@@ -103,7 +103,7 @@ export default function Home() {
       <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24">
         <div className="text-center mb-14">
           <h2 className="text-6xl md:text-8xl font-bebas tracking-tight leading-none drop-shadow-lg">
-            Beat the number with <span className="text-kos-gold">real edge</span>.
+            Beat the Number with <span className="text-kos-gold">real Edge</span>.
           </h2>
 
           <p className="mt-7 text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium">
@@ -112,7 +112,7 @@ export default function Home() {
           </p>
 
           <p className="mt-4 text-xl text-kos-gold font-semibold italic">
-            Sharper Data. Smarter Bets.
+            Sharper Data. Smarter Bets. (Live Test)
           </p>
         </div>
 
