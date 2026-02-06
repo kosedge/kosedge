@@ -43,3 +43,14 @@ next-env.d.ts
 /generated/prisma
 .env
 .env.docker
+# local envs
+app/model-service/.venv/
+*.swp
+*.swo
+
+# celery
+celerybeat-schedule
+
+# OS
+.DS_Store
+
