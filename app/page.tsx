@@ -20,7 +20,7 @@ const pillars = [
   },
 ] as const;
 
-const accentClass = (accent: Accent) => {
+function accentClass(accent: Accent) {
   if (accent === "green") {
     return {
       borderHover: "hover:border-kos-green/60",
@@ -28,18 +28,17 @@ const accentClass = (accent: Accent) => {
       glow: "shadow-kos-green/15",
     };
   }
-
   return {
     borderHover: "hover:border-kos-gold/60",
     title: "text-kos-gold",
     glow: "shadow-kos-gold/15",
   };
-};
+}
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-black text-gray-100 font-inter relative overflow-hidden">
-      {/* Subtle bg glows */}
+    <div className="min-h-screen bg-linear-to-b from-black via-gray-950 to-black text-gray-100 font-inter relative overflow-hidden">
+      {/* Background FX */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="w-full h-full bg-[radial-gradient(circle_at_20%_30%,rgba(34,197,94,0.12)_0%,transparent_60%),radial-gradient(circle_at_80%_70%,rgba(245,185,66,0.12)_0%,transparent_60%)] animate-pulse-slow" />
         <div
@@ -56,13 +55,15 @@ export default function Home() {
       <header className="relative z-20 border-b border-gray-800 bg-black/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-12">
-            <h1 className="text-4xl font-bebas tracking-wider">
-              <span className="text-kos-green">KOS</span>{" "}
-              <span className="text-kos-gold">EDGE</span>{" "}
-              <span className="text-gray-400 text-2xl font-inter font-normal">
-                ANALYTICS
-              </span>
-            </h1>
+            <Link href="/" className="block">
+              <h1 className="text-4xl font-bebas tracking-wider leading-none">
+                <span className="text-kos-green">KOS</span>{" "}
+                <span className="text-kos-gold">EDGE</span>{" "}
+                <span className="text-gray-400 text-2xl font-inter font-normal">
+                  ANALYTICS
+                </span>
+              </h1>
+            </Link>
 
             <nav className="hidden md:flex items-center gap-10 text-base font-medium text-gray-300">
               <Link href="/methodology" className="hover:text-kos-gold transition">
@@ -80,17 +81,16 @@ export default function Home() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4">
             <Link
               href="/insights"
               className="px-5 py-2.5 text-sm font-medium rounded-lg border border-kos-gold/60 text-kos-gold hover:bg-kos-gold/10 transition"
             >
               Read Insights
             </Link>
-
             <Link
               href="/pro"
-              className="px-6 py-3 bg-gradient-to-r from-kos-green to-kos-dark-green rounded-lg font-bold text-white hover:brightness-110 transition shadow-lg shadow-kos-green/30"
+              className="px-6 py-3 bg-linear-to-r from-kos-green to-kos-dark-green rounded-lg font-bold text-white hover:brightness-110 transition shadow-lg shadow-kos-green/30"
             >
               Get Edge Alerts
             </Link>
@@ -100,13 +100,12 @@ export default function Home() {
 
       {/* Hero */}
       <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24">
-        <div className="text-center mb-16">
+        <div className="text-center mb-14">
           <h2 className="text-6xl md:text-8xl font-bebas tracking-tight leading-none drop-shadow-lg">
-            Beat the number with{" "}
-            <span className="text-kos-gold">real edge</span>.
+            Beat the number with <span className="text-kos-gold">real edge</span>.
           </h2>
 
-          <p className="mt-8 text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium">
+          <p className="mt-7 text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium">
             Data-driven sports betting built around best-line shopping, strict thresholds,
             bankroll tools, and tracking that respects the long game.
           </p>
@@ -117,7 +116,7 @@ export default function Home() {
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row justify-center gap-6 mb-20">
+        <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
           <Link
             href="/pro"
             className="px-10 py-5 bg-kos-gold text-black font-bebas text-2xl rounded-xl shadow-2xl shadow-kos-gold/50 hover:scale-[1.03] transition hover:brightness-110 text-center"
@@ -162,15 +161,15 @@ export default function Home() {
 
             {/* Philosophy */}
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-emerald-950/60 to-gray-900/70 border border-kos-gold/30 rounded-2xl p-8">
+              <div className="bg-linear-to-br from-emerald-950/60 to-gray-900/70 border border-kos-gold/30 rounded-2xl p-8">
                 <h3 className="text-3xl font-bebas text-kos-gold mb-4">What you get</h3>
                 <p className="text-gray-200 text-lg">
-                  Best lines, edge thresholds, disciplined sizing, and clean tracking that
-                  fits a serious workflow.
+                  Best lines, edge thresholds, disciplined sizing, and clean tracking that fits
+                  a serious workflow.
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-red-950/50 to-gray-900/70 border border-red-800/30 rounded-2xl p-8">
+              <div className="bg-linear-to-br from-red-950/50 to-gray-900/70 border border-red-800/30 rounded-2xl p-8">
                 <h3 className="text-3xl font-bebas text-red-400 mb-4">What we avoid</h3>
                 <p className="text-gray-200 text-lg">
                   Hype picks, “lock” talk, chasing, and gimmicks that don’t scale.
