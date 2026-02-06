@@ -6,17 +6,17 @@ const pillars = [
   {
     title: "Best-Line First",
     desc: "We shop books and price the market. The number is the product, not the pick.",
-    accent: "gold" as Accent,
+    accent: "gold" as const,
   },
   {
     title: "Edge Discipline",
     desc: 'No "locks". No chasing. Plays only when value clears a real threshold.',
-    accent: "green" as Accent,
+    accent: "green" as const,
   },
   {
     title: "Track Everything",
     desc: "CLV-minded workflow with sizing tools and clean tracking for long-term winners.",
-    accent: "gold" as Accent,
+    accent: "gold" as const,
   },
 ] as const;
 
@@ -28,6 +28,7 @@ function accentClass(accent: Accent) {
       glow: "shadow-kos-green/15",
     };
   }
+
   return {
     borderHover: "hover:border-kos-gold/60",
     title: "text-kos-gold",
@@ -144,9 +145,8 @@ export default function Home() {
                   <div
                     key={p.title}
                     className={[
-                      "bg-gray-900/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-7 transition",
+                      "bg-gray-900/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-7 transition shadow-xl",
                       a.borderHover,
-                      "shadow-xl",
                       a.glow,
                     ].join(" ")}
                   >
@@ -199,7 +199,6 @@ export default function Home() {
                       <th className="pb-4">Tag</th>
                     </tr>
                   </thead>
-
                   <tbody className="divide-y divide-gray-800">
                     <tr>
                       <td className="py-4 pr-6">Duke vs UNC</td>
@@ -208,7 +207,6 @@ export default function Home() {
                       <td className="py-4 pr-6 text-emerald-400 font-bold">+1.5</td>
                       <td className="py-4 text-kos-gold font-bebas font-bold">LEAN</td>
                     </tr>
-
                     <tr>
                       <td className="py-4 pr-6">LAL vs BOS</td>
                       <td className="py-4 pr-6">o216.5</td>
@@ -216,7 +214,6 @@ export default function Home() {
                       <td className="py-4 pr-6 text-emerald-400 font-bold">+4.5</td>
                       <td className="py-4 text-emerald-400 font-bold font-bebas">PLAY</td>
                     </tr>
-
                     <tr>
                       <td className="py-4 pr-6">PHI vs NYM</td>
                       <td className="py-4 pr-6">+105</td>
