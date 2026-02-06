@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "kosedge",
   "version": "0.1.0",
   "private": true,
@@ -9,18 +10,26 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@next/mdx": "^16.1.4",
+    "@prisma/client": "^7.3.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "gray-matter": "^4.0.3",
     "next": "16.1.3",
+    "next-mdx-remote": "^5.0.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.3",
-    "tailwindcss": "^4",
+    "postcss": "^8.5.6",
+    "prisma": "^7.3.0",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5"
   }
 }

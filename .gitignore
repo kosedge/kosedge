@@ -39,3 +39,28 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/generated/prisma
+.env
+.env.docker
+# local envs
+app/model-service/.venv/
+*.swp
+*.swo
+
+# celery
+celerybeat-schedule
+
+# OS
+.DS_Store
+
+
+# --- local / editor junk ---
+app/model-service/.venv/
+*.swp
+*.swo
+.DS_Store
+
+# --- celery artifacts ---
+celerybeat-schedule
+celerybeat.pid
