@@ -1,3 +1,4 @@
+// app/page.tsx
 import Link from "next/link";
 import Image from "next/image";
 
@@ -21,30 +22,92 @@ const pillars: Array<{ title: string; desc: string; accent: Accent }> = [
   },
 ];
 
-const accentClass = (accent: Accent) =>
-  accent === "green"
-    ? {
-        ring: "hover:border-kos-green/60 hover:shadow-kos-green/25",
-        title: "text-kos-green",
-        glow: "shadow-kos-green/20",
-        icon: "text-kos-green",
-      }
-    : {
-        ring: "hover:border-kos-gold/60 hover:shadow-kos-gold/25",
-        title: "text-kos-gold",
-        glow: "shadow-kos-gold/20",
-        icon: "text-kos-gold",
-      };
+function EdgeBoardCard() {
+  return (
+    <div className="lg:col-span-5">
+      <div className="relative">
+        {/* Outer glow */}
+        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+
+        <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
+            <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
+              Sample
+            </span>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-white/10">
+            <table className="w-full text-sm sm:text-base">
+              <thead className="bg-white/5">
+                <tr className="text-left text-gray-300">
+                  <th className="py-3 px-4">Game</th>
+                  <th className="py-3 px-4">Best</th>
+                  <th className="py-3 px-4">Model</th>
+                  <th className="py-3 px-4">Edge</th>
+                  <th className="py-3 px-4">Tag</th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-white/10 text-gray-200">
+                <tr className="hover:bg-white/5 transition">
+                  <td className="py-3 px-4">Duke vs UNC</td>
+                  <td className="py-3 px-4">-2.5</td>
+                  <td className="py-3 px-4">-4.0</td>
+                  {/* ✅ INLINE Tailwind classes so JIT always generates them */}
+                  <td className="py-3 px-4 text-kos-green font-bold drop-shadow-[0_0_10px_rgba(57,255,20,0.55)]">
+                    +1.5
+                  </td>
+                  <td className="py-3 px-4 font-bebas text-kos-gold tracking-wide">
+                    LEAN
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-white/5 transition">
+                  <td className="py-3 px-4">LAL vs BOS</td>
+                  <td className="py-3 px-4">o216.5</td>
+                  <td className="py-3 px-4">223.0</td>
+                  <td className="py-3 px-4 text-kos-green font-bold drop-shadow-[0_0_10px_rgba(57,255,20,0.55)]">
+                    +4.5
+                  </td>
+                  <td className="py-3 px-4 font-bebas tracking-wide text-kos-green drop-shadow-[0_0_12px_rgba(57,255,20,0.65)]">
+                    PLAY
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-white/5 transition">
+                  <td className="py-3 px-4">PHI vs NYM</td>
+                  <td className="py-3 px-4">+105</td>
+                  <td className="py-3 px-4">+120</td>
+                  <td className="py-3 px-4 text-kos-green font-bold drop-shadow-[0_0_10px_rgba(57,255,20,0.55)]">
+                    +7.1%
+                  </td>
+                  <td className="py-3 px-4 font-bebas tracking-wide text-kos-green drop-shadow-[0_0_12px_rgba(57,255,20,0.65)]">
+                    PLAY
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-4 text-xs text-gray-400">
+            Next step: wire live data + tracking so this board is the daily hub.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
-      {/* Background FX: glow + subtle grid */}
+      {/* Background FX */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* glow blobs */}
-        <div className="absolute -top-44 left-1/2 h-130 w-225 -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-24 -left-40 h-130 w-130nded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute -bottom-56 -right-55 h-160 w-160 rounded-full bg-kos-gold/10 blur-3xl animate-pulse-slow" />
+        <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
+        <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
+        <div className="absolute -bottom-56 -right-56 h-[640px] w-[640px] rounded-full bg-kos-gold/10 blur-3xl animate-pulse-slow" />
 
         {/* subtle grid */}
         <div
@@ -57,17 +120,21 @@ export default function Home() {
         />
 
         {/* vignette */}
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       {/* Header */}
       <header className="relative z-20 border-b border-white/10 bg-black/35 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between">
           {/* Left: logo + brand */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="relative h-10 w-10 rounded-full overflow-hidden ring-1 ring-white/10">
+          <Link
+            href="/"
+            className="flex items-center gap-3 sm:gap-4"
+            aria-label="Kos Edge Analytics Home"
+          >
+            <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-full overflow-hidden ring-1 ring-white/10">
               <Image
-                src="/brand/kosedge-logo.png"
+                src="/brand/kosedge-logo-v2.png"
                 alt="Kos Edge Analytics"
                 fill
                 className="object-cover"
@@ -84,13 +151,17 @@ export default function Home() {
                 </span>
               </div>
               <div className="text-xs sm:text-sm text-gray-400/80 -mt-0.5">
-                Beat the Number with real <span className="text-kos-gold">Edge</span>
+                Beat the <span className="text-white">Number</span> with real{" "}
+                <span className="text-kos-gold">Edge</span>
               </div>
             </div>
           </Link>
 
           {/* Nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+            <Link href="/insights" className="hover:text-kos-gold transition">
+              Insights
+            </Link>
             <Link href="/about" className="hover:text-kos-gold transition">
               About
             </Link>
@@ -124,13 +195,13 @@ export default function Home() {
         <div className="md:hidden border-t border-white/10">
           <div className="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between text-sm text-gray-300">
             <Link href="/insights" className="hover:text-kos-gold transition">
-              Edge Board
-            </Link>
-            <Link href="/methodology" className="hover:text-kos-gold transition">
-              Methodology
+              Insights
             </Link>
             <Link href="/about" className="hover:text-kos-gold transition">
               About
+            </Link>
+            <Link href="/methodology" className="hover:text-kos-gold transition">
+              Methodology
             </Link>
             <Link href="/disclaimer" className="hover:text-kos-gold transition">
               Disclaimer
@@ -181,64 +252,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right: Edge Board (prominent, top-right) */}
-          <div className="lg:col-span-5">
-            <div className="relative">
-              {/* outer glow */}
-              <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-70" />
-
-              <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
-                  <span className="text-xs text-gray-400">Sample</span>
-                </div>
-
-                <div className="overflow-hidden rounded-2xl border border-white/10">
-                  <table className="w-full text-sm">
-                    <thead className="bg-white/5">
-                      <tr className="text-left text-gray-300">
-                        <th className="py-3 px-3">Game</th>
-                        <th className="py-3 px-3">Best</th>
-                        <th className="py-3 px-3">Model</th>
-                        <th className="py-3 px-3">Edge</th>
-                        <th className="py-3 px-3">Tag</th>
-                      </tr>
-                    </thead>
-
-                    <tbody className="divide-y divide-white/10 text-gray-200">
-                      <tr className="hover:bg-white/5 transition">
-                        <td className="py-3 px-3">Duke vs UNC</td>
-                        <td className="py-3 px-3">-2.5</td>
-                        <td className="py-3 px-3">-4.0</td>
-                        <td className="py-3 px-3 text-kos-green font-bold">+1.5</td>
-                        <td className="py-3 px-3 font-bebas text-kos-gold">LEAN</td>
-                      </tr>
-
-                      <tr className="hover:bg-white/5 transition">
-                        <td className="py-3 px-3">LAL vs BOS</td>
-                        <td className="py-3 px-3">o216.5</td>
-                        <td className="py-3 px-3">223.0</td>
-                        <td className="py-3 px-3 text-kos-green font-bold">+4.5</td>
-                        <td className="py-3 px-3 font-bebas text-kos-green">PLAY</td>
-                      </tr>
-
-                      <tr className="hover:bg-white/5 transition">
-                        <td className="py-3 px-3">PHI vs NYM</td>
-                        <td className="py-3 px-3">+105</td>
-                        <td className="py-3 px-3">+120</td>
-                        <td className="py-3 px-3 text-kos-green font-bold">+7.1%</td>
-                        <td className="py-3 px-3 font-bebas text-kos-green">PLAY</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="mt-4 text-xs text-gray-400">
-                  Next step: wire live data + tracking so this board is the daily hub.
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Right: Edge Board */}
+          <EdgeBoardCard />
         </div>
 
         {/* Bottom: pillars + what you get/avoid */}
@@ -247,18 +262,23 @@ export default function Home() {
             {/* Pillars */}
             <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
               {pillars.map((p) => {
-                const a = accentClass(p.accent);
+                const isGold = p.accent === "gold";
+                const ringGlow = isGold
+                  ? "hover:border-kos-gold/60 hover:shadow-kos-gold/25 shadow-kos-gold/20"
+                  : "hover:border-kos-green/60 hover:shadow-kos-green/25 shadow-kos-green/20";
+                const title = isGold ? "text-kos-gold" : "text-kos-green";
+                const icon = isGold ? "text-kos-gold" : "text-kos-green";
+
                 return (
                   <div
                     key={p.title}
                     className={[
                       "bg-black/30 border border-white/12 rounded-2xl p-5 backdrop-blur-xl shadow-xl transition",
-                      a.ring,
-                      a.glow,
+                      ringGlow,
                     ].join(" ")}
                   >
-                    <div className={["text-sm font-semibold", a.icon].join(" ")}>●</div>
-                    <h3 className={["mt-2 text-2xl font-bebas", a.title].join(" ")}>
+                    <div className={["text-sm font-semibold", icon].join(" ")}>●</div>
+                    <h3 className={["mt-2 text-2xl font-bebas", title].join(" ")}>
                       {p.title}
                     </h3>
                     <p className="mt-2 text-sm text-gray-200/80 leading-relaxed">{p.desc}</p>
