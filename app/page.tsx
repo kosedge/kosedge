@@ -23,6 +23,12 @@ const pillars: Array<{ title: string; desc: string; accent: Accent }> = [
 ];
 
 function EdgeBoardCard() {
+  // Guaranteed green (uses hex directly)
+  const edgeGreen =
+    "font-bold text-[#22c55e] drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
+  const playGreen =
+    "text-[#22c55e] drop-shadow-[0_0_12px_rgba(34,197,94,0.65)]";
+
   return (
     <div className="lg:col-span-5">
       <div className="relative">
@@ -54,10 +60,7 @@ function EdgeBoardCard() {
                   <td className="py-3 px-4">Duke vs UNC</td>
                   <td className="py-3 px-4">-2.5</td>
                   <td className="py-3 px-4">-4.0</td>
-                  {/* ✅ INLINE Tailwind classes so JIT always generates them */}
-                  <td className="py-3 px-4 text-kos-green font-bold drop-shadow-[0_0_10px_rgba(57,255,20,0.55)]">
-                    +1.5
-                  </td>
+                  <td className={`py-3 px-4 ${edgeGreen}`}>+1.5</td>
                   <td className="py-3 px-4 font-bebas text-kos-gold tracking-wide">
                     LEAN
                   </td>
@@ -67,10 +70,8 @@ function EdgeBoardCard() {
                   <td className="py-3 px-4">LAL vs BOS</td>
                   <td className="py-3 px-4">o216.5</td>
                   <td className="py-3 px-4">223.0</td>
-                  <td className="py-3 px-4 text-kos-green font-bold drop-shadow-[0_0_10px_rgba(57,255,20,0.55)]">
-                    +4.5
-                  </td>
-                  <td className="py-3 px-4 font-bebas tracking-wide text-kos-green drop-shadow-[0_0_12px_rgba(57,255,20,0.65)]">
+                  <td className={`py-3 px-4 ${edgeGreen}`}>+4.5</td>
+                  <td className={`py-3 px-4 font-bebas tracking-wide ${playGreen}`}>
                     PLAY
                   </td>
                 </tr>
@@ -79,10 +80,8 @@ function EdgeBoardCard() {
                   <td className="py-3 px-4">PHI vs NYM</td>
                   <td className="py-3 px-4">+105</td>
                   <td className="py-3 px-4">+120</td>
-                  <td className="py-3 px-4 text-kos-green font-bold drop-shadow-[0_0_10px_rgba(57,255,20,0.55)]">
-                    +7.1%
-                  </td>
-                  <td className="py-3 px-4 font-bebas tracking-wide text-kos-green drop-shadow-[0_0_12px_rgba(57,255,20,0.65)]">
+                  <td className={`py-3 px-4 ${edgeGreen}`}>+7.1%</td>
+                  <td className={`py-3 px-4 font-bebas tracking-wide ${playGreen}`}>
                     PLAY
                   </td>
                 </tr>
@@ -91,7 +90,8 @@ function EdgeBoardCard() {
           </div>
 
           <div className="mt-4 text-xs text-gray-400">
-            Next step: wire live data + tracking so this board is the daily hub.
+            Sample data for illustrative purposes only. The real Edge Board is updated daily with
+            new games, numbers, and insights across multiple sports.
           </div>
         </div>
       </div>
