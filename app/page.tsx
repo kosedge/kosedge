@@ -1,6 +1,7 @@
 // app/page.tsx
 import Link from "next/link";
 import Image from "next/image";
+import EdgeBoard from "@/components/EdgeBoard";
 
 type Accent = "gold" | "green";
 
@@ -22,94 +23,15 @@ const pillars: Array<{ title: string; desc: string; accent: Accent }> = [
   },
 ];
 
-function EdgeBoardCard() {
-  // Guaranteed green (uses hex directly)
-  const edgeGreen =
-    "font-bold text-[#22c55e] drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
-  const playGreen =
-    "text-[#22c55e] drop-shadow-[0_0_12px_rgba(34,197,94,0.65)]";
-
-  return (
-    <div className="lg:col-span-5">
-      <div className="relative">
-        {/* Outer glow */}
-        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
-
-        <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
-            <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
-              Sample
-            </span>
-          </div>
-
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <table className="w-full text-sm sm:text-base">
-              <thead className="bg-white/5">
-                <tr className="text-left text-gray-300">
-                  <th className="py-3 px-4">Game</th>
-                  <th className="py-3 px-4">Best</th>
-                  <th className="py-3 px-4">Model</th>
-                  <th className="py-3 px-4">Edge</th>
-                  <th className="py-3 px-4">Tag</th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-white/10 text-gray-200">
-                <tr className="hover:bg-white/5 transition">
-                  <td className="py-3 px-4">Duke vs UNC</td>
-                  <td className="py-3 px-4">-2.5</td>
-                  <td className="py-3 px-4">-4.0</td>
-                  <td className={`py-3 px-4 ${edgeGreen}`}>+1.5</td>
-                  <td className="py-3 px-4 font-bebas text-kos-gold tracking-wide">
-                    LEAN
-                  </td>
-                </tr>
-
-                <tr className="hover:bg-white/5 transition">
-                  <td className="py-3 px-4">LAL vs BOS</td>
-                  <td className="py-3 px-4">o216.5</td>
-                  <td className="py-3 px-4">223.0</td>
-                  <td className={`py-3 px-4 ${edgeGreen}`}>+4.5</td>
-                  <td className={`py-3 px-4 font-bebas tracking-wide ${playGreen}`}>
-                    PLAY
-                  </td>
-                </tr>
-
-                <tr className="hover:bg-white/5 transition">
-                  <td className="py-3 px-4">PHI vs NYM</td>
-                  <td className="py-3 px-4">+105</td>
-                  <td className="py-3 px-4">+120</td>
-                  <td className={`py-3 px-4 ${edgeGreen}`}>+7.1%</td>
-                  <td className={`py-3 px-4 font-bebas tracking-wide ${playGreen}`}>
-                    PLAY
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-4 text-xs text-gray-400">
-            Sample data for illustrative purposes only. The real Edge Board is updated daily with
-            new games, numbers, and insights across multiple sports.
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
       {/* Background FX */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* glow blobs */}
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
         <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
         <div className="absolute -bottom-56 -right-56 h-[640px] w-[640px] rounded-full bg-kos-gold/10 blur-3xl animate-pulse-slow" />
 
-        {/* subtle grid */}
         <div
           className="absolute inset-0 opacity-[0.10]"
           style={{
@@ -118,15 +40,12 @@ export default function Home() {
             backgroundSize: "56px 56px",
           }}
         />
-
-        {/* vignette */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       {/* Header */}
       <header className="relative z-20 border-b border-white/10 bg-black/35 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between">
-          {/* Left: logo + brand */}
           <Link
             href="/"
             className="flex items-center gap-3 sm:gap-4"
@@ -157,7 +76,6 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
             <Link href="/insights" className="hover:text-kos-gold transition">
               Insights
@@ -173,10 +91,10 @@ export default function Home() {
             </Link>
           </nav>
 
-          {/* Right CTAs */}
           <div className="flex items-center gap-3 sm:gap-4">
+            {/* TOP LINK #1: Edge Board (next to Become Pro) */}
             <Link
-              href="/insights"
+              href="/edge-board"
               className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-lg border border-kos-gold/45 text-kos-gold hover:bg-kos-gold/10 transition"
             >
               Edge Board
@@ -191,7 +109,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mobile nav row */}
         <div className="md:hidden border-t border-white/10">
           <div className="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between text-sm text-gray-300">
             <Link href="/insights" className="hover:text-kos-gold transition">
@@ -212,9 +129,7 @@ export default function Home() {
 
       {/* HERO */}
       <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 pt-10 sm:pt-14 pb-16 sm:pb-20">
-        {/* Top: two-column hero */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          {/* Left: pitch */}
           <div className="lg:col-span-7">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bebas tracking-tight leading-[0.95]">
               Beat the <span className="text-white">Number</span> with real{" "}
@@ -231,8 +146,9 @@ export default function Home() {
             </p>
 
             <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+              {/* LINK #2: Today’s Edge Board */}
               <Link
-                href="/insights"
+                href="/edge-board"
                 className="px-7 py-4 rounded-xl bg-kos-gold text-black font-bebas text-2xl text-center shadow-2xl shadow-kos-gold/35 hover:brightness-110 hover:scale-[1.02] transition"
               >
                 Today&apos;s Edge Board
@@ -246,20 +162,17 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* tiny trust line */}
             <div className="mt-5 text-sm text-gray-400">
               Threshold-based. Long-term focused. Built for disciplined bettors.
             </div>
           </div>
 
-          {/* Right: Edge Board */}
-          <EdgeBoardCard />
+          {/* Homepage visual: sample Edge Board card */}
+          <EdgeBoard variant="home" />
         </div>
 
-        {/* Bottom: pillars + what you get/avoid */}
         <div className="mt-10 sm:mt-12 grid lg:grid-cols-12 gap-6 lg:gap-8">
           <div className="lg:col-span-7 space-y-6">
-            {/* Pillars */}
             <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
               {pillars.map((p) => {
                 const isGold = p.accent === "gold";
@@ -287,13 +200,12 @@ export default function Home() {
               })}
             </div>
 
-            {/* What you get / avoid */}
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
               <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
                 <h3 className="text-2xl font-bebas text-kos-gold">What you get</h3>
                 <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                  Best lines, edge thresholds, disciplined sizing, and clean tracking that fits
-                  a serious workflow.
+                  Best lines, edge thresholds, disciplined sizing, and clean tracking that fits a
+                  serious workflow.
                 </p>
               </div>
 
@@ -306,7 +218,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right: small “product framing” box */}
           <div className="lg:col-span-5">
             <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
               <h3 className="text-2xl font-bebas text-kos-gold">One board. Every sport.</h3>
@@ -317,7 +228,7 @@ export default function Home() {
 
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="/insights"
+                  href="/edge-board"
                   className="px-4 py-3 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
                 >
                   View the Edge Board
@@ -334,7 +245,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="relative z-10 border-t border-white/10 bg-black/35 backdrop-blur py-10">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
           <p className="text-lg font-medium text-kos-gold">Sharper Data. Smarter Bets.</p>
