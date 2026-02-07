@@ -1,4 +1,4 @@
-import BeingRightVsBeingPaid from './being-right-vs-being-paid.mdx'
+import BeingRightVsBeingPaid from './insights/being-right-vs-being-paid.mdx'
 
 export const insights = {
   'being-right-vs-being-paid': {
