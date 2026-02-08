@@ -1,89 +1,140 @@
 // components/EdgeBoard.tsx
 import Link from "next/link";
-import Image from "next/image";
 
 type Variant = "home" | "full";
+type Tag = "PLAY" | "LEAN" | "PASS";
+
+type PriceSide = { label: string; juice: string };
+type PricePair = { top: PriceSide; bottom: PriceSide };
+
+type TeamBlock = {
+  name: string;
+  keiRank: string; // rank 1-361
+  site: "Away" | "Home";
+  record: string;
+  confRecord: string;
+};
 
 type EdgeBoardRow = {
   id: string;
-  game: string;
   time?: string;
-  bestSpread?: string;      // e.g. +3.5 (DK)
-  bestTotal?: string;       // e.g. o156.5 (DK)
-  keiRankA?: string;        // KEICMBR
-  keiRankB?: string;        // KEICMBR
-  keiLine?: string;         // KEAMB Line
-  keiTotal?: string;        // KEAMB O/U
-  edgeLine?: string;        // Edge Line
-  edgeOU?: string;          // Edge O/U
-  tagLine?: "PLAY" | "LEAN" | "PASS";
-  tagOU?: "PLAY" | "LEAN" | "PASS";
+
+  teamA: TeamBlock;
+  teamB: TeamBlock;
+
+  openOU: PricePair;
+  openLine: PricePair;
+
+  bestLine: PricePair;
+  bestOU: PricePair;
+
+  keiLine: PricePair; // KEICMB-Line (model spread)
+  keiOU: PricePair;   // KEICMB-O/U (model total)
+
+  edgeLine: PricePair;
+  edgeOU: PricePair;
+
+  tagLine?: Tag;
+  tagOU?: Tag;
 };
 
 const sampleRows: EdgeBoardRow[] = [
   {
     id: "1",
-    game: "Duke vs UNC",
     time: "8:30pm",
-    bestSpread: "-2.5",
-    bestTotal: "o156.5",
-    keiRankA: "12",
-    keiRankB: "18",
-    keiLine: "-4.0",
-    keiTotal: "157",
-    edgeLine: "+1.5",
-    edgeOU: "+0.5",
+    teamA: { name: "Duke", keiRank: "12", site: "Away", record: "21-1", confRecord: "10-0" },
+    teamB: { name: "UNC", keiRank: "18", site: "Home", record: "18-4", confRecord: "8-2" },
+
+    openOU: {
+      top: { label: "o150.5", juice: "-110" },
+      bottom: { label: "u150.5", juice: "-110" },
+    },
+    openLine: {
+      top: { label: "+5.5", juice: "-110" },
+      bottom: { label: "-5.5", juice: "-110" },
+    },
+
+    bestLine: {
+      top: { label: "+6.5", juice: "-112" },
+      bottom: { label: "-6.5", juice: "-108" },
+    },
+    bestOU: {
+      top: { label: "o152.5", juice: "-108" },
+      bottom: { label: "u152.5", juice: "-112" },
+    },
+
+    keiLine: {
+      top: { label: "+5.5", juice: "—" },
+      bottom: { label: "-5.5", juice: "—" },
+    },
+    keiOU: {
+      top: { label: "o157", juice: "—" },
+      bottom: { label: "u157", juice: "—" },
+    },
+
+    edgeLine: {
+      top: { label: "+2.0", juice: "—" },
+      bottom: { label: "-2.0", juice: "—" },
+    },
+    edgeOU: {
+      top: { label: "+0.5", juice: "—" },
+      bottom: { label: "-0.5", juice: "—" },
+    },
+
     tagLine: "LEAN",
     tagOU: "PASS",
   },
-  {
-    id: "2",
-    game: "LAL vs BOS",
-    time: "7:00pm",
-    bestSpread: "+1.0",
-    bestTotal: "o216.5",
-    keiRankA: "—",
-    keiRankB: "—",
-    keiLine: "-3.5",
-    keiTotal: "223",
-    edgeLine: "+4.5",
-    edgeOU: "+6.5",
-    tagLine: "PLAY",
-    tagOU: "PLAY",
-  },
-  {
-    id: "3",
-    game: "PHI vs NYM",
-    time: "1:10pm",
-    bestSpread: "+105",
-    bestTotal: "o7.5",
-    keiRankA: "—",
-    keiRankB: "—",
-    keiLine: "+120",
-    keiTotal: "8.1",
-    edgeLine: "+7.1%",
-    edgeOU: "+0.6",
-    tagLine: "PLAY",
-    tagOU: "LEAN",
-  },
 ];
 
-function tagPill(tag?: string) {
+function tagPill(tag?: Tag) {
   if (!tag) return "bg-white/5 text-gray-300 border-white/10";
   if (tag === "PLAY") return "bg-[#15803d]/20 text-[#22c55e] border-[#22c55e]/25";
   if (tag === "LEAN") return "bg-kos-gold/15 text-kos-gold border-kos-gold/25";
   return "bg-white/5 text-gray-300 border-white/10";
 }
 
+function PriceCell({
+  p,
+  valueClassName = "text-gray-200 font-semibold",
+  compact = false,
+}: {
+  p: PricePair;
+  valueClassName?: string;
+  compact?: boolean;
+}) {
+  const sep = compact ? "mt-1 h-px" : "mt-1.5 h-px";
+  const topPad = compact ? "mt-1" : "mt-1.5";
+  const valueLeading = compact ? "leading-[1.05]" : "leading-tight";
+
+  return (
+    <div className={valueLeading}>
+      <div className={valueClassName}>{p.top.label}</div>
+      <div className="text-[11px] text-gray-400">({p.top.juice})</div>
+
+      <div className={`${sep} bg-white/10`} />
+
+      <div className={`${topPad} ${valueClassName}`}>{p.bottom.label}</div>
+      <div className="text-[11px] text-gray-400">({p.bottom.juice})</div>
+    </div>
+  );
+}
+
+// One-word-per-line header helper (tightens columns)
+function HeaderStack({ a, b }: { a: string; b?: string }) {
+  return (
+    <div className="flex flex-col leading-[1.05]">
+      <span>{a}</span>
+      {b ? <span>{b}</span> : null}
+    </div>
+  );
+}
+
 export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
-  // green styling (hex, so it always shows)
   const edgeGreen =
-    "font-bold text-[#22c55e] drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
-  const playGreen =
-    "text-[#22c55e] drop-shadow-[0_0_12px_rgba(34,197,94,0.65)]";
+    "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
 
   if (variant === "home") {
-    // HOME: keep the “pretty” sample card (what you already had)
+    // Keep the homepage “pretty sample card”
     return (
       <div className="lg:col-span-5">
         <div className="relative">
@@ -98,331 +149,242 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-white/10">
+              {/* HOME table only has 5 columns — no colgroup here */}
               <table className="w-full text-sm sm:text-base">
                 <thead className="bg-white/5">
                   <tr className="text-left text-gray-300">
-                    <th className="py-3 px-4">Game</th>
-                    <th className="py-3 px-4">Best</th>
-                    <th className="py-3 px-4">Model</th>
-                    <th className="py-3 px-4">Edge</th>
-                    <th className="py-3 px-4">Tag</th>
+                    <th className="py-2.5 px-3">Game</th>
+                    <th className="py-2.5 px-3">Best Line</th>
+                    <th className="py-2.5 px-3">Best O/U</th>
+                    <th className="py-2.5 px-3">Edge</th>
+                    <th className="py-2.5 px-3">Tag</th>
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-white/10 text-gray-200">
-                  <tr className="hover:bg-white/5 transition">
-                    <td className="py-3 px-4">Duke vs UNC</td>
-                    <td className="py-3 px-4">-2.5</td>
-                    <td className="py-3 px-4">-4.0</td>
-                    <td className={`py-3 px-4 ${edgeGreen}`}>+1.5</td>
-                    <td className="py-3 px-4 font-bebas text-kos-gold tracking-wide">
-                      LEAN
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-white/5 transition">
-                    <td className="py-3 px-4">LAL vs BOS</td>
-                    <td className="py-3 px-4">o216.5</td>
-                    <td className="py-3 px-4">223.0</td>
-                    <td className={`py-3 px-4 ${edgeGreen}`}>+4.5</td>
-                    <td className={`py-3 px-4 font-bebas tracking-wide ${playGreen}`}>
-                      PLAY
-                    </td>
-                  </tr>
-
-                  <tr className="hover:bg-white/5 transition">
-                    <td className="py-3 px-4">PHI vs NYM</td>
-                    <td className="py-3 px-4">+105</td>
-                    <td className="py-3 px-4">+120</td>
-                    <td className={`py-3 px-4 ${edgeGreen}`}>+7.1%</td>
-                    <td className={`py-3 px-4 font-bebas tracking-wide ${playGreen}`}>
-                      PLAY
-                    </td>
-                  </tr>
+                  {sampleRows.map((r) => (
+                    <tr key={r.id} className="hover:bg-white/5 transition">
+                      <td className="py-2.5 px-3">
+                        <div className="font-semibold">
+                          {r.teamA.name} vs {r.teamB.name}
+                        </div>
+                        <div className="text-[11px] text-gray-400">
+                          {r.teamA.name} ({r.teamA.keiRank}) • {r.teamB.name} ({r.teamB.keiRank})
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
+                      <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
+                      <td className={["py-2.5 px-3", edgeGreen].join(" ")}>
+                        {r.edgeLine.top.label}
+                      </td>
+                      <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">
+                        {r.tagLine ?? "—"}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
-            <div className="mt-4 text-xs text-gray-400">
-              Sample data for illustrative purposes only. The real Edge Board is updated daily with
-              new games, numbers, and insights across multiple sports.
-            </div>
+            <div className="mt-4 text-xs text-gray-400">Sample data for illustrative purposes only.</div>
           </div>
         </div>
       </div>
     );
   }
 
-  // FULL: dedicated Edge Board page (big table + mobile condensed)
+  // FULL variant = ONLY the board (edge-board/page.tsx owns header/buttons)
   return (
-    <div className="max-w-7xl mx-auto px-5 sm:px-6 py-10">
-      {/* Top bar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="text-sm text-gray-400">NCAAM • Placeholder</div>
-          <h1 className="text-5xl font-bebas tracking-tight text-kos-gold">
-            Today&apos;s Edge Board
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-            Best lines + model lines + edge tags. Overview/Stats expanders will live here next.
-            No picks. Just information.
-          </p>
+    <div className="mt-6 hidden lg:block">
+      <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+          <div className="text-sm text-gray-300">Full Board • KEI placeholders</div>
+          <div className="text-xs text-gray-500">Logos + links next</div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Link
-            href="/"
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-          >
-            Back Home
-          </Link>
-          <Link
-            href="/pro"
-            className="px-4 py-2 rounded-xl bg-kos-gold text-black hover:brightness-110 transition text-center font-semibold shadow-lg shadow-kos-gold/20"
-          >
-            Become Pro
-          </Link>
-        </div>
-      </div>
+        <div className="overflow-x-auto">
+          <table className="w-full table-fixed text-[12.75px] tabular-nums">
+            {/* ✅ This is where your colgroup goes: INSIDE the FULL table, right after <table> */}
+            <colgroup>
+              <col style={{ width: "160px" }} /> {/* Game */}
+              <col style={{ width: "85px" }} />  {/* Time (tight) */}
+              <col style={{ width: "85px" }} />  {/* Open O/U */}
+              <col style={{ width: "85px" }} />  {/* Open Line */}
+              <col style={{ width: "85px" }} />  {/* Best Line */}
+              <col style={{ width: "85px" }} />  {/* Best O/U */}
+              <col style={{ width: "85px" }} />  {/* KEICMB Line */}
+              <col style={{ width: "85px" }} />  {/* KEICMB O/U */}
+              <col style={{ width: "75px" }} />  {/* Edge Line */}
+              <col style={{ width: "75px" }} />  {/* Edge O/U */}
+              <col style={{ width: "75px" }} />  {/* Tag Line */}
+              <col style={{ width: "75px" }} />  {/* Tag O/U */}
+            </colgroup>
 
-      {/* Filters / placeholders row */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="bg-black/30 border border-white/12 rounded-2xl p-4 backdrop-blur-xl">
-          <div className="text-xs text-gray-400">Sport</div>
-          <div className="mt-1 font-semibold text-gray-200">NCAAM</div>
-        </div>
-        <div className="bg-black/30 border border-white/12 rounded-2xl p-4 backdrop-blur-xl">
-          <div className="text-xs text-gray-400">Date</div>
-          <div className="mt-1 font-semibold text-gray-200">Today</div>
-        </div>
-        <div className="bg-black/30 border border-white/12 rounded-2xl p-4 backdrop-blur-xl">
-          <div className="text-xs text-gray-400">Search</div>
-          <div className="mt-1 text-gray-400">Coming soon (team, conference, market)</div>
-        </div>
-      </div>
+            <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-[13px]">
+              <tr className="text-left">
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Game" />
+                </th>
 
-      {/* Desktop “full” table */}
-      <div className="mt-6 hidden lg:block">
-        <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-            <div className="text-sm text-gray-300">
-              Full Board • KEI placeholders (KEICMB / KEICMBR)
-            </div>
-            <div className="text-xs text-gray-500">Logos + links next</div>
-          </div>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Time" />
+                </th>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-[1100px] w-full text-sm">
-              <thead className="bg-white/5 text-gray-300">
-                <tr className="text-left">
-                  <th className="py-3 px-4">Game</th>
-                  <th className="py-3 px-4">Time</th>
-                  <th className="py-3 px-4">Best Line</th>
-                  <th className="py-3 px-4">Best O/U</th>
-                  <th className="py-3 px-4">KEICMBR A</th>
-                  <th className="py-3 px-4">KEICMBR B</th>
-                  <th className="py-3 px-4">KEAMB Line</th>
-                  <th className="py-3 px-4">KEAMB O/U</th>
-                  <th className="py-3 px-4">Edge Line</th>
-                  <th className="py-3 px-4">Edge O/U</th>
-                  <th className="py-3 px-4">Tag Line</th>
-                  <th className="py-3 px-4">Tag O/U</th>
-                  <th className="py-3 px-4">Overview</th>
-                  <th className="py-3 px-4">Stats</th>
-                </tr>
-              </thead>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Open" b="O/U" />
+                </th>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Open" b="Line" />
+                </th>
 
-              <tbody className="divide-y divide-white/10 text-gray-200">
-                {sampleRows.map((r) => (
-                  <tr key={r.id} className="hover:bg-white/5 transition">
-                    <td className="py-3 px-4 font-semibold">{r.game}</td>
-                    <td className="py-3 px-4 text-gray-300">{r.time ?? "—"}</td>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Best" b="Line" />
+                </th>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Best" b="O/U" />
+                </th>
 
-                    {/* Best lines: placeholders for book logos + deep links */}
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-2">
-                        <div className="h-5 w-5 rounded bg-white/10 border border-white/10 grid place-items-center text-[10px] text-gray-300">
-                          DK
-                        </div>
-                        <a
-                          href="#"
-                          className="underline decoration-white/20 hover:decoration-kos-gold/60"
-                          title="Will link to sportsbook line page"
-                        >
-                          {r.bestSpread ?? "—"}
-                        </a>
-                      </div>
-                    </td>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="KEICMB" b="Line" />
+                </th>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="KEICMB" b="O/U" />
+                </th>
 
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-2">
-                        <div className="h-5 w-5 rounded bg-white/10 border border-white/10 grid place-items-center text-[10px] text-gray-300">
-                          DK
-                        </div>
-                        <a
-                          href="#"
-                          className="underline decoration-white/20 hover:decoration-kos-gold/60"
-                          title="Will link to sportsbook total page"
-                        >
-                          {r.bestTotal ?? "—"}
-                        </a>
-                      </div>
-                    </td>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Edge" b="Line" />
+                </th>
+                <th className="py-2.5 px-3">
+                  <HeaderStack a="Edge" b="O/U" />
+                </th>
 
-                    <td className="py-3 px-4 text-gray-300">{r.keiRankA ?? "—"}</td>
-                    <td className="py-3 px-4 text-gray-300">{r.keiRankB ?? "—"}</td>
+                <th className="py-2.5 px-3 text-center">
+                  <HeaderStack a="Tag" b="Line" />
+                </th>
+                <th className="py-2.5 px-3 text-center">
+                  <HeaderStack a="Tag" b="O/U" />
+                </th>
+              </tr>
+            </thead>
 
-                    <td className="py-3 px-4">{r.keiLine ?? "—"}</td>
-                    <td className="py-3 px-4">{r.keiTotal ?? "—"}</td>
+            <tbody className="divide-y divide-white/10 text-gray-200">
+              {sampleRows.map((r) => (
+                <tr key={r.id} className="hover:bg-white/5 transition">
+                  {/* GAME CELL (UNCHANGED CONTENT, just keep your pinning) */}
+                  <td className="py-2.5 px-3.0 align-top relative pb-7">
+                    <div className="font-semibold truncate">
+                      {r.teamA.name} <span className="text-gray-400">({r.teamA.keiRank})</span>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {r.teamA.site} • {r.teamA.record} ({r.teamA.confRecord})
+                    </div>
 
-                    <td className={`py-3 px-4 ${edgeGreen}`}>{r.edgeLine ?? "—"}</td>
-                    <td className={`py-3 px-4 ${edgeGreen}`}>{r.edgeOU ?? "—"}</td>
+                    <div className="mt-1 font-semibold truncate">
+                      {r.teamB.name} <span className="text-gray-400">({r.teamB.keiRank})</span>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {r.teamB.site} • {r.teamB.record} ({r.teamB.confRecord})
+                    </div>
 
-                    <td className="py-3 px-4">
-                      <span
-                        className={[
-                          "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-xs font-semibold",
-                          tagPill(r.tagLine),
-                        ].join(" ")}
-                      >
-                        {r.tagLine ?? "—"}
-                      </span>
-                    </td>
+                    <button
+                      className="absolute bottom-2 left-3 text-[14px] text-kos-gold hover:underline whitespace-nowrap"
+                      type="button"
+                      title="Expandable panel coming soon"
+                    >
+                      Overview ▾
+                    </button>
+                  </td>
 
-                    <td className="py-3 px-4">
-                      <span
-                        className={[
-                          "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-xs font-semibold",
-                          tagPill(r.tagOU),
-                        ].join(" ")}
-                      >
-                        {r.tagOU ?? "—"}
-                      </span>
-                    </td>
+                  {/* TIME (tight column + centered + Stats pinned to bottom) */}
+                  <td className="py-2.5 px-1 align-top relative pb-7 overflow-hidden">
+                    <div className=" text-sm font-medium text-gray-300 whitespace-nowrap">
+                      {r.time ?? "—"}
+                    </div>
 
-                    <td className="py-3 px-4">
-                      <button
-                        className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-xs font-semibold"
-                        type="button"
-                        title="Dropdown coming soon"
-                      >
-                        Overview ▾
-                      </button>
-                    </td>
-                    <td className="py-3 px-4">
-                      <button
-                        className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-xs font-semibold"
-                        type="button"
-                        title="Dropdown coming soon"
-                      >
-                        Stats ▾
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    <button
+                      className="absolute bottom-2 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
+                      type="button"
+                      title="Expandable panel coming soon"
+                    >
+                      Stats ▾
+                    </button>
+                  </td>
 
-          <div className="px-5 py-4 text-xs text-gray-400 border-t border-white/10">
-            Placeholder layout. Next: sportsbook logos + deep links, then real data wiring, then
-            Overview/Stats expanders (no picks).
-          </div>
-        </div>
-      </div>
+                  <td className="py-2.5 px-3 align-top text-gray-400">
 
-      {/* Mobile condensed board */}
-      <div className="mt-6 lg:hidden">
-        <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
-          <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-            <div className="text-sm text-gray-300">Mobile Board (Condensed)</div>
-            <div className="text-xs text-gray-500">Placeholder</div>
-          </div>
+  <PriceCell
+    p={r.openOU}
+    compact
+    valueClassName="text-gray-400 font-medium"
+  />
+</td>
+<td className="py-2.5 px-3 align-top text-gray-400">
+  <PriceCell
+    p={r.openLine}
+    compact
+    valueClassName="text-gray-400 font-medium"
+  />
+</td>
 
-          <div className="divide-y divide-white/10">
-            {sampleRows.map((r) => (
-              <div key={r.id} className="p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="font-semibold text-gray-200">{r.game}</div>
-                    <div className="text-xs text-gray-400 mt-1">{r.time ?? "—"}</div>
-                  </div>
+<td className="py-2.5 px-3 align-top">
+  <PriceCell
+    p={r.bestLine}
+    compact
+    valueClassName="text-gray-100 font-semibold"
+  />
+</td>
+<td className="py-2.5 px-3 align-top">
+  <PriceCell
+    p={r.bestOU}
+    compact
+    valueClassName="text-gray-100 font-semibold"
+  />
+</td>
 
-                  <div className="flex gap-2">
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={r.keiLine} compact />
+                  </td>
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={r.keiOU} compact />
+                  </td>
+
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={r.edgeLine} valueClassName={edgeGreen} compact />
+                  </td>
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={r.edgeOU} valueClassName={edgeGreen} compact />
+                  </td>
+
+                  <td className="py-2.5 px-2 align-top text-center">
                     <span
                       className={[
-                        "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-xs font-semibold",
+                        "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold",
                         tagPill(r.tagLine),
                       ].join(" ")}
                     >
                       {r.tagLine ?? "—"}
                     </span>
+                  </td>
+
+                  <td className="py-2.5 px-2 align-top text-center">
                     <span
                       className={[
-                        "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-xs font-semibold",
+                        "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold",
                         tagPill(r.tagOU),
                       ].join(" ")}
                     >
                       {r.tagOU ?? "—"}
                     </span>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-xs text-gray-400">Best Line (DK)</div>
-                    <div className="mt-1 font-semibold text-gray-200">{r.bestSpread ?? "—"}</div>
-                  </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-xs text-gray-400">Best O/U (DK)</div>
-                    <div className="mt-1 font-semibold text-gray-200">{r.bestTotal ?? "—"}</div>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-xs text-gray-400">KEAMB Line</div>
-                    <div className="mt-1 font-semibold text-gray-200">{r.keiLine ?? "—"}</div>
-                  </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-xs text-gray-400">KEAMB O/U</div>
-                    <div className="mt-1 font-semibold text-gray-200">{r.keiTotal ?? "—"}</div>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-xs text-gray-400">Edge Line</div>
-                    <div className={`mt-1 ${edgeGreen}`}>{r.edgeLine ?? "—"}</div>
-                  </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="text-xs text-gray-400">Edge O/U</div>
-                    <div className={`mt-1 ${edgeGreen}`}>{r.edgeOU ?? "—"}</div>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex gap-2">
-                  <button
-                    className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-xs font-semibold"
-                    type="button"
-                  >
-                    Overview ▾
-                  </button>
-                  <button
-                    className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-xs font-semibold"
-                    type="button"
-                  >
-                    Stats ▾
-                  </button>
-                </div>
-
-                <div className="mt-4 text-[11px] text-gray-400">
-                  Links/logos + expandable content coming next.
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
 
-      <div className="mt-6 text-xs text-gray-500">
-        Note: This page is a UI mock with placeholder values to lock layout before live data.
+        <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
+          Placeholder layout. Next: sportsbook logos + deep links, real data wiring, then Overview/Stats expanders (no picks).
+        </div>
       </div>
     </div>
   );
