@@ -1,4 +1,3 @@
-
 services:
   postgres:
     image: postgres:16
@@ -32,7 +31,7 @@ services:
     image: kosedge-model-service
     container_name: kosedge_model_service
     env_file:
-      - ./.env
+      - ./app/model-service/.env
     ports:
       - "8000:8000"
     volumes:
@@ -52,10 +51,10 @@ services:
     image: kosedge-celery-worker
     container_name: kosedge_celery_worker
     env_file:
-      - ./.env
+      - ./app/model-service/.env
     volumes:
       - ./app/model-service:/app
-    command: celery -A src.celery_app worker --loglevel=INFO
+    command: celery -A src.celery_app:celery_app worker --loglevel=INFO
     depends_on:
       postgres:
         condition: service_started
@@ -70,10 +69,10 @@ services:
     image: kosedge-celery-beat
     container_name: kosedge_celery_beat
     env_file:
-      - ./.env
+      - ./app/model-service/.env
     volumes:
       - ./app/model-service:/app
-    command: celery -A src.celery_app beat --loglevel=INFO
+    command: celery -A src.celery_app:celery_app beat --loglevel=INFO
     depends_on:
       postgres:
         condition: service_started

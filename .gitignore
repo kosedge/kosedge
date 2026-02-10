@@ -80,3 +80,13 @@ generated/prisma/
 .DS_Store
 *.swp
 *.swo
+.DS_Store
+**/.DS_Store
+
+# python venv
+.venv/
+**/.venv/
+
+# celery artifacts
+celerybeat-schedule
+celerybeat.pid

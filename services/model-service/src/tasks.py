@@ -1,41 +1,21 @@
-from datetime import datetime, timezone
+import logging
+from .services.odds_api import fetch_odds
+from .celery_app import celery_app
 
-from sqlalchemy import text, bindparam
-from sqlalchemy.dialects.postgresql import JSONB
+log = logging.getLogger(__name__)
 
-from src.celery_app import app
-from src.db import engine
+@celery_app.task(name="src.tasks.pull_odds_snapshot")
+def pull_odds_snapshot():
+    log.info("Running scheduled pull_odds_snapshot")
 
-
-@app.task(name="src.tasks.refresh_odds")
-def refresh_odds():
-    """
-    Demo refresh task that writes a snapshot row.
-    """
-    payload = {
-        "ok": True,
-        "ts": datetime.now(timezone.utc).isoformat(),
-        "note": "demo odds snapshot from refresh_odds",
-    }
-
-    sql = (
-        text("""
-            INSERT INTO odds_snapshots (source, payload)
-            VALUES (:source, :payload)
-            RETURNING id
-        """)
-        .bindparams(bindparam("payload", type_=JSONB))
+    data = fetch_odds(
+        endpoint="sports/upcoming/odds",
+        params={
+            "regions": "us",
+            "markets": "h2h,spreads,totals",
+            "oddsFormat": "american",
+        },
     )
 
-    with engine.begin() as conn:
-        new_id = conn.execute(sql, {"source": "odds_refresh", "payload": payload}).scalar_one()
-
-    return {"inserted_id": new_id, "payload": payload}
-
-
-@app.task(name="src.tasks.run_model_pipeline")
-def run_model_pipeline():
-    """
-    Placeholder pipeline task.
-    """
-    return {"ok": True, "ts": datetime.now(timezone.utc).isoformat(), "note": "run_model_pipeline placeholder"}
+    log.info(f"Pulled odds snapshot (len={len(data) if hasattr(data, '__len__') else 'ok'})")
+    return True
