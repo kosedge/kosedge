@@ -1,8 +1,22 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
+# -------------------------
+# Node / Next.js
+# -------------------------
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# pnpm / yarn / pnp
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -10,57 +24,59 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# Vercel
+.vercel/
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
+# TypeScript
 *.tsbuildinfo
-next-env.d.ts
 
-/generated/prisma
+# -------------------------
+# Environment files (secrets)
+# -------------------------
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env.docker
-# local envs
+
+# allow committed templates
+!.env.example
+!.env.*.example
+
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# venvs
+.venv/
+venv/
 app/model-service/.venv/
-*.swp
-*.swo
 
-# celery
-celerybeat-schedule
-
-# OS
-.DS_Store
-
-
-# --- local / editor junk ---
-app/model-service/.venv/
-*.swp
-*.swo
-.DS_Store
-
-# --- celery artifacts ---
+# -------------------------
+# Celery artifacts
+# -------------------------
 celerybeat-schedule
 celerybeat.pid
+
+# -------------------------
+# Prisma generated (if you generate locally)
+# -------------------------
+generated/prisma/
+
+# -------------------------
+# OS / editor
+# -------------------------
+.DS_Store
+*.swp
+*.swo
