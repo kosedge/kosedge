@@ -4,18 +4,18 @@ import Link from "next/link";
 type Variant = "home" | "full";
 type Tag = "PLAY" | "LEAN" | "PASS";
 
-type PriceSide = { label: string; juice: string };
-type PricePair = { top: PriceSide; bottom: PriceSide };
+export type PriceSide = { label: string; juice: string };
+export type PricePair = { top: PriceSide; bottom: PriceSide };
 
-type TeamBlock = {
+export type TeamBlock = {
   name: string;
-  keiRank: string; // rank 1-361
+  keiRank?: string; // optional for now
   site: "Away" | "Home";
-  record: string;
-  confRecord: string;
+  record?: string;
+  confRecord?: string;
 };
 
-type EdgeBoardRow = {
+export type EdgeBoardRow = {
   id: string;
   time?: string;
 
@@ -28,19 +28,25 @@ type EdgeBoardRow = {
   bestLine: PricePair;
   bestOU: PricePair;
 
-  keiLine: PricePair; // KEICMB-Line (model spread)
-  keiOU: PricePair;   // KEICMB-O/U (model total)
+  // placeholders for future model
+  keiLine?: PricePair;
+  keiOU?: PricePair;
 
-  edgeLine: PricePair;
-  edgeOU: PricePair;
+  edgeLine?: PricePair;
+  edgeOU?: PricePair;
 
   tagLine?: Tag;
   tagOU?: Tag;
 };
 
+const COMING_SOON_PAIR: PricePair = {
+  top: { label: "Coming soon", juice: "—" },
+  bottom: { label: "Coming soon", juice: "—" },
+};
+
 const sampleRows: EdgeBoardRow[] = [
   {
-    id: "1",
+    id: "sample-1",
     time: "8:30pm",
     teamA: { name: "Duke", keiRank: "12", site: "Away", record: "21-1", confRecord: "10-0" },
     teamB: { name: "UNC", keiRank: "18", site: "Home", record: "18-4", confRecord: "8-2" },
@@ -56,33 +62,12 @@ const sampleRows: EdgeBoardRow[] = [
 
     bestLine: {
       top: { label: "+6.5", juice: "-112" },
-      bottom: { label: "-6.5", juice: "-108" },
+      bottom: { label: "-5.0", juice: "-110" },
     },
     bestOU: {
-      top: { label: "o152.5", juice: "-108" },
+      top: { label: "o149.5", juice: "-110" },
       bottom: { label: "u152.5", juice: "-112" },
     },
-
-    keiLine: {
-      top: { label: "+5.5", juice: "—" },
-      bottom: { label: "-5.5", juice: "—" },
-    },
-    keiOU: {
-      top: { label: "o157", juice: "—" },
-      bottom: { label: "u157", juice: "—" },
-    },
-
-    edgeLine: {
-      top: { label: "+2.0", juice: "—" },
-      bottom: { label: "-2.0", juice: "—" },
-    },
-    edgeOU: {
-      top: { label: "+0.5", juice: "—" },
-      bottom: { label: "-0.5", juice: "—" },
-    },
-
-    tagLine: "LEAN",
-    tagOU: "PASS",
   },
 ];
 
@@ -119,7 +104,6 @@ function PriceCell({
   );
 }
 
-// One-word-per-line header helper (tightens columns)
 function HeaderStack({ a, b }: { a: string; b?: string }) {
   return (
     <div className="flex flex-col leading-[1.05]">
@@ -129,12 +113,20 @@ function HeaderStack({ a, b }: { a: string; b?: string }) {
   );
 }
 
-export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
+export default function EdgeBoard({
+  variant = "full",
+  rows,
+}: {
+  variant?: Variant;
+  rows?: EdgeBoardRow[];
+}) {
   const edgeGreen =
     "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
 
+  const data = rows && rows.length ? rows : sampleRows;
+
   if (variant === "home") {
-    // Keep the homepage “pretty sample card”
+    // Keep homepage sample card
     return (
       <div className="lg:col-span-5">
         <div className="relative">
@@ -149,7 +141,6 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-white/10">
-              {/* HOME table only has 5 columns — no colgroup here */}
               <table className="w-full text-sm sm:text-base">
                 <thead className="bg-white/5">
                   <tr className="text-left text-gray-300">
@@ -169,17 +160,13 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
                           {r.teamA.name} vs {r.teamB.name}
                         </div>
                         <div className="text-[11px] text-gray-400">
-                          {r.teamA.name} ({r.teamA.keiRank}) • {r.teamB.name} ({r.teamB.keiRank})
+                          {r.teamA.name} ({r.teamA.keiRank ?? "—"}) • {r.teamB.name} ({r.teamB.keiRank ?? "—"})
                         </div>
                       </td>
                       <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
                       <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
-                      <td className={["py-2.5 px-3", edgeGreen].join(" ")}>
-                        {r.edgeLine.top.label}
-                      </td>
-                      <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">
-                        {r.tagLine ?? "—"}
-                      </td>
+                      <td className={["py-2.5 px-3", edgeGreen].join(" ")}>Coming soon</td>
+                      <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">Coming soon</td>
                     </tr>
                   ))}
                 </tbody>
@@ -193,21 +180,20 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
     );
   }
 
-  // FULL variant = ONLY the board (edge-board/page.tsx owns header/buttons)
+  // FULL variant
   return (
     <div className="mt-6 hidden lg:block">
       <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-          <div className="text-sm text-gray-300">Full Board • KEI placeholders</div>
+          <div className="text-sm text-gray-300">Tonight • Live odds (Open + Best) • Everything else coming soon</div>
           <div className="text-xs text-gray-500">Logos + links next</div>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full table-fixed text-[12.75px] tabular-nums">
-            {/* ✅ This is where your colgroup goes: INSIDE the FULL table, right after <table> */}
             <colgroup>
               <col style={{ width: "160px" }} /> {/* Game */}
-              <col style={{ width: "85px" }} />  {/* Time (tight) */}
+              <col style={{ width: "85px" }} />  {/* Time */}
               <col style={{ width: "85px" }} />  {/* Open O/U */}
               <col style={{ width: "85px" }} />  {/* Open Line */}
               <col style={{ width: "85px" }} />  {/* Best Line */}
@@ -222,68 +208,44 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
 
             <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-[13px]">
               <tr className="text-left">
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Game" />
-                </th>
-
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Time" />
-                </th>
-
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Open" b="O/U" />
-                </th>
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Open" b="Line" />
-                </th>
-
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Best" b="Line" />
-                </th>
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Best" b="O/U" />
-                </th>
-
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="KEICMB" b="Line" />
-                </th>
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="KEICMB" b="O/U" />
-                </th>
-
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Edge" b="Line" />
-                </th>
-                <th className="py-2.5 px-3">
-                  <HeaderStack a="Edge" b="O/U" />
-                </th>
-
-                <th className="py-2.5 px-3 text-center">
-                  <HeaderStack a="Tag" b="Line" />
-                </th>
-                <th className="py-2.5 px-3 text-center">
-                  <HeaderStack a="Tag" b="O/U" />
-                </th>
+                <th className="py-2.5 px-3"><HeaderStack a="Game" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Time" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Open" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Open" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Best" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Best" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="KEICMB" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="KEICMB" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Edge" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Edge" b="O/U" /></th>
+                <th className="py-2.5 px-3 text-center"><HeaderStack a="Tag" b="Line" /></th>
+                <th className="py-2.5 px-3 text-center"><HeaderStack a="Tag" b="O/U" /></th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-white/10 text-gray-200">
-              {sampleRows.map((r) => (
+              {data.map((r) => (
                 <tr key={r.id} className="hover:bg-white/5 transition">
-                  {/* GAME CELL (UNCHANGED CONTENT, just keep your pinning) */}
-                  <td className="py-2.5 px-3.0 align-top relative pb-7">
+                  {/* Game */}
+                  <td className="py-2.5 px-3 align-top relative pb-7">
                     <div className="font-semibold truncate">
-                      {r.teamA.name} <span className="text-gray-400">({r.teamA.keiRank})</span>
+                      {r.teamA.name}{" "}
+                      <span className="text-gray-400">({r.teamA.keiRank ?? "—"})</span>
                     </div>
                     <div className="text-xs text-gray-400">
-                      {r.teamA.site} • {r.teamA.record} ({r.teamA.confRecord})
+                      {r.teamA.site}
+                      {r.teamA.record ? ` • ${r.teamA.record}` : ""}
+                      {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
                     </div>
 
                     <div className="mt-1 font-semibold truncate">
-                      {r.teamB.name} <span className="text-gray-400">({r.teamB.keiRank})</span>
+                      {r.teamB.name}{" "}
+                      <span className="text-gray-400">({r.teamB.keiRank ?? "—"})</span>
                     </div>
                     <div className="text-xs text-gray-400">
-                      {r.teamB.site} • {r.teamB.record} ({r.teamB.confRecord})
+                      {r.teamB.site}
+                      {r.teamB.record ? ` • ${r.teamB.record}` : ""}
+                      {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
                     </div>
 
                     <button
@@ -295,12 +257,11 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
                     </button>
                   </td>
 
-                  {/* TIME (tight column + centered + Stats pinned to bottom) */}
+                  {/* Time */}
                   <td className="py-2.5 px-1 align-top relative pb-7 overflow-hidden">
-                    <div className=" text-sm font-medium text-gray-300 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
                       {r.time ?? "—"}
                     </div>
-
                     <button
                       className="absolute bottom-2 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
                       type="button"
@@ -310,70 +271,43 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
                     </button>
                   </td>
 
+                  {/* Live odds columns */}
                   <td className="py-2.5 px-3 align-top text-gray-400">
+                    <PriceCell p={r.openOU} compact valueClassName="text-gray-400 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-3 align-top text-gray-400">
+                    <PriceCell p={r.openLine} compact valueClassName="text-gray-400 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-3 align-top">
+                    <PriceCell p={r.bestLine} compact valueClassName="text-gray-100 font-semibold" />
+                  </td>
+                  <td className="py-2.5 px-3 align-top">
+                    <PriceCell p={r.bestOU} compact valueClassName="text-gray-100 font-semibold" />
+                  </td>
 
-  <PriceCell
-    p={r.openOU}
-    compact
-    valueClassName="text-gray-400 font-medium"
-  />
-</td>
-<td className="py-2.5 px-3 align-top text-gray-400">
-  <PriceCell
-    p={r.openLine}
-    compact
-    valueClassName="text-gray-400 font-medium"
-  />
-</td>
-
-<td className="py-2.5 px-3 align-top">
-  <PriceCell
-    p={r.bestLine}
-    compact
-    valueClassName="text-gray-100 font-semibold"
-  />
-</td>
-<td className="py-2.5 px-3 align-top">
-  <PriceCell
-    p={r.bestOU}
-    compact
-    valueClassName="text-gray-100 font-semibold"
-  />
-</td>
-
+                  {/* Coming soon columns */}
                   <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={r.keiLine} compact />
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>
                   <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={r.keiOU} compact />
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>
 
                   <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={r.edgeLine} valueClassName={edgeGreen} compact />
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>
                   <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={r.edgeOU} valueClassName={edgeGreen} compact />
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>
 
                   <td className="py-2.5 px-2 align-top text-center">
-                    <span
-                      className={[
-                        "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold",
-                        tagPill(r.tagLine),
-                      ].join(" ")}
-                    >
-                      {r.tagLine ?? "—"}
+                    <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
+                      Coming soon
                     </span>
                   </td>
-
                   <td className="py-2.5 px-2 align-top text-center">
-                    <span
-                      className={[
-                        "inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold",
-                        tagPill(r.tagOU),
-                      ].join(" ")}
-                    >
-                      {r.tagOU ?? "—"}
+                    <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
+                      Coming soon
                     </span>
                   </td>
                 </tr>
@@ -383,7 +317,7 @@ export default function EdgeBoard({ variant = "full" }: { variant?: Variant }) {
         </div>
 
         <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
-          Placeholder layout. Next: sportsbook logos + deep links, real data wiring, then Overview/Stats expanders (no picks).
+          Live: Game/Time/Open/Best. Coming soon: KEICMB + Edge + Tags, sportsbook logos + deep links, Overview/Stats expanders.
         </div>
       </div>
     </div>

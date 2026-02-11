@@ -1,0 +1,115 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: kosedge_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ryankos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-kosedge}
+    ports:
+      - "5432:5432"
+    volumes:
+      - kosedge_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+    container_name: kosedge_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  model-service:
+    build:
+      context: ../apps/api/model-service
+      dockerfile: Dockerfile
+    image: kosedge-model-service
+    container_name: kosedge_model_service
+    env_file:
+      - ./.env.docker
+    environment:
+      TZ: ${TZ:-US/Eastern}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../apps/api/model-service:/app
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    init: true
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  celery-worker:
+    build:
+      context: ../apps/api/model-service
+      dockerfile: Dockerfile
+    image: kosedge-celery-worker
+    container_name: kosedge_celery_worker
+    env_file:
+      - ./.env.docker
+    environment:
+      TZ: ${TZ:-US/Eastern}
+    volumes:
+      - ../apps/api/model-service:/app
+    command: >
+      celery -A src.celery_app:celery_app worker
+      --loglevel=INFO
+      -n worker@%h
+      -Q default,odds,models
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    init: true
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A src.celery_app:celery_app status >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  celery-beat:
+    build:
+      context: ../apps/api/model-service
+      dockerfile: Dockerfile
+    image: kosedge-celery-beat
+    container_name: kosedge_celery_beat
+    env_file:
+      - ./.env.docker
+    volumes:
+      - ../apps/api/model-service:/app
+      - kosedge_celerybeat_data:/tmp
+    command: >
+      celery -A src.celery_app:celery_app beat
+      --loglevel=INFO
+      --scheduler celery.beat:PersistentScheduler
+      --schedule /tmp/celerybeat-schedule
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  kosedge_pgdata: {}
+  kosedge_celerybeat_data: {}

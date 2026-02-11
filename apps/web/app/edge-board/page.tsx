@@ -1,8 +1,24 @@
 // app/edge-board/page.tsx
 import Link from "next/link";
-import EdgeBoard from "@/components/EdgeBoard";
+import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 
-export default function EdgeBoardPage() {
+export const dynamic = "force-dynamic";
+
+async function getTonightRows(): Promise<EdgeBoardRow[]> {
+  try {
+    const res = await fetch("http://model-service:8000/api/edge-board/today", {
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export default async function EdgeBoardPage() {
+  const rows = await getTonightRows();
+
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
       {/* Background FX (same vibe as home) */}
@@ -25,12 +41,12 @@ export default function EdgeBoardPage() {
         {/* Header row */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="text-sm text-gray-400">NCAAM • Placeholder</div>
+            <div className="text-sm text-gray-400">NCAAM • Live odds (Open + Best)</div>
             <h1 className="text-5xl font-bebas tracking-tight text-kos-gold">
               Today&apos;s Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              Best lines + model lines + edge tags. Overview/Stats expanders will live here next.
+              Live: Game/Time/Open/Best. KEICMB + Edge + Tags are coming soon.
               No picks. Just information.
             </p>
           </div>
@@ -74,10 +90,10 @@ export default function EdgeBoardPage() {
         </div>
 
         {/* Board */}
-        <EdgeBoard variant="full" />
+        <EdgeBoard variant="full" rows={rows} />
 
         <div className="mt-6 text-xs text-gray-500">
-          Note: UI mock with placeholder values to lock layout before live odds + model wiring.
+          {rows.length ? "Live odds loaded from API." : "No games returned yet (or API offline)."}
         </div>
       </main>
     </div>

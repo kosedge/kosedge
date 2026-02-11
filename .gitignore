@@ -90,3 +90,6 @@ generated/prisma/
 # celery artifacts
 celerybeat-schedule
 celerybeat.pid
+
+# Docker env
+infra/.env.docker
