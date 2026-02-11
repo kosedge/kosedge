@@ -82,7 +82,8 @@ generated/prisma/
 *.swo
 .DS_Store
 **/.DS_Store
-
+.vscode/
+*.egg-info/
 # python venv
 .venv/
 **/.venv/
