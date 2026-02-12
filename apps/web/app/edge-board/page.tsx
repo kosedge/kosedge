@@ -1,16 +1,49 @@
-// app/edge-board/page.tsx
+// apps/web/app/edge-board/page.tsx
 import Link from "next/link";
+import { headers } from "next/headers";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
+import { env } from "@/lib/config/env";
 
 export const dynamic = "force-dynamic";
 
+async function getRequestOrigin(): Promise<string> {
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto = h.get("x-forwarded-proto") ?? "http";
+  return `${proto}://${host}`;
+}
+
+type EdgeBoardApiResponse =
+  | EdgeBoardRow[]
+  | { rows: EdgeBoardRow[]; cached?: boolean; ttl?: number }
+  | { error: string; [k: string]: unknown };
+
 async function getTonightRows(): Promise<EdgeBoardRow[]> {
   try {
-    const res = await fetch("http://model-service:8000/api/edge-board/today", {
+    const origin = await getRequestOrigin();
+
+    const headersObj: Record<string, string> = { accept: "application/json" };
+    // If your API route is protected, server components CAN safely attach the secret.
+    if (env.INTERNAL_API_SECRET) {
+      headersObj["x-kosedge-secret"] = env.INTERNAL_API_SECRET;
+    }
+
+    const res = await fetch(`${origin}/api/edge-board/ncaam/today`, {
       cache: "no-store",
+      headers: headersObj,
     });
+
     if (!res.ok) return [];
-    return await res.json();
+
+    const json = (await res.json()) as EdgeBoardApiResponse;
+
+    // ✅ Support both shapes: array OR { rows: [...] }
+    if (Array.isArray(json)) return json;
+    if (json && typeof json === "object" && "rows" in json && Array.isArray((json as any).rows)) {
+      return (json as any).rows as EdgeBoardRow[];
+    }
+
+    return [];
   } catch {
     return [];
   }
@@ -21,7 +54,7 @@ export default async function EdgeBoardPage() {
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
-      {/* Background FX (same vibe as home) */}
+      {/* Background FX */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
         <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
@@ -38,7 +71,7 @@ export default async function EdgeBoardPage() {
       </div>
 
       <main className="relative z-10 w-full px-5 sm:px-6 pt-10 pb-16">
-        {/* Header row */}
+        {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="text-sm text-gray-400">NCAAM • Live odds (Open + Best)</div>
@@ -46,8 +79,7 @@ export default async function EdgeBoardPage() {
               Today&apos;s Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              Live: Game/Time/Open/Best. KEICMB + Edge + Tags are coming soon.
-              No picks. Just information.
+              Live: Game/Time/Open/Best. KEICMB + Edge + Tags are coming soon. No picks. Just information.
             </p>
           </div>
 
@@ -73,7 +105,7 @@ export default async function EdgeBoardPage() {
           </div>
         </div>
 
-        {/* Filters row (placeholder) */}
+        {/* Filters placeholder */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="bg-black/30 border border-white/12 rounded-2xl p-4 backdrop-blur-xl">
             <div className="text-xs text-gray-400">Sport</div>
@@ -93,7 +125,7 @@ export default async function EdgeBoardPage() {
         <EdgeBoard variant="full" rows={rows} />
 
         <div className="mt-6 text-xs text-gray-500">
-          {rows.length ? "Live odds loaded from API." : "No games returned yet (or API offline)."}
+          {rows.length ? `Live odds loaded (${rows.length} games).` : "No games returned yet (or API offline)."}
         </div>
       </main>
     </div>

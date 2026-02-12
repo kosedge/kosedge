@@ -1,5 +1,4 @@
-// components/EdgeBoard.tsx
-import Link from "next/link";
+// apps/web/components/EdgeBoard.tsx
 
 type Variant = "home" | "full";
 type Tag = "PLAY" | "LEAN" | "PASS";
@@ -9,7 +8,7 @@ export type PricePair = { top: PriceSide; bottom: PriceSide };
 
 export type TeamBlock = {
   name: string;
-  keiRank?: string; // optional for now
+  keiRank?: string;
   site: "Away" | "Home";
   record?: string;
   confRecord?: string;
@@ -28,7 +27,7 @@ export type EdgeBoardRow = {
   bestLine: PricePair;
   bestOU: PricePair;
 
-  // placeholders for future model
+  // future model placeholders
   keiLine?: PricePair;
   keiOU?: PricePair;
 
@@ -50,7 +49,6 @@ const sampleRows: EdgeBoardRow[] = [
     time: "8:30pm",
     teamA: { name: "Duke", keiRank: "12", site: "Away", record: "21-1", confRecord: "10-0" },
     teamB: { name: "UNC", keiRank: "18", site: "Home", record: "18-4", confRecord: "8-2" },
-
     openOU: {
       top: { label: "o150.5", juice: "-110" },
       bottom: { label: "u150.5", juice: "-110" },
@@ -59,7 +57,6 @@ const sampleRows: EdgeBoardRow[] = [
       top: { label: "+5.5", juice: "-110" },
       bottom: { label: "-5.5", juice: "-110" },
     },
-
     bestLine: {
       top: { label: "+6.5", juice: "-112" },
       bottom: { label: "-5.0", juice: "-110" },
@@ -70,13 +67,6 @@ const sampleRows: EdgeBoardRow[] = [
     },
   },
 ];
-
-function tagPill(tag?: Tag) {
-  if (!tag) return "bg-white/5 text-gray-300 border-white/10";
-  if (tag === "PLAY") return "bg-[#15803d]/20 text-[#22c55e] border-[#22c55e]/25";
-  if (tag === "LEAN") return "bg-kos-gold/15 text-kos-gold border-kos-gold/25";
-  return "bg-white/5 text-gray-300 border-white/10";
-}
 
 function PriceCell({
   p,
@@ -113,6 +103,25 @@ function HeaderStack({ a, b }: { a: string; b?: string }) {
   );
 }
 
+/**
+ * Hydration-safe col widths:
+ * <colgroup> cannot contain whitespace text nodes / comments.
+ */
+const COL_WIDTHS = [
+  "160px",
+  "85px",
+  "85px",
+  "85px",
+  "85px",
+  "85px",
+  "85px",
+  "85px",
+  "75px",
+  "75px",
+  "75px",
+  "75px",
+] as const;
+
 export default function EdgeBoard({
   variant = "full",
   rows,
@@ -126,7 +135,6 @@ export default function EdgeBoard({
   const data = rows && rows.length ? rows : sampleRows;
 
   if (variant === "home") {
-    // Keep homepage sample card
     return (
       <div className="lg:col-span-5">
         <div className="relative">
@@ -135,9 +143,7 @@ export default function EdgeBoard({
           <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
-              <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
-                Sample
-              </span>
+              <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">Sample</span>
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-white/10">
@@ -180,30 +186,22 @@ export default function EdgeBoard({
     );
   }
 
-  // FULL variant
   return (
-    <div className="mt-6 hidden lg:block">
+    <div className="mt-6">
       <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-          <div className="text-sm text-gray-300">Tonight • Live odds (Open + Best) • Everything else coming soon</div>
+          <div className="text-sm text-gray-300">
+            Tonight • Live odds (Open + Best) • Everything else coming soon
+          </div>
           <div className="text-xs text-gray-500">Logos + links next</div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full table-fixed text-[12.75px] tabular-nums">
+          <div className="overflow-x-auto">
+          <table className="min-w-[1100px] w-full table-fixed text-[12.75px] tabular-nums">
             <colgroup>
-              <col style={{ width: "160px" }} /> {/* Game */}
-              <col style={{ width: "85px" }} />  {/* Time */}
-              <col style={{ width: "85px" }} />  {/* Open O/U */}
-              <col style={{ width: "85px" }} />  {/* Open Line */}
-              <col style={{ width: "85px" }} />  {/* Best Line */}
-              <col style={{ width: "85px" }} />  {/* Best O/U */}
-              <col style={{ width: "85px" }} />  {/* KEICMB Line */}
-              <col style={{ width: "85px" }} />  {/* KEICMB O/U */}
-              <col style={{ width: "75px" }} />  {/* Edge Line */}
-              <col style={{ width: "75px" }} />  {/* Edge O/U */}
-              <col style={{ width: "75px" }} />  {/* Tag Line */}
-              <col style={{ width: "75px" }} />  {/* Tag O/U */}
+              {COL_WIDTHS.map((w, i) => (
+                <col key={i} style={{ width: w }} />
+              ))}
             </colgroup>
 
             <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-[13px]">
@@ -226,11 +224,9 @@ export default function EdgeBoard({
             <tbody className="divide-y divide-white/10 text-gray-200">
               {data.map((r) => (
                 <tr key={r.id} className="hover:bg-white/5 transition">
-                  {/* Game */}
                   <td className="py-2.5 px-3 align-top relative pb-7">
                     <div className="font-semibold truncate">
-                      {r.teamA.name}{" "}
-                      <span className="text-gray-400">({r.teamA.keiRank ?? "—"})</span>
+                      {r.teamA.name} <span className="text-gray-400">({r.teamA.keiRank ?? "—"})</span>
                     </div>
                     <div className="text-xs text-gray-400">
                       {r.teamA.site}
@@ -239,8 +235,7 @@ export default function EdgeBoard({
                     </div>
 
                     <div className="mt-1 font-semibold truncate">
-                      {r.teamB.name}{" "}
-                      <span className="text-gray-400">({r.teamB.keiRank ?? "—"})</span>
+                      {r.teamB.name} <span className="text-gray-400">({r.teamB.keiRank ?? "—"})</span>
                     </div>
                     <div className="text-xs text-gray-400">
                       {r.teamB.site}
@@ -257,7 +252,6 @@ export default function EdgeBoard({
                     </button>
                   </td>
 
-                  {/* Time */}
                   <td className="py-2.5 px-1 align-top relative pb-7 overflow-hidden">
                     <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
                       {r.time ?? "—"}
@@ -271,7 +265,6 @@ export default function EdgeBoard({
                     </button>
                   </td>
 
-                  {/* Live odds columns */}
                   <td className="py-2.5 px-3 align-top text-gray-400">
                     <PriceCell p={r.openOU} compact valueClassName="text-gray-400 font-medium" />
                   </td>
@@ -285,14 +278,12 @@ export default function EdgeBoard({
                     <PriceCell p={r.bestOU} compact valueClassName="text-gray-100 font-semibold" />
                   </td>
 
-                  {/* Coming soon columns */}
                   <td className="py-2.5 px-2 align-top">
                     <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>
                   <td className="py-2.5 px-2 align-top">
                     <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>
-
                   <td className="py-2.5 px-2 align-top">
                     <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
                   </td>

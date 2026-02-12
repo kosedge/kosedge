@@ -1,0 +1,10 @@
+{
+  "name": "kosedge-monorepo",
+  "private": true,
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {
+    "dev:web": "pnpm -C apps/web dev",
+    "build:web": "pnpm -C apps/web build",
+    "start:web": "pnpm -C apps/web start"
+  }
+}
