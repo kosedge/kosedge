@@ -62,7 +62,7 @@ async function tryModelService(requestId: string): Promise<{ ok: true; rows: unk
 }
 
 async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
-  const key = env.ODDS_API_KEY;
+  const key = env.ODDS_API_KEY?.trim();
   if (!key) return { ok: false };
   try {
     const rows = await fetchNcaabEdgeBoard(key);
