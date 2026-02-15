@@ -1,36 +1,191 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kos Edge Analytics
 
-## Getting Started
+Premium sports handicapping insights built on data. Driven by edge.
 
-First, run the development server:
+[![CI](https://github.com/YOUR_USERNAME/kosedge/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/kosedge/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/YOUR_USERNAME/kosedge/actions/workflows/codeql.yml/badge.svg)](https://github.com/YOUR_USERNAME/kosedge/actions/workflows/codeql.yml)
+
+## 🚀 Quick Start
+
+### Local Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Install dependencies
+pnpm install
+
+# 2. Set up environment variables
+cp apps/web/.env.example apps/web/.env.local
+# Edit .env.local with your configuration
+
+# 3. Start database (Docker)
+pnpm docker:up
+
+# 4. Run database migrations
+cd apps/web
+pnpm prisma migrate dev
+
+# 5. Start development server (from repo root)
+pnpm dev:web:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**If you see `Cannot find module '.../next/dist/bin/next'`:** do a clean install from the **repository root**: `rm -rf node_modules apps/web/node_modules && pnpm install`. Then run `pnpm dev:web:3000` again. One-shot: `pnpm bootstrap:web` installs and starts the web app.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**📖 See [QUICK_START.md](./QUICK_START.md) for detailed instructions. See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines.**
 
-## Learn More
+### Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+**Option 1: Vercel CLI**
+```bash
+npm i -g vercel
+vercel login
+vercel link
+vercel --prod
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Option 2: GitHub Integration**
+1. Push to GitHub
+2. Import repository in Vercel Dashboard
+3. Set environment variables
+4. Deploy!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**📖 See [QUICK_START.md](./QUICK_START.md) for complete deployment guide.**
 
-## Deploy on Vercel
+## 📁 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+kosedge/
+├── apps/
+│   ├── web/              # Next.js frontend application
+│   └── api/              # Backend services (Python/FastAPI)
+├── packages/             # Shared packages
+├── infra/                # Infrastructure (Docker, etc.)
+└── .github/             # GitHub Actions workflows
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Development
+
+### Available Scripts
+
+```bash
+# Development
+pnpm dev                  # Start all services
+pnpm dev:web              # Start web app only
+pnpm dev:web:3000         # Start web app on port 3000
+
+# Building
+pnpm build                # Build all packages
+pnpm build:web            # Build web app only
+
+# Quality Checks
+pnpm lint                 # Lint all packages
+pnpm typecheck            # Type check all packages
+pnpm test                 # Run all tests
+pnpm format               # Format code
+pnpm format:check         # Check formatting
+
+# CI Pipeline
+pnpm ci                   # Run full CI checks locally
+```
+
+### Docker Services
+
+```bash
+pnpm docker:up            # Start all Docker services
+pnpm docker:down          # Stop all Docker services
+pnpm docker:logs          # View Docker logs
+```
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run tests with UI
+pnpm test:ui
+```
+
+See [TESTING.md](./apps/web/TESTING.md) for detailed testing documentation.
+
+## 🔐 Authentication
+
+The application uses NextAuth.js v5 for authentication with:
+- Email/password authentication
+- JWT-based sessions
+- Role-based access control (USER, PRO, ADMIN)
+- Subscription management
+
+See [AUTH_SETUP.md](./apps/web/AUTH_SETUP.md) for authentication setup and configuration.
+
+## 🐛 Error Handling
+
+Comprehensive error handling with:
+- Structured logging (Pino)
+- React error boundaries
+- Custom error pages (404, 500)
+- API error handling utilities
+- Sentry integration (optional)
+
+See [ERROR_HANDLING.md](./apps/web/ERROR_HANDLING.md) for error handling documentation.
+
+## 🚢 Deployment
+
+### CI/CD Pipeline
+
+The project includes GitHub Actions workflows:
+- **CI** - Runs on every push/PR (lint, typecheck, test, build)
+- **Deploy** - Deploys to production on main branch
+- **PR Checks** - Quality checks for pull requests
+- **CodeQL** - Security analysis
+
+### Environment Variables
+
+Required environment variables for production:
+
+```env
+DATABASE_URL=postgresql://...
+AUTH_SECRET=...
+MODEL_SERVICE_URL=...
+INTERNAL_API_SECRET=...
+```
+
+See `apps/web/.env.example` for complete list.
+
+## 📚 Documentation
+
+- [Authentication Setup](./apps/web/AUTH_SETUP.md)
+- [Testing Guide](./apps/web/TESTING.md)
+- [Error Handling](./apps/web/ERROR_HANDLING.md)
+- [CI/CD Guide](./.github/workflows/README.md)
+
+## 🏗️ Architecture
+
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript
+- **Backend**: FastAPI (Python), PostgreSQL, Redis
+- **Authentication**: NextAuth.js v5
+- **Database**: Prisma ORM
+- **Styling**: Tailwind CSS v4
+- **Testing**: Vitest, React Testing Library
+- **Logging**: Pino
+- **Error Tracking**: Sentry (optional)
+
+## 📝 License
+
+Private - All rights reserved
+
+## 🤝 Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Run `pnpm ci` to ensure all checks pass
+4. Submit a pull request
+
+All PRs must pass CI checks before merging.
