@@ -2,9 +2,43 @@
   "name": "kosedge-monorepo",
   "private": true,
   "packageManager": "pnpm@10.29.2",
+  "type": "module",
   "scripts": {
-    "dev:web": "pnpm -C apps/web dev",
-    "build:web": "pnpm -C apps/web build",
-    "start:web": "pnpm -C apps/web start"
+    "// -------------------- CORE (JS WORKSPACES ONLY) --------------------": "",
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r --parallel build",
+    "start": "pnpm -r --parallel start",
+    "lint": "pnpm -r --parallel lint",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "test": "pnpm -r --parallel test",
+    "// -------------------- WEB (Next.js) --------------------": "",
+    "dev:web": "pnpm --filter @kosedge/web dev",
+    "dev:web:3000": "pnpm --filter @kosedge/web dev --port 3000",
+    "bootstrap:web": "pnpm install && pnpm --filter @kosedge/web dev --port 3000",
+    "build:web": "pnpm --filter @kosedge/web build",
+    "start:web": "pnpm --filter @kosedge/web start",
+    "lint:web": "pnpm --filter @kosedge/web lint",
+    "typecheck:web": "pnpm --filter @kosedge/web typecheck",
+    "// -------------------- DOCKER / BACKEND (Python stack) --------------------": "",
+    "docker:up": "docker compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker compose -f infra/docker-compose.yml down",
+    "docker:ps": "docker compose -f infra/docker-compose.yml ps",
+    "docker:logs": "docker compose -f infra/docker-compose.yml logs -f --tail=200",
+    "// -------------------- CLEANUP --------------------": "",
+    "kill:ports": "bash -lc 'for p in 3000 3001 3002 3003 8000 8001 5432 6379; do lsof -ti tcp:$p | xargs -r kill -9; done || true'",
+    "clean:web": "bash -lc 'rm -rf apps/web/.next apps/web/.turbo'",
+    "reset:web": "pnpm kill:ports && pnpm clean:web && pnpm dev:web:3000",
+    "// -------------------- FORMATTING --------------------": "",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "// -------------------- CI --------------------": "",
+    "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "turbo": "^2.3.0"
+  },
+  "volta": {
+    "node": "20.20.0"
   }
 }

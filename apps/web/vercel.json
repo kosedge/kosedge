@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd ../.. && pnpm build:web",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": "nextjs",
+  "regions": ["iad1"]
+}

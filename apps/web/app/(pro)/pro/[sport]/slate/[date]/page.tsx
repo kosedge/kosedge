@@ -51,7 +51,7 @@ export default function SlatePage({ params }: { params: { sport: string; date: s
               </div>
 
               <Link
-                href={`${base}/matchup/${params.date}/${g.slug}`}
+                href={`${base}/matchups/${params.date}/${g.slug}`}
                 className="rounded-xl border border-kos-border bg-kos-surface/20 px-4 py-2 text-sm hover:border-kos-gold/40"
               >
                 Open Matchup

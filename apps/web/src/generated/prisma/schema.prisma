@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/**
+ * Core concepts:
+ * - Sport is a namespace (cbb, nfl, nba, mlb)
+ * - Team belongs to a Sport
+ * - Game belongs to a Sport and links two Teams
+ * - MarketSnapshot stores book prices (normalized, queryable)
+ * - ModelProjection stores your fair line outputs
+ * - Writeup stores the short informational copy (AI-assisted, editor-reviewed)
+ * - Injury is objective status data
+ */
+
+// ============================================
+// Authentication & User Management
+// ============================================
+
+enum UserRole {
+  USER
+  PRO
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  TRIAL
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  password      String? // Hashed password for credentials provider
+  image         String?
+  role          UserRole  @default(USER)
+
+  // Subscription management
+  subscriptionStatus SubscriptionStatus?
+  subscriptionPlan   String? // "weekly", "monthly", "yearly"
+  subscriptionStart  DateTime?
+  subscriptionEnd    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  @@index([email])
+  @@index([role])
+  @@index([subscriptionStatus])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([sessionToken])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================
+// Sports Data Models
+// ============================================
+
+model Sport {
+  id        String   @id @default(cuid())
+  key       String   @unique // "cbb", "nfl", "nba", "mlb"
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teams Team[]
+  games Game[]
+
+  @@index([key])
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  sportId   String
+  name      String
+  slug      String
+  abbr      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sport     Sport               @relation(fields: [sportId], references: [id])
+  homeGames Game[]              @relation("HomeTeam")
+  awayGames Game[]              @relation("AwayTeam")
+  injuries  Injury[]
+  profiles  TeamProfileWeekly[]
+
+  @@unique([sportId, slug])
+  @@index([sportId, name])
+}
+
+model Game {
+  id         String    @id @default(cuid())
+  sportId    String
+  date       DateTime
+  slug       String
+  homeTeamId String
+  awayTeamId String
+  startTime  DateTime?
+  venue      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sport    Sport @relation(fields: [sportId], references: [id])
+  homeTeam Team  @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam Team  @relation("AwayTeam", fields: [awayTeamId], references: [id])
+
+  market  MarketSnapshot?
+  model   ModelProjection?
+  writeup Writeup?
+
+  @@unique([sportId, date, slug])
+  @@index([sportId, date])
+  @@index([homeTeamId, date])
+  @@index([awayTeamId, date])
+}
+
+model MarketSnapshot {
+  id         String   @id @default(cuid())
+  gameId     String   @unique
+  capturedAt DateTime @default(now())
+
+  openSpreadHome    Float?
+  currentSpreadHome Float?
+  openTotal         Float?
+  currentTotal      Float?
+
+  bestSpreadHome Float?
+  bestSpreadBook String?
+  bestTotal      Float?
+  bestTotalBook  String?
+
+  spreadDispersion Float?
+  totalDispersion  Float?
+
+  bookLines BookLine[]
+
+  game Game @relation(fields: [gameId], references: [id])
+
+  @@index([capturedAt])
+}
+
+model BookLine {
+  id         String   @id @default(cuid())
+  marketId   String
+  book       String
+  capturedAt DateTime @default(now())
+
+  spreadHome Float?
+  spreadAway Float?
+  total      Float?
+
+  market MarketSnapshot @relation(fields: [marketId], references: [id])
+
+  @@index([marketId, book])
+  @@index([capturedAt])
+}
+
+model ModelProjection {
+  id         String   @id @default(cuid())
+  gameId     String   @unique
+  version    String
+  computedAt DateTime @default(now())
+
+  projSpreadHome Float
+  projTotal      Float
+
+  game Game @relation(fields: [gameId], references: [id])
+
+  @@index([version])
+  @@index([computedAt])
+}
+
+model Writeup {
+  id        String   @id @default(cuid())
+  gameId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  formatKey    String
+  body         String
+  disclosedAi  Boolean      @default(true)
+  editorStatus EditorStatus @default(DRAFT)
+
+  game Game @relation(fields: [gameId], references: [id])
+
+  @@index([formatKey])
+  @@index([editorStatus])
+}
+
+enum EditorStatus {
+  DRAFT
+  REVIEWED
+  PUBLISHED
+}
+
+model Injury {
+  id     String        @id @default(cuid())
+  teamId String
+  date   DateTime
+  player String
+  status InjuryStatus
+  note   String?
+  impact InjuryImpact?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@index([teamId, date])
+  @@index([status])
+}
+
+enum InjuryStatus {
+  OUT
+  DOUBTFUL
+  QUESTIONABLE
+  PROBABLE
+}
+
+enum InjuryImpact {
+  STAR
+  ROTATION
+  MINOR
+}
+
+model TeamProfileWeekly {
+  id        String   @id @default(cuid())
+  teamId    String
+  weekStart DateTime
+  summary   String
+
+  tempoRank Int?
+  offPpp    Float?
+  defPpp    Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([teamId, weekStart])
+  @@index([weekStart])
+}

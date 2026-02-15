@@ -1,46 +1,38 @@
-// apps/web/app/api/edge-board/ncaam/today/route.ts
 import { NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
+import { EdgeBoardResponseSchema } from "@kosedge/contracts";
+import { fetchNcaabEdgeBoard } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Small helper: JSON response with consistent headers.
- */
-function json(data: unknown, status = 200) {
+function json(data: unknown, status = 200, extraHeaders?: Record<string, string>) {
   return NextResponse.json(data, {
     status,
     headers: {
       "cache-control": "no-store, no-cache, must-revalidate, proxy-revalidate",
       pragma: "no-cache",
       expires: "0",
+      ...extraHeaders,
     },
   });
 }
 
-export async function GET(req: Request) {
-  // 1) Optional internal auth gate (recommended for production)
-  const expected = env.INTERNAL_API_SECRET;
+function getRequestId(req: Request) {
+  return (
+    req.headers.get("x-request-id") ||
+    req.headers.get("x-correlation-id") ||
+    crypto.randomUUID()
+  );
+}
 
-  if (expected) {
-    const provided = req.headers.get("x-kosedge-secret");
-    if (provided !== expected) {
-      return json({ error: "Unauthorized" }, 401);
-    }
-  }
-
-  // 2) Validate config
+async function tryModelService(requestId: string): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
   const base = env.MODEL_SERVICE_URL;
-  if (!base) {
-    return json({ error: "MODEL_SERVICE_URL is not set" }, 500);
-  }
+  if (!base) return { ok: false };
 
   const upstream = `${base.replace(/\/+$/, "")}/edge-board/ncaam/today`;
-
-  // 3) Fetch with timeout
   const controller = new AbortController();
-  const timeoutMs = 8000;
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
     const res = await fetch(upstream, {
@@ -48,60 +40,62 @@ export async function GET(req: Request) {
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        // Optional: forward secret downstream if your model-service also supports it
-        ...(env.INTERNAL_API_SECRET
-          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
-          : {}),
+        "x-request-id": requestId,
+        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
       },
     });
 
-    // Read body safely (even if non-JSON)
     const contentType = res.headers.get("content-type") ?? "";
     const raw = await res.text();
 
-    if (!res.ok) {
-      return json(
-        {
-          error: "Upstream error",
-          upstreamStatus: res.status,
-          upstreamUrl: upstream,
-          body: raw.slice(0, 2000), // keep logs sane
-        },
-        502
-      );
-    }
+    if (!res.ok || !contentType.includes("application/json")) return { ok: false };
 
-    // Parse JSON (prefer JSON, but fail gracefully)
-    if (!contentType.includes("application/json")) {
-      return json(
-        {
-          error: "Upstream returned non-JSON",
-          upstreamUrl: upstream,
-          contentType,
-          body: raw.slice(0, 2000),
-        },
-        502
-      );
-    }
+    const parsed = EdgeBoardResponseSchema.safeParse(JSON.parse(raw));
+    if (!parsed.success) return { ok: false };
 
-    const data = JSON.parse(raw) as unknown;
-    return json(data, 200);
-  } catch (e: unknown) {
-    const message =
-      e instanceof Error ? e.message : typeof e === "string" ? e : "Unknown error";
-
-    const isAbort =
-      e instanceof Error && (e.name === "AbortError" || message.toLowerCase().includes("aborted"));
-
-    return json(
-      {
-        error: isAbort ? "Upstream timeout" : "Proxy failed",
-        detail: message,
-        upstreamUrl: upstream,
-      },
-      502
-    );
+    return { ok: true, rows: parsed.data.rows };
+  } catch {
+    return { ok: false };
   } finally {
     clearTimeout(timeout);
   }
+}
+
+async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
+  const key = env.ODDS_API_KEY;
+  if (!key) return { ok: false };
+  try {
+    const rows = await fetchNcaabEdgeBoard(key);
+    return { ok: true, rows };
+  } catch (e) {
+    console.error("edge_board_odds_fallback_failed", { error: String(e) });
+    return { ok: false };
+  }
+}
+
+export async function GET(req: Request) {
+  const requestId = getRequestId(req);
+
+  const expected = env.INTERNAL_API_SECRET;
+  if (expected) {
+    const provided = req.headers.get("x-kosedge-secret");
+    if (provided !== expected) {
+      return json({ error: "Unauthorized", requestId }, 401, { "x-request-id": requestId });
+    }
+  }
+
+  // 1. Try model service first
+  const modelResult = await tryModelService(requestId);
+  if (modelResult.ok && modelResult.rows.length > 0) {
+    return json({ rows: modelResult.rows }, 200, { "x-request-id": requestId });
+  }
+
+  // 2. Fallback to Odds API when model not available
+  const oddsResult = await tryOddsApiFallback();
+  if (oddsResult.ok) {
+    return json({ rows: oddsResult.rows }, 200, { "x-request-id": requestId });
+  }
+
+  // 3. Return empty (no 500; page still loads)
+  return json({ rows: [] }, 200, { "x-request-id": requestId });
 }

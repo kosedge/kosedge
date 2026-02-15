@@ -1,11 +1,5 @@
 import Link from "next/link";
-
-const sports = [
-  { key: "cbb", label: "CBB" },
-  { key: "nfl", label: "NFL" },
-  { key: "nba", label: "NBA" },
-  { key: "mlb", label: "MLB" },
-];
+import { SPORTS } from "@/lib/sports";
 
 export default function ProLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,8 +13,8 @@ export default function ProLayout({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          <nav className="flex items-center gap-3">
-            {sports.map((s) => (
+          <nav className="flex flex-wrap items-center gap-2">
+            {SPORTS.map((s) => (
               <Link
                 key={s.key}
                 href={`/pro/${s.key}`}

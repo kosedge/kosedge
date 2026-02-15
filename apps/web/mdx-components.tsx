@@ -1,7 +1,14 @@
 // apps/web/mdx-components.tsx
-import type { MDXComponents } from "mdx/types";
+import type { ComponentProps } from "react";
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+// MDX components map - avoid mdx/types to prevent build dependency
+type MDXComponentsMap = ComponentProps<
+  typeof import("next-mdx-remote/rsc")["MDXRemote"]
+>["components"];
+
+export function useMDXComponents(
+  components: MDXComponentsMap = {}
+): MDXComponentsMap {
   return {
     ...components,
   };

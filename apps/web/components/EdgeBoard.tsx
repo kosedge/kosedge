@@ -1,0 +1,395 @@
+import * as React from "react";
+
+// Flat API row format (from Odds API / model)
+export type FlatEdgeBoardRow = {
+  id?: string;
+  game?: string;
+  time?: string;
+  market?: string;
+  open?: string;
+  best?: string;
+  book?: string;
+  note?: string;
+  commenceTime?: string;
+};
+
+export type EdgeBoardRow = FlatEdgeBoardRow;
+
+type Variant = "home" | "full";
+type Tag = "PLAY" | "LEAN" | "PASS";
+
+export type PriceSide = { label: string; juice: string };
+export type PricePair = { top: PriceSide; bottom: PriceSide };
+
+export type TeamBlock = {
+  name: string;
+  keiRank?: string;
+  site: "Away" | "Home";
+  record?: string;
+  confRecord?: string;
+};
+
+export type LegacyEdgeBoardRow = {
+  id: string;
+  time?: string;
+  teamA: TeamBlock;
+  teamB: TeamBlock;
+  openOU: PricePair;
+  openLine: PricePair;
+  bestLine: PricePair;
+  bestOU: PricePair;
+  keiLine?: PricePair;
+  keiOU?: PricePair;
+  edgeLine?: PricePair;
+  edgeOU?: PricePair;
+  tagLine?: Tag;
+  tagOU?: Tag;
+};
+
+const COMING_SOON_PAIR: PricePair = {
+  top: { label: "Coming soon", juice: "—" },
+  bottom: { label: "Coming soon", juice: "—" },
+};
+
+const sampleRows: LegacyEdgeBoardRow[] = [
+  {
+    id: "sample-1",
+    time: "8:30pm",
+    teamA: { name: "Duke", keiRank: "12", site: "Away", record: "21-1", confRecord: "10-0" },
+    teamB: { name: "UNC", keiRank: "18", site: "Home", record: "18-4", confRecord: "8-2" },
+    openOU: { top: { label: "o150.5", juice: "-110" }, bottom: { label: "u150.5", juice: "-110" } },
+    openLine: { top: { label: "+5.5", juice: "-110" }, bottom: { label: "-5.5", juice: "-110" } },
+    bestLine: { top: { label: "+6.5", juice: "-112" }, bottom: { label: "-5.0", juice: "-110" } },
+    bestOU: { top: { label: "o149.5", juice: "-110" }, bottom: { label: "u152.5", juice: "-112" } },
+  },
+];
+
+function PriceCell({
+  p,
+  valueClassName = "text-gray-200 font-semibold",
+  compact = false,
+}: {
+  p: PricePair;
+  valueClassName?: string;
+  compact?: boolean;
+}) {
+  const sep = compact ? "mt-1 h-px" : "mt-1.5 h-px";
+  const topPad = compact ? "mt-1" : "mt-1.5";
+  const valueLeading = compact ? "leading-[1.05]" : "leading-tight";
+
+  return (
+    <div className={valueLeading}>
+      <div className={valueClassName}>{p.top.label}</div>
+      <div className="text-[11px] text-gray-400">({p.top.juice})</div>
+      <div className={`${sep} bg-white/10`} />
+      <div className={`${topPad} ${valueClassName}`}>{p.bottom.label}</div>
+      <div className="text-[11px] text-gray-400">({p.bottom.juice})</div>
+    </div>
+  );
+}
+
+function HeaderStack({ a, b }: { a: string; b?: string }) {
+  return (
+    <div className="flex flex-col leading-[1.05]">
+      <span>{a}</span>
+      {b ? <span>{b}</span> : null}
+    </div>
+  );
+}
+
+const COL_WIDTHS = [
+  "160px", "85px", "85px", "85px", "85px", "85px",
+  "85px", "85px", "75px", "75px", "75px", "75px",
+] as const;
+
+function flatRowsToLegacy(flat: FlatEdgeBoardRow[]): LegacyEdgeBoardRow[] {
+  const valid = Array.isArray(flat) ? flat.filter((r): r is FlatEdgeBoardRow => r != null && typeof r === "object") : [];
+  const sorted = [...valid].sort((a, b) =>
+    String(a?.commenceTime ?? a?.time ?? "").localeCompare(String(b?.commenceTime ?? b?.time ?? ""))
+  );
+  const byGame = new Map<string, { spread?: FlatEdgeBoardRow; total?: FlatEdgeBoardRow }>();
+  for (const r of sorted) {
+    const key = String(r?.game ?? r?.id ?? "unknown").trim() || "unknown";
+    const entry = byGame.get(key) ?? {};
+    if (r?.market === "Spread") entry.spread = r;
+    else if (r?.market === "Total") entry.total = r;
+    byGame.set(key, entry);
+  }
+  const result: LegacyEdgeBoardRow[] = [];
+  for (const [gameKey, entry] of byGame) {
+    const spread = entry.spread ?? entry.total;
+    const total = entry.total ?? entry.spread;
+    if (!spread && !total) continue;
+    const game = String(spread?.game ?? total?.game ?? gameKey ?? "");
+    const parts = game.includes(" @ ") ? game.split(" @ ") : game.split(" vs ");
+    const away = (parts[0] ?? "Away").trim() || "Away";
+    const home = (parts[1] ?? "Home").trim() || "Home";
+    const time = (spread ?? total)?.time ?? "—";
+    const flipSpread = (s: string | undefined): string => {
+      const str = String(s ?? "").trim();
+      if (!str) return "—";
+      if (str.startsWith("+")) return `-${str.slice(1)}`;
+      const n = parseFloat(str);
+      return Number.isFinite(n) ? (n <= 0 ? `+${Math.abs(n)}` : `-${n}`) : "—";
+    };
+    const openLine: PricePair = spread?.open
+      ? { top: { label: spread.open, juice: "—" }, bottom: { label: flipSpread(spread.open), juice: "—" } }
+      : COMING_SOON_PAIR;
+    const bestLine: PricePair = spread?.best
+      ? { top: { label: spread.best, juice: "—" }, bottom: { label: flipSpread(spread.best), juice: "—" } }
+      : COMING_SOON_PAIR;
+    const t = total?.open ?? total?.best ?? "—";
+    const openOU: PricePair = t !== "—"
+      ? { top: { label: `o${t}`, juice: "—" }, bottom: { label: `u${t}`, juice: "—" } }
+      : COMING_SOON_PAIR;
+    const b = total?.best ?? total?.open ?? "—";
+    const bestOU: PricePair = b !== "—"
+      ? { top: { label: `o${b}`, juice: "—" }, bottom: { label: `u${b}`, juice: "—" } }
+      : COMING_SOON_PAIR;
+
+    result.push({
+      id: String(spread?.id ?? total?.id ?? gameKey),
+      time,
+      teamA: { name: away, site: "Away" },
+      teamB: { name: home, site: "Home" },
+      openOU,
+      openLine,
+      bestLine,
+      bestOU,
+    });
+  }
+  return result;
+}
+
+export default function EdgeBoard({
+  variant = "full",
+  rows,
+}: {
+  variant?: Variant;
+  rows?: FlatEdgeBoardRow[] | null;
+}) {
+  const safeRows = Array.isArray(rows) ? rows : [];
+  const edgeGreen = "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
+  const legacy = safeRows.length > 0 ? flatRowsToLegacy(safeRows) : sampleRows;
+  const data = safeRows.length > 0 ? legacy : sampleRows;
+
+  if (variant === "home") {
+    return (
+      <div className="lg:col-span-5">
+        <div className="relative">
+          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+          <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
+              <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">Sample</span>
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-white/10">
+              <table className="w-full text-sm sm:text-base">
+                <thead className="bg-white/5">
+                  <tr className="text-left text-gray-300">
+                    <th className="py-2.5 px-3">Game</th>
+                    <th className="py-2.5 px-3">Best Line</th>
+                    <th className="py-2.5 px-3">Best O/U</th>
+                    <th className="py-2.5 px-3">Edge</th>
+                    <th className="py-2.5 px-3">Tag</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/10 text-gray-200">
+                  {sampleRows.map((r) => (
+                    <tr key={r.id} className="hover:bg-white/5 transition">
+                      <td className="py-2.5 px-3">
+                        <div className="font-semibold">{r.teamA.name} vs {r.teamB.name}</div>
+                        <div className="text-[11px] text-gray-400">
+                          {r.teamA.name} ({r.teamA.keiRank ?? "—"}) • {r.teamB.name} ({r.teamB.keiRank ?? "—"})
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
+                      <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
+                      <td className={["py-2.5 px-3", edgeGreen].join(" ")}>Coming soon</td>
+                      <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">Coming soon</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4 text-xs text-gray-400">Sample data for illustrative purposes only.</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const MobileCards = (
+    <div className="lg:hidden mt-6">
+      <div className="relative">
+        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+        <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
+            <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
+              {safeRows.length ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games` : "Live"}
+            </span>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-white/10">
+            <table className="w-full text-sm">
+              <thead className="bg-white/5">
+                <tr className="text-left text-gray-300">
+                  <th className="py-2.5 px-3">Game</th>
+                  <th className="py-2.5 px-3">Time</th>
+                  <th className="py-2.5 px-3">Best Line</th>
+                  <th className="py-2.5 px-3">Best O/U</th>
+                  <th className="py-2.5 px-3">Edge</th>
+                  <th className="py-2.5 px-3">Tag</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/10 text-gray-200">
+                {data.map((r) => (
+                  <tr key={r.id} className="hover:bg-white/5 transition">
+                    <td className="py-2.5 px-3">
+                      <div className="font-semibold">{r.teamA.name} vs {r.teamB.name}</div>
+                    </td>
+                    <td className="py-2.5 px-3 text-gray-300 tabular-nums">{r.time ?? "—"}</td>
+                    <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
+                    <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
+                    <td className={["py-2.5 px-3", edgeGreen].join(" ")}>Coming soon</td>
+                    <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">Coming soon</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 text-xs text-gray-400">
+            Live: Game/Time/Open/Best. Coming soon: KEICMB + Edge + Tags.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const DesktopTable = (
+    <div className="hidden lg:block mt-6">
+      <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+          <div className="text-sm text-gray-300">
+            Tonight • Live odds (Open + Best) • Everything else coming soon
+          </div>
+          <div className="text-xs text-gray-500">
+            {safeRows.length ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games` : "Logos + links next"}
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-[1100px] w-full table-fixed text-[12.75px] tabular-nums">
+            <colgroup>
+              {COL_WIDTHS.map((w, i) => (
+                <col key={i} style={{ width: w }} />
+              ))}
+            </colgroup>
+            <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-[13px]">
+              <tr className="text-left">
+                <th className="py-2.5 px-3"><HeaderStack a="Game" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Time" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Open" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Open" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Best" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Best" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="KEICMB" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="KEICMB" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Edge" b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a="Edge" b="O/U" /></th>
+                <th className="py-2.5 px-3 text-center"><HeaderStack a="Tag" b="Line" /></th>
+                <th className="py-2.5 px-3 text-center"><HeaderStack a="Tag" b="O/U" /></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10 text-gray-200">
+              {data.map((r) => (
+                <tr key={r.id} className="hover:bg-white/5 transition">
+                  <td className="py-2.5 px-3 align-top relative pb-7">
+                    <div className="font-semibold truncate">
+                      {r.teamA.name} <span className="text-gray-400">({r.teamA.keiRank ?? "—"})</span>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {r.teamA.site}
+                      {r.teamA.record ? ` • ${r.teamA.record}` : ""}
+                      {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
+                    </div>
+                    <div className="mt-1 font-semibold truncate">
+                      {r.teamB.name} <span className="text-gray-400">({r.teamB.keiRank ?? "—"})</span>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {r.teamB.site}
+                      {r.teamB.record ? ` • ${r.teamB.record}` : ""}
+                      {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
+                    </div>
+                    <button
+                      className="absolute bottom-2 left-3 text-[14px] text-kos-gold hover:underline whitespace-nowrap"
+                      type="button"
+                      title="Expandable panel coming soon"
+                    >
+                      Overview ▾
+                    </button>
+                  </td>
+                  <td className="py-2.5 px-1 align-top relative pb-7 overflow-hidden">
+                    <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
+                      {r.time ?? "—"}
+                    </div>
+                    <button
+                      className="absolute bottom-2 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
+                      type="button"
+                      title="Expandable panel coming soon"
+                    >
+                      Stats ▾
+                    </button>
+                  </td>
+                  <td className="py-2.5 px-3 align-top text-gray-400">
+                    <PriceCell p={r.openOU} compact valueClassName="text-gray-400 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-3 align-top text-gray-400">
+                    <PriceCell p={r.openLine} compact valueClassName="text-gray-400 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-3 align-top">
+                    <PriceCell p={r.bestLine} compact valueClassName="text-gray-100 font-semibold" />
+                  </td>
+                  <td className="py-2.5 px-3 align-top">
+                    <PriceCell p={r.bestOU} compact valueClassName="text-gray-100 font-semibold" />
+                  </td>
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-2 align-top">
+                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                  </td>
+                  <td className="py-2.5 px-2 align-top text-center">
+                    <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
+                      Coming soon
+                    </span>
+                  </td>
+                  <td className="py-2.5 px-2 align-top text-center">
+                    <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
+                      Coming soon
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
+          Live: Game/Time/Open/Best. Coming soon: KEICMB + Edge + Tags, sportsbook logos + deep links, Overview/Stats expanders.
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {MobileCards}
+      {DesktopTable}
+    </>
+  );
+}

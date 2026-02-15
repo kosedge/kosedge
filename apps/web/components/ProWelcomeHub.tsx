@@ -1,182 +1,143 @@
-// apps/web/components/ProWelcomeHub.tsx
-
-"use client";
-
 import Link from "next/link";
+import Image from "next/image";
 
-type BookLine = {
-  book: string;
-  line: string;
-  juice: string;
-  url: string;
+type HubCard = {
+  title: string;
+  desc: string;
+  href: string;
+  accent?: "gold" | "green";
 };
 
-type EdgeItem = {
-  game: string;
-  modelLine: string;
-  bestMarketLine: string;
-  edge: string;
-  books: BookLine[];
-};
+import { SPORTS } from "@/lib/sports";
 
-const sampleEdge: EdgeItem = {
-  game: "Duke @ UNC",
-  modelLine: "-4.5",
-  bestMarketLine: "-2.5",
-  edge: "+2.0",
-  books: [
-    { book: "DraftKings", line: "-2.5", juice: "-110", url: "#" },
-    { book: "FanDuel", line: "-2.5", juice: "-108", url: "#" },
-    { book: "BetMGM", line: "-3.0", juice: "-110", url: "#" },
-  ],
-};
+const cards: HubCard[] = [
+  { title: "Edge Board", desc: "Best lines, open vs best, tags and filters (expanding).", href: "/edge-board", accent: "gold" },
+  { title: "Market Dashboard", desc: "Totals, spreads, steam, key numbers, movement snapshots.", href: "/pro/market", accent: "green" },
+  { title: "Workflow", desc: "Build a card. Save leans. Track CLV. One-click book links (V1).", href: "/pro/workflow", accent: "gold" },
+  { title: "Power Ratings", desc: "Team strength, updates, and historical context.", href: "/pro/power-ratings", accent: "green" },
+  { title: "Props", desc: "Prop analyzer and edge screens (V1+).", href: "/pro/props", accent: "gold" },
+  { title: "Guides", desc: "Discipline + bankroll + model methodology docs.", href: "/methodology", accent: "green" },
+];
 
 export default function ProWelcomeHub() {
   return (
-    <div className="space-y-10">
-
-      {/* ================= MARKET DASHBOARD ================= */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <div className="bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
-          <div className="text-xs text-gray-400">Active Edges Today</div>
-          <div className="text-4xl font-bebas text-kos-gold mt-2">42</div>
-          <div className="text-xs text-gray-500 mt-1">
-            Spread 18 • Total 9 • Props 15
+    <section className="w-full">
+      {/* Hero: logo + branding + nav + sport links */}
+      <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 sm:p-7 shadow-2xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full overflow-hidden ring-1 ring-white/10 flex-shrink-0">
+              <Image
+                src="/brand/kosedge-logo-v2.png"
+                alt="Kos Edge Analytics"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div className="leading-none min-w-0">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bebas tracking-wider">
+                <span className="text-kos-green">KOS</span>{" "}
+                <span className="text-kos-gold">EDGE</span>{" "}
+                <span className="text-gray-300">ANALYTICS</span>{" "}
+                <span className="text-kos-gold drop-shadow-[0_0_12px_rgba(245,185,66,0.35)]">
+                  PRO
+                </span>
+              </div>
+              <div className="text-sm text-gray-400 mt-1">
+                Beat the <span className="text-white">Number</span> with real{" "}
+                <span className="text-kos-gold">Edge</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/"
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
+            >
+              Home
+            </Link>
+            <Link
+              href="/edge-board"
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
+            >
+              Edge Board
+            </Link>
           </div>
         </div>
-
-        <div className="bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
-          <div className="text-xs text-gray-400">Largest Edge</div>
-          <div className="text-4xl font-bebas text-kos-green mt-2">+3.4%</div>
-          <div className="text-xs text-gray-500 mt-1">
-            CBB • Spread
-          </div>
+        {/* Sport hubs + edge boards */}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {SPORTS.map((s) => (
+            <Link
+              key={s.key}
+              href={`/pro/${s.key}`}
+              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-kos-gold/35 hover:bg-white/10 transition text-sm font-semibold"
+            >
+              {s.label} Hub
+            </Link>
+          ))}
+          {SPORTS.map((s) => (
+            <Link
+              key={`board-${s.key}`}
+              href={`/edge-board/${s.key}`}
+              className="px-3 py-2 rounded-xl bg-kos-gold/10 border border-kos-gold/30 hover:border-kos-gold/50 text-kos-gold transition text-sm font-semibold"
+            >
+              {s.label} Board
+            </Link>
+          ))}
         </div>
+      </div>
 
-        <div className="bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
-          <div className="text-xs text-gray-400">Most Active Sport</div>
-          <div className="text-4xl font-bebas text-gray-100 mt-2">NCAAM</div>
-          <div className="text-xs text-gray-500 mt-1">
-            22 edges detected
-          </div>
-        </div>
+      {/* Grid */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        {cards.map((c) => {
+          const isGold = c.accent === "gold";
+          const border = isGold ? "border-kos-gold/25 hover:border-kos-gold/45" : "border-kos-green/20 hover:border-kos-green/40";
+          const glow = isGold ? "hover:shadow-kos-gold/20" : "hover:shadow-kos-green/20";
+          const title = isGold ? "text-kos-gold" : "text-kos-green";
 
-      </section>
+          return (
+            <Link
+              key={c.title}
+              href={c.href}
+              className={[
+                "group rounded-3xl border bg-black/30 backdrop-blur-xl p-6 shadow-xl transition",
+                border,
+                glow,
+              ].join(" ")}
+            >
+              <div className={["text-2xl font-bebas tracking-tight", title].join(" ")}>
+                {c.title}
+              </div>
+              <div className="mt-2 text-sm text-gray-200/80 leading-relaxed">{c.desc}</div>
+              <div className="mt-4 text-sm font-semibold text-gray-300 group-hover:text-white transition">
+                Open →
+              </div>
+            </Link>
+          );
+        })}
+      </div>
 
-      {/* ================= BEST LINE PANEL ================= */}
-      <section className="bg-black/50 border border-kos-gold/30 rounded-3xl p-8 backdrop-blur-xl shadow-xl shadow-kos-gold/20">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-
+      {/* “Top Edge” / article area placeholder */}
+      <div className="mt-6 rounded-3xl border border-white/10 bg-black/25 backdrop-blur-xl p-6 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
-            <div className="text-sm text-gray-400">Top Edge Right Now</div>
-            <div className="text-3xl font-bebas text-kos-gold mt-1">
-              {sampleEdge.game}
-            </div>
-
-            <div className="mt-4 space-y-1 text-sm">
-              <div>Model Line: <span className="text-gray-100">{sampleEdge.modelLine}</span></div>
-              <div>Best Market Line: <span className="text-gray-100">{sampleEdge.bestMarketLine}</span></div>
-              <div>Edge: <span className="text-kos-green font-bold">{sampleEdge.edge}</span></div>
+            <div className="text-sm text-gray-400">Top Edge Article</div>
+            <div className="mt-1 text-2xl font-bebas text-kos-gold">Insight of the Week</div>
+            <div className="mt-2 text-sm text-gray-200/80 max-w-3xl">
+              This is where your featured weekly write-up lives: market angle, matchup breakdown, key numbers,
+              and workflow steps.
             </div>
           </div>
 
-          <div className="w-full lg:w-[380px] space-y-3">
-            {sampleEdge.books.map((b) => (
-              <a
-                key={b.book}
-                href={b.url}
-                className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white/5 border border-white/10 hover:border-kos-gold/40 transition"
-              >
-                <div>
-                  <div className="font-semibold text-gray-100">{b.book}</div>
-                  <div className="text-xs text-gray-400">
-                    {b.line} ({b.juice})
-                  </div>
-                </div>
-                <div className="text-kos-gold font-semibold">
-                  Bet →
-                </div>
-              </a>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* ================= WORKFLOW ================= */}
-      <section className="bg-black/30 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
-        <div className="text-2xl font-bebas text-kos-gold">
-          Pro Workflow
-        </div>
-
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-4 text-sm text-gray-300">
-          <div>1. Scan Edge Board</div>
-          <div>2. Filter by Edge %</div>
-          <div>3. Confirm Line Movement</div>
-          <div>4. Review Breakdown</div>
-          <div>5. Bet Best Number</div>
-        </div>
-      </section>
-
-      {/* ================= TOOL GRID ================= */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-5">
-
-        {[
-          "Edge Board",
-          "Power Ratings",
-          "Odds Screen",
-          "Props Analyzer",
-          "DFS Model",
-          "Futures Dashboard",
-          "Betting Guide",
-          "Historical Performance"
-        ].map((tool) => (
           <Link
-            key={tool}
-            href="/edge-board"
-            className="bg-black/40 border border-white/10 rounded-2xl p-6 hover:border-kos-gold/40 transition backdrop-blur-xl"
+            href="/insights"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
           >
-            <div className="text-lg font-semibold text-gray-100">
-              {tool}
-            </div>
-            <div className="text-xs text-gray-400 mt-1">
-              Open →
-            </div>
-          </Link>
-        ))}
-
-      </section>
-
-      {/* ================= CONTENT GRID ================= */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <div className="lg:col-span-2 bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
-          <div className="text-xl font-bebas text-kos-gold">
-            Featured Article
-          </div>
-          <div className="mt-4 text-gray-300">
-            Why Duke vs UNC is mispriced by 2 points tonight.
-          </div>
-          <Link href="/insights" className="text-kos-gold text-sm mt-4 inline-block">
-            Read →
+            Browse Insights
           </Link>
         </div>
-
-        <div className="bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
-          <div className="text-xl font-bebas text-kos-gold">
-            Insight of the Week
-          </div>
-          <div className="mt-4 text-gray-300">
-            Power rating shifts after conference play.
-          </div>
-          <Link href="/insights" className="text-kos-gold text-sm mt-4 inline-block">
-            View →
-          </Link>
-        </div>
-
-      </section>
-
-    </div>
+      </div>
+    </section>
   );
 }

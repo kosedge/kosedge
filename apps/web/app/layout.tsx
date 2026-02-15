@@ -1,12 +1,19 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Providers } from "./providers";
+import { ErrorBoundary } from "@/components/error/ErrorBoundary";
 
 const sans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -27,7 +34,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={sans.variable} suppressHydrationWarning>
-      <body>{children}</body>
+      <body className="overflow-x-hidden">
+        <ErrorBoundary>
+          <Providers>{children}</Providers>
+        </ErrorBoundary>
+      </body>
     </html>
   );
 }

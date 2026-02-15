@@ -18,6 +18,8 @@ yarn-error.log*
 # pnpm / yarn / pnp
 .pnp
 .pnp.*
+.pnpm-store/
+.turbo/
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -94,3 +96,5 @@ celerybeat.pid
 
 # Docker env
 infra/.env.docker
+.vercel
+.env*.local

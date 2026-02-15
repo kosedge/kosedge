@@ -1,4 +1,3 @@
-// apps/web/components/ProPricing.tsx
 "use client";
 
 import Link from "next/link";
@@ -41,15 +40,14 @@ const yearly: Plan = {
   cta: "Start Yearly",
 };
 
-function enableProAndGo() {
-  document.cookie = "kosedge_pro=1; path=/; max-age=31536000";
+// Until full launch: all price clicks go to Pro Hub (no checkout yet)
+function goToWelcome() {
   window.location.href = "/pro/welcome";
 }
 
 export default function ProPricing() {
   return (
     <section className="w-full">
-      {/* Single Hero (ONLY ONE) */}
       <div className="text-center">
         <div className="text-sm text-gray-400">Kos Edge Pro</div>
         <h2 className="mt-2 text-4xl sm:text-5xl font-bebas tracking-tight text-kos-gold">
@@ -68,7 +66,6 @@ export default function ProPricing() {
         </p>
       </div>
 
-      {/* Weekly + Monthly Row */}
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
         {[weekly, monthly].map((p) => (
           <div
@@ -102,9 +99,7 @@ export default function ProPricing() {
               <div className="pb-2 text-sm text-gray-400">{p.cadence}</div>
             </div>
 
-            {p.sub && (
-              <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>
-            )}
+            {p.sub && <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>}
 
             <button
               type="button"
@@ -114,19 +109,16 @@ export default function ProPricing() {
                   ? "bg-kos-gold text-black hover:brightness-110 shadow-lg shadow-kos-gold/25"
                   : "bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10",
               ].join(" ")}
-              onClick={enableProAndGo}
+              onClick={goToWelcome}
             >
               {p.cta}
             </button>
 
-            <div className="mt-3 text-xs text-gray-500">
-              Cancel anytime • Instant access
-            </div>
+            <div className="mt-3 text-xs text-gray-500">Cancel anytime • Instant access</div>
           </div>
         ))}
       </div>
 
-      {/* Yearly (Bottom Standout) */}
       <div className="mt-6">
         <div className="relative rounded-3xl border bg-black/50 border-kos-gold/50 backdrop-blur-xl p-7 shadow-xl shadow-kos-gold/25">
           <div className="absolute -top-3 left-6 rounded-full bg-kos-gold text-black px-3 py-1 text-xs font-bold shadow-lg shadow-kos-gold/30">
@@ -141,9 +133,7 @@ export default function ProPricing() {
                 <div className="text-6xl font-bebas tracking-tight text-kos-gold">
                   {yearly.price}
                 </div>
-                <div className="pb-2 text-sm text-gray-400">
-                  {yearly.cadence}
-                </div>
+                <div className="pb-2 text-sm text-gray-400">{yearly.cadence}</div>
               </div>
 
               <div className="mt-2 text-sm text-gray-200/80">{yearly.sub}</div>
@@ -153,7 +143,7 @@ export default function ProPricing() {
               <button
                 type="button"
                 className="w-full px-4 py-3 rounded-2xl font-semibold bg-kos-gold text-black hover:brightness-110 transition shadow-lg shadow-kos-gold/30"
-                onClick={enableProAndGo}
+                onClick={goToWelcome}
               >
                 {yearly.cta}
               </button>
@@ -166,7 +156,6 @@ export default function ProPricing() {
         </div>
       </div>
 
-      {/* Bottom links */}
       <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-500">
         <Link href="/insights" className="hover:text-gray-300 transition">
           View methodology

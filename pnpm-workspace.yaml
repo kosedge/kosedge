@@ -4,7 +4,8 @@ packages:
   - services/*
 
 onlyBuiltDependencies:
-  - '@prisma/engines'
+  - "@prisma/engines"
+  - "@sentry/cli"
   - prisma
   - sharp
   - unrs-resolver

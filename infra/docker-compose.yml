@@ -31,7 +31,7 @@ services:
 
   model-service:
     build:
-      context: ../apps/api/model-service
+      context: ../services/model-service
       dockerfile: Dockerfile
     image: kosedge-model-service
     container_name: kosedge_model_service
@@ -42,7 +42,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ../apps/api/model-service:/app
+      - ../services/model-service:/app
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       postgres:
@@ -59,7 +59,7 @@ services:
 
   celery-worker:
     build:
-      context: ../apps/api/model-service
+      context: ../services/model-service
       dockerfile: Dockerfile
     image: kosedge-celery-worker
     container_name: kosedge_celery_worker
@@ -68,7 +68,7 @@ services:
     environment:
       TZ: ${TZ:-US/Eastern}
     volumes:
-      - ../apps/api/model-service:/app
+      - ../services/model-service:/app
     command: >
       celery -A src.celery_app:celery_app worker
       --loglevel=INFO
@@ -89,14 +89,14 @@ services:
 
   celery-beat:
     build:
-      context: ../apps/api/model-service
+      context: ../services/model-service
       dockerfile: Dockerfile
     image: kosedge-celery-beat
     container_name: kosedge_celery_beat
     env_file:
       - ./.env.docker
     volumes:
-      - ../apps/api/model-service:/app
+      - ../services/model-service:/app
       - kosedge_celerybeat_data:/tmp
     command: >
       celery -A src.celery_app:celery_app beat
