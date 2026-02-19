@@ -2,17 +2,23 @@ import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
-import { fetchNcaabEdgeBoard } from "@/lib/odds-api";
+import { fetchEdgeBoard } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
+
+/** Odds refresh at most every 6 hours to limit API usage */
+const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const CACHE_HEADERS = {
+  "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
+};
+
+let ncaamCache: { rows: unknown[]; ts: number } | null = null;
 
 function json(data: unknown, status = 200, extraHeaders?: Record<string, string>) {
   return NextResponse.json(data, {
     status,
     headers: {
-      "cache-control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-      pragma: "no-cache",
-      expires: "0",
+      ...CACHE_HEADERS,
       ...extraHeaders,
     },
   });
@@ -65,7 +71,7 @@ async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { o
   const key = env.ODDS_API_KEY?.trim();
   if (!key) return { ok: false };
   try {
-    const rows = await fetchNcaabEdgeBoard(key);
+    const rows = await fetchEdgeBoard("ncaam", key);
     return { ok: true, rows };
   } catch (e) {
     console.error("edge_board_odds_fallback_failed", { error: String(e) });
@@ -84,18 +90,27 @@ export async function GET(req: Request) {
     }
   }
 
+  const now = Date.now();
+  if (ncaamCache && now - ncaamCache.ts < ODDS_CACHE_TTL_MS) {
+    return json({ rows: ncaamCache.rows }, 200, { "x-request-id": requestId });
+  }
+
   // 1. Try model service first
   const modelResult = await tryModelService(requestId);
   if (modelResult.ok && modelResult.rows.length > 0) {
+    ncaamCache = { rows: modelResult.rows, ts: now };
     return json({ rows: modelResult.rows }, 200, { "x-request-id": requestId });
   }
 
   // 2. Fallback to Odds API when model not available
   const oddsResult = await tryOddsApiFallback();
   if (oddsResult.ok) {
+    ncaamCache = { rows: oddsResult.rows, ts: now };
     return json({ rows: oddsResult.rows }, 200, { "x-request-id": requestId });
   }
 
-  // 3. Return empty (no 500; page still loads)
+  if (ncaamCache) {
+    return json({ rows: ncaamCache.rows }, 200, { "x-request-id": requestId });
+  }
   return json({ rows: [] }, 200, { "x-request-id": requestId });
 }
