@@ -7,6 +7,8 @@ const EnvSchema = z.object({
   INTERNAL_API_SECRET: z.string().min(16).optional(),
   // Odds API fallback for NCAAM (free tier: 500 req/mo)
   ODDS_API_KEY: z.string().min(1).optional(),
+  // Widget embed (server-only; never exposed to client)
+  ODDS_WIDGET_ACCESS_KEY: z.string().min(1).optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).optional(),
 
   // Authentication

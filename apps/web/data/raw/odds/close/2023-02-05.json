@@ -1,0 +1,6195 @@
+{
+  "timestamp": "2023-02-05T21:55:38Z",
+  "previous_timestamp": "2023-02-05T21:50:38Z",
+  "next_timestamp": "2023-02-05T22:00:38Z",
+  "data": [
+    {
+      "id": "0a6ba5c9210a0e1610b6209b52c990ea",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-05T20:00:00Z",
+      "home_team": "Tulsa Golden Hurricane",
+      "away_team": "Wichita St Shockers",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:42:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:42:21Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -110,
+                  "point": 18.5
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -120,
+                  "point": -18.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": 115,
+                  "point": 17.5
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -150,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-02-05T21:42:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:42:21Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -110,
+                  "point": 19.0
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -124,
+                  "point": -19.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-02-05T21:42:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:42:21Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -110,
+                  "point": 19.0
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -124,
+                  "point": -19.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-02-05T21:42:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:42:23Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -110,
+                  "point": 19.0
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -124,
+                  "point": -19.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-02-05T21:52:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -10000,
+                  "point": 16.5
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": 3300,
+                  "point": -16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -155,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": 120,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-02-05T21:43:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:43:26Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -105,
+                  "point": 18.5
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -139,
+                  "point": -18.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Tulsa Golden Hurricane",
+                  "price": -117,
+                  "point": 8.5
+                },
+                {
+                  "name": "Wichita St Shockers",
+                  "price": -111,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -125,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fab176190891d271dc9dc71851405955",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-05T21:30:00Z",
+      "home_team": "Nebraska Cornhuskers",
+      "away_team": "Penn State Nittany Lions",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -115,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -115,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -120,
+                  "point": -2.0
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -120,
+                  "point": -2.0
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-02-05T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -120,
+                  "point": -2.0
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-02-05T21:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -120,
+                  "point": -2.0
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-02-05T21:52:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -115,
+                  "point": -4.5
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -125,
+                  "point": -2.5
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -118,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -125,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -125,
+                  "point": -2.5
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -105,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Penn State Nittany Lions",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "21026d461b9db372e8dd3f1e6de67c08",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-05T23:00:00Z",
+      "home_team": "Utah Utes",
+      "away_team": "California Golden Bears",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -105,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -115,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 127.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 127.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -111,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -111,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -108,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -112,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -108,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -112,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-02-05T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -108,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -112,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-02-05T21:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -108,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -112,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -108,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -112,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-02-05T21:52:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 18.0
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -108,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -104,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2f579c3bc68bab77a43ffc85cfb8a1e8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-05T23:00:00Z",
+      "home_team": "Temple Owls",
+      "away_team": "Houston Cougars",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -104,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -108,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -109,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -112,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-02-05T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-02-05T21:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-02-05T21:52:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -106,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "67ae8a297e6d64fbf6f80bf901f3ae59",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-05T23:30:00Z",
+      "home_team": "Wisconsin Badgers",
+      "away_team": "Northwestern Wildcats",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -101,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -111,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -107,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -113,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-02-05T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -107,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -113,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-02-05T21:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -107,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -113,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -107,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -113,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -107,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -113,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-02-05T21:52:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -118,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 126.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 126.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "abf272f68da7cd3d85277be398e7905c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-06T00:00:00Z",
+      "home_team": "Colorado Buffaloes",
+      "away_team": "Stanford Cardinal",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -105,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -115,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -102,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -106,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -115,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -105,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -115,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-02-05T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-02-05T21:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -115,
+                  "point": -4.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -105,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-02-05T21:52:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -105,
+                  "point": -5.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -115,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:52:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -105,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -118,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -108,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -113,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-02-05T21:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1ab961f9f82235240b8002931aba5539",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-06T22:00:00Z",
+      "home_team": "UT-Arlington Mavericks",
+      "away_team": "Tarleton State Texans",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -111,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -111,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -106,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -106,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Tarleton State Texans",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "561c0270d79c812011f60dea3aa2a5a7",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-06T23:00:00Z",
+      "home_team": "Hartford Hawks",
+      "away_team": "UMass Lowell River Hawks",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": 16.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -111,
+                  "point": 16.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -111,
+                  "point": -16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": 16.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -106,
+                  "point": 16.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -106,
+                  "point": -16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "001978ed51d5bbe8e6e2432ae9b9fea0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T00:00:00Z",
+      "home_team": "Miami Hurricanes",
+      "away_team": "Duke Blue Devils",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -111,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -101,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e4b77ee103750b9375a6dfe19830c06b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T00:00:00Z",
+      "home_team": "Holy Cross Crusaders",
+      "away_team": "Lafayette Leopards",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Holy Cross Crusaders",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Lafayette Leopards",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Holy Cross Crusaders",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "Lafayette Leopards",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Holy Cross Crusaders",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "Lafayette Leopards",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Holy Cross Crusaders",
+                  "price": -111,
+                  "point": 3.0
+                },
+                {
+                  "name": "Lafayette Leopards",
+                  "price": -101,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 125.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 125.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5be531b73a179bf8d8c4d1a3dd9088e9",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T01:00:00Z",
+      "home_team": "Alabama A&M Bulldogs",
+      "away_team": "Grambling St Tigers",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -111,
+                  "point": 3.5
+                },
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -111,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f7fb6165ba17e8e40fc324940ad77a3a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T01:00:00Z",
+      "home_team": "Milwaukee Panthers",
+      "away_team": "Green Bay Phoenix",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -105,
+                  "point": 17.5
+                },
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -115,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2f374f83c88cc5bce6ee9c7932d5abe8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T01:00:00Z",
+      "home_team": "Northern Arizona Lumberjacks",
+      "away_team": "Idaho State Bengals",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -111,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -111,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Northern Arizona Lumberjacks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "82a3f2f446dbfd5adcff58767370850c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T01:30:00Z",
+      "home_team": "Alabama St Hornets",
+      "away_team": "Southern Jaguars",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Southern Jaguars",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -111,
+                  "point": 5.5
+                },
+                {
+                  "name": "Southern Jaguars",
+                  "price": -111,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Southern Jaguars",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -106,
+                  "point": 5.5
+                },
+                {
+                  "name": "Southern Jaguars",
+                  "price": -106,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2c7d582723911e8e972685a0ce9c065e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T01:30:00Z",
+      "home_team": "Jackson St Tigers",
+      "away_team": "Arkansas-Pine Bluff Golden Lions",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -106,
+                  "point": 4.0
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -106,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -111,
+                  "point": 4.0
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -111,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "089511271b520bb16990472cea0123b1",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T01:30:00Z",
+      "home_team": "Prairie View Panthers",
+      "away_team": "Florida A&M Rattlers",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Florida A&M Rattlers",
+                  "price": -110,
+                  "point": 10.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -110,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 120.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 120.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Florida A&M Rattlers",
+                  "price": -106,
+                  "point": 10.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -106,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 120.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 120.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Florida A&M Rattlers",
+                  "price": -110,
+                  "point": 10.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -110,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 120.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 120.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Florida A&M Rattlers",
+                  "price": -111,
+                  "point": 10.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -111,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 120.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 120.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fd45c9ca9d686a500a516bd81c20e61e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T02:00:00Z",
+      "home_team": "Alcorn St Braves",
+      "away_team": "Miss Valley St Delta Devils",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alcorn St Braves",
+                  "price": -110,
+                  "point": -12.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -110,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Alcorn St Braves",
+                  "price": -106,
+                  "point": -12.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -106,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alcorn St Braves",
+                  "price": -110,
+                  "point": -12.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -110,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Alcorn St Braves",
+                  "price": -111,
+                  "point": -12.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -111,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5ea8843fe30b5268097d8345a67b6636",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T02:00:00Z",
+      "home_team": "Texas Southern Tigers",
+      "away_team": "Bethune-Cookman Wildcats",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Bethune-Cookman Wildcats",
+                  "price": -110,
+                  "point": 8.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Bethune-Cookman Wildcats",
+                  "price": -106,
+                  "point": 8.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -106,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Bethune-Cookman Wildcats",
+                  "price": -110,
+                  "point": 8.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Bethune-Cookman Wildcats",
+                  "price": -111,
+                  "point": 8.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -111,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2da98a88df2fb3f92d213cb0b4256d52",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T02:00:00Z",
+      "home_team": "Kansas Jayhawks",
+      "away_team": "Texas Longhorns",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-02-05T21:55:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -106,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -106,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -111,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -111,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-02-05T21:55:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5c911036744ada0d0cbcdbb4057b9b7e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-02-07T04:00:00Z",
+      "home_team": "N Colorado Bears",
+      "away_team": "Weber State Wildcats",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "N Colorado Bears",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "N Colorado Bears",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-02-05T21:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "N Colorado Bears",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-02-05T21:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

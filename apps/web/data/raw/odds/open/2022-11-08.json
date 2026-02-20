@@ -1,0 +1,2689 @@
+{
+  "timestamp": "2022-11-08T11:55:39Z",
+  "previous_timestamp": "2022-11-08T11:50:39Z",
+  "next_timestamp": "2022-11-08T12:00:39Z",
+  "data": [
+    {
+      "id": "fba198f4d50d4d89a2c542923c7536f6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-11-08T23:30:00Z",
+      "home_team": "Purdue Boilermakers",
+      "away_team": "Milwaukee Panthers",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-11-08T11:51:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-11-08T11:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-11-08T11:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -106,
+                  "point": 25.5
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -106,
+                  "point": -25.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-11-08T11:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -106,
+                  "point": 25.5
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -106,
+                  "point": -25.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-11-08T11:49:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:43Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -109,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -109,
+                  "point": -26.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -112,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-11-08T11:51:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:32Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -112,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-11-08T11:50:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -112,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-11-08T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -112,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-11-08T11:55:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -112,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-11-08T11:51:10Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -109,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -109,
+                  "point": -26.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-11-08T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.5
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -26.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-11-08T11:54:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-11-08T11:50:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-11-08T11:55:07Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:07Z",
+              "outcomes": [
+                {
+                  "name": "Milwaukee Panthers",
+                  "price": -110,
+                  "point": 26.0
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -26.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:07Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8293af3a182f3a89f4f8dd4dc9e52394",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-11-08T23:30:00Z",
+      "home_team": "Providence Friars",
+      "away_team": "Rider Broncs",
+      "bookmakers": [
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-11-08T11:50:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -108,
+                  "point": -13.5
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -114,
+                  "point": 13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-11-08T11:49:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:43Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -109,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -109,
+                  "point": 13.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-11-08T11:55:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -108,
+                  "point": -13.5
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -114,
+                  "point": 13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-11-08T11:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -106,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -106,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-11-08T11:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -110,
+                  "point": -13.5
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -110,
+                  "point": 13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-11-08T11:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -106,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -106,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-11-08T11:49:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -110,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -108,
+                  "point": -13.5
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -114,
+                  "point": 13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -109,
+                  "point": -13.5
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -109,
+                  "point": 13.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-11-08T11:54:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -110,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-11-08T11:50:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -110,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-11-08T11:55:07Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:07Z",
+              "outcomes": [
+                {
+                  "name": "Providence Friars",
+                  "price": -105,
+                  "point": -13.5
+                },
+                {
+                  "name": "Rider Broncs",
+                  "price": -118,
+                  "point": 13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:07Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "285d3a747c95c853957345ff18dc20fd",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-11-09T00:00:00Z",
+      "home_team": "Duquesne Dukes",
+      "away_team": "Montana Grizzlies",
+      "bookmakers": [
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-11-08T11:55:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 135.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-11-08T11:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -106,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -106,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-11-08T11:51:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:32Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 135.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-11-08T11:49:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -105,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -115,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 135.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-11-08T11:50:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 135.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-11-08T11:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-11-08T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 135.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-11-08T11:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -106,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -106,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-11-08T11:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -104,
+                  "point": -5.5
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -118,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-11-08T11:49:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:43Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -109,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-11-08T11:51:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-11-08T11:51:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:10Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": 100,
+                  "point": -5.5
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -120,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -107,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -112,
+                  "point": 5.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-11-08T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-11-08T11:54:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-11-08T11:50:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Duquesne Dukes",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Montana Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e5302b1138dfaf392ff4922ec57ca48d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-11-09T00:00:00Z",
+      "home_team": "East Carolina Pirates",
+      "away_team": "Mercer Bears",
+      "bookmakers": [
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-11-08T11:55:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -112,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-11-08T11:55:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -106,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -106,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-11-08T11:51:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:32Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -112,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-11-08T11:49:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -112,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-11-08T11:50:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -112,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-11-08T11:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-11-08T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -112,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-11-08T11:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -106,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -106,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-11-08T11:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:01Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -122,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": 100,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-11-08T11:49:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:43Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -109,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-11-08T11:51:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-11-08T11:51:10Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -103,
+                  "point": -2.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -115,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-11-08T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-11-08T11:54:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-11-08T11:50:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "East Carolina Pirates",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Mercer Bears",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "853c06cc2118ef8c00dfb72e031eaaf0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-11-09T03:00:00Z",
+      "home_team": "San Jos\u00e9 St Spartans",
+      "away_team": "Georgia Southern Eagles",
+      "bookmakers": [
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-11-08T11:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-11-08T11:49:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:49:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-11-08T11:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-11-08T11:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-11-08T11:51:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-11-08T11:51:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:51:10Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:51:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-11-08T11:50:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:32Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -107,
+                  "point": 4.0
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -112,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-11-08T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-11-08T11:54:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:54:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-11-08T11:50:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-11-08T11:50:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

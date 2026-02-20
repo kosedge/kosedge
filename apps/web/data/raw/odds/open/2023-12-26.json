@@ -1,0 +1,105 @@
+{
+  "timestamp": "2023-12-26T11:55:38Z",
+  "previous_timestamp": "2023-12-26T11:50:38Z",
+  "next_timestamp": "2023-12-26T12:00:38Z",
+  "data": [
+    {
+      "id": "df2b12758d9ccbd37abef2ef9e32f9ce",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-12-28T00:00:00Z",
+      "home_team": "Virginia Cavaliers",
+      "away_team": "Morgan St Bears",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-12-26T11:54:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-26T11:54:13Z",
+              "outcomes": [
+                {
+                  "name": "Morgan St Bears",
+                  "price": -110,
+                  "point": 27.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": -27.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-26T11:54:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7282a35eba7ec1813f726b12d4d261dd",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-12-28T03:00:00Z",
+      "home_team": "Cal Baptist Lancers",
+      "away_team": "Chicago St Cougars",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-12-26T11:54:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-26T11:54:13Z",
+              "outcomes": [
+                {
+                  "name": "Cal Baptist Lancers",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Chicago St Cougars",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-26T11:54:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

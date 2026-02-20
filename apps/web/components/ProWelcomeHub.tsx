@@ -1,5 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
+import { SPORTS } from "@/lib/sports";
+import { getProInsightOfWeek } from "@/lib/insights/pillars";
+import { TOP_EDGE, HIGHLIGHTED_GAMES } from "@/lib/featured-games";
+import EdgeBoardPreview from "./EdgeBoardPreview";
 
 type HubCard = {
   title: string;
@@ -8,21 +12,23 @@ type HubCard = {
   accent?: "gold" | "green";
 };
 
-import { SPORTS } from "@/lib/sports";
-
 const cards: HubCard[] = [
-  { title: "Edge Board", desc: "Best lines, open vs best, tags and filters (expanding).", href: "/edge-board", accent: "gold" },
+  { title: "Model Transparency Panel", desc: "Model vs open, model vs close, ROI, EV capture %, sport & market performance.", href: "/pro/model-transparency", accent: "gold" },
   { title: "Market Dashboard", desc: "Totals, spreads, steam, key numbers, movement snapshots.", href: "/pro/market", accent: "green" },
   { title: "Workflow", desc: "Build a card. Save leans. Track CLV. One-click book links (V1).", href: "/pro/workflow", accent: "gold" },
-  { title: "Power Ratings", desc: "Team strength, updates, and historical context.", href: "/pro/power-ratings", accent: "green" },
-  { title: "Props", desc: "Prop analyzer and edge screens (V1+).", href: "/pro/props", accent: "gold" },
+  { title: "Prediction Market", desc: "Prediction market data and insights.", href: "/pro/prediction-market", accent: "green" },
+  { title: "CLV Tracker", desc: "% plays with +EV at close, avg edge open vs close, distribution chart.", href: "/pro/clv-tracker", accent: "gold" },
+  { title: "Props Center", desc: "Prop analyzer and edge screens (V1+).", href: "/pro/props-center", accent: "green" },
+  { title: "Power Ratings", desc: "Team strength, updates, and historical context.", href: "/pro/power-ratings", accent: "gold" },
   { title: "Guides", desc: "Discipline + bankroll + model methodology docs.", href: "/methodology", accent: "green" },
 ];
 
 export default function ProWelcomeHub() {
+  const proInsight = getProInsightOfWeek();
+
   return (
     <section className="w-full">
-      {/* Hero: logo + branding + nav + sport links */}
+      {/* Hero: logo + branding + nav + sport links — no Edge Board */}
       <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 sm:p-7 shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="flex items-center gap-4">
@@ -57,15 +63,9 @@ export default function ProWelcomeHub() {
             >
               Home
             </Link>
-            <Link
-              href="/edge-board"
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-            >
-              Edge Board
-            </Link>
           </div>
         </div>
-        {/* Sport hubs + edge boards */}
+        {/* Sport hubs + boards — keep individual sport links */}
         <div className="mt-6 flex flex-wrap gap-2">
           {SPORTS.map((s) => (
             <Link
@@ -88,7 +88,59 @@ export default function ProWelcomeHub() {
         </div>
       </div>
 
-      {/* Grid */}
+      {/* Top row: Top Edge (left) + Insight of the Week (right) */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Top Edge — edge board preview + link to article */}
+        <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 shadow-xl">
+          <h3 className="text-lg font-bebas text-kos-gold tracking-wide">Top Edge</h3>
+          <div className="mt-4">
+            <EdgeBoardPreview
+              row={TOP_EDGE.row}
+              articleHref={`/pro/articles/${TOP_EDGE.slug}`}
+            />
+          </div>
+        </div>
+        {/* Insight of the Week — Pro insight, rotates weekly */}
+        <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 shadow-xl">
+          <h3 className="text-lg font-bebas text-kos-gold tracking-wide">Insight of the Week</h3>
+          <div className="mt-4 text-sm text-gray-200/90 line-clamp-4">
+            {proInsight ? (
+              <>
+                <p className="font-medium text-kos-gold">{proInsight.title}</p>
+                {proInsight.body.slice(0, 2).map((b, i) =>
+                  typeof b === "string" ? (
+                    <p key={i} className="mt-2 text-gray-300/90">{b}</p>
+                  ) : null
+                )}
+              </>
+            ) : (
+              <p className="text-gray-400">Pro insight rotates weekly.</p>
+            )}
+          </div>
+          <Link
+            href="/insights"
+            className="mt-4 inline-block text-sm font-semibold text-kos-gold hover:underline"
+          >
+            Browse Insights →
+          </Link>
+        </div>
+      </div>
+
+      {/* Highlighted game articles — 3–5 cards with edge preview + link */}
+      <div className="mt-6">
+        <h3 className="text-lg font-bebas text-kos-gold tracking-wide mb-4">Highlighted Games</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {HIGHLIGHTED_GAMES.map((g) => (
+            <EdgeBoardPreview
+              key={g.slug}
+              row={g.row}
+              articleHref={`/pro/articles/${g.slug}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Cards grid */}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {cards.map((c) => {
           const isGold = c.accent === "gold";
@@ -116,27 +168,6 @@ export default function ProWelcomeHub() {
             </Link>
           );
         })}
-      </div>
-
-      {/* “Top Edge” / article area placeholder */}
-      <div className="mt-6 rounded-3xl border border-white/10 bg-black/25 backdrop-blur-xl p-6 shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div>
-            <div className="text-sm text-gray-400">Top Edge Article</div>
-            <div className="mt-1 text-2xl font-bebas text-kos-gold">Insight of the Week</div>
-            <div className="mt-2 text-sm text-gray-200/80 max-w-3xl">
-              This is where your featured weekly write-up lives: market angle, matchup breakdown, key numbers,
-              and workflow steps.
-            </div>
-          </div>
-
-          <Link
-            href="/insights"
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-          >
-            Browse Insights
-          </Link>
-        </div>
       </div>
     </section>
   );

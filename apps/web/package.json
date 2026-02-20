@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm exec next dev",
+    "dev:local": "pnpm exec next dev -p 3000 -H 127.0.0.1",
     "dev:webpack": "pnpm exec next dev --no-turbopack",
     "build": "pnpm exec next build",
     "start": "pnpm exec next start",
@@ -18,7 +19,11 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "test:pipeline": "python -m pytest tests_pipeline -v",
+    "pipeline": "python run_pipeline.py",
+    "pipeline:check-env": "python run_pipeline.py --check-env",
+    "ingest:dratings:historical": "pip install -q -r requirements-dratings-historical.txt && python -m playwright install chromium 2>/dev/null; python scripts/ingest_dratings_historical.py"
   },
   "dependencies": {
     "@kosedge/contracts": "workspace:*",

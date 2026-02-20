@@ -36,10 +36,10 @@ export default function SiteHeader() {
           Read Insights
         </Link>
         <Link
-          href="/#join"
+          href="/pro"
           className="inline-flex items-center rounded-xl bg-[#F5B942] px-4 py-2 text-sm font-semibold text-black shadow-[0_0_25px_rgba(245,185,66,0.35)] hover:opacity-90"
         >
-          Get Edge Alerts
+          Pro
         </Link>
       </div>
     </header>

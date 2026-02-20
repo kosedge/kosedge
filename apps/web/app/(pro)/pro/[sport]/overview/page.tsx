@@ -10,6 +10,11 @@ const SHELL_LINKS = [
   { href: "props", label: "Props", desc: "Prop analyzer and edge screens." },
 ];
 
+const KEICMB_LINKS = [
+  { href: "keicmb-lines", label: "KEICMB Lines", desc: "Kos Edge Index CBB · Our spread & over/under lines for today's games." },
+  { href: "keicmb-rankings", label: "KEICMB Rankings", desc: "Team rankings 1–350 from our model (adjem, Torvik, ensemble)." },
+];
+
 export default function SportOverviewPage({ params }: { params: { sport: string } }) {
   const sport = getSport(params.sport);
   const sportName = sport?.fullName ?? params.sport.toUpperCase();

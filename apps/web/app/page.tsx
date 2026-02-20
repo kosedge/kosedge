@@ -17,7 +17,7 @@ const pillars: Array<{ title: string; desc: string; accent: Accent }> = [
     accent: "green",
   },
   {
-    title: "Models vs Vegas",
+    title: "Model",
     desc: "We measure our projections against market lines to find mispriced numbers—then act.",
     accent: "gold",
   },
@@ -98,6 +98,12 @@ export default function Home() {
               className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-lg border border-kos-gold/45 text-kos-gold hover:bg-kos-gold/10 transition"
             >
               Edge Board
+            </Link>
+            <Link
+              href="/odds"
+              className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-lg border border-white/20 text-gray-300 hover:text-kos-gold hover:border-kos-gold/45 transition"
+            >
+              Compare Odds
             </Link>
 
             <Link

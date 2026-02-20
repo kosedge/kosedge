@@ -13,6 +13,12 @@ export default function DisclaimerPage() {
           <p>
             Betting involves risk. Only wager what you can afford to lose.
           </p>
+          <p>
+            Nothing on this site is financial, legal, or betting advice. You are responsible for your own decisions and for complying with the laws where you live. In many jurisdictions you must be 21 or older to gamble.
+          </p>
+          <p>
+            We do not guarantee any results. Past performance does not guarantee future outcomes. Use this platform at your own risk.
+          </p>
         </div>
       </section>
     </main>

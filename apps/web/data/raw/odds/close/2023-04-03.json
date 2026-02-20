@@ -1,0 +1,719 @@
+{
+  "timestamp": "2023-04-03T21:55:39Z",
+  "previous_timestamp": "2023-04-03T21:50:39Z",
+  "next_timestamp": "2023-04-03T22:00:39Z",
+  "data": [
+    {
+      "id": "10b34f47460faa71d51065cdb8f7da41",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-04-04T01:20:00Z",
+      "home_team": "UConn Huskies",
+      "away_team": "San Diego St Aztecs",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-04-03T21:54:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:54:39Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -115,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -105,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-04-03T21:55:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:32Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -112,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-04-03T21:54:40Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:54:40Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -112,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:54:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-04-03T21:55:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:29Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -112,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-04-03T21:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:30Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -112,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-04-03T21:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -102,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-04-03T21:55:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:29Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -112,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-04-03T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -115,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -105,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-04-03T21:54:40Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:54:40Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -105,
+                  "point": 6.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -115,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:54:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-04-03T21:52:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:52:54Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -115,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -105,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:52:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-04-03T21:52:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:52:55Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -113,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:52:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-04-03T21:55:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:29Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-04-03T21:52:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:52:15Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:52:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-04-03T21:52:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:52:14Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:52:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-04-03T21:52:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:52:15Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:52:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-04-03T21:54:40Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:54:40Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -108,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:54:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-04-03T21:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:55:30Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-04-03T21:52:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-04-03T21:52:54Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -118,
+                  "point": 7.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -105,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-04-03T21:52:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

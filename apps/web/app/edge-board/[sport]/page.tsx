@@ -92,6 +92,12 @@ export default async function EdgeBoardSportPage({
               {sportName} Hub
             </Link>
             <Link
+              href={`/odds/${sportKey}`}
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
+            >
+              Compare Odds
+            </Link>
+            <Link
               href="/pro/welcome"
               className="px-4 py-2 rounded-xl bg-kos-gold text-black hover:brightness-110 transition text-center font-semibold shadow-lg shadow-kos-gold/25"
             >
