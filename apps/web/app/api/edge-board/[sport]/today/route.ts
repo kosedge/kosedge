@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
+import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
+import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
 import { getSport } from "@/lib/sports";
 import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
-/** Odds refresh at most every 6 hours */
-const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+/** Odds refresh at most every 6 hours; use shorter window so KEI merge updates show sooner */
+const ODDS_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
 };
@@ -59,13 +61,16 @@ export async function GET(
   }
 
   const now = Date.now();
+  const url = new URL(req.url);
+  const skipCache = url.searchParams.get("refresh") === "1";
   const cached = sportCache.get(sport);
-  if (cached && now - cached.ts < ODDS_CACHE_TTL_MS) {
+  if (!skipCache && cached && now - cached.ts < ODDS_CACHE_TTL_MS) {
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
   }
 
   try {
-    const rows = await fetchEdgeBoard(sport, key);
+    let rows = await fetchEdgeBoard(sport, key);
+    rows = mergeKeiIntoEdgeBoardRows(rows, sport);
     const parsed = EdgeBoardResponseSchema.safeParse({ rows });
     if (!parsed.success) {
       if (cached) return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
@@ -74,7 +79,7 @@ export async function GET(
     sportCache.set(sport, { rows: parsed.data.rows, ts: now });
     return json(parsed.data, 200, { "x-request-id": requestId });
   } catch (e) {
-    console.error("edge_board_odds_failed", { sport, error: String(e) });
+    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "edge-board/today" });
     if (cached) return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
     return json({ rows: [] }, 200, { "x-request-id": requestId });
   }

@@ -15,7 +15,7 @@ type HubCard = {
 const cards: HubCard[] = [
   { title: "Model Transparency Panel", desc: "Model vs open, model vs close, ROI, EV capture %, sport & market performance.", href: "/pro/model-transparency", accent: "gold" },
   { title: "Market Dashboard", desc: "Totals, spreads, steam, key numbers, movement snapshots.", href: "/pro/market", accent: "green" },
-  { title: "Workflow", desc: "Build a card. Save leans. Track CLV. One-click book links (V1).", href: "/pro/workflow", accent: "gold" },
+  { title: "KEI Lines", desc: "Our projected spread and over/under for every game, by sport.", href: "/pro/kei-lines", accent: "gold" },
   { title: "Prediction Market", desc: "Prediction market data and insights.", href: "/pro/prediction-market", accent: "green" },
   { title: "CLV Tracker", desc: "% plays with +EV at close, avg edge open vs close, distribution chart.", href: "/pro/clv-tracker", accent: "gold" },
   { title: "Props Center", desc: "Prop analyzer and edge screens (V1+).", href: "/pro/props-center", accent: "green" },
@@ -32,7 +32,7 @@ export default function ProWelcomeHub() {
       <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 sm:p-7 shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full overflow-hidden ring-1 ring-white/10 flex-shrink-0">
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full overflow-hidden ring-1 ring-white/10 shrink-0">
               <Image
                 src="/brand/kosedge-logo-v2.png"
                 alt="Kos Edge Analytics"
@@ -57,6 +57,12 @@ export default function ProWelcomeHub() {
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
+            <Link
+              href="/edge-board"
+              className="px-4 py-2 rounded-xl bg-kos-green/20 border border-kos-green/40 text-kos-green hover:bg-kos-green/30 hover:border-kos-green/50 transition text-center font-semibold"
+            >
+              Free
+            </Link>
             <Link
               href="/"
               className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"

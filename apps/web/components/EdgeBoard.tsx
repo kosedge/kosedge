@@ -1,6 +1,7 @@
 import * as React from "react";
+import { generateGameOverview } from "@/lib/sports";
 
-// Flat API row format (from Odds API / model)
+// Flat API row format (from Odds API / model); kei = our projected line/total
 export type FlatEdgeBoardRow = {
   id?: string;
   game?: string;
@@ -11,6 +12,7 @@ export type FlatEdgeBoardRow = {
   book?: string;
   note?: string;
   commenceTime?: string;
+  kei?: string;
 };
 
 export type EdgeBoardRow = FlatEdgeBoardRow;
@@ -24,6 +26,7 @@ export type PricePair = { top: PriceSide; bottom: PriceSide };
 export type TeamBlock = {
   name: string;
   keiRank?: string;
+  keiNumber?: string;
   site: "Away" | "Home";
   record?: string;
   confRecord?: string;
@@ -42,8 +45,11 @@ export type LegacyEdgeBoardRow = {
   keiOU?: PricePair;
   edgeLine?: PricePair;
   edgeOU?: PricePair;
+  edgeLineNum?: number;
+  edgeOUNum?: number;
   tagLine?: Tag;
   tagOU?: Tag;
+  overview?: string;
 };
 
 const COMING_SOON_PAIR: PricePair = {
@@ -61,6 +67,7 @@ const sampleRows: LegacyEdgeBoardRow[] = [
     openLine: { top: { label: "+5.5", juice: "-110" }, bottom: { label: "-5.5", juice: "-110" } },
     bestLine: { top: { label: "+6.5", juice: "-112" }, bottom: { label: "-5.0", juice: "-110" } },
     bestOU: { top: { label: "o149.5", juice: "-110" }, bottom: { label: "u152.5", juice: "-112" } },
+    overview: generateGameOverview("Duke", "UNC"),
   },
 ];
 
@@ -95,6 +102,14 @@ function HeaderStack({ a, b }: { a: string; b?: string }) {
       {b ? <span>{b}</span> : null}
     </div>
   );
+}
+
+/** Edge column highlight: 0–2.5 kos gray, 2.6–3.4 kos gold, 3.5+ edge green */
+function edgeCellClass(edgeNum: number | undefined): string {
+  if (edgeNum == null) return "bg-white/5 text-gray-500";
+  if (edgeNum <= 2.5) return "bg-kos-gray/25 text-kos-muted";
+  if (edgeNum <= 3.4) return "bg-kos-gold/25 text-kos-gold font-medium";
+  return "bg-edge-green/20 text-edge-green font-semibold";
 }
 
 const COL_WIDTHS = [
@@ -147,15 +162,69 @@ function flatRowsToLegacy(flat: FlatEdgeBoardRow[]): LegacyEdgeBoardRow[] {
       ? { top: { label: `o${b}`, juice: "—" }, bottom: { label: `u${b}`, juice: "—" } }
       : COMING_SOON_PAIR;
 
+    const spreadKei = (spread as FlatEdgeBoardRow | undefined)?.kei;
+    const totalKei = (total as FlatEdgeBoardRow | undefined)?.kei;
+    const keiLine: PricePair = spreadKei
+      ? { top: { label: spreadKei, juice: "—" }, bottom: { label: flipSpread(spreadKei), juice: "—" } }
+      : COMING_SOON_PAIR;
+    const keiOU: PricePair = totalKei
+      ? { top: { label: `o${totalKei}`, juice: "—" }, bottom: { label: `u${totalKei}`, juice: "—" } }
+      : COMING_SOON_PAIR;
+
+    const parseSpread = (s: string): number | null => {
+      const n = parseFloat(String(s).replace(/[^+\-\d.]/g, ""));
+      return Number.isFinite(n) ? n : null;
+    };
+    const parseTotal = (s: string): number | null => {
+      const n = parseFloat(String(s).replace(/[^\d.]/g, ""));
+      return Number.isFinite(n) ? n : null;
+    };
+    const bestSpreadNum = parseSpread(bestLine.bottom.label);
+    const keiSpreadNum = parseSpread(keiLine.bottom.label);
+    const edgeLineNum =
+      bestSpreadNum != null && keiSpreadNum != null
+        ? Math.abs(bestSpreadNum - keiSpreadNum)
+        : undefined;
+    const bestTotalNum = parseTotal(bestOU.top.label);
+    const keiTotalNum = parseTotal(keiOU.top.label);
+    const edgeOUNum =
+      bestTotalNum != null && keiTotalNum != null
+        ? Math.abs(bestTotalNum - keiTotalNum)
+        : undefined;
+
+    const edgeLineDisplay: PricePair =
+      edgeLineNum != null
+        ? { top: { label: edgeLineNum.toFixed(1), juice: "—" }, bottom: { label: edgeLineNum.toFixed(1), juice: "—" } }
+        : COMING_SOON_PAIR;
+    const edgeOUDisplay: PricePair =
+      edgeOUNum != null
+        ? { top: { label: edgeOUNum.toFixed(1), juice: "—" }, bottom: { label: edgeOUNum.toFixed(1), juice: "—" } }
+        : COMING_SOON_PAIR;
+
     result.push({
       id: String(spread?.id ?? total?.id ?? gameKey),
       time,
-      teamA: { name: away, site: "Away" },
-      teamB: { name: home, site: "Home" },
+      teamA: {
+        name: away,
+        site: "Away",
+        keiNumber: keiLine.top.label !== "Coming soon" ? keiLine.top.label : undefined,
+      },
+      teamB: {
+        name: home,
+        site: "Home",
+        keiNumber: keiLine.bottom.label !== "Coming soon" ? keiLine.bottom.label : undefined,
+      },
       openOU,
       openLine,
       bestLine,
       bestOU,
+      keiLine,
+      keiOU,
+      edgeLine: edgeLineDisplay,
+      edgeOU: edgeOUDisplay,
+      edgeLineNum,
+      edgeOUNum,
+      overview: generateGameOverview(away, home),
     });
   }
   return result;
@@ -177,7 +246,7 @@ export default function EdgeBoard({
     return (
       <div className="lg:col-span-5">
         <div className="relative">
-          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+          <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
           <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
@@ -222,7 +291,7 @@ export default function EdgeBoard({
   const MobileCards = (
     <div className="lg:hidden mt-6">
       <div className="relative">
-        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+        <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
         <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
@@ -303,9 +372,16 @@ export default function EdgeBoard({
             <tbody className="divide-y divide-white/10 text-gray-200">
               {data.map((r) => (
                 <tr key={r.id} className="hover:bg-white/5 transition">
-                  <td className="py-2.5 px-3 align-top relative pb-7">
+                  <td className="py-2.5 px-3 align-top relative pb-7 overflow-visible">
                     <div className="font-semibold truncate">
-                      {r.teamA.name} <span className="text-gray-400">({r.teamA.keiRank ?? "—"})</span>
+                      {r.teamA.name}
+                      {r.teamA.keiNumber != null ? (
+                        <span className="ml-1 text-kos-gold tabular-nums">({r.teamA.keiNumber})</span>
+                      ) : (
+                        r.teamA.keiRank != null && (
+                          <span className="text-gray-400"> ({r.teamA.keiRank})</span>
+                        )
+                      )}
                     </div>
                     <div className="text-xs text-gray-400">
                       {r.teamA.site}
@@ -313,20 +389,28 @@ export default function EdgeBoard({
                       {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
                     </div>
                     <div className="mt-1 font-semibold truncate">
-                      {r.teamB.name} <span className="text-gray-400">({r.teamB.keiRank ?? "—"})</span>
+                      {r.teamB.name}
+                      {r.teamB.keiNumber != null ? (
+                        <span className="ml-1 text-kos-gold tabular-nums">({r.teamB.keiNumber})</span>
+                      ) : (
+                        r.teamB.keiRank != null && (
+                          <span className="text-gray-400"> ({r.teamB.keiRank})</span>
+                        )
+                      )}
                     </div>
                     <div className="text-xs text-gray-400">
                       {r.teamB.site}
                       {r.teamB.record ? ` • ${r.teamB.record}` : ""}
                       {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
                     </div>
-                    <button
-                      className="absolute bottom-2 left-3 text-[14px] text-kos-gold hover:underline whitespace-nowrap"
-                      type="button"
-                      title="Expandable panel coming soon"
-                    >
-                      Overview ▾
-                    </button>
+                    <details className="absolute bottom-2 left-3 group/details">
+                      <summary className="cursor-pointer text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
+                        Overview ▾
+                      </summary>
+                      <div className="absolute left-0 top-full mt-1 z-50 w-[340px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-4 shadow-xl text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+                        {r.overview ?? "No overview available."}
+                      </div>
+                    </details>
                   </td>
                   <td className="py-2.5 px-1 align-top relative pb-7 overflow-hidden">
                     <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
@@ -353,16 +437,24 @@ export default function EdgeBoard({
                     <PriceCell p={r.bestOU} compact valueClassName="text-gray-100 font-semibold" />
                   </td>
                   <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                    <PriceCell p={r.keiLine ?? COMING_SOON_PAIR} compact valueClassName="text-kos-gold/90 font-medium" />
                   </td>
                   <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                    <PriceCell p={r.keiOU ?? COMING_SOON_PAIR} compact valueClassName="text-kos-gold/90 font-medium" />
                   </td>
-                  <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                  <td className={`py-2.5 px-2 align-top rounded ${edgeCellClass(r.edgeLineNum)}`}>
+                    {r.edgeLineNum != null ? (
+                      <span className="font-semibold tabular-nums">{r.edgeLineNum.toFixed(1)}</span>
+                    ) : (
+                      <span className="text-gray-500">—</span>
+                    )}
                   </td>
-                  <td className="py-2.5 px-2 align-top">
-                    <PriceCell p={COMING_SOON_PAIR} compact valueClassName="text-gray-500 font-medium" />
+                  <td className={`py-2.5 px-2 align-top rounded ${edgeCellClass(r.edgeOUNum)}`}>
+                    {r.edgeOUNum != null ? (
+                      <span className="font-semibold tabular-nums">{r.edgeOUNum.toFixed(1)}</span>
+                    ) : (
+                      <span className="text-gray-500">—</span>
+                    )}
                   </td>
                   <td className="py-2.5 px-2 align-top text-center">
                     <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
@@ -380,7 +472,7 @@ export default function EdgeBoard({
           </table>
         </div>
         <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
-          Live: Game/Time/Open/Best. Coming soon: KEICMB + Edge + Tags, sportsbook logos + deep links, Overview/Stats expanders.
+          Live: Game/Time/Open/Best. KEI: our projected line and O/U (when data available). Coming soon: Edge + Tags, sportsbook logos + deep links, Overview/Stats expanders.
         </div>
       </div>
     </div>
