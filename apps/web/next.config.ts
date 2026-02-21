@@ -8,7 +8,8 @@ const withMDX = createMDX({
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  // Standalone causes pnpm monorepo issues on Vercel (missing workspace deps). Omit for Vercel.
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   pageExtensions: ["ts", "tsx", "mdx"],
 
   // Monorepo: Turbopack must use repo root so pnpm node_modules and Next.js resolve (scheduler, react-dom, etc.)

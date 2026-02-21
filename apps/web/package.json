@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm exec next dev",
+    "dev:3000": "pnpm exec next dev -p 3000",
     "dev:local": "pnpm exec next dev -p 3000 -H 127.0.0.1",
+    "kill:3000": "lsof -ti tcp:3000 | xargs kill -9 2>/dev/null || true",
     "dev:webpack": "pnpm exec next dev --no-turbopack",
     "build": "pnpm exec next build",
     "start": "pnpm exec next start",
@@ -23,6 +25,16 @@
     "test:pipeline": "python -m pytest tests_pipeline -v",
     "pipeline": "python run_pipeline.py",
     "pipeline:check-env": "python run_pipeline.py --check-env",
+    "export:kei-lines": "python scripts/export_kei_lines.py",
+    "project:future-lines": "python scripts/project_future_kei_lines.py",
+    "debug:projection": "python scripts/debug_projection.py",
+    "backtest:kei": "python scripts/backtest_kei_results.py",
+    "pull:odds-this-season": "python scripts/pull_odds_this_season.py",
+    "check:odds-credits": "python scripts/check_odds_api_credits.py",
+    "capture:replay": "python scripts/capture_sportsdata_replay.py",
+    "pull:cbb": "python scripts/pull_sportsdata_cbb.py",
+    "export:power-ratings": "python scripts/export_power_ratings.py",
+    "populate:kei-lines-sample": "node scripts/populate-kei-lines-sample.js",
     "ingest:dratings:historical": "pip install -q -r requirements-dratings-historical.txt && python -m playwright install chromium 2>/dev/null; python scripts/ingest_dratings_historical.py"
   },
   "dependencies": {
