@@ -1,5 +1,5 @@
 {
-  "buildCommand": "turbo run build",
+  "buildCommand": "pnpm --filter @kosedge/web build",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
   "regions": ["iad1"]
