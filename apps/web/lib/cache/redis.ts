@@ -24,12 +24,17 @@ export function getRedisClient(): Redis | null {
     });
 
     redis.on("error", (err) => {
-      logError(err instanceof Error ? err : new Error(String(err)), { module: "redis" });
+      logError(err instanceof Error ? err : new Error(String(err)), {
+        module: "redis",
+      });
     });
 
     return redis;
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", phase: "init" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      module: "redis",
+      phase: "init",
+    });
     return null;
   }
 }
@@ -37,10 +42,10 @@ export function getRedisClient(): Redis | null {
 export async function getCached<T>(
   key: string,
   fetcher: () => Promise<T>,
-  ttl: number = 300 // 5 minutes default
+  ttl: number = 300, // 5 minutes default
 ): Promise<T> {
   const client = getRedisClient();
-  
+
   if (!client) {
     // Fallback to direct fetch if Redis not available
     return fetcher();
@@ -61,7 +66,10 @@ export async function getCached<T>(
 
     return data;
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "getCached" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      module: "redis",
+      op: "getCached",
+    });
     return fetcher();
   }
 }
@@ -76,18 +84,28 @@ export async function invalidateCache(pattern: string): Promise<void> {
       await client.del(...keys);
     }
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "invalidate" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      module: "redis",
+      op: "invalidate",
+    });
   }
 }
 
-export async function setCache(key: string, value: unknown, ttl: number = 300): Promise<void> {
+export async function setCache(
+  key: string,
+  value: unknown,
+  ttl: number = 300,
+): Promise<void> {
   const client = getRedisClient();
   if (!client) return;
 
   try {
     await client.setex(key, ttl, JSON.stringify(value));
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "set" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      module: "redis",
+      op: "set",
+    });
   }
 }
 
@@ -99,7 +117,10 @@ export async function getCache<T>(key: string): Promise<T | null> {
     const cached = await client.get(key);
     return cached ? (JSON.parse(cached) as T) : null;
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "get" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      module: "redis",
+      op: "get",
+    });
     return null;
   }
 }

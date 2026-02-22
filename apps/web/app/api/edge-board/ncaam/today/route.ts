@@ -15,7 +15,11 @@ const CACHE_HEADERS = {
 
 let ncaamCache: { rows: unknown[]; ts: number } | null = null;
 
-function json(data: unknown, status = 200, extraHeaders?: Record<string, string>) {
+function json(
+  data: unknown,
+  status = 200,
+  extraHeaders?: Record<string, string>,
+) {
   return NextResponse.json(data, {
     status,
     headers: {
@@ -33,7 +37,9 @@ function getRequestId(req: Request) {
   );
 }
 
-async function tryModelService(requestId: string): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
+async function tryModelService(
+  requestId: string,
+): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
   const base = env.MODEL_SERVICE_URL;
   if (!base) return { ok: false };
 
@@ -48,14 +54,17 @@ async function tryModelService(requestId: string): Promise<{ ok: true; rows: unk
       headers: {
         accept: "application/json",
         "x-request-id": requestId,
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
 
     const contentType = res.headers.get("content-type") ?? "";
     const raw = await res.text();
 
-    if (!res.ok || !contentType.includes("application/json")) return { ok: false };
+    if (!res.ok || !contentType.includes("application/json"))
+      return { ok: false };
 
     const parsed = EdgeBoardResponseSchema.safeParse(JSON.parse(raw));
     if (!parsed.success) return { ok: false };
@@ -68,15 +77,22 @@ async function tryModelService(requestId: string): Promise<{ ok: true; rows: unk
   }
 }
 
-async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
-  const keys = [env.ODDS_API_KEY?.trim(), env.ODDS_API_KEY_BACKUP?.trim()].filter(Boolean);
+async function tryOddsApiFallback(): Promise<
+  { ok: true; rows: unknown[] } | { ok: false }
+> {
+  const keys = [
+    env.ODDS_API_KEY?.trim(),
+    env.ODDS_API_KEY_BACKUP?.trim(),
+  ].filter(Boolean);
   for (const key of keys) {
     if (!key) continue;
     try {
       const rows = await fetchEdgeBoard("ncaam", key);
       return { ok: true, rows };
     } catch (e) {
-      logError(e instanceof Error ? e : new Error(String(e)), { route: "edge-board/ncaam/fallback" });
+      logError(e instanceof Error ? e : new Error(String(e)), {
+        route: "edge-board/ncaam/fallback",
+      });
     }
   }
   return { ok: false };
@@ -89,7 +105,9 @@ export async function GET(req: Request) {
   if (expected) {
     const provided = req.headers.get("x-kosedge-secret");
     if (provided !== expected) {
-      return json({ error: "Unauthorized", requestId }, 401, { "x-request-id": requestId });
+      return json({ error: "Unauthorized", requestId }, 401, {
+        "x-request-id": requestId,
+      });
     }
   }
 

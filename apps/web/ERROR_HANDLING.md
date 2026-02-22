@@ -5,6 +5,7 @@ This document explains the error handling infrastructure and monitoring setup fo
 ## Overview
 
 We've implemented a comprehensive error handling system with:
+
 - **Structured Logging** (Pino) - Fast, structured JSON logging
 - **React Error Boundaries** - Catch and handle React component errors gracefully
 - **Global Error Handlers** - Next.js error.tsx and global-error.tsx
@@ -15,6 +16,7 @@ We've implemented a comprehensive error handling system with:
 ## Error Pages
 
 All error pages match your exact design system:
+
 - Dark background (`bg-[#070A0F]`)
 - Gold/green accent colors
 - Backdrop blur cards
@@ -91,6 +93,7 @@ logger.debug({ data }, "Debug message");
 ### Log Levels
 
 Set log level via `LOG_LEVEL` environment variable:
+
 - `debug` - All logs (development)
 - `info` - Info, warnings, errors (default production)
 - `warn` - Warnings and errors only
@@ -103,7 +106,11 @@ Set log level via `LOG_LEVEL` environment variable:
 Use the error handler utilities:
 
 ```typescript
-import { ApiError, handleApiError, withErrorHandler } from "@/lib/api/error-handler";
+import {
+  ApiError,
+  handleApiError,
+  withErrorHandler,
+} from "@/lib/api/error-handler";
 
 // Throw a custom API error
 throw new ApiError(404, "User not found", "USER_NOT_FOUND");
@@ -143,6 +150,7 @@ Sentry provides production error tracking and monitoring.
 1. **Get Sentry DSN** from [sentry.io](https://sentry.io)
 
 2. **Add to environment variables:**
+
    ```env
    NEXT_PUBLIC_SENTRY_DSN="https://your-dsn@sentry.io/project-id"
    SENTRY_AUTH_TOKEN="your-auth-token" # For source maps
@@ -225,6 +233,7 @@ logError(error, {
 ### 5. Use Error Boundaries Strategically
 
 Wrap:
+
 - ✅ Page-level components
 - ✅ Complex feature components
 - ❌ Don't wrap every small component
@@ -234,6 +243,7 @@ Wrap:
 ### Log Aggregation
 
 In production, logs are JSON-structured. Use a log aggregation service:
+
 - **Vercel** - Built-in log viewing
 - **Datadog** - Advanced log management
 - **CloudWatch** - AWS logging
@@ -242,6 +252,7 @@ In production, logs are JSON-structured. Use a log aggregation service:
 ### Error Tracking
 
 Sentry provides:
+
 - Real-time error alerts
 - Error grouping and deduplication
 - Performance monitoring
@@ -251,6 +262,7 @@ Sentry provides:
 ### Health Checks
 
 Monitor these endpoints:
+
 - `/api/ping` - Basic health check
 - Database connection status
 - External API availability

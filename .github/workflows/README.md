@@ -9,6 +9,7 @@ This directory contains GitHub Actions workflows for automated testing, building
 Runs on every push and pull request to `main` and `develop` branches.
 
 **Jobs:**
+
 1. **Lint & Type Check** - Runs ESLint and TypeScript type checking
 2. **Test** - Runs all tests and uploads coverage
 3. **Build** - Builds the application to verify it compiles
@@ -21,6 +22,7 @@ Runs on every push and pull request to `main` and `develop` branches.
 Runs on pushes to `main` branch and version tags (`v*`).
 
 **Jobs:**
+
 1. **Deploy Web Application** - Builds and deploys the web app
 
 **Note:** Deployment steps need to be configured based on your hosting platform (Vercel, Docker, etc.)
@@ -30,6 +32,7 @@ Runs on pushes to `main` branch and version tags (`v*`).
 Runs on pull request events (opened, synchronized, reopened).
 
 **Features:**
+
 - Runs all quality checks
 - Comments on PR with results
 - Updates comment on subsequent pushes
@@ -37,6 +40,7 @@ Runs on pull request events (opened, synchronized, reopened).
 ### `codeql.yml` - Security Analysis
 
 Runs CodeQL security analysis on:
+
 - Every push to `main`
 - Pull requests to `main`
 - Weekly schedule (Sundays)
@@ -56,17 +60,20 @@ For deployment, configure these secrets in GitHub Settings → Secrets:
 ### Platform-Specific Secrets
 
 **Vercel:**
+
 - `VERCEL_TOKEN`
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
 
 **Docker Hub:**
+
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
 
 ## Caching
 
 Workflows use caching for:
+
 - pnpm dependencies (via `actions/setup-node`)
 - Build artifacts (`.next`, `.turbo`)
 
@@ -121,6 +128,7 @@ pnpm format:check
 ### Add New Jobs
 
 Edit the workflow files to add:
+
 - Additional test suites
 - Deployment to multiple environments
 - Notification steps (Slack, email, etc.)
@@ -128,6 +136,7 @@ Edit the workflow files to add:
 ### Change Triggers
 
 Modify the `on:` section in workflow files:
+
 ```yaml
 on:
   push:
@@ -139,6 +148,7 @@ on:
 ### Add Environments
 
 Use GitHub Environments for staging/production:
+
 ```yaml
 environment:
   name: production

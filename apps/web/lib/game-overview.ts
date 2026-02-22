@@ -43,13 +43,16 @@ function pick<T>(arr: T[], seed: number, count: number): T[] {
   const out: T[] = [];
   const n = arr.length;
   for (let i = 0; i < count; i++) {
-    const idx = ((seed + i * 17) % n + n) % n;
+    const idx = (((seed + i * 17) % n) + n) % n;
     out.push(arr[idx]!);
   }
   return out;
 }
 
-export function generateGameOverview(awayTeam: string, homeTeam: string): string {
+export function generateGameOverview(
+  awayTeam: string,
+  homeTeam: string,
+): string {
   const seed = hash(`${awayTeam}|${homeTeam}`);
   const p1 = `${awayTeam} travels to face ${homeTeam} in a matchup that could swing on a few key factors. Both teams bring distinct strengths and vulnerabilities to the floor.`;
   const p2 = `${awayTeam} — Pros: ${pick(AWAY_PRO, seed, 2).join(" ")} Cons: ${pick(AWAY_CON, seed + 1, 2).join(" ")}`;

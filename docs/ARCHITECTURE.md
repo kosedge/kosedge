@@ -55,6 +55,7 @@ Kos Edge Analytics is a modern, enterprise-grade sports betting analytics platfo
 ## Technology Stack
 
 ### Frontend
+
 - **Framework**: Next.js 16.1.3 (App Router)
 - **Language**: TypeScript 5
 - **UI**: React 19.2.3
@@ -63,6 +64,7 @@ Kos Edge Analytics is a modern, enterprise-grade sports betting analytics platfo
 - **Forms**: React Hook Form + Zod validation
 
 ### Backend
+
 - **Runtime**: Node.js 20+
 - **API**: Next.js API Routes
 - **Authentication**: NextAuth.js v5
@@ -71,6 +73,7 @@ Kos Edge Analytics is a modern, enterprise-grade sports betting analytics platfo
 - **Cache**: Redis (ioredis)
 
 ### Infrastructure
+
 - **Package Manager**: pnpm 10.29.2
 - **Monorepo**: pnpm workspaces
 - **CI/CD**: GitHub Actions
@@ -113,6 +116,7 @@ kosedge/
 ## Data Flow
 
 ### Authentication Flow
+
 1. User submits credentials → `/api/auth/register` or `/api/auth/[...nextauth]`
 2. Credentials validated → Zod schema validation
 3. Password hashed → bcryptjs
@@ -121,6 +125,7 @@ kosedge/
 6. Protected routes accessible → Middleware checks
 
 ### Data Fetching Flow
+
 1. Page/Component requests data → Server Component or API Route
 2. Check cache → Redis (if available)
 3. Cache miss → Query database via Prisma
@@ -129,6 +134,7 @@ kosedge/
 6. Return to client → Serialized JSON
 
 ### Edge Board Flow
+
 1. Client requests → `/api/edge-board/ncaam/today`
 2. Rate limiting check → Rate limiter middleware
 3. Proxy to model service → FastAPI backend
@@ -139,24 +145,28 @@ kosedge/
 ## Security Architecture
 
 ### Authentication & Authorization
+
 - **NextAuth.js v5**: JWT-based sessions
 - **Role-Based Access Control**: USER, PRO, ADMIN
 - **Password Security**: bcryptjs (12 rounds)
 - **Session Management**: Secure HTTP-only cookies
 
 ### Security Headers
+
 - **CSP**: Content Security Policy
 - **HSTS**: HTTP Strict Transport Security
 - **X-Frame-Options**: Prevent clickjacking
 - **X-Content-Type-Options**: Prevent MIME sniffing
 
 ### Rate Limiting
+
 - **API Routes**: 100 requests/minute
 - **Auth Routes**: 5 requests/minute
 - **Edge Board**: 10 requests/minute
 - **IP-based**: Fallback to user-based when authenticated
 
 ### Input Validation
+
 - **Zod Schemas**: Type-safe validation
 - **HTML Sanitization**: DOMPurify
 - **SQL Injection Prevention**: Prisma ORM
@@ -164,6 +174,7 @@ kosedge/
 ## Database Schema
 
 ### Core Models
+
 - **User**: Authentication and subscription
 - **Sport**: Sport namespace (NCAAM, NFL, NBA, MLB)
 - **Team**: Teams within sports
@@ -173,6 +184,7 @@ kosedge/
 - **Writeup**: Game analysis content
 
 ### Relationships
+
 - Sport → Teams (1:many)
 - Sport → Games (1:many)
 - Team → Games (many:many via home/away)
@@ -183,11 +195,13 @@ kosedge/
 ## Caching Strategy
 
 ### Redis Cache
+
 - **TTL-based**: Most data cached with expiration
 - **Invalidation**: Pattern-based cache clearing
 - **Fallback**: Direct database query if Redis unavailable
 
 ### Cache Keys
+
 - `edge-board:ncaam:today` - Today's edge board
 - `user:{id}:session` - User session data
 - `game:{id}:market` - Game market data
@@ -195,17 +209,20 @@ kosedge/
 ## Performance Optimizations
 
 ### Database
+
 - **Connection Pooling**: Prisma connection management
 - **Indexes**: Strategic indexes on frequently queried fields
 - **Query Optimization**: Batch queries, pagination
 
 ### Frontend
+
 - **Server Components**: Reduce client-side JavaScript
 - **Image Optimization**: Next.js Image component
 - **Code Splitting**: Automatic route-based splitting
 - **Static Generation**: ISR for public content
 
 ### API
+
 - **Response Caching**: Redis for API responses
 - **Request Deduplication**: Automatic in Next.js
 - **Compression**: gzip/brotli via Next.js
@@ -213,11 +230,13 @@ kosedge/
 ## Deployment Architecture
 
 ### Development
+
 - **Local**: Docker Compose (PostgreSQL, Redis)
 - **Hot Reload**: Next.js dev server
 - **Database**: Local PostgreSQL instance
 
 ### Production
+
 - **Hosting**: Vercel (recommended) or Docker
 - **Database**: Managed PostgreSQL (Supabase, Neon, etc.)
 - **Cache**: Managed Redis (Upstash, Redis Cloud)
@@ -227,11 +246,13 @@ kosedge/
 ## Scalability Considerations
 
 ### Horizontal Scaling
+
 - **Stateless**: Next.js app is stateless
 - **Database**: Read replicas for read-heavy workloads
 - **Cache**: Redis cluster for high availability
 
 ### Vertical Scaling
+
 - **Database**: Connection pooling limits
 - **Memory**: Redis memory management
 - **CPU**: Next.js serverless functions auto-scale
@@ -239,16 +260,19 @@ kosedge/
 ## Monitoring & Observability
 
 ### Logging
+
 - **Structured Logging**: Pino (JSON in production)
 - **Log Levels**: debug, info, warn, error
 - **Context**: Request IDs, user IDs, timestamps
 
 ### Error Tracking
+
 - **Sentry**: Production error tracking
 - **Error Boundaries**: React error boundaries
 - **API Error Handling**: Standardized error responses
 
 ### Performance Monitoring
+
 - **Performance API**: Browser performance metrics
 - **Server Metrics**: Vercel Analytics
 - **Database Metrics**: Query performance logging
@@ -256,6 +280,7 @@ kosedge/
 ## Future Enhancements
 
 ### Planned Features
+
 - [ ] Read replicas for database
 - [ ] GraphQL API layer
 - [ ] Real-time updates (WebSockets)
@@ -264,6 +289,7 @@ kosedge/
 - [ ] Edge functions for low latency
 
 ### Technical Debt
+
 - [ ] Migrate to database sessions (from JWT)
 - [ ] Implement OAuth providers
 - [ ] Add E2E tests with Playwright

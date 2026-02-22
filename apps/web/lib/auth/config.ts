@@ -67,7 +67,8 @@ export const authConfig = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role;
+        const role = (user as { role?: import("#prisma").UserRole }).role;
+      token.role = role ?? token.role ?? ("USER" as import("#prisma").UserRole);
       }
 
       // Handle session updates (e.g., role changes)

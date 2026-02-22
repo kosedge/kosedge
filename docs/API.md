@@ -26,6 +26,7 @@ Cookie: next-auth.session-token=<token>
 - **Edge Board**: 10 requests per minute per IP
 
 Rate limit headers:
+
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 95
@@ -63,6 +64,7 @@ All errors follow this format:
 Register a new user.
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -72,6 +74,7 @@ Register a new user.
 ```
 
 **Response:** `201 Created`
+
 ```json
 {
   "message": "User created successfully",
@@ -85,6 +88,7 @@ Register a new user.
 ```
 
 **Errors:**
+
 - `400` - Validation error
 - `409` - User already exists
 
@@ -103,12 +107,14 @@ NextAuth.js authentication endpoints. See [NextAuth.js docs](https://next-auth.j
 Get today's NCAAM edge board data.
 
 **Headers:**
+
 ```
 x-kosedge-secret: <internal-api-secret> (optional)
 x-request-id: <uuid> (optional)
 ```
 
 **Response:** `200 OK`
+
 ```json
 [
   {
@@ -124,6 +130,7 @@ x-request-id: <uuid> (optional)
 ```
 
 **Errors:**
+
 - `401` - Unauthorized (if secret required)
 - `502` - Upstream service error
 - `429` - Rate limit exceeded
@@ -137,6 +144,7 @@ x-request-id: <uuid> (optional)
 Health check endpoint.
 
 **Response:** `200 OK`
+
 ```json
 {
   "status": "ok",
@@ -185,10 +193,12 @@ Health check endpoint.
 Endpoints that return lists support pagination:
 
 **Query Parameters:**
+
 - `page` - Page number (default: 1)
 - `limit` - Items per page (default: 20, max: 100)
 
 **Response Format:**
+
 ```json
 {
   "data": [...],
@@ -211,6 +221,7 @@ Endpoints that return lists support pagination:
 Handle Stripe subscription events.
 
 **Headers:**
+
 ```
 stripe-signature: <signature>
 ```
@@ -221,19 +232,19 @@ stripe-signature: <signature>
 
 ```typescript
 // Register user
-const response = await fetch('/api/auth/register', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+const response = await fetch("/api/auth/register", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    email: 'user@example.com',
-    password: 'password123',
+    email: "user@example.com",
+    password: "password123",
   }),
 });
 
 // Get edge board (with auth)
-const edgeBoard = await fetch('/api/edge-board/ncaam/today', {
+const edgeBoard = await fetch("/api/edge-board/ncaam/today", {
   headers: {
-    'Cookie': `next-auth.session-token=${sessionToken}`,
+    Cookie: `next-auth.session-token=${sessionToken}`,
   },
 });
 ```
@@ -260,6 +271,7 @@ Future versions will use URL versioning: `/api/v2/...`
 ## Changelog
 
 ### v1.0.0 (2025-02-13)
+
 - Initial API release
 - Authentication endpoints
 - Edge board endpoint

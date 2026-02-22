@@ -43,7 +43,7 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
       # Uncomment and configure based on your deployment platform
-      # 
+      #
       # For Vercel:
       # - name: Deploy to Vercel
       #   uses: amondnet/vercel-action@v25

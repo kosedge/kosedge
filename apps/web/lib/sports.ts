@@ -1,7 +1,10 @@
 // Sport config - single source of truth for shells and navigation
 
 /** Generate 3-paragraph overview (intro, away pros/cons, home pros/cons) for edge board games */
-export function generateGameOverview(awayTeam: string, homeTeam: string): string {
+export function generateGameOverview(
+  awayTeam: string,
+  homeTeam: string,
+): string {
   const AWAY_PRO = [
     "Strong perimeter shooting and ball movement.",
     "Elite transition offense; capitalizes on turnovers.",
@@ -31,10 +34,11 @@ export function generateGameOverview(awayTeam: string, homeTeam: string): string
     for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
     return h;
   };
-  const pick = <T,>(arr: T[], seed: number, count: number): T[] => {
+  const pick = <T>(arr: T[], seed: number, count: number): T[] => {
     const out: T[] = [];
     const n = arr.length;
-    for (let i = 0; i < count; i++) out.push(arr[((seed + i * 17) % n + n) % n]!);
+    for (let i = 0; i < count; i++)
+      out.push(arr[(((seed + i * 17) % n) + n) % n]!);
     return out;
   };
   const seed = hash(`${awayTeam}|${homeTeam}`);
@@ -46,14 +50,54 @@ export function generateGameOverview(awayTeam: string, homeTeam: string): string
 
 export type SportKey = "ncaam" | "nba" | "nfl" | "mlb" | "nhl" | "cfb" | "wnba";
 
-export const SPORTS: { key: SportKey; label: string; fullName: string; desc: string }[] = [
-  { key: "ncaam", label: "CBB", fullName: "College Basketball", desc: "Daily slate, fair lines, matchup context, execution." },
-  { key: "nba", label: "NBA", fullName: "NBA", desc: "Daily slate, fair lines, execution tooling." },
-  { key: "nfl", label: "NFL", fullName: "NFL", desc: "Weekly slate, matchup pages, execution." },
-  { key: "mlb", label: "MLB", fullName: "MLB", desc: "Daily slate, markets, tracking." },
-  { key: "nhl", label: "NHL", fullName: "NHL", desc: "Daily slate, moneyline and totals, tracking." },
-  { key: "cfb", label: "CFB", fullName: "College Football", desc: "Weekly slate, matchup context, execution." },
-  { key: "wnba", label: "WNBA", fullName: "WNBA", desc: "Daily slate, fair lines, matchup context." },
+export const SPORTS: {
+  key: SportKey;
+  label: string;
+  fullName: string;
+  desc: string;
+}[] = [
+  {
+    key: "ncaam",
+    label: "CBB",
+    fullName: "College Basketball",
+    desc: "Daily slate, fair lines, matchup context, execution.",
+  },
+  {
+    key: "nba",
+    label: "NBA",
+    fullName: "NBA",
+    desc: "Daily slate, fair lines, execution tooling.",
+  },
+  {
+    key: "nfl",
+    label: "NFL",
+    fullName: "NFL",
+    desc: "Weekly slate, matchup pages, execution.",
+  },
+  {
+    key: "mlb",
+    label: "MLB",
+    fullName: "MLB",
+    desc: "Daily slate, markets, tracking.",
+  },
+  {
+    key: "nhl",
+    label: "NHL",
+    fullName: "NHL",
+    desc: "Daily slate, moneyline and totals, tracking.",
+  },
+  {
+    key: "cfb",
+    label: "CFB",
+    fullName: "College Football",
+    desc: "Weekly slate, matchup context, execution.",
+  },
+  {
+    key: "wnba",
+    label: "WNBA",
+    fullName: "WNBA",
+    desc: "Daily slate, fair lines, matchup context.",
+  },
 ];
 
 export function getSport(key: string) {

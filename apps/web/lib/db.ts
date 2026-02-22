@@ -19,8 +19,7 @@ const prismaOptions: ConstructorParameters<typeof PrismaClient>[0] = {
       : ["error"],
 };
 
-export const prisma =
-  globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
+export const prisma = globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 

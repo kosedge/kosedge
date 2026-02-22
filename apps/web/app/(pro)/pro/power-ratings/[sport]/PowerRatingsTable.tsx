@@ -32,7 +32,7 @@ export function PowerRatingsTable({
   }
 
   const hasDetails = ratings.some(
-    (r) => r.adjem != null || r.torvik != null || r.barthag != null
+    (r) => r.adjem != null || r.torvik != null || r.barthag != null,
   );
 
   return (

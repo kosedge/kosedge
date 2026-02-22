@@ -16,7 +16,12 @@ async function registerHandler(req: Request): Promise<NextResponse> {
   const parsed = registerSchema.safeParse(body);
 
   if (!parsed.success) {
-    throw new ApiError(400, "Invalid input", "VALIDATION_ERROR", parsed.error.issues);
+    throw new ApiError(
+      400,
+      "Invalid input",
+      "VALIDATION_ERROR",
+      parsed.error.issues,
+    );
   }
 
   const { email, password, name } = parsed.data;
@@ -47,7 +52,7 @@ async function registerHandler(req: Request): Promise<NextResponse> {
 
   return NextResponse.json(
     { message: "User created successfully", user },
-    { status: 201 }
+    { status: 201 },
   );
 }
 

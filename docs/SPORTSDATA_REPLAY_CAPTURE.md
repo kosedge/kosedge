@@ -8,15 +8,15 @@ Use Replay to **grab as much data as possible** across all sports we cover and s
 
 ## Sports we cover (priority)
 
-| Our sport | SportsData.io league | Replay packages to use |
-|-----------|----------------------|-------------------------|
+| Our sport | SportsData.io league | Replay packages to use                                  |
+| --------- | -------------------- | ------------------------------------------------------- |
 | NCAAM     | NCAA Basketball      | Regular season + conference + March Madness if separate |
-| NBA       | NBA                  | Regular season, Playoffs |
-| NFL       | NFL                  | Regular season weeks, Playoffs |
-| MLB       | MLB                  | Regular season, Playoffs |
-| NHL       | NHL                  | Regular season, Playoffs |
-| CFB       | NCAA Football        | Regular season (excl. bowls if separate package) |
-| WNBA      | WNBA                 | Regular season, Playoffs |
+| NBA       | NBA                  | Regular season, Playoffs                                |
+| NFL       | NFL                  | Regular season weeks, Playoffs                          |
+| MLB       | MLB                  | Regular season, Playoffs                                |
+| NHL       | NHL                  | Regular season, Playoffs                                |
+| CFB       | NCAA Football        | Regular season (excl. bowls if separate package)        |
+| WNBA      | WNBA                 | Regular season, Playoffs                                |
 
 **Extra:** Grab **all College Basketball** replay packages you see (multiple conferences, women’s, etc.) even if we don’t surface them yet.
 

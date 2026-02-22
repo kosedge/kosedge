@@ -3,7 +3,10 @@ import { z } from "zod";
 
 /** Coerce empty env strings to undefined so Zod optional() works (e.g. Vercel env vars). */
 const optionalString = (schema: z.ZodString) =>
-  z.preprocess((v) => (v === "" || v === null ? undefined : v), schema.optional());
+  z.preprocess(
+    (v) => (v === "" || v === null ? undefined : v),
+    schema.optional(),
+  );
 
 const EnvSchema = z.object({
   MODEL_SERVICE_URL: optionalString(z.string().url()),

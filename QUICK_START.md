@@ -97,6 +97,7 @@ vercel link
 ```
 
 This will:
+
 - Ask for your project name
 - Link to existing Vercel project OR create new one
 
@@ -116,6 +117,7 @@ vercel env add NEXT_PUBLIC_SENTRY_DSN
 ```
 
 Or set them in Vercel Dashboard:
+
 1. Go to your project → Settings → Environment Variables
 2. Add each variable
 3. Select environments (Production, Preview, Development)
@@ -167,6 +169,7 @@ INTERNAL_API_SECRET=...
 #### Step 4: Deploy
 
 Click "Deploy" - Vercel will automatically:
+
 - Install dependencies
 - Build your app
 - Deploy to production
@@ -236,11 +239,13 @@ DATABASE_URL=$(grep DATABASE_URL ../.env.production | cut -d '=' -f2) pnpm prism
 ### Local Issues
 
 **Port already in use:**
+
 ```bash
 pnpm kill:ports
 ```
 
 **Database connection error:**
+
 ```bash
 # Check if Docker is running
 pnpm docker:ps
@@ -251,6 +256,7 @@ pnpm docker:up
 ```
 
 **Prisma errors:**
+
 ```bash
 cd apps/web
 pnpm prisma generate
@@ -260,16 +266,19 @@ pnpm prisma migrate dev
 ### Vercel Issues
 
 **Build fails:**
+
 - Check build logs in Vercel Dashboard
 - Verify `rootDirectory` is set to `apps/web`
 - Check `buildCommand` includes `cd ../.. &&`
 
 **Environment variables not working:**
+
 - Verify variables are set for correct environment (Production/Preview)
 - Redeploy after adding variables
 - Check variable names match exactly
 
 **Database connection:**
+
 - Verify `DATABASE_URL` is correct
 - Check database allows Vercel IPs (if using external DB)
 - Run migrations: `vercel env pull` then run migrations locally with production URL

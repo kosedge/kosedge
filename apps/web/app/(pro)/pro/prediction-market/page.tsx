@@ -9,7 +9,9 @@ export default function PredictionMarketPage() {
       >
         ← Pro
       </Link>
-      <h1 className="text-3xl font-semibold text-kos-text">Prediction Market</h1>
+      <h1 className="text-3xl font-semibold text-kos-text">
+        Prediction Market
+      </h1>
       <p className="mt-2 text-kos-text/70">
         Prediction market data and insights. Coming soon.
       </p>

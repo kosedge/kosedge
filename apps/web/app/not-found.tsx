@@ -30,7 +30,8 @@ export default function NotFound() {
               Page Not Found
             </h2>
             <p className="text-gray-300 mb-6">
-              The page you&apos;re looking for doesn&apos;t exist or has been moved.
+              The page you&apos;re looking for doesn&apos;t exist or has been
+              moved.
             </p>
             <div className="flex flex-col gap-3">
               <Link

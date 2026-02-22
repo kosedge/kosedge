@@ -7,7 +7,7 @@ export const section1: InsightSection = {
     "People think line shopping is optional. It's not.",
     "In sports betting, edges are usually small—often 1–4%. If you lose half a point consistently, you're donating most of your advantage back to the book.",
     "Over hundreds of bets, small execution differences become big bankroll differences.",
-    "Kos Edge is built to surface best lines because \"having the right side\" is incomplete. You need the right price.",
+    'Kos Edge is built to surface best lines because "having the right side" is incomplete. You need the right price.',
   ],
 };
 
@@ -28,7 +28,7 @@ export const section3: InsightSection = {
   body: [
     "Example: you bet the same market 300 times. If line shopping improves your expected ROI by even 1%, and your average stake is $100: That's $300 more expected profit.",
     "At scale—across sports, props, seasons—that becomes meaningful.",
-    "Most bettors would rather argue about \"who's better\" than fix execution. Pros fix execution.",
+    'Most bettors would rather argue about "who\'s better" than fix execution. Pros fix execution.',
   ],
 };
 

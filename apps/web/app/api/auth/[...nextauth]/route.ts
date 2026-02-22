@@ -5,15 +5,18 @@ import { handlers } from "@/lib/auth";
 
 async function withJsonError(
   handler: (req: NextRequest) => Promise<Response>,
-  req: NextRequest
+  req: NextRequest,
 ) {
   try {
     return await handler(req);
   } catch (e) {
     // Ensure Auth.js errors return JSON so the client never sees HTML ("Unexpected token '<'")
     return NextResponse.json(
-      { error: "AuthError", message: e instanceof Error ? e.message : "Authentication failed" },
-      { status: 500 }
+      {
+        error: "AuthError",
+        message: e instanceof Error ? e.message : "Authentication failed",
+      },
+      { status: 500 },
     );
   }
 }

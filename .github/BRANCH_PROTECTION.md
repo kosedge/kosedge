@@ -7,36 +7,43 @@ Configure these in GitHub Settings → Branches → Branch protection rules
 ### Main Branch Protection
 
 **Required Status Checks:**
+
 - ✅ Lint & Type Check
 - ✅ Test
 - ✅ Build
 - ✅ Format Check
 
 **Required Reviews:**
+
 - Require at least 1 approval
 - Dismiss stale reviews when new commits are pushed
 - Require review from code owners (if using CODEOWNERS)
 
 **Restrictions:**
+
 - Do not allow force pushes
 - Do not allow deletions
 - Require linear history (optional)
 
 **Enforcements:**
+
 - Require branches to be up to date before merging
 - Require conversation resolution before merging
 
 ### Develop Branch Protection
 
 **Required Status Checks:**
+
 - ✅ Lint & Type Check
 - ✅ Test
 - ✅ Build
 
 **Required Reviews:**
+
 - Require at least 1 approval
 
 **Restrictions:**
+
 - Do not allow force pushes
 - Do not allow deletions
 

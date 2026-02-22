@@ -72,14 +72,18 @@ function TagPill({ tag }: { tag: Row["tagLine"] }) {
     "inline-flex items-center justify-center rounded-lg px-2.5 py-1 text-xs font-bebas tracking-wide border";
   if (tag === "PLAY") {
     return (
-      <span className={`${base} border-kos-green/50 text-kos-green bg-kos-green/10`}>
+      <span
+        className={`${base} border-kos-green/50 text-kos-green bg-kos-green/10`}
+      >
         PLAY
       </span>
     );
   }
   if (tag === "LEAN") {
     return (
-      <span className={`${base} border-kos-gold/50 text-kos-gold bg-kos-gold/10`}>
+      <span
+        className={`${base} border-kos-gold/50 text-kos-gold bg-kos-gold/10`}
+      >
         LEAN
       </span>
     );
@@ -95,7 +99,11 @@ function BookLogo({ book }: { book: Row["bestLineBook"] }) {
   // Put these files in /public/books/ :
   // dk.png, fd.png, mgm.png
   const src =
-    book === "DK" ? "/books/dk.png" : book === "FD" ? "/books/fd.png" : "/books/mgm.png";
+    book === "DK"
+      ? "/books/dk.png"
+      : book === "FD"
+        ? "/books/fd.png"
+        : "/books/mgm.png";
 
   return (
     <div className="relative h-6 w-6 overflow-hidden rounded-md ring-1 ring-white/10 bg-black/30">
@@ -120,13 +128,21 @@ export default function EdgeBoardPage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" aria-label="Home">
             <div className="relative h-10 w-10 rounded-full overflow-hidden ring-1 ring-white/10">
-              <Image src="/brand/kosedge-logo-v2.png" alt="Kos Edge" fill className="object-cover" />
+              <Image
+                src="/brand/kosedge-logo-v2.png"
+                alt="Kos Edge"
+                fill
+                className="object-cover"
+              />
             </div>
             <div className="leading-none">
               <div className="text-xl font-bebas tracking-wider">
                 <span className="text-kos-green">KOS</span>{" "}
                 <span className="text-kos-gold">EDGE</span>
-                <span className="text-gray-400 text-base font-normal"> ANALYTICS</span>
+                <span className="text-gray-400 text-base font-normal">
+                  {" "}
+                  ANALYTICS
+                </span>
               </div>
               <div className="text-xs text-gray-400/80 -mt-0.5">Edge Board</div>
             </div>
@@ -157,7 +173,8 @@ export default function EdgeBoardPage() {
               Today&apos;s <span className="text-kos-gold">Edge Board</span>
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-300 max-w-2xl">
-              Full board view with expandable game notes and key betting stats. No picks—just data and context.
+              Full board view with expandable game notes and key betting stats.
+              No picks—just data and context.
             </p>
           </div>
 
@@ -221,14 +238,26 @@ export default function EdgeBoardPage() {
                       <td className="py-3 px-4 font-semibold">{r.bestLine}</td>
                       <td className="py-3 px-4 font-semibold">{r.bestOU}</td>
 
-                      <td className="py-3 px-4 font-semibold text-gray-200">{r.keiLine}</td>
-                      <td className="py-3 px-4 font-semibold text-gray-200">{r.keiOU}</td>
+                      <td className="py-3 px-4 font-semibold text-gray-200">
+                        {r.keiLine}
+                      </td>
+                      <td className="py-3 px-4 font-semibold text-gray-200">
+                        {r.keiOU}
+                      </td>
 
-                      <td className="py-3 px-4 font-bold text-[#22c55e]">{r.edgeLine}</td>
-                      <td className="py-3 px-4 font-bold text-[#22c55e]">{r.edgeOU}</td>
+                      <td className="py-3 px-4 font-bold text-[#22c55e]">
+                        {r.edgeLine}
+                      </td>
+                      <td className="py-3 px-4 font-bold text-[#22c55e]">
+                        {r.edgeOU}
+                      </td>
 
-                      <td className="py-3 px-4"><TagPill tag={r.tagLine} /></td>
-                      <td className="py-3 px-4"><TagPill tag={r.tagOU} /></td>
+                      <td className="py-3 px-4">
+                        <TagPill tag={r.tagLine} />
+                      </td>
+                      <td className="py-3 px-4">
+                        <TagPill tag={r.tagOU} />
+                      </td>
 
                       <td className="py-3 px-4">
                         <details className="group">
@@ -244,7 +273,10 @@ export default function EdgeBoardPage() {
                                 <div className="px-3 py-2">{r.teamB}</div>
                               </div>
                               {r.stats.map((s, i) => (
-                                <div key={i} className="grid grid-cols-3 border-t border-white/10">
+                                <div
+                                  key={i}
+                                  className="grid grid-cols-3 border-t border-white/10"
+                                >
                                   <div className="px-3 py-2">{s.k}</div>
                                   <div className="px-3 py-2">{s.a}</div>
                                   <div className="px-3 py-2">{s.b}</div>
@@ -269,10 +301,15 @@ export default function EdgeBoardPage() {
         {/* Mobile condensed cards */}
         <div className="mt-6 lg:hidden space-y-4">
           {rows.map((r, idx) => (
-            <div key={idx} className="bg-black/35 border border-white/12 rounded-2xl p-4">
+            <div
+              key={idx}
+              className="bg-black/35 border border-white/12 rounded-2xl p-4"
+            >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xs text-gray-400">{r.sport} • {r.date} • {r.time}</div>
+                  <div className="text-xs text-gray-400">
+                    {r.sport} • {r.date} • {r.time}
+                  </div>
                   <div className="mt-2 font-semibold">{r.teamA}</div>
                   <div className="text-gray-300">{r.teamB}</div>
                 </div>
@@ -294,11 +331,15 @@ export default function EdgeBoardPage() {
 
                 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="text-xs text-gray-400">Edge Line</div>
-                  <div className="mt-1 font-bold text-[#22c55e]">{r.edgeLine}</div>
+                  <div className="mt-1 font-bold text-[#22c55e]">
+                    {r.edgeLine}
+                  </div>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="text-xs text-gray-400">Edge O/U</div>
-                  <div className="mt-1 font-bold text-[#22c55e]">{r.edgeOU}</div>
+                  <div className="mt-1 font-bold text-[#22c55e]">
+                    {r.edgeOU}
+                  </div>
                 </div>
               </div>
 
@@ -315,7 +356,10 @@ export default function EdgeBoardPage() {
                       <div className="px-3 py-2">B</div>
                     </div>
                     {r.stats.map((s, i) => (
-                      <div key={i} className="grid grid-cols-3 border-t border-white/10 text-xs">
+                      <div
+                        key={i}
+                        className="grid grid-cols-3 border-t border-white/10 text-xs"
+                      >
                         <div className="px-3 py-2">{s.k}</div>
                         <div className="px-3 py-2">{s.a}</div>
                         <div className="px-3 py-2">{s.b}</div>

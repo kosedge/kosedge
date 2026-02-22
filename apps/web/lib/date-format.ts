@@ -57,7 +57,9 @@ export function nextDaysET(count: number): { value: string; label: string }[] {
   const options: { value: string; label: string }[] = [];
   for (let i = 0; i < count; i++) {
     const d = new Date(Date.UTC(y, m - 1, day + i, 12, 0, 0));
-    const value = d.toLocaleDateString("en-CA", { timeZone: ET }).replace(/\//g, "-");
+    const value = d
+      .toLocaleDateString("en-CA", { timeZone: ET })
+      .replace(/\//g, "-");
     const label = d.toLocaleDateString("en-US", {
       timeZone: ET,
       weekday: "long",

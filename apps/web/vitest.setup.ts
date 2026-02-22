@@ -39,13 +39,21 @@ vi.mock("next-auth/react", () => ({
 
 // Mock Next.js Image component
 vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) => React.createElement("img", props),
+  default: (props: Record<string, unknown>) =>
+    React.createElement("img", props),
 }));
 
 // Mock Next.js Link component
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href?: string; [key: string]: unknown }) =>
-    React.createElement("a", { href, ...props }, children),
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href?: string;
+    [key: string]: unknown;
+  }) => React.createElement("a", { href, ...props }, children),
 }));
 
 // Mock environment variables

@@ -1,6 +1,4 @@
 // apps/web/lib/db/query-helpers.ts
-import { Prisma } from "#prisma";
-import { prisma } from "@/lib/db";
 import { getCached } from "@/lib/cache/redis";
 
 /**
@@ -22,10 +20,12 @@ export interface PaginatedResult<T> {
   };
 }
 
+type Delegate = { findMany: (args: unknown) => Promise<unknown[]>; count: (args: { where?: unknown }) => Promise<number> };
+
 export async function paginate<T>(
-  model: any,
-  args: Prisma.Args<any, "findMany">,
-  params: PaginationParams = {}
+  model: Delegate,
+  args: { where?: unknown; orderBy?: unknown; select?: unknown },
+  params: PaginationParams = {},
 ): Promise<PaginatedResult<T>> {
   const page = Math.max(1, params.page || 1);
   const limit = Math.min(100, Math.max(1, params.limit || 20));
@@ -58,7 +58,7 @@ export async function paginate<T>(
 export async function cachedQuery<T>(
   cacheKey: string,
   query: () => Promise<T>,
-  ttl: number = 300
+  ttl: number = 300,
 ): Promise<T> {
   return getCached(cacheKey, query, ttl);
 }
@@ -69,7 +69,7 @@ export async function cachedQuery<T>(
 export async function batchQuery<T, K>(
   ids: K[],
   fetcher: (ids: K[]) => Promise<T[]>,
-  idExtractor: (item: T) => K
+  idExtractor: (item: T) => K,
 ): Promise<Map<K, T>> {
   const items = await fetcher(ids);
   const map = new Map<K, T>();

@@ -122,7 +122,7 @@ describe("POST /api/auth/register", () => {
 
   it("should handle database errors gracefully", async () => {
     vi.mocked(prisma.user.findUnique).mockRejectedValue(
-      new Error("Database error")
+      new Error("Database error"),
     );
 
     const request = new Request("http://localhost/api/auth/register", {

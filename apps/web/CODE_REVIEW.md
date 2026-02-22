@@ -13,17 +13,17 @@
 
 ## Category ratings (1–10)
 
-| Area | Score | Notes |
-|------|--------|--------|
-| **Architecture & structure** | 8 | Clear app/(pro), (docs), lib/, components/. Route groups and Prisma schema are well thought out. |
-| **Security** | 6.5 | Sanitize, rate-limit, CSP/headers **now applied** via `proxy.ts`. Register still uses `console.error`; use logger for consistency. |
-| **Data & API** | 7.5 | Prisma + Zod + contracts package. Env validated at startup. In-memory cache in routes is fine for single-instance; document or move to Redis for scale. |
-| **Auth** | 7.5 | NextAuth + JWT, role/subscription in DB, `isProUser`/`hasRole` used correctly. Pro activation still cookie-based temp hack. |
-| **Error handling & observability** | 7 | Central `ApiError` + `handleApiError`, Sentry, pino logger. Some routes still use `console.error` and don’t use `withErrorHandler`. |
-| **Testing** | 6 | Vitest + RTL, good register and pro/auth tests. No middleware or API integration tests; coverage not enforced. |
-| **Consistency & polish** | 6.5 | Typo fixes (activate route, execution path). Import mix of `@/` and `@/src/generated/prisma`. Some duplication (error UI). |
-| **Documentation** | 7 | `docs/API.md` is useful. Inline comments where it matters. Missing: ADR or “how we structure X,” runbooks. |
-| **Scalability** | 7 | Standalone build, optional Redis, DB connection handling. Rate limiter is in-memory (per-instance); need Redis-backed for multi-instance. |
+| Area                               | Score | Notes                                                                                                                                                   |
+| ---------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Architecture & structure**       | 8     | Clear app/(pro), (docs), lib/, components/. Route groups and Prisma schema are well thought out.                                                        |
+| **Security**                       | 6.5   | Sanitize, rate-limit, CSP/headers **now applied** via `proxy.ts`. Register still uses `console.error`; use logger for consistency.                      |
+| **Data & API**                     | 7.5   | Prisma + Zod + contracts package. Env validated at startup. In-memory cache in routes is fine for single-instance; document or move to Redis for scale. |
+| **Auth**                           | 7.5   | NextAuth + JWT, role/subscription in DB, `isProUser`/`hasRole` used correctly. Pro activation still cookie-based temp hack.                             |
+| **Error handling & observability** | 7     | Central `ApiError` + `handleApiError`, Sentry, pino logger. Some routes still use `console.error` and don’t use `withErrorHandler`.                     |
+| **Testing**                        | 6     | Vitest + RTL, good register and pro/auth tests. No middleware or API integration tests; coverage not enforced.                                          |
+| **Consistency & polish**           | 6.5   | Typo fixes (activate route, execution path). Import mix of `@/` and `@/src/generated/prisma`. Some duplication (error UI).                              |
+| **Documentation**                  | 7     | `docs/API.md` is useful. Inline comments where it matters. Missing: ADR or “how we structure X,” runbooks.                                              |
+| **Scalability**                    | 7     | Standalone build, optional Redis, DB connection handling. Rate limiter is in-memory (per-instance); need Redis-backed for multi-instance.               |
 
 ---
 

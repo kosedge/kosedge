@@ -19,7 +19,10 @@ export function KeiLinesTable({
       <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-8 text-center">
         <p className="text-kos-text/60">
           No KEI lines for {sportName} yet. Run the pipeline export to generate{" "}
-          <code className="text-kos-gold/80">data/processed/kei_lines_*.json</code>.
+          <code className="text-kos-gold/80">
+            data/processed/kei_lines_*.json
+          </code>
+          .
         </p>
       </div>
     );

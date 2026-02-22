@@ -8,7 +8,7 @@ export class ApiError extends Error {
     public statusCode: number,
     message: string,
     public code?: string,
-    public details?: unknown
+    public details?: unknown,
   ) {
     super(message);
     this.name = "ApiError";
@@ -31,7 +31,7 @@ export function handleApiError(error: unknown): NextResponse {
         code: error.code,
         ...(error.details != null ? { details: error.details } : {}),
       },
-      { status: error.statusCode }
+      { status: error.statusCode },
     );
   }
 
@@ -43,7 +43,7 @@ export function handleApiError(error: unknown): NextResponse {
         code: "VALIDATION_ERROR",
         issues: error.issues,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -57,7 +57,7 @@ export function handleApiError(error: unknown): NextResponse {
         code: "INTERNAL_ERROR",
         ...(isDevelopment ? { stack: error.stack } : {}),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -67,13 +67,14 @@ export function handleApiError(error: unknown): NextResponse {
       error: "An unknown error occurred",
       code: "UNKNOWN_ERROR",
     },
-    { status: 500 }
+    { status: 500 },
   );
 }
 
-export function withErrorHandler<T extends (...args: any[]) => Promise<NextResponse>>(
-  handler: T
-): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic API handler wrapper
+export function withErrorHandler<
+  T extends (...args: any[]) => Promise<NextResponse>,
+>(handler: T): T {
   return (async (...args: Parameters<T>) => {
     try {
       return await handler(...args);

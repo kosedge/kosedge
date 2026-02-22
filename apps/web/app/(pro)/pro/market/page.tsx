@@ -5,7 +5,9 @@ export default function MarketPage() {
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-semibold text-kos-text">Market Dashboard</h1>
+          <h1 className="text-3xl font-semibold text-kos-text">
+            Market Dashboard
+          </h1>
           <p className="mt-2 text-kos-text/70">
             Totals, spreads, steam, key numbers, movement snapshots.
           </p>

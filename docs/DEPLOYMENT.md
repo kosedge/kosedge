@@ -46,6 +46,7 @@ openssl rand -hex 16
 ### Option 1: Vercel (Recommended)
 
 **Advantages:**
+
 - Zero-config Next.js deployment
 - Automatic HTTPS
 - Edge network CDN
@@ -55,12 +56,14 @@ openssl rand -hex 16
 **Steps:**
 
 1. **Deploy (no global install needed):**
+
    ```bash
    cd /path/to/kosedge
    npx vercel
    ```
 
 2. **Or install Vercel CLI:**
+
    ```bash
    pnpm add -g vercel   # or: npm i -g vercel
    vercel login
@@ -82,6 +85,7 @@ openssl rand -hex 16
    - Update DNS records
 
 **Vercel Configuration:** `apps/web/vercel.json` (already in repo):
+
 ```json
 {
   "buildCommand": "cd ../.. && pnpm build:web",
@@ -90,6 +94,7 @@ openssl rand -hex 16
   "regions": ["iad1"]
 }
 ```
+
 Set **Root Directory** to `apps/web` in Vercel Dashboard → Project Settings → General.
 
 ### Option 2: Docker
@@ -125,6 +130,7 @@ CMD ["node", "apps/web/server.js"]
 ```
 
 **Build and Run:**
+
 ```bash
 docker build -t kosedge-web .
 docker run -p 3000:3000 --env-file .env.production kosedge-web
@@ -135,11 +141,13 @@ docker run -p 3000:3000 --env-file .env.production kosedge-web
 **Steps:**
 
 1. **Build:**
+
    ```bash
    pnpm build:web
    ```
 
 2. **Start:**
+
    ```bash
    cd apps/web
    pnpm start
@@ -191,6 +199,7 @@ pnpm prisma db seed
 ### Health Checks
 
 Monitor these endpoints:
+
 - `/api/ping` - Basic health check
 - Database connection status
 - Redis connection (if used)
@@ -204,6 +213,7 @@ Monitor these endpoints:
 ### Error Tracking
 
 Sentry automatically tracks errors. Check Sentry dashboard for:
+
 - Error rates
 - Performance issues
 - User impact
@@ -218,6 +228,7 @@ Sentry automatically tracks errors. Check Sentry dashboard for:
    - Self-hosted: Multiple PM2 instances
 
 2. **Database Read Replicas:**
+
    ```env
    DATABASE_URL_REPLICA=postgresql://...
    ```
@@ -238,10 +249,12 @@ Sentry automatically tracks errors. Check Sentry dashboard for:
 ### Database Backups
 
 **Automated (Recommended):**
+
 - Use managed PostgreSQL (Supabase, Neon, etc.)
 - They provide automatic backups
 
 **Manual:**
+
 ```bash
 pg_dump $DATABASE_URL > backup.sql
 ```
@@ -315,6 +328,7 @@ pm2 restart kosedge-web
 ## Support
 
 For deployment issues:
+
 1. Check logs
 2. Review documentation
 3. Check GitHub Issues

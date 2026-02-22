@@ -22,7 +22,9 @@ export default function PropsCenterPage() {
             className="rounded-2xl border border-kos-border bg-kos-surface/40 p-5 hover:border-kos-gold/40 transition"
           >
             <h3 className="font-semibold text-kos-text">{s.fullName} Props</h3>
-            <p className="mt-2 text-sm text-kos-text/70">Prop analyzer and edge screens</p>
+            <p className="mt-2 text-sm text-kos-text/70">
+              Prop analyzer and edge screens
+            </p>
           </Link>
         ))}
       </div>

@@ -22,7 +22,8 @@ type EdgeBoardApiResponse =
 async function getRows(sport: string): Promise<EdgeBoardRow[]> {
   const origin = await getRequestOrigin();
   const headersObj: Record<string, string> = { accept: "application/json" };
-  if (env.INTERNAL_API_SECRET) headersObj["x-kosedge-secret"] = env.INTERNAL_API_SECRET;
+  if (env.INTERNAL_API_SECRET)
+    headersObj["x-kosedge-secret"] = env.INTERNAL_API_SECRET;
 
   const res = await fetch(`${origin}/api/edge-board/${sport}/today`, {
     cache: "no-store",
@@ -34,7 +35,12 @@ async function getRows(sport: string): Promise<EdgeBoardRow[]> {
   const json = (await res.json()) as EdgeBoardApiResponse;
   let rows: EdgeBoardRow[] = [];
   if (Array.isArray(json)) rows = json;
-  else if (json && typeof json === "object" && "rows" in json && Array.isArray((json as { rows?: unknown }).rows)) {
+  else if (
+    json &&
+    typeof json === "object" &&
+    "rows" in json &&
+    Array.isArray((json as { rows?: unknown }).rows)
+  ) {
     rows = (json as { rows: EdgeBoardRow[] }).rows;
   }
 
@@ -44,10 +50,13 @@ async function getRows(sport: string): Promise<EdgeBoardRow[]> {
 
 export default async function EdgeBoardSportPage({
   params,
-}: { params: Promise<{ sport?: string }> | { sport?: string } }) {
-  const resolved = params && typeof (params as Promise<unknown>).then === "function"
-    ? await (params as Promise<{ sport?: string }>)
-    : (params as { sport?: string }) ?? {};
+}: {
+  params: Promise<{ sport?: string }> | { sport?: string };
+}) {
+  const resolved =
+    params && typeof (params as Promise<unknown>).then === "function"
+      ? await (params as Promise<{ sport?: string }>)
+      : ((params as { sport?: string }) ?? {});
   const sportKey = String(resolved?.sport ?? "ncaam");
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
@@ -73,12 +82,15 @@ export default async function EdgeBoardSportPage({
       <main className="relative z-10 w-full px-5 sm:px-6 pt-10 pb-16">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
-            <div className="text-sm text-gray-400">{sportName} • Live odds (Open + Best)</div>
+            <div className="text-sm text-gray-400">
+              {sportName} • Live odds (Open + Best)
+            </div>
             <h1 className="text-5xl font-bebas tracking-tight text-kos-gold">
               Today&apos;s Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              Live: Game/Time/Open/Best. KEI columns show our projected line and O/U when available.
+              Live: Game/Time/Open/Best. KEI columns show our projected line and
+              O/U when available.
             </p>
           </div>
 
@@ -130,7 +142,9 @@ export default async function EdgeBoardSportPage({
         <EdgeBoard variant="full" rows={rows} />
 
         <p className="mt-6 text-xs text-gray-500">
-          {rows.length ? `${rows.length} games` : "Add ODDS_API_KEY to Vercel env vars for live odds from the-odds-api.com."}
+          {rows.length
+            ? `${rows.length} games`
+            : "Add ODDS_API_KEY to Vercel env vars for live odds from the-odds-api.com."}
         </p>
       </main>
     </div>

@@ -13,14 +13,54 @@ type HubCard = {
 };
 
 const cards: HubCard[] = [
-  { title: "Model Transparency Panel", desc: "Model vs open, model vs close, ROI, EV capture %, sport & market performance.", href: "/pro/model-transparency", accent: "gold" },
-  { title: "Market Dashboard", desc: "Totals, spreads, steam, key numbers, movement snapshots.", href: "/pro/market", accent: "green" },
-  { title: "KEI Lines", desc: "Our projected spread and over/under for every game, by sport.", href: "/pro/kei-lines", accent: "gold" },
-  { title: "Prediction Market", desc: "Prediction market data and insights.", href: "/pro/prediction-market", accent: "green" },
-  { title: "CLV Tracker", desc: "% plays with +EV at close, avg edge open vs close, distribution chart.", href: "/pro/clv-tracker", accent: "gold" },
-  { title: "Props Center", desc: "Prop analyzer and edge screens (V1+).", href: "/pro/props-center", accent: "green" },
-  { title: "Power Ratings", desc: "Team strength, updates, and historical context.", href: "/pro/power-ratings", accent: "gold" },
-  { title: "Guides", desc: "Discipline + bankroll + model methodology docs.", href: "/methodology", accent: "green" },
+  {
+    title: "Model Transparency Panel",
+    desc: "Model vs open, model vs close, ROI, EV capture %, sport & market performance.",
+    href: "/pro/model-transparency",
+    accent: "gold",
+  },
+  {
+    title: "Market Dashboard",
+    desc: "Totals, spreads, steam, key numbers, movement snapshots.",
+    href: "/pro/market",
+    accent: "green",
+  },
+  {
+    title: "KEI Lines",
+    desc: "Our projected spread and over/under for every game, by sport.",
+    href: "/pro/kei-lines",
+    accent: "gold",
+  },
+  {
+    title: "Prediction Market",
+    desc: "Prediction market data and insights.",
+    href: "/pro/prediction-market",
+    accent: "green",
+  },
+  {
+    title: "CLV Tracker",
+    desc: "% plays with +EV at close, avg edge open vs close, distribution chart.",
+    href: "/pro/clv-tracker",
+    accent: "gold",
+  },
+  {
+    title: "Props Center",
+    desc: "Prop analyzer and edge screens (V1+).",
+    href: "/pro/props-center",
+    accent: "green",
+  },
+  {
+    title: "Power Ratings",
+    desc: "Team strength, updates, and historical context.",
+    href: "/pro/power-ratings",
+    accent: "gold",
+  },
+  {
+    title: "Guides",
+    desc: "Discipline + bankroll + model methodology docs.",
+    href: "/methodology",
+    accent: "green",
+  },
 ];
 
 export default function ProWelcomeHub() {
@@ -98,7 +138,9 @@ export default function ProWelcomeHub() {
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Top Edge — edge board preview + link to article */}
         <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 shadow-xl">
-          <h3 className="text-lg font-bebas text-kos-gold tracking-wide">Top Edge</h3>
+          <h3 className="text-lg font-bebas text-kos-gold tracking-wide">
+            Top Edge
+          </h3>
           <div className="mt-4">
             <EdgeBoardPreview
               row={TOP_EDGE.row}
@@ -108,15 +150,19 @@ export default function ProWelcomeHub() {
         </div>
         {/* Insight of the Week — Pro insight, rotates weekly */}
         <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 shadow-xl">
-          <h3 className="text-lg font-bebas text-kos-gold tracking-wide">Insight of the Week</h3>
+          <h3 className="text-lg font-bebas text-kos-gold tracking-wide">
+            Insight of the Week
+          </h3>
           <div className="mt-4 text-sm text-gray-200/90 line-clamp-4">
             {proInsight ? (
               <>
                 <p className="font-medium text-kos-gold">{proInsight.title}</p>
                 {proInsight.body.slice(0, 2).map((b, i) =>
                   typeof b === "string" ? (
-                    <p key={i} className="mt-2 text-gray-300/90">{b}</p>
-                  ) : null
+                    <p key={i} className="mt-2 text-gray-300/90">
+                      {b}
+                    </p>
+                  ) : null,
                 )}
               </>
             ) : (
@@ -134,7 +180,9 @@ export default function ProWelcomeHub() {
 
       {/* Highlighted game articles — 3–5 cards with edge preview + link */}
       <div className="mt-6">
-        <h3 className="text-lg font-bebas text-kos-gold tracking-wide mb-4">Highlighted Games</h3>
+        <h3 className="text-lg font-bebas text-kos-gold tracking-wide mb-4">
+          Highlighted Games
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {HIGHLIGHTED_GAMES.map((g) => (
             <EdgeBoardPreview
@@ -150,8 +198,12 @@ export default function ProWelcomeHub() {
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {cards.map((c) => {
           const isGold = c.accent === "gold";
-          const border = isGold ? "border-kos-gold/25 hover:border-kos-gold/45" : "border-kos-green/20 hover:border-kos-green/40";
-          const glow = isGold ? "hover:shadow-kos-gold/20" : "hover:shadow-kos-green/20";
+          const border = isGold
+            ? "border-kos-gold/25 hover:border-kos-gold/45"
+            : "border-kos-green/20 hover:border-kos-green/40";
+          const glow = isGold
+            ? "hover:shadow-kos-gold/20"
+            : "hover:shadow-kos-green/20";
           const title = isGold ? "text-kos-gold" : "text-kos-green";
 
           return (
@@ -164,10 +216,16 @@ export default function ProWelcomeHub() {
                 glow,
               ].join(" ")}
             >
-              <div className={["text-2xl font-bebas tracking-tight", title].join(" ")}>
+              <div
+                className={["text-2xl font-bebas tracking-tight", title].join(
+                  " ",
+                )}
+              >
                 {c.title}
               </div>
-              <div className="mt-2 text-sm text-gray-200/80 leading-relaxed">{c.desc}</div>
+              <div className="mt-2 text-sm text-gray-200/80 leading-relaxed">
+                {c.desc}
+              </div>
               <div className="mt-4 text-sm font-semibold text-gray-300 group-hover:text-white transition">
                 Open →
               </div>

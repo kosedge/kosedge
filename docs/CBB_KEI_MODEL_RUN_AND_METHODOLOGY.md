@@ -8,11 +8,11 @@
 
 ## 1. What Was Run
 
-- **Merge:** `python src/merge_games_ensemble.py`  
-  - Reads: `full_ensemble_ratings.parquet`, `ncaab_historical_odds_open_close.parquet`, `actual_margins.parquet` (preferred over `results.csv`).  
+- **Merge:** `python src/merge_games_ensemble.py`
+  - Reads: `full_ensemble_ratings.parquet`, `ncaab_historical_odds_open_close.parquet`, `actual_margins.parquet` (preferred over `results.csv`).
   - Writes: `merged_games_with_odds_and_ratings.parquet`.
-- **Backtest:** `python scripts/backtest_kei_results.py`  
-  - Reads: `merged_games_with_odds_and_ratings.parquet`.  
+- **Backtest:** `python scripts/backtest_kei_results.py`
+  - Reads: `merged_games_with_odds_and_ratings.parquet`.
   - Writes: `kei_backtest_results.json`.
 
 No training step was re-run; the model uses **existing** `ensemble_weights.json` (see below).
@@ -21,20 +21,20 @@ No training step was re-run; the model uses **existing** `ensemble_weights.json`
 
 ## 2. Run Results (Summary)
 
-| Metric | Value |
-|--------|--------|
-| **Total events in merged** | 10,270 (unique `event_id`) |
-| **Events with actual_margin** | 406 |
-| **Odds date range** | 2022-04-05 to 2025-12-06 |
-| **Results date range** | 2022-11-07 to 2024-01-28 |
+| Metric                        | Value                      |
+| ----------------------------- | -------------------------- |
+| **Total events in merged**    | 10,270 (unique `event_id`) |
+| **Events with actual_margin** | 406                        |
+| **Odds date range**           | 2022-04-05 to 2025-12-06   |
+| **Results date range**        | 2022-11-07 to 2024-01-28   |
 
 **Backtest (all 406 games with results; see “Bet rule” below):**
 
-| Segment | n_games | wins | win_pct | total_units | roi_pct |
-|---------|--------|------|---------|-------------|--------|
-| Yesterday (2026-02-20) | 0 | 0 | — | 0 | — |
-| This season (2026) | 0 | 0 | — | 0 | — |
-| **All games (historical)** | **406** | **199** | **49.01%** | **-8.0** | **-1.97%** |
+| Segment                    | n_games | wins    | win_pct    | total_units | roi_pct    |
+| -------------------------- | ------- | ------- | ---------- | ----------- | ---------- |
+| Yesterday (2026-02-20)     | 0       | 0       | —          | 0           | —          |
+| This season (2026)         | 0       | 0       | —          | 0           | —          |
+| **All games (historical)** | **406** | **199** | **49.01%** | **-8.0**    | **-1.97%** |
 
 So over 406 games we **bet the model side every time**, flat 1 unit per game: **199 wins, 207 losses, -8 units, -1.97% ROI**.
 
@@ -45,20 +45,20 @@ The merge script also prints a by-season backtest for games where **edge > 4 pts
 
 ## 3. Data Sources (Inputs)
 
-- **Odds:** `data/processed/ncaab_historical_odds_open_close.parquet`  
-  - The-odds-api historical NCAAB (open/close).  
-  - Per event we use **consensus** close spread/total (mean across books).  
+- **Odds:** `data/processed/ncaab_historical_odds_open_close.parquet`
+  - The-odds-api historical NCAAB (open/close).
+  - Per event we use **consensus** close spread/total (mean across books).
   - Columns used: `event_id`, `home_team`, `away_team`, `commence_time`, `close_spread_home`, `close_total` (then aggregated to `consensus_close_spread`, `consensus_close_total`).
-- **Ratings:** `data/processed/full_ensemble_ratings.parquet`  
-  - One row per `(year, team_norm)`.  
-  - Columns: KenPom `adjem`, `adjoe`, `adjde`, `adjt`, `sos`; Torvik `net_torvik`, `barthag`; EvanMiya `bpr`; optional Haslam `haslam_net`.  
+- **Ratings:** `data/processed/full_ensemble_ratings.parquet`
+  - One row per `(year, team_norm)`.
+  - Columns: KenPom `adjem`, `adjoe`, `adjde`, `adjt`, `sos`; Torvik `net_torvik`, `barthag`; EvanMiya `bpr`; optional Haslam `haslam_net`.
   - **As-of-date:** Merge uses KenPom (and Torvik) **weekly snapshots** when present (`kenpom_snapshots/`, `torvik_snapshots/`), joining by `game_date` with a backward-looking asof so we use ratings as of that date (no look-ahead).
-- **Actual margins:** `data/processed/actual_margins.parquet`  
-  - Rows: `(event_id, actual_margin)` (and optionally `actual_total`).  
+- **Actual margins:** `data/processed/actual_margins.parquet`
+  - Rows: `(event_id, actual_margin)` (and optionally `actual_total`).
   - Built by `build_actual_margins.py` from ESPN/Sports-Reference CSVs and/or SportsData.io parquets, matched to odds by `(game_date, home_team_norm, away_team_norm)`.
-- **Ensemble weights:** `data/processed/ensemble_weights.json`  
+- **Ensemble weights:** `data/processed/ensemble_weights.json`
   - Current contents (from a prior run of `estimate_ensemble_weights.py` on season ≤ 2022):  
-    `{"adjem": 1, "torvik": 0, "barthag": 0, "bpr": 0, "haslam": 0, "home_court": 2.8696, "train_end_year": 2022, "n_train": 200}`  
+    `{"adjem": 1, "torvik": 0, "barthag": 0, "bpr": 0, "haslam": 0, "home_court": 2.8696, "train_end_year": 2022, "n_train": 200}`
   - So the **live** model is effectively **KenPom-only** (adjem diff + home court); other components have weight 0.
 
 ---
@@ -128,8 +128,8 @@ The **backtest in `kei_backtest_results.json` does NOT filter on edge**; it uses
 For **every** game that has `actual_margin`:
 
 - **Bet home** if `ensemble_spread > consensus_close_spread`, else **bet away**.
-- One unit per game.  
-  - If we bet home: **win 1 unit** if `home_cover`, else **lose 1 unit**.  
+- One unit per game.
+  - If we bet home: **win 1 unit** if `home_cover`, else **lose 1 unit**.
   - If we bet away: **win 1 unit** if not `home_cover`, else **lose 1 unit**.
 
 So:
@@ -191,27 +191,32 @@ This document plus the three files above and the three data paths in §5 are eno
 
 The current backtest is “bet model side every game” → ~49% win rate, -1.97% ROI on 406 games. Below are concrete levers; none guarantee profit, but they’re the right places to push.
 
-**Data (highest impact)**  
-- **Real margins:** Replace SportsData trial (scrambled) with **ESPN-scraped results** for 2022–2025 so `actual_margin` is real. Then re-run merge + backtest.  
-- **More seasons:** Add 2022 and 2025 results so we have multiple OOS years (and can do proper train/test by season).  
+**Data (highest impact)**
+
+- **Real margins:** Replace SportsData trial (scrambled) with **ESPN-scraped results** for 2022–2025 so `actual_margin` is real. Then re-run merge + backtest.
+- **More seasons:** Add 2022 and 2025 results so we have multiple OOS years (and can do proper train/test by season).
 - **More games:** Extend odds + results so the backtest isn’t 400 games total.
 
-**Ensemble (model itself)**  
-- **Re-estimate weights:** Run `estimate_ensemble_weights.py` on **all** games with `actual_margin` (e.g. 406), or on a fixed train window (e.g. season ≤ 2023), then re-merge and backtest. Current weights were fit on 200 games (season ≤ 2022) and are KenPom-only.  
-- **Try TRAIN_END_YEAR:** In `estimate_ensemble_weights.py`, try 2023 or 2024 as `TRAIN_END_YEAR` (if you have enough data) and compare OOS.  
+**Ensemble (model itself)**
+
+- **Re-estimate weights:** Run `estimate_ensemble_weights.py` on **all** games with `actual_margin` (e.g. 406), or on a fixed train window (e.g. season ≤ 2023), then re-merge and backtest. Current weights were fit on 200 games (season ≤ 2022) and are KenPom-only.
+- **Try TRAIN_END_YEAR:** In `estimate_ensemble_weights.py`, try 2023 or 2024 as `TRAIN_END_YEAR` (if you have enough data) and compare OOS.
 - **Don’t zero out Torvik/Evan:** If the OLS gives small or negative weights, consider a floor (e.g. 10% each) instead of hard zero so the spread uses more signal.
 
-**Simple filters (before any fancy EV)**  
-- **Edge threshold:** Only count a “bet” when `|spread_edge| > 4` (or 5, 6) and backtest that subset. See if the model is right more often when it’s more confident.  
-- **Complete ratings:** Only backtest games where both teams have non-null `adjem` (and optionally `net_torvik`) so we’re not betting on incomplete inputs.  
+**Simple filters (before any fancy EV)**
+
+- **Edge threshold:** Only count a “bet” when `|spread_edge| > 4` (or 5, 6) and backtest that subset. See if the model is right more often when it’s more confident.
+- **Complete ratings:** Only backtest games where both teams have non-null `adjem` (and optionally `net_torvik`) so we’re not betting on incomplete inputs.
 - **Conference / matchup:** Later, filter to conferences or game types where the model might be more stable (e.g. high-major only).
 
-**Evaluation, not more complexity**  
-- **By season:** Already in merge output; track ROI by season so we see if one year is dragging the total.  
-- **CLV:** Compute (actual_margin + line) for the side we bet; average CLV > 0 would mean we’re beating the close on average even if ROI is negative (variance/juice).  
+**Evaluation, not more complexity**
+
+- **By season:** Already in merge output; track ROI by season so we see if one year is dragging the total.
+- **CLV:** Compute (actual_margin + line) for the side we bet; average CLV > 0 would mean we’re beating the close on average even if ROI is negative (variance/juice).
 - **Hold off on EV/σ until the baseline beats the line:** If “bet every game” is -2% ROI, adding EV filters on top of the same spread often won’t fix it; better to improve the spread and data first, then reintroduce calibration/EV later.
 
-**Totals**  
+**Totals**
+
 - We have `ensemble_total` and `total_edge` in the merge. Backtest totals (over/under) the same way we do spreads (model side vs consensus close) to see if there’s an edge there.
 
 No single step is “the solution,” but: **better data + re-fit weights + simple filters + clear by-season and CLV checks** is a solid order of operations. Once the raw model (or a filtered slice) is at least break-even or positive CLV, we can layer on calibration and selective betting again.

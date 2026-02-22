@@ -69,7 +69,11 @@ const ET = "America/New_York";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  return d.toLocaleDateString("en-US", { timeZone: ET, month: "2-digit", day: "2-digit" });
+  return d.toLocaleDateString("en-US", {
+    timeZone: ET,
+    month: "2-digit",
+    day: "2-digit",
+  });
 }
 
 function formatTime(iso: string): string {
@@ -88,7 +92,10 @@ function filterBooks<T extends { key?: string }>(items: T[]): T[] {
 }
 
 /** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
-export async function fetchEdgeBoard(sportKey: string, apiKey: string): Promise<EdgeBoardRow[]> {
+export async function fetchEdgeBoard(
+  sportKey: string,
+  apiKey: string,
+): Promise<EdgeBoardRow[]> {
   const oddsSportKey = SPORT_KEY_MAP[sportKey.toLowerCase()];
   if (!oddsSportKey) return [];
 
@@ -125,7 +132,9 @@ export async function fetchEdgeBoard(sportKey: string, apiKey: string): Promise<
       ? spreadData.reduce((best, cur) => (cur.point > best.point ? cur : best))
       : null;
     const bestSpread = bestSpreadEntry?.line ?? openSpread;
-    const bestSpreadBook = bestSpreadEntry ? bookDisplay(bestSpreadEntry.book) : undefined;
+    const bestSpreadBook = bestSpreadEntry
+      ? bookDisplay(bestSpreadEntry.book)
+      : undefined;
 
     rows.push({
       id: `${ev.id}-spread`,
@@ -151,7 +160,9 @@ export async function fetchEdgeBoard(sportKey: string, apiKey: string): Promise<
       ? totalsData.reduce((best, cur) => (cur.point > best.point ? cur : best))
       : null;
     const bestTotal = bestTotalEntry?.line ?? openTotal;
-    const bestTotalBook = bestTotalEntry ? bookDisplay(bestTotalEntry.book) : undefined;
+    const bestTotalBook = bestTotalEntry
+      ? bookDisplay(bestTotalEntry.book)
+      : undefined;
 
     rows.push({
       id: `${ev.id}-total`,
@@ -169,7 +180,9 @@ export async function fetchEdgeBoard(sportKey: string, apiKey: string): Promise<
 }
 
 /** Legacy alias for NCAAM. */
-export async function fetchNcaabEdgeBoard(apiKey: string): Promise<EdgeBoardRow[]> {
+export async function fetchNcaabEdgeBoard(
+  apiKey: string,
+): Promise<EdgeBoardRow[]> {
   return fetchEdgeBoard("ncaam", apiKey);
 }
 
@@ -183,7 +196,10 @@ export type OddsComparisonRow = {
   total: Record<string, string>;
 };
 
-export async function fetchOddsComparison(sportKey: string, apiKey: string): Promise<OddsComparisonRow[]> {
+export async function fetchOddsComparison(
+  sportKey: string,
+  apiKey: string,
+): Promise<OddsComparisonRow[]> {
   const oddsSportKey = SPORT_KEY_MAP[sportKey.toLowerCase()];
   if (!oddsSportKey) return [];
 
@@ -214,8 +230,10 @@ export async function fetchOddsComparison(sportKey: string, apiKey: string): Pro
         const awayO = spreadM.outcomes?.find((o) => o.name === ev.away_team);
         const homeO = spreadM.outcomes?.find((o) => o.name === ev.home_team);
         if (awayO?.point != null && homeO?.point != null) {
-          const awayS = awayO.point >= 0 ? `+${awayO.point}` : String(awayO.point);
-          const homeS = homeO.point >= 0 ? `+${homeO.point}` : String(homeO.point);
+          const awayS =
+            awayO.point >= 0 ? `+${awayO.point}` : String(awayO.point);
+          const homeS =
+            homeO.point >= 0 ? `+${homeO.point}` : String(homeO.point);
           spread[b.key] = { away: awayS, home: homeS };
         }
       }

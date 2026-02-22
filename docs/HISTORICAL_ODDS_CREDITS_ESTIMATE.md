@@ -8,10 +8,10 @@ Use this to plan how many credits you need so you don’t waste any. **Credits r
 - We use **1 region** (`us`) and **2 requests per day** (open snapshot + close snapshot).
 - So: **credits per day = 20 × (number of markets)**.
 
-| Markets requested | Credits/request | Requests/day | Credits/day |
-|-------------------|-----------------|---------------|-------------|
-| 2 (e.g. spreads, totals) | 20 | 2 | **40** |
-| 3 (e.g. h2h, spreads, totals) | 30 | 2 | **60** |
+| Markets requested             | Credits/request | Requests/day | Credits/day |
+| ----------------------------- | --------------- | ------------ | ----------- |
+| 2 (e.g. spreads, totals)      | 20              | 2            | **40**      |
+| 3 (e.g. h2h, spreads, totals) | 30              | 2            | **60**      |
 
 ---
 
@@ -20,19 +20,20 @@ Use this to plan how many credits you need so you don’t waste any. **Credits r
 Assumptions: 1 region (`us`), 2 requests/day (open + close), **seasons from 2000–01 through 2024–25** (25 full seasons unless noted).  
 **Important:** The Odds API may **not** offer historical data back to 2000 for any sport. Their docs often cite **June 2020** (or Nov 2020 for NCAAB) as the earliest. Confirm per-sport start dates at [the-odds-api.com](https://the-odds-api.com) before running large pulls; if data only starts in 2020, real credits will be much lower.
 
-| Sport | Markets | Season range | Est. days | Credits/day | Est. total credits |
-|-------|---------|----------------|-----------|-------------|--------------------|
-| **MLB** | Moneyline (h2h) + totals | 2000 → 2025 (Apr–Oct each year) | ~5,564 | 40 | **222,560** |
-| **NFL** | Spread + totals | 2000–01 → 2024–25 (game days only) | ~2,100 | 40 | **84,000** |
-| **NBA** | Spread + totals | 2000–01 → 2024–25 | ~4,250 | 40 | **170,000** |
-| **NHL** | Moneyline (h2h) + totals | 2000–01 → 2024–25 | ~5,000 | 40 | **200,000** |
-| **CFB (D1)** | Spread + totals | 2000–01 → 2024–25, **excl. bowl games** | ~2,450 | 40 | **98,000** |
-| **WNBA** | Spread + totals | 2000 → 2024 | ~3,000 | 40 | **120,000** |
-| **NCAAB** | Spread + totals | 2000–01 → 2024–25 | ~3,750 | 40 | **150,000** |
+| Sport        | Markets                  | Season range                            | Est. days | Credits/day | Est. total credits |
+| ------------ | ------------------------ | --------------------------------------- | --------- | ----------- | ------------------ |
+| **MLB**      | Moneyline (h2h) + totals | 2000 → 2025 (Apr–Oct each year)         | ~5,564    | 40          | **222,560**        |
+| **NFL**      | Spread + totals          | 2000–01 → 2024–25 (game days only)      | ~2,100    | 40          | **84,000**         |
+| **NBA**      | Spread + totals          | 2000–01 → 2024–25                       | ~4,250    | 40          | **170,000**        |
+| **NHL**      | Moneyline (h2h) + totals | 2000–01 → 2024–25                       | ~5,000    | 40          | **200,000**        |
+| **CFB (D1)** | Spread + totals          | 2000–01 → 2024–25, **excl. bowl games** | ~2,450    | 40          | **98,000**         |
+| **WNBA**     | Spread + totals          | 2000 → 2024                             | ~3,000    | 40          | **120,000**        |
+| **NCAAB**    | Spread + totals          | 2000–01 → 2024–25                       | ~3,750    | 40          | **150,000**        |
 
 **Rough total (if all dates from 2000 are available): ~1,044,560 credits.**
 
 Day math by sport:
+
 - **MLB:** 26 seasons (2000–2025) × ~214 days (Apr–Oct) = 5,564.
 - **NFL:** 25 seasons × ~84 game days = 2,100.
 - **NBA:** 25 seasons × ~170 days (Oct–Jun) = 4,250.

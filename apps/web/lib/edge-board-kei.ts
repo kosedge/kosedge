@@ -57,12 +57,15 @@ function formatSpread(projSpreadHome: number): string {
  */
 export function mergeKeiIntoEdgeBoardRows(
   rows: EdgeBoardRow[],
-  sportKey: string
+  sportKey: string,
 ): EdgeBoardRow[] {
   const games = getKeiLines(sportKey);
   if (!games.length) return rows;
 
-  const byGame = new Map<string, { projSpreadHome: number | null; projTotal: number | null }>();
+  const byGame = new Map<
+    string,
+    { projSpreadHome: number | null; projTotal: number | null }
+  >();
   for (const g of games) {
     const gameStr = `${g.awayTeam} @ ${g.homeTeam}`;
     for (const key of gameKeys(gameStr)) {
@@ -77,7 +80,9 @@ export function mergeKeiIntoEdgeBoardRows(
     const game = row?.game;
     if (!game) continue;
     const keys = gameKeys(game);
-    let proj: { projSpreadHome: number | null; projTotal: number | null } | undefined;
+    let proj:
+      | { projSpreadHome: number | null; projTotal: number | null }
+      | undefined;
     for (const key of keys) {
       proj = byGame.get(key);
       if (proj) break;
@@ -85,10 +90,12 @@ export function mergeKeiIntoEdgeBoardRows(
     if (!proj) continue;
 
     if (row.market === "Spread" && proj.projSpreadHome != null) {
-      (row as EdgeBoardRow & { kei?: string }).kei = formatSpread(proj.projSpreadHome);
+      (row as EdgeBoardRow & { kei?: string }).kei = formatSpread(
+        proj.projSpreadHome,
+      );
     } else if (row.market === "Total" && proj.projTotal != null) {
       (row as EdgeBoardRow & { kei?: string }).kei = String(
-        Math.round(proj.projTotal * 10) / 10
+        Math.round(proj.projTotal * 10) / 10,
       );
     }
   }

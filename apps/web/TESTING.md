@@ -5,6 +5,7 @@ This document explains the testing infrastructure and how to write tests for Kos
 ## Overview
 
 We use **Vitest** as our testing framework, which provides:
+
 - Fast test execution
 - Built-in TypeScript support
 - Great Next.js integration
@@ -38,21 +39,25 @@ NODE_ENV="test"
 ## Running Tests
 
 ### Run all tests
+
 ```bash
 pnpm test
 ```
 
 ### Run tests in watch mode (for development)
+
 ```bash
 pnpm test:watch
 ```
 
 ### Run tests with UI (interactive)
+
 ```bash
 pnpm test:ui
 ```
 
 ### Run tests with coverage report
+
 ```bash
 pnpm test:coverage
 ```
@@ -100,9 +105,9 @@ describe("isProUser", () => {
   it("should return false when user is not authenticated", async () => {
     // Mock dependencies
     vi.mocked(auth).mockResolvedValue(null);
-    
+
     const result = await isProUser();
-    
+
     expect(result).toBe(false);
   });
 });
@@ -148,7 +153,7 @@ import UserMenu from "@/components/auth/UserMenu";
 describe("UserMenu", () => {
   it("should show sign in button when not authenticated", () => {
     render(<UserMenu />);
-    
+
     expect(screen.getByText("Sign In")).toBeInTheDocument();
   });
 });
@@ -174,6 +179,7 @@ render(<MyComponent />, {
 ### Mocking Next.js Modules
 
 Common Next.js modules are already mocked in `vitest.setup.ts`:
+
 - `next/navigation` (useRouter, usePathname, etc.)
 - `next/image`
 - `next/link`
@@ -211,11 +217,13 @@ vi.mocked(auth).mockResolvedValue({
 ## Test Coverage Goals
 
 Aim for:
+
 - **80%+ coverage** for critical business logic (auth, API routes)
 - **70%+ coverage** for utility functions
 - **60%+ coverage** for components
 
 Focus on testing:
+
 1. ✅ Authentication and authorization logic
 2. ✅ API route handlers
 3. ✅ Critical business logic
@@ -261,24 +269,26 @@ describe("User Registration Integration", () => {
 
 1. **Test behavior, not implementation**: Test what users see and do, not internal implementation details.
 
-2. **Use descriptive test names**: 
+2. **Use descriptive test names**:
+
    ```typescript
    // ❌ Bad
    it("works", () => {});
-   
+
    // ✅ Good
    it("should return false when user is not authenticated", () => {});
    ```
 
 3. **Arrange-Act-Assert pattern**:
+
    ```typescript
    it("should create user", () => {
      // Arrange
      const email = "test@example.com";
-     
+
      // Act
      const result = createUser(email);
-     
+
      // Assert
      expect(result.email).toBe(email);
    });
@@ -293,11 +303,13 @@ describe("User Registration Integration", () => {
 ## Debugging Tests
 
 ### Run a specific test file
+
 ```bash
 pnpm test __tests__/lib/auth/pro.test.ts
 ```
 
 ### Run tests matching a pattern
+
 ```bash
 pnpm test auth
 ```
@@ -325,7 +337,7 @@ Tests should run automatically in CI. Add to your GitHub Actions workflow:
 ```yaml
 - name: Run tests
   run: pnpm test:coverage
-  
+
 - name: Upload coverage
   uses: codecov/codecov-action@v3
   with:
@@ -335,18 +347,22 @@ Tests should run automatically in CI. Add to your GitHub Actions workflow:
 ## Troubleshooting
 
 ### "Cannot find module" errors
+
 - Ensure `vitest.config.ts` has correct path aliases
 - Check that `tsconfig.json` paths match
 
 ### Tests timing out
+
 - Increase timeout: `it("test", () => {}, { timeout: 10000 })`
 - Check for unclosed database connections
 
 ### Mock not working
+
 - Ensure `vi.mock()` is called before imports
 - Check that module path matches exactly
 
 ### Coverage not showing
+
 - Run `pnpm test:coverage` (not just `pnpm test`)
 - Check that files aren't excluded in `vitest.config.ts`
 

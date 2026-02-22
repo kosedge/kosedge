@@ -13,19 +13,27 @@ function SectionBody({ blocks }: { blocks: InsightBlock[] }) {
             {block}
           </p>
         ) : (
-          <ul key={i} className="list-disc list-inside space-y-1 text-kos-text/90">
+          <ul
+            key={i}
+            className="list-disc list-inside space-y-1 text-kos-text/90"
+          >
             {block.map((item, j) => (
               <li key={j}>{item}</li>
             ))}
           </ul>
-        )
+        ),
       )}
     </div>
   );
 }
 
 function getWeekLabel(sectionNum: number): string {
-  const labels = ["1.1, 2.1, 3.1 …", "1.2, 2.2, 3.2 …", "1.3, 2.3, 3.3 …", "1.4, 2.4, 3.4 …"];
+  const labels = [
+    "1.1, 2.1, 3.1 …",
+    "1.2, 2.2, 3.2 …",
+    "1.3, 2.3, 3.3 …",
+    "1.4, 2.4, 3.4 …",
+  ];
   return labels[sectionNum - 1] ?? "";
 }
 
@@ -44,9 +52,7 @@ export default function InsightsPage() {
         <p className="mt-3 text-kos-text/80">
           Premium-grade sports analytics. New section set every Monday.
         </p>
-        <p className="mt-1 text-sm text-kos-text/60">
-          This week: {weekLabel}
-        </p>
+        <p className="mt-1 text-sm text-kos-text/60">This week: {weekLabel}</p>
 
         <div className="mt-10 space-y-2">
           {pillarMetas.map((meta) => {
@@ -64,7 +70,11 @@ export default function InsightsPage() {
                   {section.title}
                 </summary>
                 <div className="relative border-t border-kos-border px-6 pb-6 pt-4">
-                  <div className={isPro ? "select-none blur-md pointer-events-none" : ""}>
+                  <div
+                    className={
+                      isPro ? "select-none blur-md pointer-events-none" : ""
+                    }
+                  >
                     <SectionBody blocks={section.body} />
                   </div>
                   {isPro && (

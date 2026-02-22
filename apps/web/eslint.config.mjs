@@ -14,6 +14,13 @@ export default defineConfig([
     "node_modules/**",
     "next-env.d.ts",
     "public/**",
-    "prisma/**"
-  ])
+    "prisma/**",
+    "src/generated/**",
+  ]),
+  {
+    files: ["**/__tests__/**", "**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ]);

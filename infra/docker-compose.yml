@@ -52,7 +52,11 @@ services:
     restart: unless-stopped
     init: true
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health >/dev/null || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8000/health >/dev/null || exit 1",
+        ]
       interval: 10s
       timeout: 5s
       retries: 20
@@ -82,7 +86,11 @@ services:
     restart: unless-stopped
     init: true
     healthcheck:
-      test: ["CMD-SHELL", "celery -A src.celery_app:celery_app status >/dev/null 2>&1 || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "celery -A src.celery_app:celery_app status >/dev/null 2>&1 || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 10
