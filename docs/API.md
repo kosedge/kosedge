@@ -1,9 +1,11 @@
 # Kos Edge Analytics - API Documentation
 
+For deployment (Vercel) see [VERCEL.md](./VERCEL.md).
+
 ## Base URL
 
 ```
-Production: https://kosedge.com/api
+Production: https://www.kosedge.com/api
 Development: http://localhost:3000/api
 ```
 

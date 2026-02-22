@@ -1,5 +1,6 @@
 // apps/web/vitest.setup.ts
 import "@testing-library/jest-dom";
+import React from "react";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
@@ -38,21 +39,13 @@ vi.mock("next-auth/react", () => ({
 
 // Mock Next.js Image component
 vi.mock("next/image", () => ({
-  default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    return <img {...props} />;
-  },
+  default: (props: Record<string, unknown>) => React.createElement("img", props),
 }));
 
 // Mock Next.js Link component
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: any) => {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  },
+  default: ({ children, href, ...props }: { children: React.ReactNode; href?: string; [key: string]: unknown }) =>
+    React.createElement("a", { href, ...props }, children),
 }));
 
 // Mock environment variables

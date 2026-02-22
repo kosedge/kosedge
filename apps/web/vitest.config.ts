@@ -21,12 +21,20 @@ export default defineConfig({
         "**/types/**",
         "**/*.d.ts",
         "**/vitest.setup.ts",
+        "src/generated/**",
       ],
+      threshold: {
+        lines: 30,
+        functions: 30,
+        branches: 30,
+        statements: 30,
+      },
     },
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./"),
+      "#prisma": path.resolve(__dirname, "./src/generated/prisma"),
     },
   },
 });

@@ -21,6 +21,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "#prisma": [
+        "./src/generated/prisma"
       ]
     },
     "plugins": [

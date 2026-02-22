@@ -1,5 +1,5 @@
 // apps/web/lib/db/query-helpers.ts
-import { Prisma } from "@/src/generated/prisma";
+import { Prisma } from "#prisma";
 import { prisma } from "@/lib/db";
 import { getCached } from "@/lib/cache/redis";
 

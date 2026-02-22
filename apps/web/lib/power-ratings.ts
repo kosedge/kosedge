@@ -3,9 +3,9 @@
  * Data is read from data/processed/power_ratings_{sport}.json (exported by pipeline script).
  */
 
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, existsSync } from "node:fs";
 import { getSport } from "@/lib/sports";
+import { getPowerRatingsPath } from "@/lib/data-paths";
 
 export type PowerRatingRow = {
   rank: number;
@@ -21,12 +21,9 @@ export type PowerRatingRow = {
 export function getPowerRatings(sportKey: string): PowerRatingRow[] {
   if (!getSport(sportKey)) return [];
 
-  const p = join(
-    process.cwd(),
-    "data",
-    "processed",
-    `power_ratings_${sportKey}.json`
-  );
+  const p = getPowerRatingsPath(sportKey);
+  if (!existsSync(p)) return [];
+
   try {
     const raw = readFileSync(p, "utf-8");
     const data = JSON.parse(raw) as { ratings?: PowerRatingRow[] };

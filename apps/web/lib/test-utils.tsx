@@ -2,7 +2,7 @@
 import { ReactElement } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import { SessionProvider } from "next-auth/react";
-import { UserRole } from "@/src/generated/prisma";
+import { UserRole } from "#prisma";
 
 // Mock session for testing
 const mockSession = {

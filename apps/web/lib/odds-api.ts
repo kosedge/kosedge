@@ -1,6 +1,6 @@
 /**
  * Odds API (the-odds-api.com) fetcher.
- * Supports: NCAAM, NBA, NFL, MLB, CFB, WNBA.
+ * Supports: NCAAM, NBA, NFL, MLB, NHL, CFB, WNBA.
  * Books: DraftKings, FanDuel, Circa, Hard Rock Bet, BetMGM, Bet365, Fanatics, BetRivers, Betr.
  */
 
@@ -14,6 +14,7 @@ export const SPORT_KEY_MAP: Record<string, string> = {
   nba: "basketball_nba",
   nfl: "americanfootball_nfl",
   mlb: "baseball_mlb",
+  nhl: "icehockey_nhl",
   cfb: "americanfootball_ncaaf",
   wnba: "basketball_wnba",
 };

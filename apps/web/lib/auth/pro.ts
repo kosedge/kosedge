@@ -1,7 +1,7 @@
 // apps/web/lib/auth/pro.ts
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { UserRole, SubscriptionStatus } from "@/src/generated/prisma";
+import { UserRole, SubscriptionStatus } from "#prisma";
 
 /**
  * Check if the current user is a Pro user.

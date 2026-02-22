@@ -37,8 +37,8 @@ def parse_args():
     return p.parse_args()
 
 
-def fetch_snapshot(api_key: str, dt: datetime) -> tuple[dict | None, int]:
-    """Fetch one historical snapshot at dt (UTC). Returns (response_json, credits_used)."""
+def fetch_snapshot(api_key: str, dt: datetime) -> tuple[dict | None, int, str | None]:
+    """Fetch one historical snapshot at dt (UTC). Returns (response_json, credits_used, error_msg or None)."""
     iso = dt.strftime("%Y-%m-%dT%H:%M:%SZ")
     params = {
         "regions": "us",
@@ -47,12 +47,21 @@ def fetch_snapshot(api_key: str, dt: datetime) -> tuple[dict | None, int]:
         "apiKey": api_key,
         "date": iso,
     }
-    r = requests.get(BASE_URL, params=params, timeout=30)
-    # x-requests-last = cost of this request
+    try:
+        r = requests.get(BASE_URL, params=params, timeout=30)
+    except requests.RequestException as e:
+        return None, 0, str(e)[:80]
     credits = int(r.headers.get("x-requests-last", CREDITS_PER_REQUEST))
     if r.status_code != 200:
-        return None, credits
-    return r.json(), credits
+        try:
+            body = (r.json() or {}).get("message", r.text[:100] if r.text else "")
+        except Exception:
+            body = r.text[:100] if r.text else ""
+        err = f"{r.status_code} {r.reason or ''}".strip()
+        if body:
+            err += f" — {body}"
+        return None, credits, err[:120]
+    return r.json(), credits, None
 
 
 def _load_dotenv():
@@ -121,10 +130,10 @@ def main():
             if out_file.exists():
                 print(f"  Skip {date_str} {label} (exists)")
                 continue
-            data, used = fetch_snapshot(api_key, ts)
+            data, used, err = fetch_snapshot(api_key, ts)
             total_credits += used
             if data is None:
-                print(f"  Fail {date_str} {label}")
+                print(f"  Fail {date_str} {label}" + (f" ({err})" if err else ""))
                 continue
             with open(out_file, "w") as f:
                 json.dump(data, f, indent=2)

@@ -12,6 +12,7 @@ const credentialsSchema = z.object({
 });
 
 export const authConfig = {
+  trustHost: true, // Required so session/signin fetches get JSON; avoid "Unexpected token '<'" when host is inferred
   session: {
     strategy: "jwt" as const,
   },
@@ -79,7 +80,7 @@ export const authConfig = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as import("@/src/generated/prisma").UserRole;
+        session.user.role = token.role as import("#prisma").UserRole;
       }
       return session;
     },

@@ -1,6 +1,7 @@
 // apps/web/lib/cache/redis.ts
 import Redis from "ioredis";
 import { env } from "@/lib/config/env";
+import { logError } from "@/lib/logger";
 
 let redis: Redis | null = null;
 
@@ -23,12 +24,12 @@ export function getRedisClient(): Redis | null {
     });
 
     redis.on("error", (err) => {
-      console.error("Redis error:", err);
+      logError(err instanceof Error ? err : new Error(String(err)), { module: "redis" });
     });
 
     return redis;
   } catch (error) {
-    console.error("Failed to initialize Redis:", error);
+    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", phase: "init" });
     return null;
   }
 }
@@ -60,8 +61,7 @@ export async function getCached<T>(
 
     return data;
   } catch (error) {
-    console.error("Cache error:", error);
-    // Fallback to direct fetch on error
+    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "getCached" });
     return fetcher();
   }
 }
@@ -76,7 +76,7 @@ export async function invalidateCache(pattern: string): Promise<void> {
       await client.del(...keys);
     }
   } catch (error) {
-    console.error("Cache invalidation error:", error);
+    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "invalidate" });
   }
 }
 
@@ -87,7 +87,7 @@ export async function setCache(key: string, value: unknown, ttl: number = 300): 
   try {
     await client.setex(key, ttl, JSON.stringify(value));
   } catch (error) {
-    console.error("Cache set error:", error);
+    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "set" });
   }
 }
 
@@ -99,7 +99,7 @@ export async function getCache<T>(key: string): Promise<T | null> {
     const cached = await client.get(key);
     return cached ? (JSON.parse(cached) as T) : null;
   } catch (error) {
-    console.error("Cache get error:", error);
+    logError(error instanceof Error ? error : new Error(String(error)), { module: "redis", op: "get" });
     return null;
   }
 }

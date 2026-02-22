@@ -1,0 +1,44 @@
+{
+  "run_date": "2026-02-21",
+  "merged_path": "/Users/ryankos/kosedge/apps/web/data/processed/merged_games_with_odds_and_ratings.parquet",
+  "ev_min": 0.01,
+  "default_price": -110,
+  "folds": [
+    {
+      "train_seasons": [
+        2022,
+        2023
+      ],
+      "test_season": 2024,
+      "train_n": 280,
+      "test_n_available": 126,
+      "skipped": false,
+      "sigma": 15.2846,
+      "bets": 112,
+      "wins": 51,
+      "losses": 61,
+      "units": -14.64,
+      "roi_pct": -13.07,
+      "win_pct": 45.54,
+      "avg_ev": 0.2915,
+      "avg_clv": -0.7191
+    },
+    {
+      "train_seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "test_season": 2025,
+      "train_n": 406,
+      "test_n": 0,
+      "skipped": true,
+      "reason": "empty train or test"
+    }
+  ],
+  "oos_total_bets": 112,
+  "oos_total_wins": 51,
+  "oos_total_units": -14.64,
+  "oos_roi_pct": -13.07,
+  "oos_win_pct": 45.54
+}

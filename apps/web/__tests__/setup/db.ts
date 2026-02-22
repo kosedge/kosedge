@@ -1,5 +1,5 @@
 // apps/web/__tests__/setup/db.ts
-import { PrismaClient } from "@/src/generated/prisma";
+import { PrismaClient } from "#prisma";
 import { execSync } from "child_process";
 import { randomBytes } from "crypto";
 

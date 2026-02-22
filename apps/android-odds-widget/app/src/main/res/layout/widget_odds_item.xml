@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="6dp"
+    android:paddingHorizontal="4dp"
+    android:background="@color/kos_surface">
+    <TextView
+        android:id="@+id/item_game"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/kos_text"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+    <TextView
+        android:id="@+id/item_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/kos_text"
+        android:alpha="0.8"
+        android:textSize="11sp"
+        android:layout_marginStart="4dp" />
+    <TextView
+        android:id="@+id/item_best"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/kos_gold"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:layout_marginStart="4dp" />
+</LinearLayout>

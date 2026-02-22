@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
+import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
 import { fetchEdgeBoard } from "@/lib/odds-api";
 
@@ -68,15 +69,17 @@ async function tryModelService(requestId: string): Promise<{ ok: true; rows: unk
 }
 
 async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
-  const key = env.ODDS_API_KEY?.trim();
-  if (!key) return { ok: false };
-  try {
-    const rows = await fetchEdgeBoard("ncaam", key);
-    return { ok: true, rows };
-  } catch (e) {
-    console.error("edge_board_odds_fallback_failed", { error: String(e) });
-    return { ok: false };
+  const keys = [env.ODDS_API_KEY?.trim(), env.ODDS_API_KEY_BACKUP?.trim()].filter(Boolean);
+  for (const key of keys) {
+    if (!key) continue;
+    try {
+      const rows = await fetchEdgeBoard("ncaam", key);
+      return { ok: true, rows };
+    } catch (e) {
+      logError(e instanceof Error ? e : new Error(String(e)), { route: "edge-board/ncaam/fallback" });
+    }
   }
+  return { ok: false };
 }
 
 export async function GET(req: Request) {

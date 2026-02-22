@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { env } from "@/lib/config/env";
+import { logError } from "@/lib/logger";
 import { getSport } from "@/lib/sports";
 import { SPORT_KEY_MAP } from "@/lib/odds-api";
 
@@ -41,7 +42,7 @@ export async function GET(
       },
     });
   } catch (e) {
-    console.error("odds_widget_proxy_failed", { sport, error: String(e) });
+    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "odds-widget" });
     return new NextResponse("Widget unavailable", { status: 502 });
   }
 }

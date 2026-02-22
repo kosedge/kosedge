@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import { env } from "@/lib/config/env";
+import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
 import { getSport, SPORTS } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -31,11 +32,14 @@ async function getRows(sport: string): Promise<EdgeBoardRow[]> {
   if (!res.ok) return [];
 
   const json = (await res.json()) as EdgeBoardApiResponse;
-  if (Array.isArray(json)) return json;
-  if (json && typeof json === "object" && "rows" in json && Array.isArray((json as { rows?: unknown }).rows)) {
-    return (json as { rows: EdgeBoardRow[] }).rows;
+  let rows: EdgeBoardRow[] = [];
+  if (Array.isArray(json)) rows = json;
+  else if (json && typeof json === "object" && "rows" in json && Array.isArray((json as { rows?: unknown }).rows)) {
+    rows = (json as { rows: EdgeBoardRow[] }).rows;
   }
-  return [];
+
+  // Merge KEI lines on the page so we always use local kei_lines_*.json (no API cache dependency)
+  return mergeKeiIntoEdgeBoardRows(rows, sport);
 }
 
 export default async function EdgeBoardSportPage({
@@ -63,7 +67,7 @@ export default async function EdgeBoardSportPage({
             backgroundSize: "56px 56px",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       <main className="relative z-10 w-full px-5 sm:px-6 pt-10 pb-16">
@@ -74,7 +78,7 @@ export default async function EdgeBoardSportPage({
               Today&apos;s Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              Live: Game/Time/Open/Best. KEICMB + Edge + Tags coming with model.
+              Live: Game/Time/Open/Best. KEI columns show our projected line and O/U when available.
             </p>
           </div>
 
@@ -126,7 +130,7 @@ export default async function EdgeBoardSportPage({
         <EdgeBoard variant="full" rows={rows} />
 
         <p className="mt-6 text-xs text-gray-500">
-          {rows.length ? `${rows.length} games` : "Placeholder. Wire model for live data."}
+          {rows.length ? `${rows.length} games` : "Add ODDS_API_KEY to Vercel env vars for live odds from the-odds-api.com."}
         </p>
       </main>
     </div>

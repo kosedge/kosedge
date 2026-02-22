@@ -2,7 +2,7 @@
 // Edge-safe config for middleware only. No Node.js modules (bcryptjs, prisma).
 import type { JWT } from "next-auth/jwt";
 import type { Session, User } from "next-auth";
-import type { UserRole } from "@/src/generated/prisma";
+import type { UserRole } from "#prisma";
 
 export const authConfigEdge = {
   providers: [], // Edge config: providers live in auth/config.ts (Node-only)

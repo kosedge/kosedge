@@ -142,5 +142,5 @@ Use GitHub Environments for staging/production:
 ```yaml
 environment:
   name: production
-  url: https://kosedge.com
+  url: https://www.kosedge.com
 ```

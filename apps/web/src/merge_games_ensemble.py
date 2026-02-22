@@ -6,6 +6,7 @@ Optional: actual_margins.parquet or data/raw/games/results.csv for backtest.
 Run from apps/web: python src/merge_games_ensemble.py
 """
 import sys
+import warnings
 from pathlib import Path
 from typing import Optional
 
@@ -143,15 +144,17 @@ def main() -> None:
                 pl.col("adjde").alias("adjde_away") if "adjde" in arch.columns else pl.lit(None).alias("adjde_away"),
                 pl.col("adjt").alias("adjt_away") if "adjt" in arch.columns else pl.lit(None).alias("adjt_away"),
             ])
-            odds = odds.join_asof(
-                arch_h,
-                left_on="game_date", right_on="as_of_date",
-                by_left="home_team_norm", by_right="team_norm", strategy="backward"
-            ).join_asof(
-                arch_a,
-                left_on="game_date", right_on="as_of_date",
-                by_left="away_team_norm", by_right="team_norm", strategy="backward"
-            )
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message=".*[Ss]ortedness.*'by'.*", category=UserWarning)
+                odds = odds.join_asof(
+                    arch_h,
+                    left_on="game_date", right_on="as_of_date",
+                    by_left="home_team_norm", by_right="team_norm", strategy="backward"
+                ).join_asof(
+                    arch_a,
+                    left_on="game_date", right_on="as_of_date",
+                    by_left="away_team_norm", by_right="team_norm", strategy="backward"
+                )
             odds = odds.rename({"adjem_h": "adjem", "adjoe_h": "adjoe", "adjde_h": "adjde", "adjt_h": "adjt"})
             drop_cols = [c for c in ("as_of_date", "as_of_date_right") if c in odds.columns]
             if drop_cols:
@@ -182,15 +185,17 @@ def main() -> None:
                     pl.col("adjde").alias("adjde_away") if "adjde" in arch.columns else pl.lit(None).alias("adjde_away"),
                     pl.col("adjt").alias("adjt_away") if "adjt" in arch.columns else pl.lit(None).alias("adjt_away"),
                 ])
-                odds = odds.join_asof(
-                    arch_h,
-                    left_on="game_date", right_on="as_of_date",
-                    by_left="home_team_norm", by_right="team_norm", strategy="backward"
-                ).join_asof(
-                    arch_a,
-                    left_on="game_date", right_on="as_of_date",
-                    by_left="away_team_norm", by_right="team_norm", strategy="backward"
-                )
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", message=".*[Ss]ortedness.*'by'.*", category=UserWarning)
+                    odds = odds.join_asof(
+                        arch_h,
+                        left_on="game_date", right_on="as_of_date",
+                        by_left="home_team_norm", by_right="team_norm", strategy="backward"
+                    ).join_asof(
+                        arch_a,
+                        left_on="game_date", right_on="as_of_date",
+                        by_left="away_team_norm", by_right="team_norm", strategy="backward"
+                    )
                 odds = odds.rename({"adjem_h": "adjem", "adjoe_h": "adjoe", "adjde_h": "adjde", "adjt_h": "adjt"})
                 drop_cols = [c for c in ("as_of_date", "as_of_date_right") if c in odds.columns]
                 if drop_cols:
@@ -261,15 +266,17 @@ def main() -> None:
                             merged = merged.drop(f"{c}_away")
                     tv_h = tv.select(cols).rename({c: f"{c}_h" for c in need if c in tv.columns})
                     tv_a = tv.select(cols).rename({c: f"{c}_away" for c in need if c in tv.columns})
-                    merged = merged.join_asof(
-                        tv_h,
-                        left_on="game_date", right_on="as_of_date",
-                        by_left="home_team_norm", by_right="team_norm", strategy="backward",
-                    ).join_asof(
-                        tv_a,
-                        left_on="game_date", right_on="as_of_date",
-                        by_left="away_team_norm", by_right="team_norm", strategy="backward",
-                    )
+                    with warnings.catch_warnings():
+                        warnings.filterwarnings("ignore", message=".*[Ss]ortedness.*'by'.*", category=UserWarning)
+                        merged = merged.join_asof(
+                            tv_h,
+                            left_on="game_date", right_on="as_of_date",
+                            by_left="home_team_norm", by_right="team_norm", strategy="backward",
+                        ).join_asof(
+                            tv_a,
+                            left_on="game_date", right_on="as_of_date",
+                            by_left="away_team_norm", by_right="team_norm", strategy="backward",
+                        )
                     merged = merged.rename({f"{c}_h": c for c in need if f"{c}_h" in merged.columns})
                     merged = merged.drop([c for c in ("as_of_date", "as_of_date_right") if c in merged.columns])
                     print("Using Torvik weekly snapshots (rolling) for net_torvik/barthag.")
@@ -284,12 +291,16 @@ def main() -> None:
     merged = merged.with_columns(
         (pl.col("net_torvik").fill_null(0) - pl.col("net_torvik_away").fill_null(0)).alias("torvik_net_diff")
     )
-    # Ensemble: use estimated weights when present, else default (KenPom/Torvik heavy).
-    adjem_diff = pl.col("adjem").fill_null(0) - pl.col("adjem_away").fill_null(0)
-    torvik_diff = pl.col("torvik_net_diff").fill_null(0)
-    bpr_diff = pl.col("bpr").fill_null(0) - pl.col("bpr_away").fill_null(0)
-    barthag_diff = (pl.col("barthag").fill_null(0) - pl.col("barthag_away").fill_null(0)) * 20
-    haslam_diff = (pl.col("haslam_net").fill_null(0) - pl.col("haslam_net_away").fill_null(0)) if "haslam_net" in merged.columns else pl.lit(0.0)
+    # Clip diffs to avoid 30–40 pt blowups from missing/NaN ratings (match project_future_kei_lines)
+    SPREAD_DIFF_CLIP = 30.0
+    adjem_diff = (pl.col("adjem").fill_null(0) - pl.col("adjem_away").fill_null(0)).clip(-SPREAD_DIFF_CLIP, SPREAD_DIFF_CLIP)
+    torvik_diff = pl.col("torvik_net_diff").fill_null(0).clip(-SPREAD_DIFF_CLIP, SPREAD_DIFF_CLIP)
+    bpr_diff = (pl.col("bpr").fill_null(0) - pl.col("bpr_away").fill_null(0)).clip(-SPREAD_DIFF_CLIP, SPREAD_DIFF_CLIP)
+    barthag_diff = ((pl.col("barthag").fill_null(0) - pl.col("barthag_away").fill_null(0)) * 20).clip(-SPREAD_DIFF_CLIP, SPREAD_DIFF_CLIP)
+    haslam_diff = (
+        (pl.col("haslam_net").fill_null(0) - pl.col("haslam_net_away").fill_null(0)).clip(-SPREAD_DIFF_CLIP, SPREAD_DIFF_CLIP)
+        if "haslam_net" in merged.columns else pl.lit(0.0)
+    )
 
     w_adjem, w_torvik, w_barthag, w_bpr, w_haslam, home_court = 0.40, 0.30, 0.15, 0.10, 0.05, 3.75
     if ENSEMBLE_WEIGHTS_PATH.exists():
@@ -306,16 +317,15 @@ def main() -> None:
             print("Using estimated ensemble weights from", ENSEMBLE_WEIGHTS_PATH.name)
         except Exception as e:
             print("Could not load ensemble weights:", e)
-    merged = merged.with_columns(
-        (
-            w_adjem * adjem_diff
-            + w_torvik * torvik_diff
-            + w_barthag * barthag_diff
-            + w_bpr * bpr_diff
-            + w_haslam * haslam_diff
-            + home_court
-        ).alias("ensemble_spread")
+    raw_spread = (
+        w_adjem * adjem_diff
+        + w_torvik * torvik_diff
+        + w_barthag * barthag_diff
+        + w_bpr * bpr_diff
+        + w_haslam * haslam_diff
+        + home_court
     )
+    merged = merged.with_columns(raw_spread.clip(-28.0, 28.0).alias("ensemble_spread"))
 
     # Edge: use consensus line. Bet home when model > line; bet away when line > model.
     line_col = "consensus_close_spread"
@@ -399,21 +409,24 @@ def main() -> None:
         except Exception:
             pass
 
-    # Optional actual margin and total for backtest (prefer results.csv when it has home_pts/away_pts for actual_total)
+    # Optional actual margin and total for backtest. Prefer actual_margins.parquet (build_actual_margins output:
+    # CSV + SportsData matched to odds) so we use the full set; fall back to results.csv when parquet missing.
     actual = None
     results_csv = RAW_GAMES / "results.csv"
-    if results_csv.exists():
+    if ACTUAL_MARGINS_PATH.exists():
+        am = pl.read_parquet(ACTUAL_MARGINS_PATH)
+        if not am.is_empty() and "event_id" in am.columns and "actual_margin" in am.columns:
+            actual = am.select(["event_id", "actual_margin"])
+            if "actual_total" in am.columns:
+                actual = actual.join(am.select(["event_id", "actual_total"]), on="event_id", how="left")
+    if actual is None and results_csv.exists():
         df = pl.read_csv(results_csv)
         if "event_id" in df.columns and "home_pts" in df.columns and "away_pts" in df.columns:
             actual = df.with_columns([
                 (pl.col("home_pts") - pl.col("away_pts")).alias("actual_margin"),
                 (pl.col("home_pts") + pl.col("away_pts")).alias("actual_total"),
             ]).select(["event_id", "actual_margin", "actual_total"])
-    if actual is None and ACTUAL_MARGINS_PATH.exists():
-        actual = pl.read_parquet(ACTUAL_MARGINS_PATH)
-    elif actual is None and results_csv.exists():
-        df = pl.read_csv(results_csv)
-        if "event_id" in df.columns and "actual_margin" in df.columns:
+        elif "event_id" in df.columns and "actual_margin" in df.columns:
             actual = df.select(["event_id", "actual_margin"])
             if "actual_total" in df.columns:
                 actual = actual.join(df.select(["event_id", "actual_total"]), on="event_id", how="left")

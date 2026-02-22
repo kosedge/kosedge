@@ -1,36 +1,33 @@
 // apps/web/lib/config/env.ts
 import { z } from "zod";
 
+/** Coerce empty env strings to undefined so Zod optional() works (e.g. Vercel env vars). */
+const optionalString = (schema: z.ZodString) =>
+  z.preprocess((v) => (v === "" || v === null ? undefined : v), schema.optional());
+
 const EnvSchema = z.object({
-  // Edge board proxy: optional in dev if no upstream model service
-  MODEL_SERVICE_URL: z.string().url().optional(),
-  INTERNAL_API_SECRET: z.string().min(16).optional(),
-  // Odds API fallback for NCAAM (free tier: 500 req/mo)
-  ODDS_API_KEY: z.string().min(1).optional(),
-  // Widget embed (server-only; never exposed to client)
-  ODDS_WIDGET_ACCESS_KEY: z.string().min(1).optional(),
+  MODEL_SERVICE_URL: optionalString(z.string().url()),
+  INTERNAL_API_SECRET: optionalString(z.string().min(16)),
+  ODDS_API_KEY: optionalString(z.string().min(1)),
+  ODDS_API_KEY_BACKUP: optionalString(z.string().min(1)),
+  ODDS_WIDGET_ACCESS_KEY: optionalString(z.string().min(1)),
   NODE_ENV: z.enum(["development", "test", "production"]).optional(),
 
-  // Authentication
-  AUTH_SECRET: z.string().min(32).optional(),
-  AUTH_URL: z.string().url().optional(),
-  DATABASE_URL: z.string().url().optional(),
-  
-  // OAuth Providers (optional - add as needed)
+  AUTH_SECRET: optionalString(z.string().min(32)),
+  AUTH_URL: optionalString(z.string().url()),
+  DATABASE_URL: optionalString(z.string().url()),
+
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),
-  
-  // Error Tracking (optional)
-  NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
+
+  NEXT_PUBLIC_SENTRY_DSN: optionalString(z.string().url()),
   SENTRY_AUTH_TOKEN: z.string().optional(),
-  
-  // Logging
+
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).optional(),
-  
-  // Redis (optional)
-  REDIS_URL: z.string().url().optional(),
+
+  REDIS_URL: optionalString(z.string().url()),
 });
 
 export const env = EnvSchema.parse(process.env);
