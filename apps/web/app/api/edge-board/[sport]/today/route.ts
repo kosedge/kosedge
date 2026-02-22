@@ -55,8 +55,8 @@ export async function GET(
     }
   }
 
-  const key = env.ODDS_API_KEY?.trim();
-  if (!key || !SPORT_KEY_MAP[sport]) {
+  const keys = [env.ODDS_API_KEY?.trim(), env.ODDS_API_KEY_BACKUP?.trim()].filter((k): k is string => Boolean(k));
+  if (!keys.length || !SPORT_KEY_MAP[sport]) {
     return json({ rows: [] }, 200, { "x-request-id": requestId });
   }
 
@@ -68,8 +68,19 @@ export async function GET(
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
   }
 
+  let rows: Awaited<ReturnType<typeof fetchEdgeBoard>> = [];
+  for (const key of keys) {
+    try {
+      rows = await fetchEdgeBoard(sport, key);
+      break;
+    } catch (e) {
+      logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "edge-board/today" });
+    }
+  }
+  if (rows.length === 0 && cached) {
+    return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
+  }
   try {
-    let rows = await fetchEdgeBoard(sport, key);
     rows = mergeKeiIntoEdgeBoardRows(rows, sport);
     const parsed = EdgeBoardResponseSchema.safeParse({ rows });
     if (!parsed.success) {

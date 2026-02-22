@@ -1,0 +1,3654 @@
+{
+  "ratings": [
+    {
+      "rank": 1,
+      "team": "michigan",
+      "teamNorm": "michigan",
+      "rating": 38.66,
+      "adjem": 38.66,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 2,
+      "team": "duke",
+      "teamNorm": "duke",
+      "rating": 35.9,
+      "adjem": 35.9,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 3,
+      "team": "arizona",
+      "teamNorm": "arizona",
+      "rating": 35.7,
+      "adjem": 35.7,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 4,
+      "team": "houston",
+      "teamNorm": "houston",
+      "rating": 33.37,
+      "adjem": 33.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 5,
+      "team": "florida",
+      "teamNorm": "florida",
+      "rating": 32.97,
+      "adjem": 32.97,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 6,
+      "team": "illinois",
+      "teamNorm": "illinois",
+      "rating": 32.97,
+      "adjem": 32.97,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 7,
+      "team": "iowa state",
+      "teamNorm": "iowa state",
+      "rating": 32.2,
+      "adjem": 32.2,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 8,
+      "team": "purdue",
+      "teamNorm": "purdue",
+      "rating": 31.48,
+      "adjem": 31.48,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 9,
+      "team": "connecticut",
+      "teamNorm": "connecticut",
+      "rating": 29.05,
+      "adjem": 29.05,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 10,
+      "team": "gonzaga",
+      "teamNorm": "gonzaga",
+      "rating": 28.59,
+      "adjem": 28.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 11,
+      "team": "nebraska",
+      "teamNorm": "nebraska",
+      "rating": 28.22,
+      "adjem": 28.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 12,
+      "team": "vanderbilt",
+      "teamNorm": "vanderbilt",
+      "rating": 28.06,
+      "adjem": 28.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 13,
+      "team": "michigan state",
+      "teamNorm": "michigan state",
+      "rating": 27.85,
+      "adjem": 27.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 14,
+      "team": "louisville",
+      "teamNorm": "louisville",
+      "rating": 27.33,
+      "adjem": 27.33,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 15,
+      "team": "kansas",
+      "teamNorm": "kansas",
+      "rating": 27.21,
+      "adjem": 27.21,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 16,
+      "team": "texas tech",
+      "teamNorm": "texas tech",
+      "rating": 26.85,
+      "adjem": 26.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 17,
+      "team": "arkansas",
+      "teamNorm": "arkansas",
+      "rating": 26.1,
+      "adjem": 26.1,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 18,
+      "team": "alabama",
+      "teamNorm": "alabama",
+      "rating": 25.69,
+      "adjem": 25.69,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 19,
+      "team": "tennessee",
+      "teamNorm": "tennessee",
+      "rating": 25.64,
+      "adjem": 25.64,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 20,
+      "team": "virginia",
+      "teamNorm": "virginia",
+      "rating": 25.42,
+      "adjem": 25.42,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 21,
+      "team": "st john's",
+      "teamNorm": "st john's",
+      "rating": 24.83,
+      "adjem": 24.83,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 22,
+      "team": "byu",
+      "teamNorm": "byu",
+      "rating": 24.37,
+      "adjem": 24.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 23,
+      "team": "saint louis",
+      "teamNorm": "saint louis",
+      "rating": 23.63,
+      "adjem": 23.63,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 24,
+      "team": "utah state",
+      "teamNorm": "utah state",
+      "rating": 22.64,
+      "adjem": 22.64,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 25,
+      "team": "iowa",
+      "teamNorm": "iowa",
+      "rating": 22.33,
+      "adjem": 22.33,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 26,
+      "team": "villanova",
+      "teamNorm": "villanova",
+      "rating": 22.22,
+      "adjem": 22.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 27,
+      "team": "kentucky",
+      "teamNorm": "kentucky",
+      "rating": 21.91,
+      "adjem": 21.91,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 28,
+      "team": "north carolina",
+      "teamNorm": "north carolina",
+      "rating": 21.78,
+      "adjem": 21.78,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 29,
+      "team": "saint mary's",
+      "teamNorm": "saint mary's",
+      "rating": 21.67,
+      "adjem": 21.67,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 30,
+      "team": "texas",
+      "teamNorm": "texas",
+      "rating": 21.67,
+      "adjem": 21.67,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 31,
+      "team": "nc stateate",
+      "teamNorm": "nc stateate",
+      "rating": 21.64,
+      "adjem": 21.64,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 32,
+      "team": "wisconsin",
+      "teamNorm": "wisconsin",
+      "rating": 21.6,
+      "adjem": 21.6,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 33,
+      "team": "auburn",
+      "teamNorm": "auburn",
+      "rating": 21.02,
+      "adjem": 21.02,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 34,
+      "team": "clemson",
+      "teamNorm": "clemson",
+      "rating": 20.51,
+      "adjem": 20.51,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 35,
+      "team": "texas a&m",
+      "teamNorm": "texas a&m",
+      "rating": 19.88,
+      "adjem": 19.88,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 36,
+      "team": "indiana",
+      "teamNorm": "indiana",
+      "rating": 19.72,
+      "adjem": 19.72,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 37,
+      "team": "miami fl",
+      "teamNorm": "miami fl",
+      "rating": 19.71,
+      "adjem": 19.71,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 38,
+      "team": "smu",
+      "teamNorm": "smu",
+      "rating": 19.61,
+      "adjem": 19.61,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 39,
+      "team": "santa clara",
+      "teamNorm": "santa clara",
+      "rating": 19.38,
+      "adjem": 19.38,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 40,
+      "team": "ohio state",
+      "teamNorm": "ohio state",
+      "rating": 18.85,
+      "adjem": 18.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 41,
+      "team": "san diego state",
+      "teamNorm": "san diego state",
+      "rating": 18.81,
+      "adjem": 18.81,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 42,
+      "team": "ucla",
+      "teamNorm": "ucla",
+      "rating": 18.53,
+      "adjem": 18.53,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 43,
+      "team": "georgia",
+      "teamNorm": "georgia",
+      "rating": 17.96,
+      "adjem": 17.96,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 44,
+      "team": "new mexico",
+      "teamNorm": "new mexico",
+      "rating": 16.74,
+      "adjem": 16.74,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 45,
+      "team": "baylor",
+      "teamNorm": "baylor",
+      "rating": 16.74,
+      "adjem": 16.74,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 46,
+      "team": "vcu",
+      "teamNorm": "vcu",
+      "rating": 16.59,
+      "adjem": 16.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 47,
+      "team": "washington",
+      "teamNorm": "washington",
+      "rating": 16.28,
+      "adjem": 16.28,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 48,
+      "team": "seton hall",
+      "teamNorm": "seton hall",
+      "rating": 16.06,
+      "adjem": 16.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 49,
+      "team": "usc",
+      "teamNorm": "usc",
+      "rating": 15.34,
+      "adjem": 15.34,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 50,
+      "team": "tcu",
+      "teamNorm": "tcu",
+      "rating": 15.23,
+      "adjem": 15.23,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 51,
+      "team": "cincinnati",
+      "teamNorm": "cincinnati",
+      "rating": 14.72,
+      "adjem": 14.72,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 52,
+      "team": "ucf",
+      "teamNorm": "ucf",
+      "rating": 14.56,
+      "adjem": 14.56,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 53,
+      "team": "oklahoma",
+      "teamNorm": "oklahoma",
+      "rating": 14.16,
+      "adjem": 14.16,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 54,
+      "team": "missouri",
+      "teamNorm": "missouri",
+      "rating": 13.8,
+      "adjem": 13.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 55,
+      "team": "lsu",
+      "teamNorm": "lsu",
+      "rating": 13.74,
+      "adjem": 13.74,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 56,
+      "team": "west virginia",
+      "teamNorm": "west virginia",
+      "rating": 13.7,
+      "adjem": 13.7,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 57,
+      "team": "belmont",
+      "teamNorm": "belmont",
+      "rating": 13.5,
+      "adjem": 13.5,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 58,
+      "team": "boise state",
+      "teamNorm": "boise state",
+      "rating": 13.07,
+      "adjem": 13.07,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 59,
+      "team": "nevada",
+      "teamNorm": "nevada",
+      "rating": 13.06,
+      "adjem": 13.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 60,
+      "team": "south florida",
+      "teamNorm": "south florida",
+      "rating": 12.91,
+      "adjem": 12.91,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 61,
+      "team": "tulsa",
+      "teamNorm": "tulsa",
+      "rating": 12.49,
+      "adjem": 12.49,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 62,
+      "team": "oklahoma state",
+      "teamNorm": "oklahoma state",
+      "rating": 12.32,
+      "adjem": 12.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 63,
+      "team": "providence",
+      "teamNorm": "providence",
+      "rating": 12.28,
+      "adjem": 12.28,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 64,
+      "team": "mcneese",
+      "teamNorm": "mcneese",
+      "rating": 12.28,
+      "adjem": 12.28,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 65,
+      "team": "virginia tech",
+      "teamNorm": "virginia tech",
+      "rating": 12.23,
+      "adjem": 12.23,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 66,
+      "team": "california",
+      "teamNorm": "california",
+      "rating": 12.08,
+      "adjem": 12.08,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 67,
+      "team": "grand canyon",
+      "teamNorm": "grand canyon",
+      "rating": 11.95,
+      "adjem": 11.95,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 68,
+      "team": "akron",
+      "teamNorm": "akron",
+      "rating": 11.93,
+      "adjem": 11.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 69,
+      "team": "syracuse",
+      "teamNorm": "syracuse",
+      "rating": 11.89,
+      "adjem": 11.89,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 70,
+      "team": "northwestern",
+      "teamNorm": "northwestern",
+      "rating": 11.77,
+      "adjem": 11.77,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 71,
+      "team": "arizona state",
+      "teamNorm": "arizona state",
+      "rating": 11.59,
+      "adjem": 11.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 72,
+      "team": "wake forest",
+      "teamNorm": "wake forest",
+      "rating": 11.3,
+      "adjem": 11.3,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 73,
+      "team": "colorado",
+      "teamNorm": "colorado",
+      "rating": 11.29,
+      "adjem": 11.29,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 74,
+      "team": "stanford",
+      "teamNorm": "stanford",
+      "rating": 11.07,
+      "adjem": 11.07,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 75,
+      "team": "yale",
+      "teamNorm": "yale",
+      "rating": 10.91,
+      "adjem": 10.91,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 76,
+      "team": "george washington",
+      "teamNorm": "george washington",
+      "rating": 10.7,
+      "adjem": 10.7,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 77,
+      "team": "georgetown",
+      "teamNorm": "georgetown",
+      "rating": 10.67,
+      "adjem": 10.67,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 78,
+      "team": "creighton",
+      "teamNorm": "creighton",
+      "rating": 10.55,
+      "adjem": 10.55,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 79,
+      "team": "florida state",
+      "teamNorm": "florida state",
+      "rating": 10.51,
+      "adjem": 10.51,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 80,
+      "team": "mississippi",
+      "teamNorm": "mississippi",
+      "rating": 10.06,
+      "adjem": 10.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 81,
+      "team": "notre dame",
+      "teamNorm": "notre dame",
+      "rating": 10.04,
+      "adjem": 10.04,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 82,
+      "team": "butler",
+      "teamNorm": "butler",
+      "rating": 9.71,
+      "adjem": 9.71,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 83,
+      "team": "minnesota",
+      "teamNorm": "minnesota",
+      "rating": 9.6,
+      "adjem": 9.6,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 84,
+      "team": "miami oh",
+      "teamNorm": "miami oh",
+      "rating": 9.45,
+      "adjem": 9.45,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 85,
+      "team": "mississippi state",
+      "teamNorm": "mississippi state",
+      "rating": 9.38,
+      "adjem": 9.38,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 86,
+      "team": "stephen f austin",
+      "teamNorm": "stephen f austin",
+      "rating": 9.37,
+      "adjem": 9.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 87,
+      "team": "northern iowa",
+      "teamNorm": "northern iowa",
+      "rating": 9.36,
+      "adjem": 9.36,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 88,
+      "team": "utah valley",
+      "teamNorm": "utah valley",
+      "rating": 8.8,
+      "adjem": 8.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 89,
+      "team": "liberty",
+      "teamNorm": "liberty",
+      "rating": 8.54,
+      "adjem": 8.54,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 90,
+      "team": "high point",
+      "teamNorm": "high point",
+      "rating": 8.36,
+      "adjem": 8.36,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 91,
+      "team": "dayton",
+      "teamNorm": "dayton",
+      "rating": 8.19,
+      "adjem": 8.19,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 92,
+      "team": "wichita state",
+      "teamNorm": "wichita state",
+      "rating": 8.15,
+      "adjem": 8.15,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 93,
+      "team": "colorado state",
+      "teamNorm": "colorado state",
+      "rating": 8.14,
+      "adjem": 8.14,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 94,
+      "team": "xavier",
+      "teamNorm": "xavier",
+      "rating": 7.88,
+      "adjem": 7.88,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 95,
+      "team": "george mason",
+      "teamNorm": "george mason",
+      "rating": 7.76,
+      "adjem": 7.76,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 96,
+      "team": "south carolina",
+      "teamNorm": "south carolina",
+      "rating": 7.57,
+      "adjem": 7.57,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 97,
+      "team": "oregon",
+      "teamNorm": "oregon",
+      "rating": 7.1,
+      "adjem": 7.1,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 98,
+      "team": "illinois state",
+      "teamNorm": "illinois state",
+      "rating": 7.0,
+      "adjem": 7.0,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 99,
+      "team": "wyoming",
+      "teamNorm": "wyoming",
+      "rating": 6.99,
+      "adjem": 6.99,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 100,
+      "team": "memphis",
+      "teamNorm": "memphis",
+      "rating": 6.93,
+      "adjem": 6.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 101,
+      "team": "kansas state",
+      "teamNorm": "kansas state",
+      "rating": 6.92,
+      "adjem": 6.92,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 102,
+      "team": "hofstra",
+      "teamNorm": "hofstra",
+      "rating": 6.85,
+      "adjem": 6.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 103,
+      "team": "marquette",
+      "teamNorm": "marquette",
+      "rating": 6.83,
+      "adjem": 6.83,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 104,
+      "team": "hawaii",
+      "teamNorm": "hawaii",
+      "rating": 6.64,
+      "adjem": 6.64,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 105,
+      "team": "pacific",
+      "teamNorm": "pacific",
+      "rating": 6.59,
+      "adjem": 6.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 106,
+      "team": "unc wilmington",
+      "teamNorm": "unc wilmington",
+      "rating": 6.18,
+      "adjem": 6.18,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 107,
+      "team": "davidson",
+      "teamNorm": "davidson",
+      "rating": 5.93,
+      "adjem": 5.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 108,
+      "team": "sam houston state",
+      "teamNorm": "sam houston state",
+      "rating": 5.91,
+      "adjem": 5.91,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 109,
+      "team": "duquesne",
+      "teamNorm": "duquesne",
+      "rating": 5.83,
+      "adjem": 5.83,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 110,
+      "team": "pittsburgh",
+      "teamNorm": "pittsburgh",
+      "rating": 5.83,
+      "adjem": 5.83,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 111,
+      "team": "murray state",
+      "teamNorm": "murray state",
+      "rating": 5.59,
+      "adjem": 5.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 112,
+      "team": "depaul",
+      "teamNorm": "depaul",
+      "rating": 5.58,
+      "adjem": 5.58,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 113,
+      "team": "illinois chicago",
+      "teamNorm": "illinois chicago",
+      "rating": 5.39,
+      "adjem": 5.39,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 114,
+      "team": "uc irvine",
+      "teamNorm": "uc irvine",
+      "rating": 5.2,
+      "adjem": 5.2,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 115,
+      "team": "st thomas",
+      "teamNorm": "st thomas",
+      "rating": 4.93,
+      "adjem": 4.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 116,
+      "team": "florida atlantic",
+      "teamNorm": "florida atlantic",
+      "rating": 4.91,
+      "adjem": 4.91,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 117,
+      "team": "uc san diego",
+      "teamNorm": "uc san diego",
+      "rating": 4.8,
+      "adjem": 4.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 118,
+      "team": "rhode island",
+      "teamNorm": "rhode island",
+      "rating": 4.67,
+      "adjem": 4.67,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 119,
+      "team": "cal baptist",
+      "teamNorm": "cal baptist",
+      "rating": 4.17,
+      "adjem": 4.17,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 120,
+      "team": "utah",
+      "teamNorm": "utah",
+      "rating": 4.17,
+      "adjem": 4.17,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 121,
+      "team": "southern illinois",
+      "teamNorm": "southern illinois",
+      "rating": 4.14,
+      "adjem": 4.14,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 122,
+      "team": "fresno state",
+      "teamNorm": "fresno state",
+      "rating": 3.93,
+      "adjem": 3.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 123,
+      "team": "san francisco",
+      "teamNorm": "san francisco",
+      "rating": 3.93,
+      "adjem": 3.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 124,
+      "team": "north dakota state",
+      "teamNorm": "north dakota state",
+      "rating": 3.86,
+      "adjem": 3.86,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 125,
+      "team": "william & mary",
+      "teamNorm": "william & mary",
+      "rating": 3.8,
+      "adjem": 3.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 126,
+      "team": "penn state",
+      "teamNorm": "penn state",
+      "rating": 3.73,
+      "adjem": 3.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 127,
+      "team": "unlv",
+      "teamNorm": "unlv",
+      "rating": 3.7,
+      "adjem": 3.7,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 128,
+      "team": "seattle",
+      "teamNorm": "seattle",
+      "rating": 3.66,
+      "adjem": 3.66,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 129,
+      "team": "uc santa barbara",
+      "teamNorm": "uc santa barbara",
+      "rating": 3.58,
+      "adjem": 3.58,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 130,
+      "team": "uab",
+      "teamNorm": "uab",
+      "rating": 3.5,
+      "adjem": 3.5,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 131,
+      "team": "bradley",
+      "teamNorm": "bradley",
+      "rating": 3.49,
+      "adjem": 3.49,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 132,
+      "team": "winthrop",
+      "teamNorm": "winthrop",
+      "rating": 3.32,
+      "adjem": 3.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 133,
+      "team": "washington state",
+      "teamNorm": "washington state",
+      "rating": 3.22,
+      "adjem": 3.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 134,
+      "team": "maryland",
+      "teamNorm": "maryland",
+      "rating": 3.0,
+      "adjem": 3.0,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 135,
+      "team": "richmond",
+      "teamNorm": "richmond",
+      "rating": 2.52,
+      "adjem": 2.52,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 136,
+      "team": "north texas",
+      "teamNorm": "north texas",
+      "rating": 2.51,
+      "adjem": 2.51,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 137,
+      "team": "ut rio grande valley",
+      "teamNorm": "ut rio grande valley",
+      "rating": 2.51,
+      "adjem": 2.51,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 138,
+      "team": "east tennessee state",
+      "teamNorm": "east tennessee state",
+      "rating": 2.37,
+      "adjem": 2.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 139,
+      "team": "montana state",
+      "teamNorm": "montana state",
+      "rating": 2.35,
+      "adjem": 2.35,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 140,
+      "team": "bowling green",
+      "teamNorm": "bowling green",
+      "rating": 2.32,
+      "adjem": 2.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 141,
+      "team": "portland state",
+      "teamNorm": "portland state",
+      "rating": 2.2,
+      "adjem": 2.2,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 142,
+      "team": "austin peay",
+      "teamNorm": "austin peay",
+      "rating": 2.14,
+      "adjem": 2.14,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 143,
+      "team": "troy",
+      "teamNorm": "troy",
+      "rating": 2.03,
+      "adjem": 2.03,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 144,
+      "team": "st bonaventure",
+      "teamNorm": "st bonaventure",
+      "rating": 1.78,
+      "adjem": 1.78,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 145,
+      "team": "wright state",
+      "teamNorm": "wright state",
+      "rating": 1.69,
+      "adjem": 1.69,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 146,
+      "team": "northern colorado",
+      "teamNorm": "northern colorado",
+      "rating": 1.57,
+      "adjem": 1.57,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 147,
+      "team": "kent state",
+      "teamNorm": "kent state",
+      "rating": 1.52,
+      "adjem": 1.52,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 148,
+      "team": "arkansas state",
+      "teamNorm": "arkansas state",
+      "rating": 1.48,
+      "adjem": 1.48,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 149,
+      "team": "cornell",
+      "teamNorm": "cornell",
+      "rating": 1.39,
+      "adjem": 1.39,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 150,
+      "team": "boston college",
+      "teamNorm": "boston college",
+      "rating": 1.31,
+      "adjem": 1.31,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 151,
+      "team": "loyola marymount",
+      "teamNorm": "loyola marymount",
+      "rating": 1.22,
+      "adjem": 1.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 152,
+      "team": "oakland",
+      "teamNorm": "oakland",
+      "rating": 0.99,
+      "adjem": 0.99,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 153,
+      "team": "rutgers",
+      "teamNorm": "rutgers",
+      "rating": 0.95,
+      "adjem": 0.95,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 154,
+      "team": "saint joseph's",
+      "teamNorm": "saint joseph's",
+      "rating": 0.85,
+      "adjem": 0.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 155,
+      "team": "uc davis",
+      "teamNorm": "uc davis",
+      "rating": 0.79,
+      "adjem": 0.79,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 156,
+      "team": "navy",
+      "teamNorm": "navy",
+      "rating": 0.59,
+      "adjem": 0.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 157,
+      "team": "fordham",
+      "teamNorm": "fordham",
+      "rating": 0.55,
+      "adjem": 0.55,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 158,
+      "team": "valparaiso",
+      "teamNorm": "valparaiso",
+      "rating": 0.47,
+      "adjem": 0.47,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 159,
+      "team": "csun",
+      "teamNorm": "csun",
+      "rating": 0.47,
+      "adjem": 0.47,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 160,
+      "team": "toledo",
+      "teamNorm": "toledo",
+      "rating": 0.43,
+      "adjem": 0.43,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 161,
+      "team": "temple",
+      "teamNorm": "temple",
+      "rating": 0.32,
+      "adjem": 0.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 162,
+      "team": "georgia tech",
+      "teamNorm": "georgia tech",
+      "rating": 0.22,
+      "adjem": 0.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 163,
+      "team": "merrimack",
+      "teamNorm": "merrimack",
+      "rating": 0.2,
+      "adjem": 0.2,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 164,
+      "team": "central arkansas",
+      "teamNorm": "central arkansas",
+      "rating": 0.14,
+      "adjem": 0.14,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 165,
+      "team": "mercer",
+      "teamNorm": "mercer",
+      "rating": 0.08,
+      "adjem": 0.08,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 166,
+      "team": "harvard",
+      "teamNorm": "harvard",
+      "rating": -0.04,
+      "adjem": -0.04,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 167,
+      "team": "new mexico state",
+      "teamNorm": "new mexico state",
+      "rating": -0.07,
+      "adjem": -0.07,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 168,
+      "team": "ut arlington",
+      "teamNorm": "ut arlington",
+      "rating": -0.15,
+      "adjem": -0.15,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 169,
+      "team": "montana",
+      "teamNorm": "montana",
+      "rating": -0.15,
+      "adjem": -0.15,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 170,
+      "team": "robert morris",
+      "teamNorm": "robert morris",
+      "rating": -0.27,
+      "adjem": -0.27,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 171,
+      "team": "towson",
+      "teamNorm": "towson",
+      "rating": -0.34,
+      "adjem": -0.34,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 172,
+      "team": "charleston",
+      "teamNorm": "charleston",
+      "rating": -0.51,
+      "adjem": -0.51,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 173,
+      "team": "penn",
+      "teamNorm": "penn",
+      "rating": -0.9,
+      "adjem": -0.9,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 174,
+      "team": "lipscomb",
+      "teamNorm": "lipscomb",
+      "rating": -0.96,
+      "adjem": -0.96,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 175,
+      "team": "western kentucky",
+      "teamNorm": "western kentucky",
+      "rating": -1.04,
+      "adjem": -1.04,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 176,
+      "team": "idaho",
+      "teamNorm": "idaho",
+      "rating": -1.09,
+      "adjem": -1.09,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 177,
+      "team": "appalachian state",
+      "teamNorm": "appalachian state",
+      "rating": -1.1,
+      "adjem": -1.1,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 178,
+      "team": "utah tech",
+      "teamNorm": "utah tech",
+      "rating": -1.11,
+      "adjem": -1.11,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 179,
+      "team": "middle tennessee",
+      "teamNorm": "middle tennessee",
+      "rating": -1.25,
+      "adjem": -1.25,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 180,
+      "team": "cal state fullerton",
+      "teamNorm": "cal state fullerton",
+      "rating": -1.26,
+      "adjem": -1.26,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 181,
+      "team": "oregon state",
+      "teamNorm": "oregon state",
+      "rating": -1.32,
+      "adjem": -1.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 182,
+      "team": "kennesaw state",
+      "teamNorm": "kennesaw state",
+      "rating": -1.47,
+      "adjem": -1.47,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 183,
+      "team": "tulane",
+      "teamNorm": "tulane",
+      "rating": -1.51,
+      "adjem": -1.51,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 184,
+      "team": "massachusetts",
+      "teamNorm": "massachusetts",
+      "rating": -1.58,
+      "adjem": -1.58,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 185,
+      "team": "marshall",
+      "teamNorm": "marshall",
+      "rating": -1.62,
+      "adjem": -1.62,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 186,
+      "team": "texas a&m corpus chris",
+      "teamNorm": "texas a&m corpus chris",
+      "rating": -1.73,
+      "adjem": -1.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 187,
+      "team": "buffalo",
+      "teamNorm": "buffalo",
+      "rating": -1.81,
+      "adjem": -1.81,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 188,
+      "team": "furman",
+      "teamNorm": "furman",
+      "rating": -1.86,
+      "adjem": -1.86,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 189,
+      "team": "siena",
+      "teamNorm": "siena",
+      "rating": -1.98,
+      "adjem": -1.98,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 190,
+      "team": "elon",
+      "teamNorm": "elon",
+      "rating": -2.0,
+      "adjem": -2.0,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 191,
+      "team": "south alabama",
+      "teamNorm": "south alabama",
+      "rating": -2.06,
+      "adjem": -2.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 192,
+      "team": "columbia",
+      "teamNorm": "columbia",
+      "rating": -2.09,
+      "adjem": -2.09,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 193,
+      "team": "northern kentucky",
+      "teamNorm": "northern kentucky",
+      "rating": -2.1,
+      "adjem": -2.1,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 194,
+      "team": "marist",
+      "teamNorm": "marist",
+      "rating": -2.11,
+      "adjem": -2.11,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 195,
+      "team": "eastern washington",
+      "teamNorm": "eastern washington",
+      "rating": -2.26,
+      "adjem": -2.26,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 196,
+      "team": "portland",
+      "teamNorm": "portland",
+      "rating": -2.37,
+      "adjem": -2.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 197,
+      "team": "tennessee martin",
+      "teamNorm": "tennessee martin",
+      "rating": -2.38,
+      "adjem": -2.38,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 198,
+      "team": "campbell",
+      "teamNorm": "campbell",
+      "rating": -2.67,
+      "adjem": -2.67,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 199,
+      "team": "charlotte",
+      "teamNorm": "charlotte",
+      "rating": -2.69,
+      "adjem": -2.69,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 200,
+      "team": "fiu",
+      "teamNorm": "fiu",
+      "rating": -2.7,
+      "adjem": -2.7,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 201,
+      "team": "quinnipiac",
+      "teamNorm": "quinnipiac",
+      "rating": -2.71,
+      "adjem": -2.71,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 202,
+      "team": "youngstown state",
+      "teamNorm": "youngstown state",
+      "rating": -2.75,
+      "adjem": -2.75,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 203,
+      "team": "queens",
+      "teamNorm": "queens",
+      "rating": -2.8,
+      "adjem": -2.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 204,
+      "team": "samford",
+      "teamNorm": "samford",
+      "rating": -2.96,
+      "adjem": -2.96,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 205,
+      "team": "monmouth",
+      "teamNorm": "monmouth",
+      "rating": -3.06,
+      "adjem": -3.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 206,
+      "team": "drake",
+      "teamNorm": "drake",
+      "rating": -3.18,
+      "adjem": -3.18,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 207,
+      "team": "indiana state",
+      "teamNorm": "indiana state",
+      "rating": -3.29,
+      "adjem": -3.29,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 208,
+      "team": "lamar",
+      "teamNorm": "lamar",
+      "rating": -3.31,
+      "adjem": -3.31,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 209,
+      "team": "new orleans",
+      "teamNorm": "new orleans",
+      "rating": -3.37,
+      "adjem": -3.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 210,
+      "team": "liu",
+      "teamNorm": "liu",
+      "rating": -3.38,
+      "adjem": -3.38,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 211,
+      "team": "tarleton state",
+      "teamNorm": "tarleton state",
+      "rating": -3.42,
+      "adjem": -3.42,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 212,
+      "team": "jacksonville state",
+      "teamNorm": "jacksonville state",
+      "rating": -3.44,
+      "adjem": -3.44,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 213,
+      "team": "colgate",
+      "teamNorm": "colgate",
+      "rating": -3.52,
+      "adjem": -3.52,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 214,
+      "team": "weber state",
+      "teamNorm": "weber state",
+      "rating": -3.78,
+      "adjem": -3.78,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 215,
+      "team": "south dakota state",
+      "teamNorm": "south dakota state",
+      "rating": -3.79,
+      "adjem": -3.79,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 216,
+      "team": "missouri state",
+      "teamNorm": "missouri state",
+      "rating": -3.8,
+      "adjem": -3.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 217,
+      "team": "stony brook",
+      "teamNorm": "stony brook",
+      "rating": -4.24,
+      "adjem": -4.24,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 218,
+      "team": "san diego",
+      "teamNorm": "san diego",
+      "rating": -4.35,
+      "adjem": -4.35,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 219,
+      "team": "green bay",
+      "teamNorm": "green bay",
+      "rating": -4.44,
+      "adjem": -4.44,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 220,
+      "team": "ohio",
+      "teamNorm": "ohio",
+      "rating": -4.86,
+      "adjem": -4.86,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 221,
+      "team": "unc asheville",
+      "teamNorm": "unc asheville",
+      "rating": -4.95,
+      "adjem": -4.95,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 222,
+      "team": "james madison",
+      "teamNorm": "james madison",
+      "rating": -5.01,
+      "adjem": -5.01,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 223,
+      "team": "cal poly",
+      "teamNorm": "cal poly",
+      "rating": -5.04,
+      "adjem": -5.04,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 224,
+      "team": "vermont",
+      "teamNorm": "vermont",
+      "rating": -5.06,
+      "adjem": -5.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 225,
+      "team": "denver",
+      "teamNorm": "denver",
+      "rating": -5.08,
+      "adjem": -5.08,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 226,
+      "team": "wofford",
+      "teamNorm": "wofford",
+      "rating": -5.44,
+      "adjem": -5.44,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 227,
+      "team": "drexel",
+      "teamNorm": "drexel",
+      "rating": -5.58,
+      "adjem": -5.58,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 228,
+      "team": "bethune cookman",
+      "teamNorm": "bethune cookman",
+      "rating": -5.63,
+      "adjem": -5.63,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 229,
+      "team": "howard",
+      "teamNorm": "howard",
+      "rating": -5.72,
+      "adjem": -5.72,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 230,
+      "team": "southeast missouri",
+      "teamNorm": "southeast missouri",
+      "rating": -5.75,
+      "adjem": -5.75,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 231,
+      "team": "eastern michigan",
+      "teamNorm": "eastern michigan",
+      "rating": -5.75,
+      "adjem": -5.75,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 232,
+      "team": "abilene christian",
+      "teamNorm": "abilene christian",
+      "rating": -5.93,
+      "adjem": -5.93,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 233,
+      "team": "rice",
+      "teamNorm": "rice",
+      "rating": -5.96,
+      "adjem": -5.96,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 234,
+      "team": "coastal carolina",
+      "teamNorm": "coastal carolina",
+      "rating": -5.98,
+      "adjem": -5.98,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 235,
+      "team": "southern miss",
+      "teamNorm": "southern miss",
+      "rating": -6.07,
+      "adjem": -6.07,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 236,
+      "team": "umbc",
+      "teamNorm": "umbc",
+      "rating": -6.14,
+      "adjem": -6.14,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 237,
+      "team": "siue",
+      "teamNorm": "siue",
+      "rating": -6.15,
+      "adjem": -6.15,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 238,
+      "team": "radford",
+      "teamNorm": "radford",
+      "rating": -6.2,
+      "adjem": -6.2,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 239,
+      "team": "louisiana tech",
+      "teamNorm": "louisiana tech",
+      "rating": -6.2,
+      "adjem": -6.2,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 240,
+      "team": "la salle",
+      "teamNorm": "la salle",
+      "rating": -6.22,
+      "adjem": -6.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 241,
+      "team": "saint peter's",
+      "teamNorm": "saint peter's",
+      "rating": -6.25,
+      "adjem": -6.25,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 242,
+      "team": "long beach state",
+      "teamNorm": "long beach state",
+      "rating": -6.43,
+      "adjem": -6.43,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 243,
+      "team": "texas state",
+      "teamNorm": "texas state",
+      "rating": -6.59,
+      "adjem": -6.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 244,
+      "team": "old dominion",
+      "teamNorm": "old dominion",
+      "rating": -6.65,
+      "adjem": -6.65,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 245,
+      "team": "florida gulf coast",
+      "teamNorm": "florida gulf coast",
+      "rating": -6.72,
+      "adjem": -6.72,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 246,
+      "team": "nebraska omaha",
+      "teamNorm": "nebraska omaha",
+      "rating": -6.85,
+      "adjem": -6.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 247,
+      "team": "charleston southern",
+      "teamNorm": "charleston southern",
+      "rating": -6.85,
+      "adjem": -6.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 248,
+      "team": "detroit mercy",
+      "teamNorm": "detroit mercy",
+      "rating": -6.87,
+      "adjem": -6.87,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 249,
+      "team": "american",
+      "teamNorm": "american",
+      "rating": -7.02,
+      "adjem": -7.02,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 250,
+      "team": "idaho state",
+      "teamNorm": "idaho state",
+      "rating": -7.22,
+      "adjem": -7.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 251,
+      "team": "princeton",
+      "teamNorm": "princeton",
+      "rating": -7.22,
+      "adjem": -7.22,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 252,
+      "team": "nicholls",
+      "teamNorm": "nicholls",
+      "rating": -7.29,
+      "adjem": -7.29,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 253,
+      "team": "san jose state",
+      "teamNorm": "san jose state",
+      "rating": -7.32,
+      "adjem": -7.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 254,
+      "team": "lindenwood",
+      "teamNorm": "lindenwood",
+      "rating": -7.33,
+      "adjem": -7.33,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 255,
+      "team": "hampton",
+      "teamNorm": "hampton",
+      "rating": -7.45,
+      "adjem": -7.45,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 256,
+      "team": "iona",
+      "teamNorm": "iona",
+      "rating": -7.47,
+      "adjem": -7.47,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 257,
+      "team": "dartmouth",
+      "teamNorm": "dartmouth",
+      "rating": -7.49,
+      "adjem": -7.49,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 258,
+      "team": "sacramento state",
+      "teamNorm": "sacramento state",
+      "rating": -7.55,
+      "adjem": -7.55,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 259,
+      "team": "purdue fort wayne",
+      "teamNorm": "purdue fort wayne",
+      "rating": -7.73,
+      "adjem": -7.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 260,
+      "team": "east carolina",
+      "teamNorm": "east carolina",
+      "rating": -7.92,
+      "adjem": -7.92,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 261,
+      "team": "tennessee state",
+      "teamNorm": "tennessee state",
+      "rating": -7.95,
+      "adjem": -7.95,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 262,
+      "team": "western carolina",
+      "teamNorm": "western carolina",
+      "rating": -8.32,
+      "adjem": -8.32,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 263,
+      "team": "fairfield",
+      "teamNorm": "fairfield",
+      "rating": -8.58,
+      "adjem": -8.58,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 264,
+      "team": "georgia southern",
+      "teamNorm": "georgia southern",
+      "rating": -8.58,
+      "adjem": -8.58,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 265,
+      "team": "utep",
+      "teamNorm": "utep",
+      "rating": -8.68,
+      "adjem": -8.68,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 266,
+      "team": "southern utah",
+      "teamNorm": "southern utah",
+      "rating": -8.76,
+      "adjem": -8.76,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 267,
+      "team": "milwaukee",
+      "teamNorm": "milwaukee",
+      "rating": -8.8,
+      "adjem": -8.8,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 268,
+      "team": "incarnate word",
+      "teamNorm": "incarnate word",
+      "rating": -8.81,
+      "adjem": -8.81,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 269,
+      "team": "delaware",
+      "teamNorm": "delaware",
+      "rating": -8.89,
+      "adjem": -8.89,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 270,
+      "team": "southern",
+      "teamNorm": "southern",
+      "rating": -8.98,
+      "adjem": -8.98,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 271,
+      "team": "southeastern louisiana",
+      "teamNorm": "southeastern louisiana",
+      "rating": -9.12,
+      "adjem": -9.12,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 272,
+      "team": "uc riverside",
+      "teamNorm": "uc riverside",
+      "rating": -9.17,
+      "adjem": -9.17,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 273,
+      "team": "central michigan",
+      "teamNorm": "central michigan",
+      "rating": -9.31,
+      "adjem": -9.31,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 274,
+      "team": "bellarmine",
+      "teamNorm": "bellarmine",
+      "rating": -9.52,
+      "adjem": -9.52,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 275,
+      "team": "pepperdine",
+      "teamNorm": "pepperdine",
+      "rating": -9.52,
+      "adjem": -9.52,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 276,
+      "team": "brown",
+      "teamNorm": "brown",
+      "rating": -9.57,
+      "adjem": -9.57,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 277,
+      "team": "grambling state",
+      "teamNorm": "grambling state",
+      "rating": -9.57,
+      "adjem": -9.57,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 278,
+      "team": "northeastern",
+      "teamNorm": "northeastern",
+      "rating": -9.59,
+      "adjem": -9.59,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 279,
+      "team": "western michigan",
+      "teamNorm": "western michigan",
+      "rating": -9.81,
+      "adjem": -9.81,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 280,
+      "team": "boston university",
+      "teamNorm": "boston university",
+      "rating": -9.86,
+      "adjem": -9.86,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 281,
+      "team": "eastern kentucky",
+      "teamNorm": "eastern kentucky",
+      "rating": -9.86,
+      "adjem": -9.86,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 282,
+      "team": "south dakota",
+      "teamNorm": "south dakota",
+      "rating": -9.96,
+      "adjem": -9.96,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 283,
+      "team": "longwood",
+      "teamNorm": "longwood",
+      "rating": -10.06,
+      "adjem": -10.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 284,
+      "team": "northwestern state",
+      "teamNorm": "northwestern state",
+      "rating": -10.07,
+      "adjem": -10.07,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 285,
+      "team": "presbyterian",
+      "teamNorm": "presbyterian",
+      "rating": -10.21,
+      "adjem": -10.21,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 286,
+      "team": "central connecticut",
+      "teamNorm": "central connecticut",
+      "rating": -10.37,
+      "adjem": -10.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 287,
+      "team": "north carolina a&t",
+      "teamNorm": "north carolina a&t",
+      "rating": -10.39,
+      "adjem": -10.39,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 288,
+      "team": "north dakota",
+      "teamNorm": "north dakota",
+      "rating": -10.68,
+      "adjem": -10.68,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 289,
+      "team": "le moyne",
+      "teamNorm": "le moyne",
+      "rating": -10.71,
+      "adjem": -10.71,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 290,
+      "team": "morehead state",
+      "teamNorm": "morehead state",
+      "rating": -10.72,
+      "adjem": -10.72,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 291,
+      "team": "mercyhurst",
+      "teamNorm": "mercyhurst",
+      "rating": -10.76,
+      "adjem": -10.76,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 292,
+      "team": "east texas a&m",
+      "teamNorm": "east texas a&m",
+      "rating": -10.79,
+      "adjem": -10.79,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 293,
+      "team": "georgia state",
+      "teamNorm": "georgia state",
+      "rating": -10.98,
+      "adjem": -10.98,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 294,
+      "team": "sacred heart",
+      "teamNorm": "sacred heart",
+      "rating": -11.23,
+      "adjem": -11.23,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 295,
+      "team": "houston christian",
+      "teamNorm": "houston christian",
+      "rating": -11.46,
+      "adjem": -11.46,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 296,
+      "team": "mount state mary's",
+      "teamNorm": "mount state mary's",
+      "rating": -11.5,
+      "adjem": -11.5,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 297,
+      "team": "evansville",
+      "teamNorm": "evansville",
+      "rating": -11.61,
+      "adjem": -11.61,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 298,
+      "team": "usc upstate",
+      "teamNorm": "usc upstate",
+      "rating": -11.68,
+      "adjem": -11.68,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 299,
+      "team": "unc greensboro",
+      "teamNorm": "unc greensboro",
+      "rating": -11.73,
+      "adjem": -11.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 300,
+      "team": "lehigh",
+      "teamNorm": "lehigh",
+      "rating": -11.85,
+      "adjem": -11.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 301,
+      "team": "arkansas pine bluff",
+      "teamNorm": "arkansas pine bluff",
+      "rating": -12.24,
+      "adjem": -12.24,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 302,
+      "team": "chattanooga",
+      "teamNorm": "chattanooga",
+      "rating": -12.42,
+      "adjem": -12.42,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 303,
+      "team": "njit",
+      "teamNorm": "njit",
+      "rating": -12.52,
+      "adjem": -12.52,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 304,
+      "team": "alabama state",
+      "teamNorm": "alabama state",
+      "rating": -12.73,
+      "adjem": -12.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 305,
+      "team": "louisiana",
+      "teamNorm": "louisiana",
+      "rating": -12.73,
+      "adjem": -12.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 306,
+      "team": "cleveland state",
+      "teamNorm": "cleveland state",
+      "rating": -12.88,
+      "adjem": -12.88,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 307,
+      "team": "little rock",
+      "teamNorm": "little rock",
+      "rating": -12.95,
+      "adjem": -12.95,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 308,
+      "team": "texas southern",
+      "teamNorm": "texas southern",
+      "rating": -13.06,
+      "adjem": -13.06,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 309,
+      "team": "alabama a&m",
+      "teamNorm": "alabama a&m",
+      "rating": -13.11,
+      "adjem": -13.11,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 310,
+      "team": "northern arizona",
+      "teamNorm": "northern arizona",
+      "rating": -13.46,
+      "adjem": -13.46,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 311,
+      "team": "jacksonville",
+      "teamNorm": "jacksonville",
+      "rating": -13.48,
+      "adjem": -13.48,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 312,
+      "team": "iu indy",
+      "teamNorm": "iu indy",
+      "rating": -13.55,
+      "adjem": -13.55,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 313,
+      "team": "norfolk state",
+      "teamNorm": "norfolk state",
+      "rating": -13.56,
+      "adjem": -13.56,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 314,
+      "team": "loyola md",
+      "teamNorm": "loyola md",
+      "rating": -13.82,
+      "adjem": -13.82,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 315,
+      "team": "loyola chicago",
+      "teamNorm": "loyola chicago",
+      "rating": -13.95,
+      "adjem": -13.95,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 316,
+      "team": "cal state bakersfield",
+      "teamNorm": "cal state bakersfield",
+      "rating": -14.42,
+      "adjem": -14.42,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 317,
+      "team": "northern illinois",
+      "teamNorm": "northern illinois",
+      "rating": -14.42,
+      "adjem": -14.42,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 318,
+      "team": "tennessee tech",
+      "teamNorm": "tennessee tech",
+      "rating": -14.54,
+      "adjem": -14.54,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 319,
+      "team": "umass lowell",
+      "teamNorm": "umass lowell",
+      "rating": -14.57,
+      "adjem": -14.57,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 320,
+      "team": "west georgia",
+      "teamNorm": "west georgia",
+      "rating": -14.77,
+      "adjem": -14.77,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 321,
+      "team": "eastern illinois",
+      "teamNorm": "eastern illinois",
+      "rating": -14.78,
+      "adjem": -14.78,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 322,
+      "team": "ball state",
+      "teamNorm": "ball state",
+      "rating": -14.96,
+      "adjem": -14.96,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 323,
+      "team": "stetson",
+      "teamNorm": "stetson",
+      "rating": -15.03,
+      "adjem": -15.03,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 324,
+      "team": "wagner",
+      "teamNorm": "wagner",
+      "rating": -15.07,
+      "adjem": -15.07,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 325,
+      "team": "albany",
+      "teamNorm": "albany",
+      "rating": -15.23,
+      "adjem": -15.23,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 326,
+      "team": "prairie view a&m",
+      "teamNorm": "prairie view a&m",
+      "rating": -15.25,
+      "adjem": -15.25,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 327,
+      "team": "manhattan",
+      "teamNorm": "manhattan",
+      "rating": -15.37,
+      "adjem": -15.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 328,
+      "team": "lafayette",
+      "teamNorm": "lafayette",
+      "rating": -15.38,
+      "adjem": -15.38,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 329,
+      "team": "holy cross",
+      "teamNorm": "holy cross",
+      "rating": -15.88,
+      "adjem": -15.88,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 330,
+      "team": "fairleigh dickinson",
+      "teamNorm": "fairleigh dickinson",
+      "rating": -15.94,
+      "adjem": -15.94,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 331,
+      "team": "bucknell",
+      "teamNorm": "bucknell",
+      "rating": -16.1,
+      "adjem": -16.1,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 332,
+      "team": "new haven",
+      "teamNorm": "new haven",
+      "rating": -16.78,
+      "adjem": -16.78,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 333,
+      "team": "oral roberts",
+      "teamNorm": "oral roberts",
+      "rating": -16.98,
+      "adjem": -16.98,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 334,
+      "team": "florida a&m",
+      "teamNorm": "florida a&m",
+      "rating": -17.17,
+      "adjem": -17.17,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 335,
+      "team": "new hampshire",
+      "teamNorm": "new hampshire",
+      "rating": -17.35,
+      "adjem": -17.35,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 336,
+      "team": "jackson state",
+      "teamNorm": "jackson state",
+      "rating": -17.56,
+      "adjem": -17.56,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 337,
+      "team": "north florida",
+      "teamNorm": "north florida",
+      "rating": -17.56,
+      "adjem": -17.56,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 338,
+      "team": "niagara",
+      "teamNorm": "niagara",
+      "rating": -18.31,
+      "adjem": -18.31,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 339,
+      "team": "utsa",
+      "teamNorm": "utsa",
+      "rating": -18.31,
+      "adjem": -18.31,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 340,
+      "team": "army",
+      "teamNorm": "army",
+      "rating": -18.4,
+      "adjem": -18.4,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 341,
+      "team": "north alabama",
+      "teamNorm": "north alabama",
+      "rating": -18.56,
+      "adjem": -18.56,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 342,
+      "team": "maryland eastern shore",
+      "teamNorm": "maryland eastern shore",
+      "rating": -18.68,
+      "adjem": -18.68,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 343,
+      "team": "alcorn state",
+      "teamNorm": "alcorn state",
+      "rating": -18.78,
+      "adjem": -18.78,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 344,
+      "team": "southern indiana",
+      "teamNorm": "southern indiana",
+      "rating": -18.87,
+      "adjem": -18.87,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 345,
+      "team": "stonehill",
+      "teamNorm": "stonehill",
+      "rating": -19.16,
+      "adjem": -19.16,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 346,
+      "team": "north carolina central",
+      "teamNorm": "north carolina central",
+      "rating": -19.47,
+      "adjem": -19.47,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 347,
+      "team": "air force",
+      "teamNorm": "air force",
+      "rating": -19.73,
+      "adjem": -19.73,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 348,
+      "team": "canisius",
+      "teamNorm": "canisius",
+      "rating": -19.75,
+      "adjem": -19.75,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 349,
+      "team": "maine",
+      "teamNorm": "maine",
+      "rating": -20.49,
+      "adjem": -20.49,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 350,
+      "team": "chicago state",
+      "teamNorm": "chicago state",
+      "rating": -20.65,
+      "adjem": -20.65,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 351,
+      "team": "the citadel",
+      "teamNorm": "the citadel",
+      "rating": -20.76,
+      "adjem": -20.76,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 352,
+      "team": "morgan state",
+      "teamNorm": "morgan state",
+      "rating": -21.29,
+      "adjem": -21.29,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 353,
+      "team": "louisiana monroe",
+      "teamNorm": "louisiana monroe",
+      "rating": -21.37,
+      "adjem": -21.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 354,
+      "team": "kansas city",
+      "teamNorm": "kansas city",
+      "rating": -21.91,
+      "adjem": -21.91,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 355,
+      "team": "bryant",
+      "teamNorm": "bryant",
+      "rating": -22.18,
+      "adjem": -22.18,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 356,
+      "team": "saint francis",
+      "teamNorm": "saint francis",
+      "rating": -22.37,
+      "adjem": -22.37,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 357,
+      "team": "rider",
+      "teamNorm": "rider",
+      "rating": -23.46,
+      "adjem": -23.46,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 358,
+      "team": "south carolina state",
+      "teamNorm": "south carolina state",
+      "rating": -23.9,
+      "adjem": -23.9,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 359,
+      "team": "delaware state",
+      "teamNorm": "delaware state",
+      "rating": -24.87,
+      "adjem": -24.87,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 360,
+      "team": "vmi",
+      "teamNorm": "vmi",
+      "rating": -25.42,
+      "adjem": -25.42,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 361,
+      "team": "binghamton",
+      "teamNorm": "binghamton",
+      "rating": -26.47,
+      "adjem": -26.47,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 362,
+      "team": "western illinois",
+      "teamNorm": "western illinois",
+      "rating": -26.48,
+      "adjem": -26.48,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 363,
+      "team": "gardner webb",
+      "teamNorm": "gardner webb",
+      "rating": -27.98,
+      "adjem": -27.98,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 364,
+      "team": "coppin state",
+      "teamNorm": "coppin state",
+      "rating": -28.54,
+      "adjem": -28.54,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    },
+    {
+      "rank": 365,
+      "team": "mississippi valley state",
+      "teamNorm": "mississippi valley state",
+      "rating": -32.85,
+      "adjem": -32.85,
+      "torvik": null,
+      "barthag": null,
+      "year": 2026
+    }
+  ]
+}
