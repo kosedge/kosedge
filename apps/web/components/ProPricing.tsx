@@ -12,6 +12,15 @@ type Plan = {
   cta: string;
 };
 
+const free: Plan = {
+  title: "Free",
+  price: "$0",
+  cadence: "",
+  sub: "Edge Board, odds comparison, and hub access. No commitment.",
+  badge: "Start Here",
+  cta: "Go to Hub",
+};
+
 const weekly: Plan = {
   title: "Weekly",
   price: "$5.99",
@@ -68,8 +77,8 @@ export default function ProPricing() {
         </p>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
-        {[weekly, monthly].map((p) => (
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {[free, weekly, monthly].map((p) => (
           <div
             key={p.title}
             className={[
@@ -98,7 +107,9 @@ export default function ProPricing() {
               <div className="text-5xl font-bebas tracking-tight text-gray-100">
                 {p.price}
               </div>
-              <div className="pb-2 text-sm text-gray-400">{p.cadence}</div>
+              {p.cadence && (
+                <div className="pb-2 text-sm text-gray-400">{p.cadence}</div>
+              )}
             </div>
 
             {p.sub && (
@@ -117,9 +128,16 @@ export default function ProPricing() {
             >
               {p.cta}
             </button>
+            {p.title === "Free" && (
+              <p className="mt-2 text-xs text-gray-500">
+                Same hub as Pro — explore before you upgrade.
+              </p>
+            )}
 
             <div className="mt-3 text-xs text-gray-500">
-              Cancel anytime • Instant access
+              {p.title === "Free"
+                ? "No card required"
+                : "Cancel anytime • Instant access"}
             </div>
           </div>
         ))}

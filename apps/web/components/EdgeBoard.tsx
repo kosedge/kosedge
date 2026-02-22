@@ -718,8 +718,8 @@ export default function EdgeBoard({
           No Live Data
         </div>
         <p className="text-gray-400 text-sm max-w-md mx-auto">
-          Today&apos;s games will appear here when live odds are available.
-          Ensure ODDS_API_KEY is configured in your deployment environment.
+          Add <strong>ODDS_API_KEY</strong> in Vercel → Project Settings → Environment Variables, then redeploy. Get a key at{" "}
+          <a href="https://the-odds-api.com" target="_blank" rel="noopener noreferrer" className="text-kos-gold hover:underline">the-odds-api.com</a> (500 req/mo free).
         </p>
       </div>
     );

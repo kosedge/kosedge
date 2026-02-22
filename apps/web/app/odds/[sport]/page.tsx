@@ -2,11 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { env } from "@/lib/config/env";
 import { getSport, SPORTS } from "@/lib/sports";
-import {
-  fetchOddsComparison,
-  ALLOWED_BOOKS,
-  bookDisplay,
-} from "@/lib/odds-api";
+import type { OddsComparisonRow } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +14,29 @@ async function getRequestOrigin(): Promise<string> {
   const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
   const proto = h.get("x-forwarded-proto") ?? "http";
   return `${proto}://${host}`;
+}
+
+type CompareApiResponse = {
+  rows: OddsComparisonRow[];
+  books: { key: string; label: string }[];
+};
+
+/** Use cached API so we don't burn Odds API credits on every page load. */
+async function getOddsData(
+  sportKey: string,
+  origin: string,
+): Promise<CompareApiResponse> {
+  const res = await fetch(`${origin}/api/odds/${sportKey}/compare`, {
+    cache: "no-store",
+    headers: { accept: "application/json" },
+  });
+  if (!res.ok)
+    return { rows: [], books: [] };
+  const data = (await res.json()) as CompareApiResponse;
+  return {
+    rows: Array.isArray(data.rows) ? data.rows : [],
+    books: Array.isArray(data.books) ? data.books : [],
+  };
 }
 
 export default async function OddsComparePage({
@@ -35,11 +54,8 @@ export default async function OddsComparePage({
   const hasWidget =
     env.ODDS_WIDGET_ACCESS_KEY?.trim() && WIDGET_SPORTS.includes(sportKey);
 
-  const key = env.ODDS_API_KEY?.trim();
-  const rows = key ? await fetchOddsComparison(sportKey, key) : [];
-  const books = ALLOWED_BOOKS.map((k) => ({ key: k, label: bookDisplay(k) }));
-
   const origin = await getRequestOrigin();
+  const { rows, books } = await getOddsData(sportKey, origin);
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">

@@ -9,8 +9,8 @@ import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
-/** Odds refresh at most every 6 hours; use shorter window so KEI merge updates show sooner */
-const ODDS_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+/** Odds refresh at most every 6 hours to avoid burning API credits (500/mo free tier). */
+const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
 };

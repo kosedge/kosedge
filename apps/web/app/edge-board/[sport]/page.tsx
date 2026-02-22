@@ -76,7 +76,7 @@ export default async function EdgeBoardSportPage({
             backgroundSize: "56px 56px",
           }}
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       <main className="relative z-10 w-full px-5 sm:px-6 pt-10 pb-16">
@@ -144,7 +144,7 @@ export default async function EdgeBoardSportPage({
         <p className="mt-6 text-xs text-gray-500">
           {rows.length
             ? `${rows.length} games`
-            : "Add ODDS_API_KEY to Vercel env vars for live odds from the-odds-api.com."}
+            : "No live data: add ODDS_API_KEY in Vercel → Project Settings → Environment Variables. Get a key at the-odds-api.com (free tier: 500 req/mo). Redeploy after adding."}
         </p>
       </main>
     </div>

@@ -30,4 +30,5 @@ pnpm will resolve the workspace from the cloned repo. Ensure `DATABASE_URL` and 
 
 - **Build fails with "Cannot find module"**: Use repo root as Root Directory and Build Command `pnpm run build:web` so workspace dependencies (e.g. `@kosedge/contracts`) are installed and linked.
 - **Empty env vars**: The app coerces empty strings to `undefined` for optional env vars (see `lib/config/env.ts`), so Vercel’s empty placeholders will not break the build.
-- **Edge Board shows no data**: Add `ODDS_API_KEY` (and optionally `ODDS_API_KEY_BACKUP`) in Vercel env; redeploy.
+- **Edge Board shows no data**: Add `ODDS_API_KEY` in Vercel → Project Settings → Environment Variables (get a key at [the-odds-api.com](https://the-odds-api.com)). Optionally add `ODDS_API_KEY_BACKUP`. **Redeploy** after adding — env vars are applied on deploy.
+- **Burning through 500 Odds API credits**: Live odds are cached for **6 hours** in the API routes (`/api/edge-board/*`, `/api/odds/*/compare`). The **Odds Compare page** (`/odds/[sport]`) uses that cached API instead of calling the Odds API directly. On Vercel, cache is **in-memory per serverless instance** — each cold start or new instance can trigger one API call. For many users, consider a shared cache (e.g. Redis/Vercel KV) so all instances share one 6h window.
