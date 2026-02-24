@@ -68,6 +68,8 @@ const sampleRows: LegacyEdgeBoardRow[] = [
     bestLine: { top: { label: "+6.5", juice: "-112" }, bottom: { label: "-5.0", juice: "-110" } },
     bestOU: { top: { label: "o149.5", juice: "-110" }, bottom: { label: "u152.5", juice: "-112" } },
     overview: generateGameOverview("Duke", "UNC"),
+    tagLine: "LEAN",
+    tagOU: "PASS",
   },
 ];
 
@@ -102,6 +104,14 @@ function HeaderStack({ a, b }: { a: string; b?: string }) {
       {b ? <span>{b}</span> : null}
     </div>
   );
+}
+
+/** Tag from edge: PLAY ≥2.5, LEAN 1.0–2.5, PASS <1.0 */
+function edgeToTag(edgeNum: number | undefined): Tag | undefined {
+  if (edgeNum == null) return undefined;
+  if (edgeNum >= 2.5) return "PLAY";
+  if (edgeNum >= 1.0) return "LEAN";
+  return "PASS";
 }
 
 /** Edge column highlight: 0–2.5 kos gray, 2.6–3.4 kos gold, 3.5+ edge green */
@@ -224,6 +234,8 @@ function flatRowsToLegacy(flat: FlatEdgeBoardRow[]): LegacyEdgeBoardRow[] {
       edgeOU: edgeOUDisplay,
       edgeLineNum,
       edgeOUNum,
+      tagLine: edgeToTag(edgeLineNum),
+      tagOU: edgeToTag(edgeOUNum),
       overview: generateGameOverview(away, home),
     });
   }
@@ -239,8 +251,9 @@ export default function EdgeBoard({
 }) {
   const safeRows = Array.isArray(rows) ? rows : [];
   const edgeGreen = "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
-  const legacy = safeRows.length > 0 ? flatRowsToLegacy(safeRows) : sampleRows;
-  const data = safeRows.length > 0 ? legacy : sampleRows;
+  const hasRealData = safeRows.length > 0;
+  const legacy = hasRealData ? flatRowsToLegacy(safeRows) : sampleRows;
+  const data = hasRealData ? legacy : sampleRows;
 
   if (variant === "home") {
     return (
@@ -314,21 +327,47 @@ export default function EdgeBoard({
               <tbody className="divide-y divide-white/10 text-gray-200">
                 {data.map((r) => (
                   <tr key={r.id} className="hover:bg-white/5 transition">
-                    <td className="py-2.5 px-3">
+                    <td className="py-2.5 px-3 align-top">
                       <div className="font-semibold">{r.teamA.name} vs {r.teamB.name}</div>
+                      <details className="mt-1 group/details">
+                        <summary className="cursor-pointer text-[12px] text-kos-gold hover:underline list-none [&::-webkit-details-marker]:hidden">
+                          Overview ▾
+                        </summary>
+                        <div className="mt-2 p-3 rounded-lg border border-white/10 bg-black/60 text-[11px] text-gray-300 leading-relaxed whitespace-pre-wrap">
+                          {r.overview ?? "No overview available."}
+                        </div>
+                      </details>
                     </td>
                     <td className="py-2.5 px-3 text-gray-300 tabular-nums">{r.time ?? "—"}</td>
                     <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
                     <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
-                    <td className={["py-2.5 px-3", edgeGreen].join(" ")}>Coming soon</td>
-                    <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">Coming soon</td>
+                    <td className={`py-2.5 px-3 rounded ${edgeCellClass(r.edgeLineNum)}`}>
+                      {r.edgeLineNum != null ? (
+                        <span className="font-semibold tabular-nums">{r.edgeLineNum.toFixed(1)}</span>
+                      ) : (
+                        <span className="text-gray-500">—</span>
+                      )}
+                    </td>
+                    <td className="py-2.5 px-3">
+                      {r.tagLine ? (
+                        <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-semibold ${
+                          r.tagLine === "PLAY" ? "bg-edge-green/20 text-edge-green" :
+                          r.tagLine === "LEAN" ? "bg-kos-gold/20 text-kos-gold" :
+                          "bg-white/10 text-gray-400"
+                        }`}>
+                          {r.tagLine}
+                        </span>
+                      ) : (
+                        <span className="text-gray-500">—</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <div className="mt-4 text-xs text-gray-400">
-            Live: Game/Time/Open/Best. Coming soon: KEICMB + Edge + Tags.
+            Game • Time • Best Line/O/U • Edge • Tag • Overview
           </div>
         </div>
       </div>
@@ -457,14 +496,30 @@ export default function EdgeBoard({
                     )}
                   </td>
                   <td className="py-2.5 px-2 align-top text-center">
-                    <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
-                      Coming soon
-                    </span>
+                    {r.tagLine ? (
+                      <span className={`inline-flex items-center justify-center px-2 py-1 rounded-lg text-[12px] font-semibold ${
+                        r.tagLine === "PLAY" ? "bg-edge-green/20 text-edge-green border border-edge-green/30" :
+                        r.tagLine === "LEAN" ? "bg-kos-gold/20 text-kos-gold border border-kos-gold/30" :
+                        "bg-white/5 text-gray-400 border border-white/10"
+                      }`}>
+                        {r.tagLine}
+                      </span>
+                    ) : (
+                      <span className="text-gray-500">—</span>
+                    )}
                   </td>
                   <td className="py-2.5 px-2 align-top text-center">
-                    <span className="inline-flex items-center justify-center px-2 py-1 rounded-lg border text-[12px] font-semibold bg-white/5 text-gray-300 border-white/10">
-                      Coming soon
-                    </span>
+                    {r.tagOU ? (
+                      <span className={`inline-flex items-center justify-center px-2 py-1 rounded-lg text-[12px] font-semibold ${
+                        r.tagOU === "PLAY" ? "bg-edge-green/20 text-edge-green border border-edge-green/30" :
+                        r.tagOU === "LEAN" ? "bg-kos-gold/20 text-kos-gold border border-kos-gold/30" :
+                        "bg-white/5 text-gray-400 border border-white/10"
+                      }`}>
+                        {r.tagOU}
+                      </span>
+                    ) : (
+                      <span className="text-gray-500">—</span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -477,6 +532,18 @@ export default function EdgeBoard({
       </div>
     </div>
   );
+
+  // Empty state for full variant when no real data (avoids misleading sample)
+  if (variant === "full" && !hasRealData) {
+    return (
+      <div className="mt-6 rounded-2xl border border-white/10 bg-black/30 backdrop-blur-xl p-8 sm:p-12 text-center">
+        <div className="text-kos-gold text-2xl font-bebas tracking-wide mb-2">No Live Data</div>
+        <p className="text-gray-400 text-sm max-w-md mx-auto">
+          Today&apos;s games will appear here when live odds are available. Ensure ODDS_API_KEY is configured in your deployment environment.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
