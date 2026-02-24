@@ -81,7 +81,7 @@ export async function GET(
   for (const key of keys) {
     try {
       rows = await fetchEdgeBoard(sport, key);
-      break;
+      if (rows.length > 0) break;
     } catch (e) {
       logError(e instanceof Error ? e : new Error(String(e)), {
         sport,

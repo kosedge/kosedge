@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { HIGHLIGHTED_GAMES } from "@/lib/featured-games";
+import { getGameBySlug } from "@/lib/edge-board-tonight";
 
 export default async function GameArticlePage({
   params,
@@ -8,7 +9,12 @@ export default async function GameArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const game = HIGHLIGHTED_GAMES.find((g) => g.slug === slug);
+  let game = HIGHLIGHTED_GAMES.find((g) => g.slug === slug);
+  if (!game) {
+    const tonight = await getGameBySlug(slug);
+    if (tonight)
+      game = { slug, row: tonight.row, sport: tonight.sport };
+  }
   if (!game) return notFound();
 
   const title = `${game.row.teamA.name} vs ${game.row.teamB.name}`;
@@ -22,9 +28,17 @@ export default async function GameArticlePage({
         ← Pro
       </Link>
       <h1 className="text-3xl font-semibold text-kos-text">{title}</h1>
-      <p className="mt-2 text-kos-text/70">
-        Game breakdown, model take, and workflow. Article content coming soon.
-      </p>
+      {game.row.overview ? (
+        <div className="mt-4 space-y-3 text-kos-text/80 whitespace-pre-line">
+          {game.row.overview.split("\n\n").map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-2 text-kos-text/70">
+          Game breakdown, model take, and workflow. Article content coming soon.
+        </p>
+      )}
       <div className="mt-8 rounded-xl border border-kos-border bg-kos-surface/40 p-6">
         <h2 className="text-lg font-medium text-kos-text">Edge snapshot</h2>
         <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">

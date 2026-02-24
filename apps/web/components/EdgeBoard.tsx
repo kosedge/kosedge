@@ -161,7 +161,7 @@ const COL_WIDTHS = [
   "75px",
 ] as const;
 
-function flatRowsToLegacy(flat: FlatEdgeBoardRow[]): LegacyEdgeBoardRow[] {
+export function flatRowsToLegacy(flat: FlatEdgeBoardRow[]): LegacyEdgeBoardRow[] {
   const valid = Array.isArray(flat)
     ? flat.filter(
         (r): r is FlatEdgeBoardRow => r != null && typeof r === "object",

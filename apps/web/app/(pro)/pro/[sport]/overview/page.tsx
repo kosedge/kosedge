@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSport } from "@/lib/sports";
 import { HIGHLIGHTED_GAMES, TOP_EDGE } from "@/lib/featured-games";
+import { getTonightGames } from "@/lib/edge-board-tonight";
 import EdgeBoardPreview from "@/components/EdgeBoardPreview";
 
 const SHELL_LINKS = [
@@ -37,6 +38,7 @@ export default async function SportOverviewPage({
 
   const sportGames = HIGHLIGHTED_GAMES.filter((g) => g.sport === sportKey);
   const topEdgeForSport = TOP_EDGE.sport === sportKey ? TOP_EDGE : null;
+  const tonightGames = await getTonightGames(sportKey);
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
@@ -65,6 +67,24 @@ export default async function SportOverviewPage({
           <span className="text-kos-gold">→</span>
         </div>
       </Link>
+
+      {/* Tonight's games (edge board) */}
+      {tonightGames.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-bebas text-kos-gold tracking-wide mb-4">
+            Tonight&apos;s Games
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {tonightGames.map((g) => (
+              <EdgeBoardPreview
+                key={g.slug}
+                row={g.row}
+                articleHref={`/pro/articles/${g.slug}`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Featured game articles */}
       {(topEdgeForSport || sportGames.length > 0) && (

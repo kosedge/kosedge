@@ -83,12 +83,11 @@ async function tryOddsApiFallback(): Promise<
   const keys = [
     env.ODDS_API_KEY?.trim(),
     env.ODDS_API_KEY_BACKUP?.trim(),
-  ].filter(Boolean);
+  ].filter((k): k is string => Boolean(k));
   for (const key of keys) {
-    if (!key) continue;
     try {
       const rows = await fetchEdgeBoard("ncaam", key);
-      return { ok: true, rows };
+      if (rows.length > 0) return { ok: true, rows };
     } catch (e) {
       logError(e instanceof Error ? e : new Error(String(e)), {
         route: "edge-board/ncaam/fallback",
