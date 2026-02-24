@@ -1,0 +1,31 @@
+[
+  {
+    "id": "sample-game-1",
+    "sport_key": "basketball_ncaab",
+    "commence_time": "2025-01-15T19:00:00Z",
+    "home_team": "Connecticut",
+    "away_team": "Villanova",
+    "bookmakers": [
+      {
+        "key": "draftkings",
+        "last_update": "2025-01-14T12:00:00Z",
+        "markets": [
+          {
+            "key": "spreads",
+            "outcomes": [
+              { "name": "Connecticut", "point": -7.5 },
+              { "name": "Villanova", "point": 7.5 }
+            ]
+          },
+          {
+            "key": "totals",
+            "outcomes": [
+              { "name": "Over", "point": 142.5 },
+              { "name": "Under", "point": 142.5 }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

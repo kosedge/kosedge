@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* =========================
+   KOS EDGE — Design Tokens
+   Tailwind v4 (CSS-first)
+   ========================= */
+
+@theme {
+  /* Core */
+  --color-kos-black: #070a0f;
+  --color-kos-text: #e9eef5;
+
+  /* Brand */
+  --color-kos-gold: #f5b942;
+  --color-edge-green: #39ff14;
+
+  /* Supporting neutrals (enterprise UI) */
+  --color-kos-surface: #0b1220;
+  --color-kos-surface-2: #0f1a2e;
+  --color-kos-border: rgba(245, 185, 66, 0.18);
+
+  /* Glow accents */
+  --color-kos-gold-glow: rgba(245, 185, 66, 0.35);
+  --color-edge-green-glow: rgba(57, 255, 20, 0.25);
+
+  /* Typography (we’ll set --font-sans in layout.tsx) */
+  --font-sans: var(--font-sans);
+}
+
+/* =========================
+   Base
+   ========================= */
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: var(--color-kos-black);
+  color: var(--color-kos-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-kos-gold);
+  color: #070a0f;
+}
+
+/* Premium focus ring defaults */
+:focus-visible {
+  outline: 2px solid var(--color-kos-gold);
+  outline-offset: 2px;
+}
+
+/* Link baseline (we’ll style components later) */
+a {
+  color: inherit;
+  text-decoration: none;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@kosedge/contracts",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "echo 'Contracts: no lint (types-only)'",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'Contracts: no tests'",
+    "build": "echo 'Contracts: consumed as source'"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

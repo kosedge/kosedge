@@ -1,0 +1,979 @@
+Date,Visitor,PTS,Home,PTS_2
+2024-11-04,Howard,57,Kansas,87
+2024-11-04,UNC Asheville,54,Alabama,110
+2024-11-04,Jackson St,40,Houston,97
+2024-11-04,Miss Valley St,44,Iowa State,83
+2024-11-04,Baylor,63,Gonzaga,101
+2024-11-04,Maine,62,Duke,96
+2024-11-04,Elon,76,North Carolina,90
+2024-11-04,Canisius,64,Arizona,93
+2024-11-04,Gardner-Webb,64,Tennessee,80
+2024-11-04,Texas A&M,61,UCF,64
+2024-11-04,Texas A&M-CC,73,Purdue,90
+2024-11-04,Stony Brook,62,Marquette,102
+2024-11-04,Ohio State,80,Texas,72
+2024-11-04,AR-Pine Bluff,54,Cincinnati,109
+2024-11-04,South Florida,83,Florida,98
+2024-11-04,Rider,50,UCLA,85
+2024-11-04,Wright St,62,Kentucky,103
+2024-11-04,Long Island,60,Ole Miss,90
+2024-11-05,FIU,70,Rice,77
+2024-11-05,SUNY Canton,62,Colgate,95
+2024-11-05,Toccoa Falls,61,Kennesaw St,110
+2024-11-05,Evansville,63,North Texas,80
+2024-11-05,Bethune,61,Texas Tech,94
+2024-11-05,New Orleans,65,Kansas St,89
+2024-11-05,Idaho St,48,Arizona St,55
+2024-11-05,C Arkansas,50,BYU,88
+2024-11-05,Cal Poly,78,San Francisco,86
+2024-11-05,Cal Maritime,44,Sacramento St,106
+2024-11-05,UC Davis,73,Washington,79
+2024-11-06,Sacred Heart,56,UConn,92
+2024-11-06,Vermont,43,Auburn,94
+2024-11-06,UT Rio Grande,86,Creighton,99
+2024-11-06,Lipscomb,60,Arkansas,76
+2024-11-06,SIUE,61,Indiana,80
+2024-11-06,Wagner,52,Rutgers,75
+2024-11-07,Jacksonville,60,Florida,81
+2024-11-08,North Carolina,89,Kansas,92
+2024-11-08,Arkansas St,79,Alabama,88
+2024-11-08,Army,58,Duke,100
+2024-11-08,E Texas A&M,55,Texas A&M,87
+2024-11-08,N Kentucky,50,Purdue,72
+2024-11-08,George Mason,63,Marquette,82
+2024-11-08,Hou Christian,59,Texas,90
+2024-11-08,Morehead St,56,Cincinnati,83
+2024-11-08,New Mexico,72,UCLA,64
+2024-11-08,Grambling,64,Ole Miss,66
+2024-11-09,New Hampshire,53,UConn,92
+2024-11-09,Auburn,74,Houston,69
+2024-11-09,Baylor,72,Arkansas,67
+2024-11-09,Old Dominion,44,Arizona,102
+2024-11-09,Tennessee,77,Louisville,55
+2024-11-09,Bucknell,72,Kentucky,100
+2024-11-10,Arizona St,80,Gonzaga,88
+2024-11-10,FDU,70,Creighton,96
+2024-11-10,E Illinois,55,Indiana,90
+2024-11-11,McNeese,64,Alabama,72
+2024-11-11,Kansas City,56,Iowa State,82
+2024-11-11,Yale,84,Purdue,92
+2024-11-11,C Michigan,62,Marquette,70
+2024-11-11,Grambling,62,Florida,86
+2024-11-11,Youngstown St,47,Ohio State,81
+2024-11-11,Lamar,71,Texas A&M,97
+2024-11-11,Saint Peter's,65,Rutgers,75
+2024-11-12,Michigan St,69,Kansas,77
+2024-11-12,Duke,72,Kentucky,77
+2024-11-12,Sam Houston,67,Baylor,104
+2024-11-12,South Alabama,54,Ole Miss,64
+2024-11-13,Le Moyne,49,UConn,90
+2024-11-13,Kent State,56,Auburn,79
+2024-11-13,Louisiana,45,Houston,91
+2024-11-13,Montana,57,Tennessee,92
+2024-11-13,Hou Christian,43,Creighton,78
+2024-11-13,Troy,49,Arkansas,65
+2024-11-13,Wagner,45,St John's,66
+2024-11-14,Utah Valley,71,North Dakota,77
+2024-11-14,Lindenwood,74,New Orleans,82
+2024-11-14,E Michigan,74,IU Indy,71
+2024-11-14,N Greenville,54,The Citadel,79
+2024-11-14,FL National,55,FIU,110
+2024-11-14,Dkta Wesleyan,69,South Dakota,92
+2024-11-14,Coppin St,67,UMBC,92
+2024-11-14,Stonehill,51,Robert Morris,63
+2024-11-14,SC State,62,Jacksonville,71
+2024-11-14,Bryant,87,Buffalo,64
+2024-11-14,Nicholls,61,N Kentucky,59
+2024-11-14,Ecclesia,48,UL Monroe,110
+2024-11-14,Northern Iowa,73,Wichita St,79
+2024-11-14,Miss Valley St,39,Missouri,111
+2024-11-14,Tabor,57,Tarleton St,88
+2024-11-14,Morehead St,62,Chattanooga,76
+2024-11-14,S Illinois,78,Oklahoma St,85
+2024-11-14,CO Christian,63,Denver,86
+2024-11-14,N Colorado,78,S Dakota St,69
+2024-11-14,Grand Canyon,76,Arizona St,87
+2024-11-14,LSU,76,Kansas St,65
+2024-11-14,Texas A&M-CC,82,New Mexico St,83
+2024-11-14,La Sierra,51,UC Riverside,79
+2024-11-14,Seattle U,71,Cal Poly,75
+2024-11-14,Omaha,69,UNLV,80
+2024-11-14,N Arizona,60,Pacific,57
+2024-11-15,Alabama,78,Purdue,87
+2024-11-15,UMass Lowell,54,Gonzaga,113
+2024-11-15,Arizona,88,Wisconsin,103
+2024-11-15,American,55,North Carolina,107
+2024-11-15,Marquette,78,Maryland,74
+2024-11-15,Nicholls,49,Cincinnati,86
+2024-11-15,Florida,87,Florida St,74
+2024-11-15,Ohio State,64,Texas A&M,78
+2024-11-15,Monmouth,81,Rutgers,98
+2024-11-16,Oakland,57,Kansas,78
+2024-11-16,Wofford,35,Duke,86
+2024-11-16,Kansas City,56,Creighton,79
+2024-11-16,South Carolina,71,Indiana,87
+2024-11-16,Colorado St,69,Ole Miss,84
+2024-11-17,Austin Peay,68,Tennessee,103
+2024-11-17,Tarleton St,41,Baylor,104
+2024-11-17,New Mexico,71,St John's,85
+2024-11-18,Gonzaga,80,San Diego St,67
+2024-11-18,North Alabama,69,Auburn,102
+2024-11-18,IU Indy,52,Iowa State,87
+2024-11-18,UT Rio Grande,84,Wisconsin,87
+2024-11-18,Pacific,72,Arkansas,91
+2024-11-19,UNC Wilmington,66,Kansas,84
+2024-11-19,E Texas A&M,46,UConn,81
+2024-11-19,Purdue,58,Marquette,76
+2024-11-19,Lipscomb,68,Kentucky,97
+2024-11-19,Cincinnati,76,N Kentucky,60
+2024-11-19,Florida A&M,60,Florida,84
+2024-11-20,Long Beach St,41,Gonzaga,84
+2024-11-20,Illinois,87,Alabama,100
+2024-11-20,Southern,54,Texas A&M,71
+2024-11-20,Merrimack,63,Rutgers,74
+2024-11-21,Virginia,42,Tennessee,64
+2024-11-21,Baylor,99,St John's,98
+2024-11-21,UNC Greensboro,58,Indiana,69
+2024-11-22,Hofstra,44,Houston,80
+2024-11-22,Jackson St,59,Kentucky,108
+2024-11-22,North Carolina,87,Hawai’i,69
+2024-11-22,Tennessee,77,Baylor,62
+2024-11-22,Duke,69,Arizona,55
+2024-11-22,Nebraska,74,Creighton,63
+2024-11-22,UCF,70,Wisconsin,86
+2024-11-22,Little Rock,67,Arkansas,79
+2024-11-22,S Illinois,68,Florida,93
+2024-11-22,Virginia,55,St John's,80
+2024-11-23,Marshall,45,Purdue,80
+2024-11-23,Georgia,69,Marquette,80
+2024-11-23,Cincinnati,81,Georgia Tech,58
+2024-11-23,MD Eastern,40,Illinois,87
+2024-11-24,Wisconsin,81,Pitt,75
+2024-11-24,St John's,63,Georgia,66
+2024-11-24,Rutgers,77,Kennesaw St,79
+2024-11-25,Memphis,99,UConn,97
+2024-11-25,Auburn,83,Iowa State,81
+2024-11-25,Dayton,90,North Carolina,92
+2024-11-25,MD Eastern,35,Arkansas,109
+2024-11-25,Xavier,75,South Carolina,66
+2024-11-26,Kansas,75,Duke,72
+2024-11-26,UConn,72,Colorado,73
+2024-11-26,Auburn,85,North Carolina,72
+2024-11-26,Iowa State,89,Dayton,84
+2024-11-26,Alabama,85,Houston,80
+2024-11-26,Western KY,68,Kentucky,87
+2024-11-26,Texas A&M,70,Oregon,80
+2024-11-26,Creighton,53,San Diego St,71
+2024-11-27,UConn,67,Dayton,85
+2024-11-27,Gonzaga,78,West Virginia,86
+2024-11-27,Memphis,76,Auburn,90
+2024-11-27,Colorado,71,Iowa State,99
+2024-11-27,Houston,65,Notre Dame,54
+2024-11-27,UT Martin,35,Tennessee,78
+2024-11-27,Alabama,95,Rutgers,90
+2024-11-27,Stonehill,59,Marquette,94
+2024-11-27,Michigan St,94,North Carolina,91
+2024-11-27,Louisville,89,Indiana,61
+2024-11-27,Alabama St,59,Cincinnati,77
+2024-11-27,New Orleans,60,Baylor,91
+2024-11-27,Creighton,73,Texas A&M,77
+2024-11-27,Xavier,53,Michigan,78
+2024-11-27,Arizona,104,Davidson,71
+2024-11-28,Gonzaga,89,Indiana,73
+2024-11-28,NC State,61,Purdue,71
+2024-11-28,Florida,75,Wake Forest,58
+2024-11-28,Illinois,90,Arkansas,77
+2024-11-28,BYU,85,Ole Miss,96
+2024-11-28,Arizona,77,Oklahoma,82
+2024-11-28,Mississippi St,80,UNLV,58
+2024-11-29,Davidson,65,Gonzaga,90
+2024-11-29,Georgia St,76,Kentucky,105
+2024-11-29,Seattle U,48,Duke,70
+2024-11-29,Ole Miss,78,Purdue,80
+2024-11-29,Providence,73,Indiana,89
+2024-11-29,Wichita St,51,Florida,88
+2024-11-29,Arizona,76,West Virginia,83
+2024-11-29,Butler,87,Mississippi St,77
+2024-11-30,Furman,51,Kansas,86
+2024-11-30,MD Eastern,45,UConn,99
+2024-11-30,San Diego St,73,Houston,70
+2024-11-30,Oregon,83,Alabama,81
+2024-11-30,W Carolina,62,Marquette,94
+2024-11-30,Chicago St,53,Wisconsin,74
+2024-11-30,Texas A&M,81,Rutgers,77
+2024-11-30,Creighton,80,Notre Dame,76
+2024-12-01,SC State,68,Xavier,71
+2024-12-02,UMBC,62,Georgetown,86
+2024-12-02,Columbia Int'l,59,Jax State,89
+2024-12-02,William & Mary,83,Old Dominion,88
+2024-12-02,Oakwood,71,Miss Valley St,91
+2024-12-02,Bryant,78,Drexel,73
+2024-12-02,Loyola MD,68,Coppin St,57
+2024-12-02,Air Force,60,Miami OH,73
+2024-12-02,Yale,78,Rhode Island,84
+2024-12-02,UT Arlington,84,UL Monroe,70
+2024-12-02,SE Louisiana,71,Tulane,67
+2024-12-02,Dkta Wesleyan,62,S Dakota St,78
+2024-12-02,East-West,46,So Indiana,104
+2024-12-02,Chicago St,76,St Thomas (MN),98
+2024-12-02,Jackson St,66,Saint Louis,74
+2024-12-02,Pacific,66,Colorado,75
+2024-12-02,Washington St,68,Nevada,57
+2024-12-03,Syracuse,70,Tennessee,96
+2024-12-03,Kentucky,66,Clemson,70
+2024-12-03,Michigan,67,Wisconsin,64
+2024-12-03,Cincinnati,60,Villanova,68
+2024-12-03,Georgia Tech,61,Oklahoma,76
+2024-12-03,Wake Forest,44,Texas A&M,57
+2024-12-03,Ole Miss,86,Louisville,63
+2024-12-04,Kansas,63,Creighton,76
+2024-12-04,Auburn,78,Duke,84
+2024-12-04,Marquette,70,Iowa State,81
+2024-12-04,Alabama,94,North Carolina,79
+2024-12-04,Oregon,68,USC,60
+2024-12-04,Virginia,69,Florida,87
+2024-12-04,Baylor,72,UConn,76
+2024-12-04,Louisiana Tech,71,Memphis,81
+2024-12-04,Pitt,57,Mississippi St,90
+2024-12-04,San Diego St,84,Fresno St,62
+2024-12-05,Purdue,70,Penn State,81
+2024-12-06,Illinois,66,Northwestern,70
+2024-12-07,Kentucky,90,Gonzaga,89
+2024-12-07,Wisconsin,74,Marquette,88
+2024-12-07,Butler,51,Houston,79
+2024-12-07,Pitt,64,Virginia Tech,59
+2024-12-07,Georgia Tech,65,North Carolina,68
+2024-12-07,Alcorn St,78,Oklahoma,94
+2024-12-07,Lindenwood,53,Ole Miss,86
+2024-12-07,San Diego,57,San Diego St,74
+2024-12-08,Kansas,67,Missouri,76
+2024-12-08,Richmond,54,Auburn,98
+2024-12-08,Jackson St,58,Iowa State,100
+2024-12-08,Maryland,78,Purdue,83
+2024-12-08,Duke,76,Louisville,65
+2024-12-08,UCLA,73,Oregon,71
+2024-12-08,Howard,67,Cincinnati,84
+2024-12-08,Arkansas St,85,Memphis,72
+2024-12-08,Texas A&M,72,Texas Tech,67
+2024-12-08,UConn,76,Texas,65
+2024-12-09,THMAS,75,Boston U,113
+2024-12-09,Minnesota,67,Indiana,82
+2024-12-09,Hofstra,80,Norfolk St,67
+2024-12-09,Sarah Lawrence,46,Columbia,92
+2024-12-09,Charleston So,63,SC State,82
+2024-12-09,Penn,47,VCU,66
+2024-12-09,Abilene Chrstn,57,Baylor,88
+2024-12-09,Lincoln U (CA),80,San José St,117
+2024-12-10,Miami,62,Tennessee,75
+2024-12-10,Incarnate Word,46,Duke,72
+2024-12-10,Michigan,87,Arkansas,89
+2024-12-10,Troy,42,Houston,62
+2024-12-10,Wisconsin,80,Illinois,86
+2024-12-11,Colgate,67,Kentucky,78
+2024-12-11,CA Baptist,75,San Diego St,81
+2024-12-12,Iowa State,89,Iowa,80
+2024-12-13,UW Stout,62,N Dakota St,91
+2024-12-13,Boston U,61,Merrimack,64
+2024-12-13,Army,60,G Washington,75
+2024-12-13,GA Southern,63,Louisiana Tech,77
+2024-12-13,North Dakota,76,UTSA,80
+2024-12-13,Indiana,68,Nebraska,85
+2024-12-13,Omaha,58,Northern Iowa,78
+2024-12-13,W Michigan,71,St Thomas (MN),77
+2024-12-13,Weber St,73,Utah Tech,71
+2024-12-13,S Dakota St,70,Colorado,81
+2024-12-14,Tennessee,66,Illinois,64
+2024-12-14,Ohio State,53,Auburn,91
+2024-12-14,Louisville,85,Kentucky,93
+2024-12-14,Marquette,63,Dayton,71
+2024-12-14,Creighton,75,Alabama,83
+2024-12-14,Gonzaga,71,UConn,77
+2024-12-14,Arizona St,66,Florida,83
+2024-12-14,NC State,60,Kansas,75
+2024-12-14,Texas A&M,70,Purdue,66
+2024-12-14,Oklahoma St,65,Oklahoma,80
+2024-12-14,Memphis,87,Clemson,82
+2024-12-14,Southern Miss,46,Ole Miss,77
+2024-12-14,Wisconsin,83,Butler,74
+2024-12-14,Xavier,65,Cincinnati,68
+2024-12-14,UCLA,57,Arizona,54
+2024-12-14,McNeese,63,Mississippi St,66
+2024-12-15,Omaha,51,Iowa State,83
+2024-12-15,SF Austin,61,Oregon,79
+2024-12-16,WV Wesleyan,63,Marshall,93
+2024-12-16,Wofford,67,Charleston,77
+2024-12-16,Cairn,64,MD Eastern,81
+2024-12-16,The Citadel,71,C Arkansas,73
+2024-12-16,SE Louisiana,75,Grambling,65
+2024-12-16,St Thomas (TX),54,Sam Houston,80
+2024-12-16,Grand Canyon,66,Louisiana Tech,74
+2024-12-16,CA Baptist,64,MTSU,75
+2024-12-16,Truett McCnnll,67,Lipscomb,99
+2024-12-16,Alcorn St,75,Rice,77
+2024-12-16,Air Force,76,N Colorado,81
+2024-12-16,Montana,76,Northern Iowa,104
+2024-12-16,Oral Roberts,50,Texas Tech,86
+2024-12-16,South Alabama,49,TCU,58
+2024-12-16,Tarleton St,62,UTEP,67
+2024-12-16,Whittier,66,Utah Tech,100
+2024-12-16,Southern Utah,69,New Mexico St,72
+2024-12-16,Willamette,69,Portland,100
+2024-12-17,W Carolina,36,Tennessee,84
+2024-12-17,Georgia St,59,Auburn,100
+2024-12-17,George Mason,47,Duke,68
+2024-12-17,Florida,90,North Carolina,84
+2024-12-17,Southern,61,Ole Miss,74
+2024-12-17,Prairie View,75,UCLA,111
+2024-12-17,Michigan St,77,Oakland,58
+2024-12-17,UNLV,65,Dayton,66
+2024-12-17,Clemson,88,South Carolina,91
+2024-12-18,Alabama,97,North Dakota,90
+2024-12-18,Butler,70,Marquette,80
+2024-12-18,Xavier,89,UConn,94
+2024-12-18,Nicholls,72,Gonzaga,102
+2024-12-18,Michigan,86,Oklahoma,87
+2024-12-18,Toledo,49,Houston,78
+2024-12-18,Memphis,64,Virginia,62
+2024-12-19,Milligan,69,W Carolina,78
+2024-12-19,UNT Dallas,69,Rice,68
+2024-12-19,SW Adventist,58,UTSA,117
+2024-12-19,Alabama St,54,Norfolk St,71
+2024-12-19,Schreiner,57,Incarnate Word,101
+2024-12-19,VA Lynchburg,60,UNC Asheville,114
+2024-12-19,Franciscan,47,Saint Francis,104
+2024-12-19,Buffalo,49,Georgia,100
+2024-12-19,Oakland,75,Cleveland St,92
+2024-12-19,Charleston So,69,North Alabama,86
+2024-12-19,Grambling,60,Delaware St,73
+2024-12-19,UC Irvine,92,Belmont,84
+2024-12-19,Lipscomb,65,MTSU,67
+2024-12-19,UT Martin,69,Morehead St,70
+2024-12-19,Chadron St,72,S Dakota St,87
+2024-12-19,New Orleans,62,Texas,98
+2024-12-19,SIUE,56,Little Rock,60
+2024-12-19,Bellarmine,55,Wyoming,92
+2024-12-19,Tennessee St,75,So Indiana,77
+2024-12-19,Tennessee Tech,79,Lindenwood,73
+2024-12-19,E Illinois,72,SE Missouri,79
+2024-12-19,Northern NM,50,New Mexico St,87
+2024-12-19,South Dakota,87,Utah Tech,92
+2024-12-19,Chicago St,51,Grand Canyon,74
+2024-12-19,Long Beach St,79,Pepperdine,76
+2024-12-19,Merrimack,68,Saint Mary's,73
+2024-12-20,Hou Christian,45,Texas A&M,77
+2024-12-20,Cincinnati,66,Dayton,59
+2024-12-21,Purdue,69,Auburn,87
+2024-12-21,Kentucky,65,Ohio State,85
+2024-12-21,Duke,82,Georgia Tech,56
+2024-12-21,North Florida,45,Florida,99
+2024-12-21,Marquette,72,Xavier,70
+2024-12-21,Oregon,76,Stanford,61
+2024-12-21,UConn,78,Butler,74
+2024-12-21,Bucknell,65,Gonzaga,86
+2024-12-21,Texas A&M-CC,51,Houston,87
+2024-12-21,Queens,62,Ole Miss,80
+2024-12-21,North Carolina,76,UCLA,74
+2024-12-21,FAU,69,Michigan St,86
+2024-12-21,Mississippi St,79,Memphis,66
+2024-12-21,San Diego St,71,California,50
+2024-12-21,Wake Forest,62,Clemson,73
+2024-12-22,Morgan St,72,Iowa State,99
+2024-12-22,Kent State,54,Alabama,81
+2024-12-22,Brown,53,Kansas,87
+2024-12-22,C Arkansas,66,Oklahoma,89
+2024-12-22,Grambling,49,Cincinnati,84
+2024-12-22,Purdue FW,58,Michigan,89
+2024-12-23,MTSU,64,Tennessee,82
+2024-12-25,Loyola Chicago,68,Murray St,71
+2024-12-25,Charleston,84,Charlotte,81
+2024-12-25,Oakland,70,Hawai’i,73
+2024-12-25,Oregon St,66,Nebraska,78
+2024-12-27,Arlington Bapt,53,Baylor,107
+2024-12-28,Abilene Chrstn,54,Texas A&M,92
+2024-12-28,Gonzaga,62,UCLA,65
+2024-12-28,Ole Miss,70,Memphis,87
+2024-12-28,Utah State,67,San Diego St,66
+2024-12-29,S Dakota St,82,Alabama,105
+2024-12-29,Stetson,45,Florida,85
+2024-12-29,Weber St,49,Oregon,89
+2024-12-29,Prairie View,67,Oklahoma,89
+2024-12-29,Toledo,64,Purdue,83
+2024-12-29,Chicago St,64,Illinois,117
+2024-12-30,Monmouth,58,Auburn,87
+2024-12-30,Iowa State,79,Colorado,69
+2024-12-30,Houston,60,Oklahoma St,47
+2024-12-30,Cincinnati,67,Kansas St,70
+2024-12-30,Bethune,73,Mississippi St,87
+2024-12-30,W Michigan,62,Michigan St,80
+2024-12-30,Gonzaga,89,Pepperdine,82
+2024-12-30,Oakland,62,Arkansas,92
+2024-12-31,Norfolk St,52,Tennessee,67
+2024-12-31,Virginia Tech,65,Duke,88
+2024-12-31,West Virginia,62,Kansas,61
+2024-12-31,Marquette,78,Providence,50
+2024-12-31,Brown,54,Kentucky,88
+2024-12-31,Utah,56,Baylor,81
+2025-01-01,UConn,81,DePaul,68
+2025-01-02,Illinois,109,Oregon,77
+2025-01-02,Portland,50,Gonzaga,81
+2025-01-02,Purdue,81,Minnesota,61
+2025-01-02,Memphis,90,FAU,62
+2025-01-03,Creighton,71,Marquette,79
+2025-01-03,Michigan St,69,Ohio State,62
+2025-01-04,Arkansas,52,Tennessee,76
+2025-01-04,Missouri,68,Auburn,84
+2025-01-04,Baylor,55,Iowa State,74
+2025-01-04,Duke,89,SMU,62
+2025-01-04,Oklahoma,79,Alabama,107
+2025-01-04,Florida,100,Kentucky,106
+2025-01-04,Texas,60,Texas A&M,80
+2025-01-04,BYU,55,Houston,86
+2025-01-04,UCLA,58,Nebraska,66
+2025-01-04,Arizona,72,Cincinnati,67
+2025-01-04,South Carolina,50,Mississippi St,85
+2025-01-04,Gonzaga,96,LMU,68
+2025-01-04,Georgia,51,Ole Miss,63
+2025-01-05,Kansas,99,UCF,48
+2025-01-05,Maryland,79,Oregon,83
+2025-01-05,Providence,84,UConn,87
+2025-01-05,Northwestern,61,Purdue,79
+2025-01-05,North Texas,64,Memphis,68
+2025-01-05,Illinois,81,Washington,77
+2025-01-06,TCU,46,Houston,65
+2025-01-07,Tennessee,43,Florida,73
+2025-01-07,Auburn,87,Texas,82
+2025-01-07,Utah,59,Iowa State,82
+2025-01-07,Pitt,47,Duke,76
+2025-01-07,Kentucky,69,Georgia,82
+2025-01-07,Georgetown,66,Marquette,74
+2025-01-07,Mississippi St,76,Vanderbilt,64
+2025-01-07,Arizona,75,West Virginia,56
+2025-01-07,Michigan,94,UCLA,75
+2025-01-07,Utah State,85,San José St,78
+2025-01-08,Alabama,88,South Carolina,68
+2025-01-08,UConn,66,Villanova,68
+2025-01-08,Texas A&M,80,Oklahoma,78
+2025-01-08,Arizona St,55,Kansas,74
+2025-01-08,Penn State,52,Illinois,91
+2025-01-08,San Diego,80,Gonzaga,93
+2025-01-08,Ole Miss,73,Arkansas,66
+2025-01-09,Oregon,73,Ohio State,71
+2025-01-09,Washington,54,Michigan St,88
+2025-01-09,Purdue,68,Rutgers,50
+2025-01-10,UCLA,61,Maryland,79
+2025-01-11,Tennessee,74,Texas,70
+2025-01-11,Auburn,66,South Carolina,63
+2025-01-11,Iowa State,85,Texas Tech,84
+2025-01-11,Notre Dame,78,Duke,86
+2025-01-11,Alabama,94,Texas A&M,88
+2025-01-11,Kentucky,95,Mississippi St,90
+2025-01-11,Florida,71,Arkansas,63
+2025-01-11,UConn,68,Georgetown,60
+2025-01-11,Kansas,54,Cincinnati,40
+2025-01-11,Houston,87,Kansas St,57
+2025-01-11,USC,82,Illinois,72
+2025-01-11,Oklahoma,62,Georgia,72
+2025-01-11,Washington St,75,Gonzaga,88
+2025-01-11,East Carolina,70,Memphis,74
+2025-01-11,LSU,65,Ole Miss,77
+2025-01-11,Boise St,79,Utah State,81
+2025-01-12,Oregon,82,Penn State,81
+2025-01-12,Michigan St,78,Northwestern,68
+2025-01-12,Nebraska,68,Purdue,104
+2025-01-12,West Virginia,78,Colorado,70
+2025-01-12,Washington,75,Michigan,91
+2025-01-13,UCLA,68,Rutgers,75
+2025-01-13,Minnesota,71,Maryland,77
+2025-01-13,Prairie View,75,AR-Pine Bluff,64
+2025-01-13,Boston College,60,Notre Dame,78
+2025-01-13,Texas Southern,82,Miss Valley St,53
+2025-01-13,American,73,Loyola MD,54
+2025-01-13,Alabama St,65,Alcorn St,67
+2025-01-13,Wofford,81,Furman,62
+2025-01-13,Bethune,53,Southern,69
+2025-01-13,E Texas A&M,55,UT Rio Grande,57
+2025-01-13,Nicholls,88,Incarnate Word,82
+2025-01-13,SE Louisiana,66,SF Austin,59
+2025-01-13,Norfolk St,74,Morgan St,78
+2025-01-13,MD Eastern,64,SC State,78
+2025-01-13,Delaware St,72,NC Central,75
+2025-01-13,Coppin St,75,Howard,90
+2025-01-13,Alabama A&M,93,Jackson St,103
+2025-01-13,N'Western St,64,Texas A&M-CC,73
+2025-01-13,New Orleans,68,Lamar,62
+2025-01-13,McNeese,75,Hou Christian,59
+2025-01-13,Campbell,68,Elon,81
+2025-01-13,Florida A&M,72,Grambling,79
+2025-01-14,Mississippi St,66,Auburn,88
+2025-01-14,Miami,54,Duke,89
+2025-01-14,Ole Miss,74,Alabama,64
+2025-01-14,Missouri,83,Florida,82
+2025-01-14,Marquette,85,DePaul,83
+2025-01-14,Texas A&M,69,Kentucky,81
+2025-01-14,Illinois,94,Indiana,69
+2025-01-14,Ohio State,68,Wisconsin,70
+2025-01-14,Baylor,70,Arizona,81
+2025-01-15,Kansas,57,Iowa State,74
+2025-01-15,Georgia,56,Tennessee,74
+2025-01-15,West Virginia,54,Houston,70
+2025-01-15,Penn State,85,Michigan St,90
+2025-01-15,Purdue,69,Washington,58
+2025-01-15,Utah State,62,UNLV,65
+2025-01-16,Gonzaga,89,Oregon St,97
+2025-01-16,Memphis,81,Temple,88
+2025-01-16,Michigan,81,Minnesota,84
+2025-01-17,Ohio,80,Akron,92
+2025-01-17,VCU,78,Saint Joseph's,69
+2025-01-17,Providence,73,Villanova,75
+2025-01-17,Robert Morris,89,Green Bay,67
+2025-01-17,Indiana,77,Ohio State,76
+2025-01-17,DePaul,73,Georgetown,68
+2025-01-17,Youngstown St,64,Milwaukee,79
+2025-01-17,Iowa,70,UCLA,94
+2025-01-17,Air Force,65,Fresno St,74
+2025-01-17,Boise St,65,New Mexico,84
+2025-01-18,Auburn,70,Georgia,68
+2025-01-18,Iowa State,57,West Virginia,64
+2025-01-18,Duke,88,Boston College,63
+2025-01-18,Alabama,102,Kentucky,97
+2025-01-18,Texas,60,Florida,84
+2025-01-18,Tennessee,75,Vanderbilt,76
+2025-01-18,Xavier,59,Marquette,57
+2025-01-18,Kansas St,74,Kansas,84
+2025-01-18,Houston,69,UCF,68
+2025-01-18,LSU,57,Texas A&M,68
+2025-01-18,Purdue,65,Oregon,58
+2025-01-18,Creighton,68,UConn,63
+2025-01-18,Ole Miss,81,Mississippi St,84
+2025-01-18,Santa Clara,103,Gonzaga,99
+2025-01-18,Wisconsin,84,USC,69
+2025-01-19,Illinois,78,Michigan St,80
+2025-01-19,Memphis,77,Charlotte,68
+2025-01-19,Northwestern,76,Michigan,80
+2025-01-19,TCU,74,Baylor,71
+2025-01-20,Saint Francis,68,Wagner,70
+2025-01-20,William & Mary,74,UNC Wilmington,85
+2025-01-20,Brown,83,Cornell,82
+2025-01-20,Penn,82,Harvard,67
+2025-01-20,Columbia,67,Princeton,71
+2025-01-20,Alcorn St,78,Prairie View,70
+2025-01-20,Mercyhurst,63,Long Island,72
+2025-01-20,Dartmouth,67,Yale,83
+2025-01-20,New Orleans,61,N'Western St,73
+2025-01-20,Lamar,78,Nicholls,74
+2025-01-20,SE Louisiana,76,E Texas A&M,68
+2025-01-20,Hofstra,55,Drexel,60
+2025-01-20,Morehouse,79,Howard,76
+2025-01-20,Jackson St,73,Texas Southern,81
+2025-01-20,SF Austin,59,McNeese,79
+2025-01-20,Wash Adventist,42,Norfolk St,105
+2025-01-20,Fresno St,67,New Mexico,95
+2025-01-20,UT Rio Grande,85,Incarnate Word,78
+2025-01-20,Georgetown,64,Villanova,63
+2025-01-20,Rutgers,72,Penn State,80
+2025-01-20,Miss Valley St,53,Florida A&M,83
+2025-01-20,AR-Pine Bluff,64,Bethune,73
+2025-01-20,Bucknell,80,Colgate,87
+2025-01-20,Stonehill,72,Le Moyne,73
+2025-01-20,FDU,58,Chicago St,48
+2025-01-20,Texas A&M-CC,72,Hou Christian,76
+2025-01-20,Idaho,67,Montana,72
+2025-01-20,E Washington,64,Montana St,74
+2025-01-20,Hampton,74,NC A&T,73
+2025-01-21,UCF,83,Iowa State,108
+2025-01-21,Vanderbilt,87,Alabama,103
+2025-01-21,Mississippi St,56,Tennessee,68
+2025-01-21,Marquette,76,Seton Hall,59
+2025-01-21,Ohio State,73,Purdue,70
+2025-01-21,Washington,71,Oregon,82
+2025-01-21,Wisconsin,83,UCLA,85
+2025-01-21,Butler,78,UConn,80
+2025-01-21,Missouri,53,Texas,61
+2025-01-21,Arizona St,65,West Virginia,57
+2025-01-21,Louisville,98,SMU,73
+2025-01-22,Florida,70,South Carolina,69
+2025-01-22,Utah,36,Houston,70
+2025-01-22,Kansas,74,TCU,61
+2025-01-22,Texas A&M,63,Ole Miss,62
+2025-01-22,Xavier,71,St John's,79
+2025-01-23,Maryland,91,Illinois,70
+2025-01-23,Wichita St,53,Memphis,61
+2025-01-24,Villanova,74,Marquette,87
+2025-01-24,Michigan,64,Purdue,91
+2025-01-25,Tennessee,51,Auburn,53
+2025-01-25,Duke,63,Wake Forest,56
+2025-01-25,Iowa State,76,Arizona St,61
+2025-01-25,LSU,73,Alabama,80
+2025-01-25,Georgia,59,Florida,89
+2025-01-25,Houston,92,Kansas,86
+2025-01-25,Michigan St,81,Rutgers,74
+2025-01-25,Kentucky,69,Vanderbilt,74
+2025-01-25,Texas A&M,69,Texas,70
+2025-01-25,Mississippi St,65,South Carolina,60
+2025-01-25,Oregon,69,Minnesota,77
+2025-01-25,Ole Miss,75,Missouri,83
+2025-01-25,UConn,72,Xavier,76
+2025-01-25,West Virginia,60,Kansas St,73
+2025-01-26,Northwestern,74,Illinois,83
+2025-01-26,Nebraska,55,Wisconsin,83
+2025-01-26,UAB,77,Memphis,100
+2025-01-27,NC State,64,Duke,74
+2025-01-27,Iowa State,75,Arizona,86
+2025-01-28,Minnesota,51,Michigan St,73
+2025-01-28,Kentucky,78,Tennessee,73
+2025-01-28,Marquette,78,Butler,69
+2025-01-28,UCF,87,Kansas,91
+2025-01-28,Oklahoma,68,Texas A&M,75
+2025-01-28,St John's,66,Georgetown,41
+2025-01-28,Wake Forest,59,Louisville,72
+2025-01-29,Auburn,87,LSU,74
+2025-01-29,Alabama,88,Mississippi St,84
+2025-01-29,Houston,63,West Virginia,49
+2025-01-29,Wisconsin,68,Maryland,76
+2025-01-29,TCU,57,Texas Tech,71
+2025-01-29,Texas,69,Ole Miss,72
+2025-01-29,DePaul,61,UConn,72
+2025-01-30,Oregon,52,UCLA,78
+2025-01-30,Illinois,74,Nebraska,80
+2025-01-30,Memphis,68,Tulane,56
+2025-01-31,Indiana,76,Purdue,81
+2025-02-01,Auburn,92,Ole Miss,82
+2025-02-01,North Carolina,70,Duke,87
+2025-02-01,Kansas St,80,Iowa State,61
+2025-02-01,Georgia,69,Alabama,90
+2025-02-01,Florida,44,Tennessee,64
+2025-02-01,Texas Tech,82,Houston,81
+2025-02-01,Michigan St,64,USC,70
+2025-02-01,UConn,77,Marquette,69
+2025-02-01,Kansas,70,Baylor,81
+2025-02-01,Arkansas,89,Kentucky,79
+2025-02-01,Texas A&M,76,South Carolina,72
+2025-02-01,Missouri,88,Mississippi St,61
+2025-02-01,Providence,66,St John's,68
+2025-02-01,Wisconsin,75,Northwestern,69
+2025-02-01,Louisville,70,Georgia Tech,77
+2025-02-01,Vanderbilt,67,Oklahoma,97
+2025-02-02,Nebraska,77,Oregon,71
+2025-02-02,Ohio State,79,Illinois,87
+2025-02-02,Memphis,86,Rice,83
+2025-02-03,Iowa State,52,Kansas,69
+2025-02-04,Oklahoma,70,Auburn,98
+2025-02-04,Oklahoma St,63,Houston,72
+2025-02-04,Vanderbilt,75,Florida,86
+2025-02-04,Purdue,90,Iowa,81
+2025-02-04,Michigan St,61,UCLA,63
+2025-02-04,Marquette,64,St John's,70
+2025-02-04,Baylor,59,Texas Tech,73
+2025-02-04,Kentucky,84,Ole Miss,98
+2025-02-04,Arizona,85,BYU,74
+2025-02-04,Indiana,64,Wisconsin,76
+2025-02-05,Duke,83,Syracuse,54
+2025-02-05,Missouri,81,Tennessee,85
+2025-02-05,Tulsa,71,Memphis,83
+2025-02-05,Illinois,73,Rutgers,82
+2025-02-05,Oregon,76,Michigan,80
+2025-02-06,Maryland,70,Ohio State,73
+2025-02-07,USC,72,Purdue,90
+2025-02-07,St John's,68,UConn,62
+2025-02-08,Florida,90,Auburn,81
+2025-02-08,Duke,71,Clemson,77
+2025-02-08,Alabama,85,Arkansas,81
+2025-02-08,Tennessee,70,Oklahoma,52
+2025-02-08,Houston,69,Colorado,59
+2025-02-08,TCU,52,Iowa State,82
+2025-02-08,Oregon,74,Michigan St,86
+2025-02-08,Texas A&M,67,Missouri,64
+2025-02-08,Marquette,67,Creighton,77
+2025-02-08,Texas Tech,73,Arizona,82
+2025-02-08,South Carolina,57,Kentucky,80
+2025-02-08,Kansas,73,Kansas St,81
+2025-02-08,Wisconsin,74,Iowa,63
+2025-02-08,Mississippi St,76,Georgia,75
+2025-02-08,Illinois,95,Minnesota,74
+2025-02-08,Michigan,70,Indiana,67
+2025-02-08,Ole Miss,72,LSU,70
+2025-02-09,Temple,82,Memphis,90
+2025-02-09,Rutgers,81,Maryland,90
+2025-02-10,Baylor,65,Houston,76
+2025-02-10,North Carolina,65,Clemson,85
+2025-02-11,Auburn,80,Vanderbilt,68
+2025-02-11,Alabama,103,Texas,80
+2025-02-11,Florida,81,Mississippi St,68
+2025-02-11,Tennessee,64,Kentucky,75
+2025-02-11,Purdue,73,Michigan,75
+2025-02-11,Georgia,53,Texas A&M,69
+2025-02-11,Iowa State,77,UCF,65
+2025-02-11,Indiana,71,Michigan St,67
+2025-02-11,Arizona,70,Kansas St,73
+2025-02-11,Colorado,59,Kansas,71
+2025-02-11,DePaul,58,Marquette,68
+2025-02-11,UConn,70,Creighton,66
+2025-02-12,California,57,Duke,78
+2025-02-12,St John's,71,Villanova,73
+2025-02-12,Arizona St,106,Texas Tech,111
+2025-02-12,Ole Miss,72,South Carolina,68
+2025-02-12,Oklahoma,58,Missouri,82
+2025-02-13,Memphis,80,South Florida,65
+2025-02-13,Maryland,83,Nebraska,75
+2025-02-14,Columbia,56,Dartmouth,78
+2025-02-14,Mount St Marys,84,Niagara,83
+2025-02-14,Saint Louis,69,Loyola Chicago,78
+2025-02-14,Cornell,73,Harvard,75
+2025-02-14,Penn,71,Yale,72
+2025-02-14,Princeton,56,Brown,70
+2025-02-14,N Kentucky,73,Green Bay,60
+2025-02-14,Ohio,75,Kent State,76
+2025-02-14,Fairfield,52,Saint Peter's,65
+2025-02-14,Marist,65,Siena,64
+2025-02-14,Merrimack,75,Manhattan,79
+2025-02-14,Rider,74,Iona,71
+2025-02-14,Quinnipiac,99,Sacred Heart,90
+2025-02-14,UCLA,72,Indiana,68
+2025-02-14,Wright St,80,Milwaukee,88
+2025-02-14,Nevada,73,San José St,58
+2025-02-15,Auburn,94,Alabama,85
+2025-02-15,Stanford,70,Duke,106
+2025-02-15,South Carolina,67,Florida,88
+2025-02-15,Vanderbilt,76,Tennessee,81
+2025-02-15,Houston,62,Arizona,58
+2025-02-15,Wisconsin,94,Purdue,84
+2025-02-15,Arkansas,61,Texas A&M,69
+2025-02-15,Cincinnati,70,Iowa State,81
+2025-02-15,Michigan St,79,Illinois,65
+2025-02-15,Texas Tech,93,Oklahoma St,55
+2025-02-15,Kentucky,78,Texas,82
+2025-02-15,Kansas,67,Utah,74
+2025-02-15,Mississippi St,81,Ole Miss,71
+2025-02-15,Missouri,87,Georgia,74
+2025-02-15,Clemson,72,Florida St,46
+2025-02-16,Creighton,73,St John's,79
+2025-02-16,Memphis,79,Wichita St,84
+2025-02-16,Michigan,86,Ohio State,83
+2025-02-16,Iowa,75,Maryland,101
+2025-02-17,Duke,80,Virginia,62
+2025-02-17,Arizona,74,Baylor,67
+2025-02-18,Oklahoma,63,Florida,85
+2025-02-18,Houston,80,Arizona St,65
+2025-02-18,Texas A&M,54,Mississippi St,70
+2025-02-18,Colorado,65,Iowa State,79
+2025-02-18,Texas Tech,66,TCU,69
+2025-02-18,Illinois,74,Wisconsin,95
+2025-02-18,Purdue,66,Michigan St,75
+2025-02-18,Seton Hall,56,Marquette,80
+2025-02-18,Kansas,57,BYU,91
+2025-02-19,Arkansas,60,Auburn,67
+2025-02-19,Alabama,98,Missouri,110
+2025-02-19,St John's,82,DePaul,58
+2025-02-19,Vanderbilt,61,Kentucky,82
+2025-02-20,USC,71,Maryland,88
+2025-02-21,Michigan St,75,Michigan,62
+2025-02-21,Marquette,66,Villanova,81
+2025-02-22,Georgia,70,Auburn,82
+2025-02-22,Florida,79,LSU,65
+2025-02-22,Duke,110,Illinois,67
+2025-02-22,Kentucky,83,Alabama,96
+2025-02-22,Iowa State,59,Houston,68
+2025-02-22,Tennessee,77,Texas A&M,69
+2025-02-22,West Virginia,51,Texas Tech,73
+2025-02-22,Oregon,77,Wisconsin,73
+2025-02-22,Missouri,85,Arkansas,92
+2025-02-22,Clemson,79,SMU,69
+2025-02-22,BYU,96,Arizona,95
+2025-02-22,Mississippi St,87,Oklahoma,93
+2025-02-22,Oklahoma St,64,Kansas,96
+2025-02-22,Ole Miss,72,Vanderbilt,77
+2025-02-22,Florida St,81,Louisville,89
+2025-02-23,UConn,75,St John's,89
+2025-02-23,Purdue,58,Indiana,73
+2025-02-23,FAU,65,Memphis,84
+2025-02-24,Houston,69,Texas Tech,61
+2025-02-24,Michigan,49,Nebraska,46
+2025-02-25,Duke,97,Miami,60
+2025-02-25,Florida,83,Georgia,88
+2025-02-25,Tennessee,65,LSU,59
+2025-02-25,Mississippi St,73,Alabama,111
+2025-02-25,Iowa State,68,Oklahoma St,74
+2025-02-25,Washington,62,Wisconsin,88
+2025-02-25,South Carolina,71,Missouri,101
+2025-02-25,Louisville,71,Virginia Tech,66
+2025-02-25,Providence,52,Marquette,82
+2025-02-26,Ole Miss,76,Auburn,106
+2025-02-26,St John's,76,Butler,70
+2025-02-26,Michigan St,58,Maryland,55
+2025-02-26,Vanderbilt,86,Texas A&M,84
+2025-02-26,Notre Dame,68,Clemson,83
+2025-02-26,Kentucky,83,Oklahoma,82
+2025-02-26,Rice,72,Memphis,84
+2025-02-26,Utah,66,Arizona,83
+2025-02-26,BYU,91,Arizona St,81
+2025-02-27,Rutgers,82,Michigan,84
+2025-02-27,Saint Mary's,58,LMU,55
+2025-02-28,UCLA,66,Purdue,76
+2025-03-01,Auburn,94,Kentucky,78
+2025-03-01,Florida St,65,Duke,100
+2025-03-01,Texas A&M,70,Florida,89
+2025-03-01,Cincinnati,64,Houston,73
+2025-03-01,Alabama,76,Tennessee,79
+2025-03-01,Seton Hall,61,St John's,71
+2025-03-01,Arizona,67,Iowa State,84
+2025-03-01,Texas Tech,78,Kansas,73
+2025-03-01,Clemson,71,Virginia,58
+2025-03-01,Missouri,93,Vanderbilt,97
+2025-03-01,Maryland,68,Penn State,64
+2025-03-01,Pitt,68,Louisville,79
+2025-03-01,Marquette,76,Georgetown,61
+2025-03-01,Oregon St,64,Saint Mary's,74
+2025-03-01,LSU,69,Mississippi St,81
+2025-03-01,West Virginia,56,BYU,77
+2025-03-02,Wisconsin,62,Michigan St,71
+2025-03-02,Illinois,93,Michigan,73
+2025-03-02,Memphis,88,UAB,81
+2025-03-03,Wake Forest,60,Duke,93
+2025-03-03,Kansas,59,Houston,65
+2025-03-04,Auburn,72,Texas A&M,83
+2025-03-04,BYU,88,Iowa State,85
+2025-03-04,Memphis,75,UTSA,70
+2025-03-04,Rutgers,71,Purdue,100
+2025-03-04,LSU,64,Kentucky,95
+2025-03-04,Arizona St,100,Arizona,113
+2025-03-04,Texas,87,Mississippi St,82
+2025-03-05,Tennessee,76,Ole Miss,78
+2025-03-05,Florida,99,Alabama,94
+2025-03-05,Colorado,75,Texas Tech,91
+2025-03-05,Clemson,78,Boston College,69
+2025-03-05,Wisconsin,74,Minnesota,67
+2025-03-05,Maryland,71,Michigan,65
+2025-03-05,California,68,Louisville,85
+2025-03-05,Missouri,84,Oklahoma,96
+2025-03-05,Marquette,66,UConn,72
+2025-03-06,Michigan St,91,Iowa,84
+2025-03-07,South Florida,68,Memphis,84
+2025-03-07,Purdue,80,Illinois,88
+2025-03-08,Alabama,93,Auburn,91
+2025-03-08,Duke,82,North Carolina,69
+2025-03-08,Houston,65,Baylor,61
+2025-03-08,South Carolina,65,Tennessee,75
+2025-03-08,Ole Miss,71,Florida,90
+2025-03-08,St John's,86,Marquette,84
+2025-03-08,Texas Tech,85,Arizona St,57
+2025-03-08,Iowa State,73,Kansas St,57
+2025-03-08,Virginia Tech,47,Clemson,65
+2025-03-08,Penn State,86,Wisconsin,75
+2025-03-08,Northwestern,61,Maryland,74
+2025-03-08,Stanford,48,Louisville,68
+2025-03-08,Kentucky,91,Missouri,83
+2025-03-08,Texas A&M,66,LSU,52
+2025-03-08,Utah,74,BYU,85
+2025-03-08,Arizona,76,Kansas,83
+2025-03-08,Mississippi St,92,Arkansas,93
+2025-03-09,Michigan,62,Michigan St,79
+2025-03-10,Pepperdine,59,Saint Mary's,74
+2025-03-11,Gonzaga,58,Saint Mary's,51
+2025-03-12,Cincinnati,56,Iowa State,76
+2025-03-13,Georgia Tech,70,Duke,78
+2025-03-13,Colorado,68,Houston,77
+2025-03-13,Butler,57,St John's,78
+2025-03-13,Baylor,74,Texas Tech,76
+2025-03-13,SMU,54,Clemson,57
+2025-03-13,Iowa State,92,BYU,96
+2025-03-13,Stanford,73,Louisville,75
+2025-03-13,Texas,94,Texas A&M,89
+2025-03-13,Oklahoma,84,Kentucky,85
+2025-03-13,Northwestern,63,Wisconsin,70
+2025-03-13,USC,71,Purdue,76
+2025-03-13,Mississippi St,73,Missouri,85
+2025-03-13,Indiana,59,Oregon,72
+2025-03-13,Iowa,94,Illinois,106
+2025-03-13,Marquette,89,Xavier,87
+2025-03-14,North Carolina,71,Duke,74
+2025-03-14,BYU,54,Houston,74
+2025-03-14,Ole Miss,57,Auburn,62
+2025-03-14,Missouri,81,Florida,95
+2025-03-14,Kentucky,70,Alabama,99
+2025-03-14,Marquette,63,St John's,79
+2025-03-14,Oregon,64,Michigan St,74
+2025-03-14,Texas,72,Tennessee,83
+2025-03-14,Arizona,86,Texas Tech,80
+2025-03-14,Clemson,73,Louisville,76
+2025-03-14,Illinois,65,Maryland,88
+2025-03-14,Wichita St,80,Memphis,83
+2025-03-14,Wisconsin,86,UCLA,70
+2025-03-14,Purdue,68,Michigan,86
+2025-03-15,Louisville,62,Duke,73
+2025-03-15,Arizona,64,Houston,72
+2025-03-15,Tennessee,70,Auburn,65
+2025-03-15,Alabama,82,Florida,104
+2025-03-15,Creighton,66,St John's,82
+2025-03-15,Wisconsin,77,Michigan St,74
+2025-03-15,Michigan,81,Maryland,80
+2025-03-15,Tulane,77,Memphis,78
+2025-03-16,Tennessee,77,Florida,86
+2025-03-16,UAB,72,Memphis,84
+2025-03-16,Wisconsin,53,Michigan,59
+2025-03-18,North Carolina,95,San Diego St,68
+2025-03-18,Saint Francis,68,Alabama St,70
+2025-03-19,Xavier,86,Texas,80
+2025-03-19,Mount St Marys,83,American,72
+2025-03-20,SIUE,40,Houston,78
+2025-03-20,Alabama St,63,Auburn,83
+2025-03-20,Wofford,62,Tennessee,77
+2025-03-20,Omaha,53,St John's,83
+2025-03-20,Montana,66,Wisconsin,85
+2025-03-20,UNC Wilmington,72,Texas Tech,82
+2025-03-20,High Point,63,Purdue,75
+2025-03-20,Yale,71,Texas A&M,80
+2025-03-20,McNeese,69,Clemson,67
+2025-03-20,UC San Diego,65,Michigan,68
+2025-03-20,VCU,71,BYU,80
+2025-03-20,Drake,67,Missouri,57
+2025-03-20,Arkansas,79,Kansas,72
+2025-03-20,Utah State,47,UCLA,72
+2025-03-20,Creighton,89,Louisville,75
+2025-03-20,Georgia,68,Gonzaga,89
+2025-03-21,Mount St Marys,49,Duke,93
+2025-03-21,Norfolk St,69,Florida,95
+2025-03-21,Robert Morris,81,Alabama,90
+2025-03-21,Bryant,62,Michigan St,87
+2025-03-21,Lipscomb,55,Iowa State,82
+2025-03-21,Troy,57,Kentucky,76
+2025-03-21,Grand Canyon,49,Maryland,81
+2025-03-21,Akron,65,Arizona,93
+2025-03-21,Colorado St,78,Memphis,70
+2025-03-21,Liberty,52,Oregon,81
+2025-03-21,North Carolina,64,Ole Miss,71
+2025-03-21,Xavier,73,Illinois,86
+2025-03-21,Vanderbilt,56,Saint Mary's,59
+2025-03-21,New Mexico,75,Marquette,66
+2025-03-21,Baylor,75,Mississippi St,72
+2025-03-21,Oklahoma,59,UConn,67
+2025-03-22,Creighton,70,Auburn,82
+2025-03-22,Gonzaga,76,Houston,81
+2025-03-22,Arkansas,75,St John's,66
+2025-03-22,UCLA,58,Tennessee,67
+2025-03-22,Drake,64,Texas Tech,77
+2025-03-22,BYU,91,Wisconsin,89
+2025-03-22,McNeese,62,Purdue,76
+2025-03-22,Michigan,91,Texas A&M,79
+2025-03-23,UConn,75,Florida,77
+2025-03-23,Baylor,66,Duke,89
+2025-03-23,Saint Mary's,66,Alabama,80
+2025-03-23,New Mexico,63,Michigan St,71
+2025-03-23,Illinois,75,Kentucky,84
+2025-03-23,Ole Miss,91,Iowa State,78
+2025-03-23,Colorado St,71,Maryland,72
+2025-03-23,Oregon,83,Arizona,87
+2025-03-27,Maryland,71,Florida,87
+2025-03-27,Arizona,93,Duke,100
+2025-03-27,BYU,88,Alabama,113
+2025-03-27,Arkansas,83,Texas Tech,85
+2025-03-28,Michigan,65,Auburn,78
+2025-03-28,Purdue,60,Houston,62
+2025-03-28,Ole Miss,70,Michigan St,73
+2025-03-28,Kentucky,65,Tennessee,78
+2025-03-29,Texas Tech,79,Florida,84
+2025-03-29,Alabama,65,Duke,85
+2025-03-30,Tennessee,50,Houston,69
+2025-03-30,Michigan St,64,Auburn,70
+2025-04-05,Florida,79,Auburn,73
+2025-04-05,Houston,70,Duke,67
+2025-04-07,Florida,65,Houston,63

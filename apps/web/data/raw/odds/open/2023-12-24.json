@@ -1,0 +1,1841 @@
+{
+  "timestamp": "2023-12-24T11:55:38Z",
+  "previous_timestamp": "2023-12-24T11:50:38Z",
+  "next_timestamp": "2023-12-24T12:00:39Z",
+  "data": [
+    {
+      "id": "89929568f0399f71250db5d02084b334",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-12-24T18:30:00Z",
+      "home_team": "Portland Pilots",
+      "away_team": "Temple Owls",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-12-24T11:52:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-12-24T11:54:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -102,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-12-24T11:54:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2023-12-24T11:53:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-12-24T11:55:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-12-24T11:54:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-12-24T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-12-24T11:54:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Temple Owls",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edac01acd48d8b2c8d9f4dfefd6eba2d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-12-24T21:00:00Z",
+      "home_team": "Massachusetts Minutemen",
+      "away_team": "Old Dominion Monarchs",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-12-24T11:54:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -106,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -106,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 154.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 154.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-12-24T11:52:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -118,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -104,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2023-12-24T11:53:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -115,
+                  "point": -7.0
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -105,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -105,
+                  "point": -7.0
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -115,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-12-24T11:55:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-12-24T11:54:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-12-24T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Old Dominion Monarchs",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "247d357916871349f2de4ddac23704c7",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-12-24T23:30:00Z",
+      "home_team": "Hawai'i Rainbow Warriors",
+      "away_team": "TCU Horned Frogs",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-12-24T11:54:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -101,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -111,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -105,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -115,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-12-24T11:52:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-12-24T11:54:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2023-12-24T11:53:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -105,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -115,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-12-24T11:55:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-12-24T11:54:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-12-24T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -105,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -115,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-12-24T11:54:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05d527ade331bd7381dd926e82f70e39",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-12-25T02:00:00Z",
+      "home_team": "Georgia Tech Yellow Jackets",
+      "away_team": "Nevada Wolf Pack",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-12-24T11:52:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -120,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -102,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:52:43Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-12-24T11:54:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -106,
+                  "point": 5.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -106,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-12-24T11:54:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2023-12-24T11:53:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:53:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-12-24T11:55:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-12-24T11:55:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-12-24T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-12-24T11:54:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-12-24T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2023-12-24T11:54:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -115,
+                  "point": 6.5
+                },
+                {
+                  "name": "Nevada Wolf Pack",
+                  "price": -105,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-12-24T11:54:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

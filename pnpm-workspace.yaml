@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - packages/*
+  - services/*
+
+onlyBuiltDependencies:
+  - "@prisma/engines"
+  - "@sentry/cli"
+  - prisma
+  - sharp
+  - unrs-resolver

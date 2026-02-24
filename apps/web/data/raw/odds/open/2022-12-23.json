@@ -1,0 +1,3432 @@
+{
+  "timestamp": "2022-12-23T11:55:39Z",
+  "previous_timestamp": "2022-12-23T11:50:38Z",
+  "next_timestamp": "2022-12-23T12:00:39Z",
+  "data": [
+    {
+      "id": "8f533584b6e0f548b5727d963808d9f4",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-23T21:00:00Z",
+      "home_team": "George Mason Patriots",
+      "away_team": "Coppin St Eagles",
+      "bookmakers": [
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-23T11:51:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-23T11:49:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:49:42Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -109,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -109,
+                  "point": -11.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-23T11:50:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -114,
+                  "point": 11.5
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -106,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-23T11:51:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -120,
+                  "point": 11.5
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": 100,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-23T11:51:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-23T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-23T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-23T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -105,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -118,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-23T11:54:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 12.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b5e9b4e4062867362930ce72c8bcfae0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-23T21:30:00Z",
+      "home_team": "Seattle Redhawks",
+      "away_team": "Iona Gaels",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-23T11:51:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-23T11:51:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-23T11:49:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:49:42Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -109,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -109,
+                  "point": 8.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-23T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-23T11:50:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-23T11:51:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-23T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-23T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-23T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -106,
+                  "point": -9.0
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -106,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-23T11:52:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -106,
+                  "point": -9.0
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -106,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0e459769ef5a9eabb2bc2a7993b1b597",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-23T22:00:00Z",
+      "home_team": "Rutgers Scarlet Knights",
+      "away_team": "Bucknell Bison",
+      "bookmakers": [
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-23T11:49:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:49:42Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -109,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -109,
+                  "point": -19.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-23T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -106,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -106,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-23T11:52:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -106,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -106,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-23T11:50:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-23T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Bucknell Bison",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8358737d5740cf21dfab5f3a3b445d01",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-24T00:00:00Z",
+      "home_team": "Indiana Hoosiers",
+      "away_team": "Kennesaw St Owls",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-23T11:52:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -103,
+                  "point": -20.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -109,
+                  "point": 20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-23T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -103,
+                  "point": -20.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -109,
+                  "point": 20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-23T11:51:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-23T11:51:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-23T11:49:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:49:42Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -109,
+                  "point": -20.0
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -109,
+                  "point": 20.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-23T11:51:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -20.0
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 20.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-23T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-23T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -19.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": -20.0
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": 20.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "701e44707aae138ecb28ee279ef34d2f",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-24T00:00:00Z",
+      "home_team": "Utah State Aggies",
+      "away_team": "SMU Mustangs",
+      "bookmakers": [
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-23T11:49:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:49:42Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -109,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -109,
+                  "point": -13.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-23T11:50:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-23T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-23T11:51:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-23T11:51:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-23T11:51:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-23T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-23T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -106,
+                  "point": 13.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -106,
+                  "point": -13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-23T11:52:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -106,
+                  "point": 13.0
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -106,
+                  "point": -13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Utah State Aggies",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "678b5d96597ac75a14872ce25af280f2",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-24T03:00:00Z",
+      "home_team": "Pepperdine Waves",
+      "away_team": "George Washington Colonials",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -115,
+                  "point": 3.5
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -105,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-23T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -106,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -106,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-23T11:52:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -106,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -106,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-23T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-23T11:51:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-23T11:51:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-23T11:49:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:49:42Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -109,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -109,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-23T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -120,
+                  "point": 3.5
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": 100,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "George Washington Colonials",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7a75c24e322c552fb10c5d62a257affa",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-24T05:00:00Z",
+      "home_team": "Hawai'i Rainbow Warriors",
+      "away_team": "Washington St Cougars",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -114,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-23T11:52:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -106,
+                  "point": 3.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -106,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:52:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-23T11:53:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-23T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-23T11:50:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:50:54Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-23T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-23T11:51:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-23T11:51:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:51:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-23T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-23T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-23T11:51:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-23T11:51:06Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
