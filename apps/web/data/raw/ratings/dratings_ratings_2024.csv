@@ -1,0 +1,363 @@
+team,dratings_rating
+Connecticut Huskies,3.5675
+Purdue Boilermakers,3.1937
+Houston Cougars,2.9785
+Auburn Tigers,2.7925
+Arizona Wildcats,2.7902
+Tennessee Volunteers,2.779
+UNC Tar Heels,2.7588
+Iowa State Cyclones,2.671
+Duke Blue Devils,2.6393
+Illinois Fighting Illini,2.5668
+Creighton Bluejays,2.5342
+Marquette Golden Eagles,2.4587
+Alabama Crimson Tide,2.4446
+Gonzaga Bulldogs,2.4075
+Kentucky Wildcats,2.2417
+Michigan State Spartans,2.1998
+Baylor Bears,2.195
+Florida Gators,2.1367
+San Diego State Aztecs,2.0948
+Wisconsin Badgers,2.0871
+Kansas Jayhawks,2.0603
+Colorado Buffaloes,2.0386
+Brigham Young Cougars,2.0162
+St. John's Red Storm,2.0125
+Clemson Tigers,1.974
+Wake Forest Demon Deacons,1.9589
+Saint Mary's College Gaels,1.9565
+New Mexico Lobos,1.9463
+Texas Longhorns,1.9226
+Texas A&M Aggies,1.8964
+Mississippi State Bulldogs,1.8948
+Florida Atlantic,1.8893
+Colorado State Rams,1.8869
+Texas Tech Red Raiders,1.8818
+Northwestern Wildcats,1.8618
+Nebraska Cornhuskers,1.8295
+Villanova Wildcats,1.8125
+Dayton Flyers,1.7867
+NC State Wolfpack,1.7817
+Cincinnati Bearcats,1.7809
+Washington State Cougars,1.7668
+Ohio State Buckeyes,1.7629
+TCU Horned Frogs,1.7541
+Utah Utes,1.7453
+Oregon Ducks,1.743
+Oklahoma Sooners,1.7327
+Indiana State Sycamores,1.7306
+Utah State Aggies,1.717
+Seton Hall Pirates,1.7104
+Pitt Panthers,1.6914
+South Carolina Gamecocks,1.6826
+Grand Canyon Antelopes,1.6707
+Nevada Wolf Pack,1.621
+Iowa Hawkeyes,1.5852
+Xavier Musketeers,1.5781
+Boise State Broncos,1.5699
+Virginia Tech Hokies,1.5422
+Providence Friars,1.524
+Ole Miss Rebels,1.4765
+Maryland Terrapins,1.4614
+Washington Huskies,1.4542
+Virginia Cavaliers,1.4324
+Kansas State Wildcats,1.4152
+James Madison Dukes,1.4024
+Butler Bulldogs,1.3962
+Drake Bulldogs,1.3867
+Memphis Tigers,1.3525
+Syracuse Orange,1.3281
+San Francisco Dons,1.2828
+Indiana Hoosiers,1.2693
+Boston College Eagles,1.2489
+Florida State Seminoles,1.2138
+Rutgers Scarlet Knights,1.2098
+Bradley University Braves,1.2087
+USC Trojans,1.1888
+Georgia Bulldogs,1.1842
+UCF Knights,1.1807
+SMU Mustangs,1.1779
+Minnesota Golden Gophers,1.1647
+LSU Tigers,1.135
+Penn State Nittany Lions,1.1236
+Miami Hurricanes,1.0924
+Duquesne Dukes,1.0905
+VCU Rams,1.0874
+Princeton Tigers,1.0679
+McNeese State Cowboys,1.0601
+Stanford Cardinal,1.0567
+UCLA Bruins,1.0394
+North Texas Mean Green,1.039
+Loyola Chicago Ramblers,1.0319
+South Florida Bulls,1.0217
+Appalachian State Mountaineers,1.0027
+Arkansas Razorbacks,0.9985
+Richmond Spiders,0.9932
+UMass Minutemen,0.9666
+UNLV Rebels,0.9628
+Charleston Cougars,0.936
+Samford Bulldogs,0.9282
+Yale Bulldogs,0.9277
+St. Bonaventure Bonnies,0.911
+UC Irvine Anteaters,0.8732
+Saint Joseph's Hawks,0.8486
+George Mason Patriots,0.8157
+Vermont Catamounts,0.8149
+Louisiana Tech Bulldogs,0.8019
+UAB Blazers,0.7918
+Cornell Big Red,0.7838
+Arizona State Sun Devils,0.7733
+Santa Clara Broncos,0.7696
+Michigan Wolverines,0.7656
+California Golden Bears,0.6896
+Oklahoma State Cowboys,0.6784
+Charlotte 49ers,0.6611
+Georgia Tech Yellow Jackets,0.6131
+Seattle Redhawks,0.612
+High Point Panthers,0.5898
+Akron Zips,0.5769
+Northern Iowa Panthers,0.5619
+Notre Dame Fighting Irish,0.5502
+Belmont Bruins,0.5373
+UT Arlington Mavericks,0.5049
+Southern Illinois Salukis,0.503
+Liberty Flames,0.4693
+Hofstra Pride,0.4635
+Tarleton State Texans,0.4388
+Toledo Rockets,0.4373
+Davidson Wildcats,0.4269
+West Virginia Mountaineers,0.4252
+Oregon State Beavers,0.3937
+Western Carolina Catamounts,0.3801
+UNC Wilmington Seahawks,0.3652
+Tulane Green Wave,0.3644
+Western Kentucky Hilltoppers,0.3373
+Arkansas State Red Wolves,0.3236
+Missouri Tigers,0.309
+Wichita State Shockers,0.2926
+Troy Trojans,0.2878
+Furman Paladins,0.272
+Chattanooga Mocs,0.2571
+UC San Diego Tritons,0.2553
+Oakland Golden Grizzlies,0.247
+Stephen F. Austin Lumberjacks,0.2446
+Wyoming Cowboys,0.2445
+Sam Houston State Bearkats,0.2304
+UNC Greensboro Spartans,0.2283
+Youngstown State Penguins,0.2154
+Drexel Dragons,0.2133
+Wright State Raiders,0.2068
+Vanderbilt Commodores,0.2048
+Ohio Bobcats,0.1984
+Missouri State Bears,0.1865
+Murray State Racers,0.1447
+Towson Tigers,0.1159
+Louisiana Lafayette,0.1111
+Loyola Marymount Lions,0.1012
+Eastern Washington Eagles,0.0927
+Morehead State Eagles,0.0863
+South Dakota State Jackrabbits,0.0836
+Colgate Raiders,0.0743
+UMass Lowell River Hawks,0.0593
+Utah Valley Wolverines,0.0442
+Weber State Wildcats,0.0431
+East Carolina Pirates,0.0361
+UTEP Miners,0.0242
+Hawaii Rainbow Warriors,0.0029
+Louisville Cardinals,0.0014
+UNC Asheville Bulldogs,-0.0136
+Long Beach State 49ers,-0.0146
+Kent State Golden Flashes,-0.035
+Fordham Rams,-0.0417
+Georgetown Hoyas,-0.0552
+Illinois State Redbirds,-0.0613
+Temple Owls,-0.0731
+La Salle Explorers,-0.0829
+Tulsa Golden Hurricane,-0.086
+Longwood Lancers,-0.0931
+IPFW Mastodons,-0.1015
+Saint Louis Billikens,-0.1093
+Montana Grizzlies,-0.1278
+UC Davis Aggies,-0.1315
+Air Force Falcons,-0.1322
+Bryant Bulldogs,-0.1477
+ETSU Buccaneers,-0.17
+Delaware Fightin' Blue Hens,-0.1792
+California Baptist Lancers,-0.1838
+Lipscomb Bisons,-0.1845
+Rice Owls,-0.1932
+George Washington Colonials,-0.1964
+Wofford Terriers,-0.2182
+UC Santa Barbara Gauchos,-0.2239
+Rhode Island Rams,-0.2242
+Cleveland State Vikings,-0.2334
+Pepperdine Waves,-0.2419
+St. Thomas Tommies,-0.2429
+Jacksonville State Gamecocks,-0.2465
+Stony Brook Seawolves,-0.2678
+Quinnipiac Bobcats,-0.275
+Fresno State Bulldogs,-0.294
+UIC Flames,-0.2973
+Northern Kentucky Norse,-0.3044
+Texas State Bobcats,-0.3117
+Monmouth Hawks,-0.3315
+Winthrop Eagles,-0.3345
+Harvard Crimson,-0.3346
+Abilene Christian Wildcats,-0.3527
+Fairfield Stags,-0.3537
+Northern Colorado Bears,-0.3546
+Eastern Kentucky Colonels,-0.3675
+Brown Bears,-0.3702
+San Diego Toreros,-0.3815
+Georgia State Panthers,-0.3905
+South Alabama Jaguars,-0.3946
+Wisconsin Milwaukee Panthers,-0.4007
+Penn Quakers,-0.4083
+Evansville Purple Aces,-0.4094
+Gardner Webb Runnin' Bulldogs,-0.4105
+Little Rock Trojans,-0.4201
+San Jose State Spartans,-0.4243
+Marshall Thundering Herd,-0.4503
+Stetson Hatters,-0.451
+UC Riverside Highlanders,-0.4726
+Southern Miss Golden Eagles,-0.4734
+Mercer Bears,-0.4774
+Norfolk State Spartans,-0.4799
+Bowling Green Falcons,-0.4811
+Radford Highlanders,-0.5256
+Iona Gaels,-0.5446
+Saint Peter's Peacocks,-0.5517
+Merrimack Warriors,-0.5813
+MTSU Blue Raiders,-0.5974
+Cal State Fullerton Titans,-0.5997
+Florida Gulf Coast Eagles,-0.6156
+Texas A&M CC Islanders,-0.6372
+Cal State Northridge Matadors,-0.6505
+Montana State Bobcats,-0.6534
+Austin Peay Governors,-0.6548
+Columbia Lions,-0.658
+CSU Bakersfield Roadrunners,-0.6671
+Northeastern Huskies,-0.6802
+Portland Pilots,-0.6839
+Tennessee-Martin Skyhawks,-0.6847
+North Florida Ospreys,-0.6897
+UMKC Kangarros,-0.6911
+New Mexico State Aggies,-0.6913
+UTSA Roadrunners,-0.6932
+Marist Red Foxes,-0.6988
+Miami RedHawks,-0.7083
+North Dakota Fighting Hawks,-0.7121
+Wisconsin Green Bay Phoenix,-0.714
+Maine Black Bears,-0.7261
+Kennesaw State Owls,-0.7283
+Lamar Cardinals,-0.7316
+Rider Broncs,-0.7372
+Central Michigan Chippewas,-0.7482
+Nicholls State Colonels,-0.761
+Southern Utah Thunderbirds,-0.775
+FIU Golden Panthers,-0.7772
+Portland State Vikings,-0.7912
+DePaul Blue Demons,-0.7933
+North Alabama Lions,-0.7996
+Mount St. Mary's Mountaineers,-0.8099
+New Hampshire Wildcats,-0.8158
+Old Dominion Monarchs,-0.8458
+Idaho State Bengals,-0.848
+The Citadel Bulldogs,-0.8526
+Grambling State Tigers,-0.8544
+Niagara Purple Eagles,-0.8559
+Ball State Cardinals,-0.8623
+Central Connecticut Blue Devils,-0.8663
+Queens Royals,-0.8707
+North Carolina Central Eagles,-0.8804
+Jacksonville Dolphins,-0.8862
+Texas Southern Tigers,-0.8881
+Albany Great Danes,-0.8911
+Southern University Jaguars,-0.8924
+Denver Pioneers,-0.8974
+Howard Bison,-0.9026
+North Dakota State Bison,-0.9093
+Utah Tech Trailblazers,-0.9198
+Georgia Southern Eagles,-0.9356
+Western Illinois Leathernecks,-0.9478
+Omaha Mavericks,-0.9753
+Presbyterian Blue Hose,-0.9833
+Canisius Golden Griffins,-0.9958
+Oral Roberts Golden Eagles,-1.0042
+Binghamton Bearcats,-1.0181
+Northern Illinois Huskies,-1.0411
+Louisiana Monroe Warhawks,-1.0669
+Lehigh Mountain Hawks,-1.0998
+Alcorn State Braves,-1.1021
+SIU Edwardsville Cougars,-1.1023
+Valparaiso Beacons,-1.1396
+Western Michigan Broncos,-1.14
+Jackson State Tigers,-1.1527
+Campbell Fighting Camels,-1.1767
+Tennessee State Tigers,-1.1796
+USC Upstate Spartans,-1.1835
+American University Eagles,-1.1924
+Bucknell Bison,-1.2088
+Chicago State Cougars,-1.2096
+Boston University Terriers,-1.2104
+Delaware State Hornets,-1.2297
+South Carolina State Bulldogs,-1.2543
+UMBC Retrievers,-1.2719
+Coastal Carolina Chanticleers,-1.2765
+Sacred Heart Pioneers,-1.2819
+Robert Morris Colonials,-1.2823
+Bethune Cookman Wildcats,-1.2928
+Northern Arizona Lumberjacks,-1.2941
+Wagner Seahawks,-1.308
+Elon Phoenix,-1.3179
+Bellarmine Knights,-1.3404
+Southeastern Louisiana Lions,-1.3644
+Sacramento State Hornets,-1.4249
+Idaho Vandals,-1.4359
+Alabama State Hornets,-1.4401
+Eastern Michigan Eagles,-1.4491
+Charleston Southern Buccaneers,-1.4778
+William & Mary Tribe,-1.4941
+Lafayette Leopards,-1.5054
+Le Moyne Dolphins,-1.5146
+South Dakota Coyotes,-1.5182
+Eastern Illinois Panthers,-1.5718
+Navy Midshipmen,-1.5821
+Fairleigh Dickinson Knights,-1.6661
+Alabama A&M Bulldogs,-1.6708
+Texas A&M Commerce Lions,-1.6793
+Dartmouth Big Green,-1.709
+Northwestern State Demons,-1.7319
+UTRGV Vaqueros,-1.7461
+Prairie View A&M Panthers,-1.7651
+Ark Pine Bluff Golden Lions,-1.7682
+NJIT Highlanders,-1.7705
+Central Arkansas Bears,-1.7852
+Morgan State Bears,-1.7911
+Hampton Pirates,-1.8459
+Southern Indiana Screaming Eagles,-1.8692
+Manhattan Jaspers,-1.8723
+Buffalo Bulls,-1.8943
+Army Black Knights,-1.91
+Tennessee Tech Golden Eagles,-1.9237
+North Carolina A&T Aggies,-1.943
+Cal Poly Mustangs,-1.992
+Pacific Tigers,-1.9966
+Holy Cross Crusaders,-2.0348
+Florida A&M Rattlers,-2.0358
+New Orleans Privateers,-2.0394
+MD E Shore Fighting Hawks,-2.0929
+Incarnate Word Cardinals,-2.1716
+LIU Sharks,-2.1968
+Loyola Maryland Greyhounds,-2.2035
+SE Missouri State Redhawks,-2.2083
+Siena Saints,-2.3272
+Lindenwood Lions,-2.3974
+St. Francis Red Flash,-2.531
+Detroit Titans,-2.5505
+VMI Keydets,-2.5559
+IUPUI Jaguars,-2.6215
+Houston Christian Huskies,-2.6484
+Stonehill Skyhawks,-2.6602
+Coppin State Eagles,-2.7202
+MS Valley State Delta Devils,-3.3426

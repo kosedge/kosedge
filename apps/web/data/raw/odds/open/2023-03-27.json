@@ -1,0 +1,2004 @@
+{
+  "timestamp": "2023-03-27T11:55:38Z",
+  "previous_timestamp": "2023-03-27T11:50:38Z",
+  "next_timestamp": "2023-03-27T12:00:38Z",
+  "data": [
+    {
+      "id": "abd3356ec62108b5ce4bc9b40e999e46",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-03-28T23:00:00Z",
+      "home_team": "North Texas Mean Green",
+      "away_team": "Wisconsin Badgers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-03-27T11:55:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 114.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 114.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-03-27T11:50:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -106,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -106,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 115.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 115.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-03-27T11:55:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -111,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -111,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 115.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 115.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-03-27T11:54:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 115.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 115.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 115.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 115.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-03-27T11:54:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 115.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 115.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 115.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 115.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "North Texas Mean Green",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 114.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 114.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "901762d282cad66a9d06cb8c50fab625",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-03-29T01:30:00Z",
+      "home_team": "UAB Blazers",
+      "away_team": "Utah Valley Wolverines",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-03-27T11:55:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -108,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -112,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-03-27T11:55:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -109,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -112,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-03-27T11:54:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-03-27T11:50:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -104,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -108,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-03-27T11:54:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "UAB Blazers",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20dda6b8d826ea97f08fca4308f5fd0a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-04-01T22:09:00Z",
+      "home_team": "San Diego St Aztecs",
+      "away_team": "Florida Atlantic Owls",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-03-27T11:55:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -102,
+                  "point": 1.5
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -120,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -113,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-03-27T11:50:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -106,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -106,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-03-27T11:54:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-03-27T11:52:40Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:52:40Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:52:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-03-27T11:55:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -111,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -111,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-03-27T11:54:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -112,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -112,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-03-27T11:55:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -112,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -112,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-03-27T11:54:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -112,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-03-27T11:54:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-03-27T11:52:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:52:39Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -105,
+                  "point": 1.5
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -115,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:52:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -118,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -105,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-03-27T11:53:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:53:26Z",
+              "outcomes": [
+                {
+                  "name": "Florida Atlantic Owls",
+                  "price": -110,
+                  "point": 2.0
+                },
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:53:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5713befed0e56e6c5edb170fed496026",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2023-04-02T00:49:00Z",
+      "home_team": "UConn Huskies",
+      "away_team": "Miami Hurricanes",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2023-03-27T11:55:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -106,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -114,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -108,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -113,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2023-03-27T11:50:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -103,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2023-03-27T11:55:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2023-03-27T11:54:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2023-03-27T11:54:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2023-03-27T11:54:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2023-03-27T11:55:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -108,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -114,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:55:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2023-03-27T11:52:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:52:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2023-03-27T11:54:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2023-03-27T11:54:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2023-03-27T11:52:40Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:52:40Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2023-03-27T11:54:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:54:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2023-03-27T11:53:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2023-03-27T11:53:26Z",
+              "outcomes": [
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2023-03-27T11:53:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

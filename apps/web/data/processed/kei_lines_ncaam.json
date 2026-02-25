@@ -1,0 +1,308 @@
+{
+  "games": [
+    {
+      "id": "76433b1e442d6b37bdfbd5690444fbe8",
+      "homeTeam": "Ball State Cardinals",
+      "awayTeam": "Akron Zips",
+      "commenceTime": "2026-02-20T23:30:00Z",
+      "projSpreadHome": -9.06,
+      "projTotal": 140.0
+    },
+    {
+      "id": "84dce22358492795d7b52e603a40311a",
+      "homeTeam": "Brown Bears",
+      "awayTeam": "Princeton Tigers",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 0.52,
+      "projTotal": 140.0
+    },
+    {
+      "id": "c728d0d98b87d93d4b0b7f46f7d316f4",
+      "homeTeam": "Rider Broncs",
+      "awayTeam": "Canisius Golden Griffins",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": -20.59,
+      "projTotal": 140.0
+    },
+    {
+      "id": "a326c540b7eed72959d76ffce5b71313",
+      "homeTeam": "Detroit Mercy Titans",
+      "awayTeam": "Milwaukee Panthers",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 4.81,
+      "projTotal": 140.0
+    },
+    {
+      "id": "88171b96e547a86de319508e8aca0db8",
+      "homeTeam": "Fairfield Stags",
+      "awayTeam": "Sacred Heart Pioneers",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 5.52,
+      "projTotal": 140.0
+    },
+    {
+      "id": "76cbf71b34fed6b8281d1733ca5795a1",
+      "homeTeam": "Oakland Golden Grizzlies",
+      "awayTeam": "Green Bay Phoenix",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 7.31,
+      "projTotal": 140.0
+    },
+    {
+      "id": "5799f4a59901d27d25770c9cd45caaa9",
+      "homeTeam": "Iona Gaels",
+      "awayTeam": "Saint Peter's Peacocks",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 1.65,
+      "projTotal": 140.0
+    },
+    {
+      "id": "dd6508c126337c167813b82cec36db23",
+      "homeTeam": "Manhattan Jaspers",
+      "awayTeam": "Marist Red Foxes",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": -12.5,
+      "projTotal": 140.0
+    },
+    {
+      "id": "a01e5cfff8390b72e1c92db56d343617",
+      "homeTeam": "Mt. St. Mary's Mountaineers",
+      "awayTeam": "Niagara Purple Eagles",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 2.87,
+      "projTotal": 140.0
+    },
+    {
+      "id": "294a3be7935d2299b2ec9bf86fd8647f",
+      "homeTeam": "Saint Louis Billikens",
+      "awayTeam": "VCU Rams",
+      "commenceTime": "2026-02-21T00:00:00Z",
+      "projSpreadHome": 26.49,
+      "projTotal": 140.0
+    },
+    {
+      "id": "00cc939853d91359b6563d7736a738d0",
+      "homeTeam": "Purdue Boilermakers",
+      "awayTeam": "Indiana Hoosiers",
+      "commenceTime": "2026-02-21T01:00:00Z",
+      "projSpreadHome": 14.63,
+      "projTotal": 140.0
+    },
+    {
+      "id": "01bcf3d49aa62c6094be6cc62f3da5a3",
+      "homeTeam": "Merrimack Warriors",
+      "awayTeam": "Siena Saints",
+      "commenceTime": "2026-02-21T01:00:00Z",
+      "projSpreadHome": 5.04,
+      "projTotal": 140.0
+    },
+    {
+      "id": "9bf12ac4d3aa75cedec752c8ef1cd433",
+      "homeTeam": "Miami (OH) RedHawks",
+      "awayTeam": "Bowling Green Falcons",
+      "commenceTime": "2026-02-21T01:30:00Z",
+      "projSpreadHome": 0.55,
+      "projTotal": 140.0
+    },
+    {
+      "id": "3bd0532bb23c8fbb535635985ba8ea66",
+      "homeTeam": "Ole Miss Rebels",
+      "awayTeam": "Florida Gators",
+      "commenceTime": "2026-02-21T17:00:00Z",
+      "projSpreadHome": -20.05,
+      "projTotal": 140.0
+    },
+    {
+      "id": "90b453ae2c53debd52db8d5b3b672247",
+      "homeTeam": "Virginia Tech Hokies",
+      "awayTeam": "Wake Forest Demon Deacons",
+      "commenceTime": "2026-02-21T17:00:06Z",
+      "projSpreadHome": 3.8,
+      "projTotal": 140.0
+    },
+    {
+      "id": "7588a8fb6b8f3d92d287c8ac8a34d733",
+      "homeTeam": "Minnesota Golden Gophers",
+      "awayTeam": "Rutgers Scarlet Knights",
+      "commenceTime": "2026-02-21T17:00:31Z",
+      "projSpreadHome": 2.87,
+      "projTotal": 140.0
+    },
+    {
+      "id": "5429e878bb45dde1542bc9dc989e34bb",
+      "homeTeam": "St. John's Red Storm",
+      "awayTeam": "Creighton Bluejays",
+      "commenceTime": "2026-02-21T17:00:32Z",
+      "projSpreadHome": 17.15,
+      "projTotal": 140.0
+    },
+    {
+      "id": "602f638d6208d7d95f1b5b2b912019c3",
+      "homeTeam": "Clemson Tigers",
+      "awayTeam": "Florida St Seminoles",
+      "commenceTime": "2026-02-21T17:00:49Z",
+      "projSpreadHome": 12.87,
+      "projTotal": 140.0
+    },
+    {
+      "id": "9bbe4c3408e40a28be734107b576ce83",
+      "homeTeam": "Kansas Jayhawks",
+      "awayTeam": "Cincinnati Bearcats",
+      "commenceTime": "2026-02-21T18:00:00Z",
+      "projSpreadHome": 15.36,
+      "projTotal": 140.0
+    },
+    {
+      "id": "b11be50233a68a0b65736b4bde5e8f91",
+      "homeTeam": "South Carolina Gamecocks",
+      "awayTeam": "Mississippi St Bulldogs",
+      "commenceTime": "2026-02-21T18:00:33Z",
+      "projSpreadHome": 1.06,
+      "projTotal": 140.0
+    },
+    {
+      "id": "217193320d87ee99c12507c083719a5d",
+      "homeTeam": "Syracuse Orange",
+      "awayTeam": "North Carolina Tar Heels",
+      "commenceTime": "2026-02-21T18:00:38Z",
+      "projSpreadHome": -7.02,
+      "projTotal": 140.0
+    },
+    {
+      "id": "5a2a6eb17e707c8ea84e11bf884d73f4",
+      "homeTeam": "Butler Bulldogs",
+      "awayTeam": "Xavier Musketeers",
+      "commenceTime": "2026-02-21T18:30:06Z",
+      "projSpreadHome": 4.7,
+      "projTotal": 140.0
+    },
+    {
+      "id": "9cffa8af82de83bc1a833c59a345b49e",
+      "homeTeam": "Vanderbilt Commodores",
+      "awayTeam": "Tennessee Volunteers",
+      "commenceTime": "2026-02-21T19:00:00Z",
+      "projSpreadHome": 5.29,
+      "projTotal": 140.0
+    },
+    {
+      "id": "d099a563f1a57c8d2cf64def2714044f",
+      "homeTeam": "Nebraska Cornhuskers",
+      "awayTeam": "Penn State Nittany Lions",
+      "commenceTime": "2026-02-21T19:00:03Z",
+      "projSpreadHome": 31.09,
+      "projTotal": 140.0
+    },
+    {
+      "id": "d092205144e6359231206ed6003fe9f1",
+      "homeTeam": "Virginia Cavaliers",
+      "awayTeam": "Miami Hurricanes",
+      "commenceTime": "2026-02-21T19:00:14Z",
+      "projSpreadHome": 28.28,
+      "projTotal": 140.0
+    },
+    {
+      "id": "4cdafa7e9eb8b41d235238dc6250ba24",
+      "homeTeam": "Pittsburgh Panthers",
+      "awayTeam": "Notre Dame Fighting Irish",
+      "commenceTime": "2026-02-21T19:00:32Z",
+      "projSpreadHome": -1.35,
+      "projTotal": 140.0
+    },
+    {
+      "id": "27ec3647b64ac973730d2ec76c4771f3",
+      "homeTeam": "Louisville Cardinals",
+      "awayTeam": "Georgia Tech Yellow Jackets",
+      "commenceTime": "2026-02-21T19:15:42Z",
+      "projSpreadHome": 29.99,
+      "projTotal": 140.0
+    },
+    {
+      "id": "bae3b9745c415ab20aed05e274a9ecc4",
+      "homeTeam": "Texas Tech Red Raiders",
+      "awayTeam": "Kansas St Wildcats",
+      "commenceTime": "2026-02-21T19:30:14Z",
+      "projSpreadHome": 22.8,
+      "projTotal": 140.0
+    },
+    {
+      "id": "d03c1f3471b8a44da4188c16f41a7207",
+      "homeTeam": "Houston Cougars",
+      "awayTeam": "Arizona Wildcats",
+      "commenceTime": "2026-02-21T20:00:36Z",
+      "projSpreadHome": 0.54,
+      "projTotal": 140.0
+    },
+    {
+      "id": "5058639bf76004b08680b0770bc6127a",
+      "homeTeam": "Maryland Terrapins",
+      "awayTeam": "Washington Huskies",
+      "commenceTime": "2026-02-21T20:00:52Z",
+      "projSpreadHome": -10.4,
+      "projTotal": 140.0
+    },
+    {
+      "id": "e76f5f1e39865215f057bd6e6cd0b99a",
+      "homeTeam": "Georgia Bulldogs",
+      "awayTeam": "Texas Longhorns",
+      "commenceTime": "2026-02-21T20:30:16Z",
+      "projSpreadHome": -0.84,
+      "projTotal": 140.0
+    },
+    {
+      "id": "1d4ea6781f66527696c0317f28fd6ab9",
+      "homeTeam": "Colorado Buffaloes",
+      "awayTeam": "Oklahoma St Cowboys",
+      "commenceTime": "2026-02-21T20:30:38Z",
+      "projSpreadHome": 1.84,
+      "projTotal": 140.0
+    },
+    {
+      "id": "8b661d925939280e7ebc3192b70d3bc4",
+      "homeTeam": "Arkansas Razorbacks",
+      "awayTeam": "Missouri Tigers",
+      "commenceTime": "2026-02-21T21:00:00Z",
+      "projSpreadHome": 15.17,
+      "projTotal": 140.0
+    },
+    {
+      "id": "89e25deff51956df63b834d57763a18f",
+      "homeTeam": "Villanova Wildcats",
+      "awayTeam": "UConn Huskies",
+      "commenceTime": "2026-02-21T22:30:20Z",
+      "projSpreadHome": -3.96,
+      "projTotal": 140.0
+    },
+    {
+      "id": "2ef11f6ff54d5aed0b1c13e388b786f9",
+      "homeTeam": "Duke Blue Devils",
+      "awayTeam": "Michigan Wolverines",
+      "commenceTime": "2026-02-21T23:30:17Z",
+      "projSpreadHome": -35.79,
+      "projTotal": 140.0
+    },
+    {
+      "id": "efcfd90214c414de95066bbfdc48b607",
+      "homeTeam": "UCLA Bruins",
+      "awayTeam": "Illinois Fighting Illini",
+      "commenceTime": "2026-02-22T01:00:00Z",
+      "projSpreadHome": 21.4,
+      "projTotal": 140.0
+    },
+    {
+      "id": "9352976338e210f049415faab8666755",
+      "homeTeam": "Auburn Tigers",
+      "awayTeam": "Kentucky Wildcats",
+      "commenceTime": "2026-02-22T01:30:00Z",
+      "projSpreadHome": 1.97,
+      "projTotal": 140.0
+    },
+    {
+      "id": "282639cb35a85482a44dcc2e20999de9",
+      "homeTeam": "BYU Cougars",
+      "awayTeam": "Iowa State Cyclones",
+      "commenceTime": "2026-02-22T03:30:00Z",
+      "projSpreadHome": 27.24,
+      "projTotal": 140.0
+    }
+  ]
+}

@@ -1,0 +1,1825 @@
+{
+  "timestamp": "2024-01-01T11:55:38Z",
+  "previous_timestamp": "2024-01-01T11:50:38Z",
+  "next_timestamp": "2024-01-01T12:00:38Z",
+  "data": [
+    {
+      "id": "ebc3ce02612ece204a3c9dbe77dbce46",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-01T17:00:00Z",
+      "home_team": "Drexel Dragons",
+      "away_team": "Hampton Pirates",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-01T11:55:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-01T11:53:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -106,
+                  "point": -14.0
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -106,
+                  "point": 14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.0
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-01T11:51:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-01T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-01T11:53:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -115,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -105,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Drexel Dragons",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "849c3c0cbfcc06f6956ae481bd16e0af",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-01T19:00:00Z",
+      "home_team": "Texas Tech Red Raiders",
+      "away_team": "North Alabama Lions",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-01T11:55:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 18.0
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-01T11:51:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-01T11:53:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -106,
+                  "point": 18.0
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -106,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 18.0
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 18.0
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-01T11:53:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 17.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -105,
+                  "point": 17.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -115,
+                  "point": -17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-01T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "North Alabama Lions",
+                  "price": -110,
+                  "point": 18.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c5cd936cd9a3c88ee9cb951f30285729",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-01T19:00:00Z",
+      "home_team": "Texas Longhorns",
+      "away_team": "UT-Arlington Mavericks",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-01T11:55:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.0
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-01T11:53:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -106,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -106,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.0
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-01T11:51:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -120,
+                  "point": -17.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -102,
+                  "point": 17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-01T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -105,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -115,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-01T11:53:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -105,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -115,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -18.5
+                },
+                {
+                  "name": "UT-Arlington Mavericks",
+                  "price": -110,
+                  "point": 18.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a39a13f6e89eec4ab97d58aceb6f8fa1",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-01T21:00:00Z",
+      "home_team": "TCU Horned Frogs",
+      "away_team": "Texas A&M-Commerce Lions",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-01T11:55:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-01T11:51:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -120,
+                  "point": -24.5
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -102,
+                  "point": 24.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-01T11:53:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -106,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -106,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-01T11:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-01T11:53:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-01T11:53:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -108,
+                  "point": -24.5
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -112,
+                  "point": 24.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:53:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-01T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "TCU Horned Frogs",
+                  "price": -110,
+                  "point": -24.5
+                },
+                {
+                  "name": "Texas A&M-Commerce Lions",
+                  "price": -110,
+                  "point": 24.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-01T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

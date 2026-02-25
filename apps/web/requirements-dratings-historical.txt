@@ -1,0 +1,4 @@
+# For scripts/ingest_dratings_historical.py (Playwright browser automation)
+# Install: pip install -r requirements-dratings-historical.txt && playwright install chromium
+playwright>=1.40.0
+beautifulsoup4>=4.12.0

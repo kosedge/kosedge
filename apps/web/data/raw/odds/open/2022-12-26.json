@@ -1,0 +1,118 @@
+{
+  "timestamp": "2022-12-26T03:55:38Z",
+  "previous_timestamp": "2022-12-26T03:50:38Z",
+  "next_timestamp": "2022-12-26T15:15:38Z",
+  "data": [
+    {
+      "id": "9c1aba6722b3c50245afc3b9bc7930a9",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-26T01:52:08Z",
+      "home_team": "Hawai'i Rainbow Warriors",
+      "away_team": "SMU Mustangs",
+      "bookmakers": [
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-26T03:55:09Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-12-26T03:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 116.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 116.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-26T03:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-26T03:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -113,
+                  "point": 3.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -113,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-26T03:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 116.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 116.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-26T03:55:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-26T03:55:31Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -117,
+                  "point": -1.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -117,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-26T03:55:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -117,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -117,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

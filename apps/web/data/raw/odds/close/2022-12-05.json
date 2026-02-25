@@ -1,0 +1,4626 @@
+{
+  "timestamp": "2022-12-05T21:55:37Z",
+  "previous_timestamp": "2022-12-05T21:50:38Z",
+  "next_timestamp": "2022-12-05T22:00:37Z",
+  "data": [
+    {
+      "id": "c1781b2ea05c15b4f5ccc660e67d5c8b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-06T00:00:00Z",
+      "home_team": "Massachusetts Minutemen",
+      "away_team": "Albany Great Danes",
+      "bookmakers": [
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-05T21:54:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-05T21:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-05T21:54:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-05T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -106,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -106,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-05T21:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-05T21:54:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -106,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -106,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-05T21:54:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -109,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -109,
+                  "point": -14.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -104,
+                  "point": 13.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -118,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-05T21:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-05T21:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -115,
+                  "point": 14.5
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -105,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-12-05T21:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-05T21:54:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Albany Great Danes",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "Massachusetts Minutemen",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "429a55dd60d9c3cf22a0af3f731cb25c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-06T00:00:00Z",
+      "home_team": "Charleston Southern Buccaneers",
+      "away_team": "Kennesaw St Owls",
+      "bookmakers": [
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-05T21:54:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-05T21:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-05T21:54:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-05T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -104,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -108,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-05T21:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-05T21:54:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -104,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -108,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-05T21:54:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -109,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -109,
+                  "point": -5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-05T21:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-05T21:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -118,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-12-05T21:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-05T21:54:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Southern Buccaneers",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Kennesaw St Owls",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "814dc03c4ce61a7a21b611e397645443",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-06T00:00:00Z",
+      "home_team": "LIU Sharks",
+      "away_team": "UMass Lowell River Hawks",
+      "bookmakers": [
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-05T21:54:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-05T21:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-05T21:54:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 14.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-05T21:54:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -105,
+                  "point": 14.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -115,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-05T21:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -105,
+                  "point": 15.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -118,
+                  "point": -15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-05T21:54:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "LIU Sharks",
+                  "price": -110,
+                  "point": 16.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -110,
+                  "point": -16.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2751d13065aa65992d7f3aae339e23ae",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-06T02:00:00Z",
+      "home_team": "Gonzaga Bulldogs",
+      "away_team": "Kent State Golden Flashes",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-05T21:54:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -104,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -108,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -114,
+                  "point": -15.5
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -106,
+                  "point": 15.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-05T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -104,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -108,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.5
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.5
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -109,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -109,
+                  "point": 15.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-05T21:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-05T21:54:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-05T21:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-05T21:54:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-05T21:54:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-12-05T21:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -105,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -14.5
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -105,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -108,
+                  "point": -15.0
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -113,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-05T21:54:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c14d566f30f3b9ddde6e16839694026a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-06T03:00:00Z",
+      "home_team": "Portland Pilots",
+      "away_team": "North Dakota St Bison",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -106,
+                  "point": 13.5
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -114,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 13.5
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": 100,
+                  "point": 13.5
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -120,
+                  "point": -13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -109,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -109,
+                  "point": -14.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-05T21:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-05T21:54:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-05T21:54:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-05T21:54:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-05T21:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-12-05T21:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -115,
+                  "point": 14.5
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -105,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -108,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -113,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-05T21:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -105,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -118,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-05T21:54:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota St Bison",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Portland Pilots",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a2f511398b5ac66979ec3af54437acbd",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-06T03:00:00Z",
+      "home_team": "San Diego St Aztecs",
+      "away_team": "Troy Trojans",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-05T21:54:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -106,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -106,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-05T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -106,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -106,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -15.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 15.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -109,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -109,
+                  "point": 16.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-12-05T21:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:26Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-12-05T21:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.0
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-12-05T21:54:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-12-05T21:54:58Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:58Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2022-12-05T21:55:09Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-12-05T21:54:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-12-05T21:54:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "circasports",
+          "title": "Circa Sports",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -108,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -113,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-12-05T21:54:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-12-05T21:54:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "San Diego St Aztecs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b77310aa825d04c1a77274337e5f34d9",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-07T00:00:00Z",
+      "home_team": "Texas Longhorns",
+      "away_team": "Illinois Fighting Illini",
+      "bookmakers": [
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -109,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -109,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-05T21:54:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -106,
+                  "point": 4.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -106,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-05T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -106,
+                  "point": 4.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -106,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7568e0ce99aaba2a062068e5a56aa12a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-07T02:00:00Z",
+      "home_team": "Wisconsin Badgers",
+      "away_team": "Maryland Terrapins",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-12-05T21:55:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": -106,
+                  "point": 1.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -106,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": -110,
+                  "point": 0.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": 0.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 129.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 129.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": 100,
+                  "point": -1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -120,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 129.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 129.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-12-05T21:54:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": -106,
+                  "point": 1.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -106,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": -115,
+                  "point": 1.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -105,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 129.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 129.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 129.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 129.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-12-05T21:54:32Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:32Z",
+              "outcomes": [
+                {
+                  "name": "Maryland Terrapins",
+                  "price": -109,
+                  "point": 1.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a41703fd3fc96c8b165b7bf8766219a0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-12-07T02:30:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Iowa Hawkeyes",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-12-05T21:54:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:54:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-12-05T21:53:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:53:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-12-05T21:55:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-12-05T21:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -3.5
+                },
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -115,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-12-05T21:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

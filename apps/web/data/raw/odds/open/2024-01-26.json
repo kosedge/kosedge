@@ -1,0 +1,4127 @@
+{
+  "timestamp": "2024-01-26T11:55:38Z",
+  "previous_timestamp": "2024-01-26T11:50:38Z",
+  "next_timestamp": "2024-01-26T12:00:39Z",
+  "data": [
+    {
+      "id": "769d7612521d51bbffbb7115d50f5fd6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-26T23:30:00Z",
+      "home_team": "Kent State Golden Flashes",
+      "away_team": "Ohio Bobcats",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -120,
+                  "point": -2.5
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -102,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -106,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -106,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -105,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -115,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -108,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -112,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -105,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -105,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Kent State Golden Flashes",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Ohio Bobcats",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "18165d37d64c1b7401e6521c2d687066",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T00:00:00Z",
+      "home_team": "Canisius Golden Griffins",
+      "away_team": "Manhattan Jaspers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -106,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -106,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -105,
+                  "point": -8.0
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -115,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -105,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Manhattan Jaspers",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "86636fb2fde6a72a4b056defc70fc9dc",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T00:00:00Z",
+      "home_team": "Siena Saints",
+      "away_team": "Iona Gaels",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -106,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -106,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -105,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -115,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -108,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -112,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.0
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.0
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -105,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -105,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -115,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Iona Gaels",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bda36a46fc7794902c27f58a32777f72",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T00:00:00Z",
+      "home_team": "Niagara Purple Eagles",
+      "away_team": "Marist Red Foxes",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -106,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -106,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -105,
+                  "point": 2.0
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -115,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -112,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -108,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -112,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -108,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Marist Red Foxes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Niagara Purple Eagles",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "36a5cd8aeec08c97ca9eededcbdf6412",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T01:00:00Z",
+      "home_team": "Wisconsin Badgers",
+      "away_team": "Michigan St Spartans",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -106,
+                  "point": 2.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -114,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -106,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -106,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -112,
+                  "point": 2.5
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -108,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b703352cc1b9a39f3a49364eccfb300f",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T01:30:00Z",
+      "home_team": "St. Bonaventure Bonnies",
+      "away_team": "Saint Joseph's Hawks",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -102,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -120,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -115,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -105,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -111,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -101,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -105,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -115,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -115,
+                  "point": 2.5
+                },
+                {
+                  "name": "St. Bonaventure Bonnies",
+                  "price": -105,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1c7575d6e437cb4065985f5b3e390de8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T02:00:00Z",
+      "home_team": "Seattle Redhawks",
+      "away_team": "Utah Valley Wolverines",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -120,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -102,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -106,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -106,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -108,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -112,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Seattle Redhawks",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Utah Valley Wolverines",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9409a3ecc6c95b3f86d1ef4d49600447",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-01-27T03:00:00Z",
+      "home_team": "California Golden Bears",
+      "away_team": "Stanford Cardinal",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-01-26T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -120,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -102,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -105,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-01-26T11:53:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -111,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -101,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:53:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-01-26T11:54:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -105,
+                  "point": -2.0
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -115,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-01-26T11:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -105,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-01-26T11:54:22Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:22Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-01-26T11:55:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-01-26T11:54:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:54:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -119,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -101,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-01-26T11:55:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-01-26T11:55:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "California Golden Bears",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Stanford Cardinal",
+                  "price": -105,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-01-26T11:55:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
