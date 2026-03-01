@@ -38,6 +38,9 @@
     ".next/dev/types/**/*.ts"
 , "prisma.config.mjs"  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "apps/web",
+    "apps/android-odds-widget",
+    "kosedge-vercel-push"
   ]
 }
