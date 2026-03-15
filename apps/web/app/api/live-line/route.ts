@@ -3,8 +3,8 @@
  * Query: pregameSpread (number), homeScore (int), awayScore (int), minutesRemaining (number), [marketSpread] (optional)
  * Returns model live spread and, if marketSpread provided, edge vs market.
  */
-import { NextResponse } from "next/server";
 import { liveSpreadWithEdge } from "@/lib/live-line";
+import { jsonError, jsonOk } from "@/lib/api/response";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -15,10 +15,7 @@ export async function GET(request: Request) {
   const marketSpread = searchParams.get("marketSpread") != null ? Number(searchParams.get("marketSpread")) : null;
 
   if (Number.isNaN(pregameSpread) || Number.isNaN(homeScore) || Number.isNaN(awayScore) || Number.isNaN(minutesRemaining)) {
-    return NextResponse.json(
-      { error: "Missing or invalid: pregameSpread, homeScore, awayScore, minutesRemaining" },
-      { status: 400 }
-    );
+    return jsonError(400, "Missing or invalid: pregameSpread, homeScore, awayScore, minutesRemaining", { code: "INVALID_PARAMS" });
   }
 
   const result = liveSpreadWithEdge(
@@ -29,7 +26,7 @@ export async function GET(request: Request) {
     marketSpread
   );
 
-  return NextResponse.json({
+  return jsonOk({
     currentMargin: result.currentMargin,
     modelLiveSpreadHome: Math.round(result.modelLiveSpreadHome * 10) / 10,
     edgeVsMarket: result.edgeVsMarket != null ? Math.round(result.edgeVsMarket * 10) / 10 : null,
