@@ -20,6 +20,17 @@ const nextConfig: NextConfig = {
   // So Turbopack/Node resolve from apps/web node_modules (pnpm symlinks)
   serverExternalPackages: ["bcryptjs"],
 
+  // Keep serverless bundles under 250 MB: exclude data dirs, Python env, scripts (not needed at runtime)
+  outputFileTracingExcludes: {
+    "*": [
+      "**/data/**",
+      "**/.venv_lib/**",
+      "**/scripts/**",
+      "**/*.parquet",
+      "**/__pycache__/**",
+    ],
+  },
+
   // Good default hardening
   poweredByHeader: false,
 
