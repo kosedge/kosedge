@@ -32,6 +32,7 @@ MERGED_GAMES_PATH = PROCESSED / "merged_games_with_odds_and_ratings.parquet"
 FLAT_BETTING_PICKS_PATH = PROCESSED / "flat_betting_picks.csv"
 MARGIN_MODEL_PATH = PROCESSED / "margin_model.json"
 ENSEMBLE_WEIGHTS_PATH = PROCESSED / "ensemble_weights.json"
+KEI_BACKTEST_RESULTS_PATH = PROCESSED / "kei_backtest_results.json"
 
 # As-of-date ratings (one row per as_of_date + team; join to games by nearest prior date)
 RATINGS_ARCHIVE_DIR = RAW_RATINGS / "archive"

@@ -15,7 +15,7 @@ from pipeline_paths import MERGED_GAMES_PATH
 
 
 def main() -> None:
-    df = pl.read_parquet(MERGED_PATH)
+    df = pl.read_parquet(MERGED_GAMES_PATH)
 
     print(f"Total rows (games × books): {len(df):,}")
     print(f"Unique event_ids: {df['event_id'].n_unique():,}")
