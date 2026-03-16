@@ -34,6 +34,12 @@ No `components/`, `public/`, or app-specific config at root. Each app owns its o
 
 - **`infra/`** – Docker, env templates, infra config (outside pnpm workspace).
 
+## Web app lib (apps/web/lib)
+
+- **Config:** `lib/config/env.ts` – single env source (Zod-validated). Do **not** import this in Edge middleware (e.g. `middleware.ts`); use `process.env` there so middleware stays Edge-compatible. Use `env` in Node routes and libs (db, cache, logger, error-handler).
+- **Constants:** `lib/constants.ts` – SITE_URL, cache TTLs, odds-widget base URL; used by root layout and API routes.
+- **API:** `lib/api/response.ts` (`jsonOk`, `jsonError`), `lib/api/error-handler.ts` (`handleApiError`, `withErrorHandler`). Barrel: `lib/api/index.ts` re-exports these so routes can `import { jsonOk, jsonError, handleApiError } from "@/lib/api"`. All API routes use these and `logError` from `lib/logger` instead of `console.error`. New API routes should use `@/lib/api` (or the response/error-handler modules directly) and validate input with Zod where applicable.
+
 ## Import rules (web)
 
 - Prefer **direct imports**: `import X from "@/components/X"` (no barrels for app-critical UI).

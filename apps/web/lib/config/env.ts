@@ -32,6 +32,9 @@ const EnvSchema = z.object({
 
   // Redis (optional)
   REDIS_URL: z.string().url().optional(),
+
+  // Site (optional; used for metadataBase, canonical URLs)
+  SITE_URL: z.string().url().optional(),
 });
 
 function loadEnv(): z.infer<typeof EnvSchema> {

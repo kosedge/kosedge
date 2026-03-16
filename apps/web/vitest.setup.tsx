@@ -1,7 +1,8 @@
-// apps/web/vitest.setup.ts
+// apps/web/vitest.setup.tsx
 import "@testing-library/jest-dom";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
+import React from "react";
 
 // Cleanup after each test
 afterEach(() => {
@@ -60,3 +61,4 @@ process.env.AUTH_SECRET = "test-secret-key-at-least-32-characters-long";
 process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 process.env.MODEL_SERVICE_URL = "http://localhost:8000";
 process.env.NODE_ENV = "test";
+

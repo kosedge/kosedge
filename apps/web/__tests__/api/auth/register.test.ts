@@ -4,7 +4,17 @@ import { POST } from "@/app/api/auth/register/route";
 import { prisma } from "@/lib/db";
 import { hash } from "bcryptjs";
 
-vi.mock("@/lib/db");
+const mockPrisma = vi.hoisted(() => ({
+  user: {
+    findUnique: vi.fn(),
+    create: vi.fn(),
+  },
+})) as any;
+
+vi.mock("@/lib/db", () => ({
+  prisma: mockPrisma,
+}));
+
 vi.mock("bcryptjs", () => ({
   hash: vi.fn(),
 }));
@@ -15,11 +25,11 @@ describe("POST /api/auth/register", () => {
   });
 
   it("should create a new user with valid input", async () => {
-    const mockHash = vi.mocked(hash);
+    const mockHash = hash as unknown as ReturnType<typeof vi.fn>;
     mockHash.mockResolvedValue("hashed-password" as never);
 
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
-    vi.mocked(prisma.user.create).mockResolvedValue({
+    mockPrisma.user.findUnique.mockResolvedValue(null);
+    mockPrisma.user.create.mockResolvedValue({
       id: "user-1",
       email: "test@example.com",
       name: "Test User",
@@ -92,7 +102,7 @@ describe("POST /api/auth/register", () => {
   });
 
   it("should reject registration when user already exists", async () => {
-    vi.mocked(prisma.user.findUnique).mockResolvedValue({
+    mockPrisma.user.findUnique.mockResolvedValue({
       id: "existing-user",
       email: "test@example.com",
     } as any);
@@ -114,7 +124,7 @@ describe("POST /api/auth/register", () => {
   });
 
   it("should handle database errors gracefully", async () => {
-    vi.mocked(prisma.user.findUnique).mockRejectedValue(
+    mockPrisma.user.findUnique.mockRejectedValue(
       new Error("Database error")
     );
 
@@ -131,6 +141,7 @@ describe("POST /api/auth/register", () => {
     const data = await response.json();
 
     expect(response.status).toBe(500);
-    expect(data.error).toBe("Internal server error");
+    expect(data.error).toBe("An internal error occurred");
+    expect(data.code).toBe("INTERNAL_ERROR");
   });
 });

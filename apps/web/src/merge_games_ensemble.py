@@ -353,6 +353,20 @@ def main() -> None:
     # EV: model win prob (logistic in spread edge) vs implied (logistic in line). +EV when model > implied.
     # k ~ 0.15: ~50% at 0, ~73% at 5pt edge
     _k = 0.15
+    # Conference tags (optional, from RAW_GAMES/conferences.parquet)
+    conferences_path = RAW_GAMES / "conferences.parquet"
+    if conferences_path.exists():
+        try:
+            conf = pl.read_parquet(conferences_path)
+            if "team_norm" in conf.columns and "conference" in conf.columns:
+                conf_h = conf.select([pl.col("team_norm").alias("home_team_norm"), pl.col("conference").alias("conference_home")])
+                conf_a = conf.select([pl.col("team_norm").alias("away_team_norm"), pl.col("conference").alias("conference_away")])
+                merged = merged.join(conf_h, on="home_team_norm", how="left")
+                merged = merged.join(conf_a, on="away_team_norm", how="left")
+                print("Joined conferences onto merged games.")
+        except Exception as e:
+            print("Conference join failed:", e)
+
     merged = merged.with_columns(
         (1.0 / (1.0 + (pl.lit(-_k) * pl.col("spread_edge")).exp())).alias("model_win_prob_home")
     )

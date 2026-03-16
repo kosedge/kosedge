@@ -1,10 +1,11 @@
 // apps/web/lib/logger.ts
 import pino from "pino";
+import { env } from "@/lib/config/env";
 
-const isDevelopment = process.env.NODE_ENV === "development";
+const isDevelopment = env.NODE_ENV === "development";
 
 export const logger = pino({
-  level: process.env.LOG_LEVEL || (isDevelopment ? "debug" : "info"),
+  level: env.LOG_LEVEL ?? (isDevelopment ? "debug" : "info"),
   transport: isDevelopment
     ? {
         target: "pino-pretty",
@@ -21,7 +22,7 @@ export const logger = pino({
     },
   },
   base: {
-    env: process.env.NODE_ENV,
+    env: env.NODE_ENV,
   },
 });
 

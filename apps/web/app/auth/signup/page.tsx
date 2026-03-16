@@ -58,17 +58,8 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
-      {/* Background FX */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
-      </div>
-
-      <main className="relative z-10 flex min-h-screen items-center justify-center px-5 py-16">
-        <div className="w-full max-w-md">
-          <div className="bg-black/30 border border-white/12 rounded-2xl p-8 backdrop-blur-xl shadow-xl">
+    <div className="w-full max-w-md">
+      <div className="bg-black/30 border border-white/12 rounded-2xl p-8 backdrop-blur-xl shadow-xl">
             <div className="mb-8 text-center">
               <h1 className="text-4xl font-bebas tracking-tight text-kos-gold">
                 Sign Up
@@ -170,8 +161,6 @@ export default function SignUpPage() {
               </Link>
             </div>
           </div>
-        </div>
-      </main>
     </div>
   );
 }

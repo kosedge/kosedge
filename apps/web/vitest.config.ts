@@ -8,7 +8,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: ["./vitest.setup.ts"],
+    setupFiles: ["./vitest.setup.tsx"],
     include: ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     exclude: ["node_modules", ".next", "dist", "build"],
     coverage: {
@@ -20,7 +20,7 @@ export default defineConfig({
         "**/*.config.{js,ts}",
         "**/types/**",
         "**/*.d.ts",
-        "**/vitest.setup.ts",
+        "**/vitest.setup.tsx",
       ],
     },
   },

@@ -99,7 +99,7 @@ if (await isProUser()) {
 
 ### Protected Routes
 
-Routes under `/pro/*` are automatically protected by middleware. Unauthenticated users are redirected to `/auth/signin`.
+Pro routes (`/pro/*`) are **not** protected by Edge middleware. Protection is enforced in **layouts and server components**: call `auth()` and redirect to `/auth/signin` when unauthenticated. Middleware is used for security headers (and optional session refresh) only; it does not import the app env module so it remains Edge-compatible.
 
 ### Client-Side Session
 
@@ -205,7 +205,7 @@ await prisma.user.update({
 
 1. **Password Hashing**: All passwords are hashed with bcryptjs (12 rounds)
 2. **JWT Sessions**: Secure, stateless sessions
-3. **Middleware Protection**: Automatic route protection
+3. **Pro route protection**: Enforced in layouts/server components via `auth()` and redirect (middleware is used for security headers only)
 4. **Input Validation**: Zod schemas validate all inputs
 5. **SQL Injection Protection**: Prisma ORM prevents SQL injection
 6. **CSRF Protection**: Built into NextAuth.js

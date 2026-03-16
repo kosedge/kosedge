@@ -1,35 +1,19 @@
-import { NextResponse } from "next/server";
-import crypto from "node:crypto";
+import { jsonError, jsonOk } from "@/lib/api/response";
+import { ensureInternalSecret, getRequestId, withRequestId } from "@/lib/edge-board-common";
 import { env } from "@/lib/config/env";
-import { EdgeBoardResponseSchema } from "@kosedge/contracts";
+import { cacheControlHeader, EDGE_BOARD_NCAAM_CACHE_TTL_MS } from "@/lib/constants";
+import { logError } from "@/lib/logger";
 import { fetchEdgeBoard } from "@/lib/odds-api";
+import { EdgeBoardResponseSchema } from "@kosedge/contracts";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/** Odds refresh at most every 6 hours to limit API usage */
-const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
-const CACHE_HEADERS = {
-  "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
-};
-
 let ncaamCache: { rows: unknown[]; ts: number } | null = null;
 
-function json(data: unknown, status = 200, extraHeaders?: Record<string, string>) {
-  return NextResponse.json(data, {
-    status,
-    headers: {
-      ...CACHE_HEADERS,
-      ...extraHeaders,
-    },
-  });
-}
-
-function getRequestId(req: Request) {
-  return (
-    req.headers.get("x-request-id") ||
-    req.headers.get("x-correlation-id") ||
-    crypto.randomUUID()
-  );
+function withCacheHeaders(res: NextResponse): NextResponse {
+  res.headers.set("cache-control", cacheControlHeader());
+  return res;
 }
 
 async function tryModelService(requestId: string): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
@@ -82,35 +66,28 @@ async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { o
 export async function GET(req: Request) {
   const requestId = getRequestId(req);
 
-  const expected = env.INTERNAL_API_SECRET;
-  if (expected) {
-    const provided = req.headers.get("x-kosedge-secret");
-    if (provided !== expected) {
-      return json({ error: "Unauthorized", requestId }, 401, { "x-request-id": requestId });
-    }
-  }
+  const unauthorized = ensureInternalSecret(req, requestId);
+  if (unauthorized) return unauthorized;
 
   const now = Date.now();
-  if (ncaamCache && now - ncaamCache.ts < ODDS_CACHE_TTL_MS) {
-    return json({ rows: ncaamCache.rows }, 200, { "x-request-id": requestId });
+  if (ncaamCache && now - ncaamCache.ts < EDGE_BOARD_NCAAM_CACHE_TTL_MS) {
+    return withRequestId(withCacheHeaders(jsonOk({ rows: ncaamCache.rows })), requestId);
   }
 
-  // 1. Try model service first
   const modelResult = await tryModelService(requestId);
   if (modelResult.ok && modelResult.rows.length > 0) {
     ncaamCache = { rows: modelResult.rows, ts: now };
-    return json({ rows: modelResult.rows }, 200, { "x-request-id": requestId });
+    return withRequestId(withCacheHeaders(jsonOk({ rows: modelResult.rows })), requestId);
   }
 
-  // 2. Fallback to Odds API when model not available
   const oddsResult = await tryOddsApiFallback();
   if (oddsResult.ok) {
     ncaamCache = { rows: oddsResult.rows, ts: now };
-    return json({ rows: oddsResult.rows }, 200, { "x-request-id": requestId });
+    return withRequestId(withCacheHeaders(jsonOk({ rows: oddsResult.rows })), requestId);
   }
 
   if (ncaamCache) {
-    return json({ rows: ncaamCache.rows }, 200, { "x-request-id": requestId });
+    return withRequestId(withCacheHeaders(jsonOk({ rows: ncaamCache.rows })), requestId);
   }
-  return json({ rows: [] }, 200, { "x-request-id": requestId });
+  return withRequestId(withCacheHeaders(jsonOk({ rows: [] })), requestId);
 }

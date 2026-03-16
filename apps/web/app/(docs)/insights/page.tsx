@@ -1,5 +1,4 @@
 import Link from "next/link";
-import SiteHeader from "@/components/layout/SiteHeader";
 import { getCurrentSectionNumber } from "@/lib/insights/rotation";
 import { getSection, getAllPillarMetas } from "@/lib/insights/pillars";
 import type { InsightBlock } from "@/lib/insights/types";
@@ -35,9 +34,7 @@ export default function InsightsPage() {
   const weekLabel = getWeekLabel(sectionNum);
 
   return (
-    <main className="min-h-screen bg-kos-black">
-      <SiteHeader />
-      <div className="mx-auto max-w-4xl px-6 py-14">
+    <main className="mx-auto max-w-4xl px-6 py-14">
         <h1 className="text-4xl font-semibold tracking-tight text-kos-text">
           Insights
         </h1>
@@ -85,7 +82,6 @@ export default function InsightsPage() {
             );
           })}
         </div>
-      </div>
     </main>
   );
 }

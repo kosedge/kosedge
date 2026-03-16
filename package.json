@@ -19,6 +19,7 @@
     "start:web": "pnpm --filter @kosedge/web start",
     "lint:web": "pnpm --filter @kosedge/web lint",
     "typecheck:web": "pnpm --filter @kosedge/web typecheck",
+    "test:web": "pnpm --filter @kosedge/web test run",
     "export:kei-lines": "pnpm --filter @kosedge/web export:kei-lines",
     "export:kei-lines:py": ".venv/bin/python apps/web/scripts/export_kei_lines.py",
     "project:future-lines": "pnpm --filter @kosedge/web project:future-lines",

@@ -46,11 +46,19 @@ pnpm dev:webpack  # without Turbopack (use if Turbopack has resolution issues)
 | Area | Path | Purpose |
 |------|------|---------|
 | App routes | `app/` | Next.js routes, layouts, pages |
-| API | `app/api/` | Route handlers; use `lib/api/response.ts` for consistent error/success JSON |
-| Config | `lib/config/env.ts` | Env validation (Zod); fail fast on invalid env |
-| Shared lib | `lib/` | Auth, DB, logger, live-line, kei-lines, etc. |
+| API | `app/api/` | Route handlers; use `jsonOk`/`jsonError` from `lib/api/response.ts` and `handleApiError`/`withErrorHandler` from `lib/api/error-handler.ts`; use `logError` instead of `console.error` |
+| Config | `lib/config/env.ts` | Single env source (Zod); not imported in Edge middleware |
+| Constants | `lib/constants.ts` | SITE_URL, cache TTLs, odds-widget base URL; used by layout and API routes |
+| Shared lib | `lib/` | Auth, DB, cache, logger, live-line, kei-lines, etc. |
 | Data (static) | `data/processed/` | Excluded from serverless bundle via `next.config` |
 | Contracts | `packages/contracts` | Shared types (e.g. EdgeBoard) across services |
+
+**Redis:** When `REDIS_URL` is set, Redis-backed features (e.g. rate limiting when implemented) use it. When not set, the app runs without Redis-dependent features. See `docs/ARCHITECTURE.md`.
+
+## Tests
+
+- From repo root: `pnpm test:web` (runs web app tests via the workspace).
+- From `apps/web`: `pnpm test` or `pnpm run test run` (Vitest is launched via `scripts/run-vitest.mjs`, which resolves the local `vitest` CLI from this package's dependencies; no global install required).
 
 ## Prisma
 

@@ -33,11 +33,12 @@ def parse_args():
     p.add_argument("--start", default=DEFAULT_START, help=f"Start date YYYY-MM-DD (default {DEFAULT_START})")
     p.add_argument("--end", default=None, help="End date YYYY-MM-DD (default today)")
     p.add_argument("--delay", type=float, default=1.0, help="Seconds between requests (default 1)")
+    p.add_argument("--bookmakers", default=None, help='Optional comma-separated list of bookmaker keys (e.g. "draftkings")')
     p.add_argument("--dry-run", action="store_true", help="Print requests only, do not fetch")
     return p.parse_args()
 
 
-def fetch_snapshot(api_key: str, dt: datetime) -> tuple[dict | None, int]:
+def fetch_snapshot(api_key, dt, bookmakers=None):
     """Fetch one historical snapshot at dt (UTC). Returns (response_json, credits_used)."""
     iso = dt.strftime("%Y-%m-%dT%H:%M:%SZ")
     params = {
@@ -47,6 +48,8 @@ def fetch_snapshot(api_key: str, dt: datetime) -> tuple[dict | None, int]:
         "apiKey": api_key,
         "date": iso,
     }
+    if bookmakers:
+        params["bookmakers"] = bookmakers
     r = requests.get(BASE_URL, params=params, timeout=30)
     # x-requests-last = cost of this request
     credits = int(r.headers.get("x-requests-last", CREDITS_PER_REQUEST))
@@ -104,6 +107,8 @@ def main():
     days = (end - start).days + 1
     estimated_credits = days * 2 * CREDITS_PER_REQUEST
     print(f"Date range: {start} to {end} ({days} days). Estimated credits: {estimated_credits} (20 per request, 2 per day).")
+    if args.bookmakers:
+        print(f"Restricting bookmakers to: {args.bookmakers}")
 
     if args.dry_run:
         print("Dry run: would request open + close for each day.")
@@ -121,7 +126,7 @@ def main():
             if out_file.exists():
                 print(f"  Skip {date_str} {label} (exists)")
                 continue
-            data, used = fetch_snapshot(api_key, ts)
+            data, used = fetch_snapshot(api_key, ts, args.bookmakers)
             total_credits += used
             if data is None:
                 print(f"  Fail {date_str} {label}")

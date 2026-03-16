@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { env } from "@/lib/config/env";
+import {
+  ODDS_WIDGET_BASE_URL,
+  ODDS_WIDGET_BOOKMAKERS,
+  ODDS_WIDGET_MARKETS,
+  ODDS_WIDGET_MARKET_NAMES,
+} from "@/lib/constants";
+import { logError } from "@/lib/logger";
 import { getSport } from "@/lib/sports";
 import { SPORT_KEY_MAP } from "@/lib/odds-api";
-
-const WIDGET_BASE = "https://widget.the-odds-api.com/v1/sports";
-const BOOKMAKERS = "draftkings,fanduel,circa,betmgm,bet365,fanatics,betrivers,betr";
-const MARKETS = "h2h,spreads,totals";
-const MARKET_NAMES = "h2h:Moneyline,spreads:Spread,totals:Over/Under";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +25,7 @@ export async function GET(
     return new NextResponse("Widget not configured", { status: 404 });
   }
 
-  const url = `${WIDGET_BASE}/${widgetSportKey}/events/?accessKey=${encodeURIComponent(key)}&bookmakerKeys=${BOOKMAKERS}&oddsFormat=american&markets=${MARKETS}&marketNames=${encodeURIComponent(MARKET_NAMES)}`;
+  const url = `${ODDS_WIDGET_BASE_URL}/${widgetSportKey}/events/?accessKey=${encodeURIComponent(key)}&bookmakerKeys=${ODDS_WIDGET_BOOKMAKERS}&oddsFormat=american&markets=${ODDS_WIDGET_MARKETS}&marketNames=${encodeURIComponent(ODDS_WIDGET_MARKET_NAMES)}`;
 
   try {
     const res = await fetch(url, {
@@ -41,7 +43,7 @@ export async function GET(
       },
     });
   } catch (e) {
-    console.error("odds_widget_proxy_failed", { sport, error: String(e) });
+    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "odds-widget" });
     return new NextResponse("Widget unavailable", { status: 502 });
   }
 }

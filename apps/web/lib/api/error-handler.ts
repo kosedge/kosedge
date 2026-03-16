@@ -1,5 +1,6 @@
 // apps/web/lib/api/error-handler.ts
 import { NextResponse } from "next/server";
+import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 import { ZodError } from "zod";
 
@@ -49,8 +50,7 @@ export function handleApiError(error: unknown): NextResponse {
 
   // Handle generic errors
   if (error instanceof Error) {
-    // Don't expose internal error messages in production
-    const isDevelopment = process.env.NODE_ENV === "development";
+    const isDevelopment = env.NODE_ENV === "development";
     return NextResponse.json(
       {
         error: isDevelopment ? error.message : "An internal error occurred",

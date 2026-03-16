@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { jsonOk } from "@/lib/api/response";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return NextResponse.json({ ok: true, ts: Date.now() });
+  return jsonOk({ ok: true, ts: Date.now() });
 }
