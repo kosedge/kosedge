@@ -60,5 +60,7 @@ vi.mock("next/link", () => ({
 process.env.AUTH_SECRET = "test-secret-key-at-least-32-characters-long";
 process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 process.env.MODEL_SERVICE_URL = "http://localhost:8000";
-process.env.NODE_ENV = "test";
-
+Object.defineProperty(process.env, "NODE_ENV", {
+  value: "test",
+  configurable: true,
+});
