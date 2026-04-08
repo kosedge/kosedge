@@ -40,6 +40,9 @@ jobs:
       - name: Run type check
         run: pnpm typecheck
 
+      - name: Enforce web Python boundary policy
+        run: pnpm check:web-python-boundary
+
       - name: Run tests
         run: pnpm test
         env:

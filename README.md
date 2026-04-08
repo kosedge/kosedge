@@ -59,9 +59,9 @@ vercel --prod
 ```
 kosedge/
 ├── apps/
-│   ├── web/              # Next.js frontend application
-│   └── api/              # Backend services (Python/FastAPI)
+│   └── web/              # Next.js frontend application
 ├── packages/             # Shared packages
+├── services/             # Backend/runtime services (e.g. model-service)
 ├── infra/                # Infrastructure (Docker, etc.)
 └── .github/             # GitHub Actions workflows
 ```
@@ -84,6 +84,8 @@ pnpm build:web            # Build web app only
 pnpm lint                 # Lint all packages
 pnpm typecheck            # Type check all packages
 pnpm test                 # Run all tests
+pnpm test:web:critical    # Critical-path coverage gate
+pnpm check:web-python-boundary  # Prevent new Python drift into apps/web
 pnpm format               # Format code
 pnpm format:check         # Check formatting
 
@@ -110,6 +112,9 @@ pnpm test:watch
 
 # Run tests with coverage
 pnpm test:coverage
+
+# Run browser smoke tests
+pnpm test:web:e2e
 
 # Run tests with UI
 pnpm test:ui
@@ -146,10 +151,11 @@ See [ERROR_HANDLING.md](./apps/web/ERROR_HANDLING.md) for error handling documen
 
 The project includes GitHub Actions workflows:
 
-- **CI** - Runs on every push/PR (lint, typecheck, test, build)
+- **CI** - Runs on every push/PR (lint, typecheck, tests, critical coverage, build)
 - **Deploy** - Deploys to production on main branch
 - **PR Checks** - Quality checks for pull requests
 - **CodeQL** - Security analysis
+- **E2E Smoke** - Playwright browser smoke checks
 
 ### Environment Variables
 
@@ -170,6 +176,7 @@ See `apps/web/.env.example` for complete list.
 - [Testing Guide](./apps/web/TESTING.md)
 - [Error Handling](./apps/web/ERROR_HANDLING.md)
 - [CI/CD Guide](./.github/workflows/README.md)
+- [Architecture Boundary Policy](./docs/ARCHITECTURE_BOUNDARY_POLICY.md)
 
 ## 🏗️ Architecture
 

@@ -21,6 +21,8 @@
 - [x] Component tests
 - [x] Test coverage reporting
 - [x] CI integration
+- [x] Playwright smoke E2E (`.github/workflows/e2e.yml`)
+- [x] Critical-path coverage gate (`pnpm test:web:critical`)
 
 ### Error Handling & Monitoring
 
@@ -81,7 +83,7 @@
 
 ## 🎯 Current Status: **9.5/10** - Production Ready
 
-**Remaining 0.5:** E2E tests (Playwright), OAuth providers, and optional scale features (read replicas, multi-region) — add as needed.
+**Remaining 0.5:** complete Python boundary migration out of `apps/web` into `services/`, OAuth providers, and optional scale features (read replicas, multi-region).
 
 ### What Makes This Enterprise-Grade
 
