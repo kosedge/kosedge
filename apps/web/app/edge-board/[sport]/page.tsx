@@ -76,7 +76,7 @@ export default async function EdgeBoardSportPage({
             backgroundSize: "56px 56px",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       <main className="relative z-10 w-full px-5 sm:px-6 pt-10 pb-16">
