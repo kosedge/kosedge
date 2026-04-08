@@ -43,6 +43,7 @@
     "// -------------------- FORMATTING --------------------": "",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "check:web-python-boundary": "node scripts/check-web-python-boundary.mjs",
     "// -------------------- CI --------------------": "",
     "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "test:web:critical": "pnpm --filter @kosedge/web test:critical"
