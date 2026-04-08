@@ -14,11 +14,13 @@ const config: Config = {
         // ---- Brand ----
         "kos-green": "#22c55e",
         "kos-green-deep": "#15803d",
+        "edge-green": "#39ff14",
         "kos-gold": "#fbbf24",
         "kos-gold-metal": "#d4af37",
 
         // ---- Foundation ----
         "kos-black": "#0f0f0f",
+        "kos-gray": "#6b7280",
         "kos-surface": "#111827",
         "kos-surface-2": "#1f2937",
         "kos-border": "#2a3647",

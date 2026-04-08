@@ -12,6 +12,15 @@ type Plan = {
   cta: string;
 };
 
+const free: Plan = {
+  title: "Free",
+  price: "$0",
+  cadence: "",
+  sub: "Edge Board, odds comparison, and hub access. No commitment.",
+  badge: "Start Here",
+  cta: "Go to Hub",
+};
+
 const weekly: Plan = {
   title: "Weekly",
   price: "$5.99",
@@ -55,8 +64,10 @@ export default function ProPricing() {
         </h2>
         <p className="mt-3 text-sm sm:text-base text-gray-200/80 max-w-3xl mx-auto">
           Pro unlocks:
-          <span className="text-gray-100"> Edge Boards for all sports</span>,{" "}
-          <span className="text-gray-100">game breakdowns</span>,{" "}
+          <span className="text-gray-100">
+            {" "}
+            Edge Boards for all sports
+          </span>, <span className="text-gray-100">game breakdowns</span>,{" "}
           <span className="text-gray-100">season & event previews</span>,{" "}
           <span className="text-gray-100">power ratings</span>, and{" "}
           <span className="text-gray-100">props</span>.
@@ -66,8 +77,8 @@ export default function ProPricing() {
         </p>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
-        {[weekly, monthly].map((p) => (
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {[free, weekly, monthly].map((p) => (
           <div
             key={p.title}
             className={[
@@ -96,10 +107,14 @@ export default function ProPricing() {
               <div className="text-5xl font-bebas tracking-tight text-gray-100">
                 {p.price}
               </div>
-              <div className="pb-2 text-sm text-gray-400">{p.cadence}</div>
+              {p.cadence && (
+                <div className="pb-2 text-sm text-gray-400">{p.cadence}</div>
+              )}
             </div>
 
-            {p.sub && <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>}
+            {p.sub && (
+              <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>
+            )}
 
             <button
               type="button"
@@ -113,8 +128,17 @@ export default function ProPricing() {
             >
               {p.cta}
             </button>
+            {p.title === "Free" && (
+              <p className="mt-2 text-xs text-gray-500">
+                Same hub as Pro — explore before you upgrade.
+              </p>
+            )}
 
-            <div className="mt-3 text-xs text-gray-500">Cancel anytime • Instant access</div>
+            <div className="mt-3 text-xs text-gray-500">
+              {p.title === "Free"
+                ? "No card required"
+                : "Cancel anytime • Instant access"}
+            </div>
           </div>
         ))}
       </div>
@@ -133,7 +157,9 @@ export default function ProPricing() {
                 <div className="text-6xl font-bebas tracking-tight text-kos-gold">
                   {yearly.price}
                 </div>
-                <div className="pb-2 text-sm text-gray-400">{yearly.cadence}</div>
+                <div className="pb-2 text-sm text-gray-400">
+                  {yearly.cadence}
+                </div>
               </div>
 
               <div className="mt-2 text-sm text-gray-200/80">{yearly.sub}</div>

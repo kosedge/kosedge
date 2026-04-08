@@ -34,12 +34,29 @@ def load_kenpom() -> pl.DataFrame:
     df = pl.read_csv(p)
     if "teamname" not in df.columns or "season" not in df.columns:
         return pl.DataFrame()
-    df = df.select(
+    sel = [
         pl.col("season").cast(pl.Int32).alias("year"),
         normalize_team(pl.col("teamname")).alias("team_norm"),
         pl.col("adjem").alias("adjem") if "adjem" in df.columns else pl.lit(None).alias("adjem"),
         pl.col("sos").alias("sos") if "sos" in df.columns else pl.lit(None).alias("sos"),
-    )
+    ]
+    # Optional: tempo/eff for totals (KenPom uses AdjOE, AdjDE, AdjT or AdjTempo)
+    kp_oe = "AdjOE" if "AdjOE" in df.columns else ("adjoe" if "adjoe" in df.columns else None)
+    kp_de = "AdjDE" if "AdjDE" in df.columns else ("adjde" if "adjde" in df.columns else None)
+    kp_t = "AdjT" if "AdjT" in df.columns else ("AdjTempo" if "AdjTempo" in df.columns else ("adjt" if "adjt" in df.columns else None))
+    if kp_oe:
+        sel.append(pl.col(kp_oe).cast(pl.Float64).alias("adjoe_kp"))
+    else:
+        sel.append(pl.lit(None).cast(pl.Float64).alias("adjoe_kp"))
+    if kp_de:
+        sel.append(pl.col(kp_de).cast(pl.Float64).alias("adjde_kp"))
+    else:
+        sel.append(pl.lit(None).cast(pl.Float64).alias("adjde_kp"))
+    if kp_t:
+        sel.append(pl.col(kp_t).cast(pl.Float64).alias("adjt_kp"))
+    else:
+        sel.append(pl.lit(None).cast(pl.Float64).alias("adjt_kp"))
+    df = df.select(sel)
     return df.unique(subset=["year", "team_norm"])
 
 
@@ -218,6 +235,13 @@ def main() -> None:
             pl.lit(None).alias("barthag"),
             pl.lit(None).alias("adjt"),
         )
+    # Fill tempo/eff from KenPom when Torvik is null (so totals can vary)
+    if "adjoe_kp" in full.columns:
+        full = full.with_columns(
+            pl.coalesce(pl.col("adjoe"), pl.col("adjoe_kp")).alias("adjoe"),
+            pl.coalesce(pl.col("adjde"), pl.col("adjde_kp")).alias("adjde"),
+            pl.coalesce(pl.col("adjt"), pl.col("adjt_kp")).alias("adjt"),
+        ).drop(["adjoe_kp", "adjde_kp", "adjt_kp"])
     ev = load_evanmiya()
     if not ev.is_empty():
         full = full.join(

@@ -1,7 +1,7 @@
 // apps/web/__tests__/lib/auth/pro.test.ts
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { isProUser, hasRole, getUserRole } from "@/lib/auth/pro";
-import { UserRole, SubscriptionStatus } from "@/src/generated/prisma";
+import { UserRole, SubscriptionStatus } from "#prisma";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 

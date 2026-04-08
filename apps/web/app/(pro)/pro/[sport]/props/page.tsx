@@ -10,9 +10,12 @@ export default function PropsPage({ params }: { params: { sport: string } }) {
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold text-kos-text">{sportName} Props</h2>
+          <h2 className="text-2xl font-semibold text-kos-text">
+            {sportName} Props
+          </h2>
           <p className="mt-2 text-kos-text/70">
-            Prop analyzer and edge screens. Player props, team props, alternate lines.
+            Prop analyzer and edge screens. Player props, team props, alternate
+            lines.
           </p>
         </div>
         <Link

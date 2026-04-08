@@ -1,0 +1,17 @@
+---
+description: When user asks to load/run on local 3000, kill port 3000 and start dev server
+alwaysApply: true
+---
+
+# Local 3000 Dev Server
+
+When the user asks to "load on local 3000", "run local 3000", "start local 3000", or similar:
+
+1. **Kill everything on port 3000** – Run `pnpm run:3000` (or `bash scripts/run-web-3000.sh`). This script:
+   - Kills all processes on port 3000
+   - Kills any orphaned `next dev` processes
+   - Starts Next.js at http://127.0.0.1:3000
+
+2. **Run in background** – Start the dev server as a background process so it keeps running.
+
+3. **Do not ask** – Execute immediately; do not prompt for confirmation.

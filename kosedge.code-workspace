@@ -10,6 +10,11 @@
     "python.analysis.extraPaths": [
       "${workspaceFolder}/app/model-service"
     ],
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "cursorpyright.analysis.autoSearchPaths": true,
+    "cursorpyright.analysis.extraPaths": [
+      "${workspaceFolder}/app/model-service"
+    ],
+    "cursorpyright.analysis.typeCheckingMode": "basic"
   }
 }

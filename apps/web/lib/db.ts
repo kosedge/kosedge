@@ -1,6 +1,6 @@
 // apps/web/lib/db.ts
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@/src/generated/prisma";
+import { PrismaClient } from "#prisma";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -19,8 +19,7 @@ const prismaOptions: ConstructorParameters<typeof PrismaClient>[0] = {
       : ["error"],
 };
 
-export const prisma =
-  globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
+export const prisma = globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 

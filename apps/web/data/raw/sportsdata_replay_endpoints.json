@@ -1,0 +1,76 @@
+{
+  "_comment": "Segmented: play-by-play / pitch-by-pitch → game → date → week → season. Add exact paths from Replay package detail. Endpoints with {gameid} are fetched per-game after we get game IDs from week/date feeds.",
+  "package_defaults": {
+    "nfl": { "season": "2023reg", "week": "1" },
+    "nba": { "season": "2023", "date": "2024-01-15" },
+    "ncaab": { "season": "2024", "date": "2024-02-01" },
+    "mlb": { "season": "2024", "date": "2024-07-01" },
+    "nhl": { "season": "2024", "date": "2024-01-15" },
+    "ncaaf": { "season": "2023", "week": "1", "date": "2023-09-01" },
+    "wnba": { "season": "2024", "date": "2024-06-15" }
+  },
+  "nfl": [
+    { "path": "api/v3/nfl/scores/json/CurrentWeek", "slug": "current_week", "segment": "season" },
+    { "path": "api/v3/nfl/scores/json/Standings/{season}", "slug": "standings", "segment": "season" },
+    { "path": "api/v3/nfl/scores/json/ScoresByWeek/{season}/{week}", "slug": "scores_by_week", "segment": "week", "game_list_source": true },
+    { "path": "api/v3/nfl/scores/json/ScoresByDate/{date}", "slug": "scores_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/nfl/odds/json/GameOddsByWeek/{season}/{week}", "slug": "odds_by_week", "segment": "week" },
+    { "path": "api/v3/nfl/odds/json/GameOddsByDate/{date}", "slug": "odds_by_date", "segment": "date" },
+    { "path": "api/v3/nfl/pbp/json/PlayByPlayDelta/{season}/{week}/all", "slug": "pbp_delta_week", "segment": "week" },
+    { "path": "api/v3/nfl/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/nfl/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/nfl/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ],
+  "nba": [
+    { "path": "api/v3/nba/scores/json/CurrentSeason", "slug": "current_season", "segment": "season" },
+    { "path": "api/v3/nba/scores/json/Standings/{season}", "slug": "standings", "segment": "season" },
+    { "path": "api/v3/nba/scores/json/GamesByDate/{date}", "slug": "games_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/nba/odds/json/GameOddsByDate/{date}", "slug": "odds_by_date", "segment": "date" },
+    { "path": "api/v3/nba/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/nba/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/nba/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ],
+  "ncaab": [
+    { "path": "api/v3/ncaab/scores/json/CurrentSeason", "slug": "current_season", "segment": "season" },
+    { "path": "api/v3/ncaab/scores/json/Standings/{season}", "slug": "standings", "segment": "season" },
+    { "path": "api/v3/ncaab/scores/json/GamesByDate/{date}", "slug": "games_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/ncaab/odds/json/GameOddsByDate/{date}", "slug": "odds_by_date", "segment": "date" },
+    { "path": "api/v3/ncaab/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/ncaab/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/ncaab/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ],
+  "mlb": [
+    { "path": "api/v3/mlb/scores/json/CurrentSeason", "slug": "current_season", "segment": "season" },
+    { "path": "api/v3/mlb/scores/json/GamesByDate/{date}", "slug": "games_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/mlb/odds/json/GameOddsByDate/{date}", "slug": "odds_by_date", "segment": "date" },
+    { "path": "api/v3/mlb/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/mlb/pbp/json/PlayByPlayPitchByPitch/{gameid}", "slug": "pitch_by_pitch", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/mlb/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/mlb/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ],
+  "nhl": [
+    { "path": "api/v3/nhl/scores/json/CurrentSeason", "slug": "current_season", "segment": "season" },
+    { "path": "api/v3/nhl/scores/json/GamesByDate/{date}", "slug": "games_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/nhl/odds/json/GameOddsByDate/{date}", "slug": "odds_by_date", "segment": "date" },
+    { "path": "api/v3/nhl/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/nhl/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/nhl/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ],
+  "ncaaf": [
+    { "path": "api/v3/ncaaf/scores/json/CurrentWeek", "slug": "current_week", "segment": "season" },
+    { "path": "api/v3/ncaaf/scores/json/ScoresByWeek/{season}/{week}", "slug": "scores_by_week", "segment": "week", "game_list_source": true },
+    { "path": "api/v3/ncaaf/scores/json/ScoresByDate/{date}", "slug": "scores_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/ncaaf/odds/json/GameOddsByWeek/{season}/{week}", "slug": "odds_by_week", "segment": "week" },
+    { "path": "api/v3/ncaaf/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/ncaaf/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/ncaaf/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ],
+  "wnba": [
+    { "path": "api/v3/wnba/scores/json/CurrentSeason", "slug": "current_season", "segment": "season" },
+    { "path": "api/v3/wnba/scores/json/GamesByDate/{date}", "slug": "games_by_date", "segment": "date", "game_list_source": true },
+    { "path": "api/v3/wnba/odds/json/GameOddsByDate/{date}", "slug": "odds_by_date", "segment": "date" },
+    { "path": "api/v3/wnba/pbp/json/PlayByPlay/{gameid}", "slug": "playbyplay", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/wnba/stats/json/BoxScore/{gameid}", "slug": "box_score", "segment": "game", "needs_gameid": true },
+    { "path": "api/v3/wnba/scores/json/ScoreSummary/{gameid}", "slug": "score_summary", "segment": "game", "needs_gameid": true }
+  ]
+}

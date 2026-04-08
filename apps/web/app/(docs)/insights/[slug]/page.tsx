@@ -8,6 +8,7 @@ export function generateStaticParams() {
 }
 
 export default function InsightPage({ params }: { params: { slug: string } }) {
+  const components = useMDXComponents({});
   const slugs = getMdxSlugs("insights");
   if (!slugs.includes(params.slug)) return notFound();
 
@@ -22,12 +23,14 @@ export default function InsightPage({ params }: { params: { slug: string } }) {
             {post.frontmatter.title}
           </h1>
           {post.frontmatter.description && (
-            <p className="mt-4 text-kos-text/80">{post.frontmatter.description}</p>
+            <p className="mt-4 text-kos-text/80">
+              {post.frontmatter.description}
+            </p>
           )}
         </div>
 
         <div className="prose prose-invert mt-10 max-w-none">
-          <MDXRemote source={post.content} components={useMDXComponents({})} />
+          <MDXRemote source={post.content} components={components} />
         </div>
       </article>
     </main>

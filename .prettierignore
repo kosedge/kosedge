@@ -1,0 +1,32 @@
+# Dependencies and build
+node_modules
+.next
+.turbo
+out
+build
+dist
+coverage
+*.lock
+pnpm-lock.yaml
+
+# Generated and data
+apps/web/src/generated
+apps/web/data
+apps/web/.next
+**/*.parquet
+**/evanmiya_*.csv
+
+# Android / Gradle
+apps/android-odds-widget/.gradle
+apps/android-odds-widget/build
+apps/android-odds-widget/local.properties
+*.iml
+
+# IDE / misc
+.cursor
+.idea
+*.code-workspace
+
+# Large JSON data (optional - uncomment if format check still times out)
+# apps/web/data/processed/*.json
+# apps/web/data/raw/odds/**/*.json

@@ -1,9 +1,10 @@
 """
-Build actual_margins.parquet from Sports-Reference/ESPN CBB game results.
+Build actual_margins.parquet from Sports-Reference/ESPN CBB game results and/or SportsData.io parquets.
 Matches results to odds by date + normalized home/away team; outputs event_id, actual_margin
 so merge_games_ensemble and join_and_backtest can run backtest.
 
-Requires: sportsref_cbb_games_*.csv, sportsref_cbb_schedule_results_*.csv, or espn_cbb_games_*.csv in data/raw/games/; ncaab_historical_odds_open_close.parquet.
+Requires: ncaab_historical_odds_open_close.parquet.
+Optional: sportsref_cbb_games_*.csv, espn_cbb_games_*.csv in data/raw/games/; or sportsdata_games_*.parquet in data/processed/.
 Run from apps/web: python src/build_actual_margins.py
 """
 import sys
@@ -14,9 +15,34 @@ import polars as pl
 _WEB = Path(__file__).resolve().parent.parent
 if str(_WEB) not in sys.path:
     sys.path.insert(0, str(_WEB))
-from pipeline_paths import RAW_GAMES, ODDS_PARQUET_PATH, ACTUAL_MARGINS_PATH, ensure_dirs
+from pipeline_paths import RAW_GAMES, ODDS_PARQUET_PATH, ACTUAL_MARGINS_PATH, PROCESSED, ensure_dirs
 
 ensure_dirs()
+
+# SportsData.io uses short abbrevs (e.g. PURD, UNC). Map to pipeline team_norm (same as odds_team_to_short).
+# Expand as needed; unmapped abbrevs fall back to normalize_team(abbrev).
+SPORTSDATA_ABBREV_TO_NORM: dict[str, str] = {
+    "unc": "north carolina",
+    "purd": "purdue",
+    "kans": "kansas",
+    "uk": "kentucky",
+    "lsu": "louisiana state",
+    "usc": "southern california",
+    "ole miss": "mississippi",
+    "unlv": "nevada las vegas",
+    "vcu": "virginia commonwealth",
+    "smu": "southern methodist",
+    "tcu": "texas christian",
+    "wku": "western kentucky",
+    "unm": "new mexico",
+    "uconn": "connecticut",
+    "byu": "brigham young",
+    "st johns": "st john's",
+    "mtnst": "montana state",
+    "jaxst": "jacksonville state",
+    "char": "charlotte",
+    "ccar": "coastal carolina",
+}
 
 
 def normalize_team(col_expr: pl.Expr) -> pl.Expr:
@@ -38,19 +64,23 @@ def odds_team_to_short(col_expr: pl.Expr) -> pl.Expr:
     return normalize_team(short)
 
 
+def sportsdata_team_to_norm(col_expr: pl.Expr) -> pl.Expr:
+    """Map SportsData abbrev (e.g. PURD, IUPUI) to pipeline team_norm for odds join."""
+    raw = col_expr.str.to_lowercase().str.strip_chars().str.replace_all(r"\.", "")
+    out = raw
+    for abbrev, norm in SPORTSDATA_ABBREV_TO_NORM.items():
+        out = out.str.replace_all(abbrev, norm)
+    return normalize_team(out)
+
+
 def main() -> None:
-    # Load results: Sports-Reference (2016–2021) and/or ESPN (2022+ when Sports-Ref 404s)
+    rows: list[dict] = []
+    # Load results: Sports-Reference (2016–2021) and/or ESPN (2022+)
     results_files = (
         sorted(RAW_GAMES.glob("sportsref_cbb_games_*.csv"))
         + sorted(RAW_GAMES.glob("sportsref_cbb_schedule_results_*.csv"))
         + sorted(RAW_GAMES.glob("espn_cbb_games_*.csv"))
     )
-    if not results_files:
-        print("No sportsref_cbb_games_*.csv, schedule_results_*, or espn_cbb_games_*.csv in data/raw/games/.")
-        print("Run scrape_cbb_results.py (2016–2021) and/or scrape_cbb_results_espn.py (2022+).")
-        return
-
-    rows = []
     for fp in results_files:
         df = pl.read_csv(fp, truncate_ragged_lines=True, infer_schema_length=10000)
         cols = [c for c in df.columns if c is not None]
@@ -118,11 +148,33 @@ def main() -> None:
                 "actual_margin": r["actual_margin"],
             })
 
+    # Load SportsData.io parquets (e.g. sportsdata_games_2025.parquet from pull_sportsdata_cbb.py).
+# Note: Free-trial SportsData margins are scrambled (fuzzed). Use for backtest pipeline testing only,
+# not for training the margin model or ensemble weights — use ESPN/Sports-Ref results or unscrambled data for that.
+    for fp in sorted(PROCESSED.glob("sportsdata_games_*.parquet")):
+        try:
+            df = pl.read_parquet(fp)
+            if "DateTime" not in df.columns or "HomeTeam" not in df.columns or "actual_home_margin" not in df.columns:
+                continue
+            df = df.filter(pl.col("Status").is_in(["Final", "F/OT"]))
+            df = df.with_columns([
+                pl.col("DateTime").str.slice(0, 10).str.to_date(strict=False).alias("game_date"),
+                sportsdata_team_to_norm(pl.col("HomeTeam")).alias("home_norm"),
+                sportsdata_team_to_norm(pl.col("AwayTeam")).alias("away_norm"),
+                pl.col("actual_home_margin").cast(pl.Float64).alias("actual_margin"),
+            ]).filter(pl.col("game_date").is_not_null())
+            for r in df.select(["game_date", "home_norm", "away_norm", "actual_margin"]).iter_rows(named=True):
+                rows.append(r)
+            print(f"  Loaded {len(df)} completed games from {fp.name}")
+        except Exception as e:
+            print(f"  Skip {fp.name}: {e}")
+
     if not rows:
-        print("No result rows parsed. Check Sports-Reference CSV column names.")
+        print("No result rows from CSVs or sportsdata_games_*.parquet. Add data/raw/games/*.csv or run pull_sportsdata_cbb.py --results.")
         return
 
-    results = pl.DataFrame(rows)
+    # Prefer CSV results when same (game_date, home_norm, away_norm); then join to odds
+    results = pl.DataFrame(rows).unique(subset=["game_date", "home_norm", "away_norm"], keep="first")
 
     # Load odds to get event_id and game date + home/away
     odds_path = ODDS_PARQUET_PATH
@@ -148,7 +200,7 @@ def main() -> None:
     out = merged.select(["event_id", "actual_margin"]).filter(pl.col("actual_margin").is_not_null()).unique(subset=["event_id"])
     out_path = ACTUAL_MARGINS_PATH
     out.write_parquet(out_path)
-    print(f"Wrote {out_path} with {len(out)} events with actual_margin (matched from Sports-Reference).")
+    print(f"Wrote {out_path} with {len(out)} events with actual_margin (CSV + SportsData matched to odds).")
 
 
 if __name__ == "__main__":

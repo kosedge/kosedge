@@ -10,9 +10,7 @@ export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   if (status === "loading") {
-    return (
-      <div className="h-10 w-10 rounded-full bg-white/10 animate-pulse" />
-    );
+    return <div className="h-10 w-10 rounded-full bg-white/10 animate-pulse" />;
   }
 
   if (!session) {
@@ -48,7 +46,8 @@ export default function UserMenu() {
           />
         ) : (
           <div className="h-8 w-8 rounded-full bg-kos-gold flex items-center justify-center text-black font-bold text-sm">
-            {session.user.name?.[0]?.toUpperCase() || session.user.email[0].toUpperCase()}
+            {session.user.name?.[0]?.toUpperCase() ||
+              session.user.email[0].toUpperCase()}
           </div>
         )}
         <span className="text-sm font-medium text-gray-200 hidden sm:inline">

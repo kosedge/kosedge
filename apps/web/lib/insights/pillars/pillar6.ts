@@ -36,7 +36,7 @@ export const section4: InsightSection = {
   pillarTitle: "PILLAR 6 — Understanding Variance",
   body: [
     "Most people quit right before the process would have paid them.",
-    "Because they didn't understand variance, they assumed the model \"stopped working.\"",
+    'Because they didn\'t understand variance, they assumed the model "stopped working."',
     "Education becomes retention. Retention becomes profit.",
     "This pillar is business-critical.",
   ],

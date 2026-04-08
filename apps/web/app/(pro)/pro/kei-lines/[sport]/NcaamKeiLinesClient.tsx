@@ -50,7 +50,9 @@ export function NcaamKeiLinesClient({
 
   const filtered = useMemo(() => {
     return games
-      .filter((g) => g.commenceTime && getDateKeyET(g.commenceTime) === selectedDate)
+      .filter(
+        (g) => g.commenceTime && getDateKeyET(g.commenceTime) === selectedDate,
+      )
       .sort((a, b) => {
         const t1 = a.commenceTime ? new Date(a.commenceTime).getTime() : 0;
         const t2 = b.commenceTime ? new Date(b.commenceTime).getTime() : 0;
@@ -63,7 +65,10 @@ export function NcaamKeiLinesClient({
       <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-8 text-center">
         <p className="text-kos-text/60">
           No KEI lines for {sportName} yet. Run the pipeline export to generate{" "}
-          <code className="text-kos-gold/80">data/processed/kei_lines_*.json</code>.
+          <code className="text-kos-gold/80">
+            data/processed/kei_lines_*.json
+          </code>
+          .
         </p>
       </div>
     );
@@ -72,7 +77,10 @@ export function NcaamKeiLinesClient({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-4">
-        <label htmlFor="ncaam-date" className="text-sm font-medium text-kos-text/80">
+        <label
+          htmlFor="ncaam-date"
+          className="text-sm font-medium text-kos-text/80"
+        >
           Game date
         </label>
         <select
@@ -119,7 +127,10 @@ export function NcaamKeiLinesClient({
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-kos-text/60">
+                <td
+                  colSpan={6}
+                  className="px-4 py-8 text-center text-kos-text/60"
+                >
                   No games on this date.
                 </td>
               </tr>

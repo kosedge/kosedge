@@ -4,11 +4,23 @@ import { HIGHLIGHTED_GAMES, TOP_EDGE } from "@/lib/featured-games";
 import EdgeBoardPreview from "@/components/EdgeBoardPreview";
 
 const SHELL_LINKS = [
-  { href: "fair-lines", label: "Fair Lines", desc: "Model reference vs market. Neutral presentation." },
-  { href: "slate/today", label: "Slate", desc: "Daily/weekly games with matchup context." },
+  {
+    href: "fair-lines",
+    label: "Fair Lines",
+    desc: "Model reference vs market. Neutral presentation.",
+  },
+  {
+    href: "slate/today",
+    label: "Slate",
+    desc: "Daily/weekly games with matchup context.",
+  },
   { href: "teams", label: "Teams", desc: "Team summaries, power ratings." },
   { href: "tracking", label: "Tracking", desc: "CLV, review dashboards." },
-  { href: "execution", label: "Execution", desc: "Best numbers by book, dispersion." },
+  {
+    href: "execution",
+    label: "Execution",
+    desc: "Best numbers by book, dispersion.",
+  },
   { href: "props", label: "Props", desc: "Prop analyzer and edge screens." },
 ];
 
@@ -33,7 +45,8 @@ export default async function SportOverviewPage({
           {sportName} Hub
         </h1>
         <p className="mt-2 text-kos-text/80">
-          Sport-specific information, fair lines, and execution support. No picks. No hype.
+          Sport-specific information, fair lines, and execution support. No
+          picks. No hype.
         </p>
       </div>
 
@@ -56,7 +69,9 @@ export default async function SportOverviewPage({
       {/* Featured game articles */}
       {(topEdgeForSport || sportGames.length > 0) && (
         <div className="mb-8">
-          <h2 className="text-lg font-bebas text-kos-gold tracking-wide mb-4">Featured Game Articles</h2>
+          <h2 className="text-lg font-bebas text-kos-gold tracking-wide mb-4">
+            Featured Game Articles
+          </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {topEdgeForSport && (
               <EdgeBoardPreview
@@ -88,7 +103,9 @@ export default async function SportOverviewPage({
           <p className="mt-2 text-sm text-kos-text/80">
             Team strength, rankings, and historical context by sport.
           </p>
-          <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">View ratings →</span>
+          <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
+            View ratings →
+          </span>
         </Link>
         <Link
           href={`/pro/kei-lines/${sportKey}`}
@@ -98,7 +115,9 @@ export default async function SportOverviewPage({
           <p className="mt-2 text-sm text-kos-text/70">
             Our projected spread and over/under for today&apos;s games.
           </p>
-          <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">View lines →</span>
+          <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
+            View lines →
+          </span>
         </Link>
       </div>
 

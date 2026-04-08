@@ -4,7 +4,14 @@ import { POST } from "@/app/api/auth/register/route";
 import { prisma } from "@/lib/db";
 import { hash } from "bcryptjs";
 
-vi.mock("@/lib/db");
+vi.mock("@/lib/db", () => ({
+  prisma: {
+    user: {
+      findUnique: vi.fn(),
+      create: vi.fn(),
+    },
+  },
+}));
 vi.mock("bcryptjs", () => ({
   hash: vi.fn(),
 }));
@@ -115,7 +122,7 @@ describe("POST /api/auth/register", () => {
 
   it("should handle database errors gracefully", async () => {
     vi.mocked(prisma.user.findUnique).mockRejectedValue(
-      new Error("Database error")
+      new Error("Database error"),
     );
 
     const request = new Request("http://localhost/api/auth/register", {
@@ -131,6 +138,6 @@ describe("POST /api/auth/register", () => {
     const data = await response.json();
 
     expect(response.status).toBe(500);
-    expect(data.error).toBe("Internal server error");
+    expect(data.error).toBe("An internal error occurred");
   });
 });

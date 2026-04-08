@@ -30,6 +30,7 @@ ACTUAL_MARGINS_PATH = PROCESSED / "actual_margins.parquet"
 GAMES_WITH_EDGES_PATH = PROCESSED / "games_with_edges.parquet"
 MERGED_GAMES_PATH = PROCESSED / "merged_games_with_odds_and_ratings.parquet"
 FLAT_BETTING_PICKS_PATH = PROCESSED / "flat_betting_picks.csv"
+KEI_BACKTEST_RESULTS_PATH = PROCESSED / "kei_backtest_results.json"
 MARGIN_MODEL_PATH = PROCESSED / "margin_model.json"
 ENSEMBLE_WEIGHTS_PATH = PROCESSED / "ensemble_weights.json"
 

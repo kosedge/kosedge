@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="6dp"
+    android:paddingHorizontal="4dp"
+    android:background="@color/kos_black">
+    <TextView
+        android:id="@+id/row_game"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.4"
+        android:textColor="@color/kos_text"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+    <TextView
+        android:id="@+id/row_open_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textColor="@color/kos_text"
+        android:alpha="0.85"
+        android:textSize="11sp"
+        android:gravity="end" />
+    <TextView
+        android:id="@+id/row_open_ou"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textColor="@color/kos_text"
+        android:alpha="0.85"
+        android:textSize="11sp"
+        android:gravity="end" />
+    <TextView
+        android:id="@+id/row_best_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textColor="@color/kos_gold"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:gravity="end" />
+    <TextView
+        android:id="@+id/row_best_ou"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textColor="@color/kos_gold"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:gravity="end" />
+</LinearLayout>

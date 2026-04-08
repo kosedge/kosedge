@@ -9,15 +9,19 @@ import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
-/** Odds refresh at most every 6 hours; use shorter window so KEI merge updates show sooner */
-const ODDS_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+/** Odds refresh at most every 6 hours to avoid burning API credits (500/mo free tier). */
+const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
 };
 
 const sportCache = new Map<string, { rows: unknown[]; ts: number }>();
 
-function json(data: unknown, status = 200, extraHeaders?: Record<string, string>) {
+function json(
+  data: unknown,
+  status = 200,
+  extraHeaders?: Record<string, string>,
+) {
   return NextResponse.json(data, {
     status,
     headers: {
@@ -37,7 +41,7 @@ function getRequestId(req: Request) {
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ sport: string }> }
+  { params }: { params: Promise<{ sport: string }> },
 ) {
   const { sport } = await params;
   const valid = getSport(sport);
@@ -51,11 +55,16 @@ export async function GET(
   if (expected) {
     const provided = req.headers.get("x-kosedge-secret");
     if (provided !== expected) {
-      return json({ error: "Unauthorized", requestId }, 401, { "x-request-id": requestId });
+      return json({ error: "Unauthorized", requestId }, 401, {
+        "x-request-id": requestId,
+      });
     }
   }
 
-  const keys = [env.ODDS_API_KEY?.trim(), env.ODDS_API_KEY_BACKUP?.trim()].filter((k): k is string => Boolean(k));
+  const keys = [
+    env.ODDS_API_KEY?.trim(),
+    env.ODDS_API_KEY_BACKUP?.trim(),
+  ].filter((k): k is string => Boolean(k));
   if (!keys.length || !SPORT_KEY_MAP[sport]) {
     return json({ rows: [] }, 200, { "x-request-id": requestId });
   }
@@ -74,7 +83,10 @@ export async function GET(
       rows = await fetchEdgeBoard(sport, key);
       break;
     } catch (e) {
-      logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "edge-board/today" });
+      logError(e instanceof Error ? e : new Error(String(e)), {
+        sport,
+        route: "edge-board/today",
+      });
     }
   }
   if (rows.length === 0 && cached) {
@@ -84,14 +96,19 @@ export async function GET(
     rows = mergeKeiIntoEdgeBoardRows(rows, sport);
     const parsed = EdgeBoardResponseSchema.safeParse({ rows });
     if (!parsed.success) {
-      if (cached) return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
+      if (cached)
+        return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
       return json({ rows: [] }, 200, { "x-request-id": requestId });
     }
     sportCache.set(sport, { rows: parsed.data.rows, ts: now });
     return json(parsed.data, 200, { "x-request-id": requestId });
   } catch (e) {
-    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "edge-board/today" });
-    if (cached) return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
+    logError(e instanceof Error ? e : new Error(String(e)), {
+      sport,
+      route: "edge-board/today",
+    });
+    if (cached)
+      return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
     return json({ rows: [] }, 200, { "x-request-id": requestId });
   }
 }

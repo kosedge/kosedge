@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kos Edge Odds</string>
+    <string name="widget_label">CBB Odds</string>
+    <string name="widget_header">CBB · Kos Edge</string>
+    <string name="last_updated">Updated %1$s</string>
+</resources>

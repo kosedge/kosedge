@@ -41,4 +41,15 @@ describe("Environment Configuration", () => {
       await import("@/lib/config/env");
     }).rejects.toThrow();
   });
+
+  it("should treat empty string as undefined (Vercel-style env)", async () => {
+    process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
+    process.env.MODEL_SERVICE_URL = "";
+    process.env.ODDS_API_KEY = "";
+
+    const { env } = await import("@/lib/config/env");
+
+    expect(env.MODEL_SERVICE_URL).toBeUndefined();
+    expect(env.ODDS_API_KEY).toBeUndefined();
+  });
 });

@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { getSport } from "@/lib/sports";
 
-export default function ExecutionPage({ params }: { params: { sport: string } }) {
+export default function ExecutionPage({
+  params,
+}: {
+  params: { sport: string };
+}) {
   const sport = getSport(params.sport);
   const sportName = sport?.fullName ?? params.sport.toUpperCase();
   const base = `/pro/${params.sport}`;
@@ -10,7 +14,9 @@ export default function ExecutionPage({ params }: { params: { sport: string } })
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold text-kos-text">{sportName} Execution</h2>
+          <h2 className="text-2xl font-semibold text-kos-text">
+            {sportName} Execution
+          </h2>
           <p className="mt-2 text-kos-text/70">
             Best numbers by book, dispersion, timing. Execution support only.
           </p>
@@ -23,7 +29,9 @@ export default function ExecutionPage({ params }: { params: { sport: string } })
         </Link>
       </div>
       <div className="mt-8 rounded-2xl border border-kos-border bg-kos-surface/30 p-8">
-        <p className="text-kos-text/60">Shell placeholder. Wire execution data.</p>
+        <p className="text-kos-text/60">
+          Shell placeholder. Wire execution data.
+        </p>
       </div>
     </main>
   );

@@ -1,7 +1,7 @@
 // apps/web/lib/auth/pro.ts
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { UserRole, SubscriptionStatus } from "@/src/generated/prisma";
+import { UserRole, SubscriptionStatus } from "#prisma";
 
 /**
  * Check if the current user is a Pro user.
@@ -30,7 +30,8 @@ export async function isProUser(): Promise<boolean> {
     if (user.role === UserRole.ADMIN || user.role === UserRole.PRO) return true;
 
     if (user.subscriptionStatus === SubscriptionStatus.ACTIVE) {
-      if (user.subscriptionEnd && user.subscriptionEnd > new Date()) return true;
+      if (user.subscriptionEnd && user.subscriptionEnd > new Date())
+        return true;
     }
 
     return false;

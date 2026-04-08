@@ -4,8 +4,8 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { getSport } from "@/lib/sports";
+import { getKeiLinesPath } from "@/lib/data-paths";
 
 export type KeiLineGame = {
   id?: string;
@@ -16,24 +16,11 @@ export type KeiLineGame = {
   projTotal: number | null;
 };
 
-function findKeiLinesPath(sportKey: string): string | null {
-  const base = process.cwd();
-  const fileName = "kei_lines_" + sportKey + ".json";
-  const candidates = [
-    join(base, "data", "processed", fileName),
-    join(base, "apps", "web", "data", "processed", fileName),
-  ];
-  for (const p of candidates) {
-    if (existsSync(p)) return p;
-  }
-  return null;
-}
-
 export function getKeiLines(sportKey: string): KeiLineGame[] {
   if (!getSport(sportKey)) return [];
 
-  const p = findKeiLinesPath(sportKey);
-  if (!p) return [];
+  const p = getKeiLinesPath(sportKey);
+  if (!existsSync(p)) return [];
 
   try {
     const raw = readFileSync(p, "utf-8");

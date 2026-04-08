@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="kos_black">#070A0F</color>
+    <color name="kos_text">#E9EEF5</color>
+    <color name="kos_gold">#F5B942</color>
+    <color name="edge_green">#39FF14</color>
+    <color name="kos_surface">#0B1220</color>
+    <color name="kos_border">#2A3548</color>
+</resources>

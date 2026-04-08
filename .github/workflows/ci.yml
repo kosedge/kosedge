@@ -68,6 +68,13 @@ jobs:
           AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
           MODEL_SERVICE_URL: http://localhost:8000
 
+      - name: Web test coverage (enforce thresholds)
+        run: pnpm --filter @kosedge/web test:coverage
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
+
       - name: Upload test coverage
         if: always()
         uses: actions/upload-artifact@v4
@@ -118,6 +125,31 @@ jobs:
             apps/web/.next
             apps/web/.turbo
           retention-days: 1
+
+  pipeline-tests:
+    name: Pipeline (Python) Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pipeline dependencies
+        run: |
+          cd apps/web
+          python -m pip install --upgrade pip
+          pip install -r requirements-pipeline.txt
+
+      - name: Run pipeline tests
+        run: |
+          cd apps/web
+          python -m pytest tests_pipeline -v
 
   format-check:
     name: Format Check

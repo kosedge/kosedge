@@ -1,10 +1,24 @@
 // apps/web/proxy.ts
-// Next.js 16: middleware renamed to proxy. Minimal pass-through.
+// Next.js 16: middleware renamed to proxy. Rate limit API, add security headers.
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { rateLimit } from "@/lib/security/rate-limit";
+import { addSecurityHeaders } from "@/lib/security/headers";
 
-export function proxy(request: NextRequest) {
-  return NextResponse.next();
+export async function proxy(request: NextRequest) {
+  // Skip proxy for Auth.js routes so session/callback get JSON, not HTML
+  const { pathname } = request.nextUrl;
+  if (pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
+  }
+
+  // Rate limit other API routes
+  const rateLimitResponse = await rateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
+
+  const response = NextResponse.next();
+  addSecurityHeaders(response);
+  return response;
 }
 
 export const config = {

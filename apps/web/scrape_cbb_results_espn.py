@@ -28,7 +28,8 @@ RAW_DIR = RAW_GAMES
 BASE_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
 
 # Season end years to fetch (2022 = 2021-22, etc.). Use when Sports-Reference 404s.
-YEARS = (2022, 2023, 2024, 2025)
+# Include current season (e.g. 2026 = 2025-26) so backtest can have "this season" results.
+YEARS = (2022, 2023, 2024, 2025, 2026)
 
 # NCAAB season: early Nov (year-1) through early Apr (year)
 SEASON_START_MONTH = 11

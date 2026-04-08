@@ -1,5 +1,5 @@
 // apps/web/types/next-auth.d.ts
-import { UserRole } from "@/src/generated/prisma";
+import { UserRole } from "#prisma";
 import "next-auth";
 import "next-auth/jwt";
 
