@@ -75,6 +75,13 @@ jobs:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
           AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
 
+      - name: Critical-path coverage gate
+        run: pnpm test:web:critical
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
+
       - name: Upload test coverage
         if: always()
         uses: actions/upload-artifact@v4

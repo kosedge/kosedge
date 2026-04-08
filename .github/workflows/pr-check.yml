@@ -48,6 +48,13 @@ jobs:
           AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
           MODEL_SERVICE_URL: http://localhost:8000
 
+      - name: Critical-path coverage gate
+        run: pnpm test:web:critical
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
+
       - name: Comment PR with results
         if: always()
         uses: actions/github-script@v7

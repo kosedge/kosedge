@@ -42,29 +42,21 @@ jobs:
           INTERNAL_API_SECRET: ${{ secrets.INTERNAL_API_SECRET }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
-      # Uncomment and configure based on your deployment platform
-      #
-      # For Vercel:
-      # - name: Deploy to Vercel
-      #   uses: amondnet/vercel-action@v25
-      #   with:
-      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-      #     vercel-args: '--prod'
-      #
-      # For Docker/Docker Hub:
-      # - name: Build Docker image
-      #   run: docker build -t kosedge-web:${{ github.sha }} -f apps/web/Dockerfile .
-      #
-      # - name: Push to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      #
-      # - name: Push image
-      #   run: docker push kosedge-web:${{ github.sha }}
+      - name: Deploy to Vercel (Production)
+        if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '' }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          pnpm dlx vercel pull --yes --environment=production --cwd apps/web --token "$VERCEL_TOKEN"
+          pnpm dlx vercel build --prod --cwd apps/web --token "$VERCEL_TOKEN"
+          pnpm dlx vercel deploy --prebuilt --prod --cwd apps/web --token "$VERCEL_TOKEN"
+
+      - name: Deployment not configured (Vercel secrets missing)
+        if: ${{ secrets.VERCEL_TOKEN == '' || secrets.VERCEL_ORG_ID == '' || secrets.VERCEL_PROJECT_ID == '' }}
+        run: |
+          echo "Vercel deployment skipped: set VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID in repo secrets."
 
       - name: Deployment Summary
         run: |

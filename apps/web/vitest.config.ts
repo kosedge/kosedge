@@ -15,6 +15,7 @@ export default defineConfig({
       ".next",
       "dist",
       "build",
+      "e2e/**",
       "__tests__/lib/auth/pro.test.ts",
       "__tests__/components/auth/UserMenu.test.tsx",
     ],
