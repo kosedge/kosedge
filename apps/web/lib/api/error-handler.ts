@@ -71,15 +71,14 @@ export function handleApiError(error: unknown): NextResponse {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic API handler wrapper
-export function withErrorHandler<
-  T extends (...args: any[]) => Promise<NextResponse>,
->(handler: T): T {
-  return (async (...args: Parameters<T>) => {
+export function withErrorHandler<TArgs extends unknown[]>(
+  handler: (...args: TArgs) => Promise<NextResponse>,
+): (...args: TArgs) => Promise<NextResponse> {
+  return async (...args: TArgs) => {
     try {
       return await handler(...args);
     } catch (error) {
       return handleApiError(error);
     }
-  }) as T;
+  };
 }
