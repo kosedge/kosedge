@@ -1,12 +1,6 @@
 // apps/web/lib/performance.ts
 import { logInfo } from "@/lib/logger";
 
-interface PerformanceMetric {
-  name: string;
-  duration: number;
-  metadata?: Record<string, unknown>;
-}
-
 /**
  * Measure execution time of an async function
  */

@@ -1,6 +1,5 @@
 // apps/web/lib/cache/redis.ts
 import Redis from "ioredis";
-import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 
 let redis: Redis | null = null;

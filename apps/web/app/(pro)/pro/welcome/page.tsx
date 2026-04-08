@@ -1,5 +1,4 @@
 // apps/web/app/(pro)/pro/welcome/page.tsx
-import Link from "next/link";
 import ProWelcomeHub from "@/components/ProWelcomeHub";
 
 export const dynamic = "force-dynamic";

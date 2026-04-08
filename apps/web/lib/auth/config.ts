@@ -2,7 +2,6 @@
 import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/db";
-import { env } from "@/lib/config/env";
 import { compare } from "bcryptjs";
 import { z } from "zod";
 

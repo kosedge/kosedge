@@ -51,7 +51,7 @@ export default function SignUpPage() {
 
       router.push("/pro/welcome");
       router.refresh();
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
       setLoading(false);
     }
