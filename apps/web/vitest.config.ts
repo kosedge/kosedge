@@ -31,8 +31,8 @@ export default defineConfig({
         "**/vitest.setup.ts",
         "src/generated/**",
       ],
-      // Keep low until more tests added; raise to 30+ when ready
-      threshold: {
+      // Keep low in broad suite; strict thresholds are enforced in vitest.critical.config.ts
+      thresholds: {
         lines: 0,
         functions: 0,
         branches: 0,

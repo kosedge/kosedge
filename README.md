@@ -156,6 +156,7 @@ The project includes GitHub Actions workflows:
 - **PR Checks** - Quality checks for pull requests
 - **CodeQL** - Security analysis
 - **E2E Smoke** - Playwright browser smoke checks
+- **Secret Scan** - Gitleaks secret detection on push/PR
 
 ### Environment Variables
 
