@@ -6,6 +6,7 @@ import { EdgeBoardResponseSchema } from "@kosedge/contracts";
 import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
 import { getSport } from "@/lib/sports";
 import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
+import { getCache, setCache } from "@/lib/cache/redis";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ const CACHE_HEADERS = {
 };
 
 const sportCache = new Map<string, { rows: unknown[]; ts: number }>();
+const cacheKeyForSport = (sport: string) => `edge-board:${sport}:today:v1`;
 
 function json(
   data: unknown,
@@ -76,6 +78,15 @@ export async function GET(
   if (!skipCache && cached && now - cached.ts < ODDS_CACHE_TTL_MS) {
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
   }
+  if (!skipCache) {
+    const distributed = await getCache<{ rows: unknown[]; ts: number }>(
+      cacheKeyForSport(sport),
+    );
+    if (distributed && now - distributed.ts < ODDS_CACHE_TTL_MS) {
+      sportCache.set(sport, distributed);
+      return json({ rows: distributed.rows }, 200, { "x-request-id": requestId });
+    }
+  }
 
   let rows: Awaited<ReturnType<typeof fetchEdgeBoard>> = [];
   for (const key of keys) {
@@ -101,6 +112,7 @@ export async function GET(
       return json({ rows: [] }, 200, { "x-request-id": requestId });
     }
     sportCache.set(sport, { rows: parsed.data.rows, ts: now });
+    await setCache(cacheKeyForSport(sport), { rows: parsed.data.rows, ts: now }, Math.ceil(ODDS_CACHE_TTL_MS / 1000));
     return json(parsed.data, 200, { "x-request-id": requestId });
   } catch (e) {
     logError(e instanceof Error ? e : new Error(String(e)), {

@@ -7,8 +7,10 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Prisma 7 "client" engine requires adapter or accelerateUrl (https://pris.ly/d/client-constructor)
-const connectionString =
-  process.env.DATABASE_URL ?? "postgresql://localhost:5432/placeholder";
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error("DATABASE_URL is required to initialize Prisma");
+}
 const adapter = new PrismaPg({ connectionString });
 
 const prismaOptions: ConstructorParameters<typeof PrismaClient>[0] = {

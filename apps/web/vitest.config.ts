@@ -16,8 +16,6 @@ export default defineConfig({
       "dist",
       "build",
       "e2e/**",
-      "__tests__/lib/auth/pro.test.ts",
-      "__tests__/components/auth/UserMenu.test.tsx",
     ],
     coverage: {
       provider: "v8",

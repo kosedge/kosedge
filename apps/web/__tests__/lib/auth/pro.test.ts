@@ -1,13 +1,24 @@
 // apps/web/__tests__/lib/auth/pro.test.ts
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { isProUser, hasRole, getUserRole } from "@/lib/auth/pro";
 import { UserRole, SubscriptionStatus } from "#prisma";
-import { prisma } from "@/lib/db";
-import { auth } from "@/lib/auth";
 
 // Mock dependencies
-vi.mock("@/lib/auth");
-vi.mock("@/lib/db");
+const authMock = vi.fn();
+const findUniqueMock = vi.fn();
+
+vi.mock("@/lib/auth", () => ({
+  auth: authMock,
+}));
+
+vi.mock("@/lib/db", () => ({
+  prisma: {
+    user: {
+      findUnique: findUniqueMock,
+    },
+  },
+}));
+
+const { isProUser, hasRole, getUserRole } = await import("@/lib/auth/pro");
 
 describe("Auth Pro Utilities", () => {
   beforeEach(() => {
@@ -16,7 +27,7 @@ describe("Auth Pro Utilities", () => {
 
   describe("isProUser", () => {
     it("should return false when user is not authenticated", async () => {
-      vi.mocked(auth).mockResolvedValue(null);
+      authMock.mockResolvedValue(null);
 
       const result = await isProUser();
 
@@ -24,11 +35,11 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return true when user has PRO role", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.PRO },
       } as any);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.PRO,
         subscriptionStatus: null,
@@ -41,11 +52,11 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return true when user has ADMIN role", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.ADMIN },
       } as any);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.ADMIN,
         subscriptionStatus: null,
@@ -58,14 +69,14 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return true when user has active subscription", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.USER },
       } as any);
 
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 30);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.USER,
         subscriptionStatus: SubscriptionStatus.ACTIVE,
@@ -78,14 +89,14 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return false when subscription has expired", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.USER },
       } as any);
 
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - 1);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.USER,
         subscriptionStatus: SubscriptionStatus.ACTIVE,
@@ -98,11 +109,11 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return false when user does not exist", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.USER },
       } as any);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
+      findUniqueMock.mockResolvedValue(null);
 
       const result = await isProUser();
 
@@ -112,11 +123,11 @@ describe("Auth Pro Utilities", () => {
 
   describe("hasRole", () => {
     it("should return true when user has the specified role", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.PRO },
       } as any);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.PRO,
       } as any);
@@ -127,11 +138,11 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return false when user does not have the specified role", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.USER },
       } as any);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.USER,
       } as any);
@@ -142,7 +153,7 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return false when user is not authenticated", async () => {
-      vi.mocked(auth).mockResolvedValue(null);
+      authMock.mockResolvedValue(null);
 
       const result = await hasRole(UserRole.PRO);
 
@@ -152,11 +163,11 @@ describe("Auth Pro Utilities", () => {
 
   describe("getUserRole", () => {
     it("should return user role when authenticated", async () => {
-      vi.mocked(auth).mockResolvedValue({
+      authMock.mockResolvedValue({
         user: { id: "user-1", email: "test@example.com", role: UserRole.PRO },
       } as any);
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      findUniqueMock.mockResolvedValue({
         id: "user-1",
         role: UserRole.PRO,
       } as any);
@@ -167,7 +178,7 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("should return null when user is not authenticated", async () => {
-      vi.mocked(auth).mockResolvedValue(null);
+      authMock.mockResolvedValue(null);
 
       const result = await getUserRole();
 

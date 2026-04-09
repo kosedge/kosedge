@@ -32,6 +32,24 @@ def _parse_cors_origins(raw: str) -> List[str]:
     return [o.strip() for o in raw.split(",") if o.strip()]
 
 
+def _resolve_cors_settings() -> tuple[List[str], bool]:
+    env_name = os.getenv("ENV", os.getenv("NODE_ENV", "development")).strip().lower()
+    is_production = env_name == "production"
+    origins = _parse_cors_origins(os.getenv("CORS_ORIGINS", ""))
+
+    if not origins:
+        if is_production:
+            raise RuntimeError("CORS_ORIGINS must be set in production")
+        origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
+
+    if "*" in origins and len(origins) > 1:
+        raise RuntimeError("CORS_ORIGINS cannot mix '*' with explicit origins")
+
+    # FastAPI/Starlette disallow credentials with wildcard origin.
+    allow_credentials = "*" not in origins
+    return origins, allow_credentials
+
+
 app = FastAPI(
     title="KosEdge Model Service",
     version=os.getenv("APP_VERSION", "0.1.0"),
@@ -41,11 +59,11 @@ app = FastAPI(
 app.include_router(edge_board_router)
 
 # CORS (single middleware registration)
-origins = _parse_cors_origins(os.getenv("CORS_ORIGINS", ""))
+origins, allow_credentials = _resolve_cors_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins if origins else ["*"],  # tighten in prod
-    allow_credentials=True,
+    allow_origins=origins,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )

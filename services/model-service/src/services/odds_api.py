@@ -21,7 +21,6 @@ def fetch_odds(endpoint: str, params: dict):
 
     resp.raise_for_status()
 
-    #T5fc490bc771b47611274e13fc244036c
     remaining = resp.headers.get("x-requests-remaining")
     used = resp.headers.get("x-requests-used")
 

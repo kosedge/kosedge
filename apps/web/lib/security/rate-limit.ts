@@ -71,13 +71,20 @@ function getLimiterAndPoints(pathname: string): {
 }
 
 function getClientId(req: NextRequest): string {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader) return authHeader;
+  // Do NOT key by Authorization header: it's user-controlled and easy to rotate/spoof.
+  // Prefer proxy-provided client IP, then add user-agent for better cardinality behind NAT.
+  const cfIp = req.headers.get("cf-connecting-ip");
+  const realIp = req.headers.get("x-real-ip");
   const forwarded = req.headers.get("x-forwarded-for");
-  const ip = forwarded
-    ? forwarded.split(",")[0]
-    : req.headers.get("x-real-ip") || "unknown";
-  return ip;
+  const forwardedIp = forwarded
+    ? forwarded
+        .split(",")
+        .map((x) => x.trim())
+        .find(Boolean)
+    : undefined;
+  const ip = cfIp || realIp || forwardedIp || "unknown";
+  const userAgent = req.headers.get("user-agent") || "unknown";
+  return `${ip}|${userAgent.slice(0, 120)}`;
 }
 
 export async function rateLimit(

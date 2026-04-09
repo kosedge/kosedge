@@ -42,4 +42,30 @@ describe("rateLimit", () => {
     expect(data.retryAfter).toBeDefined();
     expect(res!.headers.get("X-RateLimit-Limit")).toBe("5");
   });
+
+  it("cannot bypass auth limiter by rotating Authorization header", async () => {
+    const clientIp = "rate-limit-auth-header-rotation-" + Date.now();
+    const base = "http://localhost/api/auth/signin";
+
+    for (let i = 0; i < 5; i++) {
+      const req = new NextRequest(base, {
+        headers: {
+          "x-forwarded-for": clientIp,
+          authorization: `Bearer fake-token-${i}`,
+        },
+      });
+      const res = await rateLimit(req);
+      expect(res).toBeNull();
+    }
+
+    const req = new NextRequest(base, {
+      headers: {
+        "x-forwarded-for": clientIp,
+        authorization: "Bearer totally-different-token",
+      },
+    });
+    const res = await rateLimit(req);
+    expect(res).not.toBeNull();
+    expect(res!.status).toBe(429);
+  });
 });

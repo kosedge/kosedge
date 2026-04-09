@@ -1,10 +1,16 @@
 // apps/web/__tests__/components/auth/UserMenu.test.tsx
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@/lib/test-utils";
+import { render, screen } from "@testing-library/react";
 import UserMenu from "@/components/auth/UserMenu";
 import { useSession, signOut } from "next-auth/react";
+import userEvent from "@testing-library/user-event";
+import type { ReactNode } from "react";
 
-vi.mock("next-auth/react");
+vi.mock("next-auth/react", () => ({
+  useSession: vi.fn(),
+  signOut: vi.fn(),
+  SessionProvider: ({ children }: { children: ReactNode }) => children,
+}));
 
 describe("UserMenu", () => {
   beforeEach(() => {
@@ -88,19 +94,18 @@ describe("UserMenu", () => {
       status: "authenticated",
     } as any);
 
-    const { user } = await import("@testing-library/user-event");
-    const userEvent = user.setup();
+    const user = userEvent.setup();
 
     render(<UserMenu />);
 
     // Open the menu first
     const menuButton = screen.getByText("Test User").closest("button");
     if (menuButton) {
-      await userEvent.click(menuButton);
+      await user.click(menuButton);
     }
 
     const signOutButton = screen.getByText("Sign Out");
-    await userEvent.click(signOutButton);
+    await user.click(signOutButton);
 
     expect(mockSignOut).toHaveBeenCalledWith({ callbackUrl: "/" });
   });

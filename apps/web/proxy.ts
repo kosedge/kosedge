@@ -6,15 +6,12 @@ import { rateLimit } from "@/lib/security/rate-limit";
 import { addSecurityHeaders } from "@/lib/security/headers";
 
 export async function proxy(request: NextRequest) {
-  // Skip proxy for Auth.js routes so session/callback get JSON, not HTML
-  const { pathname } = request.nextUrl;
-  if (pathname.startsWith("/api/auth")) {
-    return NextResponse.next();
-  }
-
-  // Rate limit other API routes
+  // Rate limit all API routes (including /api/auth), then add security headers.
   const rateLimitResponse = await rateLimit(request);
-  if (rateLimitResponse) return rateLimitResponse;
+  if (rateLimitResponse) {
+    addSecurityHeaders(rateLimitResponse);
+    return rateLimitResponse;
+  }
 
   const response = NextResponse.next();
   addSecurityHeaders(response);
