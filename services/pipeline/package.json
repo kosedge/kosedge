@@ -1,0 +1,22 @@
+{
+  "name": "@kosedge/pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Pipeline tests are run via test:python\"",
+    "test:python": "python3 -m pytest ../../apps/web/tests_pipeline -v",
+    "pipeline": "python3 ../../apps/web/run_pipeline.py",
+    "pipeline:check-env": "python3 ../../apps/web/run_pipeline.py --check-env",
+    "export:kei-lines": "python3 ../../apps/web/scripts/export_kei_lines.py",
+    "project:future-lines": "python3 ../../apps/web/scripts/project_future_kei_lines.py",
+    "debug:projection": "python3 ../../apps/web/scripts/debug_projection.py",
+    "backtest:kei": "python3 ../../apps/web/scripts/backtest_kei_results.py",
+    "pull:odds-this-season": "python3 ../../apps/web/scripts/pull_odds_this_season.py",
+    "check:odds-credits": "python3 ../../apps/web/scripts/check_odds_api_credits.py",
+    "capture:replay": "python3 ../../apps/web/scripts/capture_sportsdata_replay.py",
+    "pull:cbb": "python3 ../../apps/web/scripts/pull_sportsdata_cbb.py",
+    "export:power-ratings": "python3 ../../apps/web/scripts/export_power_ratings.py",
+    "ingest:dratings:historical": "python3 -m pip install -q -r ../../apps/web/requirements-dratings-historical.txt && python3 -m playwright install chromium 2>/dev/null; python3 ../../apps/web/scripts/ingest_dratings_historical.py"
+  }
+}

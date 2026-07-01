@@ -84,6 +84,7 @@ pnpm build:web            # Build web app only
 pnpm lint                 # Lint all packages
 pnpm typecheck            # Type check all packages
 pnpm test                 # Run all tests
+pnpm test:pipeline        # Run Python pipeline tests (services/pipeline entrypoint)
 pnpm test:web:critical    # Critical-path coverage gate
 pnpm check:web-python-boundary  # Prevent new Python drift into apps/web
 pnpm format               # Format code
@@ -153,6 +154,7 @@ The project includes GitHub Actions workflows:
 
 - **CI** - Runs on every push/PR (lint, typecheck, tests, critical coverage, build)
 - **Deploy** - Deploys to production on main branch
+- **Deploy Model Service** - Publishes model-service image to GHCR and triggers optional deploy hook
 - **PR Checks** - Quality checks for pull requests
 - **CodeQL** - Security analysis
 - **E2E Smoke** - Playwright browser smoke checks

@@ -2,16 +2,19 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Dict, List
+from datetime import date
+from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from src.celery_app import celery_app, celery_healthcheck
 from src.db import engine
-from src.routes import edge_board_router
+from src.routes import edge_board_router, mlb_router, nfl_router
+from src.services.nfl_simulator import DEFAULT_NFL_MODEL_VERSION
 
 APP_NAME: str = os.getenv("APP_NAME", "kosedge")
 LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -23,6 +26,34 @@ logging.basicConfig(
 log = logging.getLogger(APP_NAME)
 
 TASK_PULL_ODDS_SNAPSHOT = "src.tasks.pull_odds_snapshot"
+TASK_PULL_MLB_CONTEXT = "src.tasks.pull_mlb_context_snapshot"
+TASK_RUN_MLB_SIMULATIONS = "src.tasks.run_mlb_market_simulations"
+TASK_PULL_MLB_OUTCOMES = "src.tasks.pull_mlb_outcomes"
+TASK_PULL_MLB_DATA_LAKE = "src.tasks.pull_mlb_data_lake_snapshot"
+TASK_PULL_NFL_CONTEXT = "src.tasks.pull_nfl_context_snapshot"
+TASK_RUN_NFL_SIMULATIONS = "src.tasks.run_nfl_market_simulations"
+TASK_BACKFILL_NFL_HISTORICAL_PROJECTIONS = "src.tasks.backfill_nfl_historical_projections"
+TASK_MATERIALIZE_NFL_MARKET_HISTORY = "src.tasks.materialize_nfl_market_history"
+TASK_RUN_NFL_CLV_ATTRIBUTION = "src.tasks.run_nfl_clv_attribution"
+TASK_PULL_NFL_OUTCOMES = "src.tasks.pull_nfl_outcomes"
+TASK_RUN_NFL_QUALITY_GRADING = "src.tasks.run_nfl_quality_grading"
+TASK_RUN_NFL_WALKFORWARD_BACKTEST = "src.tasks.run_nfl_walkforward_backtest"
+TASK_EVAL_NFL_PROMOTION = "src.tasks.evaluate_nfl_model_promotion"
+TASK_NFL_PLAYER_BASELINES = "src.tasks.materialize_nfl_player_baseline_projections"
+TASK_NFL_PLAYER_PROPS = "src.tasks.materialize_nfl_player_props_edges"
+TASK_NFL_FANTASY = "src.tasks.materialize_nfl_fantasy_projections"
+TASK_NFL_PLAYER_CYCLE = "src.tasks.run_nfl_player_projection_cycle"
+TASK_NFL_PLAYER_PROP_MARKETS = "src.tasks.pull_nfl_player_prop_market_snapshots"
+TASK_NFL_IDENTITY_REFRESH = "src.tasks.run_nfl_identity_refresh"
+TASK_NFL_IDENTITY_MANUAL_RESOLUTIONS = "src.tasks.apply_nfl_identity_manual_resolutions"
+TASK_NFL_IDENTITY_QUALITY_SNAPSHOT = "src.tasks.run_nfl_identity_quality_snapshot"
+TASK_RUN_MLB_DAILY_CYCLE = "src.tasks.run_mlb_daily_cycle"
+TASK_EVAL_MLB_PROMOTION = "src.tasks.evaluate_mlb_model_promotion"
+TASK_MLB_NOWCAST_REPRICING = "src.tasks.run_mlb_lineup_nowcast_repricing"
+TASK_MLB_WALKFORWARD_BACKTEST = "src.tasks.run_mlb_walkforward_backtest"
+TASK_MLB_FEATURE_ABLATION = "src.tasks.run_mlb_feature_ablation"
+TASK_MLB_DETERMINISM_CHECK = "src.tasks.run_mlb_determinism_check"
+MLB_MODEL_STATE_KEY = "mlb_active_model"
 
 
 def _parse_cors_origins(raw: str) -> List[str]:
@@ -50,6 +81,150 @@ def _resolve_cors_settings() -> tuple[List[str], bool]:
     return origins, allow_credentials
 
 
+def _safe_float(v: Any) -> Optional[float]:
+    if v is None:
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def _safe_date(v: Any) -> Optional[date]:
+    if v is None:
+        return None
+    if isinstance(v, date):
+        return v
+    s = str(v).strip()
+    try:
+        return date.fromisoformat(s[:10])
+    except ValueError:
+        return None
+
+
+def _env_bool(name: str, default: bool = False) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return bool(default)
+    return str(raw).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _resolve_nfl_readiness_policy(*, default_max_last_game_age_days: int) -> Dict[str, Any]:
+    mode_raw = str(os.getenv("NFL_READINESS_MODE", "production")).strip().lower()
+    mode = mode_raw if mode_raw in {"production", "staging"} else "production"
+    effective_max_last_game_age_days = int(default_max_last_game_age_days)
+    freshness_gate_enabled = True
+    override_active = False
+    override_reason = "strict-default"
+
+    if mode == "staging":
+        if _env_bool("NFL_READINESS_STAGING_DISABLE_FRESHNESS_GATE", default=False):
+            freshness_gate_enabled = False
+            override_active = True
+            override_reason = "staging-disable-freshness-gate"
+        else:
+            override_max_raw = os.getenv("NFL_READINESS_STAGING_MAX_LAST_GAME_AGE_DAYS")
+            if override_max_raw is not None:
+                try:
+                    override_max = max(0, int(override_max_raw))
+                    effective_max_last_game_age_days = override_max
+                    override_active = override_max != int(default_max_last_game_age_days)
+                    override_reason = "staging-max-age-override"
+                except ValueError:
+                    override_reason = "staging-max-age-invalid"
+
+    return {
+        "mode": mode,
+        "freshness_gate_enabled": freshness_gate_enabled,
+        "effective_max_last_game_age_days": effective_max_last_game_age_days,
+        "override_active": override_active,
+        "override_reason": override_reason,
+    }
+
+
+def _classify_mlb_readiness(
+    *,
+    sample_size: int,
+    calendar_days: int,
+    last_game_date: Optional[date],
+    warning_alerts_24h: int,
+    min_sample_size: int,
+    min_calendar_days: int,
+    max_last_game_age_days: int,
+) -> Dict[str, Any]:
+    today = date.today()
+    last_age = (today - last_game_date).days if last_game_date else None
+    checks = {
+        "sample_size_ok": sample_size >= min_sample_size,
+        "calendar_days_ok": calendar_days >= min_calendar_days,
+        "freshness_ok": last_age is not None and last_age <= max_last_game_age_days,
+        "alerts_ok": warning_alerts_24h == 0,
+    }
+    reasons: List[str] = []
+    if not checks["sample_size_ok"]:
+        reasons.append("low_sample_size")
+    if not checks["calendar_days_ok"]:
+        reasons.append("low_calendar_coverage")
+    if not checks["freshness_ok"]:
+        reasons.append("stale_or_missing_outcomes")
+    if not checks["alerts_ok"]:
+        reasons.append("recent_warning_alerts")
+    if not checks["sample_size_ok"] or not checks["calendar_days_ok"] or not checks["freshness_ok"]:
+        status = "red"
+    elif not checks["alerts_ok"]:
+        status = "yellow"
+    else:
+        status = "green"
+    return {
+        "status": status,
+        "checks": checks,
+        "reasons": reasons,
+        "last_game_age_days": last_age,
+    }
+
+
+def _readiness_ok_flag(status: str) -> int:
+    return 1 if status in {"green", "yellow"} else 0
+
+
+def _classify_nfl_readiness(
+    *,
+    sample_size: int,
+    calendar_days: int,
+    last_game_date: Optional[date],
+    moneyline_brier: Optional[float],
+    total_mae: Optional[float],
+    clv_avg: Optional[float],
+    min_sample_size: int,
+    min_calendar_days: int,
+    max_last_game_age_days: int,
+    freshness_gate_enabled: bool,
+    max_moneyline_brier: float,
+    max_total_mae: float,
+    min_clv_avg: float,
+) -> Dict[str, Any]:
+    today = date.today()
+    last_age = (today - last_game_date).days if last_game_date else None
+    checks = {
+        "sample_size_ok": sample_size >= min_sample_size,
+        "calendar_days_ok": calendar_days >= min_calendar_days,
+        "freshness_ok": (last_age is not None and last_age <= max_last_game_age_days)
+        if freshness_gate_enabled
+        else True,
+        "moneyline_brier_ok": moneyline_brier is not None and moneyline_brier <= max_moneyline_brier,
+        "total_mae_ok": total_mae is not None and total_mae <= max_total_mae,
+        "clv_ok": clv_avg is not None and clv_avg >= min_clv_avg,
+    }
+    failed_reasons = [name for name, passed in checks.items() if not passed]
+    status = "go" if all(checks.values()) else "no-go"
+    return {
+        "status": status,
+        "checks": checks,
+        "reasons": failed_reasons,
+        "staleness_days": last_age,
+    }
+
+
 app = FastAPI(
     title="KosEdge Model Service",
     version=os.getenv("APP_VERSION", "0.1.0"),
@@ -57,6 +232,8 @@ app = FastAPI(
 
 # Routers
 app.include_router(edge_board_router)
+app.include_router(mlb_router)
+app.include_router(nfl_router)
 
 # CORS (single middleware registration)
 origins, allow_credentials = _resolve_cors_settings()
@@ -88,6 +265,265 @@ def health_db() -> Dict[str, Any]:
 @app.get("/health/celery")
 def health_celery() -> Dict[str, Any]:
     return {"status": "ok", "celery": celery_healthcheck()}
+
+
+@app.get("/health/mlb-production-readiness")
+def health_mlb_production_readiness(
+    min_sample_size: int = Query(120, ge=1, le=5000),
+    min_calendar_days: int = Query(14, ge=1, le=365),
+    max_last_game_age_days: int = Query(3, ge=0, le=30),
+) -> Dict[str, Any]:
+    try:
+        with engine.connect() as conn:
+            active_row = conn.execute(
+                text(
+                    """
+                    SELECT active_model_version
+                    FROM mlb_model_runtime_state
+                    WHERE state_key = :state_key
+                    LIMIT 1
+                    """
+                ),
+                {"state_key": MLB_MODEL_STATE_KEY},
+            ).fetchone()
+            model_version = (
+                str(active_row[0]) if active_row and active_row[0] is not None else "mlb-v1-pa-sim"
+            )
+
+            snapshot_row = conn.execute(
+                text(
+                    """
+                    SELECT payload, created_at
+                    FROM mlb_model_run_snapshots
+                    WHERE model_version = :model_version
+                      AND pipeline_stage = 'quality_snapshot'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                    """
+                ),
+                {"model_version": model_version},
+            ).fetchone()
+            if not snapshot_row:
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "status": "red",
+                        "model_version": model_version,
+                        "reason": "missing_quality_snapshot",
+                    },
+                )
+
+            payload = dict(snapshot_row._mapping).get("payload") or {}
+            sample_size = int(_safe_float(payload.get("sample_size")) or 0)
+            calendar_days = int(_safe_float(payload.get("calendar_days_covered")) or 0)
+            last_game_date = _safe_date(payload.get("last_game_date"))
+            warning_count = conn.execute(
+                text(
+                    """
+                    SELECT COUNT(*)::int
+                    FROM mlb_alert_events
+                    WHERE severity = 'warning'
+                      AND created_at >= NOW() - INTERVAL '24 hours'
+                    """
+                )
+            ).scalar_one()
+
+        classification = _classify_mlb_readiness(
+            sample_size=sample_size,
+            calendar_days=calendar_days,
+            last_game_date=last_game_date,
+            warning_alerts_24h=int(warning_count),
+            min_sample_size=min_sample_size,
+            min_calendar_days=min_calendar_days,
+            max_last_game_age_days=max_last_game_age_days,
+        )
+        response = {
+            "status": classification["status"],
+            "model_version": model_version,
+            "checks": classification["checks"],
+            "reasons": classification["reasons"],
+            "last_game_age_days": classification["last_game_age_days"],
+            "quality_snapshot_created_at": snapshot_row.created_at,
+            "recent_warning_alerts_24h": int(warning_count),
+        }
+        if classification["status"] == "red":
+            raise HTTPException(status_code=503, detail=response)
+        return response
+    except HTTPException:
+        raise
+    except SQLAlchemyError as e:
+        log.exception("MLB readiness healthcheck failed")
+        raise HTTPException(status_code=503, detail=f"mlb_readiness_unavailable: {e}")
+
+
+@app.get("/health/mlb-production-readiness/prometheus", response_class=PlainTextResponse)
+def health_mlb_production_readiness_prometheus(
+    min_sample_size: int = Query(120, ge=1, le=5000),
+    min_calendar_days: int = Query(14, ge=1, le=365),
+    max_last_game_age_days: int = Query(3, ge=0, le=30),
+) -> PlainTextResponse:
+    try:
+        payload = health_mlb_production_readiness(
+            min_sample_size=min_sample_size,
+            min_calendar_days=min_calendar_days,
+            max_last_game_age_days=max_last_game_age_days,
+        )
+        status = str(payload.get("status") or "red")
+        ok = _readiness_ok_flag(status)
+        body = (
+            "# HELP kosedge_mlb_production_readiness_ok MLB production readiness health flag (1=ready,0=not ready)\n"
+            "# TYPE kosedge_mlb_production_readiness_ok gauge\n"
+            f'kosedge_mlb_production_readiness_ok{{status="{status}",model_version="{payload.get("model_version","unknown")}"}} {ok}\n'
+        )
+        return PlainTextResponse(content=body, status_code=200)
+    except HTTPException as e:
+        detail = e.detail if isinstance(e.detail, dict) else {"status": "red", "model_version": "unknown"}
+        status = str(detail.get("status") or "red")
+        model_version = str(detail.get("model_version") or "unknown")
+        body = (
+            "# HELP kosedge_mlb_production_readiness_ok MLB production readiness health flag (1=ready,0=not ready)\n"
+            "# TYPE kosedge_mlb_production_readiness_ok gauge\n"
+            f'kosedge_mlb_production_readiness_ok{{status="{status}",model_version="{model_version}"}} 0\n'
+        )
+        return PlainTextResponse(content=body, status_code=503)
+
+
+@app.get("/health/nfl-production-readiness")
+def health_nfl_production_readiness(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    min_sample_size: int = Query(100, ge=1, le=5000),
+    min_calendar_days: int = Query(14, ge=1, le=365),
+    max_last_game_age_days: int = Query(8, ge=0, le=90),
+    max_moneyline_brier: float = Query(0.255, ge=0.01, le=0.5),
+    max_total_mae: float = Query(6.0, ge=0.2, le=20.0),
+    min_clv_avg: float = Query(0.0, ge=-0.5, le=0.5),
+) -> Dict[str, Any]:
+    try:
+        policy = _resolve_nfl_readiness_policy(default_max_last_game_age_days=int(max_last_game_age_days))
+        with engine.connect() as conn:
+            snapshot_row = conn.execute(
+                text(
+                    """
+                    SELECT run_date, payload, created_at
+                    FROM nfl_model_quality_snapshots
+                    WHERE model_version = :model_version
+                      AND pipeline_stage = 'weekly_quality'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                    """
+                ),
+                {"model_version": model_version},
+            ).fetchone()
+            if not snapshot_row:
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "status": "no-go",
+                        "model_version": model_version,
+                        "reason": "missing_quality_snapshot",
+                    },
+                )
+        payload = dict(snapshot_row._mapping).get("payload") or {}
+        sample_size = int(_safe_float(payload.get("sample_size")) or 0)
+        calendar_days = int(_safe_float(payload.get("calendar_days_covered")) or 0)
+        last_game_date = _safe_date(payload.get("last_game_date"))
+        moneyline_brier = _safe_float(payload.get("moneyline_brier"))
+        total_mae = _safe_float(payload.get("total_mae"))
+        clv_avg = _safe_float(payload.get("clv_avg"))
+        classification = _classify_nfl_readiness(
+            sample_size=sample_size,
+            calendar_days=calendar_days,
+            last_game_date=last_game_date,
+            moneyline_brier=moneyline_brier,
+            total_mae=total_mae,
+            clv_avg=clv_avg,
+            min_sample_size=min_sample_size,
+            min_calendar_days=min_calendar_days,
+            max_last_game_age_days=int(policy["effective_max_last_game_age_days"]),
+            freshness_gate_enabled=bool(policy["freshness_gate_enabled"]),
+            max_moneyline_brier=max_moneyline_brier,
+            max_total_mae=max_total_mae,
+            min_clv_avg=min_clv_avg,
+        )
+        response = {
+            "status": classification["status"],
+            "model_version": model_version,
+            "gating_checks": classification["checks"],
+            "reasons": classification["reasons"],
+            "quality_snapshot_created_at": (
+                snapshot_row.created_at.isoformat()
+                if getattr(snapshot_row, "created_at", None) is not None
+                else None
+            ),
+            "freshness_policy": {
+                "mode": policy["mode"],
+                "override_active": bool(policy["override_active"]),
+                "override_reason": policy["override_reason"],
+                "freshness_gate_enabled": bool(policy["freshness_gate_enabled"]),
+                "max_last_game_age_days_applied": (
+                    int(policy["effective_max_last_game_age_days"])
+                    if bool(policy["freshness_gate_enabled"])
+                    else None
+                ),
+            },
+            "metrics": {
+                "sample_size": sample_size,
+                "calendar_days_covered": calendar_days,
+                "last_game_date": last_game_date.isoformat() if last_game_date else None,
+                "staleness_days": classification["staleness_days"],
+                "moneyline_brier": moneyline_brier,
+                "total_mae": total_mae,
+                "clv_avg": clv_avg,
+            },
+        }
+        if classification["status"] != "go":
+            raise HTTPException(status_code=503, detail=response)
+        return response
+    except HTTPException:
+        raise
+    except SQLAlchemyError as e:
+        log.exception("NFL readiness healthcheck failed")
+        raise HTTPException(status_code=503, detail=f"nfl_readiness_unavailable: {e}")
+
+
+@app.get("/health/nfl-production-readiness/prometheus", response_class=PlainTextResponse)
+def health_nfl_production_readiness_prometheus(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    min_sample_size: int = Query(100, ge=1, le=5000),
+    min_calendar_days: int = Query(14, ge=1, le=365),
+    max_last_game_age_days: int = Query(8, ge=0, le=90),
+    max_moneyline_brier: float = Query(0.255, ge=0.01, le=0.5),
+    max_total_mae: float = Query(6.0, ge=0.2, le=20.0),
+    min_clv_avg: float = Query(0.0, ge=-0.5, le=0.5),
+) -> PlainTextResponse:
+    try:
+        payload = health_nfl_production_readiness(
+            model_version=model_version,
+            min_sample_size=min_sample_size,
+            min_calendar_days=min_calendar_days,
+            max_last_game_age_days=max_last_game_age_days,
+            max_moneyline_brier=max_moneyline_brier,
+            max_total_mae=max_total_mae,
+            min_clv_avg=min_clv_avg,
+        )
+        status = str(payload.get("status") or "no-go")
+        ok = 1 if status == "go" else 0
+        body = (
+            "# HELP kosedge_nfl_production_readiness_ok NFL production readiness health flag (1=ready,0=not ready)\n"
+            "# TYPE kosedge_nfl_production_readiness_ok gauge\n"
+            f'kosedge_nfl_production_readiness_ok{{status="{status}",model_version="{payload.get("model_version","unknown")}"}} {ok}\n'
+        )
+        return PlainTextResponse(content=body, status_code=200)
+    except HTTPException as e:
+        detail = e.detail if isinstance(e.detail, dict) else {"status": "no-go", "model_version": "unknown"}
+        status = str(detail.get("status") or "no-go")
+        model_version = str(detail.get("model_version") or "unknown")
+        body = (
+            "# HELP kosedge_nfl_production_readiness_ok NFL production readiness health flag (1=ready,0=not ready)\n"
+            "# TYPE kosedge_nfl_production_readiness_ok gauge\n"
+            f'kosedge_nfl_production_readiness_ok{{status="{status}",model_version="{model_version}"}} 0\n'
+        )
+        return PlainTextResponse(content=body, status_code=503)
 
 
 @app.get("/api/odds/snapshots")
@@ -126,6 +562,511 @@ def job_pull_odds_snapshot() -> Dict[str, str]:
         return {"task_id": async_result.id, "task_name": TASK_PULL_ODDS_SNAPSHOT}
     except Exception as e:
         log.exception("Failed to enqueue pull-odds-snapshot")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-mlb-context")
+def job_pull_mlb_context(days_ahead: int = Query(5, ge=0, le=14)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(TASK_PULL_MLB_CONTEXT, kwargs={"days_ahead": days_ahead})
+        return {"task_id": async_result.id, "task_name": TASK_PULL_MLB_CONTEXT}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-mlb-context")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-mlb-simulations")
+def job_run_mlb_simulations(
+    game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
+    simulations: int = Query(4000, ge=500, le=20000),
+    model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_MLB_SIMULATIONS,
+            kwargs={
+                "game_date": game_date,
+                "simulations": simulations,
+                "model_version": model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_MLB_SIMULATIONS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-mlb-simulations")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nfl-context")
+def job_pull_nfl_context(days_ahead: int = Query(14, ge=0, le=45)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(TASK_PULL_NFL_CONTEXT, kwargs={"days_ahead": days_ahead})
+        return {"task_id": async_result.id, "task_name": TASK_PULL_NFL_CONTEXT}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nfl-context")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-simulations")
+def job_run_nfl_simulations(
+    game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
+    simulations: int = Query(4000, ge=300, le=20000),
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_SIMULATIONS,
+            kwargs={
+                "game_date": game_date,
+                "simulations": simulations,
+                "model_version": model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_SIMULATIONS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-simulations")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/backfill-nfl-historical-projections")
+def job_backfill_nfl_historical_projections(
+    start_date: str = Query(..., description="YYYY-MM-DD"),
+    end_date: str = Query(..., description="YYYY-MM-DD"),
+    simulations: int = Query(4000, ge=300, le=20000),
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    kickoff_buffer_minutes: int = Query(30, ge=0, le=720),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_BACKFILL_NFL_HISTORICAL_PROJECTIONS,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": simulations,
+                "model_version": model_version,
+                "kickoff_buffer_minutes": kickoff_buffer_minutes,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_BACKFILL_NFL_HISTORICAL_PROJECTIONS}
+    except Exception as e:
+        log.exception("Failed to enqueue backfill-nfl-historical-projections")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/materialize-nfl-market-history")
+def job_materialize_nfl_market_history(
+    lookback_days: int = Query(45, ge=1, le=3650),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MATERIALIZE_NFL_MARKET_HISTORY,
+            kwargs={"lookback_days": lookback_days},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MATERIALIZE_NFL_MARKET_HISTORY}
+    except Exception as e:
+        log.exception("Failed to enqueue materialize-nfl-market-history")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-clv-attribution")
+def job_run_nfl_clv_attribution(
+    lookback_days: int = Query(45, ge=7, le=365),
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_CLV_ATTRIBUTION,
+            kwargs={"lookback_days": lookback_days, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_CLV_ATTRIBUTION}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-clv-attribution")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nfl-outcomes")
+def job_pull_nfl_outcomes(days_back: int = Query(60, ge=1, le=365)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(TASK_PULL_NFL_OUTCOMES, kwargs={"days_back": days_back})
+        return {"task_id": async_result.id, "task_name": TASK_PULL_NFL_OUTCOMES}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nfl-outcomes")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-quality-grading")
+def job_run_nfl_quality_grading(
+    lookback_days: int = Query(60, ge=7, le=365),
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_QUALITY_GRADING,
+            kwargs={"lookback_days": lookback_days, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_QUALITY_GRADING}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-quality-grading")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-walkforward-backtest")
+def job_run_nfl_walkforward_backtest(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    lookback_days: int = Query(240, ge=30, le=1460),
+    training_days: int = Query(56, ge=14, le=365),
+    step_days: int = Query(7, ge=1, le=30),
+    apply_calibration: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_WALKFORWARD_BACKTEST,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": lookback_days,
+                "training_days": training_days,
+                "step_days": step_days,
+                "apply_calibration": apply_calibration,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_WALKFORWARD_BACKTEST}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-walkforward-backtest")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/evaluate-nfl-promotion")
+def job_evaluate_nfl_promotion(
+    challenger_model_version: str = Query(..., min_length=3, max_length=128),
+    lookback_days: int = Query(45, ge=7, le=365),
+    auto_promote: bool = Query(True),
+    champion_model_version: Optional[str] = Query(None),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_EVAL_NFL_PROMOTION,
+            kwargs={
+                "challenger_model_version": challenger_model_version,
+                "lookback_days": int(lookback_days),
+                "auto_promote": bool(auto_promote),
+                "champion_model_version": champion_model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_EVAL_NFL_PROMOTION}
+    except Exception as e:
+        log.exception("Failed to enqueue evaluate-nfl-promotion")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-player-baselines")
+def job_run_nfl_player_baselines(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_PLAYER_BASELINES,
+            kwargs={"season": season, "week": week, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_BASELINES}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-player-baselines")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-player-props")
+def job_run_nfl_player_props(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_PLAYER_PROPS,
+            kwargs={"season": season, "week": week, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_PROPS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-player-props")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nfl-player-prop-markets")
+def job_pull_nfl_player_prop_markets(
+    season: int = Query(..., ge=2010, le=2100),
+    week: int = Query(..., ge=1, le=25),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_PLAYER_PROP_MARKETS,
+            kwargs={"season": season, "week": week},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_PROP_MARKETS}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nfl-player-prop-markets")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-fantasy-projections")
+def job_run_nfl_fantasy_projections(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_FANTASY,
+            kwargs={"season": season, "week": week, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_FANTASY}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-fantasy-projections")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-player-cycle")
+def job_run_nfl_player_cycle(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_PLAYER_CYCLE,
+            kwargs={"season": season, "week": week, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_CYCLE}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-player-cycle")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-identity-refresh")
+def job_run_nfl_identity_refresh(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_IDENTITY_REFRESH,
+            kwargs={"season": season, "week": week, "model_version": model_version},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_IDENTITY_REFRESH}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-identity-refresh")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-identity-manual-resolutions")
+def job_run_nfl_identity_manual_resolutions(
+    limit: int = Query(200, ge=1, le=5000),
+    reviewer: str = Query("system-weekly-identity-sync", min_length=2, max_length=128),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_IDENTITY_MANUAL_RESOLUTIONS,
+            kwargs={"limit": limit, "reviewer": reviewer},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_IDENTITY_MANUAL_RESOLUTIONS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-identity-manual-resolutions")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-identity-quality-snapshot")
+def job_run_nfl_identity_quality_snapshot(
+    season: Optional[int] = Query(None, ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    source_system: Optional[str] = Query(None),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_IDENTITY_QUALITY_SNAPSHOT,
+            kwargs={"season": season, "week": week, "source_system": source_system},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_IDENTITY_QUALITY_SNAPSHOT}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-identity-quality-snapshot")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-mlb-outcomes")
+def job_pull_mlb_outcomes(days_back: int = Query(30, ge=1, le=365)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(TASK_PULL_MLB_OUTCOMES, kwargs={"days_back": days_back})
+        return {"task_id": async_result.id, "task_name": TASK_PULL_MLB_OUTCOMES}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-mlb-outcomes")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-mlb-data-lake")
+def job_pull_mlb_data_lake(
+    days_back: int = Query(60, ge=1, le=365),
+    days_ahead: int = Query(7, ge=0, le=30),
+    season: Optional[int] = Query(None, ge=2000, le=2100),
+    include_rosters: bool = Query(True),
+    include_game_feeds: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_PULL_MLB_DATA_LAKE,
+            kwargs={
+                "days_back": days_back,
+                "days_ahead": days_ahead,
+                "season": season,
+                "include_rosters": include_rosters,
+                "include_game_feeds": include_game_feeds,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_MLB_DATA_LAKE}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-mlb-data-lake")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-mlb-daily-cycle")
+def job_run_mlb_daily_cycle(
+    days_ahead: int = Query(5, ge=0, le=14),
+    outcomes_lookback_days: int = Query(60, ge=7, le=365),
+    simulations: int = Query(4000, ge=500, le=30000),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+    challenger_model_version: str = Query("mlb-v2-pitch-sim"),
+    run_challenger: bool = Query(True),
+    calibration_lookback_days: int = Query(45, ge=7, le=365),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_MLB_DAILY_CYCLE,
+            kwargs={
+                "days_ahead": days_ahead,
+                "outcomes_lookback_days": outcomes_lookback_days,
+                "simulations": simulations,
+                "base_model_version": base_model_version,
+                "challenger_model_version": challenger_model_version,
+                "run_challenger": run_challenger,
+                "calibration_lookback_days": calibration_lookback_days,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_MLB_DAILY_CYCLE}
+    except Exception as e:
+        log.exception("Failed to enqueue run-mlb-daily-cycle")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/evaluate-mlb-promotion")
+def job_evaluate_mlb_promotion(
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+    challenger_model_version: str = Query("mlb-v2-pitch-sim"),
+    lookback_days: int = Query(45, ge=7, le=365),
+    auto_promote: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_EVAL_MLB_PROMOTION,
+            kwargs={
+                "base_model_version": base_model_version,
+                "challenger_model_version": challenger_model_version,
+                "lookback_days": lookback_days,
+                "auto_promote": auto_promote,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_EVAL_MLB_PROMOTION}
+    except Exception as e:
+        log.exception("Failed to enqueue evaluate-mlb-promotion")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-lineup-nowcast-repricing")
+def job_mlb_lineup_nowcast_repricing(
+    horizon_hours: int = Query(18, ge=1, le=48),
+    simulations: int = Query(3000, ge=200, le=20000),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+    challenger_model_version: str = Query("mlb-v2-pitch-sim"),
+    run_challenger: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_NOWCAST_REPRICING,
+            kwargs={
+                "horizon_hours": horizon_hours,
+                "simulations": simulations,
+                "base_model_version": base_model_version,
+                "challenger_model_version": challenger_model_version,
+                "run_challenger": run_challenger,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_NOWCAST_REPRICING}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-lineup-nowcast-repricing")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-walkforward-backtest")
+def job_mlb_walkforward_backtest(
+    model_version: str = Query("mlb-v1-pa-sim"),
+    lookback_days: int = Query(180, ge=30, le=730),
+    training_days: int = Query(45, ge=14, le=365),
+    step_days: int = Query(7, ge=1, le=30),
+    apply_calibration: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_WALKFORWARD_BACKTEST,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": lookback_days,
+                "training_days": training_days,
+                "step_days": step_days,
+                "apply_calibration": apply_calibration,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_WALKFORWARD_BACKTEST}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-walkforward-backtest")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-feature-ablation")
+def job_mlb_feature_ablation(
+    game_date: Optional[str] = Query(None),
+    model_version: str = Query("mlb-v1-pa-sim"),
+    simulations: int = Query(1500, ge=500, le=10000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_FEATURE_ABLATION,
+            kwargs={
+                "game_date": game_date,
+                "model_version": model_version,
+                "simulations": simulations,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_FEATURE_ABLATION}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-feature-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-determinism-check")
+def job_mlb_determinism_check(
+    game_date: Optional[str] = Query(None),
+    model_version: str = Query("mlb-v1-pa-sim"),
+    simulations: int = Query(800, ge=500, le=5000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_DETERMINISM_CHECK,
+            kwargs={
+                "game_date": game_date,
+                "model_version": model_version,
+                "simulations": simulations,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_DETERMINISM_CHECK}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-determinism-check")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

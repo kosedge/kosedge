@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kosedge-data-platform-nfl"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "SQLAlchemy==2.0.32",
+  "psycopg[binary]==3.2.1",
+  "python-dotenv==1.0.1",
+  "nflreadpy==0.1.5",
+  "polars==1.12.0",
+]
+
+[project.scripts]
+nfl-data-platform = "data_platform_nfl.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -106,7 +106,7 @@ if (await isProUser()) {
 
 ### Protected Routes
 
-Routes under `/pro/*` are automatically protected by middleware. Unauthenticated users are redirected to `/auth/signin`.
+Paid routes under `/pro/*` are protected at the shared Pro layout boundary (`app/(pro)/pro/layout.tsx`) using `getProAccessState()`. Unauthenticated users are redirected to `/auth/signin`; signed-in but non-entitled users are redirected to `/pricing`.
 
 ### Client-Side Session
 

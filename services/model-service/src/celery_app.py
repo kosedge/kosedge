@@ -121,8 +121,23 @@ celery_app.conf.update(
 # Route only tasks that exist TODAY (avoid “phantom routes”)
 celery_app.conf.task_routes = {
     "src.tasks.pull_odds_snapshot": {"queue": QUEUE_ODDS, "routing_key": QUEUE_ODDS},
-    # Enable once implemented:
-    # "src.tasks.run_model_pipeline": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.pull_nfl_context_snapshot": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_nfl_market_simulations": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.materialize_nfl_market_history": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_nfl_clv_attribution": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.pull_nfl_outcomes": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_nfl_quality_grading": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.evaluate_nfl_model_promotion": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.pull_mlb_context_snapshot": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_market_simulations": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.pull_mlb_outcomes": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.pull_mlb_data_lake_snapshot": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_daily_cycle": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.evaluate_mlb_model_promotion": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_lineup_nowcast_repricing": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_walkforward_backtest": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_feature_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_determinism_check": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
 }
 
 # Beat schedule (optional; beat container can boot even if file missing)

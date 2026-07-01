@@ -5,7 +5,7 @@ import { getRedisClient } from "@/lib/cache/redis";
 
 type Limiter = { consume(key: string): Promise<unknown> };
 
-const POINTS = { api: 100, auth: 5, strict: 10 } as const;
+const POINTS = { api: 100, authRead: 60, authWrite: 10, strict: 10 } as const;
 
 // In-memory limiters (used when REDIS_URL is not set or Redis unavailable)
 const apiLimiterMemory = new RateLimiterMemory({
@@ -13,7 +13,11 @@ const apiLimiterMemory = new RateLimiterMemory({
   duration: 60,
 });
 const authLimiterMemory = new RateLimiterMemory({
-  points: POINTS.auth,
+  points: POINTS.authRead,
+  duration: 60,
+});
+const authWriteLimiterMemory = new RateLimiterMemory({
+  points: POINTS.authWrite,
   duration: 60,
 });
 const strictLimiterMemory = new RateLimiterMemory({
@@ -22,8 +26,12 @@ const strictLimiterMemory = new RateLimiterMemory({
 });
 
 // Redis-backed limiters (lazy-init when REDIS_URL is set); shared across instances
-let redisLimiters: { api: Limiter; auth: Limiter; strict: Limiter } | null =
-  null;
+let redisLimiters: {
+  api: Limiter;
+  auth: Limiter;
+  authWrite: Limiter;
+  strict: Limiter;
+} | null = null;
 
 function getRedisLimiters(): typeof redisLimiters {
   if (redisLimiters) return redisLimiters;
@@ -40,7 +48,13 @@ function getRedisLimiters(): typeof redisLimiters {
     auth: new RateLimiterRedis({
       storeClient: client,
       keyPrefix: "rl:auth",
-      points: POINTS.auth,
+      points: POINTS.authRead,
+      duration: 60,
+    }),
+    authWrite: new RateLimiterRedis({
+      storeClient: client,
+      keyPrefix: "rl:auth-write",
+      points: POINTS.authWrite,
       duration: 60,
     }),
     strict: new RateLimiterRedis({
@@ -53,13 +67,31 @@ function getRedisLimiters(): typeof redisLimiters {
   return redisLimiters;
 }
 
+function isAuthWritePath(pathname: string): boolean {
+  return (
+    pathname === "/api/auth/register" ||
+    pathname.startsWith("/api/auth/callback") ||
+    pathname.startsWith("/api/auth/signin") ||
+    pathname.startsWith("/api/auth/signout")
+  );
+}
+
 function getLimiterAndPoints(pathname: string): {
   limiter: Limiter;
   points: number;
 } {
   const redis = getRedisLimiters();
   if (pathname.startsWith("/api/auth")) {
-    return { limiter: redis?.auth ?? authLimiterMemory, points: POINTS.auth };
+    if (isAuthWritePath(pathname)) {
+      return {
+        limiter: redis?.authWrite ?? authWriteLimiterMemory,
+        points: POINTS.authWrite,
+      };
+    }
+    return {
+      limiter: redis?.auth ?? authLimiterMemory,
+      points: POINTS.authRead,
+    };
   }
   if (pathname.startsWith("/api/edge-board")) {
     return {

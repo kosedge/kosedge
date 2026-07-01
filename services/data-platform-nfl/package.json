@@ -1,0 +1,14 @@
+{
+  "name": "@kosedge/data-platform-nfl",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ingest:nflverse": "PYTHONPATH=./src python3 -m data_platform_nfl.cli",
+    "ingest:nflverse:no-pbp": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --no-pbp",
+    "normalize:pbp": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --normalize-pbp-from-raw",
+    "materialize:usage": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --materialize-usage-features",
+    "materialize:matchups": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --materialize-matchup-features",
+    "test": "echo \"No JS tests in data-platform-nfl\""
+  }
+}

@@ -24,8 +24,9 @@ Runs on pushes to `main` branch and version tags (`v*`).
 **Jobs:**
 
 1. **Deploy Web Application** - Builds and deploys the web app
+2. **Deploy Model Service** - Builds/pushes model-service Docker image to GHCR and optionally triggers deploy hook
 
-**Note:** Deployment steps need to be configured based on your hosting platform (Vercel, Docker, etc.)
+**Note:** Web deploy targets Vercel. Model-service deploy publishes immutable images and can trigger your runtime rollout via deploy hook.
 
 ### `pr-check.yml` - Pull Request Checks
 
@@ -64,6 +65,10 @@ For deployment, configure these secrets in GitHub Settings → Secrets:
 - `VERCEL_TOKEN`
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
+
+**Model Service Deploy:**
+
+- `MODEL_SERVICE_DEPLOY_HOOK_URL` (optional) - Webhook URL for runtime deployment trigger after image publish
 
 **Docker Hub:**
 

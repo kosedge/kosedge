@@ -122,7 +122,7 @@ kosedge/
 3. Password hashed → bcryptjs
 4. User created/authenticated → Prisma ORM
 5. Session created → NextAuth JWT
-6. Protected routes accessible → Middleware checks
+6. Protected routes accessible → Pro access checks at shared layout boundary
 
 ### Data Fetching Flow
 
@@ -203,8 +203,16 @@ kosedge/
 ### Cache Keys
 
 - `edge-board:ncaam:today` - Today's edge board
+- `edge-board:nfl:today:v1` - Today's NFL edge board payload
 - `user:{id}:session` - User session data
 - `game:{id}:market` - Game market data
+
+### NFL Model-Service Hardening
+
+- `GET /health/nfl-production-readiness` provides a hard go/no-go health gate from latest NFL quality snapshot (sample size, freshness, brier/mae/clv checks).
+- `POST /api/jobs/run-nfl-walkforward-backtest` runs leakage-safe fold evaluation and persists reports to `nfl_model_backtest_runs`.
+- `GET /nfl/ops/backtest-runs` and `GET /nfl/ops/backtest-report` expose historical and latest walk-forward metrics.
+- `GET /nfl/edges/today` filters low-quality NFL signals using configurable quality/confidence thresholds and returns filtered diagnostics metadata.
 
 ## Performance Optimizations
 

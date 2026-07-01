@@ -164,14 +164,14 @@ jobs:
 
       - name: Install pipeline dependencies
         run: |
-          cd apps/web
+          cd services/pipeline
           python -m pip install --upgrade pip
-          pip install -r requirements-pipeline.txt
+          pip install -r ../../apps/web/requirements-pipeline.txt
 
       - name: Run pipeline tests
         run: |
-          cd apps/web
-          python -m pytest tests_pipeline -v
+          cd services/pipeline
+          python -m pytest ../../apps/web/tests_pipeline -v
 
   format-check:
     name: Format Check

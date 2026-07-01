@@ -9,7 +9,7 @@ import Link from "next/link";
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/pro/welcome";
+  const callbackUrl = searchParams.get("callbackUrl") || "/pro";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,7 +48,7 @@ function SignInForm() {
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
         <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       <main className="relative z-10 flex min-h-screen items-center justify-center px-5 py-16">
@@ -119,7 +119,7 @@ function SignInForm() {
             <div className="mt-6 text-center text-sm text-gray-400">
               Don&apos;t have an account?{" "}
               <Link
-                href="/auth/signup"
+                href={`/auth/signup?callbackUrl=${encodeURIComponent(callbackUrl)}`}
                 className="text-kos-gold hover:text-kos-gold/80 font-semibold"
               >
                 Sign up

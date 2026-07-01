@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
 from fastapi import APIRouter, HTTPException
+from src.services.odds_api import get_odds_api_keys
 from zoneinfo import ZoneInfo
 
 router = APIRouter(prefix="/edge-board", tags=["edge-board"])
@@ -181,32 +182,52 @@ def _open_total(over_under: str, open_book: Optional[Dict[str, Any]]) -> Tuple[s
 
 
 async def _fetch_odds_ncaab() -> List[Dict[str, Any]]:
-    api_key = os.getenv("ODDS_API_KEY")
-    if not api_key or api_key == "YOUR_ODDS_API_KEY":
+    api_keys = get_odds_api_keys()
+    if not api_keys or api_keys[0] == "YOUR_ODDS_API_KEY":
         raise HTTPException(status_code=500, detail="ODDS_API_KEY is not set")
 
     url = f"{ODDS_API_BASE}/sports/{SPORT_KEY_NCAAB}/odds"
-    params = {
-        "apiKey": api_key,
-        "regions": "us",
-        "markets": "spreads,totals",
-        "oddsFormat": "american",
-        "dateFormat": "iso",
-    }
+    last_error: HTTPException | None = None
 
-    try:
-        async with httpx.AsyncClient(timeout=_HTTP_TIMEOUT_SECONDS) as client:
-            r = await client.get(url, params=params)
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=502, detail=f"Odds API request failed: {e}") from e
+    async with httpx.AsyncClient(timeout=_HTTP_TIMEOUT_SECONDS) as client:
+        for api_key in api_keys:
+            params = {
+                "apiKey": api_key,
+                "regions": "us",
+                "markets": "spreads,totals",
+                "oddsFormat": "american",
+                "dateFormat": "iso",
+            }
 
-    if r.status_code != 200:
-        raise HTTPException(status_code=502, detail=f"Odds API error: {r.status_code} {r.text}")
+            try:
+                r = await client.get(url, params=params)
+            except httpx.RequestError as e:
+                last_error = HTTPException(
+                    status_code=502,
+                    detail=f"Odds API request failed: {e}",
+                )
+                continue
 
-    data = r.json()
-    if not isinstance(data, list):
-        raise HTTPException(status_code=502, detail="Odds API returned unexpected payload")
-    return data
+            if r.status_code != 200:
+                last_error = HTTPException(
+                    status_code=502,
+                    detail=f"Odds API error: {r.status_code} {r.text}",
+                )
+                continue
+
+            data = r.json()
+            if not isinstance(data, list):
+                last_error = HTTPException(
+                    status_code=502,
+                    detail="Odds API returned unexpected payload",
+                )
+                continue
+            return data
+
+    if last_error is not None:
+        raise last_error
+
+    raise HTTPException(status_code=500, detail="ODDS_API_KEY is not set")
 
 
 @router.get("/ncaam/today")

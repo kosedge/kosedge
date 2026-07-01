@@ -4,31 +4,31 @@
  */
 
 const AWAY_PRO = [
-  "Strong perimeter shooting and ball movement.",
-  "Elite transition offense; capitalizes on turnovers.",
-  "Experienced backcourt; handles pressure well.",
-  "Solid defensive rebounding; limits second chances.",
+  "Strong recent efficiency trend in core game-script situations.",
+  "Disciplined execution in high-leverage possessions and late phases.",
+  "Reliable unit cohesion with clear role allocation.",
+  "Consistent control of possession-quality and field-position swings.",
 ];
 
 const AWAY_CON = [
-  "Can struggle against length in the paint.",
-  "Road performance has been inconsistent.",
-  "Foul trouble has hurt in close games.",
-  "Bench scoring has been thin lately.",
+  "Road profile has shown more volatility than home baseline.",
+  "Depth stress can appear when primary contributors are limited.",
+  "Recent turnover and penalty profile has spiked in pressure windows.",
+  "Late-sequence execution has been uneven in one-score scenarios.",
 ];
 
 const HOME_PRO = [
-  "Home court advantage; crowd energy matters.",
-  "Stout interior defense; protects the rim.",
-  "Balanced scoring; multiple options.",
-  "Physical in the paint; wins 50-50 balls.",
+  "Home environment has produced stronger baseline execution.",
+  "Balanced production profile across primary and secondary units.",
+  "Effective control of tempo and opponent rhythm disruption.",
+  "Strong conversion rate in high-leverage scoring windows.",
 ];
 
 const HOME_CON = [
-  "Injuries have limited rotation options.",
-  "Turnover rate has crept up recently.",
-  "Three-point defense can be exploited.",
-  "Slow starts have been an issue.",
+  "Availability uncertainty can tighten rotation flexibility.",
+  "Possession-management consistency has dipped in recent samples.",
+  "Coverage and matchup adaptation has shown occasional leakage.",
+  "Early-phase starts can trail expected baseline output.",
 ];
 
 function hash(str: string): number {
@@ -54,7 +54,7 @@ export function generateGameOverview(
   homeTeam: string,
 ): string {
   const seed = hash(`${awayTeam}|${homeTeam}`);
-  const p1 = `${awayTeam} travels to face ${homeTeam} in a matchup that could swing on a few key factors. Both teams bring distinct strengths and vulnerabilities to the floor.`;
+  const p1 = `${awayTeam} travels to face ${homeTeam} in a matchup likely to turn on a few high-leverage variables. Both teams enter with clear strengths and controllable vulnerabilities.`;
   const p2 = `${awayTeam} — Pros: ${pick(AWAY_PRO, seed, 2).join(" ")} Cons: ${pick(AWAY_CON, seed + 1, 2).join(" ")}`;
   const p3 = `${homeTeam} — Pros: ${pick(HOME_PRO, seed + 2, 2).join(" ")} Cons: ${pick(HOME_CON, seed + 3, 2).join(" ")}`;
   return [p1, p2, p3].join("\n\n");

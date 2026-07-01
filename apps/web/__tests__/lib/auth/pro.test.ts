@@ -18,7 +18,9 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-const { isProUser, hasRole, getUserRole } = await import("@/lib/auth/pro");
+const { isProUser, hasRole, getUserRole, getProAccessState } = await import(
+  "@/lib/auth/pro"
+);
 
 describe("Auth Pro Utilities", () => {
   beforeEach(() => {
@@ -183,6 +185,46 @@ describe("Auth Pro Utilities", () => {
       const result = await getUserRole();
 
       expect(result).toBe(null);
+    });
+  });
+
+  describe("getProAccessState", () => {
+    it("returns unauthenticated when user is not signed in", async () => {
+      authMock.mockResolvedValue(null);
+      const result = await getProAccessState();
+      expect(result).toBe("unauthenticated");
+    });
+
+    it("returns authorized for active subscription user", async () => {
+      authMock.mockResolvedValue({
+        user: { id: "user-1", email: "test@example.com", role: UserRole.USER },
+      } as any);
+      const futureDate = new Date();
+      futureDate.setDate(futureDate.getDate() + 7);
+      findUniqueMock.mockResolvedValue({
+        id: "user-1",
+        role: UserRole.USER,
+        subscriptionStatus: SubscriptionStatus.ACTIVE,
+        subscriptionEnd: futureDate,
+      } as any);
+
+      const result = await getProAccessState();
+      expect(result).toBe("authorized");
+    });
+
+    it("returns forbidden for signed-in non-pro user", async () => {
+      authMock.mockResolvedValue({
+        user: { id: "user-1", email: "test@example.com", role: UserRole.USER },
+      } as any);
+      findUniqueMock.mockResolvedValue({
+        id: "user-1",
+        role: UserRole.USER,
+        subscriptionStatus: null,
+        subscriptionEnd: null,
+      } as any);
+
+      const result = await getProAccessState();
+      expect(result).toBe("forbidden");
     });
   });
 });

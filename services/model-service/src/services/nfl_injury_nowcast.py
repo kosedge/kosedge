@@ -1,0 +1,268 @@
+from __future__ import annotations
+
+import math
+import os
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
+
+from sqlalchemy import text
+
+
+def _clamp(value: float, low: float, high: float) -> float:
+    return max(low, min(high, value))
+
+
+def _safe_float(value: Any, default: float = 0.0) -> float:
+    try:
+        if value is None:
+            return default
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _normalize_team_key(name: Optional[str]) -> str:
+    if not name:
+        return ""
+    return "".join(ch for ch in str(name).lower() if ch.isalnum())
+
+
+def _age_hours(updated_at: Any) -> float:
+    if updated_at is None:
+        return 999.0
+    try:
+        dt = updated_at
+        if isinstance(updated_at, str):
+            dt = datetime.fromisoformat(updated_at.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        now = datetime.now(timezone.utc)
+        return max(0.0, (now - dt).total_seconds() / 3600.0)
+    except Exception:
+        return 999.0
+
+
+def _status_weight(report_status: Optional[str]) -> float:
+    raw = str(report_status or "").strip().lower()
+    if not raw:
+        return 0.03
+    mapping = {
+        "out": 1.00,
+        "doubtful": 0.78,
+        "questionable": 0.40,
+        "limited": 0.26,
+        "probable": 0.14,
+        "healthy": 0.0,
+    }
+    if raw in mapping:
+        return mapping[raw]
+    if "injured reserve" in raw or raw == "ir":
+        return 0.92
+    if "questionable" in raw:
+        return 0.40
+    if "doubtful" in raw:
+        return 0.78
+    return 0.10
+
+
+def _practice_weight(practice_status: Optional[str]) -> float:
+    raw = str(practice_status or "").strip().lower()
+    if not raw:
+        return 0.08
+    if "did not participate" in raw or raw == "dnp":
+        return 1.0
+    if "limited" in raw:
+        return 0.58
+    if "full" in raw:
+        return 0.08
+    return 0.20
+
+
+def _position_weights(position: Optional[str]) -> Dict[str, float]:
+    p = str(position or "").strip().upper()
+    if p == "QB":
+        return {"offense": 1.0, "defense": 0.0}
+    if p in {"WR", "RB", "TE"}:
+        return {"offense": 0.64, "defense": 0.0}
+    if p in {"LT", "LG", "C", "RG", "RT", "OL"}:
+        return {"offense": 0.54, "defense": 0.0}
+    if p in {"DE", "DT", "DL", "EDGE"}:
+        return {"offense": 0.0, "defense": 0.62}
+    if p in {"LB", "CB", "S", "DB"}:
+        return {"offense": 0.0, "defense": 0.52}
+    if p in {"K", "P"}:
+        return {"offense": 0.12, "defense": 0.0}
+    return {"offense": 0.28, "defense": 0.24}
+
+
+def _injury_severity_weight(injury: Optional[str]) -> float:
+    raw = str(injury or "").lower()
+    if not raw:
+        return 0.0
+    if "acl" in raw or "achilles" in raw:
+        return 0.35
+    if "concussion" in raw:
+        return 0.26
+    if "hamstring" in raw or "quad" in raw:
+        return 0.18
+    if "ankle" in raw or "knee" in raw:
+        return 0.16
+    if "shoulder" in raw or "elbow" in raw:
+        return 0.14
+    return 0.08
+
+
+def _freshness_multiplier(age_hours: float) -> float:
+    half_life = max(1.0, _safe_float(os.getenv("NFL_INJURY_HALFLIFE_HOURS"), 18.0))
+    stale_hours = max(1.0, _safe_float(os.getenv("NFL_INJURY_STALE_HOURS"), 72.0))
+    stale_floor = _clamp(_safe_float(os.getenv("NFL_INJURY_STALE_FLOOR"), 0.05), 0.0, 1.0)
+    decay = math.pow(0.5, max(0.0, age_hours) / half_life)
+    if age_hours > stale_hours:
+        decay = min(decay, stale_floor)
+    return _clamp(decay, stale_floor, 1.0)
+
+
+def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    if not rows:
+        return {
+            "injury_count": 0,
+            "freshness_hours": None,
+            "freshness_multiplier": 0.0,
+            "confidence": 0.0,
+            "offense_multiplier": 1.0,
+            "defense_multiplier": 1.0,
+            "impact_score": 0.0,
+            "top_drivers": [],
+        }
+
+    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 1.35))
+    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 1.35))
+    impact_scale = _clamp(_safe_float(os.getenv("NFL_INJURY_IMPACT_SCALE"), 0.09), 0.01, 0.25)
+    confidence_scale = _clamp(_safe_float(os.getenv("NFL_INJURY_CONFIDENCE_SCALE"), 0.9), 0.1, 1.5)
+    min_rows_for_conf = max(1.0, _safe_float(os.getenv("NFL_INJURY_ROWS_FOR_FULL_CONFIDENCE"), 14.0))
+
+    offense_raw = 0.0
+    defense_raw = 0.0
+    freshest = 999.0
+    drivers: List[Dict[str, Any]] = []
+    for row in rows:
+        status_weight = _status_weight(row.get("report_status"))
+        practice_weight = _practice_weight(row.get("practice_status"))
+        position_weights = _position_weights(row.get("position"))
+        injury_weight = _injury_severity_weight(row.get("injury"))
+        player_impact = _clamp(
+            (0.62 * status_weight) + (0.23 * practice_weight) + (0.15 * injury_weight),
+            0.0,
+            1.0,
+        )
+        offense_raw += player_impact * position_weights["offense"]
+        defense_raw += player_impact * position_weights["defense"]
+        age = _age_hours(row.get("updated_at"))
+        freshest = min(freshest, age)
+        drivers.append(
+            {
+                "player_name": row.get("player_name"),
+                "position": row.get("position"),
+                "report_status": row.get("report_status"),
+                "practice_status": row.get("practice_status"),
+                "impact": round(player_impact, 4),
+            }
+        )
+
+    freshness = _freshness_multiplier(freshest if freshest < 999.0 else 999.0)
+    data_density = _clamp(len(rows) / min_rows_for_conf, 0.0, 1.0)
+    confidence = _clamp(freshness * (0.35 + (0.65 * data_density)), 0.0, 1.0)
+    offense_penalty = _clamp(offense_raw / max_raw_offense, 0.0, 1.0) * impact_scale * confidence_scale
+    defense_penalty = _clamp(defense_raw / max_raw_defense, 0.0, 1.0) * impact_scale * confidence_scale
+
+    offense_multiplier = _clamp(1.0 - (offense_penalty * confidence), 0.82, 1.04)
+    # Higher defense_index means weaker defense in this simulator.
+    defense_multiplier = _clamp(1.0 + (defense_penalty * confidence), 0.92, 1.18)
+    impact_score = _clamp((offense_penalty + defense_penalty) * 0.5, 0.0, 1.0)
+
+    drivers = sorted(drivers, key=lambda item: float(item["impact"]), reverse=True)[:5]
+    return {
+        "injury_count": len(rows),
+        "freshness_hours": round(freshest, 3) if freshest < 999.0 else None,
+        "freshness_multiplier": round(freshness, 4),
+        "confidence": round(confidence, 4),
+        "offense_multiplier": round(offense_multiplier, 4),
+        "defense_multiplier": round(defense_multiplier, 4),
+        "impact_score": round(impact_score, 4),
+        "top_drivers": drivers,
+    }
+
+
+def fetch_nfl_injury_nowcast(
+    session: Any,
+    *,
+    season_year: Optional[int],
+    home_team: str,
+    away_team: str,
+) -> Dict[str, Any]:
+    season = int(season_year) if season_year is not None else datetime.now(timezone.utc).year
+    rows = session.execute(
+        text(
+            """
+            WITH latest AS (
+              SELECT DISTINCT ON (team, player_key)
+                season,
+                week,
+                team,
+                player_key,
+                player_name,
+                report_status,
+                practice_status,
+                injury,
+                updated_at
+              FROM nfl_dp_injuries
+              WHERE season = :season
+                AND (team = :home_team OR team = :away_team)
+              ORDER BY team, player_key, week DESC, updated_at DESC
+            )
+            SELECT
+              season, week, team, player_key, player_name,
+              report_status, practice_status, injury, updated_at
+            FROM latest
+            """
+        ),
+        {
+            "season": season,
+            "home_team": home_team,
+            "away_team": away_team,
+        },
+    ).fetchall()
+    injury_rows = [dict(row._mapping) for row in rows]
+    home_key = _normalize_team_key(home_team)
+    away_key = _normalize_team_key(away_team)
+
+    home_rows = [
+        row
+        for row in injury_rows
+        if _normalize_team_key(str(row.get("team") or "")) == home_key
+    ]
+    away_rows = [
+        row
+        for row in injury_rows
+        if _normalize_team_key(str(row.get("team") or "")) == away_key
+    ]
+    home_nowcast = _aggregate_team_nowcast(home_rows)
+    away_nowcast = _aggregate_team_nowcast(away_rows)
+    game_confidence = round(
+        _clamp(
+            (float(home_nowcast["confidence"]) + float(away_nowcast["confidence"])) / 2.0,
+            0.0,
+            1.0,
+        ),
+        4,
+    )
+    return {
+        "season_year": season,
+        "source": "nfl_dp_injuries",
+        "home_team": home_team,
+        "away_team": away_team,
+        "home": home_nowcast,
+        "away": away_nowcast,
+        "game_confidence": game_confidence,
+    }
+

@@ -20,6 +20,14 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
+      include: [
+        "app/api/**/*.ts",
+        "lib/api/**/*.ts",
+        "lib/auth/**/*.ts",
+        "lib/config/**/*.ts",
+        "lib/security/**/*.ts",
+        "components/auth/**/*.tsx",
+      ],
       exclude: [
         "node_modules/",
         ".next/",
@@ -29,12 +37,12 @@ export default defineConfig({
         "**/vitest.setup.ts",
         "src/generated/**",
       ],
-      // Keep low in broad suite; strict thresholds are enforced in vitest.critical.config.ts
+      // Broad suite has a non-zero floor; critical paths have stricter thresholds in vitest.critical.config.ts.
       thresholds: {
-        lines: 0,
-        functions: 0,
-        branches: 0,
-        statements: 0,
+        lines: 25,
+        functions: 30,
+        branches: 20,
+        statements: 25,
       },
     },
   },

@@ -1,183 +1,57 @@
 # Enterprise Readiness Checklist
 
-**CI backs this:** `.github/workflows/` run lint, typecheck, test, and build on push/PR. The checklist items below are implemented in code; failures will fail the pipeline.
+This checklist tracks *verified* readiness items. It is intentionally strict and should match what CI and runtime behavior actually enforce.
 
-## ✅ Completed
+## Current Score
 
-### Authentication & Authorization
+## 🎯 Current Status: **8.9/10** - Strong Production Foundation
 
-- [x] NextAuth.js v5 implementation
-- [x] Role-based access control (USER, PRO, ADMIN)
-- [x] Secure password hashing (bcryptjs)
-- [x] JWT session management
-- [x] Protected routes middleware
+The platform is materially hardened and deployable, but a few final architecture and productization items remain before claiming "fully enterprise-grade."
 
-### Testing Infrastructure
+## Verified in Code/CI
 
-- [x] Vitest test framework
-- [x] React Testing Library
-- [x] Unit tests for auth utilities
-- [x] API route tests
-- [x] Component tests
-- [x] Test coverage reporting
-- [x] CI integration
-- [x] Playwright smoke E2E (`.github/workflows/e2e.yml`)
-- [x] Critical-path coverage gate (`pnpm test:web:critical`)
+### Security & Access
 
-### Error Handling & Monitoring
+- [x] API rate limiting covers auth and non-auth endpoints (`apps/web/proxy.ts`)
+- [x] Non-spoofable limiter identity strategy (no raw `Authorization` keying)
+- [x] Security headers applied in proxy path
+- [x] Pro entitlement enforced at shared `/pro/*` layout boundary
+- [x] Temporary cookie-based Pro activation route removed
 
-- [x] Structured logging (Pino)
-- [x] React error boundaries
-- [x] Global error handlers
-- [x] Custom error pages (404, 500)
-- [x] API error handling utilities
-- [x] Sentry integration (optional)
-- [x] Performance monitoring utilities
+### Reliability & Backend
 
-### CI/CD Pipeline
+- [x] Model-service CORS hardened (production requires explicit origins)
+- [x] Model-service packaging metadata includes runtime dependencies
+- [x] Odds snapshot job now persists rows to `odds_snapshots` (append-only)
+- [x] Model-service tests include persistence integration coverage
 
-- [x] GitHub Actions workflows
-- [x] Automated testing
-- [x] Linting and type checking
-- [x] Build verification
-- [x] Deployment automation
-- [x] PR quality checks
-- [x] Security scanning (CodeQL)
+### Testing & Quality Gates
 
-### Security Hardening
+- [x] Lint + typecheck + test + build run in CI
+- [x] Critical coverage gate (`pnpm test:web:critical`)
+- [x] Default web coverage gate now enforces non-zero thresholds
+- [x] Playwright smoke workflow exists and runs separately
 
-- [x] Security headers (CSP, HSTS, X-Frame-Options)
-- [x] Rate limiting (API, Auth, Edge Board)
-- [x] Input sanitization (DOMPurify)
-- [x] CSRF protection (NextAuth built-in)
-- [x] SQL injection prevention (Prisma ORM)
-- [x] XSS prevention
+### Deployment
 
-### Documentation
+- [x] Web deployment workflow (Vercel)
+- [x] Model-service image publish workflow (GHCR) with optional deploy hook trigger
 
-- [x] Architecture documentation
-- [x] API documentation
-- [x] Deployment guide
-- [x] Authentication setup guide
-- [x] Testing guide
-- [x] Error handling guide
-- [x] README with quick start
+### Runtime Boundaries
 
-### Performance Optimization
+- [x] Boundary check for Python files under `apps/web` (`check:web-python-boundary`)
+- [x] `apps/web/package.json` is blocked from executing Python scripts
+- [x] Root scripts no longer execute Python files directly from `apps/web`
+- [x] Python execution entrypoints live under `services/pipeline`
 
-- [x] Redis caching utilities
-- [x] Database connection pooling
-- [x] Query optimization helpers
-- [x] Pagination utilities
-- [x] Batch query helpers
-- [x] Performance measurement utilities
+## Remaining To Reach 9.5+ / "Audit-Ready"
 
-### Scalability
+- [ ] Complete physical migration of legacy Python source files from `apps/web` into `services/pipeline` (execution boundary is done; source relocation is still in progress)
+- [ ] Add subscription billing enforcement path (checkout/webhook lifecycle) so entitlement updates are fully automated
+- [ ] Add model-service runtime deployment target integration (beyond image publish) in all environments
+- [ ] Expand API route integration tests (especially edge-board and odds compare routes)
+- [ ] Replace `next-auth` beta dependency with stable release once compatible with current stack
 
-- [x] Monorepo structure
-- [x] Modular architecture
-- [x] Stateless application design
-- [x] Caching layer (Redis)
-- [x] Database query optimization
-- [x] Connection pooling
+## Practical Next Step For MLB Model Work
 
-## 🎯 Current Status: **9.5/10** - Production Ready
-
-**Remaining 0.5:** complete Python boundary migration out of `apps/web` into `services/`, OAuth providers, and optional scale features (read replicas, multi-region).
-
-### What Makes This Enterprise-Grade
-
-1. **Security First**
-   - Comprehensive security headers
-   - Rate limiting on all API routes
-   - Input validation and sanitization
-   - Secure authentication system
-
-2. **Reliability**
-   - Comprehensive error handling
-   - Structured logging
-   - Error tracking (Sentry)
-   - Health check endpoints
-
-3. **Quality Assurance**
-   - Full test coverage
-   - Automated CI/CD
-   - Code quality checks
-   - Security scanning
-
-4. **Performance**
-   - Caching layer
-   - Database optimization
-   - Connection pooling
-   - Query helpers
-
-5. **Scalability**
-   - Stateless design
-   - Horizontal scaling ready
-   - Caching infrastructure
-   - Modular architecture
-
-6. **Developer Experience**
-   - Comprehensive documentation
-   - Type safety (TypeScript)
-   - Clear project structure
-   - Development tools
-
-## 📋 Optional Enhancements (Future)
-
-### High Priority
-
-- [ ] E2E tests with Playwright
-- [ ] Database read replicas
-- [ ] OAuth providers (Google, GitHub)
-- [ ] Email verification
-- [ ] Password reset flow
-- [ ] Stripe webhook integration
-
-### Medium Priority
-
-- [ ] GraphQL API layer
-- [ ] Real-time updates (WebSockets)
-- [ ] Advanced caching strategies
-- [ ] Multi-region deployment
-- [ ] Edge functions optimization
-- [ ] Performance testing suite
-
-### Low Priority
-
-- [ ] API versioning
-- [ ] GraphQL subscriptions
-- [ ] Advanced analytics
-- [ ] A/B testing framework
-- [ ] Feature flags system
-
-## 🚀 Ready for Production
-
-Your codebase is now **enterprise-ready** and can handle:
-
-- ✅ High traffic loads (with rate limiting)
-- ✅ Security threats (with comprehensive protection)
-- ✅ Errors gracefully (with monitoring and logging)
-- ✅ Team collaboration (with CI/CD and documentation)
-- ✅ Scaling needs (with caching and optimization)
-
-## Next Steps
-
-1. **Deploy to Production**
-   - Follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-   - Set up monitoring
-   - Configure backups
-
-2. **Monitor & Iterate**
-   - Watch error rates
-   - Monitor performance
-   - Gather user feedback
-
-3. **Scale as Needed**
-   - Add read replicas
-   - Scale horizontally
-   - Optimize bottlenecks
-
-**You're out of coding hell! 🎉**
-
-Your foundation is solid, scalable, and enterprise-ready. Time to build features and grow your business!
+You now have a stable enough foundation to start MLB model development without compounding core platform risk. Keep the items above as concurrent hardening tracks while MLB model features land.

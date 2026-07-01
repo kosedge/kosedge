@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
+import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { fetchEdgeBoard } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
@@ -69,15 +70,21 @@ async function tryModelService(requestId: string): Promise<{ ok: true; rows: unk
 }
 
 async function tryOddsApiFallback(): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
-  const key = env.ODDS_API_KEY?.trim();
-  if (!key) return { ok: false };
-  try {
-    const rows = await fetchEdgeBoard("ncaam", key);
-    return { ok: true, rows };
-  } catch (e) {
-    logError(e instanceof Error ? e : new Error(String(e)), { route: "edge-board/ncaam/fallback" });
-    return { ok: false };
+  const keys = getOddsApiKeys();
+  if (!keys.length) return { ok: false };
+
+  for (const key of keys) {
+    try {
+      const rows = await fetchEdgeBoard("ncaam", key);
+      return { ok: true, rows };
+    } catch (e) {
+      logError(e instanceof Error ? e : new Error(String(e)), {
+        route: "edge-board/ncaam/fallback",
+      });
+    }
   }
+
+  return { ok: false };
 }
 
 export async function GET(req: Request) {

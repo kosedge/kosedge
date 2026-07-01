@@ -4,6 +4,7 @@ import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
 import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
+import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
 import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
 import { getCache, setCache } from "@/lib/cache/redis";
@@ -17,7 +18,7 @@ const CACHE_HEADERS = {
 };
 
 const sportCache = new Map<string, { rows: unknown[]; ts: number }>();
-const cacheKeyForSport = (sport: string) => `edge-board:${sport}:today:v1`;
+const cacheKeyForSport = (sport: string) => `edge-board:${sport}:today:v2`;
 
 function json(
   data: unknown,
@@ -63,10 +64,7 @@ export async function GET(
     }
   }
 
-  const keys = [
-    env.ODDS_API_KEY?.trim(),
-    env.ODDS_API_KEY_BACKUP?.trim(),
-  ].filter((k): k is string => Boolean(k));
+  const keys = getOddsApiKeys();
   if (!keys.length || !SPORT_KEY_MAP[sport]) {
     return json({ rows: [] }, 200, { "x-request-id": requestId });
   }

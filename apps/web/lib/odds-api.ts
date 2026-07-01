@@ -66,6 +66,7 @@ type OddsEvent = {
 
 /** Odds API commence_time is UTC. Format in Eastern (US sports standard). */
 const ET = "America/New_York";
+const MLB_CANONICAL_RUN_LINE_MAX = 2.5;
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -91,13 +92,41 @@ function filterBooks<T extends { key?: string }>(items: T[]): T[] {
   return items.filter((b) => b.key && allowed.has(b.key.toLowerCase()));
 }
 
+function formatSignedPoint(point: number): string {
+  const rounded = Math.round(point * 10) / 10;
+  if (Object.is(rounded, -0)) return "+0";
+  return rounded >= 0 ? `+${rounded}` : String(rounded);
+}
+
+function isCanonicalMlbRunLine(point: number): boolean {
+  return Math.abs(point) <= MLB_CANONICAL_RUN_LINE_MAX;
+}
+
+function formatSpreadDisplay(
+  point: number,
+  sportKey: string,
+  opts?: { markAlternate?: boolean },
+): string {
+  const signed = formatSignedPoint(point);
+  if (
+    sportKey.toLowerCase() === "mlb" &&
+    !isCanonicalMlbRunLine(point) &&
+    opts?.markAlternate
+  ) {
+    return `ALT ${signed}`;
+  }
+  return signed;
+}
+
 /** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
 export async function fetchEdgeBoard(
   sportKey: string,
   apiKey: string,
 ): Promise<EdgeBoardRow[]> {
-  const oddsSportKey = SPORT_KEY_MAP[sportKey.toLowerCase()];
+  const normalizedSport = sportKey.toLowerCase();
+  const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
   if (!oddsSportKey) return [];
+  const isMlb = normalizedSport === "mlb";
 
   const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&apiKey=${apiKey}`;
   const res = await fetch(url, { cache: "no-store" });
@@ -124,12 +153,21 @@ export async function fetchEdgeBoard(
       const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
       if (!awayOutcome || awayOutcome.point == null) return [];
       const pt = awayOutcome.point;
-      const s = pt >= 0 ? `+${pt}` : String(pt);
-      return [{ book: b.key, line: s, point: pt }];
+      const canonical = !isMlb || isCanonicalMlbRunLine(pt);
+      const line = formatSpreadDisplay(pt, normalizedSport, {
+        markAlternate: isMlb && !canonical,
+      });
+      return [{ book: b.key, line, point: pt, canonical }];
     });
-    const openSpread = spreadData[0]?.line;
-    const bestSpreadEntry = spreadData.length
-      ? spreadData.reduce((best, cur) => (cur.point > best.point ? cur : best))
+    const spreadPool = isMlb
+      ? spreadData.filter((entry) => entry.canonical)
+      : spreadData;
+    const selectedSpreadData = spreadPool.length > 0 ? spreadPool : spreadData;
+    const openSpread = selectedSpreadData[0]?.line;
+    const bestSpreadEntry = selectedSpreadData.length
+      ? selectedSpreadData.reduce((best, cur) =>
+          cur.point > best.point ? cur : best,
+        )
       : null;
     const bestSpread = bestSpreadEntry?.line ?? openSpread;
     const bestSpreadBook = bestSpreadEntry
@@ -200,8 +238,10 @@ export async function fetchOddsComparison(
   sportKey: string,
   apiKey: string,
 ): Promise<OddsComparisonRow[]> {
-  const oddsSportKey = SPORT_KEY_MAP[sportKey.toLowerCase()];
+  const normalizedSport = sportKey.toLowerCase();
+  const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
   if (!oddsSportKey) return [];
+  const isMlb = normalizedSport === "mlb";
 
   const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&apiKey=${apiKey}`;
   const res = await fetch(url, { cache: "no-store" });
@@ -230,10 +270,14 @@ export async function fetchOddsComparison(
         const awayO = spreadM.outcomes?.find((o) => o.name === ev.away_team);
         const homeO = spreadM.outcomes?.find((o) => o.name === ev.home_team);
         if (awayO?.point != null && homeO?.point != null) {
-          const awayS =
-            awayO.point >= 0 ? `+${awayO.point}` : String(awayO.point);
-          const homeS =
-            homeO.point >= 0 ? `+${homeO.point}` : String(homeO.point);
+          const awayAlt = isMlb && !isCanonicalMlbRunLine(awayO.point);
+          const homeAlt = isMlb && !isCanonicalMlbRunLine(homeO.point);
+          const awayS = formatSpreadDisplay(awayO.point, normalizedSport, {
+            markAlternate: awayAlt,
+          });
+          const homeS = formatSpreadDisplay(homeO.point, normalizedSport, {
+            markAlternate: homeAlt,
+          });
           spread[b.key] = { away: awayS, home: homeS };
         }
       }

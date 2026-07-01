@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
+import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
 import {
   fetchOddsComparison,
@@ -20,7 +20,7 @@ const compareCache = new Map<
   string,
   { data: { rows: unknown[]; books: unknown[] }; ts: number }
 >();
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v1`;
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v2`;
 
 export async function GET(
   _req: Request,
@@ -35,10 +35,7 @@ export async function GET(
     );
   }
 
-  const keys = [
-    env.ODDS_API_KEY?.trim(),
-    env.ODDS_API_KEY_BACKUP?.trim(),
-  ].filter((k): k is string => Boolean(k));
+  const keys = getOddsApiKeys();
   if (!keys.length || !SPORT_KEY_MAP[sport]) {
     return NextResponse.json(
       { rows: [], books: [] },

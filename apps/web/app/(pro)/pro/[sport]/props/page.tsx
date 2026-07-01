@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { getSport } from "@/lib/sports";
+import { getSport, supportsPropsFantasy } from "@/lib/sports";
 
 export default function PropsPage({ params }: { params: { sport: string } }) {
   const sport = getSport(params.sport);
   const sportName = sport?.fullName ?? params.sport.toUpperCase();
   const base = `/pro/${params.sport}`;
+  const propsEnabled = supportsPropsFantasy(params.sport);
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
@@ -14,8 +15,9 @@ export default function PropsPage({ params }: { params: { sport: string } }) {
             {sportName} Props
           </h2>
           <p className="mt-2 text-kos-text/70">
-            Prop analyzer and edge screens. Player props, team props, alternate
-            lines.
+            {propsEnabled
+              ? "Prop analyzer and edge screens. Player props, team props, and alternate lines."
+              : "Premium placeholder: props and fantasy modules are staged for this college sport pending player-data validation."}
           </p>
         </div>
         <Link
@@ -28,7 +30,9 @@ export default function PropsPage({ params }: { params: { sport: string } }) {
 
       <div className="mt-8 rounded-2xl border border-kos-border bg-kos-surface/30 p-8">
         <p className="text-kos-text/60">
-          Shell placeholder. Props module coming with model integration.
+          {propsEnabled
+            ? "Soft-launch placeholder. Props module is wired and awaiting league-specific data services."
+            : "Data pending. Props and fantasy cards will unlock once sport-level player feeds meet launch confidence thresholds."}
         </p>
       </div>
     </main>

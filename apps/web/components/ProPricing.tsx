@@ -49,12 +49,25 @@ const yearly: Plan = {
   cta: "Start Yearly",
 };
 
-// Until full launch: all price clicks go to Pro Hub (no checkout yet)
-function goToWelcome() {
-  window.location.href = "/pro/welcome";
+function goToUpgradeFlow(planTitle: string, openAccessPreview: boolean) {
+  if (openAccessPreview || planTitle === "Free") {
+    window.location.href = "/pro/welcome";
+    return;
+  }
+  // Until checkout is fully launched, route paid-plan users through signup/pricing.
+  window.location.href = "/auth/signup?callbackUrl=/pricing";
 }
 
-export default function ProPricing() {
+export default function ProPricing({
+  openAccessPreview = false,
+}: {
+  openAccessPreview?: boolean;
+}) {
+  const labelForPlan = (plan: Plan): string => {
+    if (!openAccessPreview) return plan.cta;
+    return plan.title === "Free" ? "Go to Hub" : "Explore Pro";
+  };
+
   return (
     <section className="w-full">
       <div className="text-center">
@@ -124,9 +137,9 @@ export default function ProPricing() {
                   ? "bg-kos-gold text-black hover:brightness-110 shadow-lg shadow-kos-gold/25"
                   : "bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10",
               ].join(" ")}
-              onClick={goToWelcome}
+              onClick={() => goToUpgradeFlow(p.title, openAccessPreview)}
             >
-              {p.cta}
+              {labelForPlan(p)}
             </button>
             {p.title === "Free" && (
               <p className="mt-2 text-xs text-gray-500">
@@ -169,9 +182,9 @@ export default function ProPricing() {
               <button
                 type="button"
                 className="w-full px-4 py-3 rounded-2xl font-semibold bg-kos-gold text-black hover:brightness-110 transition shadow-lg shadow-kos-gold/30"
-                onClick={goToWelcome}
+                onClick={() => goToUpgradeFlow(yearly.title, openAccessPreview)}
               >
-                {yearly.cta}
+                {labelForPlan(yearly)}
               </button>
 
               <div className="mt-3 text-xs text-gray-500 text-center">

@@ -1,0 +1,321 @@
+import os
+from collections import namedtuple
+from datetime import date, datetime, timedelta, timezone
+
+os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+
+from src import tasks
+
+
+class _Result:
+    def __init__(self, rows=None, row=None):
+        self._rows = rows or []
+        self._row = row
+
+    def fetchall(self):
+        return self._rows
+
+    def fetchone(self):
+        return self._row
+
+
+class _Session:
+    def __init__(self, rows):
+        self.rows = rows
+        self.inserts = []
+        self.committed = False
+        self.closed = False
+
+    def execute(self, sql, params=None):
+        query = str(sql)
+        if "SELECT" in query and "FROM games g" in query and "nfl_dp_schedules" in query:
+            return _Result(rows=self.rows)
+        if "INSERT INTO nfl_market_outcomes" in query:
+            self.inserts.append(dict(params or {}))
+            return _Result()
+        raise AssertionError(f"Unexpected SQL in test: {query}")
+
+    def commit(self):
+        self.committed = True
+
+    def rollback(self):
+        return None
+
+    def close(self):
+        self.closed = True
+
+
+def test_pull_nfl_outcomes_upserts_and_is_repeatable(monkeypatch) -> None:
+    row = namedtuple(
+        "Row",
+        [
+            "game_id",
+            "external_id",
+            "game_status",
+            "game_date",
+            "start_time",
+            "home_score",
+            "away_score",
+            "schedule_updated_at",
+        ],
+    )(
+        game_id="game-1",
+        external_id="401547001",
+        game_status="final",
+        game_date="2026-09-11",
+        start_time=None,
+        home_score=27,
+        away_score=21,
+        schedule_updated_at=datetime(2026, 9, 11, 4, 0, tzinfo=timezone.utc),
+    )
+
+    session_1 = _Session(rows=[row])
+    session_2 = _Session(rows=[row])
+    sessions = [session_1, session_2]
+    monkeypatch.setattr(tasks, "SessionLocal", lambda: sessions.pop(0))
+    monkeypatch.setattr(tasks, "fetch_nfl_schedule", lambda *_args, **_kwargs: [])
+
+    first = tasks.pull_nfl_outcomes(days_back=14)
+    second = tasks.pull_nfl_outcomes(days_back=14)
+
+    assert first["outcomes_upserted"] == 1
+    assert second["outcomes_upserted"] == 1
+    assert session_1.inserts[0]["final_total_points"] == 48
+    assert session_1.inserts[0]["home_team_won"] is True
+    assert session_1.inserts[0]["source"] == "nfl-dp-schedules"
+    assert session_1.committed is True
+    assert session_2.committed is True
+
+
+def test_compute_nfl_quality_payload_metrics() -> None:
+    payload = tasks._compute_nfl_quality_payload(
+        point_rows=[
+            {
+                "home_win_prob": 0.7,
+                "home_team_won": True,
+                "total_mean": 46.0,
+                "final_total_points": 49,
+                "game_date": "2026-10-10",
+            },
+            {
+                "home_win_prob": 0.4,
+                "home_team_won": False,
+                "total_mean": 43.0,
+                "final_total_points": 41,
+                "game_date": "2026-10-11",
+            },
+        ],
+        clv_rollup={"sample_size": 4, "avg_clv": 0.025, "positive_count": 3},
+        clv_rows=[
+            {"market_code": "moneyline", "recommended_side": "home", "clv_value": 0.03, "home_team_won": True},
+            {"market_code": "moneyline", "recommended_side": "away", "clv_value": -0.01, "home_team_won": True},
+            {
+                "market_code": "total",
+                "recommended_side": "over",
+                "clv_value": 0.04,
+                "final_total_points": 52,
+                "close_line": 49.5,
+                "open_line": 48.5,
+            },
+        ],
+        model_version="nfl-v1.5-matchup-sim",
+        lookback_days=60,
+        totals_calibration={"slope": 1.1, "intercept": -2.0, "sample_size": 200},
+    )
+
+    assert payload["sample_size"] == 2
+    assert payload["moneyline_brier"] == 0.125
+    assert payload["total_mae_base"] == 2.5
+    assert payload["total_mae"] == 2.35
+    assert payload["clv_avg"] == 0.025
+    assert payload["clv_positive_rate"] == 0.75
+    assert payload["moneyline_hit_rate"] == 0.5
+    assert payload["moneyline_positive_edge_hit_rate"] == 1.0
+    assert payload["total_hit_rate"] == 1.0
+    assert payload["total_positive_edge_hit_rate"] == 1.0
+    assert payload["totals_calibration"]["sample_size"] == 200
+
+
+class _BacktestSession:
+    def __init__(self) -> None:
+        self.inserts = []
+        self.committed = False
+
+    def execute(self, sql, params=None):
+        query = str(sql)
+        if "INSERT INTO nfl_model_backtest_runs" in query:
+            self.inserts.append(dict(params or {}))
+            return _Result()
+        raise AssertionError(f"Unexpected SQL in backtest test: {query}")
+
+    def commit(self):
+        self.committed = True
+
+    def rollback(self):
+        return None
+
+    def close(self):
+        return None
+
+
+def test_run_nfl_walkforward_backtest_persists_metrics(monkeypatch) -> None:
+    session = _BacktestSession()
+    monkeypatch.setattr(tasks, "SessionLocal", lambda: session)
+
+    start = date(2026, 9, 1)
+    points = []
+    for i in range(42):
+        game_date = start + timedelta(days=i)
+        home_win_prob = 0.66 if i % 2 == 0 else 0.34
+        home_team_won = i % 2 == 0
+        total_mean = 44.0 + float(i % 6)
+        final_total = total_mean + (1.5 if i % 3 == 0 else -1.0)
+        points.append(
+            {
+                "game_id": f"g-{i}",
+                "game_date": game_date.isoformat(),
+                "home_win_prob": home_win_prob,
+                "total_mean": total_mean,
+                "home_team_won": home_team_won,
+                "final_total_points": final_total,
+                "projection_created_at": datetime(2026, 9, 1, tzinfo=timezone.utc),
+                "outcome_completed_at": datetime(2026, 9, 2, tzinfo=timezone.utc),
+            }
+        )
+
+    monkeypatch.setattr(tasks, "_fetch_nfl_backtest_points", lambda *_args, **_kwargs: points)
+
+    payload = tasks.run_nfl_walkforward_backtest(
+        model_version="nfl-v1.5-matchup-sim",
+        lookback_days=180,
+        training_days=21,
+        step_days=7,
+        apply_calibration=True,
+    )
+
+    assert payload["fold_count"] >= 1
+    assert payload["sample_size"] > 0
+    assert payload["base_brier_ml"] is not None
+    assert payload["calibrated_brier_ml"] is not None
+    assert payload["calibrated_mae_total_runs"] is not None
+    assert payload["mae_improvement"] is not None
+    assert payload["leakage_violations"] == 0
+    assert session.committed is True
+    assert len(session.inserts) == 1
+    assert session.inserts[0]["model_version"] == "nfl-v1.5-matchup-sim"
+
+
+def test_decide_nfl_challenger_promotion_blocks_insufficient_data() -> None:
+    decision = tasks._decide_nfl_challenger_promotion(
+        champion_quality={"sample_size": 60, "moneyline_brier": 0.24, "total_mae": 5.8},
+        challenger_quality={"sample_size": 55, "moneyline_brier": 0.22, "total_mae": 5.5},
+        champion_backtest={"sample_size": 50, "calibrated_brier_ml": 0.245, "calibrated_mae_total_runs": 5.9},
+        challenger_backtest={
+            "sample_size": 48,
+            "brier_improvement": 0.004,
+            "calibrated_brier_ml": 0.223,
+            "calibrated_mae_total_runs": 5.6,
+        },
+        champion_clv={"avg_clv": 0.001},
+        challenger_clv={"avg_clv": 0.008},
+    )
+    assert decision["promote"] is False
+    assert decision["checks"]["sample_size_ok"] is False
+
+
+def test_count_leakage_violations_requires_strict_projection_order() -> None:
+    violations = tasks._count_leakage_violations(
+        [
+            {
+                "projection_created_at": datetime(2026, 9, 10, 12, 0, tzinfo=timezone.utc),
+                "outcome_completed_at": datetime(2026, 9, 10, 12, 0, tzinfo=timezone.utc),
+            },
+            {
+                "projection_created_at": datetime(2026, 9, 10, 11, 0, tzinfo=timezone.utc),
+                "outcome_completed_at": datetime(2026, 9, 10, 12, 0, tzinfo=timezone.utc),
+            },
+        ]
+    )
+    assert violations == 1
+
+
+def test_run_nfl_walkforward_backtest_excludes_ineligible_points(monkeypatch) -> None:
+    session = _BacktestSession()
+    monkeypatch.setattr(tasks, "SessionLocal", lambda: session)
+
+    start = date(2026, 9, 1)
+    points = []
+    for i in range(49):
+        game_date = start + timedelta(days=i)
+        outcome_at = datetime.combine(game_date, datetime.min.time(), tzinfo=timezone.utc) + timedelta(hours=20)
+        if i < 35:
+            projection_at = outcome_at - timedelta(hours=2)
+        else:
+            projection_at = outcome_at + timedelta(hours=1)
+
+        points.append(
+            {
+                "game_id": f"mixed-{i}",
+                "game_date": game_date.isoformat(),
+                "home_win_prob": 0.61 if i % 2 == 0 else 0.39,
+                "total_mean": 44.0 + float(i % 5),
+                "home_team_won": i % 2 == 0,
+                "final_total_points": 45.5 + float((i + 1) % 5),
+                "projection_created_at": projection_at,
+                "outcome_completed_at": outcome_at,
+            }
+        )
+
+    monkeypatch.setattr(tasks, "_fetch_nfl_backtest_points", lambda *_args, **_kwargs: points)
+
+    payload = tasks.run_nfl_walkforward_backtest(
+        model_version="nfl-v1.5-matchup-sim",
+        lookback_days=240,
+        training_days=21,
+        step_days=7,
+        apply_calibration=True,
+    )
+
+    assert payload["fold_count"] >= 1
+    assert payload["sample_size"] > 0
+    assert payload["sample_size"] < len(points)
+    assert payload["leakage_violations"] == 0
+
+
+def test_resolve_nfl_projection_created_at_kickoff_minus_buffer() -> None:
+    kickoff = datetime(2026, 9, 10, 20, 20, tzinfo=timezone.utc)
+    created_at = tasks._resolve_nfl_projection_created_at(
+        game_date=date(2026, 9, 10),
+        start_time=kickoff,
+        mode="kickoff_minus_buffer",
+        kickoff_buffer_minutes=30,
+    )
+    assert created_at == datetime(2026, 9, 10, 19, 50, tzinfo=timezone.utc)
+
+
+def test_backfill_nfl_historical_projections_uses_kickoff_timestamp_mode(monkeypatch) -> None:
+    calls = []
+
+    def _fake_run_nfl_market_simulations(**kwargs):
+        calls.append(kwargs)
+        return {"games_processed": 2, "projections_inserted": 2}
+
+    monkeypatch.setattr(tasks, "run_nfl_market_simulations", _fake_run_nfl_market_simulations)
+
+    payload = tasks.backfill_nfl_historical_projections(
+        start_date="2026-09-10",
+        end_date="2026-09-12",
+        simulations=3000,
+        model_version="nfl-v1.5-matchup-sim",
+        kickoff_buffer_minutes=45,
+    )
+
+    assert payload["days_processed"] == 3
+    assert payload["games_processed"] == 6
+    assert payload["projections_inserted"] == 6
+    assert payload["projection_created_at_mode"] == "kickoff_minus_buffer"
+    assert payload["include_completed_games"] is True
+    assert len(calls) == 3
+    assert all(call.get("include_completed_games") is True for call in calls)
+    assert all(call.get("projection_created_at_mode") == "kickoff_minus_buffer" for call in calls)
+    assert all(call.get("kickoff_buffer_minutes") == 45 for call in calls)

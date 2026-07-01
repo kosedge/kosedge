@@ -1,4 +1,56 @@
 import Link from "next/link";
+import { getSport } from "@/lib/sports";
+
+type SlateTemplate = {
+  market: string;
+  model: string;
+  writeup: string;
+};
+
+const SPORT_SLATE_TEMPLATES: Record<string, SlateTemplate> = {
+  nfl: {
+    market: "PHI -2.5 | 47.5",
+    model: "PHI -3.0 | 46.8",
+    writeup:
+      "This matchup is shaped by key-number pressure, pressure-rate mismatch, and late injury designations. Priority is execution quality around 3 and 7 as limits mature.",
+  },
+  cfb: {
+    market: "UTAH -4.0 | 52.5",
+    model: "UTAH -4.8 | 51.7",
+    writeup:
+      "Primary drivers are tempo divergence, havoc differential, and red-zone efficiency variance. Late quarterback and weather confirmations remain the swing factors.",
+  },
+  nba: {
+    market: "BOS -5.5 | 228.5",
+    model: "BOS -6.2 | 227.1",
+    writeup:
+      "Rotation stability and pace-state assumptions drive this projection. Final confirmation is tied to late availability and back-to-back fatigue adjustments.",
+  },
+  wnba: {
+    market: "NYL -4.5 | 164.5",
+    model: "NYL -5.1 | 163.8",
+    writeup:
+      "Usage concentration and turnover control are the primary levers. Watch travel compression and late guard status for any final repricing.",
+  },
+  mlb: {
+    market: "LAD -128 | 8.5",
+    model: "LAD -136 | 8.1",
+    writeup:
+      "Starter arsenal fit, bullpen leverage depth, and weather-adjusted run environment define the edge. Lineup cards and bullpen burn rates are final checks.",
+  },
+  nhl: {
+    market: "EDM -132 | 6.5",
+    model: "EDM -138 | 6.2",
+    writeup:
+      "Goaltender confirmation and five-on-five chance quality drive this setup. Special-teams volatility remains the dominant downside risk.",
+  },
+  ncaam: {
+    market: "GONZ -6.0 | 149.5",
+    model: "GONZ -6.8 | 148.7",
+    writeup:
+      "Tempo profile, offensive rebounding leverage, and whistle environment determine projection quality. Late lineup notes can still move this market.",
+  },
+};
 
 export default function SlatePage({
   params,
@@ -6,17 +58,21 @@ export default function SlatePage({
   params: { sport: string; date: string };
 }) {
   const base = `/pro/${params.sport}`;
+  const sport = getSport(params.sport);
+  const sportName = sport?.fullName ?? params.sport.toUpperCase();
+  const template = SPORT_SLATE_TEMPLATES[params.sport];
+  const hasData = Boolean(template);
 
-  // Placeholder. Later this becomes fetched/generated list of games.
   const games = [
     {
-      slug: "northwestern-state-vs-stephen-f-austin",
-      away: "Northwestern State",
-      home: "Stephen F. Austin",
-      market: "SFA -3.0 | 145.5",
-      model: "SFA -3.5 | 146.0",
+      slug: `${params.sport}-premium-placeholder`,
+      away: `${sportName} Away`,
+      home: `${sportName} Home`,
+      market: template?.market ?? "Market pending",
+      model: template?.model ?? "Model pending",
       writeup:
-        "Stephen F. Austin profiles as defense-first with strong interior suppression and defensive rebounding stability, while Northwestern State has struggled on the glass. With both teams operating at below-average tempo, half-court efficiency and second-chance possessions may influence outcomes.",
+        template?.writeup ??
+        "Premium placeholder state: matchup narratives publish once validated market and model inputs are available for this date.",
     },
   ];
 
@@ -24,10 +80,11 @@ export default function SlatePage({
     <main>
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold">Slate: {params.date}</h2>
+          <h2 className="text-2xl font-semibold">{sportName} Slate: {params.date}</h2>
           <p className="mt-2 text-kos-text/70">
-            Write-ups are collapsed by default. Model reference is informational
-            only.
+            {hasData
+              ? "Write-ups are collapsed by default. Model reference is informational only."
+              : "Premium placeholder mode: slate cards expand automatically when validated game feeds are available."}
           </p>
         </div>
 
@@ -59,7 +116,7 @@ export default function SlatePage({
                 href={`${base}/matchups/${params.date}/${g.slug}`}
                 className="rounded-xl border border-kos-border bg-kos-surface/20 px-4 py-2 text-sm hover:border-kos-gold/40"
               >
-                Open Matchup
+                {hasData ? "Open Matchup" : "Open Placeholder Brief"}
               </Link>
             </div>
 

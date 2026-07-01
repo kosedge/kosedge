@@ -1,0 +1,5 @@
+SQLAlchemy==2.0.32
+psycopg[binary]==3.2.1
+python-dotenv==1.0.1
+nflreadpy==0.1.5
+polars==1.12.0

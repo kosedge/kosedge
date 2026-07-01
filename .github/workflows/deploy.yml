@@ -66,3 +66,76 @@ jobs:
           echo "- **Build:** ✅ Successful" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Configure deployment steps above based on your hosting platform." >> $GITHUB_STEP_SUMMARY
+
+  deploy-model-service:
+    name: Deploy Model Service
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Derive image tags
+        id: tags
+        run: |
+          IMAGE="ghcr.io/${{ github.repository_owner }}/kosedge-model-service"
+          SHA_TAG="${IMAGE}:sha-${GITHUB_SHA::12}"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            REF_NAME="${GITHUB_REF#refs/tags/}"
+            RELEASE_TAG="${IMAGE}:${REF_NAME}"
+          else
+            RELEASE_TAG="${IMAGE}:latest"
+          fi
+          echo "image=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "sha_tag=${SHA_TAG}" >> "$GITHUB_OUTPUT"
+          echo "release_tag=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push model-service image
+        uses: docker/build-push-action@v6
+        with:
+          context: services/model-service
+          file: services/model-service/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.tags.outputs.sha_tag }}
+            ${{ steps.tags.outputs.release_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trigger model-service deployment hook
+        if: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL != '' }}
+        env:
+          DEPLOY_HOOK: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL }}
+          IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
+        run: |
+          curl -fsSL -X POST "$DEPLOY_HOOK" \
+            -H "Content-Type: application/json" \
+            -d "{\"image\":\"$IMAGE_TAG\",\"sha\":\"${GITHUB_SHA}\"}"
+
+      - name: Deployment hook not configured
+        if: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL == '' }}
+        run: |
+          echo "Model-service image was published to GHCR but deploy hook is not configured."
+          echo "Set MODEL_SERVICE_DEPLOY_HOOK_URL to trigger your runtime deployment."
+
+      - name: Model Service Deployment Summary
+        run: |
+          echo "## Model Service Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image:** ${{ steps.tags.outputs.sha_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Tag:** ${{ steps.tags.outputs.release_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY

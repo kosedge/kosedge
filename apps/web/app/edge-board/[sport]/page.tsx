@@ -114,7 +114,7 @@ export default async function EdgeBoardSportPage({
               Compare Odds
             </Link>
             <Link
-              href="/pro/welcome"
+              href="/pricing"
               className="px-4 py-2 rounded-xl bg-kos-gold text-black hover:brightness-110 transition text-center font-semibold shadow-lg shadow-kos-gold/25"
             >
               Pro

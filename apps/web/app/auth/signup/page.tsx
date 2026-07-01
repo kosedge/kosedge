@@ -1,13 +1,15 @@
 // apps/web/app/auth/signup/page.tsx
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function SignUpPage() {
+function SignUpForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/pricing";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +51,7 @@ export default function SignUpPage() {
         return;
       }
 
-      router.push("/pro/welcome");
+      router.push(callbackUrl);
       router.refresh();
     } catch {
       setError("An error occurred. Please try again.");
@@ -61,9 +63,10 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
       {/* Background FX */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute -top-44 left-1/2 h-130 w-225 -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
+        <div className="absolute top-24 -left-40 h-130 w-130 rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
+        <div className="absolute -bottom-56 -right-56 h-160 w-160 rounded-full bg-kos-gold/10 blur-3xl animate-pulse-slow" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
       <main className="relative z-10 flex min-h-screen items-center justify-center px-5 py-16">
@@ -154,7 +157,7 @@ export default function SignUpPage() {
             <div className="mt-6 text-center text-sm text-gray-400">
               Already have an account?{" "}
               <Link
-                href="/auth/signin"
+                href={`/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}
                 className="text-kos-gold hover:text-kos-gold/80 font-semibold"
               >
                 Sign in
@@ -173,5 +176,19 @@ export default function SignUpPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#070A0F] text-gray-400">
+          Loading...
+        </div>
+      }
+    >
+      <SignUpForm />
+    </Suspense>
   );
 }
