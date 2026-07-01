@@ -7,6 +7,12 @@ on:
     tags:
       - "v*"
 
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  MODEL_SERVICE_DEPLOY_HOOK_URL: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL }}
+
 jobs:
   deploy-web:
     name: Deploy Web Application
@@ -43,18 +49,14 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
       - name: Deploy to Vercel (Production)
-        if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '' }}
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: |
           pnpm dlx vercel pull --yes --environment=production --cwd apps/web --token "$VERCEL_TOKEN"
           pnpm dlx vercel build --prod --cwd apps/web --token "$VERCEL_TOKEN"
           pnpm dlx vercel deploy --prebuilt --prod --cwd apps/web --token "$VERCEL_TOKEN"
 
       - name: Deployment not configured (Vercel secrets missing)
-        if: ${{ secrets.VERCEL_TOKEN == '' || secrets.VERCEL_ORG_ID == '' || secrets.VERCEL_PROJECT_ID == '' }}
+        if: ${{ env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == '' }}
         run: |
           echo "Vercel deployment skipped: set VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID in repo secrets."
 
@@ -118,9 +120,9 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trigger model-service deployment hook
-        if: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL != '' }}
+        if: ${{ env.MODEL_SERVICE_DEPLOY_HOOK_URL != '' }}
         env:
-          DEPLOY_HOOK: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL }}
+          DEPLOY_HOOK: ${{ env.MODEL_SERVICE_DEPLOY_HOOK_URL }}
           IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
         run: |
           curl -fsSL -X POST "$DEPLOY_HOOK" \
@@ -128,7 +130,7 @@ jobs:
             -d "{\"image\":\"$IMAGE_TAG\",\"sha\":\"${GITHUB_SHA}\"}"
 
       - name: Deployment hook not configured
-        if: ${{ secrets.MODEL_SERVICE_DEPLOY_HOOK_URL == '' }}
+        if: ${{ env.MODEL_SERVICE_DEPLOY_HOOK_URL == '' }}
         run: |
           echo "Model-service image was published to GHCR but deploy hook is not configured."
           echo "Set MODEL_SERVICE_DEPLOY_HOOK_URL to trigger your runtime deployment."
