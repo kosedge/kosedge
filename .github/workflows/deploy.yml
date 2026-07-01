@@ -42,8 +42,10 @@ jobs:
         run: pnpm build:web
         env:
           NODE_ENV: production
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          # Keep CI build deterministic even when runtime secrets
+          # are only configured inside Vercel project settings.
+          DATABASE_URL: ${{ secrets.DATABASE_URL != '' && secrets.DATABASE_URL || 'postgresql://ci:ci@localhost:5432/kosedge' }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET != '' && secrets.AUTH_SECRET || 'ci-build-auth-secret-32-chars-minimum' }}
           MODEL_SERVICE_URL: ${{ secrets.MODEL_SERVICE_URL }}
           INTERNAL_API_SECRET: ${{ secrets.INTERNAL_API_SECRET }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
