@@ -8,25 +8,41 @@ const globalForPrisma = globalThis as unknown as {
 
 // Prisma 7 "client" engine requires adapter or accelerateUrl (https://pris.ly/d/client-constructor)
 const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error("DATABASE_URL is required to initialize Prisma");
+const hasDatabaseUrl = typeof connectionString === "string" && connectionString.length > 0;
+
+function createMissingDatabaseProxy(): PrismaClient {
+  return new Proxy(
+    {},
+    {
+      get() {
+        throw new Error(
+          "DATABASE_URL is required at runtime for Prisma operations."
+        );
+      },
+    }
+  ) as PrismaClient;
 }
-const adapter = new PrismaPg({ connectionString });
 
-const prismaOptions: ConstructorParameters<typeof PrismaClient>[0] = {
-  adapter,
-  log:
-    process.env.NODE_ENV === "development"
-      ? ["query", "error", "warn"]
-      : ["error"],
-};
+const prismaClient =
+  hasDatabaseUrl
+    ? globalForPrisma.prisma ??
+      new PrismaClient({
+        adapter: new PrismaPg({ connectionString: connectionString as string }),
+        log:
+          process.env.NODE_ENV === "development"
+            ? ["query", "error", "warn"]
+            : ["error"],
+      })
+    : createMissingDatabaseProxy();
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
+export const prisma = prismaClient;
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (hasDatabaseUrl && process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}
 
 // Graceful shutdown
-if (typeof process !== "undefined") {
+if (hasDatabaseUrl && typeof process !== "undefined") {
   process.on("beforeExit", async () => {
     await prisma.$disconnect();
   });
