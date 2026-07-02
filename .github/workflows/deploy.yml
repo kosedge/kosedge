@@ -38,6 +38,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Validate Vercel deployment secrets
+        run: |
+          if [ -z "${VERCEL_TOKEN}" ] || [ -z "${VERCEL_ORG_ID}" ] || [ -z "${VERCEL_PROJECT_ID}" ]; then
+            echo "Missing required Vercel secrets (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)." >&2
+            exit 1
+          fi
+
       - name: Build application
         run: pnpm build:web
         env:
@@ -51,16 +58,10 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
       - name: Deploy to Vercel (Production)
-        if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: |
           pnpm dlx vercel pull --yes --environment=production --cwd apps/web --token "$VERCEL_TOKEN"
           pnpm dlx vercel build --prod --cwd apps/web --token "$VERCEL_TOKEN"
           pnpm dlx vercel deploy --prebuilt --prod --cwd apps/web --token "$VERCEL_TOKEN"
-
-      - name: Deployment not configured (Vercel secrets missing)
-        if: ${{ env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == '' }}
-        run: |
-          echo "Vercel deployment skipped: set VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID in repo secrets."
 
       - name: Deployment Summary
         run: |
