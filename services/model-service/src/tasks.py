@@ -4973,7 +4973,7 @@ def materialize_nfl_player_baseline_projections(
                     text(
                         """
                         UPDATE nfl_player_projection_features_weekly
-                        SET player_uid = :player_uid::uuid, updated_at = NOW()
+                        SET player_uid = CAST(:player_uid AS uuid), updated_at = NOW()
                         WHERE season = :season
                           AND week = :week
                           AND team = :team
@@ -5029,7 +5029,7 @@ def materialize_nfl_player_baseline_projections(
                       floor_outcome, median_outcome, ceiling_outcome, uncertainty, source_coverage,
                       created_at, updated_at
                     ) VALUES (
-                      :season, :week, :team, :player_id, :player_uid::uuid, :player_name, :position, :game_id, :model_version,
+                      :season, :week, :team, :player_id, CAST(:player_uid AS uuid), :player_name, :position, :game_id, :model_version,
                       :attempts_mean, :attempts_std, :carries_mean, :carries_std, :targets_mean, :targets_std,
                       :completions_mean, :pass_yards_mean, :pass_yards_std,
                       :rush_yards_mean, :rush_yards_std, :receiving_yards_mean, :receiving_yards_std,
@@ -5221,7 +5221,7 @@ def materialize_nfl_player_props_edges(
                     text(
                         """
                         UPDATE nfl_player_projection_baselines
-                        SET player_uid = :player_uid::uuid, updated_at = NOW()
+                        SET player_uid = CAST(:player_uid AS uuid), updated_at = NOW()
                         WHERE season = :season
                           AND week = :week
                           AND team = :team
@@ -5286,7 +5286,7 @@ def materialize_nfl_player_props_edges(
                           market_over_price, market_under_price, edge_over, edge_under, confidence,
                           diagnostics, created_at, updated_at
                         ) VALUES (
-                          :season, :week, :model_version, :game_id, :player_id, :player_uid::uuid, :player_name, :team, :market_key,
+                          :season, :week, :model_version, :game_id, :player_id, CAST(:player_uid AS uuid), :player_name, :team, :market_key,
                           :line, :model_mean, :model_std, :model_floor, :model_median, :model_ceiling,
                           :over_prob, :under_prob, :fair_over_price, :fair_under_price,
                           :market_over_price, :market_under_price, :edge_over, :edge_under, :confidence,
@@ -5489,7 +5489,7 @@ def pull_nfl_player_prop_market_snapshots(
                                   source, metadata, created_at
                                 ) VALUES (
                                   :season, :week, :game_id, :external_game_id, :sportsbook, :captured_at,
-                                  :player_uid::uuid, :player_name, :team, :opponent, :market_key, :line,
+                                  CAST(:player_uid AS uuid), :player_name, :team, :opponent, :market_key, :line,
                                   :over_price, :under_price, :implied_prob_over, :implied_prob_under,
                                   :source, CAST(:metadata AS jsonb), NOW()
                                 )
@@ -5652,7 +5652,7 @@ def materialize_nfl_fantasy_projections(
                           expected_points, floor_points, median_points, ceiling_points,
                           rank_overall, rank_position, tier, projection_payload, created_at, updated_at
                         ) VALUES (
-                          :season, :week, :scoring_profile, :model_version, :player_id, :player_uid::uuid, :player_name, :team, :position,
+                          :season, :week, :scoring_profile, :model_version, :player_id, CAST(:player_uid AS uuid), :player_name, :team, :position,
                           :expected_points, :floor_points, :median_points, :ceiling_points,
                           :rank_overall, :rank_position, :tier, CAST(:projection_payload AS jsonb), NOW(), NOW()
                         )

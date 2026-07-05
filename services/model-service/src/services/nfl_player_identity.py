@@ -211,7 +211,7 @@ def _upsert_identity_and_alias(
               active_from_season = COALESCE(active_from_season, :season),
               active_to_season = GREATEST(COALESCE(active_to_season, :season), COALESCE(:season, active_to_season)),
               updated_at = NOW()
-            WHERE player_uid = :player_uid::uuid
+            WHERE player_uid = CAST(:player_uid AS uuid)
             """
         ),
         {
@@ -230,7 +230,7 @@ def _upsert_identity_and_alias(
               player_uid, source_system, alias, normalized_alias, team, position, season, week,
               context, first_seen_at, last_seen_at, created_at, updated_at
             ) VALUES (
-              :player_uid::uuid, :source_system, :alias, :normalized_alias, :team, :position, :season, :week,
+              CAST(:player_uid AS uuid), :source_system, :alias, :normalized_alias, :team, :position, :season, :week,
               CAST(:context AS jsonb), NOW(), NOW(), NOW(), NOW()
             )
             ON CONFLICT (player_uid, normalized_alias, team, position, season, week) DO UPDATE SET
@@ -306,7 +306,7 @@ def _upsert_source_map(
               source_system, external_id, player_uid, confidence, trusted_link,
               first_seen_at, last_seen_at, metadata, created_at, updated_at
             ) VALUES (
-              :source_system, :external_id, :player_uid::uuid, :confidence, :trusted_link,
+              :source_system, :external_id, CAST(:player_uid AS uuid), :confidence, :trusted_link,
               NOW(), NOW(), CAST(:metadata AS jsonb), NOW(), NOW()
             )
             ON CONFLICT (source_system, external_id) DO UPDATE SET
@@ -341,7 +341,7 @@ def persist_mapping_event(session: Any, payload: IdentityInput, decision: Identi
             ) VALUES (
               :observed_source, :observed_external_id, :observed_player_name, :normalized_name,
               :observed_team, :observed_position, :observed_season, :observed_week,
-              :resolver_version, :rule_used, :confidence, :status, :player_uid::uuid, CAST(:candidate_player_uids AS jsonb),
+              :resolver_version, :rule_used, :confidence, :status, CAST(:player_uid AS uuid), CAST(:candidate_player_uids AS jsonb),
               CAST(:explanation AS jsonb), NOW()
             )
             RETURNING id::text
@@ -382,10 +382,10 @@ def queue_mapping_review(session: Any, *, event_id: str, payload: IdentityInput,
               observed_team, observed_position, observed_season, observed_week,
               candidate_player_uids, proposed_player_uid, created_at, updated_at
             ) VALUES (
-              :mapping_event_id::uuid, 'pending', :priority, :reason,
+              CAST(:mapping_event_id AS uuid), 'pending', :priority, :reason,
               :observed_source, :observed_external_id, :observed_player_name, :normalized_name,
               :observed_team, :observed_position, :observed_season, :observed_week,
-              CAST(:candidate_player_uids AS jsonb), :proposed_player_uid::uuid, NOW(), NOW()
+              CAST(:candidate_player_uids AS jsonb), CAST(:proposed_player_uid AS uuid), NOW(), NOW()
             )
             """
         ),
@@ -654,7 +654,7 @@ def apply_manual_mapping_resolution(
               q.observed_season,
               q.observed_week
             FROM nfl_player_mapping_review_queue q
-            WHERE q.id = :queue_id::uuid
+            WHERE q.id = CAST(:queue_id AS uuid)
             LIMIT 1
             """
         ),
@@ -679,10 +679,10 @@ def apply_manual_mapping_resolution(
               queue_status = :queue_status,
               reviewer = :reviewer,
               reviewer_notes = :reviewer_notes,
-              approved_player_uid = :approved_player_uid::uuid,
+              approved_player_uid = CAST(:approved_player_uid AS uuid),
               reviewed_at = NOW(),
               updated_at = NOW()
-            WHERE id = :queue_id::uuid
+            WHERE id = CAST(:queue_id AS uuid)
             """
         ),
         {
@@ -700,9 +700,9 @@ def apply_manual_mapping_resolution(
                 UPDATE nfl_player_mapping_events
                 SET
                   status = 'manual_approved',
-                  player_uid = :player_uid::uuid,
+                  player_uid = CAST(:player_uid AS uuid),
                   explanation = explanation || CAST(:patch AS jsonb)
-                WHERE id = :mapping_event_id::uuid
+                WHERE id = CAST(:mapping_event_id AS uuid)
                 """
             ),
             {
