@@ -12,6 +12,7 @@ export type OverviewContent = {
   sectionTitles: {
     market: string;
     props: string;
+    intel?: string;
   };
 };
 
@@ -46,13 +47,20 @@ const DEFAULT_OVERVIEW_CONTENT: OverviewContent = {
   },
 };
 
-const SPORT_COPY: Record<string, Partial<OverviewContent>> = {
+type SportCopyOverride = Omit<Partial<OverviewContent>, "sectionTitles"> & {
+  sectionTitles?: Partial<OverviewContent["sectionTitles"]>;
+};
+
+const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
       "Weekly NFL workflow for board context, key-number execution, matchup briefs, and governance checkpoints.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
+    sectionTitles: {
+      intel: "Team Intel",
+    },
   },
   cfb: {
     heroBadge: "Pro CFB intelligence hub",
@@ -165,6 +173,58 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
   ];
 }
 
+const NFL_INTEL_LINKS: OverviewSectionLink[] = [
+  {
+    href: "/pro/nfl/projections",
+    label: "Projections hub",
+    hint: "Team wins/futures plus player fantasy totals in one betting view.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/wall-chart/nfl-2026",
+    label: "2026 NFL wall chart",
+    hint: "Printable 24×18 schedule tracker for laminated wet-erase use.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/teams",
+    label: "Team intel hub",
+    hint: "Team cards, filters, and direct jump to depth/stats/injuries.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/stats",
+    label: "League stats",
+    hint: "Weekly league-level production and situational context.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/standings",
+    label: "League standings",
+    hint: "Division and conference race context with tiebreak outlook.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/depth-charts",
+    label: "Depth charts",
+    hint: "Role hierarchy and rotational snapshots by position group.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/injuries",
+    label: "Injuries",
+    hint: "Availability, return windows, and practice progression tracker.",
+    premium: true,
+    status: "active",
+  },
+];
+
 export function buildSportOverviewContent(
   sportKey: string,
   sportName: string,
@@ -186,7 +246,7 @@ export function buildSportOverviewSections({
   const slateLabel =
     sportKey === "nfl" || sportKey === "cfb" ? "Weekly slate board" : "Daily slate board";
 
-  return [
+  const sections: OverviewSection[] = [
     {
       title: "Weekly Slate",
       subtitle:
@@ -276,6 +336,17 @@ export function buildSportOverviewSections({
       ],
     },
   ];
+
+  if (sportKey === "nfl") {
+    sections.splice(3, 0, {
+      title: content.sectionTitles.intel ?? "Team Intel",
+      subtitle:
+        "Premium team and league context cards for roster quality, health, and competitive positioning.",
+      links: NFL_INTEL_LINKS,
+    });
+  }
+
+  return sections;
 }
 
 function normalizedLabel(value: string | undefined): string {

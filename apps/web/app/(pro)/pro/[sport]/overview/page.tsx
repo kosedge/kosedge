@@ -146,7 +146,7 @@ export default async function SportOverviewPage({
         )}
       </section>
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-2">
+      <section className={`mt-6 grid gap-4 ${sportKey === "nfl" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
         <Link
           href={`/pro/power-ratings/${sportKey}`}
           className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-6 transition hover:border-kos-gold/45 hover:bg-kos-gold/10"
@@ -171,6 +171,34 @@ export default async function SportOverviewPage({
             View KEI lines →
           </span>
         </Link>
+        {sportKey === "nfl" ? (
+          <Link
+            href="/pro/nfl/projections"
+            className="rounded-2xl border border-kos-gold/30 bg-linear-to-br from-kos-gold/10 via-black/30 to-black/55 p-6 transition hover:border-kos-gold/50 hover:bg-kos-gold/10"
+          >
+            <h2 className="text-xl font-semibold text-kos-gold">Projections Hub</h2>
+            <p className="mt-2 text-sm text-kos-text/80">
+              User-friendly wins, futures, and player fantasy projection tables built from the latest preseason bundle.
+            </p>
+            <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
+              Open projections hub →
+            </span>
+          </Link>
+        ) : null}
+        {sportKey === "nfl" ? (
+          <Link
+            href="/wall-chart/nfl-2026"
+            className="rounded-2xl border border-edge-green/30 bg-linear-to-br from-edge-green/10 via-black/30 to-black/55 p-6 transition hover:border-edge-green/50 hover:bg-edge-green/10"
+          >
+            <h2 className="text-xl font-semibold text-edge-green">2026 Wall Chart</h2>
+            <p className="mt-2 text-sm text-kos-text/80">
+              Printable 24×18 NFL schedule tracker — laminated wet-erase friendly with full 2026 matchups.
+            </p>
+            <span className="mt-4 inline-block text-sm font-semibold text-edge-green">
+              Open wall chart →
+            </span>
+          </Link>
+        ) : null}
       </section>
     </main>
   );

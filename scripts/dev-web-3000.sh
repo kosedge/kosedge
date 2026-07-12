@@ -8,4 +8,4 @@ echo "==> Clearing Next caches"
 rm -rf apps/web/.next apps/web/.turbo
 
 echo "==> Starting web on :3000"
-pnpm -C apps/web dev -- --port 3000
+pnpm -C apps/web exec next dev --port 3000

@@ -41,6 +41,51 @@ describe("pro sport IA", () => {
     expect(propsSection?.links.every((link) => link.status !== "placeholder")).toBe(true);
   });
 
+  it("adds NFL-only team intel section with active links", () => {
+    const content = buildSportOverviewContent("nfl", "NFL");
+    const sections = buildSportOverviewSections({
+      sportKey: "nfl",
+      base: "/pro/nfl",
+      edgeBoardHref: "/edge-board/nfl",
+      content,
+    });
+
+    const intelSection = sections.find((section) => section.title === "Team Intel");
+    expect(intelSection).toBeDefined();
+    expect(intelSection?.links.map((link) => link.label)).toEqual([
+      "Projections hub",
+      "2026 NFL wall chart",
+      "Team intel hub",
+      "League stats",
+      "League standings",
+      "Depth charts",
+      "Injuries",
+    ]);
+    expect(intelSection?.links.map((link) => link.href)).toEqual([
+      "/pro/nfl/projections",
+      "/wall-chart/nfl-2026",
+      "/pro/nfl/teams",
+      "/pro/nfl/stats",
+      "/pro/nfl/standings",
+      "/pro/nfl/depth-charts",
+      "/pro/nfl/injuries",
+    ]);
+    expect(intelSection?.links.every((link) => link.status === "active")).toBe(true);
+    expect(intelSection?.links.every((link) => link.premium)).toBe(true);
+  });
+
+  it("does not add team intel section for non-NFL sports", () => {
+    const content = buildSportOverviewContent("cfb", "College Football");
+    const sections = buildSportOverviewSections({
+      sportKey: "cfb",
+      base: "/pro/cfb",
+      edgeBoardHref: "/edge-board/cfb",
+      content,
+    });
+
+    expect(sections.some((section) => section.title === "Team Intel")).toBe(false);
+  });
+
   it("builds placeholder props links for college sports", () => {
     const content = buildSportOverviewContent("cfb", "College Football");
     const sections = buildSportOverviewSections({
