@@ -31,6 +31,7 @@ export const ALLOWED_BOOKS = [
   "betrivers",
   "betr",
 ] as const;
+const NFL_DEFAULT_BOOKS = ["draftkings"] as const;
 
 const BOOK_DISPLAY: Record<string, string> = {
   draftkings: "DraftKings",
@@ -92,6 +93,35 @@ function filterBooks<T extends { key?: string }>(items: T[]): T[] {
   return items.filter((b) => b.key && allowed.has(b.key.toLowerCase()));
 }
 
+function parseConfiguredBooks(raw: string | undefined): string[] {
+  const tokens = String(raw ?? "")
+    .split(",")
+    .map((token) => token.trim().toLowerCase())
+    .filter(Boolean);
+  const deduped = [...new Set(tokens)];
+  return deduped.length > 0 ? deduped : [...NFL_DEFAULT_BOOKS];
+}
+
+export function configuredBooksForSport(sportKey: string): string[] {
+  if (sportKey.toLowerCase() !== "nfl") {
+    return [...ALLOWED_BOOKS];
+  }
+  const allowed = new Set(ALLOWED_BOOKS.map((book) => book.toLowerCase()));
+  const configured = parseConfiguredBooks(process.env.ODDS_API_NFL_BOOKMAKERS);
+  const filtered = configured.filter((book) => allowed.has(book));
+  return filtered.length > 0 ? filtered : [...NFL_DEFAULT_BOOKS];
+}
+
+function filterBooksBySport<T extends { key?: string }>(
+  items: T[],
+  sportKey: string,
+): T[] {
+  const allowed = new Set(
+    configuredBooksForSport(sportKey).map((book) => book.toLowerCase()),
+  );
+  return items.filter((b) => b.key && allowed.has(b.key.toLowerCase()));
+}
+
 function formatSignedPoint(point: number): string {
   const rounded = Math.round(point * 10) / 10;
   if (Object.is(rounded, -0)) return "+0";
@@ -127,8 +157,9 @@ export async function fetchEdgeBoard(
   const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
   if (!oddsSportKey) return [];
   const isMlb = normalizedSport === "mlb";
+  const sportBooks = configuredBooksForSport(normalizedSport);
 
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&apiKey=${apiKey}`;
+  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     const text = await res.text();
@@ -145,7 +176,7 @@ export async function fetchEdgeBoard(
     const time = formatTime(ev.commence_time);
     const timeWithDate = `${date} ${time} ET`;
 
-    const bookmakers = filterBooks(ev.bookmakers ?? []);
+    const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
 
     const spreadData = bookmakers.flatMap((b) => {
       const m = b.markets?.find((x) => x.key === "spreads");
@@ -242,8 +273,9 @@ export async function fetchOddsComparison(
   const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
   if (!oddsSportKey) return [];
   const isMlb = normalizedSport === "mlb";
+  const sportBooks = configuredBooksForSport(normalizedSport);
 
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&apiKey=${apiKey}`;
+  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     const text = await res.text();
@@ -260,7 +292,7 @@ export async function fetchOddsComparison(
     const time = formatTime(ev.commence_time);
     const timeWithDate = `${date} ${time} ET`;
 
-    const bookmakers = filterBooks(ev.bookmakers ?? []);
+    const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
     const spread: Record<string, { away: string; home: string }> = {};
     const total: Record<string, string> = {};
 

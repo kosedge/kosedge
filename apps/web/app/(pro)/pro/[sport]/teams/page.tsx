@@ -1,10 +1,20 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getSport } from "@/lib/sports";
 
-export default function TeamsPage({ params }: { params: { sport: string } }) {
-  const sport = getSport(params.sport);
-  const sportName = sport?.fullName ?? params.sport.toUpperCase();
-  const base = `/pro/${params.sport}`;
+export default async function TeamsPage({
+  params,
+}: {
+  params: Promise<{ sport: string }>;
+}) {
+  const { sport: sportKey } = await params;
+  if (sportKey === "nfl") {
+    redirect("/pro/nfl/teams");
+  }
+
+  const sport = getSport(sportKey);
+  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const base = `/pro/${sportKey}`;
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">

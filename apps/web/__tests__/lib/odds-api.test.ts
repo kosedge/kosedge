@@ -16,6 +16,17 @@ afterEach(() => {
 });
 
 describe("odds-api MLB run line guardrails", () => {
+  it("requests NFL odds in DraftKings-only mode by default", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(jsonResponse([]));
+
+    await fetchEdgeBoard("nfl", "fake-key");
+
+    const url = String(fetchSpy.mock.calls[0]?.[0] ?? "");
+    expect(url).toContain("bookmakers=draftkings");
+  });
+
   it("prefers canonical MLB run line over alternate values", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       jsonResponse([

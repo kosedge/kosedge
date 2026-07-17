@@ -40,6 +40,8 @@
     "normalize:nflverse:pbp": "pnpm --filter @kosedge/data-platform-nfl normalize:pbp",
     "materialize:nflverse:usage": "pnpm --filter @kosedge/data-platform-nfl materialize:usage",
     "materialize:nflverse:matchups": "pnpm --filter @kosedge/data-platform-nfl materialize:matchups",
+    "materialize:nflverse:standings": "pnpm --filter @kosedge/data-platform-nfl materialize:standings",
+    "materialize:nflverse:depth-charts": "pnpm --filter @kosedge/data-platform-nfl materialize:depth-charts",
     "// -------------------- DOCKER / BACKEND (Python stack) --------------------": "",
     "docker:up": "docker compose -f infra/docker-compose.yml up -d",
     "docker:down": "docker compose -f infra/docker-compose.yml down",

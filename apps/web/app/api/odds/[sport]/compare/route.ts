@@ -4,8 +4,8 @@ import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
 import {
   fetchOddsComparison,
-  ALLOWED_BOOKS,
   bookDisplay,
+  configuredBooksForSport,
   SPORT_KEY_MAP,
 } from "@/lib/odds-api";
 import { getCache, setCache } from "@/lib/cache/redis";
@@ -73,7 +73,10 @@ export async function GET(
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   try {
-    const books = ALLOWED_BOOKS.map((k) => ({ key: k, label: bookDisplay(k) }));
+    const books = configuredBooksForSport(sport).map((k) => ({
+      key: k,
+      label: bookDisplay(k),
+    }));
     const data = { rows, books };
     const payload = { data, ts: now };
     compareCache.set(sport, payload);

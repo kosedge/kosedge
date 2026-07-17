@@ -32,9 +32,16 @@ export default function SportOverviewSection({
                   <span className="text-sm font-semibold text-kos-text">
                     {link.label}
                   </span>
-                  <span className="rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-text/70">
-                    Pending
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {link.premium ? (
+                      <span className="rounded-full border border-kos-gold/35 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
+                        Pro
+                      </span>
+                    ) : null}
+                    <span className="rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-text/70">
+                      Pending
+                    </span>
+                  </div>
                 </div>
                 <p className="mt-1 text-xs text-kos-text/60">{link.hint}</p>
               </div>
