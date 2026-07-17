@@ -26,6 +26,7 @@ logging.basicConfig(
 log = logging.getLogger(APP_NAME)
 
 TASK_PULL_ODDS_SNAPSHOT = "src.tasks.pull_odds_snapshot"
+TASK_PULL_HISTORICAL_ODDS_BACKFILL = "src.tasks.pull_historical_odds_backfill"
 TASK_PULL_MLB_CONTEXT = "src.tasks.pull_mlb_context_snapshot"
 TASK_RUN_MLB_SIMULATIONS = "src.tasks.run_mlb_market_simulations"
 TASK_PULL_MLB_OUTCOMES = "src.tasks.pull_mlb_outcomes"
@@ -39,6 +40,10 @@ TASK_PULL_NFL_OUTCOMES = "src.tasks.pull_nfl_outcomes"
 TASK_RUN_NFL_QUALITY_GRADING = "src.tasks.run_nfl_quality_grading"
 TASK_RUN_NFL_WALKFORWARD_BACKTEST = "src.tasks.run_nfl_walkforward_backtest"
 TASK_EVAL_NFL_PROMOTION = "src.tasks.evaluate_nfl_model_promotion"
+TASK_RUN_NFL_FRAMEWORK_TUNING = "src.tasks.run_nfl_framework_tuning"
+TASK_RUN_NFL_SUPERVISED_RETRAIN = "src.tasks.run_nfl_supervised_retrain"
+TASK_RUN_NFL_DECOMPOSITION_DRIFT = "src.tasks.run_nfl_decomposition_drift_monitor"
+TASK_RUN_NFL_LAUNCH_HARDENING = "src.tasks.run_nfl_launch_hardening_cycle"
 TASK_NFL_PLAYER_BASELINES = "src.tasks.materialize_nfl_player_baseline_projections"
 TASK_NFL_PLAYER_PROPS = "src.tasks.materialize_nfl_player_props_edges"
 TASK_NFL_FANTASY = "src.tasks.materialize_nfl_fantasy_projections"
@@ -423,6 +428,18 @@ def health_nfl_production_readiness(
                         "reason": "missing_quality_snapshot",
                     },
                 )
+            drift_row = conn.execute(
+                text(
+                    """
+                    SELECT status, payload, created_at
+                    FROM nfl_decomposition_drift_snapshots
+                    WHERE model_version = :model_version
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                    """
+                ),
+                {"model_version": model_version},
+            ).fetchone()
         payload = dict(snapshot_row._mapping).get("payload") or {}
         sample_size = int(_safe_float(payload.get("sample_size")) or 0)
         calendar_days = int(_safe_float(payload.get("calendar_days_covered")) or 0)
@@ -475,6 +492,19 @@ def health_nfl_production_readiness(
                 "total_mae": total_mae,
                 "clv_avg": clv_avg,
             },
+            "drift_monitor": (
+                {
+                    "status": str(drift_row.status),
+                    "created_at": drift_row.created_at.isoformat() if drift_row.created_at is not None else None,
+                    "top_shifts": (
+                        (drift_row.payload or {}).get("top_shifts")
+                        if isinstance(drift_row.payload, dict)
+                        else []
+                    ),
+                }
+                if drift_row is not None
+                else None
+            ),
         }
         if classification["status"] != "go":
             raise HTTPException(status_code=503, detail=response)
@@ -556,12 +586,52 @@ def get_odds_snapshots(
 
 
 @app.post("/api/jobs/pull-odds-snapshot")
-def job_pull_odds_snapshot() -> Dict[str, str]:
+def job_pull_odds_snapshot(
+    nfl_bookmakers: Optional[str] = Query(
+        None,
+        description="Comma-separated NFL bookmaker keys for The Odds API (defaults to NFL_ODDS_BOOKMAKERS or draftkings).",
+    ),
+) -> Dict[str, str]:
     try:
-        async_result = celery_app.send_task(TASK_PULL_ODDS_SNAPSHOT)
+        if nfl_bookmakers is not None:
+            async_result = celery_app.send_task(
+                TASK_PULL_ODDS_SNAPSHOT,
+                kwargs={"nfl_bookmakers": nfl_bookmakers},
+            )
+        else:
+            async_result = celery_app.send_task(TASK_PULL_ODDS_SNAPSHOT)
         return {"task_id": async_result.id, "task_name": TASK_PULL_ODDS_SNAPSHOT}
     except Exception as e:
         log.exception("Failed to enqueue pull-odds-snapshot")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-historical-odds-backfill")
+def job_pull_historical_odds_backfill(
+    sport_key: str = Query("americanfootball_nfl"),
+    bookmakers: str = Query("draftkings,fanduel"),
+    markets: str = Query("h2h,spreads,totals"),
+    start_season: int = Query(2013, ge=2000, le=2100),
+    end_season: int = Query(date.today().year - 1, ge=2000, le=2100),
+    max_requests: int = Query(15, ge=1, le=3000),
+    oldest_first: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_PULL_HISTORICAL_ODDS_BACKFILL,
+            kwargs={
+                "sport_key": sport_key,
+                "bookmakers": bookmakers,
+                "markets": markets,
+                "start_season": int(start_season),
+                "end_season": int(end_season),
+                "max_requests": int(max_requests),
+                "oldest_first": bool(oldest_first),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_HISTORICAL_ODDS_BACKFILL}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-historical-odds-backfill")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
@@ -754,6 +824,106 @@ def job_evaluate_nfl_promotion(
         return {"task_id": async_result.id, "task_name": TASK_EVAL_NFL_PROMOTION}
     except Exception as e:
         log.exception("Failed to enqueue evaluate-nfl-promotion")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-framework-tuning")
+def job_run_nfl_framework_tuning(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    lookback_days: int = Query(240, ge=45, le=1460),
+    training_days: int = Query(56, ge=14, le=365),
+    step_days: int = Query(7, ge=1, le=30),
+    max_candidates: int = Query(180, ge=12, le=1000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_FRAMEWORK_TUNING,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": int(lookback_days),
+                "training_days": int(training_days),
+                "step_days": int(step_days),
+                "max_candidates": int(max_candidates),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_FRAMEWORK_TUNING}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-framework-tuning")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-supervised-retrain")
+def job_run_nfl_supervised_retrain(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    start_season: int = Query(2013, ge=2000, le=2100),
+    end_season: int = Query(date.today().year - 1, ge=2000, le=2100),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_SUPERVISED_RETRAIN,
+            kwargs={
+                "model_version": model_version,
+                "start_season": int(start_season),
+                "end_season": int(end_season),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_SUPERVISED_RETRAIN}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-supervised-retrain")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-decomposition-drift")
+def job_run_nfl_decomposition_drift(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    lookback_days: int = Query(120, ge=21, le=730),
+    baseline_weeks: int = Query(4, ge=2, le=16),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_DECOMPOSITION_DRIFT,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": int(lookback_days),
+                "baseline_weeks": int(baseline_weeks),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_DECOMPOSITION_DRIFT}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-decomposition-drift")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-launch-hardening")
+def job_run_nfl_launch_hardening(
+    model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    days_ahead: int = Query(14, ge=1, le=45),
+    outcomes_lookback_days: int = Query(60, ge=14, le=365),
+    simulations: int = Query(5000, ge=500, le=30000),
+    backtest_lookback_days: int = Query(240, ge=60, le=1460),
+    tuning_lookback_days: int = Query(240, ge=60, le=1460),
+    training_days: int = Query(56, ge=14, le=365),
+    step_days: int = Query(7, ge=1, le=30),
+    max_candidates: int = Query(180, ge=12, le=1000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NFL_LAUNCH_HARDENING,
+            kwargs={
+                "model_version": model_version,
+                "days_ahead": int(days_ahead),
+                "outcomes_lookback_days": int(outcomes_lookback_days),
+                "simulations": int(simulations),
+                "backtest_lookback_days": int(backtest_lookback_days),
+                "tuning_lookback_days": int(tuning_lookback_days),
+                "training_days": int(training_days),
+                "step_days": int(step_days),
+                "max_candidates": int(max_candidates),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_LAUNCH_HARDENING}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-launch-hardening")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

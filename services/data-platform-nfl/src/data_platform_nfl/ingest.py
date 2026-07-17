@@ -9,6 +9,8 @@ import nflreadpy as nfl
 from sqlalchemy import text
 
 from .db import SessionLocal
+from .nfl_com import NflComError, fetch_nfl_com_team_intel_snapshot
+from .team_intel import build_standings_rows, infer_depth_chart_rows
 
 
 def _now() -> datetime:
@@ -22,9 +24,22 @@ def _checksum(payload: Dict[str, Any]) -> str:
 
 def _iter_rows(df: Any) -> Iterable[Dict[str, Any]]:
     # nflreadpy returns Polars DataFrames.
+    if df is None:
+        return
     if hasattr(df, "iter_rows"):
         for row in df.iter_rows(named=True):
             yield dict(row)
+
+
+def _safe_load_nflverse_table(loader: Any, *, seasons: List[int]) -> Any:
+    """Load nflverse tables; skip unavailable future-season assets without failing ingest."""
+    try:
+        return loader(seasons=seasons)
+    except Exception as exc:
+        message = str(exc)
+        if any(token in message for token in ("404", "Not Found", "must be between")):
+            return None
+        raise
 
 
 def _to_int(v: Any) -> int | None:
@@ -75,6 +90,262 @@ def _upsert_raw(session: Any, *, source: str, object_type: str, object_key: str,
             "ingested_at": _now(),
         },
     )
+
+
+def _overlay_nfl_com_team_intel(
+    *,
+    session: Any,
+    seasons: List[int],
+    metrics: Dict[str, Any],
+) -> None:
+    rows_metrics = metrics.setdefault("rows", {})
+    rows_metrics.setdefault("nfl_com_rosters", 0)
+    rows_metrics.setdefault("nfl_com_team_stats", 0)
+    rows_metrics.setdefault("nfl_com_standings", 0)
+
+    intel_metrics = metrics.setdefault("nfl_com", {})
+    diagnostics: List[Dict[str, Any]] = []
+    errors: List[str] = []
+
+    for season in seasons:
+        try:
+            snapshot = fetch_nfl_com_team_intel_snapshot(season=season)
+        except NflComError as exc:
+            errors.append(f"{season}:{exc}")
+            continue
+        except Exception as exc:
+            errors.append(f"{season}:unexpected:{exc}")
+            continue
+
+        diagnostics.append(snapshot.get("diagnostics") or {})
+        rosters = snapshot.get("rosters") or []
+        standings = snapshot.get("standings") or []
+        team_stats = snapshot.get("team_stats") or []
+
+        for item in rosters:
+            player_id = str(item.get("player_id") or "").strip()
+            team = str(item.get("team") or "").strip().upper()
+            if not player_id or not team:
+                continue
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nfl_dp_rosters (
+                      season, team, player_id, player_name, position, jersey_number, source, updated_at
+                    ) VALUES (
+                      :season, :team, :player_id, :player_name, :position, :jersey_number, :source, NOW()
+                    )
+                    ON CONFLICT (season, team, player_id) DO UPDATE SET
+                      player_name = EXCLUDED.player_name,
+                      position = EXCLUDED.position,
+                      jersey_number = EXCLUDED.jersey_number,
+                      source = EXCLUDED.source,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "season": season,
+                    "team": team,
+                    "player_id": player_id,
+                    "player_name": item.get("player_name"),
+                    "position": item.get("position"),
+                    "jersey_number": item.get("jersey_number"),
+                    "source": "nfl_com",
+                },
+            )
+            _upsert_raw(
+                session,
+                source="nfl_com",
+                object_type="roster_player",
+                object_key=f"{season}:{team}:{player_id}",
+                season=season,
+                week=snapshot.get("week"),
+                game_id=None,
+                payload=dict(item),
+            )
+            rows_metrics["nfl_com_rosters"] += 1
+
+        for item in standings:
+            team = str(item.get("team") or "").strip().upper()
+            week = _to_int(item.get("week"))
+            if not team or week is None:
+                continue
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nfl_dp_standings_weekly (
+                      season, week, team,
+                      wins, losses, ties,
+                      points_for, points_against, point_diff, win_pct,
+                      conference, division,
+                      conference_wins, conference_losses, conference_ties, conference_pct,
+                      division_wins, division_losses, division_ties, division_pct,
+                      source, updated_at
+                    ) VALUES (
+                      :season, :week, :team,
+                      :wins, :losses, :ties,
+                      :points_for, :points_against, :point_diff, :win_pct,
+                      :conference, :division,
+                      :conference_wins, :conference_losses, :conference_ties, :conference_pct,
+                      :division_wins, :division_losses, :division_ties, :division_pct,
+                      :source, NOW()
+                    )
+                    ON CONFLICT (season, week, team) DO UPDATE SET
+                      wins = EXCLUDED.wins,
+                      losses = EXCLUDED.losses,
+                      ties = EXCLUDED.ties,
+                      points_for = EXCLUDED.points_for,
+                      points_against = EXCLUDED.points_against,
+                      point_diff = EXCLUDED.point_diff,
+                      win_pct = EXCLUDED.win_pct,
+                      conference = EXCLUDED.conference,
+                      division = EXCLUDED.division,
+                      conference_wins = EXCLUDED.conference_wins,
+                      conference_losses = EXCLUDED.conference_losses,
+                      conference_ties = EXCLUDED.conference_ties,
+                      conference_pct = EXCLUDED.conference_pct,
+                      division_wins = EXCLUDED.division_wins,
+                      division_losses = EXCLUDED.division_losses,
+                      division_ties = EXCLUDED.division_ties,
+                      division_pct = EXCLUDED.division_pct,
+                      source = EXCLUDED.source,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "season": season,
+                    "week": week,
+                    "team": team,
+                    "wins": _to_int(item.get("wins")) or 0,
+                    "losses": _to_int(item.get("losses")) or 0,
+                    "ties": _to_int(item.get("ties")) or 0,
+                    "points_for": _to_int(item.get("points_for")) or 0,
+                    "points_against": _to_int(item.get("points_against")) or 0,
+                    "point_diff": _to_int(item.get("point_diff")) or 0,
+                    "win_pct": _to_float(item.get("win_pct")),
+                    "conference": item.get("conference"),
+                    "division": item.get("division"),
+                    "conference_wins": _to_int(item.get("conference_wins")),
+                    "conference_losses": _to_int(item.get("conference_losses")),
+                    "conference_ties": _to_int(item.get("conference_ties")),
+                    "conference_pct": _to_float(item.get("conference_pct")),
+                    "division_wins": _to_int(item.get("division_wins")),
+                    "division_losses": _to_int(item.get("division_losses")),
+                    "division_ties": _to_int(item.get("division_ties")),
+                    "division_pct": _to_float(item.get("division_pct")),
+                    "source": "nfl_com",
+                },
+            )
+            _upsert_raw(
+                session,
+                source="nfl_com",
+                object_type="standings_team_week",
+                object_key=f"{season}:{week}:{team}",
+                season=season,
+                week=week,
+                game_id=None,
+                payload=dict(item),
+            )
+            rows_metrics["nfl_com_standings"] += 1
+
+        for item in team_stats:
+            team = str(item.get("team") or "").strip().upper()
+            week = _to_int(item.get("week"))
+            if not team or week is None:
+                continue
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nfl_dp_team_situational_weekly (
+                      season, week, team, games_played,
+                      offensive_plays, defensive_plays, pass_plays, run_plays,
+                      early_down_plays, early_down_pass_plays,
+                      third_down_attempts, third_down_conversions,
+                      fourth_down_attempts, fourth_down_conversions,
+                      red_zone_plays, red_zone_touchdowns,
+                      sacks_allowed, qb_hits_allowed, sacks_generated, qb_hits_generated,
+                      explosive_pass_plays, explosive_pass_allowed,
+                      pass_rate, early_down_pass_rate,
+                      third_down_conversion_rate, fourth_down_conversion_rate, red_zone_td_rate,
+                      pressure_rate_allowed, pressure_rate_generated,
+                      success_rate_offense, success_rate_defense_allowed,
+                      epa_per_play_offense, epa_per_play_defense_allowed,
+                      source, updated_at
+                    ) VALUES (
+                      :season, :week, :team, :games_played,
+                      :offensive_plays, :defensive_plays, :pass_plays, :run_plays,
+                      :early_down_plays, :early_down_pass_plays,
+                      :third_down_attempts, :third_down_conversions,
+                      :fourth_down_attempts, :fourth_down_conversions,
+                      :red_zone_plays, :red_zone_touchdowns,
+                      :sacks_allowed, :qb_hits_allowed, :sacks_generated, :qb_hits_generated,
+                      :explosive_pass_plays, :explosive_pass_allowed,
+                      :pass_rate, :early_down_pass_rate,
+                      :third_down_conversion_rate, :fourth_down_conversion_rate, :red_zone_td_rate,
+                      :pressure_rate_allowed, :pressure_rate_generated,
+                      :success_rate_offense, :success_rate_defense_allowed,
+                      :epa_per_play_offense, :epa_per_play_defense_allowed,
+                      :source, NOW()
+                    )
+                    ON CONFLICT (season, week, team) DO UPDATE SET
+                      games_played = EXCLUDED.games_played,
+                      offensive_plays = EXCLUDED.offensive_plays,
+                      defensive_plays = EXCLUDED.defensive_plays,
+                      pass_plays = EXCLUDED.pass_plays,
+                      run_plays = EXCLUDED.run_plays,
+                      early_down_plays = EXCLUDED.early_down_plays,
+                      early_down_pass_plays = EXCLUDED.early_down_pass_plays,
+                      third_down_attempts = EXCLUDED.third_down_attempts,
+                      third_down_conversions = EXCLUDED.third_down_conversions,
+                      fourth_down_attempts = EXCLUDED.fourth_down_attempts,
+                      fourth_down_conversions = EXCLUDED.fourth_down_conversions,
+                      red_zone_plays = EXCLUDED.red_zone_plays,
+                      red_zone_touchdowns = EXCLUDED.red_zone_touchdowns,
+                      sacks_allowed = EXCLUDED.sacks_allowed,
+                      qb_hits_allowed = EXCLUDED.qb_hits_allowed,
+                      sacks_generated = EXCLUDED.sacks_generated,
+                      qb_hits_generated = EXCLUDED.qb_hits_generated,
+                      explosive_pass_plays = EXCLUDED.explosive_pass_plays,
+                      explosive_pass_allowed = EXCLUDED.explosive_pass_allowed,
+                      pass_rate = EXCLUDED.pass_rate,
+                      early_down_pass_rate = EXCLUDED.early_down_pass_rate,
+                      third_down_conversion_rate = EXCLUDED.third_down_conversion_rate,
+                      fourth_down_conversion_rate = EXCLUDED.fourth_down_conversion_rate,
+                      red_zone_td_rate = EXCLUDED.red_zone_td_rate,
+                      pressure_rate_allowed = EXCLUDED.pressure_rate_allowed,
+                      pressure_rate_generated = EXCLUDED.pressure_rate_generated,
+                      success_rate_offense = EXCLUDED.success_rate_offense,
+                      success_rate_defense_allowed = EXCLUDED.success_rate_defense_allowed,
+                      epa_per_play_offense = EXCLUDED.epa_per_play_offense,
+                      epa_per_play_defense_allowed = EXCLUDED.epa_per_play_defense_allowed,
+                      source = EXCLUDED.source,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    **item,
+                    "season": season,
+                    "week": week,
+                    "team": team,
+                    "source": "nfl_com",
+                },
+            )
+            _upsert_raw(
+                session,
+                source="nfl_com",
+                object_type="team_situational_week",
+                object_key=f"{season}:{week}:{team}",
+                season=season,
+                week=week,
+                game_id=None,
+                payload=dict(item),
+            )
+            rows_metrics["nfl_com_team_stats"] += 1
+
+    intel_metrics["attempted"] = bool(seasons)
+    intel_metrics["diagnostics"] = diagnostics
+    if errors:
+        intel_metrics["errors"] = errors
 
 
 def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False) -> Dict[str, Any]:
@@ -686,7 +957,7 @@ def materialize_usage_features_from_pbp(
                       third_down_conversion_rate, fourth_down_conversion_rate, red_zone_td_rate,
                       pressure_rate_allowed, pressure_rate_generated,
                       success_rate_offense, success_rate_defense_allowed,
-                      epa_per_play_offense, epa_per_play_defense_allowed, updated_at
+                      epa_per_play_offense, epa_per_play_defense_allowed, source, updated_at
                     )
                     WITH offense AS (
                       SELECT
@@ -773,6 +1044,7 @@ def materialize_usage_features_from_pbp(
                       d.success_rate_defense_allowed,
                       o.epa_per_play_offense,
                       d.epa_per_play_defense_allowed,
+                      'nflverse'::text,
                       NOW()
                     FROM offense o
                     LEFT JOIN defense d
@@ -808,7 +1080,9 @@ def materialize_usage_features_from_pbp(
                       success_rate_defense_allowed = EXCLUDED.success_rate_defense_allowed,
                       epa_per_play_offense = EXCLUDED.epa_per_play_offense,
                       epa_per_play_defense_allowed = EXCLUDED.epa_per_play_defense_allowed,
+                      source = EXCLUDED.source,
                       updated_at = EXCLUDED.updated_at
+                    WHERE nfl_dp_team_situational_weekly.source <> 'nfl_com'
                     """
                 ),
                 {"season": season},
@@ -1246,6 +1520,375 @@ def materialize_matchup_features_from_usage(
         session.close()
 
 
+def materialize_standings_weekly(
+    *, seasons: List[int], week: int | None = None, replace_existing: bool = False
+) -> Dict[str, Any]:
+    session = SessionLocal()
+    run_id = None
+    metrics = {
+        "seasons": seasons,
+        "week": week,
+        "replace_existing": replace_existing,
+        "rows": {"standings_rows": 0},
+    }
+    try:
+        run_id = session.execute(
+            text(
+                """
+                INSERT INTO nfl_dp_ingestion_runs (source, pipeline, started_at, status, metrics)
+                VALUES (:source, :pipeline, :started_at, :status, CAST(:metrics AS jsonb))
+                RETURNING id
+                """
+            ),
+            {
+                "source": "nflverse",
+                "pipeline": "nfl_standings_weekly_materialization",
+                "started_at": _now(),
+                "status": "running",
+                "metrics": json.dumps(metrics),
+            },
+        ).scalar_one()
+
+        for season in seasons:
+            if replace_existing:
+                session.execute(
+                    text(
+                        """
+                        DELETE FROM nfl_dp_standings_weekly
+                        WHERE season = :season
+                          AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
+                        """
+                    ),
+                    {"season": season, "week": week},
+                )
+            rows = session.execute(
+                text(
+                    """
+                    SELECT season, week, home_team, away_team, home_score, away_score
+                    FROM nfl_dp_schedules
+                    WHERE season = :season
+                      AND week IS NOT NULL
+                      AND (CAST(:week AS int) IS NULL OR week <= CAST(:week AS int))
+                    ORDER BY week, game_id
+                    """
+                ),
+                {"season": season, "week": week},
+            ).fetchall()
+            standings_rows = build_standings_rows([dict(r._mapping) for r in rows])
+            for item in standings_rows:
+                session.execute(
+                    text(
+                        """
+                        INSERT INTO nfl_dp_standings_weekly (
+                          season, week, team,
+                          wins, losses, ties,
+                          points_for, points_against, point_diff, win_pct,
+                          conference, division,
+                          conference_wins, conference_losses, conference_ties, conference_pct,
+                          division_wins, division_losses, division_ties, division_pct,
+                          source, updated_at
+                        ) VALUES (
+                          :season, :week, :team,
+                          :wins, :losses, :ties,
+                          :points_for, :points_against, :point_diff, :win_pct,
+                          :conference, :division,
+                          :conference_wins, :conference_losses, :conference_ties, :conference_pct,
+                          :division_wins, :division_losses, :division_ties, :division_pct,
+                          :source, NOW()
+                        )
+                        ON CONFLICT (season, week, team) DO UPDATE SET
+                          wins = EXCLUDED.wins,
+                          losses = EXCLUDED.losses,
+                          ties = EXCLUDED.ties,
+                          points_for = EXCLUDED.points_for,
+                          points_against = EXCLUDED.points_against,
+                          point_diff = EXCLUDED.point_diff,
+                          win_pct = EXCLUDED.win_pct,
+                          conference = EXCLUDED.conference,
+                          division = EXCLUDED.division,
+                          conference_wins = EXCLUDED.conference_wins,
+                          conference_losses = EXCLUDED.conference_losses,
+                          conference_ties = EXCLUDED.conference_ties,
+                          conference_pct = EXCLUDED.conference_pct,
+                          division_wins = EXCLUDED.division_wins,
+                          division_losses = EXCLUDED.division_losses,
+                          division_ties = EXCLUDED.division_ties,
+                          division_pct = EXCLUDED.division_pct,
+                          source = EXCLUDED.source,
+                          updated_at = EXCLUDED.updated_at
+                        WHERE nfl_dp_standings_weekly.source <> 'nfl_com'
+                        """
+                    ),
+                    {
+                        **item,
+                        "source": "nfl_dp_schedules_derived",
+                    },
+                )
+
+            rows_for_season = session.execute(
+                text(
+                    """
+                    SELECT COUNT(*)
+                    FROM nfl_dp_standings_weekly
+                    WHERE season = :season
+                      AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
+                    """
+                ),
+                {"season": season, "week": week},
+            ).scalar_one()
+            metrics["rows"]["standings_rows"] += int(rows_for_season or 0)
+            session.commit()
+
+        session.execute(
+            text(
+                """
+                UPDATE nfl_dp_ingestion_runs
+                SET finished_at = :finished_at,
+                    status = :status,
+                    metrics = CAST(:metrics AS jsonb)
+                WHERE id = :id
+                """
+            ),
+            {
+                "id": run_id,
+                "finished_at": _now(),
+                "status": "success",
+                "metrics": json.dumps(metrics),
+            },
+        )
+        session.commit()
+        return metrics
+    except Exception as exc:
+        session.rollback()
+        if run_id is not None:
+            session.execute(
+                text(
+                    """
+                    UPDATE nfl_dp_ingestion_runs
+                    SET finished_at = :finished_at,
+                        status = :status,
+                        metrics = CAST(:metrics AS jsonb),
+                        error_message = :error_message
+                    WHERE id = :id
+                    """
+                ),
+                {
+                    "id": run_id,
+                    "finished_at": _now(),
+                    "status": "failed",
+                    "metrics": json.dumps(metrics),
+                    "error_message": str(exc),
+                },
+            )
+            session.commit()
+        raise
+    finally:
+        session.close()
+
+
+def materialize_depth_chart_weekly(
+    *, seasons: List[int], week: int | None = None, replace_existing: bool = False
+) -> Dict[str, Any]:
+    session = SessionLocal()
+    run_id = None
+    metrics = {
+        "seasons": seasons,
+        "week": week,
+        "replace_existing": replace_existing,
+        "rows": {"depth_chart_rows": 0},
+    }
+    try:
+        run_id = session.execute(
+            text(
+                """
+                INSERT INTO nfl_dp_ingestion_runs (source, pipeline, started_at, status, metrics)
+                VALUES (:source, :pipeline, :started_at, :status, CAST(:metrics AS jsonb))
+                RETURNING id
+                """
+            ),
+            {
+                "source": "nflverse",
+                "pipeline": "nfl_depth_chart_weekly_materialization",
+                "started_at": _now(),
+                "status": "running",
+                "metrics": json.dumps(metrics),
+            },
+        ).scalar_one()
+
+        for season in seasons:
+            weeks = [week] if week is not None else [
+                int(w)
+                for w in session.execute(
+                    text(
+                        """
+                        SELECT DISTINCT week
+                        FROM nfl_dp_player_usage_weekly
+                        WHERE season = :season
+                          AND week IS NOT NULL
+                        ORDER BY week
+                        """
+                    ),
+                    {"season": season},
+                ).scalars().all()
+            ]
+            if not weeks:
+                continue
+
+            roster_rows = [
+                dict(r._mapping)
+                for r in session.execute(
+                    text(
+                        """
+                        SELECT season, team, player_id, player_name, position
+                        FROM nfl_dp_rosters
+                        WHERE season = :season
+                        """
+                    ),
+                    {"season": season},
+                ).fetchall()
+            ]
+
+            for target_week in weeks:
+                if replace_existing:
+                    session.execute(
+                        text(
+                            """
+                            DELETE FROM nfl_dp_depth_chart_weekly
+                            WHERE season = :season
+                              AND week = :week
+                            """
+                        ),
+                        {"season": season, "week": target_week},
+                    )
+                usage_rows = [
+                    dict(r._mapping)
+                    for r in session.execute(
+                        text(
+                            """
+                            SELECT
+                              team,
+                              player_id,
+                              SUM(involvement_plays)::int AS involvement,
+                              SUM(targets)::int AS targets,
+                              SUM(rush_attempts)::int AS rush_attempts,
+                              SUM(pass_attempts)::int AS pass_attempts,
+                              COUNT(DISTINCT week)::int AS active_weeks,
+                              MAX(week)::int AS latest_week
+                            FROM nfl_dp_player_usage_weekly
+                            WHERE season = :season
+                              AND week BETWEEN GREATEST(1, :week - 2) AND :week
+                            GROUP BY team, player_id
+                            """
+                        ),
+                        {"season": season, "week": target_week},
+                    ).fetchall()
+                ]
+                injury_rows = [
+                    dict(r._mapping)
+                    for r in session.execute(
+                        text(
+                            """
+                            SELECT team, player_id, player_name, report_status, practice_status
+                            FROM nfl_dp_injuries
+                            WHERE season = :season
+                              AND week = :week
+                            """
+                        ),
+                        {"season": season, "week": target_week},
+                    ).fetchall()
+                ]
+                inferred_rows = infer_depth_chart_rows(
+                    season=season,
+                    week=target_week,
+                    roster_rows=roster_rows,
+                    usage_rows=usage_rows,
+                    injury_rows=injury_rows,
+                )
+                for item in inferred_rows:
+                    session.execute(
+                        text(
+                            """
+                            INSERT INTO nfl_dp_depth_chart_weekly (
+                              season, week, team, position, depth_order, depth_slot,
+                              player_uid, player_id, player_name, role_confidence, inferred_source, updated_at
+                            ) VALUES (
+                              :season, :week, :team, :position, :depth_order, :depth_slot,
+                              :player_uid, :player_id, :player_name, :role_confidence, :inferred_source, NOW()
+                            )
+                            ON CONFLICT (season, week, team, position, depth_order) DO UPDATE SET
+                              depth_slot = EXCLUDED.depth_slot,
+                              player_uid = EXCLUDED.player_uid,
+                              player_id = EXCLUDED.player_id,
+                              player_name = EXCLUDED.player_name,
+                              role_confidence = EXCLUDED.role_confidence,
+                              inferred_source = EXCLUDED.inferred_source,
+                              updated_at = EXCLUDED.updated_at
+                            """
+                        ),
+                        item,
+                    )
+                session.commit()
+
+            rows_for_season = session.execute(
+                text(
+                    """
+                    SELECT COUNT(*)
+                    FROM nfl_dp_depth_chart_weekly
+                    WHERE season = :season
+                      AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
+                    """
+                ),
+                {"season": season, "week": week},
+            ).scalar_one()
+            metrics["rows"]["depth_chart_rows"] += int(rows_for_season or 0)
+
+        session.execute(
+            text(
+                """
+                UPDATE nfl_dp_ingestion_runs
+                SET finished_at = :finished_at,
+                    status = :status,
+                    metrics = CAST(:metrics AS jsonb)
+                WHERE id = :id
+                """
+            ),
+            {
+                "id": run_id,
+                "finished_at": _now(),
+                "status": "success",
+                "metrics": json.dumps(metrics),
+            },
+        )
+        session.commit()
+        return metrics
+    except Exception as exc:
+        session.rollback()
+        if run_id is not None:
+            session.execute(
+                text(
+                    """
+                    UPDATE nfl_dp_ingestion_runs
+                    SET finished_at = :finished_at,
+                        status = :status,
+                        metrics = CAST(:metrics AS jsonb),
+                        error_message = :error_message
+                    WHERE id = :id
+                    """
+                ),
+                {
+                    "id": run_id,
+                    "finished_at": _now(),
+                    "status": "failed",
+                    "metrics": json.dumps(metrics),
+                    "error_message": str(exc),
+                },
+            )
+            session.commit()
+        raise
+    finally:
+        session.close()
+
+
 def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) -> Dict[str, Any]:
     session = SessionLocal()
     run_id = None
@@ -1257,6 +1900,9 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
             "player_game_stats": 0,
             "injuries": 0,
             "rosters": 0,
+            "nfl_com_rosters": 0,
+            "nfl_com_team_stats": 0,
+            "nfl_com_standings": 0,
             "pbp_raw_objects": 0,
             "raw_objects": 0,
         },
@@ -1280,11 +1926,15 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
         ).scalar_one()
 
         schedules = nfl.load_schedules(seasons=seasons)
-        team_stats = nfl.load_team_stats(seasons=seasons)
-        player_stats = nfl.load_player_stats(seasons=seasons)
-        injuries = nfl.load_injuries(seasons=seasons)
+        team_stats = _safe_load_nflverse_table(nfl.load_team_stats, seasons=seasons)
+        player_stats = _safe_load_nflverse_table(nfl.load_player_stats, seasons=seasons)
+        injuries = _safe_load_nflverse_table(nfl.load_injuries, seasons=seasons)
         rosters = nfl.load_rosters(seasons=seasons)
-        pbp = nfl.load_pbp(seasons=seasons) if include_pbp else None
+        pbp = (
+            _safe_load_nflverse_table(nfl.load_pbp, seasons=seasons)
+            if include_pbp
+            else None
+        )
 
         for row in _iter_rows(schedules):
             season = _to_int(row.get("season"))
@@ -1452,6 +2102,12 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
             team = str(row.get("team") or "")
             player_id = str(row.get("gsis_id") or "")
             player_name = str(row.get("full_name") or "")
+            injury_label = (
+                row.get("report_primary_injury")
+                or row.get("practice_primary_injury")
+                or row.get("report_secondary_injury")
+                or row.get("practice_secondary_injury")
+            )
             if not season or week is None or not team:
                 continue
             player_key = player_id or player_name or "unknown"
@@ -1482,7 +2138,7 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                     "player_name": player_name or None,
                     "report_status": row.get("report_status"),
                     "practice_status": row.get("practice_status"),
-                    "injury": row.get("injury"),
+                    "injury": injury_label,
                     "source": "nflverse",
                     "updated_at": _now(),
                 },
@@ -1515,7 +2171,9 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                     "season": season,
                     "team": team,
                     "player_id": player_id,
-                    "player_name": row.get("player_name"),
+                    "player_name": row.get("full_name")
+                    or row.get("football_name")
+                    or row.get("player_name"),
                     "position": row.get("position"),
                     "jersey_number": str(row.get("jersey_number") or ""),
                     "source": "nflverse",
@@ -1543,6 +2201,13 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                 )
                 metrics["rows"]["pbp_raw_objects"] += 1
                 metrics["rows"]["raw_objects"] += 1
+
+        # NFL.com overlays run after nflverse ingestion so upstream rows are preferred
+        # when available, while still preserving nflverse as the fallback source.
+        try:
+            _overlay_nfl_com_team_intel(session=session, seasons=seasons, metrics=metrics)
+        except Exception as nfl_com_exc:
+            metrics.setdefault("nfl_com", {})["overlay_error"] = str(nfl_com_exc)
 
         session.execute(
             text(
@@ -1627,7 +2292,7 @@ def materialize_player_projection_features(
                         """
                         DELETE FROM nfl_player_projection_features_weekly
                         WHERE season = :season
-                          AND (:week IS NULL OR week = :week)
+                          AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
                         """
                     ),
                     {"season": season, "week": week},
@@ -1666,7 +2331,7 @@ def materialize_player_projection_features(
                         SUM(u.red_zone_targets + u.red_zone_carries) OVER (PARTITION BY u.season, u.week, u.team) AS team_red_zone_events
                       FROM nfl_dp_player_usage_weekly u
                       WHERE u.season = :season
-                        AND (:week IS NULL OR u.week = :week)
+                        AND (CAST(:week AS int) IS NULL OR u.week = CAST(:week AS int))
                     ),
                     injury AS (
                       SELECT
@@ -1684,7 +2349,7 @@ def materialize_player_projection_features(
                         ) AS availability_confidence
                       FROM nfl_dp_injuries i
                       WHERE i.season = :season
-                        AND (:week IS NULL OR i.week = :week)
+                        AND (CAST(:week AS int) IS NULL OR i.week = CAST(:week AS int))
                       GROUP BY i.season, i.week, i.team, COALESCE(NULLIF(i.player_id, ''), NULLIF(i.player_name, ''), i.player_key)
                     ),
                     schedule_dim AS (
@@ -1697,7 +2362,7 @@ def materialize_player_projection_features(
                         s.away_team
                       FROM nfl_dp_schedules s
                       WHERE s.season = :season
-                        AND (:week IS NULL OR s.week = :week)
+                        AND (CAST(:week AS int) IS NULL OR s.week = CAST(:week AS int))
                     )
                     SELECT
                       u.season,
@@ -1725,7 +2390,7 @@ def materialize_player_projection_features(
                           0.99,
                           (0.40 * GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(u.team_involvement::numeric, 0)))))
                           + (0.35 * GREATEST(0.0, LEAST(1.0, (u.targets::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))))
-                          + (0.25 * GREATEST(0.0, LEAST(1.0, COALESCE(u.success_rate, 0.50)))))
+                          + (0.25 * GREATEST(0.0, LEAST(1.0, COALESCE(u.success_rate, 0.50))))
                         )
                       ) AS role_confidence,
                       jsonb_build_object(
@@ -1782,7 +2447,7 @@ def materialize_player_projection_features(
                     SELECT COUNT(*)
                     FROM nfl_player_projection_features_weekly
                     WHERE season = :season
-                      AND (:week IS NULL OR week = :week)
+                      AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
                     """
                 ),
                 {"season": season, "week": week},

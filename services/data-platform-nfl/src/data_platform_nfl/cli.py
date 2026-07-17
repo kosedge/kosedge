@@ -58,6 +58,26 @@ def main() -> None:
         help="Build weekly player projection features from usage/situational tables",
     )
     parser.add_argument(
+        "--materialize-standings-weekly",
+        action="store_true",
+        help="Build derived weekly standings from schedules/results",
+    )
+    parser.add_argument(
+        "--replace-standings-weekly",
+        action="store_true",
+        help="Delete existing standings rows for target seasons before rebuild",
+    )
+    parser.add_argument(
+        "--materialize-depth-chart-weekly",
+        action="store_true",
+        help="Build inferred weekly depth charts from roster/usage/injury data",
+    )
+    parser.add_argument(
+        "--replace-depth-chart-weekly",
+        action="store_true",
+        help="Delete existing depth chart rows for target seasons before rebuild",
+    )
+    parser.add_argument(
         "--replace-player-projection-features",
         action="store_true",
         help="Delete existing player projection feature rows for target seasons before rebuild",
@@ -68,39 +88,91 @@ def main() -> None:
         default=None,
         help="Optional week filter for feature materializations",
     )
-    args = parser.parse_args()
-    from .ingest import (
-        ingest_nflverse_snapshot,
-        materialize_player_projection_features,
-        materialize_matchup_features_from_usage,
-        materialize_usage_features_from_pbp,
-        normalize_pbp_from_raw,
+    parser.add_argument(
+        "--run-launch-hardening",
+        action="store_true",
+        help="Execute full NFL data ownership hardening cycle and backup manifest",
     )
+    parser.add_argument(
+        "--backup-owned-data",
+        action="store_true",
+        help="Generate owned-data backup manifest (and optional row exports)",
+    )
+    parser.add_argument(
+        "--backup-export-dir",
+        default=None,
+        help="Directory for owned-data exports (defaults to data/ops)",
+    )
+    parser.add_argument(
+        "--backup-include-row-exports",
+        action="store_true",
+        help="Write table row NDJSON exports in addition to DB-backed manifest",
+    )
+    args = parser.parse_args()
+    from .ops import export_data_ownership_snapshot, run_launch_hardening_cycle
 
     seasons = _parse_seasons(args.seasons)
-    if args.normalize_pbp_from_raw:
-        result = normalize_pbp_from_raw(
-            seasons=seasons,
-            replace_existing=args.replace_normalized,
-        )
-    elif args.materialize_usage_features:
-        result = materialize_usage_features_from_pbp(
-            seasons=seasons,
-            replace_existing=args.replace_usage_features,
-        )
-    elif args.materialize_matchup_features:
-        result = materialize_matchup_features_from_usage(
-            seasons=seasons,
-            replace_existing=args.replace_matchup_features,
-        )
-    elif args.materialize_player_projection_features:
-        result = materialize_player_projection_features(
+    if args.run_launch_hardening:
+        result = run_launch_hardening_cycle(
             seasons=seasons,
             week=args.week,
-            replace_existing=args.replace_player_projection_features,
+            include_pbp=not args.no_pbp,
+            include_row_exports=args.backup_include_row_exports,
+            export_dir=args.backup_export_dir,
+        )
+    elif args.backup_owned_data:
+        result = export_data_ownership_snapshot(
+            seasons=seasons,
+            week=args.week,
+            export_dir=args.backup_export_dir,
+            include_row_exports=args.backup_include_row_exports,
         )
     else:
-        result = ingest_nflverse_snapshot(seasons=seasons, include_pbp=not args.no_pbp)
+        from .ingest import (
+            ingest_nflverse_snapshot,
+            materialize_depth_chart_weekly,
+            materialize_player_projection_features,
+            materialize_matchup_features_from_usage,
+            materialize_standings_weekly,
+            materialize_usage_features_from_pbp,
+            normalize_pbp_from_raw,
+        )
+
+        if args.normalize_pbp_from_raw:
+            result = normalize_pbp_from_raw(
+                seasons=seasons,
+                replace_existing=args.replace_normalized,
+            )
+        elif args.materialize_usage_features:
+            result = materialize_usage_features_from_pbp(
+                seasons=seasons,
+                replace_existing=args.replace_usage_features,
+            )
+        elif args.materialize_matchup_features:
+            result = materialize_matchup_features_from_usage(
+                seasons=seasons,
+                replace_existing=args.replace_matchup_features,
+            )
+        elif args.materialize_player_projection_features:
+            result = materialize_player_projection_features(
+                seasons=seasons,
+                week=args.week,
+                replace_existing=args.replace_player_projection_features,
+            )
+        elif args.materialize_standings_weekly:
+            result = materialize_standings_weekly(
+                seasons=seasons,
+                week=args.week,
+                replace_existing=args.replace_standings_weekly,
+            )
+        elif args.materialize_depth_chart_weekly:
+            result = materialize_depth_chart_weekly(
+                seasons=seasons,
+                week=args.week,
+                replace_existing=args.replace_depth_chart_weekly,
+            )
+        else:
+            result = ingest_nflverse_snapshot(seasons=seasons, include_pbp=not args.no_pbp)
     print(json.dumps(result, indent=2, default=str))
 
 

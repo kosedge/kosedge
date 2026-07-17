@@ -1,0 +1,13 @@
+{
+  "output_dir": "/Users/ryankos/kosedge/data/ops/nfl-preseason-sim-2026-20260705T215711Z",
+  "generated_at_utc": "2026-07-05T21:57:57.509369+00:00",
+  "files": [
+    "player_playoff_game_by_game.csv",
+    "player_playoff_totals.csv",
+    "player_regular_season_game_by_game.csv",
+    "player_regular_season_totals.csv",
+    "quality_checks.json",
+    "super_bowl_winner_probabilities.csv",
+    "team_regular_season_outcomes.csv"
+  ]
+}

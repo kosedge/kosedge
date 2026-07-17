@@ -44,6 +44,10 @@ def fetch_nfl_schedule(start_date: date, end_date: date) -> List[Dict[str, Any]]
             status = (((comps.get("status") or {}).get("type") or {}).get("description") or "scheduled").lower()
             home_score = home.get("score")
             away_score = away.get("score")
+            venue = comps.get("venue") if isinstance(comps.get("venue"), dict) else {}
+            venue_geo = venue.get("address") if isinstance(venue.get("address"), dict) else {}
+            venue_lat = venue_geo.get("latitude")
+            venue_lon = venue_geo.get("longitude")
             if not home_team or not away_team:
                 continue
             out.append(
@@ -61,6 +65,12 @@ def fetch_nfl_schedule(start_date: date, end_date: date) -> List[Dict[str, Any]]
                     "away_record_summary": ((away.get("records") or [{}])[0]).get("summary"),
                     "home_score": int(home_score) if home_score is not None else None,
                     "away_score": int(away_score) if away_score is not None else None,
+                    "venue_name": venue.get("fullName"),
+                    "venue_city": venue_geo.get("city"),
+                    "venue_state": venue_geo.get("state"),
+                    "venue_latitude": float(venue_lat) if venue_lat is not None else None,
+                    "venue_longitude": float(venue_lon) if venue_lon is not None else None,
+                    "neutral_site": bool(comps.get("neutralSite")),
                 }
             )
         day += timedelta(days=1)
@@ -79,8 +89,9 @@ def team_strength_from_record(record_summary: str | None) -> tuple[float, float]
     except Exception:
         return 1.0, 1.0
     offense = _safe_float(0.90 + (0.22 * win_pct), 1.0)
-    defense = _safe_float(1.05 - (0.18 * win_pct), 1.0)
-    return max(0.82, min(1.18, offense)), max(0.82, min(1.18, defense))
+    # Defense index is resistance (higher is stronger defense).
+    defense = _safe_float(0.92 + (0.20 * win_pct), 1.0)
+    return max(0.82, min(1.18, offense)), max(0.82, min(1.20, defense))
 
 
 def rest_days_from_schedule(game_time_iso: str | None) -> float:

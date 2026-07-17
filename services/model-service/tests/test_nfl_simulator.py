@@ -2,7 +2,13 @@ import os
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
 
-from src.services.nfl_simulator import DEFAULT_NFL_MODEL_VERSION, NflGameInputs, simulate_nfl_game
+from src.services.nfl_simulator import (
+    DEFAULT_NFL_MODEL_VERSION,
+    NFL_MARKET_BLEND_SPREAD_WEIGHT,
+    NFL_MARKET_BLEND_TOTAL_WEIGHT,
+    NflGameInputs,
+    simulate_nfl_game,
+)
 
 
 def test_simulate_nfl_game_returns_expected_market_fields() -> None:
@@ -54,10 +60,11 @@ def test_simulator_baseline_unchanged_without_matchup_features() -> None:
     assert matchup_diag["applied"] is False
     assert matchup_diag["home_points"] == 0.0
     assert matchup_diag["away_points"] == 0.0
-    expected_home = 22.5 + 1.35 + 15.0 * ((1.04 / 1.03) - 1.0)
-    expected_away = 21.0 + 15.0 * ((1.01 / 0.97) - 1.0)
-    assert out["diagnostics"]["mean_home_points"] == round(expected_home, 3)
-    assert out["diagnostics"]["mean_away_points"] == round(expected_away, 3)
+    framework = out["diagnostics"]["framework"]
+    assert framework["framework_version"] == "nfl-handicap-core-v1"
+    assert framework["factor_contributions"]["weather_environment"]["available"] is False
+    assert out["diagnostics"]["mean_home_points"] == round(float(out["decomposition"]["expected_home_points"]), 3)
+    assert out["diagnostics"]["mean_away_points"] == round(float(out["decomposition"]["expected_away_points"]), 3)
 
 
 def test_simulator_matchup_features_shift_projection_toward_home() -> None:
@@ -188,3 +195,99 @@ def test_simulator_totals_adjustments_fallback_without_signals() -> None:
     assert totals_diag["applied"] is False
     assert totals_diag["total_points"] == 0.0
     assert calibration_diag["source"] == "defaults"
+    assert out["decomposition"]["factor_contributions"]["weather_environment"]["available"] is False
+
+
+def test_market_blend_defaults_are_empirically_tuned() -> None:
+    # See scripts/nfl/historical_market_backtest.py and
+    # data/ops/nfl-market-blend-backtest-*.json: 0.30 minimized MAE vs actual
+    # outcomes across 3,562 games (2013-2025) using free nflverse closing lines.
+    assert NFL_MARKET_BLEND_SPREAD_WEIGHT == 0.30
+    assert NFL_MARKET_BLEND_TOTAL_WEIGHT == 0.30
+
+
+def test_market_blend_shifts_spread_toward_market_line() -> None:
+    inputs = NflGameInputs(
+        game_id="g-market-spread",
+        home_team="Cleveland Browns",
+        away_team="Jacksonville Jaguars",
+        offense_index_home=0.87,
+        offense_index_away=1.0,
+        defense_index_home=1.07,
+        defense_index_away=1.0,
+    )
+    baseline = simulate_nfl_game(inputs, simulations=2000, seed=42)
+    baseline_spread = baseline["markets"]["spread_home"]
+
+    # Market has the home team (CLE) as a much bigger underdog than the raw
+    # model does -- spread_home here uses the "negative = home favored"
+    # (The Odds API) convention, matching what run_nfl_market_simulations
+    # fetches from odds_snapshots live.
+    market_spread_home = baseline_spread - 6.0
+    blended = simulate_nfl_game(
+        inputs,
+        simulations=2000,
+        seed=42,
+        market_spread_home=market_spread_home,
+    )
+    blended_spread = blended["markets"]["spread_home"]
+
+    # Blended spread should land strictly between the raw model's number and
+    # the market's number, moved by roughly the configured weight.
+    assert min(baseline_spread, market_spread_home) < blended_spread < max(baseline_spread, market_spread_home)
+    expected = baseline_spread + (NFL_MARKET_BLEND_SPREAD_WEIGHT * (market_spread_home - baseline_spread))
+    assert abs(blended_spread - expected) < 0.75  # small tolerance for Monte Carlo noise
+
+    diag = blended["diagnostics"]["market_blend"]
+    assert diag["spread_applied"] is True
+    assert diag["market_spread_home"] == round(market_spread_home, 3)
+
+
+def test_market_blend_shifts_total_toward_market_line() -> None:
+    inputs = NflGameInputs(game_id="g-market-total", home_team="SEA", away_team="ARI")
+    baseline = simulate_nfl_game(inputs, simulations=2000, seed=11)
+    baseline_total = baseline["markets"]["total_mean"]
+    market_total = baseline_total + 8.0
+
+    blended = simulate_nfl_game(
+        inputs,
+        simulations=2000,
+        seed=11,
+        market_total=market_total,
+    )
+    blended_total = blended["markets"]["total_mean"]
+
+    assert baseline_total < blended_total < market_total
+    diag = blended["diagnostics"]["market_blend"]
+    assert diag["total_applied"] is True
+    assert diag["market_total"] == round(market_total, 3)
+
+
+def test_market_blend_not_applied_when_no_market_line() -> None:
+    inputs = NflGameInputs(game_id="g-no-market", home_team="DAL", away_team="NYG")
+    out = simulate_nfl_game(inputs, simulations=400, seed=3)
+    diag = out["diagnostics"]["market_blend"]
+    assert diag == {"spread_applied": False, "total_applied": False}
+
+
+def test_simulator_environment_contributions_activate_when_available() -> None:
+    inputs = NflGameInputs(
+        game_id="g-env",
+        home_team="Seattle Seahawks",
+        away_team="Miami Dolphins",
+        weather_available=True,
+        weather_wind_mph=24.0,
+        weather_precip_mm=3.2,
+        weather_temp_f=33.0,
+        travel_available=True,
+        travel_miles_home=0.0,
+        travel_miles_away=2725.0,
+        travel_timezone_delta_home=0.0,
+        travel_timezone_delta_away=3.0,
+    )
+    out = simulate_nfl_game(inputs, simulations=700, seed=31)
+    factors = out["decomposition"]["factor_contributions"]
+    assert factors["weather_environment"]["available"] is True
+    assert factors["travel_schedule"]["available"] is True
+    assert abs(float(factors["weather_environment"]["total_points"])) <= 2.8
+    assert abs(float(factors["travel_schedule"]["margin_points"])) <= 1.75

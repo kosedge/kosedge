@@ -6,7 +6,31 @@ import random
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
+from src.services.nfl_handicapping_framework import (
+    compute_nfl_projection_decomposition,
+    get_nfl_handicapping_config,
+)
+
 DEFAULT_NFL_MODEL_VERSION = "nfl-v1.5-matchup-sim"
+
+# When a live market line is available for a game, shrink the model's raw
+# margin/total toward it by these weights. This exists because the model's
+# team-strength signal is derived from rolling EPA snapshots that can be thin
+# or stale (e.g. static preseason placeholders before real 2026 games are
+# played), which let a handful of matchups drift several points away from
+# consensus with no anchor pulling them back. A moderate blend (well short of
+# 1.0) keeps the model free to disagree with the market where it has genuine
+# signal, while preventing the largest, least-defensible misses.
+#
+# Defaults are empirically tuned (not guessed): scripts/nfl/historical_market_backtest.py
+# swept blend weights against 3,562 real games (2013-2025) using nflverse's
+# free closing spread_line/total_line, minimizing MAE vs actual outcomes.
+# 0.30 won for both spread and total (see data/ops/nfl-market-blend-backtest-*.json).
+# Interestingly the raw model already edges out the market alone on this sample
+# (spread MAE 9.62 vs 9.92, total MAE 10.28 vs 10.51) -- blending still helps
+# because it averages out each side's idiosyncratic misses.
+NFL_MARKET_BLEND_SPREAD_WEIGHT = float(os.getenv("NFL_MARKET_BLEND_SPREAD_WEIGHT", "0.30"))
+NFL_MARKET_BLEND_TOTAL_WEIGHT = float(os.getenv("NFL_MARKET_BLEND_TOTAL_WEIGHT", "0.30"))
 
 
 @dataclass
@@ -55,6 +79,16 @@ class NflGameInputs:
     injury_nowcast_source: Optional[str] = None
     injury_nowcast_home_drivers: Optional[list[dict[str, Any]]] = None
     injury_nowcast_away_drivers: Optional[list[dict[str, Any]]] = None
+    weather_available: Optional[bool] = None
+    weather_wind_mph: Optional[float] = None
+    weather_precip_mm: Optional[float] = None
+    weather_temp_f: Optional[float] = None
+    weather_source: Optional[str] = None
+    travel_available: Optional[bool] = None
+    travel_miles_home: Optional[float] = None
+    travel_miles_away: Optional[float] = None
+    travel_timezone_delta_home: Optional[float] = None
+    travel_timezone_delta_away: Optional[float] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -364,50 +398,96 @@ def simulate_nfl_game(
     seed: Optional[int] = None,
     model_version: str = DEFAULT_NFL_MODEL_VERSION,
     totals_calibration: Optional[Dict[str, Any]] = None,
+    config_overrides: Optional[Dict[str, Any]] = None,
+    market_spread_home: Optional[float] = None,
+    market_total: Optional[float] = None,
 ) -> Dict[str, Any]:
     rng = random.Random(seed)
     sims = max(300, int(simulations))
+    framework_config = get_nfl_handicapping_config(config_overrides=config_overrides)
 
-    base_points_home = 22.5
-    base_points_away = 21.0
-    home_adv = 1.35
-    rest_edge = _clamp((inputs.rest_days_home - inputs.rest_days_away) * 0.18, -1.8, 1.8)
-    off_def_home = _clamp((inputs.offense_index_home / max(0.75, inputs.defense_index_away)) - 1.0, -0.25, 0.25)
-    off_def_away = _clamp((inputs.offense_index_away / max(0.75, inputs.defense_index_home)) - 1.0, -0.25, 0.25)
     matchup_adjustments = _build_matchup_adjustments(inputs)
     totals_adjustments = _build_totals_adjustments(inputs)
-
-    mean_home = max(
-        7.5,
-        base_points_home
-        + home_adv
-        + rest_edge
-        + 15.0 * off_def_home
-        + float(matchup_adjustments["home_points"]),
+    decomposition = compute_nfl_projection_decomposition(
+        offense_index_home=inputs.offense_index_home,
+        offense_index_away=inputs.offense_index_away,
+        defense_index_home=inputs.defense_index_home,
+        defense_index_away=inputs.defense_index_away,
+        rest_days_home=inputs.rest_days_home,
+        rest_days_away=inputs.rest_days_away,
+        matchup_adjustments=matchup_adjustments,
+        totals_adjustments=totals_adjustments,
+        injury_nowcast_impact_home=inputs.injury_nowcast_impact_home,
+        injury_nowcast_impact_away=inputs.injury_nowcast_impact_away,
+        injury_nowcast_freshness_home_hours=inputs.injury_nowcast_freshness_home_hours,
+        injury_nowcast_freshness_away_hours=inputs.injury_nowcast_freshness_away_hours,
+        injury_nowcast_confidence_home=inputs.injury_nowcast_confidence_home,
+        injury_nowcast_confidence_away=inputs.injury_nowcast_confidence_away,
+        injury_nowcast_offense_multiplier_home=inputs.injury_nowcast_offense_multiplier_home,
+        injury_nowcast_offense_multiplier_away=inputs.injury_nowcast_offense_multiplier_away,
+        injury_nowcast_defense_multiplier_home=inputs.injury_nowcast_defense_multiplier_home,
+        injury_nowcast_defense_multiplier_away=inputs.injury_nowcast_defense_multiplier_away,
+        weather_wind_mph=inputs.weather_wind_mph,
+        weather_precip_mm=inputs.weather_precip_mm,
+        weather_temp_f=inputs.weather_temp_f,
+        weather_available=inputs.weather_available,
+        travel_miles_home=inputs.travel_miles_home,
+        travel_miles_away=inputs.travel_miles_away,
+        travel_timezone_delta_home=inputs.travel_timezone_delta_home,
+        travel_timezone_delta_away=inputs.travel_timezone_delta_away,
+        travel_available=inputs.travel_available,
     )
-    mean_away = max(
-        7.0,
-        base_points_away
-        - 0.35 * rest_edge
-        + 15.0 * off_def_away
-        + float(matchup_adjustments["away_points"]),
-    )
-    mean_home += float(totals_adjustments["total_points"]) * 0.5
-    mean_away += float(totals_adjustments["total_points"]) * 0.5
-    stdev = _clamp(9.2 + float(totals_adjustments["stdev_points"]), 7.6, 12.2)
 
-    home_wins = 0
+    mean_home = max(7.5, float(decomposition["expected_home_points"]))
+    mean_away = max(7.0, float(decomposition["expected_away_points"]))
+    stdev = _clamp(
+        float(framework_config["priors"]["base_score_stdev"]) + float(totals_adjustments["stdev_points"]),
+        7.6,
+        12.2,
+    )
+
     totals: list[float] = []
     margins: list[float] = []
 
     for _ in range(sims):
         home_score = max(0.0, rng.gauss(mean_home, stdev))
         away_score = max(0.0, rng.gauss(mean_away, stdev))
-        if home_score > away_score:
-            home_wins += 1
         totals.append(home_score + away_score)
         margins.append(home_score - away_score)
 
+    market_blend: Dict[str, Any] = {"spread_applied": False, "total_applied": False}
+    if market_spread_home is not None and margins:
+        weight = _clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0)
+        pre_blend_margin = sum(margins) / len(margins)
+        market_margin = -float(market_spread_home)
+        post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
+        shift = post_blend_margin - pre_blend_margin
+        margins = [m + shift for m in margins]
+        market_blend.update(
+            spread_applied=True,
+            spread_weight=round(weight, 3),
+            market_spread_home=round(float(market_spread_home), 3),
+            pre_blend_margin_mean=round(pre_blend_margin, 3),
+            post_blend_margin_mean=round(post_blend_margin, 3),
+            spread_shift=round(shift, 3),
+        )
+
+    if market_total is not None and totals:
+        weight = _clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0)
+        pre_blend_total = sum(totals) / len(totals)
+        post_blend_total = ((1.0 - weight) * pre_blend_total) + (weight * float(market_total))
+        shift = post_blend_total - pre_blend_total
+        totals = [t + shift for t in totals]
+        market_blend.update(
+            total_applied=True,
+            total_weight=round(weight, 3),
+            market_total=round(float(market_total), 3),
+            pre_blend_total_mean=round(pre_blend_total, 3),
+            post_blend_total_mean=round(post_blend_total, 3),
+            total_shift=round(shift, 3),
+        )
+
+    home_wins = sum(1 for m in margins if m > 0)
     totals.sort()
     margins.sort()
     home_prob = home_wins / sims
@@ -436,10 +516,10 @@ def simulate_nfl_game(
         "mean_home_points": round(mean_home, 3),
         "mean_away_points": round(mean_away, 3),
         "drivers": [
-            {"name": "home_advantage", "value": round(home_adv, 3)},
-            {"name": "rest_edge", "value": round(rest_edge, 3)},
-            {"name": "off_def_home", "value": round(off_def_home, 4)},
-            {"name": "off_def_away", "value": round(off_def_away, 4)},
+            {"name": "predicted_margin", "value": decomposition["predicted_margin"]},
+            {"name": "predicted_total", "value": decomposition["predicted_total"]},
+            {"name": "factor_coverage", "value": decomposition["factor_coverage"]},
+            {"name": "confidence_score", "value": decomposition["confidence_score"]},
         ],
         "matchup_feature_adjustments": {
             "applied": bool(matchup_adjustments["applied"]),
@@ -457,6 +537,17 @@ def simulate_nfl_game(
             "components": totals_adjustments["components"],
         },
         "totals_calibration": totals_calibration_out,
+        "market_blend": market_blend,
+        "framework": {
+            "framework_version": decomposition["framework_version"],
+            "predicted_margin": decomposition["predicted_margin"],
+            "predicted_total": decomposition["predicted_total"],
+            "factor_coverage": decomposition["factor_coverage"],
+            "confidence_score": decomposition["confidence_score"],
+            "uncertainty_penalties": decomposition["uncertainty_penalties"],
+            "factor_contributions": decomposition["factor_contributions"],
+            "guardrails": decomposition["guardrails"],
+        },
         "injury_nowcast": {
             "source": inputs.injury_nowcast_source,
             "home_confidence": inputs.injury_nowcast_confidence_home,
@@ -471,6 +562,22 @@ def simulate_nfl_game(
             "away_defense_multiplier": inputs.injury_nowcast_defense_multiplier_away,
             "home_top_drivers": inputs.injury_nowcast_home_drivers or [],
             "away_top_drivers": inputs.injury_nowcast_away_drivers or [],
+        },
+        "environment": {
+            "weather": {
+                "available": inputs.weather_available,
+                "source": inputs.weather_source,
+                "wind_mph": inputs.weather_wind_mph,
+                "precip_mm": inputs.weather_precip_mm,
+                "temp_f": inputs.weather_temp_f,
+            },
+            "travel": {
+                "available": inputs.travel_available,
+                "travel_miles_home": inputs.travel_miles_home,
+                "travel_miles_away": inputs.travel_miles_away,
+                "timezone_delta_home": inputs.travel_timezone_delta_home,
+                "timezone_delta_away": inputs.travel_timezone_delta_away,
+            },
         },
     }
     return {
@@ -519,7 +626,18 @@ def simulate_nfl_game(
             "injury_nowcast_defense_multiplier_home": inputs.injury_nowcast_defense_multiplier_home,
             "injury_nowcast_defense_multiplier_away": inputs.injury_nowcast_defense_multiplier_away,
             "injury_nowcast_source": inputs.injury_nowcast_source,
+            "weather_available": inputs.weather_available,
+            "weather_wind_mph": inputs.weather_wind_mph,
+            "weather_precip_mm": inputs.weather_precip_mm,
+            "weather_temp_f": inputs.weather_temp_f,
+            "weather_source": inputs.weather_source,
+            "travel_available": inputs.travel_available,
+            "travel_miles_home": inputs.travel_miles_home,
+            "travel_miles_away": inputs.travel_miles_away,
+            "travel_timezone_delta_home": inputs.travel_timezone_delta_home,
+            "travel_timezone_delta_away": inputs.travel_timezone_delta_away,
         },
         "markets": markets,
         "diagnostics": diagnostics,
+        "decomposition": decomposition,
     }

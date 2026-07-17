@@ -36,7 +36,15 @@ from .services.nfl_data import (
     rest_days_from_schedule,
     team_strength_from_record,
 )
-from .services.nfl_injury_nowcast import fetch_nfl_injury_nowcast
+from .services.nfl_environment import build_nfl_environment_context
+from .services.nfl_injury_nowcast import compute_team_week_injury_severity, fetch_nfl_injury_nowcast
+from .services.nfl_handicapping_framework import (
+    NFL_HANDICAPPING_FRAMEWORK_VERSION,
+    get_nfl_handicapping_config,
+    summarize_nfl_factor_attribution_from_points,
+)
+from .services.nfl_decomposition_drift import summarize_decomposition_drift
+from .services.nfl_framework_tuning import TuningThresholds, build_tuning_candidates, evaluate_tuning_grid
 from .services.nfl_matchup_features import (
     fetch_latest_matchup_feature_pack,
     matchup_pack_to_sim_input_kwargs,
@@ -45,6 +53,12 @@ from .services.nfl_simulator import (
     DEFAULT_NFL_MODEL_VERSION,
     NflGameInputs,
     simulate_nfl_game,
+)
+from .services.nfl_supervised_retrain import (
+    FEATURE_KEYS as NFL_SUPERVISED_FEATURE_KEYS,
+    apply_supervised_blend,
+    detect_real_rolling_features,
+    fit_nfl_supervised_models,
 )
 from .services.nfl_player_projection_engine import (
     PlayerFeatureInputs,
@@ -64,7 +78,7 @@ from .services.nfl_totals_calibration import (
     apply_totals_calibration,
     fetch_nfl_totals_calibration,
 )
-from .services.odds_api import fetch_odds
+from .services.odds_api import fetch_odds, fetch_odds_with_metadata, odds_key_diagnostics
 
 log = logging.getLogger(__name__)
 
@@ -85,9 +99,15 @@ MARKET_MAP: Dict[str, str] = {
 MODEL_STATE_KEY = "mlb_active_model"
 NFL_MODEL_STATE_KEY = "nfl_active_model"
 
+NFL_DEFAULT_ODDS_BOOKMAKERS = "draftkings"
+
 
 def _now_utc() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def _clamp(v: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, v))
 
 
 def _parse_iso_datetime(v: Optional[str]) -> Optional[datetime]:
@@ -97,6 +117,729 @@ def _parse_iso_datetime(v: Optional[str]) -> Optional[datetime]:
         return datetime.fromisoformat(v.replace("Z", "+00:00"))
     except ValueError:
         return None
+
+
+def _resolve_nfl_odds_bookmakers(raw: Optional[str] = None) -> str:
+    candidate = str(
+        raw
+        if raw is not None
+        else os.getenv("NFL_ODDS_BOOKMAKERS", NFL_DEFAULT_ODDS_BOOKMAKERS)
+    ).strip()
+    if not candidate:
+        candidate = NFL_DEFAULT_ODDS_BOOKMAKERS
+    deduped: List[str] = []
+    for token in candidate.split(","):
+        book = token.strip().lower()
+        if book and book not in deduped:
+            deduped.append(book)
+    return ",".join(deduped) if deduped else NFL_DEFAULT_ODDS_BOOKMAKERS
+
+
+def _ensure_nfl_supervised_fits_table(session: Any) -> None:
+    session.execute(
+        text(
+            """
+            CREATE TABLE IF NOT EXISTS nfl_supervised_model_fits (
+              id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+              model_version text NOT NULL,
+              train_start_season integer NOT NULL,
+              train_end_season integer NOT NULL,
+              train_rows integer NOT NULL,
+              test_rows integer NOT NULL,
+              metrics jsonb NOT NULL,
+              payload jsonb NOT NULL,
+              is_active boolean NOT NULL DEFAULT true,
+              created_at timestamptz NOT NULL DEFAULT now()
+            )
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE INDEX IF NOT EXISTS idx_nfl_supervised_model_fits_lookup
+            ON nfl_supervised_model_fits (model_version, is_active, created_at DESC)
+            """
+        )
+    )
+
+
+def _load_latest_supervised_fit(session: Any, *, model_version: str) -> Optional[Dict[str, Any]]:
+    _ensure_nfl_supervised_fits_table(session)
+    row = session.execute(
+        text(
+            """
+            SELECT payload
+            FROM nfl_supervised_model_fits
+            WHERE model_version = :model_version
+              AND is_active = true
+            ORDER BY created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"model_version": model_version},
+    ).fetchone()
+    if row is None:
+        return None
+    payload = row.payload if hasattr(row, "payload") else row[0]
+    if isinstance(payload, dict):
+        return payload
+    if isinstance(payload, str):
+        try:
+            parsed = json.loads(payload)
+            return parsed if isinstance(parsed, dict) else None
+        except Exception:
+            return None
+    return None
+
+
+def _load_latest_tuning_config_overrides(
+    session: Any, *, model_version: str
+) -> Optional[Dict[str, Any]]:
+    try:
+        row = session.execute(
+            text(
+                """
+                SELECT selected_config
+                FROM nfl_framework_tuning_runs
+                WHERE model_version = :model_version
+                ORDER BY created_at DESC
+                LIMIT 1
+                """
+            ),
+            {"model_version": model_version},
+        ).fetchone()
+    except Exception:
+        return None
+    if row is None:
+        return None
+    selected = row.selected_config if hasattr(row, "selected_config") else row[0]
+    if isinstance(selected, dict):
+        return selected
+    if isinstance(selected, str):
+        try:
+            parsed = json.loads(selected)
+            return parsed if isinstance(parsed, dict) else None
+        except Exception:
+            return None
+    return None
+
+
+def _fetch_nfl_market_consensus_lines(
+    session: Any,
+    *,
+    game_id: str,
+) -> Dict[str, Optional[float]]:
+    """Latest consensus spread/total across sportsbooks for a game, used to
+    anchor the model toward the market when a live line exists. Takes each
+    sportsbook's most recent snapshot per market (avoids double-counting
+    stale historical snapshots) and averages across books."""
+    row = session.execute(
+        text(
+            """
+            WITH latest AS (
+              SELECT
+                os.sportsbook_id,
+                os.market_id,
+                os.spread_home,
+                os.total_points,
+                ROW_NUMBER() OVER (
+                  PARTITION BY os.sportsbook_id, os.market_id
+                  ORDER BY os.captured_at DESC
+                ) AS rn
+              FROM odds_snapshots os
+              WHERE os.game_id = :game_id
+            )
+            SELECT
+              (
+                SELECT AVG(l.spread_home) FROM latest l
+                JOIN markets m ON m.id = l.market_id
+                WHERE l.rn = 1 AND m.code = 'spread' AND l.spread_home IS NOT NULL
+              ) AS market_spread_home,
+              (
+                SELECT AVG(l.total_points) FROM latest l
+                JOIN markets m ON m.id = l.market_id
+                WHERE l.rn = 1 AND m.code = 'total' AND l.total_points IS NOT NULL
+              ) AS market_total
+            """
+        ),
+        {"game_id": game_id},
+    ).fetchone()
+    if row is None:
+        return {"market_spread_home": None, "market_total": None}
+    return {
+        "market_spread_home": _to_float(row.market_spread_home),
+        "market_total": _to_float(row.market_total),
+    }
+
+
+def _load_team_strength_priors(
+    session: Any,
+    *,
+    season_year: int,
+) -> Dict[str, Dict[str, float]]:
+    rows = session.execute(
+        text(
+            """
+            WITH ranked AS (
+              SELECT
+                season,
+                week,
+                team,
+                off_epa_per_play_5g,
+                def_epa_allowed_per_play_5g,
+                pressure_rate_generated_5g,
+                pressure_rate_allowed_5g,
+                ROW_NUMBER() OVER (
+                  PARTITION BY season, team
+                  ORDER BY week DESC
+                ) AS rn
+              FROM nfl_dp_team_rolling_features_weekly
+              WHERE season IN (:season_year, :fallback_season)
+            )
+            SELECT
+              season,
+              week,
+              team,
+              off_epa_per_play_5g,
+              def_epa_allowed_per_play_5g,
+              pressure_rate_generated_5g,
+              pressure_rate_allowed_5g
+            FROM ranked
+            WHERE rn = 1
+            """
+        ),
+        {"season_year": int(season_year), "fallback_season": int(season_year) - 1},
+    ).fetchall()
+    out: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        team = str(row.team or "")
+        if not team:
+            continue
+        season = int(row.season or 0)
+        # Prefer exact-season priors; only fallback to prior season when needed.
+        if team in out and int(out[team].get("_season", 0)) >= season:
+            continue
+        off_epa = _to_float(row.off_epa_per_play_5g) or 0.0
+        def_epa_allowed = _to_float(row.def_epa_allowed_per_play_5g) or 0.0
+        pressure_generated = _to_float(row.pressure_rate_generated_5g) or 0.0
+        pressure_allowed = _to_float(row.pressure_rate_allowed_5g) or 0.0
+        pressure_delta = pressure_generated - pressure_allowed
+        offense_index = _clamp(1.0 + (off_epa * 0.75) + (pressure_delta * 0.18), 0.82, 1.22)
+        defense_index = _clamp(1.0 + ((-def_epa_allowed) * 0.90) + (pressure_delta * 0.14), 0.82, 1.24)
+        out[team] = {
+            "offense_index": round(offense_index, 6),
+            "defense_index": round(defense_index, 6),
+            "_season": float(season),
+        }
+    return out
+
+
+def _normalize_bookmakers_csv(raw: Optional[str]) -> str:
+    candidate = str(raw or "").strip().lower()
+    tokens: List[str] = []
+    for part in candidate.split(","):
+        book = part.strip().lower()
+        if book and book not in tokens:
+            tokens.append(book)
+    return ",".join(tokens)
+
+
+def _normalize_markets_csv(raw: Optional[str]) -> str:
+    candidate = str(raw or "").strip().lower()
+    allowed = {"h2h", "spreads", "totals"}
+    tokens: List[str] = []
+    for part in candidate.split(","):
+        market = part.strip().lower()
+        if market in allowed and market not in tokens:
+            tokens.append(market)
+    return ",".join(tokens)
+
+
+def _ensure_odds_api_request_tables(session: Any) -> None:
+    session.execute(
+        text(
+            """
+            CREATE TABLE IF NOT EXISTS odds_api_credit_ledger (
+              id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+              endpoint text NOT NULL,
+              sport_key text NOT NULL,
+              request_signature text NOT NULL,
+              requested_at timestamptz NOT NULL,
+              request_params jsonb NOT NULL,
+              status text NOT NULL,
+              source_key text,
+              credits_last integer,
+              credits_used integer,
+              credits_remaining integer,
+              events_count integer NOT NULL DEFAULT 0,
+              response_timestamp timestamptz,
+              response_previous_timestamp timestamptz,
+              response_next_timestamp timestamptz,
+              error text,
+              created_at timestamptz NOT NULL DEFAULT now()
+            )
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE TABLE IF NOT EXISTS odds_api_request_cache (
+              request_signature text PRIMARY KEY,
+              endpoint text NOT NULL,
+              sport_key text NOT NULL,
+              request_params jsonb NOT NULL,
+              status text NOT NULL,
+              source_key text,
+              credits_last integer,
+              credits_used integer,
+              credits_remaining integer,
+              events_count integer NOT NULL DEFAULT 0,
+              response_timestamp timestamptz,
+              response_previous_timestamp timestamptz,
+              response_next_timestamp timestamptz,
+              last_error text,
+              last_requested_at timestamptz NOT NULL,
+              updated_at timestamptz NOT NULL DEFAULT now()
+            )
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE INDEX IF NOT EXISTS idx_odds_api_credit_ledger_sport_time
+            ON odds_api_credit_ledger (sport_key, requested_at DESC)
+            """
+        )
+    )
+
+
+def _record_odds_api_request(
+    session: Any,
+    *,
+    endpoint: str,
+    sport_key: str,
+    request_signature: str,
+    request_params: Dict[str, Any],
+    status: str,
+    source_key: Optional[str],
+    credits_last: Optional[int],
+    credits_used: Optional[int],
+    credits_remaining: Optional[int],
+    events_count: int,
+    response_timestamp: Optional[datetime],
+    response_previous_timestamp: Optional[datetime],
+    response_next_timestamp: Optional[datetime],
+    error: Optional[str],
+) -> None:
+    safe_error = None
+    if error:
+        safe_error = re.sub(r"(apiKey=)[^&\\s]+", r"\\1REDACTED", str(error))
+    requested_at = _now_utc()
+    session.execute(
+        text(
+            """
+            INSERT INTO odds_api_credit_ledger (
+              endpoint, sport_key, request_signature, requested_at, request_params,
+              status, source_key, credits_last, credits_used, credits_remaining,
+              events_count, response_timestamp, response_previous_timestamp,
+              response_next_timestamp, error, created_at
+            ) VALUES (
+              :endpoint, :sport_key, :request_signature, :requested_at, CAST(:request_params AS jsonb),
+              :status, :source_key, :credits_last, :credits_used, :credits_remaining,
+              :events_count, :response_timestamp, :response_previous_timestamp,
+              :response_next_timestamp, :error, :created_at
+            )
+            """
+        ),
+        {
+            "endpoint": endpoint,
+            "sport_key": sport_key,
+            "request_signature": request_signature,
+            "requested_at": requested_at,
+            "request_params": json.dumps(request_params),
+            "status": status,
+            "source_key": source_key,
+            "credits_last": credits_last,
+            "credits_used": credits_used,
+            "credits_remaining": credits_remaining,
+            "events_count": int(events_count),
+            "response_timestamp": response_timestamp,
+            "response_previous_timestamp": response_previous_timestamp,
+            "response_next_timestamp": response_next_timestamp,
+            "error": safe_error,
+            "created_at": requested_at,
+        },
+    )
+    session.execute(
+        text(
+            """
+            INSERT INTO odds_api_request_cache (
+              request_signature, endpoint, sport_key, request_params, status, source_key,
+              credits_last, credits_used, credits_remaining, events_count,
+              response_timestamp, response_previous_timestamp, response_next_timestamp,
+              last_error, last_requested_at, updated_at
+            ) VALUES (
+              :request_signature, :endpoint, :sport_key, CAST(:request_params AS jsonb), :status, :source_key,
+              :credits_last, :credits_used, :credits_remaining, :events_count,
+              :response_timestamp, :response_previous_timestamp, :response_next_timestamp,
+              :last_error, :last_requested_at, :updated_at
+            )
+            ON CONFLICT (request_signature) DO UPDATE SET
+              status = EXCLUDED.status,
+              source_key = EXCLUDED.source_key,
+              credits_last = EXCLUDED.credits_last,
+              credits_used = EXCLUDED.credits_used,
+              credits_remaining = EXCLUDED.credits_remaining,
+              events_count = EXCLUDED.events_count,
+              response_timestamp = EXCLUDED.response_timestamp,
+              response_previous_timestamp = EXCLUDED.response_previous_timestamp,
+              response_next_timestamp = EXCLUDED.response_next_timestamp,
+              last_error = EXCLUDED.last_error,
+              last_requested_at = EXCLUDED.last_requested_at,
+              updated_at = EXCLUDED.updated_at
+            """
+        ),
+        {
+            "request_signature": request_signature,
+            "endpoint": endpoint,
+            "sport_key": sport_key,
+            "request_params": json.dumps(request_params),
+            "status": status,
+            "source_key": source_key,
+            "credits_last": credits_last,
+            "credits_used": credits_used,
+            "credits_remaining": credits_remaining,
+            "events_count": int(events_count),
+            "response_timestamp": response_timestamp,
+            "response_previous_timestamp": response_previous_timestamp,
+            "response_next_timestamp": response_next_timestamp,
+            "last_error": safe_error,
+            "last_requested_at": requested_at,
+            "updated_at": requested_at,
+        },
+    )
+
+
+def _odds_request_signature(endpoint: str, params: Dict[str, Any]) -> str:
+    stable = {
+        key: str(value)
+        for key, value in sorted((params or {}).items(), key=lambda item: item[0])
+    }
+    payload = json.dumps({"endpoint": endpoint, "params": stable}, sort_keys=True)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _persist_odds_events(
+    session: Any,
+    *,
+    events: List[Dict[str, Any]],
+    source_label: str,
+) -> Dict[str, int]:
+    events_persisted = 0
+    snapshots_inserted = 0
+    # One batch (e.g. a single historical odds pull) can contain hundreds of
+    # events for the same ~32 teams / 1 league / 1 season -- share a lookup
+    # cache across the whole batch instead of re-querying per event.
+    hierarchy_cache: Dict[Tuple[Any, ...], str] = {}
+    for event in events:
+        event_id = (event or {}).get("id")
+        home_team = (event or {}).get("home_team")
+        away_team = (event or {}).get("away_team")
+        game_dt = _parse_iso_datetime((event or {}).get("commence_time")) or _now_utc()
+        sport_key = (event or {}).get("sport_key") or "unknown"
+
+        if not event_id or not home_team or not away_team:
+            continue
+
+        game_id, _league_id, _home_id, _away_id, _sport_id = _ensure_hierarchy(
+            session,
+            sport_key=sport_key,
+            game_dt=game_dt,
+            home_team=home_team,
+            away_team=away_team,
+            event_id=event_id,
+            cache=hierarchy_cache,
+        )
+        events_persisted += 1
+
+        for book in (event.get("bookmakers") or []):
+            book_key = (book or {}).get("key")
+            if not book_key:
+                continue
+            sportsbook_id = _get_or_create_sportsbook(session, book_key, cache=hierarchy_cache)
+            captured_at = _parse_iso_datetime(book.get("last_update")) or _now_utc()
+
+            for market in (book.get("markets") or []):
+                market_key = market.get("key")
+                if not market_key:
+                    continue
+                market_id = _get_or_create_market(session, market_key, cache=hierarchy_cache)
+                if not market_id:
+                    continue
+                values = _extract_snapshot_values(market_key, market, home_team, away_team)
+                if values is None:
+                    continue
+                session.execute(
+                    text(
+                        """
+                        INSERT INTO odds_snapshots (
+                          id, game_id, sportsbook_id, market_id,
+                          price_home, price_away, spread_home, spread_away,
+                          total_points, over_price, under_price,
+                          captured_at, source, created_at
+                        ) VALUES (
+                          :id, :game_id, :sportsbook_id, :market_id,
+                          :price_home, :price_away, :spread_home, :spread_away,
+                          :total_points, :over_price, :under_price,
+                          :captured_at, :source, :created_at
+                        )
+                        """
+                    ),
+                    {
+                        "id": str(uuid.uuid4()),
+                        "game_id": game_id,
+                        "sportsbook_id": sportsbook_id,
+                        "market_id": market_id,
+                        "price_home": values["price_home"],
+                        "price_away": values["price_away"],
+                        "spread_home": values["spread_home"],
+                        "spread_away": values["spread_away"],
+                        "total_points": values["total_points"],
+                        "over_price": values["over_price"],
+                        "under_price": values["under_price"],
+                        "captured_at": captured_at,
+                        "source": source_label,
+                        "created_at": _now_utc(),
+                    },
+                )
+                snapshots_inserted += 1
+    return {"events_persisted": events_persisted, "snapshots_inserted": snapshots_inserted}
+
+
+def _db_identity_payload(session: Any) -> Dict[str, Any]:
+    row = session.execute(
+        text(
+            """
+            SELECT
+              current_database() AS database_name,
+              current_schema() AS schema_name,
+              current_setting('search_path') AS search_path
+            """
+        )
+    ).fetchone()
+    if row is None:
+        return {"database_name": None, "schema_name": None, "search_path": None}
+    payload = dict(row._mapping)
+    return {
+        "database_name": payload.get("database_name"),
+        "schema_name": payload.get("schema_name"),
+        "search_path": payload.get("search_path"),
+    }
+
+
+def _assert_tables_present(session: Any, *, stage: str, required_tables: List[str]) -> None:
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = 'public'
+                """
+            )
+        ).fetchall()
+        available = {str(row[0]) for row in rows}
+    except Exception:
+        # SQLite/unit-test compatibility.
+        rows = session.execute(
+            text(
+                """
+                SELECT name
+                FROM sqlite_master
+                WHERE type = 'table'
+                """
+            )
+        ).fetchall()
+        available = {str(row[0]) for row in rows}
+    missing = [table for table in required_tables if table not in available]
+    if not missing:
+        return
+    identity = _db_identity_payload(session)
+    raise RuntimeError(
+        f"[DB_PREFLIGHT] stage={stage} missing_tables={missing} db_identity={identity}"
+    )
+
+
+def _record_nfl_stage_run_start(
+    session: Any,
+    *,
+    cycle_id: str,
+    pipeline: str,
+    stage: str,
+) -> Optional[str]:
+    try:
+        row = session.execute(
+            text(
+                """
+                INSERT INTO nfl_pipeline_stage_runs (
+                  cycle_id, pipeline, stage, status, started_at, metrics, created_at
+                ) VALUES (
+                  CAST(:cycle_id AS uuid), :pipeline, :stage, 'running', :started_at, '{}'::jsonb, :created_at
+                )
+                RETURNING id
+                """
+            ),
+            {
+                "cycle_id": cycle_id,
+                "pipeline": pipeline,
+                "stage": stage,
+                "started_at": _now_utc(),
+                "created_at": _now_utc(),
+            },
+        ).fetchone()
+        session.commit()
+        return str(row[0]) if row is not None else None
+    except Exception:
+        session.rollback()
+        return None
+
+
+def _record_nfl_stage_run_finish(
+    session: Any,
+    *,
+    run_id: Optional[str],
+    status: str,
+    metrics: Optional[Dict[str, Any]] = None,
+    error_message: Optional[str] = None,
+) -> None:
+    if not run_id:
+        return
+    try:
+        session.execute(
+            text(
+                """
+                UPDATE nfl_pipeline_stage_runs
+                SET status = :status,
+                    finished_at = :finished_at,
+                    metrics = CAST(:metrics AS jsonb),
+                    error_message = :error_message
+                WHERE id = CAST(:run_id AS uuid)
+                """
+            ),
+            {
+                "run_id": run_id,
+                "status": status,
+                "finished_at": _now_utc(),
+                "metrics": json.dumps(metrics or {}),
+                "error_message": (error_message or "")[:1000] if error_message else None,
+            },
+        )
+        session.commit()
+    except Exception:
+        session.rollback()
+
+
+def _run_nfl_launch_stage(
+    *,
+    cycle_id: str,
+    stage: str,
+    fn: Any,
+    kwargs: Dict[str, Any],
+) -> Dict[str, Any]:
+    session = SessionLocal()
+    run_id = _record_nfl_stage_run_start(
+        session,
+        cycle_id=cycle_id,
+        pipeline="nfl_launch_hardening",
+        stage=stage,
+    )
+    session.close()
+    try:
+        result = fn(**kwargs)
+        session = SessionLocal()
+        _record_nfl_stage_run_finish(
+            session,
+            run_id=run_id,
+            status="success",
+            metrics={"result": result},
+        )
+        session.close()
+        return {"stage": stage, "status": "success", "result": result}
+    except Exception as exc:
+        session = SessionLocal()
+        _record_nfl_stage_run_finish(
+            session,
+            run_id=run_id,
+            status="failed",
+            metrics={},
+            error_message=str(exc),
+        )
+        session.close()
+        raise
+
+
+# Full team name (as returned by The Odds API / ESPN displayName) -> the
+# canonical nflverse abbreviation used when the NFL schedule was bulk-loaded
+# into `teams`/`games` (name == abbr for those canonical rows, e.g. "CLE").
+# Without this normalization, `_ensure_hierarchy` matches teams by literal
+# `name`, so any full-name source silently creates a duplicate "ghost" team
+# (and therefore a duplicate "ghost" game, since the games unique constraint
+# includes team_id) instead of resolving to the existing canonical row. See
+# scripts/nfl/merge_duplicate_teams.py for the one-time cleanup of ghosts
+# created by this bug before it was fixed here.
+NFL_FULL_NAME_TO_ABBR: Dict[str, str] = {
+    "Arizona Cardinals": "ARI",
+    "Atlanta Falcons": "ATL",
+    "Baltimore Ravens": "BAL",
+    "Buffalo Bills": "BUF",
+    "Carolina Panthers": "CAR",
+    "Chicago Bears": "CHI",
+    "Cincinnati Bengals": "CIN",
+    "Cleveland Browns": "CLE",
+    "Dallas Cowboys": "DAL",
+    "Denver Broncos": "DEN",
+    "Detroit Lions": "DET",
+    "Green Bay Packers": "GB",
+    "Houston Texans": "HOU",
+    "Indianapolis Colts": "IND",
+    "Jacksonville Jaguars": "JAX",
+    "Kansas City Chiefs": "KC",
+    "Las Vegas Raiders": "LV",
+    "Los Angeles Chargers": "LAC",
+    "Los Angeles Rams": "LA",
+    "Miami Dolphins": "MIA",
+    "Minnesota Vikings": "MIN",
+    "New England Patriots": "NE",
+    "New Orleans Saints": "NO",
+    "New York Giants": "NYG",
+    "New York Jets": "NYJ",
+    "Philadelphia Eagles": "PHI",
+    "Pittsburgh Steelers": "PIT",
+    "San Francisco 49ers": "SF",
+    "Seattle Seahawks": "SEA",
+    "Tampa Bay Buccaneers": "TB",
+    "Tennessee Titans": "TEN",
+    "Washington Commanders": "WAS",
+    "Washington Football Team": "WAS",
+    "Washington Redskins": "WAS",
+    "Oakland Raiders": "OAK",
+    "San Diego Chargers": "SD",
+    "St. Louis Rams": "STL",
+}
+
+
+def _normalize_team_name_for_lookup(sport_key: str, team_name: str) -> str:
+    """Map a full team display name to the canonical abbreviation used by
+    the bulk-loaded schedule rows for that sport, so team resolution doesn't
+    fork into duplicate "ghost" rows. Falls back to the raw name unchanged
+    when no mapping is known (e.g. non-NFL sports, or an already-abbreviated
+    name)."""
+    if sport_key == "americanfootball_nfl":
+        return NFL_FULL_NAME_TO_ABBR.get(team_name, team_name)
+    return team_name
 
 
 def _abbr_for_team(team_name: str) -> str:
@@ -184,20 +927,36 @@ def _get_or_create(
     where_params: Dict[str, Any],
     insert_sql: str,
     insert_params: Dict[str, Any],
+    *,
+    cache: Optional[Dict[Tuple[Any, ...], str]] = None,
 ) -> str:
+    """cache is an optional dict, shared across many calls within one batch
+    (see _persist_odds_events), so repeatedly resolving the same sport/
+    league/season/team doesn't re-hit the DB per event. A single historical
+    odds pull can return hundreds of events for the same ~32 teams/1 league/
+    1 season -- without this, that was the dominant cost (a multi-minute
+    pull for a batch that fetches from the API in under 2 seconds)."""
+    cache_key = (table, where_sql, tuple(sorted(where_params.items())))
+    if cache is not None and cache_key in cache:
+        return cache[cache_key]
+
     found = session.execute(
         text(f"SELECT id FROM {table} WHERE {where_sql} LIMIT 1"),
         where_params,
     ).fetchone()
     if found:
-        return str(found[0])
+        result = str(found[0])
+    else:
+        new_id = str(uuid.uuid4())
+        session.execute(
+            text(insert_sql),
+            {"id": new_id, **insert_params},
+        )
+        result = new_id
 
-    new_id = str(uuid.uuid4())
-    session.execute(
-        text(insert_sql),
-        {"id": new_id, **insert_params},
-    )
-    return new_id
+    if cache is not None:
+        cache[cache_key] = result
+    return result
 
 
 def _ensure_hierarchy(
@@ -208,12 +967,15 @@ def _ensure_hierarchy(
     home_team: str,
     away_team: str,
     event_id: str,
+    cache: Optional[Dict[Tuple[Any, ...], str]] = None,
 ) -> Tuple[str, str, str, str, str]:
     sport_code, sport_name, league_name = SPORT_MAP.get(
         sport_key,
         ("unknown", sport_key.upper(), sport_key.upper()),
     )
     season_year = game_dt.year
+    home_team = _normalize_team_name_for_lookup(sport_key, home_team)
+    away_team = _normalize_team_name_for_lookup(sport_key, away_team)
 
     sport_id = _get_or_create(
         session,
@@ -225,6 +987,7 @@ def _ensure_hierarchy(
             VALUES (:id, :code, :name, :created_at)
         """,
         insert_params={"code": sport_code, "name": sport_name, "created_at": _now_utc()},
+        cache=cache,
     )
 
     league_id = _get_or_create(
@@ -242,6 +1005,7 @@ def _ensure_hierarchy(
             "name": league_name,
             "created_at": _now_utc(),
         },
+        cache=cache,
     )
 
     season_id = _get_or_create(
@@ -254,6 +1018,7 @@ def _ensure_hierarchy(
             VALUES (:id, :league_id, :season_year, :created_at)
         """,
         insert_params={"league_id": league_id, "season_year": season_year, "created_at": _now_utc()},
+        cache=cache,
     )
 
     home_team_id = _get_or_create(
@@ -273,6 +1038,7 @@ def _ensure_hierarchy(
             "market": None,
             "created_at": _now_utc(),
         },
+        cache=cache,
     )
 
     away_team_id = _get_or_create(
@@ -292,6 +1058,7 @@ def _ensure_hierarchy(
             "market": None,
             "created_at": _now_utc(),
         },
+        cache=cache,
     )
 
     game_id = _get_or_create(
@@ -329,7 +1096,9 @@ def _ensure_hierarchy(
     return game_id, league_id, home_team_id, away_team_id, sport_id
 
 
-def _get_or_create_sportsbook(session: Any, code: str) -> str:
+def _get_or_create_sportsbook(
+    session: Any, code: str, *, cache: Optional[Dict[Tuple[Any, ...], str]] = None
+) -> str:
     display_name = code.replace("_", " ").title()
     return _get_or_create(
         session,
@@ -341,10 +1110,13 @@ def _get_or_create_sportsbook(session: Any, code: str) -> str:
             VALUES (:id, :code, :name, :created_at)
         """,
         insert_params={"code": code, "name": display_name, "created_at": _now_utc()},
+        cache=cache,
     )
 
 
-def _get_or_create_market(session: Any, market_key: str) -> Optional[str]:
+def _get_or_create_market(
+    session: Any, market_key: str, *, cache: Optional[Dict[Tuple[Any, ...], str]] = None
+) -> Optional[str]:
     market_code = MARKET_MAP.get(market_key)
     if not market_code:
         return None
@@ -358,6 +1130,7 @@ def _get_or_create_market(session: Any, market_key: str) -> Optional[str]:
             VALUES (:id, :code, :created_at)
         """,
         insert_params={"code": market_code, "created_at": _now_utc()},
+        cache=cache,
     )
 
 
@@ -372,6 +1145,16 @@ def _env_bool(name: str, default: bool) -> bool:
     if raw is None:
         return default
     return raw.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _env_float(name: str, default: float) -> float:
+    raw = os.getenv(name)
+    if raw is None:
+        return float(default)
+    try:
+        return float(raw)
+    except ValueError:
+        return float(default)
 
 
 def _run_simulation_by_model(
@@ -1559,19 +2342,33 @@ def _set_active_model(
 
 
 @celery_app.task(name="src.tasks.pull_odds_snapshot")
-def pull_odds_snapshot() -> Dict[str, int]:
+def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
     log.info("Running scheduled pull_odds_snapshot")
     data: List[Dict[str, Any]] = []
+    resolved_nfl_bookmakers = _resolve_nfl_odds_bookmakers(nfl_bookmakers)
+    credits_diag: Dict[str, Any] = {
+        "remaining_by_sport": {},
+        "used_by_sport": {},
+        "selected_sources": odds_key_diagnostics().get("selected_sources"),
+    }
     for sport_key in SPORT_MAP.keys():
+        params: Dict[str, str] = {
+            "regions": "us",
+            "markets": "h2h,spreads,totals",
+            "oddsFormat": "american",
+        }
+        if sport_key == "americanfootball_nfl":
+            params["bookmakers"] = resolved_nfl_bookmakers
         try:
-            payload = fetch_odds(
+            payload_meta = fetch_odds_with_metadata(
                 endpoint=f"sports/{sport_key}/odds",
-                params={
-                    "regions": "us",
-                    "markets": "h2h,spreads,totals",
-                    "oddsFormat": "american",
-                },
+                params=params,
             )
+            payload = payload_meta.get("payload")
+            credits_diag["remaining_by_sport"][sport_key] = payload_meta.get(
+                "x_requests_remaining"
+            )
+            credits_diag["used_by_sport"][sport_key] = payload_meta.get("x_requests_used")
         except Exception:
             log.exception("Failed pulling odds for sport", extra={"sport_key": sport_key})
             continue
@@ -1589,83 +2386,29 @@ def pull_odds_snapshot() -> Dict[str, int]:
         log.warning("Odds payload was empty; skipping persistence.")
         return {"events_fetched": 0, "events_persisted": 0, "snapshots_inserted": 0}
 
-    events_persisted = 0
-    snapshots_inserted = 0
     session = SessionLocal()
     try:
-        for event in data:
-            event_id = (event or {}).get("id")
-            home_team = (event or {}).get("home_team")
-            away_team = (event or {}).get("away_team")
-            game_dt = _parse_iso_datetime((event or {}).get("commence_time")) or _now_utc()
-            sport_key = (event or {}).get("sport_key") or "unknown"
-
-            if not event_id or not home_team or not away_team:
-                continue
-
-            game_id, _league_id, _home_id, _away_id, _sport_id = _ensure_hierarchy(
-                session,
-                sport_key=sport_key,
-                game_dt=game_dt,
-                home_team=home_team,
-                away_team=away_team,
-                event_id=event_id,
-            )
-            events_persisted += 1
-
-            for book in (event.get("bookmakers") or []):
-                book_key = (book or {}).get("key")
-                if not book_key:
-                    continue
-                sportsbook_id = _get_or_create_sportsbook(session, book_key)
-                captured_at = _parse_iso_datetime(book.get("last_update")) or _now_utc()
-
-                for market in (book.get("markets") or []):
-                    market_key = market.get("key")
-                    if not market_key:
-                        continue
-                    market_id = _get_or_create_market(session, market_key)
-                    if not market_id:
-                        continue
-
-                    values = _extract_snapshot_values(market_key, market, home_team, away_team)
-                    if values is None:
-                        continue
-
-                    session.execute(
-                        text(
-                            """
-                            INSERT INTO odds_snapshots (
-                              id, game_id, sportsbook_id, market_id,
-                              price_home, price_away, spread_home, spread_away,
-                              total_points, over_price, under_price,
-                              captured_at, source, created_at
-                            ) VALUES (
-                              :id, :game_id, :sportsbook_id, :market_id,
-                              :price_home, :price_away, :spread_home, :spread_away,
-                              :total_points, :over_price, :under_price,
-                              :captured_at, :source, :created_at
-                            )
-                            """
-                        ),
-                        {
-                            "id": str(uuid.uuid4()),
-                            "game_id": game_id,
-                            "sportsbook_id": sportsbook_id,
-                            "market_id": market_id,
-                            "price_home": values["price_home"],
-                            "price_away": values["price_away"],
-                            "spread_home": values["spread_home"],
-                            "spread_away": values["spread_away"],
-                            "total_points": values["total_points"],
-                            "over_price": values["over_price"],
-                            "under_price": values["under_price"],
-                            "captured_at": captured_at,
-                            "source": "the-odds-api",
-                            "created_at": _now_utc(),
-                        },
-                    )
-                    snapshots_inserted += 1
+        _assert_tables_present(
+            session,
+            stage="pull_odds_snapshot",
+            required_tables=[
+                "sports",
+                "leagues",
+                "seasons",
+                "teams",
+                "games",
+                "sportsbooks",
+                "markets",
+                "odds_snapshots",
+            ],
+        )
+        persisted = _persist_odds_events(
+            session,
+            events=data,
+            source_label="the-odds-api",
+        )
+        events_persisted = int(persisted.get("events_persisted") or 0)
+        snapshots_inserted = int(persisted.get("snapshots_inserted") or 0)
 
         session.commit()
     except Exception:
@@ -1679,12 +2422,230 @@ def pull_odds_snapshot() -> Dict[str, int]:
         "events_fetched": len(data),
         "events_persisted": events_persisted,
         "snapshots_inserted": snapshots_inserted,
+        "credits_diagnostics": credits_diag,
     }
     log.info(
         "Pulled odds snapshot",
-        extra=result,
+        extra={**result, "nfl_bookmakers": resolved_nfl_bookmakers},
     )
     return result
+
+
+@celery_app.task(name="src.tasks.pull_historical_odds_backfill")
+def pull_historical_odds_backfill(
+    *,
+    sport_key: str = "americanfootball_nfl",
+    bookmakers: str = "draftkings,fanduel",
+    markets: str = "h2h,spreads,totals",
+    start_season: int = 2013,
+    end_season: int = 2025,
+    max_requests: int = 15,
+    oldest_first: bool = True,
+    day_offset: int = 0,
+    snapshot_hour_utc: int = 20,
+    snapshot_minute_utc: int = 30,
+) -> Dict[str, Any]:
+    """Pull one historical odds snapshot per distinct game_date.
+
+    day_offset/snapshot_hour_utc let a caller take two passes over the same
+    date range to build a real open-vs-close pair for CLV (see
+    scripts/nfl/backfill_real_clv_snapshots.py):
+      - "open" pass: day_offset=-5, snapshot_hour_utc=18 (~Tue afternoon ET,
+        shortly after lines typically first post for that week).
+      - "close" pass: day_offset=0, snapshot_hour_utc=17 (~noon ET, just
+        ahead of the early Sunday kickoff wave -- the historical API can
+        only return one moment-in-time snapshot per call, so this is a
+        deliberate approximation, not a per-game exact closing line).
+    """
+    endpoint = f"historical/sports/{sport_key}/odds"
+    normalized_books = _normalize_bookmakers_csv(bookmakers)
+    normalized_markets = _normalize_markets_csv(markets)
+    if not normalized_books:
+        raise ValueError("bookmakers must include at least one bookmaker")
+    if not normalized_markets:
+        raise ValueError("markets must include at least one of h2h,spreads,totals")
+
+    session = SessionLocal()
+    try:
+        _assert_tables_present(
+            session,
+            stage="pull_historical_odds_backfill",
+            required_tables=["odds_snapshots", "games", "seasons", "leagues"],
+        )
+        _ensure_odds_api_request_tables(session)
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  sch.season,
+                  sch.week,
+                  sch.game_date
+                FROM nfl_dp_schedules sch
+                WHERE sch.season BETWEEN :start_season AND :end_season
+                  AND sch.home_score IS NOT NULL
+                  AND sch.away_score IS NOT NULL
+                GROUP BY sch.season, sch.week, sch.game_date
+                ORDER BY
+                  CASE WHEN :oldest_first THEN sch.season ELSE -sch.season END,
+                  CASE WHEN :oldest_first THEN sch.week ELSE -sch.week END
+                """
+            ),
+            {
+                "start_season": int(start_season),
+                "end_season": int(end_season),
+                "oldest_first": bool(oldest_first),
+            },
+        ).fetchall()
+        max_req = max(1, int(max_requests))
+        selected_dates: List[datetime] = []
+        seen_dates: set[date] = set()
+        for row in rows:
+            game_date = row.game_date if hasattr(row, "game_date") else row[2]
+            if not isinstance(game_date, date):
+                continue
+            if game_date in seen_dates:
+                continue
+            seen_dates.add(game_date)
+            snapshot_date = game_date + timedelta(days=int(day_offset))
+            selected_dates.append(
+                datetime.combine(
+                    snapshot_date,
+                    time(hour=int(snapshot_hour_utc), minute=int(snapshot_minute_utc)),
+                    tzinfo=timezone.utc,
+                )
+            )
+            if len(selected_dates) >= max_req:
+                break
+
+        requested = 0
+        skipped_cached = 0
+        request_errors = 0
+        events_total = 0
+        persisted_total = 0
+        snapshots_total = 0
+        credits_last = None
+        credits_remaining = None
+        credits_used = None
+
+        for snapshot_dt in selected_dates:
+            params: Dict[str, Any] = {
+                "bookmakers": normalized_books,
+                "markets": normalized_markets,
+                "oddsFormat": "american",
+                "dateFormat": "iso",
+                "date": snapshot_dt.isoformat().replace("+00:00", "Z"),
+            }
+            signature = _odds_request_signature(endpoint, params)
+            cache_row = session.execute(
+                text(
+                    """
+                    SELECT status
+                    FROM odds_api_request_cache
+                    WHERE request_signature = :request_signature
+                    LIMIT 1
+                    """
+                ),
+                {"request_signature": signature},
+            ).fetchone()
+            if cache_row is not None and str(cache_row[0]) == "success":
+                skipped_cached += 1
+                continue
+            requested += 1
+            try:
+                payload_meta = fetch_odds_with_metadata(endpoint=endpoint, params=params)
+                payload = payload_meta.get("payload")
+                source_key = str(payload_meta.get("source") or "")
+                credits_used = _to_int_like(payload_meta.get("x_requests_used"))
+                credits_remaining = _to_int_like(payload_meta.get("x_requests_remaining"))
+                credits_last = _to_int_like(payload_meta.get("x_requests_last"))
+                events = payload.get("data") if isinstance(payload, dict) else None
+                events_list = events if isinstance(events, list) else []
+                for event in events_list:
+                    if isinstance(event, dict) and not event.get("sport_key"):
+                        event["sport_key"] = sport_key
+                persisted = _persist_odds_events(
+                    session,
+                    events=events_list,
+                    source_label="the-odds-api-historical",
+                )
+                event_count = len(events_list)
+                events_total += event_count
+                persisted_total += int(persisted.get("events_persisted") or 0)
+                snapshots_total += int(persisted.get("snapshots_inserted") or 0)
+                response_timestamp = _parse_iso_datetime(payload.get("timestamp")) if isinstance(payload, dict) else None
+                response_previous = _parse_iso_datetime(payload.get("previous_timestamp")) if isinstance(payload, dict) else None
+                response_next = _parse_iso_datetime(payload.get("next_timestamp")) if isinstance(payload, dict) else None
+                _record_odds_api_request(
+                    session,
+                    endpoint=endpoint,
+                    sport_key=sport_key,
+                    request_signature=signature,
+                    request_params=params,
+                    status="success",
+                    source_key=source_key,
+                    credits_last=credits_last,
+                    credits_used=credits_used,
+                    credits_remaining=credits_remaining,
+                    events_count=event_count,
+                    response_timestamp=response_timestamp,
+                    response_previous_timestamp=response_previous,
+                    response_next_timestamp=response_next,
+                    error=None,
+                )
+                session.commit()
+            except Exception as exc:
+                request_errors += 1
+                # A failed statement (e.g. a rare unique-constraint race on
+                # games) leaves the transaction aborted -- every subsequent
+                # statement on this session raises InFailedSqlTransaction
+                # until it's rolled back, which previously cascaded into
+                # crashing the whole backfill on the first bad request.
+                session.rollback()
+                try:
+                    _record_odds_api_request(
+                        session,
+                        endpoint=endpoint,
+                        sport_key=sport_key,
+                        request_signature=signature,
+                        request_params=params,
+                        status="failed",
+                        source_key=None,
+                        credits_last=None,
+                        credits_used=None,
+                        credits_remaining=None,
+                        events_count=0,
+                        response_timestamp=None,
+                        response_previous_timestamp=None,
+                        response_next_timestamp=None,
+                        error=str(exc)[:1000],
+                    )
+                    session.commit()
+                except Exception:
+                    session.rollback()
+                    log.exception("Failed to record odds_api_request failure status")
+                log.exception("Historical odds request failed", extra={"sport_key": sport_key, "date": params.get("date")})
+
+        return {
+            "status": "ok" if request_errors == 0 else "partial",
+            "sport_key": sport_key,
+            "bookmakers": normalized_books.split(","),
+            "markets": normalized_markets.split(","),
+            "start_season": int(start_season),
+            "end_season": int(end_season),
+            "max_requests": max_req,
+            "candidate_timestamps": len(selected_dates),
+            "requests_attempted": requested,
+            "requests_skipped_cached": skipped_cached,
+            "request_errors": request_errors,
+            "events_fetched": events_total,
+            "events_persisted": persisted_total,
+            "snapshots_inserted": snapshots_total,
+            "credits_last": credits_last,
+            "credits_used": credits_used,
+            "credits_remaining": credits_remaining,
+        }
+    finally:
+        session.close()
 
 
 @celery_app.task(name="src.tasks.pull_nfl_context_snapshot")
@@ -1696,6 +2657,11 @@ def pull_nfl_context_snapshot(days_ahead: int = 14) -> Dict[str, int]:
     created_or_updated = 0
     games_seen = 0
     try:
+        _assert_tables_present(
+            session,
+            stage="pull_nfl_context_snapshot",
+            required_tables=["games", "nfl_game_context"],
+        )
         for g in schedule:
             event_id = g.get("external_game_id")
             if not event_id:
@@ -1713,6 +2679,14 @@ def pull_nfl_context_snapshot(days_ahead: int = 14) -> Dict[str, int]:
             offense_home, defense_home = team_strength_from_record(g.get("home_record_summary"))
             offense_away, defense_away = team_strength_from_record(g.get("away_record_summary"))
             rest_days = rest_days_from_schedule(g.get("game_time"))
+            environment_context = build_nfl_environment_context(
+                game_time_iso=g.get("game_time"),
+                home_abbr=g.get("home_abbr"),
+                away_abbr=g.get("away_abbr"),
+                venue_lat=g.get("venue_latitude"),
+                venue_lon=g.get("venue_longitude"),
+                neutral_site=g.get("neutral_site"),
+            )
             session.execute(
                 text(
                     """
@@ -1752,6 +2726,15 @@ def pull_nfl_context_snapshot(days_ahead: int = 14) -> Dict[str, int]:
                             "away_abbr": g.get("away_abbr"),
                             "home_record_summary": g.get("home_record_summary"),
                             "away_record_summary": g.get("away_record_summary"),
+                            "venue": {
+                                "name": g.get("venue_name"),
+                                "city": g.get("venue_city"),
+                                "state": g.get("venue_state"),
+                                "latitude": g.get("venue_latitude"),
+                                "longitude": g.get("venue_longitude"),
+                                "neutral_site": bool(g.get("neutral_site")),
+                            },
+                            "environment": environment_context,
                         }
                     ),
                     "created_at": _now_utc(),
@@ -1787,6 +2770,14 @@ def run_nfl_market_simulations(
     processed = 0
     inserted = 0
     try:
+        _assert_tables_present(
+            session,
+            stage="run_nfl_market_simulations",
+            required_tables=["games", "nfl_game_context", "nfl_market_projections"],
+        )
+        supervised_fit = _load_latest_supervised_fit(session, model_version=model_version)
+        tuning_config_overrides = _load_latest_tuning_config_overrides(session, model_version=model_version)
+        priors_cache: Dict[int, Dict[str, Dict[str, float]]] = {}
         totals_calibration = fetch_nfl_totals_calibration(
             session,
             model_version=model_version,
@@ -1802,13 +2793,16 @@ def run_nfl_market_simulations(
                   g.start_time AS start_time,
                   s.season_year,
                   home.name AS home_team,
+                  home.abbr AS home_abbr,
                   away.name AS away_team,
+                  away.abbr AS away_abbr,
                   c.offense_index_home,
                   c.offense_index_away,
                   c.defense_index_home,
                   c.defense_index_away,
                   c.rest_days_home,
-                  c.rest_days_away
+                  c.rest_days_away,
+                  c.context
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -1844,18 +2838,89 @@ def run_nfl_market_simulations(
             )
             home_nowcast = injury_nowcast.get("home") if isinstance(injury_nowcast.get("home"), dict) else {}
             away_nowcast = injury_nowcast.get("away") if isinstance(injury_nowcast.get("away"), dict) else {}
+            context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
+            if not context_payload and isinstance(m.get("context"), str):
+                try:
+                    context_payload = json.loads(str(m.get("context")))
+                except Exception:
+                    context_payload = {}
+            environment_payload = (
+                context_payload.get("environment") if isinstance(context_payload.get("environment"), dict) else {}
+            )
+            weather_payload = environment_payload.get("weather") if isinstance(environment_payload.get("weather"), dict) else {}
+            travel_payload = environment_payload.get("travel") if isinstance(environment_payload.get("travel"), dict) else {}
+            venue_payload = context_payload.get("venue") if isinstance(context_payload.get("venue"), dict) else {}
+            weather_available = bool(weather_payload.get("available"))
+            travel_available = bool(travel_payload.get("available"))
+            if not weather_available or not travel_available:
+                fallback_environment = build_nfl_environment_context(
+                    game_time_iso=(
+                        m.get("start_time").astimezone(timezone.utc).isoformat()
+                        if isinstance(m.get("start_time"), datetime)
+                        else None
+                    ),
+                    home_abbr=str(m.get("home_abbr") or context_payload.get("home_abbr") or ""),
+                    away_abbr=str(m.get("away_abbr") or context_payload.get("away_abbr") or ""),
+                    venue_lat=venue_payload.get("latitude"),
+                    venue_lon=venue_payload.get("longitude"),
+                    neutral_site=venue_payload.get("neutral_site"),
+                )
+                fallback_weather = (
+                    fallback_environment.get("weather")
+                    if isinstance(fallback_environment.get("weather"), dict)
+                    else {}
+                )
+                fallback_travel = (
+                    fallback_environment.get("travel")
+                    if isinstance(fallback_environment.get("travel"), dict)
+                    else {}
+                )
+                if not weather_available and fallback_weather:
+                    weather_payload = fallback_weather
+                if not travel_available and fallback_travel:
+                    travel_payload = fallback_travel
             matchup_kwargs = matchup_pack_to_sim_input_kwargs(matchup_pack)
+            season_year = _to_int_like(m.get("season_year"))
+            if season_year is not None and season_year not in priors_cache:
+                priors_cache[season_year] = _load_team_strength_priors(session, season_year=season_year)
+            team_priors = priors_cache.get(season_year or -1, {})
+            home_prior = team_priors.get(str(m.get("home_team") or ""), {})
+            away_prior = team_priors.get(str(m.get("away_team") or ""), {})
+            base_offense_home = _to_float(m.get("offense_index_home")) or 1.0
+            base_offense_away = _to_float(m.get("offense_index_away")) or 1.0
+            base_defense_home = _to_float(m.get("defense_index_home")) or 1.0
+            base_defense_away = _to_float(m.get("defense_index_away")) or 1.0
+            offense_home = (
+                (_to_float(home_prior.get("offense_index")) or base_offense_home)
+                if abs(base_offense_home - 1.0) < 1e-6
+                else base_offense_home
+            )
+            offense_away = (
+                (_to_float(away_prior.get("offense_index")) or base_offense_away)
+                if abs(base_offense_away - 1.0) < 1e-6
+                else base_offense_away
+            )
+            defense_home = (
+                (_to_float(home_prior.get("defense_index")) or base_defense_home)
+                if abs(base_defense_home - 1.0) < 1e-6
+                else base_defense_home
+            )
+            defense_away = (
+                (_to_float(away_prior.get("defense_index")) or base_defense_away)
+                if abs(base_defense_away - 1.0) < 1e-6
+                else base_defense_away
+            )
             inputs = NflGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
                 away_team=str(m["away_team"]),
-                offense_index_home=(_to_float(m.get("offense_index_home")) or 1.0)
+                offense_index_home=float(offense_home)
                 * (_to_float(home_nowcast.get("offense_multiplier")) or 1.0),
-                offense_index_away=(_to_float(m.get("offense_index_away")) or 1.0)
+                offense_index_away=float(offense_away)
                 * (_to_float(away_nowcast.get("offense_multiplier")) or 1.0),
-                defense_index_home=(_to_float(m.get("defense_index_home")) or 1.0)
+                defense_index_home=float(defense_home)
                 * (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
-                defense_index_away=(_to_float(m.get("defense_index_away")) or 1.0)
+                defense_index_away=float(defense_away)
                 * (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
                 rest_days_home=_to_float(m.get("rest_days_home")) or 7.0,
                 rest_days_away=_to_float(m.get("rest_days_away")) or 7.0,
@@ -1872,16 +2937,110 @@ def run_nfl_market_simulations(
                 injury_nowcast_source=str(injury_nowcast.get("source") or "nfl_dp_injuries"),
                 injury_nowcast_home_drivers=home_nowcast.get("top_drivers") if isinstance(home_nowcast.get("top_drivers"), list) else [],
                 injury_nowcast_away_drivers=away_nowcast.get("top_drivers") if isinstance(away_nowcast.get("top_drivers"), list) else [],
+                weather_available=bool(weather_payload.get("available")),
+                weather_wind_mph=_to_float(weather_payload.get("wind_mph")),
+                weather_precip_mm=_to_float(weather_payload.get("precip_mm")),
+                weather_temp_f=_to_float(weather_payload.get("temp_f")),
+                weather_source=str(weather_payload.get("source") or "open-meteo"),
+                travel_available=bool(travel_payload.get("available")),
+                travel_miles_home=_to_float(travel_payload.get("travel_miles_home")),
+                travel_miles_away=_to_float(travel_payload.get("travel_miles_away")),
+                travel_timezone_delta_home=_to_float(travel_payload.get("timezone_delta_home")),
+                travel_timezone_delta_away=_to_float(travel_payload.get("timezone_delta_away")),
                 **matchup_kwargs,
             )
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)
+            market_lines = _fetch_nfl_market_consensus_lines(session, game_id=inputs.game_id)
             projection = simulate_nfl_game(
                 inputs,
                 simulations=simulations,
                 seed=seed,
                 model_version=model_version,
                 totals_calibration=totals_calibration,
+                config_overrides=tuning_config_overrides,
+                market_spread_home=market_lines.get("market_spread_home"),
+                market_total=market_lines.get("market_total"),
             )
+            markets = projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
+            if supervised_fit:
+                mp = matchup_pack if isinstance(matchup_pack, dict) else {}
+                mk = matchup_kwargs if isinstance(matchup_kwargs, dict) else {}
+                venue_row = session.execute(
+                    text(
+                        """
+                        SELECT roof, surface FROM nfl_dp_schedules
+                        WHERE season = :season AND home_team = :home_team AND away_team = :away_team
+                        ORDER BY (week IS NULL), ABS(COALESCE(week, 0) - :week)
+                        LIMIT 1
+                        """
+                    ),
+                    {
+                        "season": season_year,
+                        "home_team": str(m.get("home_abbr") or ""),
+                        "away_team": str(m.get("away_abbr") or ""),
+                        "week": _to_int_like(mp.get("week")) or 0,
+                    },
+                ).fetchone()
+                roof = str(venue_row.roof or "").lower() if venue_row else ""
+                surface = str(venue_row.surface or "").lower() if venue_row else ""
+                home_div = NFL_TEAM_DIVISION.get(str(m.get("home_abbr") or ""))
+                away_div = NFL_TEAM_DIVISION.get(str(m.get("away_abbr") or ""))
+                home_rest_val = _to_float(m.get("rest_days_home")) or 7.0
+                away_rest_val = _to_float(m.get("rest_days_away")) or 7.0
+                home_injury_impact = _to_float(home_nowcast.get("impact_score")) or 0.0
+                away_injury_impact = _to_float(away_nowcast.get("impact_score")) or 0.0
+                feature_row = {
+                    "week": _to_float(mp.get("week")),
+                    "home_off_epa_5g": _to_float(mp.get("home_off_epa_5g")),
+                    "away_off_epa_5g": _to_float(mp.get("away_off_epa_5g")),
+                    "home_def_epa_allowed_5g": _to_float(mp.get("home_def_epa_allowed_5g")),
+                    "away_def_epa_allowed_5g": _to_float(mp.get("away_def_epa_allowed_5g")),
+                    "home_pressure_allowed_5g": _to_float(mp.get("home_pressure_allowed_5g")),
+                    "away_pressure_allowed_5g": _to_float(mp.get("away_pressure_allowed_5g")),
+                    "home_pressure_generated_5g": _to_float(mp.get("home_pressure_generated_5g")),
+                    "away_pressure_generated_5g": _to_float(mp.get("away_pressure_generated_5g")),
+                    "home_pass_rate_5g": _to_float(mp.get("home_pass_rate_5g")),
+                    "away_pass_rate_5g": _to_float(mp.get("away_pass_rate_5g")),
+                    "home_early_down_pass_rate_5g": _to_float(mp.get("home_early_down_pass_rate_5g")),
+                    "away_early_down_pass_rate_5g": _to_float(mp.get("away_early_down_pass_rate_5g")),
+                    "home_red_zone_td_rate_5g": _to_float(mp.get("home_red_zone_td_rate_5g")),
+                    "away_red_zone_td_rate_5g": _to_float(mp.get("away_red_zone_td_rate_5g")),
+                    "home_success_offense_5g": _to_float(mp.get("home_success_offense_5g")),
+                    "away_success_offense_5g": _to_float(mp.get("away_success_offense_5g")),
+                    "home_success_defense_allowed_5g": _to_float(mp.get("home_success_defense_allowed_5g")),
+                    "away_success_defense_allowed_5g": _to_float(mp.get("away_success_defense_allowed_5g")),
+                    "diff_off_epa_5g": _to_float(mp.get("diff_off_epa_5g")),
+                    "diff_def_epa_allowed_5g": _to_float(mp.get("diff_def_epa_allowed_5g")),
+                    "diff_pressure_generated_5g": _to_float(mp.get("diff_pressure_generated_5g")),
+                    "diff_pressure_allowed_5g": _to_float(mp.get("diff_pressure_allowed_5g")),
+                    "diff_red_zone_td_rate_5g": _to_float(mp.get("diff_red_zone_td_rate_5g")),
+                    "diff_success_rate_5g": _to_float(mk.get("matchup_diff_success_rate_5g")),
+                    "home_injury_impact": home_injury_impact,
+                    "away_injury_impact": away_injury_impact,
+                    "diff_injury_impact": home_injury_impact - away_injury_impact,
+                    "home_rest_days": home_rest_val,
+                    "away_rest_days": away_rest_val,
+                    "diff_rest_days": home_rest_val - away_rest_val,
+                    "roof_dome": 1.0 if roof in {"dome", "closed"} else 0.0,
+                    "surface_turf": 1.0 if "turf" in surface else 0.0,
+                    "is_divisional_game": 1.0 if (home_div and home_div == away_div) else 0.0,
+                }
+                real_features_by_team = detect_real_rolling_features(
+                    session,
+                    season=int(season_year) if season_year is not None else 0,
+                    teams=[str(m.get("home_abbr") or ""), str(m.get("away_abbr") or "")],
+                )
+                use_validated_weights = bool(
+                    real_features_by_team.get(str(m.get("home_abbr") or ""))
+                    and real_features_by_team.get(str(m.get("away_abbr") or ""))
+                )
+                blended_markets = apply_supervised_blend(
+                    fit_payload=supervised_fit,
+                    feature_row=feature_row,
+                    base_markets=markets,
+                    use_validated_weights=use_validated_weights,
+                )
+                projection["markets"] = blended_markets
             projection_created_at = _resolve_nfl_projection_created_at(
                 game_date=(m.get("game_date") if isinstance(m.get("game_date"), date) else target_date),
                 start_time=m.get("start_time"),
@@ -1899,6 +3058,12 @@ def run_nfl_market_simulations(
                     "projection_created_at": projection_created_at.isoformat(),
                     "include_completed_games": bool(include_completed_games),
                     "totals_calibration": totals_calibration,
+                    "tuning_config_applied": bool(tuning_config_overrides),
+                    "team_prior_anchor": {
+                        "home": home_prior if isinstance(home_prior, dict) else {},
+                        "away": away_prior if isinstance(away_prior, dict) else {},
+                        "season_year": season_year,
+                    },
                 }
             )
             projection_for_storage["audit"] = audit_block
@@ -2055,6 +3220,11 @@ def materialize_nfl_market_history(lookback_days: int = 45) -> Dict[str, int]:
     session = SessionLocal()
     inserted_or_updated = 0
     try:
+        _assert_tables_present(
+            session,
+            stage="materialize_nfl_market_history",
+            required_tables=["odds_snapshots", "markets", "nfl_market_history_snapshots"],
+        )
         date_filter = ""
         params: Dict[str, Any] = {}
         if lookback_days > 0:
@@ -2069,35 +3239,49 @@ def materialize_nfl_market_history(lookback_days: int = 45) -> Dict[str, int]:
                   home_price, away_price, total_points, over_price, under_price,
                   source, created_at
                 )
-                SELECT
-                  os.game_id,
-                  os.captured_at,
-                  sb.code AS sportsbook_code,
-                  m.code AS market_code,
-                  os.price_home,
-                  os.price_away,
-                  CASE
-                    WHEN m.code = 'total' AND os.total_points IS NOT NULL
-                    THEN ROUND((os.total_points::numeric * 2.0)) / 2.0
-                    ELSE os.total_points
-                  END AS total_points,
-                  os.over_price,
-                  os.under_price,
-                  CASE
-                    WHEN m.code = 'total' THEN CONCAT(COALESCE(os.source, 'odds_snapshots'), '\:normalized-total')
-                    ELSE COALESCE(os.source, 'odds_snapshots')
-                  END AS source,
-                  NOW()
-                FROM odds_snapshots os
-                JOIN games g ON g.id = os.game_id
-                JOIN seasons s ON s.id = g.season_id
-                JOIN leagues l ON l.id = s.league_id
-                JOIN markets m ON m.id = os.market_id
-                JOIN sportsbooks sb ON sb.id = os.sportsbook_id
-                WHERE l.code = 'nfl'
-                  AND m.code IN ('moneyline', 'total')
-                  AND (m.code <> 'total' OR os.total_points IS NOT NULL)
-                  {date_filter}
+                SELECT DISTINCT ON (dedup.game_id, dedup.sportsbook_code, dedup.market_code, dedup.captured_at)
+                  dedup.game_id, dedup.captured_at, dedup.sportsbook_code, dedup.market_code,
+                  dedup.price_home, dedup.price_away, dedup.total_points, dedup.over_price, dedup.under_price,
+                  dedup.source, NOW()
+                FROM (
+                  SELECT
+                    os.id,
+                    os.game_id,
+                    os.captured_at,
+                    sb.code AS sportsbook_code,
+                    m.code AS market_code,
+                    os.price_home,
+                    os.price_away,
+                    CASE
+                      WHEN m.code = 'total' AND os.total_points IS NOT NULL
+                      THEN ROUND((os.total_points::numeric * 2.0)) / 2.0
+                      ELSE os.total_points
+                    END AS total_points,
+                    os.over_price,
+                    os.under_price,
+                    CASE
+                      WHEN m.code = 'total' THEN CONCAT(COALESCE(os.source, 'odds_snapshots'), '\:normalized-total')
+                      ELSE COALESCE(os.source, 'odds_snapshots')
+                    END AS source
+                  FROM odds_snapshots os
+                  JOIN games g ON g.id = os.game_id
+                  JOIN seasons s ON s.id = g.season_id
+                  JOIN leagues l ON l.id = s.league_id
+                  JOIN markets m ON m.id = os.market_id
+                  JOIN sportsbooks sb ON sb.id = os.sportsbook_id
+                  WHERE l.code = 'nfl'
+                    AND m.code IN ('moneyline', 'total')
+                    AND (m.code <> 'total' OR os.total_points IS NOT NULL)
+                    {date_filter}
+                ) dedup
+                -- Two raw odds_snapshots rows can normalize to the same
+                -- (game_id, sportsbook_code, market_code, captured_at) key
+                -- (e.g. a total rounded to the same 0.5 from two source
+                -- rows, or two historical pulls that both captured the same
+                -- unchanged last_update timestamp) -- ON CONFLICT can't
+                -- update the same target row twice in one statement, so
+                -- dedupe first and keep the highest raw id per key.
+                ORDER BY dedup.game_id, dedup.sportsbook_code, dedup.market_code, dedup.captured_at, dedup.id DESC
                 ON CONFLICT (game_id, sportsbook_code, market_code, captured_at) DO UPDATE SET
                   home_price = EXCLUDED.home_price,
                   away_price = EXCLUDED.away_price,
@@ -2252,6 +3436,16 @@ def run_nfl_clv_attribution(
     projections_seen = 0
     rows_upserted = 0
     try:
+        _assert_tables_present(
+            session,
+            stage="run_nfl_clv_attribution",
+            required_tables=[
+                "nfl_market_projections",
+                "nfl_market_history_snapshots",
+                "nfl_market_outcomes",
+                "nfl_clv_attribution",
+            ],
+        )
         projections = session.execute(
             text(
                 """
@@ -2370,7 +3564,15 @@ def run_nfl_clv_attribution(
             open_total_source = str(m.get("open_total_source") or "")
             close_total_source = str(m.get("close_total_source") or "")
 
-            # Moneyline CLV: pick side from model win-prob and compare implied probs.
+            # Moneyline CLV: only recommend a side where the model actually
+            # disagrees with the OPEN price in a way that implies value --
+            # i.e. model_prob(side) > open_implied_prob(side). Previously
+            # this always picked the model's favorite (home_win_prob >= 0.5)
+            # regardless of whether that side was already fairly priced or
+            # even overpriced at open, which isn't a value bet and produced
+            # a CLV positive-rate well under 50% that had nothing to do with
+            # model quality -- favorites systematically drift a bit at close
+            # for reasons unrelated to whether picking them was ever +EV.
             if (
                 home_win_prob is not None
                 and open_home_ml is not None
@@ -2378,12 +3580,20 @@ def run_nfl_clv_attribution(
                 and close_home_ml is not None
                 and close_away_ml is not None
             ):
-                side = "home" if home_win_prob >= 0.5 else "away"
-                open_price = open_home_ml if side == "home" else open_away_ml
-                close_price = close_home_ml if side == "home" else close_away_ml
-                open_imp = _american_implied_prob(open_price)
-                close_imp = _american_implied_prob(close_price)
-                if open_imp is not None and close_imp is not None:
+                open_home_imp = _american_implied_prob(open_home_ml)
+                open_away_imp = _american_implied_prob(open_away_ml)
+                home_edge = (home_win_prob - open_home_imp) if open_home_imp is not None else None
+                away_edge = ((1.0 - home_win_prob) - open_away_imp) if open_away_imp is not None else None
+                side = None
+                if home_edge is not None and (away_edge is None or home_edge >= away_edge) and home_edge > 0:
+                    side = "home"
+                elif away_edge is not None and away_edge > 0:
+                    side = "away"
+                open_price = open_home_ml if side == "home" else open_away_ml if side == "away" else None
+                close_price = close_home_ml if side == "home" else close_away_ml if side == "away" else None
+                open_imp = _american_implied_prob(open_price) if open_price is not None else None
+                close_imp = _american_implied_prob(close_price) if close_price is not None else None
+                if side is not None and open_imp is not None and close_imp is not None:
                     model_line = fair_home_ml if side == "home" else fair_away_ml
                     clv_value = close_imp - open_imp
                     session.execute(
@@ -2427,9 +3637,17 @@ def run_nfl_clv_attribution(
                     )
                     rows_upserted += 1
 
-            # Total CLV: choose side using model total vs open total.
-            if total_mean is not None and open_total is not None and close_total is not None:
-                total_side = "over" if total_mean >= open_total else "under"
+            # Total CLV: require a minimum edge vs the open line before
+            # recommending a side -- otherwise a coinflip (model_total
+            # 0.1 points from open) always "recommends" a side with zero
+            # real conviction, diluting the signal with noise plays.
+            MIN_TOTAL_EDGE_POINTS = 1.0
+            total_side = None
+            if total_mean is not None and open_total is not None:
+                total_diff = total_mean - open_total
+                if abs(total_diff) >= MIN_TOTAL_EDGE_POINTS:
+                    total_side = "over" if total_diff > 0 else "under"
+            if total_side is not None and open_total is not None and close_total is not None:
                 total_clv = (close_total - open_total) if total_side == "over" else (open_total - close_total)
                 session.execute(
                     text(
@@ -2490,11 +3708,55 @@ def run_nfl_clv_attribution(
         session.close()
 
 
+def _refresh_nfl_clv_window(
+    *,
+    lookback_days: int,
+    model_version: str,
+) -> Dict[str, Any]:
+    try:
+        return run_nfl_clv_attribution(
+            lookback_days=max(14, int(lookback_days)),
+            model_version=model_version,
+        )
+    except Exception as exc:
+        log.warning(
+            "Failed refreshing NFL CLV window (model=%s, lookback_days=%s): %s",
+            model_version,
+            lookback_days,
+            exc,
+        )
+        return {"status": "warning", "error": str(exc)}
+
+
+def _compute_nfl_market_clv_summary(clv_rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    markets = {"moneyline", "spread", "total"}
+    buckets: Dict[str, List[float]] = {market: [] for market in markets}
+    for row in clv_rows:
+        market = str(row.get("market_code") or "")
+        clv_value = _to_float_like(row.get("clv_value"))
+        if market in buckets and clv_value is not None:
+            buckets[market].append(float(clv_value))
+    out: Dict[str, Any] = {}
+    for market, values in buckets.items():
+        out[market] = {
+            "sample_size": len(values),
+            "avg_clv": round(sum(values) / len(values), 6) if values else None,
+            "positive_rate": (
+                round(sum(1 for value in values if value > 0.0) / len(values), 6) if values else None
+            ),
+        }
+    return out
+
+
 def _compute_nfl_pick_hit_metrics(clv_rows: List[Dict[str, Any]]) -> Dict[str, Optional[float]]:
     moneyline_hits = 0
     moneyline_seen = 0
     moneyline_pos_hits = 0
     moneyline_pos_seen = 0
+    spread_hits = 0
+    spread_seen = 0
+    spread_pos_hits = 0
+    spread_pos_seen = 0
     total_hits = 0
     total_seen = 0
     total_pos_hits = 0
@@ -2514,6 +3776,21 @@ def _compute_nfl_pick_hit_metrics(clv_rows: List[Dict[str, Any]]) -> Dict[str, O
             if positive_edge:
                 moneyline_pos_seen += 1
                 moneyline_pos_hits += 1 if won else 0
+        elif market == "spread":
+            home_points = _to_float_like(row.get("actual_home_points"))
+            away_points = _to_float_like(row.get("actual_away_points"))
+            settle_line = _to_float_like(row.get("close_line"))
+            if settle_line is None:
+                settle_line = _to_float_like(row.get("open_line"))
+            if home_points is None or away_points is None or settle_line is None or side not in {"home", "away"}:
+                continue
+            margin = home_points - away_points
+            won = (margin + settle_line) > 0 if side == "home" else (-margin - settle_line) > 0
+            spread_seen += 1
+            spread_hits += 1 if won else 0
+            if positive_edge:
+                spread_pos_seen += 1
+                spread_pos_hits += 1 if won else 0
         elif market == "total":
             final_total = _to_float_like(row.get("final_total_points"))
             close_line = _to_float_like(row.get("close_line"))
@@ -2535,6 +3812,12 @@ def _compute_nfl_pick_hit_metrics(clv_rows: List[Dict[str, Any]]) -> Dict[str, O
             round(moneyline_pos_hits / moneyline_pos_seen, 6) if moneyline_pos_seen > 0 else None
         ),
         "moneyline_positive_edge_sample_size": moneyline_pos_seen,
+        "spread_hit_rate": round(spread_hits / spread_seen, 6) if spread_seen > 0 else None,
+        "spread_pick_sample_size": spread_seen,
+        "spread_positive_edge_hit_rate": (
+            round(spread_pos_hits / spread_pos_seen, 6) if spread_pos_seen > 0 else None
+        ),
+        "spread_positive_edge_sample_size": spread_pos_seen,
         "total_hit_rate": round(total_hits / total_seen, 6) if total_seen > 0 else None,
         "total_pick_sample_size": total_seen,
         "total_positive_edge_hit_rate": round(total_pos_hits / total_pos_seen, 6) if total_pos_seen > 0 else None,
@@ -2551,6 +3834,7 @@ def _compute_nfl_quality_payload(
     lookback_days: int,
     totals_calibration: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
+    factor_attribution = summarize_nfl_factor_attribution_from_points(point_rows)
     brier_points = [
         (
             _to_float_like(row.get("home_win_prob")),
@@ -2591,10 +3875,14 @@ def _compute_nfl_quality_payload(
     )
     clv_sample = _to_int_like(clv_rollup.get("sample_size")) or 0
     clv_positive = _to_int_like(clv_rollup.get("positive_count")) or 0
+    clv_by_market = _compute_nfl_market_clv_summary(clv_rows)
     clv_hit_metrics = _compute_nfl_pick_hit_metrics(clv_rows)
     game_dates = sorted({str(r.get("game_date")) for r in point_rows if r.get("game_date") is not None})
     return {
         "model_version": model_version,
+        "framework_version": NFL_HANDICAPPING_FRAMEWORK_VERSION,
+        "framework_config": get_nfl_handicapping_config(),
+        "factor_attribution_diagnostics": factor_attribution,
         "lookback_days": int(lookback_days),
         "sample_size": len(point_rows),
         "moneyline_brier": moneyline_brier,
@@ -2606,6 +3894,7 @@ def _compute_nfl_quality_payload(
         "clv_avg": round(float(clv_rollup.get("avg_clv")), 6) if _to_float_like(clv_rollup.get("avg_clv")) is not None else None,
         "clv_sample_size": clv_sample,
         "clv_positive_rate": round(clv_positive / clv_sample, 6) if clv_sample > 0 else None,
+        "clv_by_market": clv_by_market,
         "calendar_days_covered": len(game_dates),
         "last_game_date": game_dates[-1] if game_dates else None,
         **clv_hit_metrics,
@@ -2626,6 +3915,7 @@ def _fetch_nfl_backtest_points(
               g.game_date,
               lp.home_win_prob,
               lp.total_mean,
+              lp.projection,
               lp.projection_created_at,
               mo.home_team_won,
               mo.final_total_points,
@@ -2642,6 +3932,7 @@ def _fetch_nfl_backtest_points(
               SELECT
                 mp.home_win_prob,
                 mp.total_mean,
+                mp.projection,
                 mp.created_at AS projection_created_at
               FROM nfl_market_projections mp
               WHERE mp.game_id = mo.game_id
@@ -2699,6 +3990,20 @@ def run_nfl_quality_grading(
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
+        clv_refresh = _refresh_nfl_clv_window(
+            lookback_days=max(int(lookback_days), 120),
+            model_version=model_version,
+        )
+        _assert_tables_present(
+            session,
+            stage="run_nfl_quality_grading",
+            required_tables=[
+                "nfl_market_projections",
+                "nfl_market_outcomes",
+                "nfl_clv_attribution",
+                "nfl_model_quality_snapshots",
+            ],
+        )
         totals_calibration = fetch_nfl_totals_calibration(
             session,
             model_version=model_version,
@@ -2714,6 +4019,7 @@ def run_nfl_quality_grading(
                     mp.model_version,
                     mp.home_win_prob,
                     mp.total_mean,
+                    mp.projection,
                     mp.created_at AS projection_created_at,
                     g.game_date
                   FROM nfl_market_projections mp
@@ -2728,6 +4034,7 @@ def run_nfl_quality_grading(
                   lp.model_version,
                   lp.home_win_prob,
                   lp.total_mean,
+                  lp.projection,
                   lp.game_date,
                   mo.home_team_won,
                   mo.final_total_points
@@ -2764,6 +4071,8 @@ def run_nfl_quality_grading(
                   c.open_line,
                   c.close_line,
                   c.clv_value,
+                  mo.actual_home_points,
+                  mo.actual_away_points,
                   mo.home_team_won,
                   mo.final_total_points
                 FROM nfl_clv_attribution c
@@ -2783,6 +4092,7 @@ def run_nfl_quality_grading(
             lookback_days=int(lookback_days),
             totals_calibration=totals_calibration,
         )
+        payload["clv_refresh"] = clv_refresh
         _persist_nfl_quality_snapshot(
             session,
             run_date=date.today(),
@@ -2800,6 +4110,244 @@ def run_nfl_quality_grading(
         session.close()
 
 
+def _fetch_nfl_team_week_injury_severity(
+    session: Any,
+    *,
+    start_season: int,
+    end_season: int,
+) -> Dict[Tuple[int, int, str], Dict[str, float]]:
+    """Position+status-weighted injury severity per (season, week, team),
+    with no freshness decay (see compute_team_week_injury_severity docstring
+    for why training uses a different aggregation than live inference)."""
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              i.season, i.week, i.team,
+              i.report_status, i.practice_status, i.injury,
+              r.position
+            FROM nfl_dp_injuries i
+            LEFT JOIN nfl_dp_rosters r
+              ON r.season = i.season AND r.team = i.team AND r.player_id = i.player_id
+            WHERE i.season BETWEEN :start_season AND :end_season
+            """
+        ),
+        {"start_season": int(start_season), "end_season": int(end_season)},
+    ).fetchall()
+
+    grouped: Dict[Tuple[int, int, str], List[Dict[str, Any]]] = {}
+    for row in rows:
+        key = (int(row.season), int(row.week), str(row.team))
+        grouped.setdefault(key, []).append(dict(row._mapping))
+
+    out: Dict[Tuple[int, int, str], Dict[str, float]] = {}
+    for key, group_rows in grouped.items():
+        out[key] = compute_team_week_injury_severity(group_rows)
+    return out
+
+
+# Static division map used only for the "divisional game" training/serving
+# feature -- divisional games are historically lower-variance/more
+# competitive, a real situational signal distinct from raw team strength.
+NFL_TEAM_DIVISION: Dict[str, str] = {
+    "BUF": "AFC_EAST", "MIA": "AFC_EAST", "NE": "AFC_EAST", "NYJ": "AFC_EAST",
+    "BAL": "AFC_NORTH", "CIN": "AFC_NORTH", "CLE": "AFC_NORTH", "PIT": "AFC_NORTH",
+    "HOU": "AFC_SOUTH", "IND": "AFC_SOUTH", "JAX": "AFC_SOUTH", "TEN": "AFC_SOUTH",
+    "DEN": "AFC_WEST", "KC": "AFC_WEST", "LV": "AFC_WEST", "LAC": "AFC_WEST",
+    "DAL": "NFC_EAST", "NYG": "NFC_EAST", "PHI": "NFC_EAST", "WAS": "NFC_EAST",
+    "CHI": "NFC_NORTH", "DET": "NFC_NORTH", "GB": "NFC_NORTH", "MIN": "NFC_NORTH",
+    "ATL": "NFC_SOUTH", "CAR": "NFC_SOUTH", "NO": "NFC_SOUTH", "TB": "NFC_SOUTH",
+    "ARI": "NFC_WEST", "LA": "NFC_WEST", "SEA": "NFC_WEST", "SF": "NFC_WEST",
+}
+
+
+def _fetch_nfl_supervised_training_rows(
+    session: Any,
+    *,
+    start_season: int,
+    end_season: int,
+) -> List[Dict[str, Any]]:
+    rows = session.execute(
+        text(
+            """
+            WITH team_games AS (
+              SELECT DISTINCT season, home_team AS team, game_date FROM nfl_dp_schedules
+              WHERE season BETWEEN :start_season AND :end_season
+              UNION
+              SELECT DISTINCT season, away_team AS team, game_date FROM nfl_dp_schedules
+              WHERE season BETWEEN :start_season AND :end_season
+            ),
+            rest AS (
+              SELECT season, team, game_date,
+                (game_date - LAG(game_date) OVER (PARTITION BY season, team ORDER BY game_date)) AS rest_days
+              FROM team_games
+            )
+            SELECT
+              mf.season,
+              mf.week,
+              mf.game_id,
+              mf.home_off_epa_5g,
+              mf.away_off_epa_5g,
+              mf.home_def_epa_allowed_5g,
+              mf.away_def_epa_allowed_5g,
+              mf.home_pressure_allowed_5g,
+              mf.away_pressure_allowed_5g,
+              mf.home_pressure_generated_5g,
+              mf.away_pressure_generated_5g,
+              mf.home_pass_rate_5g,
+              mf.away_pass_rate_5g,
+              mf.home_early_down_pass_rate_5g,
+              mf.away_early_down_pass_rate_5g,
+              mf.home_red_zone_td_rate_5g,
+              mf.away_red_zone_td_rate_5g,
+              mf.home_success_offense_5g,
+              mf.away_success_offense_5g,
+              mf.home_success_defense_allowed_5g,
+              mf.away_success_defense_allowed_5g,
+              mf.diff_off_epa_5g,
+              mf.diff_def_epa_allowed_5g,
+              mf.diff_pressure_generated_5g,
+              mf.diff_pressure_allowed_5g,
+              mf.diff_red_zone_td_rate_5g,
+              (
+                (
+                  COALESCE(mf.home_success_offense_5g, 0.0)
+                  - COALESCE(mf.away_success_offense_5g, 0.0)
+                )
+                + (
+                  COALESCE(mf.away_success_defense_allowed_5g, 0.0)
+                  - COALESCE(mf.home_success_defense_allowed_5g, 0.0)
+                )
+              ) / 2.0 AS diff_success_rate_5g,
+              sch.home_team,
+              sch.away_team,
+              sch.roof,
+              sch.surface,
+              home_rest.rest_days AS home_rest_days,
+              away_rest.rest_days AS away_rest_days,
+              sch.home_score,
+              sch.away_score,
+              (sch.home_score > sch.away_score) AS home_team_won,
+              (sch.home_score + sch.away_score) AS final_total_points
+            FROM nfl_dp_matchup_features_weekly mf
+            JOIN nfl_dp_schedules sch
+              ON sch.season = mf.season
+             AND sch.game_id = mf.game_id
+            LEFT JOIN rest home_rest
+              ON home_rest.season = sch.season AND home_rest.team = sch.home_team AND home_rest.game_date = sch.game_date
+            LEFT JOIN rest away_rest
+              ON away_rest.season = sch.season AND away_rest.team = sch.away_team AND away_rest.game_date = sch.game_date
+            WHERE mf.season BETWEEN :start_season AND :end_season
+              AND sch.home_score IS NOT NULL
+              AND sch.away_score IS NOT NULL
+            ORDER BY mf.season, mf.week, mf.game_id
+            """
+        ),
+        {"start_season": int(start_season), "end_season": int(end_season)},
+    ).fetchall()
+    parsed_rows = [dict(row._mapping) for row in rows]
+
+    injury_severity = _fetch_nfl_team_week_injury_severity(
+        session, start_season=start_season, end_season=end_season
+    )
+
+    out: List[Dict[str, Any]] = []
+    for row in parsed_rows:
+        season = int(row["season"])
+        week = int(row["week"])
+        home_team = str(row["home_team"])
+        away_team = str(row["away_team"])
+        home_inj = injury_severity.get((season, week, home_team), {})
+        away_inj = injury_severity.get((season, week, away_team), {})
+        roof = str(row.get("roof") or "").lower()
+        surface = str(row.get("surface") or "").lower()
+        home_div = NFL_TEAM_DIVISION.get(home_team)
+        away_div = NFL_TEAM_DIVISION.get(away_team)
+        row["home_injury_impact"] = home_inj.get("impact_score", 0.0)
+        row["away_injury_impact"] = away_inj.get("impact_score", 0.0)
+        row["diff_injury_impact"] = row["home_injury_impact"] - row["away_injury_impact"]
+        row["home_rest_days"] = float(row.get("home_rest_days")) if row.get("home_rest_days") is not None else 7.0
+        row["away_rest_days"] = float(row.get("away_rest_days")) if row.get("away_rest_days") is not None else 7.0
+        row["diff_rest_days"] = row["home_rest_days"] - row["away_rest_days"]
+        row["roof_dome"] = 1.0 if roof in {"dome", "closed"} else 0.0
+        row["surface_turf"] = 1.0 if "turf" in surface else 0.0
+        row["is_divisional_game"] = 1.0 if (home_div and home_div == away_div) else 0.0
+        out.append(row)
+    return out
+
+
+@celery_app.task(name="src.tasks.run_nfl_supervised_retrain")
+def run_nfl_supervised_retrain(
+    *,
+    model_version: str = DEFAULT_NFL_MODEL_VERSION,
+    start_season: int = 2013,
+    end_season: int = 2025,
+) -> Dict[str, Any]:
+    session = SessionLocal()
+    try:
+        _ensure_nfl_supervised_fits_table(session)
+        training_rows = _fetch_nfl_supervised_training_rows(
+            session,
+            start_season=int(start_season),
+            end_season=int(end_season),
+        )
+        fit_payload = fit_nfl_supervised_models(
+            training_rows,
+            feature_keys=NFL_SUPERVISED_FEATURE_KEYS,
+        )
+        metrics = fit_payload.get("metrics") if isinstance(fit_payload.get("metrics"), dict) else {}
+        session.execute(
+            text(
+                """
+                UPDATE nfl_supervised_model_fits
+                SET is_active = false
+                WHERE model_version = :model_version
+                  AND is_active = true
+                """
+            ),
+            {"model_version": model_version},
+        )
+        session.execute(
+            text(
+                """
+                INSERT INTO nfl_supervised_model_fits (
+                  model_version, train_start_season, train_end_season,
+                  train_rows, test_rows, metrics, payload, is_active, created_at
+                ) VALUES (
+                  :model_version, :train_start_season, :train_end_season,
+                  :train_rows, :test_rows, CAST(:metrics AS jsonb), CAST(:payload AS jsonb), true, :created_at
+                )
+                """
+            ),
+            {
+                "model_version": model_version,
+                "train_start_season": int(start_season),
+                "train_end_season": int(end_season),
+                "train_rows": int(metrics.get("train_rows") or 0),
+                "test_rows": int(metrics.get("test_rows") or 0),
+                "metrics": json.dumps(metrics),
+                "payload": json.dumps(fit_payload),
+                "created_at": _now_utc(),
+            },
+        )
+        session.commit()
+        return {
+            "status": "ok",
+            "model_version": model_version,
+            "train_start_season": int(start_season),
+            "train_end_season": int(end_season),
+            "rows_seen": len(training_rows),
+            "feature_count": len(NFL_SUPERVISED_FEATURE_KEYS),
+            "metrics": metrics,
+        }
+    except Exception:
+        session.rollback()
+        log.exception("Failed running NFL supervised retrain")
+        raise
+    finally:
+        session.close()
+
+
 @celery_app.task(name="src.tasks.run_nfl_walkforward_backtest")
 def run_nfl_walkforward_backtest(
     *,
@@ -2811,6 +4359,15 @@ def run_nfl_walkforward_backtest(
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
+        _assert_tables_present(
+            session,
+            stage="run_nfl_walkforward_backtest",
+            required_tables=[
+                "nfl_market_projections",
+                "nfl_market_outcomes",
+                "nfl_model_backtest_runs",
+            ],
+        )
         raw_points = _fetch_nfl_backtest_points(
             session,
             model_version=model_version,
@@ -2839,8 +4396,12 @@ def run_nfl_walkforward_backtest(
             step_days=step_days,
             apply_calibration=apply_calibration,
         )
+        factor_attribution = summarize_nfl_factor_attribution_from_points(eligible_points)
         payload = {
             "model_version": model_version,
+            "framework_version": NFL_HANDICAPPING_FRAMEWORK_VERSION,
+            "framework_config": get_nfl_handicapping_config(),
+            "factor_attribution_diagnostics": factor_attribution,
             "lookback_days": int(lookback_days),
             "training_days": int(training_days),
             "step_days": int(step_days),
@@ -2876,6 +4437,678 @@ def run_nfl_walkforward_backtest(
     except Exception:
         session.rollback()
         log.exception("Failed running NFL walk-forward backtest")
+        raise
+    finally:
+        session.close()
+
+
+def _fetch_nfl_framework_tuning_points(
+    session: Any,
+    *,
+    model_version: str,
+    lookback_days: int,
+) -> List[Dict[str, Any]]:
+    rows = session.execute(
+        text(
+            """
+            WITH base_points AS (
+              SELECT
+                mo.game_id,
+                g.game_date,
+                lp.home_win_prob,
+                lp.total_mean,
+                lp.projection,
+                lp.projection_created_at,
+                mo.home_team_won,
+                mo.final_total_points,
+                GREATEST(
+                  COALESCE(mo.completed_at, '-infinity'::timestamptz),
+                  COALESCE(
+                    g.start_time + INTERVAL '6 hours',
+                    ((g.game_date::date + INTERVAL '1 day')::timestamptz)
+                  )
+                ) AS outcome_completed_at
+              FROM nfl_market_outcomes mo
+              JOIN games g ON g.id = mo.game_id
+              JOIN LATERAL (
+                SELECT
+                  mp.home_win_prob,
+                  mp.total_mean,
+                  mp.projection,
+                  mp.created_at AS projection_created_at
+                FROM nfl_market_projections mp
+                WHERE mp.game_id = mo.game_id
+                  AND mp.model_version = :model_version
+                  AND mp.created_at < GREATEST(
+                    COALESCE(mo.completed_at, '-infinity'::timestamptz),
+                    COALESCE(
+                      g.start_time + INTERVAL '6 hours',
+                      ((g.game_date::date + INTERVAL '1 day')::timestamptz)
+                    )
+                  )
+                ORDER BY mp.created_at DESC
+                LIMIT 1
+              ) lp ON TRUE
+              WHERE g.game_date >= CURRENT_DATE - make_interval(days => :lookback_days)
+            ),
+            moneyline_open AS (
+              SELECT
+                mhs.game_id,
+                AVG(mhs.home_price)::numeric AS open_home_price,
+                AVG(mhs.away_price)::numeric AS open_away_price
+              FROM nfl_market_history_snapshots mhs
+              WHERE mhs.market_code = 'moneyline'
+                AND mhs.captured_at = (
+                  SELECT MIN(inner_mhs.captured_at)
+                  FROM nfl_market_history_snapshots inner_mhs
+                  WHERE inner_mhs.game_id = mhs.game_id
+                    AND inner_mhs.market_code = 'moneyline'
+                )
+              GROUP BY mhs.game_id
+            ),
+            clv_rollup AS (
+              SELECT
+                c.game_id,
+                AVG(c.clv_value)::numeric AS clv_avg,
+                AVG(c.clv_value) FILTER (WHERE c.market_code = 'moneyline')::numeric AS clv_ml_avg,
+                AVG(c.clv_value) FILTER (WHERE c.market_code = 'total')::numeric AS clv_total_avg
+              FROM nfl_clv_attribution c
+              WHERE c.model_version = :model_version
+              GROUP BY c.game_id
+            )
+            SELECT
+              bp.*,
+              cr.clv_avg,
+              cr.clv_ml_avg,
+              cr.clv_total_avg,
+              mo.open_home_price,
+              mo.open_away_price
+            FROM base_points bp
+            LEFT JOIN clv_rollup cr ON cr.game_id = bp.game_id
+            LEFT JOIN moneyline_open mo ON mo.game_id = bp.game_id
+            ORDER BY bp.game_date, bp.game_id
+            """
+        ),
+        {"model_version": model_version, "lookback_days": int(lookback_days)},
+    ).fetchall()
+    return [dict(r._mapping) for r in rows]
+
+
+@celery_app.task(name="src.tasks.run_nfl_framework_tuning")
+def run_nfl_framework_tuning(
+    *,
+    model_version: str = DEFAULT_NFL_MODEL_VERSION,
+    lookback_days: int = 240,
+    training_days: int = 56,
+    step_days: int = 7,
+    max_candidates: int = 180,
+) -> Dict[str, Any]:
+    session = SessionLocal()
+    try:
+        clv_refresh = _refresh_nfl_clv_window(
+            lookback_days=max(int(lookback_days), 120),
+            model_version=model_version,
+        )
+        points = _fetch_nfl_framework_tuning_points(
+            session,
+            model_version=model_version,
+            lookback_days=int(lookback_days),
+        )
+        base_config = get_nfl_handicapping_config()
+        candidates = build_tuning_candidates(
+            base_guardrails=base_config.get("guardrails") if isinstance(base_config.get("guardrails"), dict) else {},
+            max_candidates=max(12, int(max_candidates)),
+        )
+        report = evaluate_tuning_grid(
+            points=points,
+            candidates=candidates,
+            training_days=int(training_days),
+            step_days=int(step_days),
+            thresholds=TuningThresholds(
+                min_fold_count=max(2, int(_env_float("NFL_TUNING_MIN_FOLD_COUNT", 2))),
+                min_sample_size=max(25, int(_env_float("NFL_TUNING_MIN_SAMPLE_SIZE", 30))),
+                min_recommendations=max(8, int(_env_float("NFL_TUNING_MIN_RECOMMENDATIONS", 12))),
+                min_coverage=_clamp(_env_float("NFL_TUNING_MIN_COVERAGE", 0.08), 0.0, 1.0),
+                max_coverage=_clamp(_env_float("NFL_TUNING_MAX_COVERAGE", 0.80), 0.0, 1.0),
+                target_coverage=_clamp(_env_float("NFL_TUNING_TARGET_COVERAGE", 0.32), 0.0, 1.0),
+            ),
+        )
+
+        run_payload = {
+            "model_version": model_version,
+            "lookback_days": int(lookback_days),
+            "training_days": int(training_days),
+            "step_days": int(step_days),
+            "max_candidates": int(max_candidates),
+            "framework_version": NFL_HANDICAPPING_FRAMEWORK_VERSION,
+            "candidate_count": len(candidates),
+            "clv_refresh": clv_refresh,
+            **report,
+        }
+        recommended = report.get("recommended_candidate") if isinstance(report.get("recommended_candidate"), dict) else None
+        selected_config = recommended.get("config_overrides") if isinstance(recommended, dict) else None
+        run_row = session.execute(
+            text(
+                """
+                INSERT INTO nfl_framework_tuning_runs (
+                  run_date, model_version, lookback_days, training_days, step_days,
+                  candidate_count, payload, selected_config, created_at
+                ) VALUES (
+                  :run_date, :model_version, :lookback_days, :training_days, :step_days,
+                  :candidate_count, CAST(:payload AS jsonb), CAST(:selected_config AS jsonb), :created_at
+                )
+                RETURNING id
+                """
+            ),
+            {
+                "run_date": date.today(),
+                "model_version": model_version,
+                "lookback_days": int(lookback_days),
+                "training_days": int(training_days),
+                "step_days": int(step_days),
+                "candidate_count": len(candidates),
+                "payload": json.dumps(run_payload),
+                "selected_config": json.dumps(selected_config or {}),
+                "created_at": _now_utc(),
+            },
+        ).fetchone()
+        run_id = str(run_row[0]) if run_row is not None else None
+        ranked = report.get("ranked_candidates") if isinstance(report.get("ranked_candidates"), list) else []
+        if run_id:
+            for item in ranked[:60]:
+                metrics = item.get("metrics") if isinstance(item.get("metrics"), dict) else {}
+                candidate = item.get("candidate") if isinstance(item.get("candidate"), dict) else {}
+                session.execute(
+                    text(
+                        """
+                        INSERT INTO nfl_framework_tuning_candidates (
+                          run_id, rank, score, metrics, candidate, config_overrides, is_recommended, created_at
+                        ) VALUES (
+                          :run_id, :rank, :score, CAST(:metrics AS jsonb), CAST(:candidate AS jsonb),
+                          CAST(:config_overrides AS jsonb), :is_recommended, :created_at
+                        )
+                        """
+                    ),
+                    {
+                        "run_id": run_id,
+                        "rank": int(item.get("rank") or 0),
+                        "score": float(item.get("score") or 0.0),
+                        "metrics": json.dumps(metrics),
+                        "candidate": json.dumps(candidate),
+                        "config_overrides": json.dumps(item.get("config_overrides") or {}),
+                        "is_recommended": bool(int(item.get("rank") or 0) == 1),
+                        "created_at": _now_utc(),
+                    },
+                )
+        session.commit()
+        return {"run_id": run_id, **run_payload}
+    except Exception:
+        session.rollback()
+        log.exception("Failed running NFL framework tuning")
+        raise
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.run_nfl_decomposition_drift_monitor")
+def run_nfl_decomposition_drift_monitor(
+    *,
+    model_version: str = DEFAULT_NFL_MODEL_VERSION,
+    lookback_days: int = 120,
+    baseline_weeks: int = 4,
+) -> Dict[str, Any]:
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  mp.projection,
+                  date_trunc('week', g.game_date)::date AS week_bucket
+                FROM nfl_market_projections mp
+                JOIN games g ON g.id = mp.game_id
+                WHERE mp.model_version = :model_version
+                  AND g.game_date >= CURRENT_DATE - make_interval(days => :lookback_days)
+                ORDER BY g.game_date ASC
+                """
+            ),
+            {"model_version": model_version, "lookback_days": int(lookback_days)},
+        ).fetchall()
+        summary = summarize_decomposition_drift(
+            rows=[dict(r._mapping) for r in rows],
+            baseline_weeks=max(2, int(baseline_weeks)),
+            warn_threshold=_clamp(_env_float("NFL_DRIFT_WARN_THRESHOLD", 0.18), 0.01, 1.2),
+            critical_threshold=_clamp(_env_float("NFL_DRIFT_CRITICAL_THRESHOLD", 0.30), 0.01, 2.0),
+        )
+        payload = {
+            "model_version": model_version,
+            "lookback_days": int(lookback_days),
+            "baseline_weeks": int(baseline_weeks),
+            "row_count": len(rows),
+            **summary,
+        }
+        session.execute(
+            text(
+                """
+                INSERT INTO nfl_decomposition_drift_snapshots (
+                  snapshot_date, model_version, lookback_days, baseline_weeks, status, payload, created_at
+                ) VALUES (
+                  :snapshot_date, :model_version, :lookback_days, :baseline_weeks, :status, CAST(:payload AS jsonb), :created_at
+                )
+                """
+            ),
+            {
+                "snapshot_date": date.today(),
+                "model_version": model_version,
+                "lookback_days": int(lookback_days),
+                "baseline_weeks": int(baseline_weeks),
+                "status": str(summary.get("status") or "insufficient_data"),
+                "payload": json.dumps(payload),
+                "created_at": _now_utc(),
+            },
+        )
+        session.commit()
+        return payload
+    except Exception:
+        session.rollback()
+        log.exception("Failed running NFL decomposition drift monitor")
+        raise
+    finally:
+        session.close()
+
+
+def _lock_nfl_runtime_config(
+    session: Any,
+    *,
+    model_version: str,
+    cycle_id: str,
+) -> Dict[str, Any]:
+    tuning_row = session.execute(
+        text(
+            """
+            SELECT id, selected_config, created_at
+            FROM nfl_framework_tuning_runs
+            WHERE model_version = :model_version
+            ORDER BY created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"model_version": model_version},
+    ).fetchone()
+    selected_config = tuning_row.selected_config if tuning_row is not None and isinstance(tuning_row.selected_config, dict) else {}
+    framework_cfg = get_nfl_handicapping_config(config_overrides=selected_config or None)
+    lock_key = f"{model_version}:{date.today().isoformat()}:{cycle_id[:8]}"
+    session.execute(
+        text(
+            """
+            UPDATE nfl_runtime_config_locks
+            SET is_active = false
+            WHERE model_version = :model_version
+              AND is_active = true
+            """
+        ),
+        {"model_version": model_version},
+    )
+    session.execute(
+        text(
+            """
+            INSERT INTO nfl_runtime_config_locks (
+              model_version, lock_key, framework_version, selected_tuning_run_id, config_payload, lock_reason, is_active, created_at
+            ) VALUES (
+              :model_version, :lock_key, :framework_version, CAST(:selected_tuning_run_id AS uuid), CAST(:config_payload AS jsonb), :lock_reason, true, :created_at
+            )
+            ON CONFLICT (model_version, lock_key) DO UPDATE SET
+              framework_version = EXCLUDED.framework_version,
+              selected_tuning_run_id = EXCLUDED.selected_tuning_run_id,
+              config_payload = EXCLUDED.config_payload,
+              lock_reason = EXCLUDED.lock_reason,
+              is_active = true
+            """
+        ),
+        {
+            "model_version": model_version,
+            "lock_key": lock_key,
+            "framework_version": str(framework_cfg.get("framework_version") or "unknown"),
+            "selected_tuning_run_id": (str(tuning_row.id) if tuning_row is not None else None),
+            "config_payload": json.dumps(
+                {
+                    "framework_config": framework_cfg,
+                    "selected_config": selected_config,
+                }
+            ),
+            "lock_reason": f"launch-hardening-cycle:{cycle_id}",
+            "created_at": _now_utc(),
+        },
+    )
+    return {
+        "lock_key": lock_key,
+        "framework_version": framework_cfg.get("framework_version"),
+        "selected_tuning_run_id": (str(tuning_row.id) if tuning_row is not None else None),
+    }
+
+
+def _compute_nfl_launch_readiness(
+    session: Any,
+    *,
+    model_version: str,
+    max_odds_age_minutes: int,
+    max_context_age_hours: int,
+    max_moneyline_brier: float,
+    max_total_mae: float,
+    min_clv_avg: float,
+    min_quality_sample: int,
+) -> Dict[str, Any]:
+    quality_row = session.execute(
+        text(
+            """
+            SELECT payload, created_at
+            FROM nfl_model_quality_snapshots
+            WHERE model_version = :model_version
+              AND pipeline_stage = 'weekly_quality'
+            ORDER BY created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"model_version": model_version},
+    ).fetchone()
+    drift_row = session.execute(
+        text(
+            """
+            SELECT status, created_at
+            FROM nfl_decomposition_drift_snapshots
+            WHERE model_version = :model_version
+            ORDER BY created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"model_version": model_version},
+    ).fetchone()
+    tuning_row = session.execute(
+        text(
+            """
+            SELECT payload, created_at
+            FROM nfl_framework_tuning_runs
+            WHERE model_version = :model_version
+            ORDER BY created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"model_version": model_version},
+    ).fetchone()
+    tuning_payload = (
+        tuning_row.payload
+        if tuning_row is not None and isinstance(tuning_row.payload, dict)
+        else {}
+    )
+    odds_age_row = session.execute(
+        text(
+            """
+            SELECT EXTRACT(EPOCH FROM (NOW() - MAX(captured_at))) / 60.0 AS age_minutes
+            FROM odds_snapshots os
+            JOIN games g ON g.id = os.game_id
+            JOIN seasons s ON s.id = g.season_id
+            JOIN leagues l ON l.id = s.league_id
+            WHERE l.code = 'nfl'
+            """
+        )
+    ).fetchone()
+    context_age_row = session.execute(
+        text(
+            """
+            SELECT EXTRACT(EPOCH FROM (NOW() - MAX(updated_at))) / 3600.0 AS age_hours
+            FROM nfl_game_context
+            """
+        )
+    ).fetchone()
+    quality_payload = (
+        quality_row.payload
+        if quality_row is not None and isinstance(quality_row.payload, dict)
+        else {}
+    )
+    sample_size = int(_safe_float(quality_payload.get("sample_size")) or 0)
+    checks = {
+        "quality_snapshot_present": quality_row is not None,
+        "quality_sample_size_ok": sample_size >= int(min_quality_sample),
+        "moneyline_brier_ok": (_safe_float(quality_payload.get("moneyline_brier")) or 9.9)
+        <= float(max_moneyline_brier),
+        "total_mae_ok": (_safe_float(quality_payload.get("total_mae")) or 99.0)
+        <= float(max_total_mae),
+        "clv_ok": (_safe_float(quality_payload.get("clv_avg")) or -9.9) >= float(min_clv_avg),
+        "drift_ok": drift_row is not None and str(drift_row.status) in {"stable", "warning"},
+        "tuning_ok": tuning_row is not None and str(tuning_payload.get("status") or "") == "ok",
+        "odds_freshness_ok": (_safe_float(getattr(odds_age_row, "age_minutes", None)) or 9e9)
+        <= float(max_odds_age_minutes),
+        "context_freshness_ok": (_safe_float(getattr(context_age_row, "age_hours", None)) or 9e9)
+        <= float(max_context_age_hours),
+    }
+    blockers = [name for name, passed in checks.items() if not bool(passed)]
+    status = "go" if not blockers else "no-go"
+    payload = {
+        "model_version": model_version,
+        "status": status,
+        "checks": checks,
+        "blockers": blockers,
+        "metrics": {
+            "sample_size": sample_size,
+            "moneyline_brier": _safe_float(quality_payload.get("moneyline_brier")),
+            "total_mae": _safe_float(quality_payload.get("total_mae")),
+            "clv_avg": _safe_float(quality_payload.get("clv_avg")),
+            "odds_age_minutes": _safe_float(getattr(odds_age_row, "age_minutes", None)),
+            "context_age_hours": _safe_float(getattr(context_age_row, "age_hours", None)),
+            "quality_snapshot_created_at": (
+                quality_row.created_at.isoformat() if quality_row is not None else None
+            ),
+            "drift_snapshot_created_at": (
+                drift_row.created_at.isoformat() if drift_row is not None else None
+            ),
+            "tuning_created_at": (
+                tuning_row.created_at.isoformat() if tuning_row is not None else None
+            ),
+        },
+    }
+    return payload
+
+
+@celery_app.task(name="src.tasks.run_nfl_launch_hardening_cycle")
+def run_nfl_launch_hardening_cycle(
+    *,
+    model_version: str = DEFAULT_NFL_MODEL_VERSION,
+    days_ahead: int = 14,
+    outcomes_lookback_days: int = 60,
+    simulations: int = 5000,
+    backtest_lookback_days: int = 240,
+    tuning_lookback_days: int = 240,
+    training_days: int = 56,
+    step_days: int = 7,
+    max_candidates: int = 180,
+) -> Dict[str, Any]:
+    cycle_id = str(uuid.uuid4())
+    session = SessionLocal()
+    try:
+        _assert_tables_present(
+            session,
+            stage="run_nfl_launch_hardening_cycle",
+            required_tables=[
+                "odds_snapshots",
+                "nfl_game_context",
+                "nfl_market_projections",
+                "nfl_market_history_snapshots",
+                "nfl_market_outcomes",
+                "nfl_clv_attribution",
+                "nfl_model_quality_snapshots",
+                "nfl_model_backtest_runs",
+                "nfl_framework_tuning_runs",
+                "nfl_decomposition_drift_snapshots",
+                "nfl_runtime_config_locks",
+                "nfl_pipeline_stage_runs",
+                "nfl_launch_readiness_reports",
+            ],
+        )
+    finally:
+        session.close()
+
+    stage_results: List[Dict[str, Any]] = []
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="pull_odds_snapshot",
+            fn=pull_odds_snapshot,
+            kwargs={},
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="pull_nfl_context_snapshot",
+            fn=pull_nfl_context_snapshot,
+            kwargs={"days_ahead": int(days_ahead)},
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_supervised_retrain",
+            fn=run_nfl_supervised_retrain,
+            kwargs={
+                "model_version": model_version,
+                "start_season": 2013,
+                "end_season": max(2013, date.today().year - 1),
+            },
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_market_simulations",
+            fn=run_nfl_market_simulations,
+            kwargs={
+                "simulations": int(simulations),
+                "model_version": model_version,
+            },
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="materialize_nfl_market_history",
+            fn=materialize_nfl_market_history,
+            kwargs={"lookback_days": int(outcomes_lookback_days)},
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="pull_nfl_outcomes",
+            fn=pull_nfl_outcomes,
+            kwargs={"days_back": int(outcomes_lookback_days)},
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_clv_attribution",
+            fn=run_nfl_clv_attribution,
+            kwargs={
+                "lookback_days": int(outcomes_lookback_days),
+                "model_version": model_version,
+            },
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_quality_grading",
+            fn=run_nfl_quality_grading,
+            kwargs={
+                "lookback_days": int(outcomes_lookback_days),
+                "model_version": model_version,
+            },
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_walkforward_backtest",
+            fn=run_nfl_walkforward_backtest,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": int(backtest_lookback_days),
+                "training_days": int(training_days),
+                "step_days": int(step_days),
+                "apply_calibration": True,
+            },
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_framework_tuning",
+            fn=run_nfl_framework_tuning,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": int(tuning_lookback_days),
+                "training_days": int(training_days),
+                "step_days": int(step_days),
+                "max_candidates": int(max_candidates),
+            },
+        )
+    )
+    stage_results.append(
+        _run_nfl_launch_stage(
+            cycle_id=cycle_id,
+            stage="run_nfl_decomposition_drift_monitor",
+            fn=run_nfl_decomposition_drift_monitor,
+            kwargs={"model_version": model_version, "lookback_days": 120, "baseline_weeks": 4},
+        )
+    )
+
+    session = SessionLocal()
+    try:
+        config_lock = _lock_nfl_runtime_config(
+            session,
+            model_version=model_version,
+            cycle_id=cycle_id,
+        )
+        readiness = _compute_nfl_launch_readiness(
+            session,
+            model_version=model_version,
+            max_odds_age_minutes=max(15, int(_env_float("NFL_LAUNCH_MAX_ODDS_AGE_MINUTES", 180))),
+            max_context_age_hours=max(2, int(_env_float("NFL_LAUNCH_MAX_CONTEXT_AGE_HOURS", 30))),
+            max_moneyline_brier=_clamp(_env_float("NFL_LAUNCH_MAX_MONEYLINE_BRIER", 0.255), 0.05, 0.4),
+            max_total_mae=_clamp(_env_float("NFL_LAUNCH_MAX_TOTAL_MAE", 6.0), 0.5, 20.0),
+            min_clv_avg=_env_float("NFL_LAUNCH_MIN_CLV_AVG", 0.0),
+            min_quality_sample=max(40, int(_env_float("NFL_LAUNCH_MIN_QUALITY_SAMPLE", 100))),
+        )
+        session.execute(
+            text(
+                """
+                INSERT INTO nfl_launch_readiness_reports (
+                  cycle_id, model_version, status, checks, blockers, payload, created_at
+                ) VALUES (
+                  CAST(:cycle_id AS uuid), :model_version, :status, CAST(:checks AS jsonb), CAST(:blockers AS jsonb), CAST(:payload AS jsonb), :created_at
+                )
+                """
+            ),
+            {
+                "cycle_id": cycle_id,
+                "model_version": model_version,
+                "status": readiness["status"],
+                "checks": json.dumps(readiness.get("checks") or {}),
+                "blockers": json.dumps(readiness.get("blockers") or []),
+                "payload": json.dumps(readiness),
+                "created_at": _now_utc(),
+            },
+        )
+        session.commit()
+        return {
+            "cycle_id": cycle_id,
+            "model_version": model_version,
+            "stage_results": stage_results,
+            "config_lock": config_lock,
+            "readiness": readiness,
+        }
+    except Exception:
+        session.rollback()
         raise
     finally:
         session.close()
@@ -3040,6 +5273,33 @@ def _fetch_nfl_clv_rollup(
     }
 
 
+def _fetch_nfl_latest_drift_snapshot(
+    session: Any,
+    *,
+    model_version: str,
+) -> Dict[str, Any]:
+    row = session.execute(
+        text(
+            """
+            SELECT status, payload, created_at
+            FROM nfl_decomposition_drift_snapshots
+            WHERE model_version = :model_version
+            ORDER BY created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"model_version": model_version},
+    ).fetchone()
+    if row is None:
+        return {}
+    payload = row.payload if isinstance(row.payload, dict) else {}
+    return {
+        "status": row.status,
+        "created_at": row.created_at.isoformat() if row.created_at is not None else None,
+        "top_shifts": payload.get("top_shifts") if isinstance(payload.get("top_shifts"), list) else [],
+    }
+
+
 def _resolve_active_nfl_model(session: Any, fallback: str) -> str:
     row = session.execute(
         text(
@@ -3166,6 +5426,15 @@ def evaluate_nfl_model_promotion(
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
+        _assert_tables_present(
+            session,
+            stage="evaluate_nfl_model_promotion",
+            required_tables=[
+                "nfl_model_runtime_state",
+                "nfl_model_promotion_events",
+                "nfl_model_quality_snapshots",
+            ],
+        )
         champion_version = champion_model_version or _resolve_active_nfl_model(
             session,
             fallback=DEFAULT_NFL_MODEL_VERSION,
@@ -3192,6 +5461,8 @@ def evaluate_nfl_model_promotion(
             champion_clv=champion_clv,
             challenger_clv=challenger_clv,
         )
+        champion_drift = _fetch_nfl_latest_drift_snapshot(session, model_version=champion_version)
+        challenger_drift = _fetch_nfl_latest_drift_snapshot(session, model_version=challenger_model_version)
         auto_enabled = auto_promote and _env_bool("NFL_AUTO_PROMOTE_ENABLED", False)
         promoted = False
         state_change: Dict[str, Any] = {}
@@ -3222,6 +5493,8 @@ def evaluate_nfl_model_promotion(
             "challenger_backtest": challenger_backtest,
             "champion_clv": champion_clv,
             "challenger_clv": challenger_clv,
+            "champion_drift": champion_drift,
+            "challenger_drift": challenger_drift,
         }
         _persist_nfl_promotion_event(
             session,

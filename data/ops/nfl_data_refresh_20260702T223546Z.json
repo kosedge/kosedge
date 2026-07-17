@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-07-02T22:31:59.786105+00:00",
+  "steps": [
+    {
+      "name": "pull_nfl_outcomes",
+      "status": "ok",
+      "duration_sec": 3.711,
+      "result": {
+        "days_back": 120,
+        "games_seen": 0,
+        "outcomes_upserted": 0,
+        "source_hits": {
+          "nfl_dp_schedules": 0,
+          "espn_scoreboard": 0
+        }
+      }
+    },
+    {
+      "name": "run_nfl_clv_attribution",
+      "status": "ok",
+      "duration_sec": 0.051,
+      "result": {
+        "projections_seen": 0,
+        "clv_rows_upserted": 0
+      }
+    },
+    {
+      "name": "materialize_standings_weekly",
+      "status": "ok",
+      "duration_sec": 5.387,
+      "result": {
+        "seasons": [
+          2025,
+          2026
+        ],
+        "week": null,
+        "replace_existing": false,
+        "rows": {
+          "standings_rows": 570
+        }
+      }
+    },
+    {
+      "name": "materialize_depth_chart_weekly",
+      "status": "ok",
+      "duration_sec": 217.297,
+      "result": {
+        "seasons": [
+          2025,
+          2026
+        ],
+        "week": null,
+        "replace_existing": false,
+        "rows": {
+          "depth_chart_rows": 68926
+        }
+      }
+    }
+  ]
+}

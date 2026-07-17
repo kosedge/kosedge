@@ -199,6 +199,56 @@ Backtest totals calibration:
 - each fold trains a bounded linear totals calibrator (`slope`, `intercept`) on the training window only
 - fold outputs include `base_mae_total_runs`, `calibrated_mae_total_runs`, and per-fold totals calibration coefficients
 
+#### POST `/api/jobs/run-nfl-framework-tuning`
+
+Enqueue bounded deterministic framework tuning over weight scales + guardrail grids.
+
+Query params:
+
+- `model_version` (default `nfl-v1.5-matchup-sim`)
+- `lookback_days` (default `240`)
+- `training_days` (default `56`)
+- `step_days` (default `7`)
+- `max_candidates` (default `180`)
+
+Hard validation rules:
+
+- forward-only fold construction only
+- strict leakage reject (`projection_created_at < outcome_completed_at`)
+- insufficient sample/coverage candidates are penalized or rejected
+
+#### POST `/api/jobs/run-nfl-decomposition-drift`
+
+Enqueue weekly factor-contribution drift snapshot generation.
+
+Query params:
+
+- `model_version` (default `nfl-v1.5-matchup-sim`)
+- `lookback_days` (default `120`)
+- `baseline_weeks` (default `4`)
+
+#### POST `/api/jobs/run-nfl-launch-hardening`
+
+Enqueue full launch-hardening cycle (odds/context/simulation/quality/backtest/tuning/drift) with auditable stage records.
+
+Query params:
+
+- `model_version` (default `nfl-v1.5-matchup-sim`)
+- `days_ahead` (default `14`)
+- `outcomes_lookback_days` (default `60`)
+- `simulations` (default `5000`)
+- `backtest_lookback_days` (default `240`)
+- `tuning_lookback_days` (default `240`)
+- `training_days` (default `56`)
+- `step_days` (default `7`)
+- `max_candidates` (default `180`)
+
+Artifacts written:
+
+- `nfl_pipeline_stage_runs` (stage metadata + diagnostics)
+- `nfl_runtime_config_locks` (active deterministic runtime config lock)
+- `nfl_launch_readiness_reports` (explicit blockers and go/no-go result)
+
 #### POST `/api/jobs/backfill-nfl-historical-projections`
 
 Enqueue historical NFL projection backfill with explicit pre-outcome projection timestamps.
@@ -227,14 +277,36 @@ Totals payload notes:
 - diagnostics now include:
   - `diagnostics.totals_adjustments` (bounded tempo/EPA/success/injury contributors + stdev adjustment)
   - `diagnostics.totals_calibration` (base total, calibrated total, slope/intercept, sample size, source)
+  - `diagnostics.framework` and top-level `decomposition` (enterprise handicapping factor-point breakdown, uncertainty penalties, factor coverage, framework guardrails)
 
 #### GET `/nfl/ops/backtest-runs`
 
 Return latest persisted NFL walk-forward run summaries.
 
+Backtest payload now carries framework attribution diagnostics:
+
+- `framework_version`
+- `factor_attribution_diagnostics` (factor coverage rates and average absolute point contribution by factor)
+
 #### GET `/nfl/ops/backtest-report`
 
 Return latest NFL walk-forward report with fold-level metrics.
+
+#### POST `/nfl/ops/framework-tuning`
+
+Trigger async framework tuning run.
+
+#### GET `/nfl/ops/framework-tuning/latest`
+
+Return latest tuning run payload, selected config, and top candidate leaderboard.
+
+#### POST `/nfl/ops/decomposition-drift`
+
+Trigger async decomposition drift monitoring snapshot.
+
+#### GET `/nfl/ops/decomposition-drift/latest`
+
+Return latest drift status and top-shifting decomposition factors.
 
 #### GET `/nfl/ops/active-model`
 
@@ -257,6 +329,12 @@ Query params:
 #### GET `/nfl/edges/today`
 
 Return NFL model signals filtered by quality/confidence gating with diagnostics.
+
+Enterprise guardrail payload includes:
+
+- per-edge `decomposition` and `guardrails`
+- diagnostics-level `filtered_reason_codes` with explicit rejection reasons (`quality_score_below_threshold`, `confidence_score_below_threshold`, `edge_prob_below_threshold`, `uncertainty_penalty_exceeded`, `factor_coverage_below_minimum`, `injury_freshness_stale`)
+- top-level `framework` metadata (`version`, configured guardrails, and effective tuned guardrails when available)
 
 #### GET `/nfl/edges/optimize`
 
@@ -301,6 +379,51 @@ Key query params:
 - `scoring_profile` (`standard|half_ppr|ppr`)
 - `model_version` (default `nfl-player-v1`)
 - optional filters: `position`, `tier_max`, `limit`
+
+#### GET `/nfl/intel/rosters`
+
+Return NFL team rosters enriched with inferred depth role and matching injury status.
+Response includes source markers (`roster_source`, `injury_source`) and `source_diagnostics`
+(`active_source` plus source row-count mix).
+
+Query params (all optional with safe defaults):
+
+- `season`
+- `week`
+- `team`
+- `limit`
+
+#### GET `/nfl/intel/stats`
+
+Return weekly team situational metrics joined to derived standings context.
+Response includes `stats_source`, `standings_source`, and `source_diagnostics`.
+
+Query params (all optional with safe defaults): `season`, `week`, `team`, `limit`.
+
+#### GET `/nfl/intel/standings`
+
+Return derived weekly standings (`W/L/T`, PF/PA, diff, pct, nullable conference/division fields).
+Rows include `source` to indicate `nfl_com` vs derived fallback lineage.
+
+Query params (all optional with safe defaults): `season`, `week`, `team`, `limit`.
+
+#### GET `/nfl/intel/depth-charts`
+
+Return inferred weekly depth-chart rows with deterministic ordering and confidence score.
+
+Query params (all optional with safe defaults): `season`, `week`, `team`, `limit`.
+
+#### GET `/nfl/intel/injuries`
+
+Return weekly injury report rows from `nfl_dp_injuries`.
+
+Query params (all optional with safe defaults): `season`, `week`, `team`, `limit`.
+
+#### GET `/nfl/intel/health`
+
+Return schema/readiness plus latest availability for Team Intel endpoints.
+Payload includes `active_sources` (for `rosters`, `stats`, `standings`, `injuries`) to confirm
+which source is currently dominant (`nfl_com` preferred, fallback when unavailable).
 
 #### GET `/nfl/ops/projections-readiness`
 

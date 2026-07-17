@@ -135,8 +135,16 @@ def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
             "top_drivers": [],
         }
 
-    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 1.35))
-    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 1.35))
+    # Calibrated against real team-week distributions (2013-2025, ~9,600
+    # team-weeks) *after* fixing position weighting (see
+    # compute_team_week_injury_severity / the nfl_dp_rosters position join
+    # in fetch_nfl_injury_nowcast) -- before that fix, every player fell
+    # back to a generic weight and these ceilings were tuned for numbers
+    # roughly 2x smaller than what position-aware weighting actually
+    # produces, so most team-weeks were saturating near 1.0 and the score
+    # barely discriminated. p95 offense_raw ~= 2.2, p95 defense_raw ~= 1.85.
+    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 2.5))
+    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 2.2))
     impact_scale = _clamp(_safe_float(os.getenv("NFL_INJURY_IMPACT_SCALE"), 0.09), 0.01, 0.25)
     confidence_scale = _clamp(_safe_float(os.getenv("NFL_INJURY_CONFIDENCE_SCALE"), 0.9), 0.1, 1.5)
     min_rows_for_conf = max(1.0, _safe_float(os.getenv("NFL_INJURY_ROWS_FOR_FULL_CONFIDENCE"), 14.0))
@@ -193,6 +201,46 @@ def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def compute_team_week_injury_severity(rows: List[Dict[str, Any]]) -> Dict[str, float]:
+    """Position+status-weighted injury severity for a single team-week, with
+    no freshness decay. Used for historical training features, where
+    `updated_at` reflects our ingestion time rather than the original report
+    time, so the live nowcast's recency decay (see `_aggregate_team_nowcast`)
+    would be meaningless here. Shares the same status/position/severity
+    weighting as the live path so training and inference stay consistent."""
+    if not rows:
+        return {"offense_impact": 0.0, "defense_impact": 0.0, "injury_count": 0.0}
+
+    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 2.5))
+    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 2.2))
+    offense_raw = 0.0
+    defense_raw = 0.0
+    for row in rows:
+        status_weight = _status_weight(row.get("report_status"))
+        practice_weight = _practice_weight(row.get("practice_status"))
+        position_weights = _position_weights(row.get("position"))
+        injury_weight = _injury_severity_weight(row.get("injury"))
+        player_impact = _clamp(
+            (0.62 * status_weight) + (0.23 * practice_weight) + (0.15 * injury_weight),
+            0.0,
+            1.0,
+        )
+        offense_raw += player_impact * position_weights["offense"]
+        defense_raw += player_impact * position_weights["defense"]
+
+    offense_impact = _clamp(offense_raw / max_raw_offense, 0.0, 1.0)
+    defense_impact = _clamp(defense_raw / max_raw_defense, 0.0, 1.0)
+    return {
+        "offense_impact": round(offense_impact, 4),
+        "defense_impact": round(defense_impact, 4),
+        # Matches the live nowcast's "impact_score" shape (see
+        # _aggregate_team_nowcast) so training features and live-inference
+        # features are computed the same way and don't skew apart.
+        "impact_score": round(_clamp((offense_impact + defense_impact) * 0.5, 0.0, 1.0), 4),
+        "injury_count": float(len(rows)),
+    }
+
+
 def fetch_nfl_injury_nowcast(
     session: Any,
     *,
@@ -205,25 +253,35 @@ def fetch_nfl_injury_nowcast(
         text(
             """
             WITH latest AS (
-              SELECT DISTINCT ON (team, player_key)
-                season,
-                week,
-                team,
-                player_key,
-                player_name,
-                report_status,
-                practice_status,
-                injury,
-                updated_at
-              FROM nfl_dp_injuries
-              WHERE season = :season
-                AND (team = :home_team OR team = :away_team)
-              ORDER BY team, player_key, week DESC, updated_at DESC
+              SELECT DISTINCT ON (i.team, i.player_key)
+                i.season,
+                i.week,
+                i.team,
+                i.player_key,
+                i.player_id,
+                i.player_name,
+                i.report_status,
+                i.practice_status,
+                i.injury,
+                i.updated_at
+              FROM nfl_dp_injuries i
+              WHERE i.season = :season
+                AND (i.team = :home_team OR i.team = :away_team)
+              ORDER BY i.team, i.player_key, i.week DESC, i.updated_at DESC
             )
             SELECT
-              season, week, team, player_key, player_name,
-              report_status, practice_status, injury, updated_at
+              latest.season, latest.week, latest.team, latest.player_key, latest.player_name,
+              latest.report_status, latest.practice_status, latest.injury, latest.updated_at,
+              -- nfl_dp_injuries has no position column; backfill from the same
+              -- season/team roster by player_id so QB/skill-position weighting
+              -- (see _position_weights) actually differentiates by position
+              -- instead of silently falling back to the generic default.
+              r.position
             FROM latest
+            LEFT JOIN nfl_dp_rosters r
+              ON r.season = latest.season
+             AND r.team = latest.team
+             AND r.player_id = latest.player_id
             """
         ),
         {

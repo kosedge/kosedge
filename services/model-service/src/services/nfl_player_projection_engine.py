@@ -73,7 +73,12 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     rec_tds_mean = 0.0
 
     if position == "QB":
-        attempts_mean = 20.0 + (25.0 * volume_signal * pass_factor * pace_factor)
+        qb_volume_signal = _clamp(
+            (0.70 * inputs.snap_proxy) + (0.30 * _clamp(inputs.qb_dropback_factor / 1.15, 0.35, 1.35)),
+            0.25,
+            1.0,
+        )
+        attempts_mean = 22.0 + (34.0 * qb_volume_signal * pass_factor * pace_factor)
         completion_rate = _clamp(0.60 + (0.05 * inputs.target_proxy) - (0.03 * inputs.qb_pressure_factor), 0.50, 0.74)
         yards_per_attempt = _clamp(6.2 + (1.1 * inputs.target_proxy) - (0.6 * inputs.qb_pressure_factor), 5.0, 9.2)
         pass_yards_mean = attempts_mean * yards_per_attempt
@@ -84,9 +89,9 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         receptions_mean = 0.0
         receiving_yards_mean = 0.0
     elif position in {"RB", "FB"}:
-        carries_mean = _clamp(2.0 + (20.0 * inputs.rush_share * pace_factor), 0.0, 29.0)
+        carries_mean = _clamp(4.0 + (24.0 * inputs.rush_share * pace_factor), 0.0, 32.0)
         targets_mean = _clamp(0.8 + (7.0 * inputs.target_proxy * pass_factor), 0.0, 13.0)
-        rush_yards_mean = carries_mean * _clamp(3.7 + (0.9 * volume_signal), 2.6, 6.3)
+        rush_yards_mean = carries_mean * _clamp(4.1 + (1.1 * volume_signal), 2.8, 6.8)
         receptions_mean = targets_mean * _clamp(0.62 + (0.16 * inputs.route_proxy), 0.40, 0.92)
         receiving_yards_mean = receptions_mean * _clamp(6.0 + (2.8 * inputs.target_proxy), 4.2, 13.5)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.16, 0.0, 1.7)
@@ -101,7 +106,8 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
 
     # Availability and role confidence reduce all outcomes in a deterministic, bounded manner.
-    confidence_scale = _clamp((0.65 * availability_factor) + (0.35 * role_factor), 0.30, 1.0)
+    confidence_floor = 0.72 if position == "QB" else (0.60 if position in {"RB", "FB"} else 0.50)
+    confidence_scale = _clamp((0.65 * availability_factor) + (0.35 * role_factor), confidence_floor, 1.0)
     pass_yards_mean *= confidence_scale
     rush_yards_mean *= confidence_scale
     receiving_yards_mean *= confidence_scale
@@ -150,7 +156,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         "carries_std": round(carries_std, 3),
         "targets_mean": round(targets_mean, 3),
         "targets_std": round(targets_std, 3),
-        "completions_mean": round(receptions_mean if position == "QB" else 0.0, 3),
+        "completions_mean": round((attempts_mean * completion_rate) if position == "QB" else 0.0, 3),
         "pass_yards_mean": round(pass_yards_mean, 3),
         "pass_yards_std": round(pass_yards_std, 3),
         "rush_yards_mean": round(rush_yards_mean, 3),

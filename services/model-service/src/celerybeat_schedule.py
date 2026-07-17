@@ -27,6 +27,9 @@ TASK_RUN_NFL_CLV_ATTRIBUTION = os.getenv(
 TASK_PULL_NFL_OUTCOMES = os.getenv("TASK_PULL_NFL_OUTCOMES", "src.tasks.pull_nfl_outcomes")
 TASK_RUN_NFL_QUALITY_GRADING = os.getenv("TASK_RUN_NFL_QUALITY_GRADING", "src.tasks.run_nfl_quality_grading")
 TASK_EVAL_NFL_PROMOTION = os.getenv("TASK_EVAL_NFL_PROMOTION", "src.tasks.evaluate_nfl_model_promotion")
+TASK_RUN_NFL_SUPERVISED_RETRAIN = os.getenv(
+    "TASK_RUN_NFL_SUPERVISED_RETRAIN", "src.tasks.run_nfl_supervised_retrain"
+)
 TASK_NFL_PLAYER_BASELINES = os.getenv(
     "TASK_NFL_PLAYER_BASELINES",
     "src.tasks.materialize_nfl_player_baseline_projections",
@@ -166,6 +169,21 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
             "challenger_model_version": os.getenv("NFL_CHALLENGER_MODEL_VERSION", "nfl-v1.6-enterprise"),
             "lookback_days": int(os.getenv("NFL_PROMOTION_LOOKBACK_DAYS", "45")),
             "auto_promote": os.getenv("NFL_AUTO_PROMOTE_ENABLED", "false").strip().lower() in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-supervised-retrain-weekly": {
+        "task": TASK_RUN_NFL_SUPERVISED_RETRAIN,
+        # Weekly (not daily): new *completed* games only arrive once a week,
+        # so daily retraining would just refit on the same data. Tuesday
+        # morning, after Monday Night Football has graded out and outcomes
+        # have been pulled (pull-nfl-outcomes-nightly, 3:18am) and quality
+        # grading (evaluate-nfl-promotion-morning, 6:52am) has run.
+        "schedule": crontab(minute="5", hour="7", day_of_week=os.getenv("NFL_SUPERVISED_RETRAIN_DAY_OF_WEEK", "tue")),
+        "kwargs": {
+            "model_version": os.getenv("NFL_BASE_MODEL_VERSION", "nfl-v1.5-matchup-sim"),
+            "start_season": int(os.getenv("NFL_SUPERVISED_RETRAIN_START_SEASON", "2013")),
+            "end_season": int(os.getenv("NFL_SUPERVISED_RETRAIN_END_SEASON", "2026")),
         },
         "options": {"queue": MODELS_QUEUE},
     },

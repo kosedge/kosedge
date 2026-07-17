@@ -1,0 +1,588 @@
+{
+  "backtest_latest": {
+    "created_at": "2026-07-02T18:29:21.661439-04:00",
+    "payload": {
+      "apply_calibration": true,
+      "base_brier_ml": null,
+      "base_mae_total_runs": null,
+      "brier_improvement": null,
+      "calibrated_brier_ml": null,
+      "calibrated_mae_total_runs": null,
+      "factor_attribution_diagnostics": {
+        "factor_count": 0,
+        "factors": {},
+        "framework_versions": [],
+        "rows_with_framework": 0
+      },
+      "fold_count": 0,
+      "folds": [],
+      "framework_config": {
+        "factors": {
+          "base_efficiency": {
+            "margin_weight": 16.0,
+            "max_margin_points": 6.5,
+            "max_total_points": 5.0,
+            "total_weight": 10.5
+          },
+          "home_field_advantage": {
+            "margin_points": 1.35
+          },
+          "injuries_depth": {
+            "margin_weight": 2.75,
+            "max_margin_points": 2.6,
+            "max_total_points": 2.8,
+            "total_weight": 3.25
+          },
+          "regression_luck": {
+            "margin_weight": 1.8,
+            "max_margin_points": 1.8,
+            "max_total_points": 1.2,
+            "total_weight": 1.2
+          },
+          "rest_travel": {
+            "margin_per_day": 0.18,
+            "max_margin_points": 2.0,
+            "max_total_points": 1.2,
+            "total_per_day_abs": 0.12
+          },
+          "situational_flags": {
+            "max_margin_points": 0.8,
+            "short_rest_margin_points": 0.3,
+            "short_rest_threshold_days": 6.0
+          },
+          "travel_schedule": {
+            "enabled": true,
+            "max_margin_points": 1.75,
+            "max_total_points": 1.6,
+            "miles_weight_margin": 0.0016,
+            "miles_weight_total": -0.0014,
+            "timezone_weight_margin": 0.28,
+            "timezone_weight_total": -0.18
+          },
+          "weather_environment": {
+            "enabled": true,
+            "extreme_temp_weight_total": -0.06,
+            "max_margin_points": 0.55,
+            "max_total_points": 2.8,
+            "precip_mm_weight_total": -0.12,
+            "wind_margin_weight": -0.01,
+            "wind_mph_weight_total": -0.07
+          }
+        },
+        "framework_version": "nfl-handicap-core-v1",
+        "guardrails": {
+          "max_injury_freshness_hours": 72.0,
+          "max_uncertainty_penalty": 0.33,
+          "min_confidence_score": 0.53,
+          "min_factor_coverage": 0.55,
+          "min_ml_edge_prob": 0.01,
+          "min_quality_score": 58.0
+        },
+        "priors": {
+          "base_margin_points": 1.5,
+          "base_score_stdev": 9.2,
+          "base_total_points": 43.5,
+          "home_field_points": 1.35
+        },
+        "uncertainty": {
+          "base_confidence": 0.72,
+          "injury_staleness_penalty": 0.08,
+          "injury_staleness_threshold_hours": 42.0,
+          "missing_factor_penalty": 0.035,
+          "regression_penalty_weight": 0.07,
+          "variance_penalty_weight": 0.09
+        }
+      },
+      "framework_version": "nfl-handicap-core-v1",
+      "leakage_violations": 0,
+      "lookback_days": 240,
+      "mae_improvement": null,
+      "model_version": "nfl-v1.5-matchup-sim",
+      "sample_size": 0,
+      "step_days": 7,
+      "training_days": 56
+    }
+  },
+  "drift_latest": {
+    "created_at": "2026-07-02T18:29:20.693696-04:00",
+    "payload": {
+      "baseline_weeks": 4,
+      "latest_week": null,
+      "lookback_days": 120,
+      "model_version": "nfl-v1.5-matchup-sim",
+      "row_count": 0,
+      "status": "insufficient_data",
+      "top_shifts": [],
+      "weekly_factor_distributions": {}
+    },
+    "status": "insufficient_data"
+  },
+  "endpoint_health": {
+    "edges_today": {
+      "edge_count": 0,
+      "payload": {
+        "count": 0,
+        "diagnostics": {
+          "base_quality_score": 23.54,
+          "filtered_count": 0,
+          "filtered_examples": [],
+          "filtered_reason_codes": {},
+          "filtered_reasons": {
+            "confidence_score": 0,
+            "ml_edge_prob": 0,
+            "quality_score": 0
+          },
+          "odds_events_seen": 0,
+          "odds_feed_error": "HTTPSConnectionPool(host='api.the-odds-api.com', port=443): Max retries exceeded with url: /v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h%2Ctotals&oddsFormat=american&dateFormat=iso&apiKey=90a633a22cbe3597b2bceab5eb665d48 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+          "odds_feed_status": "degraded",
+          "tuning_latest_run_id": "a325b6ee-e326-4c4c-81a5-d40323958da4"
+        },
+        "edges": [],
+        "framework": {
+          "effective_guardrails": {
+            "max_injury_freshness_hours": 72.0,
+            "max_uncertainty_penalty": 0.33,
+            "min_confidence_score": 0.53,
+            "min_factor_coverage": 0.55,
+            "min_ml_edge_prob": 0.01,
+            "min_quality_score": 58.0
+          },
+          "guardrails": {
+            "max_injury_freshness_hours": 72.0,
+            "max_uncertainty_penalty": 0.33,
+            "min_confidence_score": 0.53,
+            "min_factor_coverage": 0.55,
+            "min_ml_edge_prob": 0.01,
+            "min_quality_score": 58.0
+          },
+          "version": "nfl-handicap-core-v1"
+        },
+        "gating": {
+          "min_confidence_score": 0.53,
+          "min_ml_edge_prob": 0.01,
+          "min_quality_score": 58.0
+        },
+        "model_version": "nfl-v1.5-matchup-sim"
+      },
+      "status_code": 200
+    },
+    "intel_health": {
+      "payload": {
+        "active_sources": {
+          "injuries": "nflverse",
+          "rosters": "nflverse",
+          "standings": "nfl_dp_schedules_derived",
+          "stats": "nflverse"
+        },
+        "availability": {
+          "depth-charts": {
+            "row_count": 3133,
+            "season": 2025,
+            "team_count": 32,
+            "week": 22
+          },
+          "injuries": {
+            "row_count": 383,
+            "season": 2025,
+            "team_count": 32,
+            "week": 18
+          },
+          "rosters": {
+            "row_count": 3133,
+            "season": 2025,
+            "team_count": 32,
+            "week": 22
+          },
+          "standings": {
+            "row_count": 32,
+            "season": 2025,
+            "team_count": 32,
+            "week": 18
+          },
+          "stats": {
+            "row_count": 32,
+            "season": 2025,
+            "team_count": 32,
+            "week": 18
+          }
+        },
+        "framework": {
+          "effective_guardrails": {
+            "max_injury_freshness_hours": 72.0,
+            "max_uncertainty_penalty": 0.33,
+            "min_confidence_score": 0.53,
+            "min_factor_coverage": 0.55,
+            "min_ml_edge_prob": 0.01,
+            "min_quality_score": 58.0
+          },
+          "guardrails": {
+            "max_injury_freshness_hours": 72.0,
+            "max_uncertainty_penalty": 0.33,
+            "min_confidence_score": 0.53,
+            "min_factor_coverage": 0.55,
+            "min_ml_edge_prob": 0.01,
+            "min_quality_score": 58.0
+          },
+          "tuning": {
+            "latest_created_at": "2026-07-02T18:29:20.564793-04:00",
+            "latest_run_id": "a325b6ee-e326-4c4c-81a5-d40323958da4"
+          },
+          "version": "nfl-handicap-core-v1"
+        },
+        "schema": {
+          "depth-charts": {
+            "missing_tables": [],
+            "present_tables": [
+              "nfl_dp_depth_chart_weekly"
+            ],
+            "required_tables": [
+              "nfl_dp_depth_chart_weekly"
+            ],
+            "schema_ready": true
+          },
+          "injuries": {
+            "missing_tables": [],
+            "present_tables": [
+              "nfl_dp_injuries"
+            ],
+            "required_tables": [
+              "nfl_dp_injuries"
+            ],
+            "schema_ready": true
+          },
+          "rosters": {
+            "missing_tables": [],
+            "present_tables": [
+              "nfl_dp_rosters",
+              "nfl_dp_depth_chart_weekly",
+              "nfl_dp_injuries",
+              "nfl_dp_team_situational_weekly",
+              "nfl_dp_standings_weekly"
+            ],
+            "required_tables": [
+              "nfl_dp_rosters",
+              "nfl_dp_depth_chart_weekly",
+              "nfl_dp_injuries",
+              "nfl_dp_team_situational_weekly",
+              "nfl_dp_standings_weekly"
+            ],
+            "schema_ready": true
+          },
+          "standings": {
+            "missing_tables": [],
+            "present_tables": [
+              "nfl_dp_standings_weekly"
+            ],
+            "required_tables": [
+              "nfl_dp_standings_weekly"
+            ],
+            "schema_ready": true
+          },
+          "stats": {
+            "missing_tables": [],
+            "present_tables": [
+              "nfl_dp_team_situational_weekly",
+              "nfl_dp_standings_weekly"
+            ],
+            "required_tables": [
+              "nfl_dp_team_situational_weekly",
+              "nfl_dp_standings_weekly"
+            ],
+            "schema_ready": true
+          }
+        },
+        "status": "ok"
+      },
+      "status_code": 200
+    }
+  },
+  "framework_tuning_latest": {
+    "created_at": "2026-07-02T18:29:20.564793-04:00",
+    "fold_count": 0,
+    "recommended": null,
+    "run_id": "a325b6ee-e326-4c4c-81a5-d40323958da4",
+    "sample_size": 0,
+    "selected_config": {},
+    "status": "rejected"
+  },
+  "generated_at": "2026-07-02T22:36:59.686012+00:00",
+  "model_version": "nfl-v1.5-matchup-sim",
+  "promotion_latest": {
+    "decision": {
+      "checks": {
+        "backtest_brier_ok": false,
+        "backtest_sample_ok": false,
+        "brier_ok": false,
+        "clv_ok": false,
+        "drift_guardrail_ok": false,
+        "mae_ok": false,
+        "sample_size_ok": false
+      },
+      "deltas": {
+        "brier_drift": null,
+        "brier_improvement": null,
+        "clv_improvement": 0.0,
+        "mae_drift": null,
+        "mae_improvement": null
+      },
+      "promote": false,
+      "reasons": [
+        "sample_size_ok",
+        "brier_ok",
+        "mae_ok",
+        "clv_ok",
+        "backtest_sample_ok",
+        "backtest_brier_ok",
+        "drift_guardrail_ok"
+      ],
+      "thresholds": {
+        "max_brier_drift": 0.018,
+        "max_mae_drift": 1.1,
+        "min_backtest_brier_improvement": 0.001,
+        "min_backtest_sample": 90,
+        "min_brier_improvement": 0.0025,
+        "min_clv_improvement": 0.002,
+        "min_mae_improvement": 0.08,
+        "min_sample_size": 140
+      }
+    },
+    "evaluated_at": "2026-07-02T18:29:21.846187-04:00",
+    "promoted": false
+  },
+  "quality_latest": {
+    "created_at": "2026-07-02T18:29:21.337252-04:00",
+    "payload": {
+      "calendar_days_covered": 0,
+      "clv_avg": 0.0,
+      "clv_positive_rate": 0.0,
+      "clv_sample_size": 302,
+      "factor_attribution_diagnostics": {
+        "factor_count": 0,
+        "factors": {},
+        "framework_versions": [],
+        "rows_with_framework": 0
+      },
+      "framework_config": {
+        "factors": {
+          "base_efficiency": {
+            "margin_weight": 16.0,
+            "max_margin_points": 6.5,
+            "max_total_points": 5.0,
+            "total_weight": 10.5
+          },
+          "home_field_advantage": {
+            "margin_points": 1.35
+          },
+          "injuries_depth": {
+            "margin_weight": 2.75,
+            "max_margin_points": 2.6,
+            "max_total_points": 2.8,
+            "total_weight": 3.25
+          },
+          "regression_luck": {
+            "margin_weight": 1.8,
+            "max_margin_points": 1.8,
+            "max_total_points": 1.2,
+            "total_weight": 1.2
+          },
+          "rest_travel": {
+            "margin_per_day": 0.18,
+            "max_margin_points": 2.0,
+            "max_total_points": 1.2,
+            "total_per_day_abs": 0.12
+          },
+          "situational_flags": {
+            "max_margin_points": 0.8,
+            "short_rest_margin_points": 0.3,
+            "short_rest_threshold_days": 6.0
+          },
+          "travel_schedule": {
+            "enabled": true,
+            "max_margin_points": 1.75,
+            "max_total_points": 1.6,
+            "miles_weight_margin": 0.0016,
+            "miles_weight_total": -0.0014,
+            "timezone_weight_margin": 0.28,
+            "timezone_weight_total": -0.18
+          },
+          "weather_environment": {
+            "enabled": true,
+            "extreme_temp_weight_total": -0.06,
+            "max_margin_points": 0.55,
+            "max_total_points": 2.8,
+            "precip_mm_weight_total": -0.12,
+            "wind_margin_weight": -0.01,
+            "wind_mph_weight_total": -0.07
+          }
+        },
+        "framework_version": "nfl-handicap-core-v1",
+        "guardrails": {
+          "max_injury_freshness_hours": 72.0,
+          "max_uncertainty_penalty": 0.33,
+          "min_confidence_score": 0.53,
+          "min_factor_coverage": 0.55,
+          "min_ml_edge_prob": 0.01,
+          "min_quality_score": 58.0
+        },
+        "priors": {
+          "base_margin_points": 1.5,
+          "base_score_stdev": 9.2,
+          "base_total_points": 43.5,
+          "home_field_points": 1.35
+        },
+        "uncertainty": {
+          "base_confidence": 0.72,
+          "injury_staleness_penalty": 0.08,
+          "injury_staleness_threshold_hours": 42.0,
+          "missing_factor_penalty": 0.035,
+          "regression_penalty_weight": 0.07,
+          "variance_penalty_weight": 0.09
+        }
+      },
+      "framework_version": "nfl-handicap-core-v1",
+      "last_game_date": null,
+      "lookback_days": 60,
+      "model_version": "nfl-v1.5-matchup-sim",
+      "moneyline_brier": null,
+      "moneyline_brier_sample_size": 0,
+      "moneyline_hit_rate": null,
+      "moneyline_pick_sample_size": 0,
+      "moneyline_positive_edge_hit_rate": null,
+      "moneyline_positive_edge_sample_size": 0,
+      "sample_size": 0,
+      "total_hit_rate": null,
+      "total_mae": null,
+      "total_mae_base": null,
+      "total_mae_sample_size": 0,
+      "total_pick_sample_size": 0,
+      "total_positive_edge_hit_rate": null,
+      "total_positive_edge_sample_size": 0,
+      "totals_calibration": {
+        "base_mae": 11.3761,
+        "calibrated_mae": 11.4433,
+        "eligible": true,
+        "intercept": 8.0,
+        "lookback_days": 240,
+        "mae_improvement": -0.0672,
+        "market_substrate": {
+          "games_considered": 150,
+          "games_with_total_snapshots": 150,
+          "label": "historical-total-snapshots",
+          "total_snapshot_coverage": 1.0
+        },
+        "sample_size": 150,
+        "slope": 0.8,
+        "source": "nfl_totals_linear_calibration"
+      }
+    }
+  },
+  "readiness": {
+    "staging_override": {
+      "payload": {
+        "detail": {
+          "drift_monitor": {
+            "created_at": "2026-07-02T18:29:20.693696-04:00",
+            "status": "insufficient_data",
+            "top_shifts": []
+          },
+          "freshness_policy": {
+            "freshness_gate_enabled": false,
+            "max_last_game_age_days_applied": null,
+            "mode": "staging",
+            "override_active": true,
+            "override_reason": "staging-disable-freshness-gate"
+          },
+          "gating_checks": {
+            "calendar_days_ok": false,
+            "clv_ok": true,
+            "freshness_ok": true,
+            "moneyline_brier_ok": false,
+            "sample_size_ok": false,
+            "total_mae_ok": false
+          },
+          "metrics": {
+            "calendar_days_covered": 0,
+            "clv_avg": 0.0,
+            "last_game_date": null,
+            "moneyline_brier": null,
+            "sample_size": 0,
+            "staleness_days": null,
+            "total_mae": null
+          },
+          "model_version": "nfl-v1.5-matchup-sim",
+          "quality_snapshot_created_at": "2026-07-02T18:29:21.337252-04:00",
+          "reasons": [
+            "sample_size_ok",
+            "calendar_days_ok",
+            "moneyline_brier_ok",
+            "total_mae_ok"
+          ],
+          "status": "no-go"
+        }
+      },
+      "status_code": 503
+    },
+    "strict": {
+      "payload": {
+        "detail": {
+          "drift_monitor": {
+            "created_at": "2026-07-02T18:29:20.693696-04:00",
+            "status": "insufficient_data",
+            "top_shifts": []
+          },
+          "freshness_policy": {
+            "freshness_gate_enabled": true,
+            "max_last_game_age_days_applied": 8,
+            "mode": "production",
+            "override_active": false,
+            "override_reason": "strict-default"
+          },
+          "gating_checks": {
+            "calendar_days_ok": false,
+            "clv_ok": true,
+            "freshness_ok": false,
+            "moneyline_brier_ok": false,
+            "sample_size_ok": false,
+            "total_mae_ok": false
+          },
+          "metrics": {
+            "calendar_days_covered": 0,
+            "clv_avg": 0.0,
+            "last_game_date": null,
+            "moneyline_brier": null,
+            "sample_size": 0,
+            "staleness_days": null,
+            "total_mae": null
+          },
+          "model_version": "nfl-v1.5-matchup-sim",
+          "quality_snapshot_created_at": "2026-07-02T18:29:21.337252-04:00",
+          "reasons": [
+            "sample_size_ok",
+            "calendar_days_ok",
+            "freshness_ok",
+            "moneyline_brier_ok",
+            "total_mae_ok"
+          ],
+          "status": "no-go"
+        }
+      },
+      "status_code": 503
+    }
+  },
+  "runtime_state": {
+    "active_model_version": "nfl-v1.5-matchup-sim",
+    "metadata": {
+      "framework_lock": {
+        "leakage_violations": 0,
+        "locked_at": "2026-07-02T22:29:21.939035+00:00",
+        "run_id": "a325b6ee-e326-4c4c-81a5-d40323958da4",
+        "selected_config": {},
+        "tuning_status": "rejected"
+      }
+    },
+    "previous_model_version": null,
+    "reason": "framework-lock run_id=a325b6ee-e326-4c4c-81a5-d40323958da4",
+    "state_key": "nfl_active_model",
+    "updated_at": "2026-07-02 18:29:21.944806-04:00"
+  }
+}

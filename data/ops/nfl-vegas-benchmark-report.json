@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-07-17",
+  "model_version": "nfl-v1.5-matchup-sim",
+  "methodology": {
+    "summary": "Supervised gradient-boosted model trained on 2013-2023 NFL games, blended with a Monte Carlo matchup simulation and live market lines. Blend weights were grid-searched on the 2024 season only, then applied unchanged to the 2025 season, which the tuning process never saw.",
+    "train_seasons": "2013-2023",
+    "tune_seasons": "2024 (blend weights selected here only)",
+    "test_seasons": "2025 (touched exactly once, after weights were locked)",
+    "test_sample_size": 285,
+    "significance_test": "Paired bootstrap (5000 resamples) on per-game absolute error, model vs market, on the 2025 test set only.",
+    "source_scripts": [
+      "scripts/nfl/historical_market_backtest.py",
+      "scripts/nfl/tune_blend_weights.py",
+      "scripts/nfl/full_pipeline_holdout_backtest.py"
+    ],
+    "caveats": [
+      "This is a backtest on completed historical games using nflverse's free closing lines (spread_line/total_line), not a live prospective track record yet -- live CLV tracking requires a working Odds API key and several weeks of accumulated open-to-close snapshots, which is in progress.",
+      "The validated blend weights only apply once a season's rolling features contain real, week-varying data. Before games are played (e.g. the 2026 season as of this report), the model automatically falls back to more conservative, lower-trust blend weights -- see detect_real_rolling_features in nfl_supervised_retrain.py."
+    ]
+  },
+  "results_2025_holdout": {
+    "spread_mae": { "model": 8.353, "vegas": 9.670, "unit": "points" },
+    "total_mae": { "model": 9.461, "vegas": 10.423, "unit": "points" },
+    "win_probability_brier": { "model": 0.1636, "vegas": 0.2112, "unit": "brier score (lower is better)" },
+    "spread_significance": {
+      "diff": -1.317,
+      "ci_95_low": -2.026,
+      "ci_95_high": -0.621,
+      "significant": true
+    }
+  },
+  "results_full_13yr_sample": {
+    "seasons": "2013-2025",
+    "sample_size": 3562,
+    "note": "Unblended heuristic simulation only (no supervised ML, no live market blend) -- shows the base model already had a slight edge before the ML layer was added.",
+    "spread_mae": { "model": 9.622, "vegas": 9.918 },
+    "total_mae": { "model": 10.283, "vegas": 10.505 }
+  }
+}

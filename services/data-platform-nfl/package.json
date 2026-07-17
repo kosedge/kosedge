@@ -9,6 +9,10 @@
     "normalize:pbp": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --normalize-pbp-from-raw",
     "materialize:usage": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --materialize-usage-features",
     "materialize:matchups": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --materialize-matchup-features",
+    "materialize:standings": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --materialize-standings-weekly",
+    "materialize:depth-charts": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --materialize-depth-chart-weekly",
+    "backup:owned-data": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --backup-owned-data",
+    "launch:hardening": "PYTHONPATH=./src python3 -m data_platform_nfl.cli --run-launch-hardening",
     "test": "echo \"No JS tests in data-platform-nfl\""
   }
 }
