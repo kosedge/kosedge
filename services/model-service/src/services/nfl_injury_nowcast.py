@@ -7,6 +7,8 @@ from typing import Any, Dict, List, Optional
 
 from sqlalchemy import text
 
+from .nfl_roster_continuity import fetch_roster_continuity_nowcast
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
@@ -201,6 +203,61 @@ def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _merge_roster_continuity_into_nowcast(
+    nowcast: Dict[str, Any],
+    continuity: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Compose a live injury-report nowcast with the roster-continuity
+    nowcast (see nfl_roster_continuity.py) by multiplying the two
+    multiplier pairs together -- both are centered on 1.0, so a team with
+    no roster-continuity entries (the common case) gets back exactly the
+    original in-season nowcast untouched, and a team with no live injury
+    rows (e.g. the 2026 preseason, before any weekly injury report
+    exists) gets back exactly the roster-continuity nowcast.
+    """
+    if int(continuity.get("adjustment_count") or 0) <= 0:
+        return nowcast
+
+    merged_offense = _clamp(
+        float(nowcast.get("offense_multiplier", 1.0)) * float(continuity.get("offense_multiplier", 1.0)),
+        0.82,
+        1.08,
+    )
+    merged_defense = _clamp(
+        float(nowcast.get("defense_multiplier", 1.0)) * float(continuity.get("defense_multiplier", 1.0)),
+        0.90,
+        1.18,
+    )
+    merged_confidence = _clamp(
+        max(float(nowcast.get("confidence", 0.0)), float(continuity.get("confidence", 0.0))),
+        0.0,
+        1.0,
+    )
+    merged_impact = _clamp(
+        float(nowcast.get("impact_score", 0.0)) + float(continuity.get("impact_score", 0.0)),
+        0.0,
+        1.0,
+    )
+    merged_drivers = sorted(
+        list(nowcast.get("top_drivers") or []) + list(continuity.get("top_drivers") or []),
+        key=lambda item: abs(_safe_float(item.get("impact", item.get("impact_score")))),
+        reverse=True,
+    )[:5]
+
+    merged = dict(nowcast)
+    merged.update(
+        {
+            "offense_multiplier": round(merged_offense, 4),
+            "defense_multiplier": round(merged_defense, 4),
+            "confidence": round(merged_confidence, 4),
+            "impact_score": round(merged_impact, 4),
+            "top_drivers": merged_drivers,
+            "roster_continuity_adjustment_count": int(continuity.get("adjustment_count") or 0),
+        }
+    )
+    return merged
+
+
 def compute_team_week_injury_severity(rows: List[Dict[str, Any]]) -> Dict[str, float]:
     """Position+status-weighted injury severity for a single team-week, with
     no freshness decay. Used for historical training features, where
@@ -306,6 +363,18 @@ def fetch_nfl_injury_nowcast(
     ]
     home_nowcast = _aggregate_team_nowcast(home_rows)
     away_nowcast = _aggregate_team_nowcast(away_rows)
+
+    # Layer in known offseason roster moves (see nfl_roster_continuity.py)
+    # -- e.g. a season-long free-agency/trade departure that the current
+    # week's injury report has no way to reflect, since the player simply
+    # isn't on the team anymore rather than being listed as questionable.
+    # This is a no-op multiply-by-1.0 for the (common) case of a team with
+    # no curated roster-continuity entries for the season.
+    home_continuity = fetch_roster_continuity_nowcast(session, season_year=season, team=home_team)
+    away_continuity = fetch_roster_continuity_nowcast(session, season_year=season, team=away_team)
+    home_nowcast = _merge_roster_continuity_into_nowcast(home_nowcast, home_continuity)
+    away_nowcast = _merge_roster_continuity_into_nowcast(away_nowcast, away_continuity)
+
     game_confidence = round(
         _clamp(
             (float(home_nowcast["confidence"]) + float(away_nowcast["confidence"])) / 2.0,
@@ -314,9 +383,13 @@ def fetch_nfl_injury_nowcast(
         ),
         4,
     )
+    source = "nfl_dp_injuries"
+    has_continuity = bool(home_nowcast.get("roster_continuity_adjustment_count") or away_nowcast.get("roster_continuity_adjustment_count"))
+    if has_continuity:
+        source = "nfl_dp_injuries+roster_continuity"
     return {
         "season_year": season,
-        "source": "nfl_dp_injuries",
+        "source": source,
         "home_team": home_team,
         "away_team": away_team,
         "home": home_nowcast,

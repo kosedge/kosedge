@@ -1,0 +1,12 @@
+{
+  "output_dir": "/Users/ryankos/kosedge/services/model-service/../../scripts/nfl/../../data/ops/nfl-preseason-sim-2026-20260718T012033Z",
+  "generated_at_utc": "2026-07-18T01:20:33.343857+00:00",
+  "files": [
+    "team_regular_season_outcomes.csv",
+    "super_bowl_winner_probabilities.csv",
+    "quality_checks.json",
+    "player_regular_season_totals.csv",
+    "player_playoff_totals.csv"
+  ],
+  "note": "Player projection CSVs copied unchanged from the latest prior bundle -- player projections were not part of this regeneration."
+}

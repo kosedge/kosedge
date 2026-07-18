@@ -2425,10 +2425,15 @@ def run_nfl_simulation(
             * (_to_float(home_nowcast.get("offense_multiplier")) or 1.0),
             offense_index_away=(_to_float(m.get("offense_index_away")) or 1.0)
             * (_to_float(away_nowcast.get("offense_multiplier")) or 1.0),
+            # See the matching comment in tasks.py::run_nfl_market_simulations --
+            # defense_index is "higher = stronger defense", so a
+            # defense_multiplier documented as "higher = weaker defense"
+            # (injury/roster-continuity nowcast) must be applied as a
+            # divisor, not a multiplier.
             defense_index_home=(_to_float(m.get("defense_index_home")) or 1.0)
-            * (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
+            / (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
             defense_index_away=(_to_float(m.get("defense_index_away")) or 1.0)
-            * (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
+            / (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
             rest_days_home=_to_float(m.get("rest_days_home")) or 7.0,
             rest_days_away=_to_float(m.get("rest_days_away")) or 7.0,
             injury_nowcast_confidence_home=_to_float(home_nowcast.get("confidence")),

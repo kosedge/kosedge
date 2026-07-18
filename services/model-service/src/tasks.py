@@ -2918,10 +2918,23 @@ def run_nfl_market_simulations(
                 * (_to_float(home_nowcast.get("offense_multiplier")) or 1.0),
                 offense_index_away=float(offense_away)
                 * (_to_float(away_nowcast.get("offense_multiplier")) or 1.0),
+                # defense_index is "higher = stronger defense" (see
+                # _load_team_strength_priors: defense_index rises with
+                # *negative* EPA allowed, and compute_nfl_projection_decomposition
+                # divides the OPPONENT's offense_index by this team's
+                # defense_index). injury/roster-continuity nowcast
+                # defense_multiplier is documented as "higher = weaker
+                # defense", so it must be applied as a DIVISOR here, not a
+                # multiplier -- multiplying would make an injured/departed
+                # defense look *stronger*. Verified empirically while
+                # building the roster-continuity mechanism (see
+                # nfl_roster_continuity.py): with the old `* multiplier`,
+                # weakening a team's own defense measurably *raised* their
+                # win probability.
                 defense_index_home=float(defense_home)
-                * (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
+                / (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
                 defense_index_away=float(defense_away)
-                * (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
+                / (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
                 rest_days_home=_to_float(m.get("rest_days_home")) or 7.0,
                 rest_days_away=_to_float(m.get("rest_days_away")) or 7.0,
                 injury_nowcast_confidence_home=_to_float(home_nowcast.get("confidence")),

@@ -11,6 +11,72 @@ from src.services.nfl_simulator import (
 )
 
 
+def test_higher_defense_index_favors_that_teams_own_win_probability() -> None:
+    """`defense_index` is "higher = stronger defense" (see
+    tasks.py::_load_team_strength_priors, which derives it from *negative*
+    EPA allowed, and compute_nfl_projection_decomposition, which divides
+    the opponent's offense_index by it). This directly exercises that
+    contract so a future change can't silently invert it again -- an
+    inversion previously slipped in via how the in-season injury nowcast's
+    defense_multiplier (documented "higher = weaker defense") was combined
+    with defense_index in tasks.py/routes.py: multiplying a >1.0 "weaker
+    defense" multiplier directly into defense_index made an injured team's
+    defense look *stronger* in this formula. The fix (see
+    run_nfl_market_simulations) divides instead of multiplies -- this test
+    guards against regressing that."""
+    base_inputs = dict(
+        game_id="g-defense-sign",
+        home_team="CLE",
+        away_team="BAL",
+        offense_index_home=1.0,
+        offense_index_away=1.0,
+        defense_index_away=1.0,
+        rest_days_home=7.0,
+        rest_days_away=7.0,
+    )
+    baseline = simulate_nfl_game(NflGameInputs(defense_index_home=1.0, **base_inputs), simulations=15000, seed=7)
+    weaker_defense = simulate_nfl_game(NflGameInputs(defense_index_home=0.90, **base_inputs), simulations=15000, seed=7)
+    stronger_defense = simulate_nfl_game(NflGameInputs(defense_index_home=1.10, **base_inputs), simulations=15000, seed=7)
+
+    assert weaker_defense["markets"]["home_win_prob"] < baseline["markets"]["home_win_prob"]
+    assert stronger_defense["markets"]["home_win_prob"] > baseline["markets"]["home_win_prob"]
+
+
+def test_injury_nowcast_defense_multiplier_should_be_applied_as_divisor() -> None:
+    """Mirrors exactly how tasks.py::run_nfl_market_simulations combines a
+    team-strength-prior defense_index with the injury/roster-continuity
+    nowcast's defense_multiplier: `defense_index_home = prior / multiplier`.
+    A multiplier > 1.0 ("weaker defense") must reduce the resulting
+    defense_index and therefore reduce that team's own win probability."""
+    prior_defense_index = 1.0
+    weaker_multiplier = 1.0446  # e.g. a lost star defender
+
+    def _combined_inputs(defense_multiplier: float) -> NflGameInputs:
+        return NflGameInputs(
+            game_id="g-divisor",
+            home_team="CLE",
+            away_team="BAL",
+            offense_index_home=1.0,
+            offense_index_away=1.0,
+            defense_index_home=prior_defense_index / defense_multiplier,
+            defense_index_away=1.0,
+            injury_nowcast_defense_multiplier_home=defense_multiplier,
+            injury_nowcast_defense_multiplier_away=1.0,
+            injury_nowcast_offense_multiplier_home=1.0,
+            injury_nowcast_offense_multiplier_away=1.0,
+            injury_nowcast_confidence_home=0.8,
+            injury_nowcast_confidence_away=0.0,
+            injury_nowcast_impact_home=0.028,
+            injury_nowcast_impact_away=0.0,
+            rest_days_home=7.0,
+            rest_days_away=7.0,
+        )
+
+    healthy = simulate_nfl_game(_combined_inputs(1.0), simulations=15000, seed=42)
+    weakened = simulate_nfl_game(_combined_inputs(weaker_multiplier), simulations=15000, seed=42)
+    assert weakened["markets"]["home_win_prob"] < healthy["markets"]["home_win_prob"]
+
+
 def test_simulate_nfl_game_returns_expected_market_fields() -> None:
     inputs = NflGameInputs(
         game_id="g1",
