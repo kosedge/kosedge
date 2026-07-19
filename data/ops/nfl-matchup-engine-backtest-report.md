@@ -223,13 +223,28 @@ flagged regression (discussed above).
    consistent across all three receiving-relevant stats (yards/targets/receptions),
    and traces to a real, explainable, previously-undetected bug fix — not
    a one-metric fluke.
-2. **Investigate the RB rush_yards regression before the next iteration.**
-   It's small (~2%) and could plausibly shrink or vanish entirely at
-   production replicate counts (2,000 vs. this backtest's 250) — worth a
-   quick re-check at full replicate count before spending engineering time
-   on it. If it persists, the likely fix is tightening `EFFICIENCY_CV` or
-   `SHARED_POOL_CONCENTRATION` specifically for rush allocation, since
-   rushing doesn't need the same renormalization strength receiving does.
+2. **RB rush_yards regression: confirmed real, first fix attempt disproven,
+   root cause narrowed.** Re-checked at full production replicate count
+   (2,000): unchanged (~2% regression persists, not Monte Carlo noise from
+   this report's original 250-replicate test). Tried a pool-specific
+   tighter Dirichlet concentration for rush allocation (34 -> 52) on the
+   hypothesis that added share-variance was the cause — re-tested at 800
+   replicates, RB rush_yards MAE was unchanged (22.99 either way),
+   disproving that hypothesis. Reverted rather than ship an unjustified
+   parameter. Follow-up diagnostic: queried real `rush_share`/`target_proxy`
+   SQL feature columns directly (the raw usage-ratio inputs, not
+   `baseline_projection_from_features()`'s output) across 2025 weeks 4-17 —
+   both already sum to ~0.96 per team, essentially identically for rush and
+   pass. So the "evaporating share" effect this engine's renormalization
+   fixes is NOT a rush-vs-receiving asymmetry in the raw usage data; it's
+   introduced downstream inside `baseline_projection_from_features()`'s own
+   confidence-scaling/clamping logic, likely to differing degrees by
+   position group in a way not yet isolated. Real next step for whoever
+   picks this up: diagnose confidence_scale's effect on the SUM of
+   `carries_mean` across a real roster vs. the sum of `targets_mean`,
+   holding real usage shares fixed, to find where the two diverge — a
+   targeted fix belongs in the baseline formula itself, not in the
+   box-score engine's allocation layer, given this finding.
 3. **Investigate the CURRENT pass_yards bias flip** (small negative vs.
    small positive, found in the OLD-vs-CURRENT full-sample comparison).
    Not blocking, but worth a look at whether `team_snap_share`'s weighting

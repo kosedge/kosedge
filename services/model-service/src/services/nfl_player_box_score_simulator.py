@@ -83,6 +83,20 @@ DEFAULT_REPLICATES = 2000
 # touching any player's mean.
 SHARED_POOL_CONCENTRATION = 34.0
 OTHER_BUCKET_MIN_SHARE = 0.02
+# Tried and rejected: a tighter (higher) concentration specifically for the
+# rush pool, on the hypothesis that added Dirichlet share-variance was
+# driving the small (~2%) real RB rush_yards regression documented in
+# data/ops/nfl-matchup-engine-backtest-report.md. Re-tested at 800
+# replicates with concentration raised 34 -> 52 for rush only: RB rush_yards
+# MAE was unchanged (22.99 either way), disproving the variance hypothesis --
+# the regression is a mean-calibration effect from _normalize_shares_to_pool
+# itself, not sampling noise, so tightening concentration was the wrong
+# lever and has been reverted rather than shipped as unjustified complexity.
+# Real next step: check whether OTHER_BUCKET_MIN_SHARE is too small
+# specifically for the rush pool (QB scrambles/WR jet sweeps/garbage-time
+# rushes are real non-RB rush volume that receiving doesn't have an
+# equivalent of, so renormalizing modeled RBs up to consume ~98% of the pool
+# may overstate them more than it does modeled pass-catchers).
 CONCENTRATION_MIN = 6.0
 CONCENTRATION_MAX = 46.0
 
