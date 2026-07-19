@@ -149,7 +149,10 @@ function mapPlayerTotalsRows(rows: CsvRow[]): PlayerProjectionTotalsRow[] {
     passTdsTotal: toNumber(row.pass_tds_total),
     rushTdsTotal: toNumber(row.rush_tds_total),
     recTdsTotal: toNumber(row.rec_tds_total),
-    anytimeTdProbTotal: toNumber(row.anytime_td_prob_total),
+    // CSV column is `anytime_td_prob` (not `anytime_td_prob_total`) -- see
+    // player_season_totals.py for why this stays a bounded probability
+    // rather than a summed total like the other columns here.
+    anytimeTdProbTotal: toNumber(row.anytime_td_prob),
   }));
 }
 

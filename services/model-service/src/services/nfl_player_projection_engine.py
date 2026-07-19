@@ -44,6 +44,36 @@ class PlayerFeatureInputs:
     team_pass_rate_factor: float
     availability_confidence: float
     role_confidence: float
+    experience_confidence: float = 1.0
+    team_snap_share: float = 0.0
+    """A player's involvement_plays divided by the TEAM's total offensive
+    plays that week -- a real, position-agnostic snap share (a starting QB
+    lands near 0.90-1.0). Distinct from `snap_proxy`, which is a *touch*
+    share (a player's plays divided by every teammate's combined plays) --
+    reasonable for skill positions splitting touches with each other, but
+    badly wrong for QBs, where it was crushing passing-volume projections
+    (see infra/db/031_nfl_player_team_snap_share.sql). Defaults to 0.0 for
+    any caller not yet passing it through; `qb_volume_signal` falls back to
+    the old (broken) behavior only in that case, so wire this through."""
+    opponent_pass_defense_factor: float = 1.0
+    opponent_rush_defense_factor: float = 1.0
+    """Opponent-adjusted matchup multipliers, >1.0 means the opponent's
+    defense is worse than average against that phase of offense (so this
+    player should outperform their own team-context-only baseline), <1.0
+    means a tougher-than-average matchup. 1.0 (neutral) is the safe default
+    for any caller not yet supplying real opponent context."""
+    """1.0 for a normal veteran-usage-derived projection. Lower values (see
+    ROOKIE_EXPERIENCE_CONFIDENCE) widen the output std without changing the
+    mean -- a rookie with the same *projected* mean as a veteran genuinely
+    has more outcome uncertainty, since there's no track record backing the
+    number up. Sourced from nfl_player_projection_features_weekly's
+    feature_payload->>'usage_source' (see PLAYER_HYDRATE/ROOKIE_BASELINE
+    source tags in preseason_hydration.py)."""
+
+
+ROOKIE_EXPERIENCE_CONFIDENCE = 0.45
+VETERAN_EXPERIENCE_CONFIDENCE = 1.0
+MAX_VARIANCE_WIDENING = 2.0
 
 
 def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, Any]:
@@ -73,35 +103,48 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     rec_tds_mean = 0.0
 
     if position == "QB":
+        # team_snap_share (involvement / team offensive plays) is the real
+        # signal for "is this the starter" -- snap_proxy is a touch-share
+        # metric that badly undercounts QBs (see PlayerFeatureInputs docs).
+        # Only fall back to the old snap_proxy-based blend when a caller
+        # hasn't wired team_snap_share through yet (value still at its 0.0
+        # default), so this degrades gracefully rather than breaking.
+        starter_signal = inputs.team_snap_share if inputs.team_snap_share > 0.0 else inputs.snap_proxy
         qb_volume_signal = _clamp(
-            (0.70 * inputs.snap_proxy) + (0.30 * _clamp(inputs.qb_dropback_factor / 1.15, 0.35, 1.35)),
+            (0.55 * starter_signal) + (0.45 * _clamp(inputs.qb_dropback_factor / 1.15, 0.35, 1.35)),
             0.25,
             1.0,
         )
+        opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
+        opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         attempts_mean = 22.0 + (34.0 * qb_volume_signal * pass_factor * pace_factor)
         completion_rate = _clamp(0.60 + (0.05 * inputs.target_proxy) - (0.03 * inputs.qb_pressure_factor), 0.50, 0.74)
-        yards_per_attempt = _clamp(6.2 + (1.1 * inputs.target_proxy) - (0.6 * inputs.qb_pressure_factor), 5.0, 9.2)
+        yards_per_attempt = _clamp((6.2 + (1.1 * inputs.target_proxy) - (0.6 * inputs.qb_pressure_factor)) * opp_pass_factor, 5.0, 10.5)
         pass_yards_mean = attempts_mean * yards_per_attempt
         carries_mean = _clamp(1.2 + (4.0 * inputs.rush_share), 0.0, 10.0)
-        rush_yards_mean = carries_mean * _clamp(4.6 - (0.7 * inputs.qb_pressure_factor), 2.6, 6.2)
+        rush_yards_mean = carries_mean * _clamp((4.6 - (0.7 * inputs.qb_pressure_factor)) * opp_rush_factor, 2.6, 7.0)
         pass_tds_mean = _clamp((pass_yards_mean / 115.0) * (0.72 + (0.32 * inputs.red_zone_share)), 0.15, 3.8)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.12, 0.0, 1.2)
         receptions_mean = 0.0
         receiving_yards_mean = 0.0
     elif position in {"RB", "FB"}:
+        opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
+        opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         carries_mean = _clamp(4.0 + (24.0 * inputs.rush_share * pace_factor), 0.0, 32.0)
         targets_mean = _clamp(0.8 + (7.0 * inputs.target_proxy * pass_factor), 0.0, 13.0)
-        rush_yards_mean = carries_mean * _clamp(4.1 + (1.1 * volume_signal), 2.8, 6.8)
+        rush_yards_mean = carries_mean * _clamp((4.1 + (1.1 * volume_signal)) * opp_rush_factor, 2.8, 7.8)
         receptions_mean = targets_mean * _clamp(0.62 + (0.16 * inputs.route_proxy), 0.40, 0.92)
-        receiving_yards_mean = receptions_mean * _clamp(6.0 + (2.8 * inputs.target_proxy), 4.2, 13.5)
+        receiving_yards_mean = receptions_mean * _clamp((6.0 + (2.8 * inputs.target_proxy)) * opp_pass_factor, 4.2, 15.5)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.16, 0.0, 1.7)
         rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.08, 0.0, 1.2)
     else:
+        opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
+        opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         targets_mean = _clamp(1.2 + (11.5 * inputs.target_proxy * pass_factor), 0.0, 17.5)
         receptions_mean = targets_mean * _clamp(0.56 + (0.28 * inputs.route_proxy), 0.38, 0.93)
-        receiving_yards_mean = receptions_mean * _clamp(8.4 + (4.2 * volume_signal), 5.5, 20.0)
+        receiving_yards_mean = receptions_mean * _clamp((8.4 + (4.2 * volume_signal)) * opp_pass_factor, 5.5, 23.0)
         carries_mean = _clamp(2.0 * inputs.rush_share, 0.0, 4.0)
-        rush_yards_mean = carries_mean * _clamp(5.0 + (0.8 * volume_signal), 3.0, 8.0)
+        rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
         rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.14, 0.0, 1.7)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
 
@@ -118,13 +161,23 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     rush_tds_mean *= confidence_scale
     rec_tds_mean *= confidence_scale
 
-    pass_yards_std = max(3.0, pass_yards_mean * 0.22)
-    rush_yards_std = max(2.2, rush_yards_mean * 0.31)
-    receiving_yards_std = max(2.2, receiving_yards_mean * 0.33)
-    receptions_std = max(0.4, receptions_mean * 0.29)
-    attempts_std = max(0.8, attempts_mean * 0.18)
-    carries_std = max(0.6, carries_mean * 0.24)
-    targets_std = max(0.5, targets_mean * 0.26)
+    # A rookie (or anyone with no real usage history backing their
+    # projection) has genuinely more outcome uncertainty than a veteran
+    # projected to the same mean -- there's no track record to tighten the
+    # distribution around. This widens std only, never the mean.
+    variance_widening = _clamp(
+        1.0 + (1.0 - _clamp(inputs.experience_confidence, 0.0, 1.0)) * (MAX_VARIANCE_WIDENING - 1.0),
+        1.0,
+        MAX_VARIANCE_WIDENING,
+    )
+
+    pass_yards_std = max(3.0, pass_yards_mean * 0.22) * variance_widening
+    rush_yards_std = max(2.2, rush_yards_mean * 0.31) * variance_widening
+    receiving_yards_std = max(2.2, receiving_yards_mean * 0.33) * variance_widening
+    receptions_std = max(0.4, receptions_mean * 0.29) * variance_widening
+    attempts_std = max(0.8, attempts_mean * 0.18) * variance_widening
+    carries_std = max(0.6, carries_mean * 0.24) * variance_widening
+    targets_std = max(0.5, targets_mean * 0.26) * variance_widening
 
     anytime_td_prob = _clamp(1.0 - math.exp(-(rush_tds_mean + rec_tds_mean)), 0.005, 0.92)
     total_td_mean = pass_tds_mean + rush_tds_mean + rec_tds_mean
@@ -177,6 +230,12 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
             "volume_signal": round(volume_signal, 4),
             "availability_factor": round(availability_factor, 4),
             "role_factor": round(role_factor, 4),
+            "experience_confidence": round(_clamp(inputs.experience_confidence, 0.0, 1.0), 4),
+            "variance_widening": round(variance_widening, 4),
+        },
+        "matchup": {
+            "opponent_pass_defense_factor": round(_clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30), 4),
+            "opponent_rush_defense_factor": round(_clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30), 4),
         },
     }
 

@@ -1,11 +1,15 @@
 """Season-level Monte Carlo for the 2026 NFL season using the CURRENT model
 (post ghost-team-merge, team-strength-priors fix, live market blend,
 validated supervised ML overlay with placeholder-safe adaptive weighting --
-see today's session work). The prior data/ops/nfl-preseason-sim-2026-* bundle
-predates all of that, so this regenerates team_regular_season_outcomes.csv /
+see today's session work). This regenerates team_regular_season_outcomes.csv /
 super_bowl_winner_probabilities.csv / quality_checks.json with the fixed
-model, while reusing the untouched player-projection CSVs from the latest
-prior bundle (player projections weren't part of today's fixes).
+model, AND regenerates player_regular_season_totals.csv / player_playoff_totals.csv
+fresh from the real per-week nfl_player_projection_baselines data every run
+(see services/data_platform_nfl/player_season_totals.py) -- these used to be
+`shutil.copy`'d forward unchanged from whatever the oldest existing bundle
+contained, silently freezing them at a stale, undocumented methodology. That
+is no longer the case: every bundle this script produces is fully
+self-contained and regenerated from current data.
 
 Design:
   1. Regular season: reuse the 272 real games' home_win_prob already
@@ -26,26 +30,33 @@ Design:
   4. Bracket: standard wildcard/divisional/conference-championship/Super
      Bowl with NFL-style re-seeding (no rematches enforced beyond standard
      seeding). Super Bowl uses a neutral-site probability (symmetrized, no
-     home edge) rather than the 32x32 matrix's home-team entry.
+     home edge) rather than the 32x32 matrix's home-team entry. Each
+     replicate's bracket also tallies exactly how many playoff games each
+     team played (0 for non-playoff teams, up to 4 for a Super Bowl winner);
+     averaged across all 50,000 replicates this gives a real, per-team
+     `expected_playoff_games` value (see `total_playoff_games_played` below)
+     used directly by the player playoff-totals generator instead of a
+     hardcoded games-per-team constant.
 """
 
 from __future__ import annotations
 
 import csv
-import glob
 import json
 import os
-import shutil
 import sys
 from datetime import date, datetime, timezone
+from typing import Any
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "services", "model-service"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "services", "data-platform-nfl", "src"))
 os.environ.setdefault("DATABASE_URL", "postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge")
 
 import numpy as np  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 from sqlalchemy.orm import sessionmaker  # noqa: E402
 
+from data_platform_nfl.player_season_totals import generate_and_write_player_season_totals  # noqa: E402
 from src.services.nfl_simulator import NflGameInputs, simulate_nfl_game  # noqa: E402
 from src.tasks import (  # noqa: E402
     DEFAULT_NFL_MODEL_VERSION,
@@ -53,8 +64,10 @@ from src.tasks import (  # noqa: E402
     _load_team_strength_priors,
 )
 
+NFL_PLAYER_PROJECTION_MODEL_VERSION = "nfl-player-v1"
+
 SEASON = 2026
-N_REPLICATES = 10000
+N_REPLICATES = 50000
 NEUTRAL_SIM_COUNT = 900
 
 CONFERENCE_OF = {abbr: div.split("_")[0] for abbr, div in NFL_TEAM_DIVISION.items()}
@@ -101,10 +114,22 @@ def neutral_prob(matrix, team_a: str, team_b: str) -> float:
     return 0.5 * (p_a_home + (1.0 - p_b_home))
 
 
-def run_bracket(rng, matrix, seeds_by_conf: dict[str, list[str]]) -> dict[str, str]:
-    """Returns {'AFC_champ':..., 'NFC_champ':..., 'superbowl_winner':...}."""
+def run_bracket(rng, matrix, seeds_by_conf: dict[str, list[str]]) -> dict[str, Any]:
+    """Returns {'AFC_champ':..., 'NFC_champ':..., 'superbowl_winner':...,
+    'games_played': {team: games_played_in_this_replicate_bracket}}.
+
+    `games_played` counts every playoff game each of the 14 participating
+    teams actually played in THIS replicate (wildcard through Super Bowl,
+    inclusive of losses -- a team that loses in the divisional round still
+    played 2 games). Non-participating teams are simply absent (0 implied).
+    Averaged across all replicates by the caller, this becomes a real
+    per-team expected-playoff-games value.
+    """
+    games_played: dict[str, int] = {}
 
     def play(home: str, away: str) -> str:
+        games_played[home] = games_played.get(home, 0) + 1
+        games_played[away] = games_played.get(away, 0) + 1
         p = matrix[home][away]
         return home if rng.random() < p else away
 
@@ -127,8 +152,15 @@ def run_bracket(rng, matrix, seeds_by_conf: dict[str, list[str]]) -> dict[str, s
     afc_champ = conf_champs.get("AFC")
     nfc_champ = conf_champs.get("NFC")
     sb_prob_afc = neutral_prob(matrix, afc_champ, nfc_champ)
+    games_played[afc_champ] = games_played.get(afc_champ, 0) + 1
+    games_played[nfc_champ] = games_played.get(nfc_champ, 0) + 1
     sb_winner = afc_champ if rng.random() < sb_prob_afc else nfc_champ
-    return {"AFC_champ": afc_champ, "NFC_champ": nfc_champ, "superbowl_winner": sb_winner}
+    return {
+        "AFC_champ": afc_champ,
+        "NFC_champ": nfc_champ,
+        "superbowl_winner": sb_winner,
+        "games_played": games_played,
+    }
 
 
 def seed_conference(rng, records: dict[str, int], teams: list[str]) -> list[str]:
@@ -230,6 +262,7 @@ def main() -> None:
     made_playoffs = {t: 0 for t in ALL_TEAMS}
     won_division = {t: 0 for t in ALL_TEAMS}
     won_superbowl = {t: 0 for t in ALL_TEAMS}
+    total_playoff_games_played = {t: 0 for t in ALL_TEAMS}
 
     home_teams = [g[0] for g in games]
     away_teams = [g[0 - 1] if False else g[1] for g in games]
@@ -260,11 +293,17 @@ def main() -> None:
 
         result = run_bracket(rng, matrix, seeds)
         won_superbowl[result["superbowl_winner"]] += 1
+        for t, games_played_count in result["games_played"].items():
+            total_playoff_games_played[t] += games_played_count
 
         if rep % 2000 == 0:
             print(f"  ...{rep}/{N_REPLICATES} replicates")
 
     print("Simulation complete. Building output rows.")
+
+    expected_playoff_games_by_team = {
+        t: round(total_playoff_games_played[t] / N_REPLICATES, 4) for t in ALL_TEAMS
+    }
 
     team_rows = []
     for t in ALL_TEAMS:
@@ -295,15 +334,21 @@ def main() -> None:
     out_dir = os.path.join(ops_dir, f"nfl-preseason-sim-2026-{timestamp}")
     os.makedirs(out_dir, exist_ok=True)
 
-    prior_bundles = sorted(glob.glob(os.path.join(ops_dir, "nfl-preseason-sim-2026-*")))
-    prior_bundles = [b for b in prior_bundles if b != out_dir]
-    for filename in ["player_regular_season_totals.csv", "player_playoff_totals.csv"]:
-        for bundle in reversed(prior_bundles):
-            src = os.path.join(bundle, filename)
-            if os.path.exists(src):
-                shutil.copy(src, os.path.join(out_dir, filename))
-                print(f"Copied unchanged player file from prior bundle: {filename}")
-                break
+    print("Generating fresh player season-total CSVs from nfl_player_projection_baselines...")
+    player_totals_engine = create_engine(os.environ["DATABASE_URL"])
+    PlayerTotalsSession = sessionmaker(bind=player_totals_engine)
+    player_totals_session = PlayerTotalsSession()
+    try:
+        player_totals_summary = generate_and_write_player_season_totals(
+            player_totals_session,
+            season=SEASON,
+            out_dir=out_dir,
+            expected_playoff_games_by_team=expected_playoff_games_by_team,
+            model_version=NFL_PLAYER_PROJECTION_MODEL_VERSION,
+        )
+        print(f"Player season totals: {player_totals_summary}")
+    finally:
+        player_totals_session.close()
 
     with open(os.path.join(out_dir, "team_regular_season_outcomes.csv"), "w", newline="") as f:
         writer = csv.DictWriter(
@@ -347,6 +392,8 @@ def main() -> None:
             {"season": r["season"], "team": r["team"], "super_bowl_win_prob": r["super_bowl_win_prob"]}
             for r in sb_rows[:10]
         ],
+        "expected_playoff_games_by_team": expected_playoff_games_by_team,
+        "player_season_totals": player_totals_summary,
     }
     with open(os.path.join(out_dir, "quality_checks.json"), "w") as f:
         json.dump(quality_checks, f, indent=2)
@@ -363,7 +410,8 @@ def main() -> None:
                     "player_regular_season_totals.csv",
                     "player_playoff_totals.csv",
                 ],
-                "note": "Player projection CSVs copied unchanged from the latest prior bundle -- player projections were not part of this regeneration.",
+                "note": "Player projection CSVs are freshly generated every run from nfl_player_projection_baselines (see data_platform_nfl.player_season_totals) -- no longer copied forward from a prior bundle.",
+                "player_projection_model_version": NFL_PLAYER_PROJECTION_MODEL_VERSION,
             },
             f,
             indent=2,
@@ -376,7 +424,7 @@ def main() -> None:
             f"  {r['team']:<4} {r['conference']} {r['division']:<12} exp_wins={r['expected_wins']:<6} "
             f"playoff={r['playoff_prob']:.3f} div_title={r['division_title_prob']:.3f} sb={r['super_bowl_win_prob']:.4f}"
         )
-    print(f"\nBundle dir (copy player CSVs into this manually if not automated): {out_dir}")
+    print(f"\nBundle dir: {out_dir}")
 
 
 if __name__ == "__main__":

@@ -94,6 +94,46 @@ def main() -> None:
         help="Execute full NFL data ownership hardening cycle and backup manifest",
     )
     parser.add_argument(
+        "--run-preseason-bootstrap",
+        action="store_true",
+        help=(
+            "Seed team/player priors for a future season with no real games "
+            "yet: full prior-season averages (not a single-week snapshot), "
+            "market-anchored team strength, and real historical draft-tier "
+            "baselines for rookies. Uses the LAST season in --seasons as the "
+            "target season and that minus 1 as the prior season unless "
+            "--prior-season is set. Safe to re-run any time."
+        ),
+    )
+    parser.add_argument(
+        "--prior-season",
+        type=int,
+        default=None,
+        help="Override the prior season used by --run-preseason-bootstrap",
+    )
+    parser.add_argument(
+        "--no-market-signal",
+        action="store_true",
+        help="Skip the Super Bowl futures market anchor in --run-preseason-bootstrap",
+    )
+    parser.add_argument(
+        "--refresh-rolling-player-usage",
+        action="store_true",
+        help=(
+            "Blend real in-season usage (through --through-week) into "
+            "remaining future weeks still tagged with a synthetic "
+            "preseason/rookie/rolling source, so projections keep tracking "
+            "a player's actual role instead of staying frozen at the "
+            "preseason prior. Uses the LAST season in --seasons."
+        ),
+    )
+    parser.add_argument(
+        "--through-week",
+        type=int,
+        default=None,
+        help="Last real week to treat as 'known' for --refresh-rolling-player-usage",
+    )
+    parser.add_argument(
         "--backup-owned-data",
         action="store_true",
         help="Generate owned-data backup manifest (and optional row exports)",
@@ -112,7 +152,24 @@ def main() -> None:
     from .ops import export_data_ownership_snapshot, run_launch_hardening_cycle
 
     seasons = _parse_seasons(args.seasons)
-    if args.run_launch_hardening:
+    if args.run_preseason_bootstrap:
+        from .preseason_hydration import run_preseason_bootstrap
+
+        result = run_preseason_bootstrap(
+            season=seasons[-1],
+            prior_season=args.prior_season,
+            use_market_signal=not args.no_market_signal,
+        )
+    elif args.refresh_rolling_player_usage:
+        from .preseason_hydration import refresh_future_player_usage_from_rolling_real_weeks
+
+        if args.through_week is None:
+            raise SystemExit("--through-week is required with --refresh-rolling-player-usage")
+        result = refresh_future_player_usage_from_rolling_real_weeks(
+            season=seasons[-1],
+            through_week=args.through_week,
+        )
+    elif args.run_launch_hardening:
         result = run_launch_hardening_cycle(
             seasons=seasons,
             week=args.week,

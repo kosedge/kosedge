@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import logging
 import os
 import re
@@ -61,10 +62,31 @@ from .services.nfl_supervised_retrain import (
     fit_nfl_supervised_models,
 )
 from .services.nfl_player_projection_engine import (
+    ROOKIE_EXPERIENCE_CONFIDENCE,
+    VETERAN_EXPERIENCE_CONFIDENCE,
     PlayerFeatureInputs,
     baseline_projection_from_features,
     evaluate_prop_edge,
     fantasy_points_from_projection,
+)
+from .services.nfl_player_box_score_simulator import (
+    DEFAULT_BOX_SCORE_MODEL_VERSION,
+    DEFAULT_REPLICATES,
+    PlayerBoxScoreRole,
+    TeamVolumeContext,
+    aggregate_game_sims_to_season,
+    compute_team_volume_context,
+    simulate_team_player_box_scores,
+)
+from .services.nfl_fantasy_draft_rankings import rank_season_fantasy_players
+from .services.nfl_award_projections import (
+    compute_stat_composite,
+    compute_team_success_score,
+    meets_award_volume_threshold,
+    rank_award_candidates,
+    score_mvp_candidate,
+    score_opoy_candidate,
+    select_primary_starter_per_team_position,
 )
 from .services.nfl_player_identity import (
     DEFAULT_RESOLVER_VERSION,
@@ -7208,8 +7230,9 @@ def materialize_nfl_player_baseline_projections(
                 """
                 SELECT
                   season, week, team, player_id, player_uid, player_name, position, game_id,
-                  snap_proxy, route_proxy, target_proxy, rush_share, red_zone_share,
+                  snap_proxy, team_snap_share, route_proxy, target_proxy, rush_share, red_zone_share,
                   qb_dropback_factor, qb_pressure_factor, team_pace_factor, team_pass_rate_factor,
+                  opponent_pass_defense_factor, opponent_rush_defense_factor,
                   availability_confidence, role_confidence, feature_payload, updated_at
                 FROM nfl_player_projection_features_weekly
                 WHERE season = :season
@@ -7274,6 +7297,12 @@ def materialize_nfl_player_baseline_projections(
                         "player_id": str(row.player_id),
                     },
                 )
+            usage_source = None
+            if isinstance(row.feature_payload, dict):
+                usage_source = row.feature_payload.get("usage_source")
+            experience_confidence = (
+                ROOKIE_EXPERIENCE_CONFIDENCE if usage_source == "rookie_baseline_v1" else VETERAN_EXPERIENCE_CONFIDENCE
+            )
             inputs = PlayerFeatureInputs(
                 position=str(row.position or ""),
                 snap_proxy=float(row.snap_proxy or 0.0),
@@ -7287,6 +7316,10 @@ def materialize_nfl_player_baseline_projections(
                 team_pass_rate_factor=float(row.team_pass_rate_factor or 1.0),
                 availability_confidence=float(row.availability_confidence or 0.75),
                 role_confidence=float(row.role_confidence or 0.65),
+                experience_confidence=experience_confidence,
+                team_snap_share=float(row.team_snap_share or 0.0),
+                opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
+                opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
             )
             baseline = baseline_projection_from_features(inputs)
             cov_key = str(resolved_player_uid or row.player_name)
@@ -7427,6 +7460,373 @@ def materialize_nfl_player_baseline_projections(
     except Exception:
         session.rollback()
         log.exception("Failed to materialize NFL player baseline projections")
+        raise
+    finally:
+        session.close()
+
+
+def _fetch_team_volume_context(session: Any, *, season: int, team: str, target_week: int) -> TeamVolumeContext:
+    """Walk-forward safe: only ever reads REAL (`source = 'nflverse'`) team
+    situational rows for weeks strictly BEFORE `target_week` this season, so
+    projecting week W never leaks week W's own real plays/pass-rate into its
+    own team-volume anchor. Falls back to the full prior season's real rows
+    when this season has no real weeks yet (preseason / week 1)."""
+    rows = session.execute(
+        text(
+            """
+            SELECT offensive_plays, pass_rate
+            FROM nfl_dp_team_situational_weekly
+            WHERE season = :season AND team = :team AND week < :target_week
+              AND source = 'nflverse' AND games_played > 0
+            ORDER BY week
+            """
+        ),
+        {"season": int(season), "team": team, "target_week": int(target_week)},
+    ).mappings().all()
+    if not rows:
+        rows = session.execute(
+            text(
+                """
+                SELECT offensive_plays, pass_rate
+                FROM nfl_dp_team_situational_weekly
+                WHERE season = :prior_season AND team = :team
+                  AND source = 'nflverse' AND games_played > 0
+                ORDER BY week
+                """
+            ),
+            {"prior_season": int(season) - 1, "team": team},
+        ).mappings().all()
+    return compute_team_volume_context([dict(r) for r in rows])
+
+
+def _box_score_replicate_seed(season: int, week: int, team: str) -> int:
+    return abs(hash((int(season), int(week), team))) % (2**31)
+
+
+@celery_app.task(name="src.tasks.materialize_nfl_player_box_score_sims")
+def materialize_nfl_player_box_score_sims(
+    *,
+    season: int,
+    week: Optional[int] = None,
+    model_version: str = DEFAULT_BOX_SCORE_MODEL_VERSION,
+    replicates: int = DEFAULT_REPLICATES,
+) -> Dict[str, Any]:
+    """Real per-game player box-score Monte Carlo: samples coherent
+    replicate box scores for every player on every team with a real
+    scheduled game in `season`/`week`, and persists per-stat distribution
+    summaries to `nfl_player_game_box_score_sims`. See
+    services/model-service/src/services/nfl_player_box_score_simulator.py
+    for the engine and design rationale (team-context anchoring choice,
+    Dirichlet/Gamma allocation, v2 follow-up note).
+    """
+    session = SessionLocal()
+    upserted = 0
+    teams_simulated = 0
+    try:
+        target_week = _resolve_nfl_week(session, season=season, week=week)
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  season, week, team, player_id, player_uid, player_name, position, game_id, opponent,
+                  snap_proxy, team_snap_share, route_proxy, target_proxy, rush_share, red_zone_share,
+                  qb_dropback_factor, qb_pressure_factor, team_pace_factor, team_pass_rate_factor,
+                  opponent_pass_defense_factor, opponent_rush_defense_factor,
+                  availability_confidence, role_confidence, feature_payload
+                FROM nfl_player_projection_features_weekly
+                WHERE season = :season AND week = :week
+                ORDER BY team, position, player_name
+                """
+            ),
+            {"season": int(season), "week": int(target_week)},
+        ).fetchall()
+
+        rows_by_team: Dict[str, List[Any]] = {}
+        for row in rows:
+            rows_by_team.setdefault(row.team, []).append(row)
+
+        for team, team_rows in rows_by_team.items():
+            # Bye week: nfl_player_projection_features_weekly still has a row
+            # for every rostered player every week (the preseason hydration
+            # seeds weeks 1-18 regardless of the real schedule), but game_id
+            # is only populated when nfl_dp_schedules actually has a game for
+            # this team/week. Skip entirely rather than simulating a game
+            # that doesn't exist and violating the NOT NULL game_id
+            # constraint on insert.
+            if not any(row.game_id for row in team_rows):
+                continue
+            team_context = _fetch_team_volume_context(session, season=season, team=team, target_week=target_week)
+
+            roles: List[PlayerBoxScoreRole] = []
+            row_by_key: Dict[str, Any] = {}
+            for row in team_rows:
+                usage_source = None
+                if isinstance(row.feature_payload, dict):
+                    usage_source = row.feature_payload.get("usage_source")
+                experience_confidence = (
+                    ROOKIE_EXPERIENCE_CONFIDENCE if usage_source == "rookie_baseline_v1" else VETERAN_EXPERIENCE_CONFIDENCE
+                )
+                inputs = PlayerFeatureInputs(
+                    position=str(row.position or ""),
+                    snap_proxy=float(row.snap_proxy or 0.0),
+                    route_proxy=float(row.route_proxy or 0.0),
+                    target_proxy=float(row.target_proxy or 0.0),
+                    rush_share=float(row.rush_share or 0.0),
+                    red_zone_share=float(row.red_zone_share or 0.0),
+                    qb_dropback_factor=float(row.qb_dropback_factor or 1.0),
+                    qb_pressure_factor=float(row.qb_pressure_factor or 1.0),
+                    team_pace_factor=float(row.team_pace_factor or 1.0),
+                    team_pass_rate_factor=float(row.team_pass_rate_factor or 1.0),
+                    availability_confidence=float(row.availability_confidence or 0.75),
+                    role_confidence=float(row.role_confidence or 0.65),
+                    experience_confidence=experience_confidence,
+                    team_snap_share=float(row.team_snap_share or 0.0),
+                    opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
+                    opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
+                )
+                baseline = baseline_projection_from_features(inputs)
+                player_key = str(row.player_uid) if row.player_uid is not None else f"{row.team}:{row.player_id}"
+                row_by_key[player_key] = row
+                roles.append(
+                    PlayerBoxScoreRole(
+                        player_key=player_key,
+                        player_name=str(row.player_name or ""),
+                        position=str(row.position or ""),
+                        baseline=baseline,
+                        role_confidence=float(row.role_confidence or 0.65),
+                        experience_confidence=experience_confidence,
+                    )
+                )
+
+            if not roles:
+                continue
+
+            sim_result = simulate_team_player_box_scores(
+                team_context,
+                roles,
+                replicates=int(replicates),
+                seed=_box_score_replicate_seed(season, target_week, team),
+            )
+            teams_simulated += 1
+
+            team_context_payload = json.dumps(
+                {
+                    "mean_total_plays": team_context.mean_total_plays,
+                    "std_total_plays": team_context.std_total_plays,
+                    "mean_pass_rate": team_context.mean_pass_rate,
+                    "std_pass_rate": team_context.std_pass_rate,
+                    "sample_games": team_context.sample_games,
+                    "anchoring": "trailing_real_team_situational_v1",
+                }
+            )
+
+            for player_key, dist in sim_result.items():
+                row = row_by_key[player_key]
+                session.execute(
+                    text(
+                        """
+                        INSERT INTO nfl_player_game_box_score_sims (
+                          season, week, game_id, team, opponent, player_id, player_uid, player_name, position,
+                          model_version, replicate_count, team_context,
+                          pass_attempts_dist, completions_dist, pass_yards_dist, pass_tds_dist,
+                          rush_attempts_dist, rush_yards_dist, rush_tds_dist,
+                          targets_dist, receptions_dist, receiving_yards_dist, rec_tds_dist,
+                          total_tds_dist, fantasy_points_ppr_dist,
+                          pass_yards_mean, rush_yards_mean, receiving_yards_mean, receptions_mean, total_tds_mean,
+                          source_coverage, created_at, updated_at
+                        ) VALUES (
+                          :season, :week, :game_id, :team, :opponent, :player_id, CAST(:player_uid AS uuid), :player_name, :position,
+                          :model_version, :replicate_count, CAST(:team_context AS jsonb),
+                          CAST(:pass_attempts_dist AS jsonb), CAST(:completions_dist AS jsonb), CAST(:pass_yards_dist AS jsonb), CAST(:pass_tds_dist AS jsonb),
+                          CAST(:rush_attempts_dist AS jsonb), CAST(:rush_yards_dist AS jsonb), CAST(:rush_tds_dist AS jsonb),
+                          CAST(:targets_dist AS jsonb), CAST(:receptions_dist AS jsonb), CAST(:receiving_yards_dist AS jsonb), CAST(:rec_tds_dist AS jsonb),
+                          CAST(:total_tds_dist AS jsonb), CAST(:fantasy_points_ppr_dist AS jsonb),
+                          :pass_yards_mean, :rush_yards_mean, :receiving_yards_mean, :receptions_mean, :total_tds_mean,
+                          CAST(:source_coverage AS jsonb), NOW(), NOW()
+                        )
+                        ON CONFLICT (season, week, team, player_id, model_version) DO UPDATE SET
+                          game_id = EXCLUDED.game_id,
+                          opponent = EXCLUDED.opponent,
+                          player_uid = EXCLUDED.player_uid,
+                          player_name = EXCLUDED.player_name,
+                          position = EXCLUDED.position,
+                          replicate_count = EXCLUDED.replicate_count,
+                          team_context = EXCLUDED.team_context,
+                          pass_attempts_dist = EXCLUDED.pass_attempts_dist,
+                          completions_dist = EXCLUDED.completions_dist,
+                          pass_yards_dist = EXCLUDED.pass_yards_dist,
+                          pass_tds_dist = EXCLUDED.pass_tds_dist,
+                          rush_attempts_dist = EXCLUDED.rush_attempts_dist,
+                          rush_yards_dist = EXCLUDED.rush_yards_dist,
+                          rush_tds_dist = EXCLUDED.rush_tds_dist,
+                          targets_dist = EXCLUDED.targets_dist,
+                          receptions_dist = EXCLUDED.receptions_dist,
+                          receiving_yards_dist = EXCLUDED.receiving_yards_dist,
+                          rec_tds_dist = EXCLUDED.rec_tds_dist,
+                          total_tds_dist = EXCLUDED.total_tds_dist,
+                          fantasy_points_ppr_dist = EXCLUDED.fantasy_points_ppr_dist,
+                          pass_yards_mean = EXCLUDED.pass_yards_mean,
+                          rush_yards_mean = EXCLUDED.rush_yards_mean,
+                          receiving_yards_mean = EXCLUDED.receiving_yards_mean,
+                          receptions_mean = EXCLUDED.receptions_mean,
+                          total_tds_mean = EXCLUDED.total_tds_mean,
+                          source_coverage = EXCLUDED.source_coverage,
+                          updated_at = EXCLUDED.updated_at
+                        """
+                    ),
+                    {
+                        "season": int(season),
+                        "week": int(target_week),
+                        "game_id": row.game_id,
+                        "team": row.team,
+                        "opponent": row.opponent,
+                        "player_id": row.player_id,
+                        "player_uid": str(row.player_uid) if row.player_uid is not None else None,
+                        "player_name": row.player_name,
+                        "position": row.position,
+                        "model_version": model_version,
+                        "replicate_count": int(replicates),
+                        "team_context": team_context_payload,
+                        "pass_attempts_dist": json.dumps(dist["pass_attempts_dist"]),
+                        "completions_dist": json.dumps(dist["completions_dist"]),
+                        "pass_yards_dist": json.dumps(dist["pass_yards_dist"]),
+                        "pass_tds_dist": json.dumps(dist["pass_tds_dist"]),
+                        "rush_attempts_dist": json.dumps(dist["rush_attempts_dist"]),
+                        "rush_yards_dist": json.dumps(dist["rush_yards_dist"]),
+                        "rush_tds_dist": json.dumps(dist["rush_tds_dist"]),
+                        "targets_dist": json.dumps(dist["targets_dist"]),
+                        "receptions_dist": json.dumps(dist["receptions_dist"]),
+                        "receiving_yards_dist": json.dumps(dist["receiving_yards_dist"]),
+                        "rec_tds_dist": json.dumps(dist["rec_tds_dist"]),
+                        "total_tds_dist": json.dumps(dist["total_tds_dist"]),
+                        "fantasy_points_ppr_dist": json.dumps(dist["fantasy_points_ppr_dist"]),
+                        "pass_yards_mean": dist["pass_yards_dist"]["mean"],
+                        "rush_yards_mean": dist["rush_yards_dist"]["mean"],
+                        "receiving_yards_mean": dist["receiving_yards_dist"]["mean"],
+                        "receptions_mean": dist["receptions_dist"]["mean"],
+                        "total_tds_mean": dist["total_tds_dist"]["mean"],
+                        "source_coverage": json.dumps(
+                            {
+                                "feature_source": "nfl_player_projection_features_weekly",
+                                "team_volume_sample_games": team_context.sample_games,
+                            }
+                        ),
+                    },
+                )
+                upserted += 1
+
+        session.commit()
+        return {
+            "season": int(season),
+            "week": int(target_week),
+            "model_version": model_version,
+            "replicates": int(replicates),
+            "teams_simulated": teams_simulated,
+            "player_rows_upserted": upserted,
+        }
+    except Exception:
+        session.rollback()
+        log.exception("Failed to materialize NFL player box score sims")
+        raise
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.materialize_nfl_player_season_box_score_sims")
+def materialize_nfl_player_season_box_score_sims(
+    *,
+    season: int,
+    model_version: str = DEFAULT_BOX_SCORE_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Sums real per-game box-score sim rows (`nfl_player_game_box_score_sims`)
+    into a season-level mean+std per player, via `aggregate_game_sims_to_season()`.
+    Recomputed from scratch every call -- never hand-edited, safe to re-run
+    any time after `materialize_nfl_player_box_score_sims` has run for the
+    real weeks played so far this season."""
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT team, player_id, player_uid, player_name, position,
+                  pass_yards_dist, rush_yards_dist, receiving_yards_dist, receptions_dist, total_tds_dist
+                FROM nfl_player_game_box_score_sims
+                WHERE season = :season AND model_version = :model_version
+                  AND game_id IS NOT NULL AND game_id <> ''
+                ORDER BY team, player_id, week
+                """
+            ),
+            {"season": int(season), "model_version": model_version},
+        ).fetchall()
+
+        by_player: Dict[tuple[str, str], List[Any]] = {}
+        for row in rows:
+            by_player.setdefault((row.team, row.player_id), []).append(row)
+
+        upserted = 0
+        for (team, player_id), player_rows in by_player.items():
+            game_dicts = [
+                {
+                    "pass_yards_dist": r.pass_yards_dist,
+                    "rush_yards_dist": r.rush_yards_dist,
+                    "receiving_yards_dist": r.receiving_yards_dist,
+                    "receptions_dist": r.receptions_dist,
+                    "total_tds_dist": r.total_tds_dist,
+                }
+                for r in player_rows
+            ]
+            season_totals = aggregate_game_sims_to_season(game_dicts)
+            latest = player_rows[-1]
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nfl_player_season_box_score_sims (
+                      season, team, player_id, player_uid, player_name, position, model_version,
+                      games_aggregated, pass_yards_mean, pass_yards_std, rush_yards_mean, rush_yards_std,
+                      receiving_yards_mean, receiving_yards_std, receptions_mean, receptions_std,
+                      total_tds_mean, total_tds_std, updated_at
+                    ) VALUES (
+                      :season, :team, :player_id, CAST(:player_uid AS uuid), :player_name, :position, :model_version,
+                      :games_aggregated, :pass_yards_mean, :pass_yards_std, :rush_yards_mean, :rush_yards_std,
+                      :receiving_yards_mean, :receiving_yards_std, :receptions_mean, :receptions_std,
+                      :total_tds_mean, :total_tds_std, NOW()
+                    )
+                    ON CONFLICT (season, team, player_id, model_version) DO UPDATE SET
+                      player_uid = EXCLUDED.player_uid,
+                      player_name = EXCLUDED.player_name,
+                      position = EXCLUDED.position,
+                      games_aggregated = EXCLUDED.games_aggregated,
+                      pass_yards_mean = EXCLUDED.pass_yards_mean,
+                      pass_yards_std = EXCLUDED.pass_yards_std,
+                      rush_yards_mean = EXCLUDED.rush_yards_mean,
+                      rush_yards_std = EXCLUDED.rush_yards_std,
+                      receiving_yards_mean = EXCLUDED.receiving_yards_mean,
+                      receiving_yards_std = EXCLUDED.receiving_yards_std,
+                      receptions_mean = EXCLUDED.receptions_mean,
+                      receptions_std = EXCLUDED.receptions_std,
+                      total_tds_mean = EXCLUDED.total_tds_mean,
+                      total_tds_std = EXCLUDED.total_tds_std,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "season": int(season),
+                    "team": team,
+                    "player_id": player_id,
+                    "player_uid": str(latest.player_uid) if latest.player_uid is not None else None,
+                    "player_name": latest.player_name,
+                    "position": latest.position,
+                    "model_version": model_version,
+                    **season_totals,
+                },
+            )
+            upserted += 1
+
+        session.commit()
+        return {"season": int(season), "model_version": model_version, "player_rows_upserted": upserted}
+    except Exception:
+        session.rollback()
+        log.exception("Failed to materialize NFL player season box score sims")
         raise
     finally:
         session.close()
@@ -8009,6 +8409,522 @@ def materialize_nfl_fantasy_projections(
     except Exception:
         session.rollback()
         log.exception("Failed to materialize NFL fantasy projections")
+        raise
+    finally:
+        session.close()
+
+
+_SEASON_FANTASY_ELIGIBLE_POSITIONS = ("QB", "RB", "WR", "TE")
+
+
+def _fetch_season_player_totals(
+    session: Any, *, season: int, model_version: str
+) -> List[Dict[str, Any]]:
+    """One row per (team, player_id) with real-week counting-stat totals
+    summed directly in SQL across every week that player's team has a real
+    scheduled game (`game_id` non-empty -- bye weeks leave it blank, same
+    convention as data_platform_nfl.player_season_totals). Only QB/RB/WR/TE
+    are returned since those are the only positions this model projects
+    meaningful passing/rushing/receiving counting stats for -- K/DST have no
+    real projected stat coverage here.
+
+    Two players can share a display name on the same team (verified against
+    real 2026 roster data -- e.g. two different "B.Robinson" entries on the
+    same roster), so grouping is keyed by the real `(team, player_id)` pair,
+    never by name, to avoid silently merging two distinct players' stats.
+    """
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              b.player_id,
+              MAX(b.player_uid::text) AS player_uid,
+              MAX(b.player_name) AS player_name,
+              b.team,
+              MAX(b.position) AS position,
+              COUNT(*) AS games_projected,
+              SUM(COALESCE(b.pass_yards_mean, 0.0)) AS pass_yards_total,
+              SUM(COALESCE(b.rush_yards_mean, 0.0)) AS rush_yards_total,
+              SUM(COALESCE(b.receiving_yards_mean, 0.0)) AS receiving_yards_total,
+              SUM(COALESCE(b.receptions_mean, 0.0)) AS receptions_total,
+              SUM(COALESCE(b.pass_tds_mean, 0.0)) AS pass_tds_total,
+              SUM(COALESCE(b.rush_tds_mean, 0.0)) AS rush_tds_total,
+              SUM(COALESCE(b.rec_tds_mean, 0.0)) AS rec_tds_total,
+              MAX(r.rookie_year) AS rookie_year,
+              MAX(r.draft_number) AS draft_number
+            FROM nfl_player_projection_baselines b
+            LEFT JOIN nfl_dp_rosters r
+              ON r.season = b.season AND r.team = b.team AND r.player_id = b.player_id
+            WHERE b.season = :season
+              AND b.model_version = :model_version
+              AND b.game_id IS NOT NULL AND b.game_id <> ''
+              AND b.position = ANY(:positions)
+            GROUP BY b.player_id, b.team
+            """
+        ),
+        {"season": int(season), "model_version": model_version, "positions": list(_SEASON_FANTASY_ELIGIBLE_POSITIONS)},
+    ).mappings().all()
+
+    players: List[Dict[str, Any]] = []
+    for row in rows:
+        rookie_year = row["rookie_year"]
+        players.append(
+            {
+                "player_key": f"{row['team']}:{row['player_id']}",
+                "player_id": row["player_id"],
+                "player_uid": row["player_uid"],
+                "player_name": row["player_name"],
+                "team": row["team"],
+                "position": str(row["position"] or "UNK").upper(),
+                "games_projected": int(row["games_projected"] or 0),
+                "pass_yards_total": float(row["pass_yards_total"] or 0.0),
+                "rush_yards_total": float(row["rush_yards_total"] or 0.0),
+                "receiving_yards_total": float(row["receiving_yards_total"] or 0.0),
+                "receptions_total": float(row["receptions_total"] or 0.0),
+                "pass_tds_total": float(row["pass_tds_total"] or 0.0),
+                "rush_tds_total": float(row["rush_tds_total"] or 0.0),
+                "rec_tds_total": float(row["rec_tds_total"] or 0.0),
+                "rookie_year": int(rookie_year) if rookie_year is not None else None,
+                "draft_number": int(row["draft_number"]) if row["draft_number"] is not None else None,
+                "is_rookie": bool(rookie_year is not None and int(rookie_year) == int(season)),
+            }
+        )
+    return players
+
+
+@celery_app.task(name="src.tasks.materialize_nfl_fantasy_season_draft_rankings")
+def materialize_nfl_fantasy_season_draft_rankings(
+    *,
+    season: int,
+    model_version: str = "nfl-player-v1",
+) -> Dict[str, Any]:
+    """Season-long fantasy DRAFT board -- distinct from
+    `materialize_nfl_fantasy_projections` (single-week start/sit rankings).
+    One row per (season, scoring_profile, model_version, player_id), built
+    from real season-total counting stats (see `_fetch_season_player_totals`)
+    fed through the already-canonical `fantasy_points_from_projection()` once
+    per scoring profile, then ranked/tiered via
+    `nfl_fantasy_draft_rankings.rank_season_fantasy_players`.
+    """
+    session = SessionLocal()
+    upserted = 0
+    try:
+        base_players = _fetch_season_player_totals(session, season=season, model_version=model_version)
+        if not base_players:
+            return {"season": int(season), "model_version": model_version, "status": "no_data", "rows_upserted": 0}
+
+        profiles = ["standard", "half_ppr", "ppr"]
+        for profile in profiles:
+            profile_players = []
+            for player in base_players:
+                total_points = fantasy_points_from_projection(
+                    scoring_profile=profile,
+                    pass_yards=player["pass_yards_total"],
+                    pass_tds=player["pass_tds_total"],
+                    rush_yards=player["rush_yards_total"],
+                    rush_tds=player["rush_tds_total"],
+                    receiving_yards=player["receiving_yards_total"],
+                    receptions=player["receptions_total"],
+                    rec_tds=player["rec_tds_total"],
+                )
+                profile_players.append({**player, "total_points": total_points})
+
+            ranked = rank_season_fantasy_players(profile_players)
+            for player in ranked:
+                session.execute(
+                    text(
+                        """
+                        INSERT INTO nfl_fantasy_season_draft_rankings (
+                          season, scoring_profile, model_version, player_id, player_uid, player_name, team, position,
+                          games_projected, pass_yards_total, rush_yards_total, receiving_yards_total, receptions_total,
+                          pass_tds_total, rush_tds_total, rec_tds_total, total_points, replacement_points, value_over_replacement,
+                          rank_overall, rank_position, tier, is_rookie, rookie_year, draft_number,
+                          projection_payload, created_at, updated_at
+                        ) VALUES (
+                          :season, :scoring_profile, :model_version, :player_id, CAST(:player_uid AS uuid), :player_name, :team, :position,
+                          :games_projected, :pass_yards_total, :rush_yards_total, :receiving_yards_total, :receptions_total,
+                          :pass_tds_total, :rush_tds_total, :rec_tds_total, :total_points, :replacement_points, :value_over_replacement,
+                          :rank_overall, :rank_position, :tier, :is_rookie, :rookie_year, :draft_number,
+                          CAST(:projection_payload AS jsonb), NOW(), NOW()
+                        )
+                        ON CONFLICT (season, scoring_profile, model_version, player_id) DO UPDATE SET
+                          player_uid = EXCLUDED.player_uid,
+                          player_name = EXCLUDED.player_name,
+                          team = EXCLUDED.team,
+                          position = EXCLUDED.position,
+                          games_projected = EXCLUDED.games_projected,
+                          pass_yards_total = EXCLUDED.pass_yards_total,
+                          rush_yards_total = EXCLUDED.rush_yards_total,
+                          receiving_yards_total = EXCLUDED.receiving_yards_total,
+                          receptions_total = EXCLUDED.receptions_total,
+                          pass_tds_total = EXCLUDED.pass_tds_total,
+                          rush_tds_total = EXCLUDED.rush_tds_total,
+                          rec_tds_total = EXCLUDED.rec_tds_total,
+                          total_points = EXCLUDED.total_points,
+                          replacement_points = EXCLUDED.replacement_points,
+                          value_over_replacement = EXCLUDED.value_over_replacement,
+                          rank_overall = EXCLUDED.rank_overall,
+                          rank_position = EXCLUDED.rank_position,
+                          tier = EXCLUDED.tier,
+                          is_rookie = EXCLUDED.is_rookie,
+                          rookie_year = EXCLUDED.rookie_year,
+                          draft_number = EXCLUDED.draft_number,
+                          projection_payload = EXCLUDED.projection_payload,
+                          updated_at = EXCLUDED.updated_at
+                        """
+                    ),
+                    {
+                        "season": int(season),
+                        "scoring_profile": profile,
+                        "model_version": model_version,
+                        "player_id": player["player_id"],
+                        "player_uid": player["player_uid"],
+                        "player_name": player["player_name"],
+                        "team": player["team"],
+                        "position": player["position"],
+                        "games_projected": player["games_projected"],
+                        "pass_yards_total": player["pass_yards_total"],
+                        "rush_yards_total": player["rush_yards_total"],
+                        "receiving_yards_total": player["receiving_yards_total"],
+                        "receptions_total": player["receptions_total"],
+                        "pass_tds_total": player["pass_tds_total"],
+                        "rush_tds_total": player["rush_tds_total"],
+                        "rec_tds_total": player["rec_tds_total"],
+                        "total_points": player["total_points"],
+                        "replacement_points": player["replacement_points"],
+                        "value_over_replacement": player["value_over_replacement"],
+                        "rank_overall": player["rank_overall"],
+                        "rank_position": player["rank_position"],
+                        "tier": player["tier"],
+                        "is_rookie": player["is_rookie"],
+                        "rookie_year": player["rookie_year"],
+                        "draft_number": player["draft_number"],
+                        "projection_payload": json.dumps(
+                            {"derived_from": "nfl_player_projection_baselines", "profile": profile, "aggregation": "season_total"}
+                        ),
+                    },
+                )
+                upserted += 1
+
+        session.execute(
+            text(
+                """
+                INSERT INTO nfl_projection_audit_runs (
+                  season, week, layer, model_version, source_coverage, freshness, calibration_flags, readiness_status, metrics, created_at
+                ) VALUES (
+                  :season, :week, :layer, :model_version,
+                  CAST(:source_coverage AS jsonb), CAST(:freshness AS jsonb),
+                  CAST(:calibration_flags AS jsonb), :readiness_status, CAST(:metrics AS jsonb), NOW()
+                )
+                """
+            ),
+            {
+                "season": int(season),
+                "week": 0,
+                "layer": "fantasy_season_draft_rankings",
+                "model_version": model_version,
+                "source_coverage": json.dumps({"players": len(base_players), "profiles": len(profiles)}),
+                "freshness": json.dumps({"generated_at": datetime.now(timezone.utc).isoformat()}),
+                "calibration_flags": json.dumps({"calibrated": False, "tiers": "fixed-rank-ladder"}),
+                "readiness_status": "go" if len(base_players) > 50 else "warning",
+                "metrics": json.dumps({"rows_upserted": upserted}),
+            },
+        )
+        session.commit()
+        return {"season": int(season), "model_version": model_version, "players": len(base_players), "rows_upserted": upserted}
+    except Exception:
+        session.rollback()
+        log.exception("Failed to materialize NFL fantasy season draft rankings")
+        raise
+    finally:
+        session.close()
+
+
+def _find_repo_root_with_data_ops() -> Optional[str]:
+    """Walks up from this file's location until a `data/ops` directory is
+    found, mirroring `findRepoRoot()` in apps/web/lib/nfl-preseason-artifacts.ts
+    (the web app's reader for the same season Monte Carlo bundles)."""
+    current = os.path.dirname(os.path.abspath(__file__))
+    for _ in range(8):
+        if os.path.isdir(os.path.join(current, "data", "ops")):
+            return current
+        parent = os.path.dirname(current)
+        if parent == current:
+            break
+        current = parent
+    return None
+
+
+def _load_latest_team_season_outcomes(season: int) -> Dict[str, Dict[str, Any]]:
+    """Loads {team: {...}} from the most recent
+    data/ops/nfl-preseason-sim-<season>-<timestamp>/team_regular_season_outcomes.csv
+    bundle -- the same real, validated 50,000-replicate season Monte Carlo
+    output the web app reads (see apps/web/lib/nfl-preseason-artifacts.ts).
+    There is no DB table for this yet (team-outcome persistence is owned by
+    the separate season-simulator workstream), so this reads the flat CSV
+    artifact directly, same as the web app does. Returns {} if no bundle is
+    found -- callers must treat that as "no team context available" and skip
+    award materialization rather than fabricate placeholder win totals."""
+    repo_root = _find_repo_root_with_data_ops()
+    if repo_root is None:
+        return {}
+    data_ops_path = os.path.join(repo_root, "data", "ops")
+    prefix = f"nfl-preseason-sim-{int(season)}-"
+    try:
+        candidates = sorted(
+            (
+                name
+                for name in os.listdir(data_ops_path)
+                if name.startswith(prefix) and os.path.isdir(os.path.join(data_ops_path, name))
+            ),
+            reverse=True,
+        )
+    except OSError:
+        return {}
+
+    for bundle_name in candidates:
+        csv_path = os.path.join(data_ops_path, bundle_name, "team_regular_season_outcomes.csv")
+        if not os.path.isfile(csv_path):
+            continue
+        outcomes: Dict[str, Dict[str, Any]] = {}
+        with open(csv_path, newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                try:
+                    outcomes[row["team"]] = {
+                        "expected_wins": float(row["expected_wins"]),
+                        "wins_p10": float(row["wins_p10"]),
+                        "wins_p90": float(row["wins_p90"]),
+                        "playoff_prob": float(row["playoff_prob"]),
+                        "division_title_prob": float(row["division_title_prob"]),
+                        "super_bowl_win_prob": float(row["super_bowl_win_prob"]),
+                        "bundle": bundle_name,
+                    }
+                except (KeyError, ValueError):
+                    continue
+        if outcomes:
+            return outcomes
+    return {}
+
+
+@celery_app.task(name="src.tasks.materialize_nfl_award_projections")
+def materialize_nfl_award_projections(
+    *,
+    season: int,
+    model_version: str = "nfl-player-v1",
+    top_n: int = 10,
+) -> Dict[str, Any]:
+    """MVP / Offensive Player of the Year contender leaderboards -- see
+    services/model-service/src/services/nfl_award_projections.py for the
+    full scoring methodology. Combines each qualifying player's real
+    projected season counting stats (`_fetch_season_player_totals`) with
+    their team's real projected win total / division-title probability from
+    the season Monte Carlo bundle (`_load_latest_team_season_outcomes`).
+    """
+    session = SessionLocal()
+    try:
+        team_outcomes = _load_latest_team_season_outcomes(season)
+        if not team_outcomes:
+            return {
+                "season": int(season),
+                "model_version": model_version,
+                "status": "skipped",
+                "reason": "no_team_season_outcomes_bundle_found",
+            }
+
+        base_players = _fetch_season_player_totals(session, season=season, model_version=model_version)
+
+        candidates: List[Dict[str, Any]] = []
+        for player in base_players:
+            outcome = team_outcomes.get(player["team"])
+            if outcome is None:
+                # Team not present in this season-sim bundle (e.g. a team
+                # code mismatch) -- skip rather than guess at a win total.
+                continue
+            if not meets_award_volume_threshold(
+                position=player["position"],
+                pass_yards_total=player["pass_yards_total"],
+                rush_yards_total=player["rush_yards_total"],
+                receiving_yards_total=player["receiving_yards_total"],
+            ):
+                continue
+            is_qb = player["position"] == "QB"
+            total_yards = (
+                player["pass_yards_total"] + player["rush_yards_total"]
+                if is_qb
+                else player["rush_yards_total"] + player["receiving_yards_total"]
+            )
+            total_tds = (
+                player["pass_tds_total"] + player["rush_tds_total"]
+                if is_qb
+                else player["rush_tds_total"] + player["rec_tds_total"]
+            )
+            candidates.append(
+                {
+                    **player,
+                    "total_yards": total_yards,
+                    "total_tds": total_tds,
+                    "expected_wins": outcome["expected_wins"],
+                    "division_title_prob": outcome["division_title_prob"],
+                    "playoff_prob": outcome["playoff_prob"],
+                    "team_outcome_bundle": outcome["bundle"],
+                }
+            )
+
+        # Keep only each team's single highest-volume player per position --
+        # see select_primary_starter_per_team_position's docstring for why
+        # this is both realistic (awards are never split across a team's
+        # depth chart) and a necessary guardrail against a backup
+        # occasionally clearing meets_award_volume_threshold with
+        # near-starter projected volume.
+        candidates = select_primary_starter_per_team_position(candidates, volume_key="total_yards")
+
+        if not candidates:
+            return {
+                "season": int(season),
+                "model_version": model_version,
+                "status": "no_qualifying_candidates",
+            }
+
+        # Team-success normalization uses EVERY team in the sim bundle (not
+        # just teams with a qualifying candidate) so it doesn't shift based
+        # on which positions happen to qualify this run.
+        peer_expected_wins_all_teams = [o["expected_wins"] for o in team_outcomes.values()]
+
+        peer_yards_by_position: Dict[str, List[float]] = {}
+        peer_tds_by_position: Dict[str, List[float]] = {}
+        for candidate in candidates:
+            peer_yards_by_position.setdefault(candidate["position"], []).append(candidate["total_yards"])
+            peer_tds_by_position.setdefault(candidate["position"], []).append(candidate["total_tds"])
+
+        scored: List[Dict[str, Any]] = []
+        for candidate in candidates:
+            position = candidate["position"]
+            team_success_score = compute_team_success_score(
+                expected_wins=candidate["expected_wins"],
+                division_title_prob=candidate["division_title_prob"],
+                peer_expected_wins=peer_expected_wins_all_teams,
+            )
+            stat_composite = compute_stat_composite(
+                total_yards=candidate["total_yards"],
+                total_tds=candidate["total_tds"],
+                peer_total_yards=peer_yards_by_position[position],
+                peer_total_tds=peer_tds_by_position[position],
+            )
+            mvp_score = score_mvp_candidate(
+                position=position, team_success_score=team_success_score, stat_composite=stat_composite
+            )
+            opoy_score = score_opoy_candidate(team_success_score=team_success_score, stat_composite=stat_composite)
+            scored.append(
+                {
+                    **candidate,
+                    "team_success_score": team_success_score,
+                    "stat_composite": stat_composite,
+                    "mvp_score": mvp_score,
+                    "opoy_score": opoy_score,
+                }
+            )
+
+        mvp_ranked = rank_award_candidates(scored, score_key="mvp_score")[: max(1, int(top_n))]
+        opoy_ranked = rank_award_candidates(scored, score_key="opoy_score")[: max(1, int(top_n))]
+
+        session.execute(
+            text("DELETE FROM nfl_award_projections WHERE season = :season AND model_version = :model_version"),
+            {"season": int(season), "model_version": model_version},
+        )
+
+        rows_inserted = 0
+        for award, ranked_list, score_key in (("mvp", mvp_ranked, "mvp_score"), ("opoy", opoy_ranked, "opoy_score")):
+            for item in ranked_list:
+                session.execute(
+                    text(
+                        """
+                        INSERT INTO nfl_award_projections (
+                          season, award, model_version, player_id, player_uid, player_name, team, position,
+                          rank_overall, award_score, team_success_score, stat_composite,
+                          team_expected_wins, team_division_title_prob, team_playoff_prob,
+                          pass_yards_total, rush_yards_total, receiving_yards_total,
+                          pass_tds_total, rush_tds_total, rec_tds_total,
+                          methodology_payload, created_at, updated_at
+                        ) VALUES (
+                          :season, :award, :model_version, :player_id, CAST(:player_uid AS uuid), :player_name, :team, :position,
+                          :rank_overall, :award_score, :team_success_score, :stat_composite,
+                          :team_expected_wins, :team_division_title_prob, :team_playoff_prob,
+                          :pass_yards_total, :rush_yards_total, :receiving_yards_total,
+                          :pass_tds_total, :rush_tds_total, :rec_tds_total,
+                          CAST(:methodology_payload AS jsonb), NOW(), NOW()
+                        )
+                        """
+                    ),
+                    {
+                        "season": int(season),
+                        "award": award,
+                        "model_version": model_version,
+                        "player_id": item["player_id"],
+                        "player_uid": item["player_uid"],
+                        "player_name": item["player_name"],
+                        "team": item["team"],
+                        "position": item["position"],
+                        "rank_overall": item["rank_overall"],
+                        "award_score": item[score_key],
+                        "team_success_score": item["team_success_score"],
+                        "stat_composite": item["stat_composite"],
+                        "team_expected_wins": item["expected_wins"],
+                        "team_division_title_prob": item["division_title_prob"],
+                        "team_playoff_prob": item["playoff_prob"],
+                        "pass_yards_total": item["pass_yards_total"],
+                        "rush_yards_total": item["rush_yards_total"],
+                        "receiving_yards_total": item["receiving_yards_total"],
+                        "pass_tds_total": item["pass_tds_total"],
+                        "rush_tds_total": item["rush_tds_total"],
+                        "rec_tds_total": item["rec_tds_total"],
+                        "methodology_payload": json.dumps(
+                            {
+                                "team_outcome_bundle": item["team_outcome_bundle"],
+                                "qualifying_candidates_at_position": len(peer_yards_by_position[item["position"]]),
+                            }
+                        ),
+                    },
+                )
+                rows_inserted += 1
+
+        session.execute(
+            text(
+                """
+                INSERT INTO nfl_projection_audit_runs (
+                  season, week, layer, model_version, source_coverage, freshness, calibration_flags, readiness_status, metrics, created_at
+                ) VALUES (
+                  :season, :week, :layer, :model_version,
+                  CAST(:source_coverage AS jsonb), CAST(:freshness AS jsonb),
+                  CAST(:calibration_flags AS jsonb), :readiness_status, CAST(:metrics AS jsonb), NOW()
+                )
+                """
+            ),
+            {
+                "season": int(season),
+                "week": 0,
+                "layer": "award_projections",
+                "model_version": model_version,
+                "source_coverage": json.dumps(
+                    {"qualifying_candidates": len(candidates), "team_outcome_bundle": candidates[0]["team_outcome_bundle"]}
+                ),
+                "freshness": json.dumps({"generated_at": datetime.now(timezone.utc).isoformat()}),
+                "calibration_flags": json.dumps({"calibrated": False, "methodology": "documented-weighted-heuristic"}),
+                "readiness_status": "go" if len(candidates) >= 8 else "warning",
+                "metrics": json.dumps({"rows_inserted": rows_inserted}),
+            },
+        )
+        session.commit()
+        return {
+            "season": int(season),
+            "model_version": model_version,
+            "qualifying_candidates": len(candidates),
+            "mvp_top": [{"player_name": r["player_name"], "team": r["team"], "score": r["mvp_score"]} for r in mvp_ranked],
+            "opoy_top": [{"player_name": r["player_name"], "team": r["team"], "score": r["opoy_score"]} for r in opoy_ranked],
+        }
+    except Exception:
+        session.rollback()
+        log.exception("Failed to materialize NFL award projections")
         raise
     finally:
         session.close()

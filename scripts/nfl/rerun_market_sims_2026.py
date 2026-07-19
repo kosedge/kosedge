@@ -15,7 +15,11 @@ from src import tasks as tasks_module  # noqa: E402
 
 result = tasks_module.backfill_nfl_historical_projections.run(
     start_date="2026-01-03",
-    end_date="2026-12-31",
+    # Week 17-18 games of the 2026 season are played in early January 2027
+    # and get mislabeled season_year=2027 at ingestion time (see
+    # simulate_2026_season.py's schedule query note) -- extend into next
+    # January so those games' projections get refreshed too.
+    end_date="2027-01-15",
     simulations=4000,
     model_version=tasks_module.DEFAULT_NFL_MODEL_VERSION,
     kickoff_buffer_minutes=30,

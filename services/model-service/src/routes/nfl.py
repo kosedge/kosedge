@@ -39,6 +39,8 @@ TASK_EVAL_NFL_PROMOTION = "src.tasks.evaluate_nfl_model_promotion"
 TASK_NFL_PLAYER_BASELINES = "src.tasks.materialize_nfl_player_baseline_projections"
 TASK_NFL_PLAYER_PROPS = "src.tasks.materialize_nfl_player_props_edges"
 TASK_NFL_FANTASY = "src.tasks.materialize_nfl_fantasy_projections"
+TASK_NFL_FANTASY_DRAFT_RANKINGS = "src.tasks.materialize_nfl_fantasy_season_draft_rankings"
+TASK_NFL_AWARD_PROJECTIONS = "src.tasks.materialize_nfl_award_projections"
 TASK_NFL_PLAYER_CYCLE = "src.tasks.run_nfl_player_projection_cycle"
 TASK_NFL_IDENTITY_REFRESH = "src.tasks.run_nfl_identity_refresh"
 TASK_NFL_IDENTITY_MANUAL_RESOLUTIONS = "src.tasks.apply_nfl_identity_manual_resolutions"
@@ -2846,6 +2848,97 @@ def nfl_fantasy_rankings(
         session.close()
 
 
+@router.get("/fantasy/draft-rankings")
+def nfl_fantasy_draft_rankings(
+    season: int = Query(..., ge=2010, le=2100),
+    scoring_profile: str = Query("half_ppr", pattern="^(standard|half_ppr|ppr)$"),
+    model_version: str = Query("nfl-player-v1"),
+    position: Optional[str] = Query(None),
+    tier: Optional[str] = Query(None),
+    rookies_only: bool = Query(False),
+    limit: int = Query(300, ge=1, le=3000),
+) -> Dict[str, Any]:
+    """SEASON-LONG fantasy draft board (distinct from `/fantasy/rankings`,
+    which is a single week's start/sit ranking) -- one row per player summed
+    across the whole real projected season, with overall rank, position
+    rank, draft tier, and a rookie flag. See
+    `nfl_fantasy_season_draft_rankings` / `materialize_nfl_fantasy_season_draft_rankings`."""
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  season, scoring_profile, model_version, player_id, player_uid, player_name, team, position,
+                  games_projected, pass_yards_total, rush_yards_total, receiving_yards_total, receptions_total,
+                  pass_tds_total, rush_tds_total, rec_tds_total, total_points, replacement_points, value_over_replacement,
+                  rank_overall, rank_position, tier, is_rookie, rookie_year, draft_number, updated_at
+                FROM nfl_fantasy_season_draft_rankings
+                WHERE season = :season
+                  AND scoring_profile = :scoring_profile
+                  AND model_version = :model_version
+                  AND (CAST(:position AS text) IS NULL OR position = CAST(:position AS text))
+                  AND (CAST(:tier AS text) IS NULL OR tier = CAST(:tier AS text))
+                  AND (CAST(:rookies_only AS boolean) = FALSE OR is_rookie = TRUE)
+                ORDER BY rank_overall
+                LIMIT :limit
+                """
+            ),
+            {
+                "season": season,
+                "scoring_profile": scoring_profile,
+                "model_version": model_version,
+                "position": position,
+                "tier": tier,
+                "rookies_only": rookies_only,
+                "limit": limit,
+            },
+        ).fetchall()
+        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+    finally:
+        session.close()
+
+
+@router.get("/awards/projections")
+def nfl_award_projections_board(
+    season: int = Query(..., ge=2010, le=2100),
+    award: Optional[str] = Query(None, pattern="^(mvp|opoy)$"),
+    model_version: str = Query("nfl-player-v1"),
+    limit: int = Query(20, ge=1, le=50),
+) -> Dict[str, Any]:
+    """MVP / Offensive Player of the Year contender leaderboard. Each row
+    carries the supporting projected stats (team win total, division-title
+    probability, passing/rushing/receiving yards+TDs) and the intermediate
+    `team_success_score` / `stat_composite` terms behind `award_score`, so the
+    ranking is inspectable rather than a bare name+score. See
+    `services/model-service/src/services/nfl_award_projections.py` for the
+    full weighting methodology."""
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  season, award, model_version, player_id, player_uid, player_name, team, position,
+                  rank_overall, award_score, team_success_score, stat_composite,
+                  team_expected_wins, team_division_title_prob, team_playoff_prob,
+                  pass_yards_total, rush_yards_total, receiving_yards_total,
+                  pass_tds_total, rush_tds_total, rec_tds_total, methodology_payload, updated_at
+                FROM nfl_award_projections
+                WHERE season = :season
+                  AND model_version = :model_version
+                  AND (CAST(:award AS text) IS NULL OR award = CAST(:award AS text))
+                ORDER BY award, rank_overall
+                LIMIT :limit
+                """
+            ),
+            {"season": season, "model_version": model_version, "award": award, "limit": limit},
+        ).fetchall()
+        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+    finally:
+        session.close()
+
+
 @router.get("/ops/projections-readiness")
 def nfl_projection_layer_readiness(
     season: int = Query(..., ge=2010, le=2100),
@@ -2913,6 +3006,31 @@ def nfl_trigger_fantasy_materialization(
         kwargs={"season": int(season), "week": int(week) if week is not None else None, "model_version": model_version},
     )
     return {"task_id": task.id, "task_name": TASK_NFL_FANTASY, "season": season, "week": week, "model_version": model_version}
+
+
+@router.post("/ops/materialize-fantasy-draft-rankings")
+def nfl_trigger_fantasy_draft_rankings_materialization(
+    season: int = Query(..., ge=2010, le=2100),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, Any]:
+    task = celery_app.send_task(
+        TASK_NFL_FANTASY_DRAFT_RANKINGS,
+        kwargs={"season": int(season), "model_version": model_version},
+    )
+    return {"task_id": task.id, "task_name": TASK_NFL_FANTASY_DRAFT_RANKINGS, "season": season, "model_version": model_version}
+
+
+@router.post("/ops/materialize-award-projections")
+def nfl_trigger_award_projections_materialization(
+    season: int = Query(..., ge=2010, le=2100),
+    model_version: str = Query("nfl-player-v1"),
+    top_n: int = Query(10, ge=1, le=25),
+) -> Dict[str, Any]:
+    task = celery_app.send_task(
+        TASK_NFL_AWARD_PROJECTIONS,
+        kwargs={"season": int(season), "model_version": model_version, "top_n": int(top_n)},
+    )
+    return {"task_id": task.id, "task_name": TASK_NFL_AWARD_PROJECTIONS, "season": season, "model_version": model_version}
 
 
 @router.post("/ops/run-player-cycle")

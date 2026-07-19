@@ -716,7 +716,7 @@ def materialize_usage_features_from_pbp(
                       red_zone_targets, red_zone_carries, goal_to_go_carries,
                       qb_dropbacks, qb_pressures_taken, touchdowns_scored,
                       first_downs_generated, explosive_plays, success_rate,
-                      explosive_play_rate, pressure_rate_allowed, epa_per_involvement, updated_at
+                      explosive_play_rate, pressure_rate_allowed, epa_per_involvement, source, updated_at
                     )
                     WITH receiving_events AS (
                       SELECT
@@ -904,6 +904,7 @@ def materialize_usage_features_from_pbp(
                       CASE WHEN r.involvement_plays > 0 THEN (r.explosive_plays::numeric / r.involvement_plays::numeric) ELSE NULL END AS explosive_play_rate,
                       CASE WHEN r.qb_dropbacks > 0 THEN (r.qb_pressures_taken::numeric / r.qb_dropbacks::numeric) ELSE NULL END AS pressure_rate_allowed,
                       CASE WHEN r.involvement_plays > 0 THEN (r.epa_sum / r.involvement_plays::numeric) ELSE NULL END AS epa_per_involvement,
+                      'pbp_aggregation'::text,
                       NOW()
                     FROM rolled r
                     LEFT JOIN roster_dim rd
@@ -935,6 +936,7 @@ def materialize_usage_features_from_pbp(
                       explosive_play_rate = EXCLUDED.explosive_play_rate,
                       pressure_rate_allowed = EXCLUDED.pressure_rate_allowed,
                       epa_per_involvement = EXCLUDED.epa_per_involvement,
+                      source = EXCLUDED.source,
                       updated_at = EXCLUDED.updated_at
                     """
                 ),
@@ -2155,14 +2157,19 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                 text(
                     """
                     INSERT INTO nfl_dp_rosters (
-                      season, team, player_id, player_name, position, jersey_number, source, updated_at
+                      season, team, player_id, player_name, position, jersey_number,
+                      entry_year, rookie_year, draft_number, source, updated_at
                     ) VALUES (
-                      :season, :team, :player_id, :player_name, :position, :jersey_number, :source, :updated_at
+                      :season, :team, :player_id, :player_name, :position, :jersey_number,
+                      :entry_year, :rookie_year, :draft_number, :source, :updated_at
                     )
                     ON CONFLICT (season, team, player_id) DO UPDATE SET
                       player_name = EXCLUDED.player_name,
                       position = EXCLUDED.position,
                       jersey_number = EXCLUDED.jersey_number,
+                      entry_year = COALESCE(EXCLUDED.entry_year, nfl_dp_rosters.entry_year),
+                      rookie_year = COALESCE(EXCLUDED.rookie_year, nfl_dp_rosters.rookie_year),
+                      draft_number = COALESCE(EXCLUDED.draft_number, nfl_dp_rosters.draft_number),
                       source = EXCLUDED.source,
                       updated_at = EXCLUDED.updated_at
                     """
@@ -2176,6 +2183,9 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                     or row.get("player_name"),
                     "position": row.get("position"),
                     "jersey_number": str(row.get("jersey_number") or ""),
+                    "entry_year": _to_int(row.get("entry_year")),
+                    "rookie_year": _to_int(row.get("rookie_year")),
+                    "draft_number": _to_int(row.get("draft_number")),
                     "source": "nflverse",
                     "updated_at": _now(),
                 },
@@ -2304,8 +2314,9 @@ def materialize_player_projection_features(
                     INSERT INTO nfl_player_projection_features_weekly (
                       season, week, team, player_id, player_name, position,
                       game_id, opponent, game_date,
-                      snap_proxy, route_proxy, target_proxy, rush_share, red_zone_share,
+                      snap_proxy, team_snap_share, route_proxy, target_proxy, rush_share, red_zone_share,
                       qb_dropback_factor, qb_pressure_factor, team_pace_factor, team_pass_rate_factor,
+                      opponent_pass_defense_factor, opponent_rush_defense_factor,
                       availability_confidence, role_confidence, feature_payload, source, created_at, updated_at
                     )
                     WITH usage AS (
@@ -2325,6 +2336,7 @@ def materialize_player_projection_features(
                         u.qb_dropbacks,
                         u.qb_pressures_taken,
                         u.success_rate,
+                        u.source AS usage_source,
                         SUM(u.involvement_plays) OVER (PARTITION BY u.season, u.week, u.team) AS team_involvement,
                         SUM(u.targets) OVER (PARTITION BY u.season, u.week, u.team) AS team_targets,
                         SUM(u.rush_attempts) OVER (PARTITION BY u.season, u.week, u.team) AS team_rush_attempts,
@@ -2363,6 +2375,16 @@ def materialize_player_projection_features(
                       FROM nfl_dp_schedules s
                       WHERE s.season = :season
                         AND (CAST(:week AS int) IS NULL OR s.week = CAST(:week AS int))
+                    ),
+                    league_defense AS (
+                      SELECT
+                        season,
+                        week,
+                        AVG(epa_per_play_defense_allowed) AS league_avg_epa_allowed
+                      FROM nfl_dp_team_situational_weekly
+                      WHERE season = :season
+                        AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
+                      GROUP BY season, week
                     )
                     SELECT
                       u.season,
@@ -2375,6 +2397,7 @@ def materialize_player_projection_features(
                       CASE WHEN sd.home_team = u.team THEN sd.away_team ELSE sd.home_team END AS opponent,
                       sd.game_date,
                       GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(u.team_involvement::numeric, 0)))) AS snap_proxy,
+                      GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(t.offensive_plays::numeric, 0)))) AS team_snap_share,
                       GREATEST(0.0, LEAST(1.0, ((u.targets + u.receptions)::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))) AS route_proxy,
                       GREATEST(0.0, LEAST(1.0, (u.targets::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))) AS target_proxy,
                       GREATEST(0.0, LEAST(1.0, (u.rush_attempts::numeric / NULLIF((u.team_rush_attempts + 1)::numeric, 0)))) AS rush_share,
@@ -2383,6 +2406,24 @@ def materialize_player_projection_features(
                       GREATEST(0.5, LEAST(1.5, (u.qb_pressures_taken::numeric / NULLIF((u.qb_dropbacks + 1)::numeric, 0)) * 3.0)) AS qb_pressure_factor,
                       GREATEST(0.75, LEAST(1.25, (t.offensive_plays::numeric / 64.0))) AS team_pace_factor,
                       GREATEST(0.75, LEAST(1.25, COALESCE(t.pass_rate, 0.55) / 0.55)) AS team_pass_rate_factor,
+                      -- Real opponent-adjusted matchup factors: the scheduled opponent's
+                      -- actual defensive EPA allowed vs. league average that week, so a
+                      -- player facing a bad defense projects above their team-context-only
+                      -- baseline and vice versa. EPA/play is naturally ~zero-centered
+                      -- league-wide, so this needs no separate normalization constant.
+                      -- No pass/rush defensive EPA split exists yet (see
+                      -- nfl_dp_team_situational_weekly), so both factors share the same
+                      -- overall defensive signal; the pass factor additionally folds in the
+                      -- opponent's real pass-rush pressure rate, which IS pass-specific.
+                      GREATEST(0.75, LEAST(1.30,
+                        1.0
+                        + (1.15 * (COALESCE(opp_t.epa_per_play_defense_allowed, 0.0) - COALESCE(ld.league_avg_epa_allowed, 0.0)))
+                        - (0.35 * (COALESCE(opp_t.pressure_rate_generated, 0.22) - 0.22))
+                      )) AS opponent_pass_defense_factor,
+                      GREATEST(0.75, LEAST(1.30,
+                        1.0
+                        + (1.15 * (COALESCE(opp_t.epa_per_play_defense_allowed, 0.0) - COALESCE(ld.league_avg_epa_allowed, 0.0)))
+                      )) AS opponent_rush_defense_factor,
                       COALESCE(inj.availability_confidence, 0.90) AS availability_confidence,
                       GREATEST(
                         0.15,
@@ -2399,7 +2440,8 @@ def materialize_player_projection_features(
                         'rush_attempts', u.rush_attempts,
                         'red_zone_targets', u.red_zone_targets,
                         'red_zone_carries', u.red_zone_carries,
-                        'success_rate', u.success_rate
+                        'success_rate', u.success_rate,
+                        'usage_source', u.usage_source
                       ) AS feature_payload,
                       'nfl_dp_usage_situational'::text AS source,
                       NOW(),
@@ -2416,6 +2458,12 @@ def materialize_player_projection_features(
                       ON sd.season = u.season
                       AND sd.week = u.week
                       AND (sd.home_team = u.team OR sd.away_team = u.team)
+                    LEFT JOIN nfl_dp_team_situational_weekly opp_t
+                      ON opp_t.season = sd.season
+                      AND opp_t.week = sd.week
+                      AND opp_t.team = (CASE WHEN sd.home_team = u.team THEN sd.away_team ELSE sd.home_team END)
+                    LEFT JOIN league_defense ld
+                      ON ld.season = u.season AND ld.week = u.week
                     ON CONFLICT (season, week, team, player_id) DO UPDATE SET
                       player_name = EXCLUDED.player_name,
                       position = EXCLUDED.position,
@@ -2423,6 +2471,7 @@ def materialize_player_projection_features(
                       opponent = EXCLUDED.opponent,
                       game_date = EXCLUDED.game_date,
                       snap_proxy = EXCLUDED.snap_proxy,
+                      team_snap_share = EXCLUDED.team_snap_share,
                       route_proxy = EXCLUDED.route_proxy,
                       target_proxy = EXCLUDED.target_proxy,
                       rush_share = EXCLUDED.rush_share,
@@ -2431,6 +2480,8 @@ def materialize_player_projection_features(
                       qb_pressure_factor = EXCLUDED.qb_pressure_factor,
                       team_pace_factor = EXCLUDED.team_pace_factor,
                       team_pass_rate_factor = EXCLUDED.team_pass_rate_factor,
+                      opponent_pass_defense_factor = EXCLUDED.opponent_pass_defense_factor,
+                      opponent_rush_defense_factor = EXCLUDED.opponent_rush_defense_factor,
                       availability_confidence = EXCLUDED.availability_confidence,
                       role_confidence = EXCLUDED.role_confidence,
                       feature_payload = EXCLUDED.feature_payload,
