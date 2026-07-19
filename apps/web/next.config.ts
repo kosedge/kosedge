@@ -23,6 +23,18 @@ const nextConfig: NextConfig = {
   // Good default hardening
   poweredByHeader: false,
 
+  // nfl-preseason-artifacts.ts / nfl-vegas-benchmark.ts / nfl-clv-benchmark.ts
+  // read data/ops/** via dynamic readdirSync/readFileSync (runtime-computed
+  // paths, not static imports) so Next's default file-tracing can't detect
+  // the dependency and excludes it from the deployed function bundle --
+  // this silently broke these pages in production ("No 2026 preseason
+  // simulation bundle was found yet") despite the files being committed.
+  outputFileTracingIncludes: {
+    "/pro/nfl/projections": ["../../data/ops/**/*"],
+    "/pro/clv-tracker": ["../../data/ops/**/*"],
+    "/pro/model-transparency": ["../../data/ops/**/*"],
+  },
+
   // If you ever load remote images, add domains here
   images: {
     remotePatterns: [],
