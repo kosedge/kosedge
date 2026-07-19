@@ -134,6 +134,19 @@ def main() -> None:
         help="Last real week to treat as 'known' for --refresh-rolling-player-usage",
     )
     parser.add_argument(
+        "--materialize-tendency-profiles",
+        action="store_true",
+        help=(
+            "Build real situational/tendency analytics (team down-distance/"
+            "score-state/field-position tendencies, pass/run direction "
+            "tendency, QB situational splits) from normalized PBP. Requires "
+            "034_nfl_pbp_tendency_columns.sql to be applied and "
+            "--normalize-pbp-from-raw --replace-normalized to have been run "
+            "at least once after that migration so shotgun/xpass/cp/etc are "
+            "backfilled."
+        ),
+    )
+    parser.add_argument(
         "--backup-owned-data",
         action="store_true",
         help="Generate owned-data backup manifest (and optional row exports)",
@@ -228,6 +241,10 @@ def main() -> None:
                 week=args.week,
                 replace_existing=args.replace_depth_chart_weekly,
             )
+        elif args.materialize_tendency_profiles:
+            from .tendency_profiles import materialize_all_tendency_profiles
+
+            result = materialize_all_tendency_profiles(seasons=seasons)
         else:
             result = ingest_nflverse_snapshot(seasons=seasons, include_pbp=not args.no_pbp)
     print(json.dumps(result, indent=2, default=str))

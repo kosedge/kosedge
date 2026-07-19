@@ -1121,6 +1121,249 @@ def nfl_matchup_feature_pack(
         session.close()
 
 
+# ---------------------------------------------------------------------------
+# Real situational/tendency analytics (nfl_dp_team_situational_tendencies,
+# nfl_dp_team_direction_tendencies, nfl_dp_qb_situational_splits -- built by
+# services/data-platform-nfl/src/data_platform_nfl/tendency_profiles.py from
+# real nflverse PBP). See docs/NFL_TENDENCY_ANALYTICS.md for full scope and
+# honest limits (no coverage-scheme labels -- those do not exist in free
+# nflverse/nflreadpy data).
+# ---------------------------------------------------------------------------
+
+
+@router.get("/tendencies/team")
+def nfl_team_tendency_profile(
+    season: int = Query(..., ge=2010, le=2100),
+    team: str = Query(...),
+    perspective: str = Query("offense", pattern="^(offense|defense)$"),
+    situation_type: Optional[str] = Query(None, pattern="^(down_distance|score_state|field_position)$"),
+) -> Dict[str, Any]:
+    """Real, situational-bucket tendency profile for one team/season --
+    down & distance, score state/game script, and field position splits
+    (pass/run mix, shotgun/no-huddle rate, real xpass-relative
+    pass-rate-over-expected, EPA, success rate, explosive-play rate, sack
+    rate). `perspective=defense` returns what that team's defense
+    faces/allows in the same situational buckets (the real matchup-ready
+    "flip side")."""
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  season, team, perspective, situation_type, situation_bucket,
+                  plays, pass_plays, rush_plays, pass_rate,
+                  dropback_plays, dropback_rate, avg_xpass, pass_rate_over_expected,
+                  shotgun_plays, shotgun_rate, no_huddle_plays, no_huddle_rate,
+                  epa_per_play, success_rate, explosive_play_rate, sack_rate, computed_at
+                FROM nfl_dp_team_situational_tendencies
+                WHERE season = :season
+                  AND team = :team
+                  AND perspective = :perspective
+                  AND (CAST(:situation_type AS text) IS NULL OR situation_type = CAST(:situation_type AS text))
+                ORDER BY situation_type, situation_bucket
+                """
+            ),
+            {"season": season, "team": team, "perspective": perspective, "situation_type": situation_type},
+        ).fetchall()
+        direction = session.execute(
+            text(
+                """
+                SELECT
+                  season, team, perspective,
+                  pass_plays_with_location, pass_left_rate, pass_middle_rate, pass_right_rate,
+                  run_plays_with_location, run_left_rate, run_middle_rate, run_right_rate,
+                  run_plays_with_gap, run_end_rate, run_guard_rate, run_tackle_rate, computed_at
+                FROM nfl_dp_team_direction_tendencies
+                WHERE season = :season AND team = :team AND perspective = :perspective
+                """
+            ),
+            {"season": season, "team": team, "perspective": perspective},
+        ).fetchone()
+        return {
+            "season": season,
+            "team": team,
+            "perspective": perspective,
+            "situational": [dict(r._mapping) for r in rows],
+            "direction": dict(direction._mapping) if direction is not None else None,
+        }
+    finally:
+        session.close()
+
+
+@router.get("/tendencies/team-direction")
+def nfl_team_direction_tendency(
+    season: int = Query(..., ge=2010, le=2100),
+    perspective: str = Query("offense", pattern="^(offense|defense)$"),
+    team: Optional[str] = Query(None),
+) -> Dict[str, Any]:
+    """Real pass-direction (left/middle/right) and run-direction/gap
+    tendency by team, plus a `team=LEAGUE` league-average row for context.
+    Omit `team` to fetch every team (including LEAGUE) for a season."""
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  season, team, perspective,
+                  pass_plays_with_location, pass_left_rate, pass_middle_rate, pass_right_rate,
+                  run_plays_with_location, run_left_rate, run_middle_rate, run_right_rate,
+                  run_plays_with_gap, run_end_rate, run_guard_rate, run_tackle_rate, computed_at
+                FROM nfl_dp_team_direction_tendencies
+                WHERE season = :season
+                  AND perspective = :perspective
+                  AND (CAST(:team AS text) IS NULL OR team = CAST(:team AS text))
+                ORDER BY (team = 'LEAGUE') DESC, team
+                """
+            ),
+            {"season": season, "perspective": perspective, "team": team},
+        ).fetchall()
+        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+    finally:
+        session.close()
+
+
+@router.get("/tendencies/qb")
+def nfl_qb_situational_splits(
+    season: int = Query(..., ge=2010, le=2100),
+    player_id: Optional[str] = Query(None),
+    team: Optional[str] = Query(None),
+    situation_type: Optional[str] = Query(
+        None, pattern="^(overall|down_type|pressure|score_state|field_position)$"
+    ),
+    min_dropbacks: int = Query(0, ge=0, le=1000),
+    limit: int = Query(500, ge=1, le=3000),
+) -> Dict[str, Any]:
+    """Real QB situational efficiency splits -- completion%, YPA, EPA/play,
+    CPOE (completion% over nflfastR's own `cp` model), sack/INT/TD rate --
+    broken out by down type (early vs. money down), pressure (real
+    sack/qb_hit proxy) vs. clean pocket, score state, and field position.
+    Provide at least one of `player_id` or `team` for a scoped, useful
+    result; omitting both returns a season-wide (large) result set."""
+    session = SessionLocal()
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  season, player_id, player_name, team, situation_type, situation_bucket,
+                  dropbacks, pass_attempts, completions, completion_rate, pass_yards,
+                  yards_per_attempt, epa_per_play, success_rate, avg_cp, cpoe,
+                  sacks, sack_rate, interceptions, interception_rate, passing_tds, td_rate, computed_at
+                FROM nfl_dp_qb_situational_splits
+                WHERE season = :season
+                  AND (CAST(:player_id AS text) IS NULL OR player_id = CAST(:player_id AS text))
+                  AND (CAST(:team AS text) IS NULL OR team = CAST(:team AS text))
+                  AND (CAST(:situation_type AS text) IS NULL OR situation_type = CAST(:situation_type AS text))
+                  AND dropbacks >= :min_dropbacks
+                ORDER BY player_name, situation_type, situation_bucket
+                LIMIT :limit
+                """
+            ),
+            {
+                "season": season,
+                "player_id": player_id,
+                "team": team,
+                "situation_type": situation_type,
+                "min_dropbacks": min_dropbacks,
+                "limit": limit,
+            },
+        ).fetchall()
+        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+    finally:
+        session.close()
+
+
+@router.get("/tendencies/matchup")
+def nfl_tendency_matchup_breakdown(
+    season: int = Query(..., ge=2010, le=2100),
+    home_team: str = Query(...),
+    away_team: str = Query(...),
+) -> Dict[str, Any]:
+    """Combined real matchup breakdown: each team's own offensive tendency
+    (by situational bucket) next to the opponent's real defensive tendency
+    allowed in that exact same bucket, for both sides of the matchup. This
+    is the "break down every game" deliverable built entirely from real,
+    honest situational splits -- not coverage-scheme labels (see
+    docs/NFL_TENDENCY_ANALYTICS.md)."""
+    session = SessionLocal()
+    try:
+        def _situational(team: str, perspective: str) -> List[Dict[str, Any]]:
+            rows = session.execute(
+                text(
+                    """
+                    SELECT situation_type, situation_bucket, plays, pass_rate,
+                           pass_rate_over_expected, shotgun_rate, no_huddle_rate,
+                           epa_per_play, success_rate, explosive_play_rate, sack_rate
+                    FROM nfl_dp_team_situational_tendencies
+                    WHERE season = :season AND team = :team AND perspective = :perspective
+                    ORDER BY situation_type, situation_bucket
+                    """
+                ),
+                {"season": season, "team": team, "perspective": perspective},
+            ).fetchall()
+            return [dict(r._mapping) for r in rows]
+
+        def _direction(team: str, perspective: str) -> Optional[Dict[str, Any]]:
+            row = session.execute(
+                text(
+                    """
+                    SELECT pass_left_rate, pass_middle_rate, pass_right_rate,
+                           run_left_rate, run_middle_rate, run_right_rate,
+                           run_end_rate, run_guard_rate, run_tackle_rate
+                    FROM nfl_dp_team_direction_tendencies
+                    WHERE season = :season AND team = :team AND perspective = :perspective
+                    """
+                ),
+                {"season": season, "team": team, "perspective": perspective},
+            ).fetchone()
+            return dict(row._mapping) if row is not None else None
+
+        home_off = _situational(home_team, "offense")
+        away_def = _situational(away_team, "defense")
+        away_off = _situational(away_team, "offense")
+        home_def = _situational(home_team, "defense")
+
+        def _by_bucket(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+            return {f"{r['situation_type']}:{r['situation_bucket']}": r for r in rows}
+
+        home_off_by_bucket = _by_bucket(home_off)
+        away_def_by_bucket = _by_bucket(away_def)
+        away_off_by_bucket = _by_bucket(away_off)
+        home_def_by_bucket = _by_bucket(home_def)
+
+        home_offense_vs_away_defense = [
+            {"bucket": bucket, "home_offense": home_off_by_bucket[bucket], "away_defense_allowed": away_def_by_bucket.get(bucket)}
+            for bucket in home_off_by_bucket
+        ]
+        away_offense_vs_home_defense = [
+            {"bucket": bucket, "away_offense": away_off_by_bucket[bucket], "home_defense_allowed": home_def_by_bucket.get(bucket)}
+            for bucket in away_off_by_bucket
+        ]
+
+        return {
+            "season": season,
+            "home_team": home_team,
+            "away_team": away_team,
+            "home_offense_vs_away_defense": home_offense_vs_away_defense,
+            "away_offense_vs_home_defense": away_offense_vs_home_defense,
+            "home_offense_direction": _direction(home_team, "offense"),
+            "away_defense_direction_allowed": _direction(away_team, "defense"),
+            "away_offense_direction": _direction(away_team, "offense"),
+            "home_defense_direction_allowed": _direction(home_team, "defense"),
+            "methodology_note": (
+                "Real situational/direction tendency splits only -- no "
+                "defensive coverage-scheme labels (Cover 2/3, man/zone) "
+                "exist in free nflverse/nflreadpy PBP; pass_rate_over_expected "
+                "is real but is a dropback-rate-vs-nflfastR's-own-xpass-model "
+                "signal, not a verified play-call read."
+            ),
+        }
+    finally:
+        session.close()
+
+
 @router.get("/intel/rosters")
 def nfl_intel_rosters(
     season: Optional[int] = Query(None, ge=2010, le=2100),

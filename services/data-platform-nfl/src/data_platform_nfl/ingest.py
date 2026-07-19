@@ -410,7 +410,9 @@ def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False
                       air_yards, yards_after_catch, passer_player_id, passer_player_name,
                       receiver_player_id, receiver_player_name, rusher_player_id, rusher_player_name,
                       complete_pass, incomplete_pass, interception, touchdown, first_down, sack, qb_hit,
-                      fumble, penalty, epa, wpa, success, score_differential, play_description, source,
+                      fumble, penalty, epa, wpa, success, score_differential, play_description,
+                      shotgun, no_huddle, qb_dropback, pass_location, run_location, run_gap,
+                      xpass, cp, xyac_epa, source,
                       object_key, updated_at
                     )
                     SELECT
@@ -550,6 +552,39 @@ def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False
                       END AS success,
                       CASE WHEN trim(COALESCE(payload->>'score_differential', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'score_differential')::numeric ELSE NULL END AS score_differential,
                       payload->>'desc' AS play_description,
+                      CASE
+                        WHEN payload ? 'shotgun' THEN
+                          CASE
+                            WHEN lower(trim(payload->>'shotgun')) IN ('true', 't', '1', '1.0', 'yes', 'y') THEN TRUE
+                            WHEN lower(trim(payload->>'shotgun')) IN ('false', 'f', '0', '0.0', 'no', 'n') THEN FALSE
+                            ELSE NULL
+                          END
+                        ELSE NULL
+                      END AS shotgun,
+                      CASE
+                        WHEN payload ? 'no_huddle' THEN
+                          CASE
+                            WHEN lower(trim(payload->>'no_huddle')) IN ('true', 't', '1', '1.0', 'yes', 'y') THEN TRUE
+                            WHEN lower(trim(payload->>'no_huddle')) IN ('false', 'f', '0', '0.0', 'no', 'n') THEN FALSE
+                            ELSE NULL
+                          END
+                        ELSE NULL
+                      END AS no_huddle,
+                      CASE
+                        WHEN payload ? 'qb_dropback' THEN
+                          CASE
+                            WHEN lower(trim(payload->>'qb_dropback')) IN ('true', 't', '1', '1.0', 'yes', 'y') THEN TRUE
+                            WHEN lower(trim(payload->>'qb_dropback')) IN ('false', 'f', '0', '0.0', 'no', 'n') THEN FALSE
+                            ELSE NULL
+                          END
+                        ELSE NULL
+                      END AS qb_dropback,
+                      NULLIF(payload->>'pass_location', '') AS pass_location,
+                      NULLIF(payload->>'run_location', '') AS run_location,
+                      NULLIF(payload->>'run_gap', '') AS run_gap,
+                      CASE WHEN trim(COALESCE(payload->>'xpass', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'xpass')::numeric ELSE NULL END AS xpass,
+                      CASE WHEN trim(COALESCE(payload->>'cp', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'cp')::numeric ELSE NULL END AS cp,
+                      CASE WHEN trim(COALESCE(payload->>'xyac_epa', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'xyac_epa')::numeric ELSE NULL END AS xyac_epa,
                       source,
                       object_key,
                       NOW()
@@ -598,6 +633,15 @@ def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False
                       success = EXCLUDED.success,
                       score_differential = EXCLUDED.score_differential,
                       play_description = EXCLUDED.play_description,
+                      shotgun = EXCLUDED.shotgun,
+                      no_huddle = EXCLUDED.no_huddle,
+                      qb_dropback = EXCLUDED.qb_dropback,
+                      pass_location = EXCLUDED.pass_location,
+                      run_location = EXCLUDED.run_location,
+                      run_gap = EXCLUDED.run_gap,
+                      xpass = EXCLUDED.xpass,
+                      cp = EXCLUDED.cp,
+                      xyac_epa = EXCLUDED.xyac_epa,
                       source = EXCLUDED.source,
                       object_key = EXCLUDED.object_key,
                       updated_at = EXCLUDED.updated_at

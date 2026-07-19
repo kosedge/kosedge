@@ -45,6 +45,9 @@ Tables:
 - `nfl_dp_matchup_features_weekly` - per-game matchup feature pack for home vs away context
 - `nfl_dp_standings_weekly` - derived weekly team standings from completed schedules
 - `nfl_dp_depth_chart_weekly` - inferred weekly role hierarchy by team and position
+- `nfl_dp_team_situational_tendencies` - real situational tendency profiles (down/distance, score state, field position) by team/perspective -- see `docs/NFL_TENDENCY_ANALYTICS.md`
+- `nfl_dp_team_direction_tendencies` - real pass/run direction tendency by team + league-wide -- see `docs/NFL_TENDENCY_ANALYTICS.md`
+- `nfl_dp_qb_situational_splits` - real QB situational efficiency splits (pressure, down type, score state, field position) -- see `docs/NFL_TENDENCY_ANALYTICS.md`
 - `nfl_dp_team_features_latest` (view) - latest per-team feature snapshot
 - `nfl_data_ownership_backups` - immutable backup manifests for owned-data snapshots
 
@@ -64,6 +67,8 @@ From repo root:
 - add `--replace-standings-weekly` to rebuild derived standings rows for those seasons
 - `PYTHONPATH=./src python3 -m data_platform_nfl.cli --seasons 2025,2026 --materialize-depth-chart-weekly`
 - add `--replace-depth-chart-weekly` to rebuild inferred depth-chart rows for those seasons
+- `PYTHONPATH=./src python3 -m data_platform_nfl.cli --seasons 2023,2024,2025 --materialize-tendency-profiles`
+- real situational/tendency analytics (see `docs/NFL_TENDENCY_ANALYTICS.md`); requires `--normalize-pbp-from-raw --replace-normalized` to have been run at least once after `034_nfl_pbp_tendency_columns.sql` so `shotgun`/`xpass`/`cp`/etc are backfilled
 - all materializers support `--week` for deterministic week-scoped runs
 - `PYTHONPATH=./src python3 -m data_platform_nfl.cli --run-launch-hardening --seasons 2025,2026`
 - `PYTHONPATH=./src python3 -m data_platform_nfl.cli --backup-owned-data --seasons 2026 --backup-include-row-exports`
