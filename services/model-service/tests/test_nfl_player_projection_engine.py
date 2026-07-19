@@ -400,6 +400,68 @@ def test_pass_catching_rb_rec_tds_land_in_realistic_season_range() -> None:
     assert 0.0 < season_rec_tds < 6.0
 
 
+def test_bellcow_rb_rush_tds_no_longer_cluster_at_extreme_range() -> None:
+    # Real bug found via a live 2026 spot-check: 7+ different real bell-cow
+    # RBs (J.Taylor, D.Henry, C.McCaffrey, J.Gibbs, J.Williams, C.Brown,
+    # B.Robinson) were all simultaneously projecting for 15-19 season
+    # rushing TDs at the old 0.16 coefficient -- real NFL seasons rarely see
+    # more than 2-3 backs clear 15. Fixed via a real weighted-least-squares
+    # fit against 259 real 2023-2025 RB-seasons (weighted by real season
+    # carries volume, real rushing TDs isolated from receiving TDs via
+    # play-by-play): coefficient 0.098 (R^2=0.489), refit here to 0.10. This
+    # locks in the realistic range for a real bell-cow profile (~17
+    # carries/game, ~0.42 red_zone_share, matching the real flagged
+    # players), which used to land at 18-20 season rush TDs.
+    bellcow_rb = _rb_inputs(rush_share=0.60, red_zone_share=0.42, role_confidence=0.80, availability_confidence=0.92)
+    projection = baseline_projection_from_features(bellcow_rb)
+    season_rush_tds = projection["rush_tds_mean"] * 17
+    assert 8.0 < season_rush_tds < 15.0
+
+
+def test_qb_pass_tds_mean_realistic_season_range() -> None:
+    # Real bug found during the same TD-coefficient audit that fixed RB
+    # rush_tds_mean above: pass_tds_mean's `0.32 * red_zone_share`
+    # interaction term assumed a QB's OWN red_zone_share (overwhelmingly a
+    # rushing-share signal for a QB, not a passing-efficiency one) predicts
+    # passing-TD rate. Real weighted least squares against 108 real
+    # 2023-2025 QB-seasons showed the interaction explains ~zero
+    # incremental variance (and its true sign is negative, not +0.32),
+    # while the flat base rate (0.72) was itself undercounting real pass
+    # TDs by a real weighted-average bias of -0.083 TDs/game (~-1.4/season)
+    # for a typical starter. Refit to a flat 0.79 with the red_zone_share
+    # term dropped -- locks in a realistic season range for a real
+    # full-time starter profile.
+    starter_qb = PlayerFeatureInputs(
+        position="QB", snap_proxy=0.85, route_proxy=0.0, target_proxy=0.05,
+        rush_share=0.05, red_zone_share=0.05, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+        team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.95, role_confidence=0.80,
+        team_snap_share=0.95,
+    )
+    projection = baseline_projection_from_features(starter_qb)
+    season_pass_tds = projection["pass_tds_mean"] * 17
+    assert 24.0 < season_pass_tds < 42.0
+
+
+def test_qb_pass_tds_mean_no_longer_depends_on_red_zone_share() -> None:
+    # Regression guard for the fix above: real data showed no genuine
+    # relationship between a QB's own red_zone_share (a rushing-share
+    # proxy) and passing-TD efficiency, so the term was dropped entirely --
+    # pass_tds_mean must now be identical regardless of red_zone_share,
+    # holding every other real input fixed.
+    def _proj(red_zone_share: float) -> dict:
+        return baseline_projection_from_features(
+            PlayerFeatureInputs(
+                position="QB", snap_proxy=0.85, route_proxy=0.0, target_proxy=0.05,
+                rush_share=0.20, red_zone_share=red_zone_share, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+                team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.95, role_confidence=0.80,
+                team_snap_share=0.95,
+            )
+        )
+    low_rz = _proj(0.02)
+    high_rz = _proj(0.30)
+    assert low_rz["pass_tds_mean"] == high_rz["pass_tds_mean"]
+
+
 def test_prop_edge_behaves_directionally() -> None:
     edge = evaluate_prop_edge(
         model_mean=84.0,
