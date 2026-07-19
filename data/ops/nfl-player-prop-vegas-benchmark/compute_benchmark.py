@@ -37,6 +37,7 @@ Usage: /Users/ryankos/kosedge/.venv/bin/python3 compute_benchmark.py
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import re
@@ -234,7 +235,24 @@ def simulate_new_for_team(
     ]
     if not roles:
         return {}
-    return simulate_team_player_box_scores(team_context, roles, replicates=BOX_SCORE_REPLICATES, seed=hash((season, week, team, "prop_benchmark")) % (2**31))
+    return simulate_team_player_box_scores(team_context, roles, replicates=BOX_SCORE_REPLICATES, seed=_stable_seed(season, week, team, "prop_benchmark"))
+
+
+def _stable_seed(*parts: Any) -> int:
+    """Deterministic replacement for Python's built-in `hash()` on tuples
+    containing strings -- `hash()` of a str (and any tuple containing one)
+    is intentionally randomized per-process (PYTHONHASHSEED) for security
+    reasons, so the old `hash((season, week, team, "prop_benchmark"))`
+    seed silently changed on every run of this script, making the `new`
+    method's Monte Carlo std/win-rate numbers NOT reproducible run over
+    run on identical input data (discovered via a batch-1-only rerun
+    during the 2026-07-19 sample-growth task producing a different
+    receiving-yards high-conviction win rate, n, and win count than the
+    original report on the exact same 78 games). sha256 has no such
+    randomization, so this seed is now stable forever for the same
+    (season, week, team) key."""
+    key = "|".join(str(p) for p in parts)
+    return int(hashlib.sha256(key.encode("utf-8")).hexdigest()[:8], 16) % (2**31)
 
 
 STAT_TO_DIST_KEY = {"pass_yards": "pass_yards_dist", "rush_yards": "rush_yards_dist", "receiving_yards": "receiving_yards_dist"}

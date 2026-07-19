@@ -1,0 +1,360 @@
+{
+  "primary_confirmatory_test": {
+    "description": "new-method receiving_yards high-conviction (z=0.5) win rate: batch1 (original discovery sample, n=168 in prior report) vs batch2 (fresh 78-game holdout never used to generate this hypothesis) vs combined.",
+    "batch1_only": {
+      "cut": "batch1_only",
+      "n_records": 879,
+      "high_conviction": {
+        "n": 164,
+        "wins": 85,
+        "point": 0.5183,
+        "low": 0.4423,
+        "high": 0.5935
+      },
+      "low_conviction": {
+        "n": 715,
+        "wins": 369,
+        "point": 0.5161,
+        "low": 0.4795,
+        "high": 0.5525
+      }
+    },
+    "batch2_holdout": {
+      "cut": "batch2_holdout",
+      "n_records": 866,
+      "high_conviction": {
+        "n": 164,
+        "wins": 88,
+        "point": 0.5366,
+        "low": 0.4603,
+        "high": 0.6112
+      },
+      "low_conviction": {
+        "n": 702,
+        "wins": 338,
+        "point": 0.4815,
+        "low": 0.4447,
+        "high": 0.5184
+      }
+    },
+    "combined": {
+      "cut": "combined",
+      "n_records": 1745,
+      "high_conviction": {
+        "n": 328,
+        "wins": 173,
+        "point": 0.5274,
+        "low": 0.4734,
+        "high": 0.5808
+      },
+      "low_conviction": {
+        "n": 1417,
+        "wins": 707,
+        "point": 0.4989,
+        "low": 0.4729,
+        "high": 0.5249
+      }
+    }
+  },
+  "exploration_batch1_cuts": {
+    "position_WR": {
+      "cut": "position_WR",
+      "n_records": 462,
+      "high_conviction": {
+        "n": 100,
+        "wins": 51,
+        "point": 0.51,
+        "low": 0.4135,
+        "high": 0.6058
+      },
+      "low_conviction": {
+        "n": 362,
+        "wins": 181,
+        "point": 0.5,
+        "low": 0.4488,
+        "high": 0.5512
+      }
+    },
+    "position_TE": {
+      "cut": "position_TE",
+      "n_records": 188,
+      "high_conviction": {
+        "n": 14,
+        "wins": 5,
+        "point": 0.3571,
+        "low": 0.1634,
+        "high": 0.6124
+      },
+      "low_conviction": {
+        "n": 174,
+        "wins": 99,
+        "point": 0.569,
+        "low": 0.4947,
+        "high": 0.6403
+      }
+    },
+    "position_RB": {
+      "cut": "position_RB",
+      "n_records": 227,
+      "high_conviction": {
+        "n": 48,
+        "wins": 28,
+        "point": 0.5833,
+        "low": 0.4428,
+        "high": 0.7115
+      },
+      "low_conviction": {
+        "n": 179,
+        "wins": 89,
+        "point": 0.4972,
+        "low": 0.4248,
+        "high": 0.5697
+      }
+    },
+    "home_away_home": {
+      "cut": "home_away_home",
+      "n_records": 434,
+      "high_conviction": {
+        "n": 82,
+        "wins": 42,
+        "point": 0.5122,
+        "low": 0.4059,
+        "high": 0.6174
+      },
+      "low_conviction": {
+        "n": 352,
+        "wins": 184,
+        "point": 0.5227,
+        "low": 0.4706,
+        "high": 0.5744
+      }
+    },
+    "home_away_away": {
+      "cut": "home_away_away",
+      "n_records": 445,
+      "high_conviction": {
+        "n": 82,
+        "wins": 43,
+        "point": 0.5244,
+        "low": 0.4176,
+        "high": 0.629
+      },
+      "low_conviction": {
+        "n": 363,
+        "wins": 185,
+        "point": 0.5096,
+        "low": 0.4584,
+        "high": 0.5607
+      }
+    },
+    "favorite": {
+      "cut": "favorite",
+      "n_records": 436,
+      "high_conviction": {
+        "n": 76,
+        "wins": 44,
+        "point": 0.5789,
+        "low": 0.4668,
+        "high": 0.6835
+      },
+      "low_conviction": {
+        "n": 360,
+        "wins": 183,
+        "point": 0.5083,
+        "low": 0.4569,
+        "high": 0.5596
+      }
+    },
+    "underdog": {
+      "cut": "underdog",
+      "n_records": 443,
+      "high_conviction": {
+        "n": 88,
+        "wins": 41,
+        "point": 0.4659,
+        "low": 0.3653,
+        "high": 0.5694
+      },
+      "low_conviction": {
+        "n": 355,
+        "wins": 186,
+        "point": 0.5239,
+        "low": 0.472,
+        "high": 0.5754
+      }
+    },
+    "high_total": {
+      "cut": "high_total",
+      "n_records": 446,
+      "high_conviction": {
+        "n": 101,
+        "wins": 56,
+        "point": 0.5545,
+        "low": 0.4573,
+        "high": 0.6476
+      },
+      "low_conviction": {
+        "n": 345,
+        "wins": 199,
+        "point": 0.5768,
+        "low": 0.5241,
+        "high": 0.6278
+      }
+    },
+    "low_total": {
+      "cut": "low_total",
+      "n_records": 433,
+      "high_conviction": {
+        "n": 63,
+        "wins": 29,
+        "point": 0.4603,
+        "low": 0.3431,
+        "high": 0.5821
+      },
+      "low_conviction": {
+        "n": 370,
+        "wins": 170,
+        "point": 0.4595,
+        "low": 0.4094,
+        "high": 0.5104
+      }
+    },
+    "_median_total_line": 44.5,
+    "alt_threshold_z0.35": {
+      "cut": "alt_threshold_z0.35",
+      "n_records": 879,
+      "high_conviction": {
+        "n": 284,
+        "wins": 153,
+        "point": 0.5387,
+        "low": 0.4806,
+        "high": 0.5958
+      },
+      "low_conviction": {
+        "n": 595,
+        "wins": 301,
+        "point": 0.5059,
+        "low": 0.4658,
+        "high": 0.5459
+      }
+    },
+    "alt_threshold_z0.75": {
+      "cut": "alt_threshold_z0.75",
+      "n_records": 879,
+      "high_conviction": {
+        "n": 76,
+        "wins": 37,
+        "point": 0.4868,
+        "low": 0.3778,
+        "high": 0.5971
+      },
+      "low_conviction": {
+        "n": 803,
+        "wins": 417,
+        "point": 0.5193,
+        "low": 0.4847,
+        "high": 0.5537
+      }
+    },
+    "alt_threshold_z1.0": {
+      "cut": "alt_threshold_z1.0",
+      "n_records": 879,
+      "high_conviction": {
+        "n": 38,
+        "wins": 18,
+        "point": 0.4737,
+        "low": 0.3248,
+        "high": 0.6274
+      },
+      "low_conviction": {
+        "n": 841,
+        "wins": 436,
+        "point": 0.5184,
+        "low": 0.4847,
+        "high": 0.552
+      }
+    }
+  },
+  "n_exploratory_cuts_tested": 12,
+  "promising_exploration_labels": [
+    "position_RB",
+    "home_away_away",
+    "favorite",
+    "alt_threshold_z0.35"
+  ],
+  "holdout_validation_batch2": {
+    "position_RB": {
+      "cut": "position_RB",
+      "n_records": 227,
+      "high_conviction": {
+        "n": 53,
+        "wins": 32,
+        "point": 0.6038,
+        "low": 0.4694,
+        "high": 0.7241
+      },
+      "low_conviction": {
+        "n": 174,
+        "wins": 87,
+        "point": 0.5,
+        "low": 0.4265,
+        "high": 0.5735
+      }
+    },
+    "home_away_away": {
+      "cut": "home_away_away",
+      "n_records": 434,
+      "high_conviction": {
+        "n": 68,
+        "wins": 41,
+        "point": 0.6029,
+        "low": 0.4842,
+        "high": 0.7107
+      },
+      "low_conviction": {
+        "n": 366,
+        "wins": 185,
+        "point": 0.5055,
+        "low": 0.4545,
+        "high": 0.5564
+      }
+    },
+    "favorite": {
+      "cut": "favorite",
+      "n_records": 431,
+      "high_conviction": {
+        "n": 79,
+        "wins": 39,
+        "point": 0.4937,
+        "low": 0.3863,
+        "high": 0.6016
+      },
+      "low_conviction": {
+        "n": 352,
+        "wins": 176,
+        "point": 0.5,
+        "low": 0.448,
+        "high": 0.552
+      }
+    },
+    "alt_threshold_z0.35": {
+      "cut": "alt_threshold_z0.35",
+      "n_records": 866,
+      "high_conviction": {
+        "n": 280,
+        "wins": 150,
+        "point": 0.5357,
+        "low": 0.4772,
+        "high": 0.5933
+      },
+      "low_conviction": {
+        "n": 586,
+        "wins": 276,
+        "point": 0.471,
+        "low": 0.4309,
+        "high": 0.5115
+      }
+    }
+  },
+  "breakeven_win_rate": 0.5238
+}

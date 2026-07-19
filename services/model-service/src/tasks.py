@@ -7500,7 +7500,21 @@ def _fetch_team_volume_context(session: Any, *, season: int, team: str, target_w
 
 
 def _box_score_replicate_seed(season: int, week: int, team: str) -> int:
-    return abs(hash((int(season), int(week), team))) % (2**31)
+    """Deterministic seed. Python's built-in `hash()` on a str (and any
+    tuple containing one) is intentionally randomized per-process
+    (PYTHONHASHSEED, a security feature since Python 3.3) -- the previous
+    `hash((season, week, team))` implementation silently produced a
+    DIFFERENT seed on every process run despite looking deterministic,
+    which was only caught during the 2026-07-19 player-prop benchmark's
+    sample-growth task: re-running the exact same 78 games with the exact
+    same input data produced different Monte Carlo win rates/std run over
+    run. sha256 has no such randomization, so re-materializing the same
+    season/week/team with unchanged input data now reproduces identical
+    box-score distributions every time -- important for both auditability
+    and for any backtest/report that re-runs this function expecting
+    stable results on unchanged data."""
+    key = f"{int(season)}|{int(week)}|{team}"
+    return int(hashlib.sha256(key.encode("utf-8")).hexdigest()[:8], 16) % (2**31)
 
 
 @celery_app.task(name="src.tasks.materialize_nfl_player_box_score_sims")

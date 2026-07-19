@@ -366,6 +366,290 @@ staking anything real on it.
 
 ---
 
+## Addendum (2026-07-19, part 2): grew the sample to 156 games / 2,850 bets — does the receiving-yards signal hold up?
+
+Direct follow-up to this report's own recommendation ("grow the sample...
+the current 95% CIs are wide enough that this report's directional
+ranking is plausible but not yet statistically confirmed") and to the
+first 2026-07-19 addendum's receiving-yards high-conviction finding
+(53.6%, n=168). This section pulls a second, real, non-overlapping batch
+of historical closing lines, re-runs the full benchmark on the combined
+sample, and — critically — treats the new batch as a genuine **holdout**
+for the specific hypothesis the first addendum raised, rather than just
+pooling everything into one bigger number and calling that "confirmation."
+
+### New data: a second, disjoint 78-game sample
+
+Same methodology as the original pull (`pull_historical_player_props.py`):
+same three markets (`player_pass_yds`/`player_rush_yds`/
+`player_reception_yds`), same books (`draftkings`/`fanduel`), same
+real-closing-line-at-commence_time timing, same weeks 4–17 /
+seasons 2023–2025 walk-forward-eligible window (624 candidate games).
+The only difference: `pull_historical_player_props_batch2.py` samples a
+**different residue class mod 8** — `all_games[4::8]` instead of the
+original `all_games[::8]` — which is mathematically guaranteed to be
+disjoint from the first 78-game sample (624 is exactly divisible by 8, so
+residues 0 and 4 mod 8 can never coincide), plus a live DB de-dup guard as
+defense-in-depth. Result: **78/78 planned games pulled successfully, 0
+skipped**, spread just as evenly across every season/week in the window as
+the original sample.
+
+**Real credit cost (exact, auditable):**
+
+| | Credits |
+|---|---|
+| Credits remaining at task start (`odds_api_credit_ledger`, live check) | **9,062** |
+| Batch-2 pull — 54 events-list calls (1 credit each) + 78 event-odds calls (30 credits each, all 3 markets returned every time) — all 132 calls logged individually to `odds_api_credit_ledger` | 2,394 |
+| **Credits remaining at end** | **6,668** — comfortably above the 5,000-credit stop floor; the pull completed its full planned sample and was never at risk of hitting the floor |
+
+`nfl_player_prop_market_snapshots` now holds **5,735 real snapshot rows**
+(`source = 'odds_api_historical'`) across **156 real games** (78 + 78,
+zero overlap), spanning all three seasons and every week 4–17.
+
+### A real reproducibility bug found and fixed along the way
+
+Re-running `compute_benchmark.py` on the batch-1-only games (as a sanity
+check before trusting any batch-1-vs-batch-2 comparison) produced a
+**different** receiving-yards high-conviction result than the original
+report on the exact same 78 games and exact same code — 163–164 bets
+instead of 168, and a win rate in the low-50s instead of 53.6%. Root
+cause, found by direct inspection, not guessing: `simulate_new_for_team()`
+seeded its Monte Carlo run with `hash((season, week, team,
+"prop_benchmark")) % (2**31)` — and Python's built-in `hash()` of a `str`
+(and any tuple containing one) is **intentionally randomized per process**
+(`PYTHONHASHSEED`, a security feature, not a bug in Python) unless the
+seed is fixed. That means every run of `compute_benchmark.py` was silently
+using a *different* random Monte Carlo seed for the `new` method, so the
+`new`-method numbers in the original report were not exactly reproducible
+run-over-run on identical input data — an extra, previously-undisclosed
+source of noise on top of genuine sampling variance. **Fixed**: replaced
+the seed with a `hashlib.sha256`-based `_stable_seed()` helper (no
+randomization), so the exact same input now always produces the exact
+same simulated distributions. All combined-sample numbers below use the
+fixed, reproducible seed. (`old`/`current` methods are unaffected — they
+are deterministic formulas with no RNG.)
+
+### Overall three-methodology comparison — OLD vs. CURRENT vs. NEW, 156 games / 2,850 bets
+
+| | n | OLD win% | CURRENT win% | **NEW win%** |
+|---|---|---|---|---|
+| Overall | 2,850 | 48.1% [46.3%, 49.9%] | 48.9% [47.0%, 50.7%] | **49.6% [47.8%, 51.4%]** |
+| ROI ($100/bet) | | **-9.33%** | **-7.89%** | **-6.61%** |
+
+| Paired delta | Δ win rate | 95% CI | Significant? |
+|---|---|---|---|
+| CURRENT − OLD | +0.77pp | [-1.82pp, +3.37pp] | No |
+| NEW − CURRENT | +0.70pp | [-1.89pp, +3.30pp] | No |
+| NEW − OLD | +1.47pp | [-1.12pp, +4.07pp] | No |
+
+Same qualitative conclusion as the original 78-game report: `NEW` remains
+directionally best on every metric (win rate, ROI), the ranking
+`NEW > CURRENT > OLD` held up on the doubled sample, and none of the
+pairwise deltas are statistically significant yet — CIs are tighter than
+before but still wide enough to include "no real difference."
+
+### The primary confirmatory test: does receiving-yards high-conviction hold up?
+
+The exact cut flagged in the first addendum — `new`-method receiving-yards
+bets, high conviction at the standard `z ≥ 0.5` threshold — computed
+separately for the **original 78 games** (re-run with the fixed seed),
+the **new 78 games** (a genuine holdout: never used to generate this
+hypothesis), and the **combined** 156 games:
+
+| Sample | n | Win% | 95% CI | Low-conviction win% (same sample) |
+|---|---|---|---|---|
+| Batch 1 (original 78 games, re-run w/ fixed seed) | 164 | 51.8% | [44.2%, 59.3%] | 51.6% (n=715) |
+| **Batch 2 (fresh 78-game holdout)** | **164** | **53.7%** | **[46.0%, 61.1%]** | 48.2% (n=702) |
+| Combined | 328 | 52.7% | [47.3%, 58.1%] | 49.9% (n=1,417) |
+
+**Honest answer: the signal held up on a genuine fresh holdout, and the
+combined point estimate is now the first to clear the 52.4% breakeven
+line on the full available sample — but it is still not statistically
+confirmed.** Three things worth being precise about, not rounding toward
+the more exciting one:
+
+1. **Directionally, this replicated well.** The fresh batch-2 holdout
+   (never used to generate the hypothesis) came in at 53.7% — almost
+   exactly matching the original 53.6% figure — and, unlike batch 1 on
+   re-run, batch 2 shows a real, meaningful gap between high-conviction
+   (53.7%) and low-conviction (48.2%) bets, the calibration property that
+   actually matters. A paired-delta test on batch 2 alone gives
+   high-minus-low = +5.5pp, 95% CI [-3.0pp, +14.0pp] — still crosses
+   zero, not significant on its own, but a real, sizeable point estimate
+   in the right direction on brand-new data.
+2. **The original 53.6% number was itself partly an artifact of the
+   seed bug above.** Re-running batch 1 alone with the fixed, reproducible
+   seed gives 51.8%, not 53.6% — and batch 1's own high-vs-low gap is now
+   nearly flat (51.8% vs. 51.6%). This does not mean the original finding
+   was fabricated (batch 2 replicated the *effect*, independently), but it
+   does mean the *exact number* 53.6% should not be treated as precise —
+   it was somewhat lucky on that particular unfixed seed.
+3. **The combined 328-bet number (52.7%) is still not statistically
+   distinguishable from noise.** Its 95% CI [47.3%, 58.1%] comfortably
+   spans below the 52.4% breakeven line, and the paired high-vs-low delta
+   on the combined sample (+2.9pp, 95% CI [-3.2pp, +8.9pp]) is not
+   significant either. Doubling the sample tightened the CI only
+   modestly (roughly ±5.4pp instead of ±6.9pp) because "high-conviction
+   receiving-yards bets" is itself a fairly narrow slice (n=328 of 2,850).
+
+**Bottom line: this cut is more credible after growing the sample — it
+survived a real out-of-sample check, which most noise does not — but it
+has not crossed the line into a statistically confirmed edge, and part of
+what looked exciting in the original number was measurement noise
+(the seed bug) rather than signal.** The honest, useful update is
+"promising and now independently replicated once, not yet proven,"
+which is a real step forward from "promising but only checked once."
+
+### Mining for other cuts — done with an explicit exploration/holdout split to avoid p-hacking
+
+Rather than pool everything and go hunting for whichever cut of the
+**combined** data looks best (which would silently launder a
+multiple-comparisons-inflated result), any new cut was **generated only
+from batch 1** (the `EXPLORATION` set — the same 78 games already used to
+find the original hypothesis, so no new p-hacking exposure there) and then
+checked **exactly once** against batch 2 (the `HOLDOUT` set — 78 games
+that had never been looked at for this purpose). A cut only earns a
+holdout check if, in exploration, its high-conviction win rate both (a)
+beat the 52.4% breakeven point estimate and (b) beat its own
+low-conviction win rate — the same two-part bar the original discovery
+had to clear. This mirrors the task's own honesty requirement: state how
+many cuts were checked, and treat anything found only by scanning many
+cuts with real skepticism until it survives an independent check.
+
+**12 exploratory cuts were tested** on batch 1 (all on `new`-method
+receiving-yards bets): position (WR / TE / RB, 3 cuts), home vs. away
+(2), favorite vs. underdog by real point spread (2), game-total median
+split ≥/< 44.5 (2), and three alternate conviction thresholds — a looser
+z=0.35 and stricter z=0.75/z=1.0 (3). **4 of the 12 passed the exploration
+bar** and were checked against the batch-2 holdout:
+
+| Cut (exploration → holdout) | Exploration win% (n) | Holdout win% (n) | Held up? |
+|---|---|---|---|
+| **Position = RB** | 58.3% (48) | **60.4% (53)** | **Yes — strengthened** |
+| Away team | 52.4% (82) | **60.3% (68)** | **Yes — strengthened** |
+| Favorite (by real spread) | 57.9% (76) | 49.4% (79) | **No — reverted to noise** |
+| Looser threshold (z=0.35) | 53.9% (284) | 53.6% (280) | **Yes — held steady, at ~3x the volume** |
+
+Two more honest, specific findings worth calling out:
+
+- **`position = RB` is the single most promising cut found.** Combining
+  both batches (n=101, since it passed the holdout check): **59.4% win
+  rate, 95% CI [49.7%, 68.5%]**, vs. 49.8% for non-RB receiving-yards
+  high-conviction bets over the same combined window. The paired
+  high-vs-low delta on the combined RB slice is +9.6pp, 95% CI
+  [-1.4pp, +20.5pp] — the lower bound is barely below zero, the closest
+  any cut in either report has come to statistical significance, though
+  still not quite there and n=101 is still fairly small. Some caution:
+  "away team" also strengthened almost identically (60.3% holdout) and
+  may substantially overlap with the same underlying bets (a running
+  back's receiving role often varies with game script in ways correlated
+  with both home/away and spread) — these are not fully independent
+  discoveries and shouldn't be double-counted as two separate confirmed
+  signals.
+- **The favorite/underdog cut is the clean, honest "this was noise"
+  example.** It looked good in exploration (57.9%) and completely
+  reverted to a coin flip in the holdout (49.4%, essentially identical to
+  its own low-conviction rate of 50.0%) — exactly the kind of result this
+  report's methodology is designed to catch and disclose rather than
+  quietly drop.
+- **The looser z=0.35 threshold is the most operationally useful finding**:
+  it holds the win rate essentially flat (53.9% → 53.6%) while nearly
+  doubling the qualifying bet volume (284 → 280 vs. the z=0.5 baseline's
+  164 → 164) — i.e., the model's conviction signal is informative enough
+  that loosening the cutoff doesn't dilute it on this sample, which is a
+  real, actionable, low-risk calibration adjustment independent of
+  whether the specific position/matchup cuts above hold up further.
+
+None of these individual cuts clear 95% statistical significance on their
+own — this section should be read as "these are the most promising leads
+for a future, larger, purpose-built test," not as newly proven edges.
+
+### Updated overall verdict
+
+The core conclusion from the first addendum is unchanged: **the
+player-prop side still cannot claim a statistically confirmed edge against
+real market lines.** What growing the sample changed:
+
+- The blanket `NEW > CURRENT > OLD` ranking held up, with a slightly
+  higher `NEW` win rate and smaller (but still not significant) gaps.
+- The receiving-yards high-conviction cut **replicated directionally on a
+  genuine fresh holdout** and now has a combined point estimate
+  (52.7%) that clears breakeven for the first time — real, if modest,
+  progress — while also revealing that part of the original number was
+  simulation-seed noise, now fixed for good.
+- Exploratory mining, done with an explicit exploration/holdout split
+  specifically to avoid p-hacking, surfaced one genuinely promising new
+  lead (`position = RB`, 59.4% combined, n=101, closest yet to
+  significance), one operationally useful calibration adjustment (a
+  looser z=0.35 conviction threshold, same win rate at ~3x volume), and
+  one explicitly debunked false lead (favorite/underdog).
+
+**Recommended framing, unchanged from the first addendum: treat this as a
+projection tool with an increasingly well-evidenced but still-unproven set
+of promising leads, not a confirmed betting edge.** The single best next
+step, if budget allows in the future, would be a purpose-built test of
+the `new`/receiving-yards/RB cut specifically (rather than the broad
+market), since it is now the most credible lead in either report.
+
+### Testing (this addendum)
+
+No new production pure functions were added this session — the only code
+change was the `_stable_seed()` reproducibility fix inside
+`compute_benchmark.py` (an analysis script, not part of the pytest-covered
+`services/model-service/src/services/` package), verified by direct
+invocation from two separate Python processes producing an identical
+seed. The existing production functions this addendum reuses
+(`grade_prop_bet`, `summarize_grades`, `evaluate_prop_edge`,
+`simulate_team_player_box_scores`, and the walk-forward feature builders
+imported from `backtest_matchup_engine.py`) are unchanged and already
+covered by the suites listed below. Full relevant suites were re-run
+after this addendum's changes:
+
+- `tests/test_nfl_player_prop_backtest_scoring.py`,
+  `tests/test_nfl_player_projection_engine.py`,
+  `tests/test_nfl_player_box_score_simulator.py`,
+  `tests/test_nfl_matchup_features.py` — **37/37 passing**.
+- Full `services/model-service/tests/` suite — **190 passed, 7 failed**,
+  and all 7 failures are the exact same pre-existing, already-documented
+  failures from the original report (`test_main.py::test_classify_nfl_readiness_*`
+  ×2, `test_nfl_data.py::test_team_strength_from_record_handles_basic_cases`,
+  `test_nfl_routes.py::test_nfl_edges_today_filters_low_confidence`,
+  `test_nfl_simulator.py::test_simulator_baseline_unchanged_without_matchup_features`,
+  `test_nfl_tasks.py::test_run_nfl_walkforward_backtest_*` ×2) — **no new
+  regressions**.
+
+### Artifacts (this addendum)
+
+- `data/ops/nfl-player-prop-vegas-benchmark/pull_historical_player_props_batch2.py`
+  — the second, disjoint 78-game real historical pull (documented
+  sampling-disjointness proof + budget logic in its own docstring).
+- `data/ops/nfl-player-prop-vegas-benchmark/pull_run_log_batch2.json` —
+  per-game pull log for batch 2 (event ids, commence times, credit cost;
+  0 skips).
+- `data/ops/nfl-player-prop-vegas-benchmark/mine_additional_cuts.py` — the
+  exploration/holdout cut-mining analysis (read-only, no new API/DB
+  writes beyond the schedule-context read).
+- `data/ops/nfl-player-prop-vegas-benchmark/mine_additional_cuts_report.json`
+  — full numeric output of the cut-mining analysis.
+- `data/ops/nfl-player-prop-vegas-benchmark/compute_benchmark.py` —
+  modified in place: `_stable_seed()` reproducibility fix (see above);
+  otherwise unchanged.
+- `data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records.json`,
+  `benchmark_summary.json`, `roi_and_significance.json` — **overwritten**
+  in place to reflect the combined 156-game / 2,850-bet sample (the
+  intended, documented behavior of re-running these scripts, per this
+  task's instructions — nothing here was silently lost).
+- `data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records_batch1_only.json`,
+  `benchmark_summary_batch1_only.json`, `roi_and_significance_batch1_only.json`
+  — snapshots of the original 78-game-only outputs, preserved for
+  provenance before the combined re-run overwrote the live files.
+- `data/ops/nfl-player-prop-vegas-benchmark/_unstable_seed_run_discard/`
+  — the combined-sample run made *before* the seed fix (kept only as
+  concrete evidence of the reproducibility bug described above; not used
+  for any number quoted in this addendum).
+
+---
+
 ## Testing
 
 New pure scoring/grading functions

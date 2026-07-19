@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta, timezone
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
 
 from src import tasks
+from src.tasks import _box_score_replicate_seed
 
 
 class _Result:
@@ -280,6 +281,33 @@ def test_run_nfl_walkforward_backtest_excludes_ineligible_points(monkeypatch) ->
     assert payload["sample_size"] > 0
     assert payload["sample_size"] < len(points)
     assert payload["leakage_violations"] == 0
+
+
+def test_box_score_replicate_seed_is_stable_across_calls() -> None:
+    # Real bug found via the 2026-07-19 player-prop benchmark sample-growth
+    # task: the old implementation used Python's built-in `hash()` on a
+    # tuple containing a string, which is intentionally randomized
+    # per-process (PYTHONHASHSEED) -- so re-materializing the same
+    # season/week/team on unchanged data silently produced a DIFFERENT
+    # seed (and therefore different Monte Carlo box-score distributions)
+    # every run, discovered only because a backtest re-run on identical
+    # input games produced different win rates. The fix must be provably
+    # stable, not just "probably fine now."
+    first = _box_score_replicate_seed(2026, 1, "KC")
+    second = _box_score_replicate_seed(2026, 1, "KC")
+    assert first == second
+    assert isinstance(first, int)
+    assert 0 <= first < 2**31
+
+
+def test_box_score_replicate_seed_varies_by_inputs() -> None:
+    seeds = {
+        _box_score_replicate_seed(2026, 1, "KC"),
+        _box_score_replicate_seed(2026, 2, "KC"),
+        _box_score_replicate_seed(2026, 1, "BUF"),
+        _box_score_replicate_seed(2025, 1, "KC"),
+    }
+    assert len(seeds) == 4
 
 
 def test_resolve_nfl_projection_created_at_kickoff_minus_buffer() -> None:
