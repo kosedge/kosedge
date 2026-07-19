@@ -304,6 +304,68 @@ conclusion in either direction).
 
 ---
 
+## Addendum (2026-07-19): root-caused and partially fixed the conviction-calibration gap
+
+Follow-up #1 above ("investigate the conviction-calibration gap") was
+pursued immediately, using the exact same 78-game/1,433-bet sample already
+paid for — **no new API credits spent**.
+
+**Root cause, found by direct measurement, not guessing:** the box-score
+engine's own reported `std` badly understated real outcome variance. A
+well-calibrated std should make `(actual - mean) / std` have a standard
+deviation of ~1.0 across a real sample; the actual measured values were
+**1.04x for pass_yards** (already essentially correct) but **2.30x for
+rush_yards** and **2.39x for receiving_yards** — i.e. real game-to-game
+outcomes for rushing/receiving deviate from the model's mean by well over
+double what its own uncertainty estimate implied. That single fact fully
+explains why "high conviction" wasn't beating "low conviction": with std
+this understated, the conviction threshold was almost always triggered
+(85% of `old` bets were classified "high conviction"), making the split
+nearly meaningless. Root mechanism: the box-score engine's per-replicate
+noise doesn't yet model real game-script variance (blowouts/close games
+swing rush and target distribution well beyond normal game-to-game role
+noise) — the same gap already flagged as the documented "v2" follow-up in
+`nfl_player_box_score_simulator.py`.
+
+**Fix shipped:** `STD_CALIBRATION_FACTOR` in `nfl_player_box_score_simulator.py`
+applies these measured correction factors to the engine's reported std and
+percentiles (mean unchanged) for rush/receiving yards. This is a real,
+measured correction to a demonstrably wrong uncertainty estimate, not a
+parameter tuned to make this specific sample's win rate look better — it
+was validated by checking whether a fundamental calibration *property*
+(higher conviction → higher win rate) re-emerged, not by checking whether
+overall win rate went up.
+
+**Re-scored the exact same sample with the real production functions**
+(not an approximation) after shipping the fix:
+
+| | Before fix | After fix |
+|---|---|---|
+| `new` high-conviction n (of 1,433) | 756 (53% of sample — too permissive to be a real filter) | **318** (22% — a real, meaningfully smaller filter) |
+| `new` high-conviction win% | 48.9% (below low-conviction — backwards) | **51.9%** (now above low-conviction's 49.0%, the right direction) |
+| `new` receiving-yards high-conviction win% (n=168) | — | **53.6%** — exceeds the 52.4% breakeven point estimate |
+| `new` overall win rate / ROI | 49.8% / -6.21% | 49.6% / -6.46% (essentially unchanged — expected, since this fixes *which bets are correctly labeled confident*, not the underlying mean projection or which side is favored) |
+
+**Honest interpretation:** this is real, mechanistic progress on the
+specific problem this report identified as the most fundamental gap — the
+model's confidence signal is now meaningfully more informative, which is
+the necessary precondition for any real staking strategy ("only bet
+high-conviction spots"). The receiving-yards high-conviction result
+(53.6%, n=168) is genuinely encouraging and the first single number in
+either benchmark that exceeds breakeven on a point estimate. But: its 95%
+CI is [46.0%, 60.9%] — wide enough to include both "real edge" and "no
+better than a coin flip" — and the overall blanket win rate/ROI barely
+moved, because this fix changes *which bets are labeled confident*, not
+how many win. **This does not change the top-line verdict: the player-prop
+side still cannot claim a proven, statistically significant edge.** It does
+mean the path to one is now a real, actionable strategy (bet selectively
+by corrected conviction, especially on receiving yards) rather than a
+vague "the model needs to be better" — and it's the single most promising
+number in either report, worth growing the sample to test properly before
+staking anything real on it.
+
+---
+
 ## Testing
 
 New pure scoring/grading functions

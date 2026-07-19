@@ -16,9 +16,9 @@
     },
     "new": {
       "staked": 143300.0,
-      "profit": -8892.459246902039,
+      "profit": -9254.380274856478,
       "n_bets": 1433,
-      "roi_pct": -6.205
+      "roi_pct": -6.458
     }
   },
   "win_rate_95ci_wilson": {
@@ -33,9 +33,9 @@
       "high": 0.5032
     },
     "new": {
-      "point": 0.4976,
-      "low": 0.4717,
-      "high": 0.5234
+      "point": 0.4962,
+      "low": 0.4703,
+      "high": 0.522
     }
   },
   "paired_win_rate_deltas_95ci_normal_approx": {
@@ -46,15 +46,15 @@
       "significant": false
     },
     "new_minus_current": {
-      "delta": 0.0202,
-      "ci_95_low": -0.0164,
-      "ci_95_high": 0.0568,
+      "delta": 0.0188,
+      "ci_95_low": -0.0178,
+      "ci_95_high": 0.0554,
       "significant": false
     },
     "new_minus_old": {
-      "delta": 0.03,
-      "ci_95_low": -0.0066,
-      "ci_95_high": 0.0666,
+      "delta": 0.0286,
+      "ci_95_low": -0.008,
+      "ci_95_high": 0.0652,
       "significant": false
     }
   }

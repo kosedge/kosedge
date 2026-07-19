@@ -11,6 +11,7 @@ from src.services.nfl_player_box_score_simulator import (
     simulate_team_player_box_scores,
     summarize_distribution,
 )
+from src.services.nfl_player_box_score_simulator import _calibrate_distribution_variance
 
 
 def _baseline(position: str, **overrides) -> dict:
@@ -260,6 +261,46 @@ def test_qb_starter_draw_single_qb_gets_nearly_full_pool() -> None:
     # Should land close to the full pool (minus the small reserved "other"
     # bucket for scrambles/trick plays by non-QBs), not the raw 0.62 share.
     assert mean_allocation > 32.0
+
+
+def test_calibrate_distribution_variance_preserves_mean_and_widens_spread() -> None:
+    # Real bug found via data/ops/nfl-player-prop-vegas-benchmark-report.md:
+    # this engine's own std understated real outcome variance for
+    # rush/receiving yards by 2.3-2.4x, which is why "high conviction" bets
+    # weren't beating "low conviction" ones (the threshold was almost always
+    # triggered). The fix must preserve the mean exactly and only widen
+    # spread, not shift the point estimate.
+    dist = {"mean": 40.0, "std": 10.0, "p10": 27.0, "p25": 33.0, "p50": 40.0, "p75": 47.0, "p90": 53.0}
+    calibrated = _calibrate_distribution_variance(dist, 2.0)
+    assert calibrated["mean"] == 40.0
+    assert calibrated["std"] == 20.0
+    assert calibrated["p50"] == 40.0
+    # p10 was 13 below the mean; doubling the spread should put it 26 below.
+    assert calibrated["p10"] == 14.0
+    assert calibrated["p90"] == 66.0
+
+
+def test_calibrate_distribution_variance_is_noop_at_factor_one() -> None:
+    dist = {"mean": 40.0, "std": 10.0, "p10": 27.0, "p25": 33.0, "p50": 40.0, "p75": 47.0, "p90": 53.0}
+    assert _calibrate_distribution_variance(dist, 1.0) == dist
+
+
+def test_box_score_sim_applies_calibration_to_rush_and_receiving_not_pass() -> None:
+    # pass_yards calibration factor is 1.0 (already well-calibrated per the
+    # real backtest), rush/receiving are 2.30x/2.39x (measured real
+    # under-calibration -- see module docstring). Verify the engine's
+    # reported std for rush_yards is materially wider, relative to its own
+    # mean, than pass_yards' std is relative to its mean -- a real
+    # consequence of applying different calibration factors, not just both
+    # being nonzero.
+    context, players = _standard_team()
+    result = simulate_team_player_box_scores(context, players, replicates=2000, seed=3)
+    rb_dist = result["rb1"]["rush_yards_dist"]
+    qb_pass_dist = result["qb1"]["pass_yards_dist"]
+
+    rb_cv = rb_dist["std"] / max(1e-6, rb_dist["mean"])
+    qb_cv = qb_pass_dist["std"] / max(1e-6, qb_pass_dist["mean"])
+    assert rb_cv > qb_cv
 
 
 def test_aggregate_game_sims_to_season_sums_means_and_combines_std() -> None:

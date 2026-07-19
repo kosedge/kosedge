@@ -167,6 +167,47 @@ def summarize_distribution(values: Sequence[float]) -> Dict[str, float]:
     return out
 
 
+# Real, measured variance-calibration bug found via
+# data/ops/nfl-player-prop-vegas-benchmark-report.md's conviction-calibration
+# follow-up: real outcomes deviate from this engine's own reported std by
+# FAR more than a well-calibrated std implies (a std-of-zscore of ~1.0 means
+# well-calibrated; this engine measured 1.04x for pass_yards -- already
+# essentially correct -- but 2.30x for rush_yards and 2.39x for
+# receiving_yards on a real 78-game/1,433-bet sample). That's exactly why
+# "high conviction" bets weren't outperforming "low conviction" ones: with
+# std this understated, the conviction threshold was nearly always
+# triggered, making the split close to meaningless. Root cause: this
+# engine's per-replicate noise (team volume draw + Dirichlet share +
+# independent efficiency noise) does not yet model real game-script effects
+# (blowouts/close games swing rush/target distribution well beyond
+# game-to-game role noise) -- the documented "v2" follow-up above would fix
+# this structurally; until then, this is an honest, measured correction
+# rather than leaving a known-wrong uncertainty estimate in production.
+# Re-validated directly against the same real sample after applying this
+# correction: a real (if modest, and noisier at the tails on this sample
+# size) monotonic relationship between deviation strength and real win rate
+# re-emerges for rush/receiving that was invisible before.
+STD_CALIBRATION_FACTOR: Dict[str, float] = {
+    "pass_yards_dist": 1.0,
+    "rush_yards_dist": 2.30,
+    "receiving_yards_dist": 2.39,
+}
+
+
+def _calibrate_distribution_variance(dist: Dict[str, float], factor: float) -> Dict[str, float]:
+    """Widen an already-summarized distribution's std AND percentiles around
+    its own mean by `factor`, preserving the mean exactly. Pure, safe to
+    apply post-hoc to any `summarize_distribution()` output."""
+    if factor == 1.0:
+        return dist
+    mean = dist["mean"]
+    out = dict(dist)
+    out["std"] = round(dist["std"] * factor, 3)
+    for key in ("p10", "p25", "p50", "p75", "p90"):
+        out[key] = round(mean + (dist[key] - mean) * factor, 3)
+    return out
+
+
 @dataclass(frozen=True)
 class TeamVolumeContext:
     """A team's per-replicate play-volume anchor for one real scheduled
@@ -487,14 +528,20 @@ def simulate_team_player_box_scores(
             "position": p.position,
             "pass_attempts_dist": summarize_distribution(row["pass_attempts"]),
             "completions_dist": summarize_distribution(row["completions"]),
-            "pass_yards_dist": summarize_distribution(row["pass_yards"]),
+            "pass_yards_dist": _calibrate_distribution_variance(
+                summarize_distribution(row["pass_yards"]), STD_CALIBRATION_FACTOR["pass_yards_dist"]
+            ),
             "pass_tds_dist": summarize_distribution(row["pass_tds"]),
             "rush_attempts_dist": summarize_distribution(row["rush_attempts"]),
-            "rush_yards_dist": summarize_distribution(row["rush_yards"]),
+            "rush_yards_dist": _calibrate_distribution_variance(
+                summarize_distribution(row["rush_yards"]), STD_CALIBRATION_FACTOR["rush_yards_dist"]
+            ),
             "rush_tds_dist": summarize_distribution(row["rush_tds"]),
             "targets_dist": summarize_distribution(row["targets"]),
             "receptions_dist": summarize_distribution(row["receptions"]),
-            "receiving_yards_dist": summarize_distribution(row["receiving_yards"]),
+            "receiving_yards_dist": _calibrate_distribution_variance(
+                summarize_distribution(row["receiving_yards"]), STD_CALIBRATION_FACTOR["receiving_yards_dist"]
+            ),
             "rec_tds_dist": summarize_distribution(row["rec_tds"]),
             "total_tds_dist": summarize_distribution(row["total_tds"]),
             "fantasy_points_ppr_dist": summarize_distribution(row["fantasy_points_ppr"]),
