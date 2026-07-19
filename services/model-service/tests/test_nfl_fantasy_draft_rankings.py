@@ -19,8 +19,22 @@ def test_assign_draft_tier_qb_elite_boundary() -> None:
 
 def test_assign_draft_tier_is_case_insensitive_and_falls_back_for_unknown_position() -> None:
     assert assign_draft_tier("qb", 1) == "elite"
-    assert assign_draft_tier("K", 1) == "starter"
-    assert assign_draft_tier("K", 13) == "bench"
+    assert assign_draft_tier("FB", 1) == "starter"
+    assert assign_draft_tier("FB", 13) == "bench"
+
+
+def test_assign_draft_tier_k_and_dst_use_their_own_short_ladder() -> None:
+    # K/DST get their own tier ladder (not the DEFAULT fallback) -- see
+    # nfl_fantasy_draft_rankings.py's POSITION_TIER_BOUNDARIES comment for why
+    # this is still useful despite the position as a whole being a real
+    # "wait until the last round" draft convention.
+    assert assign_draft_tier("K", 1) == "elite"
+    assert assign_draft_tier("k", 10) == "K1"
+    assert assign_draft_tier("K", 13) == "streamer"
+    assert assign_draft_tier("K", 25) == "bench"
+    assert assign_draft_tier("DST", 1) == "elite"
+    assert assign_draft_tier("dst", 10) == "DST1"
+    assert assign_draft_tier("DST", 25) == "bench"
 
 
 def test_assign_draft_tier_rb_wr_te_use_distinct_ladders() -> None:
@@ -107,3 +121,67 @@ def test_rank_season_fantasy_players_does_not_mutate_input() -> None:
     players = [_player("a", "QB", 100.0)]
     rank_season_fantasy_players(players)
     assert "rank_overall" not in players[0]
+
+
+def test_k_and_dst_replacement_rank_is_one_dedicated_slot_per_team() -> None:
+    from src.services.nfl_fantasy_draft_rankings import POSITION_REPLACEMENT_RANK
+
+    assert POSITION_REPLACEMENT_RANK["K"] == 12
+    assert POSITION_REPLACEMENT_RANK["DST"] == 12
+
+
+def test_rank_season_fantasy_players_k_and_dst_rank_below_skill_positions_with_realistic_points() -> None:
+    # Realistic real-world point totals: K/DST cluster tightly (~90-130),
+    # RB/WR fan out widely (~100-320) -- a real draft board should NOT put
+    # any K/DST above a legitimate RB1/WR1 overall, even though K/DST raw
+    # points aren't dramatically lower than a replacement-level RB/WR.
+    kickers = [_player(f"k{i}", "K", 130.0 - i * 3) for i in range(1, 25)]  # k1=127..k24=61
+    dsts = [_player(f"dst{i}", "DST", 125.0 - i * 3) for i in range(1, 25)]
+    rbs = [_player(f"rb{i}", "RB", 320.0 - i * 8) for i in range(1, 40)]  # rb1=312..rb39=0
+    wrs = [_player(f"wr{i}", "WR", 300.0 - i * 6) for i in range(1, 40)]
+    ranked = rank_season_fantasy_players(kickers + dsts + rbs + wrs)
+    by_key = {p["player_key"]: p for p in ranked}
+    top_k_overall_rank = by_key["k1"]["rank_overall"]
+    top_dst_overall_rank = by_key["dst1"]["rank_overall"]
+    top_rb_overall_rank = by_key["rb1"]["rank_overall"]
+    top_wr_overall_rank = by_key["wr1"]["rank_overall"]
+    assert top_rb_overall_rank < top_k_overall_rank
+    assert top_wr_overall_rank < top_k_overall_rank
+    assert top_rb_overall_rank < top_dst_overall_rank
+    assert top_wr_overall_rank < top_dst_overall_rank
+
+
+def test_rank_season_fantasy_players_k_and_dst_always_sort_after_every_other_position() -> None:
+    # Real bug found by checking the VOR math end-to-end against real-world
+    # ADP behavior: even with the "below RB1/WR1" guarantee from the test
+    # above, tuning POSITION_REPLACEMENT_RANK alone could not push K/DST
+    # below the REST of a realistic, deep skill-position bench (828 of 908
+    # real 2026 skill-position players sit at VOR <= 0 -- there's no
+    # replacement-rank choice that separates K/DST from that same pile on a
+    # shared VOR scale). Real ADP always drafts K/DST dead last regardless
+    # of VOR, so `rank_season_fantasy_players` now enforces that directly:
+    # even a deep bench WR/RB/QB/TE with a clearly worse real point total
+    # than the single best kicker/DST must still outrank it overall.
+    kickers = [_player("k1", "K", 170.0), _player("k2", "K", 10.0)]
+    dsts = [_player("dst1", "DST", 136.0), _player("dst2", "DST", 5.0)]
+    deep_bench_wr = _player("wr_deep_bench", "WR", 8.0)
+    deep_bench_rb = _player("rb_deep_bench", "RB", 6.0)
+    ranked = rank_season_fantasy_players([*kickers, *dsts, deep_bench_wr, deep_bench_rb])
+    by_key = {p["player_key"]: p for p in ranked}
+    assert by_key["wr_deep_bench"]["rank_overall"] < by_key["k1"]["rank_overall"]
+    assert by_key["rb_deep_bench"]["rank_overall"] < by_key["dst1"]["rank_overall"]
+    # Within the K/DST tier itself, VOR-based ordering still applies (best
+    # available K/DST right now is still meaningful).
+    assert by_key["k1"]["rank_overall"] < by_key["k2"]["rank_overall"]
+    assert by_key["dst1"]["rank_overall"] < by_key["dst2"]["rank_overall"]
+
+
+def test_rank_season_fantasy_players_k_and_dst_get_their_own_tier_ladder() -> None:
+    kickers = [_player(f"k{i}", "K", 130.0 - i) for i in range(1, 30)]
+    dsts = [_player(f"dst{i}", "DST", 125.0 - i) for i in range(1, 30)]
+    ranked = rank_season_fantasy_players(kickers + dsts)
+    by_key = {p["player_key"]: p for p in ranked}
+    assert by_key["k1"]["tier"] == "elite"
+    assert by_key["k10"]["tier"] == "K1"
+    assert by_key["dst1"]["tier"] == "elite"
+    assert by_key["dst10"]["tier"] == "DST1"

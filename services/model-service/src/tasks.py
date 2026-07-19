@@ -80,6 +80,17 @@ from .services.nfl_player_box_score_simulator import (
     simulate_team_player_box_scores,
 )
 from .services.nfl_fantasy_draft_rankings import rank_season_fantasy_players
+from .services.nfl_kicker_dst_projections import (
+    GAMES_PER_REGULAR_SEASON,
+    allocate_attempts_to_buckets,
+    compute_dst_season_fantasy_points,
+    compute_kicker_season_fantasy_points,
+    project_kicker_fg_makes_by_bucket,
+    project_pat_makes,
+    project_team_fg_attempt_volume,
+    project_team_points_allowed_mean,
+    shrink_defense_stat_per_game,
+)
 from .services.nfl_award_projections import (
     compute_stat_composite,
     compute_team_success_score,
@@ -356,6 +367,60 @@ def _load_team_strength_priors(
             "_season": float(season),
         }
     return out
+
+
+def _resolve_team_strength_indices(
+    *,
+    base_offense_home: float,
+    base_offense_away: float,
+    base_defense_home: float,
+    base_defense_away: float,
+    home_prior: Dict[str, float],
+    away_prior: Dict[str, float],
+) -> tuple[float, float, float, float]:
+    """Resolve which team-strength signal actually drives the live game
+    simulation.
+
+    Real bug found via a real team-simulator calibration audit (see
+    data/ops/nfl-team-simulator-calibration-audit-report.md): this used to
+    prefer `base_offense_*`/`base_defense_*` -- ESPN win-loss RECORD
+    converted to a strength index via nfl_data.team_strength_from_record
+    (0.90 + 0.22*win_pct) -- over the real EPA-based rolling-feature prior
+    computed by `_load_team_strength_priors`, falling back to the EPA prior
+    only when the record was degenerate (exactly 1.0, i.e. a real 0-0
+    record). Since ANY team with a played game has a non-degenerate record,
+    this meant the EPA-based signal -- the ONLY signal actually validated
+    end-to-end against real historical games in
+    scripts/nfl/historical_market_backtest.py (spread MAE 9.62 vs the
+    market's 9.92, beating the market) -- was silently unused for the
+    entire live season past week 1, in favor of a cruder win/loss-only
+    heuristic that was never backtested. Confirmed via a real backtest
+    replicating both signals against 855 real 2023-2025 games (no leakage,
+    real cumulative win-loss record entering each game, see
+    data/ops/nfl-team-simulator-calibration-audit/): the win/loss-record
+    signal's spread MAE was 10.73 (WORSE than the blind market's 9.79)
+    versus the EPA signal's 9.50 (beats the market); correlation with real
+    actual margins was 0.27-0.35 (record) vs. 0.65-0.67 (EPA) vs. 0.47-0.49
+    (the market itself) -- the record-based signal that was actually live
+    was measurably worse than either the market or the validated model
+    signal it was silently overriding.
+
+    Fixed by preferring the real EPA-based prior whenever it exists,
+    falling back to the record-based estimate only for a genuine cold start
+    (no rolling-feature rows at all for that team/season, which
+    `_load_team_strength_priors` itself already backfills from the prior
+    season when available).
+    """
+    epa_offense_home = _to_float(home_prior.get("offense_index"))
+    epa_offense_away = _to_float(away_prior.get("offense_index"))
+    epa_defense_home = _to_float(home_prior.get("defense_index"))
+    epa_defense_away = _to_float(away_prior.get("defense_index"))
+    return (
+        epa_offense_home if epa_offense_home is not None else base_offense_home,
+        epa_offense_away if epa_offense_away is not None else base_offense_away,
+        epa_defense_home if epa_defense_home is not None else base_defense_home,
+        epa_defense_away if epa_defense_away is not None else base_defense_away,
+    )
 
 
 def _normalize_bookmakers_csv(raw: Optional[str]) -> str:
@@ -2913,25 +2978,13 @@ def run_nfl_market_simulations(
             base_offense_away = _to_float(m.get("offense_index_away")) or 1.0
             base_defense_home = _to_float(m.get("defense_index_home")) or 1.0
             base_defense_away = _to_float(m.get("defense_index_away")) or 1.0
-            offense_home = (
-                (_to_float(home_prior.get("offense_index")) or base_offense_home)
-                if abs(base_offense_home - 1.0) < 1e-6
-                else base_offense_home
-            )
-            offense_away = (
-                (_to_float(away_prior.get("offense_index")) or base_offense_away)
-                if abs(base_offense_away - 1.0) < 1e-6
-                else base_offense_away
-            )
-            defense_home = (
-                (_to_float(home_prior.get("defense_index")) or base_defense_home)
-                if abs(base_defense_home - 1.0) < 1e-6
-                else base_defense_home
-            )
-            defense_away = (
-                (_to_float(away_prior.get("defense_index")) or base_defense_away)
-                if abs(base_defense_away - 1.0) < 1e-6
-                else base_defense_away
+            offense_home, offense_away, defense_home, defense_away = _resolve_team_strength_indices(
+                base_offense_home=base_offense_home,
+                base_offense_away=base_offense_away,
+                base_defense_home=base_defense_home,
+                base_defense_away=base_defense_away,
+                home_prior=home_prior,
+                away_prior=away_prior,
             )
             inputs = NflGameInputs(
                 game_id=str(m["game_id"]),
@@ -8535,6 +8588,572 @@ def _fetch_season_player_totals(
     return players
 
 
+def _fetch_league_kicker_baselines(session: Any) -> Dict[str, Any]:
+    """Real, league-wide kicker baselines from ALL history in
+    `nfl_dp_kicker_weekly` -- the league-average make rate per distance
+    bucket (used to shrink thin-sample kickers), the league-average FG
+    distance-bucket SHARE (used to shrink thin-sample teams' distance mix),
+    and the league-average PAT make rate. See
+    `nfl_kicker_dst_projections.py` module docstring for the shrinkage
+    rationale."""
+    row = session.execute(
+        text(
+            """
+            SELECT
+              SUM(fg_att) AS att_total, SUM(fg_made) AS made_total,
+              SUM(fg_att_0_19) AS att_0_19, SUM(fg_made_0_19) AS made_0_19,
+              SUM(fg_att_20_29) AS att_20_29, SUM(fg_made_20_29) AS made_20_29,
+              SUM(fg_att_30_39) AS att_30_39, SUM(fg_made_30_39) AS made_30_39,
+              SUM(fg_att_40_49) AS att_40_49, SUM(fg_made_40_49) AS made_40_49,
+              SUM(fg_att_50_59) AS att_50_59, SUM(fg_made_50_59) AS made_50_59,
+              SUM(fg_att_60_plus) AS att_60_plus, SUM(fg_made_60_plus) AS made_60_plus,
+              SUM(pat_att) AS pat_att_total, SUM(pat_made) AS pat_made_total
+            FROM nfl_dp_kicker_weekly
+            """
+        )
+    ).mappings().one()
+    bucket_keys = {"0_19": "0_19", "20_29": "20_29", "30_39": "30_39", "40_49": "40_49", "50_59": "50_59", "60_plus": "60_plus"}
+    att_total = float(row["att_total"] or 0.0)
+    make_rate: Dict[str, float] = {}
+    bucket_share: Dict[str, float] = {}
+    for bucket, col_suffix in bucket_keys.items():
+        att = float(row[f"att_{col_suffix}"] or 0.0)
+        made = float(row[f"made_{col_suffix}"] or 0.0)
+        make_rate[bucket] = (made / att) if att > 0 else 0.0
+        bucket_share[bucket] = (att / att_total) if att_total > 0 else (1.0 / len(bucket_keys))
+    pat_att_total = float(row["pat_att_total"] or 0.0)
+    pat_made_total = float(row["pat_made_total"] or 0.0)
+    league_pat_make_rate = (pat_made_total / pat_att_total) if pat_att_total > 0 else 0.94
+
+    two_pt_row = session.execute(
+        text(
+            """
+            SELECT
+              SUM(
+                COALESCE((payload->>'passing_2pt_conversions')::numeric, 0)
+                + COALESCE((payload->>'rushing_2pt_conversions')::numeric, 0)
+                + COALESCE((payload->>'receiving_2pt_conversions')::numeric, 0)
+              ) AS two_pt_made,
+              SUM(
+                COALESCE((payload->>'passing_tds')::numeric, 0)
+                + COALESCE((payload->>'rushing_tds')::numeric, 0)
+                + COALESCE((payload->>'receiving_tds')::numeric, 0)
+              ) AS total_tds
+            FROM nfl_dp_raw_objects
+            WHERE object_type = 'team_game_stats'
+            """
+        )
+    ).mappings().one()
+    total_tds = float(two_pt_row["total_tds"] or 0.0)
+    two_pt_made = float(two_pt_row["two_pt_made"] or 0.0)
+    # Real successful 2pt conversions / real total offensive TDs, used as a
+    # proxy for the 2pt ATTEMPT rate (attempt-level data isn't cleanly
+    # available) -- see nfl_kicker_dst_projections.py module docstring.
+    # Real 2pt attempt rate is small (~1-2% of TDs), so this proxy's
+    # downward bias (some attempts fail) is worth well under half a fantasy
+    # point across a season and not worth further modeling.
+    two_point_attempt_rate = (two_pt_made / total_tds) if total_tds > 0 else 0.0
+
+    return {
+        "league_make_rate_by_bucket": make_rate,
+        "league_bucket_share": bucket_share,
+        "league_pat_make_rate": league_pat_make_rate,
+        "two_point_attempt_rate": two_point_attempt_rate,
+    }
+
+
+def _fetch_team_kicker_history(session: Any) -> Dict[str, Dict[str, Any]]:
+    """Real per-team historical FG attempt volume (attempts per real game
+    played by that team's kicker(s)) and real per-team FG distance-bucket
+    attempt mix, from ALL history in `nfl_dp_kicker_weekly`."""
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              team,
+              SUM(fg_att) AS att_total,
+              COUNT(DISTINCT (season, week)) AS games,
+              SUM(fg_att_0_19) AS att_0_19, SUM(fg_made_0_19) AS made_0_19,
+              SUM(fg_att_20_29) AS att_20_29, SUM(fg_made_20_29) AS made_20_29,
+              SUM(fg_att_30_39) AS att_30_39, SUM(fg_made_30_39) AS made_30_39,
+              SUM(fg_att_40_49) AS att_40_49, SUM(fg_made_40_49) AS made_40_49,
+              SUM(fg_att_50_59) AS att_50_59, SUM(fg_made_50_59) AS made_50_59,
+              SUM(fg_att_60_plus) AS att_60_plus, SUM(fg_made_60_plus) AS made_60_plus
+            FROM nfl_dp_kicker_weekly
+            GROUP BY team
+            """
+        )
+    ).mappings().all()
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in rows:
+        games = int(row["games"] or 0)
+        out[row["team"]] = {
+            "fg_attempts_per_game": (float(row["att_total"] or 0.0) / games) if games > 0 else 0.0,
+            "bucket_attempts": {b: float(row[f"att_{b}"] or 0.0) for b in ("0_19", "20_29", "30_39", "40_49", "50_59", "60_plus")},
+            "bucket_makes": {b: float(row[f"made_{b}"] or 0.0) for b in ("0_19", "20_29", "30_39", "40_49", "50_59", "60_plus")},
+        }
+    return out
+
+
+def _fetch_kicker_career_bucket_stats(session: Any) -> Dict[str, Dict[str, Any]]:
+    """Real per-kicker CAREER (all seasons/teams -- accuracy skill travels
+    with the kicker, not the team) FG makes/attempts by distance bucket, plus
+    each kicker's most recent season with real data and that season's real
+    attempt volume (used only to pick each 2026 team's primary kicker when a
+    team has multiple K's rostered)."""
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              player_id, MAX(player_name) AS player_name,
+              MAX(season) AS most_recent_season,
+              SUM(fg_att_0_19) AS att_0_19, SUM(fg_made_0_19) AS made_0_19,
+              SUM(fg_att_20_29) AS att_20_29, SUM(fg_made_20_29) AS made_20_29,
+              SUM(fg_att_30_39) AS att_30_39, SUM(fg_made_30_39) AS made_30_39,
+              SUM(fg_att_40_49) AS att_40_49, SUM(fg_made_40_49) AS made_40_49,
+              SUM(fg_att_50_59) AS att_50_59, SUM(fg_made_50_59) AS made_50_59,
+              SUM(fg_att_60_plus) AS att_60_plus, SUM(fg_made_60_plus) AS made_60_plus
+            FROM nfl_dp_kicker_weekly
+            GROUP BY player_id
+            """
+        )
+    ).mappings().all()
+    recent_att_by_player = session.execute(
+        text(
+            """
+            SELECT player_id, season, SUM(fg_att) AS att
+            FROM nfl_dp_kicker_weekly
+            GROUP BY player_id, season
+            """
+        )
+    ).mappings().all()
+    recent_att_lookup: Dict[str, Dict[int, float]] = {}
+    for row in recent_att_by_player:
+        recent_att_lookup.setdefault(row["player_id"], {})[int(row["season"])] = float(row["att"] or 0.0)
+
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in rows:
+        player_id = row["player_id"]
+        most_recent_season = int(row["most_recent_season"]) if row["most_recent_season"] is not None else None
+        out[player_id] = {
+            "player_name": row["player_name"],
+            "career_makes_by_bucket": {b: float(row[f"made_{b}"] or 0.0) for b in ("0_19", "20_29", "30_39", "40_49", "50_59", "60_plus")},
+            "career_attempts_by_bucket": {b: float(row[f"att_{b}"] or 0.0) for b in ("0_19", "20_29", "30_39", "40_49", "50_59", "60_plus")},
+            "most_recent_season": most_recent_season,
+            "most_recent_season_attempts": recent_att_lookup.get(player_id, {}).get(most_recent_season, 0.0),
+        }
+    return out
+
+
+def _select_primary_kickers_per_team(session: Any, *, season: int) -> List[Dict[str, Any]]:
+    """Picks ONE kicker per team for `season`'s roster (some teams carry two
+    K's, e.g. an incumbent + a camp-battle/practice-squad arm) -- the one
+    with the most real recent-season FG attempt volume (most recent season
+    with data, then attempts in that season), matching this codebase's
+    existing `select_primary_starter_per_team_position` convention for
+    awards (one "the" starter per team/position, not several
+    simultaneously). A team with two kickers who BOTH have zero real
+    history (e.g. two rookies in a camp battle) falls back to the lowest
+    `player_id` for a deterministic, reproducible pick -- there is no real
+    signal available to break that tie honestly."""
+    roster_rows = session.execute(
+        text("SELECT team, player_id, player_name FROM nfl_dp_rosters WHERE season = :season AND position = 'K'"),
+        {"season": season},
+    ).mappings().all()
+    career_stats = _fetch_kicker_career_bucket_stats(session)
+    candidates_by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for row in roster_rows:
+        stats = career_stats.get(row["player_id"], {})
+        candidates_by_team.setdefault(row["team"], []).append(
+            {
+                "team": row["team"],
+                "player_id": row["player_id"],
+                "player_name": row["player_name"] or stats.get("player_name"),
+                "most_recent_season": stats.get("most_recent_season") or -1,
+                "most_recent_season_attempts": stats.get("most_recent_season_attempts") or 0.0,
+            }
+        )
+    selected: List[Dict[str, Any]] = []
+    for team, candidates in candidates_by_team.items():
+        best = sorted(
+            candidates,
+            key=lambda c: (-c["most_recent_season"], -c["most_recent_season_attempts"], str(c["player_id"])),
+        )[0]
+        selected.append(best)
+    return selected
+
+
+def _fetch_team_offensive_td_totals(session: Any, *, season: int, model_version: str) -> Dict[str, float]:
+    """Real projected season offensive TD total per team, summed across
+    EVERY position in `nfl_player_projection_baselines` (not just the
+    QB/RB/WR/TE season-total pool `_fetch_season_player_totals` filters to)
+    -- the same real projection every other position's season total is
+    built from, reused here (not re-derived) for kicker PAT volume.
+
+    Deliberately `pass_tds_mean + rush_tds_mean` ONLY -- NOT `+ rec_tds_mean`
+    too. Every real passing touchdown is thrown BY a QB (`pass_tds_mean`)
+    AND caught by a receiver (`rec_tds_mean`) -- the SAME touchdown, counted
+    on two different players' rows. Adding all three would double-count the
+    passing-TD share of a team's offense (confirmed against real projected
+    2026 team totals while validating this feature: `pass_tds_mean` summed
+    across a team consistently exceeds that same team's summed
+    `rec_tds_mean`, since this baseline is an independent per-player mean
+    with no cross-player reconciliation -- adding `rec_tds_mean` on top of
+    `pass_tds_mean` inflated one real team's projected offensive TD total
+    from a realistic ~48 to an unrealistic ~61 before this was caught)."""
+    rows = session.execute(
+        text(
+            """
+            SELECT team, SUM(COALESCE(pass_tds_mean, 0.0) + COALESCE(rush_tds_mean, 0.0)) AS offensive_tds_total
+            FROM nfl_player_projection_baselines
+            WHERE season = :season AND model_version = :model_version AND game_id IS NOT NULL AND game_id <> ''
+            GROUP BY team
+            """
+        ),
+        {"season": season, "model_version": model_version},
+    ).mappings().all()
+    return {row["team"]: float(row["offensive_tds_total"] or 0.0) for row in rows}
+
+
+def _fetch_team_situational_signal(session: Any) -> Dict[str, Any]:
+    """Latest real `red_zone_td_rate` (offense) and
+    `epa_per_play_defense_allowed` per team from
+    `nfl_dp_team_situational_latest`, plus the league-wide averages of each
+    -- this pipeline's own already-computed situational features, reused
+    (not re-derived) for the K FG-volume and DST defense-strength
+    adjustments. See `nfl_kicker_dst_projections.py`."""
+    rows = session.execute(
+        text("SELECT team, red_zone_td_rate, epa_per_play_defense_allowed FROM nfl_dp_team_situational_latest")
+    ).mappings().all()
+    by_team = {
+        row["team"]: {
+            "red_zone_td_rate": float(row["red_zone_td_rate"]) if row["red_zone_td_rate"] is not None else None,
+            "epa_per_play_defense_allowed": float(row["epa_per_play_defense_allowed"]) if row["epa_per_play_defense_allowed"] is not None else None,
+        }
+        for row in rows
+    }
+    red_zone_values = [v["red_zone_td_rate"] for v in by_team.values() if v["red_zone_td_rate"] is not None]
+    epa_values = [v["epa_per_play_defense_allowed"] for v in by_team.values() if v["epa_per_play_defense_allowed"] is not None]
+    return {
+        "by_team": by_team,
+        "league_avg_red_zone_td_rate": (sum(red_zone_values) / len(red_zone_values)) if red_zone_values else 0.20,
+        "league_avg_epa_per_play_defense_allowed": (sum(epa_values) / len(epa_values)) if epa_values else 0.0,
+    }
+
+
+def _fetch_team_schedule_game_counts(session: Any, *, season: int) -> Dict[str, int]:
+    rows = session.execute(
+        text(
+            """
+            SELECT team, COUNT(*) AS games FROM (
+              SELECT home_team AS team FROM nfl_dp_schedules WHERE season = :season
+              UNION ALL
+              SELECT away_team AS team FROM nfl_dp_schedules WHERE season = :season
+            ) t
+            GROUP BY team
+            """
+        ),
+        {"season": season},
+    ).mappings().all()
+    return {row["team"]: int(row["games"] or 0) for row in rows}
+
+
+def _fetch_kicker_season_players(session: Any, *, season: int, model_version: str) -> List[Dict[str, Any]]:
+    """Builds season-long K rows using real historical kicker accuracy +
+    real team FG-attempt-volume history/mix + this pipeline's own real
+    red-zone-efficiency signal + real projected team offensive TDs for PAT
+    volume. See `nfl_kicker_dst_projections.py` for the full methodology.
+    K fantasy scoring does not vary by PPR profile, so `total_points` here is
+    profile-independent (the caller applies the same total to every
+    scoring_profile row)."""
+    league = _fetch_league_kicker_baselines(session)
+    team_history = _fetch_team_kicker_history(session)
+    career_stats = _fetch_kicker_career_bucket_stats(session)
+    primary_kickers = _select_primary_kickers_per_team(session, season=season)
+    situational = _fetch_team_situational_signal(session)
+    offensive_tds_by_team = _fetch_team_offensive_td_totals(session, season=season, model_version=model_version)
+    schedule_games = _fetch_team_schedule_game_counts(session, season=season)
+
+    players: List[Dict[str, Any]] = []
+    for kicker in primary_kickers:
+        team = kicker["team"]
+        games = float(schedule_games.get(team, GAMES_PER_REGULAR_SEASON))
+        team_hist = team_history.get(team, {"fg_attempts_per_game": 0.0, "bucket_attempts": {}, "bucket_makes": {}})
+        team_signal = situational["by_team"].get(team, {})
+        team_red_zone_td_rate = team_signal.get("red_zone_td_rate")
+        if team_red_zone_td_rate is None:
+            team_red_zone_td_rate = situational["league_avg_red_zone_td_rate"]
+
+        total_fg_attempts = project_team_fg_attempt_volume(
+            team_fg_attempts_per_game_history=team_hist["fg_attempts_per_game"],
+            team_red_zone_td_rate=team_red_zone_td_rate,
+            league_avg_red_zone_td_rate=situational["league_avg_red_zone_td_rate"],
+            games=games,
+        )
+        attempts_by_bucket = allocate_attempts_to_buckets(
+            total_attempts=total_fg_attempts,
+            team_bucket_makes=team_hist.get("bucket_makes", {}),
+            team_bucket_attempts=team_hist.get("bucket_attempts", {}),
+            league_bucket_shares=league["league_bucket_share"],
+        )
+        career = career_stats.get(
+            kicker["player_id"],
+            {"career_makes_by_bucket": {}, "career_attempts_by_bucket": {}},
+        )
+        makes_by_bucket = project_kicker_fg_makes_by_bucket(
+            team_attempts_by_bucket=attempts_by_bucket,
+            kicker_career_makes_by_bucket=career["career_makes_by_bucket"],
+            kicker_career_attempts_by_bucket=career["career_attempts_by_bucket"],
+            league_make_rate_by_bucket=league["league_make_rate_by_bucket"],
+        )
+        pat_makes = project_pat_makes(
+            team_offensive_tds_season=offensive_tds_by_team.get(team, 0.0),
+            two_point_attempt_rate=league["two_point_attempt_rate"],
+            league_pat_make_rate=league["league_pat_make_rate"],
+        )
+        total_points = compute_kicker_season_fantasy_points(fg_makes_by_bucket=makes_by_bucket, pat_makes=pat_makes)
+        fg_made_total = sum(makes_by_bucket.values())
+
+        players.append(
+            {
+                "player_key": f"{team}:{kicker['player_id']}",
+                "player_id": kicker["player_id"],
+                "player_uid": None,
+                "player_name": kicker["player_name"] or kicker["player_id"],
+                "team": team,
+                "position": "K",
+                "games_projected": int(games),
+                "pass_yards_total": None,
+                "rush_yards_total": None,
+                "receiving_yards_total": None,
+                "receptions_total": None,
+                "pass_tds_total": None,
+                "rush_tds_total": None,
+                "rec_tds_total": None,
+                "field_goals_made_total": round(fg_made_total, 4),
+                "field_goals_attempted_total": round(total_fg_attempts, 4),
+                "extra_points_made_total": round(pat_makes, 4),
+                "points_allowed_total": None,
+                "sacks_total": None,
+                "def_interceptions_total": None,
+                "fumble_recoveries_total": None,
+                "defensive_tds_total": None,
+                "safeties_total": None,
+                "total_points": total_points,
+                "rookie_year": None,
+                "draft_number": None,
+                "is_rookie": False,
+                "projection_payload": {
+                    "derived_from": ["nfl_dp_kicker_weekly", "nfl_dp_team_situational_latest", "nfl_player_projection_baselines"],
+                    "fg_makes_by_bucket": {b: round(v, 4) for b, v in makes_by_bucket.items()},
+                    "fg_attempts_by_bucket": {b: round(v, 4) for b, v in attempts_by_bucket.items()},
+                    "team_red_zone_td_rate": round(team_red_zone_td_rate, 4),
+                    "league_avg_red_zone_td_rate": round(situational["league_avg_red_zone_td_rate"], 4),
+                },
+            }
+        )
+    return players
+
+
+def _fetch_team_defense_history(session: Any) -> Dict[str, Any]:
+    """Real per-team historical defense/special-teams counting-stat rates
+    and league-wide averages (+ league-wide points-allowed std, used as a
+    shared game-to-game variance estimate -- see
+    `nfl_kicker_dst_projections.py` module docstring for why a shared
+    league-wide std is used instead of a noisy per-team estimate), from ALL
+    history in `nfl_dp_team_defense_weekly`."""
+    team_rows = session.execute(
+        text(
+            """
+            SELECT
+              team, COUNT(*) AS games,
+              SUM(points_allowed) AS points_allowed_total,
+              SUM(sacks) AS sacks_total,
+              SUM(interceptions) AS interceptions_total,
+              SUM(fumble_recoveries) AS fumble_recoveries_total,
+              SUM(defensive_tds + special_teams_tds) AS defensive_tds_total,
+              SUM(safeties) AS safeties_total
+            FROM nfl_dp_team_defense_weekly
+            GROUP BY team
+            """
+        )
+    ).mappings().all()
+    league_row = session.execute(
+        text(
+            """
+            SELECT
+              AVG(points_allowed) AS lg_points_allowed, STDDEV(points_allowed) AS lg_points_allowed_std,
+              AVG(sacks) AS lg_sacks, AVG(interceptions) AS lg_interceptions,
+              AVG(fumble_recoveries) AS lg_fumble_recoveries, AVG(defensive_tds + special_teams_tds) AS lg_defensive_tds,
+              AVG(safeties) AS lg_safeties
+            FROM nfl_dp_team_defense_weekly
+            """
+        )
+    ).mappings().one()
+    by_team: Dict[str, Dict[str, Any]] = {}
+    for row in team_rows:
+        games = int(row["games"] or 0)
+        by_team[row["team"]] = {
+            "games": games,
+            "points_allowed_per_game": (float(row["points_allowed_total"] or 0.0) / games) if games > 0 else 0.0,
+            "sacks_per_game": (float(row["sacks_total"] or 0.0) / games) if games > 0 else 0.0,
+            "interceptions_per_game": (float(row["interceptions_total"] or 0.0) / games) if games > 0 else 0.0,
+            "fumble_recoveries_per_game": (float(row["fumble_recoveries_total"] or 0.0) / games) if games > 0 else 0.0,
+            "defensive_tds_per_game": (float(row["defensive_tds_total"] or 0.0) / games) if games > 0 else 0.0,
+            "safeties_per_game": (float(row["safeties_total"] or 0.0) / games) if games > 0 else 0.0,
+        }
+    return {
+        "by_team": by_team,
+        "league_avg_points_allowed_per_game": float(league_row["lg_points_allowed"] or 22.0),
+        "league_points_allowed_std": float(league_row["lg_points_allowed_std"] or 10.0),
+        "league_avg_sacks_per_game": float(league_row["lg_sacks"] or 0.0),
+        "league_avg_interceptions_per_game": float(league_row["lg_interceptions"] or 0.0),
+        "league_avg_fumble_recoveries_per_game": float(league_row["lg_fumble_recoveries"] or 0.0),
+        "league_avg_defensive_tds_per_game": float(league_row["lg_defensive_tds"] or 0.0),
+        "league_avg_safeties_per_game": float(league_row["lg_safeties"] or 0.0),
+    }
+
+
+# All 32 real NFL team codes, used to build one DST row per team --
+# `nfl_dp_team_defense_weekly` only carries real HISTORICAL rows (a team with
+# a data gap in every historical season would otherwise be silently absent
+# from the draft board rather than falling back to league-average, which is
+# the same "a rostered player with no usage should still get a real baseline
+# row, not silent absence" principle `docs/NFL_DATA_PLATFORM.md`'s preseason
+# bootstrap section documents for offensive skill positions).
+_ALL_NFL_TEAM_CODES = (
+    "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", "GB",
+    "HOU", "IND", "JAX", "KC", "LA", "LAC", "LV", "MIA", "MIN", "NE", "NO", "NYG",
+    "NYJ", "PHI", "PIT", "SEA", "SF", "TB", "TEN", "WAS",
+)
+
+
+def _fetch_dst_season_players(session: Any, *, season: int) -> List[Dict[str, Any]]:
+    """Builds season-long DST rows -- one per real NFL team -- using real
+    historical team defense/special-teams rates (shrunk toward league
+    average per-stat, see `DEFENSE_STAT_SHRINKAGE_PRIOR_GAMES`) and this
+    pipeline's own real defensive-EPA-allowed signal for the points-allowed
+    adjustment. See `nfl_kicker_dst_projections.py` for the full
+    methodology. DST fantasy scoring does not vary by PPR profile."""
+    defense_history = _fetch_team_defense_history(session)
+    situational = _fetch_team_situational_signal(session)
+    schedule_games = _fetch_team_schedule_game_counts(session, season=season)
+
+    players: List[Dict[str, Any]] = []
+    for team in _ALL_NFL_TEAM_CODES:
+        games = float(schedule_games.get(team, GAMES_PER_REGULAR_SEASON))
+        team_hist = defense_history["by_team"].get(team)
+        if team_hist is None:
+            team_hist = {
+                "points_allowed_per_game": defense_history["league_avg_points_allowed_per_game"],
+                "sacks_per_game": defense_history["league_avg_sacks_per_game"],
+                "interceptions_per_game": defense_history["league_avg_interceptions_per_game"],
+                "fumble_recoveries_per_game": defense_history["league_avg_fumble_recoveries_per_game"],
+                "defensive_tds_per_game": defense_history["league_avg_defensive_tds_per_game"],
+                "safeties_per_game": defense_history["league_avg_safeties_per_game"],
+                "games": 0,
+            }
+        team_games = float(team_hist.get("games", 0))
+
+        shrunk_points_allowed = shrink_defense_stat_per_game(
+            stat_name="points_allowed",
+            team_total=team_hist["points_allowed_per_game"] * team_games,
+            team_games=team_games,
+            league_avg_per_game=defense_history["league_avg_points_allowed_per_game"],
+        )
+        shrunk_sacks = shrink_defense_stat_per_game(
+            stat_name="sacks",
+            team_total=team_hist["sacks_per_game"] * team_games,
+            team_games=team_games,
+            league_avg_per_game=defense_history["league_avg_sacks_per_game"],
+        )
+        shrunk_interceptions = shrink_defense_stat_per_game(
+            stat_name="interceptions",
+            team_total=team_hist["interceptions_per_game"] * team_games,
+            team_games=team_games,
+            league_avg_per_game=defense_history["league_avg_interceptions_per_game"],
+        )
+        shrunk_fumble_recoveries = shrink_defense_stat_per_game(
+            stat_name="fumble_recoveries",
+            team_total=team_hist["fumble_recoveries_per_game"] * team_games,
+            team_games=team_games,
+            league_avg_per_game=defense_history["league_avg_fumble_recoveries_per_game"],
+        )
+        shrunk_defensive_tds = shrink_defense_stat_per_game(
+            stat_name="defensive_tds",
+            team_total=team_hist["defensive_tds_per_game"] * team_games,
+            team_games=team_games,
+            league_avg_per_game=defense_history["league_avg_defensive_tds_per_game"],
+        )
+        shrunk_safeties = shrink_defense_stat_per_game(
+            stat_name="safeties",
+            team_total=team_hist["safeties_per_game"] * team_games,
+            team_games=team_games,
+            league_avg_per_game=defense_history["league_avg_safeties_per_game"],
+        )
+
+        team_signal = situational["by_team"].get(team, {})
+        team_epa_allowed = team_signal.get("epa_per_play_defense_allowed")
+        if team_epa_allowed is None:
+            team_epa_allowed = situational["league_avg_epa_per_play_defense_allowed"]
+        adjusted_points_allowed_mean = project_team_points_allowed_mean(
+            team_points_allowed_per_game_history=shrunk_points_allowed,
+            team_epa_per_play_defense_allowed=team_epa_allowed,
+            league_avg_epa_per_play_defense_allowed=situational["league_avg_epa_per_play_defense_allowed"],
+        )
+
+        breakdown = compute_dst_season_fantasy_points(
+            points_allowed_mean_per_game=adjusted_points_allowed_mean,
+            points_allowed_std_per_game=defense_history["league_points_allowed_std"],
+            sacks_per_game=shrunk_sacks,
+            interceptions_per_game=shrunk_interceptions,
+            fumble_recoveries_per_game=shrunk_fumble_recoveries,
+            defensive_tds_per_game=shrunk_defensive_tds,
+            safeties_per_game=shrunk_safeties,
+            games=games,
+        )
+
+        players.append(
+            {
+                "player_key": f"{team}:DST",
+                "player_id": team,
+                "player_uid": None,
+                "player_name": f"{team} DST",
+                "team": team,
+                "position": "DST",
+                "games_projected": int(games),
+                "pass_yards_total": None,
+                "rush_yards_total": None,
+                "receiving_yards_total": None,
+                "receptions_total": None,
+                "pass_tds_total": None,
+                "rush_tds_total": None,
+                "rec_tds_total": None,
+                "field_goals_made_total": None,
+                "field_goals_attempted_total": None,
+                "extra_points_made_total": None,
+                "points_allowed_total": round(adjusted_points_allowed_mean * games, 4),
+                "sacks_total": round(shrunk_sacks * games, 4),
+                "def_interceptions_total": round(shrunk_interceptions * games, 4),
+                "fumble_recoveries_total": round(shrunk_fumble_recoveries * games, 4),
+                "defensive_tds_total": round(shrunk_defensive_tds * games, 4),
+                "safeties_total": round(shrunk_safeties * games, 4),
+                "total_points": breakdown["total_points"],
+                "rookie_year": None,
+                "draft_number": None,
+                "is_rookie": False,
+                "projection_payload": {
+                    "derived_from": ["nfl_dp_team_defense_weekly", "nfl_dp_schedules", "nfl_dp_team_situational_latest"],
+                    "components": breakdown,
+                    "team_epa_per_play_defense_allowed": round(team_epa_allowed, 4),
+                    "league_avg_epa_per_play_defense_allowed": round(situational["league_avg_epa_per_play_defense_allowed"], 4),
+                    "historical_games_sampled": int(team_games),
+                },
+            }
+        )
+    return players
+
+
 @celery_app.task(name="src.tasks.materialize_nfl_fantasy_season_draft_rankings")
 def materialize_nfl_fantasy_season_draft_rankings(
     *,
@@ -8548,13 +9167,36 @@ def materialize_nfl_fantasy_season_draft_rankings(
     fed through the already-canonical `fantasy_points_from_projection()` once
     per scoring profile, then ranked/tiered via
     `nfl_fantasy_draft_rankings.rank_season_fantasy_players`.
+
+    K and DST rows (`_fetch_kicker_season_players` /
+    `_fetch_dst_season_players`, see `nfl_kicker_dst_projections.py`) are
+    merged into the SAME ranking pass as QB/RB/WR/TE so `rank_overall`/
+    `value_over_replacement` reflect their real, comparatively low draft
+    value across the WHOLE board, not a separately-scaled ranking. Their
+    `total_points` does not vary by scoring profile (no PPR-style bonus
+    applies to K/DST scoring), so it is computed once and reused across all
+    three `profiles` rows.
     """
     session = SessionLocal()
     upserted = 0
     try:
         base_players = _fetch_season_player_totals(session, season=season, model_version=model_version)
-        if not base_players:
+        kicker_players = _fetch_kicker_season_players(session, season=season, model_version=model_version)
+        dst_players = _fetch_dst_season_players(session, season=season)
+        if not base_players and not kicker_players and not dst_players:
             return {"season": int(season), "model_version": model_version, "status": "no_data", "rows_upserted": 0}
+
+        k_dst_extra_columns = (
+            "field_goals_made_total",
+            "field_goals_attempted_total",
+            "extra_points_made_total",
+            "points_allowed_total",
+            "sacks_total",
+            "def_interceptions_total",
+            "fumble_recoveries_total",
+            "defensive_tds_total",
+            "safeties_total",
+        )
 
         profiles = ["standard", "half_ppr", "ppr"]
         for profile in profiles:
@@ -8571,22 +9213,39 @@ def materialize_nfl_fantasy_season_draft_rankings(
                     rec_tds=player["rec_tds_total"],
                 )
                 profile_players.append({**player, "total_points": total_points})
+            # K/DST `total_points` is already profile-independent (computed
+            # once in _fetch_kicker_season_players/_fetch_dst_season_players)
+            # -- reused as-is for every profile rather than re-derived here.
+            profile_players.extend(kicker_players)
+            profile_players.extend(dst_players)
 
             ranked = rank_season_fantasy_players(profile_players)
             for player in ranked:
+                projection_payload = dict(player.get("projection_payload") or {})
+                projection_payload.setdefault("aggregation", "season_total")
+                projection_payload.setdefault("profile", profile)
+                projection_payload.setdefault("derived_from", "nfl_player_projection_baselines")
                 session.execute(
                     text(
                         """
                         INSERT INTO nfl_fantasy_season_draft_rankings (
                           season, scoring_profile, model_version, player_id, player_uid, player_name, team, position,
                           games_projected, pass_yards_total, rush_yards_total, receiving_yards_total, receptions_total,
-                          pass_tds_total, rush_tds_total, rec_tds_total, total_points, replacement_points, value_over_replacement,
+                          pass_tds_total, rush_tds_total, rec_tds_total,
+                          field_goals_made_total, field_goals_attempted_total, extra_points_made_total,
+                          points_allowed_total, sacks_total, def_interceptions_total, fumble_recoveries_total,
+                          defensive_tds_total, safeties_total,
+                          total_points, replacement_points, value_over_replacement,
                           rank_overall, rank_position, tier, is_rookie, rookie_year, draft_number,
                           projection_payload, created_at, updated_at
                         ) VALUES (
                           :season, :scoring_profile, :model_version, :player_id, CAST(:player_uid AS uuid), :player_name, :team, :position,
                           :games_projected, :pass_yards_total, :rush_yards_total, :receiving_yards_total, :receptions_total,
-                          :pass_tds_total, :rush_tds_total, :rec_tds_total, :total_points, :replacement_points, :value_over_replacement,
+                          :pass_tds_total, :rush_tds_total, :rec_tds_total,
+                          :field_goals_made_total, :field_goals_attempted_total, :extra_points_made_total,
+                          :points_allowed_total, :sacks_total, :def_interceptions_total, :fumble_recoveries_total,
+                          :defensive_tds_total, :safeties_total,
+                          :total_points, :replacement_points, :value_over_replacement,
                           :rank_overall, :rank_position, :tier, :is_rookie, :rookie_year, :draft_number,
                           CAST(:projection_payload AS jsonb), NOW(), NOW()
                         )
@@ -8603,6 +9262,15 @@ def materialize_nfl_fantasy_season_draft_rankings(
                           pass_tds_total = EXCLUDED.pass_tds_total,
                           rush_tds_total = EXCLUDED.rush_tds_total,
                           rec_tds_total = EXCLUDED.rec_tds_total,
+                          field_goals_made_total = EXCLUDED.field_goals_made_total,
+                          field_goals_attempted_total = EXCLUDED.field_goals_attempted_total,
+                          extra_points_made_total = EXCLUDED.extra_points_made_total,
+                          points_allowed_total = EXCLUDED.points_allowed_total,
+                          sacks_total = EXCLUDED.sacks_total,
+                          def_interceptions_total = EXCLUDED.def_interceptions_total,
+                          fumble_recoveries_total = EXCLUDED.fumble_recoveries_total,
+                          defensive_tds_total = EXCLUDED.defensive_tds_total,
+                          safeties_total = EXCLUDED.safeties_total,
                           total_points = EXCLUDED.total_points,
                           replacement_points = EXCLUDED.replacement_points,
                           value_over_replacement = EXCLUDED.value_over_replacement,
@@ -8633,6 +9301,7 @@ def materialize_nfl_fantasy_season_draft_rankings(
                         "pass_tds_total": player["pass_tds_total"],
                         "rush_tds_total": player["rush_tds_total"],
                         "rec_tds_total": player["rec_tds_total"],
+                        **{col: player.get(col) for col in k_dst_extra_columns},
                         "total_points": player["total_points"],
                         "replacement_points": player["replacement_points"],
                         "value_over_replacement": player["value_over_replacement"],
@@ -8642,9 +9311,7 @@ def materialize_nfl_fantasy_season_draft_rankings(
                         "is_rookie": player["is_rookie"],
                         "rookie_year": player["rookie_year"],
                         "draft_number": player["draft_number"],
-                        "projection_payload": json.dumps(
-                            {"derived_from": "nfl_player_projection_baselines", "profile": profile, "aggregation": "season_total"}
-                        ),
+                        "projection_payload": json.dumps(projection_payload),
                     },
                 )
                 upserted += 1
@@ -8666,7 +9333,14 @@ def materialize_nfl_fantasy_season_draft_rankings(
                 "week": 0,
                 "layer": "fantasy_season_draft_rankings",
                 "model_version": model_version,
-                "source_coverage": json.dumps({"players": len(base_players), "profiles": len(profiles)}),
+                "source_coverage": json.dumps(
+                    {
+                        "players": len(base_players),
+                        "kickers": len(kicker_players),
+                        "dst_teams": len(dst_players),
+                        "profiles": len(profiles),
+                    }
+                ),
                 "freshness": json.dumps({"generated_at": datetime.now(timezone.utc).isoformat()}),
                 "calibration_flags": json.dumps({"calibrated": False, "tiers": "fixed-rank-ladder"}),
                 "readiness_status": "go" if len(base_players) > 50 else "warning",
@@ -8674,7 +9348,14 @@ def materialize_nfl_fantasy_season_draft_rankings(
             },
         )
         session.commit()
-        return {"season": int(season), "model_version": model_version, "players": len(base_players), "rows_upserted": upserted}
+        return {
+            "season": int(season),
+            "model_version": model_version,
+            "players": len(base_players),
+            "kickers": len(kicker_players),
+            "dst_teams": len(dst_players),
+            "rows_upserted": upserted,
+        }
     except Exception:
         session.rollback()
         log.exception("Failed to materialize NFL fantasy season draft rankings")

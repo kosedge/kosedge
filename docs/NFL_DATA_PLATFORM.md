@@ -26,6 +26,7 @@ Migration:
 - `infra/db/025_nfl_launch_hardening.sql`
 - `infra/db/029_nfl_rookie_draft_capital.sql`
 - `infra/db/030_nfl_usage_weekly_source_tracking.sql`
+- `infra/db/036_nfl_kicker_dst_fantasy.sql`
 
 Tables:
 
@@ -49,6 +50,8 @@ Tables:
 - `nfl_dp_team_direction_tendencies` - real pass/run direction tendency by team + league-wide -- see `docs/NFL_TENDENCY_ANALYTICS.md`
 - `nfl_dp_qb_situational_splits` - real QB situational efficiency splits (pressure, down type, score state, field position) -- see `docs/NFL_TENDENCY_ANALYTICS.md`
 - `nfl_dp_team_features_latest` (view) - latest per-team feature snapshot
+- `nfl_dp_kicker_weekly` - real per-kicker per-game FG attempts/makes by nflverse's 6 distance buckets + PAT, normalized from ALREADY-INGESTED `nfl_dp_player_game_stats.metrics` (position = `K`) -- see `data_platform_nfl.kicking_defense_history` and `docs/NFL_PROPS_FANTASY_FOUNDATION.md`'s K/DST section
+- `nfl_dp_team_defense_weekly` - real per-team per-game sacks/interceptions/fumble recoveries/defensive+special-teams TDs/safeties, normalized from ALREADY-INGESTED `nfl_dp_raw_objects.payload` (object_type = `team_game_stats`); `points_allowed` is sourced from `nfl_dp_schedules` real final scores, not from `nfl_dp_team_game_stats.points_against` (see below)
 - `nfl_data_ownership_backups` - immutable backup manifests for owned-data snapshots
 
 ## Run ingestion
@@ -71,6 +74,8 @@ From repo root:
 - real situational/tendency analytics (see `docs/NFL_TENDENCY_ANALYTICS.md`); requires `--normalize-pbp-from-raw --replace-normalized` to have been run at least once after `034_nfl_pbp_tendency_columns.sql` so `shotgun`/`xpass`/`cp`/etc are backfilled
 - all materializers support `--week` for deterministic week-scoped runs
 - `PYTHONPATH=./src python3 -m data_platform_nfl.cli --run-launch-hardening --seasons 2025,2026`
+- `PYTHONPATH=./src python3 -m data_platform_nfl.cli --seasons 2022,2023,2024,2025 --materialize-kicking-defense-history`
+- normalizes real per-kicker/per-team defense stats already ingested (see above) into `nfl_dp_kicker_weekly`/`nfl_dp_team_defense_weekly` -- no new external fetch; add `--replace-kicking-defense-history` to rebuild. Feeds model-service's K/DST season-long fantasy projections (`docs/NFL_PROPS_FANTASY_FOUNDATION.md`).
 - `PYTHONPATH=./src python3 -m data_platform_nfl.cli --backup-owned-data --seasons 2026 --backup-include-row-exports`
 
 Direct service command:
@@ -212,3 +217,4 @@ Integrate paid feeds into `nfl_dp_raw_objects` with new `source` values and keep
 - Conference/division metadata in `nfl_dp_standings_weekly` is nullable until a stable free alignment source is integrated.
 - `player_uid` in `nfl_dp_depth_chart_weekly` is nullable in v1 and can be backfilled from the identity graph later.
 - Depth roles are deterministic but inferred (`v1_usage_roster_injury`) from roster, recent usage, and injury status rather than official team depth publications.
+- `nfl_dp_team_game_stats.points_for`/`points_against` are silently `NULL` for every row -- `nflreadpy.load_team_stats()` has no points column at all, so the ingest mapping (`row.get("points")`/`row.get("points_allowed")`) never had a real source field to read. Discovered while building K/DST fantasy projections (`docs/NFL_PROPS_FANTASY_FOUNDATION.md`); worked around there by sourcing points allowed from `nfl_dp_schedules.home_score`/`away_score` instead. Left unfixed in the general ingest pipeline (out of scope for that feature) -- any other consumer of `nfl_dp_team_game_stats` points columns should use `nfl_dp_schedules` scores directly until this is fixed at the source.

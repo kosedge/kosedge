@@ -3114,7 +3114,11 @@ def nfl_fantasy_draft_rankings(
                 SELECT
                   season, scoring_profile, model_version, player_id, player_uid, player_name, team, position,
                   games_projected, pass_yards_total, rush_yards_total, receiving_yards_total, receptions_total,
-                  pass_tds_total, rush_tds_total, rec_tds_total, total_points, replacement_points, value_over_replacement,
+                  pass_tds_total, rush_tds_total, rec_tds_total,
+                  field_goals_made_total, field_goals_attempted_total, extra_points_made_total,
+                  points_allowed_total, sacks_total, def_interceptions_total, fumble_recoveries_total,
+                  defensive_tds_total, safeties_total,
+                  total_points, replacement_points, value_over_replacement,
                   rank_overall, rank_position, tier, is_rookie, rookie_year, draft_number, updated_at
                 FROM nfl_fantasy_season_draft_rankings
                 WHERE season = :season

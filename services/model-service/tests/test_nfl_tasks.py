@@ -347,3 +347,44 @@ def test_backfill_nfl_historical_projections_uses_kickoff_timestamp_mode(monkeyp
     assert all(call.get("include_completed_games") is True for call in calls)
     assert all(call.get("projection_created_at_mode") == "kickoff_minus_buffer" for call in calls)
     assert all(call.get("kickoff_buffer_minutes") == 45 for call in calls)
+
+
+def test_resolve_team_strength_indices_prefers_real_epa_prior_over_record() -> None:
+    """Real bug found via the team-simulator calibration audit (see
+    data/ops/nfl-team-simulator-calibration-audit-report.md): this used to
+    prefer the cruder win/loss-record-derived index over the real,
+    backtest-validated EPA-based rolling-feature prior whenever the record
+    was non-degenerate (i.e. for the entire season past week 1). A real
+    mid-season team with a real winning record but real rolling EPA data
+    available must resolve to the EPA prior, not the record-based value."""
+    offense_home, offense_away, defense_home, defense_away = tasks._resolve_team_strength_indices(
+        base_offense_home=1.132,  # team_strength_from_record("11-6") -> real, non-degenerate
+        base_offense_away=0.958,  # team_strength_from_record("3-14") -> real, non-degenerate
+        base_defense_home=1.062,
+        base_defense_away=0.958,
+        home_prior={"offense_index": 1.081, "defense_index": 1.045, "_season": 2025.0},
+        away_prior={"offense_index": 0.912, "defense_index": 0.936, "_season": 2025.0},
+    )
+    assert offense_home == 1.081
+    assert offense_away == 0.912
+    assert defense_home == 1.045
+    assert defense_away == 0.936
+
+
+def test_resolve_team_strength_indices_falls_back_to_record_on_genuine_cold_start() -> None:
+    """When there is truly no EPA rolling-feature prior for a team/season
+    (e.g. a brand-new franchise relocation with no prior-season row either),
+    the record-based estimate remains a valid fallback -- this is the one
+    real case the original fallback design was meant to cover."""
+    offense_home, offense_away, defense_home, defense_away = tasks._resolve_team_strength_indices(
+        base_offense_home=1.132,
+        base_offense_away=1.0,
+        base_defense_home=1.062,
+        base_defense_away=1.0,
+        home_prior={},
+        away_prior={},
+    )
+    assert offense_home == 1.132
+    assert offense_away == 1.0
+    assert defense_home == 1.062
+    assert defense_away == 1.0

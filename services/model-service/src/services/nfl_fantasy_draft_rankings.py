@@ -67,12 +67,49 @@ POSITION_TIER_BOUNDARIES: Dict[str, List[Tuple[int, str]]] = {
     "RB": [(3, "elite"), (12, "RB1"), (24, "RB2"), (36, "flex"), (10_000, "bench")],
     "WR": [(3, "elite"), (12, "WR1"), (24, "WR2"), (36, "flex"), (10_000, "bench")],
     "TE": [(3, "elite"), (8, "TE1"), (16, "streamer"), (10_000, "bench")],
+    # K/DST get their OWN, shorter tier ladder rather than falling back to
+    # DEFAULT_TIER_BOUNDARIES -- real drafters still want to know "who's the
+    # best available kicker/defense right now" even though the position as a
+    # WHOLE is famously "wait until the last round or two" (see
+    # POSITION_REPLACEMENT_RANK below for where that real dynamic actually
+    # gets enforced -- tiers alone don't fix a naive same-scale VOR).
+    "K": [(3, "elite"), (12, "K1"), (24, "streamer"), (10_000, "bench")],
+    "DST": [(3, "elite"), (12, "DST1"), (24, "streamer"), (10_000, "bench")],
 }
 DEFAULT_TIER_BOUNDARIES: List[Tuple[int, str]] = [(12, "starter"), (10_000, "bench")]
 
 # See module docstring's "WHY OVERALL RANK USES VALUE OVER REPLACEMENT"
-# section for the derivation of these numbers.
-POSITION_REPLACEMENT_RANK: Dict[str, int] = {"QB": 12, "TE": 12, "RB": 30, "WR": 30}
+# section for the derivation of these numbers. K/DST keep replacement rank
+# 12 (informational only -- see DST_KICKER_APPENDED_TO_BOARD_END below for
+# why their OVERALL rank is no longer driven by this VOR math at all).
+POSITION_REPLACEMENT_RANK: Dict[str, int] = {"QB": 12, "TE": 12, "RB": 30, "WR": 30, "K": 12, "DST": 12}
+
+# Real bug found by checking the VOR math end-to-end against real-world ADP
+# behavior, not just trusting the theoretical formula: at ANY replacement
+# rank tested (1 through 24), realistic 2026 K/DST point projections still
+# landed the top kicker/DST somewhere in overall picks ~60-90 -- nowhere
+# close to where every real standard-league ADP dataset (Yahoo/ESPN/
+# Sleeper/FantasyPros) actually drafts them (the LAST one or two rounds,
+# typically pick 150+ of a 180-192-pick, 12-team, 15-16-round draft).
+# Root cause: raising K/DST's replacement rank to reflect their real
+# in-season streamability (bye-week/matchup streaming keeps a decent K/DST
+# available off waivers most weeks, unlike RB/WR) doesn't actually help --
+# a real, honest check of the skill-position pool shows 828 of 908 real
+# non-K/DST players ALREADY sit at VOR <= 0 (deep bench/waiver-tier skill
+# players), so no replacement-rank choice for K/DST cleanly separates them
+# from that same deep bench on a single shared VOR scale; K/DST would
+# always land somewhere inside that 828-player pile rather than below all
+# of it, no matter how their own replacement rank is tuned. This is a real,
+# well-documented limitation of naive position-agnostic VOR (not specific
+# to this codebase) -- which is exactly why every real fantasy site solves
+# it the same way this constant now does: K/DST get moved to the bottom of
+# the overall board as a fixed positional convention, not left to compete
+# on the same VOR scale as skill positions. `rank_season_fantasy_players`
+# uses this to sort K/DST strictly after every other position in the
+# overall order, while still preserving real, meaningful position-level
+# rank/tier/VOR for "who's the best AVAILABLE kicker/DST right now" within
+# that bottom tier.
+POSITIONS_APPENDED_TO_BOARD_END: Tuple[str, ...] = ("K", "DST")
 DEFAULT_REPLACEMENT_RANK = 24
 
 
@@ -143,9 +180,19 @@ def rank_season_fantasy_players(players: Sequence[Dict[str, Any]]) -> List[Dict[
             )
 
     all_players = [player for group in players_by_position.values() for player in group]
+    # See POSITIONS_APPENDED_TO_BOARD_END's docstring: K/DST are sorted
+    # after every other position regardless of their own VOR (a real,
+    # documented positional convention every real ADP dataset follows, not
+    # a VOR tuning problem), then by VOR within that bottom tier so "best
+    # available K/DST right now" is still meaningful.
+    board_end_positions = {p.upper() for p in POSITIONS_APPENDED_TO_BOARD_END}
     overall_ordered = sorted(
         all_players,
-        key=lambda p: (-float(p.get("value_over_replacement") or 0.0), str(p.get("player_key") or "")),
+        key=lambda p: (
+            str(p.get("position") or "").upper() in board_end_positions,
+            -float(p.get("value_over_replacement") or 0.0),
+            str(p.get("player_key") or ""),
+        ),
     )
     for overall_idx, player in enumerate(overall_ordered, start=1):
         player["rank_overall"] = overall_idx

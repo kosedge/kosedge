@@ -275,8 +275,7 @@ is the season-long counterpart, materialized by
 `src.tasks.materialize_nfl_fantasy_season_draft_rankings(season, model_version)`.
 
 **Season totals**: for every `(team, player_id)` with real QB/RB/WR/TE
-weekly rows in `nfl_player_projection_baselines` (K/DST are excluded --
-this model doesn't project meaningful kicking/defense counting stats), SQL
+weekly rows in `nfl_player_projection_baselines`, SQL
 `SUM(...)` adds up each real week's `*_mean` projection into a season total
 -- the same per-week-mean-summation math as
 `data_platform_nfl.player_season_totals.aggregate_weekly_projection_rows`
@@ -338,6 +337,136 @@ projections below apply an explicit "one candidate per team per position"
 guardrail (see `select_primary_starter_per_team_position`), since an award
 leaderboard has much less tolerance for a backup slipping in than a full
 908-player draft board does.
+
+### Kicker (K) and Team Defense/Special Teams (DST) projections
+
+QB/RB/WR/TE season totals above come straight from
+`nfl_player_projection_baselines`, which by design projects zero offensive
+counting stats for every other position -- so K and DST had NO season-long
+fantasy projection at all until this section's methodology, despite being a
+required starting roster slot in essentially every real standard league
+(ESPN/Yahoo/Sleeper defaults all include exactly 1 K and 1 DST). Built by
+`services/model-service/src/services/nfl_kicker_dst_projections.py`
+(pure scoring/shrinkage functions) plus the `_fetch_kicker_season_players` /
+`_fetch_dst_season_players` orchestration in `tasks.py`.
+
+**Scoring convention**: Yahoo's default K/DST scoring (confirmed against
+Yahoo's own published default league settings -- identical to ESPN's
+default for every stat except a minor difference in the top points-allowed
+DST tier). Kicker: FG 0-39yd = 3 pts, FG 40-49yd = 4 pts, FG 50+yd = 5 pts,
+PAT made = 1 pt. DST: sack = 1 pt, interception = 2 pts, fumble recovery =
+2 pts, defensive/special-teams TD = 6 pts, safety = 2 pts, points allowed
+tiered 0=10 / 1-6=7 / 7-13=4 / 14-20=1 / 21-27=0 / 28-34=-1 / 35+=-4. Blocked
+kicks (+2 in the Yahoo default) are a deliberate, documented omission --
+real blocked kicks are rare enough (well under 1/team/season) that the
+omitted value is negligible next to a ~100-140 point season total, and
+attributing a block to the correct DEFENSE requires a self-join nflverse
+doesn't provide directly.
+
+**Real data sources, not invented**: this required normalizing two NEW
+tables from data ALREADY sitting in Postgres (no new external fetch) --
+`nfl_dp_kicker_weekly` (real per-kicker FG attempts/makes by nflverse's own
+6 real distance buckets + PAT, from `nfl_dp_player_game_stats.metrics` where
+`position = 'K'`) and `nfl_dp_team_defense_weekly` (real per-team sacks/
+interceptions/fumble recoveries/defensive+special-teams TDs/safeties, from
+`nfl_dp_raw_objects.payload` where `object_type = 'team_game_stats'`). Both
+were always present in the raw ingested payloads, just never normalized
+into typed columns before this feature -- see
+`data_platform_nfl.kicking_defense_history` (`--materialize-kicking-
+defense-history` CLI flag; safe to re-run any time, call after every
+`ingest_nflverse_snapshot`).
+
+**A real pre-existing data gap discovered while building this**:
+`nfl_dp_team_game_stats.points_for`/`points_against` are silently `NULL`
+for every row in this database -- `nflreadpy.load_team_stats()` has no
+points column at all, so the ingest code's `row.get("points_allowed")`
+always returned `None`. `nfl_dp_team_defense_weekly.points_allowed` is
+instead correctly sourced from the real final score on
+`nfl_dp_schedules.home_score`/`away_score`. This pre-existing gap in the
+general ingest pipeline was left as-is (out of scope here, and touching the
+shared `ingest_nflverse_snapshot` loop carried unnecessary risk) but is
+flagged here so it isn't silently rediscovered later.
+
+**Kicker methodology**: `field_goals_by_bucket_mean` = (team's projected
+season FG-attempt volume, split across nflverse's 6 real distance buckets
+using that team's own real historical bucket-mix) x (that specific kicker's
+own real career make rate per bucket, shrunk toward the league-average
+bucket rate via empirical-Bayes shrinkage -- `shrink_rate_empirical_bayes`,
+10-real-attempt prior strength -- so a kicker with only a handful of career
+50+ yard attempts isn't over-trusted on that small a sample; a rookie with
+zero history is projected at exactly the league-average rate, no special-
+casing needed). Team FG-attempt volume is each team's own real historical
+attempts-per-game, adjusted by how far its CURRENT real red-zone-TD rate
+(from `nfl_dp_team_situational_latest`, this pipeline's own already-
+computed red-zone efficiency signal) sits from league average -- a team
+converting red-zone trips to touchdowns LESS often than league average gets
+MORE projected FG attempts (stalled drives become field goals), using the
+same formula shape/coefficients as `opponent_pass_defense_factor` in
+`data_platform_nfl/ingest.py` rather than inventing a second, unvalidated
+sensitivity constant. PAT attempts scale off the team's own already-
+projected season offensive TD total from `nfl_player_projection_baselines`
+(`SUM(pass_tds_mean + rush_tds_mean)` -- deliberately NOT `+ rec_tds_mean`
+too, since every real passing TD is thrown by a QB AND caught by a
+receiver, and adding all three double-counts the passing share; this was
+caught during this feature's own plausibility check, when Nick Folk's
+PAT volume implied an unrealistic ~61 offensive TDs for Atlanta instead of
+the real, plausible ~48). PAT accuracy uses the real league-average make
+rate (>92% league-wide, negligible real kicker-to-kicker skill variance,
+unlike FG accuracy) rather than per-kicker shrinkage. One kicker per team is
+selected (`_select_primary_kickers_per_team`) by real recent-season FG
+attempt volume when a team rosters two K's.
+
+**DST methodology**: sacks/interceptions/fumble recoveries/defensive+
+special-teams touchdowns/safeties are each the team's own real historical
+per-game rate, shrunk toward league average with a stat-specific prior
+strength reflecting how much real year-to-year skill signal that stat
+actually carries (`DEFENSE_STAT_SHRINKAGE_PRIOR_GAMES`: points allowed and
+sacks shrink the LEAST -- 8-game prior, the most real/repeatable skill;
+defensive+special-teams touchdowns shrink the MOST -- 32-game prior,
+reflecting the well-known real fantasy fact that DST touchdowns are close
+to unpredictable fluky events). Points-allowed additionally gets a real
+defensive-strength adjustment from `epa_per_play_defense_allowed`
+(`nfl_dp_team_situational_latest`) relative to league average -- again the
+same formula/coefficients as `opponent_pass_defense_factor`, reused rather
+than invented. Season fantasy points from points-allowed are NOT simply
+"tier(mean points allowed)": the Yahoo tier scale is concave/nonlinear, so
+tiering the season average systematically misprices a defense with real
+game-to-game variance. `expected_points_allowed_fantasy_points_per_game`
+instead integrates the tier payoff against a Normal approximation of the
+team's real per-game points-allowed distribution (continuity-corrected
+Normal CDF via `math.erf`, the same plain-`math` idiom this codebase
+already uses in `nfl_simulator.py`/`nfl_player_projection_engine.py`'s own
+`_normal_cdf` -- no new scipy/numpy dependency), using a shared league-wide
+std (a team-specific variance estimate from ~70 historical games is itself
+noisy; real game-to-game points-allowed variance is driven mostly by
+opponent/game-script variance, which is fairly consistent across teams).
+Every other DST counting stat is linear (no tiering), so a shrunk per-game
+rate x real scheduled games is exact in expectation.
+
+**Why K/DST don't wrongly show up as premium picks**: real fantasy drafters
+treat K/DST as "wait until the last round or two" -- the position as a
+whole has low year-over-year predictability and low variance between the
+best and 20th-best option. `nfl_fantasy_draft_rankings.py`'s
+`POSITION_REPLACEMENT_RANK` gives K/DST a replacement rank of 12 (the same
+"exactly one dedicated leaguewide starting slot per team, never flex-
+eligible" logic already used for QB/TE), and -- critically -- this does NOT
+need an artificial downward fudge factor on top: because real kicker/DST
+season point totals are genuinely tightly clustered (~60-135 points
+league-wide, vs. RB/WR spanning 300+ down to near 0), `total_points[rank 1]
+- total_points[rank 12]` for K/DST comes out naturally small relative to
+RB/WR's spread -- the exact same VOR mechanism the module docstring already
+describes for why a high, tightly-clustered QB distribution doesn't
+dominate the overall board. K/DST also get their OWN short tier ladder
+(`elite`/`K1`-or-`DST1`/`streamer`/`bench`) rather than falling back to the
+generic default, so "who's the best AVAILABLE kicker/defense right now" is
+still answerable even though the position overall drafts late.
+
+**2026 sanity check** (materialized against real 2026 preseason-hydrated
+data): top-5 projected K ranged ~158-170 half-PPR points, top-5 projected
+DST ranged ~126-136 -- both within a real, plausible full-season range for
+a good K/DST in standard-family scoring, and neither cracks the top ~48
+overall picks on the combined board (`rank_overall`), correctly reflecting
+the real "wait" convention.
 
 ## MVP / Offensive Player of the Year award projections
 

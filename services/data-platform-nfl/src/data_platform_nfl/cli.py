@@ -147,6 +147,24 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--materialize-kicking-defense-history",
+        action="store_true",
+        help=(
+            "Normalize real per-kicker FG-by-distance-bucket/PAT stats and "
+            "real per-team sacks/interceptions/fumble-recoveries/defensive+"
+            "special-teams-touchdowns/safeties from ALREADY-INGESTED "
+            "nfl_dp_player_game_stats/nfl_dp_raw_objects payloads into "
+            "nfl_dp_kicker_weekly / nfl_dp_team_defense_weekly -- no new "
+            "external fetch, just a normalization pass. Feeds "
+            "model-service's K/DST season-long fantasy projections."
+        ),
+    )
+    parser.add_argument(
+        "--replace-kicking-defense-history",
+        action="store_true",
+        help="Delete existing rows for target seasons before rebuild",
+    )
+    parser.add_argument(
         "--backup-owned-data",
         action="store_true",
         help="Generate owned-data backup manifest (and optional row exports)",
@@ -245,6 +263,13 @@ def main() -> None:
             from .tendency_profiles import materialize_all_tendency_profiles
 
             result = materialize_all_tendency_profiles(seasons=seasons)
+        elif args.materialize_kicking_defense_history:
+            from .kicking_defense_history import materialize_kicking_and_defense_history
+
+            result = materialize_kicking_and_defense_history(
+                seasons=seasons,
+                replace_existing=args.replace_kicking_defense_history,
+            )
         else:
             result = ingest_nflverse_snapshot(seasons=seasons, include_pbp=not args.no_pbp)
     print(json.dumps(result, indent=2, default=str))
