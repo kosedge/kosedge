@@ -91,6 +91,29 @@ def hydrate_preseason_team_situational(
         off_lo, off_hi = (min(off_vals), max(off_vals)) if off_vals else (0.0, 0.0)
         def_lo, def_hi = (min(def_vals), max(def_vals)) if def_vals else (0.0, 0.0)
 
+        # Real bug found via a live production spot-check: a backup-caliber
+        # QB (Jacoby Brissett, ARI) was projected to lead the entire league
+        # in passing yards. Root cause traced to `pass_rate`/`offensive_plays`
+        # (pace) being carried forward at FULL single-season strength with
+        # no regression to the mean -- unlike EPA just above, which already
+        # gets shrunk toward a market signal. ARI genuinely had the
+        # league's single highest 2025 pass rate (65.9%, vs. a ~55% league
+        # average), which is real, but extrapolating a single season's most
+        # extreme rate stat at full strength into a new season overstates
+        # how much of that was a stable team characteristic vs. one year's
+        # game-script/personnel circumstances that won't necessarily repeat.
+        # Shrinking rate stats toward the league mean for a small (n=1
+        # season) sample is standard, well-established practice (this is
+        # literally what "regression to the mean" means) -- 35% shrinkage
+        # is a deliberately moderate choice: enough to pull true outliers
+        # back toward plausible, without erasing real, persistent
+        # team/scheme identity for teams with more moderate deviations.
+        RATE_SHRINKAGE_WEIGHT = 0.35
+        pass_rate_vals = [float(v["pass_rate"]) for v in season_avg.values() if v.get("pass_rate") is not None]
+        plays_vals = [float(v["offensive_plays"]) for v in season_avg.values() if v.get("offensive_plays") is not None]
+        league_avg_pass_rate = sum(pass_rate_vals) / len(pass_rate_vals) if pass_rate_vals else None
+        league_avg_plays = sum(plays_vals) / len(plays_vals) if plays_vals else None
+
         teams_updated = []
         for team, stats in season_avg.items():
             values = dict(stats)
@@ -100,6 +123,11 @@ def hydrate_preseason_team_situational(
                 market_def_equiv = def_hi - pct * (def_hi - def_lo)
                 values["epa_per_play_offense"] = (1 - market_blend_weight) * float(stats["epa_per_play_offense"]) + market_blend_weight * market_off_equiv
                 values["epa_per_play_defense_allowed"] = (1 - market_blend_weight) * float(stats["epa_per_play_defense_allowed"]) + market_blend_weight * market_def_equiv
+
+            if league_avg_pass_rate is not None and stats.get("pass_rate") is not None:
+                values["pass_rate"] = (1 - RATE_SHRINKAGE_WEIGHT) * float(stats["pass_rate"]) + RATE_SHRINKAGE_WEIGHT * league_avg_pass_rate
+            if league_avg_plays is not None and stats.get("offensive_plays") is not None:
+                values["offensive_plays"] = (1 - RATE_SHRINKAGE_WEIGHT) * float(stats["offensive_plays"]) + RATE_SHRINKAGE_WEIGHT * league_avg_plays
 
             if dry_run:
                 teams_updated.append(team)

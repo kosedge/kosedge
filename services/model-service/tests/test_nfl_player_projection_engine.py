@@ -143,6 +143,63 @@ def test_opponent_defense_factor_shifts_yards_without_changing_role() -> None:
     assert vs_good_defense["matchup"]["opponent_pass_defense_factor"] == 0.80
 
 
+def test_non_offensive_positions_get_zero_projection() -> None:
+    # Real bug found via a live production spot-check: 1,998/1,998 OL/DL/LB/
+    # DB/K/P-tagged players in the deployed bundle had nonzero receiving
+    # yards (some 90+ for a season) because the old bare `else` branch
+    # routed every non-QB/RB position through the WR/TE formula, whose
+    # additive floors (targets_mean's `1.2 +` base, receiving_yards_mean's
+    # `5.5` min yards/catch) guarantee a nonzero projection regardless of
+    # real usage. A rare real one-off event (e.g. a trick-play catch by an
+    # offensive tackle in a single game) getting treated as that player's
+    # "per-game rate" and extrapolated over a season is exactly the
+    # scenario that produced this in production.
+    for position in ["OL", "DL", "LB", "DB", "K", "P", "LS", "S", "CB", "DE", "DT", "OT", "OG", "C"]:
+        inputs = PlayerFeatureInputs(
+            position=position,
+            snap_proxy=0.5,
+            route_proxy=0.3,
+            target_proxy=0.05,  # even with a nonzero target_proxy (e.g. from a real rare event)
+            rush_share=0.02,
+            red_zone_share=0.1,
+            qb_dropback_factor=1.0,
+            qb_pressure_factor=1.0,
+            team_pace_factor=1.0,
+            team_pass_rate_factor=1.0,
+            availability_confidence=0.9,
+            role_confidence=0.5,
+        )
+        projection = baseline_projection_from_features(inputs)
+        assert projection["receiving_yards_mean"] == 0.0, position
+        assert projection["receptions_mean"] == 0.0, position
+        assert projection["rush_yards_mean"] == 0.0, position
+        assert projection["targets_mean"] == 0.0, position
+        assert projection["carries_mean"] == 0.0, position
+
+
+def test_wr_te_still_get_real_projections() -> None:
+    # Guard against the fix above accidentally zeroing out real skill
+    # positions too.
+    for position in ["WR", "TE"]:
+        inputs = PlayerFeatureInputs(
+            position=position,
+            snap_proxy=0.6,
+            route_proxy=0.75,
+            target_proxy=0.22,
+            rush_share=0.0,
+            red_zone_share=0.15,
+            qb_dropback_factor=1.0,
+            qb_pressure_factor=1.0,
+            team_pace_factor=1.0,
+            team_pass_rate_factor=1.0,
+            availability_confidence=0.9,
+            role_confidence=0.75,
+        )
+        projection = baseline_projection_from_features(inputs)
+        assert projection["receiving_yards_mean"] > 0.0, position
+        assert projection["targets_mean"] > 0.0, position
+
+
 def test_prop_edge_behaves_directionally() -> None:
     edge = evaluate_prop_edge(
         model_mean=84.0,

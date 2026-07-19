@@ -137,7 +137,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         receiving_yards_mean = receptions_mean * _clamp((6.0 + (2.8 * inputs.target_proxy)) * opp_pass_factor, 4.2, 15.5)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.16, 0.0, 1.7)
         rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.08, 0.0, 1.2)
-    else:
+    elif position in {"WR", "TE"}:
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         targets_mean = _clamp(1.2 + (11.5 * inputs.target_proxy * pass_factor), 0.0, 17.5)
@@ -147,6 +147,23 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
         rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.14, 0.0, 1.7)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
+    # else: OL/DL/LB/DB/K/P/LS/ST -- every *_mean stays at its 0.0 default.
+    # Real bug found via a live production spot-check: this branch used to
+    # be a bare `else` covering "everyone who isn't QB/RB/FB", which meant
+    # every defensive player, offensive lineman, kicker, and punter got
+    # routed through the WR/TE formula above. That formula has ADDITIVE
+    # FLOORS by design for genuine skill players (targets_mean's `1.2 +`
+    # base, receiving_yards_mean's `5.5` minimum yards/catch) -- appropriate
+    # for a real WR/TE, who will always see a nonzero target share, but with
+    # zero position-awareness those same floors guaranteed EVERY non-QB/RB
+    # player a nonzero season-long receiving projection, including a rare
+    # real one-off event (e.g. a real trick-play catch by an offensive
+    # tackle in a single 2025 game) getting amplified into a ~90+ yard
+    # SEASON projection for a player at a position that structurally never
+    # accumulates meaningful passing-game usage. Confirmed live: 1,998 of
+    # 1,998 OL/DL/LB/DB/K/P-tagged players in the deployed 2026 bundle had
+    # nonzero receiving yards before this fix -- 100% of them, which is
+    # itself the signature of a formula-floor bug, not real signal.
 
     # Availability and role confidence reduce all outcomes in a deterministic, bounded manner.
     confidence_floor = 0.72 if position == "QB" else (0.60 if position in {"RB", "FB"} else 0.50)
