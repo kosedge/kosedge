@@ -335,6 +335,71 @@ def test_wr_target_volume_scales_down_realistically_by_role() -> None:
     assert 0.0 < wr4["receiving_yards_mean"] * 17 < 300.0
 
 
+def test_mobile_qb_rush_share_produces_realistic_season_volume() -> None:
+    # Real bug found while re-validating the targets_mean fix: QB
+    # carries_mean multiplied the same real, correctly-denominated
+    # rush_share signal RB's carries_mean already uses successfully by a
+    # coefficient ~7.5x too small (4.0 vs. RB's 24.0) -- a real mobile
+    # starter with a genuine ~0.19-0.29 rush_share (real 2023-2025 range for
+    # Lamar Jackson/Jalen Hurts/Josh Allen-caliber runners) projected for
+    # only ~2-2.4 carries/game instead of a realistic ~6-9, crushing
+    # rushing yards/TDs for every mobile QB league-wide. Fixed via a real
+    # weighted linear regression against 110 real 2023-2025 QB-seasons
+    # (>=8 games): carries_per_game = 0.26 + 29.85*rush_share, R^2=0.857.
+    mobile_qb = PlayerFeatureInputs(
+        position="QB", snap_proxy=0.38, route_proxy=0.0, target_proxy=0.0,
+        rush_share=0.22, red_zone_share=0.10, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+        team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.95, role_confidence=0.75,
+        team_snap_share=0.60,
+    )
+    projection = baseline_projection_from_features(mobile_qb)
+    season_rush_yards = projection["rush_yards_mean"] * 17
+    assert projection["carries_mean"] > 5.0
+    assert 300.0 < season_rush_yards < 800.0
+
+
+def test_pocket_qb_rush_share_stays_low() -> None:
+    # Guard against the fix above accidentally inflating a real pocket
+    # passer's negligible rushing role.
+    pocket_qb = PlayerFeatureInputs(
+        position="QB", snap_proxy=0.38, route_proxy=0.0, target_proxy=0.0,
+        rush_share=0.03, red_zone_share=0.05, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+        team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.95, role_confidence=0.75,
+        team_snap_share=0.60,
+    )
+    projection = baseline_projection_from_features(pocket_qb)
+    assert projection["carries_mean"] < 2.0
+
+
+def test_elite_receiver_rec_tds_land_in_realistic_season_range() -> None:
+    # Real bug found while re-validating the targets_mean fix (same
+    # "evaporating share" pattern, but in TD math): rec_tds_mean's
+    # coefficient (0.14 for WR/TE, 0.08 for RB) drastically undercounted
+    # real receiving TDs -- a real elite WR1 catching 126 passes for 1,235
+    # yards was projecting under 3 receiving TDs for the WHOLE SEASON (real
+    # comparable seasons score 9-11). Fixed via a weighted-least-squares fit
+    # against real 2023-2025 usage data (receiving TDs vs.
+    # receptions*red_zone_share, weighted by volume so real elite
+    # performances anchor the fit instead of bench-role noise): WR/TE
+    # coefficient ~0.50, RB (receiving-only, isolated from rushing TDs via
+    # team pass_touchdowns minus WR/TE touchdowns_scored) ~0.10.
+    elite_wr1 = PlayerFeatureInputs(
+        position="WR", snap_proxy=0.6, route_proxy=0.46, target_proxy=0.27,
+        rush_share=0.0, red_zone_share=0.20, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+        team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.95, role_confidence=0.75,
+    )
+    projection = baseline_projection_from_features(elite_wr1)
+    season_rec_tds = projection["rec_tds_mean"] * 17
+    assert 5.0 < season_rec_tds < 14.0
+
+
+def test_pass_catching_rb_rec_tds_land_in_realistic_season_range() -> None:
+    elite_pass_catching_rb = _rb_inputs(target_proxy=0.15, red_zone_share=0.20)
+    projection = baseline_projection_from_features(elite_pass_catching_rb)
+    season_rec_tds = projection["rec_tds_mean"] * 17
+    assert 0.0 < season_rec_tds < 6.0
+
+
 def test_prop_edge_behaves_directionally() -> None:
     edge = evaluate_prop_edge(
         model_mean=84.0,

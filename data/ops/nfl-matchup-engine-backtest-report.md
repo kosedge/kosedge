@@ -255,3 +255,115 @@ flagged regression (discussed above).
    confirm the headline numbers hold (expected: means converge tighter,
    MAE should if anything improve slightly for NEW as Monte Carlo noise
    shrinks).
+
+---
+
+## ADDENDUM (2026-07-19): re-run after the `targets_mean` foundational fix — the box-score engine's receiving-yards edge was a symptom of the same bug this backtest already flagged
+
+**What changed:** commit `5c098d36` fixed `baseline_projection_from_features()`'s
+`targets_mean` for both WR/TE and RB. It previously multiplied `target_proxy`
+(a real target *share*) by a small arbitrary fixed coefficient (11.5 for
+WR/TE, 7.0 for RB) instead of the player's real team pass-attempts estimate
+— this is the exact mechanism identified above in "Recommended Follow-Up #2"
+(RB rush regression root-cause note) and in the main body's "evaporating
+share" finding: per-player `targets_mean` values summed to well under a
+team's real pass attempts. That fix is now live in production and this
+backtest script re-run (same walk-forward methodology, same code path,
+`baseline_projection_from_features` imported directly — **OLD now also
+carries this fix**, since it lives unconditionally inside the shared
+formula, not behind either of OLD's two fallback flags).
+
+**This directly answers the question this backtest was designed to ask:**
+did the box-score engine's earlier receiving-yards win come from a genuine
+Monte-Carlo/coherence advantage, or was it partly just correcting the same
+per-player-share-undercount bug via its Dirichlet pool renormalization? Real
+re-run numbers, below — **it was overwhelmingly the latter.**
+
+### (a) The flat baseline's own receiving-yards MAE improved substantially, on its own, from this fix alone
+
+Full sample (OLD vs. CURRENT, weeks 4–17, n=11,453 — both flat, no Monte
+Carlo, before vs. after the fix):
+
+| Stat | OLD MAE (before fix) | OLD MAE (after fix) | Δ | OLD bias (before) | OLD bias (after) |
+|---|---|---|---|---|---|
+| receiving_yards | 18.945 | **16.055** | **−15.3%** | −16.140 | **−8.531** (−47.1% magnitude) |
+| targets | 1.834 | 1.654 | −9.8%* | −1.391 | +0.250 |
+| receptions | 1.493 | 1.235 | −17.3%* | −1.219 | −0.317 |
+| pass_yards | 8.930 | 8.930 | unchanged | −0.736 | −0.736 |
+| rush_yards | 8.191 | 8.191 | unchanged | −1.624 | −1.624 |
+
+*targets/receptions MAE moves here are the direct, mechanical result of the
+formula fix itself (real targets are now realistically ~2x higher per
+pass-catcher) — pass_yards/rush_yards are unaffected because the fix only
+touches WR/TE/RB `targets_mean`, not QB `attempts_mean` or `carries_mean`.
+CURRENT shows the same pattern (receiving_yards MAE 18.856 → 16.082,
+**−14.7%**; bias −15.950 → −8.174, **−48.8% magnitude**) — confirms this is
+the shared-formula fix, not specific to either OLD or CURRENT's fallback
+flags.
+
+**Yes — a substantial chunk of "realistic receiving production" was
+recovered by the flat baseline fix alone**, exactly as this report's
+"evaporating share" finding predicted it should be, once someone fixed the
+per-player formula rather than papering over it with pool renormalization.
+
+### (b) The box-score engine's relative edge over the now-fixed baseline collapsed to a wash (and flipped to a small regression on targets/receptions)
+
+Box-score subset (OLD vs. CURRENT vs. NEW, weeks 6/10/14, n=2,337 — real
+Monte Carlo re-run):
+
+| Stat | NEW vs. OLD, before fix | NEW vs. OLD, after fix | What changed |
+|---|---|---|---|
+| receiving_yards | **−13.2%** (18.661→16.196) | **−0.08%** (16.070→16.057) | Edge is now a statistical wash |
+| targets | **−7.4%** (1.850→1.714) | **+4.7% regression** (1.656→1.733) | Flipped from win to loss |
+| receptions | **−18.3%** (1.450→1.185) | **+1.5% regression** (1.206→1.224) | Flipped from win to loss |
+| pass_yards | −1.9% (8.847→8.675) | −2.0% (8.847→8.668) | Unchanged (QB path untouched by fix) |
+| rush_yards | +1.0% regression (8.215→8.295) | +0.9% regression (8.215→8.286) | Unchanged (RB rushing path untouched by fix) |
+
+Position-level receiving_yards confirms the same collapse everywhere it
+mattered before:
+
+| Position | NEW vs OLD, before fix | NEW vs OLD, after fix |
+|---|---|---|
+| WR (n=929) | −15.8% (28.572→24.037) | **−0.1%** (23.918→23.893) |
+| TE (n=501) | −12.1% (18.802→16.533) | **−0.7%** (16.553→16.439) |
+| RB (n=626) receiving | −5.4% (12.064→11.407) | **+0.7% regression** (11.100→11.177) |
+
+**Verdict, updated:** the box-score engine's headline receiving-yards win
+(−13.2% MAE, the centerpiece of the original TL;DR) is **not** an
+independent Monte-Carlo/coherence benefit — it was almost entirely the
+Dirichlet pool renormalization silently correcting the same per-player
+target-share-undercount bug that's now fixed properly at the source. With
+the source fixed, the box-score engine's receiving-yards accuracy is now
+statistically indistinguishable from the (much simpler, much cheaper) flat
+baseline, and it's now a small net *negative* on targets/receptions (the
+count stats), on top of the pre-existing small rush_yards regression that
+was never resolved.
+
+**This does not mean the box-score engine has no value** — it still exists
+to answer a different question (coherent per-replicate team-level box
+scores, e.g. for correlated same-game parlay/DFS use cases, and per-stat
+variance/percentile bands, not just a point mean) — but **its
+accuracy-improvement justification is gone**. The original TL;DR's "ship
+the box-score engine" recommendation was based on a real measurement that,
+in hindsight, was measuring two effects at once (the intended
+renormalization behavior + an unintended bug-masking side effect); now that
+they're disentangled, the engine should be evaluated purely on
+distributional/coherence value, not on point-accuracy, for any future
+prioritization decision.
+
+**Root-cause consistency check:** this is also the correct resolution to
+this report's own "Recommended follow-up #2" (RB rush_yards regression
+investigation) — that note concluded the "evaporating share" asymmetry
+"is introduced downstream inside `baseline_projection_from_features()`'s
+own confidence-scaling/clamping logic" and recommended fixing it "in the
+baseline formula itself, not in the box-score engine's allocation layer."
+That is exactly what commit `5c098d36` did, and the RB rush_yards
+regression itself (a genuinely separate, rushing-specific issue, since the
+fix does not touch `carries_mean`) is essentially unchanged, as expected:
+22.581→23.004 (+1.9%) before vs. 22.581→22.975 (+1.7%) after — confirming
+it really is independent of the receiving-share bug this fix addressed.
+
+Raw re-run outputs: `full_sample_records.json` (n=11,453),
+`box_score_records.json` (n=2,337) in the same folder — overwritten by this
+addendum's re-run (previous pre-fix raw records are superseded; the summary
+numbers from the original run are preserved verbatim in the tables above).
