@@ -294,6 +294,47 @@ def test_compute_qb_starter_shares_empty_input() -> None:
     assert compute_qb_starter_shares({}) == {}
 
 
+def test_elite_wr_target_share_produces_realistic_season_volume() -> None:
+    # Real bug found via a live production spot-check: targets_mean used to
+    # multiply target_proxy (a real target SHARE) by a small, arbitrary
+    # fixed coefficient (11.5) with no connection to a team's real pass
+    # volume, so a real elite WR1's genuine ~31% target share projected for
+    # only ~5 targets/game instead of a realistic ~12-13. Fixed by deriving
+    # a real team-pass-attempts estimate from the already-normalized
+    # pace/pass-rate factors and multiplying that by the real target share
+    # directly -- the mathematically correct relationship. This is a
+    # regression guard on the realistic RANGE, not an exact-value check,
+    # since the formula legitimately has other inputs.
+    elite_wr1 = PlayerFeatureInputs(
+        position="WR", snap_proxy=0.6, route_proxy=0.51, target_proxy=0.31,
+        rush_share=0.0, red_zone_share=0.2, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+        team_pace_factor=1.0, team_pass_rate_factor=1.1, availability_confidence=0.95, role_confidence=0.75,
+    )
+    projection = baseline_projection_from_features(elite_wr1)
+    season_yards = projection["receiving_yards_mean"] * 17
+    assert projection["targets_mean"] > 9.0
+    assert 1100.0 < season_yards < 1900.0
+
+
+def test_wr_target_volume_scales_down_realistically_by_role() -> None:
+    def _proj(target_proxy: float, route_proxy: float, role_confidence: float) -> dict:
+        inputs = PlayerFeatureInputs(
+            position="WR", snap_proxy=route_proxy, route_proxy=route_proxy, target_proxy=target_proxy,
+            rush_share=0.0, red_zone_share=0.15, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.92, role_confidence=role_confidence,
+        )
+        return baseline_projection_from_features(inputs)
+
+    wr1 = _proj(0.30, 0.50, 0.75)
+    wr3 = _proj(0.10, 0.35, 0.45)
+    wr4 = _proj(0.03, 0.15, 0.25)
+    assert wr1["targets_mean"] > wr3["targets_mean"] > wr4["targets_mean"]
+    assert wr1["receiving_yards_mean"] > wr3["receiving_yards_mean"] > wr4["receiving_yards_mean"]
+    # A real depth WR should land at a plausible low-volume season total,
+    # not zero and not accidentally still-inflated.
+    assert 0.0 < wr4["receiving_yards_mean"] * 17 < 300.0
+
+
 def test_prop_edge_behaves_directionally() -> None:
     edge = evaluate_prop_edge(
         model_mean=84.0,

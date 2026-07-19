@@ -151,6 +151,24 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     availability_factor = _clamp(0.45 + (0.55 * inputs.availability_confidence), 0.35, 1.0)
     pace_factor = _clamp(inputs.team_pace_factor, 0.78, 1.22)
     pass_factor = _clamp(inputs.team_pass_rate_factor, 0.78, 1.22)
+    # Real, derived estimate of this team's real pass attempts/game --
+    # pace_factor and pass_factor are both already normalized around real
+    # league baselines (64 plays/game, 0.55 pass rate -- see
+    # materialize_player_projection_features's SQL), so their product times
+    # that same baseline recovers a real attempts-per-game number, not an
+    # arbitrary constant. This is the fix for a real, foundational
+    # calibration bug: target_proxy is a real target SHARE (targets divided
+    # by team targets), so the mathematically correct expected value is
+    # target_proxy * team's real attempts -- the old formulas instead
+    # multiplied target_proxy by a small, arbitrary fixed coefficient
+    # (11.5 for WR/TE, 7.0 for RB) with no connection to real team pass
+    # volume, which drastically undercounted every pass-catcher's targets
+    # (a real elite WR1 with a genuine ~31% target share on a real team
+    # projected for only ~5 targets/game instead of a realistic ~12-13,
+    # cascading into unrealistically low receptions/receiving yards for
+    # the entire receiving corps league-wide -- confirmed via a live
+    # production spot-check, see docs/NFL_PROPS_FANTASY_FOUNDATION.md).
+    team_pass_attempts_estimate = pace_factor * pass_factor * 35.2
 
     attempts_mean = 0.0
     carries_mean = 0.0
@@ -193,7 +211,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         carries_mean = _clamp(4.0 + (24.0 * inputs.rush_share * pace_factor), 0.0, 32.0)
-        targets_mean = _clamp(0.8 + (7.0 * inputs.target_proxy * pass_factor), 0.0, 13.0)
+        targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 11.0)
         rush_yards_mean = carries_mean * _clamp((4.1 + (1.1 * volume_signal)) * opp_rush_factor, 2.8, 7.8)
         receptions_mean = targets_mean * _clamp(0.62 + (0.16 * inputs.route_proxy), 0.40, 0.92)
         receiving_yards_mean = receptions_mean * _clamp((6.0 + (2.8 * inputs.target_proxy)) * opp_pass_factor, 4.2, 15.5)
@@ -202,7 +220,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     elif position in {"WR", "TE"}:
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
-        targets_mean = _clamp(1.2 + (11.5 * inputs.target_proxy * pass_factor), 0.0, 17.5)
+        targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 15.0)
         receptions_mean = targets_mean * _clamp(0.56 + (0.28 * inputs.route_proxy), 0.38, 0.93)
         receiving_yards_mean = receptions_mean * _clamp((8.4 + (4.2 * volume_signal)) * opp_pass_factor, 5.5, 23.0)
         carries_mean = _clamp(2.0 * inputs.rush_share, 0.0, 4.0)
