@@ -5,6 +5,7 @@ from src.services.nfl_player_projection_engine import (
     VETERAN_EXPERIENCE_CONFIDENCE,
     PlayerFeatureInputs,
     baseline_projection_from_features,
+    compute_qb_starter_shares,
     evaluate_prop_edge,
     fantasy_points_from_projection,
 )
@@ -198,6 +199,99 @@ def test_wr_te_still_get_real_projections() -> None:
         projection = baseline_projection_from_features(inputs)
         assert projection["receiving_yards_mean"] > 0.0, position
         assert projection["targets_mean"] > 0.0, position
+
+
+def _qb_inputs(**overrides) -> PlayerFeatureInputs:
+    base = dict(
+        position="QB",
+        snap_proxy=0.22,
+        route_proxy=0.0,
+        target_proxy=0.0,
+        rush_share=0.05,
+        red_zone_share=0.2,
+        qb_dropback_factor=0.95,
+        qb_pressure_factor=1.0,
+        team_pace_factor=1.0,
+        team_pass_rate_factor=1.0,
+        availability_confidence=0.95,
+        role_confidence=0.5,
+        team_snap_share=0.4,
+    )
+    base.update(overrides)
+    return PlayerFeatureInputs(**base)
+
+
+def test_qb_starter_share_default_leaves_starter_unaffected() -> None:
+    # The default (1.0, and every caller before this fix) must be
+    # completely unchanged -- a team with only one rostered QB, or any
+    # caller not yet wired for team context, should see IDENTICAL output
+    # to before this fix.
+    with_default = baseline_projection_from_features(_qb_inputs())
+    with_explicit_one = baseline_projection_from_features(_qb_inputs(qb_starter_share=1.0))
+    assert with_default == with_explicit_one
+
+
+def test_qb_starter_share_suppresses_backup_volume() -> None:
+    # Real bug found via a live production spot-check: every rostered QB on
+    # a team (not just the real starter) was independently clearing the
+    # attempts_mean formula's additive floors regardless of team_snap_share
+    # -- a team with 4-5 rostered QBs projected a combined SEASON
+    # pass-attempt total of ~2,100-2,500, roughly 4-5x a real starter's
+    # season. A clear backup (starter_share close to 0) must project a
+    # small fraction of the starter's volume, not a comparable one.
+    starter = baseline_projection_from_features(_qb_inputs(qb_starter_share=1.0))
+    clear_backup = baseline_projection_from_features(_qb_inputs(qb_starter_share=0.05))
+    assert clear_backup["attempts_mean"] < starter["attempts_mean"] * 0.15
+    assert clear_backup["pass_yards_mean"] < starter["pass_yards_mean"] * 0.15
+    assert clear_backup["carries_mean"] < starter["carries_mean"] * 0.15
+    assert clear_backup["pass_tds_mean"] < starter["pass_tds_mean"] * 0.15
+    # A team's QB1 with a lone token backup (both real signals present)
+    # should never see the starter suppressed at all.
+    assert baseline_projection_from_features(_qb_inputs(qb_starter_share=1.0))["attempts_mean"] == starter["attempts_mean"]
+
+
+def test_qb_starter_share_zero_fully_suppresses_qb_output() -> None:
+    fully_suppressed = baseline_projection_from_features(_qb_inputs(qb_starter_share=0.0))
+    assert fully_suppressed["attempts_mean"] == 0.0
+    assert fully_suppressed["pass_yards_mean"] == 0.0
+    assert fully_suppressed["carries_mean"] == 0.0
+    assert fully_suppressed["pass_tds_mean"] == 0.0
+
+
+def test_compute_qb_starter_shares_single_qb_always_gets_full_share() -> None:
+    # No depth-chart competition to resolve with only one rostered QB --
+    # this must return 1.0 regardless of that lone QB's own team_snap_share
+    # value (a rookie's true starter role can still look "low" by raw
+    # team_snap_share early on).
+    assert compute_qb_starter_shares({"qb1": 0.15}) == {"qb1": 1.0}
+
+
+def test_compute_qb_starter_shares_ranks_by_team_snap_share() -> None:
+    # Mirrors the real BAL-QB-room production numbers this bug was found
+    # with: a clear starter plus several backups whose team_snap_share
+    # values, post-fix, correctly separate them.
+    shares = compute_qb_starter_shares(
+        {"lamar": 0.397, "huntley": 0.086, "thompson": 0.052, "fagnano": 0.017, "pavia": 0.017}
+    )
+    assert shares["lamar"] == 1.0
+    assert shares["huntley"] < 0.3
+    assert shares["thompson"] < shares["huntley"]
+    assert shares["fagnano"] < shares["thompson"]
+    assert shares["pavia"] == shares["fagnano"]
+    # Monotonic and bounded.
+    assert all(0.0 <= v <= 1.0 for v in shares.values())
+
+
+def test_compute_qb_starter_shares_handles_all_zero_snap_shares() -> None:
+    # No real signal to rank by (e.g. every QB hydrated at exactly 0.0
+    # before any real usage exists) -- must not divide by zero or crash,
+    # and should not arbitrarily suppress anyone the data can't rank.
+    shares = compute_qb_starter_shares({"a": 0.0, "b": 0.0})
+    assert shares == {"a": 1.0, "b": 1.0}
+
+
+def test_compute_qb_starter_shares_empty_input() -> None:
+    assert compute_qb_starter_shares({}) == {}
 
 
 def test_prop_edge_behaves_directionally() -> None:

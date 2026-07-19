@@ -32,6 +32,7 @@ from typing import Any, Dict, List
 from sqlalchemy import text
 
 from .db import SessionLocal
+from .usage_hydration_shared import DEFAULT_TEAM_SEASON_GAMES, compute_hydration_games_denominator
 
 DRAFT_TIERS: List[tuple[str, int, int]] = [
     ("R1_top10", 1, 10),
@@ -113,41 +114,91 @@ def compute_rookie_usage_baselines(
     Safe to re-run every offseason once a new rookie class has a completed
     season of real usage data -- it fully replaces the table's contents
     (small, derived, no manual edits live here).
+
+    Real bug found via a live production spot-check (the same root cause as
+    the backup-QB bug fixed in preseason_hydration.py's
+    `hydrate_preseason_player_usage`): this query used to INNER JOIN rookies
+    to their real usage rows and divide each rookie's summed rookie-year
+    usage by `COUNT(DISTINCT week) WHERE games_played > 0` -- i.e. their OWN
+    active-week count. For a discrete-availability position like QB, that
+    is doubly wrong for a low-draft-capital/UDFA tier: (a) any rookie QB who
+    genuinely never played a snap as a rookie (the real, overwhelming
+    majority of UDFA rookie QBs) has NO row in usage_weekly at all and was
+    silently excluded from the sample entirely -- surviorship bias, not just
+    a noisy denominator -- and (b) the rare rookie QB who DID see the field
+    almost always did so via injury-driven emergency starts that look like
+    starter-level volume by construction, which then got applied at face
+    value to every new rookie assigned to that tier. Combined, a UDFA rookie
+    QB baseline was built almost entirely from "guys who had to start due to
+    an injury ahead of them," at THEIR rate, which is exactly backwards from
+    "what should a random new UDFA rookie QB be projected for."
+
+    Fix: LEFT JOIN every real historical rookie at (position, draft_number)
+    -- including the ones with zero recorded usage, who now correctly
+    contribute a real 0 to the bucket -- and divide each rookie's summed
+    usage by their real TEAM's season-length game count (not their own
+    active-week count), via the same `compute_hydration_games_denominator`
+    used for the analogous veteran-backup fix.
     """
     session = SessionLocal()
     try:
         rookie_rows = session.execute(
             text(
                 """
+                WITH rookie_players AS (
+                  SELECT DISTINCT r.player_id, r.position, r.draft_number, r.rookie_year AS season, r.team
+                  FROM nfl_dp_rosters r
+                  WHERE r.rookie_year IS NOT NULL
+                    AND r.rookie_year = r.season
+                    AND (CAST(:through_season AS int) IS NULL OR r.rookie_year <= CAST(:through_season AS int))
+                ),
+                usage_sums AS (
+                  SELECT
+                    player_id, season,
+                    COUNT(DISTINCT week) AS games_active,
+                    SUM(involvement_plays)::numeric AS involvement_plays,
+                    SUM(targets)::numeric AS targets,
+                    SUM(receptions)::numeric AS receptions,
+                    SUM(receiving_yards)::numeric AS receiving_yards,
+                    SUM(rush_attempts)::numeric AS rush_attempts,
+                    SUM(rush_yards)::numeric AS rush_yards,
+                    SUM(red_zone_targets)::numeric AS red_zone_targets,
+                    SUM(red_zone_carries)::numeric AS red_zone_carries,
+                    SUM(qb_dropbacks)::numeric AS qb_dropbacks,
+                    AVG(success_rate) AS success_rate
+                  FROM nfl_dp_player_usage_weekly
+                  WHERE games_played > 0
+                  GROUP BY player_id, season
+                ),
+                team_games AS (
+                  SELECT season, team, COUNT(DISTINCT week) AS games
+                  FROM nfl_dp_team_situational_weekly
+                  WHERE source = 'nflverse' AND games_played > 0
+                  GROUP BY season, team
+                )
                 SELECT
-                  u.player_id,
-                  r.position,
-                  r.draft_number,
-                  u.season,
-                  COUNT(DISTINCT u.week) AS games_played,
-                  SUM(u.involvement_plays)::numeric AS involvement_plays,
-                  SUM(u.targets)::numeric AS targets,
-                  SUM(u.receptions)::numeric AS receptions,
-                  SUM(u.receiving_yards)::numeric AS receiving_yards,
-                  SUM(u.rush_attempts)::numeric AS rush_attempts,
-                  SUM(u.rush_yards)::numeric AS rush_yards,
-                  SUM(u.red_zone_targets)::numeric AS red_zone_targets,
-                  SUM(u.red_zone_carries)::numeric AS red_zone_carries,
-                  SUM(u.qb_dropbacks)::numeric AS qb_dropbacks,
-                  AVG(u.success_rate) AS success_rate
-                FROM nfl_dp_rosters r
-                JOIN nfl_dp_player_usage_weekly u
-                  ON u.player_id = r.player_id
-                  AND u.season = r.rookie_year
-                WHERE r.rookie_year IS NOT NULL
-                  AND r.rookie_year = r.season
-                  AND (CAST(:through_season AS int) IS NULL OR r.rookie_year <= CAST(:through_season AS int))
-                  AND u.games_played > 0
-                GROUP BY u.player_id, r.position, r.draft_number, u.season
-                HAVING COUNT(DISTINCT u.week) > 0
+                  rp.player_id,
+                  rp.position,
+                  rp.draft_number,
+                  rp.season,
+                  COALESCE(us.games_active, 0) AS games_active,
+                  COALESCE(tg.games, :default_team_games) AS team_season_games,
+                  COALESCE(us.involvement_plays, 0) AS involvement_plays,
+                  COALESCE(us.targets, 0) AS targets,
+                  COALESCE(us.receptions, 0) AS receptions,
+                  COALESCE(us.receiving_yards, 0) AS receiving_yards,
+                  COALESCE(us.rush_attempts, 0) AS rush_attempts,
+                  COALESCE(us.rush_yards, 0) AS rush_yards,
+                  COALESCE(us.red_zone_targets, 0) AS red_zone_targets,
+                  COALESCE(us.red_zone_carries, 0) AS red_zone_carries,
+                  COALESCE(us.qb_dropbacks, 0) AS qb_dropbacks,
+                  us.success_rate
+                FROM rookie_players rp
+                LEFT JOIN usage_sums us ON us.player_id = rp.player_id AND us.season = rp.season
+                LEFT JOIN team_games tg ON tg.season = rp.season AND tg.team = rp.team
                 """
             ),
-            {"through_season": through_season},
+            {"through_season": through_season, "default_team_games": DEFAULT_TEAM_SEASON_GAMES},
         ).mappings().all()
 
         buckets: Dict[tuple[str, str], List[Dict[str, Any]]] = {}
@@ -155,7 +206,9 @@ def compute_rookie_usage_baselines(
             position = (row["position"] or "UNK").upper()
             tier = draft_tier_for_pick(row["draft_number"])
             key = (position, tier)
-            games = float(row["games_played"] or 0)
+            games = compute_hydration_games_denominator(
+                float(row["games_active"] or 0), float(row["team_season_games"] or DEFAULT_TEAM_SEASON_GAMES)
+            )
             if games <= 0:
                 continue
             buckets.setdefault(key, []).append(

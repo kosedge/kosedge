@@ -38,6 +38,7 @@ from sqlalchemy import text
 
 from .db import SessionLocal
 from .rookie_baselines import compute_rookie_usage_baselines, get_rookie_baseline
+from .usage_hydration_shared import DEFAULT_TEAM_SEASON_GAMES, compute_hydration_games_denominator
 
 TEAM_HYDRATE_SOURCE = "preseason_hydrate_v1"
 PLAYER_HYDRATE_SOURCE = "preseason_hydrate_v1"
@@ -188,6 +189,27 @@ _PLAYER_COUNT_COLUMNS = [
 ]
 
 
+def _fetch_team_season_games(session: Any, *, season: int) -> Dict[str, int]:
+    """Real per-team count of games played in `season`, from the real
+    (`source = 'nflverse'`) rows of `nfl_dp_team_situational_weekly` --
+    the correct denominator for turning a player's summed season usage into
+    an expected PER-TEAM-WEEK rate. See `hydrate_preseason_player_usage`'s
+    docstring for why this is deliberately NOT the same as the player's own
+    count of weeks with recorded usage."""
+    rows = session.execute(
+        text(
+            """
+            SELECT team, COUNT(DISTINCT week) AS games
+            FROM nfl_dp_team_situational_weekly
+            WHERE season = :season AND source = 'nflverse' AND games_played > 0
+            GROUP BY team
+            """
+        ),
+        {"season": season},
+    ).all()
+    return {r.team: int(r.games) for r in rows}
+
+
 def hydrate_preseason_player_usage(
     *, season: int, prior_season: Optional[int] = None, dry_run: bool = False
 ) -> Dict[str, Any]:
@@ -196,6 +218,32 @@ def hydrate_preseason_player_usage(
     Returning players get their real full-prior-season per-game average.
     Rookies and anyone else with no prior-season usage get the historical
     draft-tier baseline. Nobody on the roster is left silently absent.
+
+    Real bug found via a live production spot-check: every backup QB on a
+    roster (not just the starter) was being projected for near-starter
+    passing volume -- e.g. a team with 4-5 rostered QBs projected a combined
+    SEASON pass-attempt total of ~2,100-2,500, roughly 4-5x what one real
+    starter throws in a season. Root cause: a returning player's per-game
+    rate was computed as `SUM(usage) / COUNT(weeks with usage > 0)` --
+    i.e. "this player's rate in the games they actually appeared in" -- which
+    is a fair proxy for a full-time starter (who appears almost every team
+    week), but badly overstates a genuine backup QB's TRUE expected
+    involvement in a typical future week, since a clean backup's few
+    recorded games are almost always emergency spot starts that look like
+    starter-level volume by construction (they only show up in the data
+    BECAUSE the real starter was out that week), while the many weeks they
+    were the healthy, un-played backup contribute a real, structural zero
+    that "count weeks WITH usage" silently drops from the denominator
+    entirely.
+    Fix: divide by the player's real TEAM's season-length game count
+    (`_fetch_team_season_games`) instead, whenever that is larger than the
+    player's own active-week count -- this correctly dilutes a part-time or
+    seldom-used player's rate by the real fraction of team-weeks they
+    actually played, while leaving an every-week starter's rate essentially
+    unchanged (their own active-week count already ~= the team's game
+    count). Deliberately never INCREASES the naive per-game rate (see the
+    `max(...)` floor below), so this can only pull inflated backup/committee
+    numbers down toward reality, never push a legitimate starter's number up.
     """
     session = SessionLocal()
     try:
@@ -266,6 +314,31 @@ def hydrate_preseason_player_usage(
         ).mappings().all()
         prior_by_player = {r["player_id"]: dict(r) for r in prior_usage_rows}
 
+        # Each player's most-recent prior-season team (handles in-season
+        # trades: use the team they were with in their LAST played week),
+        # used only to look up the correct real team-game-count denominator
+        # below -- never used to override their actual current (2026)
+        # roster team.
+        last_team_rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (player_id) player_id, team
+                FROM nfl_dp_player_usage_weekly
+                WHERE season = :prior AND games_played > 0
+                ORDER BY player_id, week DESC
+                """
+            ),
+            {"prior": prior},
+        ).all()
+        last_team_by_player = {r.player_id: r.team for r in last_team_rows}
+
+        team_season_games = _fetch_team_season_games(session, season=prior)
+        league_avg_season_games = (
+            sum(team_season_games.values()) / len(team_season_games)
+            if team_season_games
+            else DEFAULT_TEAM_SEASON_GAMES
+        )
+
         veterans_updated = 0
         rookies_inserted = 0
         no_baseline_available = 0
@@ -277,7 +350,10 @@ def hydrate_preseason_player_usage(
             prior_row = prior_by_player.get(player_id)
 
             if prior_row is not None:
-                games = float(prior_row["games"] or 1)
+                games_active = float(prior_row["games"] or 1)
+                prior_team = last_team_by_player.get(player_id)
+                team_games = float(team_season_games.get(prior_team) or league_avg_season_games)
+                games = compute_hydration_games_denominator(games_active, team_games)
                 per_game = {c: float(prior_row[c] or 0) / games for c in _PLAYER_COUNT_COLUMNS}
                 success_rate = prior_row["success_rate"]
                 player_name = prior_row["player_name"]

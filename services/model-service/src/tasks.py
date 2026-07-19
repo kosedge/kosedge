@@ -66,6 +66,7 @@ from .services.nfl_player_projection_engine import (
     VETERAN_EXPERIENCE_CONFIDENCE,
     PlayerFeatureInputs,
     baseline_projection_from_features,
+    compute_qb_starter_shares,
     evaluate_prop_edge,
     fantasy_points_from_projection,
 )
@@ -7243,6 +7244,21 @@ def materialize_nfl_player_baseline_projections(
             {"season": int(season), "week": int(target_week)},
         ).fetchall()
 
+        # Real bug fix: compute each team's QB depth-chart "starter share"
+        # from team_snap_share BEFORE building per-player baselines below --
+        # see PlayerFeatureInputs.qb_starter_share's docstring for why a
+        # single-player baseline formula cannot express "only one QB
+        # actually starts" on its own.
+        qb_snap_shares_by_team: Dict[str, Dict[str, float]] = {}
+        for row in rows:
+            if str(row.position or "").upper() == "QB":
+                qb_snap_shares_by_team.setdefault(row.team, {})[str(row.player_id)] = float(row.team_snap_share or 0.0)
+        qb_starter_shares: Dict[tuple[str, str], float] = {
+            (team, player_id): share
+            for team, snap_shares in qb_snap_shares_by_team.items()
+            for player_id, share in compute_qb_starter_shares(snap_shares).items()
+        }
+
         latest_props = session.execute(
             text(
                 """
@@ -7320,6 +7336,7 @@ def materialize_nfl_player_baseline_projections(
                 team_snap_share=float(row.team_snap_share or 0.0),
                 opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
                 opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
+                qb_starter_share=qb_starter_shares.get((row.team, str(row.player_id)), 1.0),
             )
             baseline = baseline_projection_from_features(inputs)
             cov_key = str(resolved_player_uid or row.player_name)
@@ -7571,6 +7588,17 @@ def materialize_nfl_player_box_score_sims(
                 continue
             team_context = _fetch_team_volume_context(session, season=season, team=team, target_week=target_week)
 
+            # Same real fix as materialize_nfl_player_baseline_projections:
+            # compute this team's QB depth-chart "starter share" from
+            # team_snap_share before building per-player baselines below --
+            # see PlayerFeatureInputs.qb_starter_share's docstring.
+            qb_snap_shares = {
+                str(row.player_id): float(row.team_snap_share or 0.0)
+                for row in team_rows
+                if str(row.position or "").upper() == "QB"
+            }
+            qb_starter_shares = compute_qb_starter_shares(qb_snap_shares)
+
             roles: List[PlayerBoxScoreRole] = []
             row_by_key: Dict[str, Any] = {}
             for row in team_rows:
@@ -7597,6 +7625,7 @@ def materialize_nfl_player_box_score_sims(
                     team_snap_share=float(row.team_snap_share or 0.0),
                     opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
                     opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
+                    qb_starter_share=qb_starter_shares.get(str(row.player_id), 1.0),
                 )
                 baseline = baseline_projection_from_features(inputs)
                 player_key = str(row.player_uid) if row.player_uid is not None else f"{row.team}:{row.player_id}"

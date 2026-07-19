@@ -62,6 +62,33 @@ class PlayerFeatureInputs:
     player should outperform their own team-context-only baseline), <1.0
     means a tougher-than-average matchup. 1.0 (neutral) is the safe default
     for any caller not yet supplying real opponent context."""
+    qb_starter_share: float = 1.0
+    """Only meaningful for QB. Real bug found via a live production
+    spot-check: every rostered QB on a team (not just the real starter) was
+    independently clearing this function's QB-branch additive floors
+    (`attempts_mean`'s unconditional `22.0 +` base, `qb_volume_signal`'s
+    0.25 floor) regardless of `team_snap_share`, because a single-player
+    pure function has no way to know it shares a depth chart with other
+    QBs -- so a team with 4-5 rostered QBs projected a combined SEASON
+    pass-attempt total of ~2,100-2,500, roughly 4-5x what one real starter
+    throws in a season. `team_snap_share` alone could not fix this: even
+    driven to 0, `qb_volume_signal`'s OTHER additive term
+    (`qb_dropback_factor`, an efficiency/mix ratio that is similarly high
+    for a starter and a backup alike) plus the attempts formula's own
+    unconditional `22.0` base still guaranteed real volume to anyone tagged
+    QB. This field is the caller-supplied fix: once the caller has full
+    team context (which this function deliberately does not have on its
+    own), it computes each QB's real team-relative share of "who is the
+    starter" (this QB's `team_snap_share` divided by the team's single
+    highest QB `team_snap_share` that week -- see
+    `nfl_player_projection_engine.compute_qb_starter_shares`) and passes it
+    through here. 1.0 (the default, and always correct for a team with only
+    one rostered QB, or for any caller not yet wired for team context) means
+    "fully independent, could be the starter" -- the original, unscaled
+    behavior. Multiplicatively scales `attempts_mean` and `carries_mean`
+    (and everything downstream of them: pass/rush yards and TDs), so a
+    clear backup projects nowhere near a starter's volume, while a real
+    starter (share == 1.0) is completely unaffected."""
     """1.0 for a normal veteran-usage-derived projection. Lower values (see
     ROOKIE_EXPERIENCE_CONFIDENCE) widen the output std without changing the
     mean -- a rookie with the same *projected* mean as a veteran genuinely
@@ -74,6 +101,40 @@ class PlayerFeatureInputs:
 ROOKIE_EXPERIENCE_CONFIDENCE = 0.45
 VETERAN_EXPERIENCE_CONFIDENCE = 1.0
 MAX_VARIANCE_WIDENING = 2.0
+
+
+def compute_qb_starter_shares(team_snap_shares: Dict[str, float]) -> Dict[str, float]:
+    """Pure: given {player_key: team_snap_share} for every rostered QB on
+    ONE team for one week, returns {player_key: qb_starter_share} -- see
+    `PlayerFeatureInputs.qb_starter_share`'s docstring for the bug this
+    feeds into the fix for.
+
+    The QB with the highest `team_snap_share` is treated as the real
+    starter and gets a share of 1.0 (completely unaffected, including the
+    single-QB-on-roster case, which always returns 1.0 for that lone QB
+    regardless of their `team_snap_share` value -- there's no depth-chart
+    competition to resolve when there's only one rostered QB). Every other
+    QB's share is their own `team_snap_share` divided by the starter's,
+    clamped to [0, 1] -- i.e. purely data-driven from the model's own
+    already-calibrated relative-role signal, never a new arbitrary
+    constant, and it can only ever discount a backup, never inflate the
+    starter above 1.0.
+    """
+    if not team_snap_shares:
+        return {}
+    if len(team_snap_shares) == 1:
+        return {key: 1.0 for key in team_snap_shares}
+    starter_key = max(team_snap_shares, key=lambda k: float(team_snap_shares[k] or 0.0))
+    starter_share = float(team_snap_shares[starter_key] or 0.0)
+    if starter_share <= 0.0:
+        # No real signal to rank by (e.g. every QB hydrated at exactly
+        # 0.0) -- leave everyone at 1.0 rather than dividing by zero or
+        # guessing at an ordering the data doesn't support.
+        return {key: 1.0 for key in team_snap_shares}
+    return {
+        key: (1.0 if key == starter_key else _clamp(float(value or 0.0) / starter_share, 0.0, 1.0))
+        for key, value in team_snap_shares.items()
+    }
 
 
 def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, Any]:
@@ -117,13 +178,14 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         )
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
-        attempts_mean = 22.0 + (34.0 * qb_volume_signal * pass_factor * pace_factor)
+        qb_starter_share_factor = _clamp(inputs.qb_starter_share, 0.0, 1.0)
+        attempts_mean = (22.0 + (34.0 * qb_volume_signal * pass_factor * pace_factor)) * qb_starter_share_factor
         completion_rate = _clamp(0.60 + (0.05 * inputs.target_proxy) - (0.03 * inputs.qb_pressure_factor), 0.50, 0.74)
         yards_per_attempt = _clamp((6.2 + (1.1 * inputs.target_proxy) - (0.6 * inputs.qb_pressure_factor)) * opp_pass_factor, 5.0, 10.5)
         pass_yards_mean = attempts_mean * yards_per_attempt
-        carries_mean = _clamp(1.2 + (4.0 * inputs.rush_share), 0.0, 10.0)
+        carries_mean = _clamp(1.2 + (4.0 * inputs.rush_share), 0.0, 10.0) * qb_starter_share_factor
         rush_yards_mean = carries_mean * _clamp((4.6 - (0.7 * inputs.qb_pressure_factor)) * opp_rush_factor, 2.6, 7.0)
-        pass_tds_mean = _clamp((pass_yards_mean / 115.0) * (0.72 + (0.32 * inputs.red_zone_share)), 0.15, 3.8)
+        pass_tds_mean = _clamp((pass_yards_mean / 115.0) * (0.72 + (0.32 * inputs.red_zone_share)), 0.15, 3.8) * qb_starter_share_factor
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.12, 0.0, 1.2)
         receptions_mean = 0.0
         receiving_yards_mean = 0.0
