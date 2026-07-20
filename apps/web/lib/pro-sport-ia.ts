@@ -158,9 +158,12 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
 
   return [
     {
-      href: `${base}/props`,
-      label: "Sport props board",
-      hint: "Player and team prop views scoped to this sport.",
+      href: sportKey === "nfl" ? "/pro/nfl/props" : `${base}/props`,
+      label: sportKey === "nfl" ? "Player props board" : "Sport props board",
+      hint:
+        sportKey === "nfl"
+          ? "Model mean vs line, fair odds, and confidence — market edges when books join."
+          : "Player and team prop views scoped to this sport.",
       premium: true,
       status: "active",
     },
@@ -178,6 +181,20 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
     href: "/pro/nfl/projections",
     label: "Projections hub",
     hint: "Team wins/futures plus player fantasy totals in one betting view.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/fair-lines",
+    label: "Fair lines board",
+    hint: "Kosedge spreads, totals, and fair moneylines for the upcoming slate.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/props",
+    label: "Props board",
+    hint: "Player prop model means, fair prices, and confidence by market.",
     premium: true,
     status: "active",
   },
@@ -294,11 +311,14 @@ export function buildSportOverviewSections({
           status: "active",
         },
         {
-          href: `${base}/fair-lines`,
+          href: sportKey === "nfl" ? "/pro/nfl/fair-lines" : `${base}/fair-lines`,
           label: "Fair lines",
-          hint: "Neutral model fair-value reference without pick language.",
+          hint:
+            sportKey === "nfl"
+              ? "Kosedge-made spreads, totals, and fair moneylines for the upcoming slate."
+              : "Neutral model fair-value reference without pick language.",
           premium: true,
-          status: "active",
+          status: sportKey === "nfl" ? "active" : "placeholder",
         },
         {
           href: `/pro/kei-lines/${sportKey}`,

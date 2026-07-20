@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from decimal import Decimal
 from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Optional, TypedDict
+from typing import Any, Dict, List, Optional, Tuple, TypedDict
 
 import logging
 
@@ -130,6 +130,50 @@ def _build_team_case_sql(mapping: Dict[str, str], *, team_column: str = "team") 
 NFL_TEAM_CONFERENCE_CASE_SQL = _build_team_case_sql(NFL_TEAM_CONFERENCE_MAP)
 NFL_TEAM_DIVISION_CASE_SQL = _build_team_case_sql(NFL_TEAM_DIVISION_MAP)
 
+# Odds API uses full club names; DB teams often store abbr-only in `name`.
+NFL_ABBR_TO_FULL_NAME: Dict[str, str] = {
+    "ARI": "Arizona Cardinals",
+    "ATL": "Atlanta Falcons",
+    "BAL": "Baltimore Ravens",
+    "BUF": "Buffalo Bills",
+    "CAR": "Carolina Panthers",
+    "CHI": "Chicago Bears",
+    "CIN": "Cincinnati Bengals",
+    "CLE": "Cleveland Browns",
+    "DAL": "Dallas Cowboys",
+    "DEN": "Denver Broncos",
+    "DET": "Detroit Lions",
+    "GB": "Green Bay Packers",
+    "HOU": "Houston Texans",
+    "IND": "Indianapolis Colts",
+    "JAX": "Jacksonville Jaguars",
+    "KC": "Kansas City Chiefs",
+    "LV": "Las Vegas Raiders",
+    "LAC": "Los Angeles Chargers",
+    "LAR": "Los Angeles Rams",
+    "LA": "Los Angeles Rams",
+    "MIA": "Miami Dolphins",
+    "MIN": "Minnesota Vikings",
+    "NE": "New England Patriots",
+    "NO": "New Orleans Saints",
+    "NYG": "New York Giants",
+    "NYJ": "New York Jets",
+    "PHI": "Philadelphia Eagles",
+    "PIT": "Pittsburgh Steelers",
+    "SEA": "Seattle Seahawks",
+    "SF": "San Francisco 49ers",
+    "TB": "Tampa Bay Buccaneers",
+    "TEN": "Tennessee Titans",
+    "WAS": "Washington Commanders",
+    "WSH": "Washington Commanders",
+}
+NFL_FULL_NAME_TO_ABBR: Dict[str, str] = {}
+for _abbr, _full in NFL_ABBR_TO_FULL_NAME.items():
+    # Prefer canonical codes over aliases (LA→LAR, WSH→WAS).
+    if _abbr in {"LA", "WSH"}:
+        continue
+    NFL_FULL_NAME_TO_ABBR["".join(ch for ch in _full.lower() if ch.isalnum())] = _abbr
+
 
 def _to_float(v: Any) -> Optional[float]:
     if v is None:
@@ -224,6 +268,58 @@ def _normalize_team_key(name: Optional[str]) -> str:
     if not name:
         return ""
     return "".join(ch for ch in name.lower() if ch.isalnum())
+
+
+def _nfl_team_to_abbr(name: Optional[str]) -> Optional[str]:
+    """Map Odds API full names or DB abbr/name strings to a canonical team abbr."""
+    if not name:
+        return None
+    raw = str(name).strip()
+    if not raw:
+        return None
+    upper = raw.upper()
+    if upper in NFL_ABBR_TO_FULL_NAME:
+        if upper == "LA":
+            return "LAR"
+        if upper == "WSH":
+            return "WAS"
+        return upper
+    return NFL_FULL_NAME_TO_ABBR.get(_normalize_team_key(raw))
+
+
+def _extract_book_market_prices(
+    event: Dict[str, Any],
+) -> Tuple[Optional[int], Optional[int], Optional[float], Optional[float], int]:
+    """Return (home_ml, away_ml, total, spread_home, market_depth) from an odds event."""
+    home_team = str(event.get("home_team") or "")
+    away_team = str(event.get("away_team") or "")
+    home_prices: List[int] = []
+    away_prices: List[int] = []
+    totals: List[float] = []
+    spreads: List[float] = []
+    for book in event.get("bookmakers") or []:
+        for market in book.get("markets") or []:
+            key = market.get("key")
+            if key == "h2h":
+                for outcome in market.get("outcomes") or []:
+                    if outcome.get("name") == home_team and outcome.get("price") is not None:
+                        home_prices.append(int(outcome["price"]))
+                    elif outcome.get("name") == away_team and outcome.get("price") is not None:
+                        away_prices.append(int(outcome["price"]))
+            elif key == "totals":
+                for outcome in market.get("outcomes") or []:
+                    if outcome.get("name") == "Over" and outcome.get("point") is not None:
+                        totals.append(float(outcome["point"]))
+            elif key == "spreads":
+                for outcome in market.get("outcomes") or []:
+                    if outcome.get("name") == home_team and outcome.get("point") is not None:
+                        spreads.append(float(outcome["point"]))
+    market_home_ml = int(round(sum(home_prices) / len(home_prices))) if home_prices else None
+    market_away_ml = int(round(sum(away_prices) / len(away_prices))) if away_prices else None
+    market_total = round(sum(totals) / len(totals), 2) if totals else None
+    market_spread_home = round(sum(spreads) / len(spreads), 2) if spreads else None
+    market_depth = len(home_prices) + len(totals) + len(spreads)
+    return market_home_ml, market_away_ml, market_total, market_spread_home, market_depth
 
 
 def _american_implied_prob(price: Optional[int]) -> Optional[float]:
@@ -2305,8 +2401,14 @@ def nfl_edges_today(
                   g.start_time,
                   home.name AS home_team,
                   away.name AS away_team,
+                  home.abbr AS home_abbr,
+                  away.abbr AS away_abbr,
                   p.home_win_prob,
+                  p.away_win_prob,
+                  p.spread_home,
                   p.total_mean,
+                  p.fair_home_ml,
+                  p.fair_away_ml,
                   p.projection,
                   p.created_at
                 FROM games g
@@ -2380,6 +2482,13 @@ def nfl_edges_today(
         (_normalize_team_key(r.home_team), _normalize_team_key(r.away_team)): dict(r._mapping)
         for r in rows
     }
+    projection_by_abbr = {
+        (
+            _nfl_team_to_abbr(getattr(r, "home_abbr", None) or r.home_team) or "",
+            _nfl_team_to_abbr(getattr(r, "away_abbr", None) or r.away_team) or "",
+        ): dict(r._mapping)
+        for r in rows
+    }
 
     candidates: List[Dict[str, Any]] = []
     filtered_reasons: Dict[str, int] = {"quality_score": 0, "confidence_score": 0, "ml_edge_prob": 0}
@@ -2396,32 +2505,20 @@ def nfl_edges_today(
         away_team = str(event.get("away_team") or "")
         if not home_team or not away_team:
             continue
+        home_abbr = _nfl_team_to_abbr(home_team)
+        away_abbr = _nfl_team_to_abbr(away_team)
         proj = projection_by_key.get((_normalize_team_key(home_team), _normalize_team_key(away_team)))
+        if proj is None and home_abbr and away_abbr:
+            proj = projection_by_abbr.get((home_abbr, away_abbr))
         if proj is None:
             continue
 
-        home_prices: List[int] = []
-        away_prices: List[int] = []
-        totals: List[float] = []
-        for book in event.get("bookmakers") or []:
-            for market in book.get("markets") or []:
-                if market.get("key") == "h2h":
-                    for outcome in market.get("outcomes") or []:
-                        if outcome.get("name") == home_team and outcome.get("price") is not None:
-                            home_prices.append(int(outcome["price"]))
-                        elif outcome.get("name") == away_team and outcome.get("price") is not None:
-                            away_prices.append(int(outcome["price"]))
-                elif market.get("key") == "totals":
-                    for outcome in market.get("outcomes") or []:
-                        if outcome.get("name") == "Over" and outcome.get("point") is not None:
-                            totals.append(float(outcome["point"]))
-
-        if not home_prices or not away_prices:
+        market_home_ml, market_away_ml, market_total, _market_spread_home, market_depth = _extract_book_market_prices(
+            event
+        )
+        if market_home_ml is None or market_away_ml is None:
             continue
 
-        market_home_ml = int(round(sum(home_prices) / len(home_prices)))
-        market_away_ml = int(round(sum(away_prices) / len(away_prices)))
-        market_total = round(sum(totals) / len(totals), 2) if totals else None
         home_prob = _to_float(proj.get("home_win_prob"))
         market_home_prob = _american_implied_prob(market_home_ml)
         market_away_prob = _american_implied_prob(market_away_ml)
@@ -2445,7 +2542,6 @@ def nfl_edges_today(
             if total_p10 is not None and total_p90 is not None
             else 11.0
         )
-        market_depth = len(home_prices) + len(totals)
         fallback_confidence = max(
             0.0,
             min(
@@ -2538,6 +2634,9 @@ def nfl_edges_today(
                 "model_home_win_prob": round(home_prob, 4),
                 "market_home_prob_no_vig": round(no_vig_prob, 4) if no_vig_prob is not None else None,
                 "ml_edge_prob": round(edge_prob, 4),
+                "spread_home": _to_float(proj.get("spread_home")),
+                "fair_home_ml": _to_int(proj.get("fair_home_ml")),
+                "fair_away_ml": _to_int(proj.get("fair_away_ml")),
                 "total_mean": _to_float(proj.get("total_mean")),
                 "total_band_width": round(total_band_width, 3) if total_band_width is not None else None,
                 "market_depth": market_depth,
@@ -2588,6 +2687,225 @@ def nfl_edges_today(
             "version": framework_cfg["framework_version"],
             "guardrails": framework_cfg["guardrails"],
             "effective_guardrails": tuned_guardrails,
+        },
+    }
+
+
+@router.get("/fair-lines")
+def nfl_fair_lines(
+    season: int = Query(2026, ge=2010, le=2100),
+    days_ahead: int = Query(14, ge=1, le=365),
+    include_past_days: int = Query(0, ge=0, le=60),
+    model_version: Optional[str] = Query(None),
+    bookmakers: Optional[str] = Query(
+        None,
+        description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
+    ),
+) -> Dict[str, Any]:
+    """Kosedge fair-lines board for an upcoming (and optionally recent) slate.
+
+    Returns latest LATERAL projection per game with optional live market
+    comparison. If the odds feed is unavailable, Kosedge lines are still returned
+    with market fields set to null.
+    """
+    market_events: List[Dict[str, Any]] = []
+    odds_feed_error: Optional[str] = None
+    resolved_bookmakers = _resolve_nfl_odds_bookmakers(bookmakers)
+    try:
+        raw_market_events = fetch_odds(
+            endpoint="sports/americanfootball_nfl/odds",
+            params={
+                "regions": "us",
+                "markets": "h2h,spreads,totals",
+                "oddsFormat": "american",
+                "dateFormat": "iso",
+                "bookmakers": resolved_bookmakers,
+            },
+        )
+        if isinstance(raw_market_events, list):
+            market_events = raw_market_events
+    except Exception as exc:
+        odds_feed_error = str(exc)[:500]
+        log.warning("NFL odds feed unavailable for fair-lines endpoint: %s", odds_feed_error)
+
+    session = SessionLocal()
+    try:
+        effective_model_version = model_version or _resolve_active_nfl_model_version(session)
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  g.id AS game_id,
+                  g.start_time,
+                  g.game_date,
+                  s.season_year AS season,
+                  home.name AS home_team,
+                  home.abbr AS home_abbr,
+                  away.name AS away_team,
+                  away.abbr AS away_abbr,
+                  p.home_win_prob,
+                  p.away_win_prob,
+                  p.spread_home,
+                  p.total_mean,
+                  p.fair_home_ml,
+                  p.fair_away_ml,
+                  p.model_version,
+                  p.simulation_count,
+                  p.created_at AS projection_created_at
+                FROM games g
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                JOIN teams home ON home.id = g.home_team_id
+                JOIN teams away ON away.id = g.away_team_id
+                JOIN LATERAL (
+                  SELECT *
+                  FROM nfl_market_projections np
+                  WHERE np.game_id = g.id
+                    AND np.model_version = :model_version
+                  ORDER BY np.created_at DESC
+                  LIMIT 1
+                ) p ON TRUE
+                WHERE l.code = 'nfl'
+                  AND s.season_year = :season
+                  AND COALESCE(g.start_time, g.game_date::timestamptz) IS NOT NULL
+                  AND COALESCE(g.start_time, g.game_date::timestamptz)
+                      >= (NOW() - CAST(:include_past_days AS integer) * INTERVAL '1 day')
+                  AND COALESCE(g.start_time, g.game_date::timestamptz)
+                      <= (NOW() + CAST(:days_ahead AS integer) * INTERVAL '1 day')
+                ORDER BY COALESCE(g.start_time, g.game_date::timestamptz) ASC NULLS LAST
+                """
+            ),
+            {
+                "season": season,
+                "model_version": effective_model_version,
+                "days_ahead": days_ahead,
+                "include_past_days": include_past_days,
+            },
+        ).fetchall()
+    except SQLAlchemyError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "nfl_fair_lines_schema_not_ready",
+                "message": "NFL fair-lines query failed due to database schema/runtime mismatch.",
+                "database_error": str(exc)[:500],
+            },
+        )
+    finally:
+        session.close()
+
+    market_by_abbr: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for event in market_events:
+        home_abbr = _nfl_team_to_abbr(str(event.get("home_team") or ""))
+        away_abbr = _nfl_team_to_abbr(str(event.get("away_team") or ""))
+        if not home_abbr or not away_abbr:
+            continue
+        market_home_ml, market_away_ml, market_total, market_spread_home, market_depth = _extract_book_market_prices(
+            event
+        )
+        market_by_abbr[(home_abbr, away_abbr)] = {
+            "market_home_ml": market_home_ml,
+            "market_away_ml": market_away_ml,
+            "market_total": market_total,
+            "market_spread_home": market_spread_home,
+            "market_depth": market_depth,
+            "odds_home_team": event.get("home_team"),
+            "odds_away_team": event.get("away_team"),
+        }
+
+    lines: List[Dict[str, Any]] = []
+    market_joined_count = 0
+    for row in rows:
+        mapped = dict(row._mapping)
+        home_abbr = _nfl_team_to_abbr(mapped.get("home_abbr") or mapped.get("home_team")) or str(
+            mapped.get("home_abbr") or mapped.get("home_team") or ""
+        )
+        away_abbr = _nfl_team_to_abbr(mapped.get("away_abbr") or mapped.get("away_team")) or str(
+            mapped.get("away_abbr") or mapped.get("away_team") or ""
+        )
+        home_win_prob = _to_float(mapped.get("home_win_prob"))
+        away_win_prob = _to_float(mapped.get("away_win_prob"))
+        if away_win_prob is None and home_win_prob is not None:
+            away_win_prob = max(0.0, min(1.0, 1.0 - home_win_prob))
+
+        market = market_by_abbr.get((home_abbr, away_abbr), {})
+        market_home_ml = market.get("market_home_ml")
+        market_away_ml = market.get("market_away_ml")
+        market_total = market.get("market_total")
+        market_spread_home = market.get("market_spread_home")
+        has_market = any(v is not None for v in (market_home_ml, market_away_ml, market_total, market_spread_home))
+        if has_market:
+            market_joined_count += 1
+
+        spread_home = _to_float(mapped.get("spread_home"))
+        total_mean = _to_float(mapped.get("total_mean"))
+        ml_edge_prob = None
+        total_edge = None
+        spread_edge = None
+        market_home_prob_no_vig = None
+        if market_home_ml is not None and market_away_ml is not None and home_win_prob is not None:
+            market_home_prob = _american_implied_prob(int(market_home_ml))
+            market_away_prob = _american_implied_prob(int(market_away_ml))
+            if market_home_prob is not None and market_away_prob is not None and (market_home_prob + market_away_prob) > 0:
+                market_home_prob_no_vig = market_home_prob / (market_home_prob + market_away_prob)
+                ml_edge_prob = round(home_win_prob - market_home_prob_no_vig, 4)
+        if market_total is not None and total_mean is not None:
+            total_edge = round(total_mean - float(market_total), 3)
+        if market_spread_home is not None and spread_home is not None:
+            spread_edge = round(spread_home - float(market_spread_home), 3)
+
+        home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
+        away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
+
+        lines.append(
+            {
+                "game_id": str(mapped.get("game_id")),
+                "season": int(mapped.get("season") or season),
+                "start_time": mapped.get("start_time"),
+                "game_date": mapped.get("game_date"),
+                "home_team": home_display,
+                "away_team": away_display,
+                "home_abbr": home_abbr,
+                "away_abbr": away_abbr,
+                "home_win_prob": round(home_win_prob, 4) if home_win_prob is not None else None,
+                "away_win_prob": round(away_win_prob, 4) if away_win_prob is not None else None,
+                "spread_home": round(spread_home, 2) if spread_home is not None else None,
+                "total_mean": round(total_mean, 2) if total_mean is not None else None,
+                "fair_home_ml": _to_int(mapped.get("fair_home_ml")),
+                "fair_away_ml": _to_int(mapped.get("fair_away_ml")),
+                "model_version": str(mapped.get("model_version") or effective_model_version),
+                "simulation_count": _to_int(mapped.get("simulation_count")),
+                "projection_created_at": mapped.get("projection_created_at"),
+                "market_home_ml": market_home_ml,
+                "market_away_ml": market_away_ml,
+                "market_total": market_total,
+                "market_spread_home": market_spread_home,
+                "market_home_prob_no_vig": (
+                    round(market_home_prob_no_vig, 4) if market_home_prob_no_vig is not None else None
+                ),
+                "ml_edge_prob": ml_edge_prob,
+                "total_edge": total_edge,
+                "spread_edge": spread_edge,
+                "market_joined": has_market,
+            }
+        )
+
+    return {
+        "season": season,
+        "model_version": effective_model_version,
+        "count": len(lines),
+        "lines": lines,
+        "window": {
+            "days_ahead": days_ahead,
+            "include_past_days": include_past_days,
+        },
+        "diagnostics": {
+            "odds_feed_status": "degraded" if odds_feed_error else ("ok" if market_events else "empty"),
+            "odds_feed_error": odds_feed_error,
+            "odds_events_seen": len(market_events),
+            "market_joined_count": market_joined_count,
+            "bookmakers": resolved_bookmakers.split(","),
+            "kosedge_only": market_joined_count == 0,
         },
     }
 
@@ -3022,8 +3340,8 @@ def nfl_props_board(
                 WHERE season = :season
                   AND week = :week
                   AND model_version = :model_version
-                  AND (:market_key IS NULL OR market_key = :market_key)
-                  AND (:team IS NULL OR team = :team)
+                  AND (CAST(:market_key AS text) IS NULL OR market_key = CAST(:market_key AS text))
+                  AND (CAST(:team AS text) IS NULL OR team = CAST(:team AS text))
                   AND confidence >= :min_confidence
                   AND GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) >= :min_abs_edge
                 ORDER BY confidence DESC, GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) DESC
@@ -3041,7 +3359,20 @@ def nfl_props_board(
                 "limit": limit,
             },
         ).fetchall()
-        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+        serialized = [dict(r._mapping) for r in rows]
+        with_market = sum(
+            1
+            for row in serialized
+            if row.get("market_over_price") is not None or row.get("market_under_price") is not None
+        )
+        return {
+            "count": len(serialized),
+            "rows": serialized,
+            "diagnostics": {
+                "market_joined_count": with_market,
+                "kosedge_only": with_market == 0 and len(serialized) > 0,
+            },
+        }
     finally:
         session.close()
 

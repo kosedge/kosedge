@@ -28,6 +28,62 @@ def normalize_name_key(value: str) -> str:
     return compact
 
 
+def initial_last_name_key(value: str) -> Optional[str]:
+    """Bridge nflverse-style 'D.Maye' and Odds-API 'Drake Maye' to a shared key."""
+    parts = normalize_name_key(value).split()
+    if len(parts) < 2:
+        return None
+    first = parts[0]
+    last = parts[-1]
+    if not first or not last:
+        return None
+    return f"{first[0]} {last}"
+
+
+def prop_player_match_keys(*, player_uid: Optional[str], player_name: Optional[str]) -> List[str]:
+    """Stable lookup keys for joining baselines to prop market snapshots.
+
+    Historical Odds-API snapshots often have null player_uid and full names, while
+    projection baselines use nflverse abbreviations with resolved UIDs. Index and
+    lookup with uid, normalized full name, and initial+last so either side can join.
+    """
+    keys: List[str] = []
+    seen: set[str] = set()
+
+    def _add(key: str) -> None:
+        if key and key not in seen:
+            seen.add(key)
+            keys.append(key)
+
+    if player_uid is not None and str(player_uid).strip():
+        _add(f"uid:{str(player_uid).strip()}")
+    name = str(player_name or "").strip()
+    if name:
+        normalized = normalize_name_key(name)
+        if normalized:
+            _add(f"name:{normalized}")
+        initial_last = initial_last_name_key(name)
+        if initial_last:
+            _add(f"il:{initial_last}")
+    return keys
+
+
+_PROP_SPORTSBOOK_RANK = {"draftkings": 0, "fanduel": 1}
+
+
+def prop_market_snapshot_rank(market: Any) -> tuple:
+    """Lower rank is preferred when multiple books quote the same player/market."""
+    book = str(getattr(market, "sportsbook", None) or "").strip().lower()
+    book_rank = _PROP_SPORTSBOOK_RANK.get(book, 50)
+    has_both = 0 if (getattr(market, "over_price", None) is not None and getattr(market, "under_price", None) is not None) else 1
+    captured = getattr(market, "captured_at", None)
+    try:
+        captured_ts = float(captured.timestamp()) if captured is not None else 0.0
+    except Exception:
+        captured_ts = 0.0
+    return (has_both, book_rank, -captured_ts)
+
+
 def _safe_float(value: Any, default: float = 0.0) -> float:
     try:
         if value is None:

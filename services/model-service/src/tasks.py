@@ -106,6 +106,8 @@ from .services.nfl_player_identity import (
     apply_manual_mapping_resolution,
     compute_identity_quality_snapshot,
     persist_identity_quality_snapshot,
+    prop_market_snapshot_rank,
+    prop_player_match_keys,
     resolve_and_persist_player_identity,
 )
 from .services.nfl_totals_calibration import (
@@ -7955,7 +7957,7 @@ def materialize_nfl_player_props_edges(
         market_rows = session.execute(
             text(
                 """
-                SELECT DISTINCT ON (player_name, market_key, line)
+                SELECT DISTINCT ON (player_name, market_key, line, sportsbook)
                   id,
                   season,
                   week,
@@ -7964,6 +7966,7 @@ def materialize_nfl_player_props_edges(
                   player_uid,
                   player_name,
                   team,
+                  sportsbook,
                   market_key,
                   line,
                   over_price,
@@ -7972,16 +7975,27 @@ def materialize_nfl_player_props_edges(
                 FROM nfl_player_prop_market_snapshots
                 WHERE season = :season
                   AND week = :week
-                ORDER BY player_name, market_key, line, captured_at DESC
+                ORDER BY player_name, market_key, line, sportsbook, captured_at DESC
                 """
             ),
             {"season": int(season), "week": int(target_week)},
         ).fetchall()
+        # Index by uid / normalized name / initial+last so abbreviated baselines
+        # (D.Maye) join to Odds-API full names (Drake Maye) even when snapshot uid is null.
         market_lookup: Dict[tuple[str, str], Any] = {}
+        market_lookup_rank: Dict[tuple[str, str], tuple] = {}
         for market in market_rows:
-            identity_key = str(market.player_uid) if market.player_uid is not None else str(market.player_name).strip().lower()
-            key = (identity_key, str(market.market_key))
-            market_lookup[key] = market
+            market_key = str(market.market_key)
+            rank = prop_market_snapshot_rank(market)
+            for identity_key in prop_player_match_keys(
+                player_uid=str(market.player_uid) if market.player_uid is not None else None,
+                player_name=str(market.player_name or ""),
+            ):
+                key = (identity_key, market_key)
+                prior = market_lookup_rank.get(key)
+                if prior is None or rank < prior:
+                    market_lookup[key] = market
+                    market_lookup_rank[key] = rank
 
         for row in baselines:
             resolved_player_uid = str(row.player_uid) if row.player_uid is not None else None
@@ -8020,7 +8034,10 @@ def materialize_nfl_player_props_edges(
                         "model_version": str(model_version),
                     },
                 )
-            player_key = str(resolved_player_uid or str(row.player_name or "").strip().lower())
+            player_match_keys = prop_player_match_keys(
+                player_uid=resolved_player_uid,
+                player_name=str(row.player_name or ""),
+            )
             markets = [
                 ("pass_yds", float(row.pass_yards_mean or 0.0), float(row.pass_yards_std or 4.0)),
                 ("rush_yds", float(row.rush_yards_mean or 0.0), float(row.rush_yards_std or 4.0)),
@@ -8029,7 +8046,11 @@ def materialize_nfl_player_props_edges(
                 ("anytime_td", float(row.anytime_td_prob or 0.0), 0.16),
             ]
             for market_key, model_mean, model_std in markets:
-                market = market_lookup.get((player_key, market_key))
+                market = None
+                for identity_key in player_match_keys:
+                    market = market_lookup.get((identity_key, market_key))
+                    if market is not None:
+                        break
                 line = float(market.line) if (market is not None and market.line is not None) else (
                     0.5 if market_key == "anytime_td" else float(model_mean)
                 )
@@ -8230,18 +8251,32 @@ def pull_nfl_player_prop_market_snapshots(
                     if market_key is None:
                         continue
                     outcomes = market.get("outcomes") or []
+                    by_player_line: Dict[tuple[str, Optional[float]], Dict[str, Any]] = {}
                     for outcome in outcomes:
                         player_name = str(outcome.get("description") or outcome.get("name") or "").strip()
                         if not player_name:
                             continue
                         side = str(outcome.get("name") or "").strip().lower()
                         line = _safe_float(outcome.get("point"))
-                        over_price = _safe_int(outcome.get("price")) if side == "over" else None
-                        under_price = _safe_int(outcome.get("price")) if side == "under" else None
                         if market_key == "anytime_td":
                             line = 0.5
-                            if side not in {"yes", "no", "over", "under"}:
-                                over_price = _safe_int(outcome.get("price"))
+                        row_key = (player_name, line)
+                        bundled = by_player_line.setdefault(
+                            row_key,
+                            {"player_name": player_name, "line": line, "over_price": None, "under_price": None},
+                        )
+                        price = _safe_int(outcome.get("price"))
+                        if side == "over" or (market_key == "anytime_td" and side in {"yes", "over"}):
+                            bundled["over_price"] = price
+                        elif side == "under" or (market_key == "anytime_td" and side in {"no", "under"}):
+                            bundled["under_price"] = price
+                        elif market_key == "anytime_td" and side not in {"yes", "no", "over", "under"}:
+                            # Some books emit player name as the outcome side for ATD.
+                            bundled["over_price"] = price
+                    captured_at = _parse_iso_datetime(details.get("commence_time")) or _now_utc()
+                    for (player_name, line), bundled in by_player_line.items():
+                        over_price = bundled["over_price"]
+                        under_price = bundled["under_price"]
                         implied_over = _american_implied_prob(over_price) if over_price is not None else None
                         implied_under = _american_implied_prob(under_price) if under_price is not None else None
                         identity = resolve_and_persist_player_identity(
@@ -8278,6 +8313,7 @@ def pull_nfl_player_prop_market_snapshots(
                                 ON CONFLICT (sportsbook, captured_at, player_name, market_key, COALESCE(line, -9999))
                                 DO UPDATE SET
                                   game_id = EXCLUDED.game_id,
+                                  player_uid = COALESCE(EXCLUDED.player_uid, nfl_player_prop_market_snapshots.player_uid),
                                   over_price = COALESCE(EXCLUDED.over_price, nfl_player_prop_market_snapshots.over_price),
                                   under_price = COALESCE(EXCLUDED.under_price, nfl_player_prop_market_snapshots.under_price),
                                   implied_prob_over = COALESCE(EXCLUDED.implied_prob_over, nfl_player_prop_market_snapshots.implied_prob_over),
@@ -8291,7 +8327,7 @@ def pull_nfl_player_prop_market_snapshots(
                                 "game_id": _to_uuid_or_none(game_lookup.get(event_id)),
                                 "external_game_id": event_id,
                                 "sportsbook": sportsbook,
-                                "captured_at": _parse_iso_datetime(details.get("commence_time")) or _now_utc(),
+                                "captured_at": captured_at,
                                 "player_uid": identity.player_uid,
                                 "player_name": player_name,
                                 "team": None,
@@ -8306,7 +8342,6 @@ def pull_nfl_player_prop_market_snapshots(
                                 "metadata": json.dumps(
                                     {
                                         "raw_market_key": market_key_raw,
-                                        "outcome_side": side,
                                         "identity_status": identity.status,
                                         "identity_rule": identity.rule_used,
                                         "resolver_version": identity.resolver_version,

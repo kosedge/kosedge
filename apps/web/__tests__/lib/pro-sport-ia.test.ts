@@ -41,6 +41,20 @@ describe("pro sport IA", () => {
     expect(propsSection?.links.every((link) => link.status !== "placeholder")).toBe(true);
   });
 
+  it("points NFL fair lines to the dedicated board", () => {
+    const content = buildSportOverviewContent("nfl", "NFL");
+    const sections = buildSportOverviewSections({
+      sportKey: "nfl",
+      base: "/pro/nfl",
+      edgeBoardHref: "/edge-board/nfl",
+      content,
+    });
+    const marketSection = sections.find((section) => section.title === content.sectionTitles.market);
+    const fairLines = marketSection?.links.find((link) => link.label === "Fair lines");
+    expect(fairLines?.href).toBe("/pro/nfl/fair-lines");
+    expect(fairLines?.status).toBe("active");
+  });
+
   it("adds NFL-only team intel section with active links", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
@@ -54,6 +68,8 @@ describe("pro sport IA", () => {
     expect(intelSection).toBeDefined();
     expect(intelSection?.links.map((link) => link.label)).toEqual([
       "Projections hub",
+      "Fair lines board",
+      "Props board",
       "Fantasy draft board",
       "MVP & OPOY race",
       "2026 NFL wall chart",
@@ -65,6 +81,8 @@ describe("pro sport IA", () => {
     ]);
     expect(intelSection?.links.map((link) => link.href)).toEqual([
       "/pro/nfl/projections",
+      "/pro/nfl/fair-lines",
+      "/pro/nfl/props",
       "/pro/nfl/fantasy",
       "/pro/nfl/awards",
       "/wall-chart/nfl-2026",

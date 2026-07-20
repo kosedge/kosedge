@@ -181,6 +181,7 @@ class _PropsSession:
                 player_uid="uid-player-a",
                 player_name="Player A",
                 team="BUF",
+                sportsbook="draftkings",
                 market_key="rec_yds",
                 line=71.5,
                 over_price=-110,
@@ -207,6 +208,16 @@ class _PropsSession:
         return None
 
 
+def test_prop_player_match_keys_bridge_abbrev_and_full_names() -> None:
+    abbrev_keys = identity.prop_player_match_keys(player_uid="uid-1", player_name="D.Maye")
+    full_keys = identity.prop_player_match_keys(player_uid=None, player_name="Drake Maye")
+    assert "uid:uid-1" in abbrev_keys
+    assert "il:d maye" in abbrev_keys
+    assert "il:d maye" in full_keys
+    assert "name:drake maye" in full_keys
+    assert set(abbrev_keys) & set(full_keys) == {"il:d maye"}
+
+
 def test_props_materialization_integration_uses_resolved_uid(monkeypatch) -> None:
     session = _PropsSession()
     monkeypatch.setattr(tasks, "SessionLocal", lambda: session)
@@ -221,6 +232,67 @@ def test_props_materialization_integration_uses_resolved_uid(monkeypatch) -> Non
     assert payload["prop_edges_upserted"] >= 1
     assert session.committed is True
     assert any(row.get("player_uid") == "uid-player-a" for row in session.inserts)
+
+
+def test_props_materialization_joins_full_name_snapshot_to_abbrev_baseline(monkeypatch) -> None:
+    """Odds-API full names + null uid must still attach market prices to D.Last baselines."""
+
+    class _JoinSession(_PropsSession):
+        def execute(self, sql, params=None):
+            query = str(sql)
+            if "FROM nfl_player_projection_baselines" in query and "model_version" in query:
+                row = SimpleNamespace(
+                    season=2025,
+                    week=17,
+                    team="NE",
+                    player_id="p-maye",
+                    player_uid="uid-maye",
+                    player_name="D.Maye",
+                    position="QB",
+                    game_id=None,
+                    pass_yards_mean=240.0,
+                    pass_yards_std=35.0,
+                    rush_yards_mean=20.0,
+                    rush_yards_std=10.0,
+                    receiving_yards_mean=0.0,
+                    receiving_yards_std=1.0,
+                    receptions_mean=0.0,
+                    receptions_std=0.5,
+                    anytime_td_prob=0.22,
+                )
+                return _Result(rows=[row])
+            if "FROM nfl_player_prop_market_snapshots" in query and "SELECT DISTINCT ON" in query:
+                row = SimpleNamespace(
+                    id="snap-maye",
+                    season=2025,
+                    week=17,
+                    game_id=None,
+                    player_id=None,
+                    player_uid=None,
+                    player_name="Drake Maye",
+                    team=None,
+                    sportsbook="draftkings",
+                    market_key="pass_yds",
+                    line=249.5,
+                    over_price=-115,
+                    under_price=-105,
+                    captured_at=None,
+                )
+                return _Result(rows=[row])
+            return super().execute(sql, params)
+
+    session = _JoinSession()
+    monkeypatch.setattr(tasks, "SessionLocal", lambda: session)
+
+    payload = tasks.materialize_nfl_player_props_edges(season=2025, week=17, model_version="nfl-player-v1")
+
+    assert payload["prop_edges_upserted"] >= 1
+    pass_yds = [row for row in session.inserts if row.get("market_key") == "pass_yds"]
+    assert pass_yds
+    assert pass_yds[0]["market_over_price"] == -115
+    assert pass_yds[0]["market_under_price"] == -105
+    assert pass_yds[0]["edge_over"] is not None
+    assert pass_yds[0]["line"] == 249.5
 
 
 class _QualitySession:
