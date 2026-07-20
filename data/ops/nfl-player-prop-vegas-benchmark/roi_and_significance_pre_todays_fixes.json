@@ -4,57 +4,57 @@
   "roi_by_method": {
     "old": {
       "staked": 285000.0,
-      "profit": -23901.77828564798,
+      "profit": -26583.358589824595,
       "n_bets": 2850,
-      "roi_pct": -8.387
+      "roi_pct": -9.327
     },
     "current": {
       "staked": 285000.0,
-      "profit": -16679.94540464051,
+      "profit": -22479.060683722302,
       "n_bets": 2850,
-      "roi_pct": -5.853
+      "roi_pct": -7.887
     },
     "new": {
       "staked": 285000.0,
-      "profit": -19173.90296731694,
+      "profit": -18849.64327339619,
       "n_bets": 2850,
-      "roi_pct": -6.728
+      "roi_pct": -6.614
     }
   },
   "win_rate_95ci_wilson": {
     "old": {
-      "point": 0.4863,
-      "low": 0.468,
-      "high": 0.5047
+      "point": 0.4811,
+      "low": 0.4627,
+      "high": 0.4994
     },
     "current": {
-      "point": 0.5,
-      "low": 0.4817,
-      "high": 0.5183
+      "point": 0.4888,
+      "low": 0.4704,
+      "high": 0.5071
     },
     "new": {
-      "point": 0.4954,
-      "low": 0.4771,
-      "high": 0.5138
+      "point": 0.4958,
+      "low": 0.4775,
+      "high": 0.5141
     }
   },
   "paired_win_rate_deltas_95ci_normal_approx": {
     "current_minus_old": {
-      "delta": 0.0137,
-      "ci_95_low": -0.0123,
-      "ci_95_high": 0.0396,
+      "delta": 0.0077,
+      "ci_95_low": -0.0182,
+      "ci_95_high": 0.0337,
       "significant": false
     },
     "new_minus_current": {
-      "delta": -0.0046,
-      "ci_95_low": -0.0305,
-      "ci_95_high": 0.0214,
+      "delta": 0.007,
+      "ci_95_low": -0.0189,
+      "ci_95_high": 0.033,
       "significant": false
     },
     "new_minus_old": {
-      "delta": 0.0091,
-      "ci_95_low": -0.0168,
-      "ci_95_high": 0.0351,
+      "delta": 0.0147,
+      "ci_95_low": -0.0112,
+      "ci_95_high": 0.0407,
       "significant": false
     }
   }

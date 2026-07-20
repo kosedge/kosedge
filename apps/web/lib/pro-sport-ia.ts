@@ -182,6 +182,20 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
     status: "active",
   },
   {
+    href: "/pro/nfl/fantasy",
+    label: "Fantasy draft board",
+    hint: "Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers and scoring toggles.",
+    premium: true,
+    status: "active",
+  },
+  {
+    href: "/pro/nfl/awards",
+    label: "MVP & OPOY race",
+    hint: "Real projected award contenders with the supporting team + stat evidence behind each rank.",
+    premium: true,
+    status: "active",
+  },
+  {
     href: "/wall-chart/nfl-2026",
     label: "2026 NFL wall chart",
     hint: "Printable 24×18 schedule tracker for laminated wet-erase use.",
@@ -191,7 +205,7 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
   {
     href: "/pro/nfl/teams",
     label: "Team intel hub",
-    hint: "Team cards, filters, and direct jump to depth/stats/injuries.",
+    hint: "Team cards, filters, and direct jump to depth/stats/injuries/tendencies.",
     premium: true,
     status: "active",
   },

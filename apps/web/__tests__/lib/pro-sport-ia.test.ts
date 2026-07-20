@@ -54,6 +54,8 @@ describe("pro sport IA", () => {
     expect(intelSection).toBeDefined();
     expect(intelSection?.links.map((link) => link.label)).toEqual([
       "Projections hub",
+      "Fantasy draft board",
+      "MVP & OPOY race",
       "2026 NFL wall chart",
       "Team intel hub",
       "League stats",
@@ -63,6 +65,8 @@ describe("pro sport IA", () => {
     ]);
     expect(intelSection?.links.map((link) => link.href)).toEqual([
       "/pro/nfl/projections",
+      "/pro/nfl/fantasy",
+      "/pro/nfl/awards",
       "/wall-chart/nfl-2026",
       "/pro/nfl/teams",
       "/pro/nfl/stats",

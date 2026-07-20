@@ -650,6 +650,196 @@ after this addendum's changes:
 
 ---
 
+## Addendum (2026-07-19, part 3): re-measure after today's volume/TD formula fixes
+
+Today's production fixes to `nfl_player_projection_engine.py` (and the
+related hydration fixes) landed *after* every number in the sections
+above was measured. Most critically: `targets_mean` for WR/RB was
+drastically undercounted (real target share × an arbitrary small constant
+instead of real team pass attempts — roughly doubling elite WR1 season
+receiving yards once fixed); `rec_tds_mean` for WR/TE/RB was undercounted;
+QB `carries_mean`/`rush_tds_mean` were undercounted for mobile QBs; RB
+`rush_tds_mean` was refit down (~40% too high); backup-QB volume inflation
+and rookie-baseline survivorship bias were fixed in hydration. None of
+those had been checked against this real closing-line sample. This
+addendum is the apples-to-apples re-measurement: same 156 games / 2,850
+bets, same real historical closing lines already paid for (**no new API
+credits**), same walk-forward `compute_benchmark.py` pipeline — but with
+today's live production formulas.
+
+### Freshness check (are we grading today's model, not stale tables?)
+
+`compute_benchmark.py` does **not** read materialized box-score / baseline
+projection tables. For every sample game it:
+
+1. rebuilds walk-forward trailing features from real
+   `nfl_dp_player_usage_weekly` / team situational rows (strictly prior
+   weeks, this season),
+2. calls live `baseline_projection_from_features()` for OLD/CURRENT, and
+3. re-runs live `simulate_team_player_box_scores()` (2,000 replicates,
+   stable sha256 seed) for NEW.
+
+So rematerializing production tables was unnecessary — re-running the
+script is sufficient to grade today's code. Confirmed: 5,735
+`odds_api_historical` snapshot rows still cover the same 156 games.
+
+**Important methodological note:** the "OLD" arm in this script forces
+`team_snap_share=0` and neutral opponent factors, but it still calls the
+*current* `baseline_projection_from_features()`. Today's volume/TD
+coefficient fixes therefore move OLD as well as CURRENT — OLD is no
+longer a pure freeze of the pre-session volume formulas. Treat OLD here
+as "flat formula without snap-share/opponent adjustments," not as
+"literally yesterday's coefficients."
+
+### Before → after, same 156-game / 2,850-bet sample
+
+| | Before today's fixes | **After today's fixes** |
+|---|---|---|
+| OLD win% / ROI | 48.1% / **-9.33%** | 48.6% / **-8.39%** |
+| CURRENT win% / ROI | 48.9% / **-7.89%** | **50.0%** / **-5.85%** |
+| NEW win% / ROI | 49.6% / **-6.61%** | 49.5% / **-6.73%** |
+
+| After (Wilson 95% CI) | Win rate | 95% CI |
+|---|---|---|
+| OLD | 48.6% | [46.8%, 50.5%] |
+| CURRENT | 50.0% | [48.2%, 51.8%] |
+| NEW | 49.5% | [47.7%, 51.4%] |
+
+| Paired delta (after) | Δ win rate | 95% CI | Significant? |
+|---|---|---|---|
+| CURRENT − OLD | +1.37pp | [-1.23pp, +3.96pp] | No |
+| NEW − CURRENT | **-0.46pp** | [-3.05pp, +2.14pp] | No |
+| NEW − OLD | +0.91pp | [-1.68pp, +3.51pp] | No |
+
+**Honest top-line:** still not profitable. None clear the ~52.4% -110
+breakeven. But the ranking flipped: **CURRENT is now the best arm on both
+win rate and ROI** (was NEW). CURRENT's ROI improved by a real ~2.0pp
+(-7.89% → -5.85%); NEW is essentially flat-to-slightly-worse (-6.61% →
+-6.73%). That is a meaningful directional win for the flat-formula
+volume fixes on the market bar, without yet being a breakthrough to
+profitability — and it is *not* statistically significant vs. OLD at this
+sample size (CURRENT's CI upper bound 51.8% still sits below breakeven).
+
+### Conviction calibration after the fixes
+
+| | Before high / low | **After high / low** |
+|---|---|---|
+| OLD | 48.6% (n=2,443) / 45.0% (n=407) | 49.3% (n=1,895) / 47.2% (n=955) |
+| CURRENT | 48.7% (n=2,411) / 50.1% (n=439) | 49.3% (n=1,889) / **51.3%** (n=961) |
+| NEW | **52.2%** (n=647) / 48.8% (n=2,203) | **51.2%** (n=514) / 49.2% (n=2,336) |
+
+NEW still shows the right-direction high>low gap (51.2% vs 49.2%), but
+the absolute high-conviction win rate slipped ~1pp and the filter
+shrank further (647 → 514). CURRENT's high-conviction bets still do
+**not** beat its low-conviction bets — same calibration failure the
+first addendum flagged for the flat formula.
+
+### The previously-promising receiving-yards high-conviction cut weakened
+
+| Cut (`new`, high conviction) | Before | **After** |
+|---|---|---|
+| Receiving yards | 52.7% (n=328), CI [47.3%, 58.1%] | **50.4%** (n=272), CI [44.5%, 56.3%] |
+| Receiving yards, position=RB | 59.4% (n=101) | **54.2%** (n=48) |
+| Rushing yards | 52.5% (n=181) | **53.3%** (n=105) |
+
+The receiving-yards high-conviction lead that survived the batch-2
+holdout in part 2 **did not strengthen after the volume fixes** — it
+moved back toward a coin flip on the point estimate, and the RB slice
+lost roughly half its n as means shifted. Rushing-yards high-conviction
+held roughly flat at a still-interesting but small-n 53.3%. Do not treat
+the earlier 52.7%/59.4% figures as still operative under today's code.
+
+By market overall (`new` after): pass 49.1%, rush **50.4%** (was 48.2%),
+rec **49.2%** (was 50.4%). So the volume fixes helped NEW on rush and
+hurt it slightly on receiving — consistent with the box-score engine
+already having partially compensated for the old undercounted
+`targets_mean` via Dirichlet team-volume allocation, so raising the
+flat baselines moved CURRENT more than NEW.
+
+### MAE / bias vs. truth (same graded sample) — where the fixes actually landed
+
+Signed bias = model mean − actual (negative = underprojecting):
+
+| | CURRENT receiving bias | NEW receiving bias | CURRENT overall MAE |
+|---|---|---|---|
+| Before | **-24.6 yd** (mean proj 12.0 vs actual 36.6) | -13.1 yd (proj 23.5) | 29.3 |
+| **After** | **-12.5 yd** (mean proj 24.1) | **-11.2 yd** (proj 25.4) | **26.1** |
+
+The `targets_mean` fix did what it was supposed to on the flat formula:
+CURRENT receiving bias roughly halved and mean projected receiving yards
+roughly doubled. NEW's receiving mean only rose ~+1.9 yd on average
+(box-score allocation was already doing a lot of the lifting), which is
+why NEW's market win rate barely moved while CURRENT's did.
+
+Side-flip rates confirm the means actually moved on the bets that
+matter: 24.5% of CURRENT receiving sides flipped vs. the pre-fix run;
+15.6% of NEW receiving sides flipped. Pass yards for CURRENT were
+unchanged (0 flips — today's pass-volume path for the graded props was
+unaffected).
+
+### Remaining miscalibration worth naming (not fixed in this pass)
+
+1. **Receiving is still systematically low vs. both truth and the
+   market**, especially for high-line WR1s. On this sample after the
+   fix: WR receiving bias −15.8 yd; for lines ≥50, mean proj 47.9 vs
+   mean line 65.7 vs mean actual 70.5. CURRENT still favors the under on
+   ~73% of receiving bets (`mean_vs_line` = −6.6 yd). That residual gap
+   is real, but the largest individual misses mix genuine volume
+   undercount with walk-forward role-collapse cases (e.g. a real WR with
+   line 38.5 projecting 4.9 after a trailing-feature wipeout) — not a
+   single coefficient I could honestly refit from this pass without
+   conflating those mechanisms. Left unfixed rather than guess.
+2. **NEW pass yards remain badly under vs. the market**
+   (`mean_vs_line` = −31.9 yd, only 24% over-side) — this was already
+   true before today's fixes (pass means barely moved) and is a
+   pre-existing box-score allocation problem, not a regression from the
+   volume/TD work.
+
+### Updated overall verdict
+
+**Still not a proven betting edge.** What changed after today's formula
+fixes, stated without rounding toward either story:
+
+- The flat CURRENT arm improved on the market bar by a real amount
+  (~+1.1pp win rate, ~+2.0pp ROI) and is now the best of the three —
+  consistent with the `targets_mean` fix being a real root-cause volume
+  correction, not just an MAE cosmetic.
+- NEW did **not** improve in lockstep; its previous receiving
+  high-conviction lead weakened under the new means. The part-2 signal
+  should be treated as superseded for staking decisions under today's
+  code.
+- Absolute profitability is still negative for every arm; no win-rate CI
+  clears 52.4%; no pairwise methodology delta is statistically
+  significant.
+- Recommended framing, updated: the volume/TD fixes moved the flat
+  projection layer closer to both truth and the market, and that
+  movement shows up as a real (still-unprofitable) ROI improvement on
+  CURRENT. They did not unlock a confirmed prop edge, and they removed
+  some of the earlier conviction-cut optimism rather than confirming it.
+
+### Testing / artifacts (this addendum)
+
+No production code changes in this pass — measurement and report only.
+Model-service suite re-confirmed before the re-run:
+**229 passed, 7 failed**, all 7 the same pre-existing known failures
+listed in earlier sections (`test_classify_nfl_readiness_*` ×2,
+`test_team_strength_from_record_handles_basic_cases`,
+`test_nfl_edges_today_filters_low_confidence`,
+`test_simulator_baseline_unchanged_without_matchup_features`,
+`test_run_nfl_walkforward_backtest_*` ×2); `test_nfl_supervised_retrain.py`
+deselected as instructed. **No new regressions.**
+
+- `data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records.json`,
+  `benchmark_summary.json`, `roi_and_significance.json` — overwritten
+  with the post-fix 156-game re-run (intended behavior).
+- `raw_prop_records_pre_todays_fixes.json`,
+  `benchmark_summary_pre_todays_fixes.json`,
+  `roi_and_significance_pre_todays_fixes.json` — snapshots of the
+  part-2 combined-sample outputs, preserved for the before/after
+  comparison above.
+
+---
+
 ## Testing
 
 New pure scoring/grading functions

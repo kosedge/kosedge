@@ -8,6 +8,7 @@ const VIEW_META: Array<{ key: NflTeamIntelView; label: string }> = [
   { key: "depth-chart", label: "Depth Chart" },
   { key: "injuries", label: "Injuries" },
   { key: "splits", label: "Splits" },
+  { key: "tendencies", label: "Tendencies" },
 ];
 
 export default function TeamIntelSectionNav({

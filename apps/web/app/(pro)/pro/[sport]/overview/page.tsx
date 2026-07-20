@@ -199,6 +199,34 @@ export default async function SportOverviewPage({
             </span>
           </Link>
         ) : null}
+        {sportKey === "nfl" ? (
+          <Link
+            href="/pro/nfl/fantasy"
+            className="rounded-2xl border border-kos-gold/30 bg-linear-to-br from-kos-gold/10 via-black/30 to-black/55 p-6 transition hover:border-kos-gold/50 hover:bg-kos-gold/10"
+          >
+            <h2 className="text-xl font-semibold text-kos-gold">Fantasy Draft Board</h2>
+            <p className="mt-2 text-sm text-kos-text/80">
+              Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers, position filters, and scoring toggles.
+            </p>
+            <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
+              Open draft board →
+            </span>
+          </Link>
+        ) : null}
+        {sportKey === "nfl" ? (
+          <Link
+            href="/pro/nfl/awards"
+            className="rounded-2xl border border-white/12 bg-black/30 p-6 transition hover:border-kos-gold/40"
+          >
+            <h2 className="text-xl font-semibold text-kos-text">MVP &amp; OPOY Race</h2>
+            <p className="mt-2 text-sm text-kos-text/70">
+              Real projected award contenders with the team success + stat evidence behind every ranking.
+            </p>
+            <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
+              View award race →
+            </span>
+          </Link>
+        ) : null}
       </section>
     </main>
   );

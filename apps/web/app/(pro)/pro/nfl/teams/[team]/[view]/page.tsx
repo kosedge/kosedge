@@ -5,6 +5,7 @@ import InjuryStatusPanel from "@/components/pro/InjuryStatusPanel";
 import TeamIntelFilterBar from "@/components/pro/TeamIntelFilterBar";
 import TeamIntelSectionNav from "@/components/pro/TeamIntelSectionNav";
 import TeamIntelStatCards from "@/components/pro/TeamIntelStatCards";
+import TeamTendencyPanels, { type SituationTabKey } from "@/components/pro/TeamTendencyPanels";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
 import { fetchNflIntel, formatIntelValueWithRank, formatTeamRecordWithRank, type NflIntelResponseRow } from "@/lib/nfl-intel";
 import {
@@ -16,6 +17,15 @@ import {
   resolveTeamCode,
   teamDisplayName,
 } from "@/lib/nfl-team-intel";
+import {
+  fetchNflQbSituationalSplits,
+  fetchNflTeamTendencyProfileResolved,
+  type QbSituationType,
+  type TendencyPerspective,
+} from "@/lib/nfl-tendencies";
+
+const SITUATION_TAB_KEYS: SituationTabKey[] = ["down_distance", "score_state", "field_position"];
+const QB_SITUATION_KEYS: QbSituationType[] = ["down_type", "pressure", "score_state", "field_position"];
 
 type TeamIntelTableProps = {
   title: string;
@@ -128,6 +138,30 @@ export default async function NflTeamIntelViewPage({
     week: week ?? undefined,
   };
 
+  const perspective: TendencyPerspective = firstQueryValue(rawSearch.perspective) === "defense" ? "defense" : "offense";
+  const situationParam = firstQueryValue(rawSearch.situation);
+  const activeSituation: SituationTabKey = SITUATION_TAB_KEYS.includes(situationParam as SituationTabKey)
+    ? (situationParam as SituationTabKey)
+    : "down_distance";
+  const qbSituationParam = firstQueryValue(rawSearch.qbSituation);
+  const activeQbSituation: QbSituationType = QB_SITUATION_KEYS.includes(qbSituationParam as QbSituationType)
+    ? (qbSituationParam as QbSituationType)
+    : "pressure";
+
+  const tendencyData =
+    view === "tendencies"
+      ? await (async () => {
+          const profile = await fetchNflTeamTendencyProfileResolved({ season: season ?? 2026, team: selectedTeam, perspective });
+          const qbSplits = await fetchNflQbSituationalSplits({
+            season: profile.season,
+            team: selectedTeam,
+            minDropbacks: 10,
+            limit: 200,
+          });
+          return { profile, qbSplits };
+        })()
+      : null;
+
   const standingsRow = standings.rows.find((row) => row.team === selectedTeam);
   const statsRow = stats.rows.find((row) => row.team === selectedTeam);
   const statsRankMaps = buildMetricRankMaps(statsComparison.rows, [
@@ -224,9 +258,9 @@ export default async function NflTeamIntelViewPage({
         <TeamIntelStatCards row={statsRow} comparisonRows={statsComparison.rows} />
       </section>
 
-      {(stats.error || depth.error || injuries.error || rosters.error) && (
+      {(stats.error || depth.error || injuries.error || rosters.error || tendencyData?.profile.error) && (
         <section className="mt-4 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-200">
-          {[stats.error, depth.error, injuries.error, rosters.error].filter(Boolean).join(" ")}
+          {[stats.error, depth.error, injuries.error, rosters.error, tendencyData?.profile.error].filter(Boolean).join(" ")}
         </section>
       )}
 
@@ -314,6 +348,22 @@ export default async function NflTeamIntelViewPage({
               ]}
             />
           </div>
+        ) : null}
+
+        {view === "tendencies" && tendencyData ? (
+          <TeamTendencyPanels
+            team={selectedTeam}
+            season={tendencyData.profile.season}
+            requestedSeason={tendencyData.profile.requestedSeason}
+            usedFallback={tendencyData.profile.usedFallback}
+            filters={{ season: season ?? undefined, week: week ?? undefined }}
+            perspective={perspective}
+            activeSituation={activeSituation}
+            activeQbSituation={activeQbSituation}
+            situational={tendencyData.profile.situational}
+            direction={tendencyData.profile.direction}
+            qbSplits={tendencyData.qbSplits.rows}
+          />
         ) : null}
       </section>
     </main>

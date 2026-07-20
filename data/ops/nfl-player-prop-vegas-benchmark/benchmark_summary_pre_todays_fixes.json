@@ -8,23 +8,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 2850,
-        "wins": 1386,
-        "win_rate": 0.4863
+        "wins": 1371,
+        "win_rate": 0.4811
       },
       "high_conviction": {
-        "n": 1895,
-        "wins": 935,
-        "win_rate": 0.4934
+        "n": 2443,
+        "wins": 1188,
+        "win_rate": 0.4863
       },
       "low_conviction": {
-        "n": 955,
-        "wins": 451,
-        "win_rate": 0.4723
+        "n": 407,
+        "wins": 183,
+        "win_rate": 0.4496
       },
       "edge_call_accuracy": {
-        "n": 2678,
-        "correct": 1297,
-        "accuracy": 0.4843
+        "n": 2768,
+        "correct": 1327,
+        "accuracy": 0.4794
       }
     },
     "current": {
@@ -32,23 +32,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 2850,
-        "wins": 1425,
-        "win_rate": 0.5
+        "wins": 1393,
+        "win_rate": 0.4888
       },
       "high_conviction": {
-        "n": 1889,
-        "wins": 932,
-        "win_rate": 0.4934
+        "n": 2411,
+        "wins": 1173,
+        "win_rate": 0.4865
       },
       "low_conviction": {
-        "n": 961,
-        "wins": 493,
-        "win_rate": 0.513
+        "n": 439,
+        "wins": 220,
+        "win_rate": 0.5011
       },
       "edge_call_accuracy": {
-        "n": 2688,
-        "correct": 1342,
-        "accuracy": 0.4993
+        "n": 2781,
+        "correct": 1365,
+        "accuracy": 0.4908
       }
     },
     "new": {
@@ -56,23 +56,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 2850,
-        "wins": 1412,
-        "win_rate": 0.4954
+        "wins": 1413,
+        "win_rate": 0.4958
       },
       "high_conviction": {
-        "n": 514,
-        "wins": 263,
-        "win_rate": 0.5117
+        "n": 647,
+        "wins": 338,
+        "win_rate": 0.5224
       },
       "low_conviction": {
-        "n": 2336,
-        "wins": 1149,
-        "win_rate": 0.4919
+        "n": 2203,
+        "wins": 1075,
+        "win_rate": 0.488
       },
       "edge_call_accuracy": {
-        "n": 2191,
-        "correct": 1094,
-        "accuracy": 0.4993
+        "n": 2358,
+        "correct": 1172,
+        "accuracy": 0.497
       }
     }
   },
@@ -130,23 +130,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 285,
-        "wins": 140,
-        "win_rate": 0.4912
+        "wins": 138,
+        "win_rate": 0.4842
       },
       "high_conviction": {
-        "n": 137,
+        "n": 138,
         "wins": 70,
-        "win_rate": 0.5109
+        "win_rate": 0.5072
       },
       "low_conviction": {
-        "n": 148,
-        "wins": 70,
-        "win_rate": 0.473
+        "n": 147,
+        "wins": 68,
+        "win_rate": 0.4626
       },
       "edge_call_accuracy": {
-        "n": 254,
-        "correct": 126,
-        "accuracy": 0.4961
+        "n": 256,
+        "correct": 125,
+        "accuracy": 0.4883
       }
     },
     "old__rush_yds": {
@@ -154,23 +154,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 820,
-        "wins": 403,
-        "win_rate": 0.4915
+        "wins": 386,
+        "win_rate": 0.4707
       },
       "high_conviction": {
-        "n": 532,
-        "wins": 271,
-        "win_rate": 0.5094
+        "n": 587,
+        "wins": 280,
+        "win_rate": 0.477
       },
       "low_conviction": {
-        "n": 288,
-        "wins": 132,
-        "win_rate": 0.4583
+        "n": 233,
+        "wins": 106,
+        "win_rate": 0.4549
       },
       "edge_call_accuracy": {
-        "n": 760,
-        "correct": 373,
-        "accuracy": 0.4908
+        "n": 768,
+        "correct": 361,
+        "accuracy": 0.4701
       }
     },
     "current__rush_yds": {
@@ -178,23 +178,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 820,
-        "wins": 415,
-        "win_rate": 0.5061
+        "wins": 392,
+        "win_rate": 0.478
       },
       "high_conviction": {
-        "n": 546,
-        "wins": 275,
-        "win_rate": 0.5037
+        "n": 594,
+        "wins": 279,
+        "win_rate": 0.4697
       },
       "low_conviction": {
-        "n": 274,
-        "wins": 140,
-        "win_rate": 0.5109
+        "n": 226,
+        "wins": 113,
+        "win_rate": 0.5
       },
       "edge_call_accuracy": {
-        "n": 786,
-        "correct": 402,
-        "accuracy": 0.5115
+        "n": 791,
+        "correct": 383,
+        "accuracy": 0.4842
       }
     },
     "new__rush_yds": {
@@ -202,23 +202,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 820,
-        "wins": 413,
-        "win_rate": 0.5037
+        "wins": 395,
+        "win_rate": 0.4817
       },
       "high_conviction": {
-        "n": 105,
-        "wins": 56,
-        "win_rate": 0.5333
+        "n": 181,
+        "wins": 95,
+        "win_rate": 0.5249
       },
       "low_conviction": {
-        "n": 715,
-        "wins": 357,
-        "win_rate": 0.4993
+        "n": 639,
+        "wins": 300,
+        "win_rate": 0.4695
       },
       "edge_call_accuracy": {
-        "n": 616,
-        "correct": 303,
-        "accuracy": 0.4919
+        "n": 681,
+        "correct": 329,
+        "accuracy": 0.4831
       }
     },
     "old__rec_yds": {
@@ -226,23 +226,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 1745,
-        "wins": 852,
-        "win_rate": 0.4883
+        "wins": 854,
+        "win_rate": 0.4894
       },
       "high_conviction": {
-        "n": 1183,
-        "wins": 580,
-        "win_rate": 0.4903
+        "n": 1676,
+        "wins": 824,
+        "win_rate": 0.4916
       },
       "low_conviction": {
-        "n": 562,
-        "wins": 272,
-        "win_rate": 0.484
+        "n": 69,
+        "wins": 30,
+        "win_rate": 0.4348
       },
       "edge_call_accuracy": {
-        "n": 1657,
-        "correct": 809,
-        "accuracy": 0.4882
+        "n": 1739,
+        "correct": 851,
+        "accuracy": 0.4894
       }
     },
     "current__rec_yds": {
@@ -250,23 +250,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 1745,
-        "wins": 865,
-        "win_rate": 0.4957
+        "wins": 856,
+        "win_rate": 0.4905
       },
       "high_conviction": {
-        "n": 1198,
-        "wins": 586,
-        "win_rate": 0.4891
+        "n": 1672,
+        "wins": 823,
+        "win_rate": 0.4922
       },
       "low_conviction": {
-        "n": 547,
-        "wins": 279,
-        "win_rate": 0.5101
+        "n": 73,
+        "wins": 33,
+        "win_rate": 0.4521
       },
       "edge_call_accuracy": {
-        "n": 1646,
-        "correct": 810,
-        "accuracy": 0.4921
+        "n": 1734,
+        "correct": 852,
+        "accuracy": 0.4913
       }
     },
     "new__rec_yds": {
@@ -274,23 +274,23 @@
       "n_pushes": 0,
       "overall": {
         "n": 1745,
-        "wins": 859,
-        "win_rate": 0.4923
+        "wins": 880,
+        "win_rate": 0.5043
       },
       "high_conviction": {
-        "n": 272,
-        "wins": 137,
-        "win_rate": 0.5037
+        "n": 328,
+        "wins": 173,
+        "win_rate": 0.5274
       },
       "low_conviction": {
-        "n": 1473,
-        "wins": 722,
-        "win_rate": 0.4902
+        "n": 1417,
+        "wins": 707,
+        "win_rate": 0.4989
       },
       "edge_call_accuracy": {
-        "n": 1321,
-        "correct": 665,
-        "accuracy": 0.5034
+        "n": 1421,
+        "correct": 718,
+        "accuracy": 0.5053
       }
     }
   }

@@ -1,7 +1,7 @@
 import type { NflIntelResponseRow } from "@/lib/nfl-intel";
 import { formatIntelNumber } from "@/lib/intel-numeric";
 
-export type NflTeamIntelView = "overview" | "stats" | "depth-chart" | "injuries" | "splits";
+export type NflTeamIntelView = "overview" | "stats" | "depth-chart" | "injuries" | "splits" | "tendencies";
 
 export type NflTeamDirectoryEntry = {
   code: string;
@@ -24,6 +24,7 @@ const VIEW_ORDER: NflTeamIntelView[] = [
   "depth-chart",
   "injuries",
   "splits",
+  "tendencies",
 ];
 
 export const NFL_TEAM_DIRECTORY: NflTeamDirectoryEntry[] = [
