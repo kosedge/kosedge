@@ -136,11 +136,29 @@ Reliability notes:
 The following idempotent scripts are now available:
 
 - `scripts/nfl/run-preseason-bootstrap.sh`
-- `scripts/nfl/run-weekly-inseason-refresh.sh`
+- `scripts/nfl/run-weekly-inseason-refresh.sh` (owned tables + game-sim launch hardening)
+- `scripts/nfl/run-weekly-inseason-update.sh` (player path: rolling usage → features → baselines → box scores → props → fantasy/awards)
 - `scripts/nfl/run-daily-market-sim-refresh.sh`
 - `scripts/nfl/run-postweek-grading.sh`
 
 Each script can be re-run safely and writes deterministic artifacts through DB upserts plus backup manifests.
+
+### In-season weekly player update
+
+After week `W` real usage lands, keep future-week projections from freezing at
+the preseason prior:
+
+```bash
+SEASON=2026 WEEK=5 ./scripts/nfl/run-weekly-inseason-update.sh
+# or DP portion only:
+PYTHONPATH=./src python3 -m data_platform_nfl.cli \
+  --seasons 2026 --week 5 --run-inseason-weekly-update
+```
+
+Order: launch-hardening ingest (optional) → `--refresh-rolling-player-usage`
+→ rematerialize `nfl_player_projection_features_weekly` → model-service
+baselines / box-score sims / props / fantasy / awards. Details in
+`docs/NFL_PROPS_FANTASY_FOUNDATION.md` § Weekly update cadence.
 
 ## Preseason bootstrap (team + player priors, rookies)
 

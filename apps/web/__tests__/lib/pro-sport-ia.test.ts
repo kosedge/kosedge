@@ -41,7 +41,7 @@ describe("pro sport IA", () => {
     expect(propsSection?.links.every((link) => link.status !== "placeholder")).toBe(true);
   });
 
-  it("points NFL fair lines to the dedicated board", () => {
+  it("points NFL betting desk path Fair Lines → Edges → Props", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
       sportKey: "nfl",
@@ -49,10 +49,16 @@ describe("pro sport IA", () => {
       edgeBoardHref: "/edge-board/nfl",
       content,
     });
+    expect(content.sectionTitles.market).toBe("Betting Desk");
     const marketSection = sections.find((section) => section.title === content.sectionTitles.market);
-    const fairLines = marketSection?.links.find((link) => link.label === "Fair lines");
-    expect(fairLines?.href).toBe("/pro/nfl/fair-lines");
-    expect(fairLines?.status).toBe("active");
+    expect(marketSection?.subtitle).toContain("Fair Lines → Edges → Props");
+    const labels = marketSection?.links.map((link) => link.label) ?? [];
+    expect(labels.slice(0, 3)).toEqual(["Fair lines", "Edges", "Props"]);
+    expect(marketSection?.links.find((link) => link.label === "Fair lines")?.href).toBe(
+      "/pro/nfl/fair-lines",
+    );
+    expect(marketSection?.links.find((link) => link.label === "Edges")?.href).toBe("/pro/nfl/edges");
+    expect(marketSection?.links.find((link) => link.label === "Props")?.href).toBe("/pro/nfl/props");
   });
 
   it("adds NFL-only team intel section with active links", () => {
@@ -69,6 +75,7 @@ describe("pro sport IA", () => {
     expect(intelSection?.links.map((link) => link.label)).toEqual([
       "Projections hub",
       "Fair lines board",
+      "Edges desk",
       "Props board",
       "Fantasy draft board",
       "MVP & OPOY race",
@@ -82,6 +89,7 @@ describe("pro sport IA", () => {
     expect(intelSection?.links.map((link) => link.href)).toEqual([
       "/pro/nfl/projections",
       "/pro/nfl/fair-lines",
+      "/pro/nfl/edges",
       "/pro/nfl/props",
       "/pro/nfl/fantasy",
       "/pro/nfl/awards",

@@ -55,10 +55,11 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Weekly NFL workflow for board context, key-number execution, matchup briefs, and governance checkpoints.",
+      "Weekly NFL workflow for the betting desk (Fair Lines → Edges → Props), key-number execution, matchup briefs, and governance checkpoints.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
+      market: "Betting Desk",
       intel: "Team Intel",
     },
   },
@@ -192,6 +193,13 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
     status: "active",
   },
   {
+    href: "/pro/nfl/edges",
+    label: "Edges desk",
+    hint: "Actionable game + prop edges that clear Kosedge vs Vegas thresholds.",
+    premium: true,
+    status: "active",
+  },
+  {
     href: "/pro/nfl/props",
     label: "Props board",
     hint: "Player prop model means, fair prices, and confidence by market.",
@@ -301,40 +309,85 @@ export function buildSportOverviewSections({
     {
       title: content.sectionTitles.market,
       subtitle:
-        "Translate market movement into clear model-versus-price decision support.",
-      links: [
-        {
-          href: edgeBoardHref,
-          label: "Edge board",
-          hint: "Open vs best prices, KEI, and directional edge tags.",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: sportKey === "nfl" ? "/pro/nfl/fair-lines" : `${base}/fair-lines`,
-          label: "Fair lines",
-          hint:
-            sportKey === "nfl"
-              ? "Kosedge-made spreads, totals, and fair moneylines for the upcoming slate."
-              : "Neutral model fair-value reference without pick language.",
-          premium: true,
-          status: sportKey === "nfl" ? "active" : "placeholder",
-        },
-        {
-          href: `/pro/kei-lines/${sportKey}`,
-          label: "KEI projections",
-          hint: "Projected spread and total table by matchup.",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: `${base}/execution`,
-          label: "Execution monitor",
-          hint: "Book dispersion, timing windows, and price quality checks.",
-          premium: true,
-          status: "active",
-        },
-      ],
+        sportKey === "nfl"
+          ? "Betting desk path: Fair Lines → Edges → Props, then execution quality."
+          : "Translate market movement into clear model-versus-price decision support.",
+      links:
+        sportKey === "nfl"
+          ? [
+              {
+                href: "/pro/nfl/fair-lines",
+                label: "Fair lines",
+                hint: "Kosedge-made spreads, totals, and fair moneylines for the upcoming slate.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: "/pro/nfl/edges",
+                label: "Edges",
+                hint: "Thresholded game + prop edges ready for the desk.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: "/pro/nfl/props",
+                label: "Props",
+                hint: "Full prop board with model means, fair prices, and market joins.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: edgeBoardHref,
+                label: "Public edge board",
+                hint: "Open vs best prices, KEI, and directional edge tags.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: `/pro/kei-lines/${sportKey}`,
+                label: "KEI projections",
+                hint: "Projected spread and total table by matchup.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: `${base}/execution`,
+                label: "Execution monitor",
+                hint: "Book dispersion, timing windows, and price quality checks.",
+                premium: true,
+                status: "active" as const,
+              },
+            ]
+          : [
+              {
+                href: edgeBoardHref,
+                label: "Edge board",
+                hint: "Open vs best prices, KEI, and directional edge tags.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: `${base}/fair-lines`,
+                label: "Fair lines",
+                hint: "Neutral model fair-value reference without pick language.",
+                premium: true,
+                status: "placeholder" as const,
+              },
+              {
+                href: `/pro/kei-lines/${sportKey}`,
+                label: "KEI projections",
+                hint: "Projected spread and total table by matchup.",
+                premium: true,
+                status: "active" as const,
+              },
+              {
+                href: `${base}/execution`,
+                label: "Execution monitor",
+                hint: "Book dispersion, timing windows, and price quality checks.",
+                premium: true,
+                status: "active" as const,
+              },
+            ],
     },
     {
       title: content.sectionTitles.props,

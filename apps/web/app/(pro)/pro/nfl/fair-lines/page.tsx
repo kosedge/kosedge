@@ -75,6 +75,12 @@ export default async function NflFairLinesPage({
               Back to NFL Overview
             </Link>
             <Link
+              href="/pro/nfl/edges"
+              className="rounded-xl border border-edge-green/35 bg-edge-green/10 px-4 py-2 text-center text-sm font-semibold text-edge-green transition hover:border-edge-green/55"
+            >
+              Edges Desk →
+            </Link>
+            <Link
               href="/pro/nfl/props"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >

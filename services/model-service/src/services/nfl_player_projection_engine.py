@@ -199,7 +199,24 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         qb_starter_share_factor = _clamp(inputs.qb_starter_share, 0.0, 1.0)
         attempts_mean = (22.0 + (34.0 * qb_volume_signal * pass_factor * pace_factor)) * qb_starter_share_factor
         completion_rate = _clamp(0.60 + (0.05 * inputs.target_proxy) - (0.03 * inputs.qb_pressure_factor), 0.50, 0.74)
-        yards_per_attempt = _clamp((6.2 + (1.1 * inputs.target_proxy) - (0.6 * inputs.qb_pressure_factor)) * opp_pass_factor, 5.0, 10.5)
+        # Real bug found while auditing residual pass-yards undercount on
+        # the prop Vegas benchmark (CURRENT pass bias vs truth ≈ -13.5 yd /
+        # mean_vs_line ≈ -4.7 yd after the volume/TD fixes): attempts_mean
+        # was already slightly HIGH vs real (+1.8 att/game on 427 real
+        # starter-ish QB weeks), so the leftover undercount is YPA, not
+        # volume. Confirmed via real weighted fit against 416 real
+        # 2023-2025 QB game-rows (weeks 4-17, attempts>=15, weighted by
+        # attempts): keeping the existing -0.6*qb_pressure_factor slope
+        # (which has the right sign and a real high-pressure YPA drop in
+        # the data) and refitting only the intercept raises it from 6.2
+        # to 6.97 — weighted YPA bias improves from -0.77 to ~0 and RMSE
+        # from 1.86 to 1.69. The old 1.1*target_proxy term is dropped:
+        # QB target_proxy is ~0 in production features (mean 0.001 on this
+        # sample), so it contributed nothing real. Flat league-mean YPA
+        # (6.63) is nearly as good on RMSE; the pressure slope is kept
+        # because the binned data still show a real high-pressure drop
+        # (YPA 6.77 at pressure 0.5-0.7 vs 4.95 at 0.9-1.2).
+        yards_per_attempt = _clamp((6.97 - (0.6 * inputs.qb_pressure_factor)) * opp_pass_factor, 5.0, 10.5)
         pass_yards_mean = attempts_mean * yards_per_attempt
         # Real bug found while re-validating the targets_mean fix (same
         # "arbitrary undercalibrated coefficient" pattern): rush_share is
@@ -259,8 +276,20 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         carries_mean = _clamp(4.0 + (24.0 * inputs.rush_share * pace_factor), 0.0, 32.0)
         targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 11.0)
         rush_yards_mean = carries_mean * _clamp((4.1 + (1.1 * volume_signal)) * opp_rush_factor, 2.8, 7.8)
-        receptions_mean = targets_mean * _clamp(0.62 + (0.16 * inputs.route_proxy), 0.40, 0.92)
-        receiving_yards_mean = receptions_mean * _clamp((6.0 + (2.8 * inputs.target_proxy)) * opp_pass_factor, 4.2, 15.5)
+        # Real bug found while auditing residual receiving-yards undercount
+        # after the targets_mean fix (prop Vegas benchmark, CURRENT arm still
+        # ~-12 yd bias vs truth / ~-6 yd vs market on receiving props):
+        # targets_mean was already roughly right (slightly high), but
+        # catch rate and YPR were both systematically low. Confirmed via
+        # real weighted least squares against 738 real 2023-2025 RB
+        # game-rows (weeks 4-17, targets>=1, receptions>=1, weighted by
+        # targets/receptions): catch_rate ~ 0.81 + 0.02*route_proxy
+        # (R^2≈0 — route adds nothing; weighted mean CR=0.81) vs. the old
+        # 0.62+0.16*route which biased -0.15; YPR/opp ~
+        # 7.06 + 3.65*target_proxy (weighted mean YPR≈7.4) vs. old
+        # 6.0+2.8*target_proxy which biased -1.17 YPR. Refit both.
+        receptions_mean = targets_mean * _clamp(0.81 + (0.02 * inputs.route_proxy), 0.50, 0.95)
+        receiving_yards_mean = receptions_mean * _clamp((7.06 + (3.65 * inputs.target_proxy)) * opp_pass_factor, 4.2, 15.5)
         # Real bug found via a live 2026 spot-check: 7+ different real
         # bell-cow RBs (J.Taylor, D.Henry, C.McCaffrey, J.Gibbs, J.Williams,
         # C.Brown, B.Robinson) were all simultaneously projecting for 15-19
@@ -295,12 +324,26 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # at ~0.10 -- used here since the ratio-of-sums version visibly
         # overshot elite receiving RBs once checked end-to-end.
         rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.10, 0.0, 1.2)
-    elif position in {"WR", "TE"}:
+    elif position == "WR":
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 15.0)
-        receptions_mean = targets_mean * _clamp(0.56 + (0.28 * inputs.route_proxy), 0.38, 0.93)
-        receiving_yards_mean = receptions_mean * _clamp((8.4 + (4.2 * volume_signal)) * opp_pass_factor, 5.5, 23.0)
+        # Real bug found while auditing residual receiving-yards undercount
+        # after the targets_mean fix (prop Vegas benchmark: CURRENT WR
+        # receiving mvl=-9.5 yd / bias vs truth=-15.8 yd, only 22% over-side;
+        # high-line WR1s proj 47.9 vs line 65.7 vs actual 70.5). Feature×
+        # actual decomposition on 2025 baselines showed targets_mean was
+        # already slightly HIGH (+0.9/game) while model YPR sat at ~8.9 vs
+        # real ~13.0 — i.e. the leftover undercount is efficiency, not
+        # volume. Confirmed via real weighted least squares against 1,368
+        # real 2023-2025 WR game-rows (weeks 4-17, targets>=1,
+        # receptions>=1): catch_rate ~ 0.60 + 0.13*route_proxy (weighted
+        # mean CR=0.64; old 0.56+0.28*route was roughly unbiased at +0.02);
+        # YPR/opp ~ 12.78 + 0.23*volume_signal with R^2≈0 — volume adds
+        # nothing, so the honest fit is the flat weighted mean YPR/opp
+        # of 12.8 (old 8.4+4.2*volume biased -3.5 YPR). Refit both.
+        receptions_mean = targets_mean * _clamp(0.60 + (0.13 * inputs.route_proxy), 0.38, 0.93)
+        receiving_yards_mean = receptions_mean * _clamp(12.8 * opp_pass_factor, 5.5, 23.0)
         carries_mean = _clamp(2.0 * inputs.rush_share, 0.0, 4.0)
         rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
         # Real bug found while re-validating the targets_mean fix (same
@@ -341,6 +384,23 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # RB's real 24.0 / QB's real 29.8 for the identical rush_share
         # signal), then rush_tds_mean refit against the corrected value --
         # out of scope for this pass.
+        rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
+    elif position == "TE":
+        opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
+        opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
+        targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 15.0)
+        # Same residual-receiving audit as the WR branch, but TE was
+        # previously sharing WR's catch-rate/YPR coefficients and that was
+        # a real, position-specific miscalibration: real TE catch rate is
+        # ~0.74 (WLS against 767 real 2023-2025 TE game-rows: 0.72 +
+        # 0.07*route_proxy) vs. WR's ~0.64, and real TE YPR is ~10.3 vs.
+        # WR's ~12.8. Old shared WR formula biased TE catch rate by -0.10
+        # and YPR by -1.13. Split TE onto its own real fits.
+        receptions_mean = targets_mean * _clamp(0.72 + (0.07 * inputs.route_proxy), 0.45, 0.95)
+        receiving_yards_mean = receptions_mean * _clamp(10.3 * opp_pass_factor, 5.5, 20.0)
+        carries_mean = _clamp(2.0 * inputs.rush_share, 0.0, 4.0)
+        rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
+        rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.50, 0.0, 1.5)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
     # else: OL/DL/LB/DB/K/P/LS/ST -- every *_mean stays at its 0.0 default.
     # Real bug found via a live production spot-check: this branch used to

@@ -96,6 +96,51 @@ export default async function SportOverviewPage({
         <WeeklyGamesScroller games={tonightGames} sport={sportKey} />
       </div>
 
+      {sportKey === "nfl" ? (
+        <section className="mt-6">
+          <div className="mb-3 flex items-end justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight text-kos-text">Betting Desk</h2>
+              <p className="mt-1 text-sm text-kos-text/70">
+                Fair Lines → Edges → Props — Kosedge lines into actionable edges.
+              </p>
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Link
+              href="/pro/nfl/fair-lines"
+              className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-5 transition hover:border-kos-gold/45 hover:bg-kos-gold/10"
+            >
+              <h3 className="text-lg font-semibold text-kos-gold">Fair Lines</h3>
+              <p className="mt-2 text-sm text-kos-text/75">
+                Kosedge spreads, totals, and fair moneylines for the slate.
+              </p>
+              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">Open fair lines →</span>
+            </Link>
+            <Link
+              href="/pro/nfl/edges"
+              className="rounded-2xl border border-edge-green/30 bg-edge-green/5 p-5 transition hover:border-edge-green/50 hover:bg-edge-green/10"
+            >
+              <h3 className="text-lg font-semibold text-edge-green">Edges</h3>
+              <p className="mt-2 text-sm text-kos-text/75">
+                Thresholded game + prop edges with side and confidence.
+              </p>
+              <span className="mt-3 inline-block text-sm font-semibold text-edge-green">Open edges desk →</span>
+            </Link>
+            <Link
+              href="/pro/nfl/props"
+              className="rounded-2xl border border-white/12 bg-black/30 p-5 transition hover:border-kos-gold/40"
+            >
+              <h3 className="text-lg font-semibold text-kos-text">Props</h3>
+              <p className="mt-2 text-sm text-kos-text/70">
+                Full player prop board — model means, fair prices, market joins.
+              </p>
+              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">Open props board →</span>
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {sectionLinks.map((section) => (
           <SportOverviewSection

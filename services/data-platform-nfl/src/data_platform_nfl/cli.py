@@ -134,6 +134,35 @@ def main() -> None:
         help="Last real week to treat as 'known' for --refresh-rolling-player-usage",
     )
     parser.add_argument(
+        "--run-inseason-weekly-update",
+        action="store_true",
+        help=(
+            "Data-platform portion of the in-season weekly update: optional "
+            "launch-hardening ingest for --week, rolling usage refresh "
+            "(--through-week or --week), and rematerialize player projection "
+            "features. Prefer scripts/nfl/run-weekly-inseason-update.sh for "
+            "the full DP + model-service loop. Uses the LAST season in --seasons."
+        ),
+    )
+    parser.add_argument(
+        "--skip-ingest",
+        action="store_true",
+        help="With --run-inseason-weekly-update, skip --run-launch-hardening",
+    )
+    parser.add_argument(
+        "--target-week-features-only",
+        action="store_true",
+        help=(
+            "With --run-inseason-weekly-update, rematerialize projection "
+            "features only for --week instead of the full remaining season"
+        ),
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="With --run-inseason-weekly-update, print the DP step plan without writing",
+    )
+    parser.add_argument(
         "--materialize-tendency-profiles",
         action="store_true",
         help=(
@@ -180,8 +209,6 @@ def main() -> None:
         help="Write table row NDJSON exports in addition to DB-backed manifest",
     )
     args = parser.parse_args()
-    from .ops import export_data_ownership_snapshot, run_launch_hardening_cycle
-
     seasons = _parse_seasons(args.seasons)
     if args.run_preseason_bootstrap:
         from .preseason_hydration import run_preseason_bootstrap
@@ -190,6 +217,21 @@ def main() -> None:
             season=seasons[-1],
             prior_season=args.prior_season,
             use_market_signal=not args.no_market_signal,
+        )
+    elif args.run_inseason_weekly_update:
+        from .inseason_weekly_update import run_data_platform_inseason_weekly_update
+
+        target_week = args.week if args.week is not None else args.through_week
+        if target_week is None:
+            raise SystemExit(
+                "--week (or --through-week) is required with --run-inseason-weekly-update"
+            )
+        result = run_data_platform_inseason_weekly_update(
+            season=seasons[-1],
+            week=int(target_week),
+            skip_ingest=args.skip_ingest,
+            rematerialize_remaining_weeks=not args.target_week_features_only,
+            dry_run=args.dry_run,
         )
     elif args.refresh_rolling_player_usage:
         from .preseason_hydration import refresh_future_player_usage_from_rolling_real_weeks
@@ -201,6 +243,8 @@ def main() -> None:
             through_week=args.through_week,
         )
     elif args.run_launch_hardening:
+        from .ops import run_launch_hardening_cycle
+
         result = run_launch_hardening_cycle(
             seasons=seasons,
             week=args.week,
@@ -209,6 +253,8 @@ def main() -> None:
             export_dir=args.backup_export_dir,
         )
     elif args.backup_owned_data:
+        from .ops import export_data_ownership_snapshot
+
         result = export_data_ownership_snapshot(
             seasons=seasons,
             week=args.week,

@@ -840,6 +840,185 @@ deselected as instructed. **No new regressions.**
 
 ---
 
+## Addendum (2026-07-20): receiving YPR/catch-rate + QB YPA refits
+
+Part 3 left CURRENT as the best arm at **50.0% / −5.85% ROI**, still
+short of the −110 breakeven bar (~52.4%), with two named residual biases:
+(1) receiving still systematically low vs truth and market after the
+`targets_mean` fix, especially WR1s; (2) NEW pass yards badly under vs
+the market (`mean_vs_line` ≈ −32 yd). This pass root-caused both with
+real weighted fits (same methodology as the TD / `targets_mean`
+comments in `nfl_player_projection_engine.py`), shipped the supported
+coefficient changes, and re-ran the same 156-game / 2,850-bet sample.
+
+### Root causes (data-driven, not guessed constants)
+
+1. **Receiving undercount was efficiency, not targets.** On 2025
+   production baselines joined to real usage (WR n=1,545):
+   `targets_mean` was already slightly *high* (+0.9/game) while model
+   YPR sat at ~8.9 vs real ~13.0 and model catch rate ~0.53 vs real
+   ~0.61. Confirmed via WLS on 2023–2025 game-rows (weeks 4–17,
+   targets≥1, receptions≥1):
+   - **WR YPR/opp:** flat weighted mean **12.8** (old `8.4+4.2*volume`
+     biased −3.5 YPR; volume slope R²≈0 — dropped).
+   - **WR catch rate:** `0.60 + 0.13*route_proxy` (old roughly unbiased).
+   - **TE** was incorrectly sharing WR coeffs: real TE catch rate ~0.74
+     and YPR ~10.3 — split onto its own fits (`0.72+0.07*route`, flat
+     YPR 10.3).
+   - **RB:** catch rate `0.81+0.02*route` (old biased −0.15); YPR
+     `7.06+3.65*target_proxy` (old biased −1.17 YPR).
+
+2. **Pass undercount was YPA, not attempts.** On 427 real starter-ish
+   QB weeks, `attempts_mean` was already slightly *high* (+1.8) while
+   pass yards were low (−14.8). WLS on 416 QB game-rows (attempts≥15):
+   keeping the existing `−0.6*qb_pressure_factor` slope and refitting
+   only the intercept raises it **6.2 → 6.97**; the inert
+   `1.1*target_proxy` term (QB `target_proxy` mean ≈ 0.001) was dropped.
+
+3. **NEW pass residual** is still a box-score team-volume haircut vs the
+   flat formula (NEW pass `mean_vs_line` improved −31.9 → −7.3 but is
+   not fully closed). Not a new clear coefficient bug this pass — left
+   as a known allocation/context gap.
+
+4. **DB priced edges (2025 w4–17, identity-joined, `market_over_price IS
+   NOT NULL`):** n=1,002 across 14 weeks / `nfl-player-v1`. Still shows
+   the *pre-rematerialization* picture (pass mvl −19.7, rec −4.9, rush
+   −0.9) — production baselines/edges have **not** been rematerialized
+   with today's YPR/YPA code yet. Historical Odds-API snapshots still
+   have `player_uid` NULL (0/1,977 for 2025), so uid joins to baselines
+   return 0 rows; the graded walk-forward sample remains the clean
+   apples-to-apples market bar.
+
+### Before → after, same 156-game / 2,850-bet sample
+
+| | Before (part 3) | **After (YPR/CR + YPA)** |
+|---|---|---|
+| OLD win% / ROI | 48.6% / **−8.39%** | 49.7% / **−6.62%** |
+| CURRENT win% / ROI | 50.0% / **−5.85%** | **50.5%** / **−5.11%** |
+| NEW win% / ROI | 49.5% / **−6.73%** | **50.7%** / **−4.76%** |
+
+| After (Wilson 95% CI) | Win rate | 95% CI |
+|---|---|---|
+| OLD | 49.7% | [47.8%, 51.5%] |
+| CURRENT | 50.5% | [48.6%, 52.3%] |
+| NEW | 50.7% | [48.8%, 52.5%] |
+
+| Paired delta (after) | Δ win rate | 95% CI | Significant? |
+|---|---|---|---|
+| CURRENT − OLD | +0.81pp | [-1.79pp, +3.40pp] | No |
+| NEW − CURRENT | +0.21pp | [-2.39pp, +2.81pp] | No |
+| NEW − OLD | +1.02pp | [-1.58pp, +3.61pp] | No |
+
+**Honest top-line:** still not profitable overall. None clear ~52.4%.
+But ranking flipped again: **NEW is now best on both win rate and ROI**
+(was CURRENT after part 3). CURRENT ROI improved ~0.7pp (−5.85% →
+−5.11%); NEW improved ~2.0pp (−6.73% → −4.76%). Gap to −110 breakeven:
+~1.7pp win rate / ~4.8pp ROI on the best arm. No pairwise delta is
+statistically significant; NEW's CI upper bound (52.5%) just kisses
+breakeven.
+
+Note: OLD moved too because this benchmark's "OLD" arm only disables
+`team_snap_share` / opponent-defense factors — it still calls the same
+`baseline_projection_from_features`, so YPR/YPA refits correctly flow
+into OLD as well. That is a methodology caveat, not a measurement bug.
+
+### Bias / MAE movement (the fixes' actual landing zone)
+
+| Cut | Before | **After** |
+|---|---|---|
+| CURRENT receiving bias vs truth | −12.5 yd | **−3.0 yd** |
+| CURRENT receiving `mean_vs_line` | −6.6 yd (27% over) | **+2.9 yd** (65% over) |
+| CURRENT pass bias vs truth | −13.5 yd | **+14.4 yd** |
+| CURRENT pass `mean_vs_line` | −4.7 yd (39% over) | **+23.2 yd** (72% over) |
+| NEW pass `mean_vs_line` | −31.9 yd | **−7.3 yd** |
+| NEW receiving bias vs truth | −11.2 yd | **−1.1 yd** |
+
+Receiving efficiency refits did what they were supposed to on MAE/bias.
+Pass YPA refit overshot end-to-end vs truth (attempts were already
+slightly high, so unbiased YPA × slightly-high attempts → positive
+yards bias). A counterfactual that rescales CURRENT pass means back to
+zero bias vs actual *hurts* betting metrics on this sample (50.5% →
+50.0%, ROI −5.11% → −6.04%), so the shipped intercept was kept — the
+overshoot vs truth is directionally helpful against a market line that
+itself sits below actual pass yards on this sample (line 225 vs actual
+234). That is an honest tension to re-check on a fresh sample after
+rematerialization, not a reason to silently re-fit toward MAE.
+
+### Conviction calibration after the fixes
+
+| | Before high / low | **After high / low** |
+|---|---|---|
+| CURRENT | 49.3% (n=1,889) / 51.3% (n=961) | **51.2%** (n=1,844) / 49.1% (n=1,006) |
+| NEW | 51.2% (n=514) / 49.2% (n=2,336) | **52.4%** (n=275) / 50.5% (n=2,575) |
+
+CURRENT high-conviction finally beats low-conviction (the calibration
+failure part 3 still had). NEW high-conviction lands exactly on the
+−110 breakeven point estimate (52.4%, n=275) — interesting but small-n
+and not a license to size up without a holdout.
+
+### Closest-to-+EV slices remaining (not a staking recommendation)
+
+| Slice | Win% | ROI | n |
+|---|---|---|---|
+| CURRENT pass, high conviction | **56.3%** | **+6.4%** | 142 |
+| NEW pass, high conviction | **56.9%** | **+7.2%** | 102 |
+| NEW rush, high conviction | 53.8% | +1.7% | 106 |
+| CURRENT pass overall | 54.4% | +2.6% | 285 |
+
+Receiving overall is still coin-flip after the efficiency fix (CURRENT
+rec 49.7%, WR 48.4%) — bias is much better, but side-picking vs the
+market did not unlock. TE receiving improved to 50.7% (was 44.0%).
+
+### Optional market-shrinkage blend — tested, not shipped
+
+Walk-forward blends `model_mean' = (1−α)·mean + α·line` for α∈{0…0.5}
+on held-out weeks (train w4–10 / test w11–17) and held-out seasons
+(train 2023→test 2024; train 2023–24→test 2025) produced **identical**
+win rate and ROI for every α under this benchmark's grading rule
+(favored side never flips for α<1; only conviction/edge magnitude
+changes, and this grader bets every sided prop). No held-out ROI
+improvement → **not shipped**.
+
+### STD / conviction thresholding
+
+No change to `STD_CALIBRATION_FACTOR` this pass. NEW's existing
+rush/receiving wideners already put high-conviction near breakeven;
+CURRENT's high>low gap reappeared from the mean fixes alone without a
+std retune. Edge-threshold filters remain an open lever for a future
+pass with a dedicated holdout.
+
+### Updated overall verdict
+
+**Still not a proven betting edge**, but this is the closest the sample
+has been: best arm NEW at 50.7% / −4.76% ROI (~1.7pp / ~4.8pp short of
+−110). Real, testable coefficient bugs in receiving efficiency and QB
+YPA were fixed with WLS evidence; conviction calibration on CURRENT
+flipped to the right direction; a few pass/rush high-conviction slices
+clear breakeven on point estimates with modest n. Rematerialize
+production baselines/edges before treating live board numbers as
+post-fix. Market shrinkage and further std retunes were checked and
+honestly rejected or deferred.
+
+### Testing / artifacts (this addendum)
+
+Production code changes in
+`services/model-service/src/services/nfl_player_projection_engine.py`
+(WR/TE split + YPR/CR refits; RB catch-rate/YPR refit; QB YPA intercept
+refit) with regression guards in
+`tests/test_nfl_player_projection_engine.py`. Model-service suite after
+changes: **234 passed, 7 failed** — same 7 pre-existing known failures
+as prior addenda; `test_nfl_supervised_retrain.py` deselected. **No new
+regressions.**
+
+- `raw_prop_records.json`, `benchmark_summary.json`,
+  `roi_and_significance.json` — overwritten with this re-run.
+- `raw_prop_records_pre_ypr_fix.json`,
+  `benchmark_summary_pre_ypr_fix.json`,
+  `roi_and_significance_pre_ypr_fix.json` — part-3 post-volume-fix
+  snapshots preserved for the before/after table above.
+
+---
+
 ## Testing
 
 New pure scoring/grading functions
@@ -852,9 +1031,10 @@ New pure scoring/grading functions
 `test_nfl_player_projection_engine.py`,
 `test_nfl_player_box_score_simulator.py`, `test_nfl_matchup_features.py`,
 and the broader `services/model-service/tests/` suite) were re-run after
-this task's changes — no new regressions; only the pre-existing, already-
-known-and-confirmed failures remain (`test_main.py::test_classify_nfl_readiness_*`
-×2, `test_nfl_data.py::test_team_strength_from_record_handles_basic_cases`,
+this task's changes — **234 passed, 7 failed**; only the pre-existing,
+already-known-and-confirmed failures remain
+(`test_main.py::test_classify_nfl_readiness_*` ×2,
+`test_nfl_data.py::test_team_strength_from_record_handles_basic_cases`,
 `test_nfl_routes.py::test_nfl_edges_today_filters_low_confidence`,
 `test_nfl_simulator.py::test_simulator_baseline_unchanged_without_matchup_features`,
 `test_nfl_tasks.py::test_run_nfl_walkforward_backtest_*` ×2).

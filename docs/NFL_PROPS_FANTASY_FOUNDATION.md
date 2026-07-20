@@ -239,6 +239,21 @@ future rows (tagged `rolling_hydrate_v1`). Run this every week right after
 that week's real usage lands, before re-materializing
 `nfl_player_projection_features_weekly` for the remaining weeks: `python3 -m data_platform_nfl.cli --refresh-rolling-player-usage --through-week <W> --seasons <season>`.
 
+**Preferred one-shot orchestrator** (DP rolling refresh + feature rematerialize
++ baselines / box-score sims / props / fantasy / awards):
+
+```bash
+SEASON=2026 WEEK=5 ./scripts/nfl/run-weekly-inseason-update.sh
+SEASON=2026 WEEK=5 ./scripts/nfl/run-weekly-inseason-update.sh --dry-run
+# DP-only (no model-service calls):
+cd services/data-platform-nfl && PYTHONPATH=./src python3 -m data_platform_nfl.cli \
+  --seasons 2026 --week 5 --run-inseason-weekly-update --dry-run
+```
+
+Set `SKIP_INGEST=1` when week usage is already fresh; `SKIP_FANTASY=1` /
+`SKIP_AWARDS=1` to trim the cheap season boards. Idempotent and safe to re-run.
+See also `docs/NFL_DATA_PLATFORM.md` year-to-year runbook.
+
 ### Backtest verdict
 
 Walk-forward backtested against real 2023-2025 box scores in

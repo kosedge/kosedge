@@ -316,6 +316,65 @@ def test_elite_wr_target_share_produces_realistic_season_volume() -> None:
     assert 1100.0 < season_yards < 1900.0
 
 
+def test_qb_ypa_intercept_matches_real_pressure_adjusted_fit() -> None:
+    # Residual pass-yards undercount after volume fixes was YPA (attempts
+    # already slightly high). Guard the refit intercept 6.97 - 0.6*pressure.
+    qb = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="QB", snap_proxy=0.85, route_proxy=0.0, target_proxy=0.0,
+            rush_share=0.05, red_zone_share=0.10, qb_dropback_factor=1.1, qb_pressure_factor=0.5,
+            team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=1.0,
+            role_confidence=1.0, team_snap_share=0.95, qb_starter_share=1.0,
+        )
+    )
+    ypa = qb["pass_yards_mean"] / qb["attempts_mean"]
+    # At pressure=0.5: 6.97 - 0.3 = 6.67 (opp_pass default 1.0, conf=1.0).
+    assert 6.4 < ypa < 6.9
+    assert qb["pass_yards_mean"] > 200.0
+
+
+def test_receiving_ypr_and_catch_rate_match_real_position_fits() -> None:
+    # Real bug found while auditing residual receiving-yards undercount
+    # after the targets_mean fix: targets were already roughly right, but
+    # catch rate / YPR were systematically low (esp. WR YPR ~8.9 vs real
+    # ~13; TE/RB catch rates sharing an undercalibrated WR-shaped formula).
+    # Guard the position-specific WLS fits shipped against that audit.
+    wr = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="WR", snap_proxy=0.7, route_proxy=0.30, target_proxy=0.22,
+            rush_share=0.0, red_zone_share=0.15, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=1.0, role_confidence=1.0,
+        )
+    )
+    te = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="TE", snap_proxy=0.7, route_proxy=0.30, target_proxy=0.22,
+            rush_share=0.0, red_zone_share=0.15, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=1.0, role_confidence=1.0,
+        )
+    )
+    rb = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="RB", snap_proxy=0.55, route_proxy=0.12, target_proxy=0.12,
+            rush_share=0.40, red_zone_share=0.30, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=1.0, role_confidence=1.0,
+        )
+    )
+    wr_ypr = wr["receiving_yards_mean"] / wr["receptions_mean"]
+    te_ypr = te["receiving_yards_mean"] / te["receptions_mean"]
+    te_cr = te["receptions_mean"] / te["targets_mean"]
+    wr_cr = wr["receptions_mean"] / wr["targets_mean"]
+    rb_cr = rb["receptions_mean"] / rb["targets_mean"]
+    # Flat WR YPR fit is 12.8; TE is 10.3; confidence_scale is 1.0 here so
+    # these should land on the fitted constants (opp_pass default = 1.0).
+    assert 12.3 < wr_ypr < 13.3
+    assert 9.8 < te_ypr < 10.8
+    # TE catch rate must exceed WR at the same route_proxy (real TE ~0.74
+    # vs WR ~0.64); RB catch rate must clear the old ~0.65 underfit.
+    assert te_cr > wr_cr
+    assert rb_cr > 0.75
+
+
 def test_wr_target_volume_scales_down_realistically_by_role() -> None:
     def _proj(target_proxy: float, route_proxy: float, role_confidence: float) -> dict:
         inputs = PlayerFeatureInputs(
