@@ -2731,10 +2731,15 @@ def nfl_fair_lines(
     session = SessionLocal()
     try:
         effective_model_version = model_version or _resolve_active_nfl_model_version(session)
+        # Drive from nfl_dp_schedules (canonical 272-game slate) and pick the
+        # single best matching games-row per matchup. The games table can still
+        # carry timezone-skew duplicates (same SEA/NE kickoff written as both
+        # 2026-09-09 and 2026-09-10 game_date) which would otherwise double the
+        # fair-lines board.
         rows = session.execute(
             text(
                 """
-                SELECT
+                SELECT DISTINCT ON (sch.week, sch.home_team, sch.away_team)
                   g.id AS game_id,
                   g.start_time,
                   g.game_date,
@@ -2752,11 +2757,15 @@ def nfl_fair_lines(
                   p.model_version,
                   p.simulation_count,
                   p.created_at AS projection_created_at
-                FROM games g
-                JOIN seasons s ON s.id = g.season_id
-                JOIN leagues l ON l.id = s.league_id
-                JOIN teams home ON home.id = g.home_team_id
-                JOIN teams away ON away.id = g.away_team_id
+                FROM nfl_dp_schedules sch
+                JOIN leagues l ON l.code = 'nfl'
+                JOIN seasons s ON s.league_id = l.id AND s.season_year = sch.season
+                JOIN teams home ON home.league_id = l.id AND home.abbr = sch.home_team
+                JOIN teams away ON away.league_id = l.id AND away.abbr = sch.away_team
+                JOIN games g
+                  ON g.season_id = s.id
+                 AND g.home_team_id = home.id
+                 AND g.away_team_id = away.id
                 JOIN LATERAL (
                   SELECT *
                   FROM nfl_market_projections np
@@ -2765,14 +2774,19 @@ def nfl_fair_lines(
                   ORDER BY np.created_at DESC
                   LIMIT 1
                 ) p ON TRUE
-                WHERE l.code = 'nfl'
-                  AND s.season_year = :season
+                WHERE sch.season = :season
+                  AND sch.week BETWEEN 1 AND 18
                   AND COALESCE(g.start_time, g.game_date::timestamptz) IS NOT NULL
-                  AND COALESCE(g.start_time, g.game_date::timestamptz)
+                  AND COALESCE(g.start_time, sch.game_date::timestamptz)
                       >= (NOW() - CAST(:include_past_days AS integer) * INTERVAL '1 day')
-                  AND COALESCE(g.start_time, g.game_date::timestamptz)
+                  AND COALESCE(g.start_time, sch.game_date::timestamptz)
                       <= (NOW() + CAST(:days_ahead AS integer) * INTERVAL '1 day')
-                ORDER BY COALESCE(g.start_time, g.game_date::timestamptz) ASC NULLS LAST
+                ORDER BY
+                  sch.week,
+                  sch.home_team,
+                  sch.away_team,
+                  abs(COALESCE(g.game_date, (g.start_time AT TIME ZONE 'America/New_York')::date) - sch.game_date),
+                  g.start_time ASC NULLS LAST
                 """
             ),
             {
@@ -2890,6 +2904,7 @@ def nfl_fair_lines(
             }
         )
 
+    lines.sort(key=lambda row: (str(row.get("start_time") or ""), str(row.get("game_id") or "")))
     return {
         "season": season,
         "model_version": effective_model_version,
