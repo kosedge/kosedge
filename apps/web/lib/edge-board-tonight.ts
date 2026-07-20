@@ -3,6 +3,7 @@ import type { FlatEdgeBoardRow, LegacyEdgeBoardRow } from "@/components/EdgeBoar
 import { flatRowsToLegacy } from "@/components/EdgeBoard";
 import { env } from "@/lib/config/env";
 import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
+import { resolveKeiGames } from "@/lib/resolve-kei-lines";
 import { getSport, SPORTS } from "@/lib/sports";
 
 /** Build a URL slug from away/home team names (e.g. "Duke", "UNC" -> "duke-unc"). */
@@ -65,7 +66,8 @@ export async function getEdgeBoardRows(
     rows = (json as { rows: FlatEdgeBoardRow[] }).rows;
   }
 
-  return mergeKeiIntoEdgeBoardRows(rows, sport);
+  const keiGames = await resolveKeiGames(sport);
+  return mergeKeiIntoEdgeBoardRows(rows, sport, keiGames);
 }
 
 export type TonightGame = {

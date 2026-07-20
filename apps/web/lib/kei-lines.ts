@@ -11,6 +11,8 @@ export type KeiLineGame = {
   id?: string;
   homeTeam: string;
   awayTeam: string;
+  homeAbbr?: string | null;
+  awayAbbr?: string | null;
   commenceTime?: string;
   projSpreadHome: number | null;
   projTotal: number | null;

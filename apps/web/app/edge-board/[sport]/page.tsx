@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import { env } from "@/lib/config/env";
 import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
+import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
+import { resolveKeiGames } from "@/lib/resolve-kei-lines";
 import { getSport, SPORTS } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -44,8 +46,9 @@ async function getRows(sport: string): Promise<EdgeBoardRow[]> {
     rows = (json as { rows: EdgeBoardRow[] }).rows;
   }
 
-  // Merge KEI lines on the page so we always use local kei_lines_*.json (no API cache dependency)
-  return mergeKeiIntoEdgeBoardRows(rows, sport);
+  // NFL: live Kosedge fair-lines → KEINFL columns; other sports: kei_lines_*.json
+  const keiGames = await resolveKeiGames(sport);
+  return mergeKeiIntoEdgeBoardRows(rows, sport, keiGames);
 }
 
 export default async function EdgeBoardSportPage({
@@ -60,6 +63,7 @@ export default async function EdgeBoardSportPage({
   const sportKey = String(resolved?.sport ?? "ncaam");
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const keiCode = getKeiCode(sportKey);
   const rows = await getRows(sportKey);
 
   return (
@@ -83,14 +87,14 @@ export default async function EdgeBoardSportPage({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} • Live odds (Open + Best)
+              {sportName} • Live odds (Open + Best) • {getKeiProductLabel(sportKey)}
             </div>
             <h1 className="text-5xl font-bebas tracking-tight text-kos-gold">
               Today&apos;s Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              Live: Game/Time/Open/Best. KEI columns show our projected line and
-              O/U when available.
+              Same board every sport. Live: Game/Time/Open/Best. {keiCode} Line
+              and {keiCode} O/U are Kosedge projected numbers for {sportName}.
             </p>
           </div>
 
@@ -139,7 +143,7 @@ export default async function EdgeBoardSportPage({
           ))}
         </div>
 
-        <EdgeBoard variant="full" rows={rows} />
+        <EdgeBoard variant="full" rows={rows} sportKey={sportKey} />
 
         <p className="mt-6 text-xs text-gray-500">
           {rows.length

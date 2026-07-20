@@ -1,4 +1,5 @@
 import * as React from "react";
+import { getKeiCode } from "@/lib/kei-brand";
 import { generateGameOverview } from "@/lib/sports";
 
 // Flat API row format (from Odds API / model); kei = our projected line/total
@@ -245,11 +246,15 @@ export function flatRowsToLegacy(flat: FlatEdgeBoardRow[]): LegacyEdgeBoardRow[]
 export default function EdgeBoard({
   variant = "full",
   rows,
+  sportKey = "ncaam",
 }: {
   variant?: Variant;
   rows?: FlatEdgeBoardRow[] | null;
+  /** Sport key drives the KEI column brand (KEICMB, KEINFL, …). Same board layout every sport. */
+  sportKey?: string;
 }) {
   const safeRows = Array.isArray(rows) ? rows : [];
+  const keiCode = getKeiCode(sportKey);
   const edgeGreen = "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
   const hasRealData = safeRows.length > 0;
   const legacy = hasRealData ? flatRowsToLegacy(safeRows) : sampleRows;
@@ -400,8 +405,8 @@ export default function EdgeBoard({
                 <th className="py-2.5 px-3"><HeaderStack a="Open" b="Line" /></th>
                 <th className="py-2.5 px-3"><HeaderStack a="Best" b="Line" /></th>
                 <th className="py-2.5 px-3"><HeaderStack a="Best" b="O/U" /></th>
-                <th className="py-2.5 px-3"><HeaderStack a="KEICMB" b="Line" /></th>
-                <th className="py-2.5 px-3"><HeaderStack a="KEICMB" b="O/U" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a={keiCode} b="Line" /></th>
+                <th className="py-2.5 px-3"><HeaderStack a={keiCode} b="O/U" /></th>
                 <th className="py-2.5 px-3"><HeaderStack a="Edge" b="Line" /></th>
                 <th className="py-2.5 px-3"><HeaderStack a="Edge" b="O/U" /></th>
                 <th className="py-2.5 px-3 text-center"><HeaderStack a="Tag" b="Line" /></th>
@@ -527,7 +532,7 @@ export default function EdgeBoard({
           </table>
         </div>
         <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
-          Live: Game/Time/Open/Best. KEI: our projected line and O/U (when data available). Coming soon: Edge + Tags, sportsbook logos + deep links, Overview/Stats expanders.
+          Live: Game/Time/Open/Best. {keiCode}: Kos Edge Index projected line and O/U (when data available). Edge + Tags fill when {keiCode} is present.
         </div>
       </div>
     </div>

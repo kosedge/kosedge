@@ -1,0 +1,2416 @@
+{
+  "sport": "nfl",
+  "keiCode": "KEINFL",
+  "games": [
+    {
+      "id": "d64508ad-826a-4406-af3c-94294dcf425a",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "SEA",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-09-09T16:00:00-04:00",
+      "projSpreadHome": -3.47,
+      "projTotal": 41.29
+    },
+    {
+      "id": "c7fd5c30-a366-40be-87a0-724462641f08",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "LAR",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-09-10T16:00:00-04:00",
+      "projSpreadHome": -5.8,
+      "projTotal": 45.46
+    },
+    {
+      "id": "0765112e-4d4a-4e4d-9e25-6ed322a39d28",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "MIN",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": 1.53,
+      "projTotal": 43.43
+    },
+    {
+      "id": "32c54be3-4067-4128-9f3b-9cfc8a36d2cd",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "PIT",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -2.27,
+      "projTotal": 42.76
+    },
+    {
+      "id": "35933a05-7653-421f-9488-71e442f19e0e",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "LV",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -2.42,
+      "projTotal": 42.13
+    },
+    {
+      "id": "48507595-9f44-4856-baba-826703d0b903",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "HOU",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": 0.58,
+      "projTotal": 42.95
+    },
+    {
+      "id": "50e29279-f3da-4017-bb31-168ac7251a18",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "PHI",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -7.81,
+      "projTotal": 45.06
+    },
+    {
+      "id": "896d5f5f-8497-4ee9-abd2-56f9280683f1",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "DET",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -7.64,
+      "projTotal": 43.57
+    },
+    {
+      "id": "9c7d0207-b6da-4aa8-b1d7-e4e78fec551f",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "CAR",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": 2.01,
+      "projTotal": 43.89
+    },
+    {
+      "id": "a7d7c0e8-abf8-44df-a445-200e2c1640ea",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "IND",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": 2.59,
+      "projTotal": 44.63
+    },
+    {
+      "id": "a8bc9d10-85a6-4302-b30e-cf2de423d273",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "TEN",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -2.87,
+      "projTotal": 41.32
+    },
+    {
+      "id": "b57c9223-c6c3-4e30-8b13-a0896324297a",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "JAX",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -8.02,
+      "projTotal": 40.08
+    },
+    {
+      "id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+      "homeTeam": "New York Giants",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "NYG",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -0.41,
+      "projTotal": 43.76
+    },
+    {
+      "id": "d6b7382e-c430-47ed-9727-24e92fd40472",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "LAC",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -10.57,
+      "projTotal": 43.36
+    },
+    {
+      "id": "fa77c475-9231-4e1a-8cb5-29d8d22fc75b",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "CIN",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-09-13T16:00:00-04:00",
+      "projSpreadHome": -1.23,
+      "projTotal": 45.3
+    },
+    {
+      "id": "e134adf0-2f84-4878-9e2e-0645849ba29b",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "KC",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-09-14T16:00:00-04:00",
+      "projSpreadHome": -2.43,
+      "projTotal": 42.58
+    },
+    {
+      "id": "3705538b-b7f6-4240-9f68-733844958c24",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "Detroit Lions",
+      "homeAbbr": "BUF",
+      "awayAbbr": "DET",
+      "commenceTime": "2026-09-17T16:00:00-04:00",
+      "projSpreadHome": -5.32,
+      "projTotal": 43.98
+    },
+    {
+      "id": "02a341ec-22b9-43b4-a885-92bff30bc07c",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "TB",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -6.4,
+      "projTotal": 41.06
+    },
+    {
+      "id": "0c33c5d4-77b1-456b-90ac-a3158091a891",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "Philadelphia Eagles",
+      "homeAbbr": "TEN",
+      "awayAbbr": "PHI",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": 6.76,
+      "projTotal": 42.49
+    },
+    {
+      "id": "158f3a3d-7752-4ca0-b048-b57ba9609170",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "KC",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -4.38,
+      "projTotal": 43.53
+    },
+    {
+      "id": "56d76680-794b-474e-a6c6-6c76f48c9f1e",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "BAL",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -7.77,
+      "projTotal": 42.73
+    },
+    {
+      "id": "5787a05a-f48f-49f7-94ac-04133e76bb55",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "CHI",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -3.89,
+      "projTotal": 42.17
+    },
+    {
+      "id": "5d204651-716d-4a84-8c02-78f220b904f8",
+      "homeTeam": "New York Jets",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": 6.02,
+      "projTotal": 42.91
+    },
+    {
+      "id": "7e1eff70-e2d1-4013-b4d0-5330f20d835f",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "Seattle Seahawks",
+      "homeAbbr": "ARI",
+      "awayAbbr": "SEA",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": 7.44,
+      "projTotal": 42.63
+    },
+    {
+      "id": "98bee3e6-a730-451f-b3a3-2935a9d73784",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "DEN",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -3.75,
+      "projTotal": 42.48
+    },
+    {
+      "id": "a0e3e382-22b2-4d2d-96d6-67533f814fcb",
+      "homeTeam": "New England Patriots",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "NE",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -7.46,
+      "projTotal": 43.51
+    },
+    {
+      "id": "a4f75dbf-a5cb-4730-b2b3-4219dc871cdf",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "LAC",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -9.32,
+      "projTotal": 41.03
+    },
+    {
+      "id": "bed1b38b-9cde-4d28-b0f7-60584aff4349",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "HOU",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -4.97,
+      "projTotal": 43.96
+    },
+    {
+      "id": "bee1ea02-2650-4764-91a2-9fba54747ca4",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "ATL",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -2.39,
+      "projTotal": 42.91
+    },
+    {
+      "id": "dc91220b-93a8-4d57-bea2-5b10176d28bf",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "SF",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -10.06,
+      "projTotal": 43.89
+    },
+    {
+      "id": "fac5e1d0-2940-4b5c-96d5-cc87f11a5089",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "DAL",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-09-20T16:00:00-04:00",
+      "projSpreadHome": -5.33,
+      "projTotal": 46.51
+    },
+    {
+      "id": "1aa95225-ac07-41e2-8678-99b9e1cb5bbe",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "LAR",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-09-21T16:00:00-04:00",
+      "projSpreadHome": -9.56,
+      "projTotal": 44.57
+    },
+    {
+      "id": "f0016e2b-6951-4874-a6e9-497ca8ec8662",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "GB",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-09-24T16:00:00-04:00",
+      "projSpreadHome": -6.98,
+      "projTotal": 43.08
+    },
+    {
+      "id": "1a41abdf-49ad-4d57-a30a-18976f7c361a",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "BUF",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -5.0,
+      "projTotal": 43.35
+    },
+    {
+      "id": "1f84cfcd-8c76-46fc-a06e-1c8f687a8a4a",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "TB",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -2.93,
+      "projTotal": 41.25
+    },
+    {
+      "id": "3544a2a7-dd9f-4edb-af78-caf2239c9995",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "CLE",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -0.25,
+      "projTotal": 40.71
+    },
+    {
+      "id": "46ec9828-7cad-4377-881c-5c18f008ff7a",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "DAL",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": 2.14,
+      "projTotal": 45.58
+    },
+    {
+      "id": "492e8bac-c9f9-475e-9d59-9b41082278d7",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "DEN",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": 1.51,
+      "projTotal": 43.63
+    },
+    {
+      "id": "634db30f-3fc6-4f1d-85c1-5f708aa8beea",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "JAX",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": 0.16,
+      "projTotal": 43.16
+    },
+    {
+      "id": "63c688b3-cdd3-4ba4-86d0-9298796578fa",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "PIT",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -0.47,
+      "projTotal": 45.48
+    },
+    {
+      "id": "a1d45639-15fb-4089-ba59-992b52b39a8d",
+      "homeTeam": "New York Giants",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "NYG",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -5.57,
+      "projTotal": 42.55
+    },
+    {
+      "id": "a43a4af4-ff89-4d97-9ed0-89a14ae6ec61",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "DET",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -9.94,
+      "projTotal": 43.36
+    },
+    {
+      "id": "afcafd65-2bde-429b-a25c-d001f0a045da",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "NO",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -6.15,
+      "projTotal": 41.23
+    },
+    {
+      "id": "b9ed70c5-65bf-4b5f-b6f8-eeb8a093807c",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "IND",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": 1.86,
+      "projTotal": 42.31
+    },
+    {
+      "id": "c1824190-9c93-4f23-9d4a-91d40ea20f16",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Seattle Seahawks",
+      "homeAbbr": "WAS",
+      "awayAbbr": "SEA",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": 4.94,
+      "projTotal": 43.01
+    },
+    {
+      "id": "c76949e4-d986-4bd4-8262-1cc0e70b9de1",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "MIA",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": 5.4,
+      "projTotal": 43.58
+    },
+    {
+      "id": "ec8e6cd1-2081-4001-b43e-2b839cae5b90",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "SF",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-09-27T16:00:00-04:00",
+      "projSpreadHome": -10.71,
+      "projTotal": 44.89
+    },
+    {
+      "id": "d02f1521-3a91-4a25-ba1b-eba122e9ad27",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "Philadelphia Eagles",
+      "homeAbbr": "CHI",
+      "awayAbbr": "PHI",
+      "commenceTime": "2026-09-28T16:00:00-04:00",
+      "projSpreadHome": 0.08,
+      "projTotal": 42.86
+    },
+    {
+      "id": "0ae8ae3f-ac93-4bf0-a0a8-117c137941cc",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "CLE",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-10-01T16:00:00-04:00",
+      "projSpreadHome": 1.88,
+      "projTotal": 40.84
+    },
+    {
+      "id": "06879b8e-42de-4a1d-823e-b500235acdc8",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "WAS",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": 0.6,
+      "projTotal": 44.79
+    },
+    {
+      "id": "08c743da-d74e-4547-a3c1-5acb9750d85d",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "BAL",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -10.91,
+      "projTotal": 44.81
+    },
+    {
+      "id": "3a1c6a7b-5a6c-433d-a29b-69eddc5500d8",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "Detroit Lions",
+      "homeAbbr": "CAR",
+      "awayAbbr": "DET",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": 3.34,
+      "projTotal": 43.65
+    },
+    {
+      "id": "4a8b3a64-20bb-46e0-a777-fcd20e9c6a5d",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "CIN",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -0.13,
+      "projTotal": 45.08
+    },
+    {
+      "id": "5f06c66b-4955-4d76-8ce8-d9e07b299a0f",
+      "homeTeam": "New York Giants",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "NYG",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -6.96,
+      "projTotal": 43.35
+    },
+    {
+      "id": "64dd7830-3726-4dcc-bc24-0291e2e6f52a",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "SEA",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -4.86,
+      "projTotal": 41.77
+    },
+    {
+      "id": "6dad8af6-99b5-4abc-ac0d-fd13f02e5f29",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "TB",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": 0.36,
+      "projTotal": 44.49
+    },
+    {
+      "id": "6e6beb8d-5f70-4f9f-8be7-1dee47c53e76",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "BUF",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -3.53,
+      "projTotal": 45.13
+    },
+    {
+      "id": "a760d463-1025-4f9f-a529-0b40f0c0079a",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "CHI",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -10.02,
+      "projTotal": 44.24
+    },
+    {
+      "id": "bfac4f08-e67c-46cc-88f0-303c9cbe97f5",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "MIN",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -6.67,
+      "projTotal": 42.51
+    },
+    {
+      "id": "e3600505-65c1-4c5c-b072-d55ac1d6ae2a",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "PHI",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": 1.15,
+      "projTotal": 44.85
+    },
+    {
+      "id": "f04c00be-2d94-4f5d-811b-d4cc8b9480ca",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "HOU",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -4.27,
+      "projTotal": 44.97
+    },
+    {
+      "id": "f6d23ff7-b891-4528-a39d-ba4d5ab725f2",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "LV",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": 5.87,
+      "projTotal": 42.57
+    },
+    {
+      "id": "fc7b8256-8810-4777-b07a-788928a491e0",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "SF",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-10-04T16:00:00-04:00",
+      "projSpreadHome": -1.97,
+      "projTotal": 43.17
+    },
+    {
+      "id": "91c36ab0-236b-4f15-ba3f-b22ed6275594",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "NO",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-10-05T16:00:00-04:00",
+      "projSpreadHome": -1.81,
+      "projTotal": 42.57
+    },
+    {
+      "id": "4cb73823-57c5-4327-83f2-ee6603e3f983",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "DAL",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-10-08T16:00:00-04:00",
+      "projSpreadHome": -3.38,
+      "projTotal": 44.1
+    },
+    {
+      "id": "0c65baf6-3998-48e1-bc83-bfceaffe8d5b",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "Detroit Lions",
+      "homeAbbr": "ARI",
+      "awayAbbr": "DET",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": 4.84,
+      "projTotal": 43.77
+    },
+    {
+      "id": "0d53ba94-d919-4dc9-b577-b37e7f952fc5",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "GB",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -2.11,
+      "projTotal": 43.93
+    },
+    {
+      "id": "287ea54b-adb5-4c33-8030-f91d8e43f285",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "NO",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -0.46,
+      "projTotal": 40.26
+    },
+    {
+      "id": "305f353b-cd4c-4dc4-8fd0-ae829ab89ea9",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "LAC",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -1.55,
+      "projTotal": 40.91
+    },
+    {
+      "id": "53c89a03-2f02-47c1-96e9-73c486e3c03d",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "TEN",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": 4.35,
+      "projTotal": 40.9
+    },
+    {
+      "id": "56de7bcb-7e76-45bc-9fa8-551bf6394651",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "ATL",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": 3.53,
+      "projTotal": 43.27
+    },
+    {
+      "id": "6b6bf87e-5bbc-40ec-bc0f-f25e067c15ab",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "PIT",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -0.39,
+      "projTotal": 44.48
+    },
+    {
+      "id": "a4efbcab-b168-4c26-8095-cf69b3582697",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "SEA",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -5.0,
+      "projTotal": 43.93
+    },
+    {
+      "id": "a7f474f6-2e8f-4e1d-b266-0555f3eb19f7",
+      "homeTeam": "New England Patriots",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "NE",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -11.07,
+      "projTotal": 42.25
+    },
+    {
+      "id": "ad6e9d29-0d59-4ae4-92d7-74564e10f0d8",
+      "homeTeam": "New York Jets",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": 0.32,
+      "projTotal": 39.8
+    },
+    {
+      "id": "c74a2451-cc71-47fc-810c-ba5211cce520",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "WAS",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": -0.51,
+      "projTotal": 44.07
+    },
+    {
+      "id": "c97fb11a-b815-48d1-8ba1-28784544ee55",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "Philadelphia Eagles",
+      "homeAbbr": "JAX",
+      "awayAbbr": "PHI",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": 0.75,
+      "projTotal": 42.84
+    },
+    {
+      "id": "de9bbacf-82ab-48d3-8024-ae84934565b4",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "MIA",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-10-11T16:00:00-04:00",
+      "projSpreadHome": 1.76,
+      "projTotal": 45.52
+    },
+    {
+      "id": "43673619-ce06-4b71-aa1f-e7985073dd8f",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "LAR",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-10-12T16:00:00-04:00",
+      "projSpreadHome": -1.85,
+      "projTotal": 44.74
+    },
+    {
+      "id": "6ae835cf-0777-4398-93da-2fcf5405c010",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Seattle Seahawks",
+      "homeAbbr": "DEN",
+      "awayAbbr": "SEA",
+      "commenceTime": "2026-10-15T16:00:00-04:00",
+      "projSpreadHome": -0.38,
+      "projTotal": 41.09
+    },
+    {
+      "id": "2192c768-fd1b-4ca3-b8fc-511022ce32d0",
+      "homeTeam": "New England Patriots",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "NE",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -9.28,
+      "projTotal": 42.79
+    },
+    {
+      "id": "2d371533-eb96-4f00-afe5-e7598d168046",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "LAR",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -9.48,
+      "projTotal": 45.44
+    },
+    {
+      "id": "3494f5b8-db3a-4a69-95f3-d9ab11cdda11",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "GB",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -4.04,
+      "projTotal": 44.19
+    },
+    {
+      "id": "36a083d8-e3a2-4ea2-9712-c6ef3dd1cc14",
+      "homeTeam": "New York Giants",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "NYG",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -2.52,
+      "projTotal": 40.31
+    },
+    {
+      "id": "3758fe74-ced6-464d-91c8-aa221cfdf012",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "IND",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -6.75,
+      "projTotal": 43.37
+    },
+    {
+      "id": "4c9883da-d071-4480-b0ac-c74593ef9b4a",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "TB",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -3.21,
+      "projTotal": 43.09
+    },
+    {
+      "id": "7b726aa1-12e1-4ea1-93a2-d4acf56f6881",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "ATL",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": 1.05,
+      "projTotal": 43.16
+    },
+    {
+      "id": "7dfb89f4-e9b9-4722-99e8-9f5ebc96404a",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "PHI",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -9.4,
+      "projTotal": 43.2
+    },
+    {
+      "id": "864a7ef0-4933-47fd-bd69-c61101952d9a",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "KC",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -3.01,
+      "projTotal": 41.44
+    },
+    {
+      "id": "9e45e466-8fe3-47e3-bada-7ebaa0d449cb",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "JAX",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": -0.91,
+      "projTotal": 40.87
+    },
+    {
+      "id": "cd8a1fd1-4357-4cdb-9216-3f71767a0119",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "LV",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": 5.09,
+      "projTotal": 42.31
+    },
+    {
+      "id": "fd3a00ae-f0b8-4a91-8eb1-fc9adc8db212",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "CLE",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-10-18T16:00:00-04:00",
+      "projSpreadHome": 5.87,
+      "projTotal": 41.03
+    },
+    {
+      "id": "dd31700b-7e63-4660-85d4-3b71968a2285",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "SF",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-10-19T16:00:00-04:00",
+      "projSpreadHome": -6.81,
+      "projTotal": 43.9
+    },
+    {
+      "id": "0f286e95-ca0a-40da-869a-de7e605a55ad",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "CHI",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-10-22T16:00:00-04:00",
+      "projSpreadHome": 0.56,
+      "projTotal": 42.62
+    },
+    {
+      "id": "2f835ba1-2e32-413d-ac6e-1793af49c246",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "HOU",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -8.59,
+      "projTotal": 41.67
+    },
+    {
+      "id": "3a0e39c7-3061-4aa0-bd94-67f8f60a4eb3",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "LV",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": 6.67,
+      "projTotal": 43.67
+    },
+    {
+      "id": "3c0cf555-2cf7-4621-8543-c27a43af4bf8",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "BAL",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -5.27,
+      "projTotal": 44.75
+    },
+    {
+      "id": "5a8e96bd-84d7-4070-b880-6eecd3341b6b",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "NO",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -2.08,
+      "projTotal": 41.93
+    },
+    {
+      "id": "61475975-8bb4-425a-a614-0166435ac65a",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "ATL",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": 1.78,
+      "projTotal": 43.12
+    },
+    {
+      "id": "6fc2666c-e44b-49da-9d5b-01fe18927dca",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "ARI",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": 5.47,
+      "projTotal": 42.54
+    },
+    {
+      "id": "aa76bc2b-fb68-49c9-8f65-1add5b5630e4",
+      "homeTeam": "New York Jets",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": 0.24,
+      "projTotal": 41.96
+    },
+    {
+      "id": "b081d5c9-df3e-4ae2-a237-fefbce72e790",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "DET",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -1.78,
+      "projTotal": 43.86
+    },
+    {
+      "id": "b8955c60-b47c-4204-bf15-41adc5e2de85",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "CAR",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": 0.99,
+      "projTotal": 42.7
+    },
+    {
+      "id": "dae69d2a-72f7-4bab-abd9-9caa08519b10",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "SEA",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -4.4,
+      "projTotal": 41.66
+    },
+    {
+      "id": "ed5260eb-d6a4-4110-bc33-964b9f6c341d",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "TEN",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -0.03,
+      "projTotal": 40.4
+    },
+    {
+      "id": "fa88c05e-694f-46a3-b65b-8fd97e6f1204",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "MIN",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-10-25T16:00:00-04:00",
+      "projSpreadHome": -1.2,
+      "projTotal": 41.84
+    },
+    {
+      "id": "bbac5e16-d5ec-44e2-8e58-a27c900a8dc6",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "PHI",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-10-26T16:00:00-04:00",
+      "projSpreadHome": -6.16,
+      "projTotal": 43.5
+    },
+    {
+      "id": "08e347fd-cf82-449e-bb50-2701baf3b7c3",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "GB",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-10-29T16:00:00-04:00",
+      "projSpreadHome": -8.06,
+      "projTotal": 42.94
+    },
+    {
+      "id": "48459c21-70f0-4d08-8b7d-37a40bef5ff2",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "MIA",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": 4.97,
+      "projTotal": 43.09
+    },
+    {
+      "id": "4f317aaf-4e61-4736-b1eb-49c4c8842631",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Philadelphia Eagles",
+      "homeAbbr": "WAS",
+      "awayAbbr": "PHI",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": 4.41,
+      "projTotal": 43.23
+    },
+    {
+      "id": "5a961191-da2e-4695-a957-13cf48fac513",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "DEN",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -2.21,
+      "projTotal": 42.56
+    },
+    {
+      "id": "6adedbdb-69cc-4ddc-b174-aecb7ea4e554",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "PIT",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -3.95,
+      "projTotal": 40.48
+    },
+    {
+      "id": "9f74d28e-dd22-44aa-af96-a4e36cbb779b",
+      "homeTeam": "New York Jets",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -0.98,
+      "projTotal": 40.32
+    },
+    {
+      "id": "ace0d711-cfd0-4e22-889d-6fd46cfc6271",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "BUF",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -3.75,
+      "projTotal": 43.34
+    },
+    {
+      "id": "bfc73ec4-1a06-4feb-b72e-7da368328603",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "TB",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -3.49,
+      "projTotal": 43.34
+    },
+    {
+      "id": "d704333a-a077-4456-83e1-290b8810f44e",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "CIN",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -6.61,
+      "projTotal": 43.99
+    },
+    {
+      "id": "d8832c43-28b9-41fa-9c51-c1ba81091525",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "JAX",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -3.08,
+      "projTotal": 42.96
+    },
+    {
+      "id": "e1dee1df-b315-4e88-9417-d9255567c7cb",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "DET",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -5.67,
+      "projTotal": 41.06
+    },
+    {
+      "id": "e63249aa-879a-44c9-9317-aa7897dd0b65",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "DAL",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -8.45,
+      "projTotal": 45.06
+    },
+    {
+      "id": "eee146ca-01c0-43e9-9596-9135ae2d50cd",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "LAR",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-11-01T15:00:00-05:00",
+      "projSpreadHome": -4.72,
+      "projTotal": 43.86
+    },
+    {
+      "id": "7c385c3b-b835-4a88-a605-619a32f77767",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "SEA",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-11-02T15:00:00-05:00",
+      "projSpreadHome": -7.81,
+      "projTotal": 41.81
+    },
+    {
+      "id": "1e888886-9157-459e-a28e-5864139c8b3e",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "BAL",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-11-05T15:00:00-05:00",
+      "projSpreadHome": -4.22,
+      "projTotal": 42.72
+    },
+    {
+      "id": "03356f02-b1dd-4068-b3f5-a5d1363caa68",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "SEA",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -11.42,
+      "projTotal": 42.82
+    },
+    {
+      "id": "07181c77-df8a-4a2a-adfe-d72d5ca57037",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "IND",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -2.29,
+      "projTotal": 44.43
+    },
+    {
+      "id": "240bfe4a-3379-41c6-b426-bbca1562a798",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "LAC",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -1.44,
+      "projTotal": 39.38
+    },
+    {
+      "id": "360c5bbb-f948-444f-b45f-2bde1f8180a7",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "WAS",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": 6.59,
+      "projTotal": 44.89
+    },
+    {
+      "id": "4d0fb4b7-3da7-4553-86f6-8667063c902a",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "CAR",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": 2.99,
+      "projTotal": 41.36
+    },
+    {
+      "id": "58bdbe7e-177f-4d28-b2bd-9a0edd4e0feb",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "ATL",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -0.5,
+      "projTotal": 43.73
+    },
+    {
+      "id": "5e9abffe-f6f3-4bf9-85ea-13a37a8116bf",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "KC",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -10.78,
+      "projTotal": 42.31
+    },
+    {
+      "id": "87e7b514-b828-4a36-b1d9-8243c8ee99f0",
+      "homeTeam": "New England Patriots",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "NE",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -3.32,
+      "projTotal": 42.9
+    },
+    {
+      "id": "98262946-a09e-4bab-babf-9aa069b13c18",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "CHI",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -3.71,
+      "projTotal": 43.06
+    },
+    {
+      "id": "a31b9347-1688-432e-851b-ae2f9074842d",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "PHI",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -7.91,
+      "projTotal": 43.09
+    },
+    {
+      "id": "a8b97f3c-180b-4c42-8af5-8c2c6b3f12cc",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "SF",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -8.8,
+      "projTotal": 42.54
+    },
+    {
+      "id": "c3d1a5f8-c802-4b07-8adc-becb10c197d6",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "Detroit Lions",
+      "homeAbbr": "MIA",
+      "awayAbbr": "DET",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": 3.79,
+      "projTotal": 43.33
+    },
+    {
+      "id": "da22ecd8-3467-4625-89c8-2826be088a92",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "NO",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-11-08T15:00:00-05:00",
+      "projSpreadHome": -5.17,
+      "projTotal": 39.71
+    },
+    {
+      "id": "c13f78bc-cc13-4185-9fa1-b31ac4ba8517",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "MIN",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-11-09T15:00:00-05:00",
+      "projSpreadHome": 3.72,
+      "projTotal": 41.87
+    },
+    {
+      "id": "70c32094-67aa-4ea5-ac53-38fd9683dacb",
+      "homeTeam": "New York Giants",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "NYG",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-11-12T15:00:00-05:00",
+      "projSpreadHome": -1.61,
+      "projTotal": 44.16
+    },
+    {
+      "id": "249cbb23-93e3-4101-ab22-51e581341c83",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "GB",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": -4.89,
+      "projTotal": 41.02
+    },
+    {
+      "id": "3d64fe07-5a2f-481e-881b-b98423f94930",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "CLE",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 4.12,
+      "projTotal": 39.09
+    },
+    {
+      "id": "44f3c01e-60fc-4ad3-a7be-b98fd23cf59a",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "ATL",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 2.98,
+      "projTotal": 42.71
+    },
+    {
+      "id": "584f17f3-b7e2-4f6c-a1ba-c4ff8b036271",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "DAL",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": -0.25,
+      "projTotal": 44.62
+    },
+    {
+      "id": "6c12c18f-2638-4a82-b5c6-37ba4d10c338",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "TEN",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 4.24,
+      "projTotal": 42.14
+    },
+    {
+      "id": "77eee83a-962d-4f38-9e47-7225c0715868",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "DET",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 0.17,
+      "projTotal": 43.08
+    },
+    {
+      "id": "7c716dd0-0f00-4430-ae6f-fa8c013a33f8",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Seattle Seahawks",
+      "homeAbbr": "LV",
+      "awayAbbr": "SEA",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 5.48,
+      "projTotal": 40.61
+    },
+    {
+      "id": "8346c36f-c732-4e6b-99c8-a0d8faef1221",
+      "homeTeam": "New York Jets",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 6.17,
+      "projTotal": 43.75
+    },
+    {
+      "id": "a836be26-a3c6-4813-b857-aa21f03edb86",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "CIN",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": -2.58,
+      "projTotal": 43.59
+    },
+    {
+      "id": "b6a0c0bd-1bf6-434d-a74f-ef78c4f0db36",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "IND",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": -6.24,
+      "projTotal": 43.09
+    },
+    {
+      "id": "cf150244-de09-4809-8f6e-310ca6f0ba20",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "NO",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": -3.33,
+      "projTotal": 42.34
+    },
+    {
+      "id": "ee87ca9f-2976-4976-92dc-6ef1b6b310da",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "ARI",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-11-15T15:00:00-05:00",
+      "projSpreadHome": 6.66,
+      "projTotal": 44.92
+    },
+    {
+      "id": "a0cb0e3a-3909-4bad-b54a-0133be6829af",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "BAL",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-11-16T15:00:00-05:00",
+      "projSpreadHome": -2.87,
+      "projTotal": 41.51
+    },
+    {
+      "id": "c34e7645-0c7f-475b-b455-bbfffadefa09",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "HOU",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-11-19T15:00:00-05:00",
+      "projSpreadHome": -5.32,
+      "projTotal": 41.88
+    },
+    {
+      "id": "2edbb430-852b-4845-a565-4df29c70e955",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "CHI",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -5.73,
+      "projTotal": 42.12
+    },
+    {
+      "id": "4511f937-774a-4a4d-85e8-f16abcc49d28",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "PHI",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -7.41,
+      "projTotal": 43.25
+    },
+    {
+      "id": "477b483f-59c1-4d81-ac76-64dbab7ed966",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "SF",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -5.41,
+      "projTotal": 40.29
+    },
+    {
+      "id": "597c27dc-9115-4a9f-b08f-3255c73f730e",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "CAR",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": 4.6,
+      "projTotal": 43.23
+    },
+    {
+      "id": "5e64b983-aa8e-4406-b9c5-8c03a2d77322",
+      "homeTeam": "New York Giants",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "NYG",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": 1.89,
+      "projTotal": 41.65
+    },
+    {
+      "id": "7568a8ca-2b5a-4f17-90ab-8f8f7de1c679",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "BUF",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -11.64,
+      "projTotal": 43.4
+    },
+    {
+      "id": "8a348690-eb1d-4ec1-8446-04e384ae251e",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "DET",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -5.92,
+      "projTotal": 43.72
+    },
+    {
+      "id": "a388403e-696c-4e60-ae01-2e064c911f71",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "DEN",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -10.74,
+      "projTotal": 41.49
+    },
+    {
+      "id": "b71feb76-6e6b-47e6-a15e-a5701247d197",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "KC",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -11.83,
+      "projTotal": 43.6
+    },
+    {
+      "id": "c63aaf26-b8bf-43a0-acf7-fab6013ffab7",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "LAC",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -11.21,
+      "projTotal": 40.36
+    },
+    {
+      "id": "d0349dee-b215-407d-91df-45dcfc211da2",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "DAL",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-11-22T15:00:00-05:00",
+      "projSpreadHome": -8.01,
+      "projTotal": 44.74
+    },
+    {
+      "id": "1686d3ca-c2d0-4942-a5f4-4cbb14130895",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "WAS",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-11-23T15:00:00-05:00",
+      "projSpreadHome": 0.02,
+      "projTotal": 44.5
+    },
+    {
+      "id": "28b9b52f-dd2c-43b9-949c-724947fb206b",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "LAR",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-11-25T15:00:00-05:00",
+      "projSpreadHome": -5.9,
+      "projTotal": 45.42
+    },
+    {
+      "id": "6601fec2-df44-4f7e-994d-bbc98d6ada64",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Philadelphia Eagles",
+      "homeAbbr": "DAL",
+      "awayAbbr": "PHI",
+      "commenceTime": "2026-11-26T15:00:00-05:00",
+      "projSpreadHome": 1.53,
+      "projTotal": 43.62
+    },
+    {
+      "id": "cd5e75f6-eaaa-4f74-9b2d-8062644e43eb",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "DET",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-11-26T15:00:00-05:00",
+      "projSpreadHome": -2.8,
+      "projTotal": 43.88
+    },
+    {
+      "id": "d14adf76-1a58-4161-9f4b-fe15223e9de8",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "BUF",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-11-26T15:00:00-05:00",
+      "projSpreadHome": -5.01,
+      "projTotal": 42.73
+    },
+    {
+      "id": "91eaed3f-d160-495d-ae0f-765cced2e98c",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "PIT",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-11-27T15:00:00-05:00",
+      "projSpreadHome": 1.38,
+      "projTotal": 41.47
+    },
+    {
+      "id": "0f292798-8f3b-4c32-af95-76da33ce570a",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "ARI",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": 0.41,
+      "projTotal": 43.94
+    },
+    {
+      "id": "1f5c1b67-0871-408b-a554-938c9bacf9de",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "LAC",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -0.43,
+      "projTotal": 41.01
+    },
+    {
+      "id": "29facea5-1406-4069-b7f7-a4b8a1d46a68",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "IND",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -3.84,
+      "projTotal": 43.15
+    },
+    {
+      "id": "56cf688b-4958-4da9-bd82-337d4283639c",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "JAX",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -9.46,
+      "projTotal": 42.71
+    },
+    {
+      "id": "8cdebb17-9369-49a9-9a8f-d565c854b29e",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Seattle Seahawks",
+      "homeAbbr": "SF",
+      "awayAbbr": "SEA",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": 2.27,
+      "projTotal": 41.64
+    },
+    {
+      "id": "a1339e01-237c-45cb-bc61-4afa2f18503e",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "HOU",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -2.14,
+      "projTotal": 40.66
+    },
+    {
+      "id": "af9b6a6f-2bb2-46ed-a497-8a280d770f9e",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "MIN",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -3.47,
+      "projTotal": 41.23
+    },
+    {
+      "id": "b90f258d-a653-4fa9-bb12-765124317e26",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "CIN",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -3.25,
+      "projTotal": 42.0
+    },
+    {
+      "id": "d7192f7a-befa-4135-8d64-0fe8f0195667",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Las Vegas Raiders",
+      "homeAbbr": "CLE",
+      "awayAbbr": "LV",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -2.98,
+      "projTotal": 39.16
+    },
+    {
+      "id": "eb09d0a5-79fb-4d2a-a796-a9da2c62f4fe",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "MIA",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-11-29T15:00:00-05:00",
+      "projSpreadHome": -4.83,
+      "projTotal": 41.81
+    },
+    {
+      "id": "baa65993-d10a-4e57-aaed-d79b180c1f94",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "TB",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-11-30T15:00:00-05:00",
+      "projSpreadHome": -4.98,
+      "projTotal": 43.67
+    },
+    {
+      "id": "b9b9be64-e73b-40d5-9f9c-aa1390c04f0b",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "LAR",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-12-03T15:00:00-05:00",
+      "projSpreadHome": -4.29,
+      "projTotal": 44.55
+    },
+    {
+      "id": "0d74fe62-bc66-46e4-a63e-bbed312f3717",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "MIN",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": -5.5,
+      "projTotal": 41.5
+    },
+    {
+      "id": "1c30f8a0-921c-4224-b410-24de9d92ed80",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "TEN",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 1.47,
+      "projTotal": 43.14
+    },
+    {
+      "id": "1cf97896-910e-4777-a29c-c867909995ff",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "CHI",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": -1.42,
+      "projTotal": 42.42
+    },
+    {
+      "id": "1d096d29-84aa-4598-b90c-2fee38b7988b",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "PIT",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 1.46,
+      "projTotal": 40.22
+    },
+    {
+      "id": "200fbe31-5ba4-467f-a7b9-f05bf9953319",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "Philadelphia Eagles",
+      "homeAbbr": "ARI",
+      "awayAbbr": "PHI",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 5.17,
+      "projTotal": 42.82
+    },
+    {
+      "id": "338ebc69-e58e-446e-ae2e-bf612071a6da",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "TB",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 0.56,
+      "projTotal": 42.01
+    },
+    {
+      "id": "3f098430-3c63-4c20-8fd9-1affeebe2494",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "CLE",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 2.26,
+      "projTotal": 42.57
+    },
+    {
+      "id": "53dc789b-6ff9-440a-871c-7ebfa31fb4af",
+      "homeTeam": "New York Giants",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "NYG",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 1.3,
+      "projTotal": 42.95
+    },
+    {
+      "id": "639be337-e2a8-4313-a840-045a31d43507",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Detroit Lions",
+      "homeAbbr": "ATL",
+      "awayAbbr": "DET",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 2.38,
+      "projTotal": 43.15
+    },
+    {
+      "id": "6744badd-0a11-47ef-85c2-26651742aa60",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "DEN",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": -11.17,
+      "projTotal": 42.48
+    },
+    {
+      "id": "9bfe969f-3b68-426f-9be7-f492bde31792",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "NO",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 1.98,
+      "projTotal": 42.54
+    },
+    {
+      "id": "fe601af9-12b6-4b5f-9c5b-8e98d12a4eed",
+      "homeTeam": "New England Patriots",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "NE",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-12-06T15:00:00-05:00",
+      "projSpreadHome": 0.46,
+      "projTotal": 42.98
+    },
+    {
+      "id": "de6e051c-4dd6-49f9-b6f6-776213a763cd",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "SEA",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-12-07T15:00:00-05:00",
+      "projSpreadHome": -8.72,
+      "projTotal": 42.97
+    },
+    {
+      "id": "81182d70-041c-4ee6-9964-11bb68e9d89f",
+      "homeTeam": "New England Patriots",
+      "awayTeam": "Minnesota Vikings",
+      "homeAbbr": "NE",
+      "awayAbbr": "MIN",
+      "commenceTime": "2026-12-10T15:00:00-05:00",
+      "projSpreadHome": -7.31,
+      "projTotal": 40.04
+    },
+    {
+      "id": "06eb2696-0285-4746-8c5c-adc4a0493169",
+      "homeTeam": "San Francisco 49ers",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "SF",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 2.13,
+      "projTotal": 44.36
+    },
+    {
+      "id": "29d35609-4cc8-4b2d-a8c0-c28ab0a23414",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "PHI",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": -5.15,
+      "projTotal": 43.05
+    },
+    {
+      "id": "45bf17dd-0e89-4b36-a5d8-fdd1a09f8410",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "LV",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 5.88,
+      "projTotal": 40.99
+    },
+    {
+      "id": "5195b8ac-2f47-464f-a758-68666544f908",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "WAS",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 2.8,
+      "projTotal": 40.46
+    },
+    {
+      "id": "5f6445ca-67d0-42fb-9a41-eec2cf7bcc17",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "GB",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 1.18,
+      "projTotal": 43.47
+    },
+    {
+      "id": "69c6f1fc-6ee0-47ca-97fb-60ca4263c3d1",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "Kansas City Chiefs",
+      "homeAbbr": "CIN",
+      "awayAbbr": "KC",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 2.29,
+      "projTotal": 43.93
+    },
+    {
+      "id": "8fe2a279-726d-4438-92da-9e6a0cd88dca",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "DET",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": -10.33,
+      "projTotal": 43.5
+    },
+    {
+      "id": "9a3a6276-bbc2-4af5-b038-7cf0098ec9dd",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "BAL",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": -6.31,
+      "projTotal": 42.99
+    },
+    {
+      "id": "a96eae0a-42be-4bd1-b526-138c91a57537",
+      "homeTeam": "Cleveland Browns",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "CLE",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": -0.02,
+      "projTotal": 40.64
+    },
+    {
+      "id": "bcd713b3-d130-44e0-8016-73f1db8a5634",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "MIA",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 2.61,
+      "projTotal": 43.01
+    },
+    {
+      "id": "c202308e-58e5-43c0-b010-c702ee94a954",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "CAR",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": -0.75,
+      "projTotal": 40.84
+    },
+    {
+      "id": "cb8d32d6-8371-485c-9f11-7bee946cbe12",
+      "homeTeam": "New York Jets",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": 4.45,
+      "projTotal": 39.98
+    },
+    {
+      "id": "e563cbbf-a114-4354-addb-7ae61fdd428a",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "SEA",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-12-13T15:00:00-05:00",
+      "projSpreadHome": -10.41,
+      "projTotal": 41.79
+    },
+    {
+      "id": "d9fb71e8-4475-461a-9d1c-d8843c4fbef4",
+      "homeTeam": "Jacksonville Jaguars",
+      "awayTeam": "Pittsburgh Steelers",
+      "homeAbbr": "JAX",
+      "awayAbbr": "PIT",
+      "commenceTime": "2026-12-14T15:00:00-05:00",
+      "projSpreadHome": -4.77,
+      "projTotal": 42.13
+    },
+    {
+      "id": "29acffd8-e6d1-44c6-98fb-a56ed47222a6",
+      "homeTeam": "Los Angeles Chargers",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "LAC",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-12-17T15:00:00-05:00",
+      "projSpreadHome": -1.62,
+      "projTotal": 42.2
+    },
+    {
+      "id": "0833770a-53dd-4ced-b38f-bc53e00ba7b4",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Seattle Seahawks",
+      "homeAbbr": "PHI",
+      "awayAbbr": "SEA",
+      "commenceTime": "2026-12-19T15:00:00-05:00",
+      "projSpreadHome": -1.03,
+      "projTotal": 41.4
+    },
+    {
+      "id": "303cfc21-8242-4292-98dc-2ed5fa45407b",
+      "homeTeam": "Buffalo Bills",
+      "awayTeam": "Chicago Bears",
+      "homeAbbr": "BUF",
+      "awayAbbr": "CHI",
+      "commenceTime": "2026-12-19T15:00:00-05:00",
+      "projSpreadHome": -6.44,
+      "projTotal": 43.4
+    },
+    {
+      "id": "02150aba-99e0-43e8-b43d-0d65929396cb",
+      "homeTeam": "New York Giants",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "NYG",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -4.06,
+      "projTotal": 39.79
+    },
+    {
+      "id": "22f5dfb9-0e0a-4450-ae67-afee2af126ea",
+      "homeTeam": "Houston Texans",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "HOU",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -3.4,
+      "projTotal": 41.31
+    },
+    {
+      "id": "27f278b1-6020-4450-be2b-c012dd0b4008",
+      "homeTeam": "Green Bay Packers",
+      "awayTeam": "Miami Dolphins",
+      "homeAbbr": "GB",
+      "awayAbbr": "MIA",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -9.96,
+      "projTotal": 43.12
+    },
+    {
+      "id": "2b1fcf1c-735d-4818-a328-6690894df3b5",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "PIT",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": 2.61,
+      "projTotal": 43.38
+    },
+    {
+      "id": "367b9cd9-fdb7-439f-9b03-cc8992f8a7ab",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Detroit Lions",
+      "homeAbbr": "MIN",
+      "awayAbbr": "DET",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": 1.56,
+      "projTotal": 41.81
+    },
+    {
+      "id": "3ae4f05f-18ef-4196-8a7c-2dd9ab63e12e",
+      "homeTeam": "Carolina Panthers",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "CAR",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": 0.82,
+      "projTotal": 44.33
+    },
+    {
+      "id": "4ca4fe1e-3350-41bd-b26d-a99cf25f5313",
+      "homeTeam": "Tampa Bay Buccaneers",
+      "awayTeam": "New Orleans Saints",
+      "homeAbbr": "TB",
+      "awayAbbr": "NO",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -4.63,
+      "projTotal": 42.33
+    },
+    {
+      "id": "4d2f5041-af07-47b1-b96a-d32ab60f7adc",
+      "homeTeam": "Los Angeles Rams",
+      "awayTeam": "Dallas Cowboys",
+      "homeAbbr": "LAR",
+      "awayAbbr": "DAL",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -7.97,
+      "projTotal": 46.09
+    },
+    {
+      "id": "54d971fd-80ba-4200-ab92-5e487232cf85",
+      "homeTeam": "Tennessee Titans",
+      "awayTeam": "Indianapolis Colts",
+      "homeAbbr": "TEN",
+      "awayAbbr": "IND",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": 3.41,
+      "projTotal": 43.47
+    },
+    {
+      "id": "5e16f594-c448-4843-bb7c-4cfffe609e0a",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Denver Broncos",
+      "homeAbbr": "LV",
+      "awayAbbr": "DEN",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": 6.42,
+      "projTotal": 41.12
+    },
+    {
+      "id": "c510e552-372a-4e1d-aed7-65c41b207e74",
+      "homeTeam": "Arizona Cardinals",
+      "awayTeam": "New York Jets",
+      "homeAbbr": "ARI",
+      "awayAbbr": "NYJ",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -4.0,
+      "projTotal": 41.85
+    },
+    {
+      "id": "fbb4f6d4-86bd-44de-ae95-dec01f0ab5ce",
+      "homeTeam": "Washington Commanders",
+      "awayTeam": "Atlanta Falcons",
+      "homeAbbr": "WAS",
+      "awayAbbr": "ATL",
+      "commenceTime": "2026-12-20T15:00:00-05:00",
+      "projSpreadHome": -1.41,
+      "projTotal": 42.65
+    },
+    {
+      "id": "b11c0354-7efa-461a-b956-2d75f7e62542",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "KC",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-12-21T15:00:00-05:00",
+      "projSpreadHome": -1.11,
+      "projTotal": 42.2
+    },
+    {
+      "id": "0d6e0540-f9d4-4024-8e67-57bbf6efc940",
+      "homeTeam": "Philadelphia Eagles",
+      "awayTeam": "Houston Texans",
+      "homeAbbr": "PHI",
+      "awayAbbr": "HOU",
+      "commenceTime": "2026-12-24T15:00:00-05:00",
+      "projSpreadHome": -3.82,
+      "projTotal": 41.05
+    },
+    {
+      "id": "92d86517-a553-4ed2-a994-cc3e20b42f92",
+      "homeTeam": "Chicago Bears",
+      "awayTeam": "Green Bay Packers",
+      "homeAbbr": "CHI",
+      "awayAbbr": "GB",
+      "commenceTime": "2026-12-25T15:00:00-05:00",
+      "projSpreadHome": -0.35,
+      "projTotal": 44.04
+    },
+    {
+      "id": "c1e4cd49-27da-4888-a4b0-fcd192ace5c7",
+      "homeTeam": "Denver Broncos",
+      "awayTeam": "Buffalo Bills",
+      "homeAbbr": "DEN",
+      "awayAbbr": "BUF",
+      "commenceTime": "2026-12-25T15:00:00-05:00",
+      "projSpreadHome": -0.72,
+      "projTotal": 42.22
+    },
+    {
+      "id": "ec82f690-6fb8-4d6f-b609-94b00ce8b430",
+      "homeTeam": "Seattle Seahawks",
+      "awayTeam": "Los Angeles Rams",
+      "homeAbbr": "SEA",
+      "awayAbbr": "LAR",
+      "commenceTime": "2026-12-25T15:00:00-05:00",
+      "projSpreadHome": -0.46,
+      "projTotal": 42.77
+    },
+    {
+      "id": "22c0e6c7-2030-48f6-944a-ed92f3bfde60",
+      "homeTeam": "Pittsburgh Steelers",
+      "awayTeam": "Carolina Panthers",
+      "homeAbbr": "PIT",
+      "awayAbbr": "CAR",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -3.54,
+      "projTotal": 42.8
+    },
+    {
+      "id": "5b773bb9-8772-401f-b294-8a988f4a4b8f",
+      "homeTeam": "Indianapolis Colts",
+      "awayTeam": "Cincinnati Bengals",
+      "homeAbbr": "IND",
+      "awayAbbr": "CIN",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -1.7,
+      "projTotal": 44.81
+    },
+    {
+      "id": "69bf6856-bfd7-423e-a48b-4a85380414d3",
+      "homeTeam": "Baltimore Ravens",
+      "awayTeam": "Cleveland Browns",
+      "homeAbbr": "BAL",
+      "awayAbbr": "CLE",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -8.82,
+      "projTotal": 41.22
+    },
+    {
+      "id": "7d03802c-1408-4b51-ac8d-6bb8ff2d3889",
+      "homeTeam": "Miami Dolphins",
+      "awayTeam": "Los Angeles Chargers",
+      "homeAbbr": "MIA",
+      "awayAbbr": "LAC",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": 3.9,
+      "projTotal": 41.37
+    },
+    {
+      "id": "949964fd-2cb4-4862-b277-469a3eedca5c",
+      "homeTeam": "New York Jets",
+      "awayTeam": "New England Patriots",
+      "homeAbbr": "NYJ",
+      "awayAbbr": "NE",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": 6.16,
+      "projTotal": 42.93
+    },
+    {
+      "id": "b76c4d1f-72bd-4323-8323-ac74a561ece4",
+      "homeTeam": "Las Vegas Raiders",
+      "awayTeam": "Tennessee Titans",
+      "homeAbbr": "LV",
+      "awayAbbr": "TEN",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -3.11,
+      "projTotal": 41.51
+    },
+    {
+      "id": "bba4c2c4-66d1-49f5-871a-0f859fd36b3c",
+      "homeTeam": "Minnesota Vikings",
+      "awayTeam": "Washington Commanders",
+      "homeAbbr": "MIN",
+      "awayAbbr": "WAS",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -4.27,
+      "projTotal": 41.74
+    },
+    {
+      "id": "c29d392c-2b25-4a0c-a908-3ce06ac8ed36",
+      "homeTeam": "New Orleans Saints",
+      "awayTeam": "Arizona Cardinals",
+      "homeAbbr": "NO",
+      "awayAbbr": "ARI",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -6.09,
+      "projTotal": 42.71
+    },
+    {
+      "id": "c74534c4-c35b-4bff-a23a-892a15728c46",
+      "homeTeam": "Atlanta Falcons",
+      "awayTeam": "Tampa Bay Buccaneers",
+      "homeAbbr": "ATL",
+      "awayAbbr": "TB",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": 0.48,
+      "projTotal": 42.42
+    },
+    {
+      "id": "d9475543-6517-477b-a5f4-3fa651be1bfc",
+      "homeTeam": "Dallas Cowboys",
+      "awayTeam": "Jacksonville Jaguars",
+      "homeAbbr": "DAL",
+      "awayAbbr": "JAX",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -0.84,
+      "projTotal": 43.43
+    },
+    {
+      "id": "e71645e6-577a-43b7-8f51-9090ac75a376",
+      "homeTeam": "Kansas City Chiefs",
+      "awayTeam": "San Francisco 49ers",
+      "homeAbbr": "KC",
+      "awayAbbr": "SF",
+      "commenceTime": "2026-12-27T15:00:00-05:00",
+      "projSpreadHome": -3.1,
+      "projTotal": 42.76
+    },
+    {
+      "id": "a307be93-2e1e-4639-9ee2-00d336cb16d9",
+      "homeTeam": "Detroit Lions",
+      "awayTeam": "New York Giants",
+      "homeAbbr": "DET",
+      "awayAbbr": "NYG",
+      "commenceTime": "2026-12-28T15:00:00-05:00",
+      "projSpreadHome": -6.59,
+      "projTotal": 42.95
+    },
+    {
+      "id": "e3dd41eb-51ac-46c9-a53c-d8f05ef8bdd4",
+      "homeTeam": "Cincinnati Bengals",
+      "awayTeam": "Baltimore Ravens",
+      "homeAbbr": "CIN",
+      "awayAbbr": "BAL",
+      "commenceTime": "2026-12-31T15:00:00-05:00",
+      "projSpreadHome": 2.88,
+      "projTotal": 43.68
+    }
+  ]
+}

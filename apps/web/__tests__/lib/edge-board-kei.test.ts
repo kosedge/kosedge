@@ -81,5 +81,35 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     const out = mergeKeiIntoEdgeBoardRows(rows as any, "ncaam");
     expect(out[0].kei).toBeUndefined();
   });
+
+  it("matches NFL Odds full names to KEINFL abbr or full-name exports", () => {
+    vi.mocked(getKeiLines).mockReturnValue([
+      {
+        awayTeam: "NE",
+        homeTeam: "SEA",
+        awayAbbr: "NE",
+        homeAbbr: "SEA",
+        projSpreadHome: -3.5,
+        projTotal: 41.3,
+      },
+    ]);
+
+    const rows: Row[] = [
+      {
+        id: "nfl-spread",
+        game: "New England Patriots @ Seattle Seahawks",
+        market: "Spread",
+      },
+      {
+        id: "nfl-total",
+        game: "New England Patriots @ Seattle Seahawks",
+        market: "Total",
+      },
+    ];
+
+    const out = mergeKeiIntoEdgeBoardRows(rows as any, "nfl");
+    expect(out[0].kei).toBe("-3.5");
+    expect(out[1].kei).toBe("41.3");
+  });
 });
 

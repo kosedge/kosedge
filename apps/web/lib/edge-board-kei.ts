@@ -1,10 +1,12 @@
 /**
  * Merge KEI lines (our projected spread and O/U) into edge board rows.
- * Used by /api/edge-board/[sport]/today to populate "our numbers" on the board.
+ * Used by /api/edge-board/[sport]/today and the edge-board page to populate
+ * sport-specific KEI columns (KEICMB, KEINFL, …) on the shared board.
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
-import { getKeiLines } from "@/lib/kei-lines";
+import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
+import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
 function normalizeGameKey(game: string): string {
   return game
@@ -44,22 +46,84 @@ function gameKeys(game: string): string[] {
   return [...new Set(keys)];
 }
 
+const NFL_CODE_TO_NAME = new Map(
+  NFL_TEAM_DIRECTORY.map((t) => [t.code.toLowerCase(), t.name.toLowerCase()] as const),
+);
+const NFL_NAME_TO_CODE = new Map(
+  NFL_TEAM_DIRECTORY.map((t) => [t.name.toLowerCase(), t.code.toLowerCase()] as const),
+);
+
+/** Expand / compress NFL team labels so "NE @ SEA" matches "New England Patriots @ Seattle Seahawks". */
+function nflTeamAliases(label: string): string[] {
+  const raw = label.trim().toLowerCase().replace(/['.]/g, "");
+  if (!raw) return [];
+  const aliases = new Set<string>([raw]);
+  const asCode = NFL_NAME_TO_CODE.get(raw);
+  if (asCode) aliases.add(asCode);
+  const fromCode = NFL_CODE_TO_NAME.get(raw);
+  if (fromCode) aliases.add(fromCode);
+  // nickname match ("patriots", "seahawks")
+  const words = raw.split(/\s+/);
+  if (words.length > 1) {
+    aliases.add(words[words.length - 1]!);
+  }
+  return [...aliases];
+}
+
+function nflGameKeys(awayTeam: string, homeTeam: string): string[] {
+  const awayAliases = nflTeamAliases(awayTeam);
+  const homeAliases = nflTeamAliases(homeTeam);
+  const keys: string[] = [];
+  for (const a of awayAliases) {
+    for (const h of homeAliases) {
+      keys.push(...gameKeys(`${a} @ ${h}`));
+    }
+  }
+  return [...new Set(keys)];
+}
+
 function formatSpread(projSpreadHome: number): string {
   const n = Math.round(projSpreadHome * 10) / 10;
   if (n >= 0) return `+${n}`;
   return String(n);
 }
 
+function registerGame(
+  byGame: Map<string, { projSpreadHome: number | null; projTotal: number | null }>,
+  sportKey: string,
+  g: KeiLineGame,
+) {
+  const value = {
+    projSpreadHome: g.projSpreadHome ?? null,
+    projTotal: g.projTotal ?? null,
+  };
+  const keys =
+    sportKey.toLowerCase() === "nfl"
+      ? nflGameKeys(g.awayTeam, g.homeTeam)
+      : gameKeys(`${g.awayTeam} @ ${g.homeTeam}`);
+
+  // Also register explicit abbr fields when present on NFL exports.
+  if (sportKey.toLowerCase() === "nfl" && g.awayAbbr && g.homeAbbr) {
+    keys.push(...nflGameKeys(g.awayAbbr, g.homeAbbr));
+  }
+
+  for (const key of new Set(keys)) {
+    byGame.set(key, value);
+  }
+}
+
 /**
  * Merges KEI projections into edge board rows. Mutates rows in place and returns them.
  * Each row with market "Spread" gets row.kei = our projected home spread (e.g. "-5.2").
  * Each row with market "Total" gets row.kei = our projected total (e.g. "148.5").
+ * Pass gamesOverride for NFL live fair-lines (or tests); otherwise reads kei_lines_*.json.
  */
 export function mergeKeiIntoEdgeBoardRows(
   rows: EdgeBoardRow[],
   sportKey: string,
+  gamesOverride?: KeiLineGame[],
 ): EdgeBoardRow[] {
-  const games = getKeiLines(sportKey);
+  const games = gamesOverride ?? getKeiLines(sportKey);
   if (!games.length) return rows;
 
   const byGame = new Map<
@@ -67,19 +131,17 @@ export function mergeKeiIntoEdgeBoardRows(
     { projSpreadHome: number | null; projTotal: number | null }
   >();
   for (const g of games) {
-    const gameStr = `${g.awayTeam} @ ${g.homeTeam}`;
-    for (const key of gameKeys(gameStr)) {
-      byGame.set(key, {
-        projSpreadHome: g.projSpreadHome ?? null,
-        projTotal: g.projTotal ?? null,
-      });
-    }
+    registerGame(byGame, sportKey, g);
   }
 
   for (const row of rows) {
     const game = row?.game;
     if (!game) continue;
-    const keys = gameKeys(game);
+    const parts = game.split(/\s*@\s*/);
+    const keys =
+      sportKey.toLowerCase() === "nfl" && parts.length === 2
+        ? nflGameKeys(parts[0]!, parts[1]!)
+        : gameKeys(game);
     let proj:
       | { projSpreadHome: number | null; projTotal: number | null }
       | undefined;
