@@ -10,9 +10,9 @@ import {
   type NflPropBoardRow,
 } from "@/lib/nfl-props-board";
 
-/** Prop edges currently materialize for 2025 W1; 2026 board lights up when edges land. */
+/** Default to a 2025 week with real Odds-API snapshots joined (weeks 4–17). 2026 lights up when yardage markets post. */
 const DEFAULT_SEASON = 2025;
-const DEFAULT_WEEK = 1;
+const DEFAULT_WEEK = 17;
 const MARKET_TABS = ["ALL", ...Object.keys(PROP_MARKET_LABELS)] as const;
 const LIMIT_OPTIONS = [100, 250, 500] as const;
 
