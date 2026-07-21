@@ -58,6 +58,18 @@ TASK_NFL_IDENTITY_QUALITY_SNAPSHOT = os.getenv(
     "TASK_NFL_IDENTITY_QUALITY_SNAPSHOT",
     "src.tasks.run_nfl_identity_quality_snapshot",
 )
+TASK_NFL_WEEKLY_RESILIENCE = os.getenv(
+    "TASK_NFL_WEEKLY_RESILIENCE",
+    "src.tasks.run_nfl_weekly_resilience_cycle",
+)
+TASK_NFL_DR_BACKUP = os.getenv(
+    "TASK_NFL_DR_BACKUP",
+    "src.tasks.run_nfl_dr_backup",
+)
+TASK_NFL_DATA_FRESHNESS = os.getenv(
+    "TASK_NFL_DATA_FRESHNESS",
+    "src.tasks.run_nfl_data_freshness_check",
+)
 TASK_PULL_MLB_CONTEXT = os.getenv("TASK_PULL_MLB_CONTEXT", "src.tasks.pull_mlb_context_snapshot")
 TASK_RUN_MLB_SIMULATIONS = os.getenv(
     "TASK_RUN_MLB_SIMULATIONS", "src.tasks.run_mlb_market_simulations"
@@ -243,6 +255,48 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
             "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
             "source_system": None,
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    # Tuesday ownership cycle: ingest → player rematerialize → DR backup → freshness.
+    # Runs after overnight outcomes (03:18) and before supervised retrain (07:05).
+    "run-nfl-weekly-resilience-cycle": {
+        "task": TASK_NFL_WEEKLY_RESILIENCE,
+        "schedule": crontab(
+            minute=os.getenv("NFL_RESILIENCE_CYCLE_MINUTE", "15"),
+            hour=os.getenv("NFL_RESILIENCE_CYCLE_HOUR", "4"),
+            day_of_week=os.getenv("NFL_RESILIENCE_CYCLE_DAY_OF_WEEK", "tue"),
+        ),
+        "kwargs": {
+            "skip_player_update": os.getenv("NFL_RESILIENCE_SKIP_PLAYER_UPDATE", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+            "skip_dr_backup": os.getenv("NFL_RESILIENCE_SKIP_DR_BACKUP", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-data-freshness-check-morning": {
+        "task": TASK_NFL_DATA_FRESHNESS,
+        "schedule": crontab(minute="10", hour="8"),
+        "kwargs": {"persist_alert": True},
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-dr-backup-sunday": {
+        "task": TASK_NFL_DR_BACKUP,
+        "schedule": crontab(
+            minute="40",
+            hour="3",
+            day_of_week=os.getenv("NFL_DR_BACKUP_DAY_OF_WEEK", "sun"),
+        ),
+        "kwargs": {
+            "skip_verify": os.getenv("NFL_DR_BACKUP_SKIP_VERIFY", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
         },
         "options": {"queue": MODELS_QUEUE},
     },

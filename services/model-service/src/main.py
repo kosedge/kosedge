@@ -556,6 +556,50 @@ def health_nfl_production_readiness_prometheus(
         return PlainTextResponse(content=body, status_code=503)
 
 
+@app.get("/health/nfl-data-freshness")
+def health_nfl_data_freshness(persist: bool = Query(False)) -> Dict[str, Any]:
+    """Subscription data ownership freshness SLOs (ingest, odds, DR backup)."""
+    try:
+        from src.services.nfl_resilience_cycle import run_data_freshness_check
+
+        payload = run_data_freshness_check(persist_alert=False)
+        # Optionally persist snapshot without webhook noise from the health probe.
+        if persist and str(payload.get("status")) != "failed":
+            pass
+        status = str(payload.get("status") or "failed")
+        if status != "ok":
+            raise HTTPException(status_code=503, detail=payload)
+        return payload
+    except HTTPException:
+        raise
+    except Exception as exc:
+        log.exception("NFL data freshness healthcheck failed")
+        raise HTTPException(status_code=503, detail={"status": "failed", "error": str(exc)})
+
+
+@app.get("/health/nfl-data-freshness/prometheus", response_class=PlainTextResponse)
+def health_nfl_data_freshness_prometheus() -> PlainTextResponse:
+    try:
+        payload = health_nfl_data_freshness(persist=False)
+        status = str(payload.get("status") or "failed")
+        ok = 1 if status == "ok" else 0
+        body = (
+            "# HELP kosedge_nfl_data_freshness_ok NFL owned-data freshness SLOs (1=ok,0=degraded)\n"
+            "# TYPE kosedge_nfl_data_freshness_ok gauge\n"
+            f'kosedge_nfl_data_freshness_ok{{status="{status}"}} {ok}\n'
+        )
+        return PlainTextResponse(content=body, status_code=200)
+    except HTTPException as e:
+        detail = e.detail if isinstance(e.detail, dict) else {"status": "failed"}
+        status = str(detail.get("status") or "failed")
+        body = (
+            "# HELP kosedge_nfl_data_freshness_ok NFL owned-data freshness SLOs (1=ok,0=degraded)\n"
+            "# TYPE kosedge_nfl_data_freshness_ok gauge\n"
+            f'kosedge_nfl_data_freshness_ok{{status="{status}"}} 0\n'
+        )
+        return PlainTextResponse(content=body, status_code=503)
+
+
 @app.get("/api/odds/snapshots")
 def get_odds_snapshots(
     limit: int = Query(10, ge=1, le=200),
@@ -1058,6 +1102,63 @@ def job_run_nfl_identity_quality_snapshot(
         return {"task_id": async_result.id, "task_name": TASK_NFL_IDENTITY_QUALITY_SNAPSHOT}
     except Exception as e:
         log.exception("Failed to enqueue run-nfl-identity-quality-snapshot")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-weekly-resilience-cycle")
+def job_run_nfl_weekly_resilience_cycle(
+    season: Optional[int] = Query(None, ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    skip_player_update: bool = Query(False),
+    skip_dr_backup: bool = Query(False),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            "src.tasks.run_nfl_weekly_resilience_cycle",
+            kwargs={
+                "season": season,
+                "week": week,
+                "skip_player_update": skip_player_update,
+                "skip_dr_backup": skip_dr_backup,
+            },
+        )
+        return {
+            "task_id": async_result.id,
+            "task_name": "src.tasks.run_nfl_weekly_resilience_cycle",
+        }
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-weekly-resilience-cycle")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-dr-backup")
+def job_run_nfl_dr_backup(skip_verify: bool = Query(False)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            "src.tasks.run_nfl_dr_backup",
+            kwargs={"skip_verify": skip_verify},
+        )
+        return {"task_id": async_result.id, "task_name": "src.tasks.run_nfl_dr_backup"}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-dr-backup")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-data-freshness-check")
+def job_run_nfl_data_freshness_check(
+    persist_alert: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            "src.tasks.run_nfl_data_freshness_check",
+            kwargs={"persist_alert": persist_alert},
+        )
+        return {
+            "task_id": async_result.id,
+            "task_name": "src.tasks.run_nfl_data_freshness_check",
+        }
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-data-freshness-check")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

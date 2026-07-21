@@ -208,9 +208,68 @@ def main() -> None:
         action="store_true",
         help="Write table row NDJSON exports in addition to DB-backed manifest",
     )
+    parser.add_argument(
+        "--run-dr-backup",
+        action="store_true",
+        help="Run enterprise pg_dump DR backup (+ verify/retention/optional remote upload)",
+    )
+    parser.add_argument(
+        "--skip-dr-verify",
+        action="store_true",
+        help="With --run-dr-backup, skip restore verification into ephemeral DB",
+    )
+    parser.add_argument(
+        "--skip-dr-upload",
+        action="store_true",
+        help="With --run-dr-backup, skip remote upload even if NFL_DR_REMOTE_URI is set",
+    )
+    parser.add_argument(
+        "--evaluate-data-freshness",
+        action="store_true",
+        help="Evaluate NFL data freshness SLOs and persist a snapshot",
+    )
+    parser.add_argument(
+        "--ingest-snap-counts",
+        action="store_true",
+        help="Ingest nflverse snap counts into nfl_dp_snap_counts_weekly",
+    )
+    parser.add_argument(
+        "--ingest-official-depth-charts",
+        action="store_true",
+        help="Ingest latest nflverse official depth charts",
+    )
+    parser.add_argument(
+        "--print-source-matrix",
+        action="store_true",
+        help="Print the executable source fallback matrix JSON",
+    )
     args = parser.parse_args()
     seasons = _parse_seasons(args.seasons)
-    if args.run_preseason_bootstrap:
+    if args.print_source_matrix:
+        from .source_matrix import source_matrix_payload
+
+        result = source_matrix_payload()
+    elif args.run_dr_backup:
+        from .dr_backup import run_dr_backup
+
+        result = run_dr_backup(
+            verify=not args.skip_dr_verify,
+            upload=not args.skip_dr_upload,
+            backup_dir=args.backup_export_dir,
+        )
+    elif args.evaluate_data_freshness:
+        from .freshness import evaluate_data_freshness
+
+        result = evaluate_data_freshness(season=seasons[-1] if seasons else None, week=args.week)
+    elif args.ingest_snap_counts:
+        from .snap_depth_ingest import ingest_snap_counts
+
+        result = ingest_snap_counts(seasons=seasons)
+    elif args.ingest_official_depth_charts:
+        from .snap_depth_ingest import ingest_official_depth_charts
+
+        result = ingest_official_depth_charts(seasons=seasons)
+    elif args.run_preseason_bootstrap:
         from .preseason_hydration import run_preseason_bootstrap
 
         result = run_preseason_bootstrap(

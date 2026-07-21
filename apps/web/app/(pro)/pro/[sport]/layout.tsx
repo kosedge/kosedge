@@ -1,7 +1,17 @@
 import Link from "next/link";
+import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
 import { SPORTS } from "@/lib/sports";
 
-export default function ProLayout({ children }: { children: React.ReactNode }) {
+export default async function ProLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ sport: string }> | { sport: string };
+}) {
+  const resolved = await Promise.resolve(params);
+  const sport = String(resolved.sport || "").toLowerCase();
+
   return (
     <div className="min-h-screen bg-kos-black text-kos-text">
       <header className="border-b border-kos-border bg-kos-surface/30">
@@ -28,6 +38,8 @@ export default function ProLayout({ children }: { children: React.ReactNode }) {
           </nav>
         </div>
       </header>
+
+      {sport === "nfl" ? <NflDataFreshnessBanner /> : null}
 
       {children}
     </div>

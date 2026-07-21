@@ -9829,3 +9829,35 @@ def run_nfl_identity_quality_snapshot(
         raise
     finally:
         session.close()
+
+
+@celery_app.task(name="src.tasks.run_nfl_weekly_resilience_cycle")
+def run_nfl_weekly_resilience_cycle(
+    *,
+    season: Optional[int] = None,
+    week: Optional[int] = None,
+    skip_player_update: bool = False,
+    skip_dr_backup: bool = False,
+) -> Dict[str, Any]:
+    from src.services.nfl_resilience_cycle import run_weekly_resilience_cycle
+
+    return run_weekly_resilience_cycle(
+        season=season,
+        week=week,
+        skip_player_update=skip_player_update,
+        skip_dr_backup=skip_dr_backup,
+    )
+
+
+@celery_app.task(name="src.tasks.run_nfl_dr_backup")
+def run_nfl_dr_backup(*, skip_verify: bool = False) -> Dict[str, Any]:
+    from src.services.nfl_resilience_cycle import run_dr_backup_job
+
+    return run_dr_backup_job(skip_verify=skip_verify)
+
+
+@celery_app.task(name="src.tasks.run_nfl_data_freshness_check")
+def run_nfl_data_freshness_check(*, persist_alert: bool = True) -> Dict[str, Any]:
+    from src.services.nfl_resilience_cycle import run_data_freshness_check
+
+    return run_data_freshness_check(persist_alert=persist_alert)

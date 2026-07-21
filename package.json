@@ -37,6 +37,8 @@
     "ingest:dratings:historical": "pnpm --filter @kosedge/pipeline ingest:dratings:historical",
     "ingest:nflverse": "pnpm --filter @kosedge/data-platform-nfl ingest:nflverse",
     "ingest:nflverse:no-pbp": "pnpm --filter @kosedge/data-platform-nfl ingest:nflverse:no-pbp",
+    "nfl:dr-backup": "bash scripts/nfl/run-ownership-dr-backup.sh",
+    "nfl:resilience-cycle": "bash scripts/nfl/run-weekly-resilience-cycle.sh",
     "normalize:nflverse:pbp": "pnpm --filter @kosedge/data-platform-nfl normalize:pbp",
     "materialize:nflverse:usage": "pnpm --filter @kosedge/data-platform-nfl materialize:usage",
     "materialize:nflverse:matchups": "pnpm --filter @kosedge/data-platform-nfl materialize:matchups",

@@ -29,6 +29,11 @@ def _required_tables() -> List[str]:
         "nfl_dp_standings_weekly",
         "nfl_dp_depth_chart_weekly",
         "nfl_player_projection_features_weekly",
+        "nfl_dp_snap_counts_weekly",
+        "nfl_dp_official_depth_charts",
+        "nfl_data_ownership_backups",
+        "nfl_data_freshness_snapshots",
+        "nfl_ops_alert_events",
     ]
 
 
@@ -306,6 +311,20 @@ def run_launch_hardening_cycle(
                 week=week,
                 replace_existing=False,
             ),
+        }
+    )
+    from .snap_depth_ingest import ingest_official_depth_charts, ingest_snap_counts
+
+    stages.append(
+        {
+            "stage": "ingest_snap_counts",
+            "result": ingest_snap_counts(seasons=seasons),
+        }
+    )
+    stages.append(
+        {
+            "stage": "ingest_official_depth_charts",
+            "result": ingest_official_depth_charts(seasons=seasons),
         }
     )
     backup = export_data_ownership_snapshot(

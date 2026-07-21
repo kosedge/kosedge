@@ -27,6 +27,7 @@ Migration:
 - `infra/db/029_nfl_rookie_draft_capital.sql`
 - `infra/db/030_nfl_usage_weekly_source_tracking.sql`
 - `infra/db/036_nfl_kicker_dst_fantasy.sql`
+- `infra/db/037_nfl_data_resilience.sql`
 
 Tables:
 
@@ -116,6 +117,9 @@ Recommended:
 - Use checksums in `nfl_dp_raw_objects` for idempotency/audit.
 - Emit owned-data backup manifests (`nfl_data_ownership_backups`) each weekly cycle.
 - Store export artifacts under `data/ops` for cold-path recovery.
+- Run compressed warehouse DR dumps via `scripts/nfl/run-ownership-dr-backup.sh` (see `docs/NFL_DATA_RESILIENCE.md`).
+- Run Tuesday resilience cycle via `scripts/nfl/run-weekly-resilience-cycle.sh` or Celery Beat.
+- Monitor `GET /health/nfl-data-freshness` and Pro UI stale banner.
 
 ## Free-source expansion (NFL)
 
@@ -138,6 +142,8 @@ The following idempotent scripts are now available:
 - `scripts/nfl/run-preseason-bootstrap.sh`
 - `scripts/nfl/run-weekly-inseason-refresh.sh` (owned tables + game-sim launch hardening)
 - `scripts/nfl/run-weekly-inseason-update.sh` (player path: rolling usage → features → baselines → box scores → props → fantasy/awards)
+- `scripts/nfl/run-ownership-dr-backup.sh` (pg_dump DR + verify + retention)
+- `scripts/nfl/run-weekly-resilience-cycle.sh` (ingest + player update + DR + freshness SLOs)
 - `scripts/nfl/run-daily-market-sim-refresh.sh`
 - `scripts/nfl/run-postweek-grading.sh`
 
