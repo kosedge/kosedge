@@ -1,0 +1,14 @@
+# Keep CLI/git deploys under Vercel size limits
+data/backups
+**/*.dump
+**/*.dump.sha256
+.venv
+**/.venv
+**/node_modules
+**/.next
+**/__pycache__
+**/.turbo
+apps/android-odds-widget
+data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records*.json
+data/ops/nfl-player-prop-vegas-benchmark/*_pre_*.json
+data/ops/nfl-totals-resim-*.json
