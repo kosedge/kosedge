@@ -82,21 +82,11 @@ DEFAULT_REPLICATES = 2000
 # committee back's share is even less stable" actually gets modeled, without
 # touching any player's mean.
 SHARED_POOL_CONCENTRATION = 34.0
+# Pass/rec pools: small residual for unmodeled gadgets. Rush pools need a
+# larger residual (QB scrambles, WR jets, garbage-time rushes) so modeled RBs
+# are not forced to absorb ~98% of team rushes.
 OTHER_BUCKET_MIN_SHARE = 0.02
-# Tried and rejected: a tighter (higher) concentration specifically for the
-# rush pool, on the hypothesis that added Dirichlet share-variance was
-# driving the small (~2%) real RB rush_yards regression documented in
-# data/ops/nfl-matchup-engine-backtest-report.md. Re-tested at 800
-# replicates with concentration raised 34 -> 52 for rush only: RB rush_yards
-# MAE was unchanged (22.99 either way), disproving the variance hypothesis --
-# the regression is a mean-calibration effect from _normalize_shares_to_pool
-# itself, not sampling noise, so tightening concentration was the wrong
-# lever and has been reverted rather than shipped as unjustified complexity.
-# Real next step: check whether OTHER_BUCKET_MIN_SHARE is too small
-# specifically for the rush pool (QB scrambles/WR jet sweeps/garbage-time
-# rushes are real non-RB rush volume that receiving doesn't have an
-# equivalent of, so renormalizing modeled RBs up to consume ~98% of the pool
-# may overstate them more than it does modeled pass-catchers).
+OTHER_BUCKET_MIN_SHARE_RUSH = 0.06
 CONCENTRATION_MIN = 6.0
 CONCENTRATION_MAX = 46.0
 
@@ -188,9 +178,12 @@ def summarize_distribution(values: Sequence[float]) -> Dict[str, float]:
 # size) monotonic relationship between deviation strength and real win rate
 # re-emerges for rush/receiving that was invisible before.
 STD_CALIBRATION_FACTOR: Dict[str, float] = {
-    "pass_yards_dist": 1.0,
+    # Pass coverage was ~60% inside ±1σ on the 3815-prop Vegas sample;
+    # inflate before edge z-scores so PLAY tags are not fake-tight.
+    "pass_yards_dist": 1.20,
     "rush_yards_dist": 2.30,
     "receiving_yards_dist": 2.39,
+    "receptions_dist": 1.15,
 }
 
 
@@ -284,34 +277,17 @@ def _allocate_shares(
     return [_clamp(_safe_float(p.baseline.get(baseline_key)) / team_denominator, 0.0, 1.0) for p in players]
 
 
-def _normalize_shares_to_pool(base_shares: Sequence[float]) -> List[float]:
-    """Rescale a group's baseline-derived shares so they sum to
-    `1 - OTHER_BUCKET_MIN_SHARE` of the pool, preserving each player's
-    RELATIVE share to every other modeled player.
-
-    Why this is needed: `base_shares` come from dividing each player's own
-    standalone `baseline_projection_from_features()` mean volume (calibrated
-    per-player, independent of any specific team-total number) by this
-    team's real trailing play-volume anchor. Those two are independently
-    calibrated, so the raw shares for a full, real depth chart routinely sum
-    to well under 1.0 even when every real pass-catcher/rusher on the team
-    is included in `players` -- NOT because plays are actually going to
-    unmodeled players, but because the per-player formula's confidence/role
-    dampening terms don't independently sum back to the team total by
-    construction. Renormalizing (keeping only a small fixed `OTHER_BUCKET_MIN_SHARE`
-    for genuinely unmodeled/trick-play volume) is what makes a team's
-    simulated total plays actually land on real players instead of quietly
-    evaporating -- and it is exactly what produces the requested team-level
-    coherence property: since the modeled group's shares now sum to (nearly)
-    1 by construction, their SUM inherits (nearly) zero extra sampling noise
-    beyond the shared team-volume draw itself, so a big-volume replicate
-    lifts the whole group together rather than being diluted by an oversized,
-    noisy "other" bucket.
-    """
+def _normalize_shares_to_pool(
+    base_shares: Sequence[float],
+    *,
+    other_bucket_min_share: float = OTHER_BUCKET_MIN_SHARE,
+) -> List[float]:
+    """Rescale shares so they sum to `1 - other_bucket_min_share` of the pool."""
+    other = max(0.0, min(0.25, float(other_bucket_min_share)))
     modeled_total = sum(base_shares)
     if modeled_total <= 0.0:
         return [0.0 for _ in base_shares]
-    scale = (1.0 - OTHER_BUCKET_MIN_SHARE) / modeled_total
+    scale = (1.0 - other) / modeled_total
     return [s * scale for s in base_shares]
 
 
@@ -376,6 +352,7 @@ def _simulate_volume_pool(
     players: Sequence[PlayerBoxScoreRole],
     base_shares: Sequence[float],
     pool_plays: float,
+    other_bucket_min_share: float = OTHER_BUCKET_MIN_SHARE,
 ) -> List[float]:
     """One replicate's allocation of `pool_plays` (team pass or rush plays)
     across `players`. See the two-layer design note above `SHARED_POOL_CONCENTRATION`:
@@ -386,8 +363,9 @@ def _simulate_volume_pool(
     n = len(players)
     if n == 0 or pool_plays <= 0.0:
         return [0.0] * n
-    normalized_shares = _normalize_shares_to_pool(base_shares)
-    other_share = max(OTHER_BUCKET_MIN_SHARE, 1.0 - sum(normalized_shares))
+    other = max(0.0, min(0.25, float(other_bucket_min_share)))
+    normalized_shares = _normalize_shares_to_pool(base_shares, other_bucket_min_share=other)
+    other_share = max(other, 1.0 - sum(normalized_shares))
     alphas = [max(1e-3, share * SHARED_POOL_CONCENTRATION) for share in normalized_shares]
     alphas.append(max(1e-3, other_share * SHARED_POOL_CONCENTRATION))
     pool_shares = _dirichlet_shares(rng, alphas)[:n]
@@ -446,7 +424,13 @@ def simulate_team_player_box_scores(
         team_rush_plays_i = total_plays_i * (1.0 - pass_rate_i)
 
         qb_attempts_i = _simulate_qb_starter_draw(rng, players=qb_role_players, base_shares=qb_shares, pool_plays=team_pass_plays_i)
-        rush_attempts_i = _simulate_volume_pool(rng, players=rusher_players, base_shares=rush_shares, pool_plays=team_rush_plays_i)
+        rush_attempts_i = _simulate_volume_pool(
+            rng,
+            players=rusher_players,
+            base_shares=rush_shares,
+            pool_plays=team_rush_plays_i,
+            other_bucket_min_share=OTHER_BUCKET_MIN_SHARE_RUSH,
+        )
         targets_i = _simulate_volume_pool(rng, players=receiver_players, base_shares=target_shares, pool_plays=team_pass_plays_i)
 
         rush_by_key = {p.player_key: v for p, v in zip(rusher_players, rush_attempts_i)}
@@ -538,7 +522,10 @@ def simulate_team_player_box_scores(
             ),
             "rush_tds_dist": summarize_distribution(row["rush_tds"]),
             "targets_dist": summarize_distribution(row["targets"]),
-            "receptions_dist": summarize_distribution(row["receptions"]),
+            "receptions_dist": _calibrate_distribution_variance(
+                summarize_distribution(row["receptions"]),
+                STD_CALIBRATION_FACTOR.get("receptions_dist", 1.0),
+            ),
             "receiving_yards_dist": _calibrate_distribution_variance(
                 summarize_distribution(row["receiving_yards"]), STD_CALIBRATION_FACTOR["receiving_yards_dist"]
             ),

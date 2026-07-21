@@ -4,6 +4,7 @@ import { env } from "@/lib/config/env";
 export type NflFairLineRow = {
   gameId: string;
   season: number;
+  week: number | null;
   startTime: string | null;
   gameDate: string | null;
   homeTeam: string;
@@ -33,6 +34,7 @@ export type NflFairLineRow = {
 export type NflFairLinesResponse = {
   season: number;
   modelVersion: string;
+  currentWeek: number;
   count: number;
   lines: NflFairLineRow[];
   window: { daysAhead: number; includePastDays: number };
@@ -43,6 +45,11 @@ export type NflFairLinesResponse = {
     marketJoinedCount: number;
     bookmakers: string[];
     kosedgeOnly: boolean;
+    oddsPersisted?: {
+      eventsPersisted: number;
+      snapshotsInserted: number;
+      historyUpserted: number;
+    };
   };
   error?: string;
 };
@@ -71,6 +78,7 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
   return {
     gameId: String(raw.game_id ?? ""),
     season: toNumber(raw.season),
+    week: toNumberOrNull(raw.week),
     startTime: toIsoOrNull(raw.start_time),
     gameDate: toIsoOrNull(raw.game_date),
     homeTeam: String(raw.home_team ?? "Home"),
@@ -103,6 +111,8 @@ export async function fetchNflFairLines(params: {
   daysAhead?: number;
   includePastDays?: number;
   modelVersion?: string;
+  /** Comma-separated Odds API bookmaker keys for market join. */
+  bookmakers?: string;
 }): Promise<NflFairLinesResponse> {
   const base = env.MODEL_SERVICE_URL;
   const emptyDiagnostics = {
@@ -118,6 +128,7 @@ export async function fetchNflFairLines(params: {
     return {
       season: params.season,
       modelVersion: "",
+      currentWeek: 1,
       count: 0,
       lines: [],
       window: {
@@ -136,9 +147,12 @@ export async function fetchNflFairLines(params: {
   if (params.modelVersion) {
     url.searchParams.set("model_version", params.modelVersion);
   }
+  if (params.bookmakers) {
+    url.searchParams.set("bookmakers", params.bookmakers);
+  }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
+  const timeout = setTimeout(() => controller.abort(), 15000);
   try {
     const response = await fetch(url.toString(), {
       cache: "no-store",
@@ -152,6 +166,7 @@ export async function fetchNflFairLines(params: {
       return {
         season: params.season,
         modelVersion: "",
+        currentWeek: 1,
         count: 0,
         lines: [],
         window: {
@@ -165,6 +180,7 @@ export async function fetchNflFairLines(params: {
     const payload = (await response.json()) as {
       season?: number;
       model_version?: string;
+      current_week?: number;
       count?: number;
       lines?: Array<Record<string, unknown>>;
       window?: { days_ahead?: number; include_past_days?: number };
@@ -175,12 +191,23 @@ export async function fetchNflFairLines(params: {
         market_joined_count?: number;
         bookmakers?: string[];
         kosedge_only?: boolean;
+        odds_persisted?: {
+          events_persisted?: number;
+          snapshots_inserted?: number;
+          history_upserted?: number;
+        };
+        current_week?: number;
       };
     };
     const lines = Array.isArray(payload.lines) ? payload.lines.map(normalizeFairLine) : [];
+    const persisted = payload.diagnostics?.odds_persisted;
     return {
       season: typeof payload.season === "number" ? payload.season : params.season,
       modelVersion: String(payload.model_version ?? ""),
+      currentWeek: toNumber(
+        payload.current_week ?? payload.diagnostics?.current_week,
+        1,
+      ),
       count: typeof payload.count === "number" ? payload.count : lines.length,
       lines,
       window: {
@@ -199,12 +226,20 @@ export async function fetchNflFairLines(params: {
           ? payload.diagnostics.bookmakers.map(String)
           : [],
         kosedgeOnly: Boolean(payload.diagnostics?.kosedge_only ?? lines.every((line) => !line.marketJoined)),
+        oddsPersisted: persisted
+          ? {
+              eventsPersisted: toNumber(persisted.events_persisted),
+              snapshotsInserted: toNumber(persisted.snapshots_inserted),
+              historyUpserted: toNumber(persisted.history_upserted),
+            }
+          : undefined,
       },
     };
   } catch {
     return {
       season: params.season,
       modelVersion: "",
+      currentWeek: 1,
       count: 0,
       lines: [],
       window: {

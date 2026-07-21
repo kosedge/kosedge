@@ -1,0 +1,69 @@
+{
+  "as_of": "2026-07-21T13:00:53.457062+00:00",
+  "goal": "subscription-grade NFL player props",
+  "board_weeks": [
+    {
+      "season": 2025,
+      "week": 16
+    },
+    {
+      "season": 2025,
+      "week": 17
+    }
+  ],
+  "odds": {
+    "batch6_games_pulled": 21,
+    "batch6_rows": 1222,
+    "credits_remaining_approx": 380,
+    "team_backfill_2025": "2114/2192",
+    "w17_joined_edges": 326,
+    "w17_pass_players": 25,
+    "markets": [
+      "pass_yds",
+      "rush_yds",
+      "rec_yds",
+      "receptions"
+    ]
+  },
+  "mae_w17_market_joined": {
+    "pass_yds": {
+      "mae": 15.9,
+      "target": 12,
+      "status": "improving"
+    },
+    "rush_yds": {
+      "mae": 8.5,
+      "target": 6,
+      "status": "near"
+    },
+    "rec_yds": {
+      "mae": 7.7,
+      "target": 8,
+      "status": "met"
+    },
+    "receptions": {
+      "mae": 0.64,
+      "target": 1.0,
+      "status": "met"
+    }
+  },
+  "holdout_v3": {
+    "rule": "rec_rush_solid_role_z055_v3",
+    "verdict": "INCONCLUSIVE_SMALL_N",
+    "n": 14,
+    "hit_rate": 0.857,
+    "roi": 0.737,
+    "product": "PLAY remains research-only"
+  },
+  "rating": {
+    "projection_quality": "B / 7.0",
+    "coverage": "B+ / 7.5",
+    "edge_product": "C / 5.0",
+    "overall_subscription_readiness": "B- / not yet sell stake PLAY; fair-line board is usable"
+  },
+  "next": [
+    "Multi-week usage blend for WR target shares (Jameson-class)",
+    "Pass volume further vs densified closes",
+    "More holdout n (pull W14-15 densify when credits refresh) before enabling PLAY"
+  ]
+}

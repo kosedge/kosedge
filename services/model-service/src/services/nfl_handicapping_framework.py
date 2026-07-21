@@ -68,10 +68,15 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
     base = {
         "framework_version": NFL_HANDICAPPING_FRAMEWORK_VERSION,
         "priors": {
-            "base_total_points": _env_float("NFL_FRAMEWORK_PRIOR_TOTAL_POINTS", 43.5),
+            # 2023-2025 league game totals average ~45.3 (see calibration audit).
+            # Prior 43.5 systematically under-projected O/U and flooded Under edges.
+            "base_total_points": _env_float("NFL_FRAMEWORK_PRIOR_TOTAL_POINTS", 45.3),
             "base_margin_points": _env_float("NFL_FRAMEWORK_PRIOR_MARGIN_POINTS", 1.5),
-            "home_field_points": _env_float("NFL_FRAMEWORK_HOME_FIELD_POINTS", 1.35),
-            "base_score_stdev": _env_float("NFL_FRAMEWORK_BASE_SCORE_STDEV", 9.2),
+            # 2023–2025 adaptive re-sim: model home spreads ~0.7pts stronger than
+            # market and slight negative home ATS margin — trim HFA toward 1.0.
+            "home_field_points": _env_float("NFL_FRAMEWORK_HOME_FIELD_POINTS", 1.05),
+            # Single-team score stdev ~9.8-10.3 in recent seasons; 9.2 was slightly tight.
+            "base_score_stdev": _env_float("NFL_FRAMEWORK_BASE_SCORE_STDEV", 9.8),
         },
         "factors": {
             "base_efficiency": {
@@ -81,7 +86,8 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
                 "max_total_points": _env_float("NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS", 5.0),
             },
             "home_field_advantage": {
-                "margin_points": _env_float("NFL_FRAMEWORK_HFA_POINTS", 1.35),
+                # Keep in sync with priors.home_field_points (trimmed after 2023–25 ATS audit).
+                "margin_points": _env_float("NFL_FRAMEWORK_HFA_POINTS", 1.05),
             },
             "rest_travel": {
                 "margin_per_day": _env_float("NFL_FRAMEWORK_REST_MARGIN_PER_DAY", 0.18),

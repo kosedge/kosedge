@@ -5,7 +5,10 @@ vi.mock("@/lib/kei-lines", () => ({
 }));
 
 import { getKeiLines } from "@/lib/kei-lines";
-import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
+import {
+  ensureAllKeiGamesOnBoard,
+  mergeKeiIntoEdgeBoardRows,
+} from "@/lib/edge-board-kei";
 
 type Row = {
   id: string;
@@ -80,6 +83,42 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     ];
     const out = mergeKeiIntoEdgeBoardRows(rows as any, "ncaam");
     expect(out[0].kei).toBeUndefined();
+  });
+
+  it("seeds missing KEI games onto the board so PASS games still appear", () => {
+    const seeded = ensureAllKeiGamesOnBoard(
+      [
+        {
+          id: "odds-spread",
+          game: "New England Patriots @ Seattle Seahawks",
+          market: "Spread",
+          best: "+3.5",
+          book: "DraftKings",
+          bookKey: "draftkings",
+        } as any,
+      ],
+      "nfl",
+      [
+        {
+          awayTeam: "New England Patriots",
+          homeTeam: "Seattle Seahawks",
+          projSpreadHome: -3.5,
+          projTotal: 41.3,
+        },
+        {
+          awayTeam: "Green Bay Packers",
+          homeTeam: "Minnesota Vikings",
+          projSpreadHome: 1.5,
+          projTotal: 43.5,
+          commenceTime: "2026-09-13T17:00:00Z",
+        },
+      ],
+    );
+
+    const games = new Set(seeded.map((r) => r.game));
+    expect(games.has("New England Patriots @ Seattle Seahawks")).toBe(true);
+    expect(games.has("Green Bay Packers @ Minnesota Vikings")).toBe(true);
+    expect(seeded.filter((r) => r.game?.includes("Green Bay")).length).toBe(2);
   });
 
   it("matches NFL Odds full names to KEINFL abbr or full-name exports", () => {

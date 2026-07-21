@@ -355,12 +355,14 @@ def _apply_totals_linear_calibration(
     base_total: float,
     *,
     calibration: Optional[Dict[str, Any]],
+    apply: bool = True,
 ) -> Dict[str, Any]:
     floor = _env_float("NFL_TOTALS_CALIBRATION_MIN_TOTAL", 24.0)
     ceiling = _env_float("NFL_TOTALS_CALIBRATION_MAX_TOTAL", 66.0)
     default_slope = _clamp(_env_float("NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT", 1.0), 0.75, 1.25)
     default_intercept = _env_float("NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT", 0.0)
     min_sample = max(5, int(_env_float("NFL_TOTALS_CALIBRATION_MIN_SAMPLE", 80.0)))
+    intercept_abs_max = abs(_env_float("NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX", 18.0))
 
     source = "defaults"
     slope = default_slope
@@ -370,16 +372,24 @@ def _apply_totals_linear_calibration(
         maybe_slope = calibration.get("slope")
         maybe_intercept = calibration.get("intercept")
         sample_size = int(calibration.get("sample_size") or 0)
+        eligible = bool(calibration.get("eligible", True))
         if (
-            isinstance(maybe_slope, (float, int))
+            apply
+            and eligible
+            and isinstance(maybe_slope, (float, int))
             and isinstance(maybe_intercept, (float, int))
             and sample_size >= min_sample
         ):
             slope = _clamp(float(maybe_slope), 0.75, 1.25)
-            intercept = _clamp(float(maybe_intercept), -8.0, 8.0)
+            intercept = _clamp(float(maybe_intercept), -intercept_abs_max, intercept_abs_max)
             source = str(calibration.get("source") or "historical-fit")
+        elif not apply:
+            source = "deferred"
 
-    calibrated_total = _clamp((slope * float(base_total)) + intercept, floor, ceiling)
+    if not apply:
+        calibrated_total = float(base_total)
+    else:
+        calibrated_total = _clamp((slope * float(base_total)) + intercept, floor, ceiling)
     return {
         "base_total": round(float(base_total), 4),
         "calibrated_total": round(calibrated_total, 4),
@@ -388,6 +398,7 @@ def _apply_totals_linear_calibration(
         "intercept": round(intercept, 6),
         "source": source,
         "sample_size": int(sample_size),
+        "applied": bool(apply and source not in {"defaults", "deferred"}),
     }
 
 
@@ -398,6 +409,7 @@ def simulate_nfl_game(
     seed: Optional[int] = None,
     model_version: str = DEFAULT_NFL_MODEL_VERSION,
     totals_calibration: Optional[Dict[str, Any]] = None,
+    apply_linear_totals_calibration: bool = True,
     config_overrides: Optional[Dict[str, Any]] = None,
     market_spread_home: Optional[float] = None,
     market_total: Optional[float] = None,
@@ -497,6 +509,7 @@ def simulate_nfl_game(
     totals_calibration_out = _apply_totals_linear_calibration(
         base_total_mean,
         calibration=totals_calibration,
+        apply=bool(apply_linear_totals_calibration),
     )
     total_mean = float(totals_calibration_out["calibrated_total"])
     quantile_shift = float(totals_calibration_out["delta"])

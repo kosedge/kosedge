@@ -28,6 +28,13 @@ export type NflPropBoardRow = {
   confidence: number | null;
   updatedAt: string | null;
   marketJoined: boolean;
+  tag: "PLAY" | "WATCH" | "LEAN" | "PASS" | null;
+  tagSide: string | null;
+  tagAction: string | null;
+  sizeDown: boolean;
+  stakeEligible: boolean;
+  projectionSource: "box_score" | "baseline" | null;
+  zOver: number | null;
 };
 
 export type NflPropsBoardResponse = {
@@ -36,6 +43,10 @@ export type NflPropsBoardResponse = {
   diagnostics: {
     marketJoinedCount: number;
     kosedgeOnly: boolean;
+    playCount?: number;
+    watchCount?: number;
+    leanCount?: number;
+    boxScoreSourcedCount?: number;
   };
   error?: string;
 };
@@ -77,6 +88,15 @@ function toIsoOrNull(value: unknown): string | null {
 function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
   const marketOver = toNumberOrNull(raw.market_over_price);
   const marketUnder = toNumberOrNull(raw.market_under_price);
+  const diagnostics =
+    raw.diagnostics && typeof raw.diagnostics === "object"
+      ? (raw.diagnostics as Record<string, unknown>)
+      : {};
+  const tagRaw = typeof diagnostics.tag === "string" ? diagnostics.tag.toUpperCase() : null;
+  const tag =
+    tagRaw === "PLAY" || tagRaw === "WATCH" || tagRaw === "LEAN" || tagRaw === "PASS" ? tagRaw : null;
+  const sourceRaw =
+    typeof diagnostics.projection_source === "string" ? diagnostics.projection_source : null;
   return {
     season: toNumber(raw.season),
     week: toNumber(raw.week),
@@ -104,6 +124,14 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     confidence: toNumberOrNull(raw.confidence),
     updatedAt: toIsoOrNull(raw.updated_at),
     marketJoined: marketOver !== null || marketUnder !== null,
+    tag,
+    tagSide: typeof diagnostics.tag_side === "string" ? diagnostics.tag_side : null,
+    tagAction: typeof diagnostics.tag_action === "string" ? diagnostics.tag_action : null,
+    sizeDown: Boolean(diagnostics.size_down),
+    stakeEligible: Boolean(diagnostics.stake_eligible ?? tagRaw === "PLAY"),
+    projectionSource:
+      sourceRaw === "box_score" || sourceRaw === "baseline" ? sourceRaw : null,
+    zOver: toNumberOrNull(diagnostics.z_over),
   };
 }
 
@@ -113,6 +141,7 @@ export async function fetchNflPropsBoard(params: {
   modelVersion?: string;
   marketKey?: string;
   team?: string;
+  tag?: string;
   minConfidence?: number;
   minAbsEdge?: number;
   limit?: number;
@@ -133,6 +162,7 @@ export async function fetchNflPropsBoard(params: {
   url.searchParams.set("limit", String(params.limit ?? 250));
   if (params.marketKey) url.searchParams.set("market_key", params.marketKey);
   if (params.team) url.searchParams.set("team", params.team.toUpperCase());
+  if (params.tag) url.searchParams.set("tag", params.tag.toUpperCase());
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
@@ -156,7 +186,14 @@ export async function fetchNflPropsBoard(params: {
     const payload = (await response.json()) as {
       count?: number;
       rows?: Array<Record<string, unknown>>;
-      diagnostics?: { market_joined_count?: number; kosedge_only?: boolean };
+      diagnostics?: {
+        market_joined_count?: number;
+        kosedge_only?: boolean;
+        play_count?: number;
+        watch_count?: number;
+        lean_count?: number;
+        box_score_sourced_count?: number;
+      };
     };
     const rows = Array.isArray(payload.rows) ? payload.rows.map(normalizePropRow) : [];
     const marketJoinedCount =
@@ -169,6 +206,10 @@ export async function fetchNflPropsBoard(params: {
       diagnostics: {
         marketJoinedCount,
         kosedgeOnly: Boolean(payload.diagnostics?.kosedge_only ?? (rows.length > 0 && marketJoinedCount === 0)),
+        playCount: payload.diagnostics?.play_count,
+        watchCount: payload.diagnostics?.watch_count ?? payload.diagnostics?.lean_count,
+        leanCount: payload.diagnostics?.lean_count,
+        boxScoreSourcedCount: payload.diagnostics?.box_score_sourced_count,
       },
     };
   } catch {

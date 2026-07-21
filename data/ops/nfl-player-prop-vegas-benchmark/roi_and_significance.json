@@ -3,58 +3,58 @@
   "breakeven_win_rate_at_minus110": 0.5238,
   "roi_by_method": {
     "old": {
-      "staked": 285000.0,
-      "profit": -18854.43848872814,
-      "n_bets": 2850,
-      "roi_pct": -6.616
+      "staked": 381500.0,
+      "profit": -21240.436656340804,
+      "n_bets": 3815,
+      "roi_pct": -5.568
     },
     "current": {
-      "staked": 285000.0,
-      "profit": -14562.70724357606,
-      "n_bets": 2850,
-      "roi_pct": -5.11
+      "staked": 381500.0,
+      "profit": -17611.302121383804,
+      "n_bets": 3815,
+      "roi_pct": -4.616
     },
     "new": {
-      "staked": 285000.0,
-      "profit": -13564.66148904123,
-      "n_bets": 2850,
-      "roi_pct": -4.76
+      "staked": 381500.0,
+      "profit": -15343.058002958613,
+      "n_bets": 3815,
+      "roi_pct": -4.022
     }
   },
   "win_rate_95ci_wilson": {
     "old": {
-      "point": 0.4965,
-      "low": 0.4782,
-      "high": 0.5148
+      "point": 0.5028,
+      "low": 0.4869,
+      "high": 0.5186
     },
     "current": {
-      "point": 0.5046,
-      "low": 0.4862,
-      "high": 0.5229
+      "point": 0.508,
+      "low": 0.4921,
+      "high": 0.5238
     },
     "new": {
-      "point": 0.5067,
-      "low": 0.4883,
-      "high": 0.525
+      "point": 0.5111,
+      "low": 0.4953,
+      "high": 0.527
     }
   },
   "paired_win_rate_deltas_95ci_normal_approx": {
     "current_minus_old": {
-      "delta": 0.0081,
-      "ci_95_low": -0.0179,
-      "ci_95_high": 0.034,
+      "delta": 0.0052,
+      "ci_95_low": -0.0172,
+      "ci_95_high": 0.0277,
       "significant": false
     },
     "new_minus_current": {
-      "delta": 0.0021,
-      "ci_95_low": -0.0239,
-      "ci_95_high": 0.0281,
+      "delta": 0.0031,
+      "ci_95_low": -0.0193,
+      "ci_95_high": 0.0256,
       "significant": false
     },
     "new_minus_old": {
-      "delta": 0.0102,
-      "ci_95_low": -0.0158,
-      "ci_95_high": 0.0361,
+      "delta": 0.0084,
+      "ci_95_low": -0.014,
+      "ci_95_high": 0.0308,
       "significant": false
     }
   }

@@ -2469,15 +2469,31 @@ def materialize_player_projection_features(
                         + (1.15 * (COALESCE(opp_t.epa_per_play_defense_allowed, 0.0) - COALESCE(ld.league_avg_epa_allowed, 0.0)))
                       )) AS opponent_rush_defense_factor,
                       COALESCE(inj.availability_confidence, 0.90) AS availability_confidence,
-                      GREATEST(
-                        0.15,
-                        LEAST(
-                          0.99,
-                          (0.40 * GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(u.team_involvement::numeric, 0)))))
-                          + (0.35 * GREATEST(0.0, LEAST(1.0, (u.targets::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))))
-                          + (0.25 * GREATEST(0.0, LEAST(1.0, COALESCE(u.success_rate, 0.50))))
-                        )
-                      ) AS role_confidence,
+                      -- QBs almost never draw targets; the target_proxy term
+                      -- collapsed role_confidence into ~0.15-0.35 for real
+                      -- starters and starved box-score concentration. Use
+                      -- team snap + dropback mix for QBs instead.
+                      CASE
+                        WHEN UPPER(COALESCE(u.position, '')) = 'QB' THEN
+                          GREATEST(
+                            0.20,
+                            LEAST(
+                              0.99,
+                              (0.70 * GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(t.offensive_plays::numeric, 0)))))
+                              + (0.30 * GREATEST(0.0, LEAST(1.0, (u.qb_dropbacks::numeric / NULLIF((u.involvement_plays + 1)::numeric, 0)))))
+                            )
+                          )
+                        ELSE
+                          GREATEST(
+                            0.15,
+                            LEAST(
+                              0.99,
+                              (0.40 * GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(u.team_involvement::numeric, 0)))))
+                              + (0.35 * GREATEST(0.0, LEAST(1.0, (u.targets::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))))
+                              + (0.25 * GREATEST(0.0, LEAST(1.0, COALESCE(u.success_rate, 0.50))))
+                            )
+                          )
+                      END AS role_confidence,
                       jsonb_build_object(
                         'involvement_plays', u.involvement_plays,
                         'targets', u.targets,

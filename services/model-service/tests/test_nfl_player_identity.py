@@ -150,6 +150,10 @@ class _PropsSession:
         query = str(sql)
         if "SELECT COALESCE(MAX(week), 1)::int AS week" in query:
             return _Result(row=(1,))
+        if "FROM nfl_player_projection_features_weekly" in query and "role_confidence" in query:
+            return _Result(rows=[])
+        if "FROM nfl_player_game_box_score_sims" in query:
+            return _Result(rows=[])
         if "FROM nfl_player_projection_baselines" in query and "model_version" in query:
             row = SimpleNamespace(
                 season=2026,
@@ -218,6 +222,44 @@ def test_prop_player_match_keys_bridge_abbrev_and_full_names() -> None:
     assert set(abbrev_keys) & set(full_keys) == {"il:d maye"}
 
 
+def test_select_prop_market_blocks_ambiguous_il_cross_team() -> None:
+    """Javonte Williams rush must not attach to Jameson Williams (DET WR)."""
+    javonte = SimpleNamespace(
+        player_name="Javonte Williams",
+        team=None,
+        sportsbook="draftkings",
+        market_key="rush_yds",
+        line=73.5,
+        over_price=-110,
+        under_price=-110,
+        captured_at=None,
+    )
+    lookup = {
+        ("il:j williams", "rush_yds"): javonte,
+        ("il:j williams|DAL", "rush_yds"): javonte,
+        ("name:javonte williams", "rush_yds"): javonte,
+    }
+    ambiguous = {"il:j williams"}
+    det_wr = identity.select_prop_market_for_player(
+        lookup,
+        player_match_keys=identity.prop_player_match_keys(player_uid=None, player_name="J.Williams"),
+        market_key="rush_yds",
+        team="DET",
+        position="WR",
+        ambiguous_il_keys=ambiguous,
+    )
+    assert det_wr is None
+    dal_rb = identity.select_prop_market_for_player(
+        lookup,
+        player_match_keys=identity.prop_player_match_keys(player_uid=None, player_name="J.Williams"),
+        market_key="rush_yds",
+        team="DAL",
+        position="RB",
+        ambiguous_il_keys=ambiguous,
+    )
+    assert dal_rb is javonte
+
+
 def test_props_materialization_integration_uses_resolved_uid(monkeypatch) -> None:
     session = _PropsSession()
     monkeypatch.setattr(tasks, "SessionLocal", lambda: session)
@@ -240,6 +282,19 @@ def test_props_materialization_joins_full_name_snapshot_to_abbrev_baseline(monke
     class _JoinSession(_PropsSession):
         def execute(self, sql, params=None):
             query = str(sql)
+            if "FROM nfl_player_projection_features_weekly" in query and "role_confidence" in query:
+                return _Result(
+                    rows=[
+                        SimpleNamespace(
+                            player_id="p-maye",
+                            team="NE",
+                            role_confidence=0.85,
+                            availability_confidence=0.9,
+                        )
+                    ]
+                )
+            if "FROM nfl_player_game_box_score_sims" in query:
+                return _Result(rows=[])
             if "FROM nfl_player_projection_baselines" in query and "model_version" in query:
                 row = SimpleNamespace(
                     season=2025,

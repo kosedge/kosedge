@@ -1,0 +1,89 @@
+{
+  "rule": "calibrated_rec_z060_v1_2_provisional",
+  "refit": false,
+  "holdout_batch": 4,
+  "holdout_residue_offset": 2,
+  "n_holdout_games_pulled": 55,
+  "n_holdout_records": 990,
+  "holdout_play": {
+    "label": "holdout PLAY (locked rule)",
+    "n_decided": 30,
+    "wins": 19,
+    "win_rate": 0.6333,
+    "wilson_95": {
+      "point": 0.6333,
+      "low": 0.4551,
+      "high": 0.7813
+    },
+    "n_bets": 30,
+    "staked": 3000.0,
+    "profit": 579.77,
+    "roi_pct": 19.326,
+    "clears_coin_flip_95": false,
+    "clears_minus110_breakeven_95": false
+  },
+  "prior_play_same_rule": {
+    "label": "in-sample / prior PLAY (same locked rule)",
+    "n_decided": 120,
+    "wins": 70,
+    "win_rate": 0.5833,
+    "wilson_95": {
+      "point": 0.5833,
+      "low": 0.4939,
+      "high": 0.6676
+    },
+    "n_bets": 120,
+    "staked": 12000.0,
+    "profit": 1128.79,
+    "roi_pct": 9.407,
+    "clears_coin_flip_95": false,
+    "clears_minus110_breakeven_95": false
+  },
+  "holdout_by_market": {
+    "pass_yds": {
+      "label": "holdout pass_yds PLAY",
+      "n_decided": 0,
+      "wins": 0,
+      "win_rate": null,
+      "wilson_95": null,
+      "n_bets": 0,
+      "staked": 0.0,
+      "profit": 0.0,
+      "roi_pct": null,
+      "clears_coin_flip_95": false,
+      "clears_minus110_breakeven_95": false
+    },
+    "rush_yds": {
+      "label": "holdout rush_yds PLAY",
+      "n_decided": 0,
+      "wins": 0,
+      "win_rate": null,
+      "wilson_95": null,
+      "n_bets": 0,
+      "staked": 0.0,
+      "profit": 0.0,
+      "roi_pct": null,
+      "clears_coin_flip_95": false,
+      "clears_minus110_breakeven_95": false
+    },
+    "rec_yds": {
+      "label": "holdout rec_yds PLAY",
+      "n_decided": 30,
+      "wins": 19,
+      "win_rate": 0.6333,
+      "wilson_95": {
+        "point": 0.6333,
+        "low": 0.4551,
+        "high": 0.7813
+      },
+      "n_bets": 30,
+      "staked": 3000.0,
+      "profit": 579.77,
+      "roi_pct": 19.326,
+      "clears_coin_flip_95": false,
+      "clears_minus110_breakeven_95": false
+    }
+  },
+  "verdict": "INCONCLUSIVE \u2014 holdout PLAY n too small",
+  "breakeven_win_rate_at_minus110": 0.5238
+}

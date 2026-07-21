@@ -290,6 +290,32 @@ def test_compute_qb_starter_shares_handles_all_zero_snap_shares() -> None:
     assert shares == {"a": 1.0, "b": 1.0}
 
 
+def test_compute_qb_starter_shares_uses_depth_when_snaps_missing() -> None:
+    shares = compute_qb_starter_shares(
+        {"backup": 0.0, "starter": 0.0},
+        depth_orders={"starter": 1.0, "backup": 2.0},
+    )
+    assert shares["starter"] == 1.0
+    assert shares["backup"] == 0.05
+
+
+def test_qb_designated_starter_volume_not_crushed_by_mid_team_snap() -> None:
+    # Mid involvement (~0.42) for a clear starter should land near book
+    # pass lines (~230-270), not the pre-rematerialize ~167 crash.
+    mid_snap_starter = baseline_projection_from_features(
+        _qb_inputs(team_snap_share=0.42, snap_proxy=0.29, qb_starter_share=1.0)
+    )
+    assert mid_snap_starter["pass_yards_mean"] > 185.0
+    assert mid_snap_starter["pass_yards_mean"] < 300.0
+
+
+def test_qb_cold_start_designated_starter_gets_volume_floor() -> None:
+    cold = baseline_projection_from_features(
+        _qb_inputs(team_snap_share=0.05, snap_proxy=0.04, qb_starter_share=1.0)
+    )
+    assert cold["pass_yards_mean"] > 200.0
+
+
 def test_compute_qb_starter_shares_empty_input() -> None:
     assert compute_qb_starter_shares({}) == {}
 

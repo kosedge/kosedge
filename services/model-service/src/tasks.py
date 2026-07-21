@@ -70,6 +70,12 @@ from .services.nfl_player_projection_engine import (
     evaluate_prop_edge,
     fantasy_points_from_projection,
 )
+from .services.nfl_prop_edge_policy import anytime_td_prob_from_td_mean
+from .services.nfl_player_prop_calibration import (
+    apply_prop_calibration,
+    default_calibration_bundle,
+    load_walk_forward_prop_calibration,
+)
 from .services.nfl_player_box_score_simulator import (
     DEFAULT_BOX_SCORE_MODEL_VERSION,
     DEFAULT_REPLICATES,
@@ -106,9 +112,12 @@ from .services.nfl_player_identity import (
     apply_manual_mapping_resolution,
     compute_identity_quality_snapshot,
     persist_identity_quality_snapshot,
+    prop_market_position_compatible,
+    prop_market_position_rank,
     prop_market_snapshot_rank,
     prop_player_match_keys,
     resolve_and_persist_player_identity,
+    select_prop_market_for_player,
 )
 from .services.nfl_totals_calibration import (
     apply_totals_calibration,
@@ -135,7 +144,9 @@ MARKET_MAP: Dict[str, str] = {
 MODEL_STATE_KEY = "mlb_active_model"
 NFL_MODEL_STATE_KEY = "nfl_active_model"
 
-NFL_DEFAULT_ODDS_BOOKMAKERS = "draftkings"
+NFL_DEFAULT_ODDS_BOOKMAKERS = (
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr"
+)
 
 
 def _now_utc() -> datetime:
@@ -2854,11 +2865,12 @@ def run_nfl_market_simulations(
     include_completed_games: bool = False,
     projection_created_at_mode: str = "now",
     kickoff_buffer_minutes: int = 30,
-) -> Dict[str, int]:
+) -> Dict[str, Any]:
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
     processed = 0
     inserted = 0
+    pending_projections: List[Dict[str, Any]] = []
     try:
         _assert_tables_present(
             session,
@@ -2868,10 +2880,12 @@ def run_nfl_market_simulations(
         supervised_fit = _load_latest_supervised_fit(session, model_version=model_version)
         tuning_config_overrides = _load_latest_tuning_config_overrides(session, model_version=model_version)
         priors_cache: Dict[int, Dict[str, Dict[str, float]]] = {}
+        # Multi-season lookback so level bias (under-projection) is estimated
+        # from enough completed games; 240d was too short and produced fragile fits.
         totals_calibration = fetch_nfl_totals_calibration(
             session,
             model_version=model_version,
-            lookback_days=int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "240"))),
+            lookback_days=int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "1500"))),
         )
         rows = session.execute(
             text(
@@ -3042,12 +3056,15 @@ def run_nfl_market_simulations(
             )
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)
             market_lines = _fetch_nfl_market_consensus_lines(session, game_id=inputs.game_id)
+            # Defer linear totals calibration until after supervised blend so the
+            # published total_mean gets a single mean-preserving level correction.
             projection = simulate_nfl_game(
                 inputs,
                 simulations=simulations,
                 seed=seed,
                 model_version=model_version,
                 totals_calibration=totals_calibration,
+                apply_linear_totals_calibration=False,
                 config_overrides=tuning_config_overrides,
                 market_spread_home=market_lines.get("market_spread_home"),
                 market_total=market_lines.get("market_total"),
@@ -3132,12 +3149,90 @@ def run_nfl_market_simulations(
                     use_validated_weights=use_validated_weights,
                 )
                 projection["markets"] = blended_markets
+            markets = projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
+            pre_calibration_total = _to_float_like(markets.get("total_mean"))
             projection_created_at = _resolve_nfl_projection_created_at(
                 game_date=(m.get("game_date") if isinstance(m.get("game_date"), date) else target_date),
                 start_time=m.get("start_time"),
                 mode=projection_created_at_mode,
                 kickoff_buffer_minutes=kickoff_buffer_minutes,
             )
+            # Defer final totals calibration until the slate mean is known so we
+            # only close remaining level gap (avoids prior+intercept double-count).
+            pending_projections.append(
+                {
+                    "projection": projection,
+                    "pre_calibration_total": pre_calibration_total,
+                    "projection_created_at": projection_created_at,
+                    "home_prior": home_prior if isinstance(home_prior, dict) else {},
+                    "away_prior": away_prior if isinstance(away_prior, dict) else {},
+                    "season_year": season_year,
+                }
+            )
+            processed += 1
+
+        slate_pre_vals = [
+            float(item["pre_calibration_total"])
+            for item in pending_projections
+            if item.get("pre_calibration_total") is not None
+        ]
+        slate_pre_mean = (sum(slate_pre_vals) / len(slate_pre_vals)) if slate_pre_vals else None
+        # Tiny daily slates (TNF/MNF) make generative_extra noisy; only trust
+        # slate-relative residual correction when the board is large enough.
+        min_slate = max(1, int(float(os.getenv("NFL_TOTALS_CALIBRATION_MIN_SLATE", "6"))))
+        slate_pre_mean_for_cal = slate_pre_mean if len(slate_pre_vals) >= min_slate else None
+
+        for item in pending_projections:
+            projection = item["projection"]
+            pre_calibration_total = item["pre_calibration_total"]
+            projection_created_at = item["projection_created_at"]
+            calibrated_total, apply_meta = apply_totals_calibration(
+                pre_calibration_total,
+                totals_calibration or {},
+                slate_pre_mean=slate_pre_mean_for_cal,
+                return_meta=True,
+            )
+            final_calibration = {
+                "pre_calibration_total": pre_calibration_total,
+                "calibrated_total": calibrated_total,
+                "delta": apply_meta.get("delta"),
+                "fit": totals_calibration,
+                "applied": bool(apply_meta.get("applied")),
+                "apply_meta": apply_meta,
+                "slate_pre_mean": slate_pre_mean,
+            }
+            markets = projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
+            if calibrated_total is not None:
+                markets = dict(markets)
+                markets["total_mean"] = round(float(calibrated_total), 2)
+                delta = float(final_calibration["delta"] or 0.0)
+                for band_key in ("total_p10", "total_p50", "total_p90"):
+                    band_val = _to_float_like(markets.get(band_key))
+                    if band_val is not None:
+                        markets[band_key] = round(float(band_val) + delta, 2)
+                projection["markets"] = markets
+                diagnostics = projection.get("diagnostics")
+                if isinstance(diagnostics, dict):
+                    diagnostics = dict(diagnostics)
+                    diagnostics["totals_calibration"] = {
+                        **(diagnostics.get("totals_calibration") or {}),
+                        "final_applied": final_calibration,
+                        "source": str((totals_calibration or {}).get("source") or "nfl_totals_linear_calibration"),
+                        "slope": (totals_calibration or {}).get("slope"),
+                        "intercept": (totals_calibration or {}).get("intercept"),
+                        "intercept_effective": apply_meta.get("intercept_effective"),
+                        "level_shift_shrink": apply_meta.get("shrink"),
+                        "generative_extra": apply_meta.get("generative_extra"),
+                        "slate_pre_mean": slate_pre_mean,
+                        "sample_size": (totals_calibration or {}).get("sample_size"),
+                        "calibrated_total": round(float(calibrated_total), 4),
+                        "base_total": round(float(pre_calibration_total), 4)
+                        if pre_calibration_total is not None
+                        else None,
+                        "delta": final_calibration["delta"],
+                        "applied": bool(final_calibration["applied"]),
+                    }
+                    projection["diagnostics"] = diagnostics
             projection_for_storage = dict(projection)
             audit_block = projection_for_storage.get("audit")
             if not isinstance(audit_block, dict):
@@ -3147,13 +3242,18 @@ def run_nfl_market_simulations(
                     "projection_created_at_mode": str(projection_created_at_mode),
                     "kickoff_buffer_minutes": int(max(0, int(kickoff_buffer_minutes))),
                     "projection_created_at": projection_created_at.isoformat(),
+                    # Wall-clock ingest time — created_at is often backdated to kickoff
+                    # for CLV, so fair-lines must prefer this when choosing among ties.
+                    "pipeline_run_at": datetime.now(timezone.utc).isoformat(),
                     "include_completed_games": bool(include_completed_games),
+                    "pre_calibration_total": pre_calibration_total,
                     "totals_calibration": totals_calibration,
+                    "final_totals_calibration": final_calibration,
                     "tuning_config_applied": bool(tuning_config_overrides),
                     "team_prior_anchor": {
-                        "home": home_prior if isinstance(home_prior, dict) else {},
-                        "away": away_prior if isinstance(away_prior, dict) else {},
-                        "season_year": season_year,
+                        "home": item.get("home_prior") or {},
+                        "away": item.get("away_prior") or {},
+                        "season_year": item.get("season_year"),
                     },
                 }
             )
@@ -3185,10 +3285,13 @@ def run_nfl_market_simulations(
                     "created_at": projection_created_at,
                 },
             )
-            processed += 1
             inserted += 1
         session.commit()
-        return {"games_processed": processed, "projections_inserted": inserted}
+        return {
+            "games_processed": processed,
+            "projections_inserted": inserted,
+            "slate_pre_mean": round(float(slate_pre_mean), 4) if slate_pre_mean is not None else None,
+        }
     except Exception:
         session.rollback()
         log.exception("Failed running NFL market simulations")
@@ -4098,7 +4201,7 @@ def run_nfl_quality_grading(
         totals_calibration = fetch_nfl_totals_calibration(
             session,
             model_version=model_version,
-            lookback_days=max(int(lookback_days), int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "240")))),
+            lookback_days=max(int(lookback_days), int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "1500")))),
         )
         points = session.execute(
             text(
@@ -7269,6 +7372,136 @@ def _to_uuid_or_none(value: Any) -> Any:
         return None
 
 
+def _qb_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[str, Dict[str, float]]:
+    """{team: {player_id: depth_order}} for QBs — fallback when snaps are all zero."""
+    rows = session.execute(
+        text(
+            """
+            SELECT team, player_id, depth_order
+            FROM nfl_dp_depth_chart_weekly
+            WHERE season = :season
+              AND week = :week
+              AND UPPER(position) = 'QB'
+            """
+        ),
+        {"season": int(season), "week": int(week)},
+    ).fetchall()
+    out: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        out.setdefault(str(row.team), {})[str(row.player_id)] = float(row.depth_order or 99.0)
+    return out
+
+
+def _rb_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[str, Dict[str, float]]:
+    rows = session.execute(
+        text(
+            """
+            SELECT team, player_id, depth_order
+            FROM nfl_dp_depth_chart_weekly
+            WHERE season = :season
+              AND week = :week
+              AND UPPER(position) IN ('RB', 'HB', 'FB')
+            """
+        ),
+        {"season": int(season), "week": int(week)},
+    ).fetchall()
+    out: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        out.setdefault(str(row.team), {})[str(row.player_id)] = float(row.depth_order or 99.0)
+    return out
+
+
+_RB_DEPTH_RUSH_PRIOR = {1: 0.55, 2: 0.28, 3: 0.12, 4: 0.05}
+_WR_DEPTH_TARGET_PRIOR = {1: 0.27, 2: 0.18, 3: 0.11, 4: 0.06}
+_TE_DEPTH_TARGET_PRIOR = {1: 0.20, 2: 0.10, 3: 0.05}
+
+
+def _apply_rb_depth_rush_prior(
+    *,
+    team: str,
+    player_id: str,
+    position: str,
+    rush_share: float,
+    rb_depth_by_team: Dict[str, Dict[str, float]],
+) -> float:
+    """Blend trailing rush_share with depth-chart prior for RB rooms.
+
+    Real bug: DAL W17 had Malik Davis ahead of Javonte Williams on one-week
+    usage while the depth chart (and books) still had Javonte as RB1 — model
+    projected ~18-54 rush yards vs a 73.5 line.
+    """
+    pos = str(position or "").upper()
+    if pos not in {"RB", "FB", "HB"}:
+        return float(rush_share)
+    depth = rb_depth_by_team.get(str(team), {}).get(str(player_id))
+    if depth is None:
+        return float(rush_share)
+    prior = float(_RB_DEPTH_RUSH_PRIOR.get(int(depth), 0.04))
+    usage = max(0.0, float(rush_share or 0.0))
+    blended = (0.55 * usage) + (0.45 * prior)
+    # Designated RB1 with weak trailing usage still gets a floor.
+    if int(depth) == 1:
+        blended = max(blended, 0.48)
+    return max(0.0, min(0.85, blended))
+
+
+def _wr_te_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[str, Dict[str, float]]:
+    rows = session.execute(
+        text(
+            """
+            SELECT team, player_id, depth_order, UPPER(position) AS position
+            FROM nfl_dp_depth_chart_weekly
+            WHERE season = :season
+              AND week = :week
+              AND UPPER(position) IN ('WR', 'TE')
+            """
+        ),
+        {"season": int(season), "week": int(week)},
+    ).fetchall()
+    out: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        out.setdefault(str(row.team), {})[str(row.player_id)] = float(row.depth_order or 99.0)
+    return out
+
+
+def _apply_wr_te_depth_target_prior(
+    *,
+    team: str,
+    player_id: str,
+    position: str,
+    target_proxy: float,
+    depth_by_team: Dict[str, Dict[str, float]],
+) -> float:
+    """Blend trailing target share with depth-chart prior (Jameson-class miss)."""
+    pos = str(position or "").upper()
+    if pos not in {"WR", "TE"}:
+        return float(target_proxy)
+    depth = depth_by_team.get(str(team), {}).get(str(player_id))
+    if depth is None:
+        return float(target_proxy)
+    prior_map = _WR_DEPTH_TARGET_PRIOR if pos == "WR" else _TE_DEPTH_TARGET_PRIOR
+    prior = float(prior_map.get(int(depth), 0.04))
+    usage = max(0.0, float(target_proxy or 0.0))
+    blended = (0.55 * usage) + (0.45 * prior)
+    if int(depth) == 1:
+        blended = max(blended, 0.20 if pos == "WR" else 0.14)
+    return max(0.0, min(0.45, blended))
+
+
+def _team_qb_starter_shares(
+    qb_snap_shares_by_team: Dict[str, Dict[str, float]],
+    depth_orders_by_team: Dict[str, Dict[str, float]],
+) -> Dict[tuple[str, str], float]:
+    shares: Dict[tuple[str, str], float] = {}
+    for team, snap_shares in qb_snap_shares_by_team.items():
+        for player_id, share in compute_qb_starter_shares(
+            snap_shares,
+            depth_orders=depth_orders_by_team.get(team),
+        ).items():
+            shares[(team, player_id)] = share
+    return shares
+
+
 @celery_app.task(name="src.tasks.materialize_nfl_player_baseline_projections")
 def materialize_nfl_player_baseline_projections(
     *,
@@ -7308,11 +7541,38 @@ def materialize_nfl_player_baseline_projections(
         for row in rows:
             if str(row.position or "").upper() == "QB":
                 qb_snap_shares_by_team.setdefault(row.team, {})[str(row.player_id)] = float(row.team_snap_share or 0.0)
-        qb_starter_shares: Dict[tuple[str, str], float] = {
-            (team, player_id): share
-            for team, snap_shares in qb_snap_shares_by_team.items()
-            for player_id, share in compute_qb_starter_shares(snap_shares).items()
-        }
+        depth_orders_by_team = _qb_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        qb_starter_shares = _team_qb_starter_shares(qb_snap_shares_by_team, depth_orders_by_team)
+        rb_depth_by_team = _rb_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        wr_te_depth_by_team = _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week))
+
+        # Game-script anchors from schedule closing lines (nflverse).
+        schedule_rows = session.execute(
+            text(
+                """
+                SELECT home_team, away_team, spread_line, total_line
+                FROM nfl_dp_schedules
+                WHERE season = :season
+                  AND week = :week
+                """
+            ),
+            {"season": int(season), "week": int(target_week)},
+        ).fetchall()
+        team_script: Dict[str, tuple[float, float]] = {}
+        for srow in schedule_rows:
+            total = float(srow.total_line) if srow.total_line is not None else None
+            spread = float(srow.spread_line) if srow.spread_line is not None else None
+            if total is None or spread is None:
+                continue
+            home = str(srow.home_team or "")
+            away = str(srow.away_team or "")
+            # spread_line is home spread; team_spread negative ⇒ favorite.
+            home_implied = (total / 2.0) - (spread / 2.0)
+            away_implied = (total / 2.0) + (spread / 2.0)
+            if home:
+                team_script[home] = (home_implied, spread)
+            if away:
+                team_script[away] = (away_implied, -spread)
 
         latest_props = session.execute(
             text(
@@ -7374,24 +7634,45 @@ def materialize_nfl_player_baseline_projections(
             experience_confidence = (
                 ROOKIE_EXPERIENCE_CONFIDENCE if usage_source == "rookie_baseline_v1" else VETERAN_EXPERIENCE_CONFIDENCE
             )
+            implied_total, team_spread = team_script.get(str(row.team or ""), (0.0, 0.0))
+            starter_share = float(qb_starter_shares.get((row.team, str(row.player_id)), 1.0))
+            role_conf = float(row.role_confidence or 0.65)
+            if str(row.position or "").upper() == "QB" and starter_share >= 0.85:
+                role_conf = max(role_conf, 0.82)
+            rush_share = _apply_rb_depth_rush_prior(
+                team=str(row.team or ""),
+                player_id=str(row.player_id),
+                position=str(row.position or ""),
+                rush_share=float(row.rush_share or 0.0),
+                rb_depth_by_team=rb_depth_by_team,
+            )
+            target_proxy = _apply_wr_te_depth_target_prior(
+                team=str(row.team or ""),
+                player_id=str(row.player_id),
+                position=str(row.position or ""),
+                target_proxy=float(row.target_proxy or 0.0),
+                depth_by_team=wr_te_depth_by_team,
+            )
             inputs = PlayerFeatureInputs(
                 position=str(row.position or ""),
                 snap_proxy=float(row.snap_proxy or 0.0),
                 route_proxy=float(row.route_proxy or 0.0),
-                target_proxy=float(row.target_proxy or 0.0),
-                rush_share=float(row.rush_share or 0.0),
+                target_proxy=target_proxy,
+                rush_share=rush_share,
                 red_zone_share=float(row.red_zone_share or 0.0),
                 qb_dropback_factor=float(row.qb_dropback_factor or 1.0),
                 qb_pressure_factor=float(row.qb_pressure_factor or 1.0),
                 team_pace_factor=float(row.team_pace_factor or 1.0),
                 team_pass_rate_factor=float(row.team_pass_rate_factor or 1.0),
                 availability_confidence=float(row.availability_confidence or 0.75),
-                role_confidence=float(row.role_confidence or 0.65),
+                role_confidence=role_conf,
                 experience_confidence=experience_confidence,
                 team_snap_share=float(row.team_snap_share or 0.0),
                 opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
                 opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
-                qb_starter_share=qb_starter_shares.get((row.team, str(row.player_id)), 1.0),
+                qb_starter_share=starter_share,
+                implied_team_total=float(implied_total or 0.0),
+                team_spread=float(team_spread or 0.0),
             )
             baseline = baseline_projection_from_features(inputs)
             cov_key = str(resolved_player_uid or row.player_name)
@@ -7406,6 +7687,9 @@ def materialize_nfl_player_baseline_projections(
                 },
                 "feature_freshness": str(row.updated_at.isoformat() if row.updated_at is not None else ""),
                 "player_uid": resolved_player_uid,
+                "implied_team_total": float(implied_total or 0.0),
+                "team_spread": float(team_spread or 0.0),
+                "game_script_applied": bool(implied_total),
             }
             session.execute(
                 text(
@@ -7631,6 +7915,35 @@ def materialize_nfl_player_box_score_sims(
         for row in rows:
             rows_by_team.setdefault(row.team, []).append(row)
 
+        schedule_rows = session.execute(
+            text(
+                """
+                SELECT home_team, away_team, spread_line, total_line
+                FROM nfl_dp_schedules
+                WHERE season = :season AND week = :week
+                """
+            ),
+            {"season": int(season), "week": int(target_week)},
+        ).fetchall()
+        team_script: Dict[str, tuple[float, float]] = {}
+        for srow in schedule_rows:
+            total = float(srow.total_line) if srow.total_line is not None else None
+            spread = float(srow.spread_line) if srow.spread_line is not None else None
+            if total is None or spread is None:
+                continue
+            home = str(srow.home_team or "")
+            away = str(srow.away_team or "")
+            home_implied = (total / 2.0) - (spread / 2.0)
+            away_implied = (total / 2.0) + (spread / 2.0)
+            if home:
+                team_script[home] = (home_implied, spread)
+            if away:
+                team_script[away] = (away_implied, -spread)
+
+        depth_orders_by_team = _qb_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        rb_depth_by_team = _rb_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        wr_te_depth_by_team = _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week))
+
         for team, team_rows in rows_by_team.items():
             # Bye week: nfl_player_projection_features_weekly still has a row
             # for every rostered player every week (the preseason hydration
@@ -7652,7 +7965,11 @@ def materialize_nfl_player_box_score_sims(
                 for row in team_rows
                 if str(row.position or "").upper() == "QB"
             }
-            qb_starter_shares = compute_qb_starter_shares(qb_snap_shares)
+            qb_starter_shares = compute_qb_starter_shares(
+                qb_snap_shares,
+                depth_orders=depth_orders_by_team.get(str(team)),
+            )
+            implied_total, team_spread = team_script.get(str(team), (0.0, 0.0))
 
             roles: List[PlayerBoxScoreRole] = []
             row_by_key: Dict[str, Any] = {}
@@ -7663,24 +7980,46 @@ def materialize_nfl_player_box_score_sims(
                 experience_confidence = (
                     ROOKIE_EXPERIENCE_CONFIDENCE if usage_source == "rookie_baseline_v1" else VETERAN_EXPERIENCE_CONFIDENCE
                 )
+                starter_share = float(qb_starter_shares.get(str(row.player_id), 1.0))
+                role_conf = float(row.role_confidence or 0.65)
+                # Clear QB starters need high concentration in the discrete
+                # starter draw; usage-derived role_confidence often understates them.
+                if str(row.position or "").upper() == "QB" and starter_share >= 0.85:
+                    role_conf = max(role_conf, 0.82)
+                rush_share = _apply_rb_depth_rush_prior(
+                    team=str(team),
+                    player_id=str(row.player_id),
+                    position=str(row.position or ""),
+                    rush_share=float(row.rush_share or 0.0),
+                    rb_depth_by_team=rb_depth_by_team,
+                )
+                target_proxy = _apply_wr_te_depth_target_prior(
+                    team=str(team),
+                    player_id=str(row.player_id),
+                    position=str(row.position or ""),
+                    target_proxy=float(row.target_proxy or 0.0),
+                    depth_by_team=wr_te_depth_by_team,
+                )
                 inputs = PlayerFeatureInputs(
                     position=str(row.position or ""),
                     snap_proxy=float(row.snap_proxy or 0.0),
                     route_proxy=float(row.route_proxy or 0.0),
-                    target_proxy=float(row.target_proxy or 0.0),
-                    rush_share=float(row.rush_share or 0.0),
+                    target_proxy=target_proxy,
+                    rush_share=rush_share,
                     red_zone_share=float(row.red_zone_share or 0.0),
                     qb_dropback_factor=float(row.qb_dropback_factor or 1.0),
                     qb_pressure_factor=float(row.qb_pressure_factor or 1.0),
                     team_pace_factor=float(row.team_pace_factor or 1.0),
                     team_pass_rate_factor=float(row.team_pass_rate_factor or 1.0),
                     availability_confidence=float(row.availability_confidence or 0.75),
-                    role_confidence=float(row.role_confidence or 0.65),
+                    role_confidence=role_conf,
                     experience_confidence=experience_confidence,
                     team_snap_share=float(row.team_snap_share or 0.0),
                     opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
                     opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
-                    qb_starter_share=qb_starter_shares.get(str(row.player_id), 1.0),
+                    qb_starter_share=starter_share,
+                    implied_team_total=float(implied_total or 0.0),
+                    team_spread=float(team_spread or 0.0),
                 )
                 baseline = baseline_projection_from_features(inputs)
                 player_key = str(row.player_uid) if row.player_uid is not None else f"{row.team}:{row.player_id}"
@@ -7691,7 +8030,7 @@ def materialize_nfl_player_box_score_sims(
                         player_name=str(row.player_name or ""),
                         position=str(row.position or ""),
                         baseline=baseline,
-                        role_confidence=float(row.role_confidence or 0.65),
+                        role_confidence=role_conf,
                         experience_confidence=experience_confidence,
                     )
                 )
@@ -7931,17 +8270,69 @@ def materialize_nfl_player_season_box_score_sims(
 
 
 @celery_app.task(name="src.tasks.materialize_nfl_player_props_edges")
+def _box_dist_moments(dist_obj: Any) -> tuple[Optional[float], Optional[float], Optional[float]]:
+    """Extract (mean, std, p50) from a box-score *_dist jsonb block."""
+    if dist_obj is None:
+        return None, None, None
+    if isinstance(dist_obj, str):
+        try:
+            dist_obj = json.loads(dist_obj)
+        except (TypeError, ValueError, json.JSONDecodeError):
+            return None, None, None
+    if not isinstance(dist_obj, dict):
+        return None, None, None
+    mean = _to_float_like(dist_obj.get("mean"))
+    std = _to_float_like(dist_obj.get("std"))
+    p50 = _to_float_like(dist_obj.get("p50"))
+    return mean, std, p50
+
+
 def materialize_nfl_player_props_edges(
     *,
     season: int,
     week: Optional[int] = None,
     model_version: str = "nfl-player-v1",
+    box_score_model_version: str = DEFAULT_BOX_SCORE_MODEL_VERSION,
 ) -> Dict[str, Any]:
+    """Materialize prop edges, preferring box-score MC distributions when present.
+
+    Vegas benchmarks rank NEW (box MC) ahead of flat baselines. Live edges
+    historically used baselines only — this wires the better distribution into
+    the board while keeping baseline fallback for players/weeks without sims.
+    Applies enterprise mean/std calibration + sparse PLAY/WATCH tags.
+    """
     session = SessionLocal()
     target_week = None
     upserted = 0
+    box_sourced = 0
+    baseline_sourced = 0
+    play_tagged = 0
+    watch_tagged = 0
     try:
         target_week = _resolve_nfl_week(session, season=season, week=week)
+        try:
+            prop_cal_bundle = load_walk_forward_prop_calibration(
+                session, season=int(season), week=int(target_week)
+            )
+        except Exception:
+            prop_cal_bundle = default_calibration_bundle()
+        role_rows = session.execute(
+            text(
+                """
+                SELECT player_id, team, role_confidence, availability_confidence
+                FROM nfl_player_projection_features_weekly
+                WHERE season = :season AND week = :week
+                """
+            ),
+            {"season": int(season), "week": int(target_week)},
+        ).fetchall()
+        role_by_player: Dict[tuple[str, str], tuple[float, float]] = {
+            (str(r.player_id), str(r.team)): (
+                float(r.role_confidence or 0.65),
+                float(r.availability_confidence or 0.75),
+            )
+            for r in role_rows
+        }
         baselines = session.execute(
             text(
                 """
@@ -7954,6 +8345,41 @@ def materialize_nfl_player_props_edges(
             ),
             {"season": int(season), "week": int(target_week), "model_version": model_version},
         ).fetchall()
+        box_rows = session.execute(
+            text(
+                """
+                SELECT
+                  player_id, player_uid, player_name, team, position, game_id,
+                  pass_yards_dist, rush_yards_dist, receiving_yards_dist,
+                  receptions_dist, total_tds_dist,
+                  pass_yards_mean, rush_yards_mean, receiving_yards_mean,
+                  receptions_mean, total_tds_mean
+                FROM nfl_player_game_box_score_sims
+                WHERE season = :season
+                  AND week = :week
+                  AND model_version = :box_model_version
+                """
+            ),
+            {
+                "season": int(season),
+                "week": int(target_week),
+                "box_model_version": str(box_score_model_version),
+            },
+        ).fetchall()
+        box_by_player_id: Dict[str, Any] = {}
+        box_by_match_key: Dict[str, Any] = {}
+        for box in box_rows:
+            pid = str(box.player_id or "")
+            if pid:
+                box_by_player_id[pid] = box
+            for identity_key in prop_player_match_keys(
+                player_uid=str(box.player_uid) if box.player_uid is not None else None,
+                player_name=str(box.player_name or ""),
+            ):
+                # Prefer first seen; ids are unique per team-week.
+                box_by_match_key.setdefault(f"{identity_key}|{str(box.team or '')}", box)
+                box_by_match_key.setdefault(identity_key, box)
+
         market_rows = session.execute(
             text(
                 """
@@ -7980,22 +8406,60 @@ def materialize_nfl_player_props_edges(
             ),
             {"season": int(season), "week": int(target_week)},
         ).fetchall()
+        # Ambiguous initial+last keys among baselines (e.g. multiple J.Williams).
+        il_counts: Dict[str, int] = {}
+        baseline_identity_rows: List[tuple[str, str, str, set[str]]] = []
+        for brow in baselines:
+            b_keys = set(
+                prop_player_match_keys(
+                    player_uid=str(brow.player_uid) if getattr(brow, "player_uid", None) is not None else None,
+                    player_name=str(brow.player_name or ""),
+                )
+            )
+            baseline_identity_rows.append(
+                (str(brow.team or ""), str(getattr(brow, "position", None) or ""), str(brow.player_name or ""), b_keys)
+            )
+            for ik in b_keys:
+                if ik.startswith("il:"):
+                    il_counts[ik] = il_counts.get(ik, 0) + 1
+        ambiguous_il_keys = {k for k, n in il_counts.items() if n > 1}
+
         # Index by uid / normalized name / initial+last so abbreviated baselines
         # (D.Maye) join to Odds-API full names (Drake Maye) even when snapshot uid is null.
+        # Team-scope il: keys when we can resolve the market onto a unique baseline.
         market_lookup: Dict[tuple[str, str], Any] = {}
         market_lookup_rank: Dict[tuple[str, str], tuple] = {}
         for market in market_rows:
             market_key = str(market.market_key)
             rank = prop_market_snapshot_rank(market)
-            for identity_key in prop_player_match_keys(
+            m_keys = prop_player_match_keys(
                 player_uid=str(market.player_uid) if market.player_uid is not None else None,
                 player_name=str(market.player_name or ""),
-            ):
-                key = (identity_key, market_key)
-                prior = market_lookup_rank.get(key)
-                if prior is None or rank < prior:
-                    market_lookup[key] = market
-                    market_lookup_rank[key] = rank
+            )
+            m_key_set = set(m_keys)
+            resolved_team = str(market.team or "").strip().upper() or None
+            if resolved_team is None:
+                candidates = [
+                    (team, pos, name)
+                    for team, pos, name, b_keys in baseline_identity_rows
+                    if m_key_set & b_keys and prop_market_position_compatible(market_key, pos)
+                ]
+                if candidates:
+                    candidates.sort(key=lambda c: prop_market_position_rank(market_key, c[1]))
+                    best_rank = prop_market_position_rank(market_key, candidates[0][1])
+                    top = [c for c in candidates if prop_market_position_rank(market_key, c[1]) == best_rank]
+                    if len(top) == 1 and top[0][0]:
+                        resolved_team = str(top[0][0]).strip().upper()
+            for identity_key in m_keys:
+                index_keys = [identity_key]
+                if resolved_team and identity_key.startswith("il:"):
+                    index_keys.append(f"{identity_key}|{resolved_team}")
+                for identity_key_i in index_keys:
+                    key = (identity_key_i, market_key)
+                    prior = market_lookup_rank.get(key)
+                    if prior is None or rank < prior:
+                        market_lookup[key] = market
+                        market_lookup_rank[key] = rank
 
         for row in baselines:
             resolved_player_uid = str(row.player_uid) if row.player_uid is not None else None
@@ -8038,27 +8502,136 @@ def materialize_nfl_player_props_edges(
                 player_uid=resolved_player_uid,
                 player_name=str(row.player_name or ""),
             )
-            markets = [
-                ("pass_yds", float(row.pass_yards_mean or 0.0), float(row.pass_yards_std or 4.0)),
-                ("rush_yds", float(row.rush_yards_mean or 0.0), float(row.rush_yards_std or 4.0)),
-                ("rec_yds", float(row.receiving_yards_mean or 0.0), float(row.receiving_yards_std or 4.0)),
-                ("receptions", float(row.receptions_mean or 0.0), float(row.receptions_std or 1.0)),
-                ("anytime_td", float(row.anytime_td_prob or 0.0), 0.16),
-            ]
-            for market_key, model_mean, model_std in markets:
-                market = None
+            position = str(getattr(row, "position", None) or "")
+            box = box_by_player_id.get(str(row.player_id or ""))
+            if box is None:
                 for identity_key in player_match_keys:
-                    market = market_lookup.get((identity_key, market_key))
-                    if market is not None:
+                    box = box_by_match_key.get(f"{identity_key}|{str(row.team or '')}") or box_by_match_key.get(
+                        identity_key
+                    )
+                    if box is not None:
                         break
-                line = float(market.line) if (market is not None and market.line is not None) else (
-                    0.5 if market_key == "anytime_td" else float(model_mean)
+
+            # Prefer box-score MC moments (benchmark-winning NEW arm).
+            pass_mean, pass_std, pass_p50 = (
+                _box_dist_moments(box.pass_yards_dist) if box is not None else (None, None, None)
+            )
+            rush_mean, rush_std, rush_p50 = (
+                _box_dist_moments(box.rush_yards_dist) if box is not None else (None, None, None)
+            )
+            rec_mean, rec_std, rec_p50 = (
+                _box_dist_moments(box.receiving_yards_dist) if box is not None else (None, None, None)
+            )
+            receptions_mean, receptions_std, receptions_p50 = (
+                _box_dist_moments(box.receptions_dist) if box is not None else (None, None, None)
+            )
+            total_tds_mean = _to_float_like(getattr(box, "total_tds_mean", None)) if box is not None else None
+            if total_tds_mean is None and box is not None:
+                total_tds_mean, _, _ = _box_dist_moments(box.total_tds_dist)
+
+            if box is not None and any(v is not None for v in (pass_mean, rush_mean, rec_mean)):
+                projection_source = "box_score"
+                box_sourced += 1
+            else:
+                projection_source = "baseline"
+                baseline_sourced += 1
+
+            atd_mean = (
+                anytime_td_prob_from_td_mean(total_tds_mean)
+                if total_tds_mean is not None
+                else float(row.anytime_td_prob or 0.0)
+            )
+            atd_std = max(0.08, math.sqrt(max(atd_mean * (1.0 - atd_mean), 1e-4)))
+
+            # Soft-blend MC with baseline so box under-shoots (e.g. QB volume)
+            # cannot invent huge Unders vs sharp books while still preferring MC.
+            box_w = 0.60
+            role_conf, avail_conf = role_by_player.get(
+                (str(row.player_id), str(row.team)),
+                (0.65, 0.75),
+            )
+            # Clear QB starters: if MC crushed pass volume vs a healthy baseline,
+            # prefer baseline more (winner-take-all dilution / missing snaps).
+            pass_box_w = box_w
+            base_pass = float(row.pass_yards_mean or 0.0)
+            if (
+                str(position or "").upper() == "QB"
+                and pass_mean is not None
+                and base_pass >= 180.0
+                and float(pass_mean) < base_pass * 0.78
+            ):
+                pass_box_w = 0.35
+
+            def _blend_mean(box_v: Optional[float], base_v: float, weight: float = box_w) -> float:
+                if box_v is None:
+                    return float(base_v)
+                return float(weight * float(box_v) + (1.0 - weight) * float(base_v))
+
+            def _blend_std(box_v: Optional[float], base_v: float, weight: float = box_w) -> float:
+                if box_v is None:
+                    return float(base_v)
+                # Independence pool — avoids understating uncertainty when MC/base disagree.
+                return float(math.sqrt((weight * float(box_v)) ** 2 + ((1.0 - weight) * float(base_v)) ** 2))
+
+            markets = [
+                (
+                    "pass_yds",
+                    _blend_mean(pass_mean, base_pass, pass_box_w),
+                    _blend_std(pass_std, float(row.pass_yards_std or 4.0), pass_box_w),
+                    pass_p50,
+                ),
+                (
+                    "rush_yds",
+                    _blend_mean(rush_mean, float(row.rush_yards_mean or 0.0)),
+                    _blend_std(rush_std, float(row.rush_yards_std or 4.0)),
+                    rush_p50,
+                ),
+                (
+                    "rec_yds",
+                    _blend_mean(rec_mean, float(row.receiving_yards_mean or 0.0)),
+                    _blend_std(rec_std, float(row.receiving_yards_std or 4.0)),
+                    rec_p50,
+                ),
+                (
+                    "receptions",
+                    _blend_mean(receptions_mean, float(row.receptions_mean or 0.0)),
+                    _blend_std(receptions_std, float(row.receptions_std or 1.0)),
+                    receptions_p50,
+                ),
+                ("anytime_td", float(atd_mean), float(atd_std), atd_mean),
+            ]
+            for market_key, raw_mean, raw_std, model_p50 in markets:
+                market = select_prop_market_for_player(
+                    market_lookup,
+                    player_match_keys=player_match_keys,
+                    market_key=market_key,
+                    team=str(row.team or ""),
+                    position=position,
+                    ambiguous_il_keys=ambiguous_il_keys,
                 )
+                # Never invent a Vegas line from the model mean — that poisoned
+                # board MAE (~40% of rows looked "perfect") and fake edges.
+                if market is not None and market.line is not None:
+                    line: Optional[float] = float(market.line)
+                elif market_key == "anytime_td":
+                    line = 0.5
+                else:
+                    line = None
                 over_price = int(market.over_price) if (market is not None and market.over_price is not None) else None
                 under_price = int(market.under_price) if (market is not None and market.under_price is not None) else None
+                cal = apply_prop_calibration(
+                    model_mean=float(raw_mean),
+                    model_std=float(raw_std),
+                    market_key=market_key,
+                    calibration=prop_cal_bundle.get(market_key),
+                    market_line=float(line) if line is not None and market is not None else None,
+                    role_confidence=role_conf,
+                )
+                model_mean = float(cal["model_mean"])
+                model_std = float(cal["model_std"])
                 if market_key == "anytime_td":
                     model_floor = max(0.0, model_mean * 0.55)
-                    model_median = model_mean
+                    model_median = float(model_p50 if model_p50 is not None else model_mean)
                     model_ceiling = min(0.95, model_mean * 1.55 + 0.03)
                     edge = evaluate_prop_edge(
                         model_mean=model_mean,
@@ -8066,18 +8639,40 @@ def materialize_nfl_player_props_edges(
                         line=0.5,
                         market_over_price=over_price,
                         market_under_price=under_price,
+                        market_key=market_key,
+                        position=position,
+                        role_confidence=role_conf,
+                        availability_confidence=avail_conf,
                     )
                 else:
                     model_floor = max(0.0, model_mean - (1.0 * model_std))
-                    model_median = model_mean
+                    model_median = float(model_p50 if model_p50 is not None else model_mean)
                     model_ceiling = model_mean + (1.1 * model_std)
+                    edge_line = float(line) if line is not None else float(model_mean)
                     edge = evaluate_prop_edge(
                         model_mean=model_mean,
                         model_std=max(0.6, model_std),
-                        line=line,
+                        line=edge_line,
                         market_over_price=over_price,
                         market_under_price=under_price,
+                        market_key=market_key,
+                        position=position,
+                        role_confidence=role_conf,
+                        availability_confidence=avail_conf,
                     )
+                    if line is None:
+                        # Projection-only row: no book to beat.
+                        edge = {**edge, "tag": "PASS", "reason": "no_market_line"}
+                if edge.get("tag") == "PLAY":
+                    play_tagged += 1
+                elif edge.get("tag") == "WATCH":
+                    watch_tagged += 1
+
+                game_id = _to_uuid_or_none(row.game_id)
+                if game_id is None and box is not None:
+                    game_id = _to_uuid_or_none(getattr(box, "game_id", None))
+                if game_id is None and market is not None:
+                    game_id = _to_uuid_or_none(getattr(market, "game_id", None))
 
                 session.execute(
                     text(
@@ -8122,7 +8717,7 @@ def materialize_nfl_player_props_edges(
                         "season": int(row.season),
                         "week": int(row.week),
                         "model_version": model_version,
-                        "game_id": _to_uuid_or_none(row.game_id),
+                        "game_id": game_id,
                         "player_id": row.player_id,
                         "player_uid": resolved_player_uid,
                         "player_name": row.player_name,
@@ -8147,7 +8742,29 @@ def materialize_nfl_player_props_edges(
                             {
                                 "market_snapshot_id": str(market.id) if market is not None else None,
                                 "fallback_used": market is None,
+                                "projection_source": projection_source,
+                                "box_score_model_version": box_score_model_version
+                                if projection_source == "box_score"
+                                else None,
                                 "created_from_baseline_model_version": model_version,
+                                "raw_model_mean": round(float(raw_mean), 4),
+                                "raw_model_std": round(float(raw_std), 4),
+                                "z_over": edge.get("z_over"),
+                                "tag": edge.get("tag"),
+                                "tag_side": edge.get("tag_side"),
+                                "tag_action": edge.get("tag_action"),
+                                "size_down": edge.get("size_down"),
+                                "stake_eligible": edge.get("stake_eligible"),
+                                "tag_reason": edge.get("tag_reason"),
+                                "market_vig": edge.get("market_vig"),
+                                "position": position,
+                                "role_confidence": role_conf,
+                                "availability_confidence": avail_conf,
+                                "calibration_version": cal.get("calibration_version"),
+                                "calibration_source": cal.get("calibration_source"),
+                                "calibration_intercept": cal.get("calibration_intercept"),
+                                "calibration_std_multiplier": cal.get("calibration_std_multiplier"),
+                                "market_shrink": cal.get("market_shrink"),
                             }
                         ),
                     },
@@ -8171,15 +8788,57 @@ def materialize_nfl_player_props_edges(
                 "week": int(target_week),
                 "layer": "props",
                 "model_version": model_version,
-                "source_coverage": json.dumps({"market_rows": len(market_rows), "baseline_rows": len(baselines)}),
+                "source_coverage": json.dumps(
+                    {
+                        "market_rows": len(market_rows),
+                        "baseline_rows": len(baselines),
+                        "box_score_rows": len(box_rows),
+                        "box_sourced_players": box_sourced,
+                        "baseline_sourced_players": baseline_sourced,
+                    }
+                ),
                 "freshness": json.dumps({"latest_market_snapshot": str(max([r.captured_at for r in market_rows], default=None))}),
-                "calibration_flags": json.dumps({"calibrated": False, "distribution": "gaussian-approx"}),
+                "calibration_flags": json.dumps(
+                    {
+                        "calibrated": True,
+                        "distribution": "box-score-mc-preferred",
+                        "devig": "multiplicative",
+                        "tags": "PLAY/WATCH/PASS",
+                        "prop_calibration": {
+                            mk: {
+                                "intercept": c.intercept,
+                                "std_multiplier": c.std_multiplier,
+                                "source": c.source,
+                                "sample_size": c.sample_size,
+                            }
+                            for mk, c in prop_cal_bundle.items()
+                        },
+                    }
+                ),
                 "readiness_status": "go" if len(baselines) > 20 else "warning",
-                "metrics": json.dumps({"prop_edges_upserted": upserted}),
+                "metrics": json.dumps(
+                    {
+                        "prop_edges_upserted": upserted,
+                        "play_tagged": play_tagged,
+                        "watch_tagged": watch_tagged,
+                        "box_sourced_players": box_sourced,
+                        "baseline_sourced_players": baseline_sourced,
+                    }
+                ),
             },
         )
         session.commit()
-        return {"season": int(season), "week": int(target_week), "model_version": model_version, "prop_edges_upserted": upserted}
+        return {
+            "season": int(season),
+            "week": int(target_week),
+            "model_version": model_version,
+            "prop_edges_upserted": upserted,
+            "play_tagged": play_tagged,
+            "watch_tagged": watch_tagged,
+            "box_sourced_players": box_sourced,
+            "baseline_sourced_players": baseline_sourced,
+            "box_score_rows": len(box_rows),
+        }
     except Exception:
         session.rollback()
         log.exception("Failed to materialize NFL player props edges")
@@ -8216,22 +8875,64 @@ def pull_nfl_player_prop_market_snapshots(
                 """
                 SELECT
                   g.id::text AS game_id,
-                  g.external_id
+                  g.external_id,
+                  home.abbr AS home_abbr,
+                  away.abbr AS away_abbr,
+                  home.name AS home_name,
+                  away.name AS away_name
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
+                JOIN teams home ON home.id = g.home_team_id
+                JOIN teams away ON away.id = g.away_team_id
                 WHERE l.code = 'nfl'
                   AND s.season_year = :season
                 """
             ),
             {"season": int(season)},
         ).fetchall()
-        game_lookup = {str(row.external_id): str(row.game_id) for row in game_lookup_rows if row.external_id is not None}
+        game_lookup: Dict[str, Dict[str, Any]] = {
+            str(row.external_id): {
+                "game_id": str(row.game_id),
+                "home_abbr": str(row.home_abbr or ""),
+                "away_abbr": str(row.away_abbr or ""),
+                "home_name": str(row.home_name or ""),
+                "away_name": str(row.away_name or ""),
+            }
+            for row in game_lookup_rows
+            if row.external_id is not None
+        }
+        # Week roster → team abbr so Odds players resolve onto the correct side.
+        roster_rows = session.execute(
+            text(
+                """
+                SELECT player_name, team, position
+                FROM nfl_player_projection_baselines
+                WHERE season = :season AND week = :week
+                """
+            ),
+            {"season": int(season), "week": int(week)},
+        ).fetchall()
+        roster_team_by_key: Dict[str, str] = {}
+        roster_pos_by_key: Dict[str, str] = {}
+        for roster in roster_rows:
+            team_abbr = str(roster.team or "")
+            pos = str(roster.position or "")
+            for identity_key in prop_player_match_keys(
+                player_uid=None,
+                player_name=str(roster.player_name or ""),
+            ):
+                roster_team_by_key.setdefault(f"{identity_key}|{team_abbr}", team_abbr)
+                roster_team_by_key.setdefault(identity_key, team_abbr)
+                roster_pos_by_key.setdefault(identity_key, pos)
 
         for event in events:
             event_id = str(event.get("id") or "")
             if not event_id:
                 continue
+            game_meta = game_lookup.get(event_id) or {}
+            home_abbr = str(game_meta.get("home_abbr") or "")
+            away_abbr = str(game_meta.get("away_abbr") or "")
             details = fetch_odds(
                 endpoint=f"sports/americanfootball_nfl/events/{event_id}/odds",
                 params={
@@ -8279,23 +8980,45 @@ def pull_nfl_player_prop_market_snapshots(
                         under_price = bundled["under_price"]
                         implied_over = _american_implied_prob(over_price) if over_price is not None else None
                         implied_under = _american_implied_prob(under_price) if under_price is not None else None
+                        resolved_team: Optional[str] = None
+                        resolved_pos: Optional[str] = None
+                        for identity_key in prop_player_match_keys(player_uid=None, player_name=player_name):
+                            if home_abbr and f"{identity_key}|{home_abbr}" in roster_team_by_key:
+                                resolved_team = home_abbr
+                            elif away_abbr and f"{identity_key}|{away_abbr}" in roster_team_by_key:
+                                resolved_team = away_abbr
+                            else:
+                                resolved_team = roster_team_by_key.get(identity_key)
+                            resolved_pos = roster_pos_by_key.get(identity_key)
+                            if resolved_team:
+                                break
+                        # Constrain unresolved names to the event's two teams.
+                        if resolved_team is None and home_abbr and away_abbr:
+                            # Prefer home first only as a soft hint for identity context;
+                            # leave None rather than guessing wrong side.
+                            resolved_team = None
                         identity = resolve_and_persist_player_identity(
                             session,
                             IdentityInput(
                                 source_system="odds_api_nfl_props",
                                 external_id=None,
                                 player_name=player_name,
-                                team=None,
-                                position=None,
+                                team=resolved_team,
+                                position=resolved_pos,
                                 season=int(season),
                                 week=int(week),
                                 source_payload={
                                     "event_id": event_id,
                                     "market_key": market_key,
                                     "sportsbook": sportsbook,
+                                    "home_abbr": home_abbr or None,
+                                    "away_abbr": away_abbr or None,
                                 },
                             ),
                         )
+                        opponent = None
+                        if resolved_team and home_abbr and away_abbr:
+                            opponent = away_abbr if resolved_team == home_abbr else home_abbr
                         session.execute(
                             text(
                                 """
@@ -8314,6 +9037,8 @@ def pull_nfl_player_prop_market_snapshots(
                                 DO UPDATE SET
                                   game_id = EXCLUDED.game_id,
                                   player_uid = COALESCE(EXCLUDED.player_uid, nfl_player_prop_market_snapshots.player_uid),
+                                  team = COALESCE(EXCLUDED.team, nfl_player_prop_market_snapshots.team),
+                                  opponent = COALESCE(EXCLUDED.opponent, nfl_player_prop_market_snapshots.opponent),
                                   over_price = COALESCE(EXCLUDED.over_price, nfl_player_prop_market_snapshots.over_price),
                                   under_price = COALESCE(EXCLUDED.under_price, nfl_player_prop_market_snapshots.under_price),
                                   implied_prob_over = COALESCE(EXCLUDED.implied_prob_over, nfl_player_prop_market_snapshots.implied_prob_over),
@@ -8324,14 +9049,14 @@ def pull_nfl_player_prop_market_snapshots(
                             {
                                 "season": int(season),
                                 "week": int(week),
-                                "game_id": _to_uuid_or_none(game_lookup.get(event_id)),
+                                "game_id": _to_uuid_or_none(game_meta.get("game_id")),
                                 "external_game_id": event_id,
                                 "sportsbook": sportsbook,
                                 "captured_at": captured_at,
                                 "player_uid": identity.player_uid,
                                 "player_name": player_name,
-                                "team": None,
-                                "opponent": None,
+                                "team": resolved_team,
+                                "opponent": opponent,
                                 "market_key": market_key,
                                 "line": line,
                                 "over_price": over_price,
@@ -8345,6 +9070,7 @@ def pull_nfl_player_prop_market_snapshots(
                                         "identity_status": identity.status,
                                         "identity_rule": identity.rule_used,
                                         "resolver_version": identity.resolver_version,
+                                        "roster_team_resolved": resolved_team is not None,
                                     }
                                 ),
                             },

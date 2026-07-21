@@ -68,6 +68,96 @@ def prop_player_match_keys(*, player_uid: Optional[str], player_name: Optional[s
     return keys
 
 
+# Position allow-lists for ambiguous initial+last joins (e.g. J.Williams DET WR
+# must not steal Javonte Williams DAL rush lines via shared `il:j williams`).
+_PROP_MARKET_POSITIONS: Dict[str, Optional[List[str]]] = {
+    "pass_yds": ["QB"],
+    "rush_yds": ["RB", "FB", "QB", "WR"],
+    "rec_yds": ["WR", "TE", "RB", "FB"],
+    "receptions": ["WR", "TE", "RB", "FB"],
+    "anytime_td": None,
+}
+
+
+def prop_market_position_compatible(market_key: str, position: Optional[str]) -> bool:
+    allowed = _PROP_MARKET_POSITIONS.get(str(market_key or ""))
+    if allowed is None:
+        return True
+    pos = str(position or "").strip().upper()
+    return bool(pos) and pos in allowed
+
+
+def prop_market_position_rank(market_key: str, position: Optional[str]) -> int:
+    """Lower is better. Used to break ties when multiple players share il: keys."""
+    allowed = _PROP_MARKET_POSITIONS.get(str(market_key or "")) or []
+    pos = str(position or "").strip().upper()
+    try:
+        return allowed.index(pos)
+    except ValueError:
+        return 99
+
+
+def select_prop_market_for_player(
+    market_lookup: Dict[tuple[str, str], Any],
+    *,
+    player_match_keys: List[str],
+    market_key: str,
+    team: Optional[str] = None,
+    position: Optional[str] = None,
+    ambiguous_il_keys: Optional[set[str]] = None,
+) -> Any:
+    """Pick the best market snapshot for a baseline player.
+
+    Prefer uid / exact normalized name, then team-scoped initial+last, then
+    unambiguous global initial+last. Never attach an `il:` collision across
+    teams/positions (Javonte Williams rush ≠ Jameson Williams DET WR).
+    """
+    mk = str(market_key or "")
+    team_u = str(team or "").strip().upper()
+    ambiguous = ambiguous_il_keys or set()
+
+    # 1) UID
+    for key in player_match_keys:
+        if key.startswith("uid:"):
+            hit = market_lookup.get((key, mk))
+            if hit is not None:
+                return hit
+
+    # 2) Exact normalized full/abbrev name
+    for key in player_match_keys:
+        if key.startswith("name:"):
+            hit = market_lookup.get((key, mk))
+            if hit is not None:
+                m_team = str(getattr(hit, "team", None) or "").strip().upper()
+                if m_team and team_u and m_team != team_u:
+                    continue
+                return hit
+
+    # 3) Team-scoped initial+last
+    if team_u:
+        for key in player_match_keys:
+            if key.startswith("il:"):
+                hit = market_lookup.get((f"{key}|{team_u}", mk))
+                if hit is not None and prop_market_position_compatible(mk, position):
+                    return hit
+
+    # 4) Global il: only when unique among baselines this week
+    for key in player_match_keys:
+        if not key.startswith("il:") or key in ambiguous:
+            continue
+        hit = market_lookup.get((key, mk))
+        if hit is None:
+            continue
+        m_team = str(getattr(hit, "team", None) or "").strip().upper()
+        if m_team and team_u and m_team != team_u:
+            continue
+        if not prop_market_position_compatible(mk, position):
+            continue
+        return hit
+
+    return None
+
+
 _PROP_SPORTSBOOK_RANK = {"draftkings": 0, "fanduel": 1}
 
 

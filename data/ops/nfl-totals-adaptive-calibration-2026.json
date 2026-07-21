@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-07-20T21:48:15.938237+00:00",
+  "problem": "Week1 flooded Overs after prior 43.5\u219245.3 + flat level-shift +1.52 double-counted lift",
+  "fix": {
+    "slate_residual_level_shift": "intercept_eff \u2248 remaining gap after generative lift already in pre_cal",
+    "prior_transition_shrink": 0.5,
+    "env": "NFL_TOTALS_LEVEL_SHIFT_SHRINK_DEFAULT_WITH_PRIOR_DELTA",
+    "min_slate_for_generative_extra": 6,
+    "fair_lines_prefers": "final_totals_calibration.apply_meta.shrink then pipeline_run_at"
+  },
+  "week1_verification": {
+    "n": 20,
+    "pre_signed_vs_market": -0.46,
+    "published_signed_vs_market": 0.06,
+    "overs": 10,
+    "unders": 10,
+    "avg_delta_applied": 0.51,
+    "shrink": 0.5
+  },
+  "season_kei_export": {
+    "games": 255,
+    "mean_total": 45.16,
+    "path": "apps/web/data/processed/kei_lines_nfl.json"
+  },
+  "spread_week1": {
+    "signed_vs_market": -0.6,
+    "lean_home": 12,
+    "lean_away": 8,
+    "note": "Mild home lean; HFA left unchanged pending multi-week holdout"
+  },
+  "gate": {
+    "week1_abs_signed_total_vs_market_max": 0.75,
+    "week1_pass": true
+  }
+}

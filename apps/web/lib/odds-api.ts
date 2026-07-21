@@ -31,7 +31,8 @@ export const ALLOWED_BOOKS = [
   "betrivers",
   "betr",
 ] as const;
-const NFL_DEFAULT_BOOKS = ["draftkings"] as const;
+/** NFL falls back to the full allowed set so Best Line can compare books. */
+const NFL_DEFAULT_BOOKS = ALLOWED_BOOKS;
 
 const BOOK_DISPLAY: Record<string, string> = {
   draftkings: "DraftKings",
@@ -178,31 +179,49 @@ export async function fetchEdgeBoard(
 
     const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
 
+    const formatJuice = (price: number | undefined | null): string | undefined => {
+      if (price == null || !Number.isFinite(price)) return undefined;
+      const n = Math.round(price);
+      return n > 0 ? `+${n}` : String(n);
+    };
+
     const spreadData = bookmakers.flatMap((b) => {
       const m = b.markets?.find((x) => x.key === "spreads");
       if (!m) return [];
       const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
+      const homeOutcome = m.outcomes?.find((o) => o.name === ev.home_team);
       if (!awayOutcome || awayOutcome.point == null) return [];
       const pt = awayOutcome.point;
       const canonical = !isMlb || isCanonicalMlbRunLine(pt);
       const line = formatSpreadDisplay(pt, normalizedSport, {
         markAlternate: isMlb && !canonical,
       });
-      return [{ book: b.key, line, point: pt, canonical }];
+      return [
+        {
+          book: b.key,
+          line,
+          point: pt,
+          canonical,
+          juiceAway: formatJuice(awayOutcome.price),
+          juiceHome: formatJuice(homeOutcome?.price),
+        },
+      ];
     });
     const spreadPool = isMlb
       ? spreadData.filter((entry) => entry.canonical)
       : spreadData;
     const selectedSpreadData = spreadPool.length > 0 ? spreadPool : spreadData;
-    const openSpread = selectedSpreadData[0]?.line;
+    const openSpreadEntry = selectedSpreadData[0];
+    const openSpread = openSpreadEntry?.line;
     const bestSpreadEntry = selectedSpreadData.length
       ? selectedSpreadData.reduce((best, cur) =>
           cur.point > best.point ? cur : best,
         )
       : null;
     const bestSpread = bestSpreadEntry?.line ?? openSpread;
-    const bestSpreadBook = bestSpreadEntry
-      ? bookDisplay(bestSpreadEntry.book)
+    const bestSpreadBookKey = bestSpreadEntry?.book;
+    const bestSpreadBook = bestSpreadBookKey
+      ? bookDisplay(bestSpreadBookKey)
       : undefined;
 
     rows.push({
@@ -214,23 +233,39 @@ export async function fetchEdgeBoard(
       open: openSpread,
       best: bestSpread ?? openSpread,
       book: bestSpreadBook,
+      bookKey: bestSpreadBookKey,
+      openJuice: openSpreadEntry?.juiceAway,
+      openJuiceHome: openSpreadEntry?.juiceHome,
+      bestJuice: bestSpreadEntry?.juiceAway ?? openSpreadEntry?.juiceAway,
+      bestJuiceHome: bestSpreadEntry?.juiceHome ?? openSpreadEntry?.juiceHome,
     });
 
     const totalsData = bookmakers.flatMap((b) => {
       const m = b.markets?.find((x) => x.key === "totals");
       if (!m) return [];
       const over = m.outcomes?.find((o) => o.name === "Over");
+      const under = m.outcomes?.find((o) => o.name === "Under");
       const point = over?.point ?? m.outcomes?.[0]?.point;
       if (point == null) return [];
-      return [{ book: b.key, line: String(point), point }];
+      return [
+        {
+          book: b.key,
+          line: String(point),
+          point,
+          juiceOver: formatJuice(over?.price),
+          juiceUnder: formatJuice(under?.price),
+        },
+      ];
     });
-    const openTotal = totalsData[0]?.line;
+    const openTotalEntry = totalsData[0];
+    const openTotal = openTotalEntry?.line;
     const bestTotalEntry = totalsData.length
       ? totalsData.reduce((best, cur) => (cur.point > best.point ? cur : best))
       : null;
     const bestTotal = bestTotalEntry?.line ?? openTotal;
-    const bestTotalBook = bestTotalEntry
-      ? bookDisplay(bestTotalEntry.book)
+    const bestTotalBookKey = bestTotalEntry?.book;
+    const bestTotalBook = bestTotalBookKey
+      ? bookDisplay(bestTotalBookKey)
       : undefined;
 
     rows.push({
@@ -242,6 +277,11 @@ export async function fetchEdgeBoard(
       open: openTotal,
       best: bestTotal ?? openTotal,
       book: bestTotalBook,
+      bookKey: bestTotalBookKey,
+      openJuice: openTotalEntry?.juiceOver,
+      openJuiceHome: openTotalEntry?.juiceUnder,
+      bestJuice: bestTotalEntry?.juiceOver ?? openTotalEntry?.juiceOver,
+      bestJuiceHome: bestTotalEntry?.juiceUnder ?? openTotalEntry?.juiceUnder,
     });
   }
 

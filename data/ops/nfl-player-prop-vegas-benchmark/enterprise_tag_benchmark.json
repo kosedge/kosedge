@@ -1,0 +1,229 @@
+{
+  "policy_version": "enterprise-v2-play-watch",
+  "source_records": "/Users/ryankos/kosedge/data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records.json",
+  "n_records": 4805,
+  "n_graded": 4805,
+  "n_team_game_sides_approx": 526,
+  "seasons": [
+    2023,
+    2024,
+    2025
+  ],
+  "blend": {
+    "mc_weight": 0.6,
+    "baseline_weight": 0.4
+  },
+  "calibration": "frozen prop-enterprise-cal-v1 + mild market shrink",
+  "tag_counts": {
+    "PLAY": 583,
+    "WATCH": 841,
+    "PASS": 3381
+  },
+  "tag_reason_counts": {
+    "below_watch_floor": 2599,
+    "watch_band": 795,
+    "model_market_disagreement": 782,
+    "rec_yds_high_conviction": 331,
+    "rush_yds_high_conviction": 239,
+    "extreme_z_watch_only": 46,
+    "pass_yds_high_conviction": 13
+  },
+  "slices": {
+    "blanket_calibrated": {
+      "label": "all calibrated model-favored sides",
+      "n_rows": 4805,
+      "n_decided": 4805,
+      "wins": 2458,
+      "win_rate": 0.5116,
+      "wilson_95": {
+        "point": 0.5116,
+        "low": 0.4974,
+        "high": 0.5257
+      },
+      "n_bets": 4805,
+      "staked": 480500.0,
+      "profit": -19111.32,
+      "roi_pct": -3.977,
+      "breakeven_note": "\u224852.4% needed at typical \u2212110"
+    },
+    "play_only": {
+      "label": "PLAY stake tags only",
+      "n_rows": 583,
+      "n_decided": 583,
+      "wins": 318,
+      "win_rate": 0.5455,
+      "wilson_95": {
+        "point": 0.5455,
+        "low": 0.5049,
+        "high": 0.5854
+      },
+      "n_bets": 583,
+      "staked": 58300.0,
+      "profit": 1484.61,
+      "roi_pct": 2.547,
+      "breakeven_note": "\u224852.4% needed at typical \u2212110"
+    },
+    "watch_only": {
+      "label": "WATCH informational",
+      "n_rows": 841,
+      "n_decided": 841,
+      "wins": 435,
+      "win_rate": 0.5172,
+      "wilson_95": {
+        "point": 0.5172,
+        "low": 0.4835,
+        "high": 0.5509
+      },
+      "n_bets": 841,
+      "staked": 84100.0,
+      "profit": -2401.89,
+      "roi_pct": -2.856,
+      "breakeven_note": "\u224852.4% needed at typical \u2212110"
+    },
+    "play_or_watch": {
+      "label": "PLAY+WATCH",
+      "n_rows": 1424,
+      "n_decided": 1424,
+      "wins": 753,
+      "win_rate": 0.5288,
+      "wilson_95": {
+        "point": 0.5288,
+        "low": 0.5028,
+        "high": 0.5546
+      },
+      "n_bets": 1424,
+      "staked": 142400.0,
+      "profit": -917.28,
+      "roi_pct": -0.644,
+      "breakeven_note": "\u224852.4% needed at typical \u2212110"
+    },
+    "high_conviction_blanket": {
+      "label": "legacy high-conviction (|z|>=0.5) blanket",
+      "n_rows": 1166,
+      "n_decided": 1166,
+      "wins": 610,
+      "win_rate": 0.5232,
+      "wilson_95": {
+        "point": 0.5232,
+        "low": 0.4945,
+        "high": 0.5517
+      },
+      "n_bets": 1166,
+      "staked": 116600.0,
+      "profit": -1697.19,
+      "roi_pct": -1.456,
+      "breakeven_note": "\u224852.4% needed at typical \u2212110"
+    }
+  },
+  "by_market": {
+    "pass_yds": {
+      "blanket": {
+        "label": "pass_yds blanket",
+        "n_rows": 489,
+        "n_decided": 489,
+        "wins": 255,
+        "win_rate": 0.5215,
+        "wilson_95": {
+          "point": 0.5215,
+          "low": 0.4772,
+          "high": 0.5654
+        },
+        "n_bets": 489,
+        "staked": 48900.0,
+        "profit": -993.1,
+        "roi_pct": -2.031,
+        "breakeven_note": "\u224852.4% needed at typical \u2212110"
+      },
+      "play_only": {
+        "label": "pass_yds PLAY",
+        "n_rows": 13,
+        "n_decided": 13,
+        "wins": 5,
+        "win_rate": 0.3846,
+        "wilson_95": {
+          "point": 0.3846,
+          "low": 0.1771,
+          "high": 0.6448
+        },
+        "n_bets": 13,
+        "staked": 1300.0,
+        "profit": -357.26,
+        "roi_pct": -27.482,
+        "breakeven_note": "\u224852.4% needed at typical \u2212110"
+      }
+    },
+    "rush_yds": {
+      "blanket": {
+        "label": "rush_yds blanket",
+        "n_rows": 1379,
+        "n_decided": 1379,
+        "wins": 703,
+        "win_rate": 0.5098,
+        "wilson_95": {
+          "point": 0.5098,
+          "low": 0.4834,
+          "high": 0.5361
+        },
+        "n_bets": 1379,
+        "staked": 137900.0,
+        "profit": -5486.26,
+        "roi_pct": -3.978,
+        "breakeven_note": "\u224852.4% needed at typical \u2212110"
+      },
+      "play_only": {
+        "label": "rush_yds PLAY",
+        "n_rows": 239,
+        "n_decided": 239,
+        "wins": 134,
+        "win_rate": 0.5607,
+        "wilson_95": {
+          "point": 0.5607,
+          "low": 0.4973,
+          "high": 0.6221
+        },
+        "n_bets": 239,
+        "staked": 23900.0,
+        "profit": 1332.57,
+        "roi_pct": 5.576,
+        "breakeven_note": "\u224852.4% needed at typical \u2212110"
+      }
+    },
+    "rec_yds": {
+      "blanket": {
+        "label": "rec_yds blanket",
+        "n_rows": 2937,
+        "n_decided": 2937,
+        "wins": 1500,
+        "win_rate": 0.5107,
+        "wilson_95": {
+          "point": 0.5107,
+          "low": 0.4926,
+          "high": 0.5288
+        },
+        "n_bets": 2937,
+        "staked": 293700.0,
+        "profit": -12631.96,
+        "roi_pct": -4.301,
+        "breakeven_note": "\u224852.4% needed at typical \u2212110"
+      },
+      "play_only": {
+        "label": "rec_yds PLAY",
+        "n_rows": 331,
+        "n_decided": 331,
+        "wins": 179,
+        "win_rate": 0.5408,
+        "wilson_95": {
+          "point": 0.5408,
+          "low": 0.4869,
+          "high": 0.5937
+        },
+        "n_bets": 331,
+        "staked": 33100.0,
+        "profit": 509.31,
+        "roi_pct": 1.539,
+        "breakeven_note": "\u224852.4% needed at typical \u2212110"
+      }
+    }
+  },
+  "honest_read": "PLAY must clear ~52.4% at \u2212110 to be +EV. Enterprise v2 is intentionally sparse (pass_yds primary). If PLAY Wilson CI still includes 50%, treat as unproven \u2014 do not size up without a fresh residue-class holdout."
+}

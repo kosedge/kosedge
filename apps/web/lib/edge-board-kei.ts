@@ -112,6 +112,83 @@ function registerGame(
   }
 }
 
+const ET = "America/New_York";
+
+function formatKeiCommenceTime(iso: string | undefined): string | undefined {
+  if (!iso) return undefined;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return undefined;
+  const date = d.toLocaleDateString("en-US", {
+    timeZone: ET,
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const time = d.toLocaleTimeString("en-US", {
+    timeZone: ET,
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return `${date} ${time} ET`;
+}
+
+function rowMatchKeys(sportKey: string, game: string): string[] {
+  const parts = game.split(/\s*@\s*/);
+  if (sportKey.toLowerCase() === "nfl" && parts.length === 2) {
+    return nflGameKeys(parts[0]!, parts[1]!);
+  }
+  return gameKeys(game);
+}
+
+/**
+ * Ensure every KEI/fair-line game appears on the board (PLAY / LEAN / PASS alike).
+ * Odds rows win when present; missing games get skeleton Spread + Total rows.
+ */
+export function ensureAllKeiGamesOnBoard(
+  rows: EdgeBoardRow[],
+  sportKey: string,
+  games: KeiLineGame[],
+): EdgeBoardRow[] {
+  if (!games.length) return rows;
+
+  const covered = new Set<string>();
+  for (const row of rows) {
+    if (!row?.game) continue;
+    for (const key of rowMatchKeys(sportKey, row.game)) {
+      covered.add(key);
+    }
+  }
+
+  const seeded: EdgeBoardRow[] = [...rows];
+  for (const g of games) {
+    const gameStr = `${g.awayTeam} @ ${g.homeTeam}`;
+    const keys = rowMatchKeys(sportKey, gameStr);
+    if (keys.some((k) => covered.has(k))) continue;
+
+    const idBase =
+      g.id ||
+      `${sportKey}-${g.awayAbbr ?? g.awayTeam}-${g.homeAbbr ?? g.homeTeam}-${g.commenceTime ?? "tba"}`;
+    const time = formatKeiCommenceTime(g.commenceTime);
+    seeded.push({
+      id: `${idBase}-spread`,
+      game: gameStr,
+      time,
+      commenceTime: g.commenceTime,
+      market: "Spread",
+    });
+    seeded.push({
+      id: `${idBase}-total`,
+      game: gameStr,
+      time,
+      commenceTime: g.commenceTime,
+      market: "Total",
+    });
+    for (const key of keys) covered.add(key);
+  }
+
+  return seeded;
+}
+
 /**
  * Merges KEI projections into edge board rows. Mutates rows in place and returns them.
  * Each row with market "Spread" gets row.kei = our projected home spread (e.g. "-5.2").

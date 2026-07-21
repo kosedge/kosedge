@@ -47,7 +47,11 @@ TASK_NFL_IDENTITY_MANUAL_RESOLUTIONS = "src.tasks.apply_nfl_identity_manual_reso
 TASK_NFL_IDENTITY_QUALITY_SNAPSHOT = "src.tasks.run_nfl_identity_quality_snapshot"
 TASK_NFL_FRAMEWORK_TUNING = "src.tasks.run_nfl_framework_tuning"
 TASK_NFL_DECOMPOSITION_DRIFT = "src.tasks.run_nfl_decomposition_drift_monitor"
-NFL_DEFAULT_ODDS_BOOKMAKERS = "draftkings"
+# Multi-book default so fair-lines / edge-board pulls capture a real Best Line
+# and persist richer snapshots for training (override via NFL_ODDS_BOOKMAKERS).
+NFL_DEFAULT_ODDS_BOOKMAKERS = (
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr"
+)
 
 NFL_TEAM_CONFERENCE_MAP: Dict[str, str] = {
     "ARI": "NFC",
@@ -226,6 +230,77 @@ def _resolve_nfl_odds_bookmakers(raw: Optional[str] = None) -> str:
         if book and book not in books:
             books.append(book)
     return ",".join(books) if books else NFL_DEFAULT_ODDS_BOOKMAKERS
+
+
+def _resolve_current_nfl_board_week(session: Any, season: int) -> int:
+    """Upcoming (or in-progress) regular-season week for the edge board Live tab."""
+    row = session.execute(
+        text(
+            """
+            SELECT week
+            FROM nfl_dp_schedules
+            WHERE season = :season
+              AND week BETWEEN 1 AND 18
+              AND game_date >= (CURRENT_DATE - INTERVAL '1 day')
+            ORDER BY game_date ASC, week ASC
+            LIMIT 1
+            """
+        ),
+        {"season": int(season)},
+    ).fetchone()
+    if row is not None and row[0] is not None:
+        return int(row[0])
+    row = session.execute(
+        text(
+            """
+            SELECT COALESCE(MAX(week), 1)::int
+            FROM nfl_dp_schedules
+            WHERE season = :season AND week BETWEEN 1 AND 18
+            """
+        ),
+        {"season": int(season)},
+    ).fetchone()
+    return int(row[0] or 1) if row is not None else 1
+
+
+def _persist_nfl_odds_events_for_training(market_events: List[Dict[str, Any]]) -> Dict[str, int]:
+    """Write Odds API events into odds_snapshots (+ market history) for training."""
+    if not market_events:
+        return {"events_persisted": 0, "snapshots_inserted": 0, "history_upserted": 0}
+    # Deferred import avoids loading Celery app graph at router import time.
+    from src.tasks import _persist_odds_events, materialize_nfl_market_history
+
+    for event in market_events:
+        if isinstance(event, dict) and not event.get("sport_key"):
+            event["sport_key"] = "americanfootball_nfl"
+
+    session = SessionLocal()
+    try:
+        persisted = _persist_odds_events(
+            session,
+            events=market_events,
+            source_label="the-odds-api",
+        )
+        session.commit()
+    except Exception:
+        session.rollback()
+        log.exception("Failed persisting NFL odds events from fair-lines pull")
+        raise
+    finally:
+        session.close()
+
+    history_upserted = 0
+    try:
+        hist = materialize_nfl_market_history(lookback_days=45)
+        history_upserted = int((hist or {}).get("inserted_or_updated") or 0)
+    except Exception:
+        log.exception("Failed materializing nfl_market_history after odds persist")
+
+    return {
+        "events_persisted": int(persisted.get("events_persisted") or 0),
+        "snapshots_inserted": int(persisted.get("snapshots_inserted") or 0),
+        "history_upserted": history_upserted,
+    }
 
 
 def _time_window_from_start(start_time: Any) -> str:
@@ -2421,7 +2496,18 @@ def nfl_edges_today(
                   FROM nfl_market_projections np
                   WHERE np.game_id = g.id
                     AND np.model_version = :model_version
-                  ORDER BY np.created_at DESC
+                  ORDER BY
+                    CASE
+                      -- Adaptive apply_meta (slate residual + prior-transition shrink)
+                      WHEN np.projection->'audit'->'final_totals_calibration'->'apply_meta'->>'shrink' IS NOT NULL THEN 0
+                      WHEN np.projection->'audit'->'totals_calibration'->>'prior_delta_removed' IS NOT NULL THEN 1
+                      WHEN np.projection->'audit'->>'pre_calibration_total' IS NOT NULL THEN 2
+                      ELSE 3
+                    END,
+                    -- Prefer wall-clock ingest over kickoff-backdated created_at
+                    -- (COALESCE would rank Sep kickoff above a July re-sim).
+                    (np.projection->'audit'->>'pipeline_run_at')::timestamptz DESC NULLS LAST,
+                    np.created_at DESC
                   LIMIT 1
                 ) p ON TRUE
                 WHERE l.code = 'nfl'
@@ -2710,12 +2796,17 @@ def nfl_fair_lines(
     """
     market_events: List[Dict[str, Any]] = []
     odds_feed_error: Optional[str] = None
+    odds_persist: Dict[str, int] = {
+        "events_persisted": 0,
+        "snapshots_inserted": 0,
+        "history_upserted": 0,
+    }
     resolved_bookmakers = _resolve_nfl_odds_bookmakers(bookmakers)
     try:
         raw_market_events = fetch_odds(
             endpoint="sports/americanfootball_nfl/odds",
             params={
-                "regions": "us",
+                "regions": "us,us2",
                 "markets": "h2h,spreads,totals",
                 "oddsFormat": "american",
                 "dateFormat": "iso",
@@ -2728,9 +2819,18 @@ def nfl_fair_lines(
         odds_feed_error = str(exc)[:500]
         log.warning("NFL odds feed unavailable for fair-lines endpoint: %s", odds_feed_error)
 
+    # Always land pulled odds in Postgres for model training / CLV history.
+    if market_events:
+        try:
+            odds_persist = _persist_nfl_odds_events_for_training(market_events)
+        except Exception as exc:
+            log.warning("NFL odds persist skipped after fair-lines pull: %s", str(exc)[:300])
+
+    current_week = 1
     session = SessionLocal()
     try:
         effective_model_version = model_version or _resolve_active_nfl_model_version(session)
+        current_week = _resolve_current_nfl_board_week(session, season)
         # Drive from nfl_dp_schedules (canonical 272-game slate) and pick the
         # single best matching games-row per matchup. The games table can still
         # carry timezone-skew duplicates (same SEA/NE kickoff written as both
@@ -2744,6 +2844,7 @@ def nfl_fair_lines(
                   g.start_time,
                   g.game_date,
                   s.season_year AS season,
+                  sch.week AS week,
                   home.name AS home_team,
                   home.abbr AS home_abbr,
                   away.name AS away_team,
@@ -2771,7 +2872,15 @@ def nfl_fair_lines(
                   FROM nfl_market_projections np
                   WHERE np.game_id = g.id
                     AND np.model_version = :model_version
-                  ORDER BY np.created_at DESC
+                  ORDER BY
+                    CASE
+                      WHEN np.projection->'audit'->'final_totals_calibration'->'apply_meta'->>'shrink' IS NOT NULL THEN 0
+                      WHEN np.projection->'audit'->'totals_calibration'->>'prior_delta_removed' IS NOT NULL THEN 1
+                      WHEN np.projection->'audit'->>'pre_calibration_total' IS NOT NULL THEN 2
+                      ELSE 3
+                    END,
+                    (np.projection->'audit'->>'pipeline_run_at')::timestamptz DESC NULLS LAST,
+                    np.created_at DESC
                   LIMIT 1
                 ) p ON TRUE
                 WHERE sch.season = :season
@@ -2871,10 +2980,12 @@ def nfl_fair_lines(
         home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
         away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
 
+        week_val = mapped.get("week")
         lines.append(
             {
                 "game_id": str(mapped.get("game_id")),
                 "season": int(mapped.get("season") or season),
+                "week": int(week_val) if week_val is not None else None,
                 "start_time": mapped.get("start_time"),
                 "game_date": mapped.get("game_date"),
                 "home_team": home_display,
@@ -2908,6 +3019,7 @@ def nfl_fair_lines(
     return {
         "season": season,
         "model_version": effective_model_version,
+        "current_week": current_week,
         "count": len(lines),
         "lines": lines,
         "window": {
@@ -2921,6 +3033,8 @@ def nfl_fair_lines(
             "market_joined_count": market_joined_count,
             "bookmakers": resolved_bookmakers.split(","),
             "kosedge_only": market_joined_count == 0,
+            "odds_persisted": odds_persist,
+            "current_week": current_week,
         },
     }
 
@@ -2966,7 +3080,7 @@ def run_nfl_simulation(
         totals_calibration = fetch_nfl_totals_calibration(
             session,
             model_version=model_version,
-            lookback_days=int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "240"))),
+            lookback_days=int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "1500"))),
         )
         matchup_pack = fetch_latest_matchup_feature_pack(
             session,
@@ -3337,12 +3451,14 @@ def nfl_props_board(
     model_version: str = Query("nfl-player-v1"),
     market_key: Optional[str] = Query(None),
     team: Optional[str] = Query(None),
+    tag: Optional[str] = Query(None, description="PLAY | WATCH | PASS | STAKE (PLAY only)"),
     min_confidence: float = Query(0.0, ge=0.0, le=1.0),
     min_abs_edge: float = Query(0.0, ge=0.0, le=0.5),
     limit: int = Query(250, ge=1, le=2000),
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
+        tag_filter = (tag or "").strip().upper() or None
         rows = session.execute(
             text(
                 """
@@ -3359,7 +3475,26 @@ def nfl_props_board(
                   AND (CAST(:team AS text) IS NULL OR team = CAST(:team AS text))
                   AND confidence >= :min_confidence
                   AND GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) >= :min_abs_edge
-                ORDER BY confidence DESC, GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) DESC
+                  AND (
+                    CAST(:tag_filter AS text) IS NULL
+                    OR (
+                      CAST(:tag_filter AS text) = 'STAKE'
+                      AND COALESCE(diagnostics->>'tag', 'PASS') = 'PLAY'
+                    )
+                    OR (
+                      CAST(:tag_filter AS text) IN ('PLAY', 'WATCH', 'PASS', 'LEAN')
+                      AND COALESCE(diagnostics->>'tag', 'PASS') = CAST(:tag_filter AS text)
+                    )
+                  )
+                ORDER BY
+                  CASE COALESCE(diagnostics->>'tag', 'PASS')
+                    WHEN 'PLAY' THEN 0
+                    WHEN 'WATCH' THEN 1
+                    WHEN 'LEAN' THEN 1
+                    ELSE 2
+                  END,
+                  confidence DESC,
+                  GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) DESC
                 LIMIT :limit
                 """
             ),
@@ -3369,6 +3504,7 @@ def nfl_props_board(
                 "model_version": model_version,
                 "market_key": market_key,
                 "team": team,
+                "tag_filter": tag_filter,
                 "min_confidence": min_confidence,
                 "min_abs_edge": min_abs_edge,
                 "limit": limit,
@@ -3380,12 +3516,26 @@ def nfl_props_board(
             for row in serialized
             if row.get("market_over_price") is not None or row.get("market_under_price") is not None
         )
+        tagged_play = sum(1 for row in serialized if (row.get("diagnostics") or {}).get("tag") == "PLAY")
+        tagged_watch = sum(
+            1
+            for row in serialized
+            if (row.get("diagnostics") or {}).get("tag") in {"WATCH", "LEAN"}
+        )
+        box_sourced = sum(
+            1 for row in serialized if (row.get("diagnostics") or {}).get("projection_source") == "box_score"
+        )
         return {
             "count": len(serialized),
             "rows": serialized,
             "diagnostics": {
                 "market_joined_count": with_market,
                 "kosedge_only": with_market == 0 and len(serialized) > 0,
+                "play_count": tagged_play,
+                "watch_count": tagged_watch,
+                "lean_count": tagged_watch,  # backward-compatible alias
+                "box_score_sourced_count": box_sourced,
+                "policy": "PLAY/WATCH/PASS enterprise v2",
             },
         }
     finally:
