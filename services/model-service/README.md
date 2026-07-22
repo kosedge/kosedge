@@ -10,7 +10,7 @@ command:
 
 | Service | Start command | Config file |
 |---|---|---|
-| `api` | `uvicorn src.main:app --host 0.0.0.0 --port 8000` | `railway.json` |
+| `api` | `uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}` | `railway.json` |
 | `worker` | `celery -A src.celery_app worker --loglevel=info --concurrency=4` | `railway.worker.json` |
 | `beat` | `celery -A src.celery_app beat --loglevel=info` | `railway.beat.json` |
 

@@ -18,4 +18,5 @@ COPY . .
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Railway injects PORT; fall back to 8000 for local/docker runs.
+CMD ["sh", "-c", "uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
