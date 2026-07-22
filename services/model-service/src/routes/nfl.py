@@ -362,17 +362,49 @@ def _nfl_team_to_abbr(name: Optional[str]) -> Optional[str]:
     return NFL_FULL_NAME_TO_ABBR.get(_normalize_team_key(raw))
 
 
-def _extract_book_market_prices(
-    event: Dict[str, Any],
-) -> Tuple[Optional[int], Optional[int], Optional[float], Optional[float], int]:
-    """Return (home_ml, away_ml, total, spread_home, market_depth) from an odds event."""
+def _american_price_better(candidate: Optional[int], incumbent: Optional[int]) -> bool:
+    """Higher American price is better for the bettor (+120 > -105 > -115)."""
+    if candidate is None:
+        return False
+    if incumbent is None:
+        return True
+    return int(candidate) > int(incumbent)
+
+
+def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
+    """Extract consensus averages plus best-of-book spread/total from an odds event.
+
+    Best Line = highest away spread number across books (better away juice wins ties).
+    Best O/U = highest total number across books (better Over juice wins ties).
+    """
     home_team = str(event.get("home_team") or "")
     away_team = str(event.get("away_team") or "")
     home_prices: List[int] = []
     away_prices: List[int] = []
     totals: List[float] = []
     spreads: List[float] = []
+
+    best_away_point: Optional[float] = None
+    best_away_juice: Optional[int] = None
+    best_spread_home: Optional[float] = None
+    best_spread_home_juice: Optional[int] = None
+    best_spread_book: Optional[str] = None
+
+    best_total_point: Optional[float] = None
+    best_total_over_juice: Optional[int] = None
+    best_total_under_juice: Optional[int] = None
+    best_total_book: Optional[str] = None
+
     for book in event.get("bookmakers") or []:
+        book_key = str(book.get("key") or "").strip().lower() or None
+        away_spread_point: Optional[float] = None
+        away_spread_price: Optional[int] = None
+        home_spread_point: Optional[float] = None
+        home_spread_price: Optional[int] = None
+        over_point: Optional[float] = None
+        over_price: Optional[int] = None
+        under_price: Optional[int] = None
+
         for market in book.get("markets") or []:
             key = market.get("key")
             if key == "h2h":
@@ -385,16 +417,76 @@ def _extract_book_market_prices(
                 for outcome in market.get("outcomes") or []:
                     if outcome.get("name") == "Over" and outcome.get("point") is not None:
                         totals.append(float(outcome["point"]))
+                        over_point = float(outcome["point"])
+                        if outcome.get("price") is not None:
+                            over_price = int(outcome["price"])
+                    elif outcome.get("name") == "Under" and outcome.get("price") is not None:
+                        under_price = int(outcome["price"])
             elif key == "spreads":
                 for outcome in market.get("outcomes") or []:
                     if outcome.get("name") == home_team and outcome.get("point") is not None:
                         spreads.append(float(outcome["point"]))
+                        home_spread_point = float(outcome["point"])
+                        if outcome.get("price") is not None:
+                            home_spread_price = int(outcome["price"])
+                    elif outcome.get("name") == away_team and outcome.get("point") is not None:
+                        away_spread_point = float(outcome["point"])
+                        if outcome.get("price") is not None:
+                            away_spread_price = int(outcome["price"])
+
+        if away_spread_point is not None:
+            replace_spread = False
+            if best_away_point is None or away_spread_point > best_away_point:
+                replace_spread = True
+            elif away_spread_point == best_away_point and _american_price_better(
+                away_spread_price, best_away_juice
+            ):
+                replace_spread = True
+            if replace_spread:
+                best_away_point = away_spread_point
+                best_away_juice = away_spread_price
+                best_spread_home = (
+                    home_spread_point
+                    if home_spread_point is not None
+                    else round(-away_spread_point, 3)
+                )
+                best_spread_home_juice = home_spread_price
+                best_spread_book = book_key
+
+        if over_point is not None:
+            replace_total = False
+            if best_total_point is None or over_point > best_total_point:
+                replace_total = True
+            elif over_point == best_total_point and _american_price_better(
+                over_price, best_total_over_juice
+            ):
+                replace_total = True
+            if replace_total:
+                best_total_point = over_point
+                best_total_over_juice = over_price
+                best_total_under_juice = under_price
+                best_total_book = book_key
+
     market_home_ml = int(round(sum(home_prices) / len(home_prices))) if home_prices else None
     market_away_ml = int(round(sum(away_prices) / len(away_prices))) if away_prices else None
     market_total = round(sum(totals) / len(totals), 2) if totals else None
     market_spread_home = round(sum(spreads) / len(spreads), 2) if spreads else None
     market_depth = len(home_prices) + len(totals) + len(spreads)
-    return market_home_ml, market_away_ml, market_total, market_spread_home, market_depth
+    return {
+        "market_home_ml": market_home_ml,
+        "market_away_ml": market_away_ml,
+        "market_total": market_total,
+        "market_spread_home": market_spread_home,
+        "market_depth": market_depth,
+        "best_spread_home": round(best_spread_home, 2) if best_spread_home is not None else None,
+        "best_total": round(best_total_point, 2) if best_total_point is not None else None,
+        "best_spread_book": best_spread_book,
+        "best_total_book": best_total_book,
+        "best_spread_away_juice": best_away_juice,
+        "best_spread_home_juice": best_spread_home_juice,
+        "best_total_over_juice": best_total_over_juice,
+        "best_total_under_juice": best_total_under_juice,
+    }
 
 
 def _american_implied_prob(price: Optional[int]) -> Optional[float]:
@@ -2599,9 +2691,11 @@ def nfl_edges_today(
         if proj is None:
             continue
 
-        market_home_ml, market_away_ml, market_total, _market_spread_home, market_depth = _extract_book_market_prices(
-            event
-        )
+        market_snap = _extract_book_market_prices(event)
+        market_home_ml = market_snap.get("market_home_ml")
+        market_away_ml = market_snap.get("market_away_ml")
+        market_total = market_snap.get("market_total")
+        market_depth = int(market_snap.get("market_depth") or 0)
         if market_home_ml is None or market_away_ml is None:
             continue
 
@@ -2923,15 +3017,9 @@ def nfl_fair_lines(
         away_abbr = _nfl_team_to_abbr(str(event.get("away_team") or ""))
         if not home_abbr or not away_abbr:
             continue
-        market_home_ml, market_away_ml, market_total, market_spread_home, market_depth = _extract_book_market_prices(
-            event
-        )
+        market_snap = _extract_book_market_prices(event)
         market_by_abbr[(home_abbr, away_abbr)] = {
-            "market_home_ml": market_home_ml,
-            "market_away_ml": market_away_ml,
-            "market_total": market_total,
-            "market_spread_home": market_spread_home,
-            "market_depth": market_depth,
+            **market_snap,
             "odds_home_team": event.get("home_team"),
             "odds_away_team": event.get("away_team"),
         }
@@ -2956,6 +3044,10 @@ def nfl_fair_lines(
         market_away_ml = market.get("market_away_ml")
         market_total = market.get("market_total")
         market_spread_home = market.get("market_spread_home")
+        best_spread_home = market.get("best_spread_home")
+        best_total = market.get("best_total")
+        best_spread_book = market.get("best_spread_book")
+        best_total_book = market.get("best_total_book")
         has_market = any(v is not None for v in (market_home_ml, market_away_ml, market_total, market_spread_home))
         if has_market:
             market_joined_count += 1
@@ -2972,10 +3064,13 @@ def nfl_fair_lines(
             if market_home_prob is not None and market_away_prob is not None and (market_home_prob + market_away_prob) > 0:
                 market_home_prob_no_vig = market_home_prob / (market_home_prob + market_away_prob)
                 ml_edge_prob = round(home_win_prob - market_home_prob_no_vig, 4)
-        if market_total is not None and total_mean is not None:
-            total_edge = round(total_mean - float(market_total), 3)
-        if market_spread_home is not None and spread_home is not None:
-            spread_edge = round(spread_home - float(market_spread_home), 3)
+        # Edge vs best available book number when present; else consensus.
+        compare_total = best_total if best_total is not None else market_total
+        compare_spread_home = best_spread_home if best_spread_home is not None else market_spread_home
+        if compare_total is not None and total_mean is not None:
+            total_edge = round(total_mean - float(compare_total), 3)
+        if compare_spread_home is not None and spread_home is not None:
+            spread_edge = round(spread_home - float(compare_spread_home), 3)
 
         home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
         away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
@@ -3005,6 +3100,14 @@ def nfl_fair_lines(
                 "market_away_ml": market_away_ml,
                 "market_total": market_total,
                 "market_spread_home": market_spread_home,
+                "best_spread_home": best_spread_home,
+                "best_total": best_total,
+                "best_spread_book": best_spread_book,
+                "best_total_book": best_total_book,
+                "best_spread_away_juice": market.get("best_spread_away_juice"),
+                "best_spread_home_juice": market.get("best_spread_home_juice"),
+                "best_total_over_juice": market.get("best_total_over_juice"),
+                "best_total_under_juice": market.get("best_total_under_juice"),
                 "market_home_prob_no_vig": (
                     round(market_home_prob_no_vig, 4) if market_home_prob_no_vig is not None else None
                 ),

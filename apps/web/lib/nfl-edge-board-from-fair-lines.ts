@@ -80,9 +80,16 @@ function awaySpreadFromHome(homeSpread: number): string {
   return formatSigned(-homeSpread);
 }
 
+function formatJuice(price: number | null | undefined): string | undefined {
+  if (price == null || !Number.isFinite(price)) return undefined;
+  const n = Math.round(price);
+  return n > 0 ? `+${n}` : String(n);
+}
+
 /**
  * One Spread + one Total row per fair-line game.
- * KEI always set from Kosedge; Open/Best set from joined market when present.
+ * KEI always set from Kosedge.
+ * Open = market consensus average; Best = best number across books when present.
  */
 export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[] {
   const rows: EdgeBoardRow[] = [];
@@ -99,8 +106,7 @@ export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[
       line.totalMean != null
         ? String(Math.round(line.totalMean * 10) / 10)
         : undefined;
-    // Open/Best only from real market (or Odds overlay later) — never fake sportsbook
-    // prices with KEINFL. KEI columns carry Kosedge numbers for every game.
+    // Open = consensus average across books (when joined).
     const marketAwaySpread =
       line.marketSpreadHome != null
         ? awaySpreadFromHome(line.marketSpreadHome)
@@ -109,6 +115,17 @@ export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[
       line.marketTotal != null
         ? String(Math.round(line.marketTotal * 10) / 10)
         : undefined;
+    // Best = best-of-books number + winning book (not consensus).
+    const bestAwaySpread =
+      line.bestSpreadHome != null
+        ? awaySpreadFromHome(line.bestSpreadHome)
+        : undefined;
+    const bestTotal =
+      line.bestTotal != null
+        ? String(Math.round(line.bestTotal * 10) / 10)
+        : undefined;
+    const bestSpreadBook = line.bestSpreadBook ?? undefined;
+    const bestTotalBook = line.bestTotalBook ?? undefined;
 
     const week = line.week ?? undefined;
 
@@ -119,9 +136,13 @@ export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[
       commenceTime,
       market: "Spread",
       open: marketAwaySpread,
-      best: marketAwaySpread,
-      book: marketAwaySpread ? "Market" : undefined,
-      bookKey: marketAwaySpread ? "market" : undefined,
+      best: bestAwaySpread ?? marketAwaySpread,
+      book: bestSpreadBook ?? (bestAwaySpread || marketAwaySpread ? "market" : undefined),
+      bookKey: bestSpreadBook ?? (bestAwaySpread || marketAwaySpread ? "market" : undefined),
+      openJuice: undefined,
+      openJuiceHome: undefined,
+      bestJuice: formatJuice(line.bestSpreadAwayJuice),
+      bestJuiceHome: formatJuice(line.bestSpreadHomeJuice),
       kei: keiHome,
       week,
     } as EdgeBoardRow);
@@ -133,9 +154,13 @@ export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[
       commenceTime,
       market: "Total",
       open: marketTotal,
-      best: marketTotal,
-      book: marketTotal ? "Market" : undefined,
-      bookKey: marketTotal ? "market" : undefined,
+      best: bestTotal ?? marketTotal,
+      book: bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
+      bookKey: bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
+      openJuice: undefined,
+      openJuiceHome: undefined,
+      bestJuice: formatJuice(line.bestTotalOverJuice),
+      bestJuiceHome: formatJuice(line.bestTotalUnderJuice),
       kei: keiTotal,
       week,
     } as EdgeBoardRow);

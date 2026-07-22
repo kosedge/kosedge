@@ -24,6 +24,16 @@ export type NflFairLineRow = {
   marketAwayMl: number | null;
   marketTotal: number | null;
   marketSpreadHome: number | null;
+  /** Best home spread number across books (pairs with best away). */
+  bestSpreadHome: number | null;
+  /** Best total number across books (Over-favorable). */
+  bestTotal: number | null;
+  bestSpreadBook: string | null;
+  bestTotalBook: string | null;
+  bestSpreadAwayJuice: number | null;
+  bestSpreadHomeJuice: number | null;
+  bestTotalOverJuice: number | null;
+  bestTotalUnderJuice: number | null;
   marketHomeProbNoVig: number | null;
   mlEdgeProb: number | null;
   totalEdge: number | null;
@@ -98,6 +108,20 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     marketAwayMl: toNumberOrNull(raw.market_away_ml),
     marketTotal: toNumberOrNull(raw.market_total),
     marketSpreadHome: toNumberOrNull(raw.market_spread_home),
+    bestSpreadHome: toNumberOrNull(raw.best_spread_home),
+    bestTotal: toNumberOrNull(raw.best_total),
+    bestSpreadBook:
+      typeof raw.best_spread_book === "string" && raw.best_spread_book.trim()
+        ? raw.best_spread_book.trim().toLowerCase()
+        : null,
+    bestTotalBook:
+      typeof raw.best_total_book === "string" && raw.best_total_book.trim()
+        ? raw.best_total_book.trim().toLowerCase()
+        : null,
+    bestSpreadAwayJuice: toNumberOrNull(raw.best_spread_away_juice),
+    bestSpreadHomeJuice: toNumberOrNull(raw.best_spread_home_juice),
+    bestTotalOverJuice: toNumberOrNull(raw.best_total_over_juice),
+    bestTotalUnderJuice: toNumberOrNull(raw.best_total_under_juice),
     marketHomeProbNoVig: toNumberOrNull(raw.market_home_prob_no_vig),
     mlEdgeProb: toNumberOrNull(raw.ml_edge_prob),
     totalEdge: toNumberOrNull(raw.total_edge),
