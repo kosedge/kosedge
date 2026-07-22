@@ -200,6 +200,13 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
     status: "active",
   },
   {
+    href: "/odds/nfl",
+    label: "Compare odds",
+    hint: "Side-by-side spreads and totals across all 9 books (best cells highlighted).",
+    premium: true,
+    status: "active",
+  },
+  {
     href: "/pro/nfl/props",
     label: "Props board",
     hint: "Player prop model means, fair prices, and confidence by market.",

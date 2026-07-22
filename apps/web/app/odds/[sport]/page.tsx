@@ -30,13 +30,51 @@ async function getOddsData(
     cache: "no-store",
     headers: { accept: "application/json" },
   });
-  if (!res.ok)
-    return { rows: [], books: [] };
+  if (!res.ok) return { rows: [], books: [] };
   const data = (await res.json()) as CompareApiResponse;
   return {
     rows: Array.isArray(data.rows) ? data.rows : [],
     books: Array.isArray(data.books) ? data.books : [],
   };
+}
+
+function totalLine(value: OddsComparisonRow["total"][string] | string | undefined): string {
+  if (!value) return "—";
+  if (typeof value === "string") return value;
+  return value.line || "—";
+}
+
+function totalOverJuice(
+  value: OddsComparisonRow["total"][string] | string | undefined,
+): string | undefined {
+  if (!value || typeof value === "string") return undefined;
+  return value.overJuice;
+}
+
+function Cell({
+  primary,
+  secondary,
+  highlight,
+}: {
+  primary: string;
+  secondary?: string;
+  highlight?: boolean;
+}) {
+  return (
+    <td
+      className={[
+        "py-3 px-2 text-center border-l border-white/10 align-top",
+        highlight ? "bg-kos-gold/15 text-kos-gold font-semibold" : "",
+      ].join(" ")}
+    >
+      <div>{primary}</div>
+      {secondary ? (
+        <div className={`text-[10px] ${highlight ? "text-kos-gold/80" : "text-gray-500"}`}>
+          {secondary}
+        </div>
+      ) : null}
+    </td>
+  );
 }
 
 export default async function OddsComparePage({
@@ -48,7 +86,7 @@ export default async function OddsComparePage({
     params && typeof (params as Promise<unknown>).then === "function"
       ? await (params as Promise<{ sport?: string }>)
       : ((params as { sport?: string }) ?? {});
-  const sportKey = String(resolved?.sport ?? "ncaam");
+  const sportKey = String(resolved?.sport ?? "nfl");
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
   const hasWidget =
@@ -69,10 +107,11 @@ export default async function OddsComparePage({
           <div>
             <div className="text-sm text-gray-400">{sportName} • Odds</div>
             <h1 className="text-5xl font-bebas tracking-tight text-kos-gold">
-              Live Odds
+              Compare Odds
             </h1>
             <p className="mt-2 text-sm text-gray-200/80 max-w-2xl">
-              Widget and comparison by book. Key is kept server-side.
+              Side-by-side lines from {books.length || 9} books. Gold cells mark the best away
+              spread and best O/U number used on the Edge Board.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -88,6 +127,14 @@ export default async function OddsComparePage({
             >
               Edge Board
             </Link>
+            {sportKey === "nfl" ? (
+              <Link
+                href="/pro/nfl/edges"
+                className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold"
+              >
+                Edges Desk
+              </Link>
+            ) : null}
           </div>
         </div>
 
@@ -107,6 +154,12 @@ export default async function OddsComparePage({
           ))}
         </div>
 
+        {books.length > 0 ? (
+          <p className="mt-4 text-xs text-gray-400">
+            Books: {books.map((b) => b.label).join(" · ")}
+          </p>
+        ) : null}
+
         {/* Live odds widget (proxied so key never hits the client) or shell */}
         <section className="mt-6">
           <h2 className="text-lg font-bebas text-kos-gold tracking-wide mb-3">
@@ -125,7 +178,7 @@ export default async function OddsComparePage({
             <div className="rounded-2xl border border-white/12 bg-black/30 border-dashed p-12 text-center text-gray-500">
               {WIDGET_SPORTS.includes(sportKey)
                 ? "Set ODDS_WIDGET_ACCESS_KEY in .env to show the widget."
-                : "Widget for this sport coming soon. Add your widget URL when ready."}
+                : "Widget for this sport coming soon. Compare table below uses the live Odds API."}
             </div>
           )}
         </section>
@@ -137,13 +190,11 @@ export default async function OddsComparePage({
           </h2>
           <div className="mt-3 bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
             <div className="overflow-x-auto">
-              {rows.length > 0 ? (
-                <table className="min-w-[900px] w-full text-sm tabular-nums">
+              {rows.length > 0 && books.length > 0 ? (
+                <table className="min-w-[1100px] w-full text-sm tabular-nums">
                   <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-xs">
                     <tr className="text-left">
-                      <th className="py-3 px-4 sticky left-0 bg-white/5 z-10">
-                        Game
-                      </th>
+                      <th className="py-3 px-4 sticky left-0 bg-white/5 z-10">Game</th>
                       <th className="py-3 px-2">Time</th>
                       {books.map((b) => (
                         <th
@@ -160,11 +211,11 @@ export default async function OddsComparePage({
                       <th className="py-1 px-2" />
                       {books.map((b) => (
                         <th
-                          key={b.key}
+                          key={`${b.key}-sub`}
                           colSpan={2}
-                          className="py-1 px-2 text-center border-l border-white/10"
+                          className="py-1 px-2 text-center border-l border-white/10 font-normal"
                         >
-                          Spread | Total
+                          Away spread · O/U
                         </th>
                       ))}
                     </tr>
@@ -175,21 +226,40 @@ export default async function OddsComparePage({
                         <td className="py-3 px-4 sticky left-0 bg-black/30 z-10 font-semibold">
                           {r.game}
                         </td>
-                        <td className="py-3 px-2 text-gray-400">{r.time}</td>
+                        <td className="py-3 px-2 text-gray-400 whitespace-nowrap">{r.time}</td>
                         {books.map((b) => {
                           const spread = r.spread[b.key];
                           const total = r.total[b.key];
+                          const line = totalLine(total);
+                          const overJuice = totalOverJuice(total);
+                          const isBestSpread = r.bestSpreadBook === b.key;
+                          const isBestTotal = r.bestTotalBook === b.key;
                           return (
                             <td
                               key={b.key}
                               colSpan={2}
-                              className="py-3 px-2 text-center border-l border-white/10"
+                              className="py-0 px-0 border-l border-white/10"
                             >
-                              <span className="text-kos-gold">
-                                {spread?.away ?? "—"}
-                              </span>
-                              <span className="text-gray-500 mx-1">/</span>
-                              <span>{total ?? "—"}</span>
+                              <table className="w-full">
+                                <tbody>
+                                  <tr>
+                                    <Cell
+                                      primary={spread?.away ?? "—"}
+                                      secondary={
+                                        spread?.awayJuice
+                                          ? `(${spread.awayJuice})`
+                                          : undefined
+                                      }
+                                      highlight={isBestSpread}
+                                    />
+                                    <Cell
+                                      primary={line === "—" ? "—" : `o${line}`}
+                                      secondary={overJuice ? `(${overJuice})` : undefined}
+                                      highlight={isBestTotal}
+                                    />
+                                  </tr>
+                                </tbody>
+                              </table>
                             </td>
                           );
                         })}
@@ -204,6 +274,10 @@ export default async function OddsComparePage({
               )}
             </div>
           </div>
+          <p className="mt-3 text-xs text-gray-500">
+            Best Line = highest away spread number across books (better juice wins ties). Best O/U =
+            highest total number across books (better Over juice wins ties).
+          </p>
         </section>
       </main>
     </div>

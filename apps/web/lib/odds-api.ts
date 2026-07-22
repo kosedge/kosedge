@@ -19,19 +19,22 @@ export const SPORT_KEY_MAP: Record<string, string> = {
   wnba: "basketball_wnba",
 };
 
-/** Allowed bookmaker keys (Odds API). Order preserved for display. */
+/**
+ * Allowed bookmaker keys (Odds API). Order = open preference + compare columns.
+ * Matches model-service NFL_DEFAULT_ODDS_BOOKMAKERS (9 books).
+ */
 export const ALLOWED_BOOKS = [
   "draftkings",
   "fanduel",
-  "circa",
-  "hardrockbet",
   "betmgm",
-  "bet365",
-  "fanatics",
   "betrivers",
+  "hardrockbet",
+  "fanatics",
+  "bet365",
+  "circa",
   "betr",
 ] as const;
-/** NFL falls back to the full allowed set so Best Line can compare books. */
+/** NFL falls back to the full allowed set so Best Line / Best O/U span all 9 books. */
 const NFL_DEFAULT_BOOKS = ALLOWED_BOOKS;
 
 const BOOK_DISPLAY: Record<string, string> = {
@@ -149,6 +152,88 @@ function formatSpreadDisplay(
   return signed;
 }
 
+function parseAmericanPrice(raw: string | undefined | null): number | null {
+  if (raw == null || raw === "") return null;
+  const n = Number(String(raw).replace(/^\+/, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+/** Higher American price is better for the bettor (+120 > -105 > -115). */
+function americanOddsBetter(
+  candidate: number | null,
+  incumbent: number | null,
+): boolean {
+  if (candidate == null) return false;
+  if (incumbent == null) return true;
+  return candidate > incumbent;
+}
+
+type SpreadBookEntry = {
+  book: string;
+  line: string;
+  point: number;
+  canonical: boolean;
+  juiceAway?: string;
+  juiceHome?: string;
+};
+
+type TotalBookEntry = {
+  book: string;
+  line: string;
+  point: number;
+  juiceOver?: string;
+  juiceUnder?: string;
+};
+
+/** Best away spread number across books; juice breaks ties. */
+export function pickBestSpreadEntry(
+  entries: SpreadBookEntry[],
+): SpreadBookEntry | null {
+  if (!entries.length) return null;
+  return entries.reduce((best, cur) => {
+    if (cur.point > best.point) return cur;
+    if (cur.point < best.point) return best;
+    return americanOddsBetter(
+      parseAmericanPrice(cur.juiceAway),
+      parseAmericanPrice(best.juiceAway),
+    )
+      ? cur
+      : best;
+  });
+}
+
+/**
+ * Best O/U number for Over shopping = highest total across books;
+ * better Over juice breaks ties. (Under shoppers still see that book's Under juice.)
+ */
+export function pickBestTotalEntry(
+  entries: TotalBookEntry[],
+): TotalBookEntry | null {
+  if (!entries.length) return null;
+  return entries.reduce((best, cur) => {
+    if (cur.point > best.point) return cur;
+    if (cur.point < best.point) return best;
+    return americanOddsBetter(
+      parseAmericanPrice(cur.juiceOver),
+      parseAmericanPrice(best.juiceOver),
+    )
+      ? cur
+      : best;
+  });
+}
+
+function orderBooksByPreference<T extends { book: string }>(
+  entries: T[],
+  preferred: string[],
+): T[] {
+  const rank = new Map(preferred.map((key, i) => [key.toLowerCase(), i]));
+  return [...entries].sort((a, b) => {
+    const ra = rank.get(a.book.toLowerCase()) ?? 999;
+    const rb = rank.get(b.book.toLowerCase()) ?? 999;
+    return ra - rb;
+  });
+}
+
 /** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
 export async function fetchEdgeBoard(
   sportKey: string,
@@ -210,14 +295,15 @@ export async function fetchEdgeBoard(
     const spreadPool = isMlb
       ? spreadData.filter((entry) => entry.canonical)
       : spreadData;
-    const selectedSpreadData = spreadPool.length > 0 ? spreadPool : spreadData;
+    const selectedSpreadData = orderBooksByPreference(
+      spreadPool.length > 0 ? spreadPool : spreadData,
+      sportBooks,
+    );
+    // Open = preferred book order (DraftKings first), not API response order.
     const openSpreadEntry = selectedSpreadData[0];
     const openSpread = openSpreadEntry?.line;
-    const bestSpreadEntry = selectedSpreadData.length
-      ? selectedSpreadData.reduce((best, cur) =>
-          cur.point > best.point ? cur : best,
-        )
-      : null;
+    // Best Line = best away number across all configured books (juice tiebreak).
+    const bestSpreadEntry = pickBestSpreadEntry(selectedSpreadData);
     const bestSpread = bestSpreadEntry?.line ?? openSpread;
     const bestSpreadBookKey = bestSpreadEntry?.book;
     const bestSpreadBook = bestSpreadBookKey
@@ -257,11 +343,11 @@ export async function fetchEdgeBoard(
         },
       ];
     });
-    const openTotalEntry = totalsData[0];
+    const orderedTotals = orderBooksByPreference(totalsData, sportBooks);
+    const openTotalEntry = orderedTotals[0];
     const openTotal = openTotalEntry?.line;
-    const bestTotalEntry = totalsData.length
-      ? totalsData.reduce((best, cur) => (cur.point > best.point ? cur : best))
-      : null;
+    // Best O/U = highest total number across all configured books (Over juice tiebreak).
+    const bestTotalEntry = pickBestTotalEntry(orderedTotals);
     const bestTotal = bestTotalEntry?.line ?? openTotal;
     const bestTotalBookKey = bestTotalEntry?.book;
     const bestTotalBook = bestTotalBookKey
@@ -295,14 +381,35 @@ export async function fetchNcaabEdgeBoard(
   return fetchEdgeBoard("ncaam", apiKey);
 }
 
-/** Raw odds comparison: game → market → book → line. For odds comparison page. */
+/** Raw odds comparison: game → market → book → line + juice. For odds comparison page. */
 export type OddsComparisonRow = {
   id: string;
   game: string;
   time: string;
   commenceTime: string;
-  spread: Record<string, { away: string; home: string }>;
-  total: Record<string, string>;
+  spread: Record<
+    string,
+    {
+      away: string;
+      home: string;
+      awayJuice?: string;
+      homeJuice?: string;
+      awayPoint?: number;
+      homePoint?: number;
+    }
+  >;
+  total: Record<
+    string,
+    {
+      line: string;
+      overJuice?: string;
+      underJuice?: string;
+      point?: number;
+    }
+  >;
+  /** Book keys winning Best Line / Best O/U across the configured set. */
+  bestSpreadBook?: string;
+  bestTotalBook?: string;
 };
 
 export async function fetchOddsComparison(
@@ -333,8 +440,16 @@ export async function fetchOddsComparison(
     const timeWithDate = `${date} ${time} ET`;
 
     const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
-    const spread: Record<string, { away: string; home: string }> = {};
-    const total: Record<string, string> = {};
+    const spread: OddsComparisonRow["spread"] = {};
+    const total: OddsComparisonRow["total"] = {};
+    const formatJuice = (price: number | undefined | null): string | undefined => {
+      if (price == null || !Number.isFinite(price)) return undefined;
+      const n = Math.round(price);
+      return n > 0 ? `+${n}` : String(n);
+    };
+
+    const spreadEntries: SpreadBookEntry[] = [];
+    const totalEntries: TotalBookEntry[] = [];
 
     for (const b of bookmakers) {
       const spreadM = b.markets?.find((x) => x.key === "spreads");
@@ -350,14 +465,48 @@ export async function fetchOddsComparison(
           const homeS = formatSpreadDisplay(homeO.point, normalizedSport, {
             markAlternate: homeAlt,
           });
-          spread[b.key] = { away: awayS, home: homeS };
+          const awayJuice = formatJuice(awayO.price);
+          const homeJuice = formatJuice(homeO.price);
+          spread[b.key] = {
+            away: awayS,
+            home: homeS,
+            awayJuice,
+            homeJuice,
+            awayPoint: awayO.point,
+            homePoint: homeO.point,
+          };
+          spreadEntries.push({
+            book: b.key,
+            line: awayS,
+            point: awayO.point,
+            canonical: !isMlb || isCanonicalMlbRunLine(awayO.point),
+            juiceAway: awayJuice,
+            juiceHome: homeJuice,
+          });
         }
       }
       const totalM = b.markets?.find((x) => x.key === "totals");
       if (totalM) {
         const over = totalM.outcomes?.find((o) => o.name === "Over");
+        const under = totalM.outcomes?.find((o) => o.name === "Under");
         const pt = over?.point ?? totalM.outcomes?.[0]?.point;
-        if (pt != null) total[b.key] = String(pt);
+        if (pt != null) {
+          const overJuice = formatJuice(over?.price);
+          const underJuice = formatJuice(under?.price);
+          total[b.key] = {
+            line: String(pt),
+            overJuice,
+            underJuice,
+            point: pt,
+          };
+          totalEntries.push({
+            book: b.key,
+            line: String(pt),
+            point: pt,
+            juiceOver: overJuice,
+            juiceUnder: underJuice,
+          });
+        }
       }
     }
 
@@ -368,6 +517,8 @@ export async function fetchOddsComparison(
       commenceTime: ev.commence_time,
       spread,
       total,
+      bestSpreadBook: pickBestSpreadEntry(spreadEntries)?.book,
+      bestTotalBook: pickBestTotalEntry(totalEntries)?.book,
     });
   }
 

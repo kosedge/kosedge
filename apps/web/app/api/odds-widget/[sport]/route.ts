@@ -6,7 +6,7 @@ import { SPORT_KEY_MAP } from "@/lib/odds-api";
 
 const WIDGET_BASE = "https://widget.the-odds-api.com/v1/sports";
 const BOOKMAKERS =
-  "draftkings,fanduel,circa,betmgm,bet365,fanatics,betrivers,betr";
+  "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr";
 const MARKETS = "h2h,spreads,totals";
 const MARKET_NAMES = "h2h:Moneyline,spreads:Spread,totals:Over/Under";
 
