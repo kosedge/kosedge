@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -18,8 +19,24 @@ log = logging.getLogger("kosedge.nfl_resilience_cycle")
 
 
 def repo_root() -> Path:
-    # services/model-service/src/services/nfl_resilience_cycle.py -> repo root
-    return Path(__file__).resolve().parents[4]
+    """Resolve repo root locally, or /app in Railway/Docker images."""
+    here = Path(__file__).resolve()
+    candidates: List[Path] = []
+    # parents[i] raises IndexError when i is out of range (was the opaque freshness "4").
+    for idx, parent in enumerate(here.parents):
+        if idx > 6:
+            break
+        candidates.append(parent)
+    for parent in candidates:
+        if (parent / "pnpm-workspace.yaml").exists():
+            return parent
+        if (parent / "services" / "data-platform-nfl").exists():
+            return parent
+        if (parent / "data_platform_nfl").exists() and (parent / "src").exists():
+            return parent
+    if Path("/app/src").exists():
+        return Path("/app")
+    return candidates[min(2, len(candidates) - 1)] if candidates else Path.cwd()
 
 
 def resolve_active_season_week() -> Dict[str, Optional[int]]:
@@ -160,13 +177,20 @@ def run_dr_backup_job(*, skip_verify: bool = False) -> Dict[str, Any]:
 
 def run_data_freshness_check(*, persist_alert: bool = True) -> Dict[str, Any]:
     root = repo_root()
-    python_bin = os.environ.get("PYTHON_BIN", str(root / ".venv" / "bin" / "python3"))
+    # Prefer the running interpreter (Railway/Docker). The monorepo .venv path
+    # does not exist in production images and previously surfaced as opaque errors.
+    python_bin = os.environ.get("PYTHON_BIN") or sys.executable
+    dp_src = root / "services" / "data-platform-nfl" / "src"
+    # Vendored package lives at /app/data_platform_nfl in production images.
+    pythonpath_parts = [str(p) for p in (dp_src, root) if p.exists()]
     env = {
         "DATABASE_URL": os.environ.get(
             "DATABASE_URL",
             "postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge",
         ),
-        "PYTHONPATH": str(root / "services" / "data-platform-nfl" / "src"),
+        "PYTHONPATH": os.pathsep.join(
+            pythonpath_parts + ([os.environ["PYTHONPATH"]] if os.environ.get("PYTHONPATH") else [])
+        ),
     }
     # Compact single-line JSON avoids truncation issues from pretty CLI output.
     result = _run(
@@ -181,7 +205,16 @@ def run_data_freshness_check(*, persist_alert: bool = True) -> Dict[str, Any]:
         env=env,
         timeout=120,
     )
-    payload: Dict[str, Any] = {"status": "failed", "script_result": result}
+    payload: Dict[str, Any] = {
+        "status": "failed",
+        "script_result": {
+            "ok": result.get("ok"),
+            "returncode": result.get("returncode"),
+            "stderr_tail": (result.get("stderr_tail") or "")[-1200:],
+            "stdout_tail": (result.get("stdout_tail") or "")[-1200:],
+            "python_bin": python_bin,
+        },
+    }
     if result["ok"]:
         raw_out = (result.get("stdout_tail") or "").strip()
         start = raw_out.find("{")

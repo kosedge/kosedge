@@ -110,3 +110,4 @@ kosedge-vercel-push/
 data/backups/
 *.dump
 *.dump.sha256
+services/model-service/data_platform_nfl/

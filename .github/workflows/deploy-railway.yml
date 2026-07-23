@@ -1,0 +1,91 @@
+# Deploy model-service (api + worker + beat) to Railway on push to deploy-vercel.
+#
+# Project brave-art — all three services use:
+#   railway up services/model-service --path-as-root
+#   Dockerfile + PROCESS_TYPE=api|worker|beat
+#
+# GitHub secret: RAILWAY_TOKEN (Railway → brave-art → Settings → Tokens → Project Token)
+
+name: Deploy Railway model-service
+
+on:
+  push:
+    branches: [deploy-vercel]
+    paths:
+      - "services/model-service/**"
+      - "services/data-platform-nfl/src/data_platform_nfl/**"
+      - "infra/db/**"
+      - ".github/workflows/deploy-railway.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-railway-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Railway up (api / worker / beat)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Railway token
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "${RAILWAY_TOKEN}" ]; then
+            echo "Missing secret: RAILWAY_TOKEN" >&2
+            echo "Create a Project Token in Railway → brave-art → Settings → Tokens" >&2
+            exit 1
+          fi
+
+      - name: Sync vendored data_platform_nfl
+        run: bash scripts/nfl/sync-model-service-vendor.sh
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@5.2.0
+
+      - name: Deploy api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          SVC: ${{ secrets.RAILWAY_SERVICE_API }}
+        run: |
+          railway up services/model-service --path-as-root --detach \
+            --service "${SVC:-model-service}" \
+            --environment "${RAILWAY_ENVIRONMENT:-production}" \
+            -m "ci ${GITHUB_SHA::12} api"
+
+      - name: Deploy worker
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          SVC: ${{ secrets.RAILWAY_SERVICE_WORKER }}
+        run: |
+          railway up services/model-service --path-as-root --detach \
+            --service "${SVC:-model-service-worker}" \
+            --environment "${RAILWAY_ENVIRONMENT:-production}" \
+            -m "ci ${GITHUB_SHA::12} worker"
+
+      - name: Deploy beat
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          SVC: ${{ secrets.RAILWAY_SERVICE_BEAT }}
+        run: |
+          railway up services/model-service --path-as-root --detach \
+            --service "${SVC:-model-service-beat}" \
+            --environment "${RAILWAY_ENVIRONMENT:-production}" \
+            -m "ci ${GITHUB_SHA::12} beat"
+
+      - name: Summary
+        run: |
+          {
+            echo "## Railway deploy"
+            echo "- **Branch:** ${{ github.ref_name }}"
+            echo "- **Commit:** ${{ github.sha }}"
+            echo "- **Services:** model-service / model-service-worker / model-service-beat"
+          } >> "$GITHUB_STEP_SUMMARY"

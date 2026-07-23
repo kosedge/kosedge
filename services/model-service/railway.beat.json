@@ -5,7 +5,6 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "celery -A src.celery_app beat --loglevel=info",
     "restartPolicyType": "ON_FAILURE"
   }
 }
