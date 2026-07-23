@@ -54,7 +54,7 @@ jobs:
           RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
           SVC: ${{ secrets.RAILWAY_SERVICE_API }}
         run: |
-          railway up services/model-service --path-as-root --detach \
+          railway up services/model-service --path-as-root --no-gitignore --detach \
             --service "${SVC:-model-service}" \
             --environment "${RAILWAY_ENVIRONMENT:-production}" \
             -m "ci ${GITHUB_SHA::12} api"
@@ -65,7 +65,7 @@ jobs:
           RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
           SVC: ${{ secrets.RAILWAY_SERVICE_WORKER }}
         run: |
-          railway up services/model-service --path-as-root --detach \
+          railway up services/model-service --path-as-root --no-gitignore --detach \
             --service "${SVC:-model-service-worker}" \
             --environment "${RAILWAY_ENVIRONMENT:-production}" \
             -m "ci ${GITHUB_SHA::12} worker"
@@ -76,7 +76,7 @@ jobs:
           RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
           SVC: ${{ secrets.RAILWAY_SERVICE_BEAT }}
         run: |
-          railway up services/model-service --path-as-root --detach \
+          railway up services/model-service --path-as-root --no-gitignore --detach \
             --service "${SVC:-model-service-beat}" \
             --environment "${RAILWAY_ENVIRONMENT:-production}" \
             -m "ci ${GITHUB_SHA::12} beat"

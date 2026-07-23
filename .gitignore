@@ -110,4 +110,6 @@ kosedge-vercel-push/
 data/backups/
 *.dump
 *.dump.sha256
-services/model-service/data_platform_nfl/
+# Vendored into image via CI sync + committed snapshot for Railway --path-as-root uploads.
+# (Previously ignored, which stripped the package from `railway up` archives.)
+
