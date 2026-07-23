@@ -5,23 +5,16 @@
 - [x] Web builds/deploys on Vercel (`apps/web`, Next.js)
 - [x] Production branch set to `deploy-vercel` (pushes auto-promote)
 - [x] Site live at https://www.kosedge.com
+- [x] Vercel Production env has `MODEL_SERVICE_URL`, `AUTH_*`, `INTERNAL_API_SECRET`, `ODDS_API_KEY`
+- [x] Enterprise sharpening commit on `deploy-vercel` (`78ac2356`) + Vercel prod alias verified
 
-## Blockers (need credentials / Railway)
+## Remaining (Railway / warehouse)
 
-### 1) Vercel production env (currently only `ODDS_API_KEY`)
+### 1) Optional Vercel env
 
-Add these in Vercel → Project → Settings → Environment Variables → Production:
-
-| Variable | Value |
+| Variable | Notes |
 |---|---|
-| `MODEL_SERVICE_URL` | Public Railway API URL, e.g. `https://<service>.up.railway.app` |
-| `DATABASE_URL` | **Production** Postgres (not localhost) |
-| `AUTH_SECRET` | Same secret used for NextAuth (≥32 chars) |
-| `AUTH_URL` | `https://www.kosedge.com` |
-| `INTERNAL_API_SECRET` | Shared secret with model-service (≥16 chars) |
-| `ODDS_API_KEY` | Already set |
-
-Redeploy after adding.
+| `DATABASE_URL` | Only if web routes need direct Postgres (most NFL boards use `MODEL_SERVICE_URL`) |
 
 ### 2) Railway model-service (api + worker + beat)
 
@@ -40,9 +33,11 @@ From `services/model-service`:
 On the **prod** Postgres:
 
 ```bash
-# apply SQL migrations including 037_nfl_data_resilience.sql
+# apply SQL migrations through 038 (snap GSIS bridge)
 psql "$PROD_DATABASE_URL" -f infra/db/037_nfl_data_resilience.sql
+psql "$PROD_DATABASE_URL" -f infra/db/038_nfl_snap_usage_bridge.sql
 # then ingest / restore owned NFL data (or restore the verified local dump)
+# redeploy Railway api + worker + beat so sharpening code is live
 ```
 
 ### 4) Ops durability
