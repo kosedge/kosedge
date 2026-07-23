@@ -22,8 +22,14 @@ fi
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 export DATABASE_URL="${DATABASE_URL:-postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge}"
 export NFL_DR_BACKUP_DIR="${NFL_DR_BACKUP_DIR:-${ROOT_DIR}/data/backups/nfl}"
-# Prefer system pg tools in containers; Homebrew path is local-dev only.
-export NFL_PG_BIN_DIR="${NFL_PG_BIN_DIR:-/usr/bin}"
+# Prefer PG 18 tools in containers (matches Railway Postgres); Homebrew locally.
+if [[ -x /usr/lib/postgresql/18/bin/pg_dump ]]; then
+  export NFL_PG_BIN_DIR="${NFL_PG_BIN_DIR:-/usr/lib/postgresql/18/bin}"
+elif [[ -x /usr/local/bin/pg_dump ]]; then
+  export NFL_PG_BIN_DIR="${NFL_PG_BIN_DIR:-/usr/local/bin}"
+else
+  export NFL_PG_BIN_DIR="${NFL_PG_BIN_DIR:-/usr/local/opt/postgresql@16/bin}"
+fi
 
 VERIFY_FLAG=()
 UPLOAD_FLAG=()

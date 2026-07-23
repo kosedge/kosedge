@@ -6,10 +6,21 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
+# pg_dump must match Railway Postgres major (currently 18.x).
 RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \
   bash \
-  postgresql-client \
+  ca-certificates \
+  gnupg \
+  && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg \
+  && . /etc/os-release \
+  && echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \
+    > /etc/apt/sources.list.d/pgdg.list \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends postgresql-client-18 \
+  && ln -sf /usr/lib/postgresql/18/bin/pg_dump /usr/local/bin/pg_dump \
+  && ln -sf /usr/lib/postgresql/18/bin/pg_restore /usr/local/bin/pg_restore \
   && rm -rf /var/lib/apt/lists/*
 
 # Build context = services/model-service via: railway up services/model-service --path-as-root
