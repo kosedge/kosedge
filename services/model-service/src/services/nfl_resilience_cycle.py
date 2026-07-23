@@ -153,20 +153,39 @@ def run_weekly_resilience_cycle(
     return response
 
 
+def _dr_backup_script() -> Path:
+    """Prefer the image-bundled script; fall back to monorepo path."""
+    bundled = Path("/app/scripts/nfl/run-ownership-dr-backup.sh")
+    if bundled.exists():
+        return bundled
+    local = repo_root() / "scripts" / "nfl" / "run-ownership-dr-backup.sh"
+    if local.exists():
+        return local
+    # model-service checkout layout (path-as-root deploys)
+    sibling = Path(__file__).resolve().parents[2] / "scripts" / "nfl" / "run-ownership-dr-backup.sh"
+    return sibling
+
+
 def run_dr_backup_job(*, skip_verify: bool = False) -> Dict[str, Any]:
-    script = repo_root() / "scripts" / "nfl" / "run-ownership-dr-backup.sh"
+    script = _dr_backup_script()
+    default_pg_bin = "/usr/bin" if Path("/app/src").exists() else "/usr/local/opt/postgresql@16/bin"
     env = {
         "SKIP_VERIFY": "1" if skip_verify else "0",
+        # Local disk backup clears freshness; remote upload is optional via NFL_DR_REMOTE_URI.
+        "SKIP_UPLOAD": os.environ.get("SKIP_UPLOAD", "0" if os.environ.get("NFL_DR_REMOTE_URI") else "1"),
         "DATABASE_URL": os.environ.get(
             "DATABASE_URL",
             "postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge",
         ),
-        "PYTHON_BIN": os.environ.get("PYTHON_BIN", str(repo_root() / ".venv" / "bin" / "python3")),
-        "NFL_PG_BIN_DIR": os.environ.get(
-            "NFL_PG_BIN_DIR",
-            "/usr/local/opt/postgresql@16/bin",
-        ),
+        "PYTHON_BIN": os.environ.get("PYTHON_BIN") or sys.executable,
+        "NFL_PG_BIN_DIR": os.environ.get("NFL_PG_BIN_DIR", default_pg_bin),
     }
+    if not script.exists():
+        return {
+            "status": "failed",
+            "error": "dr_backup_script_missing",
+            "script": str(script),
+        }
     result = _run(["bash", str(script)], env=env)
     status = "ok" if result["ok"] else "failed"
     response = {"status": status, "script_result": result}
