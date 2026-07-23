@@ -41,7 +41,7 @@ describe("pro sport IA", () => {
     expect(propsSection?.links.every((link) => link.status !== "placeholder")).toBe(true);
   });
 
-  it("points NFL betting desk path Fair Lines → Edges → Props", () => {
+  it("points NFL betting desk path KEI Lines → Edges → Props", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
       sportKey: "nfl",
@@ -51,10 +51,10 @@ describe("pro sport IA", () => {
     });
     expect(content.sectionTitles.market).toBe("Betting Desk");
     const marketSection = sections.find((section) => section.title === content.sectionTitles.market);
-    expect(marketSection?.subtitle).toContain("Fair Lines → Edges → Props");
+    expect(marketSection?.subtitle).toContain("KEI Lines → Edges → Props");
     const labels = marketSection?.links.map((link) => link.label) ?? [];
-    expect(labels.slice(0, 3)).toEqual(["Fair lines", "Edges", "Props"]);
-    expect(marketSection?.links.find((link) => link.label === "Fair lines")?.href).toBe(
+    expect(labels.slice(0, 3)).toEqual(["KEI Lines", "Edges", "Props"]);
+    expect(marketSection?.links.find((link) => link.label === "KEI Lines")?.href).toBe(
       "/pro/nfl/fair-lines",
     );
     expect(marketSection?.links.find((link) => link.label === "Edges")?.href).toBe("/pro/nfl/edges");
@@ -74,7 +74,7 @@ describe("pro sport IA", () => {
     expect(intelSection).toBeDefined();
     expect(intelSection?.links.map((link) => link.label)).toEqual([
       "Projections hub",
-      "Fair lines board",
+      "KEI Lines board",
       "Edges desk",
       "Compare odds",
       "Props board",

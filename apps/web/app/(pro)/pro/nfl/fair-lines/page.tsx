@@ -11,10 +11,12 @@ import {
 } from "@/lib/nfl-fair-lines";
 
 const DEFAULT_SEASON = 2026;
-/** Season slate window — API default is 14; widen so preseason still shows Week 1+. */
-const DEFAULT_DAYS_AHEAD = 120;
+/** Wide fetch window; UI slate tabs decide what to show. */
+const FETCH_DAYS_AHEAD = 200;
+const PAST_WEEK_DAYS = 7;
 
 type SearchValue = string | string[] | undefined;
+type Slate = "week" | "season";
 
 function firstValue(value: SearchValue): string | undefined {
   if (Array.isArray(value)) return value[0];
@@ -30,6 +32,15 @@ function buildHref(base: Record<string, string | undefined>): string {
   return query ? `/pro/nfl/fair-lines?${query}` : "/pro/nfl/fair-lines";
 }
 
+function isInPastWindow(startTime: string | null, pastDays: number): boolean {
+  if (!startTime || pastDays <= 0) return false;
+  const t = new Date(startTime).getTime();
+  if (!Number.isFinite(t)) return false;
+  const now = Date.now();
+  const cutoff = now - pastDays * 24 * 60 * 60 * 1000;
+  return t >= cutoff && t <= now;
+}
+
 export default async function NflFairLinesPage({
   searchParams,
 }: {
@@ -38,18 +49,24 @@ export default async function NflFairLinesPage({
   const search = await searchParams;
   const seasonRaw = Number(firstValue(search.season));
   const season = Number.isFinite(seasonRaw) && seasonRaw >= 2010 ? seasonRaw : DEFAULT_SEASON;
-  const daysAheadRaw = Number(firstValue(search.daysAhead));
-  const daysAhead =
-    Number.isFinite(daysAheadRaw) && daysAheadRaw >= 1 && daysAheadRaw <= 365
-      ? daysAheadRaw
-      : DEFAULT_DAYS_AHEAD;
-  const includePastDaysRaw = Number(firstValue(search.includePast));
+  const slate: Slate = firstValue(search.slate) === "season" ? "season" : "week";
+  const includePastRaw = firstValue(search.includePast);
   const includePastDays =
-    Number.isFinite(includePastDaysRaw) && includePastDaysRaw >= 0 ? Math.min(includePastDaysRaw, 60) : 0;
+    includePastRaw === "7" || includePastRaw === "3" || includePastRaw === "1" ? PAST_WEEK_DAYS : 0;
 
-  const board = await fetchNflFairLines({ season, daysAhead, includePastDays });
-  const marketJoined = board.diagnostics.marketJoinedCount;
-  const sample = board.lines.slice(0, 3);
+  const board = await fetchNflFairLines({
+    season,
+    daysAhead: FETCH_DAYS_AHEAD,
+    includePastDays,
+  });
+
+  const visibleLines =
+    slate === "season"
+      ? board.lines
+      : board.lines.filter((row) => {
+          if (row.week != null && row.week === board.currentWeek) return true;
+          return isInPastWindow(row.startTime, includePastDays);
+        });
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -57,14 +74,14 @@ export default async function NflFairLinesPage({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              {season} Fair Lines Board
+              {season} KEI Lines
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               Kosedge Makes Its Own Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Neutral model fair values — spread, total, and moneylines — for the upcoming slate. Market columns
-              appear when the odds feed joins cleanly; otherwise you still get the Kosedge reference alone.
+              Neutral model fair values — spread, total, and moneylines — for the slate. Market columns appear when
+              Vegas joins; otherwise you still get the Kosedge reference alone.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -92,53 +109,33 @@ export default async function NflFairLinesPage({
 
       {board.error ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {board.error} Fair lines will populate once the model service is reachable.
+          KEI Lines will populate once the model service is reachable.
         </section>
       ) : null}
 
       {!board.error && board.diagnostics.kosedgeOnly ? (
         <section className="mt-6 rounded-2xl border border-sky-400/25 bg-sky-400/10 p-5 text-sm text-sky-100">
-          Odds feed unavailable or unmatched — showing Kosedge lines only
-          {board.diagnostics.oddsFeedError ? ` (${board.diagnostics.oddsFeedError})` : "."}
-        </section>
-      ) : null}
-
-      {!board.error ? (
-        <section className="mt-6 grid gap-4 md:grid-cols-3">
-          <StatCard
-            label="Games on board"
-            value={String(board.count)}
-            detail={`Next ${board.window.daysAhead} days · model ${board.modelVersion || "—"}`}
-          />
-          <StatCard
-            label="Market joins"
-            value={String(marketJoined)}
-            detail={
-              marketJoined > 0
-                ? `${marketJoined} of ${board.count} games have live Vegas comparison`
-                : "Kosedge-only until odds join"
-            }
-          />
-          <StatCard
-            label="Sims per line"
-            value={sample[0]?.simulationCount ? String(sample[0].simulationCount) : "—"}
-            detail="Monte Carlo replicates behind each fair price"
-          />
+          Vegas lines unavailable — showing Kosedge lines only.
         </section>
       ) : null}
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <nav className="flex flex-wrap gap-2" aria-label="Lookahead window">
-            {[14, 45, 120, 200].map((option) => {
-              const isActive = daysAhead === option;
+          <nav className="flex flex-wrap gap-2" aria-label="Slate window">
+            {(
+              [
+                { id: "week" as const, label: "Current week" },
+                { id: "season" as const, label: "Season slate" },
+              ] as const
+            ).map((option) => {
+              const isActive = slate === option.id;
               return (
                 <Link
-                  key={option}
+                  key={option.id}
                   href={buildHref({
                     season: String(season),
-                    daysAhead: String(option),
-                    includePast: includePastDays > 0 ? String(includePastDays) : undefined,
+                    slate: option.id === "week" ? undefined : option.id,
+                    includePast: includePastDays > 0 ? String(PAST_WEEK_DAYS) : undefined,
                   })}
                   className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
                     isActive
@@ -146,7 +143,7 @@ export default async function NflFairLinesPage({
                       : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-kos-gold/25 hover:text-kos-text"
                   }`}
                 >
-                  {option}d ahead
+                  {option.label}
                 </Link>
               );
             })}
@@ -154,8 +151,8 @@ export default async function NflFairLinesPage({
           <Link
             href={buildHref({
               season: String(season),
-              daysAhead: String(daysAhead),
-              includePast: includePastDays > 0 ? undefined : "3",
+              slate: slate === "week" ? undefined : slate,
+              includePast: includePastDays > 0 ? undefined : String(PAST_WEEK_DAYS),
             })}
             className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
               includePastDays > 0
@@ -163,26 +160,27 @@ export default async function NflFairLinesPage({
                 : "border border-white/10 bg-white/5 text-kos-text/70 hover:border-edge-green/25"
             }`}
           >
-            {includePastDays > 0 ? "Including recent games ✓" : "Include last 3 days"}
+            {includePastDays > 0 ? "Including last week ✓" : "Include last week"}
           </Link>
         </div>
       </section>
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-xl font-semibold text-kos-text">Fair Lines Board</h2>
+          <h2 className="text-xl font-semibold text-kos-text">KEI Lines</h2>
           <p className="text-xs text-kos-text/60">
-            {board.count} game{board.count === 1 ? "" : "s"}
+            {visibleLines.length} game{visibleLines.length === 1 ? "" : "s"}
+            {slate === "week" && board.currentWeek ? ` · Week ${board.currentWeek}` : ""}
           </p>
         </div>
 
-        {!board.error && board.lines.length === 0 ? (
+        {!board.error && visibleLines.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No projections yet for this window. Widen the lookahead or wait for the next slate materialization.
+            No lines in this window yet. Try Season slate, or wait for the next update.
           </div>
         ) : null}
 
-        {board.lines.length > 0 ? (
+        {visibleLines.length > 0 ? (
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-wide text-kos-text/55">
@@ -199,7 +197,7 @@ export default async function NflFairLinesPage({
                 </tr>
               </thead>
               <tbody>
-                {board.lines.map((row) => (
+                {visibleLines.map((row) => (
                   <FairLineRow key={row.gameId} row={row} />
                 ))}
               </tbody>
@@ -210,8 +208,8 @@ export default async function NflFairLinesPage({
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
         <p>
-          Kosedge fair moneylines and spreads are simulation-backed reference prices — not picks. Edges are only
-          shown when a live market price joins the same matchup.
+          KEI moneylines and spreads are simulation-backed reference prices — not picks. Edges are only shown when a
+          live market price joins the same matchup.
         </p>
       </section>
     </main>
@@ -220,7 +218,7 @@ export default async function NflFairLinesPage({
 
 function FairLineRow({ row }: { row: NflFairLineRow }) {
   return (
-                <tr className="border-b border-white/5 transition hover:bg-white/5">
+    <tr className="border-b border-white/5 transition hover:bg-white/5">
       <td className="px-3 py-3">
         <div className="font-semibold text-kos-text">
           {row.awayAbbr} @ {row.homeAbbr}
@@ -252,15 +250,5 @@ function FairLineRow({ row }: { row: NflFairLineRow }) {
         {row.mlEdgeProb === null ? "—" : `${(row.mlEdgeProb * 100).toFixed(1)}pp`}
       </td>
     </tr>
-  );
-}
-
-function StatCard({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/55">{label}</p>
-      <p className="mt-2 text-xl font-semibold text-kos-text">{value}</p>
-      <p className="mt-1 text-xs text-kos-text/60">{detail}</p>
-    </div>
   );
 }

@@ -102,7 +102,7 @@ export default async function SportOverviewPage({
             <div>
               <h2 className="text-xl font-semibold tracking-tight text-kos-text">Betting Desk</h2>
               <p className="mt-1 text-sm text-kos-text/70">
-                Fair Lines → Edges → Props — Kosedge lines into actionable edges.
+                KEI Lines → Edges → Props — Kosedge lines into actionable edges.
               </p>
             </div>
           </div>
@@ -111,11 +111,11 @@ export default async function SportOverviewPage({
               href="/pro/nfl/fair-lines"
               className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-5 transition hover:border-kos-gold/45 hover:bg-kos-gold/10"
             >
-              <h3 className="text-lg font-semibold text-kos-gold">Fair Lines</h3>
+              <h3 className="text-lg font-semibold text-kos-gold">KEI Lines</h3>
               <p className="mt-2 text-sm text-kos-text/75">
                 Kosedge spreads, totals, and fair moneylines for the slate.
               </p>
-              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">Open fair lines →</span>
+              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">Open KEI Lines →</span>
             </Link>
             <Link
               href="/pro/nfl/edges"

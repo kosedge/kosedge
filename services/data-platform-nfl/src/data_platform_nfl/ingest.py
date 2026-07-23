@@ -2361,7 +2361,9 @@ def materialize_player_projection_features(
                       snap_proxy, team_snap_share, route_proxy, target_proxy, rush_share, red_zone_share,
                       qb_dropback_factor, qb_pressure_factor, team_pace_factor, team_pass_rate_factor,
                       opponent_pass_defense_factor, opponent_rush_defense_factor,
-                      availability_confidence, role_confidence, feature_payload, source, created_at, updated_at
+                      availability_confidence, role_confidence,
+                      offense_snaps, offense_snap_pct, snap_source,
+                      feature_payload, source, created_at, updated_at
                     )
                     WITH usage AS (
                       SELECT
@@ -2389,19 +2391,56 @@ def materialize_player_projection_features(
                       WHERE u.season = :season
                         AND (CAST(:week AS int) IS NULL OR u.week = CAST(:week AS int))
                     ),
+                    snaps AS (
+                      -- Real offense snaps from nflverse (PFR), bridged to GSIS via gsis_player_id.
+                      SELECT
+                        season,
+                        week,
+                        team,
+                        gsis_player_id AS player_id,
+                        MAX(offense_snaps) AS offense_snaps,
+                        MAX(offense_pct) AS offense_pct
+                      FROM nfl_dp_snap_counts_weekly
+                      WHERE season = :season
+                        AND (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
+                        AND gsis_player_id IS NOT NULL
+                      GROUP BY season, week, team, gsis_player_id
+                    ),
                     injury AS (
+                      -- Enterprise availability: report status dominates, practice
+                      -- (DNP/limited) can only pull confidence down. Aligns with
+                      -- model-service nfl_injury_role_shocks.availability_from_injury_statuses.
                       SELECT
                         i.season,
                         i.week,
                         i.team,
                         COALESCE(NULLIF(i.player_id, ''), NULLIF(i.player_name, ''), i.player_key) AS player_key,
                         MAX(
-                          CASE
-                            WHEN lower(COALESCE(i.report_status, '')) IN ('out', 'doubtful', 'injured reserve') THEN 0.18
-                            WHEN lower(COALESCE(i.report_status, '')) IN ('questionable') THEN 0.55
-                            WHEN lower(COALESCE(i.report_status, '')) IN ('probable') THEN 0.82
-                            ELSE 0.95
-                          END
+                          LEAST(
+                            0.98,
+                            GREATEST(
+                              0.05,
+                              (
+                                0.72 * CASE
+                                  WHEN lower(COALESCE(i.report_status, '')) IN ('out') THEN 0.08
+                                  WHEN lower(COALESCE(i.report_status, '')) IN ('doubtful') THEN 0.12
+                                  WHEN lower(COALESCE(i.report_status, '')) LIKE '%injured reserve%'
+                                    OR lower(COALESCE(i.report_status, '')) = 'ir' THEN 0.08
+                                  WHEN lower(COALESCE(i.report_status, '')) IN ('questionable') THEN 0.52
+                                  WHEN lower(COALESCE(i.report_status, '')) IN ('probable', 'limited') THEN 0.82
+                                  WHEN lower(COALESCE(i.report_status, '')) IN ('healthy', '') THEN 0.95
+                                  ELSE 0.88
+                                END
+                                + 0.28 * CASE
+                                  WHEN lower(COALESCE(i.practice_status, '')) LIKE '%did not participate%'
+                                    OR lower(COALESCE(i.practice_status, '')) = 'dnp' THEN 0.15
+                                  WHEN lower(COALESCE(i.practice_status, '')) LIKE '%limited%' THEN 0.62
+                                  WHEN lower(COALESCE(i.practice_status, '')) LIKE '%full%' THEN 0.96
+                                  ELSE 0.90
+                                END
+                              )
+                            )
+                          )
                         ) AS availability_confidence
                       FROM nfl_dp_injuries i
                       WHERE i.season = :season
@@ -2441,7 +2480,17 @@ def materialize_player_projection_features(
                       CASE WHEN sd.home_team = u.team THEN sd.away_team ELSE sd.home_team END AS opponent,
                       sd.game_date,
                       GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(u.team_involvement::numeric, 0)))) AS snap_proxy,
-                      GREATEST(0.0, LEAST(1.0, (u.involvement_plays::numeric / NULLIF(t.offensive_plays::numeric, 0)))) AS team_snap_share,
+                      -- Prefer real offense snap % when bridged; else PBP involvement proxy.
+                      GREATEST(
+                        0.0,
+                        LEAST(
+                          1.0,
+                          COALESCE(
+                            sc.offense_pct,
+                            (u.involvement_plays::numeric / NULLIF(t.offensive_plays::numeric, 0))
+                          )
+                        )
+                      ) AS team_snap_share,
                       GREATEST(0.0, LEAST(1.0, ((u.targets + u.receptions)::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))) AS route_proxy,
                       GREATEST(0.0, LEAST(1.0, (u.targets::numeric / NULLIF((u.team_targets + 1)::numeric, 0)))) AS target_proxy,
                       GREATEST(0.0, LEAST(1.0, (u.rush_attempts::numeric / NULLIF((u.team_rush_attempts + 1)::numeric, 0)))) AS rush_share,
@@ -2494,6 +2543,12 @@ def materialize_player_projection_features(
                             )
                           )
                       END AS role_confidence,
+                      sc.offense_snaps AS offense_snaps,
+                      sc.offense_pct AS offense_snap_pct,
+                      CASE
+                        WHEN sc.offense_pct IS NOT NULL THEN 'nfl_dp_snap_counts_weekly'
+                        ELSE 'pbp_involvement_proxy'
+                      END AS snap_source,
                       jsonb_build_object(
                         'involvement_plays', u.involvement_plays,
                         'targets', u.targets,
@@ -2501,7 +2556,13 @@ def materialize_player_projection_features(
                         'red_zone_targets', u.red_zone_targets,
                         'red_zone_carries', u.red_zone_carries,
                         'success_rate', u.success_rate,
-                        'usage_source', u.usage_source
+                        'usage_source', u.usage_source,
+                        'offense_snaps', sc.offense_snaps,
+                        'offense_snap_pct', sc.offense_pct,
+                        'snap_source', CASE
+                          WHEN sc.offense_pct IS NOT NULL THEN 'nfl_dp_snap_counts_weekly'
+                          ELSE 'pbp_involvement_proxy'
+                        END
                       ) AS feature_payload,
                       'nfl_dp_usage_situational'::text AS source,
                       NOW(),
@@ -2509,6 +2570,11 @@ def materialize_player_projection_features(
                     FROM usage u
                     LEFT JOIN nfl_dp_team_situational_weekly t
                       ON t.season = u.season AND t.week = u.week AND t.team = u.team
+                    LEFT JOIN snaps sc
+                      ON sc.season = u.season
+                      AND sc.week = u.week
+                      AND sc.team = u.team
+                      AND sc.player_id = u.player_id
                     LEFT JOIN injury inj
                       ON inj.season = u.season
                       AND inj.week = u.week
@@ -2544,6 +2610,9 @@ def materialize_player_projection_features(
                       opponent_rush_defense_factor = EXCLUDED.opponent_rush_defense_factor,
                       availability_confidence = EXCLUDED.availability_confidence,
                       role_confidence = EXCLUDED.role_confidence,
+                      offense_snaps = EXCLUDED.offense_snaps,
+                      offense_snap_pct = EXCLUDED.offense_snap_pct,
+                      snap_source = EXCLUDED.snap_source,
                       feature_payload = EXCLUDED.feature_payload,
                       source = EXCLUDED.source,
                       updated_at = EXCLUDED.updated_at

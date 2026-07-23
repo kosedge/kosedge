@@ -46,15 +46,29 @@ def _normalize_pct(value: Any) -> Optional[float]:
     return max(0.0, min(1.0, pct))
 
 
+def _pfr_to_gsis_map() -> Dict[str, str]:
+    """Bridge nflverse snap PFR ids onto GSIS ids used by usage/features."""
+    # load_players is a global directory (no seasons= kwarg).
+    players = nfl.load_players()
+    out: Dict[str, str] = {}
+    for row in _iter_rows(players):
+        pfr = str(row.get("pfr_id") or "").strip()
+        gsis = str(row.get("gsis_id") or "").strip()
+        if pfr and gsis:
+            out[pfr] = gsis
+    return out
+
+
 def ingest_snap_counts(*, seasons: List[int], commit_every: int = 500) -> Dict[str, Any]:
     """Persist snap counts into the typed owned table.
 
     Note: we intentionally do NOT mirror every snap row into nfl_dp_raw_objects
     (already multi-GB). Typed table + ingestion_runs metrics are the ownership
-    contract for this feed.
+    contract for this feed. Also resolves gsis_player_id so features can join
+    snaps onto nfl_dp_player_usage_weekly (GSIS) rows for RB/WR usage tracking.
     """
     session = SessionLocal()
-    metrics = {"seasons": seasons, "rows": 0, "commit_batches": 0}
+    metrics = {"seasons": seasons, "rows": 0, "gsis_linked": 0, "commit_batches": 0}
     run_id = None
     try:
         run_id = session.execute(
@@ -69,20 +83,22 @@ def ingest_snap_counts(*, seasons: List[int], commit_every: int = 500) -> Dict[s
         ).scalar_one()
         session.commit()
 
+        pfr_to_gsis = _pfr_to_gsis_map()
         snaps = _safe_load_nflverse_table(nfl.load_snap_counts, seasons=seasons)
         insert_sql = text(
             """
             INSERT INTO nfl_dp_snap_counts_weekly (
-              season, week, game_id, player_id, player_name, team, position,
+              season, week, game_id, player_id, gsis_player_id, player_name, team, position,
               offense_snaps, offense_pct, defense_snaps, defense_pct,
               st_snaps, st_pct, source, updated_at
             ) VALUES (
-              :season, :week, :game_id, :player_id, :player_name, :team, :position,
+              :season, :week, :game_id, :player_id, :gsis_player_id, :player_name, :team, :position,
               :offense_snaps, :offense_pct, :defense_snaps, :defense_pct,
               :st_snaps, :st_pct, 'nflverse', :updated_at
             )
             ON CONFLICT (season, week, team, player_id) DO UPDATE SET
               game_id = EXCLUDED.game_id,
+              gsis_player_id = COALESCE(EXCLUDED.gsis_player_id, nfl_dp_snap_counts_weekly.gsis_player_id),
               player_name = EXCLUDED.player_name,
               position = EXCLUDED.position,
               offense_snaps = EXCLUDED.offense_snaps,
@@ -104,6 +120,9 @@ def ingest_snap_counts(*, seasons: List[int], commit_every: int = 500) -> Dict[s
             player_id = str(row.get("pfr_player_id") or "").strip()
             if not season or week is None or not team or not player_id:
                 continue
+            gsis_player_id = pfr_to_gsis.get(player_id)
+            if gsis_player_id:
+                metrics["gsis_linked"] += 1
             session.execute(
                 insert_sql,
                 {
@@ -111,6 +130,7 @@ def ingest_snap_counts(*, seasons: List[int], commit_every: int = 500) -> Dict[s
                     "week": week,
                     "game_id": str(row.get("game_id") or "") or None,
                     "player_id": player_id,
+                    "gsis_player_id": gsis_player_id,
                     "player_name": row.get("player"),
                     "team": team,
                     "position": row.get("position"),

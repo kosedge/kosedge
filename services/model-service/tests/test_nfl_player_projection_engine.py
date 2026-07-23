@@ -6,8 +6,12 @@ from src.services.nfl_player_projection_engine import (
     PlayerFeatureInputs,
     baseline_projection_from_features,
     compute_qb_starter_shares,
+    compute_rb_rush_shares,
+    depth_role_confidence_floor,
     evaluate_prop_edge,
     fantasy_points_from_projection,
+    qb_talent_factor_from_prior_ypg,
+    skill_talent_factor_from_prior_ypg,
 )
 
 
@@ -295,18 +299,84 @@ def test_compute_qb_starter_shares_uses_depth_when_snaps_missing() -> None:
         {"backup": 0.0, "starter": 0.0},
         depth_orders={"starter": 1.0, "backup": 2.0},
     )
-    assert shares["starter"] == 1.0
-    assert shares["backup"] == 0.05
+    assert shares["starter"] >= 0.90
+    assert shares["backup"] <= 0.08
+
+
+def test_compute_qb_starter_shares_prior_beats_stale_depth_and_injury_snaps() -> None:
+    # Production failure modes: Flacco > Burrow on 2025 injury snaps,
+    # Huntley depth_order=1 over Lamar, Milton depth_order=1 over Dak.
+    # Prior attempts must crown the real franchise QB1; winner-take-most
+    # must crush the backup below a second full starter season.
+    cin = compute_qb_starter_shares(
+        {"burrow": 0.28, "flacco": 0.43, "johnson": 0.07},
+        depth_orders={"burrow": 1.0, "flacco": 2.0, "johnson": 3.0},
+        prior_attempts={"burrow": 979.0, "flacco": 264.0, "johnson": 0.0},
+    )
+    assert cin["burrow"] >= 0.90
+    assert cin["flacco"] <= 0.08
+    assert cin["johnson"] <= 0.03
+
+    bal = compute_qb_starter_shares(
+        {"lamar": 0.40, "huntley": 0.09},
+        depth_orders={"huntley": 1.0, "lamar": 2.0},
+        prior_attempts={"lamar": 882.0, "huntley": 74.0},
+    )
+    assert bal["lamar"] >= 0.90
+    assert bal["huntley"] <= 0.08
+
+    dal = compute_qb_starter_shares(
+        {"dak": 0.35, "milton": 0.05},
+        depth_orders={"milton": 1.0, "dak": 2.0},
+        prior_attempts={"dak": 937.0, "milton": 24.0},
+    )
+    assert dal["dak"] >= 0.90
+    assert dal["milton"] <= 0.08
+
+
+def test_compute_qb_starter_shares_volume_leader_beats_stale_depth2() -> None:
+    # MIN-class room: franchise QB threw more last year but depth chart
+    # still lists a bridge veteran as QB1.
+    shares = compute_qb_starter_shares(
+        {"mccarthy": 0.32, "wentz": 0.21, "brosmer": 0.09},
+        depth_orders={"wentz": 1.0, "mccarthy": 2.0, "brosmer": 3.0},
+        prior_attempts={"mccarthy": 273.0, "wentz": 188.0, "brosmer": 85.0},
+    )
+    assert shares["mccarthy"] >= 0.90
+    assert shares["wentz"] <= 0.08
+
+
+def test_qb_talent_factor_separates_elite_from_bridge() -> None:
+    assert qb_talent_factor_from_prior_ypg(290.0) > qb_talent_factor_from_prior_ypg(210.0)
+    assert qb_talent_factor_from_prior_ypg(290.0) > 1.05
+    assert qb_talent_factor_from_prior_ypg(200.0) < 0.98
+
+
+def test_elite_qb_season_scale_above_compressed_ceiling() -> None:
+    # Elite primary starter should clear the old ~3.1k compressed "league
+    # lead" band when extrapolated over 17 games.
+    elite = baseline_projection_from_features(
+        _qb_inputs(
+            team_snap_share=0.48,
+            snap_proxy=0.30,
+            qb_starter_share=0.92,
+            qb_talent_factor=1.12,
+            role_confidence=0.9,
+            team_pass_rate_factor=1.05,
+            qb_dropback_factor=1.05,
+        )
+    )
+    assert elite["pass_yards_mean"] * 17 > 3800.0
 
 
 def test_qb_designated_starter_volume_not_crushed_by_mid_team_snap() -> None:
-    # Mid involvement (~0.42) for a clear starter should land near book
-    # pass lines (~230-270), not the pre-rematerialize ~167 crash.
+    # Mid involvement (~0.42) for a clear starter should land near book /
+    # true-projection pass lines (~220-300), not the pre-rematerialize ~167 crash.
     mid_snap_starter = baseline_projection_from_features(
         _qb_inputs(team_snap_share=0.42, snap_proxy=0.29, qb_starter_share=1.0)
     )
     assert mid_snap_starter["pass_yards_mean"] > 185.0
-    assert mid_snap_starter["pass_yards_mean"] < 300.0
+    assert mid_snap_starter["pass_yards_mean"] < 320.0
 
 
 def test_qb_cold_start_designated_starter_gets_volume_floor() -> None:
@@ -318,6 +388,36 @@ def test_qb_cold_start_designated_starter_gets_volume_floor() -> None:
 
 def test_compute_qb_starter_shares_empty_input() -> None:
     assert compute_qb_starter_shares({}) == {}
+
+
+def test_compute_rb_rush_shares_bell_cow_winner_take_most() -> None:
+    shares = compute_rb_rush_shares(
+        {"rb1": 0.55, "rb2": 0.25, "rb3": 0.10},
+        depth_orders={"rb1": 1.0, "rb2": 2.0, "rb3": 3.0},
+        prior_carries={"rb1": 320.0, "rb2": 110.0, "rb3": 40.0},
+        offense_snap_pcts={"rb1": 0.68, "rb2": 0.28, "rb3": 0.10},
+    )
+    assert abs(sum(shares.values()) - 1.0) < 1e-6
+    assert shares["rb1"] >= 0.60
+    assert shares["rb2"] < shares["rb1"]
+    assert shares["rb3"] < shares["rb2"]
+
+
+def test_compute_rb_rush_shares_committee_softens_when_usage_close() -> None:
+    shares = compute_rb_rush_shares(
+        {"rb1": 0.42, "rb2": 0.40, "rb3": 0.10},
+        depth_orders={"rb1": 1.0, "rb2": 2.0, "rb3": 3.0},
+        prior_carries={"rb1": 160.0, "rb2": 150.0, "rb3": 30.0},
+        offense_snap_pcts={"rb1": 0.45, "rb2": 0.42, "rb3": 0.12},
+    )
+    assert abs(sum(shares.values()) - 1.0) < 1e-6
+    # True committees must keep RB2 alive — not crush to QB-style residuals.
+    assert shares["rb2"] >= 0.28
+    assert shares["rb1"] < 0.62
+
+
+def test_compute_rb_rush_shares_single_back_full_share() -> None:
+    assert compute_rb_rush_shares({"rb1": 0.4}) == {"rb1": 1.0}
 
 
 def test_elite_wr_target_share_produces_realistic_season_volume() -> None:
@@ -334,12 +434,51 @@ def test_elite_wr_target_share_produces_realistic_season_volume() -> None:
     elite_wr1 = PlayerFeatureInputs(
         position="WR", snap_proxy=0.6, route_proxy=0.51, target_proxy=0.31,
         rush_share=0.0, red_zone_share=0.2, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
-        team_pace_factor=1.0, team_pass_rate_factor=1.1, availability_confidence=0.95, role_confidence=0.75,
+        team_pace_factor=1.0, team_pass_rate_factor=1.1, availability_confidence=0.95,
+        role_confidence=0.88, skill_talent_factor=1.14,
     )
     projection = baseline_projection_from_features(elite_wr1)
     season_yards = projection["receiving_yards_mean"] * 17
-    assert projection["targets_mean"] > 9.0
-    assert 1100.0 < season_yards < 1900.0
+    assert projection["targets_mean"] > 9.5
+    assert 1300.0 < season_yards < 2100.0
+
+
+def test_low_role_confidence_does_not_crush_depth1_wr_when_floored() -> None:
+    # Chase-class failure: hydrated role_confidence ~0.28 with real 31% target
+    # share must still clear ~80 yd/g once depth floor + talent are applied.
+    crushed = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="WR", snap_proxy=0.1, route_proxy=0.51, target_proxy=0.314,
+            rush_share=0.0, red_zone_share=0.15, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=0.97, team_pass_rate_factor=1.10, availability_confidence=0.9,
+            role_confidence=0.28, skill_talent_factor=1.0,
+        )
+    )
+    floored = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="WR", snap_proxy=0.1, route_proxy=0.51, target_proxy=0.314,
+            rush_share=0.0, red_zone_share=0.15, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=0.97, team_pass_rate_factor=1.10, availability_confidence=0.9,
+            role_confidence=depth_role_confidence_floor("WR", 1.0) or 0.88,
+            skill_talent_factor=1.14,
+        )
+    )
+    assert floored["receiving_yards_mean"] > crushed["receiving_yards_mean"]
+    assert floored["receiving_yards_mean"] > 80.0
+    assert skill_talent_factor_from_prior_ypg(100.0, position="WR") > 1.08
+
+
+def test_elite_rb_season_rush_scale() -> None:
+    bell = baseline_projection_from_features(
+        PlayerFeatureInputs(
+            position="RB", snap_proxy=0.55, route_proxy=0.25, target_proxy=0.12,
+            rush_share=0.55, red_zone_share=0.35, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
+            team_pace_factor=1.0, team_pass_rate_factor=1.0, availability_confidence=0.95,
+            role_confidence=0.88, skill_talent_factor=1.15,
+        )
+    )
+    assert bell["rush_yards_mean"] * 17 > 1400.0
+    assert skill_talent_factor_from_prior_ypg(95.0, position="RB") > 1.10
 
 
 def test_qb_ypa_intercept_matches_real_pressure_adjusted_fit() -> None:

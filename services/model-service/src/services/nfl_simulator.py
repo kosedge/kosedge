@@ -89,6 +89,11 @@ class NflGameInputs:
     travel_miles_away: Optional[float] = None
     travel_timezone_delta_home: Optional[float] = None
     travel_timezone_delta_away: Optional[float] = None
+    # Situational tendency PROE (pass_rate − xpass); mild totals/spread tilt.
+    tendency_proe_home: Optional[float] = None
+    tendency_proe_away: Optional[float] = None
+    tendency_total_signal: Optional[float] = None
+    tendency_spread_signal: Optional[float] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -209,6 +214,23 @@ def _build_matchup_adjustments(inputs: NflGameInputs) -> Dict[str, Any]:
         2.8,
     )
 
+    # Mild PROE tendency tilt (does not override EPA pack).
+    tendency_spread = _clamp(float(inputs.tendency_spread_signal or 0.0), -0.6, 0.6)
+    tendency_total = _clamp(float(inputs.tendency_total_signal or 0.0), -1.2, 1.2)
+    if inputs.tendency_spread_signal is None and (
+        inputs.tendency_proe_home is not None or inputs.tendency_proe_away is not None
+    ):
+        from src.services.nfl_tendency_pricing import tendency_game_signals
+
+        signals = tendency_game_signals(
+            float(inputs.tendency_proe_home or 0.0),
+            float(inputs.tendency_proe_away or 0.0),
+        )
+        tendency_spread = float(signals["spread_signal"])
+        tendency_total = float(signals["total_signal"])
+    spread_signal = _clamp(spread_signal + tendency_spread, -4.25, 4.25)
+    total_signal = _clamp(total_signal + tendency_total, -2.8, 2.8)
+
     home_points = _clamp((0.72 * spread_signal) + (0.57 * total_signal), -3.6, 3.6)
     away_points = _clamp((-0.58 * spread_signal) + (0.43 * total_signal), -3.0, 3.0)
     return {
@@ -222,6 +244,16 @@ def _build_matchup_adjustments(inputs: NflGameInputs) -> Dict[str, Any]:
             "home_off_epa_5g": home_off_component,
             "away_off_epa_5g": away_off_component,
             "combined_pass_rate_5g": pass_rate_signal,
+            "tendency_proe_spread": {
+                "raw": tendency_spread,
+                "bounded": tendency_spread,
+                "points": tendency_spread,
+            },
+            "tendency_proe_total": {
+                "raw": tendency_total,
+                "bounded": tendency_total,
+                "points": tendency_total,
+            },
         },
         "pack_reference": {
             "version": inputs.feature_pack_version,

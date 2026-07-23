@@ -103,17 +103,24 @@ def hydrate_preseason_team_situational(
         # extreme rate stat at full strength into a new season overstates
         # how much of that was a stable team characteristic vs. one year's
         # game-script/personnel circumstances that won't necessarily repeat.
-        # Shrinking rate stats toward the league mean for a small (n=1
-        # season) sample is standard, well-established practice (this is
-        # literally what "regression to the mean" means) -- 35% shrinkage
-        # is a deliberately moderate choice: enough to pull true outliers
-        # back toward plausible, without erasing real, persistent
-        # team/scheme identity for teams with more moderate deviations.
-        RATE_SHRINKAGE_WEIGHT = 0.35
+        # Enterprise update (2026-07): raise base shrink to 50% and hard-cap
+        # residual outliers at league_mean ± 1.0σ so scheme identity remains
+        # but single-season extremes cannot mint fake league-leading QBs.
+        RATE_SHRINKAGE_WEIGHT = 0.50
+        RATE_OUTLIER_SIGMA_CAP = 1.0
         pass_rate_vals = [float(v["pass_rate"]) for v in season_avg.values() if v.get("pass_rate") is not None]
         plays_vals = [float(v["offensive_plays"]) for v in season_avg.values() if v.get("offensive_plays") is not None]
         league_avg_pass_rate = sum(pass_rate_vals) / len(pass_rate_vals) if pass_rate_vals else None
         league_avg_plays = sum(plays_vals) / len(plays_vals) if plays_vals else None
+
+        def _stdev(vals: list[float]) -> float:
+            if len(vals) < 2:
+                return 0.0
+            mean = sum(vals) / len(vals)
+            return (sum((v - mean) ** 2 for v in vals) / (len(vals) - 1)) ** 0.5
+
+        pass_rate_sd = _stdev(pass_rate_vals) if pass_rate_vals else 0.0
+        plays_sd = _stdev(plays_vals) if plays_vals else 0.0
 
         teams_updated = []
         for team, stats in season_avg.items():
@@ -126,9 +133,19 @@ def hydrate_preseason_team_situational(
                 values["epa_per_play_defense_allowed"] = (1 - market_blend_weight) * float(stats["epa_per_play_defense_allowed"]) + market_blend_weight * market_def_equiv
 
             if league_avg_pass_rate is not None and stats.get("pass_rate") is not None:
-                values["pass_rate"] = (1 - RATE_SHRINKAGE_WEIGHT) * float(stats["pass_rate"]) + RATE_SHRINKAGE_WEIGHT * league_avg_pass_rate
+                shrunk = (1 - RATE_SHRINKAGE_WEIGHT) * float(stats["pass_rate"]) + RATE_SHRINKAGE_WEIGHT * league_avg_pass_rate
+                if pass_rate_sd > 0:
+                    lo = league_avg_pass_rate - (RATE_OUTLIER_SIGMA_CAP * pass_rate_sd)
+                    hi = league_avg_pass_rate + (RATE_OUTLIER_SIGMA_CAP * pass_rate_sd)
+                    shrunk = max(lo, min(hi, shrunk))
+                values["pass_rate"] = shrunk
             if league_avg_plays is not None and stats.get("offensive_plays") is not None:
-                values["offensive_plays"] = (1 - RATE_SHRINKAGE_WEIGHT) * float(stats["offensive_plays"]) + RATE_SHRINKAGE_WEIGHT * league_avg_plays
+                shrunk_plays = (1 - RATE_SHRINKAGE_WEIGHT) * float(stats["offensive_plays"]) + RATE_SHRINKAGE_WEIGHT * league_avg_plays
+                if plays_sd > 0:
+                    lo = league_avg_plays - (RATE_OUTLIER_SIGMA_CAP * plays_sd)
+                    hi = league_avg_plays + (RATE_OUTLIER_SIGMA_CAP * plays_sd)
+                    shrunk_plays = max(lo, min(hi, shrunk_plays))
+                values["offensive_plays"] = shrunk_plays
 
             if dry_run:
                 teams_updated.append(team)

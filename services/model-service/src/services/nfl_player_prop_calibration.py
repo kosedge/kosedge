@@ -23,12 +23,14 @@ CALIBRATION_VERSION = "prop-enterprise-cal-v1"
 # seasons 2023–2025 weeks 4–17, n≈3815 graded props (batch1+2+3).
 # intercept = mean(actual − pred) so calibrated = pred + intercept.
 FROZEN_MEAN_INTERCEPT: Dict[str, float] = {
-    # Retuned after 2025 W16-17 densified board: pass means sat ~+20 vs close
-    # post-volume fixes; rush/rec intercepts kept near truth-fit levels.
-    "pass_yds": -4.0,
-    "rush_yds": 4.11,
-    "rec_yds": 2.08,
-    "receptions": 0.15,
+    # Enterprise retune (2026-07): densified W16-17 board still showed pass
+    # bias ~+5.5 vs close after volume fixes; deepen the mean pull-down and
+    # keep rush/rec near truth-fit levels. Gate: pass PLAY stays research-only
+    # until densified MAE ≤ 12.
+    "pass_yds": -8.5,
+    "rush_yds": 3.6,
+    "rec_yds": 1.6,
+    "receptions": 0.12,
     "anytime_td": 0.0,
 }
 
@@ -49,8 +51,8 @@ FROZEN_STD_MULTIPLIER: Dict[str, float] = {
 MARKET_SHRINK_BASE = 0.12
 MARKET_SHRINK_LOW_ROLE = 0.30
 LOW_ROLE_CONFIDENCE = 0.55
-PASS_MARKET_SHRINK_BASE = 0.22
-PASS_MARKET_SHRINK_MAX = 0.62
+PASS_MARKET_SHRINK_BASE = 0.32
+PASS_MARKET_SHRINK_MAX = 0.68
 
 INTERCEPT_ABS_MAX: Dict[str, float] = {
     "pass_yds": 12.0,

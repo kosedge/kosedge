@@ -55,7 +55,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Weekly NFL workflow for the betting desk (Fair Lines → Edges → Props), key-number execution, matchup briefs, and governance checkpoints.",
+      "Weekly NFL workflow for the betting desk (KEI Lines → Edges → Props), key-number execution, matchup briefs, and governance checkpoints.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
@@ -187,7 +187,7 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
   },
   {
     href: "/pro/nfl/fair-lines",
-    label: "Fair lines board",
+    label: "KEI Lines board",
     hint: "Kosedge spreads, totals, and fair moneylines for the upcoming slate.",
     premium: true,
     status: "active",
@@ -317,14 +317,14 @@ export function buildSportOverviewSections({
       title: content.sectionTitles.market,
       subtitle:
         sportKey === "nfl"
-          ? "Betting desk path: Fair Lines → Edges → Props, then execution quality."
+          ? "Betting desk path: KEI Lines → Edges → Props, then execution quality."
           : "Translate market movement into clear model-versus-price decision support.",
       links:
         sportKey === "nfl"
           ? [
               {
                 href: "/pro/nfl/fair-lines",
-                label: "Fair lines",
+                label: "KEI Lines",
                 hint: "Kosedge-made spreads, totals, and fair moneylines for the upcoming slate.",
                 premium: true,
                 status: "active" as const,

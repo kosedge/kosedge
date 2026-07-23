@@ -99,6 +99,79 @@ the projection's `_std` fields (never the mean) via `variance_widening`,
 visible in each baseline's `uncertainty` block. This directly affects prop
 edge sizing (`evaluate_prop_edge`) and floor/ceiling outcome ranges.
 
+## Enterprise QB room resolution + season pass scale (2026-07)
+
+Paid-desk failure mode fixed here: season boards showed Jacoby Brissett
+leading the league at a compressed ~3.1k ceiling, with dual full-starter
+rooms (Burrow+Flacco both ~3k) and stale depth charts crowning Huntley /
+Milton over Lamar / Dak.
+
+**Starter share** (`compute_qb_starter_shares` in
+`nfl_player_projection_engine.py`, wired from
+`materialize_nfl_player_baseline_projections`):
+
+1. Team-scoped prior pass attempts (last 2 seasons on *this* team), else
+   career attempts if the room has no team signal.
+2. Depth chart score + current snap share.
+3. Clear volume-leader bonus when one QB threw ≥1.2× the next (≥120 att).
+4. Winner-take-most allocation ≈ **0.92 / 0.06 / 0.02** (not power-law
+   committee splits that minted second starters).
+
+**Talent factor** (`qb_talent_factor_from_prior_ypg`): scales attempts/YPA
+from recent yards/startish-game so elites and bridge QBs are not flattened
+onto the same band.
+
+**Team rate shrink** (`preseason_hydration.hydrate_preseason_team_situational`):
+50% regression to league mean on `pass_rate` / `offensive_plays`, plus a
+±1.0σ hard cap so single-season scheme extremes (ARI 65.9% pass) cannot
+mint fake league leaders.
+
+**Publish gate** (`evaluate_season_pass_leader_quality` in
+`player_season_totals.py`): writes `player_season_pass_quality.json` next
+to the season CSV — top passer ≥3800 yards, not a bridge-marker name, and
+zero dual ≥1800-yard QB rooms. `publish_ready` must be true before treating
+season leaders as subscription-grade.
+
+Weekly props and fantasy both consume the same baselines, so fixing rooms
++ scale here flows into `/pro/nfl/props`, draft rankings, and (via team
+score sims) wins/standings once `simulate_2026_season.py` is re-run.
+
+## Enterprise RB rush shares + snap tracking (2026-07)
+
+Paid-desk failure mode: dual ~1100-yard RB rooms on the same team and
+compressed/inflated committee boards that ignored who actually ran the
+football. Unlike QBs, real NFL backfields *do* committee — so allocation
+is winner-take-most **by default**, softened team-by-team when usage says
+so.
+
+**Rush share** (`compute_rb_rush_shares` in
+`nfl_player_projection_engine.py`, wired from baseline + box materialize):
+
+1. Team-scoped prior carries (last 2 seasons on *this* team), else career.
+2. Depth chart + trailing `rush_share` + offense snap %.
+3. Room shape from usage lead ratio:
+   - clear bell cow ≈ **0.70 / 0.22 / 0.08**
+   - soft split ≈ **0.60 / 0.28 / 0.12**
+   - true committee ≈ **0.52 / 0.36 / 0.12**
+4. Blend the ranked template with live usage (higher weight for committees)
+   so mid-season hot hands and shared backfields move as more data arrives.
+5. Shares are renormalized to sum ≈ 1.0 per team.
+
+**Snap tracking** (foundation for RB *and* WR usage):
+
+- Owned table `nfl_dp_snap_counts_weekly` now stores `gsis_player_id`
+  (PFR→GSIS bridge via nflverse `load_players`) so snaps join onto GSIS
+  usage/feature rows.
+- `nfl_player_projection_features_weekly` persists `offense_snaps`,
+  `offense_snap_pct`, `snap_source` (`nfl_dp_snap_counts_weekly` when
+  bridged, else `pbp_involvement_proxy`).
+- `team_snap_share` prefers real `offense_pct` when available.
+- Baseline `source_coverage` exposes `rb_rush_share`, `offense_snaps`,
+  `offense_snap_pct`, `snap_source` for desk audit.
+
+Preseason weeks often lack same-season snap rows; prior-season snap %
+averages still feed RB room resolution until in-season snaps land.
+
 ## Season-total artifacts (player_regular_season_totals.csv / player_playoff_totals.csv)
 
 The live web app reads two flat CSV artifacts directly off disk (see

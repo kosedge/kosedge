@@ -23,6 +23,8 @@ SKIP_INGEST="${SKIP_INGEST:-0}"
 SKIP_FANTASY="${SKIP_FANTASY:-0}"
 SKIP_AWARDS="${SKIP_AWARDS:-0}"
 TARGET_WEEK_FEATURES_ONLY="${TARGET_WEEK_FEATURES_ONLY:-0}"
+# Soft-fail model POSTs by default (local/dev). Set STRICT=1 for prod desks.
+STRICT="${STRICT:-0}"
 DRY_RUN=0
 
 for arg in "$@"; do
@@ -115,25 +117,33 @@ PROPS_PATH="/nfl/ops/materialize-player-props?season=${SEASON}&week=${WEEK}&mode
 FANTASY_PATH="/nfl/ops/materialize-fantasy?season=${SEASON}&week=${WEEK}&model_version=${PLAYER_MODEL_VERSION}"
 AWARDS_PATH="/nfl/ops/materialize-award-projections?season=${SEASON}&model_version=${PLAYER_MODEL_VERSION}&top_n=10"
 
-post_ops "${BASELINES_PATH}" "materialize_player_baselines" || true
+soft_or_strict() {
+  if [[ "${STRICT}" == "1" ]]; then
+    "$@"
+  else
+    "$@" || true
+  fi
+}
 
-run_python_task "materialize_box_score_sims" \
-  "from src.tasks import materialize_nfl_player_box_score_sims as m; import json; print(json.dumps(m(season=${SEASON}, week=${WEEK}), default=str))" \
-  || true
+soft_or_strict post_ops "${BASELINES_PATH}" "materialize_player_baselines"
 
-post_ops "${PROPS_PATH}" "materialize_prop_edges" || true
+soft_or_strict run_python_task "materialize_box_score_sims" \
+  "from src.tasks import materialize_nfl_player_box_score_sims as m; import json; print(json.dumps(m(season=${SEASON}, week=${WEEK}), default=str))"
+
+soft_or_strict post_ops "${PROPS_PATH}" "materialize_prop_edges"
 
 if [[ "${SKIP_FANTASY}" != "1" ]]; then
-  post_ops "${FANTASY_PATH}" "materialize_fantasy_weekly" || true
+  soft_or_strict post_ops "${FANTASY_PATH}" "materialize_fantasy_weekly"
 else
   log "Skipping fantasy weekly (SKIP_FANTASY=1)"
 fi
 
 if [[ "${SKIP_AWARDS}" != "1" ]]; then
-  post_ops "${AWARDS_PATH}" "materialize_award_projections" || true
+  soft_or_strict post_ops "${AWARDS_PATH}" "materialize_award_projections"
 else
   log "Skipping awards (SKIP_AWARDS=1)"
 fi
 
 log "Done. Re-run safely any time; DP steps upsert/replace, model ops enqueue/idempotent rematerialize."
+log "STRICT=${STRICT} (set STRICT=1 to fail the script on model-step errors)."
 log "Desk: /pro/nfl/fair-lines → /pro/nfl/edges → /pro/nfl/props"

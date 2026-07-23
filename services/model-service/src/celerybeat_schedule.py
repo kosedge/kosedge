@@ -62,6 +62,14 @@ TASK_NFL_WEEKLY_RESILIENCE = os.getenv(
     "TASK_NFL_WEEKLY_RESILIENCE",
     "src.tasks.run_nfl_weekly_resilience_cycle",
 )
+TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING = os.getenv(
+    "TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING",
+    "src.tasks.run_nfl_enterprise_weekly_sharpening_cycle",
+)
+TASK_NFL_WALKFORWARD_BACKTEST = os.getenv(
+    "TASK_NFL_WALKFORWARD_BACKTEST",
+    "src.tasks.run_nfl_walkforward_backtest",
+)
 TASK_NFL_DR_BACKUP = os.getenv(
     "TASK_NFL_DR_BACKUP",
     "src.tasks.run_nfl_dr_backup",
@@ -276,6 +284,43 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
             .strip()
             .lower()
             in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    # Full enterprise sharpening: snaps + tendencies + rolling usage + features
+    # + baselines/box/props. Set NFL_PLAYER_CYCLE_WEEK each week (or automate
+    # week resolution inside the task via _resolve_nfl_week).
+    "run-nfl-enterprise-weekly-sharpening": {
+        "task": TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING,
+        "schedule": crontab(
+            minute=os.getenv("NFL_ENTERPRISE_WEEKLY_MINUTE", "40"),
+            hour=os.getenv("NFL_ENTERPRISE_WEEKLY_HOUR", "5"),
+            day_of_week=os.getenv("NFL_ENTERPRISE_WEEKLY_DAY_OF_WEEK", "tue"),
+        ),
+        "kwargs": {
+            "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
+            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
+            "skip_ingest": os.getenv("NFL_ENTERPRISE_WEEKLY_SKIP_INGEST", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-walkforward-backtest-weekly": {
+        "task": TASK_NFL_WALKFORWARD_BACKTEST,
+        "schedule": crontab(
+            minute=os.getenv("NFL_WALKFORWARD_MINUTE", "20"),
+            hour=os.getenv("NFL_WALKFORWARD_HOUR", "8"),
+            day_of_week=os.getenv("NFL_WALKFORWARD_DAY_OF_WEEK", "wed"),
+        ),
+        "kwargs": {
+            "model_version": os.getenv("NFL_MODEL_VERSION", "nfl-v1.5-matchup-sim"),
+            "lookback_days": int(os.getenv("NFL_WALKFORWARD_LOOKBACK_DAYS", "240")),
+            "training_days": int(os.getenv("NFL_WALKFORWARD_TRAINING_DAYS", "56")),
+            "step_days": int(os.getenv("NFL_WALKFORWARD_STEP_DAYS", "7")),
+            "apply_calibration": True,
         },
         "options": {"queue": MODELS_QUEUE},
     },

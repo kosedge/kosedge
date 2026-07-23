@@ -109,7 +109,7 @@ export default async function NflPropsBoardPage({
               href="/pro/nfl/fair-lines"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
-              Fair Lines Board →
+              KEI Lines Board →
             </Link>
           </div>
         </div>
@@ -160,7 +160,7 @@ export default async function NflPropsBoardPage({
 
       <section className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-kos-text/75">
         No confirmed stake edge after holdout validation. PLAY highlights are research-only (not bet recommendations).
-        Pass/rush high-z tags are WATCH. Fair lines and model means still publish when books join.
+        Pass/rush high-z tags are WATCH. KEI lines and model means still publish when books join.
       </section>
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">

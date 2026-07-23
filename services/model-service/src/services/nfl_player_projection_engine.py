@@ -79,16 +79,24 @@ class PlayerFeatureInputs:
     QB. This field is the caller-supplied fix: once the caller has full
     team context (which this function deliberately does not have on its
     own), it computes each QB's real team-relative share of "who is the
-    starter" (this QB's `team_snap_share` divided by the team's single
-    highest QB `team_snap_share` that week -- see
-    `nfl_player_projection_engine.compute_qb_starter_shares`) and passes it
-    through here. 1.0 (the default, and always correct for a team with only
-    one rostered QB, or for any caller not yet wired for team context) means
-    "fully independent, could be the starter" -- the original, unscaled
-    behavior. Multiplicatively scales `attempts_mean` and `carries_mean`
-    (and everything downstream of them: pass/rush yards and TDs), so a
-    clear backup projects nowhere near a starter's volume, while a real
-    starter (share == 1.0) is completely unaffected."""
+    starter" via `compute_qb_starter_shares` (prior-season attempts + depth
+    chart + snaps, winner-take-most) and passes it through here. 1.0 (the
+    default, and always correct for a team with only one rostered QB, or
+    for any caller not yet wired for team context) means "fully
+    independent, could be the starter" -- the original, unscaled behavior.
+    Multiplicatively scales `attempts_mean` and `carries_mean` (and
+    everything downstream of them: pass/rush yards and TDs), so a clear
+    backup projects nowhere near a starter's volume, while a real starter
+    (share near 1.0) is essentially unaffected."""
+    qb_talent_factor: float = 1.0
+    """Only meaningful for QB. Scales pass attempts / YPA toward a
+    prior-production talent prior (elite starters >1.0, bridge/game-manager
+    starters <1.0). Default 1.0 is neutral. Computed by the materializer from
+    recent-season pass yards per startish game; never invents volume for
+    backups (still gated by qb_starter_share)."""
+    skill_talent_factor: float = 1.0
+    """WR/TE/RB prior-production scale (elite >1.0). Default 1.0 is neutral.
+    Computed from recent receiving or rushing yards per active game."""
     implied_team_total: float = 0.0
     """Market (or schedule) implied team total points for this game. When >0,
     scales pace / pass-attempt volume toward the game environment the books
@@ -111,60 +119,375 @@ VETERAN_EXPERIENCE_CONFIDENCE = 1.0
 MAX_VARIANCE_WIDENING = 2.0
 
 
+# Winner-take-most allocation for a resolved primary QB room. Residual
+# volume is the structural injury/spot-start expectation for QB2/QB3 — not
+# a committee split. Empirically, healthy NFL rooms put ~90-95% of pass
+# attempts on the starter; dual ~2.5k-yard season totals were the failure
+# mode this replaces.
+_QB_PRIMARY_SHARE = 0.92
+_QB_SECONDARY_SHARE = 0.06
+_QB_TERTIARY_SHARE = 0.02
+
+
+def _qb_depth_score(depth_order: float | None) -> float:
+    if depth_order is None:
+        return 0.15
+    d = float(depth_order)
+    if d <= 1.0:
+        return 1.0
+    if d <= 2.0:
+        return 0.35
+    if d <= 3.0:
+        return 0.12
+    return 0.04
+
+
+def _allocate_winner_take_most(ranked_keys: list[str]) -> Dict[str, float]:
+    """Assign primary/secondary/tertiary shares by rank order."""
+    out: Dict[str, float] = {key: 0.0 for key in ranked_keys}
+    if not ranked_keys:
+        return out
+    out[ranked_keys[0]] = _QB_PRIMARY_SHARE
+    if len(ranked_keys) == 1:
+        out[ranked_keys[0]] = 1.0
+        return out
+    out[ranked_keys[1]] = _QB_SECONDARY_SHARE
+    if len(ranked_keys) == 2:
+        # Fold tertiary residual onto primary so the room still sums to 1.0.
+        out[ranked_keys[0]] = _QB_PRIMARY_SHARE + _QB_TERTIARY_SHARE
+        return out
+    residual = _QB_TERTIARY_SHARE
+    others = ranked_keys[2:]
+    each = residual / len(others)
+    for key in others:
+        out[key] = each
+    return out
+
+
+# RB rooms are not QB rooms: true committees exist. Winner-take-most is the
+# default for a clear bell cow, but trailing rush usage + offense snaps can
+# soften the split team-by-team when the data says the backfield is shared.
+_RB_BELL_COW_PRIMARY = 0.70
+_RB_BELL_COW_SECONDARY = 0.22
+_RB_BELL_COW_TERTIARY = 0.08
+_RB_SOFT_PRIMARY = 0.60
+_RB_SOFT_SECONDARY = 0.28
+_RB_SOFT_TERTIARY = 0.12
+_RB_COMMITTEE_PRIMARY = 0.52
+_RB_COMMITTEE_SECONDARY = 0.36
+_RB_COMMITTEE_TERTIARY = 0.12
+
+
+def _rb_depth_score(depth_order: float | None) -> float:
+    if depth_order is None:
+        return 0.18
+    d = float(depth_order)
+    if d <= 1.0:
+        return 1.0
+    if d <= 2.0:
+        return 0.45
+    if d <= 3.0:
+        return 0.18
+    return 0.06
+
+
+def _allocate_rb_ranked_shares(ranked_keys: list[str], *, primary: float, secondary: float, tertiary: float) -> Dict[str, float]:
+    out: Dict[str, float] = {key: 0.0 for key in ranked_keys}
+    if not ranked_keys:
+        return out
+    if len(ranked_keys) == 1:
+        out[ranked_keys[0]] = 1.0
+        return out
+    out[ranked_keys[0]] = float(primary)
+    out[ranked_keys[1]] = float(secondary)
+    if len(ranked_keys) == 2:
+        out[ranked_keys[0]] = float(primary) + float(tertiary)
+        return out
+    residual = float(tertiary)
+    others = ranked_keys[2:]
+    each = residual / len(others)
+    for key in others:
+        out[key] = each
+    return out
+
+
+def _normalize_share_map(shares: Dict[str, float]) -> Dict[str, float]:
+    total = sum(max(0.0, float(v or 0.0)) for v in shares.values())
+    if total <= 0.0:
+        n = len(shares)
+        if n <= 0:
+            return {}
+        even = 1.0 / n
+        return {k: even for k in shares}
+    return {k: max(0.0, float(v or 0.0)) / total for k, v in shares.items()}
+
+
+def compute_rb_rush_shares(
+    trailing_rush_shares: Dict[str, float],
+    *,
+    depth_orders: Dict[str, float] | None = None,
+    prior_carries: Dict[str, float] | None = None,
+    offense_snap_pcts: Dict[str, float] | None = None,
+) -> Dict[str, float]:
+    """Team-scoped RB rush-share allocation (winner-take-most, usage-aware).
+
+    Pure: one team's RB/HB/FB room → shares that sum to ~1.0.
+
+    Ranking uses prior carries + depth + trailing rush share + offense snaps.
+    Room shape adapts to usage:
+      - bell cow when #1 clearly leads (≈0.70 / 0.22 / 0.08)
+      - soft split when leadership is moderate (≈0.60 / 0.28 / 0.12)
+      - committee when #1/#2 are close on usage (≈0.52 / 0.36 / 0.12)
+    Final shares blend the ranked template with live usage so mid-season
+    committees and hot hands move the board as more data arrives.
+    """
+    if not trailing_rush_shares:
+        return {}
+    if len(trailing_rush_shares) == 1:
+        return {key: 1.0 for key in trailing_rush_shares}
+
+    keys = list(trailing_rush_shares.keys())
+    trailing = {k: max(0.0, float(trailing_rush_shares.get(k) or 0.0)) for k in keys}
+    depths = depth_orders or {}
+    priors = prior_carries or {}
+    snaps = offense_snap_pcts or {}
+
+    prior_total = sum(float(priors.get(k) or 0.0) for k in keys)
+    trailing_total = sum(trailing.values())
+    snap_total = sum(max(0.0, float(snaps.get(k) or 0.0)) for k in keys)
+    has_prior = prior_total > 0.0
+    has_depth = any(k in depths for k in keys)
+    has_snaps = snap_total > 0.0
+
+    scores: Dict[str, float] = {}
+    usage_mix: Dict[str, float] = {}
+    for k in keys:
+        prior_share = float(priors.get(k) or 0.0) / prior_total if has_prior else 0.0
+        trail_share = trailing[k] / trailing_total if trailing_total > 0.0 else 0.0
+        snap_share = max(0.0, float(snaps.get(k) or 0.0)) / snap_total if has_snaps else 0.0
+        depth_score = _rb_depth_score(depths.get(k) if k in depths else None)
+        # Usage signal for committee detection + final blend.
+        if has_prior and has_snaps:
+            usage_mix[k] = (0.55 * prior_share) + (0.25 * trail_share) + (0.20 * snap_share)
+        elif has_prior:
+            usage_mix[k] = (0.70 * prior_share) + (0.30 * trail_share)
+        elif has_snaps:
+            usage_mix[k] = (0.55 * snap_share) + (0.45 * trail_share)
+        else:
+            usage_mix[k] = trail_share if trailing_total > 0.0 else depth_score
+
+        if has_prior:
+            scores[k] = (
+                (0.45 * prior_share)
+                + (0.25 * depth_score)
+                + (0.15 * trail_share)
+                + (0.15 * snap_share)
+            )
+        elif has_depth:
+            scores[k] = (0.55 * depth_score) + (0.25 * trail_share) + (0.20 * snap_share)
+        else:
+            scores[k] = (0.60 * trail_share) + (0.40 * snap_share)
+
+    if has_prior and prior_total > 0.0:
+        ordered_priors = sorted(((float(priors.get(k) or 0.0), k) for k in keys), reverse=True)
+        top_carries, top_key = ordered_priors[0]
+        second_carries = ordered_priors[1][0] if len(ordered_priors) > 1 else 0.0
+        # Clear workhorse seasons (~180+ carries and ≥1.35× RB2) get a boost
+        # past a stale depth-chart-only edge.
+        if top_carries >= 180.0 and top_carries >= (1.35 * max(second_carries, 1.0)):
+            scores[top_key] = scores.get(top_key, 0.0) + 0.18
+
+    ranked = sorted(
+        keys,
+        key=lambda k: (-scores[k], float(depths.get(k, 99.0) or 99.0), str(k)),
+    )
+    usage_ranked = sorted(keys, key=lambda k: (-usage_mix[k], str(k)))
+    top_usage = float(usage_mix.get(usage_ranked[0]) or 0.0)
+    second_usage = float(usage_mix.get(usage_ranked[1]) or 0.0) if len(usage_ranked) > 1 else 0.0
+    lead_ratio = top_usage / max(second_usage, 1e-6)
+
+    if lead_ratio >= 1.45 or (has_prior and top_usage >= 0.55 and lead_ratio >= 1.30):
+        template = _allocate_rb_ranked_shares(
+            ranked,
+            primary=_RB_BELL_COW_PRIMARY,
+            secondary=_RB_BELL_COW_SECONDARY,
+            tertiary=_RB_BELL_COW_TERTIARY,
+        )
+        usage_weight = 0.18
+    elif lead_ratio <= 1.20 and second_usage >= 0.22:
+        template = _allocate_rb_ranked_shares(
+            ranked,
+            primary=_RB_COMMITTEE_PRIMARY,
+            secondary=_RB_COMMITTEE_SECONDARY,
+            tertiary=_RB_COMMITTEE_TERTIARY,
+        )
+        usage_weight = 0.48
+    else:
+        template = _allocate_rb_ranked_shares(
+            ranked,
+            primary=_RB_SOFT_PRIMARY,
+            secondary=_RB_SOFT_SECONDARY,
+            tertiary=_RB_SOFT_TERTIARY,
+        )
+        usage_weight = 0.32
+
+    usage_norm = _normalize_share_map(usage_mix)
+    blended = {
+        k: ((1.0 - usage_weight) * float(template.get(k) or 0.0))
+        + (usage_weight * float(usage_norm.get(k) or 0.0))
+        for k in keys
+    }
+    return _normalize_share_map(blended)
+
+
 def compute_qb_starter_shares(
     team_snap_shares: Dict[str, float],
     *,
     depth_orders: Dict[str, float] | None = None,
+    prior_attempts: Dict[str, float] | None = None,
     power: float = 1.75,
 ) -> Dict[str, float]:
     """Pure: given {player_key: team_snap_share} for every rostered QB on
-    ONE team for one week, returns {player_key: qb_starter_share} -- see
-    `PlayerFeatureInputs.qb_starter_share`'s docstring for the bug this
-    feeds into the fix for.
+    ONE team for one week, returns {player_key: qb_starter_share}.
 
-    The QB with the highest `team_snap_share` is treated as the real
-    starter and gets a share of 1.0 (completely unaffected, including the
-    single-QB-on-roster case, which always returns 1.0 for that lone QB
-    regardless of their `team_snap_share` value -- there's no depth-chart
-    competition to resolve when there's only one rostered QB). Every other
-    QB's share is (own / starter) ** power, clamped to [0, 1] -- power > 1
-    sharpens clear starters vs near-ties so box MC does not 50/50-split a
-    healthy starter room. Optional `depth_orders` (lower = more starter)
-    ranks when every snap share is zero/missing.
+    Enterprise starter resolution (in priority order of signal richness):
+
+    1. When prior-season pass attempts and/or depth chart are available,
+       rank by composite score:
+         0.50 * prior_attempt_share + 0.30 * depth_score + 0.20 * snap_share
+       then allocate winner-take-most (≈0.92 / 0.06 / 0.02). This fixes
+       production failures where stale depth charts (Huntley over Lamar,
+       Milton over Dak) or injury-year snap shares (Flacco over Burrow)
+       crowned the wrong QB1, and where power-law snap splits still gave
+       QB2 ~half a starter's season.
+
+    2. When only snaps exist (legacy / mid-season clear separation), keep
+       the sharpened power-law: top snap share → 1.0, others
+       (own/starter)**power.
+
+    3. All-zero snaps + depth → depth winner-take-most.
+    4. All-zero snaps, no depth → leave everyone at 1.0 (callers should
+       supply depth/prior; inventing an order is worse).
     """
     if not team_snap_shares:
         return {}
     if len(team_snap_shares) == 1:
         return {key: 1.0 for key in team_snap_shares}
-    starter_key = max(team_snap_shares, key=lambda k: float(team_snap_shares[k] or 0.0))
-    starter_share = float(team_snap_shares[starter_key] or 0.0)
-    if starter_share <= 0.0:
-        # No snap signal — fall back to depth chart (depth_order 1 = starter).
-        if depth_orders:
-            ranked = sorted(
-                team_snap_shares.keys(),
-                key=lambda k: (
-                    float(depth_orders.get(k, 99.0) or 99.0),
-                    str(k),
-                ),
+
+    keys = list(team_snap_shares.keys())
+    snaps = {k: float(team_snap_shares.get(k) or 0.0) for k in keys}
+    depths = depth_orders or {}
+    priors = prior_attempts or {}
+
+    has_prior = any(float(priors.get(k) or 0.0) > 0.0 for k in keys)
+    has_depth = any(k in depths for k in keys)
+    snap_total = sum(snaps.values())
+    prior_total = sum(float(priors.get(k) or 0.0) for k in keys)
+
+    if has_prior or has_depth:
+        scores: Dict[str, float] = {}
+        for k in keys:
+            prior_share = (
+                float(priors.get(k) or 0.0) / prior_total if prior_total > 0.0 else 0.0
             )
-            starter_key = ranked[0]
-            return {
-                key: (1.0 if key == starter_key else 0.05)
-                for key in team_snap_shares
-            }
-        # Still no ranking signal — leave everyone at 1.0 rather than
-        # inventing an ordering (callers should prefer depth_orders).
-        return {key: 1.0 for key in team_snap_shares}
+            snap_share = snaps[k] / snap_total if snap_total > 0.0 else 0.0
+            depth_score = _qb_depth_score(depths.get(k) if k in depths else None)
+            # If we lack priors entirely, lean harder on depth + snaps so a
+            # clean depth chart still produces a decisive primary.
+            if has_prior:
+                # Prior production outranks stale depth charts (Huntley/Milton
+                # as QB1) and injury-year snap shares (Flacco over Burrow).
+                # Depth still breaks near-ties and cold-start rooms.
+                scores[k] = (0.55 * prior_share) + (0.25 * depth_score) + (0.20 * snap_share)
+            else:
+                scores[k] = (0.65 * depth_score) + (0.35 * snap_share)
+        # Clear same-room volume leader (e.g. McCarthy over Wentz on MIN
+        # despite a stale depth_order=2): if one QB threw ≥1.2× the next
+        # and ≥120 attempts, boost them past a depth-chart-only edge.
+        if has_prior and prior_total > 0.0:
+            ordered_priors = sorted(
+                ((float(priors.get(k) or 0.0), k) for k in keys), reverse=True
+            )
+            top_att, top_key = ordered_priors[0]
+            second_att = ordered_priors[1][0] if len(ordered_priors) > 1 else 0.0
+            if top_att >= 120.0 and top_att >= (1.2 * max(second_att, 1.0)):
+                scores[top_key] = scores.get(top_key, 0.0) + 0.22
+        ranked = sorted(keys, key=lambda k: (-scores[k], float(depths.get(k, 99.0) or 99.0), str(k)))
+        return _allocate_winner_take_most(ranked)
+
+    starter_key = max(keys, key=lambda k: snaps[k])
+    starter_share = snaps[starter_key]
+    if starter_share <= 0.0:
+        return {key: 1.0 for key in keys}
     p = max(1.0, float(power))
     return {
         key: (
             1.0
             if key == starter_key
-            else _clamp((float(value or 0.0) / starter_share) ** p, 0.0, 1.0)
+            else _clamp((snaps[key] / starter_share) ** p, 0.0, 1.0)
         )
-        for key, value in team_snap_shares.items()
+        for key in keys
     }
+
+
+def qb_talent_factor_from_prior_ypg(prior_yards_per_startish_game: float | None) -> float:
+    """Map recent pass yards / startish game → multiplicative talent prior.
+
+    Anchors (2023-2025 starter weeks): league startish ~230-250 ypg, elite
+    leaders ~270-290, bridge/game-managers ~180-210. Returns a gentle
+    scale in [0.88, 1.18] so hierarchy moves without blowing up books.
+    """
+    if prior_yards_per_startish_game is None:
+        return 1.0
+    ypg = float(prior_yards_per_startish_game)
+    if ypg <= 0.0:
+        return 0.94
+    # Center near ~240 ypg; ±40 ypg → about ±0.10 factor before clamp.
+    return _clamp(1.0 + ((ypg - 240.0) / 400.0), 0.88, 1.18)
+
+
+def skill_talent_factor_from_prior_ypg(
+    prior_yards_per_game: float | None, *, position: str
+) -> float:
+    """Map recent skill yards/game → talent prior for WR/TE/RB.
+
+    Centers: WR ~70 rec yd/g, TE ~45, RB ~65 rush yd/g. Elites (Chase /
+    Jefferson / Barkley-class) land above 1.10; committee/depth pieces below 1.0.
+    """
+    if prior_yards_per_game is None:
+        return 1.0
+    ypg = float(prior_yards_per_game)
+    if ypg <= 0.0:
+        return 0.94
+    pos = (position or "").upper()
+    if pos == "WR":
+        return _clamp(1.0 + ((ypg - 70.0) / 220.0), 0.90, 1.22)
+    if pos == "TE":
+        return _clamp(1.0 + ((ypg - 45.0) / 180.0), 0.90, 1.20)
+    if pos in {"RB", "FB", "HB"}:
+        return _clamp(1.0 + ((ypg - 65.0) / 200.0), 0.90, 1.24)
+    return 1.0
+
+
+def depth_role_confidence_floor(position: str, depth_order: float | None) -> float | None:
+    """Minimum role_confidence for designated depth-chart starters.
+
+    Production failure: Chase-class WR1s hydrated at role_confidence ~0.28,
+    which crushed targets via role_vol and again via confidence_scale —
+    landing ~57 yd/g vs real ~100. Depth-1 skill players must not be treated
+    as committee scraps.
+    """
+    if depth_order is None:
+        return None
+    d = int(float(depth_order))
+    pos = (position or "").upper()
+    if pos == "WR":
+        return {1: 0.88, 2: 0.72, 3: 0.58}.get(d)
+    if pos == "TE":
+        return {1: 0.85, 2: 0.62}.get(d)
+    if pos in {"RB", "FB", "HB"}:
+        return {1: 0.88, 2: 0.70, 3: 0.55}.get(d)
+    return None
 
 
 def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, Any]:
@@ -245,14 +568,20 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # books. Soften to ~±12% for yards-per-attempt only.
         opp_ypa_factor = _clamp(1.0 + (0.40 * (opp_pass_factor - 1.0)), 0.88, 1.12)
         qb_starter_share_factor = _clamp(inputs.qb_starter_share, 0.0, 1.0)
+        talent_factor = _clamp(float(inputs.qb_talent_factor or 1.0), 0.85, 1.22)
         # Pace already lifts team_pass_attempts_estimate for skill positions;
         # full multiplicative pace here pushed high-pace starters (e.g. Prescott
         # with pace_factor at the 1.25 clamp) ~50-70 yards over books.
         qb_pace = _clamp(0.55 + (0.45 * pace_factor), 0.85, 1.12)
-        # 2025 W16-17 densified board: 22+34*… landed ~25-35 yd over closes
-        # after blend for most starters; retuned toward book-typical volume.
-        attempts_mean = (18.5 + (31.0 * qb_volume_signal * pass_factor * qb_pace)) * qb_starter_share_factor
-        attempts_mean = min(attempts_mean, 41.5)
+        # Enterprise retune: primary starters should land in a true NFL
+        # distribution (~230-290 yd/g → ~3.9k-4.9k / 17) with talent_factor
+        # separating elites from bridge QBs. Winner-take-most starter share
+        # keeps room totals physical; talent_factor restores hierarchy that
+        # the compressed 18.5+31 book retune had flattened (Brissett-class
+        # "league leads" at ~3.1k).
+        attempts_mean = (19.5 + (33.5 * qb_volume_signal * pass_factor * qb_pace)) * qb_starter_share_factor
+        attempts_mean *= talent_factor
+        attempts_mean = min(attempts_mean, 43.0)
         # Low-scoring games compress pass volume (CLE/PIT 35.5). Dogs in
         # blowouts still throw — don't crush them by raw implied points alone.
         if inputs.implied_team_total and inputs.implied_team_total > 0:
@@ -260,7 +589,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
             if inputs.team_spread and float(inputs.team_spread) > 0:
                 # Dogs still throw; floor near league-average script, not blowout.
                 env_pts = max(env_pts, 21.5)
-            attempts_mean *= _clamp(env_pts / 22.5, 0.86, 1.12)
+            attempts_mean *= _clamp(env_pts / 22.5, 0.86, 1.14)
         if inputs.team_spread and float(inputs.team_spread) <= -7.0:
             # Heavy favorite: more likely to run clock / sit starters late.
             attempts_mean *= _clamp(1.0 + (0.015 * float(inputs.team_spread)), 0.85, 1.0)
@@ -269,24 +598,14 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         if inputs.role_confidence < 0.70:
             attempts_mean *= _clamp(0.72 + (0.40 * inputs.role_confidence), 0.78, 1.0)
         completion_rate = _clamp(0.60 + (0.05 * inputs.target_proxy) - (0.03 * inputs.qb_pressure_factor), 0.50, 0.74)
-        # Real bug found while auditing residual pass-yards undercount on
-        # the prop Vegas benchmark (CURRENT pass bias vs truth ≈ -13.5 yd /
-        # mean_vs_line ≈ -4.7 yd after the volume/TD fixes): attempts_mean
-        # was already slightly HIGH vs real (+1.8 att/game on 427 real
-        # starter-ish QB weeks), so the leftover undercount is YPA, not
-        # volume. Confirmed via real weighted fit against 416 real
-        # 2023-2025 QB game-rows (weeks 4-17, attempts>=15, weighted by
-        # attempts): keeping the existing -0.6*qb_pressure_factor slope
-        # (which has the right sign and a real high-pressure YPA drop in
-        # the data) and refitting only the intercept raises it from 6.2
-        # to 6.97 — weighted YPA bias improves from -0.77 to ~0 and RMSE
-        # from 1.86 to 1.69. The old 1.1*target_proxy term is dropped:
-        # QB target_proxy is ~0 in production features (mean 0.001 on this
-        # sample), so it contributed nothing real. Flat league-mean YPA
-        # (6.63) is nearly as good on RMSE; the pressure slope is kept
-        # because the binned data still show a real high-pressure drop
-        # (YPA 6.77 at pressure 0.5-0.7 vs 4.95 at 0.9-1.2).
-        yards_per_attempt = _clamp((6.97 - (0.6 * inputs.qb_pressure_factor)) * opp_ypa_factor, 5.0, 9.5)
+        # YPA: pressure-adjusted intercept 6.97 (2023-2025 weighted fit) plus
+        # a soft talent bump so elites finish drives / chunk plays without
+        # rewriting the pressure slope.
+        yards_per_attempt = _clamp(
+            (6.97 - (0.6 * inputs.qb_pressure_factor)) * opp_ypa_factor * (0.97 + (0.03 * talent_factor)),
+            5.0,
+            9.5,
+        )
         pass_yards_mean = attempts_mean * yards_per_attempt
         # Real bug found while re-validating the targets_mean fix (same
         # "arbitrary undercalibrated coefficient" pattern): rush_share is
@@ -343,9 +662,17 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     elif position in {"RB", "FB"}:
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
-        carries_mean = _clamp(4.0 + (24.0 * inputs.rush_share * pace_factor), 0.0, 32.0)
+        skill_talent = _clamp(float(inputs.skill_talent_factor or 1.0), 0.88, 1.26)
+        # Enterprise rush retune: bell cows clear ~90-110 rush yd/g (~1500-1900
+        # /17); old 4+24*share flattened leaders near ~60-70 yd/g.
+        carries_mean = _clamp(5.0 + (27.5 * inputs.rush_share * pace_factor), 0.0, 34.0)
+        carries_mean *= skill_talent
         targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 11.0)
-        rush_yards_mean = carries_mean * _clamp((4.1 + (1.1 * volume_signal)) * opp_rush_factor, 2.8, 7.8)
+        rush_yards_mean = carries_mean * _clamp(
+            (4.25 + (1.25 * volume_signal)) * opp_rush_factor * (0.96 + (0.04 * skill_talent)),
+            2.8,
+            8.2,
+        )
         # Real bug found while auditing residual receiving-yards undercount
         # after the targets_mean fix (prop Vegas benchmark, CURRENT arm still
         # ~-12 yd bias vs truth / ~-6 yd vs market on receiving props):
@@ -380,7 +707,10 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # real 348-carry/0.393-red-zone-share bell-cow like 2024 Barkley
         # projected 23.2 season rush TDs at 0.16 vs. a real 14; refit lands
         # at a realistic 14.2).
-        rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.10, 0.0, 1.7)
+        # Enterprise soft retune: 0.10 was truth-fit but clustered too many
+        # bell cows near 15+ season rush TDs once carries lifted; 0.092 keeps
+        # hierarchy while capping the top of the board.
+        rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.092, 0.0, 1.55)
         # Real bug found while re-validating the targets_mean fix: rec_tds's
         # coefficient (0.08) was calibrated against the OLD, drastically
         # undercounted receptions_mean -- and was independently too small
@@ -400,28 +730,25 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # Soften ±30% EPA matchup on YPR — full factor inflated McLaurin-class
         # means ~20-30 yards over books on soft defenses.
         opp_ypr = _clamp(1.0 + (0.40 * (opp_pass_factor - 1.0)), 0.88, 1.12)
-        role_vol = _clamp(0.55 + (0.45 * inputs.role_confidence), 0.45, 1.0)
+        skill_talent = _clamp(float(inputs.skill_talent_factor or 1.0), 0.88, 1.24)
+        # Enterprise fix: old role_vol (0.55+0.45*role) crushed WR1s hydrated
+        # at role_confidence~0.28 down to ~67% of earned targets — Chase-class
+        # landed ~57 yd/g vs real ~100. Milder role_vol + talent restore
+        # alpha while depth-1 role floors (materializer) keep hierarchy.
+        role_vol = _clamp(0.80 + (0.20 * inputs.role_confidence), 0.72, 1.0)
         targets_mean = _clamp(
-            (0.5 + (inputs.target_proxy * team_pass_attempts_estimate)) * role_vol,
+            (0.6 + (inputs.target_proxy * team_pass_attempts_estimate)) * role_vol * skill_talent,
             0.0,
-            14.0,
+            15.0,
         )
-        # Real bug found while auditing residual receiving-yards undercount
-        # after the targets_mean fix (prop Vegas benchmark: CURRENT WR
-        # receiving mvl=-9.5 yd / bias vs truth=-15.8 yd, only 22% over-side;
-        # high-line WR1s proj 47.9 vs line 65.7 vs actual 70.5). Feature×
-        # actual decomposition on 2025 baselines showed targets_mean was
-        # already slightly HIGH (+0.9/game) while model YPR sat at ~8.9 vs
-        # real ~13.0 — i.e. the leftover undercount is efficiency, not
-        # volume. Confirmed via real weighted least squares against 1,368
-        # real 2023-2025 WR game-rows (weeks 4-17, targets>=1,
-        # receptions>=1): catch_rate ~ 0.60 + 0.13*route_proxy (weighted
-        # mean CR=0.64; old 0.56+0.28*route was roughly unbiased at +0.02);
-        # YPR/opp ~ 12.78 + 0.23*volume_signal with R^2≈0 — volume adds
-        # nothing, so the honest fit is the flat weighted mean YPR/opp
-        # of 12.8 (old 8.4+4.2*volume biased -3.5 YPR). Refit both.
-        receptions_mean = targets_mean * _clamp(0.60 + (0.13 * inputs.route_proxy), 0.38, 0.93)
-        receiving_yards_mean = receptions_mean * _clamp(12.8 * opp_ypr, 5.5, 20.0)
+        # Catch rate / YPR from 2023-2025 WLS; soft talent bump on YPR for
+        # elites without rewriting the flat efficiency prior.
+        receptions_mean = targets_mean * _clamp(0.62 + (0.12 * inputs.route_proxy), 0.40, 0.93)
+        receiving_yards_mean = receptions_mean * _clamp(
+            13.1 * opp_ypr * (0.97 + (0.03 * skill_talent)),
+            5.5,
+            20.5,
+        )
         # rush_share is fraction of team rushes — scale by ~team rush volume
         # (~22), not a 2.0 stub that understated gadget/jet-sweep WRs ~16x.
         carries_mean = _clamp(22.0 * inputs.rush_share * pace_factor, 0.0, 8.0)
@@ -449,21 +776,19 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
         opp_rush_factor = _clamp(inputs.opponent_rush_defense_factor, 0.75, 1.30)
         opp_ypr = _clamp(1.0 + (0.40 * (opp_pass_factor - 1.0)), 0.88, 1.12)
-        role_vol = _clamp(0.55 + (0.45 * inputs.role_confidence), 0.45, 1.0)
+        skill_talent = _clamp(float(inputs.skill_talent_factor or 1.0), 0.88, 1.22)
+        role_vol = _clamp(0.80 + (0.20 * inputs.role_confidence), 0.72, 1.0)
         targets_mean = _clamp(
-            (0.5 + (inputs.target_proxy * team_pass_attempts_estimate)) * role_vol,
+            (0.55 + (inputs.target_proxy * team_pass_attempts_estimate)) * role_vol * skill_talent,
             0.0,
-            13.0,
+            14.0,
         )
-        # Same residual-receiving audit as the WR branch, but TE was
-        # previously sharing WR's catch-rate/YPR coefficients and that was
-        # a real, position-specific miscalibration: real TE catch rate is
-        # ~0.74 (WLS against 767 real 2023-2025 TE game-rows: 0.72 +
-        # 0.07*route_proxy) vs. WR's ~0.64, and real TE YPR is ~10.3 vs.
-        # WR's ~12.8. Old shared WR formula biased TE catch rate by -0.10
-        # and YPR by -1.13. Split TE onto its own real fits.
-        receptions_mean = targets_mean * _clamp(0.72 + (0.07 * inputs.route_proxy), 0.45, 0.95)
-        receiving_yards_mean = receptions_mean * _clamp(10.3 * opp_ypr, 5.5, 18.0)
+        receptions_mean = targets_mean * _clamp(0.73 + (0.07 * inputs.route_proxy), 0.45, 0.95)
+        receiving_yards_mean = receptions_mean * _clamp(
+            10.6 * opp_ypr * (0.97 + (0.03 * skill_talent)),
+            5.5,
+            18.5,
+        )
         carries_mean = _clamp(18.0 * inputs.rush_share * pace_factor, 0.0, 6.0)
         rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
         rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.50, 0.0, 1.5)
@@ -487,8 +812,17 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     # itself the signature of a formula-floor bug, not real signal.
 
     # Availability and role confidence reduce all outcomes in a deterministic, bounded manner.
-    confidence_floor = 0.72 if position == "QB" else (0.60 if position in {"RB", "FB"} else 0.50)
-    confidence_scale = _clamp((0.65 * availability_factor) + (0.35 * role_factor), confidence_floor, 1.0)
+    # WR/TE floors raised: old 0.50 floor + low role_confidence double-crushed
+    # alpha receivers after role_vol had already cut targets.
+    if position == "QB":
+        confidence_floor = 0.72
+    elif position in {"RB", "FB"}:
+        confidence_floor = 0.68
+    elif position in {"WR", "TE"}:
+        confidence_floor = 0.74
+    else:
+        confidence_floor = 0.50
+    confidence_scale = _clamp((0.70 * availability_factor) + (0.30 * role_factor), confidence_floor, 1.0)
     pass_yards_mean *= confidence_scale
     rush_yards_mean *= confidence_scale
     receiving_yards_mean *= confidence_scale

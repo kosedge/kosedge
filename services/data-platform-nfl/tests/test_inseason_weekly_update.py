@@ -13,6 +13,8 @@ def test_build_plan_includes_core_dp_and_model_steps() -> None:
     ids = [step["id"] for step in plan]
     assert ids[0] == "ingest_launch_hardening"
     assert "refresh_rolling_player_usage" in ids
+    assert "ingest_snap_counts" in ids
+    assert "materialize_tendency_profiles" in ids
     assert "materialize_player_projection_features" in ids
     assert "materialize_player_baselines" in ids
     assert "materialize_box_score_sims" in ids

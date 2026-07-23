@@ -109,8 +109,8 @@ export default async function NflEdgesDeskPage({
               Actionable Kosedge Edges
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Fair Lines → Edges → Bets. Game and prop edges that clear your thresholds — Kosedge line vs Vegas,
-              side, and confidence. Empty when nothing clears the cut.
+              KEI Lines → Edges → Bets. Game and prop edges that clear your thresholds — Kosedge line vs Vegas, side,
+              and confidence. Empty when nothing clears the cut.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -118,7 +118,7 @@ export default async function NflEdgesDeskPage({
               href="/pro/nfl/fair-lines"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
-              ← Fair Lines
+              ← KEI Lines
             </Link>
             <Link
               href="/pro/nfl/props"
@@ -132,27 +132,7 @@ export default async function NflEdgesDeskPage({
 
       {fetchError ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {fetchError} Edges will populate once the model service is reachable.
-        </section>
-      ) : null}
-
-      {!fetchError ? (
-        <section className="mt-6 grid gap-4 md:grid-cols-3">
-          <StatCard
-            label="Edges on desk"
-            value={String(desk.count)}
-            detail={`${marketLabel(market)} · min ${minEdge.label}`}
-          />
-          <StatCard
-            label="Game edges"
-            value={String(desk.diagnostics.gameCandidates)}
-            detail="ML / spread / total clearing thresholds"
-          />
-          <StatCard
-            label="Prop edges"
-            value={String(desk.diagnostics.propCandidates)}
-            detail={`Week ${week} · market-joined only`}
-          />
+          Edges will populate once the model service is reachable.
         </section>
       ) : null}
 
@@ -237,7 +217,7 @@ export default async function NflEdgesDeskPage({
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
             No edges clear the current thresholds. Lower min edge / confidence, widen market type, or check{" "}
             <Link href="/pro/nfl/fair-lines" className="text-kos-gold underline-offset-2 hover:underline">
-              Fair Lines
+              KEI Lines
             </Link>{" "}
             and{" "}
             <Link href="/pro/nfl/props" className="text-kos-gold underline-offset-2 hover:underline">
@@ -273,8 +253,8 @@ export default async function NflEdgesDeskPage({
       </section>
 
       <p className="mt-4 text-xs text-kos-text/45">
-        Decision support only — not picks. Edges require a joined market price; Kosedge-only lines stay on Fair
-        Lines / Props.
+        Decision support only — not picks. Edges require a joined market price; Kosedge-only lines stay on KEI Lines /
+        Props.
       </p>
     </main>
   );
@@ -295,15 +275,5 @@ function EdgeRow({ row }: { row: DeskEdgeRow }) {
       <td className="px-3 py-3 text-kos-text/80">{formatConfidence(row.confidence)}</td>
       <td className="px-3 py-3 text-xs text-kos-text/60">{formatKickoff(row.kickoff)}</td>
     </tr>
-  );
-}
-
-function StatCard({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/55">{label}</p>
-      <p className="mt-2 text-lg font-semibold text-kos-text">{value}</p>
-      <p className="mt-1 text-xs text-kos-text/60">{detail}</p>
-    </div>
   );
 }

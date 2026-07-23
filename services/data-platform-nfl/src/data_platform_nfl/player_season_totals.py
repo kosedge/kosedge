@@ -82,6 +82,7 @@ There is no real playoff schedule to project against. Instead:
 from __future__ import annotations
 
 import csv
+import json
 import os
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -226,6 +227,126 @@ def generate_player_regular_season_totals(
     return output_rows
 
 
+def evaluate_season_skill_leader_quality(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Publish gates for rush / receiving season totals (alongside pass)."""
+    rush = sorted(rows, key=lambda r: float(r.get("rush_yards_total") or 0.0), reverse=True)
+    rec = sorted(
+        [r for r in rows if str(r.get("position") or "").upper() in {"WR", "TE"}],
+        key=lambda r: float(r.get("receiving_yards_total") or 0.0),
+        reverse=True,
+    )
+    top_rush = rush[0] if rush else None
+    top_rec = rec[0] if rec else None
+    top_rush_yd = float(top_rush["rush_yards_total"]) if top_rush else 0.0
+    top_rec_yd = float(top_rec["receiving_yards_total"]) if top_rec else 0.0
+    wr_1200 = sum(
+        1
+        for r in rows
+        if str(r.get("position") or "").upper() == "WR" and float(r.get("receiving_yards_total") or 0.0) >= 1200.0
+    )
+    rb_1400 = sum(
+        1
+        for r in rows
+        if str(r.get("position") or "").upper() == "RB" and float(r.get("rush_yards_total") or 0.0) >= 1400.0
+    )
+    dual_rb_rooms: List[Dict[str, Any]] = []
+    by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        if str(row.get("position") or "").upper() != "RB":
+            continue
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+    for team, room in by_team.items():
+        above = sorted(
+            [r for r in room if float(r.get("rush_yards_total") or 0.0) >= 1000.0],
+            key=lambda r: float(r.get("rush_yards_total") or 0.0),
+            reverse=True,
+        )
+        if len(above) >= 2:
+            dual_rb_rooms.append(
+                {
+                    "team": team,
+                    "rbs": [
+                        {
+                            "player_name": r.get("player_name"),
+                            "rush_yards_total": round(float(r.get("rush_yards_total") or 0.0), 1),
+                        }
+                        for r in above[:3]
+                    ],
+                }
+            )
+    return {
+        "top_rusher": {
+            "player_name": (top_rush or {}).get("player_name"),
+            "pass_yards_total": None,
+            "rush_yards_total": round(top_rush_yd, 1),
+        },
+        "top_receiver": {
+            "player_name": (top_rec or {}).get("player_name"),
+            "receiving_yards_total": round(top_rec_yd, 1),
+        },
+        "top_rusher_yards_gte_1400": top_rush_yd >= 1400.0,
+        "top_receiver_yards_gte_1300": top_rec_yd >= 1300.0,
+        "wr_with_1200_plus_count": wr_1200,
+        "rb_with_1400_plus_count": rb_1400,
+        "dual_1000_yard_rb_rooms": dual_rb_rooms,
+        "dual_1000_yard_rb_rooms_count": len(dual_rb_rooms),
+        # Soft desk signal: dual 1000+ rooms can be real committees; not a hard fail.
+        "publish_ready_skill": bool(top_rush_yd >= 1400.0 and top_rec_yd >= 1300.0 and wr_1200 >= 3),
+    }
+
+
+def evaluate_season_pass_leader_quality(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Enterprise publish gate for season pass-yard totals.
+
+    Catches the failure modes that made the board unusable for a paid desk:
+    bridge QBs leading the league, compressed ~3.1k ceilings, and dual
+    full-starter rooms (Burrow+Flacco both ~3k).
+    """
+    qbs = [r for r in rows if str(r.get("position") or "").upper() == "QB"]
+    ranked = sorted(qbs, key=lambda r: float(r.get("pass_yards_total") or 0.0), reverse=True)
+    top = ranked[0] if ranked else None
+    top_yards = float(top["pass_yards_total"]) if top else 0.0
+    top_name = str(top.get("player_name") or "") if top else ""
+
+    dual_rooms: List[Dict[str, Any]] = []
+    by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for row in qbs:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+    for team, room in by_team.items():
+        above = sorted(
+            [r for r in room if float(r.get("pass_yards_total") or 0.0) >= 1800.0],
+            key=lambda r: float(r.get("pass_yards_total") or 0.0),
+            reverse=True,
+        )
+        if len(above) >= 2:
+            dual_rooms.append(
+                {
+                    "team": team,
+                    "qbs": [
+                        {"player_name": r.get("player_name"), "pass_yards_total": float(r.get("pass_yards_total") or 0.0)}
+                        for r in above[:3]
+                    ],
+                }
+            )
+
+    # Real NFL recent leaders land ~4.2k-5.0k; a usable model should put #1
+    # above ~3.8k and keep bridge/committee artifacts out of the top slot.
+    bridge_markers = ("brissett", "minshew", "flacco", "wentz", "bridgewater", "foles")
+    top_is_bridge = any(m in top_name.lower() for m in bridge_markers)
+    checks = {
+        "top_passer": {"player_name": top_name, "pass_yards_total": round(top_yards, 1)},
+        "top_passer_yards_gte_3800": top_yards >= 3800.0,
+        "top_passer_not_bridge_marker": not top_is_bridge,
+        "dual_full_volume_qb_rooms": dual_rooms,
+        "dual_full_volume_qb_rooms_count": len(dual_rooms),
+        "no_dual_full_volume_qb_rooms": len(dual_rooms) == 0,
+        "publish_ready": bool(
+            top_yards >= 3800.0 and (not top_is_bridge) and len(dual_rooms) == 0
+        ),
+    }
+    return checks
+
+
 def generate_player_playoff_totals(
     session: Any,
     *,
@@ -317,7 +438,14 @@ def generate_and_write_player_season_totals(
     )
     write_player_totals_csv(regular_rows, os.path.join(out_dir, "player_regular_season_totals.csv"))
     write_player_totals_csv(playoff_rows, os.path.join(out_dir, "player_playoff_totals.csv"))
+    pass_quality = evaluate_season_pass_leader_quality(regular_rows)
+    skill_quality = evaluate_season_skill_leader_quality(regular_rows)
+    quality = {"pass": pass_quality, "skill": skill_quality}
+    quality_path = os.path.join(out_dir, "player_season_pass_quality.json")
+    with open(quality_path, "w") as fh:
+        json.dump(quality, fh, indent=2, sort_keys=True)
     games_projected_values = sorted({r["games_projected"] for r in regular_rows})
+    publish_ready = bool(pass_quality.get("publish_ready")) and bool(skill_quality.get("publish_ready_skill"))
     return {
         "status": "ok",
         "season": season,
@@ -325,4 +453,7 @@ def generate_and_write_player_season_totals(
         "regular_season_player_rows": len(regular_rows),
         "playoff_player_rows": len(playoff_rows),
         "distinct_games_projected_values": games_projected_values,
+        "pass_leader_quality": pass_quality,
+        "skill_leader_quality": skill_quality,
+        "publish_ready": publish_ready,
     }

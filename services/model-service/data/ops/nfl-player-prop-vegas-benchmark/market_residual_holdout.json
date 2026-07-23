@@ -1,0 +1,23 @@
+{
+  "as_of": "2026-07-23T00:49:30.827302+00:00",
+  "markets": {
+    "pass_yds": {
+      "n": 0,
+      "status": "insufficient_n"
+    },
+    "rec_yds": {
+      "n": 0,
+      "status": "insufficient_n"
+    },
+    "receptions": {
+      "n": 0,
+      "status": "insufficient_n"
+    },
+    "rush_yds": {
+      "n": 0,
+      "status": "insufficient_n"
+    }
+  },
+  "note": "Research only \u2014 does not enable PLAY stake tags.",
+  "records": "/Users/ryankos/kosedge/data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records.json"
+}

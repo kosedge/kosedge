@@ -67,8 +67,12 @@ from .services.nfl_player_projection_engine import (
     PlayerFeatureInputs,
     baseline_projection_from_features,
     compute_qb_starter_shares,
+    compute_rb_rush_shares,
+    depth_role_confidence_floor,
     evaluate_prop_edge,
     fantasy_points_from_projection,
+    qb_talent_factor_from_prior_ypg,
+    skill_talent_factor_from_prior_ypg,
 )
 from .services.nfl_prop_edge_policy import anytime_td_prob_from_td_mean
 from .services.nfl_player_prop_calibration import (
@@ -2880,6 +2884,7 @@ def run_nfl_market_simulations(
         supervised_fit = _load_latest_supervised_fit(session, model_version=model_version)
         tuning_config_overrides = _load_latest_tuning_config_overrides(session, model_version=model_version)
         priors_cache: Dict[int, Dict[str, Dict[str, float]]] = {}
+        tendency_proe_cache: Dict[int, Dict[str, float]] = {}
         # Multi-season lookback so level bias (under-projection) is estimated
         # from enough completed games; 240d was too short and produced fragile fits.
         totals_calibration = fetch_nfl_totals_calibration(
@@ -2990,6 +2995,33 @@ def run_nfl_market_simulations(
             team_priors = priors_cache.get(season_year or -1, {})
             home_prior = team_priors.get(str(m.get("home_team") or ""), {})
             away_prior = team_priors.get(str(m.get("away_team") or ""), {})
+            if season_year is not None and season_year not in tendency_proe_cache:
+                try:
+                    from .services.nfl_tendency_pricing import fetch_team_proe_map
+
+                    # Prefer prior season profiles when current-season tendencies
+                    # are empty (preseason / early weeks).
+                    proe_map = fetch_team_proe_map(session, season=int(season_year), situation="all")
+                    if not proe_map:
+                        proe_map = fetch_team_proe_map(session, season=int(season_year) - 1, situation="all")
+                    tendency_proe_cache[season_year] = proe_map
+                except Exception:
+                    session.rollback()
+                    tendency_proe_cache[season_year] = {}
+            proe_by_team = tendency_proe_cache.get(season_year or -1, {})
+            home_abbr_for_proe = str(m.get("home_abbr") or m.get("home_team") or "")
+            away_abbr_for_proe = str(m.get("away_abbr") or m.get("away_team") or "")
+            home_proe = float(proe_by_team.get(home_abbr_for_proe, 0.0) or 0.0)
+            away_proe = float(proe_by_team.get(away_abbr_for_proe, 0.0) or 0.0)
+            try:
+                from .services.nfl_tendency_pricing import tendency_game_signals
+
+                tendency_signals = tendency_game_signals(home_proe, away_proe)
+            except Exception:
+                tendency_signals = {
+                    "total_signal": 0.0,
+                    "spread_signal": 0.0,
+                }
             base_offense_home = _to_float(m.get("offense_index_home")) or 1.0
             base_offense_away = _to_float(m.get("offense_index_away")) or 1.0
             base_defense_home = _to_float(m.get("defense_index_home")) or 1.0
@@ -3052,6 +3084,10 @@ def run_nfl_market_simulations(
                 travel_miles_away=_to_float(travel_payload.get("travel_miles_away")),
                 travel_timezone_delta_home=_to_float(travel_payload.get("timezone_delta_home")),
                 travel_timezone_delta_away=_to_float(travel_payload.get("timezone_delta_away")),
+                tendency_proe_home=home_proe,
+                tendency_proe_away=away_proe,
+                tendency_total_signal=float(tendency_signals.get("total_signal") or 0.0),
+                tendency_spread_signal=float(tendency_signals.get("spread_signal") or 0.0),
                 **matchup_kwargs,
             )
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)
@@ -7411,38 +7447,116 @@ def _rb_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[st
     return out
 
 
-_RB_DEPTH_RUSH_PRIOR = {1: 0.55, 2: 0.28, 3: 0.12, 4: 0.05}
-_WR_DEPTH_TARGET_PRIOR = {1: 0.27, 2: 0.18, 3: 0.11, 4: 0.06}
-_TE_DEPTH_TARGET_PRIOR = {1: 0.20, 2: 0.10, 3: 0.05}
+_WR_DEPTH_TARGET_PRIOR = {1: 0.30, 2: 0.18, 3: 0.11, 4: 0.06}
+_TE_DEPTH_TARGET_PRIOR = {1: 0.22, 2: 0.10, 3: 0.05}
 
 
-def _apply_rb_depth_rush_prior(
+def _rb_prior_carries_by_team_player(
+    session: Any, *, season: int, lookback_seasons: int = 2
+) -> Dict[tuple[str, str], float]:
+    """Team-scoped prior rush attempts: {(team, player_id): carries}."""
+    start_season = int(season) - int(lookback_seasons)
+    end_season = int(season) - 1
+    if end_season < start_season:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              team,
+              player_id,
+              SUM(COALESCE(rush_attempts, 0))::float AS carries
+            FROM nfl_dp_player_usage_weekly
+            WHERE season BETWEEN :start_season AND :end_season
+              AND UPPER(COALESCE(position, '')) IN ('RB', 'HB', 'FB')
+            GROUP BY team, player_id
+            """
+        ),
+        {"start_season": start_season, "end_season": end_season},
+    ).fetchall()
+    return {(str(row.team), str(row.player_id)): float(row.carries or 0.0) for row in rows}
+
+
+def _rb_prior_carries_by_player(
+    session: Any, *, season: int, lookback_seasons: int = 2
+) -> Dict[str, float]:
+    """Career prior rush attempts keyed by player_id (cross-team fallback)."""
+    start_season = int(season) - int(lookback_seasons)
+    end_season = int(season) - 1
+    if end_season < start_season:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              player_id,
+              SUM(COALESCE(rush_attempts, 0))::float AS carries
+            FROM nfl_dp_player_usage_weekly
+            WHERE season BETWEEN :start_season AND :end_season
+              AND UPPER(COALESCE(position, '')) IN ('RB', 'HB', 'FB')
+            GROUP BY player_id
+            """
+        ),
+        {"start_season": start_season, "end_season": end_season},
+    ).fetchall()
+    return {str(row.player_id): float(row.carries or 0.0) for row in rows}
+
+
+def _skill_prior_offense_snap_pct_by_player(
+    session: Any, *, season: int, lookback_seasons: int = 2
+) -> Dict[str, float]:
+    """Mean prior-season offense snap % keyed by GSIS player_id."""
+    start_season = int(season) - int(lookback_seasons)
+    end_season = int(season) - 1
+    if end_season < start_season:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              gsis_player_id AS player_id,
+              AVG(offense_pct)::float AS offense_snap_pct
+            FROM nfl_dp_snap_counts_weekly
+            WHERE season BETWEEN :start_season AND :end_season
+              AND gsis_player_id IS NOT NULL
+              AND offense_pct IS NOT NULL
+              AND UPPER(COALESCE(position, '')) IN ('RB', 'HB', 'FB', 'WR', 'TE', 'QB')
+            GROUP BY gsis_player_id
+            """
+        ),
+        {"start_season": start_season, "end_season": end_season},
+    ).fetchall()
+    return {str(row.player_id): float(row.offense_snap_pct or 0.0) for row in rows}
+
+
+def _team_rb_rush_shares(
+    trailing_rush_by_team: Dict[str, Dict[str, float]],
+    depth_orders_by_team: Dict[str, Dict[str, float]],
     *,
-    team: str,
-    player_id: str,
-    position: str,
-    rush_share: float,
-    rb_depth_by_team: Dict[str, Dict[str, float]],
-) -> float:
-    """Blend trailing rush_share with depth-chart prior for RB rooms.
-
-    Real bug: DAL W17 had Malik Davis ahead of Javonte Williams on one-week
-    usage while the depth chart (and books) still had Javonte as RB1 — model
-    projected ~18-54 rush yards vs a 73.5 line.
-    """
-    pos = str(position or "").upper()
-    if pos not in {"RB", "FB", "HB"}:
-        return float(rush_share)
-    depth = rb_depth_by_team.get(str(team), {}).get(str(player_id))
-    if depth is None:
-        return float(rush_share)
-    prior = float(_RB_DEPTH_RUSH_PRIOR.get(int(depth), 0.04))
-    usage = max(0.0, float(rush_share or 0.0))
-    blended = (0.55 * usage) + (0.45 * prior)
-    # Designated RB1 with weak trailing usage still gets a floor.
-    if int(depth) == 1:
-        blended = max(blended, 0.48)
-    return max(0.0, min(0.85, blended))
+    prior_carries_by_player: Dict[str, float] | None = None,
+    prior_carries_by_team_player: Dict[tuple[str, str], float] | None = None,
+    offense_snap_pcts_by_player: Dict[str, float] | None = None,
+) -> Dict[tuple[str, str], float]:
+    """Per-team winner-take-most (usage-aware) RB rush shares."""
+    shares: Dict[tuple[str, str], float] = {}
+    career_priors = prior_carries_by_player or {}
+    team_priors_map = prior_carries_by_team_player or {}
+    snap_pcts = offense_snap_pcts_by_player or {}
+    for team, trailing in trailing_rush_by_team.items():
+        team_scoped = {pid: float(team_priors_map.get((team, pid)) or 0.0) for pid in trailing}
+        if sum(team_scoped.values()) > 0.0:
+            priors_for_room = team_scoped
+        else:
+            priors_for_room = {pid: float(career_priors.get(pid) or 0.0) for pid in trailing}
+        room_snaps = {pid: float(snap_pcts.get(pid) or 0.0) for pid in trailing}
+        for player_id, share in compute_rb_rush_shares(
+            trailing,
+            depth_orders=depth_orders_by_team.get(team),
+            prior_carries=priors_for_room,
+            offense_snap_pcts=room_snaps,
+        ).items():
+            shares[(team, player_id)] = float(share)
+    return shares
 
 
 def _wr_te_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[str, Dict[str, float]]:
@@ -7484,19 +7598,144 @@ def _apply_wr_te_depth_target_prior(
     usage = max(0.0, float(target_proxy or 0.0))
     blended = (0.55 * usage) + (0.45 * prior)
     if int(depth) == 1:
-        blended = max(blended, 0.20 if pos == "WR" else 0.14)
-    return max(0.0, min(0.45, blended))
+        blended = max(blended, 0.24 if pos == "WR" else 0.16)
+    return max(0.0, min(0.48, blended))
+
+
+def _skill_prior_ypg_by_player(
+    session: Any, *, season: int, lookback_seasons: int = 2
+) -> Dict[str, Dict[str, float]]:
+    """Recent skill production: {player_id: {rec_ypg, rush_ypg, active_games}}."""
+    start_season = int(season) - int(lookback_seasons)
+    end_season = int(season) - 1
+    if end_season < start_season:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              player_id,
+              UPPER(COALESCE(position, '')) AS position,
+              SUM(COALESCE(receiving_yards, 0))::float AS rec_yards,
+              SUM(COALESCE(rush_yards, 0))::float AS rush_yards,
+              COUNT(*) FILTER (
+                WHERE COALESCE(targets, 0) + COALESCE(rush_attempts, 0) >= 3
+              )::float AS active_games
+            FROM nfl_dp_player_usage_weekly
+            WHERE season BETWEEN :start_season AND :end_season
+              AND UPPER(COALESCE(position, '')) IN ('WR', 'TE', 'RB', 'FB', 'HB')
+            GROUP BY player_id, UPPER(COALESCE(position, ''))
+            """
+        ),
+        {"start_season": start_season, "end_season": end_season},
+    ).fetchall()
+    out: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        active = float(row.active_games or 0.0)
+        rec_ypg = (float(row.rec_yards or 0.0) / active) if active > 0 else 0.0
+        rush_ypg = (float(row.rush_yards or 0.0) / active) if active > 0 else 0.0
+        out[str(row.player_id)] = {
+            "position": str(row.position or ""),
+            "rec_ypg": rec_ypg,
+            "rush_ypg": rush_ypg,
+            "active_games": active,
+        }
+    return out
+
+
+def _qb_prior_production_by_player(
+    session: Any, *, season: int, lookback_seasons: int = 2
+) -> Dict[str, Dict[str, float]]:
+    """Recent QB production priors keyed by player_id (cross-team career).
+
+    Returns {player_id: {attempts, yards, startish_games, yards_per_startish}}.
+    Talent factor uses this career read. Starter resolution prefers
+    team-scoped attempts from `_qb_prior_attempts_by_team_player` so a
+    free-agent's old-team volume cannot crown them QB1 on a new roster
+    (e.g. Kyler on MIN after ARI years).
+    """
+    start_season = int(season) - int(lookback_seasons)
+    end_season = int(season) - 1
+    if end_season < start_season:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              player_id,
+              SUM(COALESCE(pass_attempts, 0))::float AS attempts,
+              SUM(COALESCE(pass_yards, 0))::float AS yards,
+              COUNT(*) FILTER (WHERE COALESCE(pass_attempts, 0) >= 10)::float AS startish_games
+            FROM nfl_dp_player_usage_weekly
+            WHERE season BETWEEN :start_season AND :end_season
+              AND UPPER(COALESCE(position, '')) = 'QB'
+            GROUP BY player_id
+            """
+        ),
+        {"start_season": start_season, "end_season": end_season},
+    ).fetchall()
+    out: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        attempts = float(row.attempts or 0.0)
+        yards = float(row.yards or 0.0)
+        startish = float(row.startish_games or 0.0)
+        ypg = (yards / startish) if startish > 0.0 else 0.0
+        out[str(row.player_id)] = {
+            "attempts": attempts,
+            "yards": yards,
+            "startish_games": startish,
+            "yards_per_startish": ypg,
+        }
+    return out
+
+
+def _qb_prior_attempts_by_team_player(
+    session: Any, *, season: int, lookback_seasons: int = 2
+) -> Dict[tuple[str, str], float]:
+    """Team-scoped prior pass attempts: {(team, player_id): attempts}."""
+    start_season = int(season) - int(lookback_seasons)
+    end_season = int(season) - 1
+    if end_season < start_season:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              team,
+              player_id,
+              SUM(COALESCE(pass_attempts, 0))::float AS attempts
+            FROM nfl_dp_player_usage_weekly
+            WHERE season BETWEEN :start_season AND :end_season
+              AND UPPER(COALESCE(position, '')) = 'QB'
+            GROUP BY team, player_id
+            """
+        ),
+        {"start_season": start_season, "end_season": end_season},
+    ).fetchall()
+    return {(str(row.team), str(row.player_id)): float(row.attempts or 0.0) for row in rows}
 
 
 def _team_qb_starter_shares(
     qb_snap_shares_by_team: Dict[str, Dict[str, float]],
     depth_orders_by_team: Dict[str, Dict[str, float]],
+    prior_attempts_by_player: Dict[str, float] | None = None,
+    prior_attempts_by_team_player: Dict[tuple[str, str], float] | None = None,
 ) -> Dict[tuple[str, str], float]:
     shares: Dict[tuple[str, str], float] = {}
+    career_priors = prior_attempts_by_player or {}
+    team_priors_map = prior_attempts_by_team_player or {}
     for team, snap_shares in qb_snap_shares_by_team.items():
+        # Prefer same-team prior volume; fall back to career attempts only
+        # when the room has no team-scoped signal at all.
+        team_scoped = {pid: float(team_priors_map.get((team, pid)) or 0.0) for pid in snap_shares}
+        if sum(team_scoped.values()) > 0.0:
+            priors_for_room = team_scoped
+        else:
+            priors_for_room = {pid: float(career_priors.get(pid) or 0.0) for pid in snap_shares}
         for player_id, share in compute_qb_starter_shares(
             snap_shares,
             depth_orders=depth_orders_by_team.get(team),
+            prior_attempts=priors_for_room,
         ).items():
             shares[(team, player_id)] = share
     return shares
@@ -7518,11 +7757,12 @@ def materialize_nfl_player_baseline_projections(
             text(
                 """
                 SELECT
-                  season, week, team, player_id, player_uid, player_name, position, game_id,
+                  season, week, team, player_id, player_uid, player_name, position, game_id, opponent,
                   snap_proxy, team_snap_share, route_proxy, target_proxy, rush_share, red_zone_share,
                   qb_dropback_factor, qb_pressure_factor, team_pace_factor, team_pass_rate_factor,
                   opponent_pass_defense_factor, opponent_rush_defense_factor,
-                  availability_confidence, role_confidence, feature_payload, updated_at
+                  availability_confidence, role_confidence, feature_payload, updated_at,
+                  offense_snaps, offense_snap_pct, snap_source
                 FROM nfl_player_projection_features_weekly
                 WHERE season = :season
                   AND week = :week
@@ -7532,19 +7772,98 @@ def materialize_nfl_player_baseline_projections(
             {"season": int(season), "week": int(target_week)},
         ).fetchall()
 
-        # Real bug fix: compute each team's QB depth-chart "starter share"
-        # from team_snap_share BEFORE building per-player baselines below --
-        # see PlayerFeatureInputs.qb_starter_share's docstring for why a
-        # single-player baseline formula cannot express "only one QB
-        # actually starts" on its own.
+        # Enterprise QB room resolution: prior attempts + depth + snaps →
+        # winner-take-most starter shares (see compute_qb_starter_shares).
         qb_snap_shares_by_team: Dict[str, Dict[str, float]] = {}
+        rb_trailing_rush_by_team: Dict[str, Dict[str, float]] = {}
+        rb_week_snap_pcts: Dict[str, float] = {}
         for row in rows:
-            if str(row.position or "").upper() == "QB":
-                qb_snap_shares_by_team.setdefault(row.team, {})[str(row.player_id)] = float(row.team_snap_share or 0.0)
+            pos = str(row.position or "").upper()
+            pid = str(row.player_id)
+            if pos == "QB":
+                qb_snap_shares_by_team.setdefault(row.team, {})[pid] = float(row.team_snap_share or 0.0)
+            elif pos in {"RB", "HB", "FB"}:
+                rb_trailing_rush_by_team.setdefault(row.team, {})[pid] = float(row.rush_share or 0.0)
+                snap_pct = getattr(row, "offense_snap_pct", None)
+                if snap_pct is None and isinstance(row.feature_payload, dict):
+                    snap_pct = row.feature_payload.get("offense_snap_pct")
+                if snap_pct is not None:
+                    rb_week_snap_pcts[pid] = float(snap_pct or 0.0)
+                else:
+                    rb_week_snap_pcts[pid] = float(row.team_snap_share or 0.0)
         depth_orders_by_team = _qb_depth_orders_by_team(session, season=int(season), week=int(target_week))
-        qb_starter_shares = _team_qb_starter_shares(qb_snap_shares_by_team, depth_orders_by_team)
+        qb_prior_production = _qb_prior_production_by_player(session, season=int(season))
+        skill_prior_ypg = _skill_prior_ypg_by_player(session, season=int(season))
+        prior_attempts_by_player = {
+            pid: float(stats.get("attempts") or 0.0) for pid, stats in qb_prior_production.items()
+        }
+        prior_attempts_by_team_player = _qb_prior_attempts_by_team_player(session, season=int(season))
+        qb_starter_shares = _team_qb_starter_shares(
+            qb_snap_shares_by_team,
+            depth_orders_by_team,
+            prior_attempts_by_player=prior_attempts_by_player,
+            prior_attempts_by_team_player=prior_attempts_by_team_player,
+        )
         rb_depth_by_team = _rb_depth_orders_by_team(session, season=int(season), week=int(target_week))
         wr_te_depth_by_team = _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        prior_snap_pcts = _skill_prior_offense_snap_pct_by_player(session, season=int(season))
+        # Prefer same-week bridged snaps; fall back to prior-season averages.
+        rb_snap_pcts_for_rooms = {**prior_snap_pcts, **rb_week_snap_pcts}
+        rb_rush_shares = _team_rb_rush_shares(
+            rb_trailing_rush_by_team,
+            rb_depth_by_team,
+            prior_carries_by_player=_rb_prior_carries_by_player(session, season=int(season)),
+            prior_carries_by_team_player=_rb_prior_carries_by_team_player(session, season=int(season)),
+            offense_snap_pcts_by_player=rb_snap_pcts_for_rooms,
+        )
+
+        # Enterprise injury role shocks: OUT/DNP/IR players forfeit volume to
+        # healthy roommates (see nfl_injury_role_shocks).
+        from .services.nfl_injury_role_shocks import (
+            load_team_injury_availability,
+            redistribute_team_usage_for_injuries,
+        )
+        from .services.nfl_tendency_pricing import (
+            apply_tendency_to_player_pass_rate,
+            fetch_team_proe_map,
+        )
+
+        injury_avail = load_team_injury_availability(session, season=int(season), week=int(target_week))
+        try:
+            proe_by_team = fetch_team_proe_map(session, season=int(season), situation="all")
+            if not proe_by_team:
+                proe_by_team = fetch_team_proe_map(session, season=int(season) - 1, situation="all")
+        except Exception:
+            session.rollback()
+            proe_by_team = {}
+
+        injury_shocks_by_team: Dict[str, Dict[str, Dict[str, float]]] = {}
+        rows_by_team_tmp: Dict[str, List[Any]] = {}
+        for row in rows:
+            rows_by_team_tmp.setdefault(str(row.team), []).append(row)
+        for team, team_rows in rows_by_team_tmp.items():
+            shock_inputs = []
+            for row in team_rows:
+                pid = str(row.player_id)
+                inj = (
+                    injury_avail.get((team, pid))
+                    or injury_avail.get((team, str(row.player_name or "")))
+                    or {}
+                )
+                avail = float(inj.get("availability") if inj else (row.availability_confidence or 0.90))
+                shock_inputs.append(
+                    {
+                        "player_id": pid,
+                        "position": str(row.position or ""),
+                        "availability": avail,
+                        "rush_share": float(
+                            rb_rush_shares.get((team, pid), float(row.rush_share or 0.0))
+                        ),
+                        "target_proxy": float(row.target_proxy or 0.0),
+                        "qb_starter_share": float(qb_starter_shares.get((team, pid), 1.0)),
+                    }
+                )
+            injury_shocks_by_team[team] = redistribute_team_usage_for_injuries(shock_inputs)
 
         # Game-script anchors from schedule closing lines (nflverse).
         schedule_rows = session.execute(
@@ -7635,23 +7954,85 @@ def materialize_nfl_player_baseline_projections(
                 ROOKIE_EXPERIENCE_CONFIDENCE if usage_source == "rookie_baseline_v1" else VETERAN_EXPERIENCE_CONFIDENCE
             )
             implied_total, team_spread = team_script.get(str(row.team or ""), (0.0, 0.0))
-            starter_share = float(qb_starter_shares.get((row.team, str(row.player_id)), 1.0))
-            role_conf = float(row.role_confidence or 0.65)
-            if str(row.position or "").upper() == "QB" and starter_share >= 0.85:
-                role_conf = max(role_conf, 0.82)
-            rush_share = _apply_rb_depth_rush_prior(
-                team=str(row.team or ""),
-                player_id=str(row.player_id),
-                position=str(row.position or ""),
-                rush_share=float(row.rush_share or 0.0),
-                rb_depth_by_team=rb_depth_by_team,
+            team_key = str(row.team or "")
+            pid_key = str(row.player_id)
+            shock = (injury_shocks_by_team.get(team_key) or {}).get(pid_key) or {}
+            starter_share = float(
+                shock.get("qb_starter_share", qb_starter_shares.get((row.team, pid_key), 1.0))
             )
+            role_conf = float(row.role_confidence or 0.65)
+            talent_factor = 1.0
+            skill_talent = 1.0
+            pos_upper = str(row.position or "").upper()
+            availability_conf = float(
+                shock.get("availability", row.availability_confidence or 0.75)
+            )
+            injury_shock_amt = float(shock.get("injury_shock") or 0.0)
+            if pos_upper == "QB":
+                if starter_share >= 0.85:
+                    role_conf = max(role_conf, 0.82)
+                prior_stats = qb_prior_production.get(pid_key) or {}
+                prior_ypg = prior_stats.get("yards_per_startish")
+                talent_factor = qb_talent_factor_from_prior_ypg(
+                    float(prior_ypg) if prior_ypg is not None and float(prior_ypg) > 0 else None
+                )
+            if pos_upper in {"RB", "FB", "HB"}:
+                rush_share = float(
+                    shock.get(
+                        "rush_share",
+                        rb_rush_shares.get((team_key, pid_key), float(row.rush_share or 0.0)),
+                    )
+                )
+            else:
+                rush_share = float(row.rush_share or 0.0)
             target_proxy = _apply_wr_te_depth_target_prior(
-                team=str(row.team or ""),
-                player_id=str(row.player_id),
+                team=team_key,
+                player_id=pid_key,
                 position=str(row.position or ""),
                 target_proxy=float(row.target_proxy or 0.0),
                 depth_by_team=wr_te_depth_by_team,
+            )
+            if shock.get("target_proxy") is not None and pos_upper in {"WR", "TE"}:
+                # Preserve depth prior floor, then apply injury redistribution.
+                target_proxy = max(float(target_proxy), 0.0) * 0.35 + float(shock["target_proxy"]) * 0.65
+            if pos_upper in {"WR", "TE"}:
+                depth_ord = wr_te_depth_by_team.get(str(row.team or ""), {}).get(str(row.player_id))
+                floor = depth_role_confidence_floor(pos_upper, depth_ord)
+                if floor is not None:
+                    role_conf = max(role_conf, floor)
+                prior_skill = skill_prior_ypg.get(str(row.player_id)) or {}
+                skill_talent = skill_talent_factor_from_prior_ypg(
+                    float(prior_skill.get("rec_ypg") or 0.0) or None,
+                    position=pos_upper,
+                )
+            elif pos_upper in {"RB", "FB", "HB"}:
+                depth_ord = rb_depth_by_team.get(str(row.team or ""), {}).get(str(row.player_id))
+                floor = depth_role_confidence_floor(pos_upper, depth_ord)
+                if floor is not None:
+                    role_conf = max(role_conf, floor)
+                if rush_share >= 0.55:
+                    role_conf = max(role_conf, 0.84)
+                prior_skill = skill_prior_ypg.get(str(row.player_id)) or {}
+                skill_talent = skill_talent_factor_from_prior_ypg(
+                    float(prior_skill.get("rush_ypg") or 0.0) or None,
+                    position=pos_upper,
+                )
+            offense_snaps = getattr(row, "offense_snaps", None)
+            offense_snap_pct = getattr(row, "offense_snap_pct", None)
+            snap_source = getattr(row, "snap_source", None)
+            if isinstance(row.feature_payload, dict):
+                if offense_snaps is None:
+                    offense_snaps = row.feature_payload.get("offense_snaps")
+                if offense_snap_pct is None:
+                    offense_snap_pct = row.feature_payload.get("offense_snap_pct")
+                if snap_source is None:
+                    snap_source = row.feature_payload.get("snap_source")
+            opponent = str(getattr(row, "opponent", None) or "")
+            team_pass_rate = apply_tendency_to_player_pass_rate(
+                float(row.team_pass_rate_factor or 1.0),
+                team=team_key,
+                opponent=opponent,
+                proe_by_team=proe_by_team,
             )
             inputs = PlayerFeatureInputs(
                 position=str(row.position or ""),
@@ -7663,14 +8044,16 @@ def materialize_nfl_player_baseline_projections(
                 qb_dropback_factor=float(row.qb_dropback_factor or 1.0),
                 qb_pressure_factor=float(row.qb_pressure_factor or 1.0),
                 team_pace_factor=float(row.team_pace_factor or 1.0),
-                team_pass_rate_factor=float(row.team_pass_rate_factor or 1.0),
-                availability_confidence=float(row.availability_confidence or 0.75),
+                team_pass_rate_factor=team_pass_rate,
+                availability_confidence=availability_conf,
                 role_confidence=role_conf,
                 experience_confidence=experience_confidence,
                 team_snap_share=float(row.team_snap_share or 0.0),
                 opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
                 opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
                 qb_starter_share=starter_share,
+                qb_talent_factor=talent_factor,
+                skill_talent_factor=skill_talent,
                 implied_team_total=float(implied_total or 0.0),
                 team_spread=float(team_spread or 0.0),
             )
@@ -7678,6 +8061,16 @@ def materialize_nfl_player_baseline_projections(
             cov_key = str(resolved_player_uid or row.player_name)
             coverage_payload = {
                 "feature_source": "nfl_player_projection_features_weekly",
+                "qb_starter_share": starter_share if pos_upper == "QB" else None,
+                "qb_talent_factor": talent_factor if pos_upper == "QB" else None,
+                "skill_talent_factor": skill_talent if pos_upper in {"WR", "TE", "RB", "FB", "HB"} else None,
+                "rb_rush_share": rush_share if pos_upper in {"RB", "FB", "HB"} else None,
+                "injury_shock": injury_shock_amt if injury_shock_amt > 0 else None,
+                "availability_confidence": availability_conf,
+                "tendency_pass_rate_factor": team_pass_rate,
+                "offense_snaps": float(offense_snaps) if offense_snaps is not None else None,
+                "offense_snap_pct": float(offense_snap_pct) if offense_snap_pct is not None else None,
+                "snap_source": str(snap_source) if snap_source is not None else None,
                 "prop_snapshot_counts": {
                     "pass_yds": prop_cov.get((cov_key, "pass_yds"), 0),
                     "rush_yds": prop_cov.get((cov_key, "rush_yds"), 0),
@@ -7902,7 +8295,8 @@ def materialize_nfl_player_box_score_sims(
                   snap_proxy, team_snap_share, route_proxy, target_proxy, rush_share, red_zone_share,
                   qb_dropback_factor, qb_pressure_factor, team_pace_factor, team_pass_rate_factor,
                   opponent_pass_defense_factor, opponent_rush_defense_factor,
-                  availability_confidence, role_confidence, feature_payload
+                  availability_confidence, role_confidence, feature_payload,
+                  offense_snaps, offense_snap_pct, snap_source
                 FROM nfl_player_projection_features_weekly
                 WHERE season = :season AND week = :week
                 ORDER BY team, position, player_name
@@ -7943,6 +8337,12 @@ def materialize_nfl_player_box_score_sims(
         depth_orders_by_team = _qb_depth_orders_by_team(session, season=int(season), week=int(target_week))
         rb_depth_by_team = _rb_depth_orders_by_team(session, season=int(season), week=int(target_week))
         wr_te_depth_by_team = _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        qb_prior_production = _qb_prior_production_by_player(session, season=int(season))
+        skill_prior_ypg = _skill_prior_ypg_by_player(session, season=int(season))
+        prior_attempts_by_team_player = _qb_prior_attempts_by_team_player(session, season=int(season))
+        prior_rb_carries_by_team = _rb_prior_carries_by_team_player(session, season=int(season))
+        prior_rb_carries = _rb_prior_carries_by_player(session, season=int(season))
+        prior_snap_pcts = _skill_prior_offense_snap_pct_by_player(session, season=int(season))
 
         for team, team_rows in rows_by_team.items():
             # Bye week: nfl_player_projection_features_weekly still has a row
@@ -7956,18 +8356,50 @@ def materialize_nfl_player_box_score_sims(
                 continue
             team_context = _fetch_team_volume_context(session, season=season, team=team, target_week=target_week)
 
-            # Same real fix as materialize_nfl_player_baseline_projections:
-            # compute this team's QB depth-chart "starter share" from
-            # team_snap_share before building per-player baselines below --
-            # see PlayerFeatureInputs.qb_starter_share's docstring.
+            # Same enterprise starter resolution as baseline materialize.
             qb_snap_shares = {
                 str(row.player_id): float(row.team_snap_share or 0.0)
                 for row in team_rows
                 if str(row.position or "").upper() == "QB"
             }
+            team_scoped = {
+                pid: float(prior_attempts_by_team_player.get((str(team), pid)) or 0.0)
+                for pid in qb_snap_shares
+            }
+            if sum(team_scoped.values()) > 0.0:
+                team_priors = team_scoped
+            else:
+                team_priors = {
+                    pid: float((qb_prior_production.get(pid) or {}).get("attempts") or 0.0)
+                    for pid in qb_snap_shares
+                }
             qb_starter_shares = compute_qb_starter_shares(
                 qb_snap_shares,
                 depth_orders=depth_orders_by_team.get(str(team)),
+                prior_attempts=team_priors,
+            )
+            rb_trailing = {
+                str(row.player_id): float(row.rush_share or 0.0)
+                for row in team_rows
+                if str(row.position or "").upper() in {"RB", "HB", "FB"}
+            }
+            rb_snaps = {}
+            for row in team_rows:
+                if str(row.position or "").upper() not in {"RB", "HB", "FB"}:
+                    continue
+                pid = str(row.player_id)
+                snap_pct = getattr(row, "offense_snap_pct", None)
+                if snap_pct is None and isinstance(row.feature_payload, dict):
+                    snap_pct = row.feature_payload.get("offense_snap_pct")
+                rb_snaps[pid] = float(snap_pct if snap_pct is not None else (row.team_snap_share or 0.0))
+            team_rb_priors = {pid: float(prior_rb_carries_by_team.get((str(team), pid)) or 0.0) for pid in rb_trailing}
+            if sum(team_rb_priors.values()) <= 0.0:
+                team_rb_priors = {pid: float(prior_rb_carries.get(pid) or 0.0) for pid in rb_trailing}
+            room_rb_shares = compute_rb_rush_shares(
+                rb_trailing,
+                depth_orders=rb_depth_by_team.get(str(team)),
+                prior_carries=team_rb_priors,
+                offense_snap_pcts={**{pid: float(prior_snap_pcts.get(pid) or 0.0) for pid in rb_trailing}, **rb_snaps},
             )
             implied_total, team_spread = team_script.get(str(team), (0.0, 0.0))
 
@@ -7982,17 +8414,20 @@ def materialize_nfl_player_box_score_sims(
                 )
                 starter_share = float(qb_starter_shares.get(str(row.player_id), 1.0))
                 role_conf = float(row.role_confidence or 0.65)
-                # Clear QB starters need high concentration in the discrete
-                # starter draw; usage-derived role_confidence often understates them.
-                if str(row.position or "").upper() == "QB" and starter_share >= 0.85:
-                    role_conf = max(role_conf, 0.82)
-                rush_share = _apply_rb_depth_rush_prior(
-                    team=str(team),
-                    player_id=str(row.player_id),
-                    position=str(row.position or ""),
-                    rush_share=float(row.rush_share or 0.0),
-                    rb_depth_by_team=rb_depth_by_team,
-                )
+                talent_factor = 1.0
+                skill_talent = 1.0
+                pos_upper = str(row.position or "").upper()
+                if pos_upper == "QB":
+                    if starter_share >= 0.85:
+                        role_conf = max(role_conf, 0.82)
+                    prior_ypg = (qb_prior_production.get(str(row.player_id)) or {}).get("yards_per_startish")
+                    talent_factor = qb_talent_factor_from_prior_ypg(
+                        float(prior_ypg) if prior_ypg is not None and float(prior_ypg) > 0 else None
+                    )
+                if pos_upper in {"RB", "FB", "HB"}:
+                    rush_share = float(room_rb_shares.get(str(row.player_id), float(row.rush_share or 0.0)))
+                else:
+                    rush_share = float(row.rush_share or 0.0)
                 target_proxy = _apply_wr_te_depth_target_prior(
                     team=str(team),
                     player_id=str(row.player_id),
@@ -8000,6 +8435,28 @@ def materialize_nfl_player_box_score_sims(
                     target_proxy=float(row.target_proxy or 0.0),
                     depth_by_team=wr_te_depth_by_team,
                 )
+                if pos_upper in {"WR", "TE"}:
+                    depth_ord = wr_te_depth_by_team.get(str(team), {}).get(str(row.player_id))
+                    floor = depth_role_confidence_floor(pos_upper, depth_ord)
+                    if floor is not None:
+                        role_conf = max(role_conf, floor)
+                    prior_skill = skill_prior_ypg.get(str(row.player_id)) or {}
+                    skill_talent = skill_talent_factor_from_prior_ypg(
+                        float(prior_skill.get("rec_ypg") or 0.0) or None,
+                        position=pos_upper,
+                    )
+                elif pos_upper in {"RB", "FB", "HB"}:
+                    depth_ord = rb_depth_by_team.get(str(team), {}).get(str(row.player_id))
+                    floor = depth_role_confidence_floor(pos_upper, depth_ord)
+                    if floor is not None:
+                        role_conf = max(role_conf, floor)
+                    if rush_share >= 0.55:
+                        role_conf = max(role_conf, 0.84)
+                    prior_skill = skill_prior_ypg.get(str(row.player_id)) or {}
+                    skill_talent = skill_talent_factor_from_prior_ypg(
+                        float(prior_skill.get("rush_ypg") or 0.0) or None,
+                        position=pos_upper,
+                    )
                 inputs = PlayerFeatureInputs(
                     position=str(row.position or ""),
                     snap_proxy=float(row.snap_proxy or 0.0),
@@ -8018,6 +8475,8 @@ def materialize_nfl_player_box_score_sims(
                     opponent_pass_defense_factor=float(row.opponent_pass_defense_factor or 1.0),
                     opponent_rush_defense_factor=float(row.opponent_rush_defense_factor or 1.0),
                     qb_starter_share=starter_share,
+                    qb_talent_factor=talent_factor,
+                    skill_talent_factor=skill_talent,
                     implied_team_total=float(implied_total or 0.0),
                     team_spread=float(team_spread or 0.0),
                 )
@@ -10441,6 +10900,78 @@ def run_nfl_player_projection_cycle(
         "props": props,
         "fantasy": fantasy,
         "identity_quality": identity_quality,
+    }
+
+
+@celery_app.task(name="src.tasks.run_nfl_enterprise_weekly_sharpening_cycle")
+def run_nfl_enterprise_weekly_sharpening_cycle(
+    *,
+    season: int,
+    week: Optional[int] = None,
+    model_version: str = "nfl-player-v1",
+    skip_ingest: bool = False,
+    skip_fantasy: bool = False,
+    skip_awards: bool = False,
+) -> Dict[str, Any]:
+    """Year-long Tuesday/Wednesday desk cycle: DP rolling + snaps + tendencies
+    → features → baselines → box → props (+ optional fantasy/awards).
+
+    Prefer the bash orchestrator for local ops; this task exists so Celery Beat
+    can run the same chain in production without a shell dependency on curl.
+    """
+    import sys
+    from pathlib import Path
+
+    session = SessionLocal()
+    try:
+        target_week = _resolve_nfl_week(session, season=season, week=week)
+    finally:
+        session.close()
+
+    dp_root = Path(__file__).resolve().parents[2] / "data-platform-nfl" / "src"
+    if str(dp_root) not in sys.path:
+        sys.path.insert(0, str(dp_root))
+
+    from data_platform_nfl.inseason_weekly_update import run_data_platform_inseason_weekly_update
+
+    dp = run_data_platform_inseason_weekly_update(
+        season=int(season),
+        week=int(target_week),
+        skip_ingest=bool(skip_ingest),
+        rematerialize_remaining_weeks=True,
+        dry_run=False,
+    )
+    baseline = materialize_nfl_player_baseline_projections(
+        season=int(season), week=int(target_week), model_version=model_version
+    )
+    box = materialize_nfl_player_box_score_sims(season=int(season), week=int(target_week))
+    props = materialize_nfl_player_props_edges(
+        season=int(season), week=int(target_week), model_version=model_version
+    )
+    fantasy = None
+    awards = None
+    if not skip_fantasy:
+        fantasy = materialize_nfl_fantasy_projections(
+            season=int(season), week=int(target_week), model_version=model_version
+        )
+    if not skip_awards:
+        try:
+            awards = materialize_nfl_award_projections(
+                season=int(season), model_version=model_version, top_n=10
+            )
+        except Exception as exc:  # noqa: BLE001
+            awards = {"status": "failed", "error": str(exc)}
+
+    return {
+        "season": int(season),
+        "week": int(target_week),
+        "data_platform": dp,
+        "baseline": baseline,
+        "box": box,
+        "props": props,
+        "fantasy": fantasy,
+        "awards": awards,
+        "status": "ok" if str(dp.get("status")) != "failed" else "partial",
     }
 
 

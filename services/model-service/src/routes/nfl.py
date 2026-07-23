@@ -268,7 +268,7 @@ def _persist_nfl_odds_events_for_training(market_events: List[Dict[str, Any]]) -
     if not market_events:
         return {"events_persisted": 0, "snapshots_inserted": 0, "history_upserted": 0}
     # Deferred import avoids loading Celery app graph at router import time.
-    from src.tasks import _persist_odds_events, materialize_nfl_market_history
+    from src.tasks import _persist_odds_events
 
     for event in market_events:
         if isinstance(event, dict) and not event.get("sport_key"):
@@ -289,17 +289,13 @@ def _persist_nfl_odds_events_for_training(market_events: List[Dict[str, Any]]) -
     finally:
         session.close()
 
-    history_upserted = 0
-    try:
-        hist = materialize_nfl_market_history(lookback_days=45)
-        history_upserted = int((hist or {}).get("inserted_or_updated") or 0)
-    except Exception:
-        log.exception("Failed materializing nfl_market_history after odds persist")
-
+    # Skip sync market-history materialize on the request path — it can stall
+    # the fair-lines / edges UI for minutes. Snapshots are already committed;
+    # ops/nightly jobs can rebuild history.
     return {
         "events_persisted": int(persisted.get("events_persisted") or 0),
         "snapshots_inserted": int(persisted.get("snapshots_inserted") or 0),
-        "history_upserted": history_upserted,
+        "history_upserted": 0,
     }
 
 

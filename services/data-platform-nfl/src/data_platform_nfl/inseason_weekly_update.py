@@ -57,6 +57,32 @@ def build_inseason_weekly_update_plan(
         }
     )
 
+    steps.append(
+        {
+            "id": "ingest_snap_counts",
+            "layer": "data_platform",
+            "title": "Refresh owned snap counts (PFR→GSIS bridged)",
+            "prerequisite": "nflverse snap feed available for season.",
+            "cli": (
+                f"python3 -m data_platform_nfl.cli --seasons {season} "
+                "--ingest-snap-counts"
+            ),
+        }
+    )
+
+    steps.append(
+        {
+            "id": "materialize_tendency_profiles",
+            "layer": "data_platform",
+            "title": "Rematerialize PROE / direction / QB situational tendencies",
+            "prerequisite": "PBP tendency columns populated for season.",
+            "cli": (
+                f"python3 -m data_platform_nfl.cli --seasons {season} "
+                "--materialize-tendency-profiles"
+            ),
+        }
+    )
+
     feature_week = None if rematerialize_remaining_weeks else week
     feature_cli = (
         f"python3 -m data_platform_nfl.cli --seasons {season} "
@@ -213,6 +239,8 @@ def run_data_platform_inseason_weekly_update(
     from .ingest import materialize_player_projection_features
     from .ops import run_launch_hardening_cycle
     from .preseason_hydration import refresh_future_player_usage_from_rolling_real_weeks
+    from .snap_depth_ingest import ingest_snap_counts
+    from .tendency_profiles import materialize_all_tendency_profiles
 
     for step in dp_plan:
         step_id = step["id"]
@@ -223,6 +251,10 @@ def run_data_platform_inseason_weekly_update(
                 result = refresh_future_player_usage_from_rolling_real_weeks(
                     season=season, through_week=week
                 )
+            elif step_id == "ingest_snap_counts":
+                result = ingest_snap_counts(seasons=[season])
+            elif step_id == "materialize_tendency_profiles":
+                result = materialize_all_tendency_profiles(seasons=[season])
             elif step_id == "materialize_player_projection_features":
                 result = materialize_player_projection_features(
                     seasons=[season],

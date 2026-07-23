@@ -176,7 +176,8 @@ export async function fetchNflFairLines(params: {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  // Odds join + DB board query can exceed 15s on a cold model-service.
+  const timeout = setTimeout(() => controller.abort(), 60000);
   try {
     const response = await fetch(url.toString(), {
       cache: "no-store",

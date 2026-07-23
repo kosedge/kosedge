@@ -52,6 +52,17 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "services
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "services", "data-platform-nfl", "src"))
 os.environ.setdefault("DATABASE_URL", "postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge")
 
+
+def _sqlalchemy_database_url(raw: str) -> str:
+    """Prefer psycopg v3 driver; plain postgresql:// defaults to missing psycopg2."""
+    url = (raw or "").strip().strip('"').strip("'")
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url[len("postgresql://") :]
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://") :]
+    return url
+
+
 import numpy as np  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 from sqlalchemy.orm import sessionmaker  # noqa: E402
@@ -177,6 +188,8 @@ def seed_conference(rng, records: dict[str, int], teams: list[str]) -> list[str]
 
 
 def main() -> None:
+    # Normalize once so every create_engine in this process uses psycopg v3.
+    os.environ["DATABASE_URL"] = _sqlalchemy_database_url(os.environ["DATABASE_URL"])
     engine = create_engine(os.environ["DATABASE_URL"])
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -335,9 +348,9 @@ def main() -> None:
     os.makedirs(out_dir, exist_ok=True)
 
     print("Generating fresh player season-total CSVs from nfl_player_projection_baselines...")
-    player_totals_engine = create_engine(os.environ["DATABASE_URL"])
-    PlayerTotalsSession = sessionmaker(bind=player_totals_engine)
-    player_totals_session = PlayerTotalsSession()
+    # Reuse the same engine/session factory — a second create_engine was
+    # flaky against plain postgresql:// URLs in this environment.
+    player_totals_session = Session()
     try:
         player_totals_summary = generate_and_write_player_season_totals(
             player_totals_session,
