@@ -47,11 +47,17 @@ from .services.mlb_enterprise_ops import (
     resolve_densify_books,
     upsert_mlb_clv_attribution,
 )
-from .services.mlb_lineup_shock import apply_lineup_shock
+from .services.mlb_lineup_shock import apply_lineup_shock, resolve_nowcast_starters
 from .services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
+from .services.mlb_pa_feature_sharpen import sharpen_game_inputs
 from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from .services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE as MLB_PROPS_PLAY_STAKE_ELIGIBLE
 from .services.mlb_simulator import DEFAULT_MODEL_VERSION, MlbGameInputs, simulate_mlb_game
+from .services.mlb_unused_holdout import (
+    filter_points_excluding_unused_holdout,
+    filter_points_in_unused_holdout,
+    unused_holdout_summary,
+)
 from .services.nfl_data import (
     fetch_nfl_schedule,
     rest_days_from_schedule,
@@ -1328,6 +1334,28 @@ def _hours_to_game(start_time: Optional[datetime]) -> float:
     return (start_time - _now_utc()).total_seconds() / 3600.0
 
 
+def _sharpen_mlb_inputs(
+    inputs: MlbGameInputs,
+    *,
+    starter_home_feat: Optional[Dict[str, Any]] = None,
+    starter_away_feat: Optional[Dict[str, Any]] = None,
+    home_abbr: Optional[str] = None,
+    rest_days_home: Optional[float] = None,
+    rest_days_away: Optional[float] = None,
+) -> tuple[MlbGameInputs, Dict[str, Any]]:
+    """Apply bounded PA-sim feature sharpening; merge diagnostics onto projection later."""
+    home_feat = starter_home_feat or {}
+    away_feat = starter_away_feat or {}
+    return sharpen_game_inputs(
+        inputs,
+        starter_source_home=str(home_feat.get("source") or "") or None,
+        starter_source_away=str(away_feat.get("source") or "") or None,
+        home_abbr=home_abbr,
+        rest_days_home=rest_days_home,
+        rest_days_away=rest_days_away,
+    )
+
+
 def _lineup_nowcast_confidence(
     *,
     hours_to_first_pitch: float,
@@ -1726,6 +1754,7 @@ def _walkforward_backtest(
     training_days: int,
     step_days: int,
     apply_calibration: bool,
+    exclude_unused_holdout_from_train: bool = True,
 ) -> Dict[str, Any]:
     dated = [x for x in points if x.get("game_date") is not None]
     dated.sort(key=lambda x: (str(x.get("game_date")), str(x.get("game_id") or "")))
@@ -1740,6 +1769,8 @@ def _walkforward_backtest(
             "calibrated_mae_total_runs": None,
             "brier_improvement": None,
             "mae_improvement": None,
+            "unused_holdout": unused_holdout_summary(),
+            "unused_holdout_excluded_from_train": bool(exclude_unused_holdout_from_train),
         }
 
     unique_days = sorted({str(x["game_date"])[:10] for x in dated})
@@ -1747,10 +1778,15 @@ def _walkforward_backtest(
     step = max(1, int(step_days))
     folds: List[Dict[str, Any]] = []
     used_points = 0
+    unused_train_skips = 0
     for idx in range(min_train, len(unique_days), step):
         train_days = set(unique_days[max(0, idx - min_train):idx])
         test_days = set(unique_days[idx:idx + step])
         train_points = [x for x in dated if str(x["game_date"])[:10] in train_days]
+        if exclude_unused_holdout_from_train:
+            before = len(train_points)
+            train_points = filter_points_excluding_unused_holdout(train_points)
+            unused_train_skips += max(0, before - len(train_points))
         test_points = [x for x in dated if str(x["game_date"])[:10] in test_days]
         if len(train_points) < 20 or len(test_points) < 5:
             continue
@@ -1796,6 +1832,7 @@ def _walkforward_backtest(
         )
         used_points += len(test_points)
 
+    unused_eval_n = len(filter_points_in_unused_holdout(dated))
     if not folds:
         return {
             "folds": [],
@@ -1807,6 +1844,10 @@ def _walkforward_backtest(
             "calibrated_mae_total_runs": None,
             "brier_improvement": None,
             "mae_improvement": None,
+            "unused_holdout": unused_holdout_summary(),
+            "unused_holdout_excluded_from_train": bool(exclude_unused_holdout_from_train),
+            "unused_holdout_train_points_skipped": unused_train_skips,
+            "unused_holdout_eval_points_available": unused_eval_n,
         }
     base_brier_avg = sum(float(f["base_brier_ml"]) for f in folds) / len(folds)
     cal_brier_avg = sum(float(f["calibrated_brier_ml"]) for f in folds) / len(folds)
@@ -1822,6 +1863,10 @@ def _walkforward_backtest(
         "calibrated_mae_total_runs": round(cal_mae_avg, 4),
         "brier_improvement": round(base_brier_avg - cal_brier_avg, 6),
         "mae_improvement": round(base_mae_avg - cal_mae_avg, 4),
+        "unused_holdout": unused_holdout_summary(),
+        "unused_holdout_excluded_from_train": bool(exclude_unused_holdout_from_train),
+        "unused_holdout_train_points_skipped": unused_train_skips,
+        "unused_holdout_eval_points_available": unused_eval_n,
     }
 
 
@@ -5809,6 +5854,16 @@ def pull_mlb_context_snapshot(days_ahead: int = 5) -> Dict[str, int]:
             home_bp = team_bullpen_cache.get(home_team_id) or fetch_team_bullpen_fatigue(None, start)
             away_bp = team_bullpen_cache.get(away_team_id) or fetch_team_bullpen_fatigue(None, start)
             park_factor = park_factor_for_team(g.get("home_abbr"))
+            rest_days_home = team_rest_days_from_schedule(
+                schedule,
+                team_id=home_team_id if isinstance(home_team_id, int) else None,
+                game_time_iso=g.get("game_time"),
+            )
+            rest_days_away = team_rest_days_from_schedule(
+                schedule,
+                team_id=away_team_id if isinstance(away_team_id, int) else None,
+                game_time_iso=g.get("game_time"),
+            )
             home_offense = build_team_offense_context(
                 home_team_id,
                 as_of=start,
@@ -5928,6 +5983,8 @@ def pull_mlb_context_snapshot(days_ahead: int = 5) -> Dict[str, int]:
                             "status": g.get("status"),
                             "home_abbr": g.get("home_abbr"),
                             "away_abbr": g.get("away_abbr"),
+                            "rest_days_home": rest_days_home,
+                            "rest_days_away": rest_days_away,
                             "bullpen_appearances_last3_home": home_bp["bullpen_appearances_last3"],
                             "bullpen_appearances_last3_away": away_bp["bullpen_appearances_last3"],
                             "bullpen_high_leverage_availability_home": home_bp["bullpen_high_leverage_availability_score"],
@@ -5992,6 +6049,7 @@ def run_mlb_market_simulations(
                   g.status AS game_status,
                   home.name AS home_team,
                   away.name AS away_team,
+                  home.abbr AS home_abbr,
                   c.probable_pitcher_home,
                   c.probable_pitcher_away,
                   c.umpire_home_plate,
@@ -6020,7 +6078,8 @@ def run_mlb_market_simulations(
                   c.bullpen_high_leverage_availability_home,
                   c.bullpen_high_leverage_availability_away,
                   c.updated_at AS context_updated_at,
-                  c.umpire_run_factor
+                  c.umpire_run_factor,
+                  c.context
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -6046,6 +6105,14 @@ def run_mlb_market_simulations(
                 updated_at=m.get("context_updated_at"),
                 lineup_confirmed=bool(m["lineup_confirmed"]) if m.get("lineup_confirmed") is not None else False,
             )
+            context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
+            if isinstance(m.get("context"), str):
+                try:
+                    context_payload = json.loads(m["context"])
+                except Exception:
+                    context_payload = {}
+            rest_home = _to_float(context_payload.get("rest_days_home"))
+            rest_away = _to_float(context_payload.get("rest_days_away"))
             inputs = MlbGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
@@ -6089,6 +6156,14 @@ def run_mlb_market_simulations(
                 info_freshness_score_home=freshness,
                 info_freshness_score_away=freshness,
             )
+            inputs, sharpen_diag = _sharpen_mlb_inputs(
+                inputs,
+                starter_home_feat=starter_home_feat,
+                starter_away_feat=starter_away_feat,
+                home_abbr=str(m.get("home_abbr") or "") or None,
+                rest_days_home=rest_home,
+                rest_days_away=rest_away,
+            )
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)
             projection = _run_simulation_by_model(
                 inputs,
@@ -6096,6 +6171,7 @@ def run_mlb_market_simulations(
                 seed=seed,
                 model_version=model_version,
             )
+            projection.setdefault("diagnostics", {}).update(sharpen_diag)
             _insert_mlb_projection_and_audit(session, projection, seed=seed)
             processed += 1
             inserted += 1
@@ -6507,16 +6583,21 @@ def evaluate_mlb_model_promotion(
     run_date = date.today()
     try:
         holdout_bucket_count = int(os.getenv("MLB_PROMOTION_HOLDOUT_BUCKETS", "3"))
-        base_points = _fetch_calibration_points(
+        base_points_raw = _fetch_calibration_points(
             session,
             model_version=base_model_version,
             lookback_days=lookback_days,
         )
-        challenger_points = _fetch_calibration_points(
+        challenger_points_raw = _fetch_calibration_points(
             session,
             model_version=challenger_model_version,
             lookback_days=lookback_days,
         )
+        # Unused holdout is evaluation/stake-gate only — never train/tune/promote on it.
+        base_points = filter_points_excluding_unused_holdout(base_points_raw)
+        challenger_points = filter_points_excluding_unused_holdout(challenger_points_raw)
+        unused_eval_base = filter_points_in_unused_holdout(base_points_raw)
+        unused_eval_challenger = filter_points_in_unused_holdout(challenger_points_raw)
         base_quality = {
             **_compute_calibration_summary(base_points),
             **_compute_clv_summary(
@@ -6566,6 +6647,15 @@ def evaluate_mlb_model_promotion(
             "auto_promote_enabled": auto_enabled,
             "promoted": promoted,
             "state_change": state_change,
+            "unused_holdout": unused_holdout_summary(),
+            "unused_holdout_excluded_from_tune": True,
+            "unused_holdout_eval": {
+                "base_sample_size": len(unused_eval_base),
+                "challenger_sample_size": len(unused_eval_challenger),
+                "base_quality": _compute_calibration_summary(unused_eval_base),
+                "challenger_quality": _compute_calibration_summary(unused_eval_challenger),
+            },
+            "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
         }
 
         _persist_holdout_profile(
@@ -6646,17 +6736,19 @@ def run_mlb_lineup_nowcast_repricing(
     prev_conf_count = 0
     freshness_sum = 0.0
     confirmed_count = 0
+    sp_change_games = 0
     try:
         rows = session.execute(
             text(
                 """
                 SELECT
                   g.id AS game_id,
-                                    g.external_id,
+                  g.external_id,
                   g.start_time,
                   g.status AS game_status,
                   home.name AS home_team,
                   away.name AS away_team,
+                  home.abbr AS home_abbr,
                   c.probable_pitcher_home,
                   c.probable_pitcher_away,
                   c.umpire_home_plate,
@@ -6685,7 +6777,8 @@ def run_mlb_lineup_nowcast_repricing(
                   c.bullpen_high_leverage_availability_home,
                   c.bullpen_high_leverage_availability_away,
                   c.umpire_run_factor,
-                  c.updated_at AS context_updated_at
+                  c.updated_at AS context_updated_at,
+                  c.context
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -6719,11 +6812,23 @@ def run_mlb_lineup_nowcast_repricing(
                 lineup_confirmed=lineup_confirmed,
             )
             hours_to_pitch = _hours_to_game(m.get("start_time"))
+            starter_resolve = resolve_nowcast_starters(
+                context_home=m.get("probable_pitcher_home"),
+                context_away=m.get("probable_pitcher_away"),
+                live_home=live_home_lineup.get("probable_pitcher") or live_home_lineup.get("starter_name"),
+                live_away=live_away_lineup.get("probable_pitcher") or live_away_lineup.get("starter_name"),
+            )
+            prior_starter_home = starter_resolve["prior_home"]
+            prior_starter_away = starter_resolve["prior_away"]
+            next_sp_home = starter_resolve["new_home"]
+            next_sp_away = starter_resolve["new_away"]
+            if starter_resolve["any_changed"]:
+                sp_change_games += 1
             nowcast = _lineup_nowcast_confidence(
                 hours_to_first_pitch=hours_to_pitch,
                 lineup_confirmed=lineup_confirmed,
-                probable_pitcher_home=m.get("probable_pitcher_home"),
-                probable_pitcher_away=m.get("probable_pitcher_away"),
+                probable_pitcher_home=next_sp_home,
+                probable_pitcher_away=next_sp_away,
                 freshness_score=freshness,
             )
             prev_home = float(m["lineup_confidence_home"]) if m.get("lineup_confidence_home") is not None else None
@@ -6748,12 +6853,22 @@ def run_mlb_lineup_nowcast_repricing(
                 lineup_strength_home = float(live_home_lineup["lineup_strength_index"])
             if live_away_lineup.get("lineup_strength_index") is not None:
                 lineup_strength_away = float(live_away_lineup["lineup_strength_index"])
+            context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
+            if isinstance(m.get("context"), str):
+                try:
+                    context_payload = json.loads(m["context"])
+                except Exception:
+                    context_payload = {}
+            prior_home_feat = starter_identity_features(prior_starter_home)
+            prior_away_feat = starter_identity_features(prior_starter_away)
             # Update context with nowcast confidence as live pre-lock estimate.
             session.execute(
                 text(
                     """
                     UPDATE mlb_game_context
                     SET
+                      probable_pitcher_home = COALESCE(:probable_pitcher_home, probable_pitcher_home),
+                      probable_pitcher_away = COALESCE(:probable_pitcher_away, probable_pitcher_away),
                       lineup_confidence_home = :lineup_confidence_home,
                       lineup_confidence_away = :lineup_confidence_away,
                       lineup_strength_index_home = :lineup_strength_index_home,
@@ -6766,6 +6881,8 @@ def run_mlb_lineup_nowcast_repricing(
                 ),
                 {
                     "game_id": m["game_id"],
+                    "probable_pitcher_home": next_sp_home,
+                    "probable_pitcher_away": next_sp_away,
                     "lineup_confidence_home": nowcast["home"],
                     "lineup_confidence_away": nowcast["away"],
                     "lineup_strength_index_home": lineup_strength_home,
@@ -6781,6 +6898,12 @@ def run_mlb_lineup_nowcast_repricing(
                                 "confidence_away": round(nowcast["away"], 4),
                                 "lineup_strength_home": round(lineup_strength_home, 4),
                                 "lineup_strength_away": round(lineup_strength_away, 4),
+                                "prior_starter_home": prior_starter_home,
+                                "prior_starter_away": prior_starter_away,
+                                "starter_home": next_sp_home,
+                                "starter_away": next_sp_away,
+                                "sp_changed_home": bool(starter_resolve["home_changed"]),
+                                "sp_changed_away": bool(starter_resolve["away_changed"]),
                                 "home_lineup_players": live_home_lineup.get("players") or [],
                                 "away_lineup_players": live_away_lineup.get("players") or [],
                                 "generated_at": _now_utc().isoformat(),
@@ -6792,14 +6915,14 @@ def run_mlb_lineup_nowcast_repricing(
             )
             updated_context += 1
 
-            starter_home_feat = starter_identity_features(m.get("probable_pitcher_home"))
-            starter_away_feat = starter_identity_features(m.get("probable_pitcher_away"))
+            starter_home_feat = starter_identity_features(next_sp_home)
+            starter_away_feat = starter_identity_features(next_sp_away)
             inputs = MlbGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
                 away_team=str(m["away_team"]),
-                starter_home=m.get("probable_pitcher_home"),
-                starter_away=m.get("probable_pitcher_away"),
+                starter_home=next_sp_home,
+                starter_away=next_sp_away,
                 starter_quality_home=float(starter_home_feat.get("starter_quality") or 1.0),
                 starter_quality_away=float(starter_away_feat.get("starter_quality") or 1.0),
                 starter_k_factor_home=float(starter_home_feat.get("k_factor") or 1.0),
@@ -6837,13 +6960,26 @@ def run_mlb_lineup_nowcast_repricing(
                 info_freshness_score_home=freshness,
                 info_freshness_score_away=freshness,
             )
+            inputs, sharpen_diag = _sharpen_mlb_inputs(
+                inputs,
+                starter_home_feat=starter_home_feat,
+                starter_away_feat=starter_away_feat,
+                home_abbr=str(m.get("home_abbr") or "") or None,
+                rest_days_home=_to_float(context_payload.get("rest_days_home")),
+                rest_days_away=_to_float(context_payload.get("rest_days_away")),
+            )
             prior_conf_home = float(m["lineup_confidence_home"]) if m.get("lineup_confidence_home") is not None else nowcast["home"]
             prior_conf_away = float(m["lineup_confidence_away"]) if m.get("lineup_confidence_away") is not None else nowcast["away"]
             inputs, shock_diag = apply_lineup_shock(
                 inputs,
                 prior_confidence_home=prior_conf_home,
                 prior_confidence_away=prior_conf_away,
+                prior_starter_home=prior_starter_home,
+                prior_starter_away=prior_starter_away,
+                prior_starter_quality_home=float(prior_home_feat.get("starter_quality") or 1.0),
+                prior_starter_quality_away=float(prior_away_feat.get("starter_quality") or 1.0),
             )
+            shock_diag.update(sharpen_diag)
 
             seed_base = _default_projection_seed(inputs.game_id, base_model_version, simulations)
             projection_base = _run_simulation_by_model(
@@ -7503,6 +7639,7 @@ def pull_mlb_historical_odds_densify(
             start_date=start,
             end_date=end,
             max_dates=max(1, int(max_requests)),
+            prioritize_thin=True,
         )
         selected = densify_snapshot_datetimes(
             game_dates,
@@ -7621,6 +7758,7 @@ def pull_mlb_historical_odds_densify(
             "events_persisted": persisted_total,
             "snapshots_inserted": snapshots_total,
             "credits_remaining": credits_remaining,
+            "prioritize_thin": True,
             "dk_first_firewall": True,
             "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
         }
@@ -7767,10 +7905,14 @@ def backfill_mlb_historical_resim(
     simulations: int = 2000,
     model_version: str = DEFAULT_MODEL_VERSION,
     max_games: int = 200,
+    force_resim: bool = False,
+    skip_outcomes_pull: bool = False,
 ) -> Dict[str, Any]:
     """Re-sim completed MLB games so walkforward holdout n can approach ≥120.
 
-    Requires MLB_ALLOW_HISTORICAL_SIM=true. Pulls outcomes first for the window.
+    Requires MLB_ALLOW_HISTORICAL_SIM=true. Pulls outcomes first for the window
+    unless skip_outcomes_pull / force_resim. When force_resim=True, deletes
+    existing projections in-window and re-sims with current PA-sim sharpening.
     """
     if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
         raise ValueError(
@@ -7778,15 +7920,46 @@ def backfill_mlb_historical_resim(
         )
     end = date.fromisoformat(end_date) if end_date else date.today() - timedelta(days=1)
     start = date.fromisoformat(start_date) if start_date else end - timedelta(days=45)
-    outcomes = pull_mlb_outcomes(days_back=max(1, (date.today() - start).days + 2))
+    if skip_outcomes_pull or force_resim:
+        outcomes = {"skipped": True, "reason": "skip_outcomes_pull_or_force_resim"}
+    else:
+        outcomes = pull_mlb_outcomes(days_back=max(1, (date.today() - start).days + 2))
 
     session = SessionLocal()
     simulated = 0
     skipped = 0
+    deleted_prior = 0
     try:
+        if force_resim:
+            deleted = session.execute(
+                text(
+                    """
+                    DELETE FROM mlb_market_projections mp
+                    USING games g
+                    JOIN seasons s ON s.id = g.season_id
+                    JOIN leagues l ON l.id = s.league_id
+                    WHERE mp.game_id = g.id
+                      AND l.code = 'mlb'
+                      AND mp.model_version = :model_version
+                      AND g.game_date BETWEEN :start_date AND :end_date
+                    """
+                ),
+                {"model_version": model_version, "start_date": start, "end_date": end},
+            )
+            deleted_prior = int(deleted.rowcount or 0)
+            session.commit()
+
+        missing_clause = ""
+        if not force_resim:
+            missing_clause = """
+                  AND NOT EXISTS (
+                    SELECT 1 FROM mlb_market_projections mp
+                    WHERE mp.game_id = g.id AND mp.model_version = :model_version
+                  )
+            """
         rows = session.execute(
             text(
-                """
+                f"""
                 SELECT
                   g.id AS game_id,
                   g.game_date,
@@ -7823,7 +7996,8 @@ def backfill_mlb_historical_resim(
                   c.recent_form_index_home,
                   c.recent_form_index_away,
                   c.lineup_strength_index_home,
-                  c.lineup_strength_index_away
+                  c.lineup_strength_index_away,
+                  c.context
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -7833,10 +8007,7 @@ def backfill_mlb_historical_resim(
                 JOIN mlb_market_outcomes mo ON mo.game_id = g.id
                 WHERE l.code = 'mlb'
                   AND g.game_date BETWEEN :start_date AND :end_date
-                  AND NOT EXISTS (
-                    SELECT 1 FROM mlb_market_projections mp
-                    WHERE mp.game_id = g.id AND mp.model_version = :model_version
-                  )
+                  {missing_clause}
                 ORDER BY g.game_date ASC
                 LIMIT :max_games
                 """
@@ -7899,6 +8070,20 @@ def backfill_mlb_historical_resim(
                     bullpen_ip_last3_home=float(m.get("bullpen_ip_last3_home") or 9.0),
                     bullpen_ip_last3_away=float(m.get("bullpen_ip_last3_away") or 9.0),
                 )
+                context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
+                if isinstance(m.get("context"), str):
+                    try:
+                        context_payload = json.loads(m["context"])
+                    except Exception:
+                        context_payload = {}
+                inputs, sharpen_diag = _sharpen_mlb_inputs(
+                    inputs,
+                    starter_home_feat=starter_home_feat,
+                    starter_away_feat=starter_away_feat,
+                    home_abbr=str(m.get("home_abbr") or "") or None,
+                    rest_days_home=_to_float(context_payload.get("rest_days_home")),
+                    rest_days_away=_to_float(context_payload.get("rest_days_away")),
+                )
                 seed = _default_projection_seed(str(m["game_id"]), model_version, simulations)
                 projection = _run_simulation_by_model(
                     inputs,
@@ -7906,6 +8091,7 @@ def backfill_mlb_historical_resim(
                     seed=seed,
                     model_version=model_version,
                 )
+                projection.setdefault("diagnostics", {}).update(sharpen_diag)
                 # Stamp pre-first-pitch so historical densify stays leakage-clean.
                 start_dt = _coerce_datetime_utc(m.get("start_time"))
                 if start_dt is None and m.get("game_date") is not None:
@@ -7986,6 +8172,8 @@ def backfill_mlb_historical_resim(
             "status": "ok",
             "start_date": start.isoformat(),
             "end_date": end.isoformat(),
+            "force_resim": bool(force_resim),
+            "deleted_prior_projections": deleted_prior,
             "outcomes": outcomes,
             "games_selected": len(rows),
             "simulated": simulated,

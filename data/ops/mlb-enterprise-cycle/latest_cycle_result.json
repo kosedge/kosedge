@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-07-24T20:48:16.713652+00:00",
+  "pipeline_run": "mlb_subscription_sharpen_20260724",
+  "credits": {
+    "before": 4988424,
+    "after": 4978119,
+    "used_approx": 10305,
+    "budget_cap": 150000,
+    "under_budget": true
+  },
+  "densify": {
+    "generated_at": "2026-07-24T20:48:16.706032+00:00",
+    "credits_remaining_before": 4988424,
+    "credits_remaining_after": 4978119,
+    "credits_used_approx": 10305,
+    "gap_before": {
+      "proj_out": 530,
+      "missing_open": 190,
+      "missing_close": 336
+    },
+    "gap_after_original_cohort_approx": {
+      "note": "after alt-hour densify before resim",
+      "missing_open": 14,
+      "missing_close": 10,
+      "has_both": 511,
+      "proj_out": 530
+    },
+    "gap_after_final": {
+      "proj_out": 738,
+      "missing_open": 29,
+      "missing_close": 20,
+      "has_both": 695
+    },
+    "policy": "DK primary, FD fill-only; thin-date prioritize; skip-if-fresh; alt open/close hours (23/02/16/12 UTC)",
+    "passes": [
+      "today_live+historical",
+      "pass1_default_hours",
+      "pass2_alt_hours",
+      "pass3_post_resim"
+    ],
+    "today_slate": {
+      "status": "ok",
+      "events": 30,
+      "snapshots_inserted": 174,
+      "events_persisted": 30,
+      "credits_remaining": 4984335,
+      "bookmakers": "draftkings,fanduel"
+    }
+  },
+  "resim": {
+    "games_simulated": 208,
+    "window": "2026-06-01..2026-07-23"
+  },
+  "walkforward": {
+    "walkforward_n": 615,
+    "fold_count": 27,
+    "base_brier_ml": 0.248857,
+    "calibrated_brier_ml": 0.254895,
+    "base_mae_total_runs": 3.5605,
+    "calibrated_mae_total_runs": 3.6016,
+    "leakage_violations": 0,
+    "holdout_n_ok": true,
+    "clv_count": 764,
+    "avg_ml_clv": 0.0241,
+    "avg_total_clv": 0.24868,
+    "avg_spread_clv": 0.19106,
+    "projections": 779,
+    "outcomes": 761
+  },
+  "before": {
+    "walkforward_n": 27.0,
+    "brier_ml": 0.248708,
+    "mae_total_runs": 4.2816,
+    "calendar_days_covered": 3.0
+  }
+}

@@ -14,6 +14,48 @@ class _DummyResponse:
         return self._payload
 
 
+def test_extract_probable_pitchers_from_live_feed() -> None:
+    payload = {
+        "gameData": {
+            "probablePitchers": {
+                "home": {"fullName": "Yoshinobu Yamamoto"},
+                "away": {"fullName": "Joe Musgrove"},
+            }
+        }
+    }
+    out = mlb_data.extract_probable_pitchers_from_live_feed(payload)
+    assert out["home"] == "Yoshinobu Yamamoto"
+    assert out["away"] == "Joe Musgrove"
+
+
+def test_fetch_game_lineup_features_includes_probable_pitchers(monkeypatch) -> None:
+    mlb_data.fetch_game_lineup_features.cache_clear()
+    payload = {
+        "gameData": {
+            "probablePitchers": {
+                "home": {"fullName": "Gerrit Cole"},
+                "away": {"fullName": "Freddy Peralta"},
+            }
+        },
+        "liveData": {
+            "boxscore": {
+                "teams": {
+                    "home": {"players": {}},
+                    "away": {"players": {}},
+                }
+            }
+        },
+    }
+    monkeypatch.setattr(
+        mlb_data.requests,
+        "get",
+        lambda *args, **kwargs: _DummyResponse(payload),
+    )
+    out = mlb_data.fetch_game_lineup_features("777")
+    assert out["home"]["probable_pitcher"] == "Gerrit Cole"
+    assert out["away"]["probable_pitcher"] == "Freddy Peralta"
+
+
 def test_fetch_mlb_schedule_parses_expected_fields(monkeypatch) -> None:
     payload = {
         "dates": [

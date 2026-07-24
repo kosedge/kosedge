@@ -58,6 +58,13 @@ class MlbGameInputs:
     starter_gb_factor_away: float = 1.0
     bullpen_quality_home: float = 1.0
     bullpen_quality_away: float = 1.0
+    # Enterprise sharpening knobs (defaults keep prior behavior when unset).
+    starter_firmness_home: float = 0.85
+    starter_firmness_away: float = 0.85
+    rest_days_home: float = 1.0
+    rest_days_away: float = 1.0
+    weather_reliability: float = 1.0
+    uncertainty_total_mul: float = 1.0
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -170,7 +177,14 @@ def _environment_run_multiplier(inputs: MlbGameInputs) -> float:
     # Crude proxy: quartering/out-to-center winds (around 120-240 deg) slightly increase runs.
     dir_mul = 1.02 if 120.0 <= wind_dir <= 240.0 else 0.99
     ump_mul = _clamp(inputs.umpire_run_factor, 0.94, 1.06)
-    return _clamp(park * temp_mul * wind_mul * hum_mul * dir_mul * ump_mul, 0.70, 1.35)
+    raw = park * temp_mul * wind_mul * hum_mul * dir_mul * ump_mul
+    # Dome / missing-weather: blend toward park-only so Open-Meteo noise cannot dominate.
+    reliability = _clamp(float(getattr(inputs, "weather_reliability", 1.0) or 1.0), 0.0, 1.0)
+    if reliability < 0.999:
+        weather_portion = raw / max(park, 1e-6)
+        blended = park * (weather_portion**reliability)
+        return _clamp(blended, 0.70, 1.35)
+    return _clamp(raw, 0.70, 1.35)
 
 
 def _sample_walkoff_half_inning(rng: random.Random, lam: float, runs_needed: int) -> tuple[int, bool]:
@@ -261,17 +275,31 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         inputs.starter_bb_factor_away,
         inputs.starter_gb_factor_away,
     )
-    home_starter_run_factor = _clamp(inputs.starter_quality_home * home_starter_shape, 0.65, 1.35)
-    away_starter_run_factor = _clamp(inputs.starter_quality_away * away_starter_shape, 0.65, 1.35)
+    # Firmness shrinks extreme starter edges toward league average without mean-shifting ML.
+    firm_home = _clamp(float(getattr(inputs, "starter_firmness_home", 0.85) or 0.85), 0.35, 1.0)
+    firm_away = _clamp(float(getattr(inputs, "starter_firmness_away", 0.85) or 0.85), 0.35, 1.0)
+    home_starter_effective = 1.0 + (inputs.starter_quality_home * home_starter_shape - 1.0) * (
+        0.55 + 0.45 * firm_home
+    )
+    away_starter_effective = 1.0 + (inputs.starter_quality_away * away_starter_shape - 1.0) * (
+        0.55 + 0.45 * firm_away
+    )
+    home_starter_run_factor = _clamp(home_starter_effective, 0.65, 1.35)
+    away_starter_run_factor = _clamp(away_starter_effective, 0.65, 1.35)
 
     # Opponent run suppression from starter + bullpen quality.
+    # Low firmness weights bullpen more (TBD SP ⇒ less starter-driven F5/FG split).
+    home_starter_w = _clamp(0.55 + 0.20 * firm_home, 0.50, 0.75)
+    away_starter_w = _clamp(0.55 + 0.20 * firm_away, 0.50, 0.75)
     home_allowed_factor = _clamp(
-        0.65 * home_starter_run_factor + 0.35 * inputs.bullpen_quality_home,
+        home_starter_w * home_starter_run_factor
+        + (1.0 - home_starter_w) * inputs.bullpen_quality_home,
         0.70,
         1.35,
     )
     away_allowed_factor = _clamp(
-        0.65 * away_starter_run_factor + 0.35 * inputs.bullpen_quality_away,
+        away_starter_w * away_starter_run_factor
+        + (1.0 - away_starter_w) * inputs.bullpen_quality_away,
         0.70,
         1.35,
     )
@@ -342,11 +370,16 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         starter_facing=True,
     )
 
+    uncertainty_mul = _clamp(float(getattr(inputs, "uncertainty_total_mul", 1.0) or 1.0), 1.0, 1.04)
     full_home = _clamp(
-        base_full_game * offense_home_full * away_allowed_factor * env_mul, 2.0, 8.8
+        base_full_game * offense_home_full * away_allowed_factor * env_mul * uncertainty_mul,
+        2.0,
+        8.8,
     )
     full_away = _clamp(
-        base_full_game * offense_away_full * home_allowed_factor * env_mul, 2.0, 8.8
+        base_full_game * offense_away_full * home_allowed_factor * env_mul * uncertainty_mul,
+        2.0,
+        8.8,
     )
 
     # F5 is starter-dominant; weight starter quality more heavily.
@@ -354,7 +387,8 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         (base_full_game * 5.0 / 9.0)
         * offense_home_f5
         * _clamp(away_starter_run_factor, 0.70, 1.35)
-        * env_mul,
+        * env_mul
+        * uncertainty_mul,
         0.8,
         5.2,
     )
@@ -362,7 +396,8 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         (base_full_game * 5.0 / 9.0)
         * offense_away_f5
         * _clamp(home_starter_run_factor, 0.70, 1.35)
-        * env_mul,
+        * env_mul
+        * uncertainty_mul,
         0.8,
         5.2,
     )

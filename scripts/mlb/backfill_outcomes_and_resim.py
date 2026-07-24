@@ -8,7 +8,7 @@ Requires:
 Usage:
   MLB_ALLOW_HISTORICAL_SIM=true PYTHONPATH=services/model-service \
     python scripts/mlb/backfill_outcomes_and_resim.py \
-      --start-date 2025-04-01 --end-date 2025-06-30 --max-games 250
+      --start-date 2026-05-20 --end-date 2026-07-17 --max-games 400 --force-resim
 """
 
 from __future__ import annotations
@@ -35,6 +35,16 @@ def main() -> int:
     ap.add_argument("--max-games", type=int, default=200)
     ap.add_argument("--simulations", type=int, default=2000)
     ap.add_argument("--model-version", default="mlb-v1-pa-sim")
+    ap.add_argument(
+        "--force-resim",
+        action="store_true",
+        help="Delete existing projections in-window and re-sim with current PA-sim features",
+    )
+    ap.add_argument(
+        "--skip-outcomes-pull",
+        action="store_true",
+        help="Skip MLB Stats API outcomes pull (use existing mlb_market_outcomes)",
+    )
     args = ap.parse_args()
 
     result = backfill_mlb_historical_resim(
@@ -43,6 +53,8 @@ def main() -> int:
         max_games=args.max_games,
         simulations=args.simulations,
         model_version=args.model_version,
+        force_resim=bool(args.force_resim),
+        skip_outcomes_pull=bool(args.skip_outcomes_pull or args.force_resim),
     )
     print(json.dumps(result, indent=2, default=str))
     holdout_n = int((result.get("holdout") or {}).get("sample_size") or 0)

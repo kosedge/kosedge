@@ -1,0 +1,36 @@
+{
+  "status": "ok",
+  "start_date": "2026-06-01",
+  "end_date": "2026-07-23",
+  "outcomes": {
+    "outcomes_upserted": 553,
+    "schedule_rows": 712,
+    "games_ensured": 685
+  },
+  "games_selected": 208,
+  "simulated": 208,
+  "skipped": 0,
+  "calibration_sample_size": 590,
+  "calibration": {
+    "sample_size": 590.0,
+    "brier_ml": 0.249631,
+    "mae_total_runs": 3.5519,
+    "calendar_days_covered": 54.0,
+    "last_game_date": "2026-07-23"
+  },
+  "holdout": {
+    "sample_size": 494,
+    "fold_count": 16,
+    "base_brier_ml": 0.251282,
+    "calibrated_brier_ml": 0.25124,
+    "base_mae_total_runs": 3.5975,
+    "calibrated_mae_total_runs": 3.5695,
+    "brier_improvement": 4.2e-05,
+    "mae_improvement": 0.028,
+    "leakage_violations": 0
+  },
+  "holdout_target_n": 120,
+  "holdout_n_ok": true,
+  "props_play_stake_eligible": false
+}
+holdout_n=494 target=120 ok=True

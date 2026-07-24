@@ -1,0 +1,30 @@
+{
+  "title": "MLB enterprise unused holdout (pre-registered)",
+  "registered_at": "2026-07-24T20:00:00Z",
+  "status": "frozen_unused",
+  "purpose": "Stake marketing for moneyline / totals / run-line only after this unused slice is evaluated and passes. Player props remain research-only (PLAY_STAKE_ELIGIBLE=false) until a separate props holdout clears.",
+  "local_db_coverage_note": "Densify / holdout artifacts on this workstation cover roughly 2026-05-25 through 2026-07-23 (mid-July All-Star gap). May–mid-June densify walkforward training regimes must not retune on the frozen late-July window.",
+  "forbidden_for": ["train", "tune", "calibration_fit"],
+  "allowed_for": ["evaluation", "stake_gate"],
+  "windows": [
+    {
+      "id": "late_july_2026_frozen",
+      "start_date": "2026-07-18",
+      "end_date": "2026-07-23",
+      "role": "unused_evaluation",
+      "notes": "Late-July slice after May–mid-June densify train regimes. Honesty: one exploratory densify walkforward fold included 2026-07-23 (n=5) — treat that as a contaminated peek; do not retune on this window. Re-evaluate cleanly with train/tune exclusion enforced."
+    },
+    {
+      "id": "post_july_2026_reserved",
+      "start_date": "2026-07-25",
+      "end_date": "2026-08-10",
+      "role": "reserved_future",
+      "notes": "Reserved future window. Not populated in the May–Jul 2026 local densify DB as of registration; becomes the primary unused eval once completed games land."
+    }
+  ],
+  "stake_policy": {
+    "game_lines_stake_marketing": "only_after_unused_holdout_pass",
+    "props_play_stake_eligible": false,
+    "min_unused_eval_n_target": 120
+  }
+}

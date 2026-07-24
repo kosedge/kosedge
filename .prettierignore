@@ -30,3 +30,7 @@ apps/android-odds-widget/local.properties
 # Large JSON data (optional - uncomment if format check still times out)
 # apps/web/data/processed/*.json
 # apps/web/data/raw/odds/**/*.json
+
+# Ops artifacts / reports (not source; keep CI format check focused)
+data/
+services/model-service/data/

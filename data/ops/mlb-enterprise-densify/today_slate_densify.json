@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-07-24T20:26:59.617389+00:00",
+  "live_mlb": {
+    "status": "ok",
+    "events": 30,
+    "snapshots_inserted": 174,
+    "events_persisted": 30,
+    "credits_remaining": 4984335,
+    "bookmakers": "draftkings,fanduel"
+  },
+  "historical_today": {
+    "close": {
+      "status": "ok",
+      "sport_key": "baseball_mlb",
+      "bookmakers": [
+        "draftkings",
+        "fanduel"
+      ],
+      "preferred_book": "draftkings",
+      "markets": [
+        "h2h",
+        "spreads",
+        "totals"
+      ],
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "candidate_dates": 1,
+      "requests_attempted": 1,
+      "requests_skipped_cached": 0,
+      "request_errors": 0,
+      "events_fetched": 15,
+      "events_persisted": 15,
+      "snapshots_inserted": 90,
+      "credits_remaining": 4984305,
+      "prioritize_thin": true,
+      "dk_first_firewall": true,
+      "props_play_stake_eligible": false
+    },
+    "open": {
+      "status": "ok",
+      "sport_key": "baseball_mlb",
+      "bookmakers": [
+        "draftkings",
+        "fanduel"
+      ],
+      "preferred_book": "draftkings",
+      "markets": [
+        "h2h",
+        "spreads",
+        "totals"
+      ],
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "candidate_dates": 1,
+      "requests_attempted": 1,
+      "requests_skipped_cached": 0,
+      "request_errors": 0,
+      "events_fetched": 5,
+      "events_persisted": 5,
+      "snapshots_inserted": 30,
+      "credits_remaining": 4984275,
+      "prioritize_thin": true,
+      "dk_first_firewall": true,
+      "props_play_stake_eligible": false
+    }
+  }
+}

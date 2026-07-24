@@ -43,13 +43,126 @@ def _american_implied_prob(price: Optional[int]) -> Optional[float]:
     return 100.0 / (american + 100.0)
 
 
+
+def rank_thin_densify_dates(
+    scored_rows: Sequence[tuple],
+    *,
+    max_dates: int,
+) -> List[date]:
+    """Rank (game_date, thin_score) rows for densify targeting (tests + callers)."""
+    limit = max(1, int(max_dates))
+    cleaned: List[tuple[date, int]] = []
+    for row in scored_rows:
+        if not row:
+            continue
+        d, score = row[0], int(row[1] or 0)
+        if isinstance(d, date) and score > 0:
+            cleaned.append((d, score))
+    cleaned.sort(key=lambda item: (-item[1], item[0]))
+    return [d for d, _ in cleaned[:limit]]
+
+
 def mlb_game_dates_for_densify(
     session: Any,
     *,
     start_date: date,
     end_date: date,
     max_dates: int,
+    prioritize_thin: bool = True,
 ) -> List[date]:
+    """Return MLB game dates to densify, thin-first when requested.
+
+    Thin dates: games already have mlb_market_projections + mlb_market_outcomes
+    but lack open-ish (<= start-6h) or close-ish (>= start-3h) odds history.
+    Falls back to remaining slate dates (ASC) to fill max_dates.
+    """
+    limit = max(1, int(max_dates))
+    if prioritize_thin:
+        thin_rows = session.execute(
+            text(
+                """
+                WITH base AS (
+                  SELECT g.id, g.game_date, g.start_time
+                  FROM games g
+                  JOIN seasons s ON s.id = g.season_id
+                  JOIN leagues l ON l.id = s.league_id
+                  WHERE l.code = 'mlb'
+                    AND g.game_date BETWEEN :start_date AND :end_date
+                    AND EXISTS (
+                      SELECT 1 FROM mlb_market_projections p WHERE p.game_id = g.id
+                    )
+                    AND EXISTS (
+                      SELECT 1 FROM mlb_market_outcomes o WHERE o.game_id = g.id
+                    )
+                ),
+                odds AS (
+                  SELECT os.game_id,
+                         MIN(os.captured_at) AS first_c,
+                         MAX(os.captured_at) AS last_c
+                  FROM odds_snapshots os
+                  WHERE os.game_id IN (SELECT id FROM base)
+                  GROUP BY os.game_id
+                ),
+                scored AS (
+                  SELECT
+                    b.game_date,
+                    CASE
+                      WHEN o.game_id IS NULL
+                        OR NOT (
+                          o.first_c <= COALESCE(b.start_time, b.game_date::timestamptz)
+                            - INTERVAL '6 hours'
+                        )
+                      THEN 1 ELSE 0
+                    END AS miss_open,
+                    CASE
+                      WHEN o.game_id IS NULL
+                        OR NOT (
+                          o.last_c >= COALESCE(b.start_time, b.game_date::timestamptz)
+                            - INTERVAL '3 hours'
+                        )
+                      THEN 1 ELSE 0
+                    END AS miss_close
+                  FROM base b
+                  LEFT JOIN odds o ON o.game_id = b.id
+                )
+                SELECT game_date,
+                       SUM(miss_open + miss_close) AS thin_score
+                FROM scored
+                GROUP BY game_date
+                HAVING SUM(miss_open + miss_close) > 0
+                ORDER BY thin_score DESC, game_date ASC
+                LIMIT :limit
+                """
+            ),
+            {"start_date": start_date, "end_date": end_date, "limit": limit},
+        ).fetchall()
+        dates = [r[0] for r in thin_rows if isinstance(r[0], date)]
+        if len(dates) >= limit:
+            return dates[:limit]
+        taken = set(dates)
+        fill_rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT g.game_date
+                FROM games g
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                WHERE l.code = 'mlb'
+                  AND g.game_date BETWEEN :start_date AND :end_date
+                ORDER BY g.game_date ASC
+                """
+            ),
+            {"start_date": start_date, "end_date": end_date},
+        ).fetchall()
+        for r in fill_rows:
+            d = r[0]
+            if isinstance(d, date) and d not in taken:
+                dates.append(d)
+                taken.add(d)
+                if len(dates) >= limit:
+                    break
+        return dates[:limit]
+
     rows = session.execute(
         text(
             """
@@ -65,7 +178,7 @@ def mlb_game_dates_for_densify(
         {"start_date": start_date, "end_date": end_date},
     ).fetchall()
     dates = [r[0] for r in rows if isinstance(r[0], date)]
-    return dates[: max(1, int(max_dates))]
+    return dates[:limit]
 
 
 def persist_mlb_densify_run(

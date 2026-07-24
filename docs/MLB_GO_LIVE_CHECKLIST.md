@@ -9,6 +9,18 @@
 - [x] MLB-native totals calibration bounds (fixes NFL 24–66 clamp)
 - [x] Props `PLAY_STAKE_ELIGIBLE=false`
 - [x] Scripts under `scripts/mlb/`
+- [x] Nowcast SP/lineup shock reprice + shock diagnostics on audit
+- [x] Pre-registered unused holdout registry (`unused_holdout_registry.json`)
+      excluded from walkforward train / promotion tune
+- [x] PA-sim feature sharpening (firmness / rest / platoon / bullpen / dome weather)
+- [x] Thin-first densify targeting + evening-close / noon-open snapshot passes
+
+### Stake gate (not yet cleared)
+
+- [ ] Unused holdout eval pass (frozen `2026-07-18`–`23`; reserved `2026-07-25`–`08-10`) before any game-line stake marketing — local unused eval n≈58 today
+- [x] Props remain research-only (`PLAY_STAKE_ELIGIBLE=false`)
+- [x] Local sprint gates: walkforward n≥120, MAE≤3.5, positive densified CLV, `publish_ready_ops=true` (see `subscription_sharpen_sprint_report.json`)
+- [ ] Merge `mlb-subscription-sharpen` → `deploy-vercel` to Railway-deploy sharpened PA-sim
 
 ## Prod deploy steps (Railway + warehouse)
 
@@ -39,16 +51,16 @@ SELECT play_stake_eligible FROM mlb_prop_stake_policy WHERE market_family = 'pla
 
 Set / confirm:
 
-| Variable | Value |
-|---|---|
-| `DATABASE_URL` | Prod warehouse |
-| `REDIS_URL` / `CELERY_BROKER_URL` | Redis |
-| `ODDS_API_KEY` | Shared Odds API key |
-| `MLB_ODDS_PREFERRED_BOOK` | `draftkings` |
-| `MLB_DENSIFY_BOOKMAKERS` | `draftkings,fanduel` |
-| `MLB_ALLOW_HISTORICAL_SIM` | `true` only while running holdout densify; return to `false` after |
-| `MLB_RUN_DAILY_CLV_ATTRIBUTION` | `true` |
-| `MLB_BASE_MODEL_VERSION` | `mlb-v1-pa-sim` |
+| Variable                          | Value                                                              |
+| --------------------------------- | ------------------------------------------------------------------ |
+| `DATABASE_URL`                    | Prod warehouse                                                     |
+| `REDIS_URL` / `CELERY_BROKER_URL` | Redis                                                              |
+| `ODDS_API_KEY`                    | Shared Odds API key                                                |
+| `MLB_ODDS_PREFERRED_BOOK`         | `draftkings`                                                       |
+| `MLB_DENSIFY_BOOKMAKERS`          | `draftkings,fanduel`                                               |
+| `MLB_ALLOW_HISTORICAL_SIM`        | `true` only while running holdout densify; return to `false` after |
+| `MLB_RUN_DAILY_CLV_ATTRIBUTION`   | `true`                                                             |
+| `MLB_BASE_MODEL_VERSION`          | `mlb-v1-pa-sim`                                                    |
 
 Deploy path (unchanged): GitHub Actions on `deploy-vercel` when
 `services/model-service/**` changes, or:
@@ -75,15 +87,33 @@ PYTHONPATH=services/model-service \
   python scripts/mlb/run_holdout_walkforward.py --lookback-days 180 --with-quality
 ```
 
-Pass criteria: `holdout.sample_size >= 120`, calibrated Brier/MAE not worse than base
-beyond promotion guardrails, `props_play_stake_eligible=false`.
+Pass criteria: densify/walkforward `sample_size >= 120`, calibrated Brier/MAE not
+worse than base beyond promotion guardrails, `props_play_stake_eligible=false`.
+
+### 3b) Unused holdout stake gate (required before marketing)
+
+Pre-registered windows live in
+`data/ops/mlb-enterprise-holdout/unused_holdout_registry.json`
+(loader: `mlb_unused_holdout.py`):
+
+- **Frozen eval:** 2026-07-18 → 2026-07-23 (exists in local May–Jul densify DB)
+- **Reserved future:** 2026-07-25 → 2026-08-10 (label only until warehouse has games)
+
+Rules:
+
+1. Train / tune / calibration fit **must not** use unused dates (enforced in
+   walkforward + promotion).
+2. **Stake marketing** for ML / totals / run-line only after unused-slice eval
+   passes (target n ≥ 120). Densify walkforward alone is not a stake green light.
+3. Props remain research-only (`PLAY_STAKE_ELIGIBLE=false`) until a separate props
+   unused holdout clears — do not imply paid +EV prop cards.
 
 ### 4) Verify API
 
-1. `$MODEL_SERVICE_URL/health` → ok  
-2. `$MODEL_SERVICE_URL/mlb/fair-lines` → lines with spread fields  
-3. `$MODEL_SERVICE_URL/mlb/metrics/clv` → includes `avg_spread_clv`  
-4. `$MODEL_SERVICE_URL/mlb/ops/board-health` → health payload  
+1. `$MODEL_SERVICE_URL/health` → ok
+2. `$MODEL_SERVICE_URL/mlb/fair-lines` → lines with spread fields
+3. `$MODEL_SERVICE_URL/mlb/metrics/clv` → includes `avg_spread_clv`
+4. `$MODEL_SERVICE_URL/mlb/ops/board-health` → health payload
 5. `$MODEL_SERVICE_URL/mlb/ops/go-no-go` → sample_size trending toward 120+
 
 ## Blockers if credentials missing
