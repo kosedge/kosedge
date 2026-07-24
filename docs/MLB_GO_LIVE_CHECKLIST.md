@@ -11,7 +11,7 @@
 - [x] Scripts under `scripts/mlb/`
 - [x] Nowcast SP/lineup shock reprice + shock diagnostics on audit
 - [x] Pre-registered unused holdout registry (`unused_holdout_registry.json`)
-  excluded from walkforward train / promotion tune
+      excluded from walkforward train / promotion tune
 - [x] PA-sim feature sharpening (firmness / rest / platoon / bullpen / dome weather)
 - [x] Thin-first densify targeting + evening-close / noon-open snapshot passes
 
