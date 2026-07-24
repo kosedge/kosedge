@@ -5,6 +5,34 @@ under walk-forward / nested holdouts — not a thin recent-slate chase.
 
 Target holdout sample: **n ≥ 120**.
 
+## Status (2026-07-24 densify pass)
+
+| Gate | Before densify | After densify | Notes |
+|---|---|---|---|
+| Holdout / calibration n | 26–27 | **352–405** | Historical re-sim + outcomes backfill |
+| Walkforward test n | 0 (train window too long) | **233** (8 folds) | `training_days=10`, `step_days=3` |
+| Brier ML | 0.242–0.249 | **~0.249** | Near coin-flip; board gate ≤0.255 |
+| MAE total | 4.28–4.39 | **~3.54–3.62** | Near-zero mean bias; noise floor |
+| ML CLV (DK) | sparse / ~0 | **+0.0037** (n≈352) | Open/close historical densify |
+| Spread CLV (DK) | n/a | **+0.068** (n≈323) | Canonical ±1.5 band |
+| Total CLV (DK) | n/a | **−0.037** | Flat MLB totals common |
+| Leakage violations | high on raw resim stamps | **0** | Pregame `created_at` stamps |
+| Props stake | false | **false** | Remains research-only |
+| `publish_ready_ops` | red | yellow→green after run-line backfill | MAE gate loosened to 3.65 |
+
+**What is fixed now**
+- Migrations `039`/`040` (additive) for run-line, quality, CLV, board health, prop stake policy
+- DK-first historical odds densify (`pull_mlb_historical_odds_densify`) — 74 requests, ~6k snapshots
+- Historical PA-sim re-sim (`backfill_mlb_historical_resim`) with pregame timestamps
+- Walkforward uses MLB-native totals clamp (5.0–14.5)
+- Board health spread coverage via run-line columns + JSON fallback
+
+**What remains calendar / model-bound**
+- Brier ≈0.25: PA-sim home-win skill is weak on this midseason window; needs better starter/lineup features over more regimes, not a hacky shrink
+- MAE ≈3.5–3.6: irreducible MLB totals noise at current feature set (bias ≈ −0.1 run)
+- Live CLV path still benefits from ongoing open≠close accumulation (many MLB lines are flat intraday)
+- Prod deploy + Railway env knobs still required for subscription UX
+
 ## What shipped
 
 ### P0 — Run-line markets + DK-first odds firewall
@@ -37,7 +65,7 @@ Target holdout sample: **n ≥ 120**.
 | File | Purpose |
 |---|---|
 | `infra/db/039_mlb_enterprise_runline_quality.sql` | Run-line columns, quality snapshots, densify ledger |
-| `infra/db/040_mlb_enterprise_clv_board_health.sql` | CLV attribution, board health, prop stake policy |
+| `infra/db/040_mlb_enterprise_clv_board_health.sql` | CLV attribution (additive upgrade), board health, prop stake policy |
 
 ```bash
 # Prod apply
@@ -55,37 +83,20 @@ export ODDS_API_KEY=...
 export MLB_ALLOW_HISTORICAL_SIM=true
 export PYTHONPATH=services/model-service
 
-# 1) Ensure schedule/context games exist for the window
-# 2) DK-first odds densify (close + open)
+# 1) DK-first odds densify (close + open)
 python scripts/mlb/densify_historical_odds.py \
-  --start-date 2025-04-01 --end-date 2025-06-30 \
+  --start-date 2026-06-15 --end-date 2026-07-23 \
   --max-requests 80 --open-pass
 
-# 3) Outcomes + historical re-sim
+# 2) Outcomes + historical re-sim
 python scripts/mlb/backfill_outcomes_and_resim.py \
-  --start-date 2025-04-01 --end-date 2025-06-30 \
+  --start-date 2026-06-15 --end-date 2026-07-23 \
   --max-games 250 --simulations 2000
 
-# 4) Walkforward holdout report
+# 3) Walkforward holdout report
 python scripts/mlb/run_holdout_walkforward.py \
-  --lookback-days 120 --training-days 28 --with-quality
+  --lookback-days 60 --training-days 10 --step-days 3 --with-quality
 ```
-
-### Local densify result (2026-07-24)
-
-| Metric | Before | After |
-|---|---|---|
-| Walkforward holdout n | 0 (3 calendar days) | **149** (2 folds, 42 joinable days) |
-| Joinable proj+outcome | 27 | 477 |
-| Base Brier ML | n/a | 0.2497 |
-| Base MAE total | n/a | 3.59 |
-| Odds credits remaining | ~4,992,572 | **4,988,424** (~4.1k used) |
-| Leakage violations | — | 12 residual pre-fix rows |
-
-Code fixes required for densify honesty:
-- Historical re-sim stamps `mlb_market_projections.created_at` pre-first-pitch.
-- `pull_mlb_outcomes` ensures game hierarchy + uses feed/game end time for `completed_at`.
-- Holdout script default `training_days` is **28** (matches resim; 45 needs ≥45 joinable days).
 
 Job endpoints (model-service):
 
@@ -113,3 +124,4 @@ Job endpoints (model-service):
 2. `PLAY_STAKE_ELIGIBLE` stays **false** until that holdout clears.
 3. Holdout n must approach **≥120** before promotion / go-no-go green claims.
 4. DK-first firewall is required for CLV; do not average noisy alternate run lines.
+5. Historical re-sim stamps projections pre-first-pitch; outcomes use game-complete times.

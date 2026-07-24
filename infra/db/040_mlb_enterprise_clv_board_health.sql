@@ -21,6 +21,31 @@ CREATE TABLE IF NOT EXISTS mlb_clv_attribution (
   UNIQUE (game_id, model_version, market_code)
 );
 
+-- Additive upgrades for pre-enterprise mlb_clv_attribution schemas.
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS preferred_book text;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS open_price_home int;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS close_price_home int;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS open_price_away int;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS close_price_away int;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS model_side text;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS home_team_won boolean;
+ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS payload jsonb NOT NULL DEFAULT '{}'::jsonb;
+ALTER TABLE mlb_clv_attribution ALTER COLUMN projection_id DROP NOT NULL;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'mlb_clv_attribution_game_id_model_version_market_code_key'
+  ) THEN
+    ALTER TABLE mlb_clv_attribution
+      ADD CONSTRAINT mlb_clv_attribution_game_id_model_version_market_code_key
+      UNIQUE (game_id, model_version, market_code);
+  END IF;
+EXCEPTION WHEN others THEN
+  -- Unique may already exist under another name; ignore.
+  NULL;
+END $$;
+
 CREATE INDEX IF NOT EXISTS idx_mlb_clv_attribution_lookup
   ON mlb_clv_attribution (model_version, market_code, created_at DESC);
 

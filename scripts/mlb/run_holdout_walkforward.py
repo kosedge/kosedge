@@ -24,10 +24,10 @@ from src.tasks import run_mlb_quality_grading, run_mlb_walkforward_backtest  # n
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="MLB holdout walkforward report")
-    ap.add_argument("--lookback-days", type=int, default=180)
-    # 28 matches backfill_mlb_historical_resim; 45 needs ~45+ calendar days of joinable data.
-    ap.add_argument("--training-days", type=int, default=28)
-    ap.add_argument("--step-days", type=int, default=7)
+    ap.add_argument("--lookback-days", type=int, default=60)
+    # Midseason densify windows often have ~20–30 slate days; 28+ yields zero folds.
+    ap.add_argument("--training-days", type=int, default=10)
+    ap.add_argument("--step-days", type=int, default=3)
     ap.add_argument("--model-version", default="mlb-v1-pa-sim")
     ap.add_argument("--with-quality", action="store_true")
     args = ap.parse_args()
