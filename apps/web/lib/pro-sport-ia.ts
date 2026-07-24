@@ -1,4 +1,5 @@
 import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { supportsPropsFantasy } from "@/lib/sports";
 
 export type OverviewContent = {
@@ -42,8 +43,9 @@ const DEFAULT_OVERVIEW_CONTENT: OverviewContent = {
   articleEmpty:
     "Article highlights populate as games ingest into the board pipeline. Premium placeholders are shown until feed coverage is complete.",
   sectionTitles: {
-    market: "Market Edges & Projections",
+    market: "Betting Desk",
     props: "Props & Fantasy Snapshot",
+    intel: "League Intel",
   },
 };
 
@@ -70,58 +72,61 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
     slateCta: "Open weekly slate",
     articleToneBadge: "CFB analyst desk",
     sectionTitles: {
-      market: "Market Edges & Tempo Signals",
+      market: "Betting Desk",
       props: "Props & Fantasy (Data Pending)",
+      intel: "League Intel",
     },
   },
   mlb: {
     heroBadge: "Pro MLB intelligence hub",
     heroSummary:
-      "MLB premium workflow for starter and bullpen context, market edges, and run-environment-aware matchup briefs.",
+      "MLB premium workflow for the betting desk (Fair Lines → Edges → Run Line), starter and bullpen context, and run-environment-aware matchup briefs.",
     articleToneBadge: "MLB analyst desk",
     sectionTitles: {
-      market: "Market Edges & Run Environment",
-      props: "Props & Fantasy Snapshot",
+      market: "Betting Desk",
+      props: "Props Snapshot (Stake Gate Off)",
+      intel: "League Intel",
     },
   },
   nhl: {
     heroBadge: "Pro NHL intelligence hub",
     heroSummary:
-      "NHL premium workflow for goalie confirmation, five-on-five context, and market-to-model execution clarity.",
+      "NHL premium workflow for the betting desk (Fair Lines → Edges → Goalie Desk), five-on-five context, and market-to-model execution clarity.",
     articleToneBadge: "NHL analyst desk",
     sectionTitles: {
-      market: "Market Edges & Goalie Context",
-      props: "Props & Fantasy Snapshot",
+      market: "Betting Desk",
+      intel: "League Intel",
     },
   },
   nba: {
     heroBadge: "Pro NBA intelligence hub",
     heroSummary:
-      "NBA premium workflow for availability-driven pricing, pace environments, and matchup-level article context.",
+      "NBA premium workflow for the betting desk (Fair Lines → Edges → Props), availability-driven pricing, pace environments, and matchup-level article context.",
     articleToneBadge: "NBA analyst desk",
     sectionTitles: {
-      market: "Market Edges & Rotation Signals",
-      props: "Props & Fantasy Snapshot",
+      market: "Betting Desk",
+      intel: "League Intel",
     },
   },
   wnba: {
     heroBadge: "Pro WNBA intelligence hub",
     heroSummary:
-      "WNBA premium workflow for usage concentration, travel context, and market-aware matchup briefs.",
+      "WNBA premium workflow for the betting desk (Fair Lines → Edges → Props), usage concentration, travel context, and market-aware matchup briefs.",
     articleToneBadge: "WNBA analyst desk",
     sectionTitles: {
-      market: "Market Edges & Rotation Signals",
-      props: "Props & Fantasy Snapshot",
+      market: "Betting Desk",
+      intel: "League Intel",
     },
   },
   ncaam: {
     heroBadge: "Pro CBB intelligence hub",
     heroSummary:
-      "College basketball workflow for tempo and variance context, model edge translation, and disciplined game-to-game execution.",
+      "College basketball workflow for the betting desk (Fair Lines → Edges → Tempo), variance context, model edge translation, and disciplined game-to-game execution.",
     articleToneBadge: "CBB analyst desk",
     sectionTitles: {
-      market: "Market Edges & Tempo Signals",
+      market: "Betting Desk",
       props: "Props & Fantasy (Data Pending)",
+      intel: "League Intel",
     },
   },
 };
@@ -157,14 +162,46 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
     ];
   }
 
+  if (sportKey === "nfl") {
+    return [
+      {
+        href: "/pro/nfl/props",
+        label: "Player props board",
+        hint: "Model mean vs line, fair odds, and confidence — market edges when books join.",
+        premium: true,
+        status: "active",
+      },
+      {
+        href: "/pro/props-center",
+        label: "Cross-sport props center",
+        hint: "Portfolio-style scan across supported pro leagues.",
+        status: "active",
+      },
+    ];
+  }
+
+  if (sportKey === "mlb") {
+    return [
+      {
+        label: "Player props board",
+        hint: "MLB props models exist server-side; play-stake eligibility is gated off until the soft-launch bar clears.",
+        status: "placeholder",
+        premium: true,
+      },
+      {
+        href: "/pro/props-center",
+        label: "Cross-sport props center",
+        hint: "Portfolio-style scan across supported pro leagues.",
+        status: "active",
+      },
+    ];
+  }
+
   return [
     {
-      href: sportKey === "nfl" ? "/pro/nfl/props" : `${base}/props`,
-      label: sportKey === "nfl" ? "Player props board" : "Sport props board",
-      hint:
-        sportKey === "nfl"
-          ? "Model mean vs line, fair odds, and confidence — market edges when books join."
-          : "Player and team prop views scoped to this sport.",
+      href: `${base}/props`,
+      label: "Sport props board",
+      hint: "Player and team prop views scoped to this sport — board shell live; model feed pending.",
       premium: true,
       status: "active",
     },
@@ -271,6 +308,186 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
   },
 ];
 
+function mlbIntelLinks(base: string): OverviewSectionLink[] {
+  return [
+    {
+      href: "/pro/mlb/fair-lines",
+      label: "Fair lines board",
+      hint: "ML, totals, and run-line fair values for today’s MLB slate.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/pro/mlb/edges",
+      label: "Edges desk",
+      hint: "Today’s ML and total edges with quality score and recommended stake fraction.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/pro/mlb/fair-lines?focus=run-line",
+      label: "Run line board",
+      hint: "Home run-line fair spread and cover probability from the active model.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/odds/mlb",
+      label: "Compare odds",
+      hint: "Side-by-side moneylines and totals across books.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/edge-board/mlb",
+      label: "Public edge board",
+      hint: "Open vs best prices, KEI, and directional edge tags.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `/pro/kei-lines/mlb`,
+      label: "KEI projections",
+      hint: "Projected baselines to benchmark current market prices.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `${base}/teams`,
+      label: "Team baseline hub",
+      hint: "Starter, bullpen, and form context by club — directory shell until roster intel ships.",
+      premium: true,
+      status: "active",
+    },
+    {
+      label: "Standings & form",
+      hint: "Division race and recent form cards pending MLB intel tables.",
+      premium: true,
+      status: "placeholder",
+    },
+  ];
+}
+
+function genericIntelLinks(
+  sportKey: string,
+  base: string,
+): OverviewSectionLink[] {
+  const desk = getSportDeskConfig(sportKey);
+  const primary = desk.cards[0];
+  const edges = desk.cards[1];
+
+  return [
+    {
+      href: primary?.href,
+      label: primary?.title ?? "Fair lines",
+      hint: primary?.description ?? "Model fair-value reference board.",
+      premium: true,
+      status: primary?.status ?? "placeholder",
+    },
+    {
+      href: edges?.status === "active" ? edges.href : undefined,
+      label: edges?.title ?? "Edges desk",
+      hint: edges?.description ?? "Thresholded edges pending model board.",
+      premium: true,
+      status: edges?.status ?? "placeholder",
+    },
+    {
+      href: `/odds/${sportKey}`,
+      label: "Compare odds",
+      hint: "Side-by-side prices across books for this sport’s slate.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `/edge-board/${sportKey}`,
+      label: "Public edge board",
+      hint: "Open vs best prices, KEI, and directional edge tags.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `/pro/kei-lines/${sportKey}`,
+      label: "KEI projections",
+      hint: "Projected spread and total table by matchup.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `${base}/teams`,
+      label: "Team baseline hub",
+      hint: "Current form, ratings, and opponent context by team.",
+      premium: true,
+      status: "active",
+    },
+    {
+      label: "League standings",
+      hint: "Standings and race context unlock with sport intel tables.",
+      premium: true,
+      status: "placeholder",
+    },
+    {
+      label: "Injuries / availability",
+      hint: "Availability tracker pending sport-level health feed.",
+      premium: true,
+      status: "placeholder",
+    },
+  ];
+}
+
+function intelLinksForSport(
+  sportKey: string,
+  base: string,
+): OverviewSectionLink[] {
+  if (sportKey === "nfl") return NFL_INTEL_LINKS;
+  if (sportKey === "mlb") return mlbIntelLinks(base);
+  return genericIntelLinks(sportKey, base);
+}
+
+function marketLinksForSport({
+  sportKey,
+  base,
+  edgeBoardHref,
+}: {
+  sportKey: string;
+  base: string;
+  edgeBoardHref: string;
+}): OverviewSectionLink[] {
+  const desk = getSportDeskConfig(sportKey);
+
+  const deskLinks: OverviewSectionLink[] = desk.cards.map((card) => ({
+    href: card.status === "active" ? card.href : card.href,
+    label: card.title,
+    hint: card.description,
+    premium: true,
+    status: card.status,
+  }));
+
+  return [
+    ...deskLinks,
+    {
+      href: edgeBoardHref,
+      label: "Public edge board",
+      hint: "Open vs best prices, KEI, and directional edge tags.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `/pro/kei-lines/${sportKey}`,
+      label: "KEI projections",
+      hint: "Projected spread and total table by matchup.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `${base}/execution`,
+      label: "Execution monitor",
+      hint: "Book dispersion, timing windows, and price quality checks.",
+      premium: true,
+      status: "active",
+    },
+  ];
+}
+
 export function buildSportOverviewContent(
   sportKey: string,
   sportName: string,
@@ -289,6 +506,7 @@ export function buildSportOverviewSections({
   edgeBoardHref: string;
   content: OverviewContent;
 }): OverviewSection[] {
+  const desk = getSportDeskConfig(sportKey);
   const slateLabel =
     sportKey === "nfl" || sportKey === "cfb"
       ? "Weekly slate board"
@@ -308,7 +526,7 @@ export function buildSportOverviewSections({
           status: "active",
         },
         {
-          href: `${base}/teams`,
+          href: sportKey === "nfl" ? "/pro/nfl/teams" : `${base}/teams`,
           label: "Team baseline hub",
           hint: "Current form, ratings, and opponent context by team.",
           status: "active",
@@ -317,92 +535,22 @@ export function buildSportOverviewSections({
     },
     {
       title: content.sectionTitles.market,
-      subtitle:
-        sportKey === "nfl"
-          ? "Betting desk path: KEI Lines → Edges → Props, then execution quality."
-          : "Translate market movement into clear model-versus-price decision support.",
-      links:
-        sportKey === "nfl"
-          ? [
-              {
-                href: "/pro/nfl/fair-lines",
-                label: "KEI Lines",
-                hint: "Kosedge-made spreads, totals, and fair moneylines for the upcoming slate.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: "/pro/nfl/edges",
-                label: "Edges",
-                hint: "Thresholded game + prop edges ready for the desk.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: "/pro/nfl/props",
-                label: "Props",
-                hint: "Full prop board with model means, fair prices, and market joins.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: edgeBoardHref,
-                label: "Public edge board",
-                hint: "Open vs best prices, KEI, and directional edge tags.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: `/pro/kei-lines/${sportKey}`,
-                label: "KEI projections",
-                hint: "Projected spread and total table by matchup.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: `${base}/execution`,
-                label: "Execution monitor",
-                hint: "Book dispersion, timing windows, and price quality checks.",
-                premium: true,
-                status: "active" as const,
-              },
-            ]
-          : [
-              {
-                href: edgeBoardHref,
-                label: "Edge board",
-                hint: "Open vs best prices, KEI, and directional edge tags.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: `${base}/fair-lines`,
-                label: "Fair lines",
-                hint: "Neutral model fair-value reference without pick language.",
-                premium: true,
-                status: "placeholder" as const,
-              },
-              {
-                href: `/pro/kei-lines/${sportKey}`,
-                label: "KEI projections",
-                hint: "Projected spread and total table by matchup.",
-                premium: true,
-                status: "active" as const,
-              },
-              {
-                href: `${base}/execution`,
-                label: "Execution monitor",
-                hint: "Book dispersion, timing windows, and price quality checks.",
-                premium: true,
-                status: "active" as const,
-              },
-            ],
+      subtitle: desk.pathSubtitle,
+      links: marketLinksForSport({ sportKey, base, edgeBoardHref }),
     },
     {
       title: content.sectionTitles.props,
       subtitle:
         "Surface player-level opportunities where feeds are launch-ready while preserving risk discipline.",
       links: propsLinks(sportKey, base),
+    },
+    {
+      title: content.sectionTitles.intel ?? "League Intel",
+      subtitle:
+        sportKey === "nfl"
+          ? "Premium team and league context cards for roster quality, health, and competitive positioning."
+          : "League context, odds compare, and sport-specific intel surfaces — live where feeds are ready.",
+      links: intelLinksForSport(sportKey, base),
     },
     {
       title: "Model & Governance Health",
@@ -432,15 +580,6 @@ export function buildSportOverviewSections({
       ],
     },
   ];
-
-  if (sportKey === "nfl") {
-    sections.splice(3, 0, {
-      title: content.sectionTitles.intel ?? "Team Intel",
-      subtitle:
-        "Premium team and league context cards for roster quality, health, and competitive positioning.",
-      links: NFL_INTEL_LINKS,
-    });
-  }
 
   return sections;
 }

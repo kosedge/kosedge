@@ -1,6 +1,39 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import SportHubShell from "@/components/pro/SportHubShell";
+import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { getSport } from "@/lib/sports";
+
+const SPORT_FAIR_LINES_COPY: Record<
+  string,
+  { markets: string; pendingNote: string }
+> = {
+  nba: {
+    markets: "spreads, totals, and moneylines",
+    pendingNote:
+      "NBA fair-lines join the desk once the basketball model board is connected to Pro.",
+  },
+  nhl: {
+    markets: "moneylines and totals (puck line staged next)",
+    pendingNote:
+      "NHL fair-lines join the desk once the hockey model board is connected to Pro.",
+  },
+  wnba: {
+    markets: "spreads, totals, and moneylines",
+    pendingNote:
+      "WNBA fair-lines join the desk once the model board is connected to Pro.",
+  },
+  cfb: {
+    markets: "spreads and totals with key-number awareness",
+    pendingNote:
+      "CFB fair-lines join the desk once the college football model board is connected to Pro.",
+  },
+  ncaam: {
+    markets: "spreads and totals with tempo-aware baselines",
+    pendingNote:
+      "CBB fair-lines join the desk once the college basketball model board is connected to Pro.",
+  },
+};
 
 export default async function FairLinesPage({
   params,
@@ -8,45 +41,56 @@ export default async function FairLinesPage({
   params: Promise<{ sport: string }>;
 }) {
   const { sport: sportKey } = await params;
-  if (sportKey === "nfl") {
-    redirect("/pro/nfl/fair-lines");
-  }
+  if (sportKey === "nfl") redirect("/pro/nfl/fair-lines");
+  if (sportKey === "mlb") redirect("/pro/mlb/fair-lines");
 
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
   const base = `/pro/${sportKey}`;
+  const desk = getSportDeskConfig(sportKey);
+  const copy = SPORT_FAIR_LINES_COPY[sportKey] ?? {
+    markets: "spreads, totals, and moneylines",
+    pendingNote: `${sportName} projections are not connected to this surface yet.`,
+  };
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-kos-text">
-            {sportName} Fair Lines
-          </h2>
-          <p className="mt-2 text-kos-text/70">
-            Model reference vs market prices. Neutral presentation — no picks.
-          </p>
-        </div>
-        <Link
-          href={`${base}/overview`}
-          className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
-        >
-          Back to Hub
-        </Link>
-      </div>
-      <div className="mt-8 rounded-2xl border border-kos-border bg-kos-surface/30 p-8">
-        <p className="text-sm font-semibold text-kos-gold">Coming soon</p>
-        <p className="mt-2 text-kos-text/60">
-          Fair-lines board is wired for NFL. {sportName} projections are not
-          connected to this surface yet.
+    <SportHubShell
+      sportName={sportName}
+      base={base}
+      badge={`${sportName} Betting Desk`}
+      title={`${sportName} Fair Lines`}
+      summary={`Model reference for ${copy.markets}. Neutral presentation — no picks. Desk path: ${desk.pathLabel}.`}
+      primaryHref={`/edge-board/${sportKey}`}
+      primaryLabel="Open edge board →"
+      secondaryHref={`/odds/${sportKey}`}
+      secondaryLabel="Compare odds →"
+    >
+      <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6 sm:p-8">
+        <p className="text-sm font-semibold text-kos-gold">
+          Model board pending
         </p>
-        <Link
-          href="/pro/nfl/fair-lines"
-          className="mt-4 inline-flex rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
-        >
-          Open NFL fair lines →
-        </Link>
+        <p className="mt-2 text-sm text-kos-text/70 sm:text-base">
+          {copy.pendingNote}
+        </p>
+        <p className="mt-4 text-sm text-kos-text/60">
+          Until then, use the public edge board and odds compare for live market
+          context. NFL and MLB fair-lines boards are live under their hubs.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href={`/pro/kei-lines/${sportKey}`}
+            className="inline-flex rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
+          >
+            KEI projections →
+          </Link>
+          <Link
+            href={`${base}/overview`}
+            className="inline-flex rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text transition hover:border-kos-gold/35"
+          >
+            Hub overview →
+          </Link>
+        </div>
       </div>
-    </main>
+    </SportHubShell>
   );
 }
