@@ -68,8 +68,24 @@ python scripts/mlb/backfill_outcomes_and_resim.py \
 
 # 4) Walkforward holdout report
 python scripts/mlb/run_holdout_walkforward.py \
-  --lookback-days 180 --with-quality
+  --lookback-days 120 --training-days 28 --with-quality
 ```
+
+### Local densify result (2026-07-24)
+
+| Metric | Before | After |
+|---|---|---|
+| Walkforward holdout n | 0 (3 calendar days) | **149** (2 folds, 42 joinable days) |
+| Joinable proj+outcome | 27 | 477 |
+| Base Brier ML | n/a | 0.2497 |
+| Base MAE total | n/a | 3.59 |
+| Odds credits remaining | ~4,992,572 | **4,988,424** (~4.1k used) |
+| Leakage violations | — | 12 residual pre-fix rows |
+
+Code fixes required for densify honesty:
+- Historical re-sim stamps `mlb_market_projections.created_at` pre-first-pitch.
+- `pull_mlb_outcomes` ensures game hierarchy + uses feed/game end time for `completed_at`.
+- Holdout script default `training_days` is **28** (matches resim; 45 needs ≥45 joinable days).
 
 Job endpoints (model-service):
 

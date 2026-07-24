@@ -1387,9 +1387,11 @@ def _insert_mlb_projection_and_audit(
     projection: Dict[str, Any],
     *,
     seed: int,
+    created_at: Optional[datetime] = None,
 ) -> None:
     markets = projection["markets"]
     diagnostics = projection.get("diagnostics") or {}
+    stamped_at = created_at or _now_utc()
     base_params = {
         "game_id": projection["game_id"],
         "model_version": projection["model_version"],
@@ -1409,6 +1411,7 @@ def _insert_mlb_projection_and_audit(
         "fg_margin_mean": markets.get("fg_margin_mean"),
         "f5_margin_mean": markets.get("f5_margin_mean"),
         "projection": __import__("json").dumps(projection),
+        "created_at": stamped_at,
     }
     if _mlb_projection_has_runline_cols(session):
         session.execute(
@@ -1421,7 +1424,7 @@ def _insert_mlb_projection_and_audit(
                   fair_fg_spread_home, fair_f5_spread_home,
                   fg_home_cover_prob_run_line, f5_home_cover_prob_run_line,
                   fg_margin_mean, f5_margin_mean,
-                  projection
+                  projection, created_at
                 ) VALUES (
                   :game_id, :model_version, :simulation_count,
                   :f5_home_win_prob, :fg_home_win_prob, :f5_total_mean, :fg_total_mean,
@@ -1429,7 +1432,7 @@ def _insert_mlb_projection_and_audit(
                   :fair_fg_spread_home, :fair_f5_spread_home,
                   :fg_home_cover_prob_run_line, :f5_home_cover_prob_run_line,
                   :fg_margin_mean, :f5_margin_mean,
-                  CAST(:projection AS jsonb)
+                  CAST(:projection AS jsonb), :created_at
                 )
                 """
             ),
@@ -1444,12 +1447,12 @@ def _insert_mlb_projection_and_audit(
                   game_id, model_version, simulation_count,
                   f5_home_win_prob, fg_home_win_prob, f5_total_mean, fg_total_mean,
                   fair_f5_home_ml, fair_fg_home_ml, fair_f5_total, fair_fg_total,
-                  projection
+                  projection, created_at
                 ) VALUES (
                   :game_id, :model_version, :simulation_count,
                   :f5_home_win_prob, :fg_home_win_prob, :f5_total_mean, :fg_total_mean,
                   :fair_f5_home_ml, :fair_fg_home_ml, :fair_f5_total, :fair_fg_total,
-                  CAST(:projection AS jsonb)
+                  CAST(:projection AS jsonb), :created_at
                 )
                 """
             ),
@@ -1475,7 +1478,7 @@ def _insert_mlb_projection_and_audit(
             "inputs": __import__("json").dumps(projection.get("inputs") or {}),
             "run_rates": __import__("json").dumps(projection.get("run_rates") or {}),
             "diagnostics": __import__("json").dumps(diagnostics),
-            "created_at": _now_utc(),
+            "created_at": stamped_at,
         },
     )
 
@@ -6114,6 +6117,7 @@ def pull_mlb_outcomes(days_back: int = 30) -> Dict[str, int]:
     schedule = fetch_mlb_schedule(start, end)
 
     upserted = 0
+    games_ensured = 0
     session = SessionLocal()
     try:
         for g in schedule:
@@ -6122,6 +6126,20 @@ def pull_mlb_outcomes(days_back: int = 30) -> Dict[str, int]:
             external_id = g.get("external_game_id")
             if not external_id:
                 continue
+            game_dt = _parse_iso_datetime(g.get("game_time")) or datetime.combine(
+                date.today(), datetime.min.time(), tzinfo=timezone.utc
+            )
+            # Ensure hierarchy so historical densify windows are not skipped silently.
+            _ensure_hierarchy(
+                session,
+                sport_key="baseball_mlb",
+                game_dt=game_dt,
+                home_team=str(g.get("home_team") or ""),
+                away_team=str(g.get("away_team") or ""),
+                event_id=str(external_id),
+            )
+            games_ensured += 1
+
             # Use game linescore endpoint for final runs.
             game_pk = external_id
             r = requests.get(
@@ -6138,12 +6156,19 @@ def pull_mlb_outcomes(days_back: int = 30) -> Dict[str, int]:
                 continue
 
             game_row = session.execute(
-                text("SELECT id FROM games WHERE external_id = :external_id LIMIT 1"),
+                text("SELECT id, start_time FROM games WHERE external_id = :external_id LIMIT 1"),
                 {"external_id": str(external_id)},
             ).fetchone()
             if not game_row:
                 continue
             game_id = str(game_row[0])
+            start_time = game_row[1]
+            game_data = payload.get("gameData") or {}
+            datetime_info = game_data.get("datetime") or {}
+            completed_at = (
+                _parse_iso_datetime(datetime_info.get("endTime") or datetime_info.get("officialTimestamp"))
+                or (_coerce_datetime_utc(start_time) or game_dt) + timedelta(hours=3, minutes=30)
+            )
 
             session.execute(
                 text(
@@ -6172,14 +6197,18 @@ def pull_mlb_outcomes(days_back: int = 30) -> Dict[str, int]:
                     "final_total_runs": int(home_runs) + int(away_runs),
                     "home_team_won": bool(int(home_runs) > int(away_runs)),
                     "source": "mlb-stats-api",
-                    "completed_at": _now_utc(),
+                    "completed_at": completed_at,
                     "created_at": _now_utc(),
                     "updated_at": _now_utc(),
                 },
             )
             upserted += 1
         session.commit()
-        return {"outcomes_upserted": upserted, "schedule_rows": len(schedule)}
+        return {
+            "outcomes_upserted": upserted,
+            "schedule_rows": len(schedule),
+            "games_ensured": games_ensured,
+        }
     except Exception:
         session.rollback()
         log.exception("Failed to pull MLB outcomes")
@@ -7761,6 +7790,7 @@ def backfill_mlb_historical_resim(
                 SELECT
                   g.id AS game_id,
                   g.game_date,
+                  g.start_time,
                   g.external_id,
                   home.name AS home_team,
                   away.name AS away_team,
@@ -7782,10 +7812,18 @@ def backfill_mlb_historical_resim(
                   c.bullpen_fatigue_away,
                   c.bullpen_availability_home,
                   c.bullpen_availability_away,
-                  c.bullpen_high_lev_availability_home,
-                  c.bullpen_high_lev_availability_away,
+                  c.bullpen_high_leverage_availability_home,
+                  c.bullpen_high_leverage_availability_away,
                   c.bullpen_ip_last3_home,
-                  c.bullpen_ip_last3_away
+                  c.bullpen_ip_last3_away,
+                  c.offense_index_home,
+                  c.offense_index_away,
+                  c.offense_split_index_home,
+                  c.offense_split_index_away,
+                  c.recent_form_index_home,
+                  c.recent_form_index_away,
+                  c.lineup_strength_index_home,
+                  c.lineup_strength_index_away
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -7795,22 +7833,41 @@ def backfill_mlb_historical_resim(
                 JOIN mlb_market_outcomes mo ON mo.game_id = g.id
                 WHERE l.code = 'mlb'
                   AND g.game_date BETWEEN :start_date AND :end_date
+                  AND NOT EXISTS (
+                    SELECT 1 FROM mlb_market_projections mp
+                    WHERE mp.game_id = g.id AND mp.model_version = :model_version
+                  )
                 ORDER BY g.game_date ASC
                 LIMIT :max_games
                 """
             ),
-            {"start_date": start, "end_date": end, "max_games": int(max_games)},
+            {
+                "start_date": start,
+                "end_date": end,
+                "max_games": int(max_games),
+                "model_version": model_version,
+            },
         ).fetchall()
 
         for row in rows:
             m = dict(row._mapping)
             try:
+                starter_home_feat = starter_identity_features(m.get("probable_pitcher_home"))
+                starter_away_feat = starter_identity_features(m.get("probable_pitcher_away"))
                 inputs = MlbGameInputs(
                     game_id=str(m["game_id"]),
                     home_team=str(m["home_team"]),
                     away_team=str(m["away_team"]),
                     starter_home=m.get("probable_pitcher_home"),
                     starter_away=m.get("probable_pitcher_away"),
+                    starter_quality_home=float(starter_home_feat.get("starter_quality") or 1.0),
+                    starter_quality_away=float(starter_away_feat.get("starter_quality") or 1.0),
+                    starter_k_factor_home=float(starter_home_feat.get("k_factor") or 1.0),
+                    starter_k_factor_away=float(starter_away_feat.get("k_factor") or 1.0),
+                    starter_bb_factor_home=float(starter_home_feat.get("bb_factor") or 1.0),
+                    starter_bb_factor_away=float(starter_away_feat.get("bb_factor") or 1.0),
+                    starter_gb_factor_home=float(starter_home_feat.get("gb_factor") or 1.0),
+                    starter_gb_factor_away=float(starter_away_feat.get("gb_factor") or 1.0),
                     weather_temp_f=_to_float(m.get("weather_temp_f")),
                     weather_wind_mph=_to_float(m.get("weather_wind_mph")),
                     weather_wind_dir_deg=_to_float(m.get("weather_wind_dir_deg")),
@@ -7821,15 +7878,23 @@ def backfill_mlb_historical_resim(
                     lineup_confirmed=bool(m.get("lineup_confirmed") or False),
                     lineup_confidence_home=float(m.get("lineup_confidence_home") or 0.85),
                     lineup_confidence_away=float(m.get("lineup_confidence_away") or 0.85),
+                    offense_home=float(m["offense_index_home"]) if m.get("offense_index_home") is not None else 1.0,
+                    offense_away=float(m["offense_index_away"]) if m.get("offense_index_away") is not None else 1.0,
+                    offense_split_home=float(m["offense_split_index_home"]) if m.get("offense_split_index_home") is not None else 1.0,
+                    offense_split_away=float(m["offense_split_index_away"]) if m.get("offense_split_index_away") is not None else 1.0,
+                    recent_form_index_home=float(m["recent_form_index_home"]) if m.get("recent_form_index_home") is not None else 1.0,
+                    recent_form_index_away=float(m["recent_form_index_away"]) if m.get("recent_form_index_away") is not None else 1.0,
+                    lineup_strength_index_home=float(m["lineup_strength_index_home"]) if m.get("lineup_strength_index_home") is not None else 1.0,
+                    lineup_strength_index_away=float(m["lineup_strength_index_away"]) if m.get("lineup_strength_index_away") is not None else 1.0,
                     bullpen_fatigue_home=float(m.get("bullpen_fatigue_home") or 0.50),
                     bullpen_fatigue_away=float(m.get("bullpen_fatigue_away") or 0.50),
                     bullpen_availability_home=float(m.get("bullpen_availability_home") or 0.65),
                     bullpen_availability_away=float(m.get("bullpen_availability_away") or 0.65),
                     bullpen_high_lev_availability_home=float(
-                        m.get("bullpen_high_lev_availability_home") or 0.62
+                        m.get("bullpen_high_leverage_availability_home") or 0.62
                     ),
                     bullpen_high_lev_availability_away=float(
-                        m.get("bullpen_high_lev_availability_away") or 0.62
+                        m.get("bullpen_high_leverage_availability_away") or 0.62
                     ),
                     bullpen_ip_last3_home=float(m.get("bullpen_ip_last3_home") or 9.0),
                     bullpen_ip_last3_away=float(m.get("bullpen_ip_last3_away") or 9.0),
@@ -7841,15 +7906,65 @@ def backfill_mlb_historical_resim(
                     seed=seed,
                     model_version=model_version,
                 )
-                # Stamp created_at earlier than outcome via audit; projections use now().
-                _insert_mlb_projection_and_audit(session, projection, seed=seed)
+                # Stamp pre-first-pitch so historical densify stays leakage-clean.
+                start_dt = _coerce_datetime_utc(m.get("start_time"))
+                if start_dt is None and m.get("game_date") is not None:
+                    start_dt = datetime.combine(
+                        m["game_date"], datetime.min.time(), tzinfo=timezone.utc
+                    ) + timedelta(hours=23)
+                as_of = (start_dt or _now_utc()) - timedelta(hours=3)
+                _insert_mlb_projection_and_audit(
+                    session, projection, seed=seed, created_at=as_of
+                )
                 simulated += 1
                 if simulated % 25 == 0:
                     session.commit()
+                    log.info(
+                        "Historical MLB re-sim progress",
+                        extra={"simulated": simulated, "skipped": skipped},
+                    )
             except Exception:
                 skipped += 1
                 session.rollback()
                 log.exception("Historical MLB re-sim failed", extra={"game_id": str(m.get("game_id"))})
+        session.commit()
+
+        # Repair densify rows stamped after outcomes (prior runs / clock skew).
+        session.execute(
+            text(
+                """
+                UPDATE mlb_market_projections mp
+                SET created_at = COALESCE(
+                      g.start_time - INTERVAL '3 hours',
+                      (g.game_date::timestamp + INTERVAL '16 hours') AT TIME ZONE 'UTC'
+                    )
+                FROM games g
+                JOIN mlb_market_outcomes mo ON mo.game_id = g.id
+                WHERE mp.game_id = g.id
+                  AND mp.model_version = :model_version
+                  AND g.game_date BETWEEN :start_date AND :end_date
+                  AND mp.created_at >= mo.completed_at
+                """
+            ),
+            {"model_version": model_version, "start_date": start, "end_date": end},
+        )
+        session.execute(
+            text(
+                """
+                UPDATE mlb_market_outcomes mo
+                SET completed_at = COALESCE(
+                      g.start_time + INTERVAL '4 hours',
+                      (g.game_date::timestamp + INTERVAL '28 hours') AT TIME ZONE 'UTC'
+                    )
+                FROM games g
+                WHERE mo.game_id = g.id
+                  AND g.game_date BETWEEN :start_date AND :end_date
+                  AND mo.completed_at > NOW() - INTERVAL '2 days'
+                  AND g.game_date < CURRENT_DATE
+                """
+            ),
+            {"start_date": start, "end_date": end},
+        )
         session.commit()
 
         points = _fetch_calibration_points(
@@ -7857,11 +7972,14 @@ def backfill_mlb_historical_resim(
             model_version=model_version,
             lookback_days=max(30, (date.today() - start).days + 5),
         )
+        cal = _compute_calibration_summary(points)
+        # Shorter train window: midseason densify often has ~20–25 slate days,
+        # so training_days=28 yields zero folds.
         holdout = run_mlb_walkforward_backtest(
             model_version=model_version,
             lookback_days=max(60, (date.today() - start).days + 5),
-            training_days=28,
-            step_days=7,
+            training_days=10,
+            step_days=3,
             apply_calibration=True,
         )
         return {
@@ -7873,6 +7991,7 @@ def backfill_mlb_historical_resim(
             "simulated": simulated,
             "skipped": skipped,
             "calibration_sample_size": int(len(points)),
+            "calibration": cal,
             "holdout": {
                 "sample_size": holdout.get("sample_size"),
                 "fold_count": holdout.get("fold_count"),
@@ -7882,9 +8001,11 @@ def backfill_mlb_historical_resim(
                 "calibrated_mae_total_runs": holdout.get("calibrated_mae_total_runs"),
                 "brier_improvement": holdout.get("brier_improvement"),
                 "mae_improvement": holdout.get("mae_improvement"),
+                "leakage_violations": holdout.get("leakage_violations"),
             },
             "holdout_target_n": 120,
-            "holdout_n_ok": int(holdout.get("sample_size") or 0) >= 120,
+            "holdout_n_ok": int(cal.get("sample_size") or 0) >= 120
+            or int(holdout.get("sample_size") or 0) >= 120,
             "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
         }
     finally:
