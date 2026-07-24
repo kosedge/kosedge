@@ -102,6 +102,14 @@ TASK_MLB_DETERMINISM_CHECK = os.getenv(
     "TASK_MLB_DETERMINISM_CHECK",
     "src.tasks.run_mlb_determinism_check",
 )
+TASK_MLB_CLV_ATTRIBUTION = os.getenv(
+    "TASK_MLB_CLV_ATTRIBUTION",
+    "src.tasks.run_mlb_clv_attribution",
+)
+TASK_MLB_QUALITY_GRADING = os.getenv(
+    "TASK_MLB_QUALITY_GRADING",
+    "src.tasks.run_mlb_quality_grading",
+)
 
 ACTIVE_START_HOUR = os.getenv("ODDS_PULL_ACTIVE_START_HOUR", "7")   # 7am
 ACTIVE_END_HOUR = os.getenv("ODDS_PULL_ACTIVE_END_HOUR", "21")      # 9pm
@@ -390,6 +398,24 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
             "challenger_model_version": os.getenv("MLB_CHALLENGER_MODEL_VERSION", "mlb-v2-pitch-sim"),
             "lookback_days": int(os.getenv("MLB_CALIBRATION_LOOKBACK_DAYS", "45")),
             "auto_promote": os.getenv("MLB_AUTO_PROMOTE_ENABLED", "false").strip().lower() in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-mlb-clv-attribution-morning": {
+        "task": TASK_MLB_CLV_ATTRIBUTION,
+        "schedule": crontab(minute="42", hour="6"),
+        "kwargs": {
+            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+            "lookback_days": int(os.getenv("MLB_CLV_LOOKBACK_DAYS", "45")),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-mlb-quality-grading-morning": {
+        "task": TASK_MLB_QUALITY_GRADING,
+        "schedule": crontab(minute="48", hour="6"),
+        "kwargs": {
+            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+            "lookback_days": int(os.getenv("MLB_QUALITY_LOOKBACK_DAYS", "60")),
         },
         "options": {"queue": MODELS_QUEUE},
     },

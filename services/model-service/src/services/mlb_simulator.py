@@ -392,10 +392,16 @@ def simulate_mlb_game(
     fg_home_wins = 0
     f5_totals: List[int] = []
     fg_totals: List[int] = []
+    f5_margins: List[int] = []
+    fg_margins: List[int] = []
+    fg_home_cover_run_line = 0
+    f5_home_cover_run_line = 0
     push_f5 = 0
     extra_innings_games = 0
     extra_innings_total = 0
     home_walkoff_wins = 0
+    # Canonical MLB run line used for cover pricing (±1.5).
+    run_line_abs = 1.5
 
     for _ in range(simulations):
         result = _simulate_full_game(rng, rates)
@@ -403,6 +409,8 @@ def simulate_mlb_game(
         f5_away = int(result["f5_away_runs"])
         fg_home = int(result["home_runs"])
         fg_away = int(result["away_runs"])
+        f5_margin = f5_home - f5_away
+        fg_margin = fg_home - fg_away
 
         if f5_home > f5_away:
             f5_home_wins += 1
@@ -418,6 +426,14 @@ def simulate_mlb_game(
 
         f5_totals.append(f5_home + f5_away)
         fg_totals.append(fg_home + fg_away)
+        f5_margins.append(f5_margin)
+        fg_margins.append(fg_margin)
+        # Home covers -1.5 when margin > 1.5; covers +1.5 when margin > -1.5.
+        # Fair cover prob is reported for the home side of the canonical favorite line.
+        if fg_margin > run_line_abs:
+            fg_home_cover_run_line += 1
+        if f5_margin > run_line_abs:
+            f5_home_cover_run_line += 1
 
     # Exclude pushes from moneyline probability denominator.
     f5_ml_denom = max(1, simulations - push_f5)
@@ -428,6 +444,17 @@ def simulate_mlb_game(
     fg_ci = _beta_interval_from_wins(fg_home_wins, max(0, fg_ml_denom - fg_home_wins))
     f5_mean = sum(f5_totals) / simulations
     fg_mean = sum(fg_totals) / simulations
+    f5_margin_mean = sum(f5_margins) / simulations
+    fg_margin_mean = sum(fg_margins) / simulations
+    # Negative spread_home = home favored (matches odds_snapshots convention).
+    fair_fg_spread_home = -round(fg_margin_mean * 2.0) / 2.0
+    fair_f5_spread_home = -round(f5_margin_mean * 2.0) / 2.0
+    if abs(fair_fg_spread_home) < 0.5:
+        fair_fg_spread_home = -1.5 if fg_margin_mean >= 0 else 1.5
+    if abs(fair_f5_spread_home) < 0.5:
+        fair_f5_spread_home = -1.5 if f5_margin_mean >= 0 else 1.5
+    fg_cover_prob = fg_home_cover_run_line / simulations
+    f5_cover_prob = f5_home_cover_run_line / simulations
     f5_p10 = _quantile(f5_totals, 0.10)
     f5_p50 = _quantile(f5_totals, 0.50)
     f5_p90 = _quantile(f5_totals, 0.90)
@@ -568,6 +595,13 @@ def simulate_mlb_game(
             "fair_fg_home_ml": _fair_moneyline_from_prob(fg_home_prob),
             "fair_f5_total": round(f5_mean * 2.0) / 2.0,
             "fair_fg_total": round(fg_mean * 2.0) / 2.0,
+            "fair_f5_spread_home": fair_f5_spread_home,
+            "fair_fg_spread_home": fair_fg_spread_home,
+            "f5_margin_mean": round(f5_margin_mean, 4),
+            "fg_margin_mean": round(fg_margin_mean, 4),
+            "f5_home_cover_prob_run_line": round(f5_cover_prob, 6),
+            "fg_home_cover_prob_run_line": round(fg_cover_prob, 6),
+            "run_line_point": -run_line_abs,
         },
         "diagnostics": {
             "f5_push_rate": push_f5 / simulations,
