@@ -30,7 +30,19 @@ ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS close_price_away int;
 ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS model_side text;
 ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS home_team_won boolean;
 ALTER TABLE mlb_clv_attribution ADD COLUMN IF NOT EXISTS payload jsonb NOT NULL DEFAULT '{}'::jsonb;
-ALTER TABLE mlb_clv_attribution ALTER COLUMN projection_id DROP NOT NULL;
+-- Older schemas required projection_id; enterprise CREATE omits it.
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'mlb_clv_attribution'
+      AND column_name = 'projection_id'
+  ) THEN
+    ALTER TABLE mlb_clv_attribution ALTER COLUMN projection_id DROP NOT NULL;
+  END IF;
+END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
