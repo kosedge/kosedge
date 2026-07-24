@@ -1,6 +1,6 @@
 # Enterprise Readiness Checklist
 
-This checklist tracks *verified* readiness items. It is intentionally strict and should match what CI and runtime behavior actually enforce.
+This checklist tracks _verified_ readiness items. It is intentionally strict and should match what CI and runtime behavior actually enforce.
 
 ## Current Score
 

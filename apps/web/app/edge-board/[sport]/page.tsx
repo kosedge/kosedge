@@ -77,7 +77,9 @@ export default async function EdgeBoardSportPage({
   const sp =
     searchParams &&
     typeof (searchParams as Promise<unknown>).then === "function"
-      ? await (searchParams as Promise<Record<string, string | string[] | undefined>>)
+      ? await (searchParams as Promise<
+          Record<string, string | string[] | undefined>
+        >)
       : ((searchParams as Record<string, string | string[] | undefined>) ?? {});
   const slateRaw = Array.isArray(sp.slate) ? sp.slate[0] : sp.slate;
   const slate: "live" | "all" =

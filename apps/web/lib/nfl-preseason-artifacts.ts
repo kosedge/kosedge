@@ -166,20 +166,34 @@ export function loadLatestNflPreseasonBundle2026(): NflPreseasonBundle | null {
   for (const bundleDirName of bundleDirs) {
     const bundlePath = path.join(dataOpsPath, bundleDirName);
     const teamPath = path.join(bundlePath, "team_regular_season_outcomes.csv");
-    const regularPath = path.join(bundlePath, "player_regular_season_totals.csv");
+    const regularPath = path.join(
+      bundlePath,
+      "player_regular_season_totals.csv",
+    );
     const playoffPath = path.join(bundlePath, "player_playoff_totals.csv");
     const checksPath = path.join(bundlePath, "quality_checks.json");
     const summaryPath = path.join(bundlePath, "run_summary.json");
-    if (!existsSync(teamPath) || !existsSync(regularPath) || !existsSync(playoffPath)) continue;
+    if (
+      !existsSync(teamPath) ||
+      !existsSync(regularPath) ||
+      !existsSync(playoffPath)
+    )
+      continue;
 
     const teamRows = mapTeamRows(parseCsvRows(readFileSync(teamPath, "utf8")));
-    const playerTotalsRegular = mapPlayerTotalsRows(parseCsvRows(readFileSync(regularPath, "utf8")));
-    const playerTotalsPlayoff = mapPlayerTotalsRows(parseCsvRows(readFileSync(playoffPath, "utf8")));
+    const playerTotalsRegular = mapPlayerTotalsRows(
+      parseCsvRows(readFileSync(regularPath, "utf8")),
+    );
+    const playerTotalsPlayoff = mapPlayerTotalsRows(
+      parseCsvRows(readFileSync(playoffPath, "utf8")),
+    );
 
     let generatedAtUtc: string | null = null;
     if (existsSync(summaryPath)) {
       try {
-        const parsed = JSON.parse(readFileSync(summaryPath, "utf8")) as { generated_at_utc?: string };
+        const parsed = JSON.parse(readFileSync(summaryPath, "utf8")) as {
+          generated_at_utc?: string;
+        };
         generatedAtUtc = parsed.generated_at_utc ?? null;
       } catch {
         generatedAtUtc = null;

@@ -60,7 +60,9 @@ export default function MatchupPage({
       >
         ← Back to {sportName} slate
       </Link>
-      <h2 className="mt-4 text-2xl font-semibold text-kos-text">{sportName} Matchup</h2>
+      <h2 className="mt-4 text-2xl font-semibold text-kos-text">
+        {sportName} Matchup
+      </h2>
       <p className="mt-2 text-kos-text/70">
         {sportName} · {params.date} · {params.slug}
       </p>

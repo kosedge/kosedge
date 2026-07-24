@@ -3,11 +3,11 @@ import { z } from "zod";
 
 const optionalString = z.preprocess(
   (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
-  z.string().optional()
+  z.string().optional(),
 );
 const optionalUrl = z.preprocess(
   (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
-  z.string().url().optional()
+  z.string().url().optional(),
 );
 
 const EnvSchema = z.object({
@@ -15,7 +15,7 @@ const EnvSchema = z.object({
   MODEL_SERVICE_URL: optionalUrl,
   INTERNAL_API_SECRET: z.preprocess(
     (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
-    z.string().min(16).optional()
+    z.string().min(16).optional(),
   ),
   // Odds API fallback for NCAAM (free tier: 500 req/mo)
   ODDS_API_KEY: optionalString,
@@ -27,24 +27,24 @@ const EnvSchema = z.object({
   // Authentication
   AUTH_SECRET: z.preprocess(
     (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
-    z.string().min(32).optional()
+    z.string().min(32).optional(),
   ),
   AUTH_URL: optionalUrl,
   DATABASE_URL: optionalUrl,
-  
+
   // OAuth Providers (optional - add as needed)
   GOOGLE_CLIENT_ID: optionalString,
   GOOGLE_CLIENT_SECRET: optionalString,
   GITHUB_CLIENT_ID: optionalString,
   GITHUB_CLIENT_SECRET: optionalString,
-  
+
   // Error Tracking (optional)
   NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
   SENTRY_AUTH_TOKEN: optionalString,
-  
+
   // Logging
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).optional(),
-  
+
   // Redis (optional)
   REDIS_URL: optionalUrl,
   SITE_URL: optionalUrl,

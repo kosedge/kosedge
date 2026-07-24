@@ -32,7 +32,9 @@ export default function SportsbookBadge({
     >
       <span
         className={`inline-flex items-center justify-center rounded-sm bg-black/35 font-bebas tracking-wide ${
-          compact ? "h-3.5 min-w-3.5 px-0.5 text-[9px]" : "h-4 min-w-4 px-1 text-[10px]"
+          compact
+            ? "h-3.5 min-w-3.5 px-0.5 text-[9px]"
+            : "h-4 min-w-4 px-1 text-[10px]"
         }`}
         aria-hidden
       >

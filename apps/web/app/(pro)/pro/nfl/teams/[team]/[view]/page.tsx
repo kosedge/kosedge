@@ -5,9 +5,16 @@ import InjuryStatusPanel from "@/components/pro/InjuryStatusPanel";
 import TeamIntelFilterBar from "@/components/pro/TeamIntelFilterBar";
 import TeamIntelSectionNav from "@/components/pro/TeamIntelSectionNav";
 import TeamIntelStatCards from "@/components/pro/TeamIntelStatCards";
-import TeamTendencyPanels, { type SituationTabKey } from "@/components/pro/TeamTendencyPanels";
+import TeamTendencyPanels, {
+  type SituationTabKey,
+} from "@/components/pro/TeamTendencyPanels";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
-import { fetchNflIntel, formatIntelValueWithRank, formatTeamRecordWithRank, type NflIntelResponseRow } from "@/lib/nfl-intel";
+import {
+  fetchNflIntel,
+  formatIntelValueWithRank,
+  formatTeamRecordWithRank,
+  type NflIntelResponseRow,
+} from "@/lib/nfl-intel";
 import {
   buildTrendSnippets,
   extractTeamCodes,
@@ -24,8 +31,17 @@ import {
   type TendencyPerspective,
 } from "@/lib/nfl-tendencies";
 
-const SITUATION_TAB_KEYS: SituationTabKey[] = ["down_distance", "score_state", "field_position"];
-const QB_SITUATION_KEYS: QbSituationType[] = ["down_type", "pressure", "score_state", "field_position"];
+const SITUATION_TAB_KEYS: SituationTabKey[] = [
+  "down_distance",
+  "score_state",
+  "field_position",
+];
+const QB_SITUATION_KEYS: QbSituationType[] = [
+  "down_type",
+  "pressure",
+  "score_state",
+  "field_position",
+];
 
 type TeamIntelTableProps = {
   title: string;
@@ -35,21 +51,34 @@ type TeamIntelTableProps = {
   empty: string;
 };
 
-function TeamIntelTable({ title, rows, comparisonRows, columns, empty }: TeamIntelTableProps) {
+function TeamIntelTable({
+  title,
+  rows,
+  comparisonRows,
+  columns,
+  empty,
+}: TeamIntelTableProps) {
   const rankingRows = comparisonRows ?? rows;
   const rankMetricKeys = columns.map((column) => column.key);
-  if (columns.some((column) => column.key === "record") && !rankMetricKeys.includes("win_pct")) {
+  if (
+    columns.some((column) => column.key === "record") &&
+    !rankMetricKeys.includes("win_pct")
+  ) {
     rankMetricKeys.push("win_pct");
   }
-  const rankMaps = buildMetricRankMaps(
-    rankingRows,
-    rankMetricKeys,
+  const rankMaps = buildMetricRankMaps(rankingRows, rankMetricKeys);
+  const rowIndexByRef = new Map(
+    rankingRows.map((row, index) => [row, index] as const),
   );
-  const rowIndexByRef = new Map(rankingRows.map((row, index) => [row, index] as const));
   const rowIndexByTeam = new Map(
     rankingRows
-      .map((row, index) => ({ index, team: typeof row.team === "string" ? row.team : null }))
-      .filter((entry): entry is { index: number; team: string } => Boolean(entry.team))
+      .map((row, index) => ({
+        index,
+        team: typeof row.team === "string" ? row.team : null,
+      }))
+      .filter((entry): entry is { index: number; team: string } =>
+        Boolean(entry.team),
+      )
       .map((entry) => [entry.team, entry.index] as const),
   );
 
@@ -57,7 +86,9 @@ function TeamIntelTable({ title, rows, comparisonRows, columns, empty }: TeamInt
     <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
       <h3 className="text-lg font-semibold text-kos-text">{title}</h3>
       {rows.length === 0 ? (
-        <p className="mt-3 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-kos-text/70">{empty}</p>
+        <p className="mt-3 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-kos-text/70">
+          {empty}
+        </p>
       ) : (
         <div className="mt-3 overflow-x-auto">
           <table className="min-w-full border-separate border-spacing-0">
@@ -78,15 +109,27 @@ function TeamIntelTable({ title, rows, comparisonRows, columns, empty }: TeamInt
                 <tr key={`${title}-${idx}`} className="odd:bg-white/3">
                   {columns.map((column) => {
                     const byRef = rowIndexByRef.get(row);
-                    const byTeam = typeof row.team === "string" ? rowIndexByTeam.get(row.team) : undefined;
+                    const byTeam =
+                      typeof row.team === "string"
+                        ? rowIndexByTeam.get(row.team)
+                        : undefined;
                     const rankingIndex = byRef ?? byTeam ?? -1;
                     return (
-                    <td key={column.key} className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                      {column.key === "record"
-                        ? formatTeamRecordWithRank(row, rankMaps.win_pct?.get(rankingIndex))
-                        : formatIntelValueWithRank(row[column.key], rankMaps[column.key]?.get(rankingIndex))}
-                    </td>
-                  );
+                      <td
+                        key={column.key}
+                        className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85"
+                      >
+                        {column.key === "record"
+                          ? formatTeamRecordWithRank(
+                              row,
+                              rankMaps.win_pct?.get(rankingIndex),
+                            )
+                          : formatIntelValueWithRank(
+                              row[column.key],
+                              rankMaps[column.key]?.get(rankingIndex),
+                            )}
+                      </td>
+                    );
                   })}
                 </tr>
               ))}
@@ -110,24 +153,47 @@ export default async function NflTeamIntelViewPage({
   if (!isNflTeamIntelView(view)) notFound();
 
   const filters = parseTeamIntelFilters(rawSearch);
-  const standings = await fetchNflIntel("standings", { season: filters.season, week: filters.week });
+  const standings = await fetchNflIntel("standings", {
+    season: filters.season,
+    week: filters.week,
+  });
   const teamCodes = extractTeamCodes(standings.rows);
   const selectedTeam = resolveTeamCode(requestedTeam, teamCodes);
   const queryTeam = firstQueryValue(rawSearch.team);
-  const queryTeamResolved = queryTeam ? resolveTeamCode(queryTeam, teamCodes) : null;
+  const queryTeamResolved = queryTeam
+    ? resolveTeamCode(queryTeam, teamCodes)
+    : null;
   if (queryTeamResolved && queryTeamResolved !== selectedTeam) {
     const query = new URLSearchParams();
     if (filters.season) query.set("season", String(filters.season));
     if (filters.week) query.set("week", String(filters.week));
-    redirect(`/pro/nfl/teams/${queryTeamResolved}/${view}${query.toString() ? `?${query.toString()}` : ""}`);
+    redirect(
+      `/pro/nfl/teams/${queryTeamResolved}/${view}${query.toString() ? `?${query.toString()}` : ""}`,
+    );
   }
 
   const [stats, statsComparison, depth, injuries, rosters] = await Promise.all([
-    fetchNflIntel("stats", { season: filters.season, week: filters.week, team: selectedTeam }),
+    fetchNflIntel("stats", {
+      season: filters.season,
+      week: filters.week,
+      team: selectedTeam,
+    }),
     fetchNflIntel("stats", { season: filters.season, week: filters.week }),
-    fetchNflIntel("depth-charts", { season: filters.season, week: filters.week, team: selectedTeam }),
-    fetchNflIntel("injuries", { season: filters.season, week: filters.week, team: selectedTeam }),
-    fetchNflIntel("rosters", { season: filters.season, week: filters.week, team: selectedTeam }),
+    fetchNflIntel("depth-charts", {
+      season: filters.season,
+      week: filters.week,
+      team: selectedTeam,
+    }),
+    fetchNflIntel("injuries", {
+      season: filters.season,
+      week: filters.week,
+      team: selectedTeam,
+    }),
+    fetchNflIntel("rosters", {
+      season: filters.season,
+      week: filters.week,
+      team: selectedTeam,
+    }),
   ]);
 
   const season = standings.season ?? stats.season ?? filters.season ?? null;
@@ -138,20 +204,31 @@ export default async function NflTeamIntelViewPage({
     week: week ?? undefined,
   };
 
-  const perspective: TendencyPerspective = firstQueryValue(rawSearch.perspective) === "defense" ? "defense" : "offense";
+  const perspective: TendencyPerspective =
+    firstQueryValue(rawSearch.perspective) === "defense"
+      ? "defense"
+      : "offense";
   const situationParam = firstQueryValue(rawSearch.situation);
-  const activeSituation: SituationTabKey = SITUATION_TAB_KEYS.includes(situationParam as SituationTabKey)
+  const activeSituation: SituationTabKey = SITUATION_TAB_KEYS.includes(
+    situationParam as SituationTabKey,
+  )
     ? (situationParam as SituationTabKey)
     : "down_distance";
   const qbSituationParam = firstQueryValue(rawSearch.qbSituation);
-  const activeQbSituation: QbSituationType = QB_SITUATION_KEYS.includes(qbSituationParam as QbSituationType)
+  const activeQbSituation: QbSituationType = QB_SITUATION_KEYS.includes(
+    qbSituationParam as QbSituationType,
+  )
     ? (qbSituationParam as QbSituationType)
     : "pressure";
 
   const tendencyData =
     view === "tendencies"
       ? await (async () => {
-          const profile = await fetchNflTeamTendencyProfileResolved({ season: season ?? 2026, team: selectedTeam, perspective });
+          const profile = await fetchNflTeamTendencyProfileResolved({
+            season: season ?? 2026,
+            team: selectedTeam,
+            perspective,
+          });
           const qbSplits = await fetchNflQbSituationalSplits({
             season: profile.season,
             team: selectedTeam,
@@ -170,15 +247,25 @@ export default async function NflTeamIntelViewPage({
     "epa_per_play_offense",
     "epa_per_play_defense_allowed",
   ]);
-  const statsIndex = statsComparison.rows.findIndex((row) => row.team === selectedTeam);
+  const statsIndex = statsComparison.rows.findIndex(
+    (row) => row.team === selectedTeam,
+  );
   const trends = buildTrendSnippets(statsRow, {
     pass_rate: statsRankMaps.pass_rate?.get(statsIndex),
     red_zone_td_rate: statsRankMaps.red_zone_td_rate?.get(statsIndex),
     epa_per_play_offense: statsRankMaps.epa_per_play_offense?.get(statsIndex),
-    epa_per_play_defense_allowed: statsRankMaps.epa_per_play_defense_allowed?.get(statsIndex),
+    epa_per_play_defense_allowed:
+      statsRankMaps.epa_per_play_defense_allowed?.get(statsIndex),
   });
-  const standingsRankMaps = buildMetricRankMaps(standings.rows, ["point_diff", "win_pct", "points_for", "points_against"]);
-  const standingsIndex = standings.rows.findIndex((row) => row.team === selectedTeam);
+  const standingsRankMaps = buildMetricRankMaps(standings.rows, [
+    "point_diff",
+    "win_pct",
+    "points_for",
+    "points_against",
+  ]);
+  const standingsIndex = standings.rows.findIndex(
+    (row) => row.team === selectedTeam,
+  );
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -199,18 +286,26 @@ export default async function NflTeamIntelViewPage({
         subtitle="Switch season/week context while keeping premium team intel navigation in place."
         basePath={`/pro/nfl/teams/${selectedTeam}/${view}`}
         filters={selectedFilters}
-        teamOptions={teamCodes.map((code) => ({ code, name: teamDisplayName(code) }))}
+        teamOptions={teamCodes.map((code) => ({
+          code,
+          name: teamDisplayName(code),
+        }))}
         selectedTeam={selectedTeam}
         showTeamSelect
         showLeagueFilters={false}
       />
 
       <section className="mt-6 rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/45 to-black/65 p-5 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.15em] text-kos-gold">Team Hub</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">{teamDisplayName(selectedTeam)}</h1>
+        <p className="text-xs uppercase tracking-[0.15em] text-kos-gold">
+          Team Hub
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
+          {teamDisplayName(selectedTeam)}
+        </h1>
         <p className="mt-2 text-sm text-kos-text/75">
-          {season ? `Season ${season}` : "Season unavailable"} {week ? `· Week ${week}` : ""} · Premium team intel
-          view for matchup prep and execution context.
+          {season ? `Season ${season}` : "Season unavailable"}{" "}
+          {week ? `· Week ${week}` : ""} · Premium team intel view for matchup
+          prep and execution context.
         </p>
         <TeamIntelSectionNav
           activeView={view}
@@ -221,15 +316,30 @@ export default async function NflTeamIntelViewPage({
 
       <section className="mt-5 grid gap-4 xl:grid-cols-[2fr_1fr]">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h2 className="text-lg font-semibold text-kos-text">Quick Market Context</h2>
+          <h2 className="text-lg font-semibold text-kos-text">
+            Quick Market Context
+          </h2>
           <p className="mt-2 text-sm text-kos-text/75">
-            Record {formatTeamRecordWithRank(standingsRow, standingsRankMaps.win_pct?.get(standingsIndex))} with point differential{" "}
-            {formatIntelValueWithRank(standingsRow?.point_diff, standingsRankMaps.point_diff?.get(standingsIndex), true)}.
-            Use pass rate and efficiency splits to calibrate spread/total assumptions before pricing.
+            Record{" "}
+            {formatTeamRecordWithRank(
+              standingsRow,
+              standingsRankMaps.win_pct?.get(standingsIndex),
+            )}{" "}
+            with point differential{" "}
+            {formatIntelValueWithRank(
+              standingsRow?.point_diff,
+              standingsRankMaps.point_diff?.get(standingsIndex),
+              true,
+            )}
+            . Use pass rate and efficiency splits to calibrate spread/total
+            assumptions before pricing.
           </p>
           <div className="mt-4 space-y-2">
             {trends.map((snippet) => (
-              <p key={snippet} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-kos-text/80">
+              <p
+                key={snippet}
+                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-kos-text/80"
+              >
                 {snippet}
               </p>
             ))}
@@ -237,12 +347,17 @@ export default async function NflTeamIntelViewPage({
         </article>
 
         <article className="rounded-2xl border border-white/10 bg-black/30 p-5">
-          <h2 className="text-lg font-semibold text-kos-text">Depth / Injury Impact</h2>
+          <h2 className="text-lg font-semibold text-kos-text">
+            Depth / Injury Impact
+          </h2>
           <p className="mt-2 text-sm text-kos-text/75">
-            {injuries.rows.length} reported injuries and {depth.rows.length} depth-chart records for this filter.
+            {injuries.rows.length} reported injuries and {depth.rows.length}{" "}
+            depth-chart records for this filter.
           </p>
           <div className="mt-4 rounded-lg border border-kos-gold/25 bg-kos-gold/10 p-3">
-            <p className="text-xs uppercase tracking-wide text-kos-gold">Impact Badge</p>
+            <p className="text-xs uppercase tracking-wide text-kos-gold">
+              Impact Badge
+            </p>
             <p className="mt-1 text-sm text-kos-text">
               {injuries.rows.length >= 8
                 ? "Elevated volatility"
@@ -255,12 +370,27 @@ export default async function NflTeamIntelViewPage({
       </section>
 
       <section className="mt-5">
-        <TeamIntelStatCards row={statsRow} comparisonRows={statsComparison.rows} />
+        <TeamIntelStatCards
+          row={statsRow}
+          comparisonRows={statsComparison.rows}
+        />
       </section>
 
-      {(stats.error || depth.error || injuries.error || rosters.error || tendencyData?.profile.error) && (
+      {(stats.error ||
+        depth.error ||
+        injuries.error ||
+        rosters.error ||
+        tendencyData?.profile.error) && (
         <section className="mt-4 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-200">
-          {[stats.error, depth.error, injuries.error, rosters.error, tendencyData?.profile.error].filter(Boolean).join(" ")}
+          {[
+            stats.error,
+            depth.error,
+            injuries.error,
+            rosters.error,
+            tendencyData?.profile.error,
+          ]
+            .filter(Boolean)
+            .join(" ")}
         </section>
       )}
 
@@ -308,16 +438,23 @@ export default async function NflTeamIntelViewPage({
               { key: "pass_rate", label: "Pass Rate" },
               { key: "early_down_pass_rate", label: "Early Pass" },
               { key: "success_rate_offense", label: "Off Success" },
-              { key: "success_rate_defense_allowed", label: "Def Success Allowed" },
+              {
+                key: "success_rate_defense_allowed",
+                label: "Def Success Allowed",
+              },
               { key: "epa_per_play_offense", label: "Off EPA/Play" },
               { key: "epa_per_play_defense_allowed", label: "Def EPA Allowed" },
             ]}
           />
         ) : null}
 
-        {view === "depth-chart" ? <DepthChartRenderer rows={depth.rows} /> : null}
+        {view === "depth-chart" ? (
+          <DepthChartRenderer rows={depth.rows} />
+        ) : null}
 
-        {view === "injuries" ? <InjuryStatusPanel rows={injuries.rows} /> : null}
+        {view === "injuries" ? (
+          <InjuryStatusPanel rows={injuries.rows} />
+        ) : null}
 
         {view === "splits" ? (
           <div className="grid gap-4 xl:grid-cols-2">

@@ -51,7 +51,12 @@ export function loadNflVegasBenchmarkReport(): NflVegasBenchmarkReport | null {
   try {
     const repoRoot = findRepoRoot();
     if (!repoRoot) return null;
-    const reportPath = path.join(repoRoot, "data", "ops", "nfl-vegas-benchmark-report.json");
+    const reportPath = path.join(
+      repoRoot,
+      "data",
+      "ops",
+      "nfl-vegas-benchmark-report.json",
+    );
     const raw = JSON.parse(readFileSync(reportPath, "utf-8"));
     return {
       generatedAt: raw.generated_at,
@@ -91,6 +96,7 @@ export function loadNflVegasBenchmarkReport(): NflVegasBenchmarkReport | null {
 }
 
 export function percentBetter(model: number, vegas: number): number {
-  if (!Number.isFinite(model) || !Number.isFinite(vegas) || vegas === 0) return 0;
+  if (!Number.isFinite(model) || !Number.isFinite(vegas) || vegas === 0)
+    return 0;
   return ((vegas - model) / vegas) * 100;
 }

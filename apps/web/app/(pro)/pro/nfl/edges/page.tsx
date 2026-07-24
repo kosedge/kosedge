@@ -56,20 +56,30 @@ export default async function NflEdgesDeskPage({
   const search = await searchParams;
   const seasonRaw = Number(firstValue(search.season));
   const weekRaw = Number(firstValue(search.week));
-  const season = Number.isFinite(seasonRaw) && seasonRaw >= 2010 ? seasonRaw : DEFAULT_SEASON;
-  const week = Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 25 ? weekRaw : DEFAULT_WEEK;
+  const season =
+    Number.isFinite(seasonRaw) && seasonRaw >= 2010
+      ? seasonRaw
+      : DEFAULT_SEASON;
+  const week =
+    Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 25
+      ? weekRaw
+      : DEFAULT_WEEK;
   const marketRaw = (firstValue(search.market) ?? "all").toLowerCase();
-  const market = (MARKET_TABS.includes(marketRaw as DeskMarketType)
-    ? marketRaw
-    : "all") as DeskMarketType;
+  const market = (
+    MARKET_TABS.includes(marketRaw as DeskMarketType) ? marketRaw : "all"
+  ) as DeskMarketType;
   const minEdgeIdxRaw = Number(firstValue(search.minEdge));
   const minEdgeIdx =
-    Number.isFinite(minEdgeIdxRaw) && minEdgeIdxRaw >= 0 && minEdgeIdxRaw < MIN_EDGE_OPTIONS.length
+    Number.isFinite(minEdgeIdxRaw) &&
+    minEdgeIdxRaw >= 0 &&
+    minEdgeIdxRaw < MIN_EDGE_OPTIONS.length
       ? minEdgeIdxRaw
       : 1;
   const minEdge = MIN_EDGE_OPTIONS[minEdgeIdx];
   const minConfRaw = Number(firstValue(search.minConf));
-  const minConfidence = MIN_CONF_OPTIONS.includes(minConfRaw as (typeof MIN_CONF_OPTIONS)[number])
+  const minConfidence = MIN_CONF_OPTIONS.includes(
+    minConfRaw as (typeof MIN_CONF_OPTIONS)[number],
+  )
     ? minConfRaw
     : 0;
 
@@ -109,8 +119,9 @@ export default async function NflEdgesDeskPage({
               Actionable Kosedge Edges
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              KEI Lines → Edges → Bets. Game and prop edges that clear your thresholds — Kosedge line vs Vegas, side,
-              and confidence. Empty when nothing clears the cut.
+              KEI Lines → Edges → Bets. Game and prop edges that clear your
+              thresholds — Kosedge line vs Vegas, side, and confidence. Empty
+              when nothing clears the cut.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -166,7 +177,9 @@ export default async function NflEdgesDeskPage({
                 key={option.label}
                 href={buildHref({ ...activeQuery, minEdge: String(index) })}
                 className={`rounded-md px-2 py-1 font-semibold transition ${
-                  minEdgeIdx === index ? "bg-white/15 text-kos-text" : "text-kos-text/60 hover:text-kos-text"
+                  minEdgeIdx === index
+                    ? "bg-white/15 text-kos-text"
+                    : "text-kos-text/60 hover:text-kos-text"
                 }`}
               >
                 {option.label}
@@ -184,7 +197,9 @@ export default async function NflEdgesDeskPage({
                 minConf: option > 0 ? String(option) : undefined,
               })}
               className={`rounded-md px-2 py-1 font-semibold transition ${
-                minConfidence === option ? "bg-white/15 text-kos-text" : "text-kos-text/60 hover:text-kos-text"
+                minConfidence === option
+                  ? "bg-white/15 text-kos-text"
+                  : "text-kos-text/60 hover:text-kos-text"
               }`}
             >
               {option === 0 ? "Any" : `${Math.round(option * 100)}%`}
@@ -196,7 +211,9 @@ export default async function NflEdgesDeskPage({
               key={w}
               href={buildHref({ ...activeQuery, week: String(w) })}
               className={`rounded-md px-2 py-1 font-semibold transition ${
-                week === w ? "border border-kos-gold/40 bg-kos-gold/15 text-kos-gold" : "text-kos-text/60"
+                week === w
+                  ? "border border-kos-gold/40 bg-kos-gold/15 text-kos-gold"
+                  : "text-kos-text/60"
               }`}
             >
               W{w}
@@ -215,12 +232,19 @@ export default async function NflEdgesDeskPage({
 
         {!fetchError && desk.rows.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No edges clear the current thresholds. Lower min edge / confidence, widen market type, or check{" "}
-            <Link href="/pro/nfl/fair-lines" className="text-kos-gold underline-offset-2 hover:underline">
+            No edges clear the current thresholds. Lower min edge / confidence,
+            widen market type, or check{" "}
+            <Link
+              href="/pro/nfl/fair-lines"
+              className="text-kos-gold underline-offset-2 hover:underline"
+            >
               KEI Lines
             </Link>{" "}
             and{" "}
-            <Link href="/pro/nfl/props" className="text-kos-gold underline-offset-2 hover:underline">
+            <Link
+              href="/pro/nfl/props"
+              className="text-kos-gold underline-offset-2 hover:underline"
+            >
               Props
             </Link>{" "}
             for the full boards.
@@ -253,8 +277,8 @@ export default async function NflEdgesDeskPage({
       </section>
 
       <p className="mt-4 text-xs text-kos-text/45">
-        Decision support only — not picks. Edges require a joined market price; Kosedge-only lines stay on KEI Lines /
-        Props.
+        Decision support only — not picks. Edges require a joined market price;
+        Kosedge-only lines stay on KEI Lines / Props.
       </p>
     </main>
   );
@@ -267,13 +291,23 @@ function EdgeRow({ row }: { row: DeskEdgeRow }) {
         <div className="font-semibold text-kos-text">{row.matchupOrPlayer}</div>
         <div className="text-xs text-kos-text/55">{row.detail}</div>
       </td>
-      <td className="px-3 py-3 text-kos-text/80">{marketLabel(row.marketType)}</td>
-      <td className="px-3 py-3 font-semibold text-kos-gold">{row.kosedgeLine}</td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {marketLabel(row.marketType)}
+      </td>
+      <td className="px-3 py-3 font-semibold text-kos-gold">
+        {row.kosedgeLine}
+      </td>
       <td className="px-3 py-3 text-kos-text/90">{row.vegasLine}</td>
-      <td className="px-3 py-3 font-semibold text-edge-green">{row.edgeDisplay}</td>
+      <td className="px-3 py-3 font-semibold text-edge-green">
+        {row.edgeDisplay}
+      </td>
       <td className="px-3 py-3 text-edge-green">{row.side}</td>
-      <td className="px-3 py-3 text-kos-text/80">{formatConfidence(row.confidence)}</td>
-      <td className="px-3 py-3 text-xs text-kos-text/60">{formatKickoff(row.kickoff)}</td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatConfidence(row.confidence)}
+      </td>
+      <td className="px-3 py-3 text-xs text-kos-text/60">
+        {formatKickoff(row.kickoff)}
+      </td>
     </tr>
   );
 }

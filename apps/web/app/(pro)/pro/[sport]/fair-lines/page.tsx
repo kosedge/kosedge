@@ -20,7 +20,9 @@ export default async function FairLinesPage({
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold text-kos-text">{sportName} Fair Lines</h2>
+          <h2 className="text-2xl font-semibold text-kos-text">
+            {sportName} Fair Lines
+          </h2>
           <p className="mt-2 text-kos-text/70">
             Model reference vs market prices. Neutral presentation — no picks.
           </p>
@@ -35,7 +37,8 @@ export default async function FairLinesPage({
       <div className="mt-8 rounded-2xl border border-kos-border bg-kos-surface/30 p-8">
         <p className="text-sm font-semibold text-kos-gold">Coming soon</p>
         <p className="mt-2 text-kos-text/60">
-          Fair-lines board is wired for NFL. {sportName} projections are not connected to this surface yet.
+          Fair-lines board is wired for NFL. {sportName} projections are not
+          connected to this surface yet.
         </p>
         <Link
           href="/pro/nfl/fair-lines"

@@ -264,7 +264,9 @@ export async function fetchEdgeBoard(
 
     const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
 
-    const formatJuice = (price: number | undefined | null): string | undefined => {
+    const formatJuice = (
+      price: number | undefined | null,
+    ): string | undefined => {
       if (price == null || !Number.isFinite(price)) return undefined;
       const n = Math.round(price);
       return n > 0 ? `+${n}` : String(n);
@@ -442,7 +444,9 @@ export async function fetchOddsComparison(
     const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
     const spread: OddsComparisonRow["spread"] = {};
     const total: OddsComparisonRow["total"] = {};
-    const formatJuice = (price: number | undefined | null): string | undefined => {
+    const formatJuice = (
+      price: number | undefined | null,
+    ): string | undefined => {
       if (price == null || !Number.isFinite(price)) return undefined;
       const n = Math.round(price);
       return n > 0 ? `+${n}` : String(n);

@@ -7,14 +7,13 @@ import "server-only";
 
 import type { KeiLineGame } from "@/lib/kei-lines";
 import { getKeiLines } from "@/lib/kei-lines";
-import {
-  fetchNflFairLines,
-  type NflFairLineRow,
-} from "@/lib/nfl-fair-lines";
+import { fetchNflFairLines, type NflFairLineRow } from "@/lib/nfl-fair-lines";
 
 const NFL_KEI_SEASON = 2026;
 
-export function keiGamesFromNflFairLines(lines: NflFairLineRow[]): KeiLineGame[] {
+export function keiGamesFromNflFairLines(
+  lines: NflFairLineRow[],
+): KeiLineGame[] {
   return lines.map((line) => ({
     id: line.gameId,
     homeTeam: line.homeTeam,
@@ -27,7 +26,9 @@ export function keiGamesFromNflFairLines(lines: NflFairLineRow[]): KeiLineGame[]
   }));
 }
 
-export async function resolveKeiGames(sportKey: string): Promise<KeiLineGame[]> {
+export async function resolveKeiGames(
+  sportKey: string,
+): Promise<KeiLineGame[]> {
   if (sportKey.toLowerCase() === "nfl") {
     try {
       const board = await fetchNflFairLines({

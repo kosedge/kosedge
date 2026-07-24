@@ -22,7 +22,9 @@ function firstValue(value: SearchValue): string | undefined {
   return value;
 }
 
-function isScoringProfile(value: string | undefined): value is FantasyScoringProfile {
+function isScoringProfile(
+  value: string | undefined,
+): value is FantasyScoringProfile {
   return value === "standard" || value === "half_ppr" || value === "ppr";
 }
 
@@ -43,10 +45,16 @@ export default async function NflFantasyDraftBoardPage({
   const search = await searchParams;
   const position = (firstValue(search.position) ?? "ALL").toUpperCase();
   const scoringRaw = firstValue(search.scoring);
-  const scoring: FantasyScoringProfile = isScoringProfile(scoringRaw) ? scoringRaw : "half_ppr";
+  const scoring: FantasyScoringProfile = isScoringProfile(scoringRaw)
+    ? scoringRaw
+    : "half_ppr";
   const rookiesOnly = firstValue(search.rookies) === "1";
   const limitRaw = Number(firstValue(search.limit));
-  const limit = LIMIT_OPTIONS.includes(limitRaw as (typeof LIMIT_OPTIONS)[number]) ? limitRaw : 100;
+  const limit = LIMIT_OPTIONS.includes(
+    limitRaw as (typeof LIMIT_OPTIONS)[number],
+  )
+    ? limitRaw
+    : 100;
   const season = DEFAULT_SEASON;
 
   const board = await fetchNflFantasyDraftRankings({
@@ -58,9 +66,17 @@ export default async function NflFantasyDraftBoardPage({
   });
 
   const overallLeader = board.rows[0];
-  const bestValue = [...board.rows].sort((a, b) => b.valueOverReplacement - a.valueOverReplacement)[0];
-  const bestRookie = board.rows.filter((row) => row.isRookie).sort((a, b) => a.rankOverall - b.rankOverall)[0];
-  const activeQuery = { scoring, rookies: rookiesOnly ? "1" : undefined, limit: String(limit) };
+  const bestValue = [...board.rows].sort(
+    (a, b) => b.valueOverReplacement - a.valueOverReplacement,
+  )[0];
+  const bestRookie = board.rows
+    .filter((row) => row.isRookie)
+    .sort((a, b) => a.rankOverall - b.rankOverall)[0];
+  const activeQuery = {
+    scoring,
+    rookies: rookiesOnly ? "1" : undefined,
+    limit: String(limit),
+  };
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -74,9 +90,10 @@ export default async function NflFantasyDraftBoardPage({
               Beat Your Fantasy League
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Full season-long draft board across QB/RB/WR/TE/K/DST, ranked by Value Over Replacement (VOR) so the
-              board mirrors how single-QB drafts actually play out — not just raw point totals. Switch scoring format
-              and position to build your cheat sheet.
+              Full season-long draft board across QB/RB/WR/TE/K/DST, ranked by
+              Value Over Replacement (VOR) so the board mirrors how single-QB
+              drafts actually play out — not just raw point totals. Switch
+              scoring format and position to build your cheat sheet.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -98,37 +115,68 @@ export default async function NflFantasyDraftBoardPage({
 
       {board.error ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {board.error} The draft board will populate once the model service is reachable.
+          {board.error} The draft board will populate once the model service is
+          reachable.
         </section>
       ) : (
         <>
           <section className="mt-6 grid gap-4 md:grid-cols-3">
             <StatCard
               label="Overall #1 Pick"
-              value={overallLeader ? `${overallLeader.playerName} (${overallLeader.team} ${overallLeader.position})` : "N/A"}
-              detail={overallLeader ? `${overallLeader.totalPoints.toFixed(1)} projected pts · Tier ${draftTierLabel(overallLeader.tier)}` : ""}
+              value={
+                overallLeader
+                  ? `${overallLeader.playerName} (${overallLeader.team} ${overallLeader.position})`
+                  : "N/A"
+              }
+              detail={
+                overallLeader
+                  ? `${overallLeader.totalPoints.toFixed(1)} projected pts · Tier ${draftTierLabel(overallLeader.tier)}`
+                  : ""
+              }
             />
             <StatCard
               label="Best Value Over Replacement"
-              value={bestValue ? `${bestValue.playerName} (${bestValue.team} ${bestValue.position})` : "N/A"}
-              detail={bestValue ? `+${bestValue.valueOverReplacement.toFixed(1)} VOR vs. replacement` : ""}
+              value={
+                bestValue
+                  ? `${bestValue.playerName} (${bestValue.team} ${bestValue.position})`
+                  : "N/A"
+              }
+              detail={
+                bestValue
+                  ? `+${bestValue.valueOverReplacement.toFixed(1)} VOR vs. replacement`
+                  : ""
+              }
             />
             <StatCard
               label="Top Rookie"
-              value={bestRookie ? `${bestRookie.playerName} (${bestRookie.team} ${bestRookie.position})` : "No qualifying rookie yet"}
-              detail={bestRookie ? `Overall rank #${bestRookie.rankOverall} · Pos rank #${bestRookie.rankPosition}` : ""}
+              value={
+                bestRookie
+                  ? `${bestRookie.playerName} (${bestRookie.team} ${bestRookie.position})`
+                  : "No qualifying rookie yet"
+              }
+              detail={
+                bestRookie
+                  ? `Overall rank #${bestRookie.rankOverall} · Pos rank #${bestRookie.rankPosition}`
+                  : ""
+              }
             />
           </section>
 
           <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <nav className="flex flex-wrap gap-2" aria-label="Position filter">
+              <nav
+                className="flex flex-wrap gap-2"
+                aria-label="Position filter"
+              >
                 {POSITION_TABS.map((tab) => {
                   const isActive = position === tab;
                   return (
                     <Link
                       key={tab}
-                      href={buildHref({ ...activeQuery, position: tab === "ALL" ? undefined : tab })}
+                      href={buildHref({
+                        ...activeQuery,
+                        position: tab === "ALL" ? undefined : tab,
+                      })}
                       className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
                         isActive
                           ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
@@ -194,7 +242,9 @@ export default async function NflFantasyDraftBoardPage({
                       limit: String(option),
                     })}
                     className={`rounded-md px-2 py-1 font-semibold transition ${
-                      limit === option ? "bg-white/15 text-kos-text" : "text-kos-text/60 hover:text-kos-text"
+                      limit === option
+                        ? "bg-white/15 text-kos-text"
+                        : "text-kos-text/60 hover:text-kos-text"
                     }`}
                   >
                     {option}
@@ -206,21 +256,36 @@ export default async function NflFantasyDraftBoardPage({
 
           <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
             <div className="flex items-baseline justify-between gap-3">
-              <h2 className="text-xl font-semibold text-kos-text">Draft Board</h2>
+              <h2 className="text-xl font-semibold text-kos-text">
+                Draft Board
+              </h2>
               <p className="text-xs text-kos-text/60">
-                {board.count} player{board.count === 1 ? "" : "s"} matching filters
+                {board.count} player{board.count === 1 ? "" : "s"} matching
+                filters
               </p>
             </div>
             {board.rows.length === 0 ? (
               <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-                No draft board rows match this filter yet. Try clearing the rookie filter or switching position.
+                No draft board rows match this filter yet. Try clearing the
+                rookie filter or switching position.
               </div>
             ) : (
               <div className="mt-4 overflow-x-auto">
                 <table className="min-w-full border-separate border-spacing-0">
                   <thead>
                     <tr>
-                      {["Rk", "Pos Rk", "Player", "Team", "Pos", "Tier", "Gms", "Pts", "Pts/Gm", "VOR"].map((label) => (
+                      {[
+                        "Rk",
+                        "Pos Rk",
+                        "Player",
+                        "Team",
+                        "Pos",
+                        "Tier",
+                        "Gms",
+                        "Pts",
+                        "Pts/Gm",
+                        "VOR",
+                      ].map((label) => (
                         <th
                           key={label}
                           className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
@@ -245,10 +310,20 @@ export default async function NflFantasyDraftBoardPage({
   );
 }
 
-function StatCard({ label, value, detail }: { label: string; value: string; detail: string }) {
+function StatCard({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+}) {
   return (
     <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <p className="text-xs uppercase tracking-wide text-kos-text/60">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-kos-text/60">
+        {label}
+      </p>
       <p className="mt-2 text-lg font-semibold text-kos-text">{value}</p>
       {detail ? <p className="text-sm text-kos-gold">{detail}</p> : null}
     </article>
@@ -258,7 +333,9 @@ function StatCard({ label, value, detail }: { label: string; value: string; deta
 function DraftRow({ row }: { row: NflFantasyDraftRankingRow }) {
   return (
     <tr className="odd:bg-white/3">
-      <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">{row.rankOverall}</td>
+      <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">
+        {row.rankOverall}
+      </td>
       <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
         {row.position}
         {row.rankPosition}
@@ -271,7 +348,9 @@ function DraftRow({ row }: { row: NflFantasyDraftRankingRow }) {
           </span>
         ) : null}
       </td>
-      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.team}</td>
+      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+        {row.team}
+      </td>
       <td className="border-b border-white/5 px-3 py-2 text-sm">
         <span
           className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase ${draftPositionBadgeClass(
@@ -282,13 +361,21 @@ function DraftRow({ row }: { row: NflFantasyDraftRankingRow }) {
         </span>
       </td>
       <td className="border-b border-white/5 px-3 py-2 text-sm">
-        <span className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}>
+        <span
+          className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}
+        >
           {draftTierLabel(row.tier)}
         </span>
       </td>
-      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.gamesProjected}</td>
-      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">{row.totalPoints.toFixed(1)}</td>
-      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{fantasyPointsPerGame(row).toFixed(1)}</td>
+      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+        {row.gamesProjected}
+      </td>
+      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">
+        {row.totalPoints.toFixed(1)}
+      </td>
+      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+        {fantasyPointsPerGame(row).toFixed(1)}
+      </td>
       <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
         {row.valueOverReplacement >= 0 ? "+" : ""}
         {row.valueOverReplacement.toFixed(1)}

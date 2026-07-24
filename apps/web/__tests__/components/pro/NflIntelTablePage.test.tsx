@@ -3,7 +3,14 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: { children: ReactNode; href: string }) => (
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: ReactNode;
+    href: string;
+  }) => (
     <a href={href} {...props}>
       {children}
     </a>
@@ -13,7 +20,10 @@ vi.mock("next/link", () => ({
 vi.mock("@/lib/nfl-intel", () => ({
   formatIntelValueWithRank: (value: unknown, rank?: number) =>
     `${String(value ?? "—")}${typeof rank === "number" ? ` (${rank})` : ""}`,
-  formatTeamRecordWithRank: (row: Record<string, unknown> | undefined, rank?: number) => {
+  formatTeamRecordWithRank: (
+    row: Record<string, unknown> | undefined,
+    rank?: number,
+  ) => {
     if (!row) return "—";
     const wins = Number(row.wins ?? Number.NaN);
     const losses = Number(row.losses ?? Number.NaN);
@@ -29,12 +39,16 @@ vi.mock("@/lib/nfl-intel", () => ({
       {
         conference: "AFC",
         division: "East",
-        rows: typedRows.filter((row) => row.conference === "AFC" && row.division === "East"),
+        rows: typedRows.filter(
+          (row) => row.conference === "AFC" && row.division === "East",
+        ),
       },
       {
         conference: "NFC",
         division: "West",
-        rows: typedRows.filter((row) => row.conference === "NFC" && row.division === "West"),
+        rows: typedRows.filter(
+          (row) => row.conference === "NFC" && row.division === "West",
+        ),
       },
     ];
   },
@@ -51,9 +65,36 @@ describe("NflIntelTablePage", () => {
       team: null,
       count: 3,
       rows: [
-        { team: "SEA", wins: 10, losses: 7, ties: 0, win_pct: 0.625, point_diff: 35, conference: "NFC", division: "West" },
-        { team: "MIA", wins: 11, losses: 6, ties: 0, win_pct: 0.688, point_diff: 40, conference: "AFC", division: "East" },
-        { team: "BUF", wins: 13, losses: 4, ties: 0, win_pct: 0.812, point_diff: 70, conference: "AFC", division: "East" },
+        {
+          team: "SEA",
+          wins: 10,
+          losses: 7,
+          ties: 0,
+          win_pct: 0.625,
+          point_diff: 35,
+          conference: "NFC",
+          division: "West",
+        },
+        {
+          team: "MIA",
+          wins: 11,
+          losses: 6,
+          ties: 0,
+          win_pct: 0.688,
+          point_diff: 40,
+          conference: "AFC",
+          division: "East",
+        },
+        {
+          team: "BUF",
+          wins: 13,
+          losses: 4,
+          ties: 0,
+          win_pct: 0.812,
+          point_diff: 70,
+          conference: "AFC",
+          division: "East",
+        },
       ],
       selection: {
         fallback_applied: true,
@@ -79,7 +120,9 @@ describe("NflIntelTablePage", () => {
 
     render(page);
 
-    expect(screen.getByText("Showing latest available: 2025 W22")).toBeInTheDocument();
+    expect(
+      screen.getByText("Showing latest available: 2025 W22"),
+    ).toBeInTheDocument();
     expect(screen.getByText("AFC · East")).toBeInTheDocument();
     expect(screen.getByText("NFC · West")).toBeInTheDocument();
     expect(screen.getByText("BUF")).toBeInTheDocument();

@@ -93,7 +93,7 @@ That baseline carries a real signal (`feature_payload->>'usage_source'` on
 `preseason_hydrate_v1`/`pbp_aggregation`) into
 `services/model-service/src/services/nfl_player_projection_engine.py`'s
 `PlayerFeatureInputs.experience_confidence` field. A rookie projected to the
-same *mean* as a veteran genuinely carries more outcome uncertainty -- there
+same _mean_ as a veteran genuinely carries more outcome uncertainty -- there
 is no track record backing the number -- so `experience_confidence` widens
 the projection's `_std` fields (never the mean) via `variance_widening`,
 visible in each baseline's `uncertainty` block. This directly affects prop
@@ -110,7 +110,7 @@ Milton over Lamar / Dak.
 `nfl_player_projection_engine.py`, wired from
 `materialize_nfl_player_baseline_projections`):
 
-1. Team-scoped prior pass attempts (last 2 seasons on *this* team), else
+1. Team-scoped prior pass attempts (last 2 seasons on _this_ team), else
    career attempts if the room has no team signal.
 2. Depth chart score + current snap share.
 3. Clear volume-leader bonus when one QB threw ≥1.2× the next (≥120 att).
@@ -133,21 +133,22 @@ zero dual ≥1800-yard QB rooms. `publish_ready` must be true before treating
 season leaders as subscription-grade.
 
 Weekly props and fantasy both consume the same baselines, so fixing rooms
-+ scale here flows into `/pro/nfl/props`, draft rankings, and (via team
-score sims) wins/standings once `simulate_2026_season.py` is re-run.
+
+- scale here flows into `/pro/nfl/props`, draft rankings, and (via team
+  score sims) wins/standings once `simulate_2026_season.py` is re-run.
 
 ## Enterprise RB rush shares + snap tracking (2026-07)
 
 Paid-desk failure mode: dual ~1100-yard RB rooms on the same team and
 compressed/inflated committee boards that ignored who actually ran the
-football. Unlike QBs, real NFL backfields *do* committee — so allocation
+football. Unlike QBs, real NFL backfields _do_ committee — so allocation
 is winner-take-most **by default**, softened team-by-team when usage says
 so.
 
 **Rush share** (`compute_rb_rush_shares` in
 `nfl_player_projection_engine.py`, wired from baseline + box materialize):
 
-1. Team-scoped prior carries (last 2 seasons on *this* team), else career.
+1. Team-scoped prior carries (last 2 seasons on _this_ team), else career.
 2. Depth chart + trailing `rush_share` + offense snap %.
 3. Room shape from usage lead ratio:
    - clear bell cow ≈ **0.70 / 0.22 / 0.08**
@@ -157,7 +158,7 @@ so.
    so mid-season hot hands and shared backfields move as more data arrives.
 5. Shares are renormalized to sum ≈ 1.0 per team.
 
-**Snap tracking** (foundation for RB *and* WR usage):
+**Snap tracking** (foundation for RB _and_ WR usage):
 
 - Owned table `nfl_dp_snap_counts_weekly` now stores `gsis_player_id`
   (PFR→GSIS bridge via nflverse `load_players`) so snaps join onto GSIS
@@ -277,7 +278,7 @@ simulated together across N replicates:
 3. **Persistence**: `src.tasks.materialize_nfl_player_box_score_sims(season, week, model_version, replicates)`
    writes one row per player per real game to `nfl_player_game_box_score_sims`
    (`infra/db/032_nfl_player_game_box_score_sims.sql`) -- a `{mean, std,
-   p10, p25, p50, p75, p90}` block per stat (`pass_yards_dist`,
+p10, p25, p50, p75, p90}` block per stat (`pass_yards_dist`,
    `rush_yards_dist`, `receiving_yards_dist`, `receptions_dist`,
    `total_tds_dist`, `fantasy_points_ppr_dist`, etc.), plus a handful of
    flattened `*_mean` columns for simple indexed queries. This is exactly
@@ -313,7 +314,8 @@ that week's real usage lands, before re-materializing
 `nfl_player_projection_features_weekly` for the remaining weeks: `python3 -m data_platform_nfl.cli --refresh-rolling-player-usage --through-week <W> --seasons <season>`.
 
 **Preferred one-shot orchestrator** (DP rolling refresh + feature rematerialize
-+ baselines / box-score sims / props / fantasy / awards):
+
+- baselines / box-score sims / props / fantasy / awards):
 
 ```bash
 SEASON=2026 WEEK=5 ./scripts/nfl/run-weekly-inseason-update.sh
@@ -541,13 +543,14 @@ eligible" logic already used for QB/TE), and -- critically -- this does NOT
 need an artificial downward fudge factor on top: because real kicker/DST
 season point totals are genuinely tightly clustered (~60-135 points
 league-wide, vs. RB/WR spanning 300+ down to near 0), `total_points[rank 1]
+
 - total_points[rank 12]` for K/DST comes out naturally small relative to
 RB/WR's spread -- the exact same VOR mechanism the module docstring already
 describes for why a high, tightly-clustered QB distribution doesn't
 dominate the overall board. K/DST also get their OWN short tier ladder
 (`elite`/`K1`-or-`DST1`/`streamer`/`bench`) rather than falling back to the
-generic default, so "who's the best AVAILABLE kicker/defense right now" is
-still answerable even though the position overall drafts late.
+  generic default, so "who's the best AVAILABLE kicker/defense right now" is
+  still answerable even though the position overall drafts late.
 
 **2026 sanity check** (materialized against real 2026 preseason-hydrated
 data): top-5 projected K ranged ~158-170 half-PPR points, top-5 projected
@@ -585,12 +588,13 @@ real voting patterns.
 **The player's own stats matter, but weighted below team + position for
 MVP** (`MVP_STAT_WEIGHT = 0.35`). `stat_composite` blends a player's
 projected season yardage and touchdowns (passing + rushing for QBs, rushing
-+ receiving for everyone else), each independently min-max normalized
-against SAME-POSITION qualifying peers only -- so a QB's raw passing-yardage
-scale is never compared directly to a WR's receiving-yardage scale, only
-each player's standing relative to their own position group is compared,
-which is what makes the resulting `[0, 1]` scores comparable ACROSS
-positions for OPOY.
+
+- receiving for everyone else), each independently min-max normalized
+  against SAME-POSITION qualifying peers only -- so a QB's raw passing-yardage
+  scale is never compared directly to a WR's receiving-yardage scale, only
+  each player's standing relative to their own position group is compared,
+  which is what makes the resulting `[0, 1]` scores comparable ACROSS
+  positions for OPOY.
 
 **OPOY has no QB bias at all** -- `OPOY_STAT_WEIGHT = 0.65` /
 `OPOY_TEAM_WEIGHT = 0.35`, and any offensive position can win purely on
@@ -641,14 +645,14 @@ is found, award materialization is skipped entirely (returns
 
 ## Data Source Matrix
 
-| Source | Free/Paid | Fields Used | Ingestion Cadence | Reliability / Risk Notes | Implementation Status |
-| --- | --- | --- | --- | --- | --- |
-| nflverse / nflreadpy | Free (open data, dataset terms apply) | PBP (`load_pbp`), schedules, rosters, injuries, weekly stats | Daily + weekly rebuilds | Broad coverage and reproducible dictionaries; must respect upstream data-owner terms | Integrated now |
-| The Odds API (NFL event odds, player props markets) | Free tier + paid quotas | Player prop lines/prices (`player_pass_yds`, `player_rush_yds`, `player_reception_yds`, `player_receptions`, `player_anytime_td`) | Hourly near slate + pre-kickoff refresh | Practical for V1 but quota cost/coverage variance by sportsbook/region | Integrated now |
-| ESPN public scoreboard endpoints (unofficial) | Free | Schedule/status fallback and context snapshots | Daily + hourly | Unofficial and undocumented; no SLA, endpoint change risk | Integrated now (fallback context source) |
-| SportsDataIO (FantasyData) NFL feeds | Paid | Official depth charts, richer injury status, projections/fantasy metadata, prop/archive feeds | Near real-time + scheduled | Better depth-role confidence and injury freshness than free stack; commercial contract required for full live feeds | Not integrated (recommended paid upgrade) |
-| Sportradar Odds Comparison Player Props | Paid (enterprise) | Multi-book player props, mappings, structured change-log feeds | Minute-level polling / change-log driven | Enterprise-grade normalization and bookmaker mapping; contract onboarding required | Not integrated (recommended for production props scale) |
-| Stats Perform / Opta | Paid (enterprise) | Advanced player/team context, tracking-derived features, premium betting/fantasy context | Real-time + batched historical | Highest quality for advanced role/usage and proprietary context; expensive and sales-led | Not integrated (recommended for advanced model quality) |
+| Source                                              | Free/Paid                             | Fields Used                                                                                                                       | Ingestion Cadence                        | Reliability / Risk Notes                                                                                            | Implementation Status                                   |
+| --------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| nflverse / nflreadpy                                | Free (open data, dataset terms apply) | PBP (`load_pbp`), schedules, rosters, injuries, weekly stats                                                                      | Daily + weekly rebuilds                  | Broad coverage and reproducible dictionaries; must respect upstream data-owner terms                                | Integrated now                                          |
+| The Odds API (NFL event odds, player props markets) | Free tier + paid quotas               | Player prop lines/prices (`player_pass_yds`, `player_rush_yds`, `player_reception_yds`, `player_receptions`, `player_anytime_td`) | Hourly near slate + pre-kickoff refresh  | Practical for V1 but quota cost/coverage variance by sportsbook/region                                              | Integrated now                                          |
+| ESPN public scoreboard endpoints (unofficial)       | Free                                  | Schedule/status fallback and context snapshots                                                                                    | Daily + hourly                           | Unofficial and undocumented; no SLA, endpoint change risk                                                           | Integrated now (fallback context source)                |
+| SportsDataIO (FantasyData) NFL feeds                | Paid                                  | Official depth charts, richer injury status, projections/fantasy metadata, prop/archive feeds                                     | Near real-time + scheduled               | Better depth-role confidence and injury freshness than free stack; commercial contract required for full live feeds | Not integrated (recommended paid upgrade)               |
+| Sportradar Odds Comparison Player Props             | Paid (enterprise)                     | Multi-book player props, mappings, structured change-log feeds                                                                    | Minute-level polling / change-log driven | Enterprise-grade normalization and bookmaker mapping; contract onboarding required                                  | Not integrated (recommended for production props scale) |
+| Stats Perform / Opta                                | Paid (enterprise)                     | Advanced player/team context, tracking-derived features, premium betting/fantasy context                                          | Real-time + batched historical           | Highest quality for advanced role/usage and proprietary context; expensive and sales-led                            | Not integrated (recommended for advanced model quality) |
 
 ## Paid Gap Analysis (What Is Still Needed)
 

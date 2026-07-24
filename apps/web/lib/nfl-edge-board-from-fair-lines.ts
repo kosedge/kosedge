@@ -43,10 +43,14 @@ function normalizeGameKey(game: string): string {
 }
 
 const NFL_CODE_TO_NAME = new Map(
-  NFL_TEAM_DIRECTORY.map((t) => [t.code.toLowerCase(), t.name.toLowerCase()] as const),
+  NFL_TEAM_DIRECTORY.map(
+    (t) => [t.code.toLowerCase(), t.name.toLowerCase()] as const,
+  ),
 );
 const NFL_NAME_TO_CODE = new Map(
-  NFL_TEAM_DIRECTORY.map((t) => [t.name.toLowerCase(), t.code.toLowerCase()] as const),
+  NFL_TEAM_DIRECTORY.map(
+    (t) => [t.name.toLowerCase(), t.code.toLowerCase()] as const,
+  ),
 );
 
 function nflAliases(label: string): string[] {
@@ -91,14 +95,18 @@ function formatJuice(price: number | null | undefined): string | undefined {
  * KEI always set from Kosedge.
  * Open = market consensus average; Best = best number across books when present.
  */
-export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[] {
+export function fairLinesToEdgeBoardRows(
+  lines: NflFairLineRow[],
+): EdgeBoardRow[] {
   const rows: EdgeBoardRow[] = [];
 
   for (const line of lines) {
     const game = `${line.awayTeam} @ ${line.homeTeam}`;
     const commenceTime = line.startTime ?? line.gameDate ?? undefined;
     const time = formatCommence(commenceTime ?? null);
-    const idBase = line.gameId || `${line.awayAbbr}-${line.homeAbbr}-${commenceTime ?? "tba"}`;
+    const idBase =
+      line.gameId ||
+      `${line.awayAbbr}-${line.homeAbbr}-${commenceTime ?? "tba"}`;
 
     const keiHome =
       line.spreadHome != null ? formatSigned(line.spreadHome) : undefined;
@@ -137,8 +145,12 @@ export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[
       market: "Spread",
       open: marketAwaySpread,
       best: bestAwaySpread ?? marketAwaySpread,
-      book: bestSpreadBook ?? (bestAwaySpread || marketAwaySpread ? "market" : undefined),
-      bookKey: bestSpreadBook ?? (bestAwaySpread || marketAwaySpread ? "market" : undefined),
+      book:
+        bestSpreadBook ??
+        (bestAwaySpread || marketAwaySpread ? "market" : undefined),
+      bookKey:
+        bestSpreadBook ??
+        (bestAwaySpread || marketAwaySpread ? "market" : undefined),
       openJuice: undefined,
       openJuiceHome: undefined,
       bestJuice: formatJuice(line.bestSpreadAwayJuice),
@@ -156,7 +168,8 @@ export function fairLinesToEdgeBoardRows(lines: NflFairLineRow[]): EdgeBoardRow[
       open: marketTotal,
       best: bestTotal ?? marketTotal,
       book: bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
-      bookKey: bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
+      bookKey:
+        bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
       openJuice: undefined,
       openJuiceHome: undefined,
       bestJuice: formatJuice(line.bestTotalOverJuice),
@@ -266,19 +279,22 @@ export function overlayOddsOntoFairLineRows(
     };
     if (odds.open) target.open = odds.open;
     if (odds.best) target.best = odds.best;
-    if (odds.book) (target as EdgeBoardRow & { book?: string }).book = odds.book;
+    if (odds.book)
+      (target as EdgeBoardRow & { book?: string }).book = odds.book;
     if (src.bookKey) {
       (target as EdgeBoardRow & { bookKey?: string }).bookKey = src.bookKey;
     }
     if (src.openJuice) {
-      (target as EdgeBoardRow & { openJuice?: string }).openJuice = src.openJuice;
+      (target as EdgeBoardRow & { openJuice?: string }).openJuice =
+        src.openJuice;
     }
     if (src.openJuiceHome) {
       (target as EdgeBoardRow & { openJuiceHome?: string }).openJuiceHome =
         src.openJuiceHome;
     }
     if (src.bestJuice) {
-      (target as EdgeBoardRow & { bestJuice?: string }).bestJuice = src.bestJuice;
+      (target as EdgeBoardRow & { bestJuice?: string }).bestJuice =
+        src.bestJuice;
     }
     if (src.bestJuiceHome) {
       (target as EdgeBoardRow & { bestJuiceHome?: string }).bestJuiceHome =

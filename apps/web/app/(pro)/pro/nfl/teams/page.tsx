@@ -1,7 +1,11 @@
 import Link from "next/link";
 import TeamIntelFilterBar from "@/components/pro/TeamIntelFilterBar";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
-import { fetchNflIntel, formatIntelValueWithRank, formatTeamRecordWithRank } from "@/lib/nfl-intel";
+import {
+  fetchNflIntel,
+  formatIntelValueWithRank,
+  formatTeamRecordWithRank,
+} from "@/lib/nfl-intel";
 import {
   buildTeamIntelHref,
   extractTeamCodes,
@@ -30,22 +34,40 @@ export default async function NflTeamsIndexPage({
   const filteredSet = new Set(filteredDirectory.map((team) => team.code));
   const availableCodes = extractTeamCodes(standings.rows);
   const selectedCodes = availableCodes.filter((code) => filteredSet.has(code));
-  const standingsRanks = buildMetricRankMaps(standings.rows, ["win_pct", "point_diff"]);
-  const statsRanks = buildMetricRankMaps(stats.rows, ["pass_rate", "epa_per_play_offense"]);
+  const standingsRanks = buildMetricRankMaps(standings.rows, [
+    "win_pct",
+    "point_diff",
+  ]);
+  const statsRanks = buildMetricRankMaps(stats.rows, [
+    "pass_rate",
+    "epa_per_play_offense",
+  ]);
   const standingsIndexByTeam = new Map(
     standings.rows
-      .map((entry, index) => ({ index, team: typeof entry.team === "string" ? entry.team : null }))
-      .filter((entry): entry is { index: number; team: string } => Boolean(entry.team))
+      .map((entry, index) => ({
+        index,
+        team: typeof entry.team === "string" ? entry.team : null,
+      }))
+      .filter((entry): entry is { index: number; team: string } =>
+        Boolean(entry.team),
+      )
       .map((entry) => [entry.team, entry.index] as const),
   );
   const statsIndexByTeam = new Map(
     stats.rows
-      .map((entry, index) => ({ index, team: typeof entry.team === "string" ? entry.team : null }))
-      .filter((entry): entry is { index: number; team: string } => Boolean(entry.team))
+      .map((entry, index) => ({
+        index,
+        team: typeof entry.team === "string" ? entry.team : null,
+      }))
+      .filter((entry): entry is { index: number; team: string } =>
+        Boolean(entry.team),
+      )
       .map((entry) => [entry.team, entry.index] as const),
   );
   const fallbackCodes =
-    selectedCodes.length > 0 ? selectedCodes : filteredDirectory.map((team) => team.code);
+    selectedCodes.length > 0
+      ? selectedCodes
+      : filteredDirectory.map((team) => team.code);
 
   const season = standings.season ?? filters.season ?? null;
   const week = standings.week ?? filters.week ?? null;
@@ -57,19 +79,28 @@ export default async function NflTeamsIndexPage({
         subtitle="Premium team intelligence index with fast lookup controls for week, conference, and division."
         basePath="/pro/nfl/teams"
         filters={filters}
-        teamOptions={filteredDirectory.map((team) => ({ code: team.code, name: team.name }))}
+        teamOptions={filteredDirectory.map((team) => ({
+          code: team.code,
+          name: team.name,
+        }))}
       />
 
       <section className="mt-6 rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-5 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.15em] text-kos-gold">Premium Team Intel Hub</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">Team Directory & Market Context</h1>
+        <p className="text-xs uppercase tracking-[0.15em] text-kos-gold">
+          Premium Team Intel Hub
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
+          Team Directory & Market Context
+        </h1>
         <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
-          Navigate from league context into team-level depth, availability, and split signals. Cards route directly to
-          the team hub with selected season/week preserved.
+          Navigate from league context into team-level depth, availability, and
+          split signals. Cards route directly to the team hub with selected
+          season/week preserved.
         </p>
         <p className="mt-2 text-xs text-kos-text/65">
-          {season ? `Season ${season}` : "Season unavailable"} {week ? `· Week ${week}` : ""} ·{" "}
-          {fallbackCodes.length} teams in current filter
+          {season ? `Season ${season}` : "Season unavailable"}{" "}
+          {week ? `· Week ${week}` : ""} · {fallbackCodes.length} teams in
+          current filter
         </p>
       </section>
 
@@ -85,7 +116,10 @@ export default async function NflTeamsIndexPage({
           const statRow = stats.rows.find((entry) => entry.team === teamCode);
           const standingsIndex = standingsIndexByTeam.get(teamCode) ?? -1;
           const statsIndex = statsIndexByTeam.get(teamCode) ?? -1;
-          const href = buildTeamIntelHref(teamCode, "overview", { season: season ?? undefined, week: week ?? undefined });
+          const href = buildTeamIntelHref(teamCode, "overview", {
+            season: season ?? undefined,
+            week: week ?? undefined,
+          });
 
           return (
             <Link
@@ -95,8 +129,12 @@ export default async function NflTeamsIndexPage({
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-kos-gold">{teamCode}</p>
-                  <h2 className="mt-1 text-lg font-semibold text-kos-text">{teamDisplayName(teamCode)}</h2>
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-kos-gold">
+                    {teamCode}
+                  </p>
+                  <h2 className="mt-1 text-lg font-semibold text-kos-text">
+                    {teamDisplayName(teamCode)}
+                  </h2>
                 </div>
                 <span className="rounded-full border border-kos-gold/30 bg-kos-gold/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
                   Intel
@@ -105,25 +143,42 @@ export default async function NflTeamsIndexPage({
 
               <dl className="mt-4 grid grid-cols-2 gap-2 text-sm text-kos-text/80">
                 <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
-                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">Record</dt>
+                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">
+                    Record
+                  </dt>
                   <dd className="mt-1 font-semibold text-kos-text">
-                    {formatTeamRecordWithRank(row, standingsRanks.win_pct?.get(standingsIndex))}
+                    {formatTeamRecordWithRank(
+                      row,
+                      standingsRanks.win_pct?.get(standingsIndex),
+                    )}
                   </dd>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
-                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">Point Diff</dt>
+                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">
+                    Point Diff
+                  </dt>
                   <dd className="mt-1 font-semibold text-kos-text">
-                    {formatIntelValueWithRank(row?.point_diff, standingsRanks.point_diff?.get(standingsIndex))}
+                    {formatIntelValueWithRank(
+                      row?.point_diff,
+                      standingsRanks.point_diff?.get(standingsIndex),
+                    )}
                   </dd>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
-                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">Pass Rate</dt>
+                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">
+                    Pass Rate
+                  </dt>
                   <dd className="mt-1 font-semibold text-kos-text">
-                    {formatIntelValueWithRank(statRow?.pass_rate, statsRanks.pass_rate?.get(statsIndex))}
+                    {formatIntelValueWithRank(
+                      statRow?.pass_rate,
+                      statsRanks.pass_rate?.get(statsIndex),
+                    )}
                   </dd>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
-                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">Off EPA / Play</dt>
+                  <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">
+                    Off EPA / Play
+                  </dt>
                   <dd className="mt-1 font-semibold text-kos-text">
                     {formatIntelValueWithRank(
                       statRow?.epa_per_play_offense,
@@ -139,7 +194,8 @@ export default async function NflTeamsIndexPage({
 
       {fallbackCodes.length === 0 ? (
         <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-          No teams match the selected filters yet. Clear conference/division/search constraints or switch season/week.
+          No teams match the selected filters yet. Clear
+          conference/division/search constraints or switch season/week.
         </div>
       ) : null}
     </main>

@@ -7,16 +7,30 @@ import {
 import { supportsPropsFantasy } from "@/lib/sports";
 import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
 
-function buildRow(overrides: Partial<LegacyEdgeBoardRow> = {}): LegacyEdgeBoardRow {
+function buildRow(
+  overrides: Partial<LegacyEdgeBoardRow> = {},
+): LegacyEdgeBoardRow {
   return {
     id: "row-1",
     time: "8:00 PM ET",
     teamA: { name: "Away Team", site: "Away" },
     teamB: { name: "Home Team", site: "Home" },
-    openOU: { top: { label: "o145.5", juice: "-110" }, bottom: { label: "u145.5", juice: "-110" } },
-    openLine: { top: { label: "+2.5", juice: "-110" }, bottom: { label: "-2.5", juice: "-110" } },
-    bestLine: { top: { label: "+2.0", juice: "-108" }, bottom: { label: "-2.0", juice: "-112" } },
-    bestOU: { top: { label: "o146.5", juice: "-110" }, bottom: { label: "u146.5", juice: "-110" } },
+    openOU: {
+      top: { label: "o145.5", juice: "-110" },
+      bottom: { label: "u145.5", juice: "-110" },
+    },
+    openLine: {
+      top: { label: "+2.5", juice: "-110" },
+      bottom: { label: "-2.5", juice: "-110" },
+    },
+    bestLine: {
+      top: { label: "+2.0", juice: "-108" },
+      bottom: { label: "-2.0", juice: "-112" },
+    },
+    bestOU: {
+      top: { label: "o146.5", juice: "-110" },
+      bottom: { label: "u146.5", juice: "-110" },
+    },
     ...overrides,
   };
 }
@@ -36,9 +50,15 @@ describe("pro sport IA", () => {
       edgeBoardHref: "/edge-board/nfl",
       content,
     });
-    const propsSection = sections.find((section) => section.title === content.sectionTitles.props);
-    expect(propsSection?.links.some((link) => link.href === "/pro/nfl/props")).toBe(true);
-    expect(propsSection?.links.every((link) => link.status !== "placeholder")).toBe(true);
+    const propsSection = sections.find(
+      (section) => section.title === content.sectionTitles.props,
+    );
+    expect(
+      propsSection?.links.some((link) => link.href === "/pro/nfl/props"),
+    ).toBe(true);
+    expect(
+      propsSection?.links.every((link) => link.status !== "placeholder"),
+    ).toBe(true);
   });
 
   it("points NFL betting desk path KEI Lines → Edges → Props", () => {
@@ -50,15 +70,21 @@ describe("pro sport IA", () => {
       content,
     });
     expect(content.sectionTitles.market).toBe("Betting Desk");
-    const marketSection = sections.find((section) => section.title === content.sectionTitles.market);
+    const marketSection = sections.find(
+      (section) => section.title === content.sectionTitles.market,
+    );
     expect(marketSection?.subtitle).toContain("KEI Lines → Edges → Props");
     const labels = marketSection?.links.map((link) => link.label) ?? [];
     expect(labels.slice(0, 3)).toEqual(["KEI Lines", "Edges", "Props"]);
-    expect(marketSection?.links.find((link) => link.label === "KEI Lines")?.href).toBe(
-      "/pro/nfl/fair-lines",
-    );
-    expect(marketSection?.links.find((link) => link.label === "Edges")?.href).toBe("/pro/nfl/edges");
-    expect(marketSection?.links.find((link) => link.label === "Props")?.href).toBe("/pro/nfl/props");
+    expect(
+      marketSection?.links.find((link) => link.label === "KEI Lines")?.href,
+    ).toBe("/pro/nfl/fair-lines");
+    expect(
+      marketSection?.links.find((link) => link.label === "Edges")?.href,
+    ).toBe("/pro/nfl/edges");
+    expect(
+      marketSection?.links.find((link) => link.label === "Props")?.href,
+    ).toBe("/pro/nfl/props");
   });
 
   it("adds NFL-only team intel section with active links", () => {
@@ -70,7 +96,9 @@ describe("pro sport IA", () => {
       content,
     });
 
-    const intelSection = sections.find((section) => section.title === "Team Intel");
+    const intelSection = sections.find(
+      (section) => section.title === "Team Intel",
+    );
     expect(intelSection).toBeDefined();
     expect(intelSection?.links.map((link) => link.label)).toEqual([
       "Projections hub",
@@ -102,7 +130,9 @@ describe("pro sport IA", () => {
       "/pro/nfl/depth-charts",
       "/pro/nfl/injuries",
     ]);
-    expect(intelSection?.links.every((link) => link.status === "active")).toBe(true);
+    expect(intelSection?.links.every((link) => link.status === "active")).toBe(
+      true,
+    );
     expect(intelSection?.links.every((link) => link.premium)).toBe(true);
   });
 
@@ -115,7 +145,9 @@ describe("pro sport IA", () => {
       content,
     });
 
-    expect(sections.some((section) => section.title === "Team Intel")).toBe(false);
+    expect(sections.some((section) => section.title === "Team Intel")).toBe(
+      false,
+    );
   });
 
   it("builds placeholder props links for college sports", () => {
@@ -126,10 +158,14 @@ describe("pro sport IA", () => {
       edgeBoardHref: "/edge-board/cfb",
       content,
     });
-    const propsSection = sections.find((section) => section.title === content.sectionTitles.props);
+    const propsSection = sections.find(
+      (section) => section.title === content.sectionTitles.props,
+    );
     expect(propsSection?.links.length).toBeGreaterThan(0);
     expect(propsSection?.links.every((link) => !link.href)).toBe(true);
-    expect(propsSection?.links.every((link) => link.status === "placeholder")).toBe(true);
+    expect(
+      propsSection?.links.every((link) => link.status === "placeholder"),
+    ).toBe(true);
   });
 
   it("requires line and total labels for article-ready cards", () => {
@@ -137,7 +173,10 @@ describe("pro sport IA", () => {
     expect(
       hasArticleData(
         buildRow({
-          bestOU: { top: { label: "—", juice: "" }, bottom: { label: "—", juice: "" } },
+          bestOU: {
+            top: { label: "—", juice: "" },
+            bottom: { label: "—", juice: "" },
+          },
         }),
       ),
     ).toBe(false);

@@ -1,5 +1,8 @@
 import { headers } from "next/headers";
-import type { FlatEdgeBoardRow, LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import type {
+  FlatEdgeBoardRow,
+  LegacyEdgeBoardRow,
+} from "@/components/EdgeBoard";
 import { flatRowsToLegacy } from "@/components/EdgeBoard";
 import { env } from "@/lib/config/env";
 import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";

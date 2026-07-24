@@ -167,7 +167,10 @@ export async function fetchNflFairLines(params: {
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/fair-lines`);
   url.searchParams.set("season", String(params.season));
   url.searchParams.set("days_ahead", String(params.daysAhead ?? 14));
-  url.searchParams.set("include_past_days", String(params.includePastDays ?? 0));
+  url.searchParams.set(
+    "include_past_days",
+    String(params.includePastDays ?? 0),
+  );
   if (params.modelVersion) {
     url.searchParams.set("model_version", params.modelVersion);
   }
@@ -184,7 +187,9 @@ export async function fetchNflFairLines(params: {
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
@@ -224,10 +229,13 @@ export async function fetchNflFairLines(params: {
         current_week?: number;
       };
     };
-    const lines = Array.isArray(payload.lines) ? payload.lines.map(normalizeFairLine) : [];
+    const lines = Array.isArray(payload.lines)
+      ? payload.lines.map(normalizeFairLine)
+      : [];
     const persisted = payload.diagnostics?.odds_persisted;
     return {
-      season: typeof payload.season === "number" ? payload.season : params.season,
+      season:
+        typeof payload.season === "number" ? payload.season : params.season,
       modelVersion: String(payload.model_version ?? ""),
       currentWeek: toNumber(
         payload.current_week ?? payload.diagnostics?.current_week,
@@ -237,10 +245,13 @@ export async function fetchNflFairLines(params: {
       lines,
       window: {
         daysAhead: payload.window?.days_ahead ?? params.daysAhead ?? 14,
-        includePastDays: payload.window?.include_past_days ?? params.includePastDays ?? 0,
+        includePastDays:
+          payload.window?.include_past_days ?? params.includePastDays ?? 0,
       },
       diagnostics: {
-        oddsFeedStatus: String(payload.diagnostics?.odds_feed_status ?? "unknown"),
+        oddsFeedStatus: String(
+          payload.diagnostics?.odds_feed_status ?? "unknown",
+        ),
         oddsFeedError:
           typeof payload.diagnostics?.odds_feed_error === "string"
             ? payload.diagnostics.odds_feed_error
@@ -250,7 +261,10 @@ export async function fetchNflFairLines(params: {
         bookmakers: Array.isArray(payload.diagnostics?.bookmakers)
           ? payload.diagnostics.bookmakers.map(String)
           : [],
-        kosedgeOnly: Boolean(payload.diagnostics?.kosedge_only ?? lines.every((line) => !line.marketJoined)),
+        kosedgeOnly: Boolean(
+          payload.diagnostics?.kosedge_only ??
+          lines.every((line) => !line.marketJoined),
+        ),
         oddsPersisted: persisted
           ? {
               eventsPersisted: toNumber(persisted.events_persisted),

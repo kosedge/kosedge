@@ -30,7 +30,9 @@ describe("odds-api MLB run line guardrails", () => {
     await fetchEdgeBoard("nfl", "fake-key");
 
     const url = String(fetchSpy.mock.calls[0]?.[0] ?? "");
-    expect(url).toContain(`bookmakers=${encodeURIComponent(ALLOWED_BOOKS.join(","))}`);
+    expect(url).toContain(
+      `bookmakers=${encodeURIComponent(ALLOWED_BOOKS.join(","))}`,
+    );
     expect(ALLOWED_BOOKS).toHaveLength(9);
   });
 
@@ -124,9 +126,27 @@ describe("odds-api MLB run line guardrails", () => {
 
   it("pickBestSpreadEntry prefers higher away point then better juice", () => {
     const best = pickBestSpreadEntry([
-      { book: "draftkings", line: "+3", point: 3, canonical: true, juiceAway: "-110" },
-      { book: "fanduel", line: "+3.5", point: 3.5, canonical: true, juiceAway: "-115" },
-      { book: "circa", line: "+3.5", point: 3.5, canonical: true, juiceAway: "-105" },
+      {
+        book: "draftkings",
+        line: "+3",
+        point: 3,
+        canonical: true,
+        juiceAway: "-110",
+      },
+      {
+        book: "fanduel",
+        line: "+3.5",
+        point: 3.5,
+        canonical: true,
+        juiceAway: "-115",
+      },
+      {
+        book: "circa",
+        line: "+3.5",
+        point: 3.5,
+        canonical: true,
+        juiceAway: "-105",
+      },
     ]);
     expect(best?.book).toBe("circa");
   });

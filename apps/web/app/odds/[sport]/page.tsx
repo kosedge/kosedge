@@ -38,7 +38,9 @@ async function getOddsData(
   };
 }
 
-function totalLine(value: OddsComparisonRow["total"][string] | string | undefined): string {
+function totalLine(
+  value: OddsComparisonRow["total"][string] | string | undefined,
+): string {
   if (!value) return "—";
   if (typeof value === "string") return value;
   return value.line || "—";
@@ -69,7 +71,9 @@ function Cell({
     >
       <div>{primary}</div>
       {secondary ? (
-        <div className={`text-[10px] ${highlight ? "text-kos-gold/80" : "text-gray-500"}`}>
+        <div
+          className={`text-[10px] ${highlight ? "text-kos-gold/80" : "text-gray-500"}`}
+        >
           {secondary}
         </div>
       ) : null}
@@ -110,8 +114,8 @@ export default async function OddsComparePage({
               Compare Odds
             </h1>
             <p className="mt-2 text-sm text-gray-200/80 max-w-2xl">
-              Side-by-side lines from {books.length || 9} books. Gold cells mark the best away
-              spread and best O/U number used on the Edge Board.
+              Side-by-side lines from {books.length || 9} books. Gold cells mark
+              the best away spread and best O/U number used on the Edge Board.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -194,7 +198,9 @@ export default async function OddsComparePage({
                 <table className="min-w-[1100px] w-full text-sm tabular-nums">
                   <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-xs">
                     <tr className="text-left">
-                      <th className="py-3 px-4 sticky left-0 bg-white/5 z-10">Game</th>
+                      <th className="py-3 px-4 sticky left-0 bg-white/5 z-10">
+                        Game
+                      </th>
                       <th className="py-3 px-2">Time</th>
                       {books.map((b) => (
                         <th
@@ -226,7 +232,9 @@ export default async function OddsComparePage({
                         <td className="py-3 px-4 sticky left-0 bg-black/30 z-10 font-semibold">
                           {r.game}
                         </td>
-                        <td className="py-3 px-2 text-gray-400 whitespace-nowrap">{r.time}</td>
+                        <td className="py-3 px-2 text-gray-400 whitespace-nowrap">
+                          {r.time}
+                        </td>
                         {books.map((b) => {
                           const spread = r.spread[b.key];
                           const total = r.total[b.key];
@@ -254,7 +262,9 @@ export default async function OddsComparePage({
                                     />
                                     <Cell
                                       primary={line === "—" ? "—" : `o${line}`}
-                                      secondary={overJuice ? `(${overJuice})` : undefined}
+                                      secondary={
+                                        overJuice ? `(${overJuice})` : undefined
+                                      }
                                       highlight={isBestTotal}
                                     />
                                   </tr>
@@ -275,8 +285,9 @@ export default async function OddsComparePage({
             </div>
           </div>
           <p className="mt-3 text-xs text-gray-500">
-            Best Line = highest away spread number across books (better juice wins ties). Best O/U =
-            highest total number across books (better Over juice wins ties).
+            Best Line = highest away spread number across books (better juice
+            wins ties). Best O/U = highest total number across books (better
+            Over juice wins ties).
           </p>
         </section>
       </main>

@@ -41,7 +41,12 @@ export function loadNflClvBenchmarkReport(): NflClvBenchmarkReport | null {
   try {
     const repoRoot = findRepoRoot();
     if (!repoRoot) return null;
-    const reportPath = path.join(repoRoot, "data", "ops", "nfl-clv-benchmark-report.json");
+    const reportPath = path.join(
+      repoRoot,
+      "data",
+      "ops",
+      "nfl-clv-benchmark-report.json",
+    );
     const raw = JSON.parse(readFileSync(reportPath, "utf-8"));
     return {
       generatedAt: raw.generated_at,
@@ -53,13 +58,15 @@ export function loadNflClvBenchmarkReport(): NflClvBenchmarkReport | null {
         excluded: raw.methodology.excluded,
         clvDefinition: raw.methodology.clv_definition,
       },
-      resultsBySeason: (raw.results_by_season ?? []).map((row: Record<string, unknown>) => ({
-        season: row.season,
-        market: row.market,
-        n: row.n,
-        avgClv: row.avg_clv,
-        positiveRate: row.positive_rate,
-      })),
+      resultsBySeason: (raw.results_by_season ?? []).map(
+        (row: Record<string, unknown>) => ({
+          season: row.season,
+          market: row.market,
+          n: row.n,
+          avgClv: row.avg_clv,
+          positiveRate: row.positive_rate,
+        }),
+      ),
       resultsCombined: {
         moneyline: {
           n: raw.results_combined_2024_2025.moneyline.n,

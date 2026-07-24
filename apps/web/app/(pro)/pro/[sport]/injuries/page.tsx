@@ -12,10 +12,21 @@ export default async function InjuriesPage({
   const filters = await searchParams;
   if (sport !== "nfl") notFound();
   const parsedSeason = Number(filters.season);
-  const season = Number.isFinite(parsedSeason) && parsedSeason >= 2010 && parsedSeason <= 2100 ? parsedSeason : undefined;
+  const season =
+    Number.isFinite(parsedSeason) &&
+    parsedSeason >= 2010 &&
+    parsedSeason <= 2100
+      ? parsedSeason
+      : undefined;
   const parsedWeek = Number(filters.week);
-  const week = Number.isFinite(parsedWeek) && parsedWeek >= 1 && parsedWeek <= 25 ? parsedWeek : undefined;
-  const team = typeof filters.team === "string" && filters.team.trim().length > 0 ? filters.team.trim().toUpperCase() : undefined;
+  const week =
+    Number.isFinite(parsedWeek) && parsedWeek >= 1 && parsedWeek <= 25
+      ? parsedWeek
+      : undefined;
+  const team =
+    typeof filters.team === "string" && filters.team.trim().length > 0
+      ? filters.team.trim().toUpperCase()
+      : undefined;
 
   return (
     <NflIntelTablePage

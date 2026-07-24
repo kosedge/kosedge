@@ -44,7 +44,9 @@ function toNumber(value: unknown, fallback = 0): number {
   return fallback;
 }
 
-function normalizeAwardRow(raw: Record<string, unknown>): NflAwardProjectionRow {
+function normalizeAwardRow(
+  raw: Record<string, unknown>,
+): NflAwardProjectionRow {
   return {
     season: toNumber(raw.season),
     award: raw.award === "opoy" ? "opoy" : "mvp",
@@ -83,7 +85,11 @@ export async function fetchNflAwardProjections(params: {
 }): Promise<NflAwardProjectionsResponse> {
   const base = env.MODEL_SERVICE_URL;
   if (!base) {
-    return { count: 0, rows: [], error: "MODEL_SERVICE_URL is not configured." };
+    return {
+      count: 0,
+      rows: [],
+      error: "MODEL_SERVICE_URL is not configured.",
+    };
   }
 
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/awards/projections`);
@@ -100,15 +106,29 @@ export async function fetchNflAwardProjections(params: {
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
-      return { count: 0, rows: [], error: `Model service returned ${response.status}.` };
+      return {
+        count: 0,
+        rows: [],
+        error: `Model service returned ${response.status}.`,
+      };
     }
-    const payload = (await response.json()) as { count?: number; rows?: Array<Record<string, unknown>> };
-    const rows = Array.isArray(payload.rows) ? payload.rows.map(normalizeAwardRow) : [];
-    return { count: typeof payload.count === "number" ? payload.count : rows.length, rows };
+    const payload = (await response.json()) as {
+      count?: number;
+      rows?: Array<Record<string, unknown>>;
+    };
+    const rows = Array.isArray(payload.rows)
+      ? payload.rows.map(normalizeAwardRow)
+      : [];
+    return {
+      count: typeof payload.count === "number" ? payload.count : rows.length,
+      rows,
+    };
   } catch {
     return { count: 0, rows: [], error: "Unable to reach model service." };
   } finally {
@@ -119,14 +139,21 @@ export async function fetchNflAwardProjections(params: {
 export function awardStatLine(row: NflAwardProjectionRow): string {
   const isPasser = row.position === "QB";
   if (isPasser) {
-    const parts = [`${row.passYardsTotal.toFixed(0)} pass yds`, `${row.passTdsTotal.toFixed(1)} pass TD`];
-    if (row.rushYardsTotal >= 50) parts.push(`${row.rushYardsTotal.toFixed(0)} rush yds`);
-    if (row.rushTdsTotal >= 1) parts.push(`${row.rushTdsTotal.toFixed(1)} rush TD`);
+    const parts = [
+      `${row.passYardsTotal.toFixed(0)} pass yds`,
+      `${row.passTdsTotal.toFixed(1)} pass TD`,
+    ];
+    if (row.rushYardsTotal >= 50)
+      parts.push(`${row.rushYardsTotal.toFixed(0)} rush yds`);
+    if (row.rushTdsTotal >= 1)
+      parts.push(`${row.rushTdsTotal.toFixed(1)} rush TD`);
     return parts.join(" · ");
   }
   const parts: string[] = [];
-  if (row.rushYardsTotal >= 25) parts.push(`${row.rushYardsTotal.toFixed(0)} rush yds`);
-  if (row.receivingYardsTotal >= 25) parts.push(`${row.receivingYardsTotal.toFixed(0)} rec yds`);
+  if (row.rushYardsTotal >= 25)
+    parts.push(`${row.rushYardsTotal.toFixed(0)} rush yds`);
+  if (row.receivingYardsTotal >= 25)
+    parts.push(`${row.receivingYardsTotal.toFixed(0)} rec yds`);
   const totalTds = row.rushTdsTotal + row.recTdsTotal;
   parts.push(`${totalTds.toFixed(1)} total TD`);
   return parts.join(" · ");

@@ -23,8 +23,8 @@ export async function NflDataFreshnessBanner() {
             : ""}
         </p>
         <p className="text-amber-100/80">
-          Boards may use last owned snapshots. PLAY stake tags should be treated as research-only
-          until freshness recovers. {blockers}
+          Boards may use last owned snapshots. PLAY stake tags should be treated
+          as research-only until freshness recovers. {blockers}
         </p>
       </div>
     </div>

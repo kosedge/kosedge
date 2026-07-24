@@ -18,8 +18,7 @@ export default async function GameArticlePage({
   let game = HIGHLIGHTED_GAMES.find((g) => g.slug === slug);
   if (!game) {
     const tonight = await getGameBySlug(slug);
-    if (tonight)
-      game = { slug, row: tonight.row, sport: tonight.sport };
+    if (tonight) game = { slug, row: tonight.row, sport: tonight.sport };
   }
   if (!game) return notFound();
 
@@ -58,7 +57,9 @@ export default async function GameArticlePage({
 
       <section className="mt-6 grid gap-4 md:grid-cols-2">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-5 backdrop-blur-xl">
-          <h2 className="text-lg font-semibold text-kos-text">Market Context</h2>
+          <h2 className="text-lg font-semibold text-kos-text">
+            Market Context
+          </h2>
           <p className="mt-2 text-sm leading-relaxed text-kos-text/80">
             {content.marketContext}
           </p>
@@ -73,7 +74,9 @@ export default async function GameArticlePage({
 
       <section className="mt-6 grid gap-4 md:grid-cols-2">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-5 backdrop-blur-xl">
-          <h2 className="text-lg font-semibold text-kos-text">Matchup Drivers</h2>
+          <h2 className="text-lg font-semibold text-kos-text">
+            Matchup Drivers
+          </h2>
           <ul className="mt-3 space-y-2 text-sm text-kos-text/80">
             {content.matchupDrivers.map((driver) => (
               <li key={driver} className="flex gap-2">
@@ -97,7 +100,9 @@ export default async function GameArticlePage({
       </section>
 
       <section className="mt-6 rounded-2xl border border-kos-gold/20 bg-kos-gold/6 p-5 backdrop-blur-xl">
-        <h2 className="text-lg font-semibold text-kos-gold">{confidenceTone}</h2>
+        <h2 className="text-lg font-semibold text-kos-gold">
+          {confidenceTone}
+        </h2>
         <p className="mt-2 text-sm text-kos-text/85">{content.confidence}</p>
       </section>
 

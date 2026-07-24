@@ -17,10 +17,15 @@ function percentage(value: number, digits = 1): string {
 }
 
 function totalYards(player: PlayerProjectionTotalsRow): number {
-  return player.passYardsTotal + player.rushYardsTotal + player.receivingYardsTotal;
+  return (
+    player.passYardsTotal + player.rushYardsTotal + player.receivingYardsTotal
+  );
 }
 
-function sortTeamRows(rows: TeamProjectionRow[], key: string): TeamProjectionRow[] {
+function sortTeamRows(
+  rows: TeamProjectionRow[],
+  key: string,
+): TeamProjectionRow[] {
   const sortable = [...rows];
   if (key === "sb") {
     sortable.sort((a, b) => b.superBowlWinProb - a.superBowlWinProb);
@@ -34,12 +39,18 @@ function sortTeamRows(rows: TeamProjectionRow[], key: string): TeamProjectionRow
   return sortable;
 }
 
-function sortPlayerRows(rows: PlayerProjectionTotalsRow[], key: string): PlayerProjectionTotalsRow[] {
+function sortPlayerRows(
+  rows: PlayerProjectionTotalsRow[],
+  key: string,
+): PlayerProjectionTotalsRow[] {
   const sortable = [...rows];
   if (key === "tds") {
     sortable.sort(
       (a, b) =>
-        b.passTdsTotal + b.rushTdsTotal + b.recTdsTotal - (a.passTdsTotal + a.rushTdsTotal + a.recTdsTotal),
+        b.passTdsTotal +
+        b.rushTdsTotal +
+        b.recTdsTotal -
+        (a.passTdsTotal + a.rushTdsTotal + a.recTdsTotal),
     );
     return sortable;
   }
@@ -64,7 +75,8 @@ export default async function NflProjectionsPage({
         <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-amber-100">
           <h1 className="text-2xl font-semibold">NFL Projections Hub</h1>
           <p className="mt-2 text-sm text-amber-100/90">
-            No 2026 preseason simulation bundle was found yet. Run the simulation export and reload this page.
+            No 2026 preseason simulation bundle was found yet. Run the
+            simulation export and reload this page.
           </p>
         </section>
       </main>
@@ -78,9 +90,16 @@ export default async function NflProjectionsPage({
   const playerSort = firstValue(search.playerSort) ?? "yards";
   const phase = firstValue(search.phase) === "playoff" ? "playoff" : "regular";
 
-  const uniqueTeams = [...new Set(bundle.teamRows.map((row) => row.team))].sort();
-  const phaseRows = phase === "playoff" ? bundle.playerTotalsPlayoff : bundle.playerTotalsRegular;
-  const uniquePositions = [...new Set(phaseRows.map((row) => row.position))].sort();
+  const uniqueTeams = [
+    ...new Set(bundle.teamRows.map((row) => row.team)),
+  ].sort();
+  const phaseRows =
+    phase === "playoff"
+      ? bundle.playerTotalsPlayoff
+      : bundle.playerTotalsRegular;
+  const uniquePositions = [
+    ...new Set(phaseRows.map((row) => row.position)),
+  ].sort();
 
   const teamRows = sortTeamRows(
     bundle.teamRows.filter((row) => (team ? row.team === team : true)),
@@ -90,7 +109,8 @@ export default async function NflProjectionsPage({
     phaseRows.filter((row) => {
       if (team && row.team !== team) return false;
       if (position && row.position !== position) return false;
-      if (playerSearch && !row.playerName.toLowerCase().includes(playerSearch)) return false;
+      if (playerSearch && !row.playerName.toLowerCase().includes(playerSearch))
+        return false;
       return true;
     }),
     playerSort,
@@ -113,12 +133,15 @@ export default async function NflProjectionsPage({
               Betting + Fantasy Decision Center
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Browse projected wins, playoff/Super Bowl probabilities, and player totals in one place. Filters keep the
-              view focused for bet prep and fantasy drafting.
+              Browse projected wins, playoff/Super Bowl probabilities, and
+              player totals in one place. Filters keep the view focused for bet
+              prep and fantasy drafting.
             </p>
             <p className="mt-2 text-xs text-kos-text/65">
               Source: {bundle.bundleDirName}
-              {bundle.generatedAtUtc ? ` • Generated ${new Date(bundle.generatedAtUtc).toLocaleString()}` : ""}
+              {bundle.generatedAtUtc
+                ? ` • Generated ${new Date(bundle.generatedAtUtc).toLocaleString()}`
+                : ""}
             </p>
           </div>
           <Link
@@ -132,25 +155,50 @@ export default async function NflProjectionsPage({
 
       <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
-          <p className="text-xs uppercase tracking-wide text-kos-text/60">Super Bowl Favorite</p>
-          <p className="mt-2 text-2xl font-semibold text-kos-text">{favorite?.team ?? "N/A"}</p>
-          <p className="text-sm text-kos-gold">{percentage(favorite?.superBowlWinProb ?? 0, 2)} title probability</p>
-        </article>
-        <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
-          <p className="text-xs uppercase tracking-wide text-kos-text/60">Wins Leader</p>
-          <p className="mt-2 text-2xl font-semibold text-kos-text">{winsLeader?.team ?? "N/A"}</p>
-          <p className="text-sm text-kos-gold">{(winsLeader?.expectedWins ?? 0).toFixed(2)} projected wins</p>
-        </article>
-        <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
-          <p className="text-xs uppercase tracking-wide text-kos-text/60">Highest Playoff Odds</p>
-          <p className="mt-2 text-2xl font-semibold text-kos-text">{playoffLeader?.team ?? "N/A"}</p>
-          <p className="text-sm text-kos-gold">{percentage(playoffLeader?.playoffProb ?? 0, 2)} to qualify</p>
-        </article>
-        <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
-          <p className="text-xs uppercase tracking-wide text-kos-text/60">Fantasy Yards Leader</p>
-          <p className="mt-2 text-2xl font-semibold text-kos-text">{fantasyLeader?.playerName ?? "N/A"}</p>
+          <p className="text-xs uppercase tracking-wide text-kos-text/60">
+            Super Bowl Favorite
+          </p>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {favorite?.team ?? "N/A"}
+          </p>
           <p className="text-sm text-kos-gold">
-            {(totalYards(fantasyLeader ?? ({} as PlayerProjectionTotalsRow))).toFixed(1)} combined yards
+            {percentage(favorite?.superBowlWinProb ?? 0, 2)} title probability
+          </p>
+        </article>
+        <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <p className="text-xs uppercase tracking-wide text-kos-text/60">
+            Wins Leader
+          </p>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {winsLeader?.team ?? "N/A"}
+          </p>
+          <p className="text-sm text-kos-gold">
+            {(winsLeader?.expectedWins ?? 0).toFixed(2)} projected wins
+          </p>
+        </article>
+        <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <p className="text-xs uppercase tracking-wide text-kos-text/60">
+            Highest Playoff Odds
+          </p>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {playoffLeader?.team ?? "N/A"}
+          </p>
+          <p className="text-sm text-kos-gold">
+            {percentage(playoffLeader?.playoffProb ?? 0, 2)} to qualify
+          </p>
+        </article>
+        <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
+          <p className="text-xs uppercase tracking-wide text-kos-text/60">
+            Fantasy Yards Leader
+          </p>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {fantasyLeader?.playerName ?? "N/A"}
+          </p>
+          <p className="text-sm text-kos-gold">
+            {totalYards(
+              fantasyLeader ?? ({} as PlayerProjectionTotalsRow),
+            ).toFixed(1)}{" "}
+            combined yards
           </p>
         </article>
       </section>
@@ -159,7 +207,11 @@ export default async function NflProjectionsPage({
         <form className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
           <label className="text-xs text-kos-text/70">
             Team
-            <select name="team" defaultValue={team} className="mt-1 w-full rounded-lg border border-white/15 bg-black/40 p-2 text-sm">
+            <select
+              name="team"
+              defaultValue={team}
+              className="mt-1 w-full rounded-lg border border-white/15 bg-black/40 p-2 text-sm"
+            >
               <option value="">All teams</option>
               {uniqueTeams.map((code) => (
                 <option key={code} value={code}>
@@ -185,7 +237,11 @@ export default async function NflProjectionsPage({
           </label>
           <label className="text-xs text-kos-text/70">
             Season phase
-            <select name="phase" defaultValue={phase} className="mt-1 w-full rounded-lg border border-white/15 bg-black/40 p-2 text-sm">
+            <select
+              name="phase"
+              defaultValue={phase}
+              className="mt-1 w-full rounded-lg border border-white/15 bg-black/40 p-2 text-sm"
+            >
               <option value="regular">Regular season</option>
               <option value="playoff">Playoff</option>
             </select>
@@ -235,13 +291,24 @@ export default async function NflProjectionsPage({
 
       <section className="mt-6 grid gap-6 xl:grid-cols-2">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
-          <h2 className="text-xl font-semibold text-kos-text">Team Betting Outlook</h2>
-          <p className="mt-1 text-sm text-kos-text/70">Projected wins and futures probabilities for market framing.</p>
+          <h2 className="text-xl font-semibold text-kos-text">
+            Team Betting Outlook
+          </h2>
+          <p className="mt-1 text-sm text-kos-text/70">
+            Projected wins and futures probabilities for market framing.
+          </p>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full border-separate border-spacing-0">
               <thead>
                 <tr>
-                  {["Team", "Expected W", "P10-P90", "Playoff", "Division", "Super Bowl"].map((label) => (
+                  {[
+                    "Team",
+                    "Expected W",
+                    "P10-P90",
+                    "Playoff",
+                    "Division",
+                    "Super Bowl",
+                  ].map((label) => (
                     <th
                       key={label}
                       className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
@@ -254,16 +321,24 @@ export default async function NflProjectionsPage({
               <tbody>
                 {teamRows.slice(0, 24).map((row) => (
                   <tr key={row.team} className="odd:bg-white/3">
-                    <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">{row.team}</td>
-                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.expectedWins.toFixed(2)}</td>
+                    <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">
+                      {row.team}
+                    </td>
+                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                      {row.expectedWins.toFixed(2)}
+                    </td>
                     <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
                       {row.winsP10}-{row.winsP90}
                     </td>
-                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{percentage(row.playoffProb, 2)}</td>
+                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                      {percentage(row.playoffProb, 2)}
+                    </td>
                     <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
                       {percentage(row.divisionTitleProb, 2)}
                     </td>
-                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">{percentage(row.superBowlWinProb, 2)}</td>
+                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">
+                      {percentage(row.superBowlWinProb, 2)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -273,14 +348,28 @@ export default async function NflProjectionsPage({
 
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
           <h2 className="text-xl font-semibold text-kos-text">
-            {phase === "playoff" ? "Playoff Fantasy Totals" : "Regular Season Fantasy Totals"}
+            {phase === "playoff"
+              ? "Playoff Fantasy Totals"
+              : "Regular Season Fantasy Totals"}
           </h2>
-          <p className="mt-1 text-sm text-kos-text/70">Use totals to compare volume tiers for draft, props, and ladder ideas.</p>
+          <p className="mt-1 text-sm text-kos-text/70">
+            Use totals to compare volume tiers for draft, props, and ladder
+            ideas.
+          </p>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full border-separate border-spacing-0">
               <thead>
                 <tr>
-                  {["Player", "Tm", "Pos", "Games", "Yards", "Rec", "TDs", "ATD"].map((label) => (
+                  {[
+                    "Player",
+                    "Tm",
+                    "Pos",
+                    "Games",
+                    "Yards",
+                    "Rec",
+                    "TDs",
+                    "ATD",
+                  ].map((label) => (
                     <th
                       key={label}
                       className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
@@ -292,16 +381,34 @@ export default async function NflProjectionsPage({
               </thead>
               <tbody>
                 {players.slice(0, 40).map((row) => {
-                  const touchdowns = row.passTdsTotal + row.rushTdsTotal + row.recTdsTotal;
+                  const touchdowns =
+                    row.passTdsTotal + row.rushTdsTotal + row.recTdsTotal;
                   return (
-                    <tr key={`${row.playerKey}-${row.team}`} className="odd:bg-white/3">
-                      <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">{row.playerName}</td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.team}</td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.position}</td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.gamesProjected}</td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">{totalYards(row).toFixed(1)}</td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{row.receptionsTotal.toFixed(1)}</td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">{touchdowns.toFixed(1)}</td>
+                    <tr
+                      key={`${row.playerKey}-${row.team}`}
+                      className="odd:bg-white/3"
+                    >
+                      <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">
+                        {row.playerName}
+                      </td>
+                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                        {row.team}
+                      </td>
+                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                        {row.position}
+                      </td>
+                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                        {row.gamesProjected}
+                      </td>
+                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">
+                        {totalYards(row).toFixed(1)}
+                      </td>
+                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                        {row.receptionsTotal.toFixed(1)}
+                      </td>
+                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                        {touchdowns.toFixed(1)}
+                      </td>
                       <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
                         {row.anytimeTdProbTotal.toFixed(2)}
                       </td>
@@ -316,9 +423,11 @@ export default async function NflProjectionsPage({
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/75">
         <p>
-          Sanity checks: SB sum {bundle.qualityChecks.sumSuperBowlProb?.toFixed(4) ?? "n/a"} · Division sum{" "}
-          {bundle.qualityChecks.sumDivisionTitleProb?.toFixed(4) ?? "n/a"} · Playoff sum{" "}
-          {bundle.qualityChecks.sumPlayoffProb?.toFixed(4) ?? "n/a"}
+          Sanity checks: SB sum{" "}
+          {bundle.qualityChecks.sumSuperBowlProb?.toFixed(4) ?? "n/a"} ·
+          Division sum{" "}
+          {bundle.qualityChecks.sumDivisionTitleProb?.toFixed(4) ?? "n/a"} ·
+          Playoff sum {bundle.qualityChecks.sumPlayoffProb?.toFixed(4) ?? "n/a"}
         </p>
       </section>
     </main>

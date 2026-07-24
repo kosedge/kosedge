@@ -105,7 +105,11 @@ export async function GET(
     }
   }
 
-  if (oddsRows.length === 0 && cached && (cached.rows as unknown[]).length > 0) {
+  if (
+    oddsRows.length === 0 &&
+    cached &&
+    (cached.rows as unknown[]).length > 0
+  ) {
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
   }
 

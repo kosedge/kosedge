@@ -47,10 +47,14 @@ function gameKeys(game: string): string[] {
 }
 
 const NFL_CODE_TO_NAME = new Map(
-  NFL_TEAM_DIRECTORY.map((t) => [t.code.toLowerCase(), t.name.toLowerCase()] as const),
+  NFL_TEAM_DIRECTORY.map(
+    (t) => [t.code.toLowerCase(), t.name.toLowerCase()] as const,
+  ),
 );
 const NFL_NAME_TO_CODE = new Map(
-  NFL_TEAM_DIRECTORY.map((t) => [t.name.toLowerCase(), t.code.toLowerCase()] as const),
+  NFL_TEAM_DIRECTORY.map(
+    (t) => [t.name.toLowerCase(), t.code.toLowerCase()] as const,
+  ),
 );
 
 /** Expand / compress NFL team labels so "NE @ SEA" matches "New England Patriots @ Seattle Seahawks". */
@@ -89,7 +93,10 @@ function formatSpread(projSpreadHome: number): string {
 }
 
 function registerGame(
-  byGame: Map<string, { projSpreadHome: number | null; projTotal: number | null }>,
+  byGame: Map<
+    string,
+    { projSpreadHome: number | null; projTotal: number | null }
+  >,
   sportKey: string,
   g: KeiLineGame,
 ) {

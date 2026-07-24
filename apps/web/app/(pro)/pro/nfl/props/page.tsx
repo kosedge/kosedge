@@ -41,14 +41,26 @@ export default async function NflPropsBoardPage({
   const search = await searchParams;
   const seasonRaw = Number(firstValue(search.season));
   const weekRaw = Number(firstValue(search.week));
-  const season = Number.isFinite(seasonRaw) && seasonRaw >= 2010 ? seasonRaw : DEFAULT_SEASON;
-  const week = Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 25 ? weekRaw : DEFAULT_WEEK;
+  const season =
+    Number.isFinite(seasonRaw) && seasonRaw >= 2010
+      ? seasonRaw
+      : DEFAULT_SEASON;
+  const week =
+    Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 25
+      ? weekRaw
+      : DEFAULT_WEEK;
   const market = (firstValue(search.market) ?? "ALL").toLowerCase();
   const tagRaw = (firstValue(search.tag) ?? "ALL").toUpperCase();
-  const tag = TAG_TABS.includes(tagRaw as (typeof TAG_TABS)[number]) ? tagRaw : "ALL";
+  const tag = TAG_TABS.includes(tagRaw as (typeof TAG_TABS)[number])
+    ? tagRaw
+    : "ALL";
   const team = (firstValue(search.team) ?? "").toUpperCase();
   const limitRaw = Number(firstValue(search.limit));
-  const limit = LIMIT_OPTIONS.includes(limitRaw as (typeof LIMIT_OPTIONS)[number]) ? limitRaw : 250;
+  const limit = LIMIT_OPTIONS.includes(
+    limitRaw as (typeof LIMIT_OPTIONS)[number],
+  )
+    ? limitRaw
+    : 250;
 
   const board = await fetchNflPropsBoard({
     season,
@@ -71,8 +83,14 @@ export default async function NflPropsBoardPage({
   const topEdge = [...board.rows]
     .filter((row) => row.edgeOver !== null || row.edgeUnder !== null)
     .sort((a, b) => {
-      const aMax = Math.max(Math.abs(a.edgeOver ?? 0), Math.abs(a.edgeUnder ?? 0));
-      const bMax = Math.max(Math.abs(b.edgeOver ?? 0), Math.abs(b.edgeUnder ?? 0));
+      const aMax = Math.max(
+        Math.abs(a.edgeOver ?? 0),
+        Math.abs(a.edgeUnder ?? 0),
+      );
+      const bMax = Math.max(
+        Math.abs(b.edgeOver ?? 0),
+        Math.abs(b.edgeUnder ?? 0),
+      );
       return bMax - aMax;
     })[0];
 
@@ -88,8 +106,9 @@ export default async function NflPropsBoardPage({
               Kosedge Player Props
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Selective stake board: calibrated Monte Carlo means, de-vigged edges, and sparse PLAY tags. Most props
-              are PASS by design. Edges appear only when a book line is joined — never invented.
+              Selective stake board: calibrated Monte Carlo means, de-vigged
+              edges, and sparse PLAY tags. Most props are PASS by design. Edges
+              appear only when a book line is joined — never invented.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -117,14 +136,16 @@ export default async function NflPropsBoardPage({
 
       {board.error ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {board.error} The props board will populate once the model service is reachable.
+          {board.error} The props board will populate once the model service is
+          reachable.
         </section>
       ) : null}
 
       {!board.error && board.diagnostics.kosedgeOnly ? (
         <section className="mt-6 rounded-2xl border border-sky-400/25 bg-sky-400/10 p-5 text-sm text-sky-100">
-          No market-joined prop edges yet (with_mkt = 0). Showing Kosedge model means and fair prices only — market
-          edge columns stay blank until books join.
+          No market-joined prop edges yet (with_mkt = 0). Showing Kosedge model
+          means and fair prices only — market edge columns stay blank until
+          books join.
         </section>
       ) : null}
 
@@ -159,8 +180,9 @@ export default async function NflPropsBoardPage({
       ) : null}
 
       <section className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-kos-text/75">
-        No confirmed stake edge after holdout validation. PLAY highlights are research-only (not bet recommendations).
-        Pass/rush high-z tags are WATCH. KEI lines and model means still publish when books join.
+        No confirmed stake edge after holdout validation. PLAY highlights are
+        research-only (not bet recommendations). Pass/rush high-z tags are
+        WATCH. KEI lines and model means still publish when books join.
       </section>
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
@@ -215,7 +237,9 @@ export default async function NflPropsBoardPage({
                 key={option}
                 href={buildHref({ ...activeQuery, limit: String(option) })}
                 className={`rounded-md px-2 py-1 font-semibold transition ${
-                  limit === option ? "bg-white/15 text-kos-text" : "text-kos-text/60 hover:text-kos-text"
+                  limit === option
+                    ? "bg-white/15 text-kos-text"
+                    : "text-kos-text/60 hover:text-kos-text"
                 }`}
               >
                 {option}
@@ -225,7 +249,11 @@ export default async function NflPropsBoardPage({
         </div>
         <div className="mt-3 flex flex-wrap gap-2 text-xs">
           <Link
-            href={buildHref({ season: "2025", week: "17", limit: String(limit) })}
+            href={buildHref({
+              season: "2025",
+              week: "17",
+              limit: String(limit),
+            })}
             className={`rounded-lg px-3 py-1.5 font-semibold transition ${
               season === 2025 && week === 17
                 ? "border border-edge-green/45 bg-edge-green/15 text-edge-green"
@@ -235,7 +263,11 @@ export default async function NflPropsBoardPage({
             2025 W17 (Vegas joins)
           </Link>
           <Link
-            href={buildHref({ season: "2026", week: "1", limit: String(limit) })}
+            href={buildHref({
+              season: "2026",
+              week: "1",
+              limit: String(limit),
+            })}
             className={`rounded-lg px-3 py-1.5 font-semibold transition ${
               season === 2026 && week === 1
                 ? "border border-kos-gold/45 bg-kos-gold/15 text-kos-gold"
@@ -257,7 +289,8 @@ export default async function NflPropsBoardPage({
 
         {!board.error && board.rows.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No prop edges for {season} week {week} yet. Try 2025 W1, or wait for the next materialization cycle.
+            No prop edges for {season} week {week} yet. Try 2025 W1, or wait for
+            the next materialization cycle.
           </div>
         ) : null}
 
@@ -280,7 +313,10 @@ export default async function NflPropsBoardPage({
               </thead>
               <tbody>
                 {board.rows.map((row, index) => (
-                  <PropRow key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`} row={row} />
+                  <PropRow
+                    key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
+                    row={row}
+                  />
                 ))}
               </tbody>
             </table>
@@ -305,39 +341,83 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
         <div className="font-semibold text-kos-text">{row.playerName}</div>
         <div className="text-xs text-kos-text/55">
           {row.team}
-          {row.projectionSource ? ` · ${row.projectionSource === "box_score" ? "MC" : "base"}` : ""}
+          {row.projectionSource
+            ? ` · ${row.projectionSource === "box_score" ? "MC" : "base"}`
+            : ""}
         </div>
       </td>
-      <td className="px-3 py-3 text-kos-text/80">{propMarketLabel(row.marketKey)}</td>
-      <td className="px-3 py-3 font-semibold text-kos-text">{formatPropNumber(row.line)}</td>
-      <td className="px-3 py-3 font-semibold text-kos-gold">{formatPropNumber(row.modelMean)}</td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {propMarketLabel(row.marketKey)}
+      </td>
+      <td className="px-3 py-3 font-semibold text-kos-text">
+        {formatPropNumber(row.line)}
+      </td>
+      <td className="px-3 py-3 font-semibold text-kos-gold">
+        {formatPropNumber(row.modelMean)}
+      </td>
       <td className={`px-3 py-3 font-semibold ${tagClass}`}>
         {displayTag ?? "—"}
-        {row.tagSide ? <div className="text-xs font-normal text-kos-text/55">{row.tagSide}</div> : null}
-        {displayTag === "PLAY" ? (
-          <div className="text-[10px] font-normal text-amber-200/80">Research</div>
-        ) : displayTag === "WATCH" ? (
-          <div className="text-[10px] font-normal text-kos-text/45">Watch only</div>
+        {row.tagSide ? (
+          <div className="text-xs font-normal text-kos-text/55">
+            {row.tagSide}
+          </div>
         ) : null}
-        {row.sizeDown ? <div className="text-[10px] font-normal text-amber-200/80">Extreme z</div> : null}
+        {displayTag === "PLAY" ? (
+          <div className="text-[10px] font-normal text-amber-200/80">
+            Research
+          </div>
+        ) : displayTag === "WATCH" ? (
+          <div className="text-[10px] font-normal text-kos-text/45">
+            Watch only
+          </div>
+        ) : null}
+        {row.sizeDown ? (
+          <div className="text-[10px] font-normal text-amber-200/80">
+            Extreme z
+          </div>
+        ) : null}
       </td>
-      <td className="px-3 py-3 text-kos-text/90">{formatAmericanOdds(row.fairOverPrice)}</td>
-      <td className="px-3 py-3 text-kos-text/90">{formatAmericanOdds(row.fairUnderPrice)}</td>
+      <td className="px-3 py-3 text-kos-text/90">
+        {formatAmericanOdds(row.fairOverPrice)}
+      </td>
+      <td className="px-3 py-3 text-kos-text/90">
+        {formatAmericanOdds(row.fairUnderPrice)}
+      </td>
       <td className="px-3 py-3 text-kos-text/70">
-        {row.marketJoined ? formatEdgeProb(row.edgeOver) : <span className="text-kos-text/40">no mkt</span>}
+        {row.marketJoined ? (
+          formatEdgeProb(row.edgeOver)
+        ) : (
+          <span className="text-kos-text/40">no mkt</span>
+        )}
       </td>
       <td className="px-3 py-3 text-kos-text/70">
-        {row.marketJoined ? formatEdgeProb(row.edgeUnder) : <span className="text-kos-text/40">no mkt</span>}
+        {row.marketJoined ? (
+          formatEdgeProb(row.edgeUnder)
+        ) : (
+          <span className="text-kos-text/40">no mkt</span>
+        )}
       </td>
-      <td className="px-3 py-3 text-edge-green">{formatConfidence(row.confidence)}</td>
+      <td className="px-3 py-3 text-edge-green">
+        {formatConfidence(row.confidence)}
+      </td>
     </tr>
   );
 }
 
-function StatCard({ label, value, detail }: { label: string; value: string; detail: string }) {
+function StatCard({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+}) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/55">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/55">
+        {label}
+      </p>
       <p className="mt-2 text-lg font-semibold text-kos-text">{value}</p>
       <p className="mt-1 text-xs text-kos-text/60">{detail}</p>
     </div>

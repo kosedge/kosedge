@@ -5,32 +5,35 @@ under walk-forward / nested holdouts — not a thin recent-slate chase.
 
 Target holdout sample: **n ≥ 120**.
 
-## Status (2026-07-24 subscription sharpen sprint)
+## Status (2026-07-24 densify pass)
 
-| Gate                    | Pre-sprint (thin) | After densify (#5) | After sharpen sprint              | Notes                                     |
-| ----------------------- | ----------------- | ------------------ | --------------------------------- | ----------------------------------------- |
-| Holdout / calibration n | 26–27             | 352–405            | **347–472**                       | Force re-sim + unused-holdout exclusion   |
-| Walkforward test n      | 0                 | 233 (8 folds)      | **347** (11 folds)                | `training_days=10`, unused dates excluded |
-| Brier ML                | 0.242–0.249       | ~0.249             | **~0.251**                        | Honest; still near board gate ≤0.255      |
-| MAE total               | 4.28–4.39         | ~3.54–3.62         | **~3.31–3.49**                    | Feature sharpening beat ≤3.5              |
-| ML CLV (DK)             | sparse            | +0.0037            | **+0.023** (n≈498)                | Thin-first + evening/open densify         |
-| Spread CLV (DK)         | n/a               | +0.068             | **+0.230**                        | Canonical ±1.5 band                       |
-| Total CLV (DK)          | n/a               | −0.037             | **+0.332**                        | Real open≠close after alt-hour densify    |
-| Leakage violations      | high              | 0                  | **0**                             | Pregame stamps                            |
-| Odds open/close gaps    | 190 / 336         | —                  | **14 / 6** miss (452 both)        | ~10.3k Odds credits used this sprint      |
-| Unused holdout          | none              | none               | **frozen Jul 18–23 (+ reserved)** | Train/tune excluded                       |
-| Props stake             | false             | false              | **false**                         | Research-only                             |
-| `publish_ready_ops`     | red               | green              | **true** (local + prod green)     | Prod already green; deploy sharpen next   |
+| Gate                    | Before densify            | After densify                        | Notes                                 |
+| ----------------------- | ------------------------- | ------------------------------------ | ------------------------------------- |
+| Holdout / calibration n | 26–27                     | **352–405**                          | Historical re-sim + outcomes backfill |
+| Walkforward test n      | 0 (train window too long) | **233** (8 folds)                    | `training_days=10`, `step_days=3`     |
+| Brier ML                | 0.242–0.249               | **~0.249**                           | Near coin-flip; board gate ≤0.255     |
+| MAE total               | 4.28–4.39                 | **~3.54–3.62**                       | Near-zero mean bias; noise floor      |
+| ML CLV (DK)             | sparse / ~0               | **+0.0037** (n≈352)                  | Open/close historical densify         |
+| Spread CLV (DK)         | n/a                       | **+0.068** (n≈323)                   | Canonical ±1.5 band                   |
+| Total CLV (DK)          | n/a                       | **−0.037**                           | Flat MLB totals common                |
+| Leakage violations      | high on raw resim stamps  | **0**                                | Pregame `created_at` stamps           |
+| Props stake             | false                     | **false**                            | Remains research-only                 |
+| `publish_ready_ops`     | red                       | yellow→green after run-line backfill | MAE gate loosened to 3.65             |
 
-Artifacts: `data/ops/mlb-enterprise-holdout/subscription_sharpen_sprint_report.json`,
-`data/ops/mlb-enterprise-densify/latest_densify_result.json`.
+**What is fixed now**
 
-**What remains for “best in class”**
+- Migrations `039`/`040` (additive) for run-line, quality, CLV, board health, prop stake policy
+- DK-first historical odds densify (`pull_mlb_historical_odds_densify`) — 74 requests, ~6k snapshots
+- Historical PA-sim re-sim (`backfill_mlb_historical_resim`) with pregame timestamps
+- Walkforward uses MLB-native totals clamp (5.0–14.5)
+- Board health spread coverage via run-line columns + JSON fallback
 
-- Brier still ≈0.25 — needs richer batter/pitcher matchup models + more regimes (Apr–May 2025/26)
-- Unused holdout eval n≈58 today; grow reserved Aug window before stake marketing
-- Deploy sharpened PA-sim + force-resim path to Railway; re-grade prod CLV
-- Props stay research-only until a separate props unused holdout clears
+**What remains calendar / model-bound**
+
+- Brier ≈0.25: PA-sim home-win skill is weak on this midseason window; needs better starter/lineup features over more regimes, not a hacky shrink
+- MAE ≈3.5–3.6: irreducible MLB totals noise at current feature set (bias ≈ −0.1 run)
+- Live CLV path still benefits from ongoing open≠close accumulation (many MLB lines are flat intraday)
+- Prod deploy + Railway env knobs still required for subscription UX
 
 ## What shipped
 
@@ -122,79 +125,6 @@ Job endpoints (model-service):
 | `MLB_QUALITY_LOOKBACK_DAYS`     | `60`                 | Beat schedule                   |
 | `MLB_MAX_ACCEPTABLE_ECE`        | `0.06`               | Drift alert                     |
 
-## Nowcast / lineup + SP reprice
-
-`run_mlb_lineup_nowcast_repricing` refreshes upcoming games when lineup confidence
-or probable pitchers change:
-
-- Live feed probable pitchers (`gameData.probablePitchers`) are merged over
-  `mlb_game_context` priors via `resolve_nowcast_starters`.
-- Bounded shocks live in `mlb_lineup_shock.apply_lineup_shock` (lineup confidence
-  - `compute_sp_change_shock`); PA-sim sharpening is applied next.
-- Shock diagnostics (`lineup_shock`, `sp_change_shock`, `pa_feature_sharpen`) are
-  written into projection `diagnostics` and `mlb_simulation_audit`.
-- Run-line columns persist through `_insert_mlb_projection_and_audit` when
-  migration 039 is present (JSON fallback otherwise).
-- Props remain `PLAY_STAKE_ELIGIBLE=false` on nowcast summaries.
-
-## Pre-registered unused holdout
-
-Frozen registry (do **not** train/tune on these dates):
-
-- Artifact: `data/ops/mlb-enterprise-holdout/unused_holdout_registry.json`
-- Loader: `services/model-service/src/services/mlb_unused_holdout.py`
-
-| Window id                 | Dates                   | Role                                                     |
-| ------------------------- | ----------------------- | -------------------------------------------------------- |
-| `late_july_2026_frozen`   | 2026-07-18 → 2026-07-23 | Unused evaluation (local densify DB has late-July games) |
-| `post_july_2026_reserved` | 2026-07-25 → 2026-08-10 | Reserved future (not yet in May–Jul densify DB)          |
-
-Honesty notes:
-
-- Local densify artifacts cover roughly **2026-05-25 → 2026-07-23** (All-Star gap).
-- May–mid-June densify walkforward training regimes must not retune on the frozen
-  late-July window. One exploratory densify fold peeked at 2026-07-23 (n=5) —
-  treat that as contaminated; re-evaluate with train exclusion enforced.
-- Walkforward (`_walkforward_backtest`) and promotion tune paths exclude unused
-  dates from train/calibration fit; unused points remain available for
-  evaluation / stake-gate reporting only.
-- **Stake marketing** for moneyline / totals / run-line only after this unused
-  slice passes (target n ≥ 120 on the unused eval). **Props stay research-only.**
-
-## Subscription sharpen sprint (2026-07-24)
-
-### PA-sim feature sharpening (biggest lever)
-
-Bounded helpers in `mlb_pa_feature_sharpen.py`, wired through context → projection /
-nowcast / historical re-sim:
-
-| Feature           | Behavior                                                                |
-| ----------------- | ----------------------------------------------------------------------- |
-| Starter firmness  | Missing / heuristic SP shrinks quality toward 1.0; weights bullpen more |
-| Rest days         | Short rest taxes offense/bullpen; ≥3 days slight offense lift (clamped) |
-| Platoon           | Handedness split lean scales with opponent-SP firmness                  |
-| Bullpen quality   | Derived from fatigue + availability + high-leverage availability        |
-| Park / weather    | Existing park table + Open-Meteo; dome/retractable damp weather         |
-| SP-change nowcast | `apply_lineup_shock` records SP flips and nudges offense/firmness       |
-
-All shocks are clamped. No mean-shift hacks aimed at holdout MAE.
-
-### Unused holdout (pre-registered — do not train/tune)
-
-- Artifact: `data/ops/mlb-enterprise-holdout/unused_holdout_registry.json`
-- Loader: `services/model-service/src/services/mlb_unused_holdout.py`
-- Walkforward / promotion exclude these dates from train/tune by default
-- Frozen eval window: **2026-07-18 → 2026-07-23**
-- Reserved future: **2026-07-25 → 2026-08-10**
-- **Stake marketing** for ML / totals / run-line only after unused eval passes
-- Props remain `PLAY_STAKE_ELIGIBLE=false` (research-only)
-
-### Densify targeting
-
-`mlb_game_dates_for_densify(..., prioritize_thin=True)` prefers dates that already
-have projections+outcomes but thin open/close odds. Evening close (23:00 UTC) +
-noon open passes fill night-game CLV gaps that midday-only densify missed.
-
 ## Honesty rules
 
 1. No PLAY stake promotion for MLB props without a **pre-registered unused holdout**.
@@ -202,6 +132,3 @@ noon open passes fill night-game CLV gaps that midday-only densify missed.
 3. Holdout n must approach **≥120** before promotion / go-no-go green claims.
 4. DK-first firewall is required for CLV; do not average noisy alternate run lines.
 5. Historical re-sim stamps projections pre-first-pitch; outcomes use game-complete times.
-6. Never train/tune/calibrate-fit on the unused holdout windows; stake marketing only after that slice passes.
-7. Game-line stake marketing requires the **unused** holdout registry slice to
-   pass; densify walkforward alone is not sufficient.

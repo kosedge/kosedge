@@ -1,7 +1,13 @@
 import type { NflIntelResponseRow } from "@/lib/nfl-intel";
 import { formatIntelNumber } from "@/lib/intel-numeric";
 
-export type NflTeamIntelView = "overview" | "stats" | "depth-chart" | "injuries" | "splits" | "tendencies";
+export type NflTeamIntelView =
+  | "overview"
+  | "stats"
+  | "depth-chart"
+  | "injuries"
+  | "splits"
+  | "tendencies";
 
 export type NflTeamDirectoryEntry = {
   code: string;
@@ -28,38 +34,153 @@ const VIEW_ORDER: NflTeamIntelView[] = [
 ];
 
 export const NFL_TEAM_DIRECTORY: NflTeamDirectoryEntry[] = [
-  { code: "ARI", name: "Arizona Cardinals", conference: "NFC", division: "West" },
-  { code: "ATL", name: "Atlanta Falcons", conference: "NFC", division: "South" },
-  { code: "BAL", name: "Baltimore Ravens", conference: "AFC", division: "North" },
+  {
+    code: "ARI",
+    name: "Arizona Cardinals",
+    conference: "NFC",
+    division: "West",
+  },
+  {
+    code: "ATL",
+    name: "Atlanta Falcons",
+    conference: "NFC",
+    division: "South",
+  },
+  {
+    code: "BAL",
+    name: "Baltimore Ravens",
+    conference: "AFC",
+    division: "North",
+  },
   { code: "BUF", name: "Buffalo Bills", conference: "AFC", division: "East" },
-  { code: "CAR", name: "Carolina Panthers", conference: "NFC", division: "South" },
+  {
+    code: "CAR",
+    name: "Carolina Panthers",
+    conference: "NFC",
+    division: "South",
+  },
   { code: "CHI", name: "Chicago Bears", conference: "NFC", division: "North" },
-  { code: "CIN", name: "Cincinnati Bengals", conference: "AFC", division: "North" },
-  { code: "CLE", name: "Cleveland Browns", conference: "AFC", division: "North" },
+  {
+    code: "CIN",
+    name: "Cincinnati Bengals",
+    conference: "AFC",
+    division: "North",
+  },
+  {
+    code: "CLE",
+    name: "Cleveland Browns",
+    conference: "AFC",
+    division: "North",
+  },
   { code: "DAL", name: "Dallas Cowboys", conference: "NFC", division: "East" },
   { code: "DEN", name: "Denver Broncos", conference: "AFC", division: "West" },
   { code: "DET", name: "Detroit Lions", conference: "NFC", division: "North" },
-  { code: "GB", name: "Green Bay Packers", conference: "NFC", division: "North" },
+  {
+    code: "GB",
+    name: "Green Bay Packers",
+    conference: "NFC",
+    division: "North",
+  },
   { code: "HOU", name: "Houston Texans", conference: "AFC", division: "South" },
-  { code: "IND", name: "Indianapolis Colts", conference: "AFC", division: "South" },
-  { code: "JAX", name: "Jacksonville Jaguars", conference: "AFC", division: "South" },
-  { code: "KC", name: "Kansas City Chiefs", conference: "AFC", division: "West" },
-  { code: "LV", name: "Las Vegas Raiders", conference: "AFC", division: "West" },
-  { code: "LAC", name: "Los Angeles Chargers", conference: "AFC", division: "West" },
-  { code: "LAR", name: "Los Angeles Rams", conference: "NFC", division: "West" },
+  {
+    code: "IND",
+    name: "Indianapolis Colts",
+    conference: "AFC",
+    division: "South",
+  },
+  {
+    code: "JAX",
+    name: "Jacksonville Jaguars",
+    conference: "AFC",
+    division: "South",
+  },
+  {
+    code: "KC",
+    name: "Kansas City Chiefs",
+    conference: "AFC",
+    division: "West",
+  },
+  {
+    code: "LV",
+    name: "Las Vegas Raiders",
+    conference: "AFC",
+    division: "West",
+  },
+  {
+    code: "LAC",
+    name: "Los Angeles Chargers",
+    conference: "AFC",
+    division: "West",
+  },
+  {
+    code: "LAR",
+    name: "Los Angeles Rams",
+    conference: "NFC",
+    division: "West",
+  },
   { code: "MIA", name: "Miami Dolphins", conference: "AFC", division: "East" },
-  { code: "MIN", name: "Minnesota Vikings", conference: "NFC", division: "North" },
-  { code: "NE", name: "New England Patriots", conference: "AFC", division: "East" },
-  { code: "NO", name: "New Orleans Saints", conference: "NFC", division: "South" },
+  {
+    code: "MIN",
+    name: "Minnesota Vikings",
+    conference: "NFC",
+    division: "North",
+  },
+  {
+    code: "NE",
+    name: "New England Patriots",
+    conference: "AFC",
+    division: "East",
+  },
+  {
+    code: "NO",
+    name: "New Orleans Saints",
+    conference: "NFC",
+    division: "South",
+  },
   { code: "NYG", name: "New York Giants", conference: "NFC", division: "East" },
   { code: "NYJ", name: "New York Jets", conference: "AFC", division: "East" },
-  { code: "PHI", name: "Philadelphia Eagles", conference: "NFC", division: "East" },
-  { code: "PIT", name: "Pittsburgh Steelers", conference: "AFC", division: "North" },
-  { code: "SEA", name: "Seattle Seahawks", conference: "NFC", division: "West" },
-  { code: "SF", name: "San Francisco 49ers", conference: "NFC", division: "West" },
-  { code: "TB", name: "Tampa Bay Buccaneers", conference: "NFC", division: "South" },
-  { code: "TEN", name: "Tennessee Titans", conference: "AFC", division: "South" },
-  { code: "WAS", name: "Washington Commanders", conference: "NFC", division: "East" },
+  {
+    code: "PHI",
+    name: "Philadelphia Eagles",
+    conference: "NFC",
+    division: "East",
+  },
+  {
+    code: "PIT",
+    name: "Pittsburgh Steelers",
+    conference: "AFC",
+    division: "North",
+  },
+  {
+    code: "SEA",
+    name: "Seattle Seahawks",
+    conference: "NFC",
+    division: "West",
+  },
+  {
+    code: "SF",
+    name: "San Francisco 49ers",
+    conference: "NFC",
+    division: "West",
+  },
+  {
+    code: "TB",
+    name: "Tampa Bay Buccaneers",
+    conference: "NFC",
+    division: "South",
+  },
+  {
+    code: "TEN",
+    name: "Tennessee Titans",
+    conference: "AFC",
+    division: "South",
+  },
+  {
+    code: "WAS",
+    name: "Washington Commanders",
+    conference: "NFC",
+    division: "East",
+  },
 ];
 
 const NFL_TEAM_DIRECTORY_BY_CODE = new Map(
@@ -70,14 +191,18 @@ export function isNflTeamIntelView(value: string): value is NflTeamIntelView {
   return VIEW_ORDER.includes(value as NflTeamIntelView);
 }
 
-export function normalizeTeamCode(value: string | undefined | null): string | null {
+export function normalizeTeamCode(
+  value: string | undefined | null,
+): string | null {
   if (!value) return null;
   const normalized = value.trim().toUpperCase();
   if (!normalized) return null;
   return normalized;
 }
 
-export function parseTeamIntelFilters(searchParams: Record<string, string | string[] | undefined>): TeamIntelFilters {
+export function parseTeamIntelFilters(
+  searchParams: Record<string, string | string[] | undefined>,
+): TeamIntelFilters {
   const seasonRaw = firstQueryValue(searchParams.season);
   const weekRaw = firstQueryValue(searchParams.week);
   const conferenceRaw = firstQueryValue(searchParams.conference);
@@ -85,15 +210,30 @@ export function parseTeamIntelFilters(searchParams: Record<string, string | stri
   const queryRaw = firstQueryValue(searchParams.q);
 
   const parsedSeason = Number(seasonRaw);
-  const season = Number.isFinite(parsedSeason) && parsedSeason >= 2010 && parsedSeason <= 2100 ? parsedSeason : undefined;
+  const season =
+    Number.isFinite(parsedSeason) &&
+    parsedSeason >= 2010 &&
+    parsedSeason <= 2100
+      ? parsedSeason
+      : undefined;
   const parsedWeek = Number(weekRaw);
-  const week = Number.isFinite(parsedWeek) && parsedWeek >= 1 && parsedWeek <= 25 ? parsedWeek : undefined;
-  const conference = conferenceRaw === "AFC" || conferenceRaw === "NFC" ? conferenceRaw : undefined;
+  const week =
+    Number.isFinite(parsedWeek) && parsedWeek >= 1 && parsedWeek <= 25
+      ? parsedWeek
+      : undefined;
+  const conference =
+    conferenceRaw === "AFC" || conferenceRaw === "NFC"
+      ? conferenceRaw
+      : undefined;
   const division =
-    divisionRaw === "East" || divisionRaw === "North" || divisionRaw === "South" || divisionRaw === "West"
+    divisionRaw === "East" ||
+    divisionRaw === "North" ||
+    divisionRaw === "South" ||
+    divisionRaw === "West"
       ? divisionRaw
       : undefined;
-  const query = queryRaw && queryRaw.trim().length > 0 ? queryRaw.trim() : undefined;
+  const query =
+    queryRaw && queryRaw.trim().length > 0 ? queryRaw.trim() : undefined;
 
   return {
     season,
@@ -110,8 +250,10 @@ export function buildTeamIntelHref(
   filters?: Pick<TeamIntelFilters, "season" | "week">,
 ): string {
   const params = new URLSearchParams();
-  if (typeof filters?.season === "number") params.set("season", String(filters.season));
-  if (typeof filters?.week === "number") params.set("week", String(filters.week));
+  if (typeof filters?.season === "number")
+    params.set("season", String(filters.season));
+  if (typeof filters?.week === "number")
+    params.set("week", String(filters.week));
   const query = params.toString();
   const base = `/pro/nfl/teams/${team}/${view}`;
   return query ? `${base}?${query}` : base;
@@ -123,7 +265,9 @@ export function teamDisplayName(teamCode: string): string {
   return NFL_TEAM_DIRECTORY_BY_CODE.get(normalized)?.name ?? normalized;
 }
 
-export function resolveConferenceDivision(teamCode: string | undefined | null): {
+export function resolveConferenceDivision(
+  teamCode: string | undefined | null,
+): {
   conference: "AFC" | "NFC";
   division: "East" | "North" | "South" | "West";
 } | null {
@@ -137,11 +281,17 @@ export function resolveConferenceDivision(teamCode: string | undefined | null): 
   };
 }
 
-export function resolveTeamCode(candidate: string | undefined, availableTeams: string[]): string {
+export function resolveTeamCode(
+  candidate: string | undefined,
+  availableTeams: string[],
+): string {
   const normalizedCandidate = normalizeTeamCode(candidate);
-  const normalizedAvailable = availableTeams.map((team) => normalizeTeamCode(team)).filter(Boolean) as string[];
+  const normalizedAvailable = availableTeams
+    .map((team) => normalizeTeamCode(team))
+    .filter(Boolean) as string[];
 
-  if (normalizedCandidate && normalizedAvailable.includes(normalizedCandidate)) return normalizedCandidate;
+  if (normalizedCandidate && normalizedAvailable.includes(normalizedCandidate))
+    return normalizedCandidate;
   if (normalizedAvailable.length > 0) return normalizedAvailable[0];
   return "BUF";
 }
@@ -149,19 +299,26 @@ export function resolveTeamCode(candidate: string | undefined, availableTeams: s
 export function extractTeamCodes(rows: NflIntelResponseRow[]): string[] {
   const set = new Set<string>();
   for (const row of rows) {
-    const team = normalizeTeamCode(typeof row.team === "string" ? row.team : undefined);
+    const team = normalizeTeamCode(
+      typeof row.team === "string" ? row.team : undefined,
+    );
     if (team) set.add(team);
   }
   return Array.from(set).sort();
 }
 
-export function filterTeamDirectory(filters: TeamIntelFilters): NflTeamDirectoryEntry[] {
+export function filterTeamDirectory(
+  filters: TeamIntelFilters,
+): NflTeamDirectoryEntry[] {
   return NFL_TEAM_DIRECTORY.filter((team) => {
-    if (filters.conference && team.conference !== filters.conference) return false;
+    if (filters.conference && team.conference !== filters.conference)
+      return false;
     if (filters.division && team.division !== filters.division) return false;
     if (!filters.query) return true;
     const q = filters.query.toLowerCase();
-    return team.name.toLowerCase().includes(q) || team.code.toLowerCase().includes(q);
+    return (
+      team.name.toLowerCase().includes(q) || team.code.toLowerCase().includes(q)
+    );
   });
 }
 
@@ -172,7 +329,10 @@ type TrendRankContext = {
   epa_per_play_defense_allowed?: number;
 };
 
-export function buildTrendSnippets(statsRow: NflIntelResponseRow | undefined, ranks?: TrendRankContext): string[] {
+export function buildTrendSnippets(
+  statsRow: NflIntelResponseRow | undefined,
+  ranks?: TrendRankContext,
+): string[] {
   if (!statsRow) {
     return [
       "No weekly stat profile available for the selected filter.",
@@ -194,7 +354,9 @@ export function buildTrendSnippets(statsRow: NflIntelResponseRow | undefined, ra
   ];
 }
 
-export function firstQueryValue(value: string | string[] | undefined): string | undefined {
+export function firstQueryValue(
+  value: string | string[] | undefined,
+): string | undefined {
   if (Array.isArray(value)) return value[0];
   return value;
 }
@@ -207,7 +369,10 @@ function asNumber(value: unknown): number | null {
 function formatPct(value: number | null, rank?: number): string {
   if (value === null) return "N/A";
   const base = formatIntelNumber(value * 100, false);
-  const rankSuffix = typeof rank === "number" && Number.isFinite(rank) ? ` (${Math.trunc(rank)})` : "";
+  const rankSuffix =
+    typeof rank === "number" && Number.isFinite(rank)
+      ? ` (${Math.trunc(rank)})`
+      : "";
   return `${base}${rankSuffix}%`;
 }
 
@@ -215,6 +380,9 @@ function formatSigned(value: number | null, rank?: number): string {
   if (value === null) return "N/A";
   const abs = formatIntelNumber(Math.abs(value), false);
   const base = value >= 0 ? `+${abs}` : `-${abs}`;
-  const rankSuffix = typeof rank === "number" && Number.isFinite(rank) ? ` (${Math.trunc(rank)})` : "";
+  const rankSuffix =
+    typeof rank === "number" && Number.isFinite(rank)
+      ? ` (${Math.trunc(rank)})`
+      : "";
   return `${base}${rankSuffix}`;
 }

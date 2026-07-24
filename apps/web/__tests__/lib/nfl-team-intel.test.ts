@@ -9,10 +9,12 @@ import {
 
 describe("nfl-team-intel helpers", () => {
   it("builds team intel links with season/week filters", () => {
-    expect(buildTeamIntelHref("BUF", "overview", { season: 2025, week: 12 })).toBe(
-      "/pro/nfl/teams/BUF/overview?season=2025&week=12",
+    expect(
+      buildTeamIntelHref("BUF", "overview", { season: 2025, week: 12 }),
+    ).toBe("/pro/nfl/teams/BUF/overview?season=2025&week=12");
+    expect(buildTeamIntelHref("BUF", "injuries")).toBe(
+      "/pro/nfl/teams/BUF/injuries",
     );
-    expect(buildTeamIntelHref("BUF", "injuries")).toBe("/pro/nfl/teams/BUF/injuries");
   });
 
   it("parses valid filters and ignores invalid values", () => {
@@ -31,7 +33,12 @@ describe("nfl-team-intel helpers", () => {
       query: "Bills",
     });
 
-    const invalid = parseTeamIntelFilters({ season: "1901", week: "99", conference: "x", division: "y" });
+    const invalid = parseTeamIntelFilters({
+      season: "1901",
+      week: "99",
+      conference: "x",
+      division: "y",
+    });
     expect(invalid.season).toBeUndefined();
     expect(invalid.week).toBeUndefined();
     expect(invalid.conference).toBeUndefined();
@@ -45,7 +52,11 @@ describe("nfl-team-intel helpers", () => {
   });
 
   it("filters directory by conference/division/search", () => {
-    const filtered = filterTeamDirectory({ conference: "AFC", division: "East", query: "new" });
+    const filtered = filterTeamDirectory({
+      conference: "AFC",
+      division: "East",
+      query: "new",
+    });
     expect(filtered.map((team) => team.code)).toEqual(["NE", "NYJ"]);
   });
 

@@ -12,8 +12,8 @@
 
 ### 1) Optional Vercel env
 
-| Variable | Notes |
-|---|---|
+| Variable       | Notes                                                                             |
+| -------------- | --------------------------------------------------------------------------------- |
 | `DATABASE_URL` | Only if web routes need direct Postgres (most NFL boards use `MODEL_SERVICE_URL`) |
 
 ### 2) Railway model-service (api + worker + beat) — one-push
@@ -28,8 +28,8 @@
 
 One-time GitHub secret (Settings → Secrets and variables → Actions):
 
-| Secret | Value |
-|---|---|
+| Secret          | Value                                                         |
+| --------------- | ------------------------------------------------------------- |
 | `RAILWAY_TOKEN` | Railway → `brave-art` → Settings → Tokens → **Project Token** |
 
 Optional overrides (defaults match brave-art): `RAILWAY_SERVICE_API`, `RAILWAY_SERVICE_WORKER`, `RAILWAY_SERVICE_BEAT`, `RAILWAY_ENVIRONMENT`.

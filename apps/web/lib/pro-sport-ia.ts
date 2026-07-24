@@ -290,7 +290,9 @@ export function buildSportOverviewSections({
   content: OverviewContent;
 }): OverviewSection[] {
   const slateLabel =
-    sportKey === "nfl" || sportKey === "cfb" ? "Weekly slate board" : "Daily slate board";
+    sportKey === "nfl" || sportKey === "cfb"
+      ? "Weekly slate board"
+      : "Daily slate board";
 
   const sections: OverviewSection[] = [
     {

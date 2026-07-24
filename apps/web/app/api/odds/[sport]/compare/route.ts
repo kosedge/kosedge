@@ -80,7 +80,11 @@ export async function GET(
     const data = { rows, books };
     const payload = { data, ts: now };
     compareCache.set(sport, payload);
-    await setCache(compareCacheKeyForSport(sport), payload, Math.ceil(ODDS_CACHE_TTL_MS / 1000));
+    await setCache(
+      compareCacheKeyForSport(sport),
+      payload,
+      Math.ceil(ODDS_CACHE_TTL_MS / 1000),
+    );
     return NextResponse.json(data, { headers: CACHE_HEADERS });
   } catch (e) {
     logError(e instanceof Error ? e : new Error(String(e)), {

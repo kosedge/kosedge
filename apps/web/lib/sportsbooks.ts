@@ -98,7 +98,9 @@ const BY_NAME = new Map(
   Object.values(SPORTSBOOKS).map((b) => [b.name.toLowerCase(), b] as const),
 );
 
-export function getSportsbook(bookOrKey: string | undefined | null): SportsbookMeta | null {
+export function getSportsbook(
+  bookOrKey: string | undefined | null,
+): SportsbookMeta | null {
   if (!bookOrKey) return null;
   const raw = bookOrKey.trim();
   if (!raw) return null;
@@ -107,6 +109,8 @@ export function getSportsbook(bookOrKey: string | undefined | null): SportsbookM
   return BY_NAME.get(raw.toLowerCase()) ?? null;
 }
 
-export function sportsbookHomepage(bookOrKey: string | undefined | null): string | null {
+export function sportsbookHomepage(
+  bookOrKey: string | undefined | null,
+): string | null {
   return getSportsbook(bookOrKey)?.homepage ?? null;
 }

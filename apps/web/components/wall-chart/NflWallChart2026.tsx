@@ -15,7 +15,10 @@ function ConferenceBlock({ conference }: { conference: "AFC" | "NFC" }) {
   const railClass = conference === "AFC" ? "afc" : "nfc";
 
   return (
-    <section className={`wall-chart-conference ${railClass}`} aria-label={`${conference} schedule`}>
+    <section
+      className={`wall-chart-conference ${railClass}`}
+      aria-label={`${conference} schedule`}
+    >
       <div className={`wall-chart-conf-rail ${railClass}`}>
         <span>{conference}</span>
       </div>
@@ -75,7 +78,14 @@ function HelmetFootballArt() {
         </linearGradient>
       </defs>
       {/* football */}
-      <ellipse cx="118" cy="62" rx="28" ry="17" fill="url(#wcBall)" transform="rotate(-25 118 62)" />
+      <ellipse
+        cx="118"
+        cy="62"
+        rx="28"
+        ry="17"
+        fill="url(#wcBall)"
+        transform="rotate(-25 118 62)"
+      />
       <path
         d="M102 54c10 5 24 5 34 0"
         fill="none"
@@ -83,7 +93,11 @@ function HelmetFootballArt() {
         strokeWidth="1.6"
         transform="rotate(-25 118 62)"
       />
-      <path d="M112 58h12M115 55v8M121 55v8" stroke="#f5e6d3" strokeWidth="1.2" />
+      <path
+        d="M112 58h12M115 55v8M121 55v8"
+        stroke="#f5e6d3"
+        strokeWidth="1.2"
+      />
       {/* helmet */}
       <path
         d="M18 58c2-28 24-46 52-42 18 2 34 16 38 34 2 10-2 18-12 22-8 4-18 4-28 2l-8 12c-2 2-6 2-8 0l-6-10c-12-2-24-8-28-18z"
@@ -94,8 +108,19 @@ function HelmetFootballArt() {
         fill="#1a1a1a"
         opacity="0.85"
       />
-      <path d="M48 52h28" stroke="#f5b942" strokeWidth="2" strokeLinecap="round" />
-      <path d="M70 38c10 4 18 14 20 26" fill="none" stroke="#ffe9a8" strokeWidth="2" opacity="0.5" />
+      <path
+        d="M48 52h28"
+        stroke="#f5b942"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M70 38c10 4 18 14 20 26"
+        fill="none"
+        stroke="#ffe9a8"
+        strokeWidth="2"
+        opacity="0.5"
+      />
     </svg>
   );
 }
@@ -146,13 +171,29 @@ function NeonFooterArt() {
         strokeWidth="2"
         filter="url(#wcNeon)"
       />
-      <path d="M28 38h18M32 34v10M40 34v10" stroke="#39ff14" strokeWidth="1.8" opacity="0.9" />
+      <path
+        d="M28 38h18M32 34v10M40 34v10"
+        stroke="#39ff14"
+        strokeWidth="1.8"
+        opacity="0.9"
+      />
       <rect x="62" y="48" width="6" height="14" fill="#39ff14" opacity="0.45" />
       <rect x="71" y="40" width="6" height="22" fill="#39ff14" opacity="0.65" />
       <rect x="80" y="30" width="6" height="32" fill="#39ff14" opacity="0.85" />
       <rect x="89" y="20" width="6" height="42" fill="#39ff14" />
-      <path d="M64 22 L96 8" stroke="#39ff14" strokeWidth="2.5" strokeLinecap="round" filter="url(#wcNeon)" />
-      <path d="M90 4 L96 8 L91 12" fill="none" stroke="#39ff14" strokeWidth="2.5" />
+      <path
+        d="M64 22 L96 8"
+        stroke="#39ff14"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        filter="url(#wcNeon)"
+      />
+      <path
+        d="M90 4 L96 8 L91 12"
+        fill="none"
+        stroke="#39ff14"
+        strokeWidth="2.5"
+      />
     </svg>
   );
 }

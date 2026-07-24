@@ -2,8 +2,16 @@ import "server-only";
 import { env } from "@/lib/config/env";
 
 export type TendencyPerspective = "offense" | "defense";
-export type TendencySituationType = "down_distance" | "score_state" | "field_position";
-export type QbSituationType = "overall" | "down_type" | "pressure" | "score_state" | "field_position";
+export type TendencySituationType =
+  | "down_distance"
+  | "score_state"
+  | "field_position";
+export type QbSituationType =
+  | "overall"
+  | "down_type"
+  | "pressure"
+  | "score_state"
+  | "field_position";
 
 export type NflTeamSituationalTendencyRow = {
   season: number;
@@ -104,7 +112,9 @@ function toNumber(value: unknown, fallback = 0): number {
   return fallback;
 }
 
-function normalizeSituational(raw: Record<string, unknown>): NflTeamSituationalTendencyRow {
+function normalizeSituational(
+  raw: Record<string, unknown>,
+): NflTeamSituationalTendencyRow {
   return {
     season: toNumber(raw.season),
     team: String(raw.team ?? "—"),
@@ -131,7 +141,9 @@ function normalizeSituational(raw: Record<string, unknown>): NflTeamSituationalT
   };
 }
 
-function normalizeDirection(raw: Record<string, unknown>): NflTeamDirectionTendencyRow {
+function normalizeDirection(
+  raw: Record<string, unknown>,
+): NflTeamDirectionTendencyRow {
   return {
     season: toNumber(raw.season),
     team: String(raw.team ?? "—"),
@@ -152,7 +164,9 @@ function normalizeDirection(raw: Record<string, unknown>): NflTeamDirectionTende
   };
 }
 
-function normalizeQbSplit(raw: Record<string, unknown>): NflQbSituationalSplitRow {
+function normalizeQbSplit(
+  raw: Record<string, unknown>,
+): NflQbSituationalSplitRow {
   return {
     season: toNumber(raw.season),
     playerId: String(raw.player_id ?? ""),
@@ -180,9 +194,16 @@ function normalizeQbSplit(raw: Record<string, unknown>): NflQbSituationalSplitRo
   };
 }
 
-async function fetchJson(path: string, searchParams: Record<string, string | number | boolean | undefined>) {
+async function fetchJson(
+  path: string,
+  searchParams: Record<string, string | number | boolean | undefined>,
+) {
   const base = env.MODEL_SERVICE_URL;
-  if (!base) return { ok: false as const, error: "MODEL_SERVICE_URL is not configured." };
+  if (!base)
+    return {
+      ok: false as const,
+      error: "MODEL_SERVICE_URL is not configured.",
+    };
 
   const url = new URL(`${base.replace(/\/+$/, "")}${path}`);
   for (const [key, value] of Object.entries(searchParams)) {
@@ -198,11 +219,16 @@ async function fetchJson(path: string, searchParams: Record<string, string | num
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
-      return { ok: false as const, error: `Model service returned ${response.status}.` };
+      return {
+        ok: false as const,
+        error: `Model service returned ${response.status}.`,
+      };
     }
     const payload = (await response.json()) as Record<string, unknown>;
     return { ok: true as const, payload };
@@ -227,12 +253,22 @@ export async function fetchNflTeamTendencyProfile(params: {
     situation_type: params.situationType,
   });
   if (!result.ok) {
-    return { season: params.season, team: params.team, perspective, situational: [], direction: null, error: result.error };
+    return {
+      season: params.season,
+      team: params.team,
+      perspective,
+      situational: [],
+      direction: null,
+      error: result.error,
+    };
   }
   const situationalRaw = Array.isArray(result.payload.situational)
     ? (result.payload.situational as Array<Record<string, unknown>>)
     : [];
-  const directionRaw = result.payload.direction as Record<string, unknown> | null | undefined;
+  const directionRaw = result.payload.direction as
+    | Record<string, unknown>
+    | null
+    | undefined;
   return {
     season: params.season,
     team: params.team,
@@ -250,14 +286,30 @@ export async function fetchNflTeamTendencyProfileResolved(params: {
   season: number;
   team: string;
   perspective?: TendencyPerspective;
-}): Promise<NflTeamTendencyProfileResponse & { requestedSeason: number; usedFallback: boolean }> {
-  const candidateSeasons = [params.season, ...TENDENCY_SEASON_FALLBACKS.filter((s) => s !== params.season)];
+}): Promise<
+  NflTeamTendencyProfileResponse & {
+    requestedSeason: number;
+    usedFallback: boolean;
+  }
+> {
+  const candidateSeasons = [
+    params.season,
+    ...TENDENCY_SEASON_FALLBACKS.filter((s) => s !== params.season),
+  ];
   let lastResult: NflTeamTendencyProfileResponse | null = null;
   for (const season of candidateSeasons) {
-    const result = await fetchNflTeamTendencyProfile({ season, team: params.team, perspective: params.perspective });
+    const result = await fetchNflTeamTendencyProfile({
+      season,
+      team: params.team,
+      perspective: params.perspective,
+    });
     lastResult = result;
     if (result.situational.length > 0 || result.direction) {
-      return { ...result, requestedSeason: params.season, usedFallback: season !== params.season };
+      return {
+        ...result,
+        requestedSeason: params.season,
+        usedFallback: season !== params.season,
+      };
     }
     if (result.error) break;
   }
@@ -291,8 +343,18 @@ export async function fetchNflQbSituationalSplits(params: {
     limit: params.limit ?? 500,
   });
   if (!result.ok) return { count: 0, rows: [], error: result.error };
-  const rows = Array.isArray(result.payload.rows) ? (result.payload.rows as Array<Record<string, unknown>>).map(normalizeQbSplit) : [];
-  return { count: typeof result.payload.count === "number" ? result.payload.count : rows.length, rows };
+  const rows = Array.isArray(result.payload.rows)
+    ? (result.payload.rows as Array<Record<string, unknown>>).map(
+        normalizeQbSplit,
+      )
+    : [];
+  return {
+    count:
+      typeof result.payload.count === "number"
+        ? result.payload.count
+        : rows.length,
+    rows,
+  };
 }
 
 export const SITUATION_BUCKET_LABELS: Record<string, string> = {

@@ -18,9 +18,8 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-const { isProUser, hasRole, getUserRole, getProAccessState } = await import(
-  "@/lib/auth/pro"
-);
+const { isProUser, hasRole, getUserRole, getProAccessState } =
+  await import("@/lib/auth/pro");
 
 describe("Auth Pro Utilities", () => {
   beforeEach(() => {

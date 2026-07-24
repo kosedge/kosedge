@@ -32,7 +32,12 @@ describe("fetchNflIntel", () => {
         rows: [],
         selection: {
           used_default: { season: false, week: false, any: false },
-          latest_available: { season: 2025, week: 22, row_count: 320, team_count: 32 },
+          latest_available: {
+            season: 2025,
+            week: 22,
+            row_count: 320,
+            team_count: 32,
+          },
           requested_availability: {
             season: 2026,
             week: 1,
@@ -62,22 +67,77 @@ describe("fetchNflIntel", () => {
 
   it("sorts standings by conference, division, and rank inputs", () => {
     const sorted = sortStandingsRows([
-      { team: "SEA", wins: 10, win_pct: 0.625, point_diff: 35, conference: "NFC", division: "West" },
-      { team: "MIA", wins: 11, win_pct: 0.688, point_diff: 40, conference: "AFC", division: "East" },
-      { team: "BUF", wins: 12, win_pct: 0.75, point_diff: 60, conference: "AFC", division: "East" },
-      { team: "XYZ", wins: 9, win_pct: 0.56, point_diff: 10, conference: null, division: null },
-      { team: "BAL", wins: 11, win_pct: 0.688, point_diff: 50, conference: "AFC", division: "North" },
+      {
+        team: "SEA",
+        wins: 10,
+        win_pct: 0.625,
+        point_diff: 35,
+        conference: "NFC",
+        division: "West",
+      },
+      {
+        team: "MIA",
+        wins: 11,
+        win_pct: 0.688,
+        point_diff: 40,
+        conference: "AFC",
+        division: "East",
+      },
+      {
+        team: "BUF",
+        wins: 12,
+        win_pct: 0.75,
+        point_diff: 60,
+        conference: "AFC",
+        division: "East",
+      },
+      {
+        team: "XYZ",
+        wins: 9,
+        win_pct: 0.56,
+        point_diff: 10,
+        conference: null,
+        division: null,
+      },
+      {
+        team: "BAL",
+        wins: 11,
+        win_pct: 0.688,
+        point_diff: 50,
+        conference: "AFC",
+        division: "North",
+      },
     ]);
 
-    expect(sorted.map((row) => row.team)).toEqual(["BUF", "MIA", "BAL", "SEA", "XYZ"]);
+    expect(sorted.map((row) => row.team)).toEqual([
+      "BUF",
+      "MIA",
+      "BAL",
+      "SEA",
+      "XYZ",
+    ]);
     expect(sorted[4]?.conference).toBe("Unknown");
     expect(sorted[4]?.division).toBe("Unknown");
   });
 
   it("derives missing conference/division from team map", () => {
     const sorted = sortStandingsRows([
-      { team: "BUF", wins: 12, win_pct: 0.75, point_diff: 60, conference: null, division: null },
-      { team: "MIA", wins: 11, win_pct: 0.688, point_diff: 40, conference: null, division: null },
+      {
+        team: "BUF",
+        wins: 12,
+        win_pct: 0.75,
+        point_diff: 60,
+        conference: null,
+        division: null,
+      },
+      {
+        team: "MIA",
+        wins: 11,
+        win_pct: 0.688,
+        point_diff: 40,
+        conference: null,
+        division: null,
+      },
     ]);
 
     expect(sorted[0]?.conference).toBe("AFC");
@@ -88,17 +148,43 @@ describe("fetchNflIntel", () => {
 
   it("groups sorted standings by conference and division", () => {
     const groups = groupStandingsRows([
-      { team: "SEA", wins: 10, win_pct: 0.625, point_diff: 35, conference: "NFC", division: "West" },
-      { team: "MIA", wins: 11, win_pct: 0.688, point_diff: 40, conference: "AFC", division: "East" },
-      { team: "BUF", wins: 12, win_pct: 0.75, point_diff: 60, conference: "AFC", division: "East" },
-      { team: "BAL", wins: 11, win_pct: 0.688, point_diff: 50, conference: "AFC", division: "North" },
+      {
+        team: "SEA",
+        wins: 10,
+        win_pct: 0.625,
+        point_diff: 35,
+        conference: "NFC",
+        division: "West",
+      },
+      {
+        team: "MIA",
+        wins: 11,
+        win_pct: 0.688,
+        point_diff: 40,
+        conference: "AFC",
+        division: "East",
+      },
+      {
+        team: "BUF",
+        wins: 12,
+        win_pct: 0.75,
+        point_diff: 60,
+        conference: "AFC",
+        division: "East",
+      },
+      {
+        team: "BAL",
+        wins: 11,
+        win_pct: 0.688,
+        point_diff: 50,
+        conference: "AFC",
+        division: "North",
+      },
     ]);
 
-    expect(groups.map((group) => `${group.conference}-${group.division}`)).toEqual([
-      "AFC-East",
-      "AFC-North",
-      "NFC-West",
-    ]);
+    expect(
+      groups.map((group) => `${group.conference}-${group.division}`),
+    ).toEqual(["AFC-East", "AFC-North", "NFC-West"]);
     expect(groups[0]?.rows.map((row) => row.team)).toEqual(["BUF", "MIA"]);
   });
 
@@ -115,9 +201,15 @@ describe("fetchNflIntel", () => {
   });
 
   it("formats team record with optional ties and rank", () => {
-    expect(formatTeamRecordWithRank({ wins: 15, losses: 2, ties: 0 }, 1)).toBe("15-2 (1)");
-    expect(formatTeamRecordWithRank({ wins: 10, losses: 6, ties: 1 }, 4)).toBe("10-6-1 (4)");
-    expect(formatTeamRecordWithRank({ wins: 9, losses: 8, ties: 0 })).toBe("9-8");
+    expect(formatTeamRecordWithRank({ wins: 15, losses: 2, ties: 0 }, 1)).toBe(
+      "15-2 (1)",
+    );
+    expect(formatTeamRecordWithRank({ wins: 10, losses: 6, ties: 1 }, 4)).toBe(
+      "10-6-1 (4)",
+    );
+    expect(formatTeamRecordWithRank({ wins: 9, losses: 8, ties: 0 })).toBe(
+      "9-8",
+    );
     expect(formatTeamRecordWithRank({ wins: 9 })).toBe("—");
   });
 });

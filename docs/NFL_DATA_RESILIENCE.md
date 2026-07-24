@@ -12,15 +12,15 @@ This runbook covers owned-data DR, weekly automation, source fallbacks, and fres
 
 ## What is owned
 
-| Domain | Owned tables | Primary | Fallback |
-|---|---|---|---|
-| Schedules/scores | `nfl_dp_schedules` | nflverse schedules | ESPN scoreboard |
-| PBP | `nfl_dp_raw_objects`, `nfl_dp_play_by_play` | nflverse PBP | none (licensed later) |
-| Player/team stats | `nfl_dp_*_game_stats` | nflverse | NFL.com team intel |
-| Injuries/rosters | `nfl_dp_injuries`, `nfl_dp_rosters` | nflverse / NFL.com | each other |
-| Snaps | `nfl_dp_snap_counts_weekly` | nflverse snap counts | PBP proxy shares |
-| Depth | `nfl_dp_official_depth_charts`, inferred depth | nflverse depth charts | inferred usage depth |
-| Props odds | `nfl_player_prop_market_snapshots` | The Odds API | last owned snapshots |
+| Domain            | Owned tables                                   | Primary               | Fallback              |
+| ----------------- | ---------------------------------------------- | --------------------- | --------------------- |
+| Schedules/scores  | `nfl_dp_schedules`                             | nflverse schedules    | ESPN scoreboard       |
+| PBP               | `nfl_dp_raw_objects`, `nfl_dp_play_by_play`    | nflverse PBP          | none (licensed later) |
+| Player/team stats | `nfl_dp_*_game_stats`                          | nflverse              | NFL.com team intel    |
+| Injuries/rosters  | `nfl_dp_injuries`, `nfl_dp_rosters`            | nflverse / NFL.com    | each other            |
+| Snaps             | `nfl_dp_snap_counts_weekly`                    | nflverse snap counts  | PBP proxy shares      |
+| Depth             | `nfl_dp_official_depth_charts`, inferred depth | nflverse depth charts | inferred usage depth  |
+| Props odds        | `nfl_player_prop_market_snapshots`             | The Odds API          | last owned snapshots  |
 
 Executable matrix: `data_platform_nfl.source_matrix.source_matrix_payload()`.
 
@@ -39,13 +39,13 @@ Produces:
 
 Env:
 
-| Var | Purpose |
-|---|---|
-| `NFL_DR_BACKUP_DIR` | Local dump directory (default `data/backups/nfl`) |
-| `NFL_DR_BACKUP_KEEP` | Retention count (default `3`) |
-| `NFL_DR_REMOTE_URI` | Optional `s3://bucket/prefix` (requires AWS CLI) |
-| `NFL_PG_BIN_DIR` | Directory containing `pg_dump`/`pg_restore`/`psql` |
-| `NFL_ALERT_WEBHOOK_URL` | Slack/Discord/etc webhook for ops alerts |
+| Var                     | Purpose                                            |
+| ----------------------- | -------------------------------------------------- |
+| `NFL_DR_BACKUP_DIR`     | Local dump directory (default `data/backups/nfl`)  |
+| `NFL_DR_BACKUP_KEEP`    | Retention count (default `3`)                      |
+| `NFL_DR_REMOTE_URI`     | Optional `s3://bucket/prefix` (requires AWS CLI)   |
+| `NFL_PG_BIN_DIR`        | Directory containing `pg_dump`/`pg_restore`/`psql` |
+| `NFL_ALERT_WEBHOOK_URL` | Slack/Discord/etc webhook for ops alerts           |
 
 ## Weekly automation
 

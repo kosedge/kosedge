@@ -46,7 +46,8 @@ export type NflIntelResponse = {
 
 function toText(value: unknown): string {
   if (value === null || value === undefined) return "—";
-  if (typeof value === "number") return Number.isFinite(value) ? String(value) : "—";
+  if (typeof value === "number")
+    return Number.isFinite(value) ? String(value) : "—";
   const text = String(value).trim();
   return text.length > 0 ? text : "—";
 }
@@ -58,7 +59,11 @@ export function formatIntelValue(value: unknown): string {
   return toText(value);
 }
 
-export function formatIntelValueWithRank(value: unknown, rank?: number, signed = false): string {
+export function formatIntelValueWithRank(
+  value: unknown,
+  rank?: number,
+  signed = false,
+): string {
   if (typeof value !== "number" || !Number.isFinite(value)) {
     return formatIntelValue(value);
   }
@@ -75,7 +80,10 @@ function toRecordPart(value: unknown): number | null {
   return Math.trunc(numeric);
 }
 
-export function formatTeamRecordWithRank(row: NflIntelResponseRow | undefined, rank?: number): string {
+export function formatTeamRecordWithRank(
+  row: NflIntelResponseRow | undefined,
+  rank?: number,
+): string {
   if (!row) return "—";
   const wins = toRecordPart(row.wins);
   const losses = toRecordPart(row.losses);
@@ -126,7 +134,9 @@ export async function fetchNflIntel(
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
@@ -207,44 +217,75 @@ function normalizeDivision(value: unknown): string | null {
   const trimmed = value.trim().toLowerCase();
   if (trimmed.length === 0) return null;
   const normalized = `${trimmed[0]?.toUpperCase() ?? ""}${trimmed.slice(1)}`;
-  if (normalized === "East" || normalized === "North" || normalized === "South" || normalized === "West") {
+  if (
+    normalized === "East" ||
+    normalized === "North" ||
+    normalized === "South" ||
+    normalized === "West"
+  ) {
     return normalized;
   }
   return null;
 }
 
-function compareNullableNumbersDesc(left: number | null, right: number | null): number {
+function compareNullableNumbersDesc(
+  left: number | null,
+  right: number | null,
+): number {
   if (left === null && right === null) return 0;
   if (left === null) return 1;
   if (right === null) return -1;
   return right - left;
 }
 
-export function sortStandingsRows(rows: NflIntelResponseRow[]): NflIntelResponseRow[] {
+export function sortStandingsRows(
+  rows: NflIntelResponseRow[],
+): NflIntelResponseRow[] {
   const normalizedRows: NflIntelResponseRow[] = rows.map((row) => {
-      const team = asTeamCode(row.team);
-      const teamDirectoryEntry = resolveConferenceDivision(team);
-      const conference = normalizeConference(row.conference) ?? teamDirectoryEntry?.conference ?? "Unknown";
-      const division = normalizeDivision(row.division) ?? teamDirectoryEntry?.division ?? "Unknown";
-      return {
-        ...row,
-        conference,
-        division,
-      } as NflIntelResponseRow;
-    });
+    const team = asTeamCode(row.team);
+    const teamDirectoryEntry = resolveConferenceDivision(team);
+    const conference =
+      normalizeConference(row.conference) ??
+      teamDirectoryEntry?.conference ??
+      "Unknown";
+    const division =
+      normalizeDivision(row.division) ??
+      teamDirectoryEntry?.division ??
+      "Unknown";
+    return {
+      ...row,
+      conference,
+      division,
+    } as NflIntelResponseRow;
+  });
   return normalizedRows.sort((left, right) => {
-      const conferenceDiff = (CONFERENCE_ORDER[left.conference as string] ?? 99) - (CONFERENCE_ORDER[right.conference as string] ?? 99);
-      if (conferenceDiff !== 0) return conferenceDiff;
-      const divisionDiff = (DIVISION_ORDER[left.division as string] ?? 99) - (DIVISION_ORDER[right.division as string] ?? 99);
-      if (divisionDiff !== 0) return divisionDiff;
-      const winsDiff = compareNullableNumbersDesc(asNumber(left["wins"]), asNumber(right["wins"]));
-      if (winsDiff !== 0) return winsDiff;
-      const pctDiff = compareNullableNumbersDesc(asNumber(left["win_pct"]), asNumber(right["win_pct"]));
-      if (pctDiff !== 0) return pctDiff;
-      const diffDiff = compareNullableNumbersDesc(asNumber(left["point_diff"]), asNumber(right["point_diff"]));
-      if (diffDiff !== 0) return diffDiff;
-      return String(left["team"] ?? "").localeCompare(String(right["team"] ?? ""));
-    });
+    const conferenceDiff =
+      (CONFERENCE_ORDER[left.conference as string] ?? 99) -
+      (CONFERENCE_ORDER[right.conference as string] ?? 99);
+    if (conferenceDiff !== 0) return conferenceDiff;
+    const divisionDiff =
+      (DIVISION_ORDER[left.division as string] ?? 99) -
+      (DIVISION_ORDER[right.division as string] ?? 99);
+    if (divisionDiff !== 0) return divisionDiff;
+    const winsDiff = compareNullableNumbersDesc(
+      asNumber(left["wins"]),
+      asNumber(right["wins"]),
+    );
+    if (winsDiff !== 0) return winsDiff;
+    const pctDiff = compareNullableNumbersDesc(
+      asNumber(left["win_pct"]),
+      asNumber(right["win_pct"]),
+    );
+    if (pctDiff !== 0) return pctDiff;
+    const diffDiff = compareNullableNumbersDesc(
+      asNumber(left["point_diff"]),
+      asNumber(right["point_diff"]),
+    );
+    if (diffDiff !== 0) return diffDiff;
+    return String(left["team"] ?? "").localeCompare(
+      String(right["team"] ?? ""),
+    );
+  });
 }
 
 export function groupStandingsRows(rows: NflIntelResponseRow[]): Array<{
@@ -253,12 +294,26 @@ export function groupStandingsRows(rows: NflIntelResponseRow[]): Array<{
   rows: NflIntelResponseRow[];
 }> {
   const sorted = sortStandingsRows(rows);
-  const groups: Array<{ conference: string; division: string; rows: NflIntelResponseRow[] }> = [];
+  const groups: Array<{
+    conference: string;
+    division: string;
+    rows: NflIntelResponseRow[];
+  }> = [];
   for (const row of sorted) {
-    const conference = typeof row.conference === "string" && row.conference.trim().length > 0 ? row.conference : "Unknown";
-    const division = typeof row.division === "string" && row.division.trim().length > 0 ? row.division : "Unknown";
+    const conference =
+      typeof row.conference === "string" && row.conference.trim().length > 0
+        ? row.conference
+        : "Unknown";
+    const division =
+      typeof row.division === "string" && row.division.trim().length > 0
+        ? row.division
+        : "Unknown";
     const current = groups[groups.length - 1];
-    if (!current || current.conference !== conference || current.division !== division) {
+    if (
+      !current ||
+      current.conference !== conference ||
+      current.division !== division
+    ) {
       groups.push({ conference, division, rows: [row] });
       continue;
     }

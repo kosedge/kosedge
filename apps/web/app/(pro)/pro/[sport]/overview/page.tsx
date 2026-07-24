@@ -17,7 +17,8 @@ function signalFromGame(game: SpotlightGame, sportKey: string): string {
   const lineEdge = game.row.edgeLineNum ?? 0;
   const totalEdge = game.row.edgeOUNum ?? 0;
   const maxEdge = Math.max(lineEdge, totalEdge);
-  if (maxEdge >= 2.5) return `Strong model separation (${maxEdge.toFixed(1)} pts)`;
+  if (maxEdge >= 2.5)
+    return `Strong model separation (${maxEdge.toFixed(1)} pts)`;
   if (maxEdge >= 1.0) return `Actionable lean (${maxEdge.toFixed(1)} pts)`;
   if (sportKey === "mlb") return "Monitoring starter and lineup confirmations";
   if (sportKey === "nhl") return "Monitoring goalie and total discovery";
@@ -100,7 +101,9 @@ export default async function SportOverviewPage({
         <section className="mt-6">
           <div className="mb-3 flex items-end justify-between gap-3">
             <div>
-              <h2 className="text-xl font-semibold tracking-tight text-kos-text">Betting Desk</h2>
+              <h2 className="text-xl font-semibold tracking-tight text-kos-text">
+                Betting Desk
+              </h2>
               <p className="mt-1 text-sm text-kos-text/70">
                 KEI Lines → Edges → Props — Kosedge lines into actionable edges.
               </p>
@@ -115,7 +118,9 @@ export default async function SportOverviewPage({
               <p className="mt-2 text-sm text-kos-text/75">
                 Kosedge spreads, totals, and fair moneylines for the slate.
               </p>
-              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">Open KEI Lines →</span>
+              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">
+                Open KEI Lines →
+              </span>
             </Link>
             <Link
               href="/pro/nfl/edges"
@@ -125,7 +130,9 @@ export default async function SportOverviewPage({
               <p className="mt-2 text-sm text-kos-text/75">
                 Thresholded game + prop edges with side and confidence.
               </p>
-              <span className="mt-3 inline-block text-sm font-semibold text-edge-green">Open edges desk →</span>
+              <span className="mt-3 inline-block text-sm font-semibold text-edge-green">
+                Open edges desk →
+              </span>
             </Link>
             <Link
               href="/pro/nfl/props"
@@ -135,7 +142,9 @@ export default async function SportOverviewPage({
               <p className="mt-2 text-sm text-kos-text/70">
                 Full player prop board — model means, fair prices, market joins.
               </p>
-              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">Open props board →</span>
+              <span className="mt-3 inline-block text-sm font-semibold text-kos-gold">
+                Open props board →
+              </span>
             </Link>
           </div>
         </section>
@@ -191,7 +200,9 @@ export default async function SportOverviewPage({
         )}
       </section>
 
-      <section className={`mt-6 grid gap-4 ${sportKey === "nfl" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+      <section
+        className={`mt-6 grid gap-4 ${sportKey === "nfl" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+      >
         <Link
           href={`/pro/power-ratings/${sportKey}`}
           className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-6 transition hover:border-kos-gold/45 hover:bg-kos-gold/10"
@@ -221,9 +232,12 @@ export default async function SportOverviewPage({
             href="/pro/nfl/projections"
             className="rounded-2xl border border-kos-gold/30 bg-linear-to-br from-kos-gold/10 via-black/30 to-black/55 p-6 transition hover:border-kos-gold/50 hover:bg-kos-gold/10"
           >
-            <h2 className="text-xl font-semibold text-kos-gold">Projections Hub</h2>
+            <h2 className="text-xl font-semibold text-kos-gold">
+              Projections Hub
+            </h2>
             <p className="mt-2 text-sm text-kos-text/80">
-              User-friendly wins, futures, and player fantasy projection tables built from the latest preseason bundle.
+              User-friendly wins, futures, and player fantasy projection tables
+              built from the latest preseason bundle.
             </p>
             <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
               Open projections hub →
@@ -235,9 +249,12 @@ export default async function SportOverviewPage({
             href="/wall-chart/nfl-2026"
             className="rounded-2xl border border-edge-green/30 bg-linear-to-br from-edge-green/10 via-black/30 to-black/55 p-6 transition hover:border-edge-green/50 hover:bg-edge-green/10"
           >
-            <h2 className="text-xl font-semibold text-edge-green">2026 Wall Chart</h2>
+            <h2 className="text-xl font-semibold text-edge-green">
+              2026 Wall Chart
+            </h2>
             <p className="mt-2 text-sm text-kos-text/80">
-              Printable 24×18 NFL schedule tracker — laminated wet-erase friendly with full 2026 matchups.
+              Printable 24×18 NFL schedule tracker — laminated wet-erase
+              friendly with full 2026 matchups.
             </p>
             <span className="mt-4 inline-block text-sm font-semibold text-edge-green">
               Open wall chart →
@@ -249,9 +266,12 @@ export default async function SportOverviewPage({
             href="/pro/nfl/fantasy"
             className="rounded-2xl border border-kos-gold/30 bg-linear-to-br from-kos-gold/10 via-black/30 to-black/55 p-6 transition hover:border-kos-gold/50 hover:bg-kos-gold/10"
           >
-            <h2 className="text-xl font-semibold text-kos-gold">Fantasy Draft Board</h2>
+            <h2 className="text-xl font-semibold text-kos-gold">
+              Fantasy Draft Board
+            </h2>
             <p className="mt-2 text-sm text-kos-text/80">
-              Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers, position filters, and scoring toggles.
+              Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers,
+              position filters, and scoring toggles.
             </p>
             <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
               Open draft board →
@@ -263,9 +283,12 @@ export default async function SportOverviewPage({
             href="/pro/nfl/awards"
             className="rounded-2xl border border-white/12 bg-black/30 p-6 transition hover:border-kos-gold/40"
           >
-            <h2 className="text-xl font-semibold text-kos-text">MVP &amp; OPOY Race</h2>
+            <h2 className="text-xl font-semibold text-kos-text">
+              MVP &amp; OPOY Race
+            </h2>
             <p className="mt-2 text-sm text-kos-text/70">
-              Real projected award contenders with the team success + stat evidence behind every ranking.
+              Real projected award contenders with the team success + stat
+              evidence behind every ranking.
             </p>
             <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
               View award race →

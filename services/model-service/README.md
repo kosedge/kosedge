@@ -8,11 +8,11 @@ were never actually deployed**, so the "every 30 min" odds-pull schedule in
 Railway services from this same repo/Dockerfile, each with a different start
 command:
 
-| Service | Start command | Config file |
-|---|---|---|
-| `api` | `uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}` | `railway.json` |
+| Service  | Start command                                                     | Config file           |
+| -------- | ----------------------------------------------------------------- | --------------------- |
+| `api`    | `uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}`        | `railway.json`        |
 | `worker` | `celery -A src.celery_app worker --loglevel=info --concurrency=4` | `railway.worker.json` |
-| `beat` | `celery -A src.celery_app beat --loglevel=info` | `railway.beat.json` |
+| `beat`   | `celery -A src.celery_app beat --loglevel=info`                   | `railway.beat.json`   |
 
 Railway doesn't support defining multiple services from one config file —
 create each service in the dashboard (same repo, same Dockerfile), then

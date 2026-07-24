@@ -178,7 +178,9 @@ describe("nfl-edge-board-from-fair-lines", () => {
 
     const week1 = filterNflCurrentWeekRows(withBooks, 1);
     const week1Games = new Set(week1.map((r) => r.game));
-    expect(week1Games.has("New England Patriots @ Seattle Seahawks")).toBe(true);
+    expect(week1Games.has("New England Patriots @ Seattle Seahawks")).toBe(
+      true,
+    );
     expect(week1Games.has("San Francisco 49ers @ Los Angeles Rams")).toBe(true);
     expect(week1Games.has("Green Bay Packers @ Minnesota Vikings")).toBe(false);
 

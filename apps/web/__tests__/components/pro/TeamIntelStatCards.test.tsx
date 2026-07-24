@@ -19,9 +19,30 @@ describe("TeamIntelStatCards", () => {
           epa_per_play_defense_allowed: -0.08,
         }}
         comparisonRows={[
-          { team: "MIA", wins: 11, losses: 6, ties: 0, win_pct: 0.647, point_diff: 40 },
-          { team: "BUF", wins: 15, losses: 2, ties: 0, win_pct: 0.882, point_diff: 140 },
-          { team: "NYJ", wins: 5, losses: 12, ties: 0, win_pct: 0.294, point_diff: -120 },
+          {
+            team: "MIA",
+            wins: 11,
+            losses: 6,
+            ties: 0,
+            win_pct: 0.647,
+            point_diff: 40,
+          },
+          {
+            team: "BUF",
+            wins: 15,
+            losses: 2,
+            ties: 0,
+            win_pct: 0.882,
+            point_diff: 140,
+          },
+          {
+            team: "NYJ",
+            wins: 5,
+            losses: 12,
+            ties: 0,
+            win_pct: 0.294,
+            point_diff: -120,
+          },
         ]}
       />,
     );

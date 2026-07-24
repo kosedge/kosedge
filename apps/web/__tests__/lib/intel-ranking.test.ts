@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildMetricRankMaps, computeMetricRanks, getMetricRankDirection } from "@/lib/intel-ranking";
+import {
+  buildMetricRankMaps,
+  computeMetricRanks,
+  getMetricRankDirection,
+} from "@/lib/intel-ranking";
 
 describe("intel-ranking helpers", () => {
   it("uses explicit rank direction map for known metrics", () => {

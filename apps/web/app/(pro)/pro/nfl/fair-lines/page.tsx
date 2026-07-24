@@ -48,11 +48,17 @@ export default async function NflFairLinesPage({
 }) {
   const search = await searchParams;
   const seasonRaw = Number(firstValue(search.season));
-  const season = Number.isFinite(seasonRaw) && seasonRaw >= 2010 ? seasonRaw : DEFAULT_SEASON;
-  const slate: Slate = firstValue(search.slate) === "season" ? "season" : "week";
+  const season =
+    Number.isFinite(seasonRaw) && seasonRaw >= 2010
+      ? seasonRaw
+      : DEFAULT_SEASON;
+  const slate: Slate =
+    firstValue(search.slate) === "season" ? "season" : "week";
   const includePastRaw = firstValue(search.includePast);
   const includePastDays =
-    includePastRaw === "7" || includePastRaw === "3" || includePastRaw === "1" ? PAST_WEEK_DAYS : 0;
+    includePastRaw === "7" || includePastRaw === "3" || includePastRaw === "1"
+      ? PAST_WEEK_DAYS
+      : 0;
 
   const board = await fetchNflFairLines({
     season,
@@ -80,8 +86,9 @@ export default async function NflFairLinesPage({
               Kosedge Makes Its Own Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Neutral model fair values — spread, total, and moneylines — for the slate. Market columns appear when
-              Vegas joins; otherwise you still get the Kosedge reference alone.
+              Neutral model fair values — spread, total, and moneylines — for
+              the slate. Market columns appear when Vegas joins; otherwise you
+              still get the Kosedge reference alone.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -135,7 +142,8 @@ export default async function NflFairLinesPage({
                   href={buildHref({
                     season: String(season),
                     slate: option.id === "week" ? undefined : option.id,
-                    includePast: includePastDays > 0 ? String(PAST_WEEK_DAYS) : undefined,
+                    includePast:
+                      includePastDays > 0 ? String(PAST_WEEK_DAYS) : undefined,
                   })}
                   className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
                     isActive
@@ -152,7 +160,8 @@ export default async function NflFairLinesPage({
             href={buildHref({
               season: String(season),
               slate: slate === "week" ? undefined : slate,
-              includePast: includePastDays > 0 ? undefined : String(PAST_WEEK_DAYS),
+              includePast:
+                includePastDays > 0 ? undefined : String(PAST_WEEK_DAYS),
             })}
             className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
               includePastDays > 0
@@ -160,7 +169,9 @@ export default async function NflFairLinesPage({
                 : "border border-white/10 bg-white/5 text-kos-text/70 hover:border-edge-green/25"
             }`}
           >
-            {includePastDays > 0 ? "Including last week ✓" : "Include last week"}
+            {includePastDays > 0
+              ? "Including last week ✓"
+              : "Include last week"}
           </Link>
         </div>
       </section>
@@ -170,13 +181,16 @@ export default async function NflFairLinesPage({
           <h2 className="text-xl font-semibold text-kos-text">KEI Lines</h2>
           <p className="text-xs text-kos-text/60">
             {visibleLines.length} game{visibleLines.length === 1 ? "" : "s"}
-            {slate === "week" && board.currentWeek ? ` · Week ${board.currentWeek}` : ""}
+            {slate === "week" && board.currentWeek
+              ? ` · Week ${board.currentWeek}`
+              : ""}
           </p>
         </div>
 
         {!board.error && visibleLines.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No lines in this window yet. Try Season slate, or wait for the next update.
+            No lines in this window yet. Try Season slate, or wait for the next
+            update.
           </div>
         ) : null}
 
@@ -208,8 +222,9 @@ export default async function NflFairLinesPage({
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
         <p>
-          KEI moneylines and spreads are simulation-backed reference prices — not picks. Edges are only shown when a
-          live market price joins the same matchup.
+          KEI moneylines and spreads are simulation-backed reference prices —
+          not picks. Edges are only shown when a live market price joins the
+          same matchup.
         </p>
       </section>
     </main>
@@ -227,12 +242,19 @@ function FairLineRow({ row }: { row: NflFairLineRow }) {
           {row.awayTeam} at {row.homeTeam}
         </div>
       </td>
-      <td className="px-3 py-3 text-kos-text/80">{formatKickoff(row.startTime)}</td>
-      <td className="px-3 py-3 font-semibold text-kos-gold">{formatSpread(row.spreadHome)}</td>
-      <td className="px-3 py-3 font-semibold text-kos-text">{formatTotal(row.totalMean)}</td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatKickoff(row.startTime)}
+      </td>
+      <td className="px-3 py-3 font-semibold text-kos-gold">
+        {formatSpread(row.spreadHome)}
+      </td>
+      <td className="px-3 py-3 font-semibold text-kos-text">
+        {formatTotal(row.totalMean)}
+      </td>
       <td className="px-3 py-3 text-kos-text/90">
         <div>
-          H {formatAmericanOdds(row.fairHomeMl)} / A {formatAmericanOdds(row.fairAwayMl)}
+          H {formatAmericanOdds(row.fairHomeMl)} / A{" "}
+          {formatAmericanOdds(row.fairAwayMl)}
         </div>
       </td>
       <td className="px-3 py-3 text-kos-text/80">
@@ -246,8 +268,12 @@ function FairLineRow({ row }: { row: NflFairLineRow }) {
       <td className="px-3 py-3 text-kos-text/70">
         {row.marketJoined ? formatTotal(row.marketTotal) : "—"}
       </td>
-      <td className={`px-3 py-3 font-semibold ${edgeToneClass(row.mlEdgeProb)}`}>
-        {row.mlEdgeProb === null ? "—" : `${(row.mlEdgeProb * 100).toFixed(1)}pp`}
+      <td
+        className={`px-3 py-3 font-semibold ${edgeToneClass(row.mlEdgeProb)}`}
+      >
+        {row.mlEdgeProb === null
+          ? "—"
+          : `${(row.mlEdgeProb * 100).toFixed(1)}pp`}
       </td>
     </tr>
   );

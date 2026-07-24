@@ -25,12 +25,16 @@ function ClvCard({
           {avgClv > 0 ? "+" : ""}
           {avgClv.toFixed(3)}
         </span>
-        <span className="text-xs text-kos-text/50">avg CLV{unit ? ` (${unit})` : ""}</span>
+        <span className="text-xs text-kos-text/50">
+          avg CLV{unit ? ` (${unit})` : ""}
+        </span>
       </div>
       <div className="mt-1 text-sm text-kos-text/60">
         {(positiveRate * 100).toFixed(1)}% of plays beat the closing line
       </div>
-      <div className="mt-1 text-xs text-kos-text/45">n = {n.toLocaleString()} plays</div>
+      <div className="mt-1 text-xs text-kos-text/45">
+        n = {n.toLocaleString()} plays
+      </div>
     </div>
   );
 }
@@ -48,10 +52,10 @@ export default function CLVTrackerPage() {
       </Link>
       <h1 className="text-3xl font-semibold text-kos-text">CLV Tracker</h1>
       <p className="mt-2 text-kos-text/70">
-        Closing Line Value: did the market move toward our number after we
-        made the play? This is the metric professional bettors and books
-        themselves use to judge whether a model actually has an edge — not
-        just whether a pick won.
+        Closing Line Value: did the market move toward our number after we made
+        the play? This is the metric professional bettors and books themselves
+        use to judge whether a model actually has an edge — not just whether a
+        pick won.
       </p>
 
       {report ? (
@@ -101,13 +105,24 @@ export default function CLVTrackerPage() {
                 </thead>
                 <tbody>
                   {report.resultsBySeason.map((row) => (
-                    <tr key={`${row.season}-${row.market}`} className="border-b border-white/5">
-                      <td className="px-4 py-2 text-kos-text/80">{row.season}</td>
-                      <td className="px-4 py-2 text-kos-text/80 capitalize">{row.market}</td>
-                      <td className="px-4 py-2 text-right text-kos-text/80">{row.n}</td>
+                    <tr
+                      key={`${row.season}-${row.market}`}
+                      className="border-b border-white/5"
+                    >
+                      <td className="px-4 py-2 text-kos-text/80">
+                        {row.season}
+                      </td>
+                      <td className="px-4 py-2 text-kos-text/80 capitalize">
+                        {row.market}
+                      </td>
+                      <td className="px-4 py-2 text-right text-kos-text/80">
+                        {row.n}
+                      </td>
                       <td
                         className={`px-4 py-2 text-right font-medium ${
-                          row.avgClv > 0 ? "text-edge-green" : "text-kos-text/80"
+                          row.avgClv > 0
+                            ? "text-edge-green"
+                            : "text-kos-text/80"
                         }`}
                       >
                         {row.avgClv > 0 ? "+" : ""}
@@ -127,11 +142,15 @@ export default function CLVTrackerPage() {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-kos-gold">
               Methodology &amp; honest caveats
             </h2>
-            <p className="mt-2 text-sm text-kos-text/75">{report.methodology.clvDefinition}</p>
-            <p className="mt-2 text-sm text-kos-text/65">{report.methodology.excluded}</p>
+            <p className="mt-2 text-sm text-kos-text/75">
+              {report.methodology.clvDefinition}
+            </p>
+            <p className="mt-2 text-sm text-kos-text/65">
+              {report.methodology.excluded}
+            </p>
             <p className="mt-3 text-xs text-kos-text/45">
-              Report generated {report.generatedAt} · model {report.modelVersion} · source:{" "}
-              {report.methodology.dataSource}
+              Report generated {report.generatedAt} · model{" "}
+              {report.modelVersion} · source: {report.methodology.dataSource}
             </p>
           </section>
         </>

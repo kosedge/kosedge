@@ -3,13 +3,23 @@ import { env } from "@/lib/config/env";
 
 export type FantasyScoringProfile = "standard" | "half_ppr" | "ppr";
 
-export const FANTASY_SCORING_PROFILES: Array<{ value: FantasyScoringProfile; label: string }> = [
+export const FANTASY_SCORING_PROFILES: Array<{
+  value: FantasyScoringProfile;
+  label: string;
+}> = [
   { value: "standard", label: "Standard" },
   { value: "half_ppr", label: "Half PPR" },
   { value: "ppr", label: "PPR" },
 ];
 
-export const FANTASY_DRAFT_POSITIONS = ["QB", "RB", "WR", "TE", "K", "DST"] as const;
+export const FANTASY_DRAFT_POSITIONS = [
+  "QB",
+  "RB",
+  "WR",
+  "TE",
+  "K",
+  "DST",
+] as const;
 export type FantasyDraftPosition = (typeof FANTASY_DRAFT_POSITIONS)[number];
 
 export type NflFantasyDraftRankingRow = {
@@ -70,10 +80,13 @@ function toNumber(value: unknown, fallback = 0): number {
   return toNumberOrNull(value) ?? fallback;
 }
 
-function normalizeDraftRow(raw: Record<string, unknown>): NflFantasyDraftRankingRow {
+function normalizeDraftRow(
+  raw: Record<string, unknown>,
+): NflFantasyDraftRankingRow {
   return {
     season: toNumber(raw.season),
-    scoringProfile: (raw.scoring_profile as FantasyScoringProfile) ?? "half_ppr",
+    scoringProfile:
+      (raw.scoring_profile as FantasyScoringProfile) ?? "half_ppr",
     modelVersion: String(raw.model_version ?? ""),
     playerId: String(raw.player_id ?? ""),
     playerUid: typeof raw.player_uid === "string" ? raw.player_uid : null,
@@ -121,7 +134,11 @@ export async function fetchNflFantasyDraftRankings(params: {
 }): Promise<NflFantasyDraftRankingsResponse> {
   const base = env.MODEL_SERVICE_URL;
   if (!base) {
-    return { count: 0, rows: [], error: "MODEL_SERVICE_URL is not configured." };
+    return {
+      count: 0,
+      rows: [],
+      error: "MODEL_SERVICE_URL is not configured.",
+    };
   }
 
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/fantasy/draft-rankings`);
@@ -147,15 +164,29 @@ export async function fetchNflFantasyDraftRankings(params: {
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
-      return { count: 0, rows: [], error: `Model service returned ${response.status}.` };
+      return {
+        count: 0,
+        rows: [],
+        error: `Model service returned ${response.status}.`,
+      };
     }
-    const payload = (await response.json()) as { count?: number; rows?: Array<Record<string, unknown>> };
-    const rows = Array.isArray(payload.rows) ? payload.rows.map(normalizeDraftRow) : [];
-    return { count: typeof payload.count === "number" ? payload.count : rows.length, rows };
+    const payload = (await response.json()) as {
+      count?: number;
+      rows?: Array<Record<string, unknown>>;
+    };
+    const rows = Array.isArray(payload.rows)
+      ? payload.rows.map(normalizeDraftRow)
+      : [];
+    return {
+      count: typeof payload.count === "number" ? payload.count : rows.length,
+      rows,
+    };
   } catch {
     return { count: 0, rows: [], error: "Unable to reach model service." };
   } finally {

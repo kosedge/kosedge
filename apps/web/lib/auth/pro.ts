@@ -21,7 +21,9 @@ function parseBooleanEnv(value: string | undefined): boolean | null {
 export function isOpenAccessPreviewEnabled(): boolean {
   const serverValue = parseBooleanEnv(process.env.OPEN_ACCESS_PREVIEW);
   if (serverValue !== null) return serverValue;
-  const publicValue = parseBooleanEnv(process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW);
+  const publicValue = parseBooleanEnv(
+    process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW,
+  );
   if (publicValue !== null) return publicValue;
   return true;
 }

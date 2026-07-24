@@ -26,15 +26,21 @@ export async function fetchNflDataFreshness(): Promise<NflDataFreshnessPayload> 
     };
   }
   try {
-    const res = await fetch(`${base.replace(/\/$/, "")}/health/nfl-data-freshness`, {
-      cache: "no-store",
-      next: { revalidate: 0 },
-    });
-    const body = (await res.json().catch(() => ({}))) as NflDataFreshnessPayload & {
+    const res = await fetch(
+      `${base.replace(/\/$/, "")}/health/nfl-data-freshness`,
+      {
+        cache: "no-store",
+        next: { revalidate: 0 },
+      },
+    );
+    const body = (await res
+      .json()
+      .catch(() => ({}))) as NflDataFreshnessPayload & {
       detail?: NflDataFreshnessPayload;
     };
     if (!res.ok) {
-      const detail = body.detail && typeof body.detail === "object" ? body.detail : body;
+      const detail =
+        body.detail && typeof body.detail === "object" ? body.detail : body;
       return {
         status: String(detail.status || "degraded"),
         in_season: detail.in_season,

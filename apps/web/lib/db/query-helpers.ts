@@ -20,7 +20,10 @@ export interface PaginatedResult<T> {
   };
 }
 
-type Delegate = { findMany: (args: unknown) => Promise<unknown[]>; count: (args: { where?: unknown }) => Promise<number> };
+type Delegate = {
+  findMany: (args: unknown) => Promise<unknown[]>;
+  count: (args: { where?: unknown }) => Promise<number>;
+};
 
 export async function paginate<T>(
   model: Delegate,

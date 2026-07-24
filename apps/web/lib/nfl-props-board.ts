@@ -92,11 +92,19 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     raw.diagnostics && typeof raw.diagnostics === "object"
       ? (raw.diagnostics as Record<string, unknown>)
       : {};
-  const tagRaw = typeof diagnostics.tag === "string" ? diagnostics.tag.toUpperCase() : null;
+  const tagRaw =
+    typeof diagnostics.tag === "string" ? diagnostics.tag.toUpperCase() : null;
   const tag =
-    tagRaw === "PLAY" || tagRaw === "WATCH" || tagRaw === "LEAN" || tagRaw === "PASS" ? tagRaw : null;
+    tagRaw === "PLAY" ||
+    tagRaw === "WATCH" ||
+    tagRaw === "LEAN" ||
+    tagRaw === "PASS"
+      ? tagRaw
+      : null;
   const sourceRaw =
-    typeof diagnostics.projection_source === "string" ? diagnostics.projection_source : null;
+    typeof diagnostics.projection_source === "string"
+      ? diagnostics.projection_source
+      : null;
   return {
     season: toNumber(raw.season),
     week: toNumber(raw.week),
@@ -125,8 +133,12 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     updatedAt: toIsoOrNull(raw.updated_at),
     marketJoined: marketOver !== null || marketUnder !== null,
     tag,
-    tagSide: typeof diagnostics.tag_side === "string" ? diagnostics.tag_side : null,
-    tagAction: typeof diagnostics.tag_action === "string" ? diagnostics.tag_action : null,
+    tagSide:
+      typeof diagnostics.tag_side === "string" ? diagnostics.tag_side : null,
+    tagAction:
+      typeof diagnostics.tag_action === "string"
+        ? diagnostics.tag_action
+        : null,
     sizeDown: Boolean(diagnostics.size_down),
     stakeEligible: Boolean(diagnostics.stake_eligible ?? tagRaw === "PLAY"),
     projectionSource:
@@ -150,7 +162,12 @@ export async function fetchNflPropsBoard(params: {
   const emptyDiagnostics = { marketJoinedCount: 0, kosedgeOnly: true };
 
   if (!base) {
-    return { count: 0, rows: [], diagnostics: emptyDiagnostics, error: "MODEL_SERVICE_URL is not configured." };
+    return {
+      count: 0,
+      rows: [],
+      diagnostics: emptyDiagnostics,
+      error: "MODEL_SERVICE_URL is not configured.",
+    };
   }
 
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/props/board`);
@@ -172,7 +189,9 @@ export async function fetchNflPropsBoard(params: {
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
@@ -195,7 +214,9 @@ export async function fetchNflPropsBoard(params: {
         box_score_sourced_count?: number;
       };
     };
-    const rows = Array.isArray(payload.rows) ? payload.rows.map(normalizePropRow) : [];
+    const rows = Array.isArray(payload.rows)
+      ? payload.rows.map(normalizePropRow)
+      : [];
     const marketJoinedCount =
       typeof payload.diagnostics?.market_joined_count === "number"
         ? payload.diagnostics.market_joined_count
@@ -205,15 +226,24 @@ export async function fetchNflPropsBoard(params: {
       rows,
       diagnostics: {
         marketJoinedCount,
-        kosedgeOnly: Boolean(payload.diagnostics?.kosedge_only ?? (rows.length > 0 && marketJoinedCount === 0)),
+        kosedgeOnly: Boolean(
+          payload.diagnostics?.kosedge_only ??
+          (rows.length > 0 && marketJoinedCount === 0),
+        ),
         playCount: payload.diagnostics?.play_count,
-        watchCount: payload.diagnostics?.watch_count ?? payload.diagnostics?.lean_count,
+        watchCount:
+          payload.diagnostics?.watch_count ?? payload.diagnostics?.lean_count,
         leanCount: payload.diagnostics?.lean_count,
         boxScoreSourcedCount: payload.diagnostics?.box_score_sourced_count,
       },
     };
   } catch {
-    return { count: 0, rows: [], diagnostics: emptyDiagnostics, error: "Unable to reach model service." };
+    return {
+      count: 0,
+      rows: [],
+      diagnostics: emptyDiagnostics,
+      error: "Unable to reach model service.",
+    };
   } finally {
     clearTimeout(timeout);
   }

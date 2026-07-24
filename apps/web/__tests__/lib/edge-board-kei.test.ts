@@ -151,4 +151,3 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     expect(out[1].kei).toBe("41.3");
   });
 });
-

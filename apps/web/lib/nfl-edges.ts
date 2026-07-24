@@ -82,8 +82,12 @@ export function deskEdgesFromFairLine(
       marketType: "ml",
       matchupOrPlayer: matchup,
       detail: "Moneyline",
-      kosedgeLine: formatAmericanOdds(homeSide ? row.fairHomeMl : row.fairAwayMl),
-      vegasLine: formatAmericanOdds(homeSide ? row.marketHomeMl : row.marketAwayMl),
+      kosedgeLine: formatAmericanOdds(
+        homeSide ? row.fairHomeMl : row.fairAwayMl,
+      ),
+      vegasLine: formatAmericanOdds(
+        homeSide ? row.marketHomeMl : row.marketAwayMl,
+      ),
       edge: row.mlEdgeProb,
       edgeDisplay: formatEdgeProb(row.mlEdgeProb),
       side: homeSide ? "Home" : "Away",
@@ -168,7 +172,10 @@ export function deskEdgeFromPropRow(
   };
 }
 
-function normalizeEdgesTodayRow(raw: Record<string, unknown>, minProbEdge: number): DeskEdgeRow | null {
+function normalizeEdgesTodayRow(
+  raw: Record<string, unknown>,
+  minProbEdge: number,
+): DeskEdgeRow | null {
   const mlEdge = toNumberOrNull(raw.ml_edge_prob);
   if (mlEdge === null || Math.abs(mlEdge) < minProbEdge) return null;
   const home = String(raw.home_team ?? "Home");
@@ -179,8 +186,12 @@ function normalizeEdgesTodayRow(raw: Record<string, unknown>, minProbEdge: numbe
     marketType: "ml",
     matchupOrPlayer: `${away} @ ${home}`,
     detail: "Moneyline (today)",
-    kosedgeLine: formatAmericanOdds(toNumberOrNull(homeSide ? raw.fair_home_ml : raw.fair_away_ml)),
-    vegasLine: formatAmericanOdds(toNumberOrNull(homeSide ? raw.market_home_ml : raw.market_away_ml)),
+    kosedgeLine: formatAmericanOdds(
+      toNumberOrNull(homeSide ? raw.fair_home_ml : raw.fair_away_ml),
+    ),
+    vegasLine: formatAmericanOdds(
+      toNumberOrNull(homeSide ? raw.market_home_ml : raw.market_away_ml),
+    ),
     edge: mlEdge,
     edgeDisplay: formatEdgeProb(mlEdge),
     side: homeSide ? "Home" : "Away",
@@ -202,7 +213,10 @@ async function fetchNflEdgesToday(params: {
     url.searchParams.set("min_ml_edge_prob", String(params.minMlEdgeProb));
   }
   if (params.minConfidenceScore != null) {
-    url.searchParams.set("min_confidence_score", String(params.minConfidenceScore));
+    url.searchParams.set(
+      "min_confidence_score",
+      String(params.minConfidenceScore),
+    );
   }
 
   const controller = new AbortController();
@@ -213,13 +227,17 @@ async function fetchNflEdgesToday(params: {
       signal: controller.signal,
       headers: {
         accept: "application/json",
-        ...(env.INTERNAL_API_SECRET ? { "x-kosedge-secret": env.INTERNAL_API_SECRET } : {}),
+        ...(env.INTERNAL_API_SECRET
+          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
+          : {}),
       },
     });
     if (!response.ok) {
       return { rows: [], error: `Model service returned ${response.status}.` };
     }
-    const payload = (await response.json()) as { edges?: Array<Record<string, unknown>> };
+    const payload = (await response.json()) as {
+      edges?: Array<Record<string, unknown>>;
+    };
     const edges = Array.isArray(payload.edges) ? payload.edges : [];
     const rows = edges
       .map((raw) => normalizeEdgesTodayRow(raw, params.minMlEdgeProb ?? 0.02))
@@ -236,7 +254,8 @@ export function filterDeskRows(
   rows: DeskEdgeRow[],
   market: DeskMarketType,
 ): DeskEdgeRow[] {
-  const filtered = market === "all" ? rows : rows.filter((row) => row.marketType === market);
+  const filtered =
+    market === "all" ? rows : rows.filter((row) => row.marketType === market);
   return [...filtered].sort((a, b) => Math.abs(b.edge) - Math.abs(a.edge));
 }
 
@@ -274,10 +293,14 @@ export async function fetchNflEdgesDesk(params: {
   const fairEdges = fairBoard.lines.flatMap((line) =>
     deskEdgesFromFairLine(line, { minProbEdge, minLineEdge }),
   );
-  const todayIds = new Set(todayBoard.rows.map((row) => row.id.replace("-today-ml", "-ml")));
+  const todayIds = new Set(
+    todayBoard.rows.map((row) => row.id.replace("-today-ml", "-ml")),
+  );
   const mergedGame = [
     ...fairEdges,
-    ...todayBoard.rows.filter((row) => !todayIds.has(row.id.replace("-today-ml", "-ml"))),
+    ...todayBoard.rows.filter(
+      (row) => !todayIds.has(row.id.replace("-today-ml", "-ml")),
+    ),
   ];
 
   const propEdges = propsBoard.rows

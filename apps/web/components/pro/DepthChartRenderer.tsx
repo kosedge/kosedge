@@ -33,7 +33,9 @@ type DepthRow = {
 const SKILL_POSITION_PRIORITY = ["QB", "RB", "WR", "TE"] as const;
 
 function asFiniteNumber(value: unknown): number | undefined {
-  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+  return typeof value === "number" && Number.isFinite(value)
+    ? value
+    : undefined;
 }
 
 function hasAny(...values: Array<number | undefined>): boolean {
@@ -49,7 +51,8 @@ function formatMetric(value: number | undefined, rank?: number): string {
 
 function toDepthRow(row: NflIntelResponseRow): DepthRow | null {
   const position = typeof row.position === "string" ? row.position : null;
-  const playerName = typeof row.player_name === "string" ? row.player_name : null;
+  const playerName =
+    typeof row.player_name === "string" ? row.player_name : null;
   const slot = typeof row.depth_slot === "string" ? row.depth_slot : null;
   const order = typeof row.depth_order === "number" ? row.depth_order : null;
   if (!position || !playerName || !slot || order === null) return null;
@@ -59,7 +62,8 @@ function toDepthRow(row: NflIntelResponseRow): DepthRow | null {
     player_name: playerName,
     depth_slot: slot,
     depth_order: order,
-    role_confidence: typeof row.role_confidence === "number" ? row.role_confidence : undefined,
+    role_confidence:
+      typeof row.role_confidence === "number" ? row.role_confidence : undefined,
     pass_yards: asFiniteNumber(row.pass_yards),
     pass_touchdowns: asFiniteNumber(row.pass_touchdowns),
     rush_yards: asFiniteNumber(row.rush_yards),
@@ -83,7 +87,9 @@ function toDepthRow(row: NflIntelResponseRow): DepthRow | null {
 }
 
 function positionSortKey(position: string): number {
-  const idx = SKILL_POSITION_PRIORITY.indexOf(position as (typeof SKILL_POSITION_PRIORITY)[number]);
+  const idx = SKILL_POSITION_PRIORITY.indexOf(
+    position as (typeof SKILL_POSITION_PRIORITY)[number],
+  );
   return idx >= 0 ? idx : SKILL_POSITION_PRIORITY.length + 1;
 }
 
@@ -98,10 +104,15 @@ function depthSlotSortKey(slot: string): number {
 
 type RankMaps = Record<string, Map<number, number>>;
 
-function renderFantasyStats(row: DepthRow, rowIndex: number, rankMaps: RankMaps): string {
+function renderFantasyStats(
+  row: DepthRow,
+  rowIndex: number,
+  rankMaps: RankMaps,
+): string {
   const isQb = row.position === "QB";
   const isRushRole = row.position === "QB" || row.position === "RB";
-  const isReceiverRole = row.position === "WR" || row.position === "TE" || row.position === "RB";
+  const isReceiverRole =
+    row.position === "WR" || row.position === "TE" || row.position === "RB";
 
   const segments: string[] = [];
 
@@ -130,10 +141,16 @@ function renderFantasyStats(row: DepthRow, rowIndex: number, rankMaps: RankMaps)
     );
   }
 
-  return segments.length > 0 ? segments.join(" · ") : "No tracked production yet";
+  return segments.length > 0
+    ? segments.join(" · ")
+    : "No tracked production yet";
 }
 
-function renderProjection(row: DepthRow, rowIndex: number, rankMaps: RankMaps): { primary: string; secondary?: string; missing: boolean } {
+function renderProjection(
+  row: DepthRow,
+  rowIndex: number,
+  rankMaps: RankMaps,
+): { primary: string; secondary?: string; missing: boolean } {
   const projectionParts: string[] = [];
   if (hasAny(row.pass_yards_mean, row.pass_tds_mean) && row.position === "QB") {
     projectionParts.push(
@@ -143,7 +160,10 @@ function renderProjection(row: DepthRow, rowIndex: number, rankMaps: RankMaps): 
       )} TD`,
     );
   }
-  if (hasAny(row.rush_yards_mean, row.rush_tds_mean) && (row.position === "QB" || row.position === "RB")) {
+  if (
+    hasAny(row.rush_yards_mean, row.rush_tds_mean) &&
+    (row.position === "QB" || row.position === "RB")
+  ) {
     projectionParts.push(
       `Rush ${formatMetric(row.rush_yards_mean, rankMaps.rush_yards_mean?.get(rowIndex))}y / ${formatMetric(
         row.rush_tds_mean,
@@ -184,13 +204,20 @@ function renderProjection(row: DepthRow, rowIndex: number, rankMaps: RankMaps): 
     : undefined;
 
   return {
-    primary: projectionParts.length > 0 ? projectionParts.join(" · ") : "Projection available",
+    primary:
+      projectionParts.length > 0
+        ? projectionParts.join(" · ")
+        : "Projection available",
     secondary: fantasyPart,
     missing: false,
   };
 }
 
-export default function DepthChartRenderer({ rows }: { rows: NflIntelResponseRow[] }) {
+export default function DepthChartRenderer({
+  rows,
+}: {
+  rows: NflIntelResponseRow[];
+}) {
   const mapped = rows.map(toDepthRow).filter(Boolean) as DepthRow[];
   const byPosition = mapped.reduce<Record<string, DepthRow[]>>((acc, row) => {
     acc[row.position] = acc[row.position] ?? [];
@@ -214,7 +241,8 @@ export default function DepthChartRenderer({ rows }: { rows: NflIntelResponseRow
     <section className="grid gap-4 lg:grid-cols-2">
       {positions.map((position) => {
         const rowsForPosition = byPosition[position]!.sort((a, b) => {
-          const bySlot = depthSlotSortKey(a.depth_slot) - depthSlotSortKey(b.depth_slot);
+          const bySlot =
+            depthSlotSortKey(a.depth_slot) - depthSlotSortKey(b.depth_slot);
           if (bySlot !== 0) return bySlot;
           return a.depth_order - b.depth_order;
         });
@@ -236,12 +264,21 @@ export default function DepthChartRenderer({ rows }: { rows: NflIntelResponseRow
           "fantasy_rank_position_roy",
           "role_confidence",
         ]);
-        const rowIndexByRef = new Map(rowsForPosition.map((row, index) => [row, index] as const));
+        const rowIndexByRef = new Map(
+          rowsForPosition.map((row, index) => [row, index] as const),
+        );
         return (
-          <article key={position} className="rounded-xl border border-white/10 bg-white/5 p-4">
+          <article
+            key={position}
+            className="rounded-xl border border-white/10 bg-white/5 p-4"
+          >
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-kos-text">{position}</h3>
-              <span className="text-xs text-kos-text/60">{rowsForPosition.length} players</span>
+              <h3 className="text-sm font-semibold text-kos-text">
+                {position}
+              </h3>
+              <span className="text-xs text-kos-text/60">
+                {rowsForPosition.length} players
+              </span>
             </div>
             <div className="mb-2 hidden grid-cols-[minmax(180px,1.2fr)_minmax(220px,1.7fr)_minmax(220px,1.7fr)] gap-3 px-1 text-[11px] font-semibold uppercase tracking-wide text-kos-text/55 md:grid">
               <span>Player</span>
@@ -259,7 +296,9 @@ export default function DepthChartRenderer({ rows }: { rows: NflIntelResponseRow
                   >
                     <div className="grid gap-2 md:grid-cols-[minmax(180px,1.2fr)_minmax(220px,1.7fr)_minmax(220px,1.7fr)] md:items-center md:gap-3">
                       <div>
-                        <p className="text-sm font-semibold text-kos-text">{row.player_name}</p>
+                        <p className="text-sm font-semibold text-kos-text">
+                          {row.player_name}
+                        </p>
                         <p className="mt-0.5 text-xs text-kos-text/60">
                           {row.depth_slot} · {formatIntelValue(row.depth_order)}
                         </p>
@@ -272,10 +311,16 @@ export default function DepthChartRenderer({ rows }: { rows: NflIntelResponseRow
                             : "Confidence N/A"}
                         </p>
                       </div>
-                      <p className="text-xs text-kos-text/80">{renderFantasyStats(row, rowIndex, rankMaps)}</p>
+                      <p className="text-xs text-kos-text/80">
+                        {renderFantasyStats(row, rowIndex, rankMaps)}
+                      </p>
                       <div className="text-xs text-kos-text/80">
                         <p>{projection.primary}</p>
-                        {projection.secondary ? <p className="mt-0.5 text-kos-text/60">{projection.secondary}</p> : null}
+                        {projection.secondary ? (
+                          <p className="mt-0.5 text-kos-text/60">
+                            {projection.secondary}
+                          </p>
+                        ) : null}
                         {projection.missing ? (
                           <span className="mt-1 inline-flex rounded-full border border-kos-gold/45 bg-kos-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
                             Premium Pending

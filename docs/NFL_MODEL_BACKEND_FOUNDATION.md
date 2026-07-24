@@ -388,6 +388,7 @@ Default weight intent (all env-overridable; tune with walk-forward only):
 - `moneyline_positive_edge_hit_rate` / `total_positive_edge_hit_rate`: hit rates restricted to picks with positive CLV, useful as a CLV-style quality proxy.
 
 Notes:
+
 - Total hit rates use close line when present, otherwise open line.
 - If any component is unavailable (e.g., no CLV rows in lookback), metrics are null-safe and return `null` with sample sizes preserved.
 - NFL total market snapshots are normalized to half-points during history materialization for stable CLV and calibration targets.

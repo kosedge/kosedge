@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { loadNflVegasBenchmarkReport, percentBetter } from "@/lib/nfl-vegas-benchmark";
+import {
+  loadNflVegasBenchmarkReport,
+  percentBetter,
+} from "@/lib/nfl-vegas-benchmark";
 
 function StatCard({
   label,
@@ -38,7 +41,9 @@ function StatCard({
             : "bg-white/5 text-kos-text/60 border border-white/10"
         }`}
       >
-        {better ? `${Math.abs(pct).toFixed(1)}% better than Vegas` : "not better on this metric"}
+        {better
+          ? `${Math.abs(pct).toFixed(1)}% better than Vegas`
+          : "not better on this metric"}
       </div>
     </div>
   );
@@ -60,8 +65,8 @@ export default function ModelTransparencyPage() {
       </h1>
       <p className="mt-2 text-kos-text/70">
         We don&apos;t ask you to trust the model — we show you the backtest.
-        Every number below is reproducible from the source scripts linked at
-        the bottom of this page.
+        Every number below is reproducible from the source scripts linked at the
+        bottom of this page.
       </p>
 
       {report ? (
@@ -72,9 +77,9 @@ export default function ModelTransparencyPage() {
             </h2>
             <p className="mt-1 text-sm text-kos-text/60">
               Blend weights were selected on 2024 games only, then locked and
-              applied unchanged to {report.methodology.testSampleSize} games
-              in 2025. This is the honest test: performance on games the
-              tuning process never saw.
+              applied unchanged to {report.methodology.testSampleSize} games in
+              2025. This is the honest test: performance on games the tuning
+              process never saw.
             </p>
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               <StatCard
@@ -98,16 +103,26 @@ export default function ModelTransparencyPage() {
             </div>
             <div className="mt-4 rounded-xl border border-kos-border bg-kos-surface/40 p-5">
               <div className="text-sm text-kos-text/70">
-                Statistical significance (spread, paired bootstrap, 5,000 resamples)
+                Statistical significance (spread, paired bootstrap, 5,000
+                resamples)
               </div>
               <div className="mt-2 text-kos-text">
                 Model beats Vegas by{" "}
                 <span className="font-semibold text-edge-green">
-                  {Math.abs(report.results2025Holdout.spreadSignificance.diff).toFixed(2)} points
+                  {Math.abs(
+                    report.results2025Holdout.spreadSignificance.diff,
+                  ).toFixed(2)}{" "}
+                  points
                 </span>{" "}
                 on average, 95% CI [
-                {report.results2025Holdout.spreadSignificance.ci95Low.toFixed(2)},{" "}
-                {report.results2025Holdout.spreadSignificance.ci95High.toFixed(2)}]
+                {report.results2025Holdout.spreadSignificance.ci95Low.toFixed(
+                  2,
+                )}
+                ,{" "}
+                {report.results2025Holdout.spreadSignificance.ci95High.toFixed(
+                  2,
+                )}
+                ]
                 {report.results2025Holdout.spreadSignificance.significant
                   ? " — statistically significant, not noise."
                   : " — within noise at this sample size."}
@@ -117,9 +132,12 @@ export default function ModelTransparencyPage() {
 
           <section className="mt-10">
             <h2 className="text-lg font-semibold text-kos-gold">
-              Full 13-season sample (2013–2025, {report.resultsFull13YrSample.sampleSize.toLocaleString()} games)
+              Full 13-season sample (2013–2025,{" "}
+              {report.resultsFull13YrSample.sampleSize.toLocaleString()} games)
             </h2>
-            <p className="mt-1 text-sm text-kos-text/60">{report.resultsFull13YrSample.note}</p>
+            <p className="mt-1 text-sm text-kos-text/60">
+              {report.resultsFull13YrSample.note}
+            </p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <StatCard
                 label="Spread error (MAE, points)"
@@ -140,14 +158,17 @@ export default function ModelTransparencyPage() {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-kos-gold">
               Methodology &amp; honest caveats
             </h2>
-            <p className="mt-2 text-sm text-kos-text/75">{report.methodology.summary}</p>
+            <p className="mt-2 text-sm text-kos-text/75">
+              {report.methodology.summary}
+            </p>
             <ul className="mt-3 list-disc list-inside space-y-1.5 text-sm text-kos-text/65">
               {report.methodology.caveats.map((caveat) => (
                 <li key={caveat}>{caveat}</li>
               ))}
             </ul>
             <p className="mt-3 text-xs text-kos-text/45">
-              Report generated {report.generatedAt} · model {report.modelVersion} · source:{" "}
+              Report generated {report.generatedAt} · model{" "}
+              {report.modelVersion} · source:{" "}
               {report.methodology.sourceScripts.join(", ")}
             </p>
           </section>
@@ -164,10 +185,10 @@ export default function ModelTransparencyPage() {
           Other sports &amp; live tracking
         </h2>
         <p className="mt-2 text-sm text-kos-text/60">
-          Live closing-line-value tracking (open vs. close, in real time as
-          the season plays out) is being built out now that the odds
-          pipeline is fully wired — it will appear here once enough games
-          have accumulated real open-to-close data.
+          Live closing-line-value tracking (open vs. close, in real time as the
+          season plays out) is being built out now that the odds pipeline is
+          fully wired — it will appear here once enough games have accumulated
+          real open-to-close data.
         </p>
       </section>
     </main>

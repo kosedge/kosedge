@@ -2,16 +2,30 @@ import { describe, expect, it } from "vitest";
 import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
 import { buildProArticleContent } from "@/lib/pro-article-content";
 
-function buildRow(overrides: Partial<LegacyEdgeBoardRow> = {}): LegacyEdgeBoardRow {
+function buildRow(
+  overrides: Partial<LegacyEdgeBoardRow> = {},
+): LegacyEdgeBoardRow {
   return {
     id: "game-1",
     time: "7:30 PM ET",
     teamA: { name: "Away Team", site: "Away" },
     teamB: { name: "Home Team", site: "Home" },
-    openOU: { top: { label: "o219.5", juice: "-110" }, bottom: { label: "u219.5", juice: "-110" } },
-    openLine: { top: { label: "+3.5", juice: "-110" }, bottom: { label: "-3.5", juice: "-110" } },
-    bestLine: { top: { label: "+2.5", juice: "-108" }, bottom: { label: "-2.5", juice: "-112" } },
-    bestOU: { top: { label: "o221.5", juice: "-110" }, bottom: { label: "u221.5", juice: "-110" } },
+    openOU: {
+      top: { label: "o219.5", juice: "-110" },
+      bottom: { label: "u219.5", juice: "-110" },
+    },
+    openLine: {
+      top: { label: "+3.5", juice: "-110" },
+      bottom: { label: "-3.5", juice: "-110" },
+    },
+    bestLine: {
+      top: { label: "+2.5", juice: "-108" },
+      bottom: { label: "-2.5", juice: "-112" },
+    },
+    bestOU: {
+      top: { label: "o221.5", juice: "-110" },
+      bottom: { label: "u221.5", juice: "-110" },
+    },
     edgeLineNum: 1.4,
     edgeOUNum: 0.8,
     ...overrides,

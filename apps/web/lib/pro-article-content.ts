@@ -38,7 +38,9 @@ function movementSummary(row: LegacyEdgeBoardRow): string {
       ? Math.abs(bestSpread - openSpread)
       : null;
   const totalShift =
-    openTotal != null && bestTotal != null ? Math.abs(bestTotal - openTotal) : null;
+    openTotal != null && bestTotal != null
+      ? Math.abs(bestTotal - openTotal)
+      : null;
 
   const spreadText =
     spreadShift != null
@@ -281,9 +283,13 @@ export function buildProArticleContent({
   const edgeSummary =
     lineEdge != null || totalEdge != null
       ? `Current model edge reads ${
-          lineEdge != null ? `${lineEdge.toFixed(1)} points on spread` : "no clear spread edge"
+          lineEdge != null
+            ? `${lineEdge.toFixed(1)} points on spread`
+            : "no clear spread edge"
         } and ${
-          totalEdge != null ? `${totalEdge.toFixed(1)} points on total` : "no clear total edge"
+          totalEdge != null
+            ? `${totalEdge.toFixed(1)} points on total`
+            : "no clear total edge"
         }.`
       : "Model edge values are not fully available yet; execution should remain conservative.";
 

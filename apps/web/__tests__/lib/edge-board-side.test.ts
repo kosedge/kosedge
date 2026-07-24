@@ -70,8 +70,20 @@ describe("edge board side + play action", () => {
     // Odds best = away line. Away -3 ⇒ market home +3.
     const mid = flatRowsToLegacy(
       [
-        { game: "A @ B", market: "Spread", best: "-3.0", bookKey: "dk", kei: "+1.8" }, // |1.8-3|=1.2 → LEAN
-        { game: "A @ B", market: "Total", best: "45.0", bookKey: "dk", kei: "47.2" }, // 2.2 → LEAN
+        {
+          game: "A @ B",
+          market: "Spread",
+          best: "-3.0",
+          bookKey: "dk",
+          kei: "+1.8",
+        }, // |1.8-3|=1.2 → LEAN
+        {
+          game: "A @ B",
+          market: "Total",
+          best: "45.0",
+          bookKey: "dk",
+          kei: "47.2",
+        }, // 2.2 → LEAN
       ],
       "nfl",
     )[0];
@@ -81,8 +93,20 @@ describe("edge board side + play action", () => {
 
     const play = flatRowsToLegacy(
       [
-        { game: "A @ B", market: "Spread", best: "+3.0", bookKey: "dk", kei: "-1.0" },
-        { game: "A @ B", market: "Total", best: "45.0", bookKey: "dk", kei: "47.7" }, // 2.7 → PLAY
+        {
+          game: "A @ B",
+          market: "Spread",
+          best: "+3.0",
+          bookKey: "dk",
+          kei: "-1.0",
+        },
+        {
+          game: "A @ B",
+          market: "Total",
+          best: "45.0",
+          bookKey: "dk",
+          kei: "47.7",
+        }, // 2.7 → PLAY
       ],
       "nfl",
     )[0];
@@ -91,8 +115,20 @@ describe("edge board side + play action", () => {
 
     const bigTotal = flatRowsToLegacy(
       [
-        { game: "A @ B", market: "Spread", best: "-3.0", bookKey: "dk", kei: "-3.0" },
-        { game: "A @ B", market: "Total", best: "45.0", bookKey: "dk", kei: "50.2" }, // 5.2 → PLAY + size down
+        {
+          game: "A @ B",
+          market: "Spread",
+          best: "-3.0",
+          bookKey: "dk",
+          kei: "-3.0",
+        },
+        {
+          game: "A @ B",
+          market: "Total",
+          best: "45.0",
+          bookKey: "dk",
+          kei: "50.2",
+        }, // 5.2 → PLAY + size down
       ],
       "nfl",
     )[0];
@@ -101,8 +137,20 @@ describe("edge board side + play action", () => {
 
     const pass = flatRowsToLegacy(
       [
-        { game: "A @ B", market: "Spread", best: "-3.0", bookKey: "dk", kei: "+2.5" }, // 0.5 → PASS
-        { game: "A @ B", market: "Total", best: "45.0", bookKey: "dk", kei: "46.5" }, // 1.5 → PASS
+        {
+          game: "A @ B",
+          market: "Spread",
+          best: "-3.0",
+          bookKey: "dk",
+          kei: "+2.5",
+        }, // 0.5 → PASS
+        {
+          game: "A @ B",
+          market: "Total",
+          best: "45.0",
+          bookKey: "dk",
+          kei: "46.5",
+        }, // 1.5 → PASS
       ],
       "nfl",
     )[0];

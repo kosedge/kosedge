@@ -35,7 +35,9 @@ export default function TeamIntelFilterBar({
     <section className="sticky top-16 z-20 rounded-2xl border border-white/10 bg-black/75 p-4 shadow-xl backdrop-blur-xl">
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-kos-gold">Team Intel Controls</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-kos-gold">
+            Team Intel Controls
+          </p>
           <h2 className="mt-1 text-lg font-semibold text-kos-text">{title}</h2>
           <p className="mt-1 text-xs text-kos-text/70">{subtitle}</p>
         </div>
@@ -47,7 +49,10 @@ export default function TeamIntelFilterBar({
         </Link>
       </div>
 
-      <form action={basePath} className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
+      <form
+        action={basePath}
+        className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6"
+      >
         {showTeamSelect ? (
           <label className="flex flex-col gap-1 text-xs text-kos-text/70">
             Team

@@ -8,7 +8,12 @@ import {
 } from "@/lib/nfl-intel";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
 
-type IntelEndpoint = "rosters" | "stats" | "standings" | "depth-charts" | "injuries";
+type IntelEndpoint =
+  | "rosters"
+  | "stats"
+  | "standings"
+  | "depth-charts"
+  | "injuries";
 
 type ColumnSpec = {
   key: string;
@@ -36,39 +41,57 @@ export default async function NflIntelTablePage({
 }) {
   const data = await fetchNflIntel(endpoint, { season, week, team });
   const rows = data.rows as NflIntelResponseRow[];
-  const standingsGroups = endpoint === "standings" ? groupStandingsRows(rows) : [];
-  const tableRows = endpoint === "standings" ? standingsGroups.flatMap((group) => group.rows) : rows;
+  const standingsGroups =
+    endpoint === "standings" ? groupStandingsRows(rows) : [];
+  const tableRows =
+    endpoint === "standings"
+      ? standingsGroups.flatMap((group) => group.rows)
+      : rows;
   const rankMetricKeys = columns.map((column) => column.key);
-  if (columns.some((column) => column.key === "record") && !rankMetricKeys.includes("win_pct")) {
+  if (
+    columns.some((column) => column.key === "record") &&
+    !rankMetricKeys.includes("win_pct")
+  ) {
     rankMetricKeys.push("win_pct");
   }
-  const rankMaps = buildMetricRankMaps(
-    tableRows,
-    rankMetricKeys,
+  const rankMaps = buildMetricRankMaps(tableRows, rankMetricKeys);
+  const tableRowIndexByRef = new Map(
+    tableRows.map((row, index) => [row, index] as const),
   );
-  const tableRowIndexByRef = new Map(tableRows.map((row, index) => [row, index] as const));
   const latest = data.selection?.latest_available;
-  const latestSeason = typeof latest?.season === "number" ? latest.season : null;
+  const latestSeason =
+    typeof latest?.season === "number" ? latest.season : null;
   const latestWeek = typeof latest?.week === "number" ? latest.week : null;
   const latestLabel =
     latestSeason && latestWeek ? `${latestSeason} W${latestWeek}` : null;
-  const requestedHadNoData = data.selection?.requested_availability?.has_data === false;
-  const showFallbackHint = Boolean(data.selection?.fallback_applied && latestLabel);
-  const showRequestedEmptyHint = Boolean(rows.length === 0 && requestedHadNoData && latestLabel);
+  const requestedHadNoData =
+    data.selection?.requested_availability?.has_data === false;
+  const showFallbackHint = Boolean(
+    data.selection?.fallback_applied && latestLabel,
+  );
+  const showRequestedEmptyHint = Boolean(
+    rows.length === 0 && requestedHadNoData && latestLabel,
+  );
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-kos-text">{title}</h1>
-          <p className="mt-2 max-w-3xl text-sm text-kos-text/75">{description}</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-kos-text">
+            {title}
+          </h1>
+          <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
+            {description}
+          </p>
           <p className="mt-2 text-xs text-kos-text/60">
             {data.season ? `Season ${data.season}` : "Season unavailable"}
             {data.week ? ` • Week ${data.week}` : ""}
             {` • ${data.count} rows`}
           </p>
           {showFallbackHint ? (
-            <p className="mt-1 text-xs text-kos-gold/80">Showing latest available: {latestLabel}</p>
+            <p className="mt-1 text-xs text-kos-gold/80">
+              Showing latest available: {latestLabel}
+            </p>
           ) : null}
         </div>
         <Link
@@ -112,7 +135,10 @@ export default async function NflIntelTablePage({
               <tbody>
                 {endpoint === "standings"
                   ? standingsGroups.flatMap((group, groupIndex) => [
-                      <tr key={`group-${group.conference}-${group.division}-${groupIndex}`} className="bg-kos-gold/8">
+                      <tr
+                        key={`group-${group.conference}-${group.division}-${groupIndex}`}
+                        className="bg-kos-gold/8"
+                      >
                         <td
                           colSpan={columns.length}
                           className="border-b border-kos-gold/25 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-kos-gold"
@@ -121,17 +147,27 @@ export default async function NflIntelTablePage({
                         </td>
                       </tr>,
                       ...group.rows.map((row, rowIndex) => (
-                        <tr key={`${endpoint}-${groupIndex}-${rowIndex}`} className="odd:bg-white/2">
+                        <tr
+                          key={`${endpoint}-${groupIndex}-${rowIndex}`}
+                          className="odd:bg-white/2"
+                        >
                           {columns.map((column) => (
-                            <td key={column.key} className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                            <td
+                              key={column.key}
+                              className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85"
+                            >
                               {column.key === "record"
                                 ? formatTeamRecordWithRank(
                                     row,
-                                    rankMaps.win_pct?.get(tableRowIndexByRef.get(row) ?? -1),
+                                    rankMaps.win_pct?.get(
+                                      tableRowIndexByRef.get(row) ?? -1,
+                                    ),
                                   )
                                 : formatIntelValueWithRank(
                                     row[column.key],
-                                    rankMaps[column.key]?.get(tableRowIndexByRef.get(row) ?? -1),
+                                    rankMaps[column.key]?.get(
+                                      tableRowIndexByRef.get(row) ?? -1,
+                                    ),
                                   )}
                             </td>
                           ))}
@@ -139,12 +175,24 @@ export default async function NflIntelTablePage({
                       )),
                     ])
                   : tableRows.map((row, rowIndex) => (
-                      <tr key={`${endpoint}-${rowIndex}`} className="odd:bg-white/2">
+                      <tr
+                        key={`${endpoint}-${rowIndex}`}
+                        className="odd:bg-white/2"
+                      >
                         {columns.map((column) => (
-                          <td key={column.key} className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
+                          <td
+                            key={column.key}
+                            className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85"
+                          >
                             {column.key === "record"
-                              ? formatTeamRecordWithRank(row, rankMaps.win_pct?.get(rowIndex))
-                              : formatIntelValueWithRank(row[column.key], rankMaps[column.key]?.get(rowIndex))}
+                              ? formatTeamRecordWithRank(
+                                  row,
+                                  rankMaps.win_pct?.get(rowIndex),
+                                )
+                              : formatIntelValueWithRank(
+                                  row[column.key],
+                                  rankMaps[column.key]?.get(rowIndex),
+                                )}
                           </td>
                         ))}
                       </tr>

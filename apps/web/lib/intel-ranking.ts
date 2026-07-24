@@ -44,7 +44,9 @@ const METRIC_RANK_DIRECTIONS: Record<string, RankDirection> = {
   fantasy_tier_roy: "asc",
 };
 
-export function getMetricRankDirection(metricKey: string): RankDirection | null {
+export function getMetricRankDirection(
+  metricKey: string,
+): RankDirection | null {
   return METRIC_RANK_DIRECTIONS[metricKey] ?? null;
 }
 
@@ -66,13 +68,22 @@ export function computeMetricRanks(
   if (!direction) return empty;
 
   const sortable = rows
-    .map((row, index) => ({ index, value: toFiniteNumber((row as Record<string, unknown>)[metricKey]) }))
-    .filter((entry): entry is { index: number; value: number } => entry.value !== null);
+    .map((row, index) => ({
+      index,
+      value: toFiniteNumber((row as Record<string, unknown>)[metricKey]),
+    }))
+    .filter(
+      (entry): entry is { index: number; value: number } =>
+        entry.value !== null,
+    );
 
   if (sortable.length === 0) return empty;
 
   sortable.sort((left, right) => {
-    const byValue = direction === "desc" ? right.value - left.value : left.value - right.value;
+    const byValue =
+      direction === "desc"
+        ? right.value - left.value
+        : left.value - right.value;
     if (byValue !== 0) return byValue;
     return left.index - right.index;
   });

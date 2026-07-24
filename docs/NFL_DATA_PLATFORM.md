@@ -168,7 +168,7 @@ baselines / box-score sims / props / fantasy / awards. Details in
 
 ## Preseason bootstrap (team + player priors, rookies)
 
-`scripts/nfl/run-preseason-bootstrap.sh` should be the *only* thing anyone
+`scripts/nfl/run-preseason-bootstrap.sh` should be the _only_ thing anyone
 ever needs to run at the start of a new season. It now includes a step that
 used to be a one-off, uncommitted manual fix
 (`scripts/nfl/fix_2026_preseason_priors.py`, since deleted) and is a real,
@@ -180,8 +180,8 @@ and `nfl_dp_player_usage_weekly` have nothing to go on for that season. The
 bootstrap seeds a real prior instead of leaving that gap or (the bug this
 replaced) silently carrying forward a single noisy snapshot:
 
-- **Team priors** (`hydrate_preseason_team_situational`): full *prior-season
-  average* per team for every situational column, optionally blended 50/50
+- **Team priors** (`hydrate_preseason_team_situational`): full _prior-season
+  average_ per team for every situational column, optionally blended 50/50
   with a Super Bowl-futures market percentile (`market_signals.py`, needs
   `ODDS_API_KEY`). A walk-forward backtest showed the full-season average
   beats a single-game/week snapshot by 47-62% lower MAE against real
