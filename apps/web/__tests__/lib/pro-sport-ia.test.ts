@@ -4,7 +4,8 @@ import {
   buildSportOverviewSections,
   hasArticleData,
 } from "@/lib/pro-sport-ia";
-import { supportsPropsFantasy } from "@/lib/sports";
+import { getSportDeskConfig } from "@/lib/pro-sport-desk";
+import { SPORTS, supportsPropsFantasy } from "@/lib/sports";
 import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
 
 function buildRow(
@@ -42,7 +43,7 @@ describe("pro sport IA", () => {
     expect(supportsPropsFantasy("nfl")).toBe(true);
   });
 
-  it("builds active props links for pro sports", () => {
+  it("builds active props links for NFL", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
       sportKey: "nfl",
@@ -87,7 +88,34 @@ describe("pro sport IA", () => {
     ).toBe("/pro/nfl/props");
   });
 
-  it("adds NFL-only team intel section with active links", () => {
+  it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {
+    const desk = getSportDeskConfig("mlb");
+    expect(desk.pathLabel).toBe("Fair Lines → Edges → Run Line");
+    expect(desk.cards.map((c) => c.title)).toEqual([
+      "Fair Lines",
+      "Edges",
+      "Run Line",
+    ]);
+    expect(desk.cards[0]?.href).toBe("/pro/mlb/fair-lines");
+    expect(desk.cards[1]?.href).toBe("/pro/mlb/edges");
+    expect(desk.cards[2]?.href).toContain("focus=run-line");
+
+    const content = buildSportOverviewContent("mlb", "MLB");
+    const sections = buildSportOverviewSections({
+      sportKey: "mlb",
+      base: "/pro/mlb",
+      edgeBoardHref: "/edge-board/mlb",
+      content,
+    });
+    const marketSection = sections.find(
+      (section) => section.title === content.sectionTitles.market,
+    );
+    expect(marketSection?.subtitle).toContain("Fair Lines → Edges → Run Line");
+    const labels = marketSection?.links.map((link) => link.label) ?? [];
+    expect(labels.slice(0, 3)).toEqual(["Fair Lines", "Edges", "Run Line"]);
+  });
+
+  it("adds NFL team intel section with active links", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
       sportKey: "nfl",
@@ -115,39 +143,61 @@ describe("pro sport IA", () => {
       "Depth charts",
       "Injuries",
     ]);
-    expect(intelSection?.links.map((link) => link.href)).toEqual([
-      "/pro/nfl/projections",
-      "/pro/nfl/fair-lines",
-      "/pro/nfl/edges",
-      "/odds/nfl",
-      "/pro/nfl/props",
-      "/pro/nfl/fantasy",
-      "/pro/nfl/awards",
-      "/wall-chart/nfl-2026",
-      "/pro/nfl/teams",
-      "/pro/nfl/stats",
-      "/pro/nfl/standings",
-      "/pro/nfl/depth-charts",
-      "/pro/nfl/injuries",
-    ]);
     expect(intelSection?.links.every((link) => link.status === "active")).toBe(
       true,
     );
     expect(intelSection?.links.every((link) => link.premium)).toBe(true);
   });
 
-  it("does not add team intel section for non-NFL sports", () => {
-    const content = buildSportOverviewContent("cfb", "College Football");
+  it("adds League Intel for non-NFL sports with sport-specific desks", () => {
+    for (const sport of SPORTS.filter((s) => s.key !== "nfl")) {
+      const content = buildSportOverviewContent(sport.key, sport.fullName);
+      const sections = buildSportOverviewSections({
+        sportKey: sport.key,
+        base: `/pro/${sport.key}`,
+        edgeBoardHref: `/edge-board/${sport.key}`,
+        content,
+      });
+      expect(content.sectionTitles.market).toBe("Betting Desk");
+      expect(sections.some((section) => section.title === "Team Intel")).toBe(
+        false,
+      );
+      const intel = sections.find(
+        (section) =>
+          section.title === (content.sectionTitles.intel ?? "League Intel"),
+      );
+      expect(intel).toBeDefined();
+      expect(
+        intel?.links.some((link) => link.href === `/odds/${sport.key}`),
+      ).toBe(true);
+      expect(
+        intel?.links.some((link) => link.href === `/edge-board/${sport.key}`),
+      ).toBe(true);
+
+      const desk = getSportDeskConfig(sport.key);
+      expect(desk.cards).toHaveLength(3);
+      expect(desk.pathLabel.length).toBeGreaterThan(0);
+      expect(desk.footerCards.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it("keeps MLB props stake-gated as placeholder while exposing props center", () => {
+    const content = buildSportOverviewContent("mlb", "MLB");
     const sections = buildSportOverviewSections({
-      sportKey: "cfb",
-      base: "/pro/cfb",
-      edgeBoardHref: "/edge-board/cfb",
+      sportKey: "mlb",
+      base: "/pro/mlb",
+      edgeBoardHref: "/edge-board/mlb",
       content,
     });
-
-    expect(sections.some((section) => section.title === "Team Intel")).toBe(
-      false,
+    const propsSection = sections.find(
+      (section) => section.title === content.sectionTitles.props,
     );
+    expect(
+      propsSection?.links.some((link) => link.status === "placeholder"),
+    ).toBe(true);
+    expect(
+      propsSection?.links.some((link) => link.href === "/pro/props-center"),
+    ).toBe(true);
   });
 
   it("builds placeholder props links for college sports", () => {
