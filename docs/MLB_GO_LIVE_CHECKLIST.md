@@ -17,8 +17,10 @@
 
 ### Stake gate (not yet cleared)
 
-- [ ] Unused holdout eval pass before any game-line stake marketing
+- [ ] Unused holdout eval pass (frozen `2026-07-18`–`23`; reserved `2026-07-25`–`08-10`) before any game-line stake marketing — local unused eval n≈58 today
 - [x] Props remain research-only (`PLAY_STAKE_ELIGIBLE=false`)
+- [x] Local sprint gates: walkforward n≥120, MAE≤3.5, positive densified CLV, `publish_ready_ops=true` (see `subscription_sharpen_sprint_report.json`)
+- [ ] Merge `mlb-subscription-sharpen` → `deploy-vercel` to Railway-deploy sharpened PA-sim
 
 ## Prod deploy steps (Railway + warehouse)
 
