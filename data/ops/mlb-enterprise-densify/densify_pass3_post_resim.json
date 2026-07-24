@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-07-24T20:46:45.901405+00:00",
+  "passes": [
+    {
+      "name": "close_23",
+      "result": {
+        "status": "ok",
+        "sport_key": "baseball_mlb",
+        "bookmakers": [
+          "draftkings",
+          "fanduel"
+        ],
+        "preferred_book": "draftkings",
+        "markets": [
+          "h2h",
+          "spreads",
+          "totals"
+        ],
+        "start_date": "2026-05-01",
+        "end_date": "2026-07-23",
+        "candidate_dates": 40,
+        "requests_attempted": 24,
+        "requests_skipped_cached": 16,
+        "request_errors": 0,
+        "events_fetched": 470,
+        "events_persisted": 470,
+        "snapshots_inserted": 2606,
+        "credits_remaining": 4978749,
+        "prioritize_thin": true,
+        "dk_first_firewall": true,
+        "props_play_stake_eligible": false
+      }
+    },
+    {
+      "name": "close_02",
+      "result": {
+        "status": "ok",
+        "sport_key": "baseball_mlb",
+        "bookmakers": [
+          "draftkings",
+          "fanduel"
+        ],
+        "preferred_book": "draftkings",
+        "markets": [
+          "h2h",
+          "spreads",
+          "totals"
+        ],
+        "start_date": "2026-05-01",
+        "end_date": "2026-07-23",
+        "candidate_dates": 40,
+        "requests_attempted": 11,
+        "requests_skipped_cached": 29,
+        "request_errors": 0,
+        "events_fetched": 169,
+        "events_persisted": 169,
+        "snapshots_inserted": 941,
+        "credits_remaining": 4978419,
+        "prioritize_thin": true,
+        "dk_first_firewall": true,
+        "props_play_stake_eligible": false
+      }
+    },
+    {
+      "name": "open_16",
+      "result": {
+        "status": "ok",
+        "sport_key": "baseball_mlb",
+        "bookmakers": [
+          "draftkings",
+          "fanduel"
+        ],
+        "preferred_book": "draftkings",
+        "markets": [
+          "h2h",
+          "spreads",
+          "totals"
+        ],
+        "start_date": "2026-05-01",
+        "end_date": "2026-07-23",
+        "candidate_dates": 40,
+        "requests_attempted": 10,
+        "requests_skipped_cached": 30,
+        "request_errors": 0,
+        "events_fetched": 120,
+        "events_persisted": 120,
+        "snapshots_inserted": 715,
+        "credits_remaining": 4978119,
+        "prioritize_thin": true,
+        "dk_first_firewall": true,
+        "props_play_stake_eligible": false
+      }
+    }
+  ],
+  "clv_after": {
+    "count": 764,
+    "avg_ml_clv": 0.0241,
+    "avg_total_clv": 0.24868,
+    "avg_spread_clv": 0.19106,
+    "rows_upserted": 2165
+  },
+  "gap_after": {
+    "proj_out": 738,
+    "missing_open": 29,
+    "missing_close": 20,
+    "has_both": 695
+  },
+  "credits_remaining": 4978119
+}
