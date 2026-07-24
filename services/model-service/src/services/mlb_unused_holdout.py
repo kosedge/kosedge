@@ -15,15 +15,30 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set
 
-# Repo-relative default; overridden via MLB_UNUSED_HOLDOUT_REGISTRY env in ops.
-_DEFAULT_REGISTRY_CANDIDATES = (
-    Path(__file__).resolve().parents[4]
-    / "data"
-    / "ops"
-    / "mlb-enterprise-holdout"
-    / "unused_holdout_registry.json",
-    Path.cwd() / "data" / "ops" / "mlb-enterprise-holdout" / "unused_holdout_registry.json",
-)
+
+def _default_registry_candidates() -> tuple[Path, ...]:
+    """Resolve registry paths for monorepo checkout and Railway path-as-root.
+
+    Monorepo: ``services/model-service/src/services/...`` → repo ``data/ops/...``.
+    Railway ``--path-as-root``: ``/app/src/services/...`` → optional ``/app/data/...``
+    (usually missing; ``FALLBACK_UNUSED_WINDOWS`` applies). Never IndexError on import.
+    """
+    here = Path(__file__).resolve()
+    rel = Path("data") / "ops" / "mlb-enterprise-holdout" / "unused_holdout_registry.json"
+    out: list[Path] = []
+    # parents[4] = repo root in monorepo; parents[2] = service root under /app.
+    for idx in (4, 3, 2):
+        if len(here.parents) > idx:
+            out.append(here.parents[idx] / rel)
+    out.append(Path.cwd() / rel)
+    # Dedupe while preserving order.
+    seen: set[Path] = set()
+    uniq: list[Path] = []
+    for p in out:
+        if p not in seen:
+            seen.add(p)
+            uniq.append(p)
+    return tuple(uniq)
 
 # Frozen fallback if the artifact is missing (must match registry windows).
 FALLBACK_UNUSED_WINDOWS: tuple[Dict[str, str], ...] = (
@@ -49,7 +64,7 @@ def _registry_path() -> Optional[Path]:
     if override:
         p = Path(override)
         return p if p.exists() else None
-    for candidate in _DEFAULT_REGISTRY_CANDIDATES:
+    for candidate in _default_registry_candidates():
         if candidate.exists():
             return candidate
     return None
