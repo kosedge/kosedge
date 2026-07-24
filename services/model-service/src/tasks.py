@@ -47,6 +47,7 @@ from .services.mlb_enterprise_ops import (
     resolve_densify_books,
     upsert_mlb_clv_attribution,
 )
+from .services.mlb_lineup_shock import apply_lineup_shock
 from .services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
 from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from .services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE as MLB_PROPS_PLAY_STAKE_ELIGIBLE
@@ -6807,6 +6808,13 @@ def run_mlb_lineup_nowcast_repricing(
                 info_freshness_score_home=freshness,
                 info_freshness_score_away=freshness,
             )
+            prior_conf_home = float(m["lineup_confidence_home"]) if m.get("lineup_confidence_home") is not None else nowcast["home"]
+            prior_conf_away = float(m["lineup_confidence_away"]) if m.get("lineup_confidence_away") is not None else nowcast["away"]
+            inputs, shock_diag = apply_lineup_shock(
+                inputs,
+                prior_confidence_home=prior_conf_home,
+                prior_confidence_away=prior_conf_away,
+            )
 
             seed_base = _default_projection_seed(inputs.game_id, base_model_version, simulations)
             projection_base = _run_simulation_by_model(
@@ -6815,6 +6823,7 @@ def run_mlb_lineup_nowcast_repricing(
                 seed=seed_base,
                 model_version=base_model_version,
             )
+            projection_base.setdefault("diagnostics", {}).update(shock_diag)
             _insert_mlb_projection_and_audit(session, projection_base, seed=seed_base)
             repriced_base += 1
 
@@ -6826,6 +6835,7 @@ def run_mlb_lineup_nowcast_repricing(
                     seed=seed_ch,
                     model_version=challenger_model_version,
                 )
+                projection_ch.setdefault("diagnostics", {}).update(shock_diag)
                 _insert_mlb_projection_and_audit(session, projection_ch, seed=seed_ch)
                 repriced_challenger += 1
 
