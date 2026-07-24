@@ -7905,10 +7905,14 @@ def backfill_mlb_historical_resim(
     simulations: int = 2000,
     model_version: str = DEFAULT_MODEL_VERSION,
     max_games: int = 200,
+    force_resim: bool = False,
+    skip_outcomes_pull: bool = False,
 ) -> Dict[str, Any]:
     """Re-sim completed MLB games so walkforward holdout n can approach ≥120.
 
-    Requires MLB_ALLOW_HISTORICAL_SIM=true. Pulls outcomes first for the window.
+    Requires MLB_ALLOW_HISTORICAL_SIM=true. Pulls outcomes first for the window
+    unless skip_outcomes_pull / force_resim. When force_resim=True, deletes
+    existing projections in-window and re-sims with current PA-sim sharpening.
     """
     if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
         raise ValueError(
@@ -7916,15 +7920,46 @@ def backfill_mlb_historical_resim(
         )
     end = date.fromisoformat(end_date) if end_date else date.today() - timedelta(days=1)
     start = date.fromisoformat(start_date) if start_date else end - timedelta(days=45)
-    outcomes = pull_mlb_outcomes(days_back=max(1, (date.today() - start).days + 2))
+    if skip_outcomes_pull or force_resim:
+        outcomes = {"skipped": True, "reason": "skip_outcomes_pull_or_force_resim"}
+    else:
+        outcomes = pull_mlb_outcomes(days_back=max(1, (date.today() - start).days + 2))
 
     session = SessionLocal()
     simulated = 0
     skipped = 0
+    deleted_prior = 0
     try:
+        if force_resim:
+            deleted = session.execute(
+                text(
+                    """
+                    DELETE FROM mlb_market_projections mp
+                    USING games g
+                    JOIN seasons s ON s.id = g.season_id
+                    JOIN leagues l ON l.id = s.league_id
+                    WHERE mp.game_id = g.id
+                      AND l.code = 'mlb'
+                      AND mp.model_version = :model_version
+                      AND g.game_date BETWEEN :start_date AND :end_date
+                    """
+                ),
+                {"model_version": model_version, "start_date": start, "end_date": end},
+            )
+            deleted_prior = int(deleted.rowcount or 0)
+            session.commit()
+
+        missing_clause = ""
+        if not force_resim:
+            missing_clause = """
+                  AND NOT EXISTS (
+                    SELECT 1 FROM mlb_market_projections mp
+                    WHERE mp.game_id = g.id AND mp.model_version = :model_version
+                  )
+            """
         rows = session.execute(
             text(
-                """
+                f"""
                 SELECT
                   g.id AS game_id,
                   g.game_date,
@@ -7961,7 +7996,8 @@ def backfill_mlb_historical_resim(
                   c.recent_form_index_home,
                   c.recent_form_index_away,
                   c.lineup_strength_index_home,
-                  c.lineup_strength_index_away
+                  c.lineup_strength_index_away,
+                  c.context
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -7971,10 +8007,7 @@ def backfill_mlb_historical_resim(
                 JOIN mlb_market_outcomes mo ON mo.game_id = g.id
                 WHERE l.code = 'mlb'
                   AND g.game_date BETWEEN :start_date AND :end_date
-                  AND NOT EXISTS (
-                    SELECT 1 FROM mlb_market_projections mp
-                    WHERE mp.game_id = g.id AND mp.model_version = :model_version
-                  )
+                  {missing_clause}
                 ORDER BY g.game_date ASC
                 LIMIT :max_games
                 """
@@ -8037,6 +8070,20 @@ def backfill_mlb_historical_resim(
                     bullpen_ip_last3_home=float(m.get("bullpen_ip_last3_home") or 9.0),
                     bullpen_ip_last3_away=float(m.get("bullpen_ip_last3_away") or 9.0),
                 )
+                context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
+                if isinstance(m.get("context"), str):
+                    try:
+                        context_payload = json.loads(m["context"])
+                    except Exception:
+                        context_payload = {}
+                inputs, sharpen_diag = _sharpen_mlb_inputs(
+                    inputs,
+                    starter_home_feat=starter_home_feat,
+                    starter_away_feat=starter_away_feat,
+                    home_abbr=str(m.get("home_abbr") or "") or None,
+                    rest_days_home=_to_float(context_payload.get("rest_days_home")),
+                    rest_days_away=_to_float(context_payload.get("rest_days_away")),
+                )
                 seed = _default_projection_seed(str(m["game_id"]), model_version, simulations)
                 projection = _run_simulation_by_model(
                     inputs,
@@ -8044,6 +8091,7 @@ def backfill_mlb_historical_resim(
                     seed=seed,
                     model_version=model_version,
                 )
+                projection.setdefault("diagnostics", {}).update(sharpen_diag)
                 # Stamp pre-first-pitch so historical densify stays leakage-clean.
                 start_dt = _coerce_datetime_utc(m.get("start_time"))
                 if start_dt is None and m.get("game_date") is not None:
@@ -8124,6 +8172,8 @@ def backfill_mlb_historical_resim(
             "status": "ok",
             "start_date": start.isoformat(),
             "end_date": end.isoformat(),
+            "force_resim": bool(force_resim),
+            "deleted_prior_projections": deleted_prior,
             "outcomes": outcomes,
             "games_selected": len(rows),
             "simulated": simulated,

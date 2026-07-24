@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-07-24",
+  "clv": {
+    "model_version": "mlb-v1-pa-sim",
+    "lookback_days": 90,
+    "preferred_book": "draftkings",
+    "rows_upserted": 1414,
+    "avg_ml_clv": 0.0232,
+    "avg_total_clv": 0.33233,
+    "avg_spread_clv": 0.22967,
+    "count": 498,
+    "firewall": {
+      "preferred_book": "draftkings",
+      "books_seen": [
+        "draftkings",
+        "fanduel"
+      ],
+      "dk_first": true,
+      "spreads_kept": 1550,
+      "spreads_dropped_alt": 5,
+      "canonical_run_line_abs": 1.5,
+      "canonical_run_line_max": 2.5
+    }
+  },
+  "walkforward": {
+    "model_version": "mlb-v1-pa-sim",
+    "lookback_days": 90,
+    "training_days": 10,
+    "step_days": 3,
+    "apply_calibration": true,
+    "leakage_violations": 0,
+    "fold_count": 11,
+    "sample_size": 347,
+    "base_brier_ml": 0.251616,
+    "calibrated_brier_ml": 0.251601,
+    "base_mae_total_runs": 3.306,
+    "calibrated_mae_total_runs": 3.3478,
+    "brier_improvement": 1.5e-05,
+    "mae_improvement": -0.0418,
+    "unused_holdout": {
+      "title": "MLB enterprise unused holdout (pre-registered)",
+      "status": "frozen_unused",
+      "registered_at": "2026-07-24T20:00:00Z",
+      "source": "/Users/ryankos/kosedge/data/ops/mlb-enterprise-holdout/unused_holdout_registry.json",
+      "window_count": 2,
+      "date_count": 23,
+      "first_date": "2026-07-18",
+      "last_date": "2026-08-10",
+      "props_play_stake_eligible": false,
+      "stake_marketing_requires_unused_pass": true
+    },
+    "unused_holdout_excluded_from_train": true,
+    "unused_holdout_train_points_skipped": 36,
+    "unused_holdout_eval_points_available": 58
+  },
+  "odds_gaps": {
+    "games": 472,
+    "miss_open": 14,
+    "miss_close": 6,
+    "has_both": 452
+  },
+  "credits_remaining_latest_cache": 4978119,
+  "resim_sharpened": {
+    "status": "ok",
+    "start_date": "2026-05-20",
+    "end_date": "2026-07-17",
+    "force_resim": true,
+    "deleted_prior_projections": 616,
+    "outcomes": {
+      "skipped": true,
+      "reason": "skip_outcomes_pull_or_force_resim"
+    },
+    "games_selected": 350,
+    "simulated": 350,
+    "skipped": 0,
+    "calibration_sample_size": 472,
+    "calibration": {
+      "sample_size": 472.0,
+      "brier_ml": 0.251174,
+      "mae_total_runs": 3.4868,
+      "calendar_days_covered": 42.0,
+      "last_game_date": "2026-07-23"
+    },
+    "holdout": {
+      "sample_size": 347,
+      "fold_count": 11,
+      "base_brier_ml": 0.251616,
+      "calibrated_brier_ml": 0.251601,
+      "base_mae_total_runs": 3.306,
+      "calibrated_mae_total_runs": 3.3478,
+      "brier_improvement": 1.5e-05,
+      "mae_improvement": -0.0418,
+      "leakage_violations": 0
+    },
+    "holdout_target_n": 120,
+    "holdout_n_ok": true,
+    "props_play_stake_eligible": false
+  }
+}
