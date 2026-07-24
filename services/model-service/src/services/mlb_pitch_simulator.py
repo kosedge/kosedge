@@ -308,10 +308,15 @@ def simulate_mlb_game_pitch_by_pitch(
     push_fg = 0
     f5_totals: List[int] = []
     fg_totals: List[int] = []
+    f5_margins: List[int] = []
+    fg_margins: List[int] = []
+    fg_home_cover_run_line = 0
+    f5_home_cover_run_line = 0
     pitch_totals: List[int] = []
     extra_innings_games = 0
     extra_innings_total = 0
     home_walkoff_wins = 0
+    run_line_abs = 1.5
 
     for _ in range(simulations):
         home_runs = 0
@@ -418,6 +423,8 @@ def simulate_mlb_game_pitch_by_pitch(
             else:
                 away_runs += 1
 
+        f5_margin = f5_home - f5_away
+        fg_margin = home_runs - away_runs
         if f5_home > f5_away:
             f5_home_wins += 1
         elif f5_home == f5_away:
@@ -432,6 +439,12 @@ def simulate_mlb_game_pitch_by_pitch(
 
         f5_totals.append(f5_home + f5_away)
         fg_totals.append(home_runs + away_runs)
+        f5_margins.append(f5_margin)
+        fg_margins.append(fg_margin)
+        if fg_margin > run_line_abs:
+            fg_home_cover_run_line += 1
+        if f5_margin > run_line_abs:
+            f5_home_cover_run_line += 1
         pitch_totals.append(game_pitches)
 
     f5_denom = max(1, simulations - push_f5)
@@ -442,6 +455,16 @@ def simulate_mlb_game_pitch_by_pitch(
     fg_ci = _beta_interval_from_wins(fg_home_wins, max(0, fg_denom - fg_home_wins))
     f5_mean = sum(f5_totals) / simulations
     fg_mean = sum(fg_totals) / simulations
+    f5_margin_mean = sum(f5_margins) / simulations
+    fg_margin_mean = sum(fg_margins) / simulations
+    fair_fg_spread_home = -round(fg_margin_mean * 2.0) / 2.0
+    fair_f5_spread_home = -round(f5_margin_mean * 2.0) / 2.0
+    if abs(fair_fg_spread_home) < 0.5:
+        fair_fg_spread_home = -1.5 if fg_margin_mean >= 0 else 1.5
+    if abs(fair_f5_spread_home) < 0.5:
+        fair_f5_spread_home = -1.5 if f5_margin_mean >= 0 else 1.5
+    fg_cover_prob = fg_home_cover_run_line / simulations
+    f5_cover_prob = f5_home_cover_run_line / simulations
     pitch_mean = sum(pitch_totals) / simulations
     f5_p10 = _quantile(f5_totals, 0.10)
     f5_p50 = _quantile(f5_totals, 0.50)
@@ -521,6 +544,13 @@ def simulate_mlb_game_pitch_by_pitch(
             "fair_fg_home_ml": _fair_moneyline_from_prob(fg_home_prob),
             "fair_f5_total": round(f5_mean * 2.0) / 2.0,
             "fair_fg_total": round(fg_mean * 2.0) / 2.0,
+            "fair_f5_spread_home": fair_f5_spread_home,
+            "fair_fg_spread_home": fair_fg_spread_home,
+            "f5_margin_mean": round(f5_margin_mean, 4),
+            "fg_margin_mean": round(fg_margin_mean, 4),
+            "f5_home_cover_prob_run_line": round(f5_cover_prob, 6),
+            "fg_home_cover_prob_run_line": round(fg_cover_prob, 6),
+            "run_line_point": -run_line_abs,
         },
         "diagnostics": {
             "f5_push_rate": push_f5 / simulations,
