@@ -58,6 +58,10 @@ TASK_MLB_NOWCAST_REPRICING = "src.tasks.run_mlb_lineup_nowcast_repricing"
 TASK_MLB_WALKFORWARD_BACKTEST = "src.tasks.run_mlb_walkforward_backtest"
 TASK_MLB_FEATURE_ABLATION = "src.tasks.run_mlb_feature_ablation"
 TASK_MLB_DETERMINISM_CHECK = "src.tasks.run_mlb_determinism_check"
+TASK_MLB_HISTORICAL_ODDS_DENSIFY = "src.tasks.pull_mlb_historical_odds_densify"
+TASK_MLB_CLV_ATTRIBUTION = "src.tasks.run_mlb_clv_attribution"
+TASK_MLB_QUALITY_GRADING = "src.tasks.run_mlb_quality_grading"
+TASK_MLB_HISTORICAL_RESIM = "src.tasks.backfill_mlb_historical_resim"
 MLB_MODEL_STATE_KEY = "mlb_active_model"
 
 
@@ -1317,6 +1321,98 @@ def job_mlb_feature_ablation(
         return {"task_id": async_result.id, "task_name": TASK_MLB_FEATURE_ABLATION}
     except Exception as e:
         log.exception("Failed to enqueue mlb-feature-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-historical-odds-densify")
+def job_mlb_historical_odds_densify(
+    start_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
+    bookmakers: str = Query("draftkings,fanduel"),
+    markets: str = Query("h2h,spreads,totals"),
+    max_requests: int = Query(40, ge=1, le=500),
+    day_offset: int = Query(0, ge=-7, le=2),
+    snapshot_hour_utc: int = Query(17, ge=0, le=23),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_HISTORICAL_ODDS_DENSIFY,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "bookmakers": bookmakers,
+                "markets": markets,
+                "max_requests": int(max_requests),
+                "day_offset": int(day_offset),
+                "snapshot_hour_utc": int(snapshot_hour_utc),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_HISTORICAL_ODDS_DENSIFY}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-historical-odds-densify")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-clv-attribution")
+def job_mlb_clv_attribution(
+    model_version: str = Query("mlb-v1-pa-sim"),
+    lookback_days: int = Query(45, ge=7, le=365),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_CLV_ATTRIBUTION,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": int(lookback_days),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_CLV_ATTRIBUTION}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-clv-attribution")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-quality-grading")
+def job_mlb_quality_grading(
+    model_version: str = Query("mlb-v1-pa-sim"),
+    lookback_days: int = Query(60, ge=7, le=365),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_QUALITY_GRADING,
+            kwargs={
+                "model_version": model_version,
+                "lookback_days": int(lookback_days),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_QUALITY_GRADING}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-quality-grading")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-historical-resim")
+def job_mlb_historical_resim(
+    start_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
+    simulations: int = Query(2000, ge=500, le=10000),
+    model_version: str = Query("mlb-v1-pa-sim"),
+    max_games: int = Query(200, ge=1, le=2000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_HISTORICAL_RESIM,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": int(simulations),
+                "model_version": model_version,
+                "max_games": int(max_games),
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_HISTORICAL_RESIM}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-historical-resim")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

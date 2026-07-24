@@ -138,6 +138,10 @@ celery_app.conf.task_routes = {
     "src.tasks.run_mlb_walkforward_backtest": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_mlb_feature_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_mlb_determinism_check": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.pull_mlb_historical_odds_densify": {"queue": QUEUE_ODDS, "routing_key": QUEUE_ODDS},
+    "src.tasks.run_mlb_clv_attribution": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_quality_grading": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.backfill_mlb_historical_resim": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
 }
 
 # Beat schedule (optional; beat container can boot even if file missing)

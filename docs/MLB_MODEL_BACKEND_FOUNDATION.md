@@ -27,6 +27,10 @@ Migration file:
 - `infra/db/006_mlb_premium_context.sql`
 - `infra/db/007_mlb_reliever_tiers.sql`
 - `infra/db/010_mlb_data_lake.sql`
+- `infra/db/039_mlb_enterprise_runline_quality.sql`
+- `infra/db/040_mlb_enterprise_clv_board_health.sql`
+
+See also `docs/MLB_ENTERPRISE_SHARPENING.md` and `docs/MLB_GO_LIVE_CHECKLIST.md`.
 
 Tables added:
 
