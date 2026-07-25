@@ -5,7 +5,7 @@ import { getRedisClient } from "@/lib/cache/redis";
 
 type Limiter = { consume(key: string): Promise<unknown> };
 
-const POINTS = { api: 100, authRead: 60, authWrite: 10, strict: 10 } as const;
+const POINTS = { api: 100, authRead: 60, authWrite: 5, strict: 10 } as const;
 
 // In-memory limiters (used when REDIS_URL is not set or Redis unavailable)
 const apiLimiterMemory = new RateLimiterMemory({
