@@ -10,9 +10,11 @@ import {
   buildTeamIntelHref,
   extractTeamCodes,
   filterTeamDirectory,
+  NFL_TEAM_DIRECTORY,
   parseTeamIntelFilters,
   teamDisplayName,
 } from "@/lib/nfl-team-intel";
+import { assignTeamPreviewWriter } from "@/lib/team-research";
 
 export default async function NflTeamsIndexPage({
   searchParams,
@@ -120,6 +122,18 @@ export default async function NflTeamsIndexPage({
             season: season ?? undefined,
             week: week ?? undefined,
           });
+          const directoryEntry = NFL_TEAM_DIRECTORY.find(
+            (entry) => entry.code === teamCode,
+          );
+          const previewAssignment = directoryEntry
+            ? assignTeamPreviewWriter("nfl", {
+                slug: directoryEntry.code.toLowerCase(),
+                code: directoryEntry.code,
+                name: directoryEntry.name,
+                conference: directoryEntry.conference,
+                division: directoryEntry.division,
+              })
+            : null;
 
           return (
             <Link
@@ -135,9 +149,17 @@ export default async function NflTeamsIndexPage({
                   <h2 className="mt-1 text-lg font-semibold text-kos-text">
                     {teamDisplayName(teamCode)}
                   </h2>
+                  {directoryEntry ? (
+                    <p className="mt-1 text-xs text-kos-text/55">
+                      {directoryEntry.conference} {directoryEntry.division}
+                      {previewAssignment
+                        ? ` · Preview by ${previewAssignment.writer.shortName}`
+                        : ""}
+                    </p>
+                  ) : null}
                 </div>
                 <span className="rounded-full border border-kos-gold/30 bg-kos-gold/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
-                  Intel
+                  Research
                 </span>
               </div>
 

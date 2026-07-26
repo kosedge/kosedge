@@ -5,6 +5,7 @@ import InjuryStatusPanel from "@/components/pro/InjuryStatusPanel";
 import TeamIntelFilterBar from "@/components/pro/TeamIntelFilterBar";
 import TeamIntelSectionNav from "@/components/pro/TeamIntelSectionNav";
 import TeamIntelStatCards from "@/components/pro/TeamIntelStatCards";
+import TeamPreviewSlot from "@/components/pro/team-research/TeamPreviewSlot";
 import TeamTendencyPanels, {
   type SituationTabKey,
 } from "@/components/pro/TeamTendencyPanels";
@@ -20,6 +21,7 @@ import {
   extractTeamCodes,
   firstQueryValue,
   isNflTeamIntelView,
+  NFL_TEAM_DIRECTORY,
   parseTeamIntelFilters,
   resolveTeamCode,
   teamDisplayName,
@@ -30,6 +32,7 @@ import {
   type QbSituationType,
   type TendencyPerspective,
 } from "@/lib/nfl-tendencies";
+import { assignTeamPreviewWriter } from "@/lib/team-research";
 
 const SITUATION_TAB_KEYS: SituationTabKey[] = [
   "down_distance",
@@ -266,6 +269,17 @@ export default async function NflTeamIntelViewPage({
   const standingsIndex = standings.rows.findIndex(
     (row) => row.team === selectedTeam,
   );
+  const directoryEntry =
+    NFL_TEAM_DIRECTORY.find((entry) => entry.code === selectedTeam) ?? null;
+  const previewAssignment = directoryEntry
+    ? assignTeamPreviewWriter("nfl", {
+        slug: directoryEntry.code.toLowerCase(),
+        code: directoryEntry.code,
+        name: directoryEntry.name,
+        conference: directoryEntry.conference,
+        division: directoryEntry.division,
+      })
+    : null;
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -312,7 +326,26 @@ export default async function NflTeamIntelViewPage({
           team={selectedTeam}
           filters={{ season: season ?? undefined, week: week ?? undefined }}
         />
+        {directoryEntry ? (
+          <p className="mt-3 text-xs text-kos-text/60">
+            {directoryEntry.conference} {directoryEntry.division}
+            {previewAssignment
+              ? ` · Preview by ${previewAssignment.writer.name}`
+              : ""}
+          </p>
+        ) : null}
       </section>
+
+      {view === "overview" && previewAssignment ? (
+        <div className="mt-5">
+          <TeamPreviewSlot
+            teamName={teamDisplayName(selectedTeam)}
+            writer={previewAssignment.writer}
+            assignmentNote={previewAssignment.note}
+            provisional={previewAssignment.provisional}
+          />
+        </div>
+      ) : null}
 
       <section className="mt-5 grid gap-4 xl:grid-cols-[2fr_1fr]">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-5">
@@ -423,6 +456,46 @@ export default async function NflTeamIntelViewPage({
                 { key: "report_status", label: "Report" },
               ]}
             />
+            <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5 xl:col-span-2">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <h3 className="text-lg font-semibold text-kos-text">
+                    Coaching staff
+                  </h3>
+                  <p className="mt-1 text-sm text-kos-text/70">
+                    Head coach, offensive coordinator, and defensive
+                    coordinator for scheme context.
+                  </p>
+                </div>
+                <span className="rounded-full border border-amber-400/35 bg-amber-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-100">
+                  Data pending
+                </span>
+              </div>
+              <p className="mt-4 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-kos-text/70">
+                Coaching profile data pending — HC / OC / DC notes ship with
+                the writer desk research pass.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  href="/edge-board/nfl"
+                  className="inline-flex rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
+                >
+                  Edge board →
+                </Link>
+                <Link
+                  href="/pro/nfl/fair-lines"
+                  className="inline-flex rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text transition hover:border-kos-gold/35"
+                >
+                  KEI lines →
+                </Link>
+                <Link
+                  href={`/pro/nfl/teams/${selectedTeam}/depth-chart`}
+                  className="inline-flex rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text transition hover:border-kos-gold/35"
+                >
+                  Depth chart →
+                </Link>
+              </div>
+            </article>
           </div>
         ) : null}
 
