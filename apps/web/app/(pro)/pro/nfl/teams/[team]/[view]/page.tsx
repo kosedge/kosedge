@@ -463,8 +463,8 @@ export default async function NflTeamIntelViewPage({
                     Coaching staff
                   </h3>
                   <p className="mt-1 text-sm text-kos-text/70">
-                    Head coach, offensive coordinator, and defensive
-                    coordinator for scheme context.
+                    Head coach, offensive coordinator, and defensive coordinator
+                    for scheme context.
                   </p>
                 </div>
                 <span className="rounded-full border border-amber-400/35 bg-amber-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-100">
@@ -472,8 +472,8 @@ export default async function NflTeamIntelViewPage({
                 </span>
               </div>
               <p className="mt-4 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-kos-text/70">
-                Coaching profile data pending — HC / OC / DC notes ship with
-                the writer desk research pass.
+                Coaching profile data pending — HC / OC / DC notes ship with the
+                writer desk research pass.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
