@@ -273,8 +273,8 @@ const NFL_INTEL_LINKS: OverviewSectionLink[] = [
   },
   {
     href: "/pro/nfl/teams",
-    label: "Team intel hub",
-    hint: "Team cards, filters, and direct jump to depth/stats/injuries/tendencies.",
+    label: "Team research hub",
+    hint: "Team cards with writer preview slots, depth/stats/injuries/tendencies intel.",
     premium: true,
     status: "active",
   },
@@ -354,8 +354,8 @@ function mlbIntelLinks(base: string): OverviewSectionLink[] {
     },
     {
       href: `${base}/teams`,
-      label: "Team baseline hub",
-      hint: "Starter, bullpen, and form context by club — directory shell until roster intel ships.",
+      label: "Team research hub",
+      hint: "Club directory with park factors, writer preview slots, and handicapping shells.",
       premium: true,
       status: "active",
     },
@@ -414,8 +414,8 @@ function genericIntelLinks(
     },
     {
       href: `${base}/teams`,
-      label: "Team baseline hub",
-      hint: "Current form, ratings, and opponent context by team.",
+      label: "Team research hub",
+      hint: "Per-team handicapping shells with writer preview ownership and sport-aware sections.",
       premium: true,
       status: "active",
     },
@@ -527,8 +527,8 @@ export function buildSportOverviewSections({
         },
         {
           href: sportKey === "nfl" ? "/pro/nfl/teams" : `${base}/teams`,
-          label: "Team baseline hub",
-          hint: "Current form, ratings, and opponent context by team.",
+          label: "Team research hub",
+          hint: "Per-team handicapping research pages with writer preview ownership.",
           status: "active",
         },
       ],
