@@ -137,7 +137,7 @@ describe("pro sport IA", () => {
       "Fantasy draft board",
       "MVP & OPOY race",
       "2026 NFL wall chart",
-      "Team intel hub",
+      "Team research hub",
       "League stats",
       "League standings",
       "Depth charts",
