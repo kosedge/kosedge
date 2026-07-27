@@ -1,5 +1,5 @@
 // apps/web/__tests__/lib/auth/pro.test.ts
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { UserRole, SubscriptionStatus } from "#prisma";
 
 // Mock dependencies
@@ -24,6 +24,11 @@ const { isProUser, hasRole, getUserRole, getProAccessState } =
 describe("Auth Pro Utilities", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubEnv("OPEN_ACCESS_PREVIEW", "false");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   describe("isProUser", () => {
