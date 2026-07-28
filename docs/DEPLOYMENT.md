@@ -19,9 +19,11 @@ Use this when driving work from [cursor.com/agents](https://cursor.com/agents) o
      - Root Directory: `/services/model-service`
      - Config File: `/services/model-service/railway.toml`
    - Generate a public domain; copy the HTTPS URL.
+   - The `kosedge` service in project `joyful-clarity` is already wired this way (`https://kosedge-production.up.railway.app`).
+   - For DB-backed routes, set `DATABASE_URL` (and optionally `REDIS_URL`) on the Railway service. `/health` works without them.
 2. **Vercel ↔ Railway**
    - In Vercel project env vars, set:
-     - `MODEL_SERVICE_URL=https://<your-railway-domain>`
+     - `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` (or your Railway HTTPS URL)
      - `INTERNAL_API_SECRET=<same value as Railway>`
    - On Railway, set the same `INTERNAL_API_SECRET` plus any DB/Redis vars the model service needs.
 3. **Cursor Cloud secrets** (so phone agents can deploy/inspect)
