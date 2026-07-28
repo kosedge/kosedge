@@ -59,12 +59,13 @@ DB-first grading coverage is complete (1693/1693 projection join). **No Odds API
 
 ## 5. What you must do for prod / PR
 
-1. **Open PR manually** (no `gh` here): https://github.com/kosedge/kosedge/compare/main...nfl-kav-sharpen
-2. Promote prod DB: migration 041 + KAV tables/materialization + matchup KAV columns.
-3. Prod retrain: `DATABASE_URL=<prod> .venv/bin/python scripts/nfl/retrain_supervised_kav_v3.py`
-4. Prod re-sim: `NFL_KAV_RESIM_SIMS=500 NFL_KAV_RESIM_SEASON=2025 .venv/bin/python scripts/nfl/resim_kav_season_boards.py`
-5. Prod grade: `DATABASE_URL=<prod> .venv/bin/python scripts/nfl/odds_open_close_grading.py`
-6. Densify owned OC via Odds API only if prod coverage collapses.
+1. **PR open:** https://github.com/kosedge/kosedge/pull/15 (`nfl-kav-sharpen` → `deploy-vercel`). Compare: https://github.com/kosedge/kosedge/compare/deploy-vercel...nfl-kav-sharpen
+2. Local warehouse cutover done: `kosedge_nfl_restore` → `kosedge` (wiped partial kept as `kosedge_wiped_partial_20260728t124723z`).
+3. Promote **prod** DB: migration 041 + KAV materialization + matchup KAV columns.
+4. Prod retrain: `DATABASE_URL=<prod> .venv/bin/python scripts/nfl/retrain_supervised_kav_v3.py`
+5. Prod re-sim: `NFL_KAV_RESIM_SIMS=500 NFL_KAV_RESIM_SEASON=2025 .venv/bin/python scripts/nfl/resim_kav_season_boards.py`
+6. Prod grade: `DATABASE_URL=<prod> .venv/bin/python scripts/nfl/odds_open_close_grading.py`
+7. Densify owned OC via Odds API only if prod coverage collapses.
 
 ## Scripts
 

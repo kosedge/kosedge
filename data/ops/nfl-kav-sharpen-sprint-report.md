@@ -53,14 +53,27 @@ Method: invert stored projection blend → sweep weights + fit totals calibrator
 - `tests/test_kav.py` — 6 passed (math, SOS, leakage)
 - `test_nfl_handicapping_framework.py` + `test_nfl_matchup_features.py` — 7 passed (incl. KAV factor)
 
-## 5. DB note
+## 5. DB note (local cutover 2026-07-28)
 
-Primary warehouse for this sprint: `kosedge_nfl_restore` (restored DR dump + KAV). Slim `kosedge` DB remains empty of NFL core tables — ops should point `DATABASE_URL` at the restored warehouse or promote restore → `kosedge`.
+| DB | Role | Size / inventory |
+| --- | --- | --- |
+| **`kosedge`** (live) | Renamed from `kosedge_nfl_restore` | ~4.8 GB · games 4437 · odds_snapshots 80995 · schedules 3834 · market proj 20740 · outcomes 3562 · history 42763 · KAV game/weekly 7070/8734 · props 20322 |
+| `kosedge_wiped_partial_20260728t124723z` | Pre-swap partial (not destroyed) | 54 MB · games 0 (residual injuries/rosters only) |
+| Dump backup | `data/backups/nfl/kosedge-pre-swap-wiped-partial-20260728T124723Z.dump` | sha256 sidecar present |
+
+`041` re-applied idempotently (already present). App `DATABASE_URL` already targets `…/kosedge`.
 
 ## 6. Remaining gaps
 
-1. Promote restore DB (or re-ingest) so default `kosedge` has schedules/PBP/odds/KAV.
-2. Re-sim 2025 slate **with KAV wired** for true before→after vs pre-KAV projections (current grading uses existing projections).
-3. Supervised retrain schema v3 on KAV features + chronological holdout.
-4. Densify owned open/close for 2020–2023 mainlines (DB-first gap pull only).
-5. Special-teams KAV unit (deferred; pass/run EPA only in v1).
+### Closed locally
+1. Promote restore → live `kosedge` (rename + backup of wiped partial).
+2. Migration `041` + KAV materialization on live local DB.
+3. Supervised schema v3 retrain active (`e8f73ce5…`); 2025 KAV re-sim done — see `data/ops/nfl-kav-enterprise-next-report.md`.
+4. PR open: https://github.com/kosedge/kosedge/pull/15 (`nfl-kav-sharpen` → `deploy-vercel`).
+
+### Still open (prod / research)
+1. Merge PR #15; on **production** DB: `041` + materialize KAV + matchup attach.
+2. Prod supervised v3 retrain + 2025 board re-sim + owned OC grade (same scripts as enterprise-next report).
+3. Densify owned open/close for older seasons only if prod coverage collapses (DB-first; no blind Odds pull). Prop snapshots max `2025-12-30` — Jul 25–28 enterprise prop pull not in DR dump.
+4. Special-teams KAV unit (deferred; pass/run EPA only in v1).
+5. Fix compose celery image missing `numpy` before relying on Celery retrain in Docker.
