@@ -17,6 +17,8 @@ from src.services.nfl_side_total_publish_policy import (
 
 def test_candidate_tag_spread_play_and_lean_disabled():
     assert candidate_tag("spread", 2.5) == "PLAY"
+    assert candidate_tag("spread", 6.9) == "PLAY"
+    assert candidate_tag("spread", 7.0) == "PASS"  # v2 cap — mega-edge PASS
     assert candidate_tag("spread", 1.5) == "PASS"  # LEAN disabled
     assert candidate_tag("spread", 0.5) == "PASS"
 
@@ -122,10 +124,20 @@ def test_play_only_holdout_yellow_when_ats_clears_clv_thin():
         play_holdout={
             "primary_holdout_2025": {
                 "spread": {
-                    "n": 206,
-                    "hit_rate": 0.76,
-                    "n_clv": 105,
-                    "clv_positive_rate": 0.53,
+                    "n": 112,
+                    "hit_rate": 0.70,
+                    "n_clv_move": 100,
+                    "clv_positive_rate": 0.58,
+                    "gate": "YELLOW",
+                },
+                "combined": {"gate": "YELLOW"},
+            },
+            "confirmatory_2024_2025": {
+                "spread": {
+                    "n": 100,
+                    "hit_rate": 0.70,
+                    "n_clv_move": 80,
+                    "clv_positive_rate": 0.58,
                     "gate": "YELLOW",
                 },
                 "combined": {"gate": "YELLOW"},
@@ -138,6 +150,65 @@ def test_play_only_holdout_yellow_when_ats_clears_clv_thin():
     by_name = {c.name: c.status for c in report.checks}
     assert by_name["play_only_holdout"] == "YELLOW"
     assert report.selective_play_ready is False
+    assert report.betting_product_ready is False
+
+
+def test_play_only_holdout_green_on_confirmatory_movement_clv():
+    report = evaluate_enterprise_gates(
+        grading={
+            "model": {
+                "ats_hit_rate": 0.50,
+                "n_spread": 1693,
+                "clv_spread_positive_rate": 0.51,
+                "n_clv_spread": 600,
+                "spread_mae": 9.5,
+                "total_mae": 10.1,
+            },
+            "market_close": {"spread_mae": 9.8, "total_mae": 10.3},
+            "coverage": {"owned_open_close_games": 1900},
+        },
+        supervised={
+            "schema_version": 3,
+            "feature_keys": ["diff_kav_net_5g"],
+            "metrics": {
+                "test_brier": 0.15,
+                "test_margin_mae": 7.5,
+                "test_total_mae": 9.2,
+                "test_rows": 570,
+            },
+        },
+        play_holdout={
+            "pre_registered": {"policy_version": "spread_play_v2_cap7"},
+            "primary_holdout_2025": {
+                "spread": {
+                    "n": 112,
+                    "hit_rate": 0.696,
+                    "n_clv_move": 100,
+                    "clv_positive_rate": 0.58,
+                    "mean_abs_edge": 4.66,
+                    "gate": "YELLOW",
+                }
+            },
+            "confirmatory_2024_2025": {
+                "spread": {
+                    "n": 232,
+                    "hit_rate": 0.724,
+                    "n_clv_move": 214,
+                    "clv_positive_rate": 0.598,
+                    "mean_abs_edge": 4.5,
+                    "gate": "GREEN",
+                },
+                "combined": {"gate": "GREEN"},
+            },
+            "overall": {"gate": "GREEN", "betting_product_selective_ready": True},
+            "green_segments_2025": [],
+        },
+        props_stake_eligible=False,
+    )
+    by_name = {c.name: c.status for c in report.checks}
+    assert by_name["play_only_holdout"] == "GREEN"
+    assert report.selective_play_ready is True
+    # Full-slate ATS still red → not every-game betting product
     assert report.betting_product_ready is False
 
 

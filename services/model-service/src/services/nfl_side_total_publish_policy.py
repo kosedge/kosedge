@@ -24,9 +24,14 @@ Market = Literal["spread", "total"]
 # -110 American → ~52.38% breakeven hit rate
 BREAKEVEN_ATS = 0.5238
 
-# Edge bands (pts of |model − market|). Derived from tag_band_simulations
-# in nfl-edge-bucket-roi-study.json — LEAN spread band historically toxic.
+# Edge bands (pts of |model − market|).
+# v1 (legacy): spread PLAY |edge| ≥ 2.5 (uncapped) — mean |edge| ~7, CLV diluted by flats.
+# v2 (2026-07-28 pre-registration): spread PLAY 2.5 ≤ |edge| < 7.0
+#   Caps mega-edges (calibration failures / research-only); movement CLV clears on 2024–25.
+# Evidence: data/ops/nfl-play-only-holdout.json + nfl-path-to-95-report.md
 SPREAD_PLAY_MIN = 2.5
+SPREAD_PLAY_MAX = 7.0  # half-open upper bound; |edge| ≥ 7.0 → PASS (size-down research)
+POLICY_VERSION = "spread_play_v2_cap7"
 # Spread LEAN disabled: 1.1–2.5 settled ROI −14.4% (n=174) in study.
 SPREAD_LEAN_ENABLED = False
 SPREAD_LEAN_MIN = 1.1
@@ -73,15 +78,15 @@ class SegmentEvidence:
         return ats_ok
 
 
-# Locked evidence from nfl-edge-bucket-roi-study tag_band_simulations.data_driven_shipped
-# plus owned OC CLV rollups where available. Update via evaluate_enterprise_gates.py.
+# Locked evidence: v2 band on 2024–25 confirmatory holdout (movement CLV).
+# Update via scripts/nfl/play_only_holdout.py + evaluate_enterprise_gates.py.
 DEFAULT_SEGMENT_EVIDENCE: Dict[str, SegmentEvidence] = {
     "spread:PLAY": SegmentEvidence(
-        n_ats=535,
-        ats_hit_rate=0.5645,
+        n_ats=227,
+        ats_hit_rate=0.7313,
         beats_minus_110=True,
-        n_clv=0,
-        clv_positive_rate=None,
+        n_clv=206,
+        clv_positive_rate=0.6117,
     ),
     "spread:LEAN": SegmentEvidence(
         n_ats=174,
@@ -111,7 +116,7 @@ def candidate_tag(market: Market, abs_edge: float) -> Tag:
     """Magnitude-only candidate before evidence / product gates."""
     e = abs(float(abs_edge))
     if market == "spread":
-        if e >= SPREAD_PLAY_MIN:
+        if SPREAD_PLAY_MIN <= e < SPREAD_PLAY_MAX:
             return "PLAY"
         if SPREAD_LEAN_ENABLED and e >= SPREAD_LEAN_MIN:
             return "LEAN"

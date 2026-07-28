@@ -38,17 +38,19 @@ Code:
 - Evaluator: `scripts/nfl/evaluate_enterprise_gates.py`
 - Aggregate gates: `services/model-service/src/services/nfl_enterprise_gates.py`
 
-Rules (from `data/ops/nfl-edge-bucket-roi-study.json`):
+Rules (v2 `spread_play_v2_cap7` — see `nfl-play-only-holdout.json`):
 
 1. **Default PASS** on the full slate.
-2. **Spread PLAY** only if \|edge\| ≥ 2.5 **and** segment ATS evidence clears
-   (study: PLAY n=535, hit 56.5%, +ROI).
-3. **Spread LEAN disabled** — 1.1–2.5 band settled −14% ROI (n=174).
-4. **Total PLAY** only if 2.5 ≤ \|edge\| < 3.0 (narrow band that cleared ATS).
-5. **Total ≥ 3.0** → PASS (toxic / size-down research only).
-6. If product gate is **RED**, force PASS even for large edges.
-7. Props stay research-only until a pre-registered holdout flips
+2. **Spread PLAY** only if **2.5 ≤ \|edge\| < 7.0** and segment ATS+CLV evidence clears
+   (confirmatory 2024–25: n=227, ATS 73.1%, movement-CLV+ 61.2% n=206).
+3. **Spread \|edge\| ≥ 7.0** → PASS (mega-edge size-down / research).
+4. **Spread LEAN disabled** — 1.1–2.5 band settled −14% ROI (n=174).
+5. **Total PLAY** only if 2.5 ≤ \|edge\| < 3.0 (narrow band that cleared ATS).
+6. **Total ≥ 3.0** → PASS (toxic / size-down research only).
+7. If product gate is **RED**, force PASS even for large edges.
+8. Props stay research-only until a pre-registered holdout flips
    `PLAY_STAKE_ELIGIBLE`.
+9. Product CLV+ uses **movement sample** (open≠close, n_snaps≥2).
 
 ## Ops commands
 

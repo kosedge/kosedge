@@ -10,6 +10,8 @@ describe("nfl-publish-policy", () => {
 
   it("allows PLAY only in cleared bands", () => {
     expect(nflCandidateTag("spread", 2.5)).toBe("PLAY");
+    expect(nflCandidateTag("spread", 6.9)).toBe("PLAY");
+    expect(nflCandidateTag("spread", 7.0)).toBe("PASS"); // v2 mega-edge cap
     expect(nflCandidateTag("total", 2.7)).toBe("PLAY");
   });
 

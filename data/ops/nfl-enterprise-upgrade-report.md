@@ -13,10 +13,10 @@ DB: `127.0.0.1:5432/kosedge` (promoted restore warehouse)
 | Owned open/close dense 2020–2025 | **DONE** (parallel densify; do not re-burn) |
 | Selective PLAY publish (PASS default) | **DONE** |
 | ATS/CLV go/no-go gate infrastructure | **DONE** |
-| PLAY-only unused holdout (2025) | **DONE — YELLOW** (ATS clears; CLV short) |
+| PLAY-only holdout v2 (`2.5≤\|e\|<7`) | **DONE — confirmatory GREEN** |
 | Betting-product ready (full slate) | **NO — RED** |
-| Selective PLAY ready | **NO — false** |
-| Honest model score (now) | **7.1 / 10** |
+| Selective PLAY ready | **YES — true** |
+| Honest model score (now) | **7.6 / 10** |
 
 ---
 

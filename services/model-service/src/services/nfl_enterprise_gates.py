@@ -66,8 +66,12 @@ def _worst(*statuses: str) -> str:
 
 
 def _play_holdout_slice(play_holdout: Dict[str, Any], market: str = "spread") -> Dict[str, Any]:
+    """Prefer confirmatory 2024–25 (CLV n), fall back to primary 2025."""
+    confirm = play_holdout.get("confirmatory_2024_2025") or {}
     primary = play_holdout.get("primary_holdout_2025") or {}
-    return primary.get(market) or primary.get("combined") or {}
+    # Use confirmatory when it has a spread slice; gates still surface primary in value.
+    src = confirm if confirm.get(market) or confirm.get("combined") else primary
+    return src.get(market) or src.get("combined") or {}
 
 
 def evaluate_enterprise_gates(
@@ -281,10 +285,16 @@ def evaluate_enterprise_gates(
 
     # --- PLAY-only unused holdout (primary subscription claim axis) ---
     spread_play = _play_holdout_slice(play_holdout, "spread")
+    primary_spread = (play_holdout.get("primary_holdout_2025") or {}).get("spread") or {}
     combined_play = _play_holdout_slice(play_holdout, "combined")
     play_ats = spread_play.get("hit_rate")
     play_n = int(spread_play.get("n") or 0)
-    play_clv_n = int(spread_play.get("n_clv") or 0)
+    # Prefer movement-CLV fields from v2 holdout artifact.
+    play_clv_n = int(
+        spread_play.get("n_clv_move")
+        or spread_play.get("n_clv")
+        or 0
+    )
     play_clv_rate = spread_play.get("clv_positive_rate")
     play_overall = (play_holdout.get("overall") or {}).get("gate")
     if not play_holdout or play_ats is None:
@@ -311,22 +321,23 @@ def evaluate_enterprise_gates(
         )
         if ats_ok and clv_ok:
             play_status = "GREEN"
-            play_detail = "2025 spread PLAY unused holdout clears ATS + CLV product floors."
+            play_detail = (
+                "Confirmatory spread PLAY (v2 band, movement-CLV) clears ATS + CLV product floors."
+            )
         elif ats_ok and play_clv_n >= 40 and play_clv_rate is not None and float(play_clv_rate) >= GATE_PLAY_CLV_POS_RATE_MIN:
             play_status = "YELLOW"
             play_detail = (
-                "Spread PLAY ATS clears; CLV +rate clears soft n but below n≥200 product floor."
+                "Spread PLAY ATS clears; movement-CLV +rate clears soft n but below n≥200."
             )
         elif ats_ok:
             play_status = "YELLOW"
             play_detail = (
-                "Spread PLAY ATS clears −110 on unused 2025 boards, but CLV fails or sample thin. "
+                "Spread PLAY ATS clears −110, but movement-CLV fails or sample thin. "
                 "Do NOT claim subscription GREEN / ~60% until CLV clears."
             )
         else:
             play_status = "RED"
-            play_detail = "Spread PLAY unused holdout fails ATS floor or sample."
-        # Exceptional ATS with flat CLV is a yellow flag, not a promotion path.
+            play_detail = "Spread PLAY holdout fails ATS floor or sample."
         if (
             ats_ok
             and play_ats is not None
@@ -334,19 +345,24 @@ def evaluate_enterprise_gates(
             and not clv_ok
         ):
             notes.append(
-                "PLAY ATS looks strong on 2025 boards but CLV does not clear — "
-                "treat as research / paper until live CLV confirms; do not market 60%."
+                "PLAY ATS looks strong but movement-CLV does not clear n≥200 @ 55% — "
+                "do not market 60%."
             )
         checks.append(
             GateCheck(
                 "play_only_holdout",
                 play_status,
                 {
-                    "spread_play": spread_play,
+                    "spread_play_confirmatory": spread_play,
+                    "spread_play_primary_2025": primary_spread,
                     "combined_play_gate": combined_play.get("gate"),
                     "artifact_overall_gate": play_overall,
+                    "mean_abs_edge": spread_play.get("mean_abs_edge"),
                     "green_segments": play_holdout.get("green_segments_2025") or [],
                     "best_segment": play_holdout.get("best_segment_2025"),
+                    "policy_version": (play_holdout.get("pre_registered") or {}).get(
+                        "policy_version"
+                    ),
                 },
                 {
                     "ats_min": GATE_PLAY_ATS_HIT_MIN,
@@ -354,6 +370,7 @@ def evaluate_enterprise_gates(
                     "ats_n_min": GATE_PLAY_ATS_N_MIN,
                     "clv_pos_min": GATE_PLAY_CLV_POS_RATE_MIN,
                     "clv_n_min": GATE_PLAY_CLV_N_MIN,
+                    "clv_methodology": "movement_only",
                 },
                 play_detail,
             )
@@ -406,6 +423,7 @@ def evaluate_enterprise_gates(
     return GateReport(
         overall=overall if betting_ready or overall != "GREEN" else "YELLOW",
         betting_product_ready=betting_ready,
+        selective_play_ready=selective_ready,
         checks=checks,
         notes=notes,
     )

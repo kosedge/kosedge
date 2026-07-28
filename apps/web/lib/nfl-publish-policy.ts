@@ -4,13 +4,15 @@
  *
  * Default PASS. PLAY only when edge is in a historically productive band.
  * Spread LEAN band is disabled (settled ROI −14% in edge-bucket study).
- * Totals PLAY only in [2.5, 3.0).
+ * Spread PLAY v2: [2.5, 7.0). Totals PLAY only in [2.5, 3.0).
  */
 
 export type NflPublishTag = "PLAY" | "LEAN" | "PASS";
 export type NflPublishMarket = "spread" | "total";
 
 export const SPREAD_PLAY_MIN = 2.5;
+/** Half-open upper bound — |edge| ≥ 7 is PASS (mega-edge size-down). */
+export const SPREAD_PLAY_MAX = 7.0;
 export const TOTAL_PLAY_MIN = 2.5;
 export const TOTAL_PLAY_MAX = 3.0;
 
@@ -23,7 +25,7 @@ export function nflCandidateTag(
 ): NflPublishTag {
   const e = Math.abs(absEdge);
   if (market === "spread") {
-    if (e >= SPREAD_PLAY_MIN) return "PLAY";
+    if (e >= SPREAD_PLAY_MIN && e < SPREAD_PLAY_MAX) return "PLAY";
     return "PASS";
   }
   if (e >= TOTAL_PLAY_MIN && e < TOTAL_PLAY_MAX) return "PLAY";
