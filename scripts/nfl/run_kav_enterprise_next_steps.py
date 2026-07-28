@@ -40,6 +40,7 @@ os.environ.setdefault(
 from sqlalchemy import create_engine, text  # noqa: E402
 from sqlalchemy.orm import sessionmaker  # noqa: E402
 
+from src.services import nfl_supervised_retrain as supervised_mod  # noqa: E402
 from src.services.nfl_supervised_retrain import (  # noqa: E402
     FEATURE_KEYS,
     MODEL_SCHEMA_VERSION,
@@ -49,6 +50,32 @@ from src.tasks import (  # noqa: E402
     run_nfl_market_simulations,
     run_nfl_supervised_retrain,
 )
+
+
+def _fast_permutation_importance(estimator, X, y, **kwargs):
+    """Ops-speed importance: fewer repeats/samples than default retrain path."""
+    from sklearn.inspection import permutation_importance as _pi
+    import numpy as np
+
+    if os.getenv("NFL_KAV_SKIP_PERM", "0") == "1":
+        n_features = int(getattr(X, "shape", [0, 0])[1] or 0)
+        class _Stub:
+            importances_mean = np.zeros(n_features, dtype=float)
+        return _Stub()
+
+    kwargs = dict(kwargs)
+    kwargs["n_repeats"] = int(os.getenv("NFL_KAV_PERM_REPEATS", "2"))
+    kwargs["max_samples"] = min(int(kwargs.get("max_samples") or 800), 250)
+    print(
+        f"permutation_importance n_repeats={kwargs['n_repeats']} "
+        f"max_samples={kwargs['max_samples']}",
+        flush=True,
+    )
+    return _pi(estimator, X, y, **kwargs)
+
+
+# Speed up schema-v3 retrain wall-clock without changing model hyperparameters.
+supervised_mod.permutation_importance = _fast_permutation_importance  # type: ignore[attr-defined]
 
 OUT_DIR = ROOT / "data" / "ops"
 TS = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")

@@ -1,0 +1,596 @@
+{
+  "generated_at": "2026-07-28T17:03:52.200418+00:00",
+  "season": 2025,
+  "min_date": "2025-09-01",
+  "simulations": 500,
+  "model_version": "nfl-v1.5-matchup-sim",
+  "deleted_prior_projections": 341,
+  "days": 97,
+  "games_processed": 370,
+  "projections_inserted": 370,
+  "elapsed_sec": 750.2,
+  "results": [
+    {
+      "game_date": "2025-09-04",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 51.24
+    },
+    {
+      "game_date": "2025-09-05",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 51.375
+    },
+    {
+      "game_date": "2025-09-06",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 49.95
+    },
+    {
+      "game_date": "2025-09-07",
+      "games_processed": 13,
+      "projections_inserted": 13,
+      "slate_pre_mean": 44.7631
+    },
+    {
+      "game_date": "2025-09-08",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 47.05
+    },
+    {
+      "game_date": "2025-09-09",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 38.05
+    },
+    {
+      "game_date": "2025-09-11",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 48.47
+    },
+    {
+      "game_date": "2025-09-12",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 48.33
+    },
+    {
+      "game_date": "2025-09-14",
+      "games_processed": 13,
+      "projections_inserted": 13,
+      "slate_pre_mean": 46.6292
+    },
+    {
+      "game_date": "2025-09-15",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 40.5733
+    },
+    {
+      "game_date": "2025-09-16",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 41.05
+    },
+    {
+      "game_date": "2025-09-18",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 54.73
+    },
+    {
+      "game_date": "2025-09-19",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 53.31
+    },
+    {
+      "game_date": "2025-09-21",
+      "games_processed": 14,
+      "projections_inserted": 14,
+      "slate_pre_mean": 44.5071
+    },
+    {
+      "game_date": "2025-09-22",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 49.095
+    },
+    {
+      "game_date": "2025-09-23",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 54.8
+    },
+    {
+      "game_date": "2025-09-25",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 44.7
+    },
+    {
+      "game_date": "2025-09-26",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 44.19
+    },
+    {
+      "game_date": "2025-09-28",
+      "games_processed": 13,
+      "projections_inserted": 13,
+      "slate_pre_mean": 46.8077
+    },
+    {
+      "game_date": "2025-09-29",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 50.5533
+    },
+    {
+      "game_date": "2025-09-30",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 43.23
+    },
+    {
+      "game_date": "2025-10-02",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 49.44
+    },
+    {
+      "game_date": "2025-10-03",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 50.75
+    },
+    {
+      "game_date": "2025-10-05",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 46.665
+    },
+    {
+      "game_date": "2025-10-06",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 49.77
+    },
+    {
+      "game_date": "2025-10-07",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 47.59
+    },
+    {
+      "game_date": "2025-10-09",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 45.35
+    },
+    {
+      "game_date": "2025-10-10",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 45.31
+    },
+    {
+      "game_date": "2025-10-12",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 47.3083
+    },
+    {
+      "game_date": "2025-10-13",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 47.35
+    },
+    {
+      "game_date": "2025-10-14",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 50.75
+    },
+    {
+      "game_date": "2025-10-16",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 49.88
+    },
+    {
+      "game_date": "2025-10-17",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 50.01
+    },
+    {
+      "game_date": "2025-10-19",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 45.8025
+    },
+    {
+      "game_date": "2025-10-20",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 47.06
+    },
+    {
+      "game_date": "2025-10-21",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 45.5
+    },
+    {
+      "game_date": "2025-10-23",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 44.81
+    },
+    {
+      "game_date": "2025-10-24",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 44.29
+    },
+    {
+      "game_date": "2025-10-26",
+      "games_processed": 11,
+      "projections_inserted": 11,
+      "slate_pre_mean": 47.6673
+    },
+    {
+      "game_date": "2025-10-27",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 50.8
+    },
+    {
+      "game_date": "2025-10-28",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 49.24
+    },
+    {
+      "game_date": "2025-10-30",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 44.58
+    },
+    {
+      "game_date": "2025-10-31",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 43.97
+    },
+    {
+      "game_date": "2025-11-02",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 48.0492
+    },
+    {
+      "game_date": "2025-11-03",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 50.47
+    },
+    {
+      "game_date": "2025-11-04",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 52.94
+    },
+    {
+      "game_date": "2025-11-06",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 37.35
+    },
+    {
+      "game_date": "2025-11-07",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 36.71
+    },
+    {
+      "game_date": "2025-11-09",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 46.6308
+    },
+    {
+      "game_date": "2025-11-10",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 48.195
+    },
+    {
+      "game_date": "2025-11-11",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 49.56
+    },
+    {
+      "game_date": "2025-11-13",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 39.84
+    },
+    {
+      "game_date": "2025-11-14",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 39.51
+    },
+    {
+      "game_date": "2025-11-16",
+      "games_processed": 13,
+      "projections_inserted": 13,
+      "slate_pre_mean": 45.3777
+    },
+    {
+      "game_date": "2025-11-17",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 45.64
+    },
+    {
+      "game_date": "2025-11-18",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 47.0
+    },
+    {
+      "game_date": "2025-11-20",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 43.39
+    },
+    {
+      "game_date": "2025-11-21",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 42.83
+    },
+    {
+      "game_date": "2025-11-23",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 45.8167
+    },
+    {
+      "game_date": "2025-11-24",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 47.06
+    },
+    {
+      "game_date": "2025-11-25",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 47.46
+    },
+    {
+      "game_date": "2025-11-27",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 49.99
+    },
+    {
+      "game_date": "2025-11-28",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 46.86
+    },
+    {
+      "game_date": "2025-11-30",
+      "games_processed": 11,
+      "projections_inserted": 11,
+      "slate_pre_mean": 43.7518
+    },
+    {
+      "game_date": "2025-12-01",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 46.695
+    },
+    {
+      "game_date": "2025-12-02",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 46.75
+    },
+    {
+      "game_date": "2025-12-04",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 53.68
+    },
+    {
+      "game_date": "2025-12-05",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 52.82
+    },
+    {
+      "game_date": "2025-12-07",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 43.0992
+    },
+    {
+      "game_date": "2025-12-08",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 38.53
+    },
+    {
+      "game_date": "2025-12-09",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 34.81
+    },
+    {
+      "game_date": "2025-12-11",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 46.45
+    },
+    {
+      "game_date": "2025-12-12",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 46.44
+    },
+    {
+      "game_date": "2025-12-14",
+      "games_processed": 14,
+      "projections_inserted": 14,
+      "slate_pre_mean": 44.6429
+    },
+    {
+      "game_date": "2025-12-15",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 45.915
+    },
+    {
+      "game_date": "2025-12-16",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 44.1
+    },
+    {
+      "game_date": "2025-12-18",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 46.12
+    },
+    {
+      "game_date": "2025-12-19",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 46.26
+    },
+    {
+      "game_date": "2025-12-20",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 47.425
+    },
+    {
+      "game_date": "2025-12-21",
+      "games_processed": 13,
+      "projections_inserted": 13,
+      "slate_pre_mean": 45.5731
+    },
+    {
+      "game_date": "2025-12-22",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 48.53
+    },
+    {
+      "game_date": "2025-12-23",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 50.82
+    },
+    {
+      "game_date": "2025-12-25",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 44.8167
+    },
+    {
+      "game_date": "2025-12-26",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 40.9
+    },
+    {
+      "game_date": "2025-12-27",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 46.435
+    },
+    {
+      "game_date": "2025-12-28",
+      "games_processed": 12,
+      "projections_inserted": 12,
+      "slate_pre_mean": 45.37
+    },
+    {
+      "game_date": "2025-12-29",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 52.635
+    },
+    {
+      "game_date": "2025-12-30",
+      "games_processed": 1,
+      "projections_inserted": 1,
+      "slate_pre_mean": 53.02
+    },
+    {
+      "game_date": "2026-01-03",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 45.3367
+    },
+    {
+      "game_date": "2026-01-04",
+      "games_processed": 30,
+      "projections_inserted": 30,
+      "slate_pre_mean": 44.329
+    },
+    {
+      "game_date": "2026-01-05",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 45.65
+    },
+    {
+      "game_date": "2026-01-10",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 46.82
+    },
+    {
+      "game_date": "2026-01-11",
+      "games_processed": 7,
+      "projections_inserted": 7,
+      "slate_pre_mean": 46.3814
+    },
+    {
+      "game_date": "2026-01-12",
+      "games_processed": 3,
+      "projections_inserted": 3,
+      "slate_pre_mean": 42.2233
+    },
+    {
+      "game_date": "2026-01-13",
+      "games_processed": 2,
+      "projections_inserted": 2,
+      "slate_pre_mean": 40.845
+    },
+    {
+      "game_date": "2026-01-17",
+      "games_processed": 4,
+      "projections_inserted": 4,
+      "slate_pre_mean": 43.6725
+    },
+    {
+      "game_date": "2026-01-18",
+      "games_processed": 4,
+      "projections_inserted": 4,
+      "slate_pre_mean": 45.92
+    }
+  ]
+}

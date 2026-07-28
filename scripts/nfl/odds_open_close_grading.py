@@ -147,7 +147,9 @@ def main() -> int:
             )
         ).fetchall()
 
-        # Latest projection per game (if any)
+        # Latest projection per game (if any). Prefer pipeline_run_at (wall-clock
+        # ingest) over created_at — historical re-sims backdate created_at to
+        # kickoff-minus-buffer, so created_at DESC alone can keep stale rows.
         proj_rows = conn.execute(
             text(
                 """
@@ -155,9 +157,17 @@ def main() -> int:
                   game_id, model_version,
                   home_win_prob, away_win_prob,
                   spread_home, total_mean,
-                  created_at
+                  created_at,
+                  COALESCE(
+                    (projection->'audit'->>'pipeline_run_at')::timestamptz,
+                    created_at
+                  ) AS effective_at
                 FROM nfl_market_projections
-                ORDER BY game_id, created_at DESC
+                ORDER BY game_id,
+                  COALESCE(
+                    (projection->'audit'->>'pipeline_run_at')::timestamptz,
+                    created_at
+                  ) DESC
                 """
             )
         ).fetchall()
