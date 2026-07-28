@@ -1,6 +1,6 @@
-# NFL Enterprise Upgrade Report (COMPLETE)
+# NFL Enterprise Upgrade Report (COMPLETE + PLAY holdout)
 
-Generated: 2026-07-28T16:35:00Z  
+Generated: 2026-07-28T21:05:00Z  
 Branch: `nfl-kav-sharpen`  
 DB: `127.0.0.1:5432/kosedge` (promoted restore warehouse)
 
@@ -13,8 +13,10 @@ DB: `127.0.0.1:5432/kosedge` (promoted restore warehouse)
 | Owned open/close dense 2020–2025 | **DONE** (parallel densify; do not re-burn) |
 | Selective PLAY publish (PASS default) | **DONE** |
 | ATS/CLV go/no-go gate infrastructure | **DONE** |
+| PLAY-only unused holdout (2025) | **DONE — YELLOW** (ATS clears; CLV short) |
 | Betting-product ready (full slate) | **NO — RED** |
-| Honest model score (now) | **6.8 / 10** |
+| Selective PLAY ready | **NO — false** |
+| Honest model score (now) | **7.1 / 10** |
 
 ---
 
@@ -108,7 +110,19 @@ Do **not** market as a paid every-game betting card. Ship PASS-default board; se
 
 ---
 
-## 4) Honest model score: **6.8 / 10**
+## 4) PLAY-only holdout (2025, pre-registered)
+
+See `nfl-play-only-holdout.json` and `nfl-path-to-95-report.md`.
+
+| Slice | n | ATS | CLV n | CLV+ | Gate |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Spread PLAY (≥2.5) | 206 | 0.762 | 105 | 0.533 | YELLOW |
+| Total PLAY [2.5,3.0) | 26 | 0.731 | 14 | 0.214 | RED |
+| GREEN shrink segments | — | — | — | — | **none** |
+
+---
+
+## 5) Honest model score: **7.1 / 10**
 
 | Score | Meaning |
 | ---: | --- |
@@ -116,29 +130,28 @@ Do **not** market as a paid every-game betting card. Ship PASS-default board; se
 | 7 | Chargeable **selective** edge |
 | 5.5 | Prior baseline |
 
-**6.8** = KAV v3 + full densify + full 2025 re-sim + gate/publish discipline; full-slate ATS/CLV rates still fail. Selective PLAY is the chargeable wedge, not yet holdout-confirmed post-KAV.
+**7.1** = prior 6.8 + PLAY-only holdout + selective ATS evidence. Cap below subscription GREEN until CLV n≥200 @ ≥55% on the PLAY universe. Do **not** claim 9.5 or 60%.
 
 ---
 
-## 5) Gaps to 9.5 (prioritized)
+## 6) Gaps to 9.5 (prioritized)
 
-1. Pre-register **PLAY-only** ATS/CLV holdout (≥52.4% ATS, ≥55% CLV+, n≥200).  
-2. Speed market-sim (cache supervised fit + calibration; single entrypoint; no concurrent wipes).  
-3. Odds persist bound to nflverse `games.external_id` (no orphan rematch).  
-4. Special-teams KAV unit.  
-5. Near-kickoff inactives / licensed depth feeds.  
+1. Grow PLAY-tagged CLV to n≥200 with +rate ≥55% (live 2026 + owned OC; no densify re-burn).  
+2. Calibrate edge magnitude (mean PLAY |edge| ~7 pts is too wide).  
+3. Live 2026 paper → stake confirmation under locked thresholds.  
+4. Speed market-sim (cache supervised fit + calibration).  
+5. Special-teams KAV / inactives only if leakage-safe + holdout-positive.  
 6. Props remain research-only until dedicated holdout.  
 7. Prod warehouse promote + migration 041 + active v3 fit.
 
 ---
 
-## 6) Needs from user
+## 7) Needs from user
 
 1. **Prod DB promote** if Railway still points at empty slim `kosedge`.  
 2. **Do not re-densify** 2020–23 OC (~3M credits left for live).  
-3. **Commit/PR** when you want this branch packaged (left uncommitted).  
-4. Keep `NFL_PRODUCT_GATE_STATUS` conservative until PLAY-segment holdout clears.  
-5. Optional: kill any leftover local resim shells if still listed as running after completion.
+3. Keep `NFL_PRODUCT_GATE_STATUS` conservative until PLAY CLV clears.  
+4. Continue capturing open/close into `odds_snapshots` through 2026.
 
 ---
 

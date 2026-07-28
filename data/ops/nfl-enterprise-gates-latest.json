@@ -1,11 +1,13 @@
 {
-  "generated_at": "2026-07-28T17:09:01.163160+00:00",
+  "generated_at": "2026-07-28T20:55:31.241697+00:00",
   "grading_artifact": "data/ops/nfl-kav-grading-after.json",
   "supervised_artifact": "data/ops/nfl-kav-supervised-retrain-v3.json",
+  "play_holdout_artifact": "data/ops/nfl-play-only-holdout.json",
   "database_url_host": "127.0.0.1:5432/kosedge",
   "report": {
     "overall": "RED",
     "betting_product_ready": false,
+    "selective_play_ready": false,
     "checks": [
       {
         "name": "ats_vs_minus_110",
@@ -86,11 +88,45 @@
           "expected": false
         },
         "detail": "Props must remain research-only / stake-off until holdout clears."
+      },
+      {
+        "name": "play_only_holdout",
+        "status": "YELLOW",
+        "value": {
+          "spread_play": {
+            "n": 206,
+            "hits": 157,
+            "hit_rate": 0.7621,
+            "roi": 0.455,
+            "units": 93.727,
+            "beats_minus_110": true,
+            "n_clv": 105,
+            "clv_positive_rate": 0.5333,
+            "clv_avg": 0.1048,
+            "gate": "YELLOW",
+            "stretch_band": "60pct+",
+            "detail": "ATS clears \u2212110 but CLV fails or missing."
+          },
+          "combined_play_gate": "YELLOW",
+          "artifact_overall_gate": "YELLOW",
+          "green_segments": [],
+          "best_segment": "spread_edge_5.0_plus"
+        },
+        "threshold": {
+          "ats_min": 0.5238,
+          "ats_stretch": 0.55,
+          "ats_n_min": 60,
+          "clv_pos_min": 0.55,
+          "clv_n_min": 200
+        },
+        "detail": "Spread PLAY ATS clears \u2212110 on unused 2025 boards, but CLV fails or sample thin. Do NOT claim subscription GREEN / ~60% until CLV clears."
       }
     ],
     "notes": [
+      "PLAY ATS looks strong on 2025 boards but CLV does not clear \u2014 treat as research / paper until live CLV confirms; do not market 60%.",
       "Do NOT claim betting-product ready. Ship selective PASS-default publish gates and keep improving ATS/CLV samples.",
-      "Full-slate ATS failed \u2014 publish PLAY only on segments that clear nfl_side_total_publish_policy evidence."
+      "Full-slate ATS failed \u2014 publish PLAY only on segments that clear nfl_side_total_publish_policy evidence.",
+      "PLAY-only unused holdout not GREEN \u2014 keep NFL_PRODUCT_GATE_STATUS conservative; PASS default remains mandatory."
     ]
   },
   "publish_policy_examples": [

@@ -21,9 +21,13 @@ supervised holdout; MAE vs market at least YELLOW; props stake-off.
 | --- | --- |
 | Full-slate ATS hit rate | ≥ 52.38% (−110 breakeven), n ≥ 200 |
 | CLV spread +rate | ≥ 55%, **n ≥ 200** (hundreds+) |
+| **PLAY-only unused holdout (2025)** | Spread PLAY ATS ≥ 52.38% (n ≥ 60); CLV+ ≥ 55% with **n ≥ 200** for GREEN |
 | Model MAE vs market close | model ≤ market on spread and/or total |
 | Supervised chronological holdout | Brier ≤ 0.22, margin MAE ≤ 9.5, total MAE ≤ 10.5, schema ≥ v3 + KAV |
 | Props stake | must remain `PLAY_STAKE_ELIGIBLE=False` |
+
+**Selective subscription claim** requires PLAY-only holdout GREEN (not full-slate ATS).
+Exceptional PLAY ATS with flat CLV stays **YELLOW** — do not market ~60% win rate.
 
 ## Selective publish (sides/totals)
 
@@ -51,18 +55,23 @@ Rules (from `data/ops/nfl-edge-bucket-roi-study.json`):
 ```bash
 export DATABASE_URL=postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge
 
-# After grading / retrain artifacts exist:
+# Pre-registered PLAY-only unused holdout (2025 KAV boards):
+.venv/bin/python scripts/nfl/play_only_holdout.py
+
+# After grading / retrain / PLAY holdout artifacts exist:
 .venv/bin/python scripts/nfl/evaluate_enterprise_gates.py
 
 # Unit tests
 cd services/model-service && PYTHONPATH=. \
-  ../.venv/bin/python -m pytest tests/test_nfl_enterprise_gates.py -q
+  ../../.venv/bin/python -m pytest tests/test_nfl_enterprise_gates.py -q
 ```
 
 Artifacts:
 
+- `data/ops/nfl-play-only-holdout.{json,md}`
 - `data/ops/nfl-enterprise-gates-latest.json`
 - `data/ops/nfl-enterprise-gates-latest.md`
+- `data/ops/nfl-path-to-95-report.md`
 
 ## Honesty rules
 

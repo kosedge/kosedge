@@ -22,6 +22,13 @@ GATE_HOLDOUT_MARGIN_MAE_MAX = 9.5  # chronological supervised holdout
 GATE_HOLDOUT_TOTAL_MAE_MAX = 10.5
 GATE_HOLDOUT_BRIER_MAX = 0.22
 
+# Selective PLAY unused-holdout floors (subscription claim on PLAY slice only)
+GATE_PLAY_ATS_HIT_MIN = BREAKEVEN_ATS
+GATE_PLAY_ATS_STRETCH = 0.55
+GATE_PLAY_ATS_N_MIN = 60
+GATE_PLAY_CLV_POS_RATE_MIN = 0.55
+GATE_PLAY_CLV_N_MIN = 200  # product; soft confirmatory n=40 lives in publish policy
+
 
 @dataclass
 class GateCheck:
@@ -36,6 +43,7 @@ class GateCheck:
 class GateReport:
     overall: str
     betting_product_ready: bool
+    selective_play_ready: bool = False
     checks: List[GateCheck] = field(default_factory=list)
     notes: List[str] = field(default_factory=list)
 
@@ -43,6 +51,7 @@ class GateReport:
         return {
             "overall": self.overall,
             "betting_product_ready": self.betting_product_ready,
+            "selective_play_ready": self.selective_play_ready,
             "checks": [asdict(c) for c in self.checks],
             "notes": list(self.notes),
         }
@@ -56,17 +65,24 @@ def _worst(*statuses: str) -> str:
     return max(statuses, key=_status_rank)
 
 
+def _play_holdout_slice(play_holdout: Dict[str, Any], market: str = "spread") -> Dict[str, Any]:
+    primary = play_holdout.get("primary_holdout_2025") or {}
+    return primary.get(market) or primary.get("combined") or {}
+
+
 def evaluate_enterprise_gates(
     *,
     grading: Optional[Dict[str, Any]] = None,
     supervised: Optional[Dict[str, Any]] = None,
+    play_holdout: Optional[Dict[str, Any]] = None,
     props_stake_eligible: bool = False,
 ) -> GateReport:
-    """Evaluate product gates from grading + supervised holdout artifacts."""
+    """Evaluate product gates from grading + supervised + PLAY-only holdout."""
     checks: List[GateCheck] = []
     notes: List[str] = []
     grading = grading or {}
     supervised = supervised or {}
+    play_holdout = play_holdout or {}
     model = grading.get("model") or {}
     market = grading.get("market_close") or {}
     coverage = grading.get("coverage") or {}
@@ -263,18 +279,106 @@ def evaluate_enterprise_gates(
         )
     )
 
+    # --- PLAY-only unused holdout (primary subscription claim axis) ---
+    spread_play = _play_holdout_slice(play_holdout, "spread")
+    combined_play = _play_holdout_slice(play_holdout, "combined")
+    play_ats = spread_play.get("hit_rate")
+    play_n = int(spread_play.get("n") or 0)
+    play_clv_n = int(spread_play.get("n_clv") or 0)
+    play_clv_rate = spread_play.get("clv_positive_rate")
+    play_overall = (play_holdout.get("overall") or {}).get("gate")
+    if not play_holdout or play_ats is None:
+        checks.append(
+            GateCheck(
+                "play_only_holdout",
+                "RED",
+                {"artifact_present": bool(play_holdout)},
+                {
+                    "ats_min": GATE_PLAY_ATS_HIT_MIN,
+                    "ats_n_min": GATE_PLAY_ATS_N_MIN,
+                    "clv_pos_min": GATE_PLAY_CLV_POS_RATE_MIN,
+                    "clv_n_min": GATE_PLAY_CLV_N_MIN,
+                },
+                "PLAY-only holdout artifact missing — run scripts/nfl/play_only_holdout.py.",
+            )
+        )
+    else:
+        ats_ok = play_n >= GATE_PLAY_ATS_N_MIN and float(play_ats) >= GATE_PLAY_ATS_HIT_MIN
+        clv_ok = (
+            play_clv_n >= GATE_PLAY_CLV_N_MIN
+            and play_clv_rate is not None
+            and float(play_clv_rate) >= GATE_PLAY_CLV_POS_RATE_MIN
+        )
+        if ats_ok and clv_ok:
+            play_status = "GREEN"
+            play_detail = "2025 spread PLAY unused holdout clears ATS + CLV product floors."
+        elif ats_ok and play_clv_n >= 40 and play_clv_rate is not None and float(play_clv_rate) >= GATE_PLAY_CLV_POS_RATE_MIN:
+            play_status = "YELLOW"
+            play_detail = (
+                "Spread PLAY ATS clears; CLV +rate clears soft n but below n≥200 product floor."
+            )
+        elif ats_ok:
+            play_status = "YELLOW"
+            play_detail = (
+                "Spread PLAY ATS clears −110 on unused 2025 boards, but CLV fails or sample thin. "
+                "Do NOT claim subscription GREEN / ~60% until CLV clears."
+            )
+        else:
+            play_status = "RED"
+            play_detail = "Spread PLAY unused holdout fails ATS floor or sample."
+        # Exceptional ATS with flat CLV is a yellow flag, not a promotion path.
+        if (
+            ats_ok
+            and play_ats is not None
+            and float(play_ats) >= GATE_PLAY_ATS_STRETCH
+            and not clv_ok
+        ):
+            notes.append(
+                "PLAY ATS looks strong on 2025 boards but CLV does not clear — "
+                "treat as research / paper until live CLV confirms; do not market 60%."
+            )
+        checks.append(
+            GateCheck(
+                "play_only_holdout",
+                play_status,
+                {
+                    "spread_play": spread_play,
+                    "combined_play_gate": combined_play.get("gate"),
+                    "artifact_overall_gate": play_overall,
+                    "green_segments": play_holdout.get("green_segments_2025") or [],
+                    "best_segment": play_holdout.get("best_segment_2025"),
+                },
+                {
+                    "ats_min": GATE_PLAY_ATS_HIT_MIN,
+                    "ats_stretch": GATE_PLAY_ATS_STRETCH,
+                    "ats_n_min": GATE_PLAY_ATS_N_MIN,
+                    "clv_pos_min": GATE_PLAY_CLV_POS_RATE_MIN,
+                    "clv_n_min": GATE_PLAY_CLV_N_MIN,
+                },
+                play_detail,
+            )
+        )
+
     overall = "GREEN"
     for c in checks:
         overall = _worst(overall, c.status)
 
-    # Betting-product claim requires GREEN overall AND ATS+CLV specifically green.
+    # Full-slate betting-product claim still requires full-slate ATS+CLV green.
+    # Selective subscription claim additionally requires PLAY-only holdout GREEN.
     critical = {c.name: c.status for c in checks}
     betting_ready = (
         overall == "GREEN"
         and critical.get("ats_vs_minus_110") == "GREEN"
         and critical.get("clv_spread_sample") == "GREEN"
+        and critical.get("play_only_holdout") == "GREEN"
         and critical.get("mae_vs_market_close") in {"GREEN", "YELLOW"}
         and critical.get("supervised_holdout") == "GREEN"
+        and not props_stake_eligible
+    )
+    selective_ready = (
+        critical.get("play_only_holdout") == "GREEN"
+        and critical.get("supervised_holdout") == "GREEN"
+        and critical.get("mae_vs_market_close") in {"GREEN", "YELLOW"}
         and not props_stake_eligible
     )
 
@@ -283,10 +387,20 @@ def evaluate_enterprise_gates(
             "Do NOT claim betting-product ready. Ship selective PASS-default "
             "publish gates and keep improving ATS/CLV samples."
         )
+    if selective_ready and not betting_ready:
+        notes.append(
+            "Selective PLAY holdout GREEN — chargeable wedge is PLAY-tagged sides only, "
+            "not full-slate."
+        )
     if critical.get("ats_vs_minus_110") == "RED":
         notes.append(
             "Full-slate ATS failed — publish PLAY only on segments that clear "
             "nfl_side_total_publish_policy evidence."
+        )
+    if critical.get("play_only_holdout") in {"RED", "YELLOW"}:
+        notes.append(
+            "PLAY-only unused holdout not GREEN — keep NFL_PRODUCT_GATE_STATUS "
+            "conservative; PASS default remains mandatory."
         )
 
     return GateReport(
