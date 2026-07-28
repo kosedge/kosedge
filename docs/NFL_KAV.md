@@ -1,7 +1,7 @@
 # KAV — Kos Edge Adjusted Value
 
 KAV is Kos Edge’s **owned** opponent-adjusted team efficiency metric. It is
-inspired by the *idea* of Football Outsiders / FTN DVOA (situation + opponent),
+inspired by the _idea_ of Football Outsiders / FTN DVOA (situation + opponent),
 but it is **not** official DVOA, does not use FO/FTN numbers, and must never be
 confused with them in product copy or training labels.
 
@@ -38,11 +38,11 @@ first-class efficiency signal that we fully control.
 
 Migration: `infra/db/041_nfl_kav_efficiency.sql`
 
-| Table | Grain | Meaning |
-| --- | --- | --- |
-| `nfl_dp_team_kav_game` | team-game | Raw + adjusted game efficiency |
+| Table                    | Grain     | Meaning                             |
+| ------------------------ | --------- | ----------------------------------- |
+| `nfl_dp_team_kav_game`   | team-game | Raw + adjusted game efficiency      |
 | `nfl_dp_team_kav_weekly` | team-week | As-of ratings through end of `week` |
-| `nfl_dp_team_kav_latest` | view | Latest weekly row per team |
+| `nfl_dp_team_kav_latest` | view      | Latest weekly row per team          |
 
 Matchup pack columns (nullable until materializer runs):
 `home/away_kav_*_5g`, `home/away_kav_*_ytd`, `diff_kav_*`, `kav_as_of_week`.
@@ -59,13 +59,13 @@ Never train or simulate with same-week KAV.
 
 ## How it enters the model
 
-| Layer | Path |
-| --- | --- |
-| Materialize | `data_platform_nfl.kav.materialize_kav` / CLI `--materialize-kav` |
-| Matchup pack | `nfl_matchup_features.matchup_pack_to_sim_input_kwargs` |
-| Simulator inputs | `NflGameInputs.home_kav_*` / `away_kav_*` |
-| Handicapping | factor `kav_efficiency` in `nfl_handicapping_framework` (v3) |
-| Supervised | `FEATURE_KEYS` includes `home/away_kav_*` + `diff_kav_net_5g` (schema v3) |
+| Layer            | Path                                                                      |
+| ---------------- | ------------------------------------------------------------------------- |
+| Materialize      | `data_platform_nfl.kav.materialize_kav` / CLI `--materialize-kav`         |
+| Matchup pack     | `nfl_matchup_features.matchup_pack_to_sim_input_kwargs`                   |
+| Simulator inputs | `NflGameInputs.home_kav_*` / `away_kav_*`                                 |
+| Handicapping     | factor `kav_efficiency` in `nfl_handicapping_framework` (v3)              |
+| Supervised       | `FEATURE_KEYS` includes `home/away_kav_*` + `diff_kav_net_5g` (schema v3) |
 
 `external_dvoa` is a separate optional handicapping placeholder for a future
 public second opinion. It is **disabled by default**, contributes zero unless
