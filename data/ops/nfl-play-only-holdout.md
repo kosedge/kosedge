@@ -1,6 +1,6 @@
 # NFL PLAY-only unused holdout (v2 cap7)
 
-Generated: `2026-07-28T21:10:36.484393+00:00`
+Generated: `2026-07-28T21:43:38.250464+00:00`
 Policy: `spread_play_v2_cap7` — spread PLAY `2.5 ≤ |edge| < 7.0`
 
 ## Methodology
@@ -35,18 +35,18 @@ Confirmatory 2024–25 spread PLAY (v2 band) clears ATS + movement-CLV. Primary 
 ```json
 {
   "n": 387,
-  "hits": 207,
-  "hit_rate": 0.5349,
-  "roi": 0.0211,
-  "units": 8.182,
+  "hits": 208,
+  "hit_rate": 0.5375,
+  "roi": 0.0261,
+  "units": 10.091,
   "beats_minus_110": true,
-  "mean_abs_edge": 4.686,
+  "mean_abs_edge": 4.685,
   "n_clv_all": 387,
   "clv_positive_rate_all": 0.2584,
-  "n_clv_move": 221,
-  "clv_positive_rate": 0.4525,
-  "clv_avg_move": -0.5882,
-  "n_clv": 221,
+  "n_clv_move": 222,
+  "clv_positive_rate": 0.4505,
+  "clv_avg_move": -0.5721,
+  "n_clv": 222,
   "gate": "YELLOW",
   "stretch_band": "breakeven+",
   "detail": "ATS clears \u2212110 but movement-CLV fails or sample thin."

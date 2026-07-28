@@ -27,6 +27,9 @@ supervised holdout; MAE vs market at least YELLOW; props stake-off.
 | Props stake | must remain `PLAY_STAKE_ELIGIBLE=False` |
 
 **Selective subscription claim** requires PLAY-only holdout GREEN (not full-slate ATS).
+Scope claim to **2024+ confirmatory** (2020–22 clears −110 ATS but fails movement-CLV).
+Primary-2025 consensus CLV n≥200 is a **hard ceiling** inside v2 PLAY (≤112 PLAY games).
+Totals PLAY has no GREEN band yet — research-only.
 Exceptional PLAY ATS with flat CLV stays **YELLOW** — do not market ~60% win rate.
 
 ## Selective publish (sides/totals)

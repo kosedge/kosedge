@@ -1,0 +1,237 @@
+{
+  "generated_at": "2026-07-28T21:43:16.260645+00:00",
+  "spread_policy": "2.5 <= |edge| < 7.0",
+  "primary_2025_clv_ceiling": {
+    "consensus_move_n": 100,
+    "play_n": 112,
+    "multibook_move_n": 163,
+    "hard_ceiling_note": "Primary-2025 consensus movement-CLV cannot reach n\u2265200 inside the v2 PLAY band: only 112 PLAY games and 100 with open\u2260close. Multi-book expands sample but double-counts games \u2014 secondary only. No Odds API densify re-burn; rematch orphans first.",
+    "metrics": {
+      "n": 112,
+      "ats": 0.6964,
+      "n_clv_consensus_move": 100,
+      "clv_consensus_pos": 0.59,
+      "n_clv_multibook_move": 163,
+      "clv_multibook_pos": 0.6012,
+      "gate_consensus": "YELLOW",
+      "gate_multibook_secondary": "YELLOW"
+    }
+  },
+  "era_durability_spread_v2": {
+    "2020-2022": {
+      "n": 403,
+      "ats": 0.5558,
+      "n_clv_consensus_move": 238,
+      "clv_consensus_pos": 0.458,
+      "n_clv_multibook_move": 394,
+      "clv_multibook_pos": 0.4822,
+      "gate_consensus": "YELLOW_ats",
+      "gate_multibook_secondary": "YELLOW_ats"
+    },
+    "2023": {
+      "n": 120,
+      "ats": 0.7,
+      "n_clv_consensus_move": 101,
+      "clv_consensus_pos": 0.5446,
+      "n_clv_multibook_move": 196,
+      "clv_multibook_pos": 0.5306,
+      "gate_consensus": "YELLOW_ats",
+      "gate_multibook_secondary": "YELLOW_ats"
+    },
+    "2024-2025": {
+      "n": 232,
+      "ats": 0.7241,
+      "n_clv_consensus_move": 214,
+      "clv_consensus_pos": 0.6028,
+      "n_clv_multibook_move": 369,
+      "clv_multibook_pos": 0.5745,
+      "gate_consensus": "GREEN",
+      "gate_multibook_secondary": "GREEN"
+    },
+    "2023-2025": {
+      "n": 352,
+      "ats": 0.7159,
+      "n_clv_consensus_move": 315,
+      "clv_consensus_pos": 0.5841,
+      "n_clv_multibook_move": 565,
+      "clv_multibook_pos": 0.5593,
+      "gate_consensus": "GREEN",
+      "gate_multibook_secondary": "GREEN"
+    }
+  },
+  "product_scope_recommendation": "Scope selective spread PLAY subscription claim to 2024\u20132025 confirmatory (and live 2026+). 2020\u20132022 clears \u2212110 ATS but fails movement-CLV; treat as out-of-regime for CLV-backed product claims.",
+  "totals": {
+    "shipped_band_2.5_3.0": {
+      "2025": {
+        "band": [
+          2.5,
+          3.0
+        ],
+        "n": 25,
+        "ats": 0.72,
+        "n_clv_move": 18,
+        "clv_pos": 0.3333,
+        "gate": "RED"
+      },
+      "2024-2025": {
+        "band": [
+          2.5,
+          3.0
+        ],
+        "n": 49,
+        "ats": 0.6327,
+        "n_clv_move": 37,
+        "clv_pos": 0.2432,
+        "gate": "RED"
+      },
+      "2023-2025": {
+        "band": [
+          2.5,
+          3.0
+        ],
+        "n": 67,
+        "ats": 0.6269,
+        "n_clv_move": 54,
+        "clv_pos": 0.2778,
+        "gate": "YELLOW_ats"
+      }
+    },
+    "candidates_2024_2025": [
+      {
+        "band": [
+          1.5,
+          2.5
+        ],
+        "n": 105,
+        "ats": 0.5333,
+        "n_clv_move": 96,
+        "clv_pos": 0.4792,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          2.0,
+          2.5
+        ],
+        "n": 53,
+        "ats": 0.6038,
+        "n_clv_move": 46,
+        "clv_pos": 0.4348,
+        "gate": "RED"
+      },
+      {
+        "band": [
+          2.0,
+          3.0
+        ],
+        "n": 102,
+        "ats": 0.6176,
+        "n_clv_move": 83,
+        "clv_pos": 0.3494,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          2.5,
+          3.0
+        ],
+        "n": 49,
+        "ats": 0.6327,
+        "n_clv_move": 37,
+        "clv_pos": 0.2432,
+        "gate": "RED"
+      },
+      {
+        "band": [
+          2.5,
+          3.5
+        ],
+        "n": 89,
+        "ats": 0.6629,
+        "n_clv_move": 72,
+        "clv_pos": 0.3194,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          3.0,
+          4.0
+        ],
+        "n": 76,
+        "ats": 0.7237,
+        "n_clv_move": 65,
+        "clv_pos": 0.3846,
+        "gate": "YELLOW_ats"
+      }
+    ],
+    "candidates_2023_2025": [
+      {
+        "band": [
+          1.5,
+          2.5
+        ],
+        "n": 153,
+        "ats": 0.5621,
+        "n_clv_move": 137,
+        "clv_pos": 0.4818,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          2.0,
+          2.5
+        ],
+        "n": 77,
+        "ats": 0.5844,
+        "n_clv_move": 68,
+        "clv_pos": 0.4412,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          2.0,
+          3.0
+        ],
+        "n": 144,
+        "ats": 0.6042,
+        "n_clv_move": 122,
+        "clv_pos": 0.3689,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          2.5,
+          3.0
+        ],
+        "n": 67,
+        "ats": 0.6269,
+        "n_clv_move": 54,
+        "clv_pos": 0.2778,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          2.5,
+          3.5
+        ],
+        "n": 127,
+        "ats": 0.6299,
+        "n_clv_move": 109,
+        "clv_pos": 0.3486,
+        "gate": "YELLOW_ats"
+      },
+      {
+        "band": [
+          3.0,
+          4.0
+        ],
+        "n": 111,
+        "ats": 0.6577,
+        "n_clv_move": 100,
+        "clv_pos": 0.41,
+        "gate": "YELLOW_ats"
+      }
+    ]
+  },
+  "totals_verdict": "No totals band clears GREEN (ATS + movement-CLV n\u2265200 @ \u226555%). Keep shipped [2.5, 3.0) research-only / thin-sample; do not flip totals stake."
+}

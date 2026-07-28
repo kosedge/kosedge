@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T21:11:49.766911+00:00",
+  "generated_at": "2026-07-28T21:43:23.705397+00:00",
   "grading_artifact": "data/ops/nfl-kav-grading-after.json",
   "supervised_artifact": "data/ops/nfl-kav-supervised-retrain-v3.json",
   "play_holdout_artifact": "data/ops/nfl-play-only-holdout.json",
