@@ -28,8 +28,8 @@ Add at [Cloud Agents dashboard → Secrets](https://cursor.com/dashboard/cloud-a
 | `VERCEL_TOKEN` | Deploy/inspect Vercel from cloud agents |
 | `VERCEL_ORG_ID` | Optional; speeds `vercel` project targeting |
 | `VERCEL_PROJECT_ID` | Optional; speeds `vercel` project targeting |
-| `RAILWAY_TOKEN` | Deploy/inspect Railway from cloud agents |
-| `RAILWAY_SERVICE_ID` | Optional; target model-service without prompts |
+| `RAILWAY_TOKEN` | Deploy/inspect Railway from cloud agents (project token for `joyful-clarity` works for `railway api` / deploy; account token needed for `railway whoami` / trigger edits) |
+| `RAILWAY_SERVICE_ID` | Optional; model-service is `117410e8-bcc0-4f51-8631-5f1785c8e2d1` |
 | `DATABASE_URL` | App/DB work in cloud |
 | `AUTH_SECRET` | Auth-related local runs |
 | `MODEL_SERVICE_URL` | Point web at Railway (or local) model service |
