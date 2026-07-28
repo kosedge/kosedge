@@ -91,29 +91,23 @@ def main() -> int:
             text(
                 """
                 WITH nfl_games AS (
-                  SELECT g.id AS game_id, g.start_time, g.external_id,
-                         ht.abbreviation AS home_abbr, at.abbreviation AS away_abbr
+                  SELECT g.id AS game_id
                   FROM games g
                   JOIN seasons s ON s.id = g.season_id
                   JOIN leagues l ON l.id = s.league_id
-                  JOIN teams ht ON ht.id = g.home_team_id
-                  JOIN teams at ON at.id = g.away_team_id
-                  WHERE lower(l.code) = 'nfl'
+                  WHERE lower(l.code) IN ('nfl', 'americanfootball_nfl')
+                     OR lower(COALESCE(l.name, '')) LIKE '%nfl%'
                 ),
-                snaps AS (
+                ranked AS (
                   SELECT
                     o.game_id,
-                    o.captured_at,
-                    o.spread_home,
-                    o.total_points,
-                    o.price_home,
-                    o.price_away,
                     FIRST_VALUE(o.spread_home) OVER w AS open_spread,
                     FIRST_VALUE(o.total_points) OVER w AS open_total,
                     FIRST_VALUE(o.price_home) OVER w AS open_price_home,
                     LAST_VALUE(o.spread_home) OVER w AS close_spread,
                     LAST_VALUE(o.total_points) OVER w AS close_total,
-                    LAST_VALUE(o.price_home) OVER w AS close_price_home
+                    LAST_VALUE(o.price_home) OVER w AS close_price_home,
+                    ROW_NUMBER() OVER (PARTITION BY o.game_id ORDER BY o.captured_at) AS rn
                   FROM odds_snapshots o
                   JOIN nfl_games g ON g.game_id = o.game_id
                   WHERE o.spread_home IS NOT NULL OR o.total_points IS NOT NULL OR o.price_home IS NOT NULL
@@ -123,11 +117,11 @@ def main() -> int:
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                   )
                 )
-                SELECT DISTINCT ON (game_id)
+                SELECT
                   game_id, open_spread, close_spread, open_total, close_total,
                   open_price_home, close_price_home
-                FROM snaps
-                ORDER BY game_id, captured_at
+                FROM ranked
+                WHERE rn = 1
                 """
             )
         ).fetchall()
