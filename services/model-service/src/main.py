@@ -10,7 +10,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from src.celery_app import celery_app, celery_healthcheck
-from src.db import engine
+from src.db import require_engine
 from src.routes import edge_board_router
 
 APP_NAME: str = os.getenv("APP_NAME", "kosedge")
@@ -59,9 +59,12 @@ def health() -> Dict[str, Any]:
 @app.get("/health/db")
 def health_db() -> Dict[str, Any]:
     try:
+        engine = require_engine()
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
         return {"status": "ok", "db": "connected"}
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
     except SQLAlchemyError as e:
         log.exception("DB healthcheck failed")
         raise HTTPException(status_code=503, detail=f"db_unavailable: {e}")
@@ -93,9 +96,12 @@ def get_odds_snapshots(
     )
 
     try:
+        engine = require_engine()
         with engine.connect() as conn:
             rows = conn.execute(sql, {"limit": limit, "offset": offset}).fetchall()
         return [dict(r._mapping) for r in rows]
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
     except SQLAlchemyError as e:
         log.exception("Failed to query odds_snapshots")
         raise HTTPException(status_code=500, detail=f"db_error: {e}")
