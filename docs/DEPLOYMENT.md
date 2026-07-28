@@ -1,5 +1,9 @@
 # Deployment Guide
 
+> **Production web branch:** Vercel project `kosedge` deploys production from **`deploy-vercel`**.
+> Do **not** point the Vercel Production Branch at `restore-working-ui` — that branch is a thinner UI
+> shell (missing Pro hubs / NFL boards). Railway model-service may still track `restore-working-ui`.
+
 ## Prerequisites
 
 - Node.js 20+
