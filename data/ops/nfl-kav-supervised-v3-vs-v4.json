@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-07-28T21:54:12.745978+00:00",
+  "v3": {
+    "schema": 3,
+    "test_brier": 0.14822177223985103,
+    "test_margin_mae": 7.48009840196442,
+    "test_total_mae": 9.202883619613488,
+    "test_rows": 570
+  },
+  "v4": {
+    "schema": 4,
+    "test_brier": 0.14934041260782382,
+    "test_margin_mae": 7.526339159439281,
+    "test_total_mae": 9.168268933870872,
+    "test_rows": 570,
+    "feature_count": 44
+  },
+  "delta": {
+    "test_brier": 0.001119,
+    "test_margin_mae": 0.046241,
+    "test_total_mae": -0.034615
+  },
+  "promote": false,
+  "rolled_back_to_v3": true,
+  "active_fit_id": "e8f73ce5-1c52-4f27-a8b2-939d0f559bec",
+  "notes": [
+    "v4 worsens holdout Brier (+0.001) and margin MAE (+0.046); total MAE improved slightly (-0.035).",
+    "Failed retune NOT promoted. Active DB fit rolled back to schema v3.",
+    "ST KAV warehouse retained (nfl_dp_team_st_kav_weekly + matchup columns) for future work."
+  ]
+}

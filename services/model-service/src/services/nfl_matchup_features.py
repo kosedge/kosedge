@@ -49,7 +49,8 @@ def fetch_latest_matchup_feature_pack(
                 home_kav_defense_ytd, away_kav_defense_ytd,
                 home_kav_net_ytd, away_kav_net_ytd,
                 diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
-                kav_as_of_week
+                kav_as_of_week,
+                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g
               FROM nfl_dp_matchup_features_weekly
               WHERE game_id = :game_id
               UNION ALL
@@ -75,7 +76,8 @@ def fetch_latest_matchup_feature_pack(
                 home_kav_defense_ytd, away_kav_defense_ytd,
                 home_kav_net_ytd, away_kav_net_ytd,
                 diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
-                kav_as_of_week
+                kav_as_of_week,
+                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g
               FROM nfl_dp_matchup_features_weekly
               WHERE :season IS NOT NULL
                 AND season = :season
@@ -103,7 +105,8 @@ def fetch_latest_matchup_feature_pack(
               home_kav_defense_ytd, away_kav_defense_ytd,
               home_kav_net_ytd, away_kav_net_ytd,
               diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
-              kav_as_of_week
+              kav_as_of_week,
+              home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g
             FROM candidates
             ORDER BY priority, season DESC, week DESC
             LIMIT 1
@@ -172,5 +175,8 @@ def matchup_pack_to_sim_input_kwargs(
             if matchup_pack.get("kav_as_of_week") is not None
             else None
         ),
-        "feature_pack_version": "nfl-v1.1-matchup-pack-kav",
+        "home_st_kav_net_5g": _to_float(matchup_pack.get("home_st_kav_net_5g")),
+        "away_st_kav_net_5g": _to_float(matchup_pack.get("away_st_kav_net_5g")),
+        "diff_st_kav_net_5g": _to_float(matchup_pack.get("diff_st_kav_net_5g")),
+        "feature_pack_version": "nfl-v1.2-matchup-pack-kav-st",
     }

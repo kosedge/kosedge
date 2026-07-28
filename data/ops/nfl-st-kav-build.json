@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-07-28T21:35:35.521104+00:00",
+  "team_game_rows": 7124,
+  "weekly_rows_written": 7124,
+  "matchup_rows_updated": 2751,
+  "league_mean_st_epa": -0.04918,
+  "st_scale": 0.2,
+  "coverage_2020_2025": {
+    "matchup_n": 1693,
+    "with_st": 1409,
+    "week1_n": 96,
+    "week1_with_st": 0
+  },
+  "leakage": "matchup join uses week-1 lag (GREATEST(week-1,0)); week 1 typically null ST"
+}

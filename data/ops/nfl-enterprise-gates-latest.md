@@ -1,6 +1,6 @@
 # NFL Enterprise Gates
 
-Generated: 2026-07-28T21:43:23.705397+00:00
+Generated: 2026-07-28T21:57:47.444052+00:00
 Overall: **RED**
 Betting-product ready: **False**
 Selective PLAY ready: **True**

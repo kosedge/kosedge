@@ -59,6 +59,9 @@ FEATURE_KEYS: Tuple[str, ...] = (
     "home_kav_net_5g",
     "away_kav_net_5g",
     "diff_kav_net_5g",
+    # Special-teams KAV (diff_st_kav_net_5g) evaluated as schema-v4 candidate
+    # 2026-07-28: holdout margin/Brier worsened vs v3 — NOT promoted.
+    # Tables/build script retained: scripts/nfl/build_st_kav_weekly.py
     "home_injury_impact",
     "away_injury_impact",
     "diff_injury_impact",
