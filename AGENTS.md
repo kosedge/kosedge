@@ -15,8 +15,8 @@ Use these when running as a Cursor Cloud agent (web/mobile/desktop Cloud).
 ### How they talk to each other
 
 1. **GitHub → Vercel**: Vercel GitHub integration auto-deploys on push/PR (already connected; see GitHub Environments named `Preview` / `Production`).
-2. **GitHub → Railway**: Connected as service `kosedge` in project `joyful-clarity` (`1873f728-9c20-4350-9dbe-802153ecc835`). Root `/services/model-service`, config `/services/model-service/railway.toml`. Public URL: `https://kosedge-production.up.railway.app`.
-3. **Vercel → Railway**: Set `MODEL_SERVICE_URL` on Vercel to `https://kosedge-production.up.railway.app`. Set matching `INTERNAL_API_SECRET` on both.
+2. **GitHub → Railway**: Connected as service `kosedge` in project `joyful-clarity` (`1873f728-9c20-4350-9dbe-802153ecc835`). Root `/services/model-service`, config `/services/model-service/railway.toml`. Deploy trigger: `restore-working-ui`. Public URL: `https://kosedge-production.up.railway.app`. Postgres service provides `DATABASE_URL`.
+3. **Vercel → Railway**: `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` with matching `INTERNAL_API_SECRET` on both.
 4. **Cursor Cloud → all three**: GitHub is available via `gh` + git. For Vercel/Railway CLIs, add secrets below so `scripts/setup-cloud-tooling.sh` installs them on boot.
 
 ### Required Cursor Cloud secrets

@@ -11,25 +11,21 @@ Use this when driving work from [cursor.com/agents](https://cursor.com/agents) o
 - **GitHub ↔ Cursor Cloud**: this repo runs cloud agents from `kosedge/kosedge`.
 - **GitHub ↔ Vercel**: production/preview Environments on the repo show Vercel is linked and auto-deploys.
 
-### You still need to do (once)
+### Current production wiring (done)
 
-1. **Railway ↔ GitHub**
-   - Open [railway.app](https://railway.app) → New Project → Deploy from GitHub → `kosedge/kosedge`.
-   - Service settings:
-     - Root Directory: `/services/model-service`
-     - Config File: `/services/model-service/railway.toml`
-   - Generate a public domain; copy the HTTPS URL.
-   - The `kosedge` service in project `joyful-clarity` is already wired this way (`https://kosedge-production.up.railway.app`).
-   - For DB-backed routes, set `DATABASE_URL` (and optionally `REDIS_URL`) on the Railway service. `/health` works without them.
-2. **Vercel ↔ Railway**
-   - In Vercel project env vars, set:
-     - `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` (or your Railway HTTPS URL)
-     - `INTERNAL_API_SECRET=<same value as Railway>`
-   - On Railway, set the same `INTERNAL_API_SECRET` plus any DB/Redis vars the model service needs.
+1. **Railway ↔ GitHub** — project `joyful-clarity`, service `kosedge`
+   - Root: `/services/model-service`, config: `/services/model-service/railway.toml`
+   - Deploy trigger branch: `restore-working-ui`
+   - Public URL: `https://kosedge-production.up.railway.app` (`/health` and `/health/db` OK)
+   - Postgres service attached; `DATABASE_URL` on `kosedge` is `${{Postgres.DATABASE_URL}}`
+2. **Vercel ↔ Railway** — project `kosedge`
+   - `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` (Production + Preview)
+   - Matching `INTERNAL_API_SECRET` on Vercel and Railway
 3. **Cursor Cloud secrets** (so phone agents can deploy/inspect)
-   - [Cloud Agents → Secrets](https://cursor.com/dashboard/cloud-agents): add `VERCEL_TOKEN`, `RAILWAY_TOKEN`, and optionally `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `RAILWAY_SERVICE_ID`, `MODEL_SERVICE_URL`, `INTERNAL_API_SECRET`.
+   - [Cloud Agents → Secrets](https://cursor.com/dashboard/cloud-agents): `VERCEL_TOKEN` + `RAILWAY_TOKEN` are set.
+   - Also add `INTERNAL_API_SECRET` and `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` (copy the secret from Railway → `kosedge` → Variables). New cloud agent runs are required to pick up new secrets.
 4. **Optional GitHub Actions Railway deploy**
-   - Repo secrets: `RAILWAY_TOKEN`, `RAILWAY_SERVICE_ID`
+   - Repo secrets: `RAILWAY_TOKEN`, `RAILWAY_SERVICE_ID=117410e8-bcc0-4f51-8631-5f1785c8e2d1`
    - Repo variable: `ENABLE_RAILWAY_DEPLOY=true`
 5. **Vercel MCP (desktop once)**
    - Authenticate the Vercel MCP server in Cursor desktop; phone-only agents use the CLI + `VERCEL_TOKEN` instead.
