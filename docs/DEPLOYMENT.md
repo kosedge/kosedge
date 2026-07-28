@@ -9,7 +9,7 @@ Use this when driving work from [cursor.com/agents](https://cursor.com/agents) o
 ### Already connected
 
 - **GitHub ↔ Cursor Cloud**: this repo runs cloud agents from `kosedge/kosedge`.
-- **GitHub ↔ Vercel**: project `kosedge` is linked; **Production Branch = `restore-working-ui`**. Preview/Production Environments auto-deploy from GitHub.
+- **GitHub ↔ Vercel**: project `kosedge` is linked; **Production Branch = `deploy-vercel`**. Preview/Production Environments auto-deploy from GitHub.
 - **GitHub ↔ Railway**: `railway-app[bot]` deploys model-service from `restore-working-ui`.
 
 ### Current production wiring (done)
@@ -17,15 +17,15 @@ Use this when driving work from [cursor.com/agents](https://cursor.com/agents) o
 1. **Railway ↔ GitHub** — project `joyful-clarity`, service `kosedge`
    - Root: `/services/model-service`, config: `/services/model-service/railway.toml`
    - Deploy trigger branch: `restore-working-ui`
-   - Public URL: `https://kosedge-production.up.railway.app` (`/health` and `/health/db` OK)
+   - Public URL: Railway model-service production URL (`/health` and `/health/db` OK)
    - Postgres service attached; `DATABASE_URL` on `kosedge` is `${{Postgres.DATABASE_URL}}`
-2. **Vercel ↔ Railway** — project `kosedge` (production branch `restore-working-ui`)
-   - `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` (Production + Preview)
+2. **Vercel ↔ Railway** — project `kosedge` (production branch `deploy-vercel`)
+   - `MODEL_SERVICE_URL=<Railway model-service production URL>` (Production + Preview)
    - Matching `INTERNAL_API_SECRET` on Vercel and Railway
    - Live domains: `www.kosedge.com`, `kosedge.com`, `kosedge.vercel.app`
 3. **Cursor Cloud secrets** (so phone agents can deploy/inspect)
    - [Cloud Agents → Secrets](https://cursor.com/dashboard/cloud-agents): `VERCEL_TOKEN` + `RAILWAY_TOKEN` are set.
-   - Also add `INTERNAL_API_SECRET` and `MODEL_SERVICE_URL=https://kosedge-production.up.railway.app` (copy the secret from Railway → `kosedge` → Variables). New cloud agent runs are required to pick up new secrets.
+   - Also add `INTERNAL_API_SECRET` and `MODEL_SERVICE_URL=<Railway model-service production URL>` (copy the secret from Railway → `kosedge` → Variables). New cloud agent runs are required to pick up new secrets.
 4. **Optional GitHub Actions Railway deploy**
    - Repo secrets: `RAILWAY_TOKEN`, `RAILWAY_SERVICE_ID=117410e8-bcc0-4f51-8631-5f1785c8e2d1`
    - Repo variable: `ENABLE_RAILWAY_DEPLOY=true`
