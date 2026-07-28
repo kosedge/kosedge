@@ -10,6 +10,9 @@ jobs:
     name: PR Quality Checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout code
@@ -86,17 +89,19 @@ jobs:
               comment.user.type === 'Bot' && comment.body.includes('## PR Checks')
             );
 
-            const status = '${{ job.status }}' === 'success' ? '✅' : '❌';
+            const jobStatus = '${{ job.status }}';
+            const success = jobStatus === 'success';
+            const status = success ? '✅' : '❌';
             const body = `## PR Checks
 
-            ${status} **All checks passed!**
+${status} **${success ? 'All checks passed!' : 'Some checks failed.'}**
 
-            - ✅ Formatting check
-            - ✅ Linting
-            - ✅ Type checking
-            - ✅ Tests
+- ✅ Formatting check
+- ✅ Linting
+- ✅ Type checking
+- ✅ Tests
 
-            Ready for review!`;
+${success ? 'Ready for review!' : 'Please fix the failing checks before merging.'}`;
 
             if (botComment) {
               await github.rest.issues.updateComment({

@@ -21,8 +21,8 @@ describe("rateLimit", () => {
     const clientId = "rate-limit-test-auth-" + Date.now();
     const base = "http://localhost/api/auth/signin";
 
-    // Exhaust the auth limiter (5 points)
-    for (let i = 0; i < 5; i++) {
+    // Exhaust the auth write limiter (10 points)
+    for (let i = 0; i < 10; i++) {
       const req = new NextRequest(base, {
         headers: { "x-forwarded-for": clientId },
       });
@@ -30,7 +30,7 @@ describe("rateLimit", () => {
       expect(res).toBeNull();
     }
 
-    // 6th request should be rate limited
+    // 11th request should be rate limited
     const req = new NextRequest(base, {
       headers: { "x-forwarded-for": clientId },
     });
@@ -40,14 +40,14 @@ describe("rateLimit", () => {
     const data = await res!.json();
     expect(data.code).toBe("RATE_LIMIT_EXCEEDED");
     expect(data.retryAfter).toBeDefined();
-    expect(res!.headers.get("X-RateLimit-Limit")).toBe("5");
+    expect(res!.headers.get("X-RateLimit-Limit")).toBe("10");
   });
 
   it("cannot bypass auth limiter by rotating Authorization header", async () => {
     const clientIp = "rate-limit-auth-header-rotation-" + Date.now();
     const base = "http://localhost/api/auth/signin";
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       const req = new NextRequest(base, {
         headers: {
           "x-forwarded-for": clientIp,
