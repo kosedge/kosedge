@@ -3204,6 +3204,19 @@ def run_nfl_market_simulations(
                     "diff_pressure_allowed_5g": _to_float(mp.get("diff_pressure_allowed_5g")),
                     "diff_red_zone_td_rate_5g": _to_float(mp.get("diff_red_zone_td_rate_5g")),
                     "diff_success_rate_5g": _to_float(mk.get("matchup_diff_success_rate_5g")),
+                    "home_kav_offense_5g": _to_float(mp.get("home_kav_offense_5g")),
+                    "away_kav_offense_5g": _to_float(mp.get("away_kav_offense_5g")),
+                    "home_kav_defense_5g": _to_float(mp.get("home_kav_defense_5g")),
+                    "away_kav_defense_5g": _to_float(mp.get("away_kav_defense_5g")),
+                    "home_kav_net_5g": _to_float(mp.get("home_kav_net_5g")),
+                    "away_kav_net_5g": _to_float(mp.get("away_kav_net_5g")),
+                    "diff_kav_net_5g": (
+                        None
+                        if _to_float(mp.get("home_kav_net_5g")) is None
+                        or _to_float(mp.get("away_kav_net_5g")) is None
+                        else float(_to_float(mp.get("home_kav_net_5g")))
+                        - float(_to_float(mp.get("away_kav_net_5g")))
+                    ),
                     "home_injury_impact": home_injury_impact,
                     "away_injury_impact": away_injury_impact,
                     "diff_injury_impact": home_injury_impact - away_injury_impact,
@@ -4494,6 +4507,16 @@ def _fetch_nfl_supervised_training_rows(
                   - COALESCE(mf.home_success_defense_allowed_5g, 0.0)
                 )
               ) / 2.0 AS diff_success_rate_5g,
+              mf.home_kav_offense_5g,
+              mf.away_kav_offense_5g,
+              mf.home_kav_defense_5g,
+              mf.away_kav_defense_5g,
+              mf.home_kav_net_5g,
+              mf.away_kav_net_5g,
+              CASE
+                WHEN mf.home_kav_net_5g IS NULL OR mf.away_kav_net_5g IS NULL THEN NULL
+                ELSE mf.home_kav_net_5g - mf.away_kav_net_5g
+              END AS diff_kav_net_5g,
               sch.home_team,
               sch.away_team,
               sch.roof,

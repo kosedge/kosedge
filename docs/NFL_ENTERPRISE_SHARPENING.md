@@ -77,8 +77,15 @@ These are real ceiling raises — code paths are ready to consume them:
 3. **Props continuity** (Sportradar or higher Odds API tier) for alt lines + CLV.
 4. **Coverage / personnel / blitz** licensed PBP for matchup packs.
 
-Until those land, the free stack (nflverse snaps+injuries+PBP+tendencies+market blend)
+Until those land, the free stack (nflverse snaps+injuries+PBP+tendencies+**KAV**+market blend)
 is the production path — sharpened, gated, and re-runnable every week.
+
+### KAV (owned efficiency)
+
+- Spec: `docs/NFL_KAV.md`
+- Tables: `nfl_dp_team_kav_game`, `nfl_dp_team_kav_weekly` (`041_nfl_kav_efficiency.sql`)
+- Wired into matchup packs, handicapping `kav_efficiency`, supervised schema v3
+- External public DVOA remains an optional second-opinion placeholder only — never training ground truth
 
 ## Honesty rules (non-negotiable)
 

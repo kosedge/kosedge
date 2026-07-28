@@ -4,7 +4,7 @@ import os
 from copy import deepcopy
 from typing import Any, Dict, Iterable, List, Optional
 
-NFL_HANDICAPPING_FRAMEWORK_VERSION = "nfl-handicap-core-v2"
+NFL_HANDICAPPING_FRAMEWORK_VERSION = "nfl-handicap-core-v3"
 
 
 def _env_float(name: str, default: float) -> float:
@@ -132,6 +132,22 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
                 "min_reliability": _clamp(_env_float("NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY", 0.35), 0.1, 1.0),
                 "max_reliability": _clamp(_env_float("NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY", 0.85), 0.2, 1.0),
             },
+            # Owned opponent-adjusted efficiency (KAV). Ground-truth for the model.
+            "kav_efficiency": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_KAV_ENABLED"), True),
+                "margin_weight": _env_float("NFL_FRAMEWORK_KAV_MARGIN_WEIGHT", 3.2),
+                "total_weight": _env_float("NFL_FRAMEWORK_KAV_TOTAL_WEIGHT", 2.4),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS", 3.5),
+                "max_total_points": _env_float("NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS", 2.8),
+            },
+            # Optional public DVOA second opinion — never used for training; placeholder only.
+            "external_dvoa": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED"), False),
+                "margin_weight": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT", 0.0),
+                "total_weight": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT", 0.0),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS", 0.0),
+                "max_total_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS", 0.0),
+            },
         },
         "uncertainty": {
             "base_confidence": _clamp(_env_float("NFL_FRAMEWORK_BASE_CONFIDENCE", 0.72), 0.05, 0.99),
@@ -182,6 +198,15 @@ def compute_nfl_projection_decomposition(
     travel_timezone_delta_home: Optional[float] = None,
     travel_timezone_delta_away: Optional[float] = None,
     travel_available: Optional[bool] = None,
+    home_kav_net_5g: Optional[float] = None,
+    away_kav_net_5g: Optional[float] = None,
+    home_kav_offense_5g: Optional[float] = None,
+    away_kav_offense_5g: Optional[float] = None,
+    home_kav_defense_5g: Optional[float] = None,
+    away_kav_defense_5g: Optional[float] = None,
+    kav_as_of_week: Optional[int] = None,
+    external_dvoa_home: Optional[float] = None,
+    external_dvoa_away: Optional[float] = None,
     config_overrides: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     cfg = get_nfl_handicapping_config(config_overrides=config_overrides)
@@ -435,7 +460,76 @@ def compute_nfl_projection_decomposition(
                 "reliability": round(regression_reliability, 4),
             },
         },
+        "kav_efficiency": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Owned KAV (opponent-adjusted EPA). Strict week-1 lag.",
+            "raw_signals": {},
+        },
+        "external_dvoa": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Optional public DVOA second opinion; disabled for training.",
+            "raw_signals": {},
+        },
     }
+
+    kav_cfg = factors_cfg["kav_efficiency"]
+    kav_enabled = bool(kav_cfg.get("enabled"))
+    kav_home_net = _to_float(home_kav_net_5g)
+    kav_away_net = _to_float(away_kav_net_5g)
+    if kav_enabled and kav_home_net is not None and kav_away_net is not None:
+        kav_diff = kav_home_net - kav_away_net
+        kav_margin = _clamp(
+            kav_diff * float(kav_cfg["margin_weight"]),
+            -float(kav_cfg["max_margin_points"]),
+            float(kav_cfg["max_margin_points"]),
+        )
+        home_off_k = _to_float(home_kav_offense_5g, 0.0) or 0.0
+        away_off_k = _to_float(away_kav_offense_5g, 0.0) or 0.0
+        home_def_k = _to_float(home_kav_defense_5g, 0.0) or 0.0
+        away_def_k = _to_float(away_kav_defense_5g, 0.0) or 0.0
+        kav_total_signal = home_off_k + away_off_k + home_def_k + away_def_k
+        kav_total = _clamp(
+            kav_total_signal * float(kav_cfg["total_weight"]) * 0.5,
+            -float(kav_cfg["max_total_points"]),
+            float(kav_cfg["max_total_points"]),
+        )
+        contributions["kav_efficiency"] = {
+            "margin_points": round(kav_margin, 4),
+            "total_points": round(kav_total, 4),
+            "available": True,
+            "notes": "Owned KAV (opponent-adjusted EPA). Strict week-1 lag.",
+            "raw_signals": {
+                "home_kav_net_5g": round(kav_home_net, 6),
+                "away_kav_net_5g": round(kav_away_net, 6),
+                "diff_kav_net_5g": round(kav_diff, 6),
+                "kav_as_of_week": kav_as_of_week,
+            },
+        }
+
+    ext_cfg = factors_cfg["external_dvoa"]
+    ext_home = _to_float(external_dvoa_home)
+    ext_away = _to_float(external_dvoa_away)
+    if bool(ext_cfg.get("enabled")) and ext_home is not None and ext_away is not None:
+        ext_diff = ext_home - ext_away
+        ext_margin = _clamp(
+            ext_diff * float(ext_cfg["margin_weight"]),
+            -float(ext_cfg["max_margin_points"]),
+            float(ext_cfg["max_margin_points"]),
+        )
+        contributions["external_dvoa"] = {
+            "margin_points": round(ext_margin, 4),
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Optional public DVOA second opinion (not used in training).",
+            "raw_signals": {
+                "external_dvoa_home": round(ext_home, 6),
+                "external_dvoa_away": round(ext_away, 6),
+            },
+        }
 
     predicted_margin = float(
         contributions["base_efficiency"]["margin_points"]
@@ -446,6 +540,8 @@ def compute_nfl_projection_decomposition(
         + contributions["travel_schedule"]["margin_points"]
         + contributions["situational_flags"]["margin_points"]
         + contributions["regression_luck"]["margin_points"]
+        + contributions["kav_efficiency"]["margin_points"]
+        + contributions["external_dvoa"]["margin_points"]
     )
     predicted_total = float(
         priors["base_total_points"]
@@ -455,6 +551,8 @@ def compute_nfl_projection_decomposition(
         + contributions["weather_environment"]["total_points"]
         + contributions["travel_schedule"]["total_points"]
         + contributions["regression_luck"]["total_points"]
+        + contributions["kav_efficiency"]["total_points"]
+        + contributions["external_dvoa"]["total_points"]
     )
     predicted_total = _clamp(predicted_total, 30.0, 66.0)
 

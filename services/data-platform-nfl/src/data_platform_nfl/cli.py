@@ -53,6 +53,16 @@ def main() -> None:
         help="Delete existing matchup-feature rows for target seasons before rebuild",
     )
     parser.add_argument(
+        "--materialize-kav",
+        action="store_true",
+        help="Build owned KAV opponent-adjusted efficiency tables from PBP",
+    )
+    parser.add_argument(
+        "--replace-kav",
+        action="store_true",
+        help="Delete existing KAV rows for target seasons before rebuild",
+    )
+    parser.add_argument(
         "--materialize-player-projection-features",
         action="store_true",
         help="Build weekly player projection features from usage/situational tables",
@@ -345,6 +355,13 @@ def main() -> None:
             result = materialize_matchup_features_from_usage(
                 seasons=seasons,
                 replace_existing=args.replace_matchup_features,
+            )
+        elif args.materialize_kav:
+            from .kav import materialize_kav
+
+            result = materialize_kav(
+                seasons=seasons,
+                replace_existing=args.replace_kav,
             )
         elif args.materialize_player_projection_features:
             result = materialize_player_projection_features(

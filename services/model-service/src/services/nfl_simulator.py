@@ -94,6 +94,14 @@ class NflGameInputs:
     tendency_proe_away: Optional[float] = None
     tendency_total_signal: Optional[float] = None
     tendency_spread_signal: Optional[float] = None
+    # Owned KAV (lagged opponent-adjusted efficiency). Never same-week.
+    home_kav_offense_5g: Optional[float] = None
+    away_kav_offense_5g: Optional[float] = None
+    home_kav_defense_5g: Optional[float] = None
+    away_kav_defense_5g: Optional[float] = None
+    home_kav_net_5g: Optional[float] = None
+    away_kav_net_5g: Optional[float] = None
+    kav_as_of_week: Optional[int] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -480,6 +488,14 @@ def simulate_nfl_game(
         travel_timezone_delta_home=inputs.travel_timezone_delta_home,
         travel_timezone_delta_away=inputs.travel_timezone_delta_away,
         travel_available=inputs.travel_available,
+        home_kav_net_5g=inputs.home_kav_net_5g,
+        away_kav_net_5g=inputs.away_kav_net_5g,
+        home_kav_offense_5g=inputs.home_kav_offense_5g,
+        away_kav_offense_5g=inputs.away_kav_offense_5g,
+        home_kav_defense_5g=inputs.home_kav_defense_5g,
+        away_kav_defense_5g=inputs.away_kav_defense_5g,
+        kav_as_of_week=inputs.kav_as_of_week,
+        config_overrides=config_overrides,
     )
 
     mean_home = max(7.5, float(decomposition["expected_home_points"]))

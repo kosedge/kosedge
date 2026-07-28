@@ -52,6 +52,13 @@ FEATURE_KEYS: Tuple[str, ...] = (
     "diff_pressure_allowed_5g",
     "diff_red_zone_td_rate_5g",
     "diff_success_rate_5g",
+    "home_kav_offense_5g",
+    "away_kav_offense_5g",
+    "home_kav_defense_5g",
+    "away_kav_defense_5g",
+    "home_kav_net_5g",
+    "away_kav_net_5g",
+    "diff_kav_net_5g",
     "home_injury_impact",
     "away_injury_impact",
     "diff_injury_impact",
@@ -63,7 +70,7 @@ FEATURE_KEYS: Tuple[str, ...] = (
     "is_divisional_game",
 )
 
-MODEL_SCHEMA_VERSION = 2
+MODEL_SCHEMA_VERSION = 3
 
 
 def _to_float(value: Any, default: float = 0.0) -> float:

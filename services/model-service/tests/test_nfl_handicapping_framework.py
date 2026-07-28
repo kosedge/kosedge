@@ -45,6 +45,63 @@ def test_compute_nfl_projection_decomposition_returns_factor_point_space() -> No
     assert 0.0 <= out["confidence_score"] <= 1.0
 
 
+def test_kav_efficiency_factor_moves_margin_when_present() -> None:
+    base = compute_nfl_projection_decomposition(
+        offense_index_home=1.0,
+        offense_index_away=1.0,
+        defense_index_home=1.0,
+        defense_index_away=1.0,
+        rest_days_home=7.0,
+        rest_days_away=7.0,
+        matchup_adjustments={},
+        totals_adjustments={},
+        injury_nowcast_impact_home=None,
+        injury_nowcast_impact_away=None,
+        injury_nowcast_freshness_home_hours=None,
+        injury_nowcast_freshness_away_hours=None,
+        injury_nowcast_confidence_home=None,
+        injury_nowcast_confidence_away=None,
+        injury_nowcast_offense_multiplier_home=None,
+        injury_nowcast_offense_multiplier_away=None,
+        injury_nowcast_defense_multiplier_home=None,
+        injury_nowcast_defense_multiplier_away=None,
+    )
+    with_kav = compute_nfl_projection_decomposition(
+        offense_index_home=1.0,
+        offense_index_away=1.0,
+        defense_index_home=1.0,
+        defense_index_away=1.0,
+        rest_days_home=7.0,
+        rest_days_away=7.0,
+        matchup_adjustments={},
+        totals_adjustments={},
+        injury_nowcast_impact_home=None,
+        injury_nowcast_impact_away=None,
+        injury_nowcast_freshness_home_hours=None,
+        injury_nowcast_freshness_away_hours=None,
+        injury_nowcast_confidence_home=None,
+        injury_nowcast_confidence_away=None,
+        injury_nowcast_offense_multiplier_home=None,
+        injury_nowcast_offense_multiplier_away=None,
+        injury_nowcast_defense_multiplier_home=None,
+        injury_nowcast_defense_multiplier_away=None,
+        home_kav_net_5g=0.45,
+        away_kav_net_5g=-0.20,
+        home_kav_offense_5g=0.30,
+        away_kav_offense_5g=-0.10,
+        home_kav_defense_5g=-0.15,
+        away_kav_defense_5g=0.10,
+        kav_as_of_week=8,
+    )
+    kav = with_kav["factor_contributions"]["kav_efficiency"]
+    assert kav["available"] is True
+    assert kav["margin_points"] > 0
+    assert with_kav["predicted_margin"] > base["predicted_margin"]
+    ext = with_kav["factor_contributions"]["external_dvoa"]
+    assert ext["available"] is False
+    assert ext["margin_points"] == 0.0
+
+
 def test_compute_nfl_projection_decomposition_marks_missing_data_placeholders() -> None:
     out = compute_nfl_projection_decomposition(
         offense_index_home=1.0,
