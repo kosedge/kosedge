@@ -21,9 +21,8 @@ Runs on every push and pull request to `main` and `develop` branches.
 Runs on pushes to `main` branch and version tags (`v*`).
 
 **Jobs:**
-1. **Deploy Web Application** - Builds and deploys the web app
-
-**Note:** Deployment steps need to be configured based on your hosting platform (Vercel, Docker, etc.)
+1. **Verify Web Build** - Builds the web app (Vercel production deploys come from the Vercel GitHub integration)
+2. **Deploy Model Service (Railway)** - Runs only when repo variable `ENABLE_RAILWAY_DEPLOY=true` and secrets `RAILWAY_TOKEN` (+ optional `RAILWAY_SERVICE_ID`) are set
 
 ### `pr-check.yml` - Pull Request Checks
 
@@ -55,10 +54,15 @@ For deployment, configure these secrets in GitHub Settings → Secrets:
 
 ### Platform-Specific Secrets
 
-**Vercel:**
+**Vercel (optional — usually not needed if the Vercel GitHub app deploys):**
 - `VERCEL_TOKEN`
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
+
+**Railway (model service):**
+- `RAILWAY_TOKEN`
+- `RAILWAY_SERVICE_ID` (recommended)
+- Repo variable `ENABLE_RAILWAY_DEPLOY=true` to turn the deploy job on
 
 **Docker Hub:**
 - `DOCKER_USERNAME`

@@ -8,8 +8,10 @@ on:
       - "v*"
 
 jobs:
-  deploy-web:
-    name: Deploy Web Application
+  # Vercel production deploys are handled by the Vercel ↔ GitHub integration.
+  # This job verifies the web build on main/tags and surfaces a deploy summary.
+  verify-web:
+    name: Verify Web Build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     timeout-minutes: 30
@@ -42,35 +44,64 @@ jobs:
           INTERNAL_API_SECRET: ${{ secrets.INTERNAL_API_SECRET }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
-      # Uncomment and configure based on your deployment platform
-      # 
-      # For Vercel:
-      # - name: Deploy to Vercel
-      #   uses: amondnet/vercel-action@v25
-      #   with:
-      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-      #     vercel-args: '--prod'
-      #
-      # For Docker/Docker Hub:
-      # - name: Build Docker image
-      #   run: docker build -t kosedge-web:${{ github.sha }} -f apps/web/Dockerfile .
-      #
-      # - name: Push to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      #
-      # - name: Push image
-      #   run: docker push kosedge-web:${{ github.sha }}
-
       - name: Deployment Summary
         run: |
-          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Branch:** ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Build:** ✅ Successful" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Configure deployment steps above based on your hosting platform." >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Deployment Summary"
+            echo "- **Branch:** ${{ github.ref }}"
+            echo "- **Commit:** ${{ github.sha }}"
+            echo "- **Web build:** ✅ Successful"
+            echo "- **Vercel:** Deployed by Vercel GitHub integration (not this workflow)"
+            echo "- **Railway:** See \`deploy-model-service\` job when \`RAILWAY_TOKEN\` is set"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Railway hosts services/model-service. Requires repo secrets:
+  #   RAILWAY_TOKEN (required), RAILWAY_SERVICE_ID (recommended)
+  deploy-model-service:
+    name: Deploy Model Service (Railway)
+    runs-on: ubuntu-latest
+    if: |
+      (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) &&
+      vars.ENABLE_RAILWAY_DEPLOY == 'true'
+    timeout-minutes: 25
+    needs: verify-web
+
+    defaults:
+      run:
+        working-directory: services/model-service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@latest
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+        run: |
+          if [ -z "${RAILWAY_TOKEN:-}" ]; then
+            echo "RAILWAY_TOKEN secret is missing; skipping Railway deploy."
+            exit 1
+          fi
+          if [ -n "${RAILWAY_SERVICE_ID:-}" ]; then
+            railway up --service "$RAILWAY_SERVICE_ID" --ci --detach
+          else
+            railway up --ci --detach
+          fi
+
+      - name: Railway Summary
+        run: |
+          {
+            echo "## Railway deploy"
+            echo "- **Service path:** \`services/model-service\`"
+            echo "- **Healthcheck:** \`/health\`"
+            echo "- Remember to set \`MODEL_SERVICE_URL\` on Vercel to the Railway public URL."
+          } >> "$GITHUB_STEP_SUMMARY"
