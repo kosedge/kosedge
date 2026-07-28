@@ -1,0 +1,35 @@
+{
+  "gap_dates": [
+    "2020-10-18",
+    "2020-10-19",
+    "2021-12-20",
+    "2023-01-08",
+    "2025-01-04",
+    "2025-01-11",
+    "2025-01-13",
+    "2025-01-18",
+    "2026-01-03",
+    "2026-01-10",
+    "2026-01-11",
+    "2026-01-12"
+  ],
+  "credits_spent": 720,
+  "credits_remaining": 2992534,
+  "by_sport": {
+    "nfl": {
+      "mainline_dates_attempted": 0,
+      "mainline_requests": 24,
+      "mainline_skipped_cached": 0,
+      "mainline_skipped_owned_range": 0,
+      "mainline_skipped_empty": 0,
+      "mainline_events": 310,
+      "mainline_snapshots": 1638,
+      "prop_events_pulled": 0,
+      "prop_events_skipped_owned": 0,
+      "prop_events_skipped_no_match": 0,
+      "prop_rows": 0,
+      "prop_open_pulled": 0,
+      "errors": 0
+    }
+  }
+}

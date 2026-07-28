@@ -1,6 +1,7 @@
 import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { getKeiCode } from "@/lib/kei-brand";
+import { nflPublishTag } from "@/lib/nfl-publish-policy";
 import { generateGameOverview } from "@/lib/sports";
 
 // Flat API row format (from Odds API / model); kei = our projected line/total
@@ -259,10 +260,9 @@ function HeaderStack({ a, b }: { a: string; b?: string }) {
 type EdgeMarket = "line" | "total";
 
 /**
- * NFL tag bands (pts of |KEI − best book|):
- *   Spread: PASS <1.1 · LEAN 1.1–2.49 · PLAY ≥2.5
- *   Total:  PASS <2.1 · LEAN 2.1–2.49 · PLAY ≥2.5
- *           ≥3.0 keeps PLAY but shows "Size down" (3–4pt settled ROI was toxic)
+ * NFL: selective publish (see lib/nfl-publish-policy.ts + docs/NFL_ENTERPRISE_GATES.md).
+ *   Spread: PASS default · PLAY ≥2.5 with ATS evidence · LEAN disabled
+ *   Total:  PASS default · PLAY only in [2.5, 3.0) · ≥3.0 PASS (toxic)
  * Other sports keep the legacy 1.0 / 2.5 cut for both markets.
  */
 function edgeToTag(
@@ -272,15 +272,13 @@ function edgeToTag(
 ): Tag | undefined {
   if (edgeNum == null) return undefined;
   const nfl = String(sportKey).toLowerCase() === "nfl";
-  if (nfl && market === "total") {
-    if (edgeNum >= 2.5) return "PLAY";
-    if (edgeNum >= 2.1) return "LEAN";
-    return "PASS";
-  }
-  if (nfl && market === "line") {
-    if (edgeNum >= 2.5) return "PLAY";
-    if (edgeNum >= 1.1) return "LEAN";
-    return "PASS";
+  if (nfl) {
+    const pub = nflPublishTag(
+      market === "total" ? "total" : "spread",
+      edgeNum,
+      "YELLOW",
+    );
+    return pub.tag;
   }
   if (edgeNum >= 2.5) return "PLAY";
   if (edgeNum >= 1.0) return "LEAN";
@@ -943,7 +941,7 @@ export default function EdgeBoard({
         </div>
         <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
           {isNfl
-            ? "NFL tags — Spread: PASS <1.1 · LEAN 1.1–2.4 · PLAY ≥2.5. Total: PASS <2.1 · LEAN 2.1–2.4 · PLAY ≥2.5 (size down if ≥3). "
+            ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
             : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           Edge shows pts + side favored. Tag shows the action at the best book.{" "}
           {keiCode}: Kos Edge Index.

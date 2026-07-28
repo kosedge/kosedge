@@ -100,3 +100,9 @@ PYTHONPATH=./src /Users/ryankos/kosedge/.venv/bin/python -m pytest tests/test_ka
 
 - Say **“KAV (Kos Edge Adjusted Value)”** or **“owned opponent-adjusted efficiency”**
 - Do **not** say “our DVOA” or imply Football Outsiders affiliation
+
+## Enterprise gates
+
+Betting-product go/no-go (ATS / CLV / MAE / holdout) and selective PLAY
+publish policy live in `docs/NFL_ENTERPRISE_GATES.md`. KAV wiring alone does
+not make the board stake-eligible — gates must print GREEN.

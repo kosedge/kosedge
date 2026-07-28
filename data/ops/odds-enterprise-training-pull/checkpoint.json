@@ -1,18 +1,14 @@
 {
   "completed_sports": [
-    "nfl",
     "mlb",
     "nba",
     "nhl",
     "wnba",
     "cfb",
-    "ncaam"
+    "ncaam",
+    "nfl"
   ],
   "completed_phases": {
-    "nfl:mainlines": {
-      "at": "2026-07-25T12:47:06.761733+00:00",
-      "dates": 373
-    },
     "nfl:props": {
       "at": "2026-07-25T16:46:50.227824+00:00",
       "targets": 855
@@ -56,6 +52,17 @@
     "ncaam:mainlines": {
       "at": "2026-07-28T06:10:05.359242+00:00",
       "dates": 894
+    },
+    "nfl:mainlines": {
+      "at": "2026-07-28T15:06:34.216834+00:00",
+      "dates": 244
+    }
+  },
+  "gap_densify_note": {
+    "reason": "2020-2023 mainline OC missing after DB restore swap; re-run NFL mainlines DB-first",
+    "cleared_phase": {
+      "at": "2026-07-25T12:47:06.761733+00:00",
+      "dates": 373
     }
   }
 }

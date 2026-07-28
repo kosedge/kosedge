@@ -31,6 +31,7 @@ from src.services.nfl_handicapping_framework import (
     get_nfl_handicapping_config,
 )
 from src.services.nfl_totals_calibration import fetch_nfl_totals_calibration
+from src.services.nfl_side_total_publish_policy import publish_tag as nfl_publish_tag
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
 log = logging.getLogger(__name__)
@@ -3068,6 +3069,19 @@ def nfl_fair_lines(
         if compare_spread_home is not None and spread_home is not None:
             spread_edge = round(spread_home - float(compare_spread_home), 3)
 
+        # Product gate defaults YELLOW until ops artifact promotes GREEN.
+        _gate = str(os.getenv("NFL_PRODUCT_GATE_STATUS", "YELLOW")).upper()
+        spread_pub = nfl_publish_tag(
+            market="spread",
+            abs_edge=abs(spread_edge) if spread_edge is not None else None,
+            product_gate_status=_gate,
+        )
+        total_pub = nfl_publish_tag(
+            market="total",
+            abs_edge=abs(total_edge) if total_edge is not None else None,
+            product_gate_status=_gate,
+        )
+
         home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
         away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
 
@@ -3111,6 +3125,12 @@ def nfl_fair_lines(
                 "total_edge": total_edge,
                 "spread_edge": spread_edge,
                 "market_joined": has_market,
+                "publish_tag_spread": spread_pub.get("tag"),
+                "publish_tag_total": total_pub.get("tag"),
+                "stake_eligible_spread": bool(spread_pub.get("stake_eligible")),
+                "stake_eligible_total": bool(total_pub.get("stake_eligible")),
+                "publish_reason_spread": spread_pub.get("reason"),
+                "publish_reason_total": total_pub.get("reason"),
             }
         )
 

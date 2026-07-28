@@ -93,3 +93,6 @@ is the production path — sharpened, gated, and re-runnable every week.
 2. Pass props stay research-only while densified MAE > 12.
 3. Dual ≥1000-yard RB rooms on the same team are a desk red flag (`skill` quality JSON).
 4. Market blend 0.30 on sides/totals stays; win by knowing _when_ to deviate.
+5. Sides/totals betting-product claim requires GREEN gates in
+   `docs/NFL_ENTERPRISE_GATES.md` (`scripts/nfl/evaluate_enterprise_gates.py`).
+   Full-slate PASS is default; PLAY is selective.

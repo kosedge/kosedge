@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-07-28T15:07:28.214907+00:00",
+  "credits_spent": 6022,
+  "credits_remaining": 2993254,
+  "by_season_games_with_odds": {
+    "2020": 276,
+    "2021": 291,
+    "2022": 283,
+    "2023": 273,
+    "2024": 266,
+    "2025": 320
+  },
+  "notes": [
+    "Gap-pull mainlines only for 2020-2023 via scripts/nfl/densify_owned_oc_2020_2023.py",
+    "Restored persist_mainline_odds.py from commit 7bab07a7 (was missing from tree)",
+    "DB-first skip-if-owned; ~6k credits burned"
+  ],
+  "grading_after_densify": {
+    "owned_open_close_games": 1868,
+    "n_clv_spread": 494,
+    "n_clv_total": 279,
+    "clv_spread_avg": 1.0435,
+    "clv_spread_positive_rate": 0.5182,
+    "ats_hit_rate": 0.4961,
+    "by_season_owned_oc": {
+      "2020": 237,
+      "2021": 240,
+      "2022": 241,
+      "2023": 256,
+      "2024": 229,
+      "2025": 235
+    }
+  },
+  "grading_final_after_kav_resim": {
+    "owned_open_close_games": 1931,
+    "n_clv_spread": 601,
+    "n_clv_total": 378,
+    "clv_spread_positive_rate": 0.5092,
+    "ats_hit_rate": 0.495
+  }
+}

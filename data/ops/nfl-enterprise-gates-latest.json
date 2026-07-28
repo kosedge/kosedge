@@ -1,0 +1,128 @@
+{
+  "generated_at": "2026-07-28T17:09:01.163160+00:00",
+  "grading_artifact": "data/ops/nfl-kav-grading-after.json",
+  "supervised_artifact": "data/ops/nfl-kav-supervised-retrain-v3.json",
+  "database_url_host": "127.0.0.1:5432/kosedge",
+  "report": {
+    "overall": "RED",
+    "betting_product_ready": false,
+    "checks": [
+      {
+        "name": "ats_vs_minus_110",
+        "status": "RED",
+        "value": {
+          "hit_rate": 0.495,
+          "n": 1693
+        },
+        "threshold": {
+          "min_hit": 0.5238,
+          "min_n": 200
+        },
+        "detail": "Full-slate ATS below \u2212110 breakeven \u2014 selective segments only."
+      },
+      {
+        "name": "clv_spread_sample",
+        "status": "RED",
+        "value": {
+          "n_clv_spread": 601,
+          "positive_rate": 0.5092
+        },
+        "threshold": {
+          "min_n": 200,
+          "min_pos_rate": 0.55
+        },
+        "detail": "CLV +rate below floor despite adequate sample."
+      },
+      {
+        "name": "mae_vs_market_close",
+        "status": "GREEN",
+        "value": {
+          "model_spread_mae": 9.5513,
+          "market_spread_mae": 9.7764,
+          "model_total_mae": 10.086,
+          "market_total_mae": 10.2956
+        },
+        "threshold": "model_mae <= market_mae",
+        "detail": "Model beats market close MAE on spread and total."
+      },
+      {
+        "name": "supervised_holdout",
+        "status": "GREEN",
+        "value": {
+          "test_brier": 0.14822177223985103,
+          "test_margin_mae": 7.48009840196442,
+          "test_total_mae": 9.202883619613488,
+          "schema_version": 3,
+          "has_kav_feature": true,
+          "test_rows": 570
+        },
+        "threshold": {
+          "max_brier": 0.22,
+          "max_margin_mae": 9.5,
+          "max_total_mae": 10.5,
+          "min_schema": 3
+        },
+        "detail": "Chronological holdout within floors."
+      },
+      {
+        "name": "owned_open_close_coverage",
+        "status": "GREEN",
+        "value": {
+          "owned_open_close_games": 1931
+        },
+        "threshold": {
+          "green_min": 800,
+          "yellow_min": 400
+        },
+        "detail": "Owned open/close game coverage for CLV densify track."
+      },
+      {
+        "name": "props_stake_policy",
+        "status": "GREEN",
+        "value": {
+          "props_stake_eligible": false
+        },
+        "threshold": {
+          "expected": false
+        },
+        "detail": "Props must remain research-only / stake-off until holdout clears."
+      }
+    ],
+    "notes": [
+      "Do NOT claim betting-product ready. Ship selective PASS-default publish gates and keep improving ATS/CLV samples.",
+      "Full-slate ATS failed \u2014 publish PLAY only on segments that clear nfl_side_total_publish_policy evidence."
+    ]
+  },
+  "publish_policy_examples": [
+    {
+      "tag": "PASS",
+      "stake_eligible": false,
+      "reason": "product_gate_red",
+      "candidate_tag": "PLAY"
+    },
+    {
+      "tag": "PASS",
+      "stake_eligible": false,
+      "reason": "product_gate_red",
+      "candidate_tag": "PASS"
+    },
+    {
+      "tag": "PASS",
+      "stake_eligible": false,
+      "reason": "product_gate_red",
+      "candidate_tag": "PLAY"
+    },
+    {
+      "tag": "PASS",
+      "stake_eligible": false,
+      "reason": "product_gate_red",
+      "candidate_tag": "PASS"
+    }
+  ],
+  "segment_evidence_keys": [
+    "spread:PLAY",
+    "spread:LEAN",
+    "total:PLAY",
+    "total:LEAN"
+  ]
+}

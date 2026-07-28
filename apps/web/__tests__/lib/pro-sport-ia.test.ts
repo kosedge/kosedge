@@ -36,6 +36,42 @@ function buildRow(
   };
 }
 
+const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
+  "Weekly Slate": [
+    "Weekly Slate",
+    "Matchups",
+    "Team Previews",
+    "Player Previews",
+  ],
+  "Betting Desk": [
+    "KEI Lines",
+    "Compare Odds",
+    "Edges",
+    "Prediction Markets",
+    "Props",
+    "Execution Monitor",
+    "Futures",
+  ],
+  "Props & Fantasy": [
+    "Player Props Board",
+    "Fantasy Draft Board",
+    "Weekly Fantasy Projections",
+  ],
+  "Team Intel": [
+    "Team Research Hub",
+    "Standings",
+    "League Stats",
+    "Depth Charts",
+    "Injuries",
+  ],
+  "Model Governance & Health": [
+    "Model Transparency",
+    "Sport Tracking",
+    "Global CLV Tracker",
+    "Performance",
+  ],
+};
+
 describe("pro sport IA", () => {
   it("marks college sports as props-disabled", () => {
     expect(supportsPropsFantasy("ncaam")).toBe(false);
@@ -43,7 +79,7 @@ describe("pro sport IA", () => {
     expect(supportsPropsFantasy("nfl")).toBe(true);
   });
 
-  it("builds active props links for NFL", () => {
+  it("builds the exact NFL hub nav structure without duplicate categories", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
       sportKey: "nfl",
@@ -51,15 +87,86 @@ describe("pro sport IA", () => {
       edgeBoardHref: "/edge-board/nfl",
       content,
     });
-    const propsSection = sections.find(
-      (section) => section.title === content.sectionTitles.props,
+
+    expect(sections.map((section) => section.title)).toEqual(
+      Object.keys(NFL_SECTION_STRUCTURE),
     );
+
+    for (const [title, labels] of Object.entries(NFL_SECTION_STRUCTURE)) {
+      const section = sections.find((item) => item.title === title);
+      expect(section?.links.map((link) => link.label)).toEqual(labels);
+    }
+
+    const allLabels = sections.flatMap((section) =>
+      section.links.map((link) => `${section.title}::${link.label}`),
+    );
+    expect(new Set(allLabels).size).toBe(allLabels.length);
+
+    expect(content.sectionTitles.props).toBe("Props & Fantasy");
+    expect(content.sectionTitles.intel).toBe("Team Intel");
+  });
+
+  it("wires NFL hub links to real routes", () => {
+    const content = buildSportOverviewContent("nfl", "NFL");
+    const sections = buildSportOverviewSections({
+      sportKey: "nfl",
+      base: "/pro/nfl",
+      edgeBoardHref: "/edge-board/nfl",
+      content,
+    });
+    const byLabel = Object.fromEntries(
+      sections.flatMap((section) =>
+        section.links.map((link) => [link.label, link.href]),
+      ),
+    );
+
+    expect(byLabel["Weekly Slate"]).toBe("/pro/nfl/slate/today");
+    expect(byLabel.Matchups).toBe("/pro/nfl/slate/today");
+    expect(byLabel["Team Previews"]).toBe("/pro/nfl/teams");
+    expect(byLabel["Player Previews"]).toBe("/pro/nfl/awards");
+    expect(byLabel["KEI Lines"]).toBe("/pro/nfl/fair-lines");
+    expect(byLabel["Compare Odds"]).toBe("/odds/nfl");
+    expect(byLabel.Edges).toBe("/pro/nfl/edges");
+    expect(byLabel["Prediction Markets"]).toBe("/pro/prediction-market");
+    expect(byLabel.Props).toBe("/pro/nfl/props");
+    expect(byLabel["Execution Monitor"]).toBe("/pro/nfl/execution");
+    expect(byLabel.Futures).toBe("/pro/nfl/projections");
+    expect(byLabel["Player Props Board"]).toBe("/pro/nfl/props");
+    expect(byLabel["Fantasy Draft Board"]).toBe("/pro/nfl/fantasy");
+    expect(byLabel["Weekly Fantasy Projections"]).toBe("/pro/nfl/projections");
+    expect(byLabel["Team Research Hub"]).toBe("/pro/nfl/teams");
+    expect(byLabel.Standings).toBe("/pro/nfl/standings");
+    expect(byLabel["League Stats"]).toBe("/pro/nfl/stats");
+    expect(byLabel["Depth Charts"]).toBe("/pro/nfl/depth-charts");
+    expect(byLabel.Injuries).toBe("/pro/nfl/injuries");
+    expect(byLabel["Model Transparency"]).toBe("/pro/model-transparency");
+    expect(byLabel["Sport Tracking"]).toBe("/pro/nfl/tracking");
+    expect(byLabel["Global CLV Tracker"]).toBe("/pro/clv-tracker");
+    expect(byLabel.Performance).toBe("/pro/model-transparency");
+
     expect(
-      propsSection?.links.some((link) => link.href === "/pro/nfl/props"),
+      sections
+        .flatMap((section) => section.links)
+        .every((link) => link.href && link.status === "active"),
     ).toBe(true);
-    expect(
-      propsSection?.links.every((link) => link.status !== "placeholder"),
-    ).toBe(true);
+  });
+
+  it("keeps Team Intel free of betting-desk / props duplicates", () => {
+    const content = buildSportOverviewContent("nfl", "NFL");
+    const sections = buildSportOverviewSections({
+      sportKey: "nfl",
+      base: "/pro/nfl",
+      edgeBoardHref: "/edge-board/nfl",
+      content,
+    });
+    const intel = sections.find((section) => section.title === "Team Intel");
+    const labels = intel?.links.map((link) => link.label) ?? [];
+    expect(labels).not.toContain("KEI Lines");
+    expect(labels).not.toContain("Edges");
+    expect(labels).not.toContain("Props board");
+    expect(labels).not.toContain("Compare odds");
+    expect(labels).not.toContain("Fantasy draft board");
+    expect(labels).not.toContain("Projections hub");
   });
 
   it("points NFL betting desk path KEI Lines → Edges → Props", () => {
@@ -75,8 +182,6 @@ describe("pro sport IA", () => {
       (section) => section.title === content.sectionTitles.market,
     );
     expect(marketSection?.subtitle).toContain("KEI Lines → Edges → Props");
-    const labels = marketSection?.links.map((link) => link.label) ?? [];
-    expect(labels.slice(0, 3)).toEqual(["KEI Lines", "Edges", "Props"]);
     expect(
       marketSection?.links.find((link) => link.label === "KEI Lines")?.href,
     ).toBe("/pro/nfl/fair-lines");
@@ -113,40 +218,6 @@ describe("pro sport IA", () => {
     expect(marketSection?.subtitle).toContain("Fair Lines → Edges → Run Line");
     const labels = marketSection?.links.map((link) => link.label) ?? [];
     expect(labels.slice(0, 3)).toEqual(["Fair Lines", "Edges", "Run Line"]);
-  });
-
-  it("adds NFL team intel section with active links", () => {
-    const content = buildSportOverviewContent("nfl", "NFL");
-    const sections = buildSportOverviewSections({
-      sportKey: "nfl",
-      base: "/pro/nfl",
-      edgeBoardHref: "/edge-board/nfl",
-      content,
-    });
-
-    const intelSection = sections.find(
-      (section) => section.title === "Team Intel",
-    );
-    expect(intelSection).toBeDefined();
-    expect(intelSection?.links.map((link) => link.label)).toEqual([
-      "Projections hub",
-      "KEI Lines board",
-      "Edges desk",
-      "Compare odds",
-      "Props board",
-      "Fantasy draft board",
-      "MVP & OPOY race",
-      "2026 NFL wall chart",
-      "Team research hub",
-      "League stats",
-      "League standings",
-      "Depth charts",
-      "Injuries",
-    ]);
-    expect(intelSection?.links.every((link) => link.status === "active")).toBe(
-      true,
-    );
-    expect(intelSection?.links.every((link) => link.premium)).toBe(true);
   });
 
   it("adds League Intel for non-NFL sports with sport-specific desks", () => {

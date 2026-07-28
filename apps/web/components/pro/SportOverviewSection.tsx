@@ -20,7 +20,7 @@ export default function SportOverviewSection({
         {links.map((link) => {
           const href = link.href;
           const isPlaceholder = !href || link.status === "placeholder";
-          const key = `${title}-${href ?? link.label}`;
+          const key = `${title}-${link.label}`;
 
           if (isPlaceholder) {
             return (
