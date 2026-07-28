@@ -23,11 +23,15 @@ export default function EdgeBoardPreview({
         <div className="flex gap-4 text-sm tabular-nums">
           <div>
             <div className="text-gray-400 text-xs">Best Line</div>
-            <div className="text-kos-gold font-medium">{row.bestLine.top.label}</div>
+            <div className="text-kos-gold font-medium">
+              {row.bestLine.top.label}
+            </div>
           </div>
           <div>
             <div className="text-gray-400 text-xs">Best O/U</div>
-            <div className="text-kos-gold font-medium">{row.bestOU.top.label}</div>
+            <div className="text-kos-gold font-medium">
+              {row.bestOU.top.label}
+            </div>
           </div>
         </div>
       </div>

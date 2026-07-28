@@ -13,19 +13,29 @@ function matchGame(row: EdgeBoardRow, kei: KeiLineGame): boolean {
   return (
     (rowGame.includes(away) && rowGame.includes(home)) ||
     row.commenceTime === kei.commenceTime ||
-    Math.abs(new Date(row.commenceTime).getTime() - new Date(kei.commenceTime).getTime()) < 60_000
+    Math.abs(
+      new Date(row.commenceTime).getTime() -
+        new Date(kei.commenceTime).getTime(),
+    ) < 60_000
   );
 }
 
 /** Find KEI game for an edge board row (by game string and commence time). */
-function findKeiForRow(rows: EdgeBoardRow[], keiGames: KeiLineGame[], row: EdgeBoardRow): KeiLineGame | undefined {
+function findKeiForRow(
+  rows: EdgeBoardRow[],
+  keiGames: KeiLineGame[],
+  row: EdgeBoardRow,
+): KeiLineGame | undefined {
   return keiGames.find((k) => matchGame(row, k));
 }
 
 /**
  * Merge KEI projected spread/total into edge board rows. Mutates and returns the same array.
  */
-export function mergeKeiIntoEdgeBoardRows(rows: EdgeBoardRow[], sportKey: string): EdgeBoardRow[] {
+export function mergeKeiIntoEdgeBoardRows(
+  rows: EdgeBoardRow[],
+  sportKey: string,
+): EdgeBoardRow[] {
   const keiGames = getKeiLines(sportKey);
   if (keiGames.length === 0) return rows;
 
@@ -34,7 +44,10 @@ export function mergeKeiIntoEdgeBoardRows(rows: EdgeBoardRow[], sportKey: string
     if (!kei) continue;
 
     if (row.market === "Spread" && kei.projSpreadHome != null) {
-      row.kei = kei.projSpreadHome > 0 ? `+${kei.projSpreadHome.toFixed(1)}` : kei.projSpreadHome.toFixed(1);
+      row.kei =
+        kei.projSpreadHome > 0
+          ? `+${kei.projSpreadHome.toFixed(1)}`
+          : kei.projSpreadHome.toFixed(1);
     } else if (row.market === "Total" && kei.projTotal != null) {
       row.kei = kei.projTotal.toFixed(1);
     }

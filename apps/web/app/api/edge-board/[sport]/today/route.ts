@@ -1,5 +1,9 @@
 import { jsonError, jsonOk } from "@/lib/api/response";
-import { ensureInternalSecret, getRequestId, withRequestId } from "@/lib/edge-board-common";
+import {
+  ensureInternalSecret,
+  getRequestId,
+  withRequestId,
+} from "@/lib/edge-board-common";
 import { env } from "@/lib/config/env";
 import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
 import { cacheControlHeader, EDGE_BOARD_CACHE_TTL_MS } from "@/lib/constants";
@@ -15,13 +19,14 @@ const sportCache = new Map<string, { rows: unknown[]; ts: number }>();
 
 function addHeaders(response: NextResponse, extra?: Record<string, string>) {
   response.headers.set("cache-control", cacheControlHeader());
-  if (extra) Object.entries(extra).forEach(([k, v]) => response.headers.set(k, v));
+  if (extra)
+    Object.entries(extra).forEach(([k, v]) => response.headers.set(k, v));
   return response;
 }
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ sport: string }> }
+  { params }: { params: Promise<{ sport: string }> },
 ) {
   const { sport } = await params;
   const valid = getSport(sport);
@@ -34,7 +39,10 @@ export async function GET(
   const unauthorized = ensureInternalSecret(req, requestId);
   if (unauthorized) return unauthorized;
 
-  const keys = [env.ODDS_API_KEY?.trim(), env.ODDS_API_KEY_BACKUP?.trim()].filter((k): k is string => Boolean(k));
+  const keys = [
+    env.ODDS_API_KEY?.trim(),
+    env.ODDS_API_KEY_BACKUP?.trim(),
+  ].filter((k): k is string => Boolean(k));
   if (!keys.length || !SPORT_KEY_MAP[sport]) {
     return withRequestId(addHeaders(jsonOk({ rows: [] })), requestId);
   }
@@ -53,7 +61,10 @@ export async function GET(
       rows = await fetchEdgeBoard(sport, key);
       break;
     } catch (e) {
-      logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "edge-board/today" });
+      logError(e instanceof Error ? e : new Error(String(e)), {
+        sport,
+        route: "edge-board/today",
+      });
     }
   }
   if (rows.length === 0 && cached) {
@@ -63,14 +74,25 @@ export async function GET(
     rows = mergeKeiIntoEdgeBoardRows(rows, sport);
     const parsed = EdgeBoardResponseSchema.safeParse({ rows });
     if (!parsed.success) {
-      if (cached) return withRequestId(addHeaders(jsonOk({ rows: cached.rows })), requestId);
+      if (cached)
+        return withRequestId(
+          addHeaders(jsonOk({ rows: cached.rows })),
+          requestId,
+        );
       return withRequestId(addHeaders(jsonOk({ rows: [] })), requestId);
     }
     sportCache.set(sport, { rows: parsed.data.rows, ts: now });
     return withRequestId(addHeaders(jsonOk(parsed.data)), requestId);
   } catch (e) {
-    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "edge-board/today" });
-    if (cached) return withRequestId(addHeaders(jsonOk({ rows: cached.rows })), requestId);
+    logError(e instanceof Error ? e : new Error(String(e)), {
+      sport,
+      route: "edge-board/today",
+    });
+    if (cached)
+      return withRequestId(
+        addHeaders(jsonOk({ rows: cached.rows })),
+        requestId,
+      );
     return withRequestId(addHeaders(jsonOk({ rows: [] })), requestId);
   }
 }

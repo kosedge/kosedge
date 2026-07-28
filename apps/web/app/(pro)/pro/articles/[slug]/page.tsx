@@ -2,7 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { HIGHLIGHTED_GAMES } from "@/lib/featured-games";
 
-export default async function GameArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function GameArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const game = HIGHLIGHTED_GAMES.find((g) => g.slug === slug);
   if (!game) return notFound();
@@ -26,11 +30,15 @@ export default async function GameArticlePage({ params }: { params: Promise<{ sl
         <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
           <div>
             <div className="text-kos-text/60">Best Line</div>
-            <div className="text-kos-gold font-medium">{game.row.bestLine.top.label}</div>
+            <div className="text-kos-gold font-medium">
+              {game.row.bestLine.top.label}
+            </div>
           </div>
           <div>
             <div className="text-kos-text/60">Best O/U</div>
-            <div className="text-kos-gold font-medium">{game.row.bestOU.top.label}</div>
+            <div className="text-kos-gold font-medium">
+              {game.row.bestOU.top.label}
+            </div>
           </div>
           <div>
             <div className="text-kos-text/60">Open Line</div>

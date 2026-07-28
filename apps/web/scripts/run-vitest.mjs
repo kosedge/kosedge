@@ -14,7 +14,9 @@ const packageRoot = path.resolve(__dirname, "..");
 
 let binPath;
 try {
-  const pkgPath = require.resolve("vitest/package.json", { paths: [packageRoot] });
+  const pkgPath = require.resolve("vitest/package.json", {
+    paths: [packageRoot],
+  });
   const pkg = require(pkgPath);
   const bin = pkg.bin?.vitest ?? pkg.bin;
   const binFile = typeof bin === "string" ? bin : "vitest.mjs";

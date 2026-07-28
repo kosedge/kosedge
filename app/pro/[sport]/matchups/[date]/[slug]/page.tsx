@@ -14,7 +14,8 @@ export default function MatchupPage({
         <section className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6">
           <h3 className="text-lg font-semibold">Fair Lines vs Market</h3>
           <p className="mt-2 text-kos-text/80">
-            Placeholder. (Model reference + best available numbers will live here.)
+            Placeholder. (Model reference + best available numbers will live
+            here.)
           </p>
         </section>
 

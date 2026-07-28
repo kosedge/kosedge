@@ -13,7 +13,7 @@ export function getRequestId(req: Request): string {
 
 export function withRequestId<T extends NextResponse>(
   res: T,
-  requestId: string
+  requestId: string,
 ): T {
   res.headers.set("x-request-id", requestId);
   return res;
@@ -25,7 +25,7 @@ export function withRequestId<T extends NextResponse>(
  */
 export function ensureInternalSecret(
   req: Request,
-  requestId: string
+  requestId: string,
 ): NextResponse | null {
   const expected = env.INTERNAL_API_SECRET;
   if (!expected) return null;
@@ -36,4 +36,3 @@ export function ensureInternalSecret(
   const res = NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   return withRequestId(res, requestId);
 }
-

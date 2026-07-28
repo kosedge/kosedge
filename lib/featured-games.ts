@@ -6,15 +6,31 @@ export type FeaturedGame = {
   sport: string;
 };
 
-const SAMPLE_ROW = (away: string, home: string, time: string): LegacyEdgeBoardRow => ({
+const SAMPLE_ROW = (
+  away: string,
+  home: string,
+  time: string,
+): LegacyEdgeBoardRow => ({
   id: `${away}-${home}`.toLowerCase().replace(/\s+/g, "-"),
   time,
   teamA: { name: away, site: "Away" },
   teamB: { name: home, site: "Home" },
-  openOU: { top: { label: "o148.5", juice: "-110" }, bottom: { label: "u148.5", juice: "-110" } },
-  openLine: { top: { label: "+4.5", juice: "-110" }, bottom: { label: "-4.5", juice: "-110" } },
-  bestLine: { top: { label: "+5.5", juice: "-112" }, bottom: { label: "-5.0", juice: "-110" } },
-  bestOU: { top: { label: "o147.5", juice: "-110" }, bottom: { label: "u149.5", juice: "-112" } },
+  openOU: {
+    top: { label: "o148.5", juice: "-110" },
+    bottom: { label: "u148.5", juice: "-110" },
+  },
+  openLine: {
+    top: { label: "+4.5", juice: "-110" },
+    bottom: { label: "-4.5", juice: "-110" },
+  },
+  bestLine: {
+    top: { label: "+5.5", juice: "-112" },
+    bottom: { label: "-5.0", juice: "-110" },
+  },
+  bestOU: {
+    top: { label: "o147.5", juice: "-110" },
+    bottom: { label: "u149.5", juice: "-112" },
+  },
 });
 
 /** Top edge = first featured game. */

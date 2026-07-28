@@ -37,7 +37,7 @@ export const logError = (error: Error, context?: Record<string, unknown>) => {
       },
       ...context,
     },
-    error.message
+    error.message,
   );
 };
 
@@ -49,6 +49,9 @@ export const logWarn = (message: string, context?: Record<string, unknown>) => {
   logger.warn(context, message);
 };
 
-export const logDebug = (message: string, context?: Record<string, unknown>) => {
+export const logDebug = (
+  message: string,
+  context?: Record<string, unknown>,
+) => {
   logger.debug(context, message);
 };

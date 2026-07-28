@@ -13,18 +13,18 @@ interface PerformanceMetric {
 export async function measurePerformance<T>(
   name: string,
   fn: () => Promise<T>,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): Promise<T> {
   const start = performance.now();
   try {
     const result = await fn();
     const duration = performance.now() - start;
-    
+
     logInfo(`Performance: ${name}`, {
       duration: `${duration.toFixed(2)}ms`,
       ...metadata,
     });
-    
+
     return result;
   } catch (error) {
     const duration = performance.now() - start;
@@ -43,18 +43,18 @@ export async function measurePerformance<T>(
 export function measurePerformanceSync<T>(
   name: string,
   fn: () => T,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): T {
   const start = performance.now();
   try {
     const result = fn();
     const duration = performance.now() - start;
-    
+
     logInfo(`Performance: ${name}`, {
       duration: `${duration.toFixed(2)}ms`,
       ...metadata,
     });
-    
+
     return result;
   } catch (error) {
     const duration = performance.now() - start;
@@ -72,7 +72,7 @@ export function measurePerformanceSync<T>(
  */
 export function createTimer(name: string) {
   const start = performance.now();
-  
+
   return {
     end: (metadata?: Record<string, unknown>) => {
       const duration = performance.now() - start;

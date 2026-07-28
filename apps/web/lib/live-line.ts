@@ -22,12 +22,16 @@ export function liveSpread(
   homeScore: number,
   awayScore: number,
   minutesRemaining: number,
-  totalMinutes: number = NCAAM_TOTAL_MINUTES
+  totalMinutes: number = NCAAM_TOTAL_MINUTES,
 ): number {
   const currentMargin = homeScore - awayScore;
-  const fractionRemaining = Math.max(0, Math.min(1, minutesRemaining / totalMinutes));
+  const fractionRemaining = Math.max(
+    0,
+    Math.min(1, minutesRemaining / totalMinutes),
+  );
   // Expected final margin = current + (pregame expectation for the rest of the game)
-  const expectedFinalMargin = currentMargin + pregameSpreadHome * fractionRemaining;
+  const expectedFinalMargin =
+    currentMargin + pregameSpreadHome * fractionRemaining;
   // Fair live spread (from now to end) = what spread makes expected final margin zero from bettor's view
   // Live spread for "home from now" = expectedFinalMargin - currentMargin = pregameSpreadHome * fractionRemaining.
   return pregameSpreadHome * fractionRemaining;
@@ -43,11 +47,23 @@ export function liveSpreadWithEdge(
   awayScore: number,
   minutesRemaining: number,
   marketLiveSpreadHome: number | null,
-  totalMinutes: number = NCAAM_TOTAL_MINUTES
-): { currentMargin: number; modelLiveSpreadHome: number; edgeVsMarket: number | null } {
+  totalMinutes: number = NCAAM_TOTAL_MINUTES,
+): {
+  currentMargin: number;
+  modelLiveSpreadHome: number;
+  edgeVsMarket: number | null;
+} {
   const currentMargin = homeScore - awayScore;
-  const modelLiveSpreadHome = liveSpread(pregameSpreadHome, homeScore, awayScore, minutesRemaining, totalMinutes);
+  const modelLiveSpreadHome = liveSpread(
+    pregameSpreadHome,
+    homeScore,
+    awayScore,
+    minutesRemaining,
+    totalMinutes,
+  );
   const edgeVsMarket =
-    marketLiveSpreadHome != null ? modelLiveSpreadHome - marketLiveSpreadHome : null;
+    marketLiveSpreadHome != null
+      ? modelLiveSpreadHome - marketLiveSpreadHome
+      : null;
   return { currentMargin, modelLiveSpreadHome, edgeVsMarket };
 }

@@ -19,16 +19,19 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   session?: typeof mockSession;
 }
 
-const AllTheProviders = ({ children, session = mockSession }: { children: React.ReactNode; session?: typeof mockSession }) => {
+const AllTheProviders = ({
+  children,
+  session = mockSession,
+}: {
+  children: React.ReactNode;
+  session?: typeof mockSession;
+}) => {
   return <SessionProvider session={session}>{children}</SessionProvider>;
 };
 
-const customRender = (
-  ui: ReactElement,
-  options?: CustomRenderOptions
-) => {
+const customRender = (ui: ReactElement, options?: CustomRenderOptions) => {
   const { session, ...renderOptions } = options || {};
-  
+
   return render(ui, {
     wrapper: ({ children }) => (
       <AllTheProviders session={session}>{children}</AllTheProviders>

@@ -36,8 +36,8 @@ const nextConfig: NextConfig = {
 
   // If you ever load remote images, add domains here
   images: {
-    remotePatterns: []
-  }
+    remotePatterns: [],
+  },
 };
 
 export default withMDX(nextConfig);

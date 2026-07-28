@@ -16,7 +16,7 @@ export const section2: InsightSection = {
   pillarTitle: "PILLAR 5 — Discipline > Confidence",
   body: [
     "You need hard rules: minimum edge, minimum liquidity, max exposure per slate, max exposure per team/player.",
-    "These rules prevent your brain from talking you into \"one more bet.\"",
+    'These rules prevent your brain from talking you into "one more bet."',
     "Kos Edge is being built to enforce discipline, not enable gambling.",
   ],
 };
@@ -26,7 +26,7 @@ export const section3: InsightSection = {
   pillarTitle: "PILLAR 5 — Discipline > Confidence",
   body: [
     "Confidence is a feeling. Probability is a measurement.",
-    "Your job is to build a process that wins even when you \"don't feel it,\" and passes even when you \"love it.\"",
+    'Your job is to build a process that wins even when you "don\'t feel it," and passes even when you "love it."',
     "That's what separates a business from entertainment.",
   ],
 };

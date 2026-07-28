@@ -8,7 +8,11 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 
 function getRequestId(req: Request): string {
-  return req.headers.get("x-request-id") ?? req.headers.get("x-correlation-id") ?? crypto.randomUUID();
+  return (
+    req.headers.get("x-request-id") ??
+    req.headers.get("x-correlation-id") ??
+    crypto.randomUUID()
+  );
 }
 
 const registerSchema = z.object({
@@ -53,11 +57,16 @@ export async function POST(req: Request) {
       },
     });
 
-    const res = jsonOk({ message: "User created successfully", user }, { status: 201 });
+    const res = jsonOk(
+      { message: "User created successfully", user },
+      { status: 201 },
+    );
     res.headers.set("x-request-id", requestId);
     return res;
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { route: "auth/register" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      route: "auth/register",
+    });
     const errRes = handleApiError(error);
     errRes.headers.set("x-request-id", requestId);
     return errRes;

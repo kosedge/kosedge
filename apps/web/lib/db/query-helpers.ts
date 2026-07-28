@@ -25,7 +25,7 @@ export interface PaginatedResult<T> {
 export async function paginate<T>(
   model: any,
   args: Prisma.Args<any, "findMany">,
-  params: PaginationParams = {}
+  params: PaginationParams = {},
 ): Promise<PaginatedResult<T>> {
   const page = Math.max(1, params.page || 1);
   const limit = Math.min(100, Math.max(1, params.limit || 20));
@@ -58,7 +58,7 @@ export async function paginate<T>(
 export async function cachedQuery<T>(
   cacheKey: string,
   query: () => Promise<T>,
-  ttl: number = 300
+  ttl: number = 300,
 ): Promise<T> {
   return getCached(cacheKey, query, ttl);
 }
@@ -69,7 +69,7 @@ export async function cachedQuery<T>(
 export async function batchQuery<T, K>(
   ids: K[],
   fetcher: (ids: K[]) => Promise<T[]>,
-  idExtractor: (item: T) => K
+  idExtractor: (item: T) => K,
 ): Promise<Map<K, T>> {
   const items = await fetcher(ids);
   const map = new Map<K, T>();

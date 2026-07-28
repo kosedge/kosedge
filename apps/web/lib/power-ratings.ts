@@ -25,7 +25,7 @@ export function getPowerRatings(sportKey: string): PowerRatingRow[] {
     process.cwd(),
     "data",
     "processed",
-    `power_ratings_${sportKey}.json`
+    `power_ratings_${sportKey}.json`,
   );
   try {
     const raw = readFileSync(p, "utf-8");

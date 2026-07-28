@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-export default function SlatePage({ params }: { params: { sport: string; date: string } }) {
+export default function SlatePage({
+  params,
+}: {
+  params: { sport: string; date: string };
+}) {
   const base = `/pro/${params.sport}`;
 
   // Placeholder. Later this becomes fetched/generated list of games.
@@ -22,7 +26,8 @@ export default function SlatePage({ params }: { params: { sport: string; date: s
         <div>
           <h2 className="text-2xl font-semibold">Slate: {params.date}</h2>
           <p className="mt-2 text-kos-text/70">
-            Write-ups are collapsed by default. Model reference is informational only.
+            Write-ups are collapsed by default. Model reference is informational
+            only.
           </p>
         </div>
 

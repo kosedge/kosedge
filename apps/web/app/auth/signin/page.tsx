@@ -45,94 +45,97 @@ function SignInForm() {
   return (
     <div className="w-full max-w-md">
       <div className="bg-black/30 border border-white/12 rounded-2xl p-8 backdrop-blur-xl shadow-xl">
-            <div className="mb-8 text-center">
-              <h1 className="text-4xl font-bebas tracking-tight text-kos-gold">
-                Sign In
-              </h1>
-              <p className="mt-2 text-sm text-gray-400">
-                Access your Kos Edge Pro account
-              </p>
-            </div>
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bebas tracking-tight text-kos-gold">
+            Sign In
+          </h1>
+          <p className="mt-2 text-sm text-gray-400">
+            Access your Kos Edge Pro account
+          </p>
+        </div>
 
-            {error && (
-              <div className="mb-4 rounded-lg bg-red-500/20 border border-red-500/50 p-3 text-sm text-red-300">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-lg bg-white/5 border border-white/12 px-4 py-3 text-white placeholder-gray-500 focus:border-kos-gold/50 focus:outline-none focus:ring-2 focus:ring-kos-gold/20"
-                  placeholder="you@example.com"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={8}
-                  className="w-full rounded-lg bg-white/5 border border-white/12 px-4 py-3 text-white placeholder-gray-500 focus:border-kos-gold/50 focus:outline-none focus:ring-2 focus:ring-kos-gold/20"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-xl bg-kos-gold px-6 py-3 font-bold text-black hover:brightness-110 transition shadow-lg shadow-kos-gold/25 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </form>
-
-            <div className="mt-6 text-center text-sm text-gray-400">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/signup"
-                className="text-kos-gold hover:text-kos-gold/80 font-semibold"
-              >
-                Sign up
-              </Link>
-            </div>
-
-            <div className="mt-4 text-center">
-              <Link
-                href="/"
-                className="text-xs text-gray-500 hover:text-gray-400"
-              >
-                ← Back to home
-              </Link>
-            </div>
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-500/20 border border-red-500/50 p-3 text-sm text-red-300">
+            {error}
           </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full rounded-lg bg-white/5 border border-white/12 px-4 py-3 text-white placeholder-gray-500 focus:border-kos-gold/50 focus:outline-none focus:ring-2 focus:ring-kos-gold/20"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+              className="w-full rounded-lg bg-white/5 border border-white/12 px-4 py-3 text-white placeholder-gray-500 focus:border-kos-gold/50 focus:outline-none focus:ring-2 focus:ring-kos-gold/20"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-kos-gold px-6 py-3 font-bold text-black hover:brightness-110 transition shadow-lg shadow-kos-gold/25 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+
+        <div className="mt-6 text-center text-sm text-gray-400">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/auth/signup"
+            className="text-kos-gold hover:text-kos-gold/80 font-semibold"
+          >
+            Sign up
+          </Link>
+        </div>
+
+        <div className="mt-4 text-center">
+          <Link href="/" className="text-xs text-gray-500 hover:text-gray-400">
+            ← Back to home
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function SignInPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center py-16 text-gray-400">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-16 text-gray-400">
+          Loading...
+        </div>
+      }
+    >
       <SignInForm />
     </Suspense>
   );

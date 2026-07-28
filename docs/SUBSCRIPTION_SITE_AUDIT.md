@@ -7,13 +7,13 @@
 
 ## Overall rating: **6.2 / 10**
 
-| Dimension           | Score | Notes |
-|--------------------|--------|-------|
-| Structure          | 7/10   | Clear app/router, lib, components; some duplication. |
-| Organization       | 6.5/10 | Good layout and docs; Pro vs public boundaries fuzzy. |
-| Professionalism    | 6/10   | Polished UI and stack; auth/gating and billing incomplete. |
-| Enterprise-grade   | 5.5/10 | Solid foundations; subscription and API discipline missing. |
-| Scalability        | 6.5/10 | Monorepo, contracts, env; no middleware, weak API patterns. |
+| Dimension              | Score    | Notes                                                                         |
+| ---------------------- | -------- | ----------------------------------------------------------------------------- |
+| Structure              | 7/10     | Clear app/router, lib, components; some duplication.                          |
+| Organization           | 6.5/10   | Good layout and docs; Pro vs public boundaries fuzzy.                         |
+| Professionalism        | 6/10     | Polished UI and stack; auth/gating and billing incomplete.                    |
+| Enterprise-grade       | 5.5/10   | Solid foundations; subscription and API discipline missing.                   |
+| Scalability            | 6.5/10   | Monorepo, contracts, env; no middleware, weak API patterns.                   |
 | **Subscription-ready** | **4/10** | **Schema and Pro logic exist; no paywall, no Stripe, Pro content not gated.** |
 
 ---
@@ -59,7 +59,7 @@
 
 **Strengths**
 
-- Themed UI (Tailwind, CSS variables, kos-* tokens), ErrorBoundary, error/global-error pages, Pino logging.
+- Themed UI (Tailwind, CSS variables, kos-\* tokens), ErrorBoundary, error/global-error pages, Pino logging.
 - NextAuth v5, Prisma, typed env, `jsonError`/`jsonOk` in one route; security lib (rate-limit, sanitize, headers).
 
 **Gaps**
@@ -138,34 +138,34 @@
 
 ## Recommended priorities (in order)
 
-1. **Gate Pro content**  
-   - Add Next.js `middleware.ts` that, for `/pro/*` (except `/pro` and maybe `/pro/welcome` for post-login), requires auth and Pro (session + DB or cached Pro flag) and redirects else to `/pro` or sign-in.  
-   - Or add a shared Pro layout that calls `isProUser()` and redirects if false.  
+1. **Gate Pro content**
+   - Add Next.js `middleware.ts` that, for `/pro/*` (except `/pro` and maybe `/pro/welcome` for post-login), requires auth and Pro (session + DB or cached Pro flag) and redirects else to `/pro` or sign-in.
+   - Or add a shared Pro layout that calls `isProUser()` and redirects if false.
    - Ensure every Pro route is behind this (or equivalent) so paid content is not publicly accessible.
 
-2. **Integrate billing**  
-   - Add Stripe (or chosen provider): Checkout Session for new subscriptions, Customer Portal for management, webhooks to update `User.subscriptionStatus`, `subscriptionPlan`, `subscriptionEnd`.  
+2. **Integrate billing**
+   - Add Stripe (or chosen provider): Checkout Session for new subscriptions, Customer Portal for management, webhooks to update `User.subscriptionStatus`, `subscriptionPlan`, `subscriptionEnd`.
    - Wire ProPricing CTAs to Stripe Checkout; replace or remove the cookie-based activate route so entitlement is driven by DB + webhooks.
 
-3. **Align docs and code**  
-   - Update AUTH_SETUP.md (and any similar docs) so they describe actual behavior (no middleware today; Pro gating only on `/pro` until you add it).  
+3. **Align docs and code**
+   - Update AUTH_SETUP.md (and any similar docs) so they describe actual behavior (no middleware today; Pro gating only on `/pro` until you add it).
    - Fix `pro/activate/rout.ts` → `route.ts` if you keep the file; otherwise remove or replace with a real “grant trial” or post-checkout redirect.
 
-4. **Harden API surface**  
-   - Use `lib/api/error-handler.ts` (or a single wrapper) in all API route handlers so errors return a consistent shape and status codes.  
+4. **Harden API surface**
+   - Use `lib/api/error-handler.ts` (or a single wrapper) in all API route handlers so errors return a consistent shape and status codes.
    - Apply rate limiting and security headers on key API routes.
 
-5. **Tests**  
-   - Add tests for: Pro gating (e.g. redirect when not Pro), auth flow (sign-in/sign-out), and at least one critical API (e.g. edge-board or register).  
+5. **Tests**
+   - Add tests for: Pro gating (e.g. redirect when not Pro), auth flow (sign-in/sign-out), and at least one critical API (e.g. edge-board or register).
    - Add E2E for: visit `/pro/kei-lines` as guest → redirect to sign-in or Pro; after “Pro” → can see content.
 
 ---
 
 ## Summary
 
-- **Structure and organization:** Good for a growing product; a 7 and 6.5 are fair.  
-- **Professionalism and enterprise:** Undermined by open Pro content and no real billing; 6 and 5.5.  
-- **Scalability:** Fine for traffic and code layout; needs a proper access and billing layer for 7+.  
+- **Structure and organization:** Good for a growing product; a 7 and 6.5 are fair.
+- **Professionalism and enterprise:** Undermined by open Pro content and no real billing; 6 and 5.5.
+- **Scalability:** Fine for traffic and code layout; needs a proper access and billing layer for 7+.
 - **Subscription business:** Today it’s a **4/10** — schema and Pro logic exist but paywall and payments are missing and Pro content is not protected.
 
 **Bottom line:** With Pro gating (middleware or layout) and Stripe (or equivalent) wired to the DB, the same codebase can credibly sit at **7–7.5/10** for a subscription product and scale from there.

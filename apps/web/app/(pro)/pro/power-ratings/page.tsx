@@ -28,7 +28,9 @@ export default function PowerRatingsHubPage() {
             href={`/pro/power-ratings/${s.key}`}
             className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6 hover:border-kos-gold/40 transition"
           >
-            <h2 className="text-xl font-semibold text-kos-text">{s.fullName}</h2>
+            <h2 className="text-xl font-semibold text-kos-text">
+              {s.fullName}
+            </h2>
             <p className="mt-2 text-sm text-kos-text/70">{s.desc}</p>
             <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
               View ratings →

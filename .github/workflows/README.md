@@ -9,6 +9,7 @@ This directory contains GitHub Actions workflows for automated testing, building
 Runs on every push and pull request to `main` and `develop` branches.
 
 **Jobs:**
+
 1. **Lint & Type Check** - Runs ESLint and TypeScript type checking
 2. **Test** - Runs all tests and uploads coverage
 3. **Build** - Builds the application to verify it compiles
@@ -21,6 +22,7 @@ Runs on every push and pull request to `main` and `develop` branches.
 Runs on pushes to `main` branch and version tags (`v*`).
 
 **Jobs:**
+
 1. **Verify Web Build** - Builds the web app (Vercel production deploys come from the Vercel GitHub integration)
 2. **Deploy Model Service (Railway)** - Runs only when repo variable `ENABLE_RAILWAY_DEPLOY=true` and secrets `RAILWAY_TOKEN` (+ optional `RAILWAY_SERVICE_ID`) are set
 
@@ -29,6 +31,7 @@ Runs on pushes to `main` branch and version tags (`v*`).
 Runs on pull request events (opened, synchronized, reopened).
 
 **Features:**
+
 - Runs all quality checks
 - Comments on PR with results
 - Updates comment on subsequent pushes
@@ -36,6 +39,7 @@ Runs on pull request events (opened, synchronized, reopened).
 ### `codeql.yml` - Security Analysis
 
 Runs CodeQL security analysis on:
+
 - Every push to `main`
 - Pull requests to `main`
 - Weekly schedule (Sundays)
@@ -55,22 +59,26 @@ For deployment, configure these secrets in GitHub Settings → Secrets:
 ### Platform-Specific Secrets
 
 **Vercel (optional — usually not needed if the Vercel GitHub app deploys):**
+
 - `VERCEL_TOKEN`
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
 
 **Railway (model service):**
+
 - `RAILWAY_TOKEN`
 - `RAILWAY_SERVICE_ID` (recommended)
 - Repo variable `ENABLE_RAILWAY_DEPLOY=true` to turn the deploy job on
 
 **Docker Hub:**
+
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
 
 ## Caching
 
 Workflows use caching for:
+
 - pnpm dependencies (via `actions/setup-node`)
 - Build artifacts (`.next`, `.turbo`)
 
@@ -125,6 +133,7 @@ pnpm format:check
 ### Add New Jobs
 
 Edit the workflow files to add:
+
 - Additional test suites
 - Deployment to multiple environments
 - Notification steps (Slack, email, etc.)
@@ -132,6 +141,7 @@ Edit the workflow files to add:
 ### Change Triggers
 
 Modify the `on:` section in workflow files:
+
 ```yaml
 on:
   push:
@@ -143,6 +153,7 @@ on:
 ### Add Environments
 
 Use GitHub Environments for staging/production:
+
 ```yaml
 environment:
   name: production

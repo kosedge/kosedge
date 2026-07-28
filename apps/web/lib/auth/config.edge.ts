@@ -14,26 +14,15 @@ export const authConfigEdge = {
     error: "/auth/error",
   },
   callbacks: {
-    jwt({
-      token,
-      user,
-    }: {
-      token: JWT;
-      user?: User;
-    }) {
+    jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
         token.id = user.id;
-        token.role = ((user as { role?: string }).role ?? "USER") as JWT["role"];
+        token.role = ((user as { role?: string }).role ??
+          "USER") as JWT["role"];
       }
       return token;
     },
-    session({
-      session,
-      token,
-    }: {
-      session: Session;
-      token: JWT;
-    }) {
+    session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as UserRole;

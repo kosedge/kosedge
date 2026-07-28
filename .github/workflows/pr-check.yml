@@ -10,6 +10,13 @@ jobs:
     name: PR Quality Checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Needed for the optional PR comment step. Repo default token may be
+    # read-only; without these scopes the comment step 403s and marks the
+    # whole job failed even when format/lint/typecheck/tests passed.
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout code
@@ -32,15 +39,19 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check formatting
+        id: format
         run: pnpm format:check
 
       - name: Run linter
+        id: lint
         run: pnpm lint
 
       - name: Run type check
+        id: typecheck
         run: pnpm typecheck
 
       - name: Run tests
+        id: test
         run: pnpm test
         env:
           NODE_ENV: test
@@ -50,43 +61,53 @@ jobs:
 
       - name: Comment PR with results
         if: always()
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-            
-            const botComment = comments.find(comment => 
-              comment.user.type === 'Bot' && comment.body.includes('## PR Checks')
-            );
-            
-            const status = '${{ job.status }}' === 'success' ? '✅' : '❌';
+            const jobOk = '${{ job.status }}' === 'success';
+            const status = jobOk ? '✅' : '❌';
+            const headline = jobOk
+              ? '**All checks passed!**'
+              : '**Some checks failed.** See the Actions log for details.';
             const body = `## PR Checks
-            
-            ${status} **All checks passed!**
-            
-            - ✅ Formatting check
-            - ✅ Linting
-            - ✅ Type checking
-            - ✅ Tests
-            
-            Ready for review!`;
-            
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: body
-              });
-            } else {
-              await github.rest.issues.createComment({
+
+            ${status} ${headline}
+
+            - Formatting check
+            - Linting
+            - Type checking
+            - Tests
+
+            ${jobOk ? 'Ready for review!' : 'Fix the failing step(s), then push again.'}`;
+
+            try {
+              const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                body: body
               });
+
+              const botComment = comments.find(comment =>
+                comment.user.type === 'Bot' && comment.body.includes('## PR Checks')
+              );
+
+              if (botComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body,
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body,
+                });
+              }
+            } catch (err) {
+              // Never fail the job over a comment permission/network issue.
+              core.warning(`Skipping PR comment: ${err.message || err}`);
             }

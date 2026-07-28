@@ -7,7 +7,8 @@ export default function MethodologyPage() {
       <SiteHeader />
       <section className="mx-auto max-w-4xl px-6 pt-10 pb-20">
         <h1 className="text-4xl font-extrabold">
-          Methodology: <span className="text-[#F5B942]">Process Over Noise</span>
+          Methodology:{" "}
+          <span className="text-[#F5B942]">Process Over Noise</span>
         </h1>
         <p className="mt-4 text-white/70">
           Best-line shopping, disciplined thresholds, and long-term thinking.

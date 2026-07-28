@@ -3,7 +3,8 @@ import { GET } from "@/app/api/live-line/route";
 
 describe("GET /api/live-line", () => {
   it("returns 200 with expected shape for valid query", async () => {
-    const url = "http://localhost/api/live-line?pregameSpread=-5&homeScore=30&awayScore=28&minutesRemaining=10";
+    const url =
+      "http://localhost/api/live-line?pregameSpread=-5&homeScore=30&awayScore=28&minutesRemaining=10";
     const req = new Request(url);
     const res = await GET(req);
     const data = await res.json();
@@ -11,7 +12,9 @@ describe("GET /api/live-line", () => {
     expect(res.status).toBe(200);
     expect(typeof data.currentMargin).toBe("number");
     expect(typeof data.modelLiveSpreadHome).toBe("number");
-    expect(data.edgeVsMarket === null || typeof data.edgeVsMarket === "number").toBe(true);
+    expect(
+      data.edgeVsMarket === null || typeof data.edgeVsMarket === "number",
+    ).toBe(true);
   });
 
   it("returns 200 with edgeVsMarket when marketSpread provided", async () => {
@@ -31,7 +34,10 @@ describe("GET /api/live-line", () => {
     const data = await res.json();
 
     expect(res.status).toBe(400);
-    expect(data).toMatchObject({ error: expect.any(String), code: "VALIDATION_ERROR" });
+    expect(data).toMatchObject({
+      error: expect.any(String),
+      code: "VALIDATION_ERROR",
+    });
   });
 
   it("returns 400 for invalid numeric params", async () => {

@@ -1,15 +1,13 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "python.defaultInterpreterPath": "${workspaceFolder}/app/model-service/.venv/bin/python",
     "python.analysis.autoSearchPaths": true,
-    "python.analysis.extraPaths": [
-      "${workspaceFolder}/app/model-service"
-    ],
-    "python.analysis.typeCheckingMode": "basic"
-  }
+    "python.analysis.extraPaths": ["${workspaceFolder}/app/model-service"],
+    "python.analysis.typeCheckingMode": "basic",
+  },
 }

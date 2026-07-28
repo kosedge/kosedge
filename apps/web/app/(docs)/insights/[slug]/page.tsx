@@ -9,6 +9,9 @@ export function generateStaticParams() {
 }
 
 export default function InsightPage({ params }: { params: { slug: string } }) {
+  // useMDXComponents is a Next MDX helper (not a React Hook); call it
+  // unconditionally so eslint react-hooks rules stay quiet.
+  const mdxComponents = useMDXComponents({});
   const slugs = getMdxSlugs("insights");
   if (!slugs.includes(params.slug)) return notFound();
 
@@ -21,7 +24,7 @@ export default function InsightPage({ params }: { params: { slug: string } }) {
     >
       <p className="text-sm text-kos-text/60">{post.frontmatter.date}</p>
       <div className="prose prose-invert mt-10 max-w-none">
-        <MDXRemote source={post.content} components={useMDXComponents({})} />
+        <MDXRemote source={post.content} components={mdxComponents} />
       </div>
     </ArticleLayout>
   );
