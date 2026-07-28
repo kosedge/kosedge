@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-07-28T15:16:30+00:00",
+  "workstream": "nfl-oc-densify-2020-2023",
+  "branch": "nfl-kav-sharpen",
+  "database": "127.0.0.1:5432/kosedge",
+  "note": "Warehouse is promoted restore (former kosedge_nfl_restore renamed to kosedge). Densify/CLV only — no game-model retrain/re-sim.",
+  "before": {
+    "source_artifact": "data/ops/nfl-odds-open-close-grading.json @ 2026-07-28T12:51:51Z",
+    "odds_snapshots": 60183,
+    "owned_open_close_games": 724,
+    "rows_with_owned_oc_join": 296,
+    "n_clv_spread": 159,
+    "n_clv_total": 117,
+    "n_owned_oc_by_season": {
+      "2020": 0,
+      "2021": 0,
+      "2022": 0,
+      "2023": 0,
+      "2024": 229,
+      "2025": 235
+    }
+  },
+  "after": {
+    "source_artifact": "data/ops/nfl-odds-open-close-grading.json @ 2026-07-28T15:15:47Z",
+    "odds_snapshots": 80995,
+    "owned_open_close_games": 1931,
+    "rows_with_owned_oc_join": 1172,
+    "n_clv_spread": 545,
+    "n_clv_total": 309,
+    "n_owned_oc_by_season": {
+      "2020": 269,
+      "2021": 285,
+      "2022": 284,
+      "2023": 285,
+      "2024": 285,
+      "2025": 285
+    },
+    "schedule_final_games_2020_2025": 1693,
+    "schedule_owned_2plus_ts_by_season": {
+      "2020": {"owned_2plus": 269, "n": 269, "still_zero": 0},
+      "2021": {"owned_2plus": 285, "n": 285, "still_zero": 0},
+      "2022": {"owned_2plus": 284, "n": 284, "still_zero": 0},
+      "2023": {"owned_2plus": 285, "n": 285, "still_zero": 0},
+      "2024": {"owned_2plus": 285, "n": 285, "still_zero": 0},
+      "2025": {"owned_2plus": 285, "n": 285, "still_zero": 0}
+    }
+  },
+  "clv_delta": {
+    "n_clv_spread": {"before": 159, "after": 545, "delta": 386},
+    "n_clv_total": {"before": 117, "after": 309, "delta": 192}
+  },
+  "credits": {
+    "starting_remaining": 2999276,
+    "ending_remaining": 2992534,
+    "total_spent_this_workstream": 6742,
+    "breakdown": {
+      "nfl_mainline_densify_2020_2023": 6022,
+      "residual_gap_force_pull": 720
+    },
+    "orphan_rematch_credits": 0
+  },
+  "actions": [
+    {
+      "step": "enterprise densify 2020-2023 mainlines",
+      "script": "scripts/nfl/densify_owned_oc_2020_2023.py",
+      "result": "244 candidate dates; 200 API requests; 144 skip-if-owned; 19174 snapshots inserted this run; 6022 credits"
+    },
+    {
+      "step": "orphan odds rematch onto nflverse schedule games",
+      "script": "scripts/nfl/rematch_orphan_odds_to_schedule.py",
+      "result": "11580+ snapshots relinked (Odds API event-id games → schedule external_id games); 0 credits"
+    },
+    {
+      "step": "residual force-pull for 12 gap dates",
+      "artifact": "data/ops/nfl-oc-residual-gap-pull.json",
+      "result": "24 requests; 1638 snapshots; 720 credits; post-rematch full 1693/1693 schedule OC"
+    },
+    {
+      "step": "re-run open/close grading",
+      "script": "scripts/nfl/odds_open_close_grading.py",
+      "artifacts": [
+        "data/ops/nfl-odds-open-close-grading.json",
+        "data/ops/nfl-odds-open-close-grading.md"
+      ]
+    }
+  ],
+  "residual_gaps": {
+    "schedule_join_missing_2plus_ts": 0,
+    "notes": [
+      "CLV n still gated by model edge thresholds (spread |edge|>=0.5 vs open; total |edge|>=1.0) and projection coverage (1470/1693 rows with projections at last grade).",
+      "Persist still creates Odds-API-keyed duplicate games; rematch script must run after historical pulls until persist always hits schedule natural keys.",
+      "Date-level skip-if-owned (games>=8 & hours>=2) can leave individual slate games unjoined until rematch/force-pull."
+    ]
+  },
+  "files_written_or_updated": [
+    "data/ops/nfl-oc-densify-2020-2023-report.md",
+    "data/ops/nfl-oc-densify-2020-2023-report.json",
+    "data/ops/nfl-odds-open-close-grading.json",
+    "data/ops/nfl-odds-open-close-grading.md",
+    "data/ops/odds-enterprise-training-pull/checkpoint.json",
+    "data/ops/odds-enterprise-training-pull/summary.json",
+    "data/ops/odds-enterprise-training-pull/pull.log",
+    "data/ops/nfl-oc-orphan-rematch.json",
+    "data/ops/nfl-oc-residual-gap-pull.json",
+    "scripts/nfl/densify_owned_oc_2020_2023.py",
+    "scripts/nfl/rematch_orphan_odds_to_schedule.py"
+  ],
+  "needs_user": [
+    "No API key action needed (local ODDS_API_KEY worked).",
+    "Local kosedge already has warehouse data (restore promote already done). Prod warehouse promote still a separate ops step if desired.",
+    "Optional: harden persist_mainline_odds to always bind Odds API events to nflverse schedule game rows to avoid orphan rematch."
+  ]
+}
