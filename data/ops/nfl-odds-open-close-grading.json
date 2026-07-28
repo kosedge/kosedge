@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T12:42:12.374672+00:00",
+  "generated_at": "2026-07-28T12:51:51.342593+00:00",
   "database_url_host": "127.0.0.1:5432/kosedge_nfl_restore",
   "inventory": {
     "games": 4195,
@@ -83,6 +83,3 @@
     "Model metrics require nfl_market_projections rows joined on games.id."
   ]
 }
-
-Wrote /Users/ryankos/kosedge/data/ops/nfl-odds-open-close-grading.json
-Wrote /Users/ryankos/kosedge/data/ops/nfl-odds-open-close-grading.md

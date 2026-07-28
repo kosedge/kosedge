@@ -1,6 +1,6 @@
 # NFL odds open/close grading
 
-Generated: `2026-07-28T12:42:12.374672+00:00`
+Generated: `2026-07-28T12:51:51.342593+00:00`
 
 ## Inventory
 

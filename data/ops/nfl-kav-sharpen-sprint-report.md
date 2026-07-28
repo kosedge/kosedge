@@ -1,56 +1,66 @@
-# NFL KAV Sharpening Sprint Report (2026-07-28)
+# NFL KAV Sharpen Sprint Report
 
-## Verdict
-KAV (owned opponent-adjusted efficiency) is implemented, tested, materialized for 2013–2025, and wired into matchup packs / handicapping / supervised schema v3. DB-first odds grading shows the model beating market MAE with positive CLV on owned open/close pairs. Blend/totals retune does **not** clear the holdout promotion gate — keep `NFL_MARKET_BLEND_*=0.30`.
+Generated: 2026-07-28  
+Branch: `nfl-kav-sharpen`  
+Commit: `d63c6ed1` (+ follow-ups)
 
-## Odds grading (before → after using owned inventory)
+## 1. KAV (owned efficiency)
 
-Inventory on restore warehouse (`kosedge_nfl_restore` from DR dump + restore in progress):
-- games 4195 · odds_snapshots 60183 · schedules 3834 · projections 20619 · outcomes 3562 · history 42763
+**Definition:** Kos Edge Adjusted Value — iterative opponent-adjusted EPA/play from owned nflverse PBP. Not Football Outsiders / FTN DVOA. Spec: `docs/NFL_KAV.md`.
+
+| Item | Status |
+| --- | --- |
+| Migration | `infra/db/041_nfl_kav_efficiency.sql` |
+| Materializer | `--materialize-kav` / `data_platform_nfl.kav` |
+| Seasons materialized | **2013–2025** (13 seasons, ~7k team-games) |
+| Matchup attach (week−1 lag) | **3140 / 3834** rows (week 1 null by design) |
+| Handicapping | `kav_efficiency` factor (framework v3) |
+| Supervised | schema v3 FEATURE_KEYS |
+| External DVOA | placeholder only, disabled |
+
+2024 W18 net KAV leaders (sanity): BAL, DET, BUF, PHI, GB.
+
+## 2. Odds grading (DB-first, no API pull)
+
+Artifact: `data/ops/nfl-odds-open-close-grading.json`
 
 | Metric | Market close | Model |
-| --- | ---: | ---: |
+| --- | --- | --- |
 | Spread MAE | 9.778 | **9.613** |
 | Total MAE | 10.300 | **10.123** |
 | ML Brier | 0.224 | **0.200** |
-| ATS hit | — | 0.493 |
-| CLV spread avg (n=159) | — | **+2.02** (66.0% +) |
-| CLV total avg (n=117) | — | **+1.29** (63.3% +) |
+| ATS hit rate | — | 0.493 |
+| CLV spread avg / +rate | — | **+2.02 / 66.0%** (n=159 owned OC) |
+| CLV total avg / +rate | — | **+1.29 / 63.3%** (n=117) |
 
-Owned Odds API open/close dense mainly 2024–2025 (229 / 235 games); earlier seasons use nflverse closes as fallback. Artifact: `data/ops/nfl-odds-open-close-grading.json`.
+Coverage: 1693 graded games 2020–2025; **724** owned open/close games in `odds_snapshots`; owned OC dense in 2024–25; earlier seasons use nflverse closes.
 
-## Calibration retune
+## 3. Calibration before → after
 
-Walkforward with KAV features (tune 2023–24 n=538, holdout 2025 n=269; all with KAV):
+Artifact: `data/ops/nfl-calibration-retune-owned-20260728.json`  
+Method: invert stored projection blend → sweep weights + fit totals calibrator on 2023–24; holdout 2025 (n=269).
 
-| Config | Tune spread/total MAE | Holdout 2025 spread/total MAE |
-| --- | --- | --- |
-| Before 0.30/0.30 uncal | 9.585 / 9.852 | **9.499 / 9.881** |
-| Best tune 0.30/0.35 + level cal | 9.585 / 9.849 | 9.499 / 9.896 |
+| | Blend S/T | Holdout spread MAE | Holdout total MAE |
+| --- | --- | --- | --- |
+| **Before (current defaults)** | 0.30 / 0.30 | 8.547 | **9.547** |
+| After (tune-best + affine cal) | 0.25 / 0.35 | 8.529 | 9.763 |
+| Delta | — | −0.018 | **+0.216** |
 
-**Recommendation:** keep blend **0.30 / 0.30**. Totals calibrator fit is near-identity (level_shift intercept ≈ −0.03). Do not promote 0.35 total weight — holdout total MAE regresses. Artifact: `data/ops/nfl-calibration-retune-20260728.json`.
+**Decision:** do **not** promote new blend/cal defaults. Holdout joint gate failed (totals regress). Keep `NFL_MARKET_BLEND_* = 0.30`. Totals calibrator remains the live adaptive path in `nfl_totals_calibration.py`.
 
-## KAV
+## 4. Tests
 
-- Spec: `docs/NFL_KAV.md`
-- Tables: `nfl_dp_team_kav_game` (6,640 team-games), `nfl_dp_team_kav_weekly` (8,734)
-- Seasons: 2013–2025
-- Matchup packs updated with week−1 lag: 3,140 rows
-- 2024 W18 net leaders (sanity): BAL 1.80, DET 1.62, BUF 1.22, PHI 1.21, GB 1.12
-- Handicapping factor `kav_efficiency`; `external_dvoa` placeholder disabled
-- Supervised `MODEL_SCHEMA_VERSION = 3`
+- `tests/test_kav.py` — 6 passed (math, SOS, leakage)
+- `test_nfl_handicapping_framework.py` + `test_nfl_matchup_features.py` — 7 passed (incl. KAV factor)
 
-## Code / PR
+## 5. DB note
 
-- Branch: `nfl-kav-sharpen` @ `d63c6ed1` (+ grading script fix pending)
-- Remote: `origin/nfl-kav-sharpen`
-- PR: open via https://github.com/kosedge/kosedge/pull/new/nfl-kav-sharpen (gh CLI unauthenticated in this environment)
+Primary warehouse for this sprint: `kosedge_nfl_restore` (restored DR dump + KAV). Slim `kosedge` DB remains empty of NFL core tables — ops should point `DATABASE_URL` at the restored warehouse or promote restore → `kosedge`.
 
-## Remaining gaps
+## 6. Remaining gaps
 
-1. Point live `kosedge` DB at restored warehouse (or rename `kosedge_nfl_restore` → `kosedge`) — main `kosedge` was wiped; work used restore DB.
-2. Enterprise prop open/close from Jul 25–28 pull not fully recovered in dump (pre-pull); check DB before any re-pull.
-3. Re-train supervised overlay on schema v3 with KAV keys; re-sim boards under KAV factor.
-4. Attach/materialize KAV on production after migrate `041`.
-5. Props PLAY stake gates left unchanged (still research-only until densified MAE gate).
-6. Parallel agents repeatedly switched git branch mid-sprint — keep `nfl-kav-sharpen` pinned when continuing.
+1. Promote restore DB (or re-ingest) so default `kosedge` has schedules/PBP/odds/KAV.
+2. Re-sim 2025 slate **with KAV wired** for true before→after vs pre-KAV projections (current grading uses existing projections).
+3. Supervised retrain schema v3 on KAV features + chronological holdout.
+4. Densify owned open/close for 2020–2023 mainlines (DB-first gap pull only).
+5. Special-teams KAV unit (deferred; pass/run EPA only in v1).

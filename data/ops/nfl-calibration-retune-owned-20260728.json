@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-07-28T13:15:12.466663+00:00",
+  "method": "owned_projections_invert_blend",
+  "ok": true,
+  "n_components": 807,
+  "n_tune": 538,
+  "n_holdout_2025": 269,
+  "before": {
+    "blend_spread": 0.3,
+    "blend_total": 0.3,
+    "tune": {
+      "spread_mae": 8.7819,
+      "total_mae": 9.714
+    },
+    "holdout_2025": {
+      "spread_mae": 8.5468,
+      "total_mae": 9.547
+    }
+  },
+  "totals_calibrator": {
+    "sample_size": 538,
+    "slope": 0.756404,
+    "intercept": 10.952368,
+    "raw_slope": 0.756404,
+    "fit_mode": "affine",
+    "slope_clamped": false,
+    "pred_mean": 45.8367,
+    "actual_mean": 45.6234,
+    "base_mae": 10.0189,
+    "calibrated_mae": 9.9088,
+    "mae_improvement": 0.1101,
+    "signed_bias_pre": 0.3882,
+    "signed_bias_post": 0.2846,
+    "eligible": true,
+    "mean_preserved": false,
+    "intercept_clamped": true,
+    "recenter_applied": 2.9524,
+    "affine_mae": 9.9088,
+    "level_shift_mae": 10.006,
+    "half_life_days": 180.0,
+    "prior_now": 45.3,
+    "prior_reference": 45.3,
+    "prior_delta_removed": 0.0
+  },
+  "best_blend": {
+    "spread_w": 0.25,
+    "total_w": 0.35,
+    "spread_mae": 8.7819,
+    "total_mae": 9.793,
+    "score": 18.5749
+  },
+  "after": {
+    "blend_spread": 0.25,
+    "blend_total": 0.35,
+    "tune": {
+      "spread_mae": 8.7819,
+      "total_mae": 9.793
+    },
+    "holdout_2025_calibrated": {
+      "spread_mae": 8.529,
+      "total_mae": 9.763
+    }
+  },
+  "holdout_delta": {
+    "spread_mae": -0.0178,
+    "total_mae": 0.216
+  },
+  "recommendation": {
+    "NFL_MARKET_BLEND_SPREAD_WEIGHT": 0.25,
+    "NFL_MARKET_BLEND_TOTAL_WEIGHT": 0.35,
+    "totals_calibration_slope": 0.756404,
+    "totals_calibration_intercept": 10.952368,
+    "totals_fit_mode": "affine",
+    "promote_if_holdout_improves": false
+  }
+}
