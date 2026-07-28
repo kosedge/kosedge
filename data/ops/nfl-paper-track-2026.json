@@ -1,123 +1,27 @@
 {
-  "generated_at": "2026-07-28T21:41:39.416656+00:00",
+  "generated_at": "2026-07-28T23:16:41.457357+00:00",
   "policy_version": "spread_play_v2_cap7",
   "thresholds": {
     "spread_play": "2.5 <= |edge| < 7.0",
     "total_play": "2.5 <= |edge| < 3.0"
   },
   "inventory": {
-    "games_2026": 314,
-    "games_with_projection_and_line": 151,
-    "spread_play_paper": 23,
-    "total_play_paper": 14,
+    "games_2026": 241,
+    "games_with_projection_and_line": 100,
+    "spread_play_paper": 11,
+    "total_play_paper": 8,
     "unsettled_spread_play": 11,
-    "settled_spread_play": 12,
-    "games_with_owned_oc": 137
+    "settled_spread_play": 0,
+    "games_with_owned_oc": 86
   },
   "settled_play_grading": {
-    "n": 12,
-    "hit_rate": 0.6666666666666666,
-    "roi": 0.2727272727272727,
-    "n_clv_move": 9,
-    "clv_positive_rate": 0.2222222222222222
+    "n": 0,
+    "hit_rate": null,
+    "roi": null,
+    "n_clv_move": 0,
+    "clv_positive_rate": null
   },
   "paper_spread_plays": [
-    {
-      "date": "2026-01-04",
-      "matchup": "NO@ATL",
-      "abs_edge": 2.54,
-      "model": -1.96,
-      "market": -4.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "DET@CHI",
-      "abs_edge": 3.93,
-      "model": -0.57,
-      "market": -4.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "CLE@CIN",
-      "abs_edge": 2.56,
-      "model": -6.94,
-      "market": -9.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "IND@HOU",
-      "abs_edge": 3.91,
-      "model": -6.09,
-      "market": -10.0,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "TEN@JAX",
-      "abs_edge": 2.71,
-      "model": -10.79,
-      "market": -13.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "ARI@LA",
-      "abs_edge": 3.13,
-      "model": -11.37,
-      "market": -14.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "DAL@NYG",
-      "abs_edge": 3.14,
-      "model": -0.14,
-      "market": 3.0,
-      "settled": true
-    },
-    {
-      "date": "2026-01-04",
-      "matchup": "WAS@PHI",
-      "abs_edge": 4.03,
-      "model": -7.53,
-      "market": -3.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-10",
-      "matchup": "LA@CAR",
-      "abs_edge": 6.51,
-      "model": 3.99,
-      "market": 10.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-18",
-      "matchup": "LA@CHI",
-      "abs_edge": 2.88,
-      "model": 0.62,
-      "market": 3.5,
-      "settled": true
-    },
-    {
-      "date": "2026-01-25",
-      "matchup": "NE@DEN",
-      "abs_edge": 5.96,
-      "model": -2.46,
-      "market": 3.5,
-      "settled": true
-    },
-    {
-      "date": "2026-02-08",
-      "matchup": "SEA@NE",
-      "abs_edge": 5.59,
-      "model": -1.09,
-      "market": 4.5,
-      "settled": true
-    },
     {
       "date": "2026-09-10",
       "matchup": "SF@LA",

@@ -63,6 +63,9 @@ export DATABASE_URL=postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge
 # Pre-registered PLAY-only unused holdout (2025 KAV boards):
 .venv/bin/python scripts/nfl/play_only_holdout.py
 
+# Walk-forward edge-band study (select 2023 → confirm 2024–25 once):
+.venv/bin/python scripts/nfl/walkforward_play_band_study.py
+
 # After grading / retrain / PLAY holdout artifacts exist:
 .venv/bin/python scripts/nfl/evaluate_enterprise_gates.py
 

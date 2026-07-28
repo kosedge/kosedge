@@ -29,9 +29,22 @@ BREAKEVEN_ATS = 0.5238
 # v2 (2026-07-28 pre-registration): spread PLAY 2.5 ≤ |edge| < 7.0
 #   Caps mega-edges (calibration failures / research-only); movement CLV clears on 2024–25.
 # Evidence: data/ops/nfl-play-only-holdout.json + nfl-path-to-95-report.md
+# Walk-forward (select 2023 → confirm 2024–25 once): data/ops/nfl-walkforward-play-band-study.json
+#   Research-only tighter bands improve confirmatory CLV+ but fail n_clv≥200 GREEN — NOT promoted.
 SPREAD_PLAY_MIN = 2.5
 SPREAD_PLAY_MAX = 7.0  # half-open upper bound; |edge| ≥ 7.0 → PASS (size-down research)
 POLICY_VERSION = "spread_play_v2_cap7"
+
+# Research registrations (publish path still uses SPREAD_PLAY_* above).
+# Selected on 2023 CLV+; confirmed once on 2024–25. Do not swap product without GREEN n_clv≥200.
+RESEARCH_SPREAD_PLAY_BANDS = (
+    # registration_id, lo, hi — see nfl-walkforward-play-band-study.json
+    # Selected on 2023 CLV+; confirmed once on 2024–25; improve CLV+ vs v2; not product.
+    ("spread_play_research_40_80", 4.0, 8.0),  # confirm CLV+ ~0.645, n_clv~155
+    ("spread_play_research_40_70", 4.0, 7.0),  # confirm CLV+ ~0.633, n_clv~120
+    ("spread_play_research_50_80", 5.0, 8.0),  # 2023 CLV+ leader; confirm ~0.625
+    ("spread_play_research_35_70", 3.5, 7.0),  # confirm CLV+ ~0.614, n_clv~145
+)
 # Spread LEAN disabled: 1.1–2.5 settled ROI −14.4% (n=174) in study.
 SPREAD_LEAN_ENABLED = False
 SPREAD_LEAN_MIN = 1.1

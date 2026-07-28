@@ -1,0 +1,471 @@
+{
+  "generated_at": "2026-07-28T22:53:35.766040+00:00",
+  "protocol": {
+    "selection_universe": "2023 settled PLAY-eligible spreads",
+    "confirmatory_universe": "2024\u201325 settled (single evaluation)",
+    "clv_definition": "owned odds_snapshots open\u2260close, n_snaps\u22652 (movement only)",
+    "eligibility": "ATS\u22650.5238, n\u226560 on selection",
+    "ranking": "CLV+ desc, then n_clv, then ATS",
+    "no_peeking": true
+  },
+  "product_decision": {
+    "keep_policy": "spread_play_v2_cap7",
+    "product_band": "[2.5,7.0)",
+    "rationale": "Only capped band that clears confirmatory GREEN (n_clv\u2265200, CLV+\u22650.55, ATS\u2265breakeven). Tighter CLV-max bands improve CLV+ but drop below n_clv=200 \u2014 research-only.",
+    "promote_any_new_band": false
+  },
+  "selection_2023_ranked": [
+    {
+      "lo": 5.0,
+      "hi": 8.0,
+      "band": "[5.0,8.0)",
+      "n": 70,
+      "ats": 0.7714285714285715,
+      "mean_abs_edge": 6.299285714285715,
+      "n_clv": 62,
+      "clv": 0.6290322580645161,
+      "avg_clv": 1.1129032258064515,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 4.0,
+      "hi": 7.0,
+      "band": "[4.0,7.0)",
+      "n": 71,
+      "ats": 0.7323943661971831,
+      "mean_abs_edge": 5.407464788732393,
+      "n_clv": 61,
+      "clv": 0.5901639344262295,
+      "avg_clv": 0.6311475409836066,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 3.5,
+      "hi": 100.0,
+      "band": "[3.5,100.0)",
+      "n": 148,
+      "ats": 0.7432432432432432,
+      "mean_abs_edge": 7.09756756756757,
+      "n_clv": 127,
+      "clv": 0.5826771653543307,
+      "avg_clv": 0.5787401574803149,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 4.0,
+      "hi": 8.0,
+      "band": "[4.0,8.0)",
+      "n": 91,
+      "ats": 0.7472527472527473,
+      "mean_abs_edge": 5.866923076923077,
+      "n_clv": 79,
+      "clv": 0.5822784810126582,
+      "avg_clv": 0.5949367088607594,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 3.5,
+      "hi": 7.0,
+      "band": "[3.5,7.0)",
+      "n": 86,
+      "ats": 0.7093023255813954,
+      "mean_abs_edge": 5.126860465116278,
+      "n_clv": 73,
+      "clv": 0.5753424657534246,
+      "avg_clv": 0.7054794520547946,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 3.0,
+      "hi": 7.0,
+      "band": "[3.0,7.0)",
+      "n": 96,
+      "ats": 0.6979166666666666,
+      "mean_abs_edge": 4.9284374999999985,
+      "n_clv": 82,
+      "clv": 0.573170731707317,
+      "avg_clv": 0.6402439024390244,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 3.5,
+      "hi": 8.0,
+      "band": "[3.5,8.0)",
+      "n": 106,
+      "ats": 0.7264150943396226,
+      "mean_abs_edge": 5.5742452830188665,
+      "n_clv": 91,
+      "clv": 0.5714285714285714,
+      "avg_clv": 0.6593406593406593,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 2.5,
+      "hi": 100.0,
+      "band": "[2.5,100.0)",
+      "n": 181,
+      "ats": 0.7348066298342542,
+      "mean_abs_edge": 6.333977900552488,
+      "n_clv": 155,
+      "clv": 0.5612903225806452,
+      "avg_clv": 0.3096774193548387,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 3.0,
+      "hi": 6.0,
+      "band": "[3.0,6.0)",
+      "n": 81,
+      "ats": 0.6666666666666666,
+      "mean_abs_edge": 4.624567901234565,
+      "n_clv": 69,
+      "clv": 0.5507246376811594,
+      "avg_clv": 0.5289855072463768,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 3.5,
+      "hi": 6.0,
+      "band": "[3.5,6.0)",
+      "n": 71,
+      "ats": 0.676056338028169,
+      "mean_abs_edge": 4.822112676056336,
+      "n_clv": 60,
+      "clv": 0.55,
+      "avg_clv": 0.5916666666666667,
+      "gate": "YELLOW"
+    },
+    {
+      "lo": 2.5,
+      "hi": 8.0,
+      "band": "[2.5,8.0)",
+      "n": 139,
+      "ats": 0.7194244604316546,
+      "mean_abs_edge": 4.94158273381295,
+      "n_clv": 119,
+      "clv": 0.5462184873949579,
+      "avg_clv": 0.28991596638655465,
+      "gate": "AMBER"
+    },
+    {
+      "lo": 2.5,
+      "hi": 7.0,
+      "band": "[2.5,7.0)",
+      "n": 119,
+      "ats": 0.7058823529411765,
+      "mean_abs_edge": 4.511932773109241,
+      "n_clv": 101,
+      "clv": 0.5445544554455446,
+      "avg_clv": 0.25742574257425743,
+      "gate": "AMBER"
+    },
+    {
+      "lo": 2.5,
+      "hi": 6.0,
+      "band": "[2.5,6.0)",
+      "n": 104,
+      "ats": 0.6826923076923077,
+      "mean_abs_edge": 4.215192307692305,
+      "n_clv": 88,
+      "clv": 0.5227272727272727,
+      "avg_clv": 0.11363636363636363,
+      "gate": "AMBER"
+    },
+    {
+      "lo": 2.5,
+      "hi": 5.0,
+      "band": "[2.5,5.0)",
+      "n": 69,
+      "ats": 0.6666666666666666,
+      "mean_abs_edge": 3.5642028985507253,
+      "n_clv": 57,
+      "clv": 0.45614035087719296,
+      "avg_clv": -0.6052631578947368,
+      "gate": "AMBER"
+    }
+  ],
+  "confirmatory": [
+    {
+      "lo": 2.5,
+      "hi": 7.0,
+      "band": "[2.5,7.0)",
+      "is_product_v2": true,
+      "confirm_2024_25": {
+        "n": 232,
+        "ats": 0.7241379310344828,
+        "mean_abs_edge": 4.5065086206896545,
+        "n_clv": 214,
+        "clv": 0.5981308411214953,
+        "avg_clv": 0.8504672897196262,
+        "gate": "GREEN"
+      },
+      "primary_2025": {
+        "n": 112,
+        "ats": 0.6964285714285714,
+        "mean_abs_edge": 4.664107142857143,
+        "n_clv": 100,
+        "clv": 0.58,
+        "avg_clv": 0.575,
+        "gate": "YELLOW"
+      },
+      "clean_era_2020_22": {
+        "n": 402,
+        "ats": 0.554726368159204,
+        "mean_abs_edge": 4.640447761194027,
+        "n_clv": 236,
+        "clv": 0.461864406779661,
+        "avg_clv": -0.538135593220339,
+        "gate": "AMBER"
+      }
+    },
+    {
+      "lo": 5.0,
+      "hi": 8.0,
+      "band": "[5.0,8.0)",
+      "is_product_v2": false,
+      "confirm_2024_25": {
+        "n": 127,
+        "ats": 0.7874015748031497,
+        "mean_abs_edge": 6.499133858267717,
+        "n_clv": 112,
+        "clv": 0.625,
+        "avg_clv": 1.1651785714285714,
+        "gate": "YELLOW"
+      },
+      "primary_2025": {
+        "n": 72,
+        "ats": 0.8333333333333334,
+        "mean_abs_edge": 6.581666666666666,
+        "n_clv": 62,
+        "clv": 0.6290322580645161,
+        "avg_clv": 1.5080645161290323,
+        "gate": "YELLOW"
+      },
+      "clean_era_2020_22": {
+        "n": 219,
+        "ats": 0.5068493150684932,
+        "mean_abs_edge": 6.23607305936073,
+        "n_clv": 124,
+        "clv": 0.4032258064516129,
+        "avg_clv": -1.1975806451612903,
+        "gate": "RED"
+      }
+    },
+    {
+      "lo": 4.0,
+      "hi": 7.0,
+      "band": "[4.0,7.0)",
+      "is_product_v2": false,
+      "confirm_2024_25": {
+        "n": 132,
+        "ats": 0.7575757575757576,
+        "mean_abs_edge": 5.4988636363636365,
+        "n_clv": 120,
+        "clv": 0.6333333333333333,
+        "avg_clv": 1.2,
+        "gate": "YELLOW"
+      },
+      "primary_2025": {
+        "n": 65,
+        "ats": 0.7538461538461538,
+        "mean_abs_edge": 5.68907692307692,
+        "n_clv": 58,
+        "clv": 0.6551724137931034,
+        "avg_clv": 1.5344827586206897,
+        "gate": "YELLOW"
+      },
+      "clean_era_2020_22": {
+        "n": 270,
+        "ats": 0.5481481481481482,
+        "mean_abs_edge": 5.29811111111111,
+        "n_clv": 160,
+        "clv": 0.45625,
+        "avg_clv": -0.58125,
+        "gate": "AMBER"
+      }
+    },
+    {
+      "lo": 3.5,
+      "hi": 100.0,
+      "band": "[3.5,100.0)",
+      "is_product_v2": false,
+      "confirm_2024_25": {
+        "n": 326,
+        "ats": 0.803680981595092,
+        "mean_abs_edge": 7.732975460122698,
+        "n_clv": 292,
+        "clv": 0.6061643835616438,
+        "avg_clv": 0.6506849315068494,
+        "gate": "GREEN"
+      },
+      "primary_2025": {
+        "n": 172,
+        "ats": 0.8023255813953488,
+        "mean_abs_edge": 7.976046511627913,
+        "n_clv": 153,
+        "clv": 0.6078431372549019,
+        "avg_clv": 0.6535947712418301,
+        "gate": "YELLOW"
+      },
+      "clean_era_2020_22": {
+        "n": 528,
+        "ats": 0.5208333333333334,
+        "mean_abs_edge": 6.906439393939392,
+        "n_clv": 314,
+        "clv": 0.37579617834394907,
+        "avg_clv": -1.3168789808917198,
+        "gate": "RED"
+      }
+    },
+    {
+      "lo": 4.0,
+      "hi": 8.0,
+      "band": "[4.0,8.0)",
+      "is_product_v2": false,
+      "confirm_2024_25": {
+        "n": 172,
+        "ats": 0.7558139534883721,
+        "mean_abs_edge": 5.979011627906977,
+        "n_clv": 155,
+        "clv": 0.6451612903225806,
+        "avg_clv": 1.2225806451612904,
+        "gate": "YELLOW"
+      },
+      "primary_2025": {
+        "n": 89,
+        "ats": 0.7752808988764045,
+        "mean_abs_edge": 6.197865168539328,
+        "n_clv": 79,
+        "clv": 0.6582278481012658,
+        "avg_clv": 1.4303797468354431,
+        "gate": "YELLOW"
+      },
+      "clean_era_2020_22": {
+        "n": 324,
+        "ats": 0.5216049382716049,
+        "mean_abs_edge": 5.662839506172839,
+        "n_clv": 185,
+        "clv": 0.42702702702702705,
+        "avg_clv": -0.8702702702702703,
+        "gate": "RED"
+      }
+    },
+    {
+      "lo": 3.5,
+      "hi": 7.0,
+      "band": "[3.5,7.0)",
+      "is_product_v2": false,
+      "confirm_2024_25": {
+        "n": 158,
+        "ats": 0.759493670886076,
+        "mean_abs_edge": 5.219810126582279,
+        "n_clv": 145,
+        "clv": 0.6137931034482759,
+        "avg_clv": 0.996551724137931,
+        "gate": "YELLOW"
+      },
+      "primary_2025": {
+        "n": 79,
+        "ats": 0.7468354430379747,
+        "mean_abs_edge": 5.358987341772152,
+        "n_clv": 72,
+        "clv": 0.625,
+        "avg_clv": 1.1111111111111112,
+        "gate": "YELLOW"
+      },
+      "clean_era_2020_22": {
+        "n": 323,
+        "ats": 0.5325077399380805,
+        "mean_abs_edge": 5.045696594427244,
+        "n_clv": 194,
+        "clv": 0.4536082474226804,
+        "avg_clv": -0.5489690721649485,
+        "gate": "AMBER"
+      }
+    }
+  ],
+  "research_registrations": [
+    {
+      "band": "[5.0,8.0)",
+      "lo": 5.0,
+      "hi": 8.0,
+      "improves_clv_vs_v2": true,
+      "clears_confirmatory_green": false,
+      "promote_to_product": false,
+      "confirm": {
+        "n": 127,
+        "ats": 0.7874015748031497,
+        "mean_abs_edge": 6.499133858267717,
+        "n_clv": 112,
+        "clv": 0.625,
+        "avg_clv": 1.1651785714285714,
+        "gate": "YELLOW"
+      },
+      "registration_id": "spread_play_research_50_80",
+      "reason": "Improves confirmatory CLV+ vs v2 but fails n_clv\u2265200 GREEN volume"
+    },
+    {
+      "band": "[4.0,7.0)",
+      "lo": 4.0,
+      "hi": 7.0,
+      "improves_clv_vs_v2": true,
+      "clears_confirmatory_green": false,
+      "promote_to_product": false,
+      "confirm": {
+        "n": 132,
+        "ats": 0.7575757575757576,
+        "mean_abs_edge": 5.4988636363636365,
+        "n_clv": 120,
+        "clv": 0.6333333333333333,
+        "avg_clv": 1.2,
+        "gate": "YELLOW"
+      },
+      "registration_id": "spread_play_research_40_70",
+      "reason": "Improves confirmatory CLV+ vs v2 but fails n_clv\u2265200 GREEN volume"
+    },
+    {
+      "band": "[4.0,8.0)",
+      "lo": 4.0,
+      "hi": 8.0,
+      "improves_clv_vs_v2": true,
+      "clears_confirmatory_green": false,
+      "promote_to_product": false,
+      "confirm": {
+        "n": 172,
+        "ats": 0.7558139534883721,
+        "mean_abs_edge": 5.979011627906977,
+        "n_clv": 155,
+        "clv": 0.6451612903225806,
+        "avg_clv": 1.2225806451612904,
+        "gate": "YELLOW"
+      },
+      "registration_id": "spread_play_research_40_80",
+      "reason": "Improves confirmatory CLV+ vs v2 but fails n_clv\u2265200 GREEN volume"
+    },
+    {
+      "band": "[3.5,7.0)",
+      "lo": 3.5,
+      "hi": 7.0,
+      "improves_clv_vs_v2": true,
+      "clears_confirmatory_green": false,
+      "promote_to_product": false,
+      "confirm": {
+        "n": 158,
+        "ats": 0.759493670886076,
+        "mean_abs_edge": 5.219810126582279,
+        "n_clv": 145,
+        "clv": 0.6137931034482759,
+        "avg_clv": 0.996551724137931,
+        "gate": "YELLOW"
+      },
+      "registration_id": "spread_play_research_35_70",
+      "reason": "Improves confirmatory CLV+ vs v2 but fails n_clv\u2265200 GREEN volume"
+    }
+  ],
+  "promote_review": [],
+  "notes": [
+    "Do not densify 2020\u201323 Odds API to chase band volume.",
+    "Primary-2025 CLV n\u2265200 remains math-blocked under product [2.5,7).",
+    "Uncapped bands are reference-only (mega-edge calibration risk)."
+  ]
+}

@@ -85,8 +85,9 @@ def main() -> int:
                 JOIN leagues l ON l.id = s.league_id
                 JOIN teams ht ON ht.id = g.home_team_id
                 JOIN teams at ON at.id = g.away_team_id
-                LEFT JOIN nfl_dp_schedules sch
+                JOIN nfl_dp_schedules sch
                   ON sch.game_id = g.external_id
+                 AND sch.season = 2026
                 WHERE l.code = 'nfl'
                   AND s.season_year = 2026
                 ORDER BY g.game_date NULLS LAST, g.start_time NULLS LAST
@@ -265,6 +266,8 @@ def main() -> int:
             for r in sorted(spread_play, key=lambda x: (x["game_date"], x["home_team"]))
         ][:80],
         "notes": [
+            "Universe = seasons.season_year=2026 AND nfl_dp_schedules.season=2026 "
+            "(excludes late-2025 playoff games that sit on calendar-2026 season rows).",
             "Paper track only until finals settle — do not claim ATS from unsettled rows.",
             "Re-run weekly (or after each slate) to accumulate live confirmation sample.",
             "PASS default remains; these tags mirror publish policy for research/paper.",

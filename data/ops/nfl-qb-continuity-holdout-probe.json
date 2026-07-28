@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-28T23:07:47.465266+00:00",
+  "elapsed_sec": 1686.5,
+  "leakage_rule": "QB features use only prior weeks' primary passer (max attempts); never same-week outcome stats",
+  "coverage": {
+    "training_rows": 3562,
+    "rows_with_both_qb_features": 1075,
+    "passer_keys": 2278,
+    "note": "player_game_stats attempts coverage ~2022\u20132025; earlier seasons mostly NaN (HGB-native)"
+  },
+  "feature_keys_experimental": [
+    "home_qb_changed_entering",
+    "away_qb_changed_entering",
+    "diff_qb_changed_entering",
+    "home_qb_starts_streak",
+    "away_qb_starts_streak",
+    "diff_qb_starts_streak"
+  ],
+  "v3_metrics": {
+    "train_rows": 2992,
+    "test_rows": 570,
+    "train_brier": 0.12012401696773022,
+    "test_brier": 0.14822177223985103,
+    "train_total_mae": 8.843347682455535,
+    "test_total_mae": 9.202883619613488,
+    "train_margin_mae": 6.7980416788170395,
+    "test_margin_mae": 7.48009840196442,
+    "test_avg_home_prob": 0.5551789399689772,
+    "test_avg_total_pred": 46.31406386577945
+  },
+  "v3_plus_qb_metrics": {
+    "train_rows": 2992,
+    "test_rows": 570,
+    "train_brier": 0.11914607973233686,
+    "test_brier": 0.14852807564079093,
+    "train_total_mae": 8.579178098007596,
+    "test_total_mae": 9.211408211742075,
+    "train_margin_mae": 6.924553865449404,
+    "test_margin_mae": 7.495034219172898,
+    "test_avg_home_prob": 0.5573690124636327,
+    "test_avg_total_pred": 46.300438384804785
+  },
+  "deltas_v3b_minus_v3": {
+    "test_brier": 0.00030630340093990016,
+    "test_margin_mae": 0.014935817208478142,
+    "test_total_mae": 0.008524592128587472
+  },
+  "promote": false,
+  "decision": "REJECT \u2014 holdout does not clear improve bar (or regresses)",
+  "active_fit_unchanged": true
+}

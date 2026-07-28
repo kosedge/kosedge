@@ -1,55 +1,79 @@
 # NFL Path to ~9.5 / Subscription-Grade Edge
 
-Generated: 2026-07-28T22:00:00Z  
+Generated: 2026-07-28T23:20:00Z  
 Branch: `nfl-kav-sharpen`  
-Policy: **`spread_play_v2_cap7`**  
-Active supervised fit: **schema v3** (v4 ST candidate rolled back)
+Policy: **`spread_play_v2_cap7`** (unchanged — not re-promoted)  
+Active supervised fit: **schema v3** (ST v4 rejected; QB continuity probe rejected)
 
-## Executive verdict
+## Executive verdict / next milestone
 
 | Claim | Status |
 | --- | --- |
-| Selective PLAY (2024–25 confirmatory) | **GREEN** — ATS 73.1% n=227, CLV+ 61.2% n_move=206 |
+| Selective PLAY (2024–25 confirmatory, v2 band) | **GREEN** — ATS ~72.4% n=232, CLV+ ~59.8% n_move=214 |
 | `selective_play_ready` | **true** |
 | `betting_product_ready` | **false** (full-slate RED) |
-| Primary 2025 CLV n≥200 | **BLOCKED** — only 112 PLAY spreads under v2 band (math ceiling) |
-| Special-teams KAV → supervised v4 | **Built + tested — NOT promoted** (holdout regresses) |
-| Honest score (now) | **7.6 / 10** |
+| Primary 2025 CLV n≥200 | **BLOCKED** — ~112 PLAY spreads under v2 (math ceiling) |
+| Walk-forward tighter bands | **Registered research-only** — better CLV+, fail n_clv≥200 |
+| ST KAV / QB continuity | **Built + tested — NOT promoted** |
+| Honest score (now) | **7.6 / 10** (no bump — failed probes; product band unchanged) |
+
+**Product env note:** set `NFL_PRODUCT_GATE_STATUS=YELLOW` to surface selective PLAY (RED forces all PASS). This is the main user-env gate for publishing tags; model work below still ships regardless.
 
 ---
 
-## 1) PLAY / CLV status (unchanged product claim)
+## 1) Walk-forward edge-band study (this iteration)
 
-| Universe | n | ATS | mean\|edge\| | CLV move n | CLV+ | Gate |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 2024–25 confirmatory | 227 | 0.731 | 4.46 | **206** | **0.612** | **GREEN** |
-| 2025 primary | 112 | 0.696 | 4.66 | 101 | 0.584 | YELLOW |
+Protocol: select on **2023 only** → confirm once on **2024–25** (no peeking).  
+Artifact: `data/ops/nfl-walkforward-play-band-study.{json,md}`  
+Code: `scripts/nfl/walkforward_play_band_study.py`  
+Constants: `RESEARCH_SPREAD_PLAY_BANDS` in `nfl_side_total_publish_policy.py`
 
-**Hard blocker for primary-2025 CLV n≥200:** under `2.5≤|edge|<7`, 2025 yields only ~112 PLAY spreads. Owned OC already has ≥2 snaps on all 285 settled games; densify cannot create more PLAY tags. Expanding the band would undo calibration. Product claim correctly uses **2024–25 confirmatory**.
+| Band | Role | Confirm n | ATS | CLV n | CLV+ | Gate |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| **[2.5,7)** | **product v2** | 232 | 0.724 | **214** | 0.598 | **GREEN** |
+| [4.0,8) | research | 172 | 0.756 | 155 | **0.645** | YELLOW |
+| [4.0,7) | research | 132 | 0.758 | 120 | 0.633 | YELLOW |
+| [5.0,8) | research (2023 CLV+ leader) | 127 | 0.787 | 112 | 0.625 | YELLOW |
+| [3.5,7) | research | 158 | 0.759 | 145 | 0.614 | YELLOW |
+
+**Decision:** keep product `spread_play_v2_cap7`. No capped band beats v2 on confirmatory GREEN volume. Uncapped bands excluded from research registration (mega-edge calibration risk).
 
 ---
 
-## 2) Special-teams KAV experiment (this iteration)
+## 2) Feature probes (leakage-safe; promote only if holdout improves)
 
-| Step | Result |
+| Experiment | Result | Promote? |
+| --- | --- | --- |
+| ST KAV → schema v4 | prior: Brier/margin regress | **NO** (quarantined) |
+| QB continuity (week-lagged primary passer) | Brier +0.0003, margin MAE +0.015 | **NO** |
+| Injury / rest / dome / turf | already in v3 FEATURE_KEYS | — |
+| Weather / travel | live sim inputs present; not added to supervised (no holdout win yet) | deferred |
+| Line-move as model feature | not added (timing discipline; CLV grading only) | deferred |
+
+QB probe artifact: `data/ops/nfl-qb-continuity-holdout-probe.json`  
+Coverage: 1075/3562 rows with both-team QB flags (~2022–25 attempts data).
+
+---
+
+## 3) Sim / quality
+
+| Item | Result |
 | --- | --- |
-| PBP ST EPA (FG/XP/punt/kickoff) | 7124 team-game rows |
-| Weekly ST KAV + week−1 matchup lag | 1409/1693 games 2020–25 (week1 = 0 by design) |
-| Supervised schema v4 (+3 ST features) | Chronological holdout n=570 |
-| vs v3 | Brier **+0.0011**, margin MAE **+0.046**, total MAE **−0.035** |
-| Promote? | **NO** — rolled active fit back to v3 |
-| Default path | **v3 FEATURE_KEYS** — ST opt-in only via `retrain_supervised_kav_v4.py` / `NFL_SUPERVISED_INCLUDE_ST_KAV=1` |
+| Projection inputs KAV audit | 2025 boards were missing KAV keys → **backfilled 240** rows from matchup pack (markets unchanged) |
+| 2025 KAV still missing | ~34% (week-1 / null matchup KAV) |
+| 2026 KAV in matchup | **0** until real weekly features exist — not invented |
+| Paper track universe bug | Was grading 2025 playoffs on `season_year=2026` rows → **fixed** (`sch.season=2026` required) |
+| Clean 2026 paper | 241 season games, 11 unsettled spread PLAY, **0 settled** |
 
-Artifacts: `nfl-st-kav-build.json`, `nfl-kav-supervised-retrain-v4.json`, `nfl-kav-supervised-v3-vs-v4.json`.  
-Warehouse retained (`042_nfl_st_kav.sql`, `nfl_dp_team_st_kav_weekly`); failed retune is quarantined, not in default supervised path.
+Artifacts: `nfl-projection-input-completeness.json`, `nfl-kav-projection-inputs-backfill.json`, `nfl-paper-track-2026.{json,md}`
 
 ---
 
-## 3) Gate status
+## 4) Gate status (unchanged product claim)
 
 | Check | Status |
 | --- | --- |
-| PLAY-only confirmatory | GREEN |
+| PLAY-only confirmatory (v2) | GREEN |
 | Supervised holdout (active v3) | GREEN |
 | MAE vs market | GREEN |
 | Full-slate ATS/CLV | RED |
@@ -60,26 +84,24 @@ PASS default remains. Prefer `NFL_PRODUCT_GATE_STATUS=YELLOW` to surface v2 PLAY
 
 ---
 
-## 4) Honest score: **7.6 / 10**
+## 5) Honest score: **7.6 / 10**
 
-No score bump from ST (failed holdout). Selective CLV GREEN already priced in at 7.6.
+No score bump this iteration: ST/QB rejected; product band unchanged; primary-2025 CLV n≥200 still math-blocked; 2026 paper has no settled grades yet.
 
 ---
 
-## 5) Gaps to 9.5
+## 6) Gaps to 9.5 / next unblocked work
 
-1. Live **2026** paper→stake under locked v2 thresholds (only path to grow “unused” CLV without widening band).
-2. ST / inactives: need a formulation that **improves** chronological holdout before re-sim.
-3. Edge magnitude: further shrink model↔market gap without killing PLAY ATS.
+1. Live **2026** paper→stake under locked v2 (and optionally shadow research bands) as scores land.
+2. Supervised features that **beat** chronological holdout (travel deltas, weather when outdoor, inactives with week−1 lag).
+3. Edge magnitude shrink without killing PLAY ATS/CLV.
 4. Totals PLAY still research-only.
-5. Full-slate ATS ~50% — never claim every-game card.
-6. 2020–22 CLV weak — scope claim to post-2023 pipeline boards.
+5. Do **not** re-promote ST KAV; do **not** densify 2020–23 Odds API.
 
 ---
 
-## 6) Needs from user
+## 7) Needs from user
 
 1. `NFL_PRODUCT_GATE_STATUS=YELLOW` where selective PLAY should publish.
-2. Do **not** re-densify 2020–23 (won’t fix primary-2025 PLAY n ceiling).
-3. Keep 2026 open/close snapshots flowing.
-4. Optional: approve limited **2024–25 residual** Odds pulls only if any single-snap dates appear later — not needed now (0 missing).
+2. Keep 2026 open/close snapshots flowing.
+3. No Odds API densify of 2020–23.
