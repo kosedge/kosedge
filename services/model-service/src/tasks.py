@@ -3217,14 +3217,22 @@ def run_nfl_market_simulations(
                         else float(_to_float(mp.get("home_kav_net_5g")))
                         - float(_to_float(mp.get("away_kav_net_5g")))
                     ),
-                    "home_st_kav_net_5g": _to_float(mp.get("home_st_kav_net_5g")),
-                    "away_st_kav_net_5g": _to_float(mp.get("away_st_kav_net_5g")),
-                    "diff_st_kav_net_5g": (
-                        None
-                        if _to_float(mp.get("home_st_kav_net_5g")) is None
-                        or _to_float(mp.get("away_st_kav_net_5g")) is None
-                        else float(_to_float(mp.get("home_st_kav_net_5g")))
-                        - float(_to_float(mp.get("away_st_kav_net_5g")))
+                    # ST-KAV supervised inputs are opt-in only (failed v4 holdout).
+                    # Warehouse columns may still exist on matchup packs.
+                    **(
+                        {
+                            "home_st_kav_net_5g": _to_float(mp.get("home_st_kav_net_5g")),
+                            "away_st_kav_net_5g": _to_float(mp.get("away_st_kav_net_5g")),
+                            "diff_st_kav_net_5g": (
+                                None
+                                if _to_float(mp.get("home_st_kav_net_5g")) is None
+                                or _to_float(mp.get("away_st_kav_net_5g")) is None
+                                else float(_to_float(mp.get("home_st_kav_net_5g")))
+                                - float(_to_float(mp.get("away_st_kav_net_5g")))
+                            ),
+                        }
+                        if os.getenv("NFL_SUPERVISED_INCLUDE_ST_KAV", "0") == "1"
+                        else {}
                     ),
                     "home_injury_impact": home_injury_impact,
                     "away_injury_impact": away_injury_impact,

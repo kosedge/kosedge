@@ -16,7 +16,8 @@ DB: `127.0.0.1:5432/kosedge` (promoted restore warehouse)
 | PLAY-only holdout v2 (`2.5≤\|e\|<7`) | **DONE — confirmatory GREEN** |
 | Betting-product ready (full slate) | **NO — RED** |
 | Selective PLAY ready | **YES — true** |
-| Honest model score (now) | **7.7 / 10** |
+| Special-teams KAV → supervised v4 | **Built — NOT promoted** (holdout regresses; v3 active) |
+| Honest model score (now) | **7.6 / 10** |
 
 ---
 

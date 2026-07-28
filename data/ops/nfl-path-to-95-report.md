@@ -38,8 +38,10 @@ Active supervised fit: **schema v3** (v4 ST candidate rolled back)
 | Supervised schema v4 (+3 ST features) | Chronological holdout n=570 |
 | vs v3 | Brier **+0.0011**, margin MAE **+0.046**, total MAE **−0.035** |
 | Promote? | **NO** — rolled active fit back to v3 |
+| Default path | **v3 FEATURE_KEYS** — ST opt-in only via `retrain_supervised_kav_v4.py` / `NFL_SUPERVISED_INCLUDE_ST_KAV=1` |
 
-Artifacts: `nfl-st-kav-build.json`, `nfl-kav-supervised-retrain-v4.json`, `nfl-kav-supervised-v3-vs-v4.json`.
+Artifacts: `nfl-st-kav-build.json`, `nfl-kav-supervised-retrain-v4.json`, `nfl-kav-supervised-v3-vs-v4.json`.  
+Warehouse retained (`042_nfl_st_kav.sql`, `nfl_dp_team_st_kav_weekly`); failed retune is quarantined, not in default supervised path.
 
 ---
 

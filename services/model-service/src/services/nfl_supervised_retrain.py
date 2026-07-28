@@ -59,9 +59,6 @@ FEATURE_KEYS: Tuple[str, ...] = (
     "home_kav_net_5g",
     "away_kav_net_5g",
     "diff_kav_net_5g",
-    # Special-teams KAV (diff_st_kav_net_5g) evaluated as schema-v4 candidate
-    # 2026-07-28: holdout margin/Brier worsened vs v3 — NOT promoted.
-    # Tables/build script retained: scripts/nfl/build_st_kav_weekly.py
     "home_injury_impact",
     "away_injury_impact",
     "diff_injury_impact",
@@ -74,6 +71,16 @@ FEATURE_KEYS: Tuple[str, ...] = (
 )
 
 MODEL_SCHEMA_VERSION = 3
+
+# Experimental ST-KAV keys (schema v4 candidate). NOT in default FEATURE_KEYS.
+# Evaluated 2026-07-28: chronological holdout Brier/margin worsened vs v3 — not promoted.
+# Opt-in only via scripts/nfl/retrain_supervised_kav_v4.py (auto-rollback on failure).
+# Warehouse: infra/db/042_nfl_st_kav.sql + scripts/nfl/build_st_kav_weekly.py
+FEATURE_KEYS_ST_EXPERIMENTAL: Tuple[str, ...] = (
+    "home_st_kav_net_5g",
+    "away_st_kav_net_5g",
+    "diff_st_kav_net_5g",
+)
 
 
 def _to_float(value: Any, default: float = 0.0) -> float:
