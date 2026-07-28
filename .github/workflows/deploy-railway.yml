@@ -1,0 +1,133 @@
+# Deploy model-service (api + worker + beat) to Railway on push to deploy-vercel.
+#
+# Project brave-art — all three services use:
+#   railway up services/model-service --path-as-root
+#   Dockerfile + PROCESS_TYPE=api|worker|beat
+#
+# GitHub secret: RAILWAY_TOKEN (Railway → brave-art → Settings → Tokens → Project Token)
+# Optional: RAILWAY_ENVIRONMENT, RAILWAY_SERVICE_API / _WORKER / _BEAT, RAILWAY_PROJECT_ID
+#
+# Known CI failure mode: RAILWAY_TOKEN with trailing newline/control chars →
+# "failed to parse header value". Sanitize before every railway call.
+
+name: Deploy Railway model-service
+
+on:
+  push:
+    branches: [deploy-vercel]
+    paths:
+      - "services/model-service/**"
+      - "services/data-platform-nfl/src/data_platform_nfl/**"
+      - "infra/db/**"
+      - ".github/workflows/deploy-railway.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-railway-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # brave-art (from Railway dashboard / GitHub deployment URLs)
+  RAILWAY_PROJECT_ID_DEFAULT: da3d68f8-d925-462f-b262-c4ef3e488245
+  RAILWAY_ENVIRONMENT_ID_DEFAULT: 4bf00465-0220-4764-8b3b-e7adce18ca64
+
+jobs:
+  deploy:
+    name: Railway up (api / worker / beat)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Railway token
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          set -euo pipefail
+          TOKEN="$(printf '%s' "${RAILWAY_TOKEN:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          if [ -z "${TOKEN}" ]; then
+            echo "Missing secret: RAILWAY_TOKEN" >&2
+            echo "Create a Project Token in Railway → brave-art → Settings → Tokens" >&2
+            exit 1
+          fi
+          if printf '%s' "${TOKEN}" | grep -q '[[:cntrl:]]'; then
+            echo "RAILWAY_TOKEN contains control characters after sanitize." >&2
+            echo "Re-paste the Project Token in GitHub → Settings → Secrets (no quotes/newlines)." >&2
+            exit 1
+          fi
+          echo "::add-mask::${TOKEN}"
+          echo "Railway token present (length=${#TOKEN})."
+
+      - name: Sync vendored data_platform_nfl
+        run: bash scripts/nfl/sync-model-service-vendor.sh
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@5.2.0
+
+      - name: Deploy api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SVC: ${{ secrets.RAILWAY_SERVICE_API }}
+        run: |
+          set -euo pipefail
+          export RAILWAY_TOKEN="$(printf '%s' "${RAILWAY_TOKEN:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          echo "::add-mask::${RAILWAY_TOKEN}"
+          ENV_ID="$(printf '%s' "${RAILWAY_ENVIRONMENT:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          PROJECT_ID="$(printf '%s' "${RAILWAY_PROJECT_ID:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          SVC_NAME="$(printf '%s' "${SVC:-model-service}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          railway up services/model-service --path-as-root --no-gitignore --detach \
+            --project "${PROJECT_ID:-${RAILWAY_PROJECT_ID_DEFAULT}}" \
+            --environment "${ENV_ID:-${RAILWAY_ENVIRONMENT_ID_DEFAULT}}" \
+            --service "${SVC_NAME}" \
+            -m "ci ${GITHUB_SHA::12} api"
+
+      - name: Deploy worker
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SVC: ${{ secrets.RAILWAY_SERVICE_WORKER }}
+        run: |
+          set -euo pipefail
+          export RAILWAY_TOKEN="$(printf '%s' "${RAILWAY_TOKEN:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          echo "::add-mask::${RAILWAY_TOKEN}"
+          ENV_ID="$(printf '%s' "${RAILWAY_ENVIRONMENT:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          PROJECT_ID="$(printf '%s' "${RAILWAY_PROJECT_ID:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          SVC_NAME="$(printf '%s' "${SVC:-model-service-worker}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          railway up services/model-service --path-as-root --no-gitignore --detach \
+            --project "${PROJECT_ID:-${RAILWAY_PROJECT_ID_DEFAULT}}" \
+            --environment "${ENV_ID:-${RAILWAY_ENVIRONMENT_ID_DEFAULT}}" \
+            --service "${SVC_NAME}" \
+            -m "ci ${GITHUB_SHA::12} worker"
+
+      - name: Deploy beat
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SVC: ${{ secrets.RAILWAY_SERVICE_BEAT }}
+        run: |
+          set -euo pipefail
+          export RAILWAY_TOKEN="$(printf '%s' "${RAILWAY_TOKEN:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          echo "::add-mask::${RAILWAY_TOKEN}"
+          ENV_ID="$(printf '%s' "${RAILWAY_ENVIRONMENT:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          PROJECT_ID="$(printf '%s' "${RAILWAY_PROJECT_ID:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          SVC_NAME="$(printf '%s' "${SVC:-model-service-beat}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          railway up services/model-service --path-as-root --no-gitignore --detach \
+            --project "${PROJECT_ID:-${RAILWAY_PROJECT_ID_DEFAULT}}" \
+            --environment "${ENV_ID:-${RAILWAY_ENVIRONMENT_ID_DEFAULT}}" \
+            --service "${SVC_NAME}" \
+            -m "ci ${GITHUB_SHA::12} beat"
+
+      - name: Summary
+        run: |
+          {
+            echo "## Railway deploy"
+            echo "- **Branch:** ${{ github.ref_name }}"
+            echo "- **Commit:** ${{ github.sha }}"
+            echo "- **Services:** model-service / model-service-worker / model-service-beat"
+          } >> "$GITHUB_STEP_SUMMARY"

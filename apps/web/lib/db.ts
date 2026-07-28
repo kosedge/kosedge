@@ -8,7 +8,8 @@ const globalForPrisma = globalThis as unknown as {
 
 // Prisma 7 "client" engine requires adapter or accelerateUrl (https://pris.ly/d/client-constructor)
 const connectionString = process.env.DATABASE_URL;
-const hasDatabaseUrl = typeof connectionString === "string" && connectionString.length > 0;
+const hasDatabaseUrl =
+  typeof connectionString === "string" && connectionString.length > 0;
 
 function createMissingDatabaseProxy(): PrismaClient {
   return new Proxy(
@@ -16,24 +17,23 @@ function createMissingDatabaseProxy(): PrismaClient {
     {
       get() {
         throw new Error(
-          "DATABASE_URL is required at runtime for Prisma operations."
+          "DATABASE_URL is required at runtime for Prisma operations.",
         );
       },
-    }
+    },
   ) as PrismaClient;
 }
 
-const prismaClient =
-  hasDatabaseUrl
-    ? globalForPrisma.prisma ??
-      new PrismaClient({
-        adapter: new PrismaPg({ connectionString: connectionString as string }),
-        log:
-          process.env.NODE_ENV === "development"
-            ? ["query", "error", "warn"]
-            : ["error"],
-      })
-    : createMissingDatabaseProxy();
+const prismaClient = hasDatabaseUrl
+  ? (globalForPrisma.prisma ??
+    new PrismaClient({
+      adapter: new PrismaPg({ connectionString: connectionString as string }),
+      log:
+        process.env.NODE_ENV === "development"
+          ? ["query", "error", "warn"]
+          : ["error"],
+    }))
+  : createMissingDatabaseProxy();
 
 export const prisma = prismaClient;
 

@@ -7,6 +7,13 @@ import {
   buildSportOverviewSections,
   hasArticleData,
 } from "@/lib/pro-sport-ia";
+import {
+  deskCardClassName,
+  footerCardClassName,
+  footerCtaClassName,
+  footerTitleClassName,
+  getSportDeskConfig,
+} from "@/lib/pro-sport-desk";
 import EdgeBoardPreview from "@/components/EdgeBoardPreview";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
@@ -17,13 +24,26 @@ function signalFromGame(game: SpotlightGame, sportKey: string): string {
   const lineEdge = game.row.edgeLineNum ?? 0;
   const totalEdge = game.row.edgeOUNum ?? 0;
   const maxEdge = Math.max(lineEdge, totalEdge);
-  if (maxEdge >= 2.5) return `Strong model separation (${maxEdge.toFixed(1)} pts)`;
+  if (maxEdge >= 2.5)
+    return `Strong model separation (${maxEdge.toFixed(1)} pts)`;
   if (maxEdge >= 1.0) return `Actionable lean (${maxEdge.toFixed(1)} pts)`;
   if (sportKey === "mlb") return "Monitoring starter and lineup confirmations";
   if (sportKey === "nhl") return "Monitoring goalie and total discovery";
   if (sportKey === "nfl" || sportKey === "cfb")
     return "Monitoring key-number discovery into close";
   return "Monitoring market discovery into close";
+}
+
+function deskTitleClass(accent: "gold" | "green" | "neutral"): string {
+  if (accent === "gold") return "text-lg font-semibold text-kos-gold";
+  if (accent === "green") return "text-lg font-semibold text-edge-green";
+  return "text-lg font-semibold text-kos-text";
+}
+
+function deskCtaClass(accent: "gold" | "green" | "neutral"): string {
+  if (accent === "green")
+    return "mt-3 inline-block text-sm font-semibold text-edge-green";
+  return "mt-3 inline-block text-sm font-semibold text-kos-gold";
 }
 
 export default async function SportOverviewPage({
@@ -37,6 +57,7 @@ export default async function SportOverviewPage({
   const base = `/pro/${sportKey}`;
   const edgeBoardHref = `/edge-board/${sportKey}`;
   const content = buildSportOverviewContent(sportKey, sportName);
+  const desk = getSportDeskConfig(sportKey);
 
   const sportGames = HIGHLIGHTED_GAMES.filter((g) => g.sport === sportKey);
   const tonightGames = await getTonightGames(sportKey);
@@ -59,6 +80,13 @@ export default async function SportOverviewPage({
   const populatedSpotlightGames = spotlightGames.filter((game) =>
     hasArticleData(game.row),
   );
+
+  const footerCols =
+    desk.footerCards.length >= 5
+      ? "sm:grid-cols-3"
+      : desk.footerCards.length >= 3
+        ? "sm:grid-cols-2 lg:grid-cols-4"
+        : "sm:grid-cols-2";
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -95,6 +123,34 @@ export default async function SportOverviewPage({
       <div className="mt-6">
         <WeeklyGamesScroller games={tonightGames} sport={sportKey} />
       </div>
+
+      <section className="mt-6">
+        <div className="mb-3 flex items-end justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight text-kos-text">
+              Betting Desk
+            </h2>
+            <p className="mt-1 text-sm text-kos-text/70">
+              {desk.pathLabel} — sport-specific desk path.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {desk.cards.map((card) => (
+            <Link
+              key={card.title}
+              href={card.href}
+              className={deskCardClassName(card.accent, card.status)}
+            >
+              <h3 className={deskTitleClass(card.accent)}>{card.title}</h3>
+              <p className="mt-2 text-sm text-kos-text/75">
+                {card.description}
+              </p>
+              <span className={deskCtaClass(card.accent)}>{card.cta}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {sectionLinks.map((section) => (
@@ -146,31 +202,18 @@ export default async function SportOverviewPage({
         )}
       </section>
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-2">
-        <Link
-          href={`/pro/power-ratings/${sportKey}`}
-          className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-6 transition hover:border-kos-gold/45 hover:bg-kos-gold/10"
-        >
-          <h2 className="text-xl font-semibold text-kos-gold">Power Ratings</h2>
-          <p className="mt-2 text-sm text-kos-text/80">
-            Team strength, tiering, and historical movement with weekly context.
-          </p>
-          <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
-            View ratings →
-          </span>
-        </Link>
-        <Link
-          href={`/pro/kei-lines/${sportKey}`}
-          className="rounded-2xl border border-white/12 bg-black/30 p-6 transition hover:border-kos-gold/40"
-        >
-          <h2 className="text-xl font-semibold text-kos-text">KEI Lines</h2>
-          <p className="mt-2 text-sm text-kos-text/70">
-            Projected spread/total baselines to benchmark current market prices.
-          </p>
-          <span className="mt-4 inline-block text-sm font-semibold text-kos-gold">
-            View KEI lines →
-          </span>
-        </Link>
+      <section className={`mt-6 grid gap-4 ${footerCols}`}>
+        {desk.footerCards.map((card) => (
+          <Link
+            key={card.title}
+            href={card.href}
+            className={footerCardClassName(card.accent)}
+          >
+            <h2 className={footerTitleClassName(card.accent)}>{card.title}</h2>
+            <p className="mt-2 text-sm text-kos-text/80">{card.description}</p>
+            <span className={footerCtaClassName(card.accent)}>{card.cta}</span>
+          </Link>
+        ))}
       </section>
     </main>
   );

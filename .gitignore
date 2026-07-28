@@ -103,3 +103,13 @@ infra/.env.docker
 
 # Local duplicate checkout (keep out of repo; remove when no longer needed)
 kosedge-vercel-push/
+
+# -------------------------
+# NFL / warehouse DR dumps (large binary artifacts)
+# -------------------------
+data/backups/
+*.dump
+*.dump.sha256
+# Vendored into image via CI sync + committed snapshot for Railway --path-as-root uploads.
+# (Previously ignored, which stripped the package from `railway up` archives.)
+

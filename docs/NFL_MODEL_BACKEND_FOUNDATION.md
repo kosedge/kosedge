@@ -18,6 +18,10 @@ Initial NFL model foundation is now in `services/model-service`.
   - `src.tasks.run_nfl_walkforward_backtest(model_version="nfl-v1.5-matchup-sim", lookback_days=240, training_days=56, step_days=7, apply_calibration=true)`
 - NFL champion/challenger promotion task:
   - `src.tasks.evaluate_nfl_model_promotion(challenger_model_version, lookback_days=45, auto_promote=true)`
+- NFL framework tuning task:
+  - `src.tasks.run_nfl_framework_tuning(model_version="nfl-v1.5-matchup-sim", lookback_days=240, training_days=56, step_days=7, max_candidates=180)`
+- NFL decomposition drift monitor task:
+  - `src.tasks.run_nfl_decomposition_drift_monitor(model_version="nfl-v1.5-matchup-sim", lookback_days=120, baseline_weeks=4)`
 - NFL API routes:
   - `GET /nfl/games?game_date=YYYY-MM-DD`
   - `GET /nfl/market-history?game_date=YYYY-MM-DD&market_code=moneyline|total`
@@ -28,6 +32,10 @@ Initial NFL model foundation is now in `services/model-service`.
   - `GET /nfl/ops/active-model`
   - `GET /nfl/ops/promotion-events?limit=20`
   - `POST /nfl/ops/evaluate-promotion?challenger_model_version=nfl-v1.6-enterprise&lookback_days=45&auto_promote=true`
+  - `POST /nfl/ops/framework-tuning?model_version=nfl-v1.5-matchup-sim&lookback_days=240&training_days=56&step_days=7&max_candidates=180`
+  - `GET /nfl/ops/framework-tuning/latest?model_version=nfl-v1.5-matchup-sim`
+  - `POST /nfl/ops/decomposition-drift?model_version=nfl-v1.5-matchup-sim&lookback_days=120&baseline_weeks=4`
+  - `GET /nfl/ops/decomposition-drift/latest?model_version=nfl-v1.5-matchup-sim`
   - `GET /nfl/edges/today?model_version=nfl-v1.5-matchup-sim`
   - `GET /nfl/edges/optimize?...`
   - `GET /nfl/projections/players?season=2026&week=1&model_version=nfl-player-v1`
@@ -48,6 +56,11 @@ Initial NFL model foundation is now in `services/model-service`.
   - `GET /nfl/features/team-situational?season=2025&week=1&team=BUF`
   - `GET /nfl/features/team-rolling?season=2025&week=1&team=BUF`
   - `GET /nfl/features/matchup-pack?season=2025&week=1&home_team=BUF&away_team=NE&top_players=6`
+  - `GET /nfl/intel/rosters?season=2026&week=7&team=BUF`
+  - `GET /nfl/intel/stats?season=2026&week=7&team=BUF`
+  - `GET /nfl/intel/standings?season=2026&week=7&team=BUF`
+  - `GET /nfl/intel/depth-charts?season=2026&week=7&team=BUF`
+  - `GET /nfl/intel/injuries?season=2026&week=7&team=BUF`
   - `POST /nfl/simulations/{game_id}?simulations=4000&model_version=nfl-v1.5-matchup-sim`
 - NFL readiness health:
   - `GET /health/nfl-production-readiness`
@@ -62,6 +75,8 @@ Initial NFL model foundation is now in `services/model-service`.
   - `POST /api/jobs/run-nfl-quality-grading?lookback_days=60&model_version=nfl-v1.5-matchup-sim`
   - `POST /api/jobs/run-nfl-walkforward-backtest?model_version=nfl-v1.5-matchup-sim&lookback_days=240&training_days=56&step_days=7&apply_calibration=true`
   - `POST /api/jobs/evaluate-nfl-promotion?challenger_model_version=nfl-v1.6-enterprise&lookback_days=45&auto_promote=true`
+  - `POST /api/jobs/run-nfl-framework-tuning?model_version=nfl-v1.5-matchup-sim&lookback_days=240&training_days=56&step_days=7&max_candidates=180`
+  - `POST /api/jobs/run-nfl-decomposition-drift?model_version=nfl-v1.5-matchup-sim&lookback_days=120&baseline_weeks=4`
   - `POST /api/jobs/run-nfl-player-baselines?season=2026&week=1&model_version=nfl-player-v1`
   - `POST /api/jobs/pull-nfl-player-prop-markets?season=2026&week=1`
   - `POST /api/jobs/run-nfl-player-props?season=2026&week=1&model_version=nfl-player-v1`
@@ -78,6 +93,8 @@ Migrations:
 - `infra/db/011_nfl_model_foundation.sql`
 - `infra/db/020_nfl_player_props_fantasy_foundation.sql`
 - `infra/db/021_nfl_player_identity_graph.sql`
+- `infra/db/022_nfl_team_intel.sql`
+- `infra/db/024_nfl_framework_tuning_and_drift.sql`
 
 Tables:
 
@@ -90,12 +107,17 @@ Tables:
 - `nfl_model_backtest_runs`
 - `nfl_model_runtime_state`
 - `nfl_model_promotion_events`
+- `nfl_framework_tuning_runs`
+- `nfl_framework_tuning_candidates`
+- `nfl_decomposition_drift_snapshots`
 - `nfl_portfolio_runs`
 - `nfl_portfolio_recommendations`
 - `nfl_dp_player_usage_weekly`
 - `nfl_dp_team_situational_weekly`
 - `nfl_dp_team_rolling_features_weekly`
 - `nfl_dp_matchup_features_weekly`
+- `nfl_dp_standings_weekly`
+- `nfl_dp_depth_chart_weekly`
 - `nfl_player_projection_features_weekly`
 - `nfl_player_projection_baselines`
 - `nfl_player_prop_market_snapshots`
@@ -109,6 +131,20 @@ Tables:
 - `nfl_player_mapping_review_queue`
 - `nfl_player_mapping_quality_snapshots`
 
+## Team Intel surfaces
+
+- Team Intel pages under web are now live for NFL:
+  - `/pro/nfl/rosters`
+  - `/pro/nfl/stats`
+  - `/pro/nfl/standings`
+  - `/pro/nfl/depth-charts`
+  - `/pro/nfl/injuries`
+- Team Intel overview cards in `/pro/nfl/overview` now point to active routes (no placeholders).
+- Team Intel responses now include source visibility:
+  - `/nfl/intel/rosters` returns `roster_source`/`injury_source` fields plus `source_diagnostics`
+  - `/nfl/intel/stats` returns `stats_source`/`standings_source` plus `source_diagnostics`
+  - `/nfl/intel/health` includes `active_sources` so ops can verify `nfl_com` vs fallback
+
 ## Current model profile
 
 - Model version: `nfl-v1.5-matchup-sim`
@@ -118,6 +154,7 @@ Tables:
   - rest-day effects
   - home-field advantage
   - matchup/rolling feature-pack signals (`nfl_dp_matchup_features_weekly`) with bounded point adjustments and safe fallback-to-baseline when features are missing
+  - **KAV** (Kos Edge Adjusted Value) — owned opponent-adjusted EPA efficiency, lagged week−1 (see `docs/NFL_KAV.md`); handicapping factor `kav_efficiency`
   - totals-specific bounded signals:
     - tempo/pass-rate proxy
     - offense-vs-defense EPA interaction terms
@@ -128,10 +165,47 @@ Tables:
   - implied fair moneylines
   - spread and calibrated total expectations
   - total distribution quantiles
+  - deterministic decomposition payload with:
+    - predicted margin / predicted total
+    - factor-point attribution by framework factor
+    - uncertainty penalties + confidence score
+    - factor coverage + active guardrail thresholds
   - explainability blocks in simulation diagnostics describing:
     - matchup feature adjustments
     - totals adjustments (component-level bounded contributions)
     - totals calibration (`base_total`, `calibrated_total`, `slope`, `intercept`, `sample_size`, `source`)
+
+## Enterprise handicapping framework core
+
+- Framework version: `nfl-handicap-core-v1`
+- Central tunable config: `src/services/nfl_handicapping_framework.py` (weights, priors, uncertainty penalties, guardrails, env overrides)
+- All factors are represented in point-space (`margin_points`, `total_points`) and emitted in `decomposition.factor_contributions`:
+  - `base_efficiency`
+  - `home_field_advantage`
+  - `rest_travel`
+  - `injuries_depth`
+  - `weather_environment` (wind/precip/extreme-temperature bounded adjustment; fallback-safe when feed unavailable)
+  - `travel_schedule` (away/home travel intensity from mileage + timezone transitions)
+  - `situational_flags`
+  - `regression_luck`
+
+Core formula (deterministic decomposition layer before simulation sampling):
+
+- `predicted_margin = sum(factor.margin_points)`
+- `predicted_total = prior_total + sum(factor.total_points)`
+- `expected_home_points = (predicted_total + predicted_margin) / 2`
+- `expected_away_points = (predicted_total - predicted_margin) / 2`
+
+Default weight intent (all env-overridable; tune with walk-forward only):
+
+- base efficiency: medium/high influence (drives most spread signal)
+- HFA: low/medium constant
+- rest/travel: low/medium bounded adjustments
+- injuries/depth: medium influence, confidence-scaled
+- weather/environment: low/medium bounded totals drag under high wind/precip/extreme temp
+- travel/schedule: low/medium bounded away-side tax on long-distance/timezone transitions
+- situational flags: low influence
+- regression/luck: low/medium shrinkage to damp unstable outliers
 
 ## Production hardening guardrails
 
@@ -184,6 +258,9 @@ Tables:
   - `base_mae_total_runs`, `calibrated_mae_total_runs`, `mae_improvement`
   - `leakage_violations`
   - per-fold totals calibrator coefficients (`total_calibration_slope`, `total_calibration_intercept`)
+  - framework metadata:
+    - `framework_version`
+    - `factor_attribution_diagnostics` (factor coverage and average absolute point attribution)
 - Report reads:
   - `GET /nfl/ops/backtest-runs` (history)
   - `GET /nfl/ops/backtest-report` (latest summary + folds)
@@ -191,13 +268,62 @@ Tables:
 ## NFL edge gating
 
 - `GET /nfl/edges/today` computes model-vs-market edges and applies quality/confidence filtering by default.
+- If live odds retrieval is unavailable, the endpoint returns HTTP `200` with `edges=[]` and diagnostics (`odds_feed_status=degraded`, `odds_feed_error`, `odds_events_seen`) so downstream systems retain deterministic behavior while feed outages remain visible.
 - Default thresholds are env-configurable:
   - `NFL_EDGE_MIN_QUALITY_SCORE`
   - `NFL_EDGE_MIN_CONFIDENCE_SCORE`
   - `NFL_EDGE_MIN_ML_EDGE_PROB`
+- Additional enterprise guardrails (framework config):
+  - max uncertainty penalty
+  - minimum factor coverage
+  - max injury freshness hours
 - Response includes diagnostics for production observability:
   - `filtered_count`
   - `filtered_reasons`
+  - `filtered_reason_codes` and filtered examples
+  - `odds_feed_status` / `odds_feed_error` / `odds_events_seen`
+
+## Tuning runbook guidance
+
+- Use `run_nfl_framework_tuning` as the primary search loop; it executes bounded deterministic grid slices over key weight scales and guardrails.
+- Objective is joint: moneyline Brier, totals MAE, CLV (actual when present; proxy fallback), and recommendation coverage/throughput.
+- Throughput protections are hard constraints (`min_recommendations`, `min/max coverage`) so over-filtered configs are automatically down-ranked.
+- Forward-only and leakage checks are hard reject gates: tuning run status becomes `rejected` when any leakage violation is detected.
+- Store and review both `nfl_framework_tuning_runs.payload` and top ranked `nfl_framework_tuning_candidates` before rollout.
+- When a run is `rejected` due sparse data, still lock runtime metadata to the latest run id/status for full auditability and explicit no-promotion evidence.
+
+## Framework lock operations
+
+- Runtime champion state remains in `nfl_model_runtime_state` (`state_key=nfl_active_model`).
+- Framework lock metadata is written under `metadata.framework_lock` and should include:
+  - `run_id`
+  - `locked_at`
+  - `tuning_status`
+  - `leakage_violations`
+  - `selected_config` (possibly `{}` when no candidate is recommended)
+- Operator verification query:
+  - `SELECT state_key, active_model_version, reason, metadata, updated_at FROM nfl_model_runtime_state WHERE state_key='nfl_active_model';`
+- During sparse historical windows, readiness may remain `no-go` after successful job execution; treat this as a hard promotion stop condition, not a task failure.
+
+## Drift monitor interpretation
+
+- Weekly decomposition drift is persisted in `nfl_decomposition_drift_snapshots` and exposed via `/nfl/ops/decomposition-drift/latest`.
+- Monitor computes factor-level mean absolute contribution shifts versus trailing baseline weeks.
+- Suggested action bands:
+  - `stable`: continue normal champion monitoring
+  - `warning`: inspect top-shifting factors and recent data/feed changes before promotion decisions
+  - `critical`: block promotion, trigger root-cause analysis, and rerun framework tuning after fix
+- Readiness payload now includes latest drift monitor status so operators can gate promotions with context.
+
+## Safe rollout procedure
+
+- Run challenger cycle in order: outcomes refresh -> quality grading -> walk-forward backtest -> framework tuning -> decomposition drift.
+- Require no-regression package:
+  - quality: challenger Brier/MAE/CLV meets promotion thresholds
+  - backtest: forward-only metrics hold and leakage violations remain `0`
+  - tuning: selected config passes throughput constraints with acceptable coverage
+  - drift: latest status is not `critical`
+- Promote with champion/challenger controls only after all checks pass; keep previous champion in `nfl_model_runtime_state.previous_model_version` for immediate rollback.
 
 ## Enterprise promotion framework
 
@@ -263,6 +389,7 @@ Tables:
 - `moneyline_positive_edge_hit_rate` / `total_positive_edge_hit_rate`: hit rates restricted to picks with positive CLV, useful as a CLV-style quality proxy.
 
 Notes:
+
 - Total hit rates use close line when present, otherwise open line.
 - If any component is unavailable (e.g., no CLV rows in lookback), metrics are null-safe and return `null` with sample sizes preserved.
 - NFL total market snapshots are normalized to half-points during history materialization for stable CLV and calibration targets.

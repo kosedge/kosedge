@@ -1,0 +1,57 @@
+{
+  "title": "NFL player props enterprise v2 upgrade",
+  "as_of": "2026-07-20",
+  "sample": {
+    "games": 208,
+    "graded_props": 3815,
+    "source": "nfl_player_prop_market_snapshots (odds_api_historical) + walk-forward projections"
+  },
+  "changes_shipped": [
+    "Truth level-shift + std inflation calibrator (prop-enterprise-cal-v1), walk-forward refreshable",
+    "Market shrink disabled for solid-role projections (was erasing the edge)",
+    "Game-script anchors: implied team total + team spread into baseline + box MC",
+    "Wider pass/rush/rec uncertainty (baseline CV + MC pass std ×1.20)",
+    "Pooled blend stds; role/availability gates on PLAY",
+    "PLAY/WATCH/PASS policy: stake only calibrated |z|≥0.5 yardage (pass/rush/rec)",
+    "Board defaults to PLAY-only with honest sparse-stake framing"
+  ],
+  "locked_stake_rule": {
+    "name": "calibrated_yards_high_z_v1",
+    "requirements": [
+      "60/40 MC+baseline blend",
+      "apply frozen/walk-forward mean intercept + std multiplier",
+      "no market shrink when role_confidence ≥ 0.55",
+      "market in {pass_yds, rush_yds, rec_yds}",
+      "|z| ≥ 0.50 and |z| < 1.15",
+      "de-vig edge ≥ 0.040 on favored side",
+      "abs(mean−line) within market gap caps",
+      "role_confidence ≥ 0.50 and availability_confidence ≥ 0.55"
+    ]
+  },
+  "in_sample_results": {
+    "play_only": {
+      "n": 470,
+      "win_rate": 0.5574,
+      "roi_pct": 4.722,
+      "wilson_95_low": 0.5123,
+      "wilson_95_high": 0.6017
+    },
+    "by_market_play": {
+      "pass_yds": { "n": 24, "win_rate": 0.5833, "roi_pct": 9.977 },
+      "rush_yds": { "n": 182, "win_rate": 0.5769, "roi_pct": 8.582 },
+      "rec_yds": { "n": 264, "win_rate": 0.5417, "roi_pct": 1.583 }
+    },
+    "blanket_still_negative": {
+      "win_rate": 0.514,
+      "roi_pct": -3.478,
+      "note": "Do not bet the full slate"
+    }
+  },
+  "honest_caveats": [
+    "Calibration intercepts were fit on this same graded sample — treat +4.7% ROI as optimistic until a fresh residue-class holdout (offsets 2/3/5 still unused).",
+    "Wilson lower bound (51.2%) clears coin-flip but not full −110 breakeven (52.4%) at 95% confidence.",
+    "pass_yds PLAY n=24 is thin; rush/rec carry most of the volume.",
+    "2025 W17 live board may show zero PLAY when Oddssnapshots are sparse or model–market gaps trip the disagreement gate (correct behavior)."
+  ],
+  "next_holdout": "Pull residue offset=2 (dedupe vs DB), regrade locked_stake_rule only — do not refit tags on that batch."
+}

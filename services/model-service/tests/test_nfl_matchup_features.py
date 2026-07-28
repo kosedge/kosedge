@@ -32,7 +32,7 @@ def test_matchup_pack_to_sim_input_kwargs_maps_expected_fields() -> None:
     mapped = matchup_pack_to_sim_input_kwargs(matchup_pack)
     assert mapped["matchup_season"] == 2025
     assert mapped["matchup_week"] == 9
-    assert mapped["feature_pack_version"] == "nfl-v1-matchup-pack"
+    assert mapped["feature_pack_version"] == "nfl-v1.1-matchup-pack-kav"
     assert mapped["matchup_diff_off_epa_5g"] == 0.14
     assert mapped["matchup_diff_pressure_generated_5g"] == 0.03
     assert mapped["matchup_diff_success_rate_5g"] == pytest.approx(0.055)

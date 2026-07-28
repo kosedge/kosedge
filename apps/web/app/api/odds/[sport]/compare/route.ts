@@ -4,8 +4,8 @@ import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
 import {
   fetchOddsComparison,
-  ALLOWED_BOOKS,
   bookDisplay,
+  configuredBooksForSport,
   SPORT_KEY_MAP,
 } from "@/lib/odds-api";
 import { getCache, setCache } from "@/lib/cache/redis";
@@ -20,7 +20,7 @@ const compareCache = new Map<
   string,
   { data: { rows: unknown[]; books: unknown[] }; ts: number }
 >();
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v2`;
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v3`;
 
 export async function GET(
   _req: Request,
@@ -73,11 +73,18 @@ export async function GET(
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   try {
-    const books = ALLOWED_BOOKS.map((k) => ({ key: k, label: bookDisplay(k) }));
+    const books = configuredBooksForSport(sport).map((k) => ({
+      key: k,
+      label: bookDisplay(k),
+    }));
     const data = { rows, books };
     const payload = { data, ts: now };
     compareCache.set(sport, payload);
-    await setCache(compareCacheKeyForSport(sport), payload, Math.ceil(ODDS_CACHE_TTL_MS / 1000));
+    await setCache(
+      compareCacheKeyForSport(sport),
+      payload,
+      Math.ceil(ODDS_CACHE_TTL_MS / 1000),
+    );
     return NextResponse.json(data, { headers: CACHE_HEADERS });
   } catch (e) {
     logError(e instanceof Error ? e : new Error(String(e)), {

@@ -1177,158 +1177,19 @@ def mlb_clv_metrics(
     model_version: Optional[str] = Query(None),
     lookback_days: int = Query(30, ge=7, le=365),
 ) -> Dict[str, Any]:
+    from src.services.mlb_enterprise_ops import compute_mlb_clv_with_spread
+    from src.services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
+
     session = SessionLocal()
     try:
         effective_model_version = model_version or _resolve_active_model_version(session)
-        rows = session.execute(
-            text(
-                """
-                WITH latest_proj AS (
-                  SELECT DISTINCT ON (mp.game_id)
-                    mp.game_id,
-                    mp.fg_home_win_prob,
-                    mp.fair_fg_total
-                  FROM mlb_market_projections mp
-                  JOIN games g ON g.id = mp.game_id
-                  WHERE mp.model_version = :model_version
-                    AND g.game_date >= CURRENT_DATE - make_interval(days => :lookback_days)
-                  ORDER BY mp.game_id, mp.created_at DESC
-                ),
-                ml_first AS (
-                  SELECT os.game_id, AVG(os.price_home)::numeric AS open_home_ml, AVG(os.price_away)::numeric AS open_away_ml
-                  FROM odds_snapshots os
-                  JOIN markets m ON m.id = os.market_id
-                  JOIN (
-                    SELECT game_id, MIN(captured_at) AS t
-                    FROM odds_snapshots os2 JOIN markets m2 ON m2.id = os2.market_id
-                    WHERE m2.code = 'moneyline'
-                    GROUP BY game_id
-                  ) f ON f.game_id = os.game_id AND f.t = os.captured_at
-                  WHERE m.code = 'moneyline'
-                  GROUP BY os.game_id
-                ),
-                ml_last AS (
-                  SELECT os.game_id, AVG(os.price_home)::numeric AS close_home_ml, AVG(os.price_away)::numeric AS close_away_ml
-                  FROM odds_snapshots os
-                  JOIN markets m ON m.id = os.market_id
-                  JOIN (
-                    SELECT game_id, MAX(captured_at) AS t
-                    FROM odds_snapshots os2 JOIN markets m2 ON m2.id = os2.market_id
-                    WHERE m2.code = 'moneyline'
-                    GROUP BY game_id
-                  ) f ON f.game_id = os.game_id AND f.t = os.captured_at
-                  WHERE m.code = 'moneyline'
-                  GROUP BY os.game_id
-                ),
-                total_first AS (
-                  SELECT os.game_id, AVG(os.total_points)::numeric AS open_total
-                  FROM odds_snapshots os
-                  JOIN markets m ON m.id = os.market_id
-                  JOIN (
-                    SELECT game_id, MIN(captured_at) AS t
-                    FROM odds_snapshots os2 JOIN markets m2 ON m2.id = os2.market_id
-                    WHERE m2.code = 'total'
-                    GROUP BY game_id
-                  ) f ON f.game_id = os.game_id AND f.t = os.captured_at
-                  WHERE m.code = 'total'
-                  GROUP BY os.game_id
-                ),
-                total_last AS (
-                  SELECT os.game_id, AVG(os.total_points)::numeric AS close_total
-                  FROM odds_snapshots os
-                  JOIN markets m ON m.id = os.market_id
-                  JOIN (
-                    SELECT game_id, MAX(captured_at) AS t
-                    FROM odds_snapshots os2 JOIN markets m2 ON m2.id = os2.market_id
-                    WHERE m2.code = 'total'
-                    GROUP BY game_id
-                  ) f ON f.game_id = os.game_id AND f.t = os.captured_at
-                  WHERE m.code = 'total'
-                  GROUP BY os.game_id
-                )
-                SELECT
-                  lp.game_id,
-                  lp.fg_home_win_prob,
-                  lp.fair_fg_total,
-                  mf.open_home_ml,
-                  mf.open_away_ml,
-                  ml.close_home_ml,
-                  ml.close_away_ml,
-                  tf.open_total,
-                  tl.close_total
-                FROM latest_proj lp
-                LEFT JOIN ml_first mf ON mf.game_id = lp.game_id
-                LEFT JOIN ml_last ml ON ml.game_id = lp.game_id
-                LEFT JOIN total_first tf ON tf.game_id = lp.game_id
-                LEFT JOIN total_last tl ON tl.game_id = lp.game_id
-                """
-            ),
-            {"model_version": effective_model_version, "lookback_days": lookback_days},
-        ).fetchall()
-        items: List[Dict[str, Any]] = []
-        for r in rows:
-            m = dict(r._mapping)
-            open_home = _to_int(round(m["open_home_ml"])) if m["open_home_ml"] is not None else None
-            open_away = _to_int(round(m["open_away_ml"])) if m["open_away_ml"] is not None else None
-            close_home = _to_int(round(m["close_home_ml"])) if m["close_home_ml"] is not None else None
-            close_away = _to_int(round(m["close_away_ml"])) if m["close_away_ml"] is not None else None
-            open_total = _to_float(m["open_total"])
-            close_total = _to_float(m["close_total"])
-            model_home_prob = _to_float(m["fg_home_win_prob"])
-            fair_total = _to_float(m["fair_fg_total"])
-
-            ml_pick = None
-            ml_clv = None
-            if model_home_prob is not None and open_home is not None and open_away is not None:
-                open_home_prob = _american_implied_prob(open_home)
-                if open_home_prob is not None:
-                    ml_pick = "home" if model_home_prob > open_home_prob else "away"
-                    if close_home is not None and close_away is not None:
-                        if ml_pick == "home":
-                            ml_clv = round(
-                                (_american_implied_prob(close_home) or 0.0) - (_american_implied_prob(open_home) or 0.0),
-                                4,
-                            )
-                        else:
-                            ml_clv = round(
-                                (_american_implied_prob(close_away) or 0.0) - (_american_implied_prob(open_away) or 0.0),
-                                4,
-                            )
-
-            total_pick = None
-            total_clv = None
-            if fair_total is not None and open_total is not None and close_total is not None:
-                total_pick = "over" if fair_total > open_total else "under"
-                total_clv = (
-                    round(close_total - open_total, 3)
-                    if total_pick == "over"
-                    else round(open_total - close_total, 3)
-                )
-
-            items.append(
-                {
-                    "game_id": m["game_id"],
-                    "ml_pick": ml_pick,
-                    "ml_clv": ml_clv,
-                    "total_pick": total_pick,
-                    "total_clv": total_clv,
-                    "open_home_ml": open_home,
-                    "close_home_ml": close_home,
-                    "open_total": open_total,
-                    "close_total": close_total,
-                }
-            )
-
-        ml_vals = [x["ml_clv"] for x in items if x["ml_clv"] is not None]
-        total_vals = [x["total_clv"] for x in items if x["total_clv"] is not None]
-        return {
-            "model_version": effective_model_version,
-            "lookback_days": lookback_days,
-            "count": len(items),
-            "avg_ml_clv": round(sum(ml_vals) / len(ml_vals), 5) if ml_vals else None,
-            "avg_total_clv": round(sum(total_vals) / len(total_vals), 5) if total_vals else None,
-            "items": items,
-        }
+        preferred = os.getenv("MLB_ODDS_PREFERRED_BOOK", DEFAULT_PREFERRED_BOOK)
+        return compute_mlb_clv_with_spread(
+            session,
+            model_version=effective_model_version,
+            lookback_days=lookback_days,
+            preferred_book=preferred,
+        )
     finally:
         session.close()
 
@@ -2133,8 +1994,140 @@ def mlb_go_no_go(
                 "mae_total_runs": _safe_float(payload.get("mae_total_runs")),
                 "avg_ml_clv": _safe_float(payload.get("avg_ml_clv")),
                 "avg_total_clv": _safe_float(payload.get("avg_total_clv")),
+                "avg_spread_clv": _safe_float(payload.get("avg_spread_clv")),
             },
             "recent_warning_alerts_24h": int(warning_count),
+        }
+    finally:
+        session.close()
+
+
+@router.get("/fair-lines")
+def mlb_fair_lines(
+    game_date: Optional[date] = Query(None, description="UTC date; defaults to today"),
+    model_version: Optional[str] = Query(None),
+) -> Dict[str, Any]:
+    """Desk fair-lines board: ML, total, and run-line/spread from latest projections."""
+    session = SessionLocal()
+    try:
+        effective_model_version = model_version or _resolve_active_model_version(session)
+        target_date = game_date or date.today()
+        rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (mp.game_id)
+                  g.id AS game_id,
+                  g.game_date,
+                  g.start_time,
+                  home.name AS home_team,
+                  away.name AS away_team,
+                  mp.fg_home_win_prob,
+                  mp.fair_fg_home_ml,
+                  mp.fg_total_mean,
+                  mp.fair_fg_total,
+                  mp.projection,
+                  mp.created_at
+                FROM mlb_market_projections mp
+                JOIN games g ON g.id = mp.game_id
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                JOIN teams home ON home.id = g.home_team_id
+                JOIN teams away ON away.id = g.away_team_id
+                WHERE l.code = 'mlb'
+                  AND g.game_date = :game_date
+                  AND mp.model_version = :model_version
+                ORDER BY mp.game_id, mp.created_at DESC
+                """
+            ),
+            {"game_date": target_date, "model_version": effective_model_version},
+        ).fetchall()
+        lines: List[Dict[str, Any]] = []
+        for r in rows:
+            m = dict(r._mapping)
+            proj = m.get("projection") or {}
+            markets = proj.get("markets") if isinstance(proj, dict) else {}
+            markets = markets if isinstance(markets, dict) else {}
+            lines.append(
+                {
+                    "game_id": m["game_id"],
+                    "game_date": m["game_date"],
+                    "start_time": m["start_time"],
+                    "home_team": m["home_team"],
+                    "away_team": m["away_team"],
+                    "fg_home_win_prob": _to_float(m["fg_home_win_prob"]),
+                    "fair_fg_home_ml": _to_int(m["fair_fg_home_ml"]),
+                    "fg_total_mean": _to_float(m["fg_total_mean"]),
+                    "fair_fg_total": _to_float(m["fair_fg_total"]),
+                    "fair_fg_spread_home": _to_float(markets.get("fair_fg_spread_home")),
+                    "fg_home_cover_prob_run_line": _to_float(markets.get("fg_home_cover_prob_run_line")),
+                    "fg_margin_mean": _to_float(markets.get("fg_margin_mean")),
+                    "projected_at": m["created_at"],
+                }
+            )
+        return {
+            "game_date": target_date,
+            "model_version": effective_model_version,
+            "count": len(lines),
+            "lines": lines,
+        }
+    finally:
+        session.close()
+
+
+@router.get("/ops/board-health")
+def mlb_board_health(
+    model_version: Optional[str] = Query(None),
+    lookback_days: int = Query(14, ge=3, le=60),
+) -> Dict[str, Any]:
+    from src.services.mlb_enterprise_ops import build_board_health_from_db
+    from src.services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE
+
+    session = SessionLocal()
+    try:
+        effective_model_version = model_version or _resolve_active_model_version(session)
+        latest = session.execute(
+            text(
+                """
+                SELECT payload, created_at
+                FROM mlb_board_health_snapshots
+                WHERE model_version = :model_version
+                ORDER BY created_at DESC
+                LIMIT 1
+                """
+            ),
+            {"model_version": effective_model_version},
+        ).fetchone()
+        if latest:
+            return {
+                "model_version": effective_model_version,
+                "source": "snapshot",
+                "created_at": latest.created_at,
+                "health": latest.payload,
+                "props_play_stake_eligible": PLAY_STAKE_ELIGIBLE,
+            }
+        health = build_board_health_from_db(
+            session,
+            model_version=effective_model_version,
+            lookback_days=lookback_days,
+        )
+        return {
+            "model_version": effective_model_version,
+            "source": "live",
+            "health": health,
+            "props_play_stake_eligible": PLAY_STAKE_ELIGIBLE,
+        }
+    except Exception:
+        # Table may not exist pre-040; still return live evaluation when possible.
+        health = build_board_health_from_db(
+            session,
+            model_version=model_version or DEFAULT_MODEL_VERSION,
+            lookback_days=lookback_days,
+        )
+        return {
+            "model_version": model_version or DEFAULT_MODEL_VERSION,
+            "source": "live_fallback",
+            "health": health,
+            "props_play_stake_eligible": PLAY_STAKE_ELIGIBLE,
         }
     finally:
         session.close()

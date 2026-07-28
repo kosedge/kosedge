@@ -103,7 +103,7 @@ export default function Home() {
               Edge Board
             </Link>
             <Link
-              href="/odds"
+              href="/odds/nfl"
               className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-lg border border-white/20 text-gray-300 hover:text-kos-gold hover:border-kos-gold/45 transition"
             >
               Compare Odds

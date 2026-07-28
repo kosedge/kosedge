@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-07-20T23:28:11.917042+00:00",
+  "summary": "Enterprise props: box-score MC edges, de-vig mids, PLAY/LEAN tags, disagreement gate, Odds roster team, rush other-bucket, WR/TE gadget carries",
+  "week_2025_17": {
+    "play": 6,
+    "lean": 9,
+    "disagree": 15
+  },
+  "board": "/pro/nfl/props?season=2025&week=17"
+}

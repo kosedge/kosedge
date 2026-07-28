@@ -67,7 +67,8 @@ export const authConfig = {
       if (user) {
         token.id = user.id;
         const role = (user as { role?: import("#prisma").UserRole }).role;
-      token.role = role ?? token.role ?? ("USER" as import("#prisma").UserRole);
+        token.role =
+          role ?? token.role ?? ("USER" as import("#prisma").UserRole);
       }
 
       // Handle session updates (e.g., role changes)

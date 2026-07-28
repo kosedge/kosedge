@@ -97,7 +97,9 @@ function parseNumber(label: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-function getGameStatus(time?: string): "Upcoming" | "Live" | "Final" | "Listed" {
+function getGameStatus(
+  time?: string,
+): "Upcoming" | "Live" | "Final" | "Listed" {
   const value = (time ?? "").toLowerCase();
   if (value.includes("live") || value.includes("q") || value.includes("half")) {
     return "Live";
@@ -113,13 +115,15 @@ function getSignal(game: TonightGame, content: SportScrollerContent): string {
   const maxEdge = Math.max(lineEdge, totalEdge);
 
   if (maxEdge >= 2.5) return `${content.signalHigh} ${maxEdge.toFixed(1)} pts`;
-  if (maxEdge >= 1.0) return `${content.signalModerate} ${maxEdge.toFixed(1)} pts`;
+  if (maxEdge >= 1.0)
+    return `${content.signalModerate} ${maxEdge.toFixed(1)} pts`;
 
   const openSpread = parseNumber(game.row.openLine.top.label);
   const bestSpread = parseNumber(game.row.bestLine.top.label);
   if (openSpread != null && bestSpread != null) {
     const shift = Math.abs(bestSpread - openSpread);
-    if (shift >= 0.5) return `${content.movementSignal} ${shift.toFixed(1)} pts`;
+    if (shift >= 0.5)
+      return `${content.movementSignal} ${shift.toFixed(1)} pts`;
   }
 
   return content.defaultSignal;
@@ -127,7 +131,11 @@ function getSignal(game: TonightGame, content: SportScrollerContent): string {
 
 function withFallback(value: string | undefined, fallback: string): string {
   const normalized = (value ?? "").trim();
-  if (!normalized || normalized === "—" || normalized.toLowerCase() === "coming soon") {
+  if (
+    !normalized ||
+    normalized === "—" ||
+    normalized.toLowerCase() === "coming soon"
+  ) {
     return fallback;
   }
   return normalized;
@@ -145,10 +153,10 @@ export default function WeeklyGamesScroller({
   if (!games.length) {
     return (
       <section className="rounded-2xl border border-white/10 bg-black/30 p-5 sm:p-6 backdrop-blur-xl">
-        <h2 className="text-lg font-semibold text-kos-text">{content.sectionTitle}</h2>
-        <p className="mt-2 text-sm text-kos-text/70">
-          {content.emptyCopy}
-        </p>
+        <h2 className="text-lg font-semibold text-kos-text">
+          {content.sectionTitle}
+        </h2>
+        <p className="mt-2 text-sm text-kos-text/70">{content.emptyCopy}</p>
       </section>
     );
   }
@@ -177,8 +185,14 @@ export default function WeeklyGamesScroller({
           {games.map((game) => {
             const status = getGameStatus(game.row.time);
             const signal = getSignal(game, content);
-            const bestLine = withFallback(game.row.bestLine.top.label, "Line pending");
-            const bestTotal = withFallback(game.row.bestOU.top.label, "Total pending");
+            const bestLine = withFallback(
+              game.row.bestLine.top.label,
+              "Line pending",
+            );
+            const bestTotal = withFallback(
+              game.row.bestOU.top.label,
+              "Total pending",
+            );
             const gameTime = withFallback(game.row.time, "Time pending");
             const hasData = hasArticleData(game.row);
             const statusClass =
@@ -196,9 +210,7 @@ export default function WeeklyGamesScroller({
                   >
                     {status}
                   </span>
-                  <span className="text-xs text-kos-text/60">
-                    {gameTime}
-                  </span>
+                  <span className="text-xs text-kos-text/60">{gameTime}</span>
                 </div>
                 <div className="mt-3 text-sm font-semibold text-kos-text">
                   {game.row.teamA.name} @ {game.row.teamB.name}

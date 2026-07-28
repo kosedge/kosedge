@@ -80,7 +80,9 @@ export default function SlatePage({
     <main>
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold">{sportName} Slate: {params.date}</h2>
+          <h2 className="text-2xl font-semibold">
+            {sportName} Slate: {params.date}
+          </h2>
           <p className="mt-2 text-kos-text/70">
             {hasData
               ? "Write-ups are collapsed by default. Model reference is informational only."

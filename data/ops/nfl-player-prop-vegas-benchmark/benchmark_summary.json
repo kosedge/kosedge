@@ -1,0 +1,297 @@
+{
+  "n_games": 318,
+  "n_records": 5786,
+  "n_new_skipped_no_sim": 0,
+  "by_method": {
+    "old": {
+      "n_total": 5786,
+      "n_pushes": 0,
+      "overall": {
+        "n": 5786,
+        "wins": 2892,
+        "win_rate": 0.4998
+      },
+      "high_conviction": {
+        "n": 3447,
+        "wins": 1748,
+        "win_rate": 0.5071
+      },
+      "low_conviction": {
+        "n": 2339,
+        "wins": 1144,
+        "win_rate": 0.4891
+      },
+      "edge_call_accuracy": {
+        "n": 5737,
+        "correct": 2875,
+        "accuracy": 0.5011
+      }
+    },
+    "current": {
+      "n_total": 5786,
+      "n_pushes": 0,
+      "overall": {
+        "n": 5786,
+        "wins": 2913,
+        "win_rate": 0.5035
+      },
+      "high_conviction": {
+        "n": 3676,
+        "wins": 1850,
+        "win_rate": 0.5033
+      },
+      "low_conviction": {
+        "n": 2110,
+        "wins": 1063,
+        "win_rate": 0.5038
+      },
+      "edge_call_accuracy": {
+        "n": 5743,
+        "correct": 2900,
+        "accuracy": 0.505
+      }
+    },
+    "new": {
+      "n_total": 5786,
+      "n_pushes": 0,
+      "overall": {
+        "n": 5786,
+        "wins": 2932,
+        "win_rate": 0.5067
+      },
+      "high_conviction": {
+        "n": 498,
+        "wins": 269,
+        "win_rate": 0.5402
+      },
+      "low_conviction": {
+        "n": 5288,
+        "wins": 2663,
+        "win_rate": 0.5036
+      },
+      "edge_call_accuracy": {
+        "n": 5633,
+        "correct": 2852,
+        "accuracy": 0.5063
+      }
+    }
+  },
+  "by_method_market": {
+    "old__pass_yds": {
+      "n_total": 592,
+      "n_pushes": 0,
+      "overall": {
+        "n": 592,
+        "wins": 301,
+        "win_rate": 0.5084
+      },
+      "high_conviction": {
+        "n": 115,
+        "wins": 51,
+        "win_rate": 0.4435
+      },
+      "low_conviction": {
+        "n": 477,
+        "wins": 250,
+        "win_rate": 0.5241
+      },
+      "edge_call_accuracy": {
+        "n": 589,
+        "correct": 300,
+        "accuracy": 0.5093
+      }
+    },
+    "current__pass_yds": {
+      "n_total": 592,
+      "n_pushes": 0,
+      "overall": {
+        "n": 592,
+        "wins": 308,
+        "win_rate": 0.5203
+      },
+      "high_conviction": {
+        "n": 258,
+        "wins": 125,
+        "win_rate": 0.4845
+      },
+      "low_conviction": {
+        "n": 334,
+        "wins": 183,
+        "win_rate": 0.5479
+      },
+      "edge_call_accuracy": {
+        "n": 587,
+        "correct": 305,
+        "accuracy": 0.5196
+      }
+    },
+    "new__pass_yds": {
+      "n_total": 592,
+      "n_pushes": 0,
+      "overall": {
+        "n": 592,
+        "wins": 297,
+        "win_rate": 0.5017
+      },
+      "high_conviction": {
+        "n": 160,
+        "wins": 85,
+        "win_rate": 0.5312
+      },
+      "low_conviction": {
+        "n": 432,
+        "wins": 212,
+        "win_rate": 0.4907
+      },
+      "edge_call_accuracy": {
+        "n": 588,
+        "correct": 296,
+        "accuracy": 0.5034
+      }
+    },
+    "old__rush_yds": {
+      "n_total": 1656,
+      "n_pushes": 0,
+      "overall": {
+        "n": 1656,
+        "wins": 816,
+        "win_rate": 0.4928
+      },
+      "high_conviction": {
+        "n": 1053,
+        "wins": 533,
+        "win_rate": 0.5062
+      },
+      "low_conviction": {
+        "n": 603,
+        "wins": 283,
+        "win_rate": 0.4693
+      },
+      "edge_call_accuracy": {
+        "n": 1633,
+        "correct": 806,
+        "accuracy": 0.4936
+      }
+    },
+    "current__rush_yds": {
+      "n_total": 1656,
+      "n_pushes": 0,
+      "overall": {
+        "n": 1656,
+        "wins": 834,
+        "win_rate": 0.5036
+      },
+      "high_conviction": {
+        "n": 1081,
+        "wins": 543,
+        "win_rate": 0.5023
+      },
+      "low_conviction": {
+        "n": 575,
+        "wins": 291,
+        "win_rate": 0.5061
+      },
+      "edge_call_accuracy": {
+        "n": 1644,
+        "correct": 830,
+        "accuracy": 0.5049
+      }
+    },
+    "new__rush_yds": {
+      "n_total": 1656,
+      "n_pushes": 0,
+      "overall": {
+        "n": 1656,
+        "wins": 832,
+        "win_rate": 0.5024
+      },
+      "high_conviction": {
+        "n": 195,
+        "wins": 115,
+        "win_rate": 0.5897
+      },
+      "low_conviction": {
+        "n": 1461,
+        "wins": 717,
+        "win_rate": 0.4908
+      },
+      "edge_call_accuracy": {
+        "n": 1607,
+        "correct": 805,
+        "accuracy": 0.5009
+      }
+    },
+    "old__rec_yds": {
+      "n_total": 3538,
+      "n_pushes": 0,
+      "overall": {
+        "n": 3538,
+        "wins": 1775,
+        "win_rate": 0.5017
+      },
+      "high_conviction": {
+        "n": 2279,
+        "wins": 1164,
+        "win_rate": 0.5108
+      },
+      "low_conviction": {
+        "n": 1259,
+        "wins": 611,
+        "win_rate": 0.4853
+      },
+      "edge_call_accuracy": {
+        "n": 3515,
+        "correct": 1769,
+        "accuracy": 0.5033
+      }
+    },
+    "current__rec_yds": {
+      "n_total": 3538,
+      "n_pushes": 0,
+      "overall": {
+        "n": 3538,
+        "wins": 1771,
+        "win_rate": 0.5006
+      },
+      "high_conviction": {
+        "n": 2337,
+        "wins": 1182,
+        "win_rate": 0.5058
+      },
+      "low_conviction": {
+        "n": 1201,
+        "wins": 589,
+        "win_rate": 0.4904
+      },
+      "edge_call_accuracy": {
+        "n": 3512,
+        "correct": 1765,
+        "accuracy": 0.5026
+      }
+    },
+    "new__rec_yds": {
+      "n_total": 3538,
+      "n_pushes": 0,
+      "overall": {
+        "n": 3538,
+        "wins": 1803,
+        "win_rate": 0.5096
+      },
+      "high_conviction": {
+        "n": 143,
+        "wins": 69,
+        "win_rate": 0.4825
+      },
+      "low_conviction": {
+        "n": 3395,
+        "wins": 1734,
+        "win_rate": 0.5108
+      },
+      "edge_call_accuracy": {
+        "n": 3438,
+        "correct": 1751,
+        "accuracy": 0.5093
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "before": {
+    "board_mean_total": 42.76,
+    "pct_under_vs_market": 80.1,
+    "signed_bias_2025": -3.93
+  },
+  "after": {
+    "board_mean_total": 45.98,
+    "pct_under_vs_market_sample": 34.7,
+    "model_minus_market_sample": 0.45,
+    "prior": 45.3,
+    "calibration": "level_shift_with_prior_delta_removal"
+  },
+  "changes": [
+    "Raised NFL_FRAMEWORK_PRIOR_TOTAL_POINTS default 43.5 \u2192 45.3",
+    "Fixed totals calibrator mean-breaking slope/intercept clamps",
+    "Prefer level-shift + recency weights; remove prior-delta double count",
+    "Apply final totals calibration after supervised blend",
+    "Fair-lines prefers prior-delta-aware projections"
+  ],
+  "rating_impact": {
+    "game_lines_note": "Totals level bias was the main O/U distortion; spread/ML path untouched.",
+    "expected_direction": "Game-lines score should rise as O/U mix normalizes without killing edge."
+  }
+}

@@ -7,6 +7,8 @@ from typing import Any, Dict, List, Optional
 
 from sqlalchemy import text
 
+from .nfl_roster_continuity import fetch_roster_continuity_nowcast
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
@@ -135,8 +137,16 @@ def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
             "top_drivers": [],
         }
 
-    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 1.35))
-    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 1.35))
+    # Calibrated against real team-week distributions (2013-2025, ~9,600
+    # team-weeks) *after* fixing position weighting (see
+    # compute_team_week_injury_severity / the nfl_dp_rosters position join
+    # in fetch_nfl_injury_nowcast) -- before that fix, every player fell
+    # back to a generic weight and these ceilings were tuned for numbers
+    # roughly 2x smaller than what position-aware weighting actually
+    # produces, so most team-weeks were saturating near 1.0 and the score
+    # barely discriminated. p95 offense_raw ~= 2.2, p95 defense_raw ~= 1.85.
+    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 2.5))
+    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 2.2))
     impact_scale = _clamp(_safe_float(os.getenv("NFL_INJURY_IMPACT_SCALE"), 0.09), 0.01, 0.25)
     confidence_scale = _clamp(_safe_float(os.getenv("NFL_INJURY_CONFIDENCE_SCALE"), 0.9), 0.1, 1.5)
     min_rows_for_conf = max(1.0, _safe_float(os.getenv("NFL_INJURY_ROWS_FOR_FULL_CONFIDENCE"), 14.0))
@@ -193,6 +203,101 @@ def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _merge_roster_continuity_into_nowcast(
+    nowcast: Dict[str, Any],
+    continuity: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Compose a live injury-report nowcast with the roster-continuity
+    nowcast (see nfl_roster_continuity.py) by multiplying the two
+    multiplier pairs together -- both are centered on 1.0, so a team with
+    no roster-continuity entries (the common case) gets back exactly the
+    original in-season nowcast untouched, and a team with no live injury
+    rows (e.g. the 2026 preseason, before any weekly injury report
+    exists) gets back exactly the roster-continuity nowcast.
+    """
+    if int(continuity.get("adjustment_count") or 0) <= 0:
+        return nowcast
+
+    merged_offense = _clamp(
+        float(nowcast.get("offense_multiplier", 1.0)) * float(continuity.get("offense_multiplier", 1.0)),
+        0.82,
+        1.08,
+    )
+    merged_defense = _clamp(
+        float(nowcast.get("defense_multiplier", 1.0)) * float(continuity.get("defense_multiplier", 1.0)),
+        0.90,
+        1.18,
+    )
+    merged_confidence = _clamp(
+        max(float(nowcast.get("confidence", 0.0)), float(continuity.get("confidence", 0.0))),
+        0.0,
+        1.0,
+    )
+    merged_impact = _clamp(
+        float(nowcast.get("impact_score", 0.0)) + float(continuity.get("impact_score", 0.0)),
+        0.0,
+        1.0,
+    )
+    merged_drivers = sorted(
+        list(nowcast.get("top_drivers") or []) + list(continuity.get("top_drivers") or []),
+        key=lambda item: abs(_safe_float(item.get("impact", item.get("impact_score")))),
+        reverse=True,
+    )[:5]
+
+    merged = dict(nowcast)
+    merged.update(
+        {
+            "offense_multiplier": round(merged_offense, 4),
+            "defense_multiplier": round(merged_defense, 4),
+            "confidence": round(merged_confidence, 4),
+            "impact_score": round(merged_impact, 4),
+            "top_drivers": merged_drivers,
+            "roster_continuity_adjustment_count": int(continuity.get("adjustment_count") or 0),
+        }
+    )
+    return merged
+
+
+def compute_team_week_injury_severity(rows: List[Dict[str, Any]]) -> Dict[str, float]:
+    """Position+status-weighted injury severity for a single team-week, with
+    no freshness decay. Used for historical training features, where
+    `updated_at` reflects our ingestion time rather than the original report
+    time, so the live nowcast's recency decay (see `_aggregate_team_nowcast`)
+    would be meaningless here. Shares the same status/position/severity
+    weighting as the live path so training and inference stay consistent."""
+    if not rows:
+        return {"offense_impact": 0.0, "defense_impact": 0.0, "injury_count": 0.0}
+
+    max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 2.5))
+    max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 2.2))
+    offense_raw = 0.0
+    defense_raw = 0.0
+    for row in rows:
+        status_weight = _status_weight(row.get("report_status"))
+        practice_weight = _practice_weight(row.get("practice_status"))
+        position_weights = _position_weights(row.get("position"))
+        injury_weight = _injury_severity_weight(row.get("injury"))
+        player_impact = _clamp(
+            (0.62 * status_weight) + (0.23 * practice_weight) + (0.15 * injury_weight),
+            0.0,
+            1.0,
+        )
+        offense_raw += player_impact * position_weights["offense"]
+        defense_raw += player_impact * position_weights["defense"]
+
+    offense_impact = _clamp(offense_raw / max_raw_offense, 0.0, 1.0)
+    defense_impact = _clamp(defense_raw / max_raw_defense, 0.0, 1.0)
+    return {
+        "offense_impact": round(offense_impact, 4),
+        "defense_impact": round(defense_impact, 4),
+        # Matches the live nowcast's "impact_score" shape (see
+        # _aggregate_team_nowcast) so training features and live-inference
+        # features are computed the same way and don't skew apart.
+        "impact_score": round(_clamp((offense_impact + defense_impact) * 0.5, 0.0, 1.0), 4),
+        "injury_count": float(len(rows)),
+    }
+
+
 def fetch_nfl_injury_nowcast(
     session: Any,
     *,
@@ -205,25 +310,35 @@ def fetch_nfl_injury_nowcast(
         text(
             """
             WITH latest AS (
-              SELECT DISTINCT ON (team, player_key)
-                season,
-                week,
-                team,
-                player_key,
-                player_name,
-                report_status,
-                practice_status,
-                injury,
-                updated_at
-              FROM nfl_dp_injuries
-              WHERE season = :season
-                AND (team = :home_team OR team = :away_team)
-              ORDER BY team, player_key, week DESC, updated_at DESC
+              SELECT DISTINCT ON (i.team, i.player_key)
+                i.season,
+                i.week,
+                i.team,
+                i.player_key,
+                i.player_id,
+                i.player_name,
+                i.report_status,
+                i.practice_status,
+                i.injury,
+                i.updated_at
+              FROM nfl_dp_injuries i
+              WHERE i.season = :season
+                AND (i.team = :home_team OR i.team = :away_team)
+              ORDER BY i.team, i.player_key, i.week DESC, i.updated_at DESC
             )
             SELECT
-              season, week, team, player_key, player_name,
-              report_status, practice_status, injury, updated_at
+              latest.season, latest.week, latest.team, latest.player_key, latest.player_name,
+              latest.report_status, latest.practice_status, latest.injury, latest.updated_at,
+              -- nfl_dp_injuries has no position column; backfill from the same
+              -- season/team roster by player_id so QB/skill-position weighting
+              -- (see _position_weights) actually differentiates by position
+              -- instead of silently falling back to the generic default.
+              r.position
             FROM latest
+            LEFT JOIN nfl_dp_rosters r
+              ON r.season = latest.season
+             AND r.team = latest.team
+             AND r.player_id = latest.player_id
             """
         ),
         {
@@ -248,6 +363,18 @@ def fetch_nfl_injury_nowcast(
     ]
     home_nowcast = _aggregate_team_nowcast(home_rows)
     away_nowcast = _aggregate_team_nowcast(away_rows)
+
+    # Layer in known offseason roster moves (see nfl_roster_continuity.py)
+    # -- e.g. a season-long free-agency/trade departure that the current
+    # week's injury report has no way to reflect, since the player simply
+    # isn't on the team anymore rather than being listed as questionable.
+    # This is a no-op multiply-by-1.0 for the (common) case of a team with
+    # no curated roster-continuity entries for the season.
+    home_continuity = fetch_roster_continuity_nowcast(session, season_year=season, team=home_team)
+    away_continuity = fetch_roster_continuity_nowcast(session, season_year=season, team=away_team)
+    home_nowcast = _merge_roster_continuity_into_nowcast(home_nowcast, home_continuity)
+    away_nowcast = _merge_roster_continuity_into_nowcast(away_nowcast, away_continuity)
+
     game_confidence = round(
         _clamp(
             (float(home_nowcast["confidence"]) + float(away_nowcast["confidence"])) / 2.0,
@@ -256,9 +383,13 @@ def fetch_nfl_injury_nowcast(
         ),
         4,
     )
+    source = "nfl_dp_injuries"
+    has_continuity = bool(home_nowcast.get("roster_continuity_adjustment_count") or away_nowcast.get("roster_continuity_adjustment_count"))
+    if has_continuity:
+        source = "nfl_dp_injuries+roster_continuity"
     return {
         "season_year": season,
-        "source": "nfl_dp_injuries",
+        "source": source,
         "home_team": home_team,
         "away_team": away_team,
         "home": home_nowcast,

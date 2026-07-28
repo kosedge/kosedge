@@ -1,0 +1,198 @@
+{
+  "metadata": {
+    "season": 2025,
+    "model_version": "nfl-v1.5-matchup-sim",
+    "game_simulation_count": 50000,
+    "season_monte_carlo_iterations": 50000
+  },
+  "counts": {
+    "games_total": 285,
+    "games_regular": 265,
+    "games_playoff": 20,
+    "team_outcome_rows": 32,
+    "super_bowl_rows": 32,
+    "player_game_rows_regular": 5354,
+    "player_game_rows_playoff": 258,
+    "player_total_rows_regular": 622,
+    "player_total_rows_playoff": 159
+  },
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 7.9998,
+    "sum_playoff_prob": 13.9999
+  },
+  "top10_playoff_odds": [
+    {
+      "season": 2025,
+      "team": "DEN",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 8.845,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5674,
+      "division_title_prob": 0.3754,
+      "super_bowl_win_prob": 0.0471
+    },
+    {
+      "season": 2025,
+      "team": "HOU",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 8.841,
+      "wins_p10": 6,
+      "wins_p90": 17,
+      "playoff_prob": 0.5491,
+      "division_title_prob": 0.311,
+      "super_bowl_win_prob": 0.0481
+    },
+    {
+      "season": 2025,
+      "team": "BAL",
+      "conference": "AFC",
+      "division": "AFC North",
+      "expected_wins": 8.771,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5475,
+      "division_title_prob": 0.3629,
+      "super_bowl_win_prob": 0.044
+    },
+    {
+      "season": 2025,
+      "team": "PHI",
+      "conference": "NFC",
+      "division": "NFC East",
+      "expected_wins": 8.74,
+      "wins_p10": 6,
+      "wins_p90": 17,
+      "playoff_prob": 0.5245,
+      "division_title_prob": 0.3591,
+      "super_bowl_win_prob": 0.043
+    },
+    {
+      "season": 2025,
+      "team": "BUF",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 8.646,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5205,
+      "division_title_prob": 0.3183,
+      "super_bowl_win_prob": 0.0402
+    },
+    {
+      "season": 2025,
+      "team": "KC",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 8.605,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5184,
+      "division_title_prob": 0.3247,
+      "super_bowl_win_prob": 0.0403
+    },
+    {
+      "season": 2025,
+      "team": "JAX",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 8.648,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5134,
+      "division_title_prob": 0.2815,
+      "super_bowl_win_prob": 0.0424
+    },
+    {
+      "season": 2025,
+      "team": "NYJ",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 8.546,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5051,
+      "division_title_prob": 0.304,
+      "super_bowl_win_prob": 0.0384
+    },
+    {
+      "season": 2025,
+      "team": "DET",
+      "conference": "NFC",
+      "division": "NFC North",
+      "expected_wins": 8.702,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.4995,
+      "division_title_prob": 0.2801,
+      "super_bowl_win_prob": 0.0425
+    },
+    {
+      "season": 2025,
+      "team": "LA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 8.643,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.4947,
+      "division_title_prob": 0.2918,
+      "super_bowl_win_prob": 0.0393
+    }
+  ],
+  "top10_super_bowl": [
+    {
+      "season": 2025,
+      "team": "HOU",
+      "super_bowl_win_prob": 0.04814
+    },
+    {
+      "season": 2025,
+      "team": "DEN",
+      "super_bowl_win_prob": 0.04714
+    },
+    {
+      "season": 2025,
+      "team": "BAL",
+      "super_bowl_win_prob": 0.04398
+    },
+    {
+      "season": 2025,
+      "team": "PHI",
+      "super_bowl_win_prob": 0.04298
+    },
+    {
+      "season": 2025,
+      "team": "DET",
+      "super_bowl_win_prob": 0.04252
+    },
+    {
+      "season": 2025,
+      "team": "JAX",
+      "super_bowl_win_prob": 0.04242
+    },
+    {
+      "season": 2025,
+      "team": "KC",
+      "super_bowl_win_prob": 0.04034
+    },
+    {
+      "season": 2025,
+      "team": "BUF",
+      "super_bowl_win_prob": 0.04022
+    },
+    {
+      "season": 2025,
+      "team": "TB",
+      "super_bowl_win_prob": 0.03992
+    },
+    {
+      "season": 2025,
+      "team": "LA",
+      "super_bowl_win_prob": 0.03932
+    }
+  ]
+}

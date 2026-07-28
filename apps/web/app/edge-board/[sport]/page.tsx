@@ -2,7 +2,8 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import { env } from "@/lib/config/env";
-import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
+import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { getSport, SPORTS } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,15 @@ type EdgeBoardApiResponse =
   | { rows: EdgeBoardRow[]; cached?: boolean; ttl?: number }
   | { error: string; [k: string]: unknown };
 
-async function getRows(sport: string): Promise<EdgeBoardRow[]> {
+async function getRows(
+  sport: string,
+  slate: "live" | "all",
+): Promise<EdgeBoardRow[]> {
+  // NFL: assemble directly from fair-lines + Odds (avoids empty Open/Best from stale API cache).
+  if (sport.toLowerCase() === "nfl") {
+    return assembleEdgeBoardRows("nfl", [], { slate });
+  }
+
   const origin = await getRequestOrigin();
   const headersObj: Record<string, string> = { accept: "application/json" };
   if (env.INTERNAL_API_SECRET)
@@ -44,14 +53,17 @@ async function getRows(sport: string): Promise<EdgeBoardRow[]> {
     rows = (json as { rows: EdgeBoardRow[] }).rows;
   }
 
-  // Merge KEI lines on the page so we always use local kei_lines_*.json (no API cache dependency)
-  return mergeKeiIntoEdgeBoardRows(rows, sport);
+  return assembleEdgeBoardRows(sport, rows);
 }
 
 export default async function EdgeBoardSportPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ sport?: string }> | { sport?: string };
+  searchParams?:
+    | Promise<Record<string, string | string[] | undefined>>
+    | Record<string, string | string[] | undefined>;
 }) {
   const resolved =
     params && typeof (params as Promise<unknown>).then === "function"
@@ -60,7 +72,21 @@ export default async function EdgeBoardSportPage({
   const sportKey = String(resolved?.sport ?? "ncaam");
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const rows = await getRows(sportKey);
+  const keiCode = getKeiCode(sportKey);
+
+  const sp =
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
+      ? await (searchParams as Promise<
+          Record<string, string | string[] | undefined>
+        >)
+      : ((searchParams as Record<string, string | string[] | undefined>) ?? {});
+  const slateRaw = Array.isArray(sp.slate) ? sp.slate[0] : sp.slate;
+  const slate: "live" | "all" =
+    sportKey === "nfl" && slateRaw === "all" ? "all" : "live";
+
+  const rows = await getRows(sportKey, slate);
+  const gameCount = new Set(rows.map((r) => r.game).filter(Boolean)).size;
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
@@ -83,14 +109,17 @@ export default async function EdgeBoardSportPage({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} • Live odds (Open + Best)
+              {sportName} • Open + Best • {getKeiProductLabel(sportKey)}
             </div>
             <h1 className="text-5xl font-bebas tracking-tight text-kos-gold">
               Today&apos;s Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              Live: Game/Time/Open/Best. KEI columns show our projected line and
-              O/U when available.
+              {sportKey === "nfl"
+                ? slate === "live"
+                  ? `Current week slate — every scheduled game this week. Open/Best/Edge from sportsbooks when posted; ${keiCode} always.`
+                  : `All NFL games we currently have sportsbook odds on (any week). Odds pulls are saved for model training.`
+                : `Same board every sport. Live Open/Best. ${keiCode} Line and O/U are Kosedge projections.`}
             </p>
           </div>
 
@@ -122,7 +151,6 @@ export default async function EdgeBoardSportPage({
           </div>
         </div>
 
-        {/* Sport switcher */}
         <div className="mt-6 flex flex-wrap gap-2">
           {SPORTS.map((s) => (
             <Link
@@ -139,12 +167,43 @@ export default async function EdgeBoardSportPage({
           ))}
         </div>
 
-        <EdgeBoard variant="full" rows={rows} />
+        {sportKey === "nfl" ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/edge-board/nfl"
+              className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                slate === "live"
+                  ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
+                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+              }`}
+            >
+              Current week
+            </Link>
+            <Link
+              href="/edge-board/nfl?slate=all"
+              className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                slate === "all"
+                  ? "bg-kos-gold/20 border border-kos-gold/50 text-kos-gold"
+                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+              }`}
+            >
+              Odds slate
+            </Link>
+          </div>
+        ) : null}
+
+        <EdgeBoard variant="full" rows={rows} sportKey={sportKey} />
 
         <p className="mt-6 text-xs text-gray-500">
           {rows.length
-            ? `${rows.length} games`
-            : "No live data: add ODDS_API_KEY in Vercel → Project Settings → Environment Variables. Get a key at the-odds-api.com (free tier: 500 req/mo). Redeploy after adding."}
+            ? `${gameCount} games${
+                sportKey === "nfl"
+                  ? slate === "live"
+                    ? " · current week"
+                    : " · with sportsbook odds"
+                  : ""
+              }`
+            : "No live data: add ODDS_API_KEY in Vercel → Project Settings → Environment Variables."}
         </p>
       </main>
     </div>

@@ -1,0 +1,86 @@
+{
+  "generated_at": "2026-07-28T17:09:29.829353+00:00",
+  "branch": "nfl-kav-sharpen",
+  "database": "127.0.0.1:5432/kosedge",
+  "supervised": {
+    "path": "services/model-service/src/services/nfl_supervised_retrain.py + src.tasks.run_nfl_supervised_retrain",
+    "runner": "scripts/nfl/retrain_supervised_kav_v3.py",
+    "before": {
+      "schema_version": 2,
+      "n_features": 34,
+      "has_kav": false,
+      "train_rows": 2513,
+      "test_rows": 479,
+      "test_brier": 0.1831,
+      "test_margin_mae": 8.255,
+      "test_total_mae": 9.932
+    },
+    "after": {
+      "schema_version": 3,
+      "n_features": 41,
+      "has_kav": true,
+      "train_rows": 2992,
+      "test_rows": 570,
+      "train_brier": 0.12012401696773022,
+      "test_brier": 0.14822177223985103,
+      "train_total_mae": 8.843347682455535,
+      "test_total_mae": 9.202883619613488,
+      "train_margin_mae": 6.7980416788170395,
+      "test_margin_mae": 7.48009840196442,
+      "test_avg_home_prob": 0.5551789399689772,
+      "test_avg_total_pred": 46.31406386577945
+    }
+  },
+  "resim": {
+    "generated_at": "2026-07-28T17:03:52.200418+00:00",
+    "season": 2025,
+    "min_date": "2025-09-01",
+    "simulations": 500,
+    "model_version": "nfl-v1.5-matchup-sim",
+    "deleted_prior_projections": 341,
+    "days": 97,
+    "games_processed": 370,
+    "projections_inserted": 370,
+    "elapsed_sec": 750.2
+  },
+  "grading_before": {
+    "spread_mae": 9.6127,
+    "total_mae": 10.1226,
+    "ml_brier": 0.1995,
+    "ats_hit_rate": 0.4932,
+    "clv_spread_avg": 2.022,
+    "clv_spread_positive_rate": 0.6604,
+    "clv_total_avg": 1.2863,
+    "clv_total_positive_rate": 0.6325,
+    "n_spread": 1693,
+    "n_total": 1693,
+    "n_clv_spread": 159,
+    "n_clv_total": 117
+  },
+  "grading_after": {
+    "spread_mae": 9.5513,
+    "total_mae": 10.086,
+    "ml_brier": 0.1933,
+    "ats_hit_rate": 0.495,
+    "clv_spread_avg": 1.0466,
+    "clv_spread_positive_rate": 0.5092,
+    "clv_total_avg": 0.6772,
+    "clv_total_positive_rate": 0.5212,
+    "n_spread": 1693,
+    "n_total": 1693,
+    "n_clv_spread": 601,
+    "n_clv_total": 378
+  },
+  "grading_deltas": {
+    "spread_mae": -0.0614,
+    "total_mae": -0.0366,
+    "ml_brier": -0.0062,
+    "ats_hit_rate": 0.0018
+  },
+  "coverage_note": {
+    "before_owned_oc_games": 724,
+    "after_owned_oc_games": 1931,
+    "odds_pull": "none (DB-first)"
+  },
+  "compare_url": "https://github.com/kosedge/kosedge/compare/main...nfl-kav-sharpen"
+}

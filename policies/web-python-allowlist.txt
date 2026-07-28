@@ -8,6 +8,7 @@ apps/web/scripts/capture_sportsdata_replay.py
 apps/web/scripts/check_odds_api_credits.py
 apps/web/scripts/debug_projection.py
 apps/web/scripts/export_kei_lines.py
+apps/web/scripts/export_kei_lines_nfl.py
 apps/web/scripts/export_power_ratings.py
 apps/web/scripts/fetch_historical_ncaab_odds.py
 apps/web/scripts/ingest_dratings_historical.py

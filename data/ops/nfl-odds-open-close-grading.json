@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-07-28T12:51:51.342593+00:00",
+  "database_url_host": "127.0.0.1:5432/kosedge_nfl_restore",
+  "inventory": {
+    "games": 4195,
+    "odds_snapshots": 60183,
+    "nfl_dp_schedules": 3834,
+    "nfl_market_projections": 20619,
+    "nfl_market_outcomes": 3562,
+    "nfl_market_history_snapshots": 42763
+  },
+  "coverage": {
+    "schedule_games_2020_2025": 1693,
+    "owned_open_close_games": 724,
+    "rows_with_owned_oc_join": 296,
+    "rows_using_nflverse_close_fallback": 1530,
+    "rows_with_model_projection": 1693
+  },
+  "market_close": {
+    "spread_mae": 9.7782,
+    "total_mae": 10.3001,
+    "ml_brier": 0.224,
+    "open_to_close_spread_move_avg": 0.4268,
+    "n_spread": 1693,
+    "n_total": 1693
+  },
+  "model": {
+    "spread_mae": 9.6127,
+    "total_mae": 10.1226,
+    "ml_brier": 0.1995,
+    "ats_hit_rate": 0.4932,
+    "clv_spread_avg": 2.022,
+    "clv_spread_positive_rate": 0.6604,
+    "clv_total_avg": 1.2863,
+    "clv_total_positive_rate": 0.6325,
+    "n_spread": 1693,
+    "n_total": 1693,
+    "n_clv_spread": 159,
+    "n_clv_total": 117
+  },
+  "by_season": {
+    "2020": {
+      "n": 269,
+      "n_owned_oc": 0,
+      "market_spread_mae": 9.79,
+      "market_total_mae": 10.303
+    },
+    "2021": {
+      "n": 285,
+      "n_owned_oc": 0,
+      "market_spread_mae": 10.6667,
+      "market_total_mae": 10.807
+    },
+    "2022": {
+      "n": 284,
+      "n_owned_oc": 0,
+      "market_spread_mae": 8.7835,
+      "market_total_mae": 10.3979
+    },
+    "2023": {
+      "n": 285,
+      "n_owned_oc": 0,
+      "market_spread_mae": 9.9842,
+      "market_total_mae": 10.1684
+    },
+    "2024": {
+      "n": 285,
+      "n_owned_oc": 229,
+      "market_spread_mae": 9.7088,
+      "market_total_mae": 9.7579
+    },
+    "2025": {
+      "n": 285,
+      "n_owned_oc": 235,
+      "market_spread_mae": 9.7333,
+      "market_total_mae": 10.3667
+    }
+  },
+  "notes": [
+    "DB-first: no Odds API calls.",
+    "Owned open/close from odds_snapshots min/max captured_at when present.",
+    "nflverse spread_line/total_line used as close fallback (sign-converted).",
+    "Model metrics require nfl_market_projections rows joined on games.id."
+  ]
+}

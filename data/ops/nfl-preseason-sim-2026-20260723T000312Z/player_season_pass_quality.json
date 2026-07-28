@@ -1,0 +1,32 @@
+{
+  "pass": {
+    "dual_full_volume_qb_rooms": [],
+    "dual_full_volume_qb_rooms_count": 0,
+    "no_dual_full_volume_qb_rooms": true,
+    "publish_ready": true,
+    "top_passer": {
+      "pass_yards_total": 4727.6,
+      "player_name": "D.Prescott"
+    },
+    "top_passer_not_bridge_marker": true,
+    "top_passer_yards_gte_3800": true
+  },
+  "skill": {
+    "dual_1000_yard_rb_rooms": [],
+    "dual_1000_yard_rb_rooms_count": 0,
+    "publish_ready_skill": true,
+    "rb_with_1400_plus_count": 30,
+    "top_receiver": {
+      "player_name": "J.Chase",
+      "receiving_yards_total": 1916.2
+    },
+    "top_receiver_yards_gte_1300": true,
+    "top_rusher": {
+      "pass_yards_total": null,
+      "player_name": "S.Barkley",
+      "rush_yards_total": 2121.6
+    },
+    "top_rusher_yards_gte_1400": true,
+    "wr_with_1200_plus_count": 11
+  }
+}

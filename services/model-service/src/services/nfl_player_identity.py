@@ -28,6 +28,152 @@ def normalize_name_key(value: str) -> str:
     return compact
 
 
+def initial_last_name_key(value: str) -> Optional[str]:
+    """Bridge nflverse-style 'D.Maye' and Odds-API 'Drake Maye' to a shared key."""
+    parts = normalize_name_key(value).split()
+    if len(parts) < 2:
+        return None
+    first = parts[0]
+    last = parts[-1]
+    if not first or not last:
+        return None
+    return f"{first[0]} {last}"
+
+
+def prop_player_match_keys(*, player_uid: Optional[str], player_name: Optional[str]) -> List[str]:
+    """Stable lookup keys for joining baselines to prop market snapshots.
+
+    Historical Odds-API snapshots often have null player_uid and full names, while
+    projection baselines use nflverse abbreviations with resolved UIDs. Index and
+    lookup with uid, normalized full name, and initial+last so either side can join.
+    """
+    keys: List[str] = []
+    seen: set[str] = set()
+
+    def _add(key: str) -> None:
+        if key and key not in seen:
+            seen.add(key)
+            keys.append(key)
+
+    if player_uid is not None and str(player_uid).strip():
+        _add(f"uid:{str(player_uid).strip()}")
+    name = str(player_name or "").strip()
+    if name:
+        normalized = normalize_name_key(name)
+        if normalized:
+            _add(f"name:{normalized}")
+        initial_last = initial_last_name_key(name)
+        if initial_last:
+            _add(f"il:{initial_last}")
+    return keys
+
+
+# Position allow-lists for ambiguous initial+last joins (e.g. J.Williams DET WR
+# must not steal Javonte Williams DAL rush lines via shared `il:j williams`).
+_PROP_MARKET_POSITIONS: Dict[str, Optional[List[str]]] = {
+    "pass_yds": ["QB"],
+    "rush_yds": ["RB", "FB", "QB", "WR"],
+    "rec_yds": ["WR", "TE", "RB", "FB"],
+    "receptions": ["WR", "TE", "RB", "FB"],
+    "anytime_td": None,
+}
+
+
+def prop_market_position_compatible(market_key: str, position: Optional[str]) -> bool:
+    allowed = _PROP_MARKET_POSITIONS.get(str(market_key or ""))
+    if allowed is None:
+        return True
+    pos = str(position or "").strip().upper()
+    return bool(pos) and pos in allowed
+
+
+def prop_market_position_rank(market_key: str, position: Optional[str]) -> int:
+    """Lower is better. Used to break ties when multiple players share il: keys."""
+    allowed = _PROP_MARKET_POSITIONS.get(str(market_key or "")) or []
+    pos = str(position or "").strip().upper()
+    try:
+        return allowed.index(pos)
+    except ValueError:
+        return 99
+
+
+def select_prop_market_for_player(
+    market_lookup: Dict[tuple[str, str], Any],
+    *,
+    player_match_keys: List[str],
+    market_key: str,
+    team: Optional[str] = None,
+    position: Optional[str] = None,
+    ambiguous_il_keys: Optional[set[str]] = None,
+) -> Any:
+    """Pick the best market snapshot for a baseline player.
+
+    Prefer uid / exact normalized name, then team-scoped initial+last, then
+    unambiguous global initial+last. Never attach an `il:` collision across
+    teams/positions (Javonte Williams rush ≠ Jameson Williams DET WR).
+    """
+    mk = str(market_key or "")
+    team_u = str(team or "").strip().upper()
+    ambiguous = ambiguous_il_keys or set()
+
+    # 1) UID
+    for key in player_match_keys:
+        if key.startswith("uid:"):
+            hit = market_lookup.get((key, mk))
+            if hit is not None:
+                return hit
+
+    # 2) Exact normalized full/abbrev name
+    for key in player_match_keys:
+        if key.startswith("name:"):
+            hit = market_lookup.get((key, mk))
+            if hit is not None:
+                m_team = str(getattr(hit, "team", None) or "").strip().upper()
+                if m_team and team_u and m_team != team_u:
+                    continue
+                return hit
+
+    # 3) Team-scoped initial+last
+    if team_u:
+        for key in player_match_keys:
+            if key.startswith("il:"):
+                hit = market_lookup.get((f"{key}|{team_u}", mk))
+                if hit is not None and prop_market_position_compatible(mk, position):
+                    return hit
+
+    # 4) Global il: only when unique among baselines this week
+    for key in player_match_keys:
+        if not key.startswith("il:") or key in ambiguous:
+            continue
+        hit = market_lookup.get((key, mk))
+        if hit is None:
+            continue
+        m_team = str(getattr(hit, "team", None) or "").strip().upper()
+        if m_team and team_u and m_team != team_u:
+            continue
+        if not prop_market_position_compatible(mk, position):
+            continue
+        return hit
+
+    return None
+
+
+_PROP_SPORTSBOOK_RANK = {"draftkings": 0, "fanduel": 1}
+
+
+def prop_market_snapshot_rank(market: Any) -> tuple:
+    """Lower rank is preferred when multiple books quote the same player/market."""
+    book = str(getattr(market, "sportsbook", None) or "").strip().lower()
+    book_rank = _PROP_SPORTSBOOK_RANK.get(book, 50)
+    has_both = 0 if (getattr(market, "over_price", None) is not None and getattr(market, "under_price", None) is not None) else 1
+    captured = getattr(market, "captured_at", None)
+    try:
+        captured_ts = float(captured.timestamp()) if captured is not None else 0.0
+    except Exception:
+        captured_ts = 0.0
+    return (has_both, book_rank, -captured_ts)
+
+
 def _safe_float(value: Any, default: float = 0.0) -> float:
     try:
         if value is None:
@@ -211,7 +357,7 @@ def _upsert_identity_and_alias(
               active_from_season = COALESCE(active_from_season, :season),
               active_to_season = GREATEST(COALESCE(active_to_season, :season), COALESCE(:season, active_to_season)),
               updated_at = NOW()
-            WHERE player_uid = :player_uid::uuid
+            WHERE player_uid = CAST(:player_uid AS uuid)
             """
         ),
         {
@@ -230,7 +376,7 @@ def _upsert_identity_and_alias(
               player_uid, source_system, alias, normalized_alias, team, position, season, week,
               context, first_seen_at, last_seen_at, created_at, updated_at
             ) VALUES (
-              :player_uid::uuid, :source_system, :alias, :normalized_alias, :team, :position, :season, :week,
+              CAST(:player_uid AS uuid), :source_system, :alias, :normalized_alias, :team, :position, :season, :week,
               CAST(:context AS jsonb), NOW(), NOW(), NOW(), NOW()
             )
             ON CONFLICT (player_uid, normalized_alias, team, position, season, week) DO UPDATE SET
@@ -306,7 +452,7 @@ def _upsert_source_map(
               source_system, external_id, player_uid, confidence, trusted_link,
               first_seen_at, last_seen_at, metadata, created_at, updated_at
             ) VALUES (
-              :source_system, :external_id, :player_uid::uuid, :confidence, :trusted_link,
+              :source_system, :external_id, CAST(:player_uid AS uuid), :confidence, :trusted_link,
               NOW(), NOW(), CAST(:metadata AS jsonb), NOW(), NOW()
             )
             ON CONFLICT (source_system, external_id) DO UPDATE SET
@@ -341,7 +487,7 @@ def persist_mapping_event(session: Any, payload: IdentityInput, decision: Identi
             ) VALUES (
               :observed_source, :observed_external_id, :observed_player_name, :normalized_name,
               :observed_team, :observed_position, :observed_season, :observed_week,
-              :resolver_version, :rule_used, :confidence, :status, :player_uid::uuid, CAST(:candidate_player_uids AS jsonb),
+              :resolver_version, :rule_used, :confidence, :status, CAST(:player_uid AS uuid), CAST(:candidate_player_uids AS jsonb),
               CAST(:explanation AS jsonb), NOW()
             )
             RETURNING id::text
@@ -382,10 +528,10 @@ def queue_mapping_review(session: Any, *, event_id: str, payload: IdentityInput,
               observed_team, observed_position, observed_season, observed_week,
               candidate_player_uids, proposed_player_uid, created_at, updated_at
             ) VALUES (
-              :mapping_event_id::uuid, 'pending', :priority, :reason,
+              CAST(:mapping_event_id AS uuid), 'pending', :priority, :reason,
               :observed_source, :observed_external_id, :observed_player_name, :normalized_name,
               :observed_team, :observed_position, :observed_season, :observed_week,
-              CAST(:candidate_player_uids AS jsonb), :proposed_player_uid::uuid, NOW(), NOW()
+              CAST(:candidate_player_uids AS jsonb), CAST(:proposed_player_uid AS uuid), NOW(), NOW()
             )
             """
         ),
@@ -654,7 +800,7 @@ def apply_manual_mapping_resolution(
               q.observed_season,
               q.observed_week
             FROM nfl_player_mapping_review_queue q
-            WHERE q.id = :queue_id::uuid
+            WHERE q.id = CAST(:queue_id AS uuid)
             LIMIT 1
             """
         ),
@@ -679,10 +825,10 @@ def apply_manual_mapping_resolution(
               queue_status = :queue_status,
               reviewer = :reviewer,
               reviewer_notes = :reviewer_notes,
-              approved_player_uid = :approved_player_uid::uuid,
+              approved_player_uid = CAST(:approved_player_uid AS uuid),
               reviewed_at = NOW(),
               updated_at = NOW()
-            WHERE id = :queue_id::uuid
+            WHERE id = CAST(:queue_id AS uuid)
             """
         ),
         {
@@ -700,9 +846,9 @@ def apply_manual_mapping_resolution(
                 UPDATE nfl_player_mapping_events
                 SET
                   status = 'manual_approved',
-                  player_uid = :player_uid::uuid,
+                  player_uid = CAST(:player_uid AS uuid),
                   explanation = explanation || CAST(:patch AS jsonb)
-                WHERE id = :mapping_event_id::uuid
+                WHERE id = CAST(:mapping_event_id AS uuid)
                 """
             ),
             {

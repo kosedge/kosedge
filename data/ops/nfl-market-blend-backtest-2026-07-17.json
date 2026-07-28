@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-07-17",
+  "start_season": 2013,
+  "end_season": 2025,
+  "sample_size": 3562,
+  "simulations_per_game": 1200,
+  "baseline": {
+    "model_spread_mae": 9.6224,
+    "market_spread_mae": 9.918,
+    "model_total_mae": 10.2828,
+    "market_total_mae": 10.5053
+  },
+  "weight_sweep": [
+    {
+      "weight": 0.0,
+      "spread_mae": 9.6224,
+      "total_mae": 10.2828
+    },
+    {
+      "weight": 0.1,
+      "spread_mae": 9.5874,
+      "total_mae": 10.2609
+    },
+    {
+      "weight": 0.2,
+      "spread_mae": 9.5677,
+      "total_mae": 10.2496
+    },
+    {
+      "weight": 0.3,
+      "spread_mae": 9.5591,
+      "total_mae": 10.2478
+    },
+    {
+      "weight": 0.35,
+      "spread_mae": 9.5605,
+      "total_mae": 10.25
+    },
+    {
+      "weight": 0.4,
+      "spread_mae": 9.566,
+      "total_mae": 10.2548
+    },
+    {
+      "weight": 0.5,
+      "spread_mae": 9.5893,
+      "total_mae": 10.2723
+    },
+    {
+      "weight": 0.6,
+      "spread_mae": 9.6265,
+      "total_mae": 10.3005
+    },
+    {
+      "weight": 0.75,
+      "spread_mae": 9.7093,
+      "total_mae": 10.3593
+    },
+    {
+      "weight": 1.0,
+      "spread_mae": 9.918,
+      "total_mae": 10.5053
+    }
+  ],
+  "recommended_spread_weight": 0.3,
+  "recommended_total_weight": 0.3
+}

@@ -27,6 +27,9 @@ TASK_RUN_NFL_CLV_ATTRIBUTION = os.getenv(
 TASK_PULL_NFL_OUTCOMES = os.getenv("TASK_PULL_NFL_OUTCOMES", "src.tasks.pull_nfl_outcomes")
 TASK_RUN_NFL_QUALITY_GRADING = os.getenv("TASK_RUN_NFL_QUALITY_GRADING", "src.tasks.run_nfl_quality_grading")
 TASK_EVAL_NFL_PROMOTION = os.getenv("TASK_EVAL_NFL_PROMOTION", "src.tasks.evaluate_nfl_model_promotion")
+TASK_RUN_NFL_SUPERVISED_RETRAIN = os.getenv(
+    "TASK_RUN_NFL_SUPERVISED_RETRAIN", "src.tasks.run_nfl_supervised_retrain"
+)
 TASK_NFL_PLAYER_BASELINES = os.getenv(
     "TASK_NFL_PLAYER_BASELINES",
     "src.tasks.materialize_nfl_player_baseline_projections",
@@ -55,6 +58,26 @@ TASK_NFL_IDENTITY_QUALITY_SNAPSHOT = os.getenv(
     "TASK_NFL_IDENTITY_QUALITY_SNAPSHOT",
     "src.tasks.run_nfl_identity_quality_snapshot",
 )
+TASK_NFL_WEEKLY_RESILIENCE = os.getenv(
+    "TASK_NFL_WEEKLY_RESILIENCE",
+    "src.tasks.run_nfl_weekly_resilience_cycle",
+)
+TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING = os.getenv(
+    "TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING",
+    "src.tasks.run_nfl_enterprise_weekly_sharpening_cycle",
+)
+TASK_NFL_WALKFORWARD_BACKTEST = os.getenv(
+    "TASK_NFL_WALKFORWARD_BACKTEST",
+    "src.tasks.run_nfl_walkforward_backtest",
+)
+TASK_NFL_DR_BACKUP = os.getenv(
+    "TASK_NFL_DR_BACKUP",
+    "src.tasks.run_nfl_dr_backup",
+)
+TASK_NFL_DATA_FRESHNESS = os.getenv(
+    "TASK_NFL_DATA_FRESHNESS",
+    "src.tasks.run_nfl_data_freshness_check",
+)
 TASK_PULL_MLB_CONTEXT = os.getenv("TASK_PULL_MLB_CONTEXT", "src.tasks.pull_mlb_context_snapshot")
 TASK_RUN_MLB_SIMULATIONS = os.getenv(
     "TASK_RUN_MLB_SIMULATIONS", "src.tasks.run_mlb_market_simulations"
@@ -78,6 +101,14 @@ TASK_MLB_FEATURE_ABLATION = os.getenv(
 TASK_MLB_DETERMINISM_CHECK = os.getenv(
     "TASK_MLB_DETERMINISM_CHECK",
     "src.tasks.run_mlb_determinism_check",
+)
+TASK_MLB_CLV_ATTRIBUTION = os.getenv(
+    "TASK_MLB_CLV_ATTRIBUTION",
+    "src.tasks.run_mlb_clv_attribution",
+)
+TASK_MLB_QUALITY_GRADING = os.getenv(
+    "TASK_MLB_QUALITY_GRADING",
+    "src.tasks.run_mlb_quality_grading",
 )
 
 ACTIVE_START_HOUR = os.getenv("ODDS_PULL_ACTIVE_START_HOUR", "7")   # 7am
@@ -169,6 +200,21 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         },
         "options": {"queue": MODELS_QUEUE},
     },
+    "run-nfl-supervised-retrain-weekly": {
+        "task": TASK_RUN_NFL_SUPERVISED_RETRAIN,
+        # Weekly (not daily): new *completed* games only arrive once a week,
+        # so daily retraining would just refit on the same data. Tuesday
+        # morning, after Monday Night Football has graded out and outcomes
+        # have been pulled (pull-nfl-outcomes-nightly, 3:18am) and quality
+        # grading (evaluate-nfl-promotion-morning, 6:52am) has run.
+        "schedule": crontab(minute="5", hour="7", day_of_week=os.getenv("NFL_SUPERVISED_RETRAIN_DAY_OF_WEEK", "tue")),
+        "kwargs": {
+            "model_version": os.getenv("NFL_BASE_MODEL_VERSION", "nfl-v1.5-matchup-sim"),
+            "start_season": int(os.getenv("NFL_SUPERVISED_RETRAIN_START_SEASON", "2013")),
+            "end_season": int(os.getenv("NFL_SUPERVISED_RETRAIN_END_SEASON", "2026")),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
     "run-nfl-player-cycle-thursday": {
         "task": TASK_NFL_PLAYER_CYCLE,
         "schedule": crontab(minute="8", hour="7", day_of_week=os.getenv("NFL_PLAYER_CYCLE_DAY_OF_WEEK", "thu")),
@@ -228,6 +274,85 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         },
         "options": {"queue": MODELS_QUEUE},
     },
+    # Tuesday ownership cycle: ingest → player rematerialize → DR backup → freshness.
+    # Runs after overnight outcomes (03:18) and before supervised retrain (07:05).
+    "run-nfl-weekly-resilience-cycle": {
+        "task": TASK_NFL_WEEKLY_RESILIENCE,
+        "schedule": crontab(
+            minute=os.getenv("NFL_RESILIENCE_CYCLE_MINUTE", "15"),
+            hour=os.getenv("NFL_RESILIENCE_CYCLE_HOUR", "4"),
+            day_of_week=os.getenv("NFL_RESILIENCE_CYCLE_DAY_OF_WEEK", "tue"),
+        ),
+        "kwargs": {
+            "skip_player_update": os.getenv("NFL_RESILIENCE_SKIP_PLAYER_UPDATE", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+            "skip_dr_backup": os.getenv("NFL_RESILIENCE_SKIP_DR_BACKUP", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    # Full enterprise sharpening: snaps + tendencies + rolling usage + features
+    # + baselines/box/props. Set NFL_PLAYER_CYCLE_WEEK each week (or automate
+    # week resolution inside the task via _resolve_nfl_week).
+    "run-nfl-enterprise-weekly-sharpening": {
+        "task": TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING,
+        "schedule": crontab(
+            minute=os.getenv("NFL_ENTERPRISE_WEEKLY_MINUTE", "40"),
+            hour=os.getenv("NFL_ENTERPRISE_WEEKLY_HOUR", "5"),
+            day_of_week=os.getenv("NFL_ENTERPRISE_WEEKLY_DAY_OF_WEEK", "tue"),
+        ),
+        "kwargs": {
+            "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
+            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
+            "skip_ingest": os.getenv("NFL_ENTERPRISE_WEEKLY_SKIP_INGEST", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-walkforward-backtest-weekly": {
+        "task": TASK_NFL_WALKFORWARD_BACKTEST,
+        "schedule": crontab(
+            minute=os.getenv("NFL_WALKFORWARD_MINUTE", "20"),
+            hour=os.getenv("NFL_WALKFORWARD_HOUR", "8"),
+            day_of_week=os.getenv("NFL_WALKFORWARD_DAY_OF_WEEK", "wed"),
+        ),
+        "kwargs": {
+            "model_version": os.getenv("NFL_MODEL_VERSION", "nfl-v1.5-matchup-sim"),
+            "lookback_days": int(os.getenv("NFL_WALKFORWARD_LOOKBACK_DAYS", "240")),
+            "training_days": int(os.getenv("NFL_WALKFORWARD_TRAINING_DAYS", "56")),
+            "step_days": int(os.getenv("NFL_WALKFORWARD_STEP_DAYS", "7")),
+            "apply_calibration": True,
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-data-freshness-check-morning": {
+        "task": TASK_NFL_DATA_FRESHNESS,
+        "schedule": crontab(minute="10", hour="8"),
+        "kwargs": {"persist_alert": True},
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nfl-dr-backup-sunday": {
+        "task": TASK_NFL_DR_BACKUP,
+        "schedule": crontab(
+            minute="40",
+            hour="3",
+            day_of_week=os.getenv("NFL_DR_BACKUP_DAY_OF_WEEK", "sun"),
+        ),
+        "kwargs": {
+            "skip_verify": os.getenv("NFL_DR_BACKUP_SKIP_VERIFY", "false")
+            .strip()
+            .lower()
+            in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
     "run-mlb-simulations-daily": {
         "task": TASK_RUN_MLB_SIMULATIONS,
         "schedule": crontab(minute="20", hour="6"),
@@ -273,6 +398,24 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
             "challenger_model_version": os.getenv("MLB_CHALLENGER_MODEL_VERSION", "mlb-v2-pitch-sim"),
             "lookback_days": int(os.getenv("MLB_CALIBRATION_LOOKBACK_DAYS", "45")),
             "auto_promote": os.getenv("MLB_AUTO_PROMOTE_ENABLED", "false").strip().lower() in {"1", "true", "yes", "y", "on"},
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-mlb-clv-attribution-morning": {
+        "task": TASK_MLB_CLV_ATTRIBUTION,
+        "schedule": crontab(minute="42", hour="6"),
+        "kwargs": {
+            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+            "lookback_days": int(os.getenv("MLB_CLV_LOOKBACK_DAYS", "45")),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-mlb-quality-grading-morning": {
+        "task": TASK_MLB_QUALITY_GRADING,
+        "schedule": crontab(minute="48", hour="6"),
+        "kwargs": {
+            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+            "lookback_days": int(os.getenv("MLB_QUALITY_LOOKBACK_DAYS", "60")),
         },
         "options": {"queue": MODELS_QUEUE},
     },

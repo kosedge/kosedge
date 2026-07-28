@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
-import { mergeKeiIntoEdgeBoardRows } from "@/lib/edge-board-kei";
+import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
 import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
@@ -18,7 +18,9 @@ const CACHE_HEADERS = {
 };
 
 const sportCache = new Map<string, { rows: unknown[]; ts: number }>();
-const cacheKeyForSport = (sport: string) => `edge-board:${sport}:today:v2`;
+/** v7: live=current week; all=odds-posted games; odds persisted via fair-lines. */
+const cacheKeyForSport = (sport: string, slate: string) =>
+  `edge-board:${sport}:today:v7:${slate}`;
 
 function json(
   data: unknown,
@@ -64,53 +66,67 @@ export async function GET(
     }
   }
 
-  const keys = getOddsApiKeys();
-  if (!keys.length || !SPORT_KEY_MAP[sport]) {
-    return json({ rows: [] }, 200, { "x-request-id": requestId });
-  }
-
   const now = Date.now();
   const url = new URL(req.url);
   const skipCache = url.searchParams.get("refresh") === "1";
-  const cached = sportCache.get(sport);
+  const slateParam = url.searchParams.get("slate");
+  const slate: "live" | "all" =
+    sport === "nfl" && slateParam === "all" ? "all" : "live";
+  const cacheBucket = `${sport}:${slate}`;
+  const cached = sportCache.get(cacheBucket);
   if (!skipCache && cached && now - cached.ts < ODDS_CACHE_TTL_MS) {
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
   }
   if (!skipCache) {
     const distributed = await getCache<{ rows: unknown[]; ts: number }>(
-      cacheKeyForSport(sport),
+      cacheKeyForSport(sport, slate),
     );
     if (distributed && now - distributed.ts < ODDS_CACHE_TTL_MS) {
-      sportCache.set(sport, distributed);
-      return json({ rows: distributed.rows }, 200, { "x-request-id": requestId });
-    }
-  }
-
-  let rows: Awaited<ReturnType<typeof fetchEdgeBoard>> = [];
-  for (const key of keys) {
-    try {
-      rows = await fetchEdgeBoard(sport, key);
-      if (rows.length > 0) break;
-    } catch (e) {
-      logError(e instanceof Error ? e : new Error(String(e)), {
-        sport,
-        route: "edge-board/today",
+      sportCache.set(cacheBucket, distributed);
+      return json({ rows: distributed.rows }, 200, {
+        "x-request-id": requestId,
       });
     }
   }
-  if (rows.length === 0 && cached) {
+
+  let oddsRows: Awaited<ReturnType<typeof fetchEdgeBoard>> = [];
+  const keys = getOddsApiKeys();
+  if (keys.length && SPORT_KEY_MAP[sport]) {
+    for (const key of keys) {
+      try {
+        oddsRows = await fetchEdgeBoard(sport, key);
+        if (oddsRows.length > 0) break;
+      } catch (e) {
+        logError(e instanceof Error ? e : new Error(String(e)), {
+          sport,
+          route: "edge-board/today",
+        });
+      }
+    }
+  }
+
+  if (
+    oddsRows.length === 0 &&
+    cached &&
+    (cached.rows as unknown[]).length > 0
+  ) {
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
   }
+
   try {
-    rows = mergeKeiIntoEdgeBoardRows(rows, sport);
+    const rows = await assembleEdgeBoardRows(sport, oddsRows, { slate });
     const parsed = EdgeBoardResponseSchema.safeParse({ rows });
     if (!parsed.success) {
       if (cached)
         return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
       return json({ rows: [] }, 200, { "x-request-id": requestId });
     }
-    sportCache.set(sport, { rows: parsed.data.rows, ts: now });
-    await setCache(cacheKeyForSport(sport), { rows: parsed.data.rows, ts: now }, Math.ceil(ODDS_CACHE_TTL_MS / 1000));
+    sportCache.set(cacheBucket, { rows: parsed.data.rows, ts: now });
+    await setCache(
+      cacheKeyForSport(sport, slate),
+      { rows: parsed.data.rows, ts: now },
+      Math.ceil(ODDS_CACHE_TTL_MS / 1000),
+    );
     return json(parsed.data, 200, { "x-request-id": requestId });
   } catch (e) {
     logError(e instanceof Error ? e : new Error(String(e)), {

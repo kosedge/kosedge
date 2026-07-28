@@ -7,7 +7,7 @@ function readAllowlist(path) {
     readFileSync(path, "utf-8")
       .split("\n")
       .map((l) => l.trim())
-      .filter((l) => l && !l.startsWith("#"))
+      .filter((l) => l && !l.startsWith("#")),
   );
 }
 
@@ -19,7 +19,7 @@ function listTrackedPythonUnderWeb() {
     out
       .split("\n")
       .map((l) => l.trim())
-      .filter(Boolean)
+      .filter(Boolean),
   );
 }
 
@@ -52,8 +52,14 @@ const scriptViolations = pythonScriptViolations();
 const unexpected = [...tracked].filter((f) => !allowlist.has(f)).sort();
 const missing = [...allowlist].filter((f) => !tracked.has(f)).sort();
 
-if (unexpected.length === 0 && missing.length === 0 && scriptViolations.length === 0) {
-  console.log("Python boundary check passed: apps/web Python footprint unchanged.");
+if (
+  unexpected.length === 0 &&
+  missing.length === 0 &&
+  scriptViolations.length === 0
+) {
+  console.log(
+    "Python boundary check passed: apps/web Python footprint unchanged.",
+  );
   process.exit(0);
 }
 
@@ -63,16 +69,19 @@ if (unexpected.length) {
   for (const f of unexpected) console.error(`  - ${f}`);
 }
 if (missing.length) {
-  console.error("\nAllowlisted files no longer tracked (update allowlist if intentional):");
+  console.error(
+    "\nAllowlisted files no longer tracked (update allowlist if intentional):",
+  );
   for (const f of missing) console.error(`  - ${f}`);
 }
 if (scriptViolations.length) {
-  console.error("\nPython execution is not allowed in apps/web package scripts:");
+  console.error(
+    "\nPython execution is not allowed in apps/web package scripts:",
+  );
   for (const v of scriptViolations) console.error(`  - ${v}`);
 }
 console.error(
   "\nPolicy: Python ingestion/model execution belongs under services/ (not apps/web). " +
-    "If this is an intentional migration step, update policies/web-python-allowlist.txt and boundary scripts in the same PR."
+    "If this is an intentional migration step, update policies/web-python-allowlist.txt and boundary scripts in the same PR.",
 );
 process.exit(1);
-

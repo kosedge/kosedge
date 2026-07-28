@@ -1,0 +1,336 @@
+{
+  "generated_at": "2026-07-20T20:59:57.968844+00:00",
+  "methodology": {
+    "settled": "Latest pre-kickoff nfl_market_projections vs nfl_dp_schedules closing spread_line/total_line; unit ROI at -110.",
+    "spread_sign": "nflverse spread_line (+) home favored \u2192 Odds home spread = -spread_line; lean home when model_home < market_home.",
+    "clv": "nfl_clv_attribution totals only (open\u2192close movement in recommended direction).",
+    "breakeven_hit_rate": 0.5238
+  },
+  "sample": {
+    "spread_plays": 855,
+    "total_plays": 855,
+    "total_clv_rows": 446
+  },
+  "spread_settled_by_bucket": {
+    "0-1.1": {
+      "n": 127,
+      "hit_rate": 0.5354,
+      "roi": 0.0222,
+      "units": 2.818,
+      "beats_minus_110": true
+    },
+    "1.1-2.0": {
+      "n": 111,
+      "hit_rate": 0.4955,
+      "roi": -0.0541,
+      "units": -6.0,
+      "beats_minus_110": false
+    },
+    "2.0-2.5": {
+      "n": 63,
+      "hit_rate": 0.3651,
+      "roi": -0.303,
+      "units": -19.091,
+      "beats_minus_110": false
+    },
+    "2.5-3.5": {
+      "n": 108,
+      "hit_rate": 0.5463,
+      "roi": 0.0429,
+      "units": 4.636,
+      "beats_minus_110": true
+    },
+    "3.5-5.0": {
+      "n": 163,
+      "hit_rate": 0.4663,
+      "roi": -0.1099,
+      "units": -17.909,
+      "beats_minus_110": false
+    },
+    "5.0+": {
+      "n": 264,
+      "hit_rate": 0.6326,
+      "roi": 0.2076,
+      "units": 54.818,
+      "beats_minus_110": true
+    }
+  },
+  "total_settled_by_bucket": {
+    "0-1.5": {
+      "n": 262,
+      "hit_rate": 0.4885,
+      "roi": -0.0673,
+      "units": -17.636,
+      "beats_minus_110": false
+    },
+    "1.5-2.0": {
+      "n": 60,
+      "hit_rate": 0.6,
+      "roi": 0.1455,
+      "units": 8.727,
+      "beats_minus_110": true
+    },
+    "2.0-2.5": {
+      "n": 72,
+      "hit_rate": 0.5139,
+      "roi": -0.0189,
+      "units": -1.364,
+      "beats_minus_110": false
+    },
+    "2.5-3.0": {
+      "n": 63,
+      "hit_rate": 0.5714,
+      "roi": 0.0909,
+      "units": 5.727,
+      "beats_minus_110": true
+    },
+    "3.0-4.0": {
+      "n": 97,
+      "hit_rate": 0.3918,
+      "roi": -0.2521,
+      "units": -24.455,
+      "beats_minus_110": false
+    },
+    "4.0-6.0": {
+      "n": 155,
+      "hit_rate": 0.5355,
+      "roi": 0.0223,
+      "units": 3.455,
+      "beats_minus_110": true
+    },
+    "6.0+": {
+      "n": 140,
+      "hit_rate": 0.5357,
+      "roi": 0.0227,
+      "units": 3.182,
+      "beats_minus_110": true
+    }
+  },
+  "total_clv_by_bucket": {
+    "0-1.5": {
+      "n": 49,
+      "pct_pos": 51.0,
+      "avg_clv": 0.6327
+    },
+    "1.5-2.0": {
+      "n": 52,
+      "pct_pos": 42.3,
+      "avg_clv": 0.4231
+    },
+    "2.0-2.5": {
+      "n": 55,
+      "pct_pos": 70.9,
+      "avg_clv": 1.8182
+    },
+    "2.5-3.0": {
+      "n": 45,
+      "pct_pos": 55.6,
+      "avg_clv": 1.3556
+    },
+    "3.0-4.0": {
+      "n": 77,
+      "pct_pos": 50.6,
+      "avg_clv": 1.0195
+    },
+    "4.0-6.0": {
+      "n": 108,
+      "pct_pos": 52.8,
+      "avg_clv": 1.1667
+    },
+    "6.0+": {
+      "n": 60,
+      "pct_pos": 38.3,
+      "avg_clv": 0.8167
+    }
+  },
+  "tag_band_simulations": {
+    "data_driven_shipped": {
+      "spread": {
+        "PASS": {
+          "n": 127,
+          "hit_rate": 0.5354,
+          "roi": 0.0222,
+          "units": 2.818,
+          "beats_minus_110": true
+        },
+        "LEAN": {
+          "n": 174,
+          "hit_rate": 0.4483,
+          "roi": -0.1442,
+          "units": -25.091,
+          "beats_minus_110": false
+        },
+        "PLAY": {
+          "n": 535,
+          "hit_rate": 0.5645,
+          "roi": 0.0777,
+          "units": 41.545,
+          "beats_minus_110": true
+        }
+      },
+      "total": {
+        "PASS": {
+          "n": 322,
+          "hit_rate": 0.5093,
+          "roi": -0.0277,
+          "units": -8.909,
+          "beats_minus_110": false
+        },
+        "LEAN": {
+          "n": 464,
+          "hit_rate": 0.5022,
+          "roi": -0.0413,
+          "units": -19.182,
+          "beats_minus_110": false
+        },
+        "PLAY": {
+          "n": 63,
+          "hit_rate": 0.5714,
+          "roi": 0.0909,
+          "units": 5.727,
+          "beats_minus_110": true
+        }
+      },
+      "config": {
+        "spread_lean": 1.1,
+        "spread_play": 2.5,
+        "total_lean": 2.0,
+        "total_play_from": 2.5,
+        "total_play_to": 3.0
+      }
+    },
+    "old_total_play_ge_3": {
+      "spread": {
+        "PASS": {
+          "n": 127,
+          "hit_rate": 0.5354,
+          "roi": 0.0222,
+          "units": 2.818,
+          "beats_minus_110": true
+        },
+        "LEAN": {
+          "n": 174,
+          "hit_rate": 0.4483,
+          "roi": -0.1442,
+          "units": -25.091,
+          "beats_minus_110": false
+        },
+        "PLAY": {
+          "n": 535,
+          "hit_rate": 0.5645,
+          "roi": 0.0777,
+          "units": 41.545,
+          "beats_minus_110": true
+        }
+      },
+      "total": {
+        "PASS": {
+          "n": 340,
+          "hit_rate": 0.5147,
+          "roi": -0.0174,
+          "units": -5.909,
+          "beats_minus_110": false
+        },
+        "LEAN": {
+          "n": 117,
+          "hit_rate": 0.5299,
+          "roi": 0.0117,
+          "units": 1.364,
+          "beats_minus_110": true
+        },
+        "PLAY": {
+          "n": 392,
+          "hit_rate": 0.5,
+          "roi": -0.0455,
+          "units": -17.818,
+          "beats_minus_110": false
+        }
+      },
+      "config": {
+        "spread_lean": 1.1,
+        "spread_play": 2.5,
+        "total_lean": 2.1,
+        "total_play_from": 3.0,
+        "total_play_to": 100.0
+      }
+    },
+    "total_play_ge_2_5_open": {
+      "spread": {
+        "PASS": {
+          "n": 127,
+          "hit_rate": 0.5354,
+          "roi": 0.0222,
+          "units": 2.818,
+          "beats_minus_110": true
+        },
+        "LEAN": {
+          "n": 174,
+          "hit_rate": 0.4483,
+          "roi": -0.1442,
+          "units": -25.091,
+          "beats_minus_110": false
+        },
+        "PLAY": {
+          "n": 535,
+          "hit_rate": 0.5645,
+          "roi": 0.0777,
+          "units": 41.545,
+          "beats_minus_110": true
+        }
+      },
+      "total": {
+        "PASS": {
+          "n": 322,
+          "hit_rate": 0.5093,
+          "roi": -0.0277,
+          "units": -8.909,
+          "beats_minus_110": false
+        },
+        "LEAN": {
+          "n": 72,
+          "hit_rate": 0.5139,
+          "roi": -0.0189,
+          "units": -1.364,
+          "beats_minus_110": false
+        },
+        "PLAY": {
+          "n": 455,
+          "hit_rate": 0.5099,
+          "roi": -0.0266,
+          "units": -12.091,
+          "beats_minus_110": false
+        }
+      },
+      "config": {
+        "spread_lean": 1.1,
+        "spread_play": 2.5,
+        "total_lean": 2.0,
+        "total_play_from": 2.5,
+        "total_play_to": 100.0
+      }
+    }
+  },
+  "recommended_thresholds": {
+    "spread": {
+      "pass_below": 1.1,
+      "lean_from": 1.1,
+      "play_from": 2.5
+    },
+    "total": {
+      "pass_below": 2.0,
+      "lean_from": 2.0,
+      "play_from": 2.5,
+      "play_to": 3.0,
+      "size_down_from": 3.0
+    },
+    "board_policy": {
+      "spread_tag": "PASS <1.1 \u00b7 LEAN 1.1\u20132.4 \u00b7 PLAY \u22652.5",
+      "total_tag": "PASS <2 \u00b7 LEAN \u22652 (incl. \u22653 size-down) \u00b7 PLAY only 2.5\u20132.99"
+    },
+    "notes": [
+      "Spread PLAY floor ignores buckets below 2.0 pts even if sample looks green.",
+      "Total PLAY is a closed interval (sweet spot); edges \u2265 play_to stay LEAN + size-down.",
+      "Gate: n\u226540, hit>52.4%, ROI\u22650; totals also require CLV pos\u226550% when n\u226530."
+    ]
+  }
+}

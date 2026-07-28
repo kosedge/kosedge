@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "season": 2026,
+    "model_version": "nfl-v1.5-matchup-sim",
+    "game_simulation_count": 50000,
+    "season_monte_carlo_iterations": 50000
+  },
+  "counts": {
+    "games_total": 121,
+    "games_regular": 121,
+    "games_playoff": 0,
+    "team_outcome_rows": 64,
+    "super_bowl_rows": 64,
+    "player_game_rows_regular": 0,
+    "player_game_rows_playoff": 0,
+    "player_total_rows_regular": 0,
+    "player_total_rows_playoff": 0
+  },
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 7.9999,
+    "sum_playoff_prob": 13.9999
+  },
+  "top10_playoff_odds": [
+    {
+      "season": 2026,
+      "team": "NE",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 2.615,
+      "wins_p10": 1,
+      "wins_p90": 4,
+      "playoff_prob": 0.9117,
+      "division_title_prob": 0.7562,
+      "super_bowl_win_prob": 0.1855
+    },
+    {
+      "season": 2026,
+      "team": "SEA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 2.001,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.7913,
+      "division_title_prob": 0.4325,
+      "super_bowl_win_prob": 0.114
+    },
+    {
+      "season": 2026,
+      "team": "LA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 1.907,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.7645,
+      "division_title_prob": 0.3533,
+      "super_bowl_win_prob": 0.1004
+    },
+    {
+      "season": 2026,
+      "team": "DEN",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 1.629,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.757,
+      "division_title_prob": 0.6205,
+      "super_bowl_win_prob": 0.0715
+    },
+    {
+      "season": 2026,
+      "team": "CHI",
+      "conference": "NFC",
+      "division": "NFC North",
+      "expected_wins": 1.637,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.7373,
+      "division_title_prob": 0.6105,
+      "super_bowl_win_prob": 0.0737
+    },
+    {
+      "season": 2026,
+      "team": "HOU",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 1.461,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.7048,
+      "division_title_prob": 0.5255,
+      "super_bowl_win_prob": 0.0576
+    },
+    {
+      "season": 2026,
+      "team": "BUF",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 1.459,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.6634,
+      "division_title_prob": 0.2041,
+      "super_bowl_win_prob": 0.0558
+    },
+    {
+      "season": 2026,
+      "team": "SF",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 1.46,
+      "wins_p10": 1,
+      "wins_p90": 3,
+      "playoff_prob": 0.6393,
+      "division_title_prob": 0.2119,
+      "super_bowl_win_prob": 0.0605
+    },
+    {
+      "season": 2026,
+      "team": "PIT",
+      "conference": "AFC",
+      "division": "AFC North",
+      "expected_wins": 1.082,
+      "wins_p10": 1,
+      "wins_p90": 2,
+      "playoff_prob": 0.6177,
+      "division_title_prob": 0.4984,
+      "super_bowl_win_prob": 0.0297
+    },
+    {
+      "season": 2026,
+      "team": "PHI",
+      "conference": "NFC",
+      "division": "NFC East",
+      "expected_wins": 1.081,
+      "wins_p10": 1,
+      "wins_p90": 2,
+      "playoff_prob": 0.6052,
+      "division_title_prob": 0.4978,
+      "super_bowl_win_prob": 0.0294
+    }
+  ],
+  "top10_super_bowl": [
+    {
+      "season": 2026,
+      "team": "NE",
+      "super_bowl_win_prob": 0.18554
+    },
+    {
+      "season": 2026,
+      "team": "SEA",
+      "super_bowl_win_prob": 0.11404
+    },
+    {
+      "season": 2026,
+      "team": "LA",
+      "super_bowl_win_prob": 0.10038
+    },
+    {
+      "season": 2026,
+      "team": "CHI",
+      "super_bowl_win_prob": 0.07368
+    },
+    {
+      "season": 2026,
+      "team": "DEN",
+      "super_bowl_win_prob": 0.0715
+    },
+    {
+      "season": 2026,
+      "team": "SF",
+      "super_bowl_win_prob": 0.06046
+    },
+    {
+      "season": 2026,
+      "team": "HOU",
+      "super_bowl_win_prob": 0.05756
+    },
+    {
+      "season": 2026,
+      "team": "BUF",
+      "super_bowl_win_prob": 0.05578
+    },
+    {
+      "season": 2026,
+      "team": "PIT",
+      "super_bowl_win_prob": 0.0297
+    },
+    {
+      "season": 2026,
+      "team": "PHI",
+      "super_bowl_win_prob": 0.02938
+    }
+  ],
+  "top10_regular_player_totals": [],
+  "top10_playoff_player_totals": []
+}

@@ -1,0 +1,39 @@
+{
+  "before": {
+    "walkforward_n": 27.0,
+    "brier_ml": 0.248708,
+    "mae_total_runs": 4.2816,
+    "calendar_days_covered": 3.0
+  },
+  "after": {
+    "walkforward_n": 615,
+    "fold_count": 27,
+    "base_brier_ml": 0.248857,
+    "calibrated_brier_ml": 0.254895,
+    "base_mae_total_runs": 3.5605,
+    "calibrated_mae_total_runs": 3.6016,
+    "leakage_violations": 0,
+    "holdout_n_ok": true,
+    "clv_count": 764,
+    "avg_ml_clv": 0.0241,
+    "avg_total_clv": 0.24868,
+    "avg_spread_clv": 0.19106,
+    "projections": 779,
+    "outcomes": 761
+  },
+  "credits": {
+    "before": 4988424,
+    "after": 4978119,
+    "used_approx": 10305,
+    "budget_cap": 150000,
+    "under_budget": true
+  },
+  "resim_games": 208,
+  "gap_after": {
+    "proj_out": 738,
+    "missing_open": 29,
+    "missing_close": 20,
+    "has_both": 695
+  },
+  "branch": "mlb-subscription-sharpen"
+}

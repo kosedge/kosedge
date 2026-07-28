@@ -13,7 +13,7 @@ This repo is a monorepo with clear runtime boundaries:
 - CI runs `pnpm check:web-python-boundary`.
 - The command compares tracked `apps/web/**/*.py` files against
   `policies/web-python-allowlist.txt`.
-- Any *new* Python file under `apps/web` fails CI until reviewed and allowlisted.
+- Any _new_ Python file under `apps/web` fails CI until reviewed and allowlisted.
 - `apps/web/package.json` is not allowed to execute Python commands.
 - Root `package.json` is not allowed to call Python files directly from `apps/web`.
 
@@ -37,4 +37,3 @@ Move Python ingestion/pipeline/model logic to `services/`:
 - Single source of truth per runtime.
 - Lower deploy risk (web deploys do not accidentally drag pipeline behavior).
 - Clear ownership and faster onboarding.
-

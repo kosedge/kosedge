@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-07-17",
+  "model_version": "nfl-v1.5-matchup-sim",
+  "methodology": {
+    "summary": "Closing Line Value (CLV) using real open-to-close line movement from The Odds API's historical endpoint (not a single closing-line snapshot). A play is only recorded when the model shows genuine edge vs. the opening price (moneyline: model win probability exceeds the open-implied probability on that side; total: model total differs from the open total by at least 1.0 point) -- games with no edge get no recommendation, matching the site's own 'if it doesn't clear the threshold, it doesn't make the board' policy.",
+    "data_source": "the-odds-api.com historical endpoint, draftkings+fanduel, open snapshot ~5 days before kickoff week, close snapshot ~day-of",
+    "seasons_included": "2024-2025 (completed seasons with real week-to-week line movement)",
+    "excluded": "2026 season is intentionally excluded from this report -- games haven't been played yet, and only near-simultaneous same-day snapshots exist so far (no real open-to-close separation). Live CLV tracking for 2026 begins accumulating now that the odds pipeline is running.",
+    "clv_definition": "clv_value = close_implied_prob - open_implied_prob (moneyline, on the recommended side) or the total-line movement in the model's favored direction (total). Positive means the market moved toward confirming the play after we made it -- the standard professional-bettor definition of 'beating the closing line'."
+  },
+  "results_by_season": [
+    { "season": 2024, "market": "moneyline", "n": 230, "avg_clv": 0.0869, "positive_rate": 0.4739 },
+    { "season": 2024, "market": "total", "n": 204, "avg_clv": 1.4730, "positive_rate": 0.5490 },
+    { "season": 2025, "market": "moneyline", "n": 254, "avg_clv": 0.1308, "positive_rate": 0.5984 },
+    { "season": 2025, "market": "total", "n": 242, "avg_clv": 0.6901, "positive_rate": 0.4876 }
+  ],
+  "results_combined_2024_2025": {
+    "moneyline": { "n": 484, "avg_clv": 0.1099, "positive_rate": 0.5393 },
+    "total": { "n": 446, "avg_clv": 1.0482, "positive_rate": 0.5157 }
+  }
+}

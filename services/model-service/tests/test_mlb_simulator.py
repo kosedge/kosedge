@@ -27,6 +27,10 @@ def test_simulate_mlb_game_outputs_expected_shape() -> None:
     assert 0.0 <= markets["fg_home_win_prob_ci_low"] <= 1.0
     assert 0.0 <= markets["fg_home_win_prob_ci_high"] <= 1.0
     assert markets["fg_total_p10"] <= markets["fg_total_p50"] <= markets["fg_total_p90"]
+    assert markets["fair_fg_spread_home"] is not None
+    assert abs(float(markets["fair_fg_spread_home"])) >= 0.5
+    assert 0.0 <= float(markets["fg_home_cover_prob_run_line"]) <= 1.0
+    assert markets["run_line_point"] == -1.5
 
 
 def test_simulate_mlb_game_is_stable_with_seed() -> None:

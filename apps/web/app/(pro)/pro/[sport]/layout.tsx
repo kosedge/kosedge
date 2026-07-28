@@ -1,12 +1,25 @@
 import Link from "next/link";
+import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
 import { SPORTS } from "@/lib/sports";
 
-export default function ProLayout({ children }: { children: React.ReactNode }) {
+export default async function ProLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ sport: string }> | { sport: string };
+}) {
+  const resolved = await Promise.resolve(params);
+  const sport = String(resolved.sport || "").toLowerCase();
+
   return (
     <div className="min-h-screen bg-kos-black text-kos-text">
       <header className="border-b border-kos-border bg-kos-surface/30">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          <Link
+            href="/pro/welcome"
+            className="flex shrink-0 items-center gap-3"
+          >
             <span className="text-lg font-semibold tracking-tight">
               Kos Edge
             </span>
@@ -15,19 +28,32 @@ export default function ProLayout({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          <nav className="flex flex-wrap items-center gap-2">
-            {SPORTS.map((s) => (
-              <Link
-                key={s.key}
-                href={`/pro/${s.key}`}
-                className="rounded-lg border border-transparent px-3 py-1.5 text-sm text-kos-text/80 hover:border-kos-border hover:bg-kos-surface/40 hover:text-kos-text"
-              >
-                {s.label}
-              </Link>
-            ))}
+          <nav
+            className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2"
+            aria-label="Sport hubs"
+          >
+            {SPORTS.map((s) => {
+              const active = sport === s.key;
+              return (
+                <Link
+                  key={s.key}
+                  href={`/pro/${s.key}`}
+                  aria-current={active ? "page" : undefined}
+                  className={
+                    active
+                      ? "rounded-lg border border-kos-gold/45 bg-kos-gold/15 px-2.5 py-1.5 text-sm font-semibold text-kos-gold sm:px-3"
+                      : "rounded-lg border border-transparent px-2.5 py-1.5 text-sm text-kos-text/80 hover:border-kos-border hover:bg-kos-surface/40 hover:text-kos-text sm:px-3"
+                  }
+                >
+                  {s.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       </header>
+
+      {sport === "nfl" ? <NflDataFreshnessBanner /> : null}
 
       {children}
     </div>

@@ -152,7 +152,22 @@ def test_pull_odds_snapshot_persists_rows(monkeypatch) -> None:
     TestSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
     monkeypatch.setattr(tasks, "SessionLocal", TestSession)
-    monkeypatch.setattr(tasks, "fetch_odds", lambda endpoint, params: _sample_odds_payload())
+
+    def _fake_fetch_odds(endpoint, params):
+        if endpoint == "sports/basketball_ncaab/odds":
+            return _sample_odds_payload()
+        return []
+
+    def _fake_fetch_odds_with_metadata(endpoint, params):
+        return {
+            "payload": _fake_fetch_odds(endpoint, params),
+            "source": "test",
+            "x_requests_remaining": "42",
+            "x_requests_used": "7",
+        }
+
+    monkeypatch.setattr(tasks, "fetch_odds", _fake_fetch_odds)
+    monkeypatch.setattr(tasks, "fetch_odds_with_metadata", _fake_fetch_odds_with_metadata)
 
     first = tasks.pull_odds_snapshot()
     assert first["events_fetched"] == 1

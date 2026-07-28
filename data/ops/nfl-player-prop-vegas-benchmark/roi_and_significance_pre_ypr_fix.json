@@ -1,0 +1,61 @@
+{
+  "stake_per_bet": 100.0,
+  "breakeven_win_rate_at_minus110": 0.5238,
+  "roi_by_method": {
+    "old": {
+      "staked": 285000.0,
+      "profit": -23901.77828564798,
+      "n_bets": 2850,
+      "roi_pct": -8.387
+    },
+    "current": {
+      "staked": 285000.0,
+      "profit": -16679.94540464051,
+      "n_bets": 2850,
+      "roi_pct": -5.853
+    },
+    "new": {
+      "staked": 285000.0,
+      "profit": -19173.90296731694,
+      "n_bets": 2850,
+      "roi_pct": -6.728
+    }
+  },
+  "win_rate_95ci_wilson": {
+    "old": {
+      "point": 0.4863,
+      "low": 0.468,
+      "high": 0.5047
+    },
+    "current": {
+      "point": 0.5,
+      "low": 0.4817,
+      "high": 0.5183
+    },
+    "new": {
+      "point": 0.4954,
+      "low": 0.4771,
+      "high": 0.5138
+    }
+  },
+  "paired_win_rate_deltas_95ci_normal_approx": {
+    "current_minus_old": {
+      "delta": 0.0137,
+      "ci_95_low": -0.0123,
+      "ci_95_high": 0.0396,
+      "significant": false
+    },
+    "new_minus_current": {
+      "delta": -0.0046,
+      "ci_95_low": -0.0305,
+      "ci_95_high": 0.0214,
+      "significant": false
+    },
+    "new_minus_old": {
+      "delta": 0.0091,
+      "ci_95_low": -0.0168,
+      "ci_95_high": 0.0351,
+      "significant": false
+    }
+  }
+}

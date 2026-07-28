@@ -1,0 +1,342 @@
+{
+  "metadata": {
+    "season": 2026,
+    "model_version": "nfl-v1.5-matchup-sim",
+    "game_simulation_count": 50000,
+    "season_monte_carlo_iterations": 50000
+  },
+  "counts": {
+    "games_total": 170,
+    "games_regular": 170,
+    "games_playoff": 0,
+    "team_outcome_rows": 32,
+    "super_bowl_rows": 32,
+    "player_game_rows_regular": 11304,
+    "player_game_rows_playoff": 2512,
+    "player_total_rows_regular": 628,
+    "player_total_rows_playoff": 628
+  },
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 7.9999,
+    "sum_playoff_prob": 13.9998
+  },
+  "top10_playoff_odds": [
+    {
+      "season": 2026,
+      "team": "NE",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 6.988,
+      "wins_p10": 5,
+      "wins_p90": 14,
+      "playoff_prob": 0.7677,
+      "division_title_prob": 0.5792,
+      "super_bowl_win_prob": 0.112
+    },
+    {
+      "season": 2026,
+      "team": "SEA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 6.751,
+      "wins_p10": 4,
+      "wins_p90": 13,
+      "playoff_prob": 0.7337,
+      "division_title_prob": 0.4196,
+      "super_bowl_win_prob": 0.1023
+    },
+    {
+      "season": 2026,
+      "team": "PIT",
+      "conference": "AFC",
+      "division": "AFC North",
+      "expected_wins": 6.195,
+      "wins_p10": 4,
+      "wins_p90": 12,
+      "playoff_prob": 0.6384,
+      "division_title_prob": 0.4636,
+      "super_bowl_win_prob": 0.0598
+    },
+    {
+      "season": 2026,
+      "team": "HOU",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 6.184,
+      "wins_p10": 4,
+      "wins_p90": 12,
+      "playoff_prob": 0.6349,
+      "division_title_prob": 0.4387,
+      "super_bowl_win_prob": 0.0583
+    },
+    {
+      "season": 2026,
+      "team": "SF",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 6.108,
+      "wins_p10": 4,
+      "wins_p90": 12,
+      "playoff_prob": 0.6131,
+      "division_title_prob": 0.2778,
+      "super_bowl_win_prob": 0.0603
+    },
+    {
+      "season": 2026,
+      "team": "CHI",
+      "conference": "NFC",
+      "division": "NFC North",
+      "expected_wins": 5.832,
+      "wins_p10": 4,
+      "wins_p90": 11,
+      "playoff_prob": 0.5935,
+      "division_title_prob": 0.4447,
+      "super_bowl_win_prob": 0.0456
+    },
+    {
+      "season": 2026,
+      "team": "DEN",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 5.974,
+      "wins_p10": 4,
+      "wins_p90": 12,
+      "playoff_prob": 0.5845,
+      "division_title_prob": 0.3958,
+      "super_bowl_win_prob": 0.0491
+    },
+    {
+      "season": 2026,
+      "team": "LA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 5.903,
+      "wins_p10": 4,
+      "wins_p90": 12,
+      "playoff_prob": 0.5624,
+      "division_title_prob": 0.2209,
+      "super_bowl_win_prob": 0.0516
+    },
+    {
+      "season": 2026,
+      "team": "PHI",
+      "conference": "NFC",
+      "division": "NFC East",
+      "expected_wins": 5.516,
+      "wins_p10": 3,
+      "wins_p90": 11,
+      "playoff_prob": 0.5012,
+      "division_title_prob": 0.3117,
+      "super_bowl_win_prob": 0.0344
+    },
+    {
+      "season": 2026,
+      "team": "JAX",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 5.592,
+      "wins_p10": 3,
+      "wins_p90": 11,
+      "playoff_prob": 0.4994,
+      "division_title_prob": 0.2687,
+      "super_bowl_win_prob": 0.0334
+    }
+  ],
+  "top10_super_bowl": [
+    {
+      "season": 2026,
+      "team": "NE",
+      "super_bowl_win_prob": 0.11196
+    },
+    {
+      "season": 2026,
+      "team": "SEA",
+      "super_bowl_win_prob": 0.1023
+    },
+    {
+      "season": 2026,
+      "team": "SF",
+      "super_bowl_win_prob": 0.0603
+    },
+    {
+      "season": 2026,
+      "team": "PIT",
+      "super_bowl_win_prob": 0.05984
+    },
+    {
+      "season": 2026,
+      "team": "HOU",
+      "super_bowl_win_prob": 0.05826
+    },
+    {
+      "season": 2026,
+      "team": "LA",
+      "super_bowl_win_prob": 0.0516
+    },
+    {
+      "season": 2026,
+      "team": "DEN",
+      "super_bowl_win_prob": 0.04914
+    },
+    {
+      "season": 2026,
+      "team": "CHI",
+      "super_bowl_win_prob": 0.04558
+    },
+    {
+      "season": 2026,
+      "team": "BUF",
+      "super_bowl_win_prob": 0.03484
+    },
+    {
+      "season": 2026,
+      "team": "PHI",
+      "super_bowl_win_prob": 0.03442
+    }
+  ],
+  "top10_regular_player_totals": [
+    {
+      "player_name": "D.Maye",
+      "team": "NE",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2354.832
+    },
+    {
+      "player_name": "J.Burrow",
+      "team": "CIN",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2274.714
+    },
+    {
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2273.832
+    },
+    {
+      "player_name": "C.Williams",
+      "team": "CHI",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2267.91
+    },
+    {
+      "player_name": "B.Nix",
+      "team": "DEN",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2226.294
+    },
+    {
+      "player_name": "B.Purdy",
+      "team": "SF",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2221.506
+    },
+    {
+      "player_name": "B.Young",
+      "team": "CAR",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2211.282
+    },
+    {
+      "player_name": "M.Stafford",
+      "team": "LA",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2207.448
+    },
+    {
+      "player_name": "M.Willis",
+      "team": "GB",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2204.856
+    },
+    {
+      "player_name": "T.Lance",
+      "team": "LAC",
+      "position": "QB",
+      "games_projected": 18,
+      "total_yards": 2188.584
+    }
+  ],
+  "top10_playoff_player_totals": [
+    {
+      "player_name": "D.Maye",
+      "team": "NE",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 523.296
+    },
+    {
+      "player_name": "J.Burrow",
+      "team": "CIN",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 505.492
+    },
+    {
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 505.296
+    },
+    {
+      "player_name": "C.Williams",
+      "team": "CHI",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 503.98
+    },
+    {
+      "player_name": "B.Nix",
+      "team": "DEN",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 494.732
+    },
+    {
+      "player_name": "B.Purdy",
+      "team": "SF",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 493.668
+    },
+    {
+      "player_name": "B.Young",
+      "team": "CAR",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 491.396
+    },
+    {
+      "player_name": "M.Stafford",
+      "team": "LA",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 490.544
+    },
+    {
+      "player_name": "M.Willis",
+      "team": "GB",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 489.968
+    },
+    {
+      "player_name": "T.Lance",
+      "team": "LAC",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 486.352
+    }
+  ]
+}

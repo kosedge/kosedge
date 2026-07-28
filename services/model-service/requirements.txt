@@ -35,3 +35,9 @@ tenacity==9.0.0
 # Observability (optional now, useful later)
 # -----------------------------
 structlog==24.4.0
+
+# -----------------------------
+# ML (supervised NFL outcome model)
+# -----------------------------
+numpy==2.4.2
+scikit-learn==1.9.0

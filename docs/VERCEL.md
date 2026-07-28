@@ -16,7 +16,7 @@ Use this setup for reliable builds and to avoid "failed to load" after deploy.
 3. **Environment variables** (Settings → Environment Variables):
    - `DATABASE_URL` — required for auth. For build-only you can use a dummy: `postgresql://build:build@localhost:5432/build`.
    - `AUTH_SECRET` — required in production (min 32 characters).
-   - `ODDS_API_KEY` — for live Edge Board data ([the-odds-api.com](https://the-odds-api.com)).
+   - `ODDS_API_KEY` — for live Edge Board data ([the-odds-api.com](https://the-odds-api.com)). Use the **same key** in the model-service Railway deployment (see `services/model-service/README.md`) — they share one account/credit balance.
    - `ODDS_API_KEY_BACKUP` — optional; used when the primary key is rate-limited.
 
 ## If you use Root Directory = `apps/web`

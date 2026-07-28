@@ -1,0 +1,452 @@
+import { supportsPropsFantasy, type SportKey } from "@/lib/sports";
+
+export type DeskAccent = "gold" | "green" | "neutral";
+
+export type BettingDeskCard = {
+  href: string;
+  title: string;
+  description: string;
+  cta: string;
+  accent: DeskAccent;
+  status: "active" | "placeholder";
+};
+
+export type HubFooterCard = {
+  href: string;
+  title: string;
+  description: string;
+  cta: string;
+  accent: DeskAccent;
+};
+
+export type SportDeskConfig = {
+  /** Short path label shown under Betting Desk, e.g. "KEI Lines → Edges → Props" */
+  pathLabel: string;
+  /** Hero / market-section subtitle describing the desk workflow */
+  pathSubtitle: string;
+  cards: BettingDeskCard[];
+  footerCards: HubFooterCard[];
+};
+
+const SHARED_FOOTER = (sportKey: string): HubFooterCard[] => [
+  {
+    href: `/pro/power-ratings/${sportKey}`,
+    title: "Power Ratings",
+    description:
+      "Team strength, tiering, and historical movement with slate context.",
+    cta: "View ratings →",
+    accent: "gold",
+  },
+  {
+    href: `/pro/kei-lines/${sportKey}`,
+    title: "KEI Lines",
+    description:
+      "Projected spread/total baselines to benchmark current market prices.",
+    cta: "View KEI lines →",
+    accent: "neutral",
+  },
+];
+
+function stubFairLines(sportKey: string, marketNoun: string): BettingDeskCard {
+  return {
+    href: `/pro/${sportKey}/fair-lines`,
+    title: "Fair Lines",
+    description: `Model ${marketNoun} reference board — fair prices without pick language. Board shell is live; model join pending.`,
+    cta: "Open fair lines →",
+    accent: "gold",
+    // Navigable sport-specific shell (not a dead Pending tile).
+    status: "active",
+  };
+}
+
+function stubEdges(sportKey: string, edgeHint: string): BettingDeskCard {
+  return {
+    href: `/pro/${sportKey}/fair-lines`,
+    title: "Edges",
+    description: edgeHint,
+    cta: "Open edges path →",
+    accent: "green",
+    status: "active",
+  };
+}
+
+function stubThirdCard(
+  sportKey: string,
+  title: string,
+  description: string,
+  href?: string,
+): BettingDeskCard {
+  const propsHref = href ?? `/pro/${sportKey}/props`;
+  return {
+    href: propsHref,
+    title,
+    description,
+    cta: `Open ${title.toLowerCase()} →`,
+    accent: "neutral",
+    status: "active",
+  };
+}
+
+const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
+  nfl: {
+    pathLabel: "KEI Lines → Edges → Props",
+    pathSubtitle:
+      "Betting desk path: KEI Lines → Edges → Props, then execution quality.",
+    cards: [
+      {
+        href: "/pro/nfl/fair-lines",
+        title: "KEI Lines",
+        description:
+          "Kosedge spreads, totals, and fair moneylines for the slate.",
+        cta: "Open KEI Lines →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/nfl/edges",
+        title: "Edges",
+        description: "Thresholded game + prop edges with side and confidence.",
+        cta: "Open edges desk →",
+        accent: "green",
+        status: "active",
+      },
+      {
+        href: "/pro/nfl/props",
+        title: "Props",
+        description:
+          "Full player prop board — model means, fair prices, market joins.",
+        cta: "Open props board →",
+        accent: "neutral",
+        status: "active",
+      },
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("nfl"),
+      {
+        href: "/pro/nfl/projections",
+        title: "Projections Hub",
+        description:
+          "User-friendly wins, futures, and player fantasy projection tables built from the latest preseason bundle.",
+        cta: "Open projections hub →",
+        accent: "gold",
+      },
+      {
+        href: "/wall-chart/nfl-2026",
+        title: "2026 Wall Chart",
+        description:
+          "Printable 24×18 NFL schedule tracker — laminated wet-erase friendly with full 2026 matchups.",
+        cta: "Open wall chart →",
+        accent: "green",
+      },
+      {
+        href: "/pro/nfl/fantasy",
+        title: "Fantasy Draft Board",
+        description:
+          "Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers, position filters, and scoring toggles.",
+        cta: "Open draft board →",
+        accent: "gold",
+      },
+      {
+        href: "/pro/nfl/awards",
+        title: "MVP & OPOY Race",
+        description:
+          "Real projected award contenders with the team success + stat evidence behind every ranking.",
+        cta: "View award race →",
+        accent: "neutral",
+      },
+    ],
+  },
+  mlb: {
+    pathLabel: "Fair Lines → Edges → Run Line",
+    pathSubtitle:
+      "MLB desk path: Fair Lines → Edges → Run Line, with starter/bullpen context into execution.",
+    cards: [
+      {
+        href: "/pro/mlb/fair-lines",
+        title: "Fair Lines",
+        description:
+          "Kosedge moneylines, totals, and run-line cover probs for today’s slate.",
+        cta: "Open fair lines →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/mlb/edges",
+        title: "Edges",
+        description:
+          "Today’s ML and total edges with quality score and stake fraction.",
+        cta: "Open edges desk →",
+        accent: "green",
+        status: "active",
+      },
+      {
+        href: "/pro/mlb/fair-lines?focus=run-line",
+        title: "Run Line",
+        description:
+          "Home run-line fair spread and cover probability from the same projection set.",
+        cta: "Open run line →",
+        accent: "neutral",
+        status: "active",
+      },
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("mlb"),
+      {
+        href: "/odds/mlb",
+        title: "Compare Odds",
+        description:
+          "Side-by-side moneylines and totals across books for the MLB slate.",
+        cta: "Open odds compare →",
+        accent: "gold",
+      },
+      {
+        href: "/edge-board/mlb",
+        title: "Public Edge Board",
+        description: "Open vs best prices with KEI and directional edge tags.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
+    ],
+  },
+  nba: {
+    pathLabel: "Fair Lines → Edges → Props",
+    pathSubtitle:
+      "NBA desk path: Fair Lines → Edges → Props, with availability and pace into execution.",
+    cards: [
+      stubFairLines("nba", "spread / total / ML"),
+      stubEdges(
+        "nba",
+        "Thresholded game edges once the NBA model board is connected.",
+      ),
+      stubThirdCard(
+        "nba",
+        "Props",
+        "Player props and alternates staged for launch once feeds clear validation.",
+      ),
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("nba"),
+      {
+        href: "/odds/nba",
+        title: "Compare Odds",
+        description:
+          "Side-by-side spreads and totals across books for the NBA slate.",
+        cta: "Open odds compare →",
+        accent: "gold",
+      },
+      {
+        href: "/edge-board/nba",
+        title: "Public Edge Board",
+        description: "Open vs best prices with KEI and directional edge tags.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
+    ],
+  },
+  nhl: {
+    pathLabel: "Fair Lines → Edges → Goalie Desk",
+    pathSubtitle:
+      "NHL desk path: Fair Lines → Edges → Goalie confirmation, then totals execution.",
+    cards: [
+      stubFairLines("nhl", "moneyline / total"),
+      stubEdges(
+        "nhl",
+        "ML and total edges once the NHL model board is connected.",
+      ),
+      stubThirdCard(
+        "nhl",
+        "Goalie Desk",
+        "Starter confirmation and total sensitivity — pending live goalie feed wiring.",
+        "/pro/nhl/teams",
+      ),
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("nhl"),
+      {
+        href: "/odds/nhl",
+        title: "Compare Odds",
+        description:
+          "Side-by-side moneylines and totals across books for the NHL slate.",
+        cta: "Open odds compare →",
+        accent: "gold",
+      },
+      {
+        href: "/edge-board/nhl",
+        title: "Public Edge Board",
+        description: "Open vs best prices with KEI and directional edge tags.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
+    ],
+  },
+  wnba: {
+    pathLabel: "Fair Lines → Edges → Props",
+    pathSubtitle:
+      "WNBA desk path: Fair Lines → Edges → Props, with usage and travel into execution.",
+    cards: [
+      stubFairLines("wnba", "spread / total / ML"),
+      stubEdges(
+        "wnba",
+        "Thresholded game edges once the WNBA model board is connected.",
+      ),
+      stubThirdCard(
+        "wnba",
+        "Props",
+        "Player props staged for launch once usage feeds clear validation.",
+      ),
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("wnba"),
+      {
+        href: "/odds/wnba",
+        title: "Compare Odds",
+        description:
+          "Side-by-side spreads and totals across books for the WNBA slate.",
+        cta: "Open odds compare →",
+        accent: "gold",
+      },
+      {
+        href: "/edge-board/wnba",
+        title: "Public Edge Board",
+        description: "Open vs best prices with KEI and directional edge tags.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
+    ],
+  },
+  cfb: {
+    pathLabel: "Fair Lines → Edges → Tempo",
+    pathSubtitle:
+      "CFB desk path: Fair Lines → Edges → Tempo signals, then key-number execution.",
+    cards: [
+      stubFairLines("cfb", "spread / total"),
+      stubEdges(
+        "cfb",
+        "Weekly game edges once the CFB model board is connected.",
+      ),
+      stubThirdCard(
+        "cfb",
+        "Tempo Signals",
+        "Pace and havoc context for market translation — data pending soft launch.",
+        "/pro/cfb/execution",
+      ),
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("cfb"),
+      {
+        href: "/odds/cfb",
+        title: "Compare Odds",
+        description:
+          "Side-by-side spreads and totals across books for the CFB slate.",
+        cta: "Open odds compare →",
+        accent: "gold",
+      },
+      {
+        href: "/edge-board/cfb",
+        title: "Public Edge Board",
+        description: "Open vs best prices with KEI and directional edge tags.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
+    ],
+  },
+  ncaam: {
+    pathLabel: "Fair Lines → Edges → Tempo",
+    pathSubtitle:
+      "CBB desk path: Fair Lines → Edges → Tempo signals, then variance-aware execution.",
+    cards: [
+      stubFairLines("ncaam", "spread / total"),
+      stubEdges(
+        "ncaam",
+        "Daily game edges once the CBB model board is connected.",
+      ),
+      stubThirdCard(
+        "ncaam",
+        "Tempo Signals",
+        "Tempo and variance context for market translation — data pending soft launch.",
+        "/pro/ncaam/execution",
+      ),
+    ],
+    footerCards: [
+      ...SHARED_FOOTER("ncaam"),
+      {
+        href: "/odds/ncaam",
+        title: "Compare Odds",
+        description:
+          "Side-by-side spreads and totals across books for the CBB slate.",
+        cta: "Open odds compare →",
+        accent: "gold",
+      },
+      {
+        href: "/edge-board/ncaam",
+        title: "Public Edge Board",
+        description: "Open vs best prices with KEI and directional edge tags.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
+    ],
+  },
+};
+
+export function getSportDeskConfig(sportKey: string): SportDeskConfig {
+  const key = sportKey as SportKey;
+  if (key in DESK_BY_SPORT) return DESK_BY_SPORT[key];
+  return {
+    pathLabel: "Fair Lines → Edges → Markets",
+    pathSubtitle:
+      "Translate market movement into clear model-versus-price decision support.",
+    cards: [
+      stubFairLines(sportKey, "spread / total / ML"),
+      stubEdges(sportKey, "Game edges pending model board connection."),
+      supportsPropsFantasy(sportKey)
+        ? stubThirdCard(
+            sportKey,
+            "Props",
+            "Player props pending feed validation.",
+          )
+        : stubThirdCard(
+            sportKey,
+            "Markets",
+            "Additional market views staged for this league.",
+            `/pro/${sportKey}/execution`,
+          ),
+    ],
+    footerCards: SHARED_FOOTER(sportKey),
+  };
+}
+
+export function deskCardClassName(
+  accent: DeskAccent,
+  status: "active" | "placeholder",
+): string {
+  const pending = status === "placeholder" ? " opacity-90" : "";
+  if (accent === "gold") {
+    return `rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-5 transition hover:border-kos-gold/45 hover:bg-kos-gold/10${pending}`;
+  }
+  if (accent === "green") {
+    return `rounded-2xl border border-edge-green/30 bg-edge-green/5 p-5 transition hover:border-edge-green/50 hover:bg-edge-green/10${pending}`;
+  }
+  return `rounded-2xl border border-white/12 bg-black/30 p-5 transition hover:border-kos-gold/40${pending}`;
+}
+
+export function footerCardClassName(accent: DeskAccent): string {
+  if (accent === "gold") {
+    return "rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-6 transition hover:border-kos-gold/45 hover:bg-kos-gold/10";
+  }
+  if (accent === "green") {
+    return "rounded-2xl border border-edge-green/30 bg-linear-to-br from-edge-green/10 via-black/30 to-black/55 p-6 transition hover:border-edge-green/50 hover:bg-edge-green/10";
+  }
+  return "rounded-2xl border border-white/12 bg-black/30 p-6 transition hover:border-kos-gold/40";
+}
+
+export function footerTitleClassName(accent: DeskAccent): string {
+  if (accent === "gold") return "text-xl font-semibold text-kos-gold";
+  if (accent === "green") return "text-xl font-semibold text-edge-green";
+  return "text-xl font-semibold text-kos-text";
+}
+
+export function footerCtaClassName(accent: DeskAccent): string {
+  if (accent === "green")
+    return "mt-4 inline-block text-sm font-semibold text-edge-green";
+  return "mt-4 inline-block text-sm font-semibold text-kos-gold";
+}

@@ -269,6 +269,24 @@ def fetch_team_hitting_profile(
         return {"source": "unavailable", "ops_index": 1.0}
 
 
+def extract_probable_pitchers_from_live_feed(payload: Dict[str, Any]) -> Dict[str, Optional[str]]:
+    """Pull home/away probable pitchers from a Stats API live feed payload."""
+    game_data = payload.get("gameData") or {}
+    probable = game_data.get("probablePitchers") or {}
+    out: Dict[str, Optional[str]] = {"home": None, "away": None}
+    for side in ("home", "away"):
+        block = probable.get(side) or {}
+        name = block.get("fullName") if isinstance(block, dict) else None
+        if not name:
+            teams = (((payload.get("liveData") or {}).get("boxscore") or {}).get("teams") or {})
+            team_block = teams.get(side) or {}
+            team_pp = team_block.get("probablePitcher") or {}
+            if isinstance(team_pp, dict):
+                name = team_pp.get("fullName")
+        out[side] = str(name).strip() if name else None
+    return out
+
+
 @lru_cache(maxsize=512)
 def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
     response = requests.get(
@@ -278,6 +296,7 @@ def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
     response.raise_for_status()
     payload = response.json() or {}
     teams = (((payload.get("liveData") or {}).get("boxscore") or {}).get("teams") or {})
+    live_pitchers = extract_probable_pitchers_from_live_feed(payload)
     out: Dict[str, Dict[str, Any]] = {}
     for side in ("home", "away"):
         players = ((teams.get(side) or {}).get("players") or {})
@@ -319,6 +338,7 @@ def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
             "known_players": len(lineup_by_slot),
             "players": player_summaries,
             "lineup_confirmed": len(lineup_by_slot) >= 8,
+            "probable_pitcher": live_pitchers.get(side),
             "source": "feed/live",
         }
     return out
@@ -522,6 +542,39 @@ def park_factor_for_team(team_abbr: Optional[str]) -> float:
     if not team_abbr:
         return 1.0
     return PARK_FACTOR_RUNS.get(team_abbr.upper(), 1.0)
+
+
+def team_rest_days_from_schedule(
+    schedule: List[Dict[str, Any]],
+    *,
+    team_id: Optional[int],
+    game_time_iso: Optional[str],
+) -> float:
+    """Calendar rest days before this game for a team (1.0 = normal next-day)."""
+    if not team_id or not game_time_iso:
+        return 1.0
+    try:
+        game_dt = datetime.fromisoformat(game_time_iso.replace("Z", "+00:00"))
+    except ValueError:
+        return 1.0
+    prior: Optional[datetime] = None
+    for row in schedule:
+        if row.get("home_team_id") != team_id and row.get("away_team_id") != team_id:
+            continue
+        other_iso = row.get("game_time")
+        if not other_iso:
+            continue
+        try:
+            other_dt = datetime.fromisoformat(str(other_iso).replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if other_dt >= game_dt:
+            continue
+        if prior is None or other_dt > prior:
+            prior = other_dt
+    if prior is None:
+        return 3.0
+    return max(0.0, float((game_dt.date() - prior.date()).days))
 
 
 def umpire_run_factor(umpire_name: Optional[str]) -> float:

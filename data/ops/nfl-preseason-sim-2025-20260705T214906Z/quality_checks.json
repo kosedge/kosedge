@@ -1,0 +1,342 @@
+{
+  "metadata": {
+    "season": 2025,
+    "model_version": "nfl-v1.5-matchup-sim",
+    "game_simulation_count": 50000,
+    "season_monte_carlo_iterations": 50000
+  },
+  "counts": {
+    "games_total": 285,
+    "games_regular": 272,
+    "games_playoff": 13,
+    "team_outcome_rows": 32,
+    "super_bowl_rows": 32,
+    "player_game_rows_regular": 5354,
+    "player_game_rows_playoff": 258,
+    "player_total_rows_regular": 622,
+    "player_total_rows_playoff": 159
+  },
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 8.0001,
+    "sum_playoff_prob": 14.0003
+  },
+  "top10_playoff_odds": [
+    {
+      "season": 2025,
+      "team": "PHI",
+      "conference": "NFC",
+      "division": "NFC East",
+      "expected_wins": 10.313,
+      "wins_p10": 7,
+      "wins_p90": 18,
+      "playoff_prob": 0.7347,
+      "division_title_prob": 0.4647,
+      "super_bowl_win_prob": 0.1032
+    },
+    {
+      "season": 2025,
+      "team": "KC",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 10.171,
+      "wins_p10": 7,
+      "wins_p90": 19,
+      "playoff_prob": 0.7165,
+      "division_title_prob": 0.4578,
+      "super_bowl_win_prob": 0.0949
+    },
+    {
+      "season": 2025,
+      "team": "BUF",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 9.61,
+      "wins_p10": 7,
+      "wins_p90": 17,
+      "playoff_prob": 0.6431,
+      "division_title_prob": 0.4589,
+      "super_bowl_win_prob": 0.0664
+    },
+    {
+      "season": 2025,
+      "team": "HOU",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 9.398,
+      "wins_p10": 7,
+      "wins_p90": 18,
+      "playoff_prob": 0.6192,
+      "division_title_prob": 0.4488,
+      "super_bowl_win_prob": 0.0553
+    },
+    {
+      "season": 2025,
+      "team": "BAL",
+      "conference": "AFC",
+      "division": "AFC North",
+      "expected_wins": 9.29,
+      "wins_p10": 7,
+      "wins_p90": 17,
+      "playoff_prob": 0.6031,
+      "division_title_prob": 0.4367,
+      "super_bowl_win_prob": 0.0484
+    },
+    {
+      "season": 2025,
+      "team": "DEN",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 9.298,
+      "wins_p10": 7,
+      "wins_p90": 16,
+      "playoff_prob": 0.5799,
+      "division_title_prob": 0.2812,
+      "super_bowl_win_prob": 0.0503
+    },
+    {
+      "season": 2025,
+      "team": "WAS",
+      "conference": "NFC",
+      "division": "NFC East",
+      "expected_wins": 9.332,
+      "wins_p10": 6,
+      "wins_p90": 18,
+      "playoff_prob": 0.5703,
+      "division_title_prob": 0.2703,
+      "super_bowl_win_prob": 0.0566
+    },
+    {
+      "season": 2025,
+      "team": "LA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 9.11,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.5654,
+      "division_title_prob": 0.4039,
+      "super_bowl_win_prob": 0.0447
+    },
+    {
+      "season": 2025,
+      "team": "DET",
+      "conference": "NFC",
+      "division": "NFC North",
+      "expected_wins": 9.154,
+      "wins_p10": 6,
+      "wins_p90": 17,
+      "playoff_prob": 0.5563,
+      "division_title_prob": 0.3389,
+      "super_bowl_win_prob": 0.0448
+    },
+    {
+      "season": 2025,
+      "team": "TB",
+      "conference": "NFC",
+      "division": "NFC South",
+      "expected_wins": 8.596,
+      "wins_p10": 6,
+      "wins_p90": 16,
+      "playoff_prob": 0.475,
+      "division_title_prob": 0.334,
+      "super_bowl_win_prob": 0.029
+    }
+  ],
+  "top10_super_bowl": [
+    {
+      "season": 2025,
+      "team": "PHI",
+      "super_bowl_win_prob": 0.10322
+    },
+    {
+      "season": 2025,
+      "team": "KC",
+      "super_bowl_win_prob": 0.0949
+    },
+    {
+      "season": 2025,
+      "team": "BUF",
+      "super_bowl_win_prob": 0.06642
+    },
+    {
+      "season": 2025,
+      "team": "WAS",
+      "super_bowl_win_prob": 0.05656
+    },
+    {
+      "season": 2025,
+      "team": "HOU",
+      "super_bowl_win_prob": 0.05528
+    },
+    {
+      "season": 2025,
+      "team": "DEN",
+      "super_bowl_win_prob": 0.05034
+    },
+    {
+      "season": 2025,
+      "team": "BAL",
+      "super_bowl_win_prob": 0.04836
+    },
+    {
+      "season": 2025,
+      "team": "DET",
+      "super_bowl_win_prob": 0.04476
+    },
+    {
+      "season": 2025,
+      "team": "LA",
+      "super_bowl_win_prob": 0.04468
+    },
+    {
+      "season": 2025,
+      "team": "MIN",
+      "super_bowl_win_prob": 0.03392
+    }
+  ],
+  "top10_regular_player_totals": [
+    {
+      "player_name": "B.Nix",
+      "team": "DEN",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2188.041
+    },
+    {
+      "player_name": "T.Lawrence",
+      "team": "JAX",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2155.916
+    },
+    {
+      "player_name": "C.Williams",
+      "team": "CHI",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2154.286
+    },
+    {
+      "player_name": "D.Maye",
+      "team": "NE",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2148.738
+    },
+    {
+      "player_name": "D.Prescott",
+      "team": "DAL",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2111.538
+    },
+    {
+      "player_name": "C.Ward",
+      "team": "TEN",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2108.801
+    },
+    {
+      "player_name": "B.Mayfield",
+      "team": "TB",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2090.541
+    },
+    {
+      "player_name": "M.Stafford",
+      "team": "LA",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2052.602
+    },
+    {
+      "player_name": "J.Goff",
+      "team": "DET",
+      "position": "QB",
+      "games_projected": 17,
+      "total_yards": 2048.315
+    },
+    {
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "games_projected": 16,
+      "total_yards": 2044.182
+    }
+  ],
+  "top10_playoff_player_totals": [
+    {
+      "player_name": "D.Maye",
+      "team": "NE",
+      "position": "QB",
+      "games_projected": 4,
+      "total_yards": 521.684
+    },
+    {
+      "player_name": "M.Stafford",
+      "team": "LA",
+      "position": "QB",
+      "games_projected": 3,
+      "total_yards": 378.615
+    },
+    {
+      "player_name": "S.Darnold",
+      "team": "SEA",
+      "position": "QB",
+      "games_projected": 3,
+      "total_yards": 351.537
+    },
+    {
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "games_projected": 2,
+      "total_yards": 284.805
+    },
+    {
+      "player_name": "C.Williams",
+      "team": "CHI",
+      "position": "QB",
+      "games_projected": 2,
+      "total_yards": 262.828
+    },
+    {
+      "player_name": "B.Purdy",
+      "team": "SF",
+      "position": "QB",
+      "games_projected": 2,
+      "total_yards": 257.64
+    },
+    {
+      "player_name": "C.Stroud",
+      "team": "HOU",
+      "position": "QB",
+      "games_projected": 2,
+      "total_yards": 251.657
+    },
+    {
+      "player_name": "K.Walker",
+      "team": "SEA",
+      "position": "RB",
+      "games_projected": 3,
+      "total_yards": 179.592
+    },
+    {
+      "player_name": "R.Stevenson",
+      "team": "NE",
+      "position": "RB",
+      "games_projected": 4,
+      "total_yards": 176.92
+    },
+    {
+      "player_name": "B.Nix",
+      "team": "DEN",
+      "position": "QB",
+      "games_projected": 1,
+      "total_yards": 152.874
+    }
+  ]
+}

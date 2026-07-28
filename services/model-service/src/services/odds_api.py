@@ -1,62 +1,121 @@
 from __future__ import annotations
 
 # model-service/services/odds_api.py
-import os
-import requests
 import logging
+import os
+
+import requests
 
 BASE_URL = "https://api.the-odds-api.com/v4"
 EMBEDDED_ODDS_API_BACKUP_KEY = "90a633a22cbe3597b2bceab5eb665d48"
 
 
-def get_odds_api_keys() -> list[str]:
-    keys: list[str] = []
-    for raw_key in (
-        os.getenv("ODDS_API_KEY"),
-        os.getenv("ODDS_API_KEY_BACKUP"),
-        EMBEDDED_ODDS_API_BACKUP_KEY,
+def _env_bool(name: str, default: bool = False) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return bool(default)
+    return str(raw).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _configured_key_pool() -> list[tuple[str, str]]:
+    pairs: list[tuple[str, str]] = []
+    for source, raw_key in (
+        ("primary", os.getenv("ODDS_API_KEY")),
+        ("backup", os.getenv("ODDS_API_KEY_BACKUP")),
     ):
         key = (raw_key or "").strip()
-        if key and key not in keys:
-            keys.append(key)
-    return keys
+        if key and all(existing_key != key for _, existing_key in pairs):
+            pairs.append((source, key))
+    if _env_bool("ODDS_API_ALLOW_EMBEDDED_FALLBACK", default=False):
+        if all(existing_key != EMBEDDED_ODDS_API_BACKUP_KEY for _, existing_key in pairs):
+            pairs.append(("embedded", EMBEDDED_ODDS_API_BACKUP_KEY))
+    return pairs
+
+
+def _select_odds_api_key_pairs() -> list[tuple[str, str]]:
+    pool = _configured_key_pool()
+    mode = str(os.getenv("ODDS_API_KEY_ACTIVE", "auto")).strip().lower()
+    by_source = {source: key for source, key in pool}
+    if mode == "auto":
+        return pool
+    if mode in {"primary", "backup", "embedded"}:
+        selected_key = by_source.get(mode)
+        return [(mode, selected_key)] if selected_key else []
+    logging.warning("Unknown ODDS_API_KEY_ACTIVE value '%s'; defaulting to auto mode", mode)
+    return pool
+
+
+def get_odds_api_keys() -> list[str]:
+    return [key for _, key in _select_odds_api_key_pairs()]
 
 
 def get_odds_api_key() -> str | None:
     keys = get_odds_api_keys()
     return keys[0] if keys else None
 
-def assert_odds_key_present():
+
+def odds_key_diagnostics() -> dict[str, object]:
+    selected = _select_odds_api_key_pairs()
+    return {
+        "active_mode": str(os.getenv("ODDS_API_KEY_ACTIVE", "auto")).strip().lower(),
+        "allow_embedded_fallback": _env_bool("ODDS_API_ALLOW_EMBEDDED_FALLBACK", default=False),
+        "selected_sources": [source for source, _ in selected],
+        "selected_key_count": len(selected),
+    }
+
+
+def assert_odds_key_present() -> None:
     if not get_odds_api_key():
-        raise RuntimeError("Odds API key missing")
+        raise RuntimeError(
+            "Odds API key missing. Configure ODDS_API_KEY/ODDS_API_KEY_BACKUP, "
+            "or set ODDS_API_ALLOW_EMBEDDED_FALLBACK=true. "
+            f"diagnostics={odds_key_diagnostics()}"
+        )
+
 
 def fetch_odds(endpoint: str, params: dict):
+    return fetch_odds_with_metadata(endpoint=endpoint, params=params)["payload"]
+
+
+def fetch_odds_with_metadata(endpoint: str, params: dict) -> dict:
     assert_odds_key_present()
     last_error: requests.HTTPError | None = None
 
-    for api_key in get_odds_api_keys():
-        resp = requests.get(
-            f"{BASE_URL}/{endpoint}",
-            params={**params, "apiKey": api_key},
-            timeout=15,
-        )
+    # Avoid inheriting host proxy auto-detection; local proxy settings can block
+    # The Odds API while direct egress is available from this runtime.
+    with requests.Session() as session:
+        session.trust_env = False
+        for source, api_key in _select_odds_api_key_pairs():
+            resp = session.get(
+                f"{BASE_URL}/{endpoint}",
+                params={**params, "apiKey": api_key},
+                timeout=15,
+            )
 
-        try:
-            resp.raise_for_status()
-        except requests.HTTPError as exc:
-            last_error = exc
-            continue
+            try:
+                resp.raise_for_status()
+            except requests.HTTPError as exc:
+                last_error = exc
+                continue
 
-        remaining = resp.headers.get("x-requests-remaining")
-        used = resp.headers.get("x-requests-used")
-
-        logging.info(
-            f"[ODDS_API] Remaining credits: {remaining}, Used this request: {used}"
-        )
-
-        return resp.json()
+            remaining = resp.headers.get("x-requests-remaining")
+            used = resp.headers.get("x-requests-used")
+            last = resp.headers.get("x-requests-last")
+            logging.info(
+                "[ODDS_API] request succeeded source=%s remaining=%s used=%s last=%s",
+                source,
+                remaining,
+                used,
+                last,
+            )
+            return {
+                "payload": resp.json(),
+                "source": source,
+                "x_requests_remaining": remaining,
+                "x_requests_used": used,
+                "x_requests_last": last,
+            }
 
     if last_error is not None:
         raise last_error
-
     raise RuntimeError("Odds API key missing")

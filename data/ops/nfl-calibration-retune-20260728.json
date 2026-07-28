@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-07-28T12:42:52.705825+00:00",
+  "ok": true,
+  "n_components": 807,
+  "n_tune": 538,
+  "n_holdout_2025": 269,
+  "n_with_kav": 807,
+  "before": {
+    "blend_spread": 0.3,
+    "blend_total": 0.3,
+    "calibration": null,
+    "tune": {
+      "spread_mae": 9.5848,
+      "total_mae": 9.8517
+    },
+    "holdout_2025": {
+      "spread_mae": 9.4992,
+      "total_mae": 9.8812
+    }
+  },
+  "totals_calibrator": {
+    "sample_size": 538,
+    "slope": 1.0,
+    "intercept": -0.034264,
+    "raw_slope": 1.204215,
+    "fit_mode": "level_shift",
+    "slope_clamped": false,
+    "pred_mean": 45.6577,
+    "actual_mean": 45.6234,
+    "base_mae": 9.9164,
+    "calibrated_mae": 9.9139,
+    "mae_improvement": 0.0025,
+    "signed_bias_pre": 0.2178,
+    "signed_bias_post": 0.1836,
+    "eligible": true,
+    "mean_preserved": false,
+    "intercept_clamped": true,
+    "recenter_applied": -1.3582,
+    "affine_mae": 9.8828,
+    "level_shift_mae": 9.9139,
+    "half_life_days": 180.0,
+    "prior_now": 45.3,
+    "prior_reference": 45.3,
+    "prior_delta_removed": 0.0
+  },
+  "best_blend": {
+    "spread_w": 0.3,
+    "total_w": 0.35,
+    "spread_mae": 9.5848,
+    "total_mae": 9.8488,
+    "score": 19.4336
+  },
+  "after": {
+    "blend_spread": 0.3,
+    "blend_total": 0.35,
+    "tune": {
+      "spread_mae": 9.5848,
+      "total_mae": 9.8488
+    },
+    "holdout_2025_calibrated": {
+      "spread_mae": 9.4992,
+      "total_mae": 9.8955
+    },
+    "holdout_2025_uncalibrated": {
+      "spread_mae": 9.4992,
+      "total_mae": 9.8936
+    }
+  },
+  "holdout_delta": {
+    "spread_mae": 0.0,
+    "total_mae": 0.0143
+  },
+  "recommendation": {
+    "NFL_MARKET_BLEND_SPREAD_WEIGHT": 0.3,
+    "NFL_MARKET_BLEND_TOTAL_WEIGHT": 0.35,
+    "totals_calibration_slope": 1.0,
+    "totals_calibration_intercept": -0.034264,
+    "totals_fit_mode": "level_shift",
+    "promote_if_holdout_improves": false
+  }
+}

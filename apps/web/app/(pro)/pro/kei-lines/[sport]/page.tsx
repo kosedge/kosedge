@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { getSport } from "@/lib/sports";
 import { getKeiLines } from "@/lib/kei-lines";
 import { KeiLinesTable } from "./KeiLinesTable";
@@ -14,6 +15,7 @@ export default async function KeiLinesSportPage({
   const { sport: sportKey } = await params;
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const keiCode = getKeiCode(sportKey);
   const games = getKeiLines(sportKey);
   const isNcaam = sportKey === "ncaam";
 
@@ -22,9 +24,10 @@ export default async function KeiLinesSportPage({
       <div className="flex items-end justify-between gap-6">
         <div>
           <h1 className="text-3xl font-semibold text-kos-text">
-            {sportName} — KEI Lines
+            {sportName} — {keiCode} Lines
           </h1>
           <p className="mt-2 text-kos-text/70">
+            {getKeiProductLabel(sportKey)}.{" "}
             {isNcaam
               ? "Projected spread and over/under by game date. Use the dropdown to pick a day."
               : "Projected spread and over/under for each game."}

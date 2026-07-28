@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-07-24T20:46:17.259912+00:00",
+  "model_version": "mlb-v1-pa-sim",
+  "lookback_days": 90,
+  "training_days": 8,
+  "step_days": 2,
+  "calibration": {
+    "sample_size": 764.0,
+    "brier_ml": 0.249574,
+    "mae_total_runs": 3.5842,
+    "calendar_days_covered": 66.0,
+    "last_game_date": "2026-07-23"
+  },
+  "walkforward": {
+    "sample_size": 615,
+    "fold_count": 27,
+    "base_brier_ml": 0.248857,
+    "calibrated_brier_ml": 0.254895,
+    "base_mae_total_runs": 3.5605,
+    "calibrated_mae_total_runs": 3.6016,
+    "leakage_violations": 0
+  },
+  "clv": {
+    "count": 764,
+    "avg_ml_clv": 0.0241,
+    "avg_total_clv": 0.24868,
+    "avg_spread_clv": 0.19106
+  },
+  "threshold_checks": {
+    "sample_size_ok": true,
+    "sample_size": 615,
+    "sample_size_threshold": 120,
+    "brier_ml_ok": false,
+    "brier_ml": 0.248857,
+    "brier_ml_threshold": 0.24,
+    "mae_total_ok": false,
+    "mae_total": 3.5605,
+    "mae_total_threshold": 3.5,
+    "avg_ml_clv_ok": true,
+    "avg_ml_clv": 0.0241
+  }
+}
