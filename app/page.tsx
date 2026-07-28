@@ -15,14 +15,30 @@ export default function Home() {
             <h1 className="text-4xl font-bebas tracking-wider">
               <span className="text-kos-green">KOS</span>{" "}
               <span className="text-kos-gold">EDGE</span>{" "}
-              <span className="text-gray-400 text-2xl font-inter font-normal">ANALYTICS</span>
+              <span className="text-gray-400 text-2xl font-inter font-normal">
+                ANALYTICS
+              </span>
             </h1>
 
             <nav className="hidden md:flex items-center gap-10 text-base font-medium text-gray-300">
-              <Link href="/methodology" className="hover:text-kos-gold transition">Methodology</Link>
-              <Link href="/insights" className="hover:text-kos-gold transition">Insights</Link>
-              <Link href="/about" className="hover:text-kos-gold transition">About</Link>
-              <Link href="/disclaimer" className="hover:text-kos-gold transition">Disclaimer</Link>
+              <Link
+                href="/methodology"
+                className="hover:text-kos-gold transition"
+              >
+                Methodology
+              </Link>
+              <Link href="/insights" className="hover:text-kos-gold transition">
+                Insights
+              </Link>
+              <Link href="/about" className="hover:text-kos-gold transition">
+                About
+              </Link>
+              <Link
+                href="/disclaimer"
+                className="hover:text-kos-gold transition"
+              >
+                Disclaimer
+              </Link>
             </nav>
           </div>
 
@@ -45,7 +61,8 @@ export default function Home() {
             <span className="text-kos-gold">real edge</span>.
           </h2>
           <p className="mt-8 text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium">
-            Premium, data-driven sports betting: best-line shopping, disciplined thresholds, bankroll tools for long-term winners.
+            Premium, data-driven sports betting: best-line shopping, disciplined
+            thresholds, bankroll tools for long-term winners.
           </p>
           <p className="mt-4 text-xl text-kos-gold font-semibold italic">
             Sharper Data. Smarter Bets.
@@ -67,15 +84,29 @@ export default function Home() {
           <div className="md:col-span-7 space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {[
-                { title: "Best Lines", desc: "Shop books and capture the best number.", color: "kos-gold" },
-                { title: "Edge Discipline", desc: "Plays only when true value exceeds threshold.", color: "kos-green" },
-                { title: "Sizing Tools", desc: "Flat or Kelly — your bankroll in control.", color: "kos-gold" },
+                {
+                  title: "Best Lines",
+                  desc: "Shop books and capture the best number.",
+                  color: "kos-gold",
+                },
+                {
+                  title: "Edge Discipline",
+                  desc: "Plays only when true value exceeds threshold.",
+                  color: "kos-green",
+                },
+                {
+                  title: "Sizing Tools",
+                  desc: "Flat or Kelly — your bankroll in control.",
+                  color: "kos-gold",
+                },
               ].map((item) => (
                 <div
                   key={item.title}
                   className={`bg-gray-900/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-7 hover:border-${item.color}/60 transition`}
                 >
-                  <h3 className={`text-2xl font-bebas mb-3 text-${item.color}`}>{item.title}</h3>
+                  <h3 className={`text-2xl font-bebas mb-3 text-${item.color}`}>
+                    {item.title}
+                  </h3>
                   <p className="text-gray-400">{item.desc}</p>
                 </div>
               ))}
@@ -83,16 +114,22 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-gradient-to-br from-emerald-950/60 to-gray-900/70 border border-kos-gold/30 rounded-2xl p-8">
-                <h3 className="text-3xl font-bebas text-kos-gold mb-4">What you get</h3>
+                <h3 className="text-3xl font-bebas text-kos-gold mb-4">
+                  What you get
+                </h3>
                 <p className="text-gray-200 text-lg">
-                  Edge thresholds, best lines, disciplined sizing, clean tracking built into your workflow.
+                  Edge thresholds, best lines, disciplined sizing, clean
+                  tracking built into your workflow.
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-red-950/50 to-gray-900/70 border border-red-800/30 rounded-2xl p-8">
-                <h3 className="text-3xl font-bebas text-red-400 mb-4">What we avoid</h3>
+                <h3 className="text-3xl font-bebas text-red-400 mb-4">
+                  What we avoid
+                </h3>
                 <p className="text-gray-200 text-lg">
-                  Hype picks, "lock" language, gimmicks and parlays that don't scale.
+                  Hype picks, "lock" language, gimmicks and parlays that don't
+                  scale.
                 </p>
               </div>
             </div>
@@ -102,8 +139,13 @@ export default function Home() {
           <div className="md:col-span-5">
             <div className="bg-gray-900/80 backdrop-blur-xl border border-kos-gold/40 rounded-2xl p-7 shadow-2xl shadow-kos-gold/20">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-3xl font-bebas text-kos-gold">Edge Board</h3>
-                <span className="text-sm text-gray-400">Green = value • <span className="text-kos-gold">Gold = premium action</span></span>
+                <h3 className="text-3xl font-bebas text-kos-gold">
+                  Edge Board
+                </h3>
+                <span className="text-sm text-gray-400">
+                  Green = value •{" "}
+                  <span className="text-kos-gold">Gold = premium action</span>
+                </span>
               </div>
 
               <div className="overflow-x-auto">
@@ -122,22 +164,34 @@ export default function Home() {
                       <td className="py-4 pr-6">Duke vs UNC</td>
                       <td className="py-4 pr-6">-2.5</td>
                       <td className="py-4 pr-6">-4.0</td>
-                      <td className="py-4 pr-6 text-emerald-400 font-bold">+1.5</td>
-                      <td className="py-4 text-kos-gold font-bebas font-bold">LEAN</td>
+                      <td className="py-4 pr-6 text-emerald-400 font-bold">
+                        +1.5
+                      </td>
+                      <td className="py-4 text-kos-gold font-bebas font-bold">
+                        LEAN
+                      </td>
                     </tr>
                     <tr>
                       <td className="py-4 pr-6">LAL vs BOS</td>
                       <td className="py-4 pr-6">o216.5</td>
                       <td className="py-4 pr-6">223.0</td>
-                      <td className="py-4 pr-6 text-emerald-400 font-bold">+4.5</td>
-                      <td className="py-4 text-emerald-400 font-bold font-bebas">PLAY</td>
+                      <td className="py-4 pr-6 text-emerald-400 font-bold">
+                        +4.5
+                      </td>
+                      <td className="py-4 text-emerald-400 font-bold font-bebas">
+                        PLAY
+                      </td>
                     </tr>
                     <tr>
                       <td className="py-4 pr-6">PHI vs NYM</td>
                       <td className="py-4 pr-6">+105</td>
                       <td className="py-4 pr-6">+120</td>
-                      <td className="py-4 pr-6 text-emerald-400 font-bold">+7.1%</td>
-                      <td className="py-4 text-emerald-400 font-bold font-bebas">PLAY</td>
+                      <td className="py-4 pr-6 text-emerald-400 font-bold">
+                        +7.1%
+                      </td>
+                      <td className="py-4 text-emerald-400 font-bold font-bebas">
+                        PLAY
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -149,8 +203,12 @@ export default function Home() {
 
       <footer className="relative z-10 border-t border-gray-800 bg-black/60 backdrop-blur py-10">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-500">
-          <p className="text-lg font-medium text-kos-gold">Sharpen Data. Smarter Bets.</p>
-          <p className="mt-2">© {new Date().getFullYear()} KOS Edge Analytics</p>
+          <p className="text-lg font-medium text-kos-gold">
+            Sharpen Data. Smarter Bets.
+          </p>
+          <p className="mt-2">
+            © {new Date().getFullYear()} KOS Edge Analytics
+          </p>
         </div>
       </footer>
     </div>

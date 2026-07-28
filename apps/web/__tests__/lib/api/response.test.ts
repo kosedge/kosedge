@@ -12,10 +12,15 @@ describe("lib/api/response", () => {
     });
 
     it("includes code when provided", async () => {
-      const res = jsonError(422, "Validation failed", { code: "VALIDATION_ERROR" });
+      const res = jsonError(422, "Validation failed", {
+        code: "VALIDATION_ERROR",
+      });
       expect(res.status).toBe(422);
       const body = await res.json();
-      expect(body).toEqual({ error: "Validation failed", code: "VALIDATION_ERROR" });
+      expect(body).toEqual({
+        error: "Validation failed",
+        code: "VALIDATION_ERROR",
+      });
     });
   });
 

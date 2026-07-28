@@ -1,8 +1,16 @@
 import Link from "next/link";
 
 const sports = [
-  { key: "cbb", label: "College Basketball", desc: "Daily slate, fair lines, matchup context, execution." },
-  { key: "nfl", label: "NFL", desc: "Weekly slate and matchup pages (in-season)." },
+  {
+    key: "cbb",
+    label: "College Basketball",
+    desc: "Daily slate, fair lines, matchup context, execution.",
+  },
+  {
+    key: "nfl",
+    label: "NFL",
+    desc: "Weekly slate and matchup pages (in-season).",
+  },
   { key: "nba", label: "NBA", desc: "Daily slate and execution tooling." },
   { key: "mlb", label: "MLB", desc: "Daily slate, markets, and tracking." },
 ];
@@ -10,9 +18,12 @@ const sports = [
 export default function ProHubLanding() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="text-4xl font-semibold tracking-tight text-kos-text">Pro Betting Hub</h1>
+      <h1 className="text-4xl font-semibold tracking-tight text-kos-text">
+        Pro Betting Hub
+      </h1>
       <p className="mt-3 max-w-2xl text-kos-text/80">
-        Sport-specific hubs designed for information, execution quality, and long-term review. No picks. No hype.
+        Sport-specific hubs designed for information, execution quality, and
+        long-term review. No picks. No hype.
       </p>
 
       <div className="mt-10 grid gap-6 md:grid-cols-2">

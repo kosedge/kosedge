@@ -8,7 +8,7 @@ type Params = { eventId: string };
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<Params> }
+  { params }: { params: Promise<Params> },
 ) {
   const { eventId } = await params;
 
@@ -16,13 +16,13 @@ export async function GET(
     process.cwd(),
     "data",
     "processed",
-    "upcoming_ncaam_games.json"
+    "upcoming_ncaam_games.json",
   );
 
   if (!existsSync(dataPath)) {
     return NextResponse.json(
       { error: "No upcoming games export found" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -33,7 +33,7 @@ export async function GET(
   } catch (e) {
     return NextResponse.json(
       { error: "Failed to read upcoming games", details: String(e) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -41,7 +41,7 @@ export async function GET(
   if (!game) {
     return NextResponse.json(
       { error: "Game not found", eventId },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -59,16 +59,14 @@ export async function GET(
       game.consensus_close_spread != null
         ? Number(game.consensus_close_spread)
         : null,
-    edgeClose:
-      game.spread_edge != null ? Number(game.spread_edge) : null,
+    edgeClose: game.spread_edge != null ? Number(game.spread_edge) : null,
     modelTotal:
       game.ensemble_total != null ? Number(game.ensemble_total) : null,
     marketTotalClose:
       game.consensus_close_total != null
         ? Number(game.consensus_close_total)
         : null,
-    totalEdge:
-      game.total_edge != null ? Number(game.total_edge) : null,
+    totalEdge: game.total_edge != null ? Number(game.total_edge) : null,
     restDaysHome:
       game.days_rest_home != null ? Number(game.days_rest_home) : null,
     restDaysAway:
@@ -98,4 +96,3 @@ export async function GET(
     },
   });
 }
-

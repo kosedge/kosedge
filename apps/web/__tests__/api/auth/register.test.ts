@@ -124,9 +124,7 @@ describe("POST /api/auth/register", () => {
   });
 
   it("should handle database errors gracefully", async () => {
-    mockPrisma.user.findUnique.mockRejectedValue(
-      new Error("Database error")
-    );
+    mockPrisma.user.findUnique.mockRejectedValue(new Error("Database error"));
 
     const request = new Request("http://localhost/api/auth/register", {
       method: "POST",

@@ -4,7 +4,7 @@
 
 **The Odds API only has NCAAB historical data from November 16, 2020** (`basketball_ncaab` start date). They do not offer 2015–2016 or any season before 2020–21.
 
-Seasons you *can* pull:
+Seasons you _can_ pull:
 
 - **2020–21** (from 2020-11-16)
 - **2021–22**, **2022–23**, **2023–24**, **2024–25**
@@ -19,11 +19,11 @@ Seasons you *can* pull:
 
 Rough totals:
 
-| Range              | Days (approx) | Requests | Credits (approx) |
-|--------------------|----------------|----------|-------------------|
-| One season (~150)  | 150            | 300      | 6,000             |
-| 2020-11 → 2025-04  | ~1,600         | 3,200    | 64,000            |
-| **3 seasons**      | ~900           | 1,800    | **~22,000**       |
+| Range             | Days (approx) | Requests | Credits (approx) |
+| ----------------- | ------------- | -------- | ---------------- |
+| One season (~150) | 150           | 300      | 6,000            |
+| 2020-11 → 2025-04 | ~1,600        | 3,200    | 64,000           |
+| **3 seasons**     | ~900          | 1,800    | **~22,000**      |
 
 Check your plan: 20K/month, 100K/month, etc. You can run the script for a **short date range** first (e.g. one month) to confirm everything and cost.
 

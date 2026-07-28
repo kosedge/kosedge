@@ -89,7 +89,8 @@ export class ErrorBoundary extends Component<Props, State> {
                     </summary>
                     <pre className="mt-2 p-4 bg-black/50 rounded-lg text-xs text-red-300 overflow-auto">
                       {this.state.error.toString()}
-                      {this.state.error.stack && `\n\n${this.state.error.stack}`}
+                      {this.state.error.stack &&
+                        `\n\n${this.state.error.stack}`}
                     </pre>
                   </details>
                 )}

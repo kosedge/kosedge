@@ -43,15 +43,15 @@ pnpm dev:webpack  # without Turbopack (use if Turbopack has resolution issues)
 
 ## Project layout (scalability)
 
-| Area | Path | Purpose |
-|------|------|---------|
-| App routes | `app/` | Next.js routes, layouts, pages |
-| API | `app/api/` | Route handlers; use `jsonOk`/`jsonError` from `lib/api/response.ts` and `handleApiError`/`withErrorHandler` from `lib/api/error-handler.ts`; use `logError` instead of `console.error` |
-| Config | `lib/config/env.ts` | Single env source (Zod); not imported in Edge middleware |
-| Constants | `lib/constants.ts` | SITE_URL, cache TTLs, odds-widget base URL; used by layout and API routes |
-| Shared lib | `lib/` | Auth, DB, cache, logger, live-line, kei-lines, etc. |
-| Data (static) | `data/processed/` | Excluded from serverless bundle via `next.config` |
-| Contracts | `packages/contracts` | Shared types (e.g. EdgeBoard) across services |
+| Area          | Path                 | Purpose                                                                                                                                                                                |
+| ------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| App routes    | `app/`               | Next.js routes, layouts, pages                                                                                                                                                         |
+| API           | `app/api/`           | Route handlers; use `jsonOk`/`jsonError` from `lib/api/response.ts` and `handleApiError`/`withErrorHandler` from `lib/api/error-handler.ts`; use `logError` instead of `console.error` |
+| Config        | `lib/config/env.ts`  | Single env source (Zod); not imported in Edge middleware                                                                                                                               |
+| Constants     | `lib/constants.ts`   | SITE_URL, cache TTLs, odds-widget base URL; used by layout and API routes                                                                                                              |
+| Shared lib    | `lib/`               | Auth, DB, cache, logger, live-line, kei-lines, etc.                                                                                                                                    |
+| Data (static) | `data/processed/`    | Excluded from serverless bundle via `next.config`                                                                                                                                      |
+| Contracts     | `packages/contracts` | Shared types (e.g. EdgeBoard) across services                                                                                                                                          |
 
 **Redis:** When `REDIS_URL` is set, Redis-backed features (e.g. rate limiting when implemented) use it. When not set, the app runs without Redis-dependent features. See `docs/ARCHITECTURE.md`.
 

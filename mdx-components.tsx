@@ -1,4 +1,7 @@
-type MDXComponents = Record<string, React.ComponentType<Record<string, unknown>>>;
+type MDXComponents = Record<
+  string,
+  React.ComponentType<Record<string, unknown>>
+>;
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -20,9 +23,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...props}
       />
     ),
-    p: (props) => (
-      <p className="mt-4 leading-7 text-kos-text/90" {...props} />
-    ),
+    p: (props) => <p className="mt-4 leading-7 text-kos-text/90" {...props} />,
     a: (props) => (
       <a
         className="text-kos-gold underline underline-offset-4 hover:text-edge-green"

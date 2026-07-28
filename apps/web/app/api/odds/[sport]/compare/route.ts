@@ -4,11 +4,19 @@ import { jsonError, jsonOk } from "@/lib/api/response";
 import { cacheControlHeader, ODDS_COMPARE_CACHE_TTL_MS } from "@/lib/constants";
 import { logError } from "@/lib/logger";
 import { getSport } from "@/lib/sports";
-import { fetchOddsComparison, ALLOWED_BOOKS, bookDisplay, SPORT_KEY_MAP } from "@/lib/odds-api";
+import {
+  fetchOddsComparison,
+  ALLOWED_BOOKS,
+  bookDisplay,
+  SPORT_KEY_MAP,
+} from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
-const compareCache = new Map<string, { data: { rows: unknown[]; books: unknown[] }; ts: number }>();
+const compareCache = new Map<
+  string,
+  { data: { rows: unknown[]; books: unknown[] }; ts: number }
+>();
 
 function withCacheHeaders(res: NextResponse) {
   res.headers.set("cache-control", cacheControlHeader());
@@ -17,7 +25,7 @@ function withCacheHeaders(res: NextResponse) {
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ sport: string }> }
+  { params }: { params: Promise<{ sport: string }> },
 ) {
   const { sport } = await params;
   const valid = getSport(sport);
@@ -25,7 +33,10 @@ export async function GET(
     return jsonError(400, "Unknown sport");
   }
 
-  const keys = [env.ODDS_API_KEY?.trim(), env.ODDS_API_KEY_BACKUP?.trim()].filter((k): k is string => Boolean(k));
+  const keys = [
+    env.ODDS_API_KEY?.trim(),
+    env.ODDS_API_KEY_BACKUP?.trim(),
+  ].filter((k): k is string => Boolean(k));
   if (!keys.length || !SPORT_KEY_MAP[sport]) {
     return withCacheHeaders(jsonOk({ rows: [], books: [] }));
   }
@@ -42,7 +53,10 @@ export async function GET(
       rows = await fetchOddsComparison(sport, key);
       break;
     } catch (e) {
-      logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "odds/compare" });
+      logError(e instanceof Error ? e : new Error(String(e)), {
+        sport,
+        route: "odds/compare",
+      });
     }
   }
   if (rows.length === 0 && cached) {
@@ -54,7 +68,10 @@ export async function GET(
     compareCache.set(sport, { data, ts: now });
     return withCacheHeaders(jsonOk(data));
   } catch (e) {
-    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "odds/compare" });
+    logError(e instanceof Error ? e : new Error(String(e)), {
+      sport,
+      route: "odds/compare",
+    });
     if (cached) return withCacheHeaders(jsonOk(cached.data));
     return withCacheHeaders(jsonOk({ rows: [], books: [] }));
   }

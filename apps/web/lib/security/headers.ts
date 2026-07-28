@@ -17,7 +17,7 @@ export function addSecurityHeaders(response: NextResponse) {
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-    ].join("; ")
+    ].join("; "),
   );
 
   // X-Frame-Options
@@ -32,19 +32,16 @@ export function addSecurityHeaders(response: NextResponse) {
   // Permissions-Policy
   headers.set(
     "Permissions-Policy",
-    [
-      "camera=()",
-      "microphone=()",
-      "geolocation=()",
-      "interest-cohort=()",
-    ].join(", ")
+    ["camera=()", "microphone=()", "geolocation=()", "interest-cohort=()"].join(
+      ", ",
+    ),
   );
 
   // Strict-Transport-Security (HSTS) - only in production
   if (process.env.NODE_ENV === "production") {
     headers.set(
       "Strict-Transport-Security",
-      "max-age=31536000; includeSubDomains; preload"
+      "max-age=31536000; includeSubDomains; preload",
     );
   }
 

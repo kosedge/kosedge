@@ -20,20 +20,31 @@ const PILLARS = [
 ] as const;
 
 const PILLAR_METAS: PillarMeta[] = [
-  { number: 1, title: "Why Most Bettors Lose (And It's Not What They Think)", isPro: false },
-  { number: 2, title: "What \"Edge\" Actually Means", isPro: false },
+  {
+    number: 1,
+    title: "Why Most Bettors Lose (And It's Not What They Think)",
+    isPro: false,
+  },
+  { number: 2, title: 'What "Edge" Actually Means', isPro: false },
   { number: 3, title: "Model: How We Measure Ourselves", isPro: false },
   { number: 4, title: "Best Line Shopping Is Non-Negotiable", isPro: false },
   { number: 5, title: "Discipline > Confidence", isPro: true },
   { number: 6, title: "Understanding Variance", isPro: true },
-  { number: 7, title: "Deep Dive: How the MLB Simulation Works (Framework Only)", isPro: true },
+  {
+    number: 7,
+    title: "Deep Dive: How the MLB Simulation Works (Framework Only)",
+    isPro: true,
+  },
 ];
 
 /** Get section for pillar (1–7) and section index (1–4). */
-export function getSection(pillarNum: number, sectionNum: number): InsightSection | null {
+export function getSection(
+  pillarNum: number,
+  sectionNum: number,
+): InsightSection | null {
   const p = PILLARS[pillarNum - 1];
   const s = sectionNum >= 1 && sectionNum <= 4 ? sectionNum - 1 : 0;
-  return p ? p[s] ?? null : null;
+  return p ? (p[s] ?? null) : null;
 }
 
 export function getPillarMeta(pillarNum: number): PillarMeta | null {

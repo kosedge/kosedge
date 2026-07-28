@@ -2,7 +2,11 @@
  * Shared shell for auth routes: signin, signup, error.
  * Provides consistent background and centered card area; pages render the card content.
  */
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 font-inter relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">

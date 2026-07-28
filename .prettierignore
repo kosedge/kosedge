@@ -1,0 +1,25 @@
+# Dependencies and build output
+node_modules
+.next
+.turbo
+dist
+build
+coverage
+out
+
+# Lockfiles (machine-managed)
+pnpm-lock.yaml
+package-lock.json
+
+# Generated / vendor
+apps/web/src/generated
+**/generated/prisma
+**/*.wasm
+**/*-base64.js
+
+# Local / tooling
+.vercel
+.venv
+**/.venv
+*.min.js
+*.min.css

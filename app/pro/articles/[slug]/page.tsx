@@ -3,13 +3,20 @@ import { notFound } from "next/navigation";
 import { HIGHLIGHTED_GAMES } from "@/lib/featured-games";
 import { generateGameOverview } from "@/lib/sports";
 
-export default async function GameArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function GameArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const game = HIGHLIGHTED_GAMES.find((g) => g.slug === slug);
   if (!game) return notFound();
 
   const title = `${game.row.teamA.name} vs ${game.row.teamB.name}`;
-  const overview = generateGameOverview(game.row.teamA.name, game.row.teamB.name);
+  const overview = generateGameOverview(
+    game.row.teamA.name,
+    game.row.teamB.name,
+  );
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
@@ -24,18 +31,24 @@ export default async function GameArticlePage({ params }: { params: Promise<{ sl
         Game breakdown, model take, and workflow.
       </p>
       <div className="mt-6 prose prose-invert max-w-none">
-        <div className="whitespace-pre-line text-kos-text/90 leading-relaxed">{overview}</div>
+        <div className="whitespace-pre-line text-kos-text/90 leading-relaxed">
+          {overview}
+        </div>
       </div>
       <div className="mt-8 rounded-xl border border-kos-border bg-kos-surface/40 p-6">
         <h2 className="text-lg font-medium text-kos-text">Edge snapshot</h2>
         <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
           <div>
             <div className="text-kos-text/60">Best Line</div>
-            <div className="text-kos-gold font-medium">{game.row.bestLine.top.label}</div>
+            <div className="text-kos-gold font-medium">
+              {game.row.bestLine.top.label}
+            </div>
           </div>
           <div>
             <div className="text-kos-text/60">Best O/U</div>
-            <div className="text-kos-gold font-medium">{game.row.bestOU.top.label}</div>
+            <div className="text-kos-gold font-medium">
+              {game.row.bestOU.top.label}
+            </div>
           </div>
           <div>
             <div className="text-kos-text/60">Open Line</div>

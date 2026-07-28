@@ -22,7 +22,9 @@ export default function InsightPage({ params }: { params: { slug: string } }) {
             {post.frontmatter.title}
           </h1>
           {post.frontmatter.description && (
-            <p className="mt-4 text-kos-text/80">{post.frontmatter.description}</p>
+            <p className="mt-4 text-kos-text/80">
+              {post.frontmatter.description}
+            </p>
           )}
         </div>
 

@@ -8,7 +8,7 @@ export type JsonErrorBody = { error: string; code?: string };
 export function jsonError(
   status: number,
   message: string,
-  options?: { code?: string }
+  options?: { code?: string },
 ): NextResponse<JsonErrorBody> {
   const body: JsonErrorBody = { error: message };
   if (options?.code) body.code = options.code;

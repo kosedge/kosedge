@@ -30,7 +30,8 @@ export async function isProUser(): Promise<boolean> {
     if (user.role === UserRole.ADMIN || user.role === UserRole.PRO) return true;
 
     if (user.subscriptionStatus === SubscriptionStatus.ACTIVE) {
-      if (user.subscriptionEnd && user.subscriptionEnd > new Date()) return true;
+      if (user.subscriptionEnd && user.subscriptionEnd > new Date())
+        return true;
     }
 
     return false;

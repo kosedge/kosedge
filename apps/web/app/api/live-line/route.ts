@@ -29,28 +29,43 @@ export async function GET(request: Request) {
     });
 
     if (!parsed.success) {
-      return jsonError(400, "Missing or invalid: pregameSpread, homeScore, awayScore, minutesRemaining", {
-        code: "VALIDATION_ERROR",
-      });
+      return jsonError(
+        400,
+        "Missing or invalid: pregameSpread, homeScore, awayScore, minutesRemaining",
+        {
+          code: "VALIDATION_ERROR",
+        },
+      );
     }
 
-    const { pregameSpread, homeScore, awayScore, minutesRemaining, marketSpread } = parsed.data;
+    const {
+      pregameSpread,
+      homeScore,
+      awayScore,
+      minutesRemaining,
+      marketSpread,
+    } = parsed.data;
 
     const result = liveSpreadWithEdge(
       pregameSpread,
       homeScore,
       awayScore,
       minutesRemaining,
-      marketSpread ?? null
+      marketSpread ?? null,
     );
 
     return jsonOk({
       currentMargin: result.currentMargin,
       modelLiveSpreadHome: Math.round(result.modelLiveSpreadHome * 10) / 10,
-      edgeVsMarket: result.edgeVsMarket != null ? Math.round(result.edgeVsMarket * 10) / 10 : null,
+      edgeVsMarket:
+        result.edgeVsMarket != null
+          ? Math.round(result.edgeVsMarket * 10) / 10
+          : null,
     });
   } catch (error) {
-    logError(error instanceof Error ? error : new Error(String(error)), { route: "live-line" });
+    logError(error instanceof Error ? error : new Error(String(error)), {
+      route: "live-line",
+    });
     return handleApiError(error);
   }
 }

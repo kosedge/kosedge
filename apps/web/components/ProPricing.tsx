@@ -55,8 +55,10 @@ export default function ProPricing() {
         </h2>
         <p className="mt-3 text-sm sm:text-base text-gray-200/80 max-w-3xl mx-auto">
           Pro unlocks:
-          <span className="text-gray-100"> Edge Boards for all sports</span>,{" "}
-          <span className="text-gray-100">game breakdowns</span>,{" "}
+          <span className="text-gray-100">
+            {" "}
+            Edge Boards for all sports
+          </span>, <span className="text-gray-100">game breakdowns</span>,{" "}
           <span className="text-gray-100">season & event previews</span>,{" "}
           <span className="text-gray-100">power ratings</span>, and{" "}
           <span className="text-gray-100">props</span>.
@@ -99,7 +101,9 @@ export default function ProPricing() {
               <div className="pb-2 text-sm text-gray-400">{p.cadence}</div>
             </div>
 
-            {p.sub && <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>}
+            {p.sub && (
+              <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>
+            )}
 
             <button
               type="button"
@@ -114,7 +118,9 @@ export default function ProPricing() {
               {p.cta}
             </button>
 
-            <div className="mt-3 text-xs text-gray-500">Cancel anytime • Instant access</div>
+            <div className="mt-3 text-xs text-gray-500">
+              Cancel anytime • Instant access
+            </div>
           </div>
         ))}
       </div>
@@ -133,7 +139,9 @@ export default function ProPricing() {
                 <div className="text-6xl font-bebas tracking-tight text-kos-gold">
                   {yearly.price}
                 </div>
-                <div className="pb-2 text-sm text-gray-400">{yearly.cadence}</div>
+                <div className="pb-2 text-sm text-gray-400">
+                  {yearly.cadence}
+                </div>
               </div>
 
               <div className="mt-2 text-sm text-gray-200/80">{yearly.sub}</div>

@@ -19,6 +19,7 @@ data/
 ## Run order (from `apps/web`)
 
 **One command (recommended):**
+
 ```bash
 python run_pipeline.py              # full pipeline
 python run_pipeline.py --skip-odds  # use existing odds parquet
@@ -26,6 +27,7 @@ python run_pipeline.py --check-env  # print ODDS_API_KEY / KENPOM_API_KEY status
 ```
 
 **Step by step:**
+
 ```bash
 # 1. Build ratings
 python src/build_ratings.py
@@ -51,16 +53,16 @@ python src/train_margin_model.py
 
 ## Key outputs
 
-| File | Produced by |
-|------|-------------|
-| `full_ratings.parquet` | build_ratings.py |
-| `full_ensemble_ratings.parquet` | build_ensemble_ratings.py |
-| `ncaab_historical_odds_open_close.parquet` | process_odds.py |
-| `actual_margins.parquet` | build_actual_margins.py |
-| `games_with_edges.parquet` | join_and_backtest.py |
-| `merged_games_with_odds_and_ratings.parquet` | merge_games_ensemble.py |
-| `flat_betting_picks.csv` | flat_betting_backtest.py |
-| `margin_model.json` | train_margin_model.py |
+| File                                         | Produced by               |
+| -------------------------------------------- | ------------------------- |
+| `full_ratings.parquet`                       | build_ratings.py          |
+| `full_ensemble_ratings.parquet`              | build_ensemble_ratings.py |
+| `ncaab_historical_odds_open_close.parquet`   | process_odds.py           |
+| `actual_margins.parquet`                     | build_actual_margins.py   |
+| `games_with_edges.parquet`                   | join_and_backtest.py      |
+| `merged_games_with_odds_and_ratings.parquet` | merge_games_ensemble.py   |
+| `flat_betting_picks.csv`                     | flat_betting_backtest.py  |
+| `margin_model.json`                          | train_margin_model.py     |
 
 ## Ingest / scrape targets
 

@@ -21,7 +21,8 @@ export const metadata: Metadata = {
     default: "Kos Edge Analytics",
     template: "%s • Kos Edge Analytics",
   },
-  description: "Premium sports handicapping insights built on data. Driven by edge.",
+  description:
+    "Premium sports handicapping insights built on data. Driven by edge.",
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: "/favicon.ico",

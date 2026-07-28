@@ -96,5 +96,4 @@ celerybeat.pid
 
 # Docker env
 infra/.env.docker
-.vercel
 .env*.local

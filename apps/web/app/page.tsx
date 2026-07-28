@@ -84,7 +84,10 @@ export default function Home() {
             <Link href="/about" className="hover:text-kos-gold transition">
               About
             </Link>
-            <Link href="/methodology" className="hover:text-kos-gold transition">
+            <Link
+              href="/methodology"
+              className="hover:text-kos-gold transition"
+            >
               Methodology
             </Link>
             <Link href="/disclaimer" className="hover:text-kos-gold transition">
@@ -123,7 +126,10 @@ export default function Home() {
             <Link href="/about" className="hover:text-kos-gold transition">
               About
             </Link>
-            <Link href="/methodology" className="hover:text-kos-gold transition">
+            <Link
+              href="/methodology"
+              className="hover:text-kos-gold transition"
+            >
               Methodology
             </Link>
             <Link href="/disclaimer" className="hover:text-kos-gold transition">
@@ -143,8 +149,9 @@ export default function Home() {
             </h1>
 
             <p className="mt-5 sm:mt-6 text-lg sm:text-xl text-gray-200/90 max-w-2xl">
-              Data-driven sports betting built around best-line shopping, strict thresholds,
-              bankroll tools, and tracking that respects the long game.
+              Data-driven sports betting built around best-line shopping, strict
+              thresholds, bankroll tools, and tracking that respects the long
+              game.
             </p>
 
             <p className="mt-3 text-base sm:text-lg text-kos-gold font-semibold italic">
@@ -195,11 +202,17 @@ export default function Home() {
                       ringGlow,
                     ].join(" ")}
                   >
-                    <div className={["text-sm font-semibold", icon].join(" ")}>●</div>
-                    <h3 className={["mt-2 text-2xl font-bebas", title].join(" ")}>
+                    <div className={["text-sm font-semibold", icon].join(" ")}>
+                      ●
+                    </div>
+                    <h3
+                      className={["mt-2 text-2xl font-bebas", title].join(" ")}
+                    >
                       {p.title}
                     </h3>
-                    <p className="mt-2 text-sm text-gray-200/80 leading-relaxed">{p.desc}</p>
+                    <p className="mt-2 text-sm text-gray-200/80 leading-relaxed">
+                      {p.desc}
+                    </p>
                   </div>
                 );
               })}
@@ -207,17 +220,22 @@ export default function Home() {
 
             <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
               <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-                <h3 className="text-2xl font-bebas text-kos-gold">What you get</h3>
+                <h3 className="text-2xl font-bebas text-kos-gold">
+                  What you get
+                </h3>
                 <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                  Best lines, edge thresholds, disciplined sizing, and clean tracking that fits a
-                  serious workflow.
+                  Best lines, edge thresholds, disciplined sizing, and clean
+                  tracking that fits a serious workflow.
                 </p>
               </div>
 
               <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-                <h3 className="text-2xl font-bebas text-red-400">What we avoid</h3>
+                <h3 className="text-2xl font-bebas text-red-400">
+                  What we avoid
+                </h3>
                 <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                  Hype picks, “lock” talk, chasing, and gimmicks that don’t scale.
+                  Hype picks, “lock” talk, chasing, and gimmicks that don’t
+                  scale.
                 </p>
               </div>
             </div>
@@ -225,10 +243,13 @@ export default function Home() {
 
           <div className="lg:col-span-5">
             <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-              <h3 className="text-2xl font-bebas text-kos-gold">One board. Every sport.</h3>
+              <h3 className="text-2xl font-bebas text-kos-gold">
+                One board. Every sport.
+              </h3>
               <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                Behind the scenes, each sport has its own model. Up front, everything flows into the
-                same Edge Board so your workflow stays consistent.
+                Behind the scenes, each sport has its own model. Up front,
+                everything flows into the same Edge Board so your workflow stays
+                consistent.
               </p>
 
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
@@ -252,8 +273,12 @@ export default function Home() {
 
       <footer className="relative z-10 border-t border-white/10 bg-black/35 backdrop-blur py-10">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
-          <p className="text-lg font-medium text-kos-gold">Sharper Data. Smarter Bets.</p>
-          <p className="mt-2 text-sm">© {new Date().getFullYear()} KOS Edge Analytics</p>
+          <p className="text-lg font-medium text-kos-gold">
+            Sharper Data. Smarter Bets.
+          </p>
+          <p className="mt-2 text-sm">
+            © {new Date().getFullYear()} KOS Edge Analytics
+          </p>
         </div>
       </footer>
     </div>

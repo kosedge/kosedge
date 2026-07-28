@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ sport: string }> }
+  { params }: { params: Promise<{ sport: string }> },
 ) {
   const { sport } = await params;
   const valid = getSport(sport);
@@ -30,20 +30,29 @@ export async function GET(
   try {
     const res = await fetch(url, {
       cache: "no-store",
-      headers: { accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
+      headers: {
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
     });
     if (!res.ok) {
-      return new NextResponse(`Widget upstream error: ${res.status}`, { status: 502 });
+      return new NextResponse(`Widget upstream error: ${res.status}`, {
+        status: 502,
+      });
     }
     const html = await res.text();
     return new NextResponse(html, {
       headers: {
-        "content-type": res.headers.get("content-type") ?? "text/html; charset=utf-8",
+        "content-type":
+          res.headers.get("content-type") ?? "text/html; charset=utf-8",
         "cache-control": "public, s-maxage=3600, stale-while-revalidate=600",
       },
     });
   } catch (e) {
-    logError(e instanceof Error ? e : new Error(String(e)), { sport, route: "odds-widget" });
+    logError(e instanceof Error ? e : new Error(String(e)), {
+      sport,
+      route: "odds-widget",
+    });
     return new NextResponse("Widget unavailable", { status: 502 });
   }
 }

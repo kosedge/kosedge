@@ -13,14 +13,10 @@ const adapter = new PrismaPg({ connectionString });
 
 const prismaOptions: ConstructorParameters<typeof PrismaClient>[0] = {
   adapter,
-  log:
-    env.NODE_ENV === "development"
-      ? ["query", "error", "warn"]
-      : ["error"],
+  log: env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
 };
 
-export const prisma =
-  globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
+export const prisma = globalForPrisma.prisma ?? new PrismaClient(prismaOptions);
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 

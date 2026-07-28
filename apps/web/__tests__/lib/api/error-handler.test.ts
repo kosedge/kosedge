@@ -28,7 +28,11 @@ describe("lib/api/error-handler", () => {
       const err = new ApiError(400, "Invalid", "INVALID", { field: "email" });
       const res = handleApiError(err);
       const body = await res.json();
-      expect(body).toMatchObject({ error: "Invalid", code: "INVALID", details: { field: "email" } });
+      expect(body).toMatchObject({
+        error: "Invalid",
+        code: "INVALID",
+        details: { field: "email" },
+      });
     });
 
     it("returns 400 and VALIDATION_ERROR for ZodError", async () => {
@@ -38,7 +42,10 @@ describe("lib/api/error-handler", () => {
       const res = handleApiError(err);
       expect(res.status).toBe(400);
       const body = await res.json();
-      expect(body).toMatchObject({ error: "Validation failed", code: "VALIDATION_ERROR" });
+      expect(body).toMatchObject({
+        error: "Validation failed",
+        code: "VALIDATION_ERROR",
+      });
       expect(Array.isArray(body.issues)).toBe(true);
     });
 
@@ -54,7 +61,10 @@ describe("lib/api/error-handler", () => {
       const res = handleApiError("string error");
       expect(res.status).toBe(500);
       const body = await res.json();
-      expect(body).toMatchObject({ error: "An unknown error occurred", code: "UNKNOWN_ERROR" });
+      expect(body).toMatchObject({
+        error: "An unknown error occurred",
+        code: "UNKNOWN_ERROR",
+      });
     });
   });
 });

@@ -37,6 +37,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 ### Deploy to Vercel
 
 **Option 1: Vercel CLI**
+
 ```bash
 npm i -g vercel
 vercel login
@@ -45,6 +46,7 @@ vercel --prod
 ```
 
 **Option 2: GitHub Integration**
+
 1. Push to GitHub
 2. Import repository in Vercel Dashboard
 3. Set environment variables
@@ -118,6 +120,7 @@ See [TESTING.md](./apps/web/TESTING.md) for detailed testing documentation.
 ## 🔐 Authentication
 
 The application uses NextAuth.js v5 for authentication with:
+
 - Email/password authentication
 - JWT-based sessions
 - Role-based access control (USER, PRO, ADMIN)
@@ -128,6 +131,7 @@ See [AUTH_SETUP.md](./apps/web/AUTH_SETUP.md) for authentication setup and confi
 ## 🐛 Error Handling
 
 Comprehensive error handling with:
+
 - Structured logging (Pino)
 - React error boundaries
 - Custom error pages (404, 500)
@@ -141,6 +145,7 @@ See [ERROR_HANDLING.md](./apps/web/ERROR_HANDLING.md) for error handling documen
 ### CI/CD Pipeline
 
 The project includes GitHub Actions workflows:
+
 - **CI** - Runs on every push/PR (lint, typecheck, test, build)
 - **Deploy** - Deploys to production on main branch
 - **PR Checks** - Quality checks for pull requests

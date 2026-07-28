@@ -79,7 +79,8 @@ export const authConfig = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as import("@/src/generated/prisma").UserRole;
+        session.user.role =
+          token.role as import("@/src/generated/prisma").UserRole;
       }
       return session;
     },

@@ -17,16 +17,10 @@ export default function ArticleLayout({
             {title}
           </h1>
 
-          {subtitle && (
-            <p className="mt-4 text-lg text-white/70">
-              {subtitle}
-            </p>
-          )}
+          {subtitle && <p className="mt-4 text-lg text-white/70">{subtitle}</p>}
         </header>
 
-        <div className="prose prose-invert prose-lg max-w-none">
-          {children}
-        </div>
+        <div className="prose prose-invert prose-lg max-w-none">{children}</div>
       </article>
     </Container>
   );

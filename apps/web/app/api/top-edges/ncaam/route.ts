@@ -23,13 +23,13 @@ export async function GET(req: Request) {
     process.cwd(),
     "data",
     "processed",
-    "upcoming_ncaam_games.json"
+    "upcoming_ncaam_games.json",
   );
 
   if (!existsSync(dataPath)) {
     return NextResponse.json(
       { error: "No upcoming games export found" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -40,7 +40,7 @@ export async function GET(req: Request) {
   } catch (e) {
     return NextResponse.json(
       { error: "Failed to read upcoming games", details: String(e) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -51,16 +51,14 @@ export async function GET(req: Request) {
   // Sort by absolute spread edge descending; fallback to total edge when spread edge missing.
   const scored = games
     .map((g) => {
-      const spreadEdge =
-        g.spread_edge != null ? Number(g.spread_edge) : null;
-      const totalEdge =
-        g.total_edge != null ? Number(g.total_edge) : null;
+      const spreadEdge = g.spread_edge != null ? Number(g.spread_edge) : null;
+      const totalEdge = g.total_edge != null ? Number(g.total_edge) : null;
       const magnitude =
         spreadEdge != null
           ? Math.abs(spreadEdge)
           : totalEdge != null
-          ? Math.abs(totalEdge)
-          : 0;
+            ? Math.abs(totalEdge)
+            : 0;
       return { ...g, spreadEdge, totalEdge, magnitude };
     })
     .filter((g) => g.magnitude > 0)
@@ -81,4 +79,3 @@ export async function GET(req: Request) {
 
   return NextResponse.json({ games: scored });
 }
-

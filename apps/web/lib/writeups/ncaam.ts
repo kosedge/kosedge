@@ -59,7 +59,9 @@ function describeContext(ctx: NcaamGameContext) {
 
   if (ctx.conferenceHome && ctx.conferenceAway) {
     if (ctx.conferenceHome === ctx.conferenceAway) {
-      parts.push(`${fmtTeam(ctx.awayTeam)} visits a conference rival in ${ctx.conferenceHome}.`);
+      parts.push(
+        `${fmtTeam(ctx.awayTeam)} visits a conference rival in ${ctx.conferenceHome}.`,
+      );
     } else {
       parts.push(
         `${fmtTeam(ctx.awayTeam)} from ${ctx.conferenceAway} matches up with ${fmtTeam(
@@ -68,11 +70,15 @@ function describeContext(ctx: NcaamGameContext) {
       );
     }
   } else {
-    parts.push(`${fmtTeam(ctx.awayTeam)} faces ${fmtTeam(ctx.homeTeam)} in NCAAM action.`);
+    parts.push(
+      `${fmtTeam(ctx.awayTeam)} faces ${fmtTeam(ctx.homeTeam)} in NCAAM action.`,
+    );
   }
 
   if (ctx.isTournament) {
-    parts.push("This sets up as a tournament game where motivation and rotations can be a bit different.");
+    parts.push(
+      "This sets up as a tournament game where motivation and rotations can be a bit different.",
+    );
   }
 
   return parts.join(" ");
@@ -85,11 +91,17 @@ function describeRestAndTravel(ctx: NcaamGameContext) {
   if (restDaysHome != null && restDaysAway != null) {
     const diff = restDaysHome - restDaysAway;
     if (diff >= 2) {
-      lines.push(`${fmtTeam(ctx.homeTeam)} has a notable rest advantage (${restDaysHome} days vs ${restDaysAway}).`);
+      lines.push(
+        `${fmtTeam(ctx.homeTeam)} has a notable rest advantage (${restDaysHome} days vs ${restDaysAway}).`,
+      );
     } else if (diff >= 1) {
-      lines.push(`${fmtTeam(ctx.homeTeam)} is slightly fresher (${restDaysHome} days rest vs ${restDaysAway}).`);
+      lines.push(
+        `${fmtTeam(ctx.homeTeam)} is slightly fresher (${restDaysHome} days rest vs ${restDaysAway}).`,
+      );
     } else if (diff <= -2) {
-      lines.push(`${fmtTeam(ctx.awayTeam)} comes in much fresher on rest (${restDaysAway} days vs ${restDaysHome}).`);
+      lines.push(
+        `${fmtTeam(ctx.awayTeam)} comes in much fresher on rest (${restDaysAway} days vs ${restDaysHome}).`,
+      );
     }
   }
 
@@ -107,7 +119,9 @@ function describeRestAndTravel(ctx: NcaamGameContext) {
 function describeInjuries(ctx: NcaamGameContext) {
   const lines: string[] = [];
   if (ctx.keyPlayerOutHome) {
-    lines.push(`${fmtTeam(ctx.homeTeam)} is flagged with at least one key player unavailable.`);
+    lines.push(
+      `${fmtTeam(ctx.homeTeam)} is flagged with at least one key player unavailable.`,
+    );
   }
   if (ctx.keyPlayerOutAway) {
     lines.push(`${fmtTeam(ctx.awayTeam)} is also dealing with a key absence.`);
@@ -139,18 +153,24 @@ export function buildNcaamWriteup(ctx: NcaamGameContext): string {
         `implying an edge of ${fmtEdge(edge)} against the spread.`,
     );
   } else {
-    parts.push("Our NCAAM model is aligned with this market, with no clear edge showing on the spread.");
+    parts.push(
+      "Our NCAAM model is aligned with this market, with no clear edge showing on the spread.",
+    );
   }
 
   // Totals, when available
-  if (ctx.modelTotal != null && ctx.marketTotalClose != null && ctx.totalEdge != null) {
+  if (
+    ctx.modelTotal != null &&
+    ctx.marketTotalClose != null &&
+    ctx.totalEdge != null
+  ) {
     const totalEdgeAbs = Math.abs(Math.round(ctx.totalEdge * 10) / 10);
     const lean =
       ctx.totalEdge > 0
         ? "slightly toward the over"
         : ctx.totalEdge < 0
-        ? "slightly toward the under"
-        : "without a strong lean";
+          ? "slightly toward the under"
+          : "without a strong lean";
     parts.push(
       `On the total, our projection sits at ${Math.round(ctx.modelTotal * 10) / 10} versus a market number of ` +
         `${Math.round(ctx.marketTotalClose * 10) / 10}, an edge of about ${totalEdgeAbs.toFixed(
@@ -173,4 +193,3 @@ export function buildNcaamWriteup(ctx: NcaamGameContext): string {
 
   return parts.join(" ");
 }
-
