@@ -1,0 +1,36 @@
+{
+  "status": "completed",
+  "sims_requested": 100000,
+  "pid": 31096,
+  "started_at_utc": "2026-07-29T15:53:29Z",
+  "finished_at_utc": "2026-07-29T16:12:46.331676+00:00",
+  "updated_at_utc": "2026-07-29T17:34:00Z",
+  "output_dir": "data/ops/nfl-preseason-sim-2026-20260729T160818Z",
+  "season_monte_carlo_iterations": 100000,
+  "game_simulation_count_neutral": 900,
+  "games_regular": 272,
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 7.9996,
+    "sum_playoff_prob": 13.9999
+  },
+  "player_publish_ready": false,
+  "player_publish_ready_why": [
+    "pass: dual_full_volume_qb_rooms_count=7 (CIN/CLE/NO/ATL/SF/MIN/WAS) — depth-chart volume not resolved to one starter",
+    "skill: top_rusher 1307.5 < 1400 threshold (J.Taylor)",
+    "skill: top_receiver 1234.9 < 1300 threshold (J.Chase); wr_with_1200_plus_count=1 < 3"
+  ],
+  "projections_hub_readable": true,
+  "projections_hub_bundle": "nfl-preseason-sim-2026-20260729T160818Z",
+  "log_path": "data/ops/nfl-100k-sim-run.log",
+  "command": "NFL_SEASON_SIMS=100000 .venv/bin/python -u scripts/nfl/simulate_2026_season.py",
+  "constraints": {
+    "no_play_widen": true,
+    "no_reenable_EBA": true,
+    "no_odds_densify": true
+  },
+  "notes": [
+    "Monitor died mid-run; finalized manually after verify",
+    "publish_ready left false — do not fake green; QB room + skill leader gates failed honestly"
+  ]
+}

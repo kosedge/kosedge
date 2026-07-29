@@ -21,20 +21,20 @@ Default without env is **50,000** replicates (`N_REPLICATES = int(os.getenv("NFL
 
 Web hub reads the latest bundle via `apps/web/lib/nfl-preseason-artifacts.ts`.
 
-## Pilot status (2026-07-29)
+## Status (2026-07-29)
 
 | Check | Result |
 | --- | --- |
 | Env wiring | **Done** (`NFL_SEASON_SIMS`) |
-| Existing 50k bundle | Present under `data/ops/nfl-preseason-sim-2026-*` (if prior run) |
-| Fresh 100k run this session | **Not completed** — full 100k is multi-hour (pairwise matrix + 100k replicates + player totals). Do not fake readiness. |
+| Fresh 100k run | **Completed** → `data/ops/nfl-preseason-sim-2026-20260729T160818Z` |
+| Iterations | **100000** (`quality_checks.json` metadata) |
+| Sanity | SB 1.0000 · division 7.9996 · playoff 13.9999 |
+| Player `publish_ready` | **false** (7 dual QB rooms; skill leader floors) — do not fake |
 
-## Blockers / needs
-
-1. Long wall-clock on local or Railway worker (prefer overnight).
-2. Stable `DATABASE_URL` with 2026 market projections for all 272 REG games.
-3. After run: verify `quality_checks.json` SB/division/playoff sums ≈ 1.0 / 8.0 / ~12–14.
+Progress: `data/ops/nfl-100k-sim-progress.{json,md}` · Log: `data/ops/nfl-100k-sim-run.log`
 
 ## Honest readiness
 
-Futures / win-total boards are **usable on existing ~50k bundle**; **100k is the production target**, not a blocker for selective Week-1 sides PLAY.
+Team futures / win totals from the **100k** bundle are production-usable for the hub.  
+Player season totals stay **research-grade** until depth-chart volume clears `publish_ready`.  
+100k is **not** a blocker for selective Week-1 sides PLAY.
