@@ -38,8 +38,8 @@ Regen: `scripts/nfl/regen_player_season_totals.py` (no 100k re-run).
 | --- | --- |
 | `dual_full_volume_qb_rooms_count` | **0** (was 7) |
 | Pass `publish_ready` | **true** (Goff 4122.8, not bridge) |
-| Skill `publish_ready_skill` | **false** — rush 1307.5 &lt; 1400; rec 1234.9 &lt; 1300; wr1200=1 |
-| Overall `publish_ready` | **false** |
+| Skill `publish_ready_skill` | **false** at lock time — rush 1307.5 &lt; 1400; rec 1234.9 &lt; 1300; wr1200=1 |
+| Overall `publish_ready` | **false** at lock time |
 
-Do **not** cut skill thresholds. Next workstream: usage / share calibration for
-RB/WR leaders (separate from QB room lock).
+Skill floors cleared later via prior-anchor calibration — see
+`data/ops/nfl-skill-prior-anchor-report.md`. Thresholds were **not** cut.

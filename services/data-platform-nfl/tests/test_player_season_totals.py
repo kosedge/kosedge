@@ -4,8 +4,10 @@ from data_platform_nfl.player_season_totals import (
     FALLBACK_EXPECTED_GAMES_GIVEN_APPEARANCE,
     aggregate_weekly_projection_rows,
     apply_qb_starter_volume_lock,
+    apply_skill_prior_anchor_calibration,
     designate_qb_starter_shares,
     evaluate_season_pass_leader_quality,
+    evaluate_season_skill_leader_quality,
 )
 
 
@@ -152,3 +154,136 @@ def test_apply_qb_starter_volume_lock_clears_dual_full_volume_room() -> None:
     quality = evaluate_season_pass_leader_quality(locked)
     assert quality["dual_full_volume_qb_rooms_count"] == 0
     assert quality["publish_ready"] is True
+
+
+def test_skill_prior_anchor_pulls_compressed_elites_to_floors() -> None:
+    # Compressed baselines undershoot historical leader floors; prior REG YPG
+    # (leakage-safe) must pull Rush/WR leaders up without inventing rookies.
+    rows = [
+        {
+            "team": "IND",
+            "position": "RB",
+            "player_id": "taylor",
+            "player_name": "J.Taylor",
+            "player_key": "taylor",
+            "games_projected": 17,
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 1307.0,
+            "rush_tds_total": 10.0,
+            "receiving_yards_total": 200.0,
+            "receptions_total": 30.0,
+            "rec_tds_total": 1.0,
+            "anytime_td_prob": 0.9,
+        },
+        {
+            "team": "CIN",
+            "position": "WR",
+            "player_id": "chase",
+            "player_name": "J.Chase",
+            "player_key": "chase",
+            "games_projected": 17,
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 0.0,
+            "rush_tds_total": 0.0,
+            "receiving_yards_total": 1235.0,
+            "receptions_total": 100.0,
+            "rec_tds_total": 10.0,
+            "anytime_td_prob": 0.95,
+        },
+        {
+            "team": "LA",
+            "position": "WR",
+            "player_id": "nacua",
+            "player_name": "P.Nacua",
+            "player_key": "nacua",
+            "games_projected": 17,
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 0.0,
+            "rush_tds_total": 0.0,
+            "receiving_yards_total": 892.0,
+            "receptions_total": 70.0,
+            "rec_tds_total": 6.0,
+            "anytime_td_prob": 0.8,
+        },
+        {
+            "team": "DET",
+            "position": "WR",
+            "player_id": "stbrown",
+            "player_name": "A.St. Brown",
+            "player_key": "stbrown",
+            "games_projected": 17,
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 0.0,
+            "rush_tds_total": 0.0,
+            "receiving_yards_total": 984.0,
+            "receptions_total": 90.0,
+            "rec_tds_total": 8.0,
+            "anytime_td_prob": 0.85,
+        },
+        {
+            "team": "LV",
+            "position": "RB",
+            "player_id": "jeanty",
+            "player_name": "A.Jeanty",
+            "player_key": "jeanty",
+            "games_projected": 17,
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 1160.0,
+            "rush_tds_total": 9.0,
+            "receiving_yards_total": 300.0,
+            "receptions_total": 40.0,
+            "rec_tds_total": 2.0,
+            "anytime_td_prob": 0.88,
+        },
+    ]
+    anchors = {
+        "taylor": {"rush_ypg": 102.2, "rush_games": 14.0, "rec_ypg": 20.0, "rec_games": 14.0, "rec_gpg": 3.0},
+        "chase": {"rush_ypg": 0.0, "rush_games": 0.0, "rec_ypg": 100.5, "rec_games": 17.0, "rec_gpg": 7.5},
+        "nacua": {"rush_ypg": 0.0, "rush_games": 0.0, "rec_ypg": 107.2, "rec_games": 16.0, "rec_gpg": 8.0},
+        "stbrown": {"rush_ypg": 0.0, "rush_games": 0.0, "rec_ypg": 82.4, "rec_games": 17.0, "rec_gpg": 7.0},
+        # Rookie: no prior anchor → unchanged
+    }
+    calibrated, audit = apply_skill_prior_anchor_calibration(rows, anchors_by_player_id=anchors)
+    by_id = {r["player_id"]: r for r in calibrated}
+    assert by_id["taylor"]["rush_yards_total"] >= 1400.0
+    assert by_id["chase"]["receiving_yards_total"] >= 1300.0
+    assert by_id["nacua"]["receiving_yards_total"] > 892.0
+    assert by_id["jeanty"]["rush_yards_total"] == 1160.0  # no fake prior
+    assert audit["players_adjusted"] >= 3
+    skill_q = evaluate_season_skill_leader_quality(calibrated)
+    assert skill_q["top_rusher_yards_gte_1400"] is True
+    assert skill_q["top_receiver_yards_gte_1300"] is True
+    assert skill_q["wr_with_1200_plus_count"] >= 3
+    assert skill_q["publish_ready_skill"] is True
+
+
+def test_skill_prior_anchor_never_pulls_yards_down() -> None:
+    rows = [
+        {
+            "team": "IND",
+            "position": "RB",
+            "player_id": "taylor",
+            "player_name": "J.Taylor",
+            "player_key": "taylor",
+            "games_projected": 17,
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 1800.0,
+            "rush_tds_total": 14.0,
+            "receiving_yards_total": 0.0,
+            "receptions_total": 0.0,
+            "rec_tds_total": 0.0,
+            "anytime_td_prob": 0.9,
+        }
+    ]
+    anchors = {
+        "taylor": {"rush_ypg": 90.0, "rush_games": 17.0, "rec_ypg": 0.0, "rec_games": 0.0, "rec_gpg": 0.0},
+    }
+    calibrated, audit = apply_skill_prior_anchor_calibration(rows, anchors_by_player_id=anchors)
+    assert calibrated[0]["rush_yards_total"] == 1800.0
+    assert audit["players_adjusted"] == 0

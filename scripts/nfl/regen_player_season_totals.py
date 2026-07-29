@@ -116,6 +116,7 @@ def main() -> None:
                     (summary.get("skill_leader_quality") or {}).get("wr_with_1200_plus_count")
                 ),
             },
+            "skill_prior_anchor": summary.get("skill_prior_anchor"),
         }
     )
     why = []

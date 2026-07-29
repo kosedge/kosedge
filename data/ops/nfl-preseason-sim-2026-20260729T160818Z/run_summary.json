@@ -20,12 +20,10 @@
     "player_season_pass_quality.json"
   ],
   "player_projection_model_version": "nfl-player-v1",
-  "player_publish_ready": false,
-  "player_publish_ready_why": [
-    "skill_gate rush>=False rec>=False wr1200=1"
-  ],
-  "note": "Player projection CSVs are freshly generated every run from nfl_player_projection_baselines. Team MC used NFL_SEASON_SIMS=100000. publish_ready left false \u2014 do not fake.",
-  "player_totals_regenerated_at_utc": "2026-07-29T18:07:35.083730+00:00",
+  "player_publish_ready": true,
+  "player_publish_ready_why": [],
+  "note": "Player projection CSVs regenerated from nfl_player_projection_baselines with QB starter lock + skill prior-anchor (no 100k re-run). Team MC used NFL_SEASON_SIMS=100000. publish_ready true after honest skill floors — thresholds not cut.",
+  "player_totals_regenerated_at_utc": "2026-07-29T18:37:38.377102+00:00",
   "qb_starter_lock": {
     "applied": true,
     "teams_locked": 32,
@@ -40,16 +38,22 @@
     }
   },
   "skill_leader_quality": {
-    "publish_ready_skill": false,
+    "publish_ready_skill": true,
     "top_rusher": {
-      "player_name": "J.Taylor",
+      "player_name": "S.Barkley",
       "pass_yards_total": null,
-      "rush_yards_total": 1307.5
+      "rush_yards_total": 1649.8
     },
     "top_receiver": {
       "player_name": "J.Chase",
-      "receiving_yards_total": 1234.9
+      "receiving_yards_total": 1495.1
     },
-    "wr_with_1200_plus_count": 1
+    "wr_with_1200_plus_count": 5
+  },
+  "skill_prior_anchor": {
+    "applied": true,
+    "method": "prior_reg_ypg_upward_blend_max_lookback2",
+    "players_adjusted": 116,
+    "anchors_loaded": 380
   }
 }

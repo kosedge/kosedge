@@ -248,27 +248,33 @@
     },
     "skill_leader_quality": {
       "top_rusher": {
-        "player_name": "J.Taylor",
+        "player_name": "S.Barkley",
         "pass_yards_total": null,
-        "rush_yards_total": 1307.5
+        "rush_yards_total": 1649.8
       },
       "top_receiver": {
         "player_name": "J.Chase",
-        "receiving_yards_total": 1234.9
+        "receiving_yards_total": 1495.1
       },
-      "top_rusher_yards_gte_1400": false,
-      "top_receiver_yards_gte_1300": false,
-      "wr_with_1200_plus_count": 1,
-      "rb_with_1400_plus_count": 0,
+      "top_rusher_yards_gte_1400": true,
+      "top_receiver_yards_gte_1300": true,
+      "wr_with_1200_plus_count": 5,
+      "rb_with_1400_plus_count": 3,
       "dual_1000_yard_rb_rooms": [],
       "dual_1000_yard_rb_rooms_count": 0,
-      "publish_ready_skill": false
+      "publish_ready_skill": true
     },
     "qb_starter_lock": {
       "applied": true,
       "teams_locked": 32,
       "method": "depth_week1_plus_prior_attempts_winner_take_most"
     },
-    "publish_ready": false
+    "skill_prior_anchor": {
+      "applied": true,
+      "method": "prior_reg_ypg_upward_blend_max_lookback2",
+      "players_adjusted": 116,
+      "anchors_loaded": 380
+    },
+    "publish_ready": true
   }
 }
