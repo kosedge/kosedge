@@ -5,6 +5,8 @@ export type NflFairLineRow = {
   gameId: string;
   season: number;
   week: number | null;
+  /** REG / PRE / POST — PRE never gets season PLAY tags under info desk. */
+  seasonType: string | null;
   startTime: string | null;
   gameDate: string | null;
   homeTeam: string;
@@ -39,6 +41,10 @@ export type NflFairLineRow = {
   totalEdge: number | null;
   spreadEdge: number | null;
   marketJoined: boolean;
+  /** Server publish policy (mirrors Edge Board; authoritative for PRE block). */
+  publishTagSpread: "PLAY" | "LEAN" | "PASS" | null;
+  publishTagTotal: "PLAY" | "LEAN" | "PASS" | null;
+  publishTagMl: "PLAY" | "LEAN" | "PASS" | null;
 };
 
 export type NflFairLinesResponse = {
@@ -84,11 +90,25 @@ function toIsoOrNull(value: unknown): string | null {
   return null;
 }
 
+function normalizePublishTag(
+  value: unknown,
+): "PLAY" | "LEAN" | "PASS" | null {
+  const token = String(value ?? "")
+    .trim()
+    .toUpperCase();
+  if (token === "PLAY" || token === "LEAN" || token === "PASS") return token;
+  return null;
+}
+
 function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
   return {
     gameId: String(raw.game_id ?? ""),
     season: toNumber(raw.season),
     week: toNumberOrNull(raw.week),
+    seasonType:
+      typeof raw.season_type === "string" && raw.season_type.trim()
+        ? raw.season_type.trim().toUpperCase()
+        : null,
     startTime: toIsoOrNull(raw.start_time),
     gameDate: toIsoOrNull(raw.game_date),
     homeTeam: String(raw.home_team ?? "Home"),
@@ -127,6 +147,9 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     totalEdge: toNumberOrNull(raw.total_edge),
     spreadEdge: toNumberOrNull(raw.spread_edge),
     marketJoined: Boolean(raw.market_joined),
+    publishTagSpread: normalizePublishTag(raw.publish_tag_spread),
+    publishTagTotal: normalizePublishTag(raw.publish_tag_total),
+    publishTagMl: normalizePublishTag(raw.publish_tag_ml),
   };
 }
 

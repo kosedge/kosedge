@@ -98,11 +98,17 @@ def compute_error_regime_uncertainty(
     injury_impact: float = 0.0,
     max_stdev_widen: float = 0.85,
     confidence_penalty_weight: float = 0.06,
+    season_week: Optional[int] = None,
+    early_season_max_week: int = 4,
+    early_season_regime_boost: float = 0.18,
 ) -> Dict[str, Any]:
     """Light error-regime detector: widen stdev / cut confidence; no point shift.
 
     High-velocity injury news, very fresh status changes, missing weather, or
     thin factor coverage push the regime score up.
+
+    Early-season (W1–W4) adds a decaying D-style uncertainty boost — not a
+    50% blend — so confidence shrinks while point estimates stay unblended.
     """
     regime = 0.0
     regime += _clamp(abs(info_velocity_abs) / 1.5, 0.0, 1.0) * 0.45
@@ -112,6 +118,16 @@ def compute_error_regime_uncertainty(
         regime += 0.15
     regime += _clamp(1.0 - factor_coverage, 0.0, 1.0) * 0.20
     regime += _clamp(injury_impact, 0.0, 1.0) * 0.15
+    early_boost = 0.0
+    if (
+        season_week is not None
+        and early_season_max_week > 0
+        and 1 <= int(season_week) <= int(early_season_max_week)
+    ):
+        # W1 full boost → W4 half boost (linear decay within the window).
+        frac = (int(season_week) - 1) / float(early_season_max_week)
+        early_boost = float(early_season_regime_boost) * (1.0 - 0.5 * frac)
+        regime += early_boost
     regime = _clamp(regime, 0.0, 1.0)
 
     stdev_widen = round(regime * max_stdev_widen, 4)
@@ -123,6 +139,7 @@ def compute_error_regime_uncertainty(
         "available": True,
         "margin_points": 0.0,
         "total_points": 0.0,
+        "early_season_boost": round(early_boost, 4),
         "notes": "Uncertainty widening only; no unsupervised point shift.",
     }
 

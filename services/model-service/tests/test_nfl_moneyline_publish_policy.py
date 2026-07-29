@@ -83,6 +83,16 @@ def test_preseason_blocks_season_play_tags():
     assert out["reason"] == "preseason_info_desk"
     assert out["stake_eligible"] is False
 
+    ml = publish_moneyline_tag(
+        spread_tag="PLAY",
+        spread_stake_eligible=True,
+        model_win_prob=0.7,
+        offered_american=120,
+        season_type="PRE",
+    )
+    assert ml["tag"] == "PASS"
+    assert ml["reason"] == "preseason_info_desk"
+
 
 def test_totals_sides_only_launch():
     out = publish_tag(

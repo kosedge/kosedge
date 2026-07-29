@@ -11,6 +11,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
+from src.services.nfl_side_total_publish_policy import (
+    is_preseason_info_mode,
+    is_preseason_season_type,
+)
+
 # Stricter than spread: require clear price edge after juice.
 ML_MIN_EV = 0.02  # +2% EV on a 1-unit stake
 POLICY_VERSION = "ml_from_spread_play_v1"
@@ -50,8 +55,16 @@ def publish_moneyline_tag(
     offered_american: Optional[float],
     product_gate_status: str = "YELLOW",
     min_ev: float = ML_MIN_EV,
+    season_type: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Return ML tag. PASS unless spread PLAY + EV bar clear."""
+    if is_preseason_season_type(season_type) and is_preseason_info_mode():
+        return {
+            "tag": "PASS",
+            "stake_eligible": False,
+            "reason": "preseason_info_desk",
+            "policy_version": POLICY_VERSION,
+        }
     status = (product_gate_status or "YELLOW").upper()
     if status == "RED":
         return {

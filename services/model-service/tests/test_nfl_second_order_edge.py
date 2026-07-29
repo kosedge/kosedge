@@ -215,6 +215,18 @@ def test_error_regime_widens_without_point_shift() -> None:
     assert regime["stdev_widen"] <= 0.85
 
 
+def test_error_regime_early_season_boost_decays() -> None:
+    base = compute_error_regime_uncertainty(factor_coverage=1.0)
+    w1 = compute_error_regime_uncertainty(factor_coverage=1.0, season_week=1)
+    w4 = compute_error_regime_uncertainty(factor_coverage=1.0, season_week=4)
+    w5 = compute_error_regime_uncertainty(factor_coverage=1.0, season_week=5)
+    assert w1["regime_score"] > base["regime_score"]
+    assert w1["early_season_boost"] > w4["early_season_boost"] > 0
+    assert w5["early_season_boost"] == 0.0
+    assert w1["margin_points"] == 0.0
+    assert w1["total_points"] == 0.0
+
+
 def test_personnel_coach_info_velocity_in_decomposition() -> None:
     # Opt-in killed factors for pure-fn wiring checks (defaults are OFF post-ablation).
     enable_all = {

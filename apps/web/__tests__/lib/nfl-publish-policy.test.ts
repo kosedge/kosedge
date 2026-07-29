@@ -42,6 +42,16 @@ describe("nfl-publish-policy", () => {
     const out = nflPublishTag("spread", 3.5, "YELLOW", "PRE");
     expect(out.tag).toBe("PASS");
     expect(out.reason).toBe("preseason_info_desk");
+
+    const ml = nflPublishMoneylineTag({
+      spreadTag: "PLAY",
+      spreadStakeEligible: true,
+      modelWinProb: 0.7,
+      offeredAmerican: 120,
+      seasonType: "PRE",
+    });
+    expect(ml.tag).toBe("PASS");
+    expect(ml.reason).toBe("preseason_info_desk");
   });
 
   it("computes vig-aware ML EV", () => {

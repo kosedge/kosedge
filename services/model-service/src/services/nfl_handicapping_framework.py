@@ -852,6 +852,7 @@ def compute_nfl_projection_decomposition(
             "regime_score": 0.0,
         }
     else:
+        season_week = second_order_as_of_week if second_order_as_of_week is not None else kav_as_of_week
         error_regime = compute_error_regime_uncertainty(
             info_velocity_abs=max(v_home_abs, v_away_abs),
             hours_since_injury_change=hours_change,
@@ -860,6 +861,7 @@ def compute_nfl_projection_decomposition(
             injury_impact=injury_impact_avg,
             max_stdev_widen=float(err_cfg["max_stdev_widen"]),
             confidence_penalty_weight=float(err_cfg["confidence_penalty_weight"]),
+            season_week=int(season_week) if season_week is not None else None,
         )
         contributions["error_regime"] = {
             "margin_points": 0.0,
@@ -870,6 +872,8 @@ def compute_nfl_projection_decomposition(
                 "regime_score": error_regime["regime_score"],
                 "stdev_widen": error_regime["stdev_widen"],
                 "confidence_penalty": error_regime["confidence_penalty"],
+                "early_season_boost": error_regime.get("early_season_boost"),
+                "season_week": season_week,
             },
         }
 

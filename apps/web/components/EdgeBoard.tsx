@@ -23,6 +23,10 @@ export type FlatEdgeBoardRow = {
   note?: string;
   commenceTime?: string;
   kei?: string;
+  /** REG / PRE / POST — PRE blocked from season PLAY under info desk. */
+  seasonType?: string;
+  /** Authoritative server tag when present (fair-lines publish policy). */
+  publishTag?: "PLAY" | "LEAN" | "PASS";
 };
 
 export type EdgeBoardRow = FlatEdgeBoardRow;
@@ -269,17 +273,30 @@ function edgeToTag(
   edgeNum: number | undefined,
   market: EdgeMarket,
   sportKey = "ncaam",
+  seasonType?: string | null,
+  serverPublishTag?: Tag | null,
 ): Tag | undefined {
-  if (edgeNum == null) return undefined;
+  if (edgeNum == null && !serverPublishTag) return undefined;
   const nfl = String(sportKey).toLowerCase() === "nfl";
   if (nfl) {
+    // Prefer model-service publish tags when present (includes PRE block).
+    if (
+      serverPublishTag === "PLAY" ||
+      serverPublishTag === "LEAN" ||
+      serverPublishTag === "PASS"
+    ) {
+      return serverPublishTag;
+    }
+    if (edgeNum == null) return undefined;
     const pub = nflPublishTag(
       market === "total" ? "total" : "spread",
       edgeNum,
       "YELLOW",
+      seasonType,
     );
     return pub.tag;
   }
+  if (edgeNum == null) return undefined;
   if (edgeNum >= 2.5) return "PLAY";
   if (edgeNum >= 1.0) return "LEAN";
   return "PASS";
@@ -550,8 +567,20 @@ export function flatRowsToLegacy(
       playLine,
       playOU,
       edgeOUCaution: isNflTotalCaution(edgeOUNum, sportKey),
-      tagLine: edgeToTag(edgeLineNum, "line", sportKey),
-      tagOU: edgeToTag(edgeOUNum, "total", sportKey),
+      tagLine: edgeToTag(
+        edgeLineNum,
+        "line",
+        sportKey,
+        spreadRow?.seasonType ?? totalRow?.seasonType,
+        spreadRow?.publishTag,
+      ),
+      tagOU: edgeToTag(
+        edgeOUNum,
+        "total",
+        sportKey,
+        totalRow?.seasonType ?? spreadRow?.seasonType,
+        totalRow?.publishTag,
+      ),
       overview: generateGameOverview(away, home),
     });
   }
