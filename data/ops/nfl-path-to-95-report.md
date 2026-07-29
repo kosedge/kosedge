@@ -15,7 +15,7 @@ Active supervised fit: **schema v3** (ST v4 rejected; QB continuity probe reject
 | Primary 2025 CLV n≥200 | **BLOCKED** — ~112 PLAY spreads under v2 (math ceiling) |
 | Walk-forward tighter bands | **Registered research-only** — better CLV+, fail n_clv≥200 |
 | ST KAV / QB continuity | **Built + tested — NOT promoted** |
-| Honest score (now) | **7.6 / 10** (no bump — failed probes; product band unchanged) |
+| Honest score (now) | **7.7 / 10** (provisional +0.1 for narrow E/H/D wiring; holdout ablation pending — see `nfl-narrow-second-order-report.md`) |
 
 **Product env note:** set `NFL_PRODUCT_GATE_STATUS=YELLOW` to surface selective PLAY (RED forces all PASS). This is the main user-env gate for publishing tags; model work below still ships regardless.
 
@@ -84,9 +84,9 @@ PASS default remains. Prefer `NFL_PRODUCT_GATE_STATUS=YELLOW` to surface v2 PLAY
 
 ---
 
-## 5) Honest score: **7.6 / 10**
+## 5) Honest score: **7.7 / 10**
 
-No score bump this iteration: ST/QB rejected; product band unchanged; primary-2025 CLV n≥200 still math-blocked; 2026 paper has no settled grades yet.
+Provisional +0.1 after narrow second-order ship (info velocity, travel×weather, thin coach, light error-regime). **Not** holdout-confirmed. ST/QB remain rejected; product band unchanged; primary-2025 CLV n≥200 still math-blocked. Details: `nfl-narrow-second-order-report.md`.
 
 ---
 
