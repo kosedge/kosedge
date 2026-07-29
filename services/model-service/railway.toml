@@ -1,8 +1,8 @@
-# Used when Railway's service root / path-as-root is services/model-service.
-# Dockerfile lives here (not at monorepo root). Prefer GHA:
+# Brave-art model-service: GHA uses
 #   railway up services/model-service --path-as-root
-# Do NOT connect native GitHub auto-deploy with empty rootDirectory — Metal
-# will unpack the monorepo and fail with "couldn't locate the dockerfile".
+# Dashboard rootDirectory is ALSO services/model-service, so Metal resolves
+# Dockerfile at services/model-service/Dockerfile *inside* the uploaded tree
+# (= nested path). Keep services/model-service/Dockerfile in sync with ./Dockerfile.
 
 [build]
 builder = "DOCKERFILE"
