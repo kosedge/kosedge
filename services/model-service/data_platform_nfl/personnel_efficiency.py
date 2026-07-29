@@ -79,6 +79,19 @@ def compute_personnel_edge(
     return _clamp(edge / max(0.05, weight) / 0.05, -3.0, 3.0)
 
 
+def light_usage_elasticity_tilt(
+    *,
+    base_usage: float,
+    elasticity_5g: Optional[float],
+    max_tilt: float = 0.04,
+) -> float:
+    """Light player-usage tilt from team sub elasticity (bounded; optional hook)."""
+    if elasticity_5g is None:
+        return float(base_usage)
+    tilt = _clamp(float(elasticity_5g) * 0.02, -max_tilt, max_tilt)
+    return _clamp(float(base_usage) * (1.0 + tilt), 0.0, 1.0)
+
+
 def compute_substitution_elasticity(
     *,
     snap_pcts: Sequence[float],

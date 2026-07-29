@@ -124,6 +124,149 @@ def _freshness_multiplier(age_hours: float) -> float:
     return _clamp(decay, stale_floor, 1.0)
 
 
+def _report_severity_rank(report_status: Optional[str]) -> float:
+    """Higher = worse availability. Used for upgrade/downgrade deltas."""
+    return _status_weight(report_status)
+
+
+def _practice_severity_rank(practice_status: Optional[str]) -> float:
+    return _practice_weight(practice_status)
+
+
+def compute_player_status_delta(
+    *,
+    prior_report: Optional[str],
+    prior_practice: Optional[str],
+    current_report: Optional[str],
+    current_practice: Optional[str],
+    position: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Pure upgrade/downgrade delta for one player between two report snapshots.
+
+    Positive delta_severity = downgrade (worse news). Negative = upgrade.
+    """
+    prior_sev = 0.7 * _report_severity_rank(prior_report) + 0.3 * _practice_severity_rank(prior_practice)
+    curr_sev = 0.7 * _report_severity_rank(current_report) + 0.3 * _practice_severity_rank(current_practice)
+    raw_delta = curr_sev - prior_sev
+    pos_w = _position_weights(position)
+    importance = max(pos_w["offense"], pos_w["defense"], 0.15)
+    weighted = raw_delta * importance
+    direction = "stable"
+    if weighted > 0.04:
+        direction = "downgrade"
+    elif weighted < -0.04:
+        direction = "upgrade"
+    return {
+        "direction": direction,
+        "delta_severity": round(raw_delta, 4),
+        "weighted_delta": round(weighted, 4),
+        "importance": round(importance, 4),
+    }
+
+
+def compute_team_info_velocity(
+    current_rows: List[Dict[str, Any]],
+    prior_rows: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Team-level injury/practice information velocity from week-over-week rows.
+
+    Net velocity > 0 means net downgrades (worse availability). Bounded.
+    hours_since_change uses freshest updated_at among changed players.
+    """
+    prior_by_key = {
+        str(r.get("player_key") or r.get("player_id") or r.get("player_name") or ""): r
+        for r in prior_rows
+        if (r.get("player_key") or r.get("player_id") or r.get("player_name"))
+    }
+    upgrades = 0
+    downgrades = 0
+    net_weighted = 0.0
+    hours_since_change: Optional[float] = None
+    change_drivers: List[Dict[str, Any]] = []
+
+    for row in current_rows:
+        key = str(row.get("player_key") or row.get("player_id") or row.get("player_name") or "")
+        if not key:
+            continue
+        prior = prior_by_key.get(key)
+        if prior is None:
+            # New listing vs prior week ≈ mild downgrade signal.
+            delta = compute_player_status_delta(
+                prior_report="healthy",
+                prior_practice="full",
+                current_report=row.get("report_status"),
+                current_practice=row.get("practice_status"),
+                position=row.get("position"),
+            )
+        else:
+            delta = compute_player_status_delta(
+                prior_report=prior.get("report_status"),
+                prior_practice=prior.get("practice_status"),
+                current_report=row.get("report_status"),
+                current_practice=row.get("practice_status"),
+                position=row.get("position"),
+            )
+        if delta["direction"] == "stable":
+            continue
+        if delta["direction"] == "upgrade":
+            upgrades += 1
+        else:
+            downgrades += 1
+        net_weighted += float(delta["weighted_delta"])
+        age = _age_hours(row.get("updated_at"))
+        if hours_since_change is None or age < hours_since_change:
+            hours_since_change = age
+        change_drivers.append(
+            {
+                "player_name": row.get("player_name"),
+                "position": row.get("position"),
+                "direction": delta["direction"],
+                "weighted_delta": delta["weighted_delta"],
+                "hours_since_update": round(age, 3) if age < 999 else None,
+            }
+        )
+
+    # Removals from prior week (cleared) ≈ upgrade.
+    curr_keys = {
+        str(r.get("player_key") or r.get("player_id") or r.get("player_name") or "")
+        for r in current_rows
+    }
+    for key, prior in prior_by_key.items():
+        if key in curr_keys:
+            continue
+        delta = compute_player_status_delta(
+            prior_report=prior.get("report_status"),
+            prior_practice=prior.get("practice_status"),
+            current_report="healthy",
+            current_practice="full",
+            position=prior.get("position"),
+        )
+        if delta["direction"] == "upgrade":
+            upgrades += 1
+            net_weighted += float(delta["weighted_delta"])
+            change_drivers.append(
+                {
+                    "player_name": prior.get("player_name"),
+                    "position": prior.get("position"),
+                    "direction": "upgrade",
+                    "weighted_delta": delta["weighted_delta"],
+                    "hours_since_update": None,
+                }
+            )
+
+    velocity_score = _clamp(net_weighted, -2.5, 2.5)
+    change_drivers = sorted(change_drivers, key=lambda d: abs(float(d["weighted_delta"])), reverse=True)[:5]
+    return {
+        "velocity_score": round(velocity_score, 4),
+        "upgrade_count": upgrades,
+        "downgrade_count": downgrades,
+        "change_count": upgrades + downgrades,
+        "hours_since_change": round(hours_since_change, 3) if hours_since_change is not None else None,
+        "top_change_drivers": change_drivers,
+        "available": bool(current_rows or prior_rows),
+    }
+
+
 def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     if not rows:
         return {
@@ -298,29 +441,21 @@ def compute_team_week_injury_severity(rows: List[Dict[str, Any]]) -> Dict[str, f
     }
 
 
-def fetch_nfl_injury_nowcast(
+def _fetch_injury_rows_for_week(
     session: Any,
     *,
-    season_year: Optional[int],
+    season: int,
     home_team: str,
     away_team: str,
-) -> Dict[str, Any]:
-    season = int(season_year) if season_year is not None else datetime.now(timezone.utc).year
-    rows = session.execute(
-        text(
-            """
+    week: Optional[int],
+) -> List[Dict[str, Any]]:
+    """Fetch injury rows for a specific week (or latest per player when week is None)."""
+    if week is None:
+        sql = """
             WITH latest AS (
               SELECT DISTINCT ON (i.team, i.player_key)
-                i.season,
-                i.week,
-                i.team,
-                i.player_key,
-                i.player_id,
-                i.player_name,
-                i.report_status,
-                i.practice_status,
-                i.injury,
-                i.updated_at
+                i.season, i.week, i.team, i.player_key, i.player_id, i.player_name,
+                i.report_status, i.practice_status, i.injury, i.updated_at
               FROM nfl_dp_injuries i
               WHERE i.season = :season
                 AND (i.team = :home_team OR i.team = :away_team)
@@ -329,10 +464,6 @@ def fetch_nfl_injury_nowcast(
             SELECT
               latest.season, latest.week, latest.team, latest.player_key, latest.player_name,
               latest.report_status, latest.practice_status, latest.injury, latest.updated_at,
-              -- nfl_dp_injuries has no position column; backfill from the same
-              -- season/team roster by player_id so QB/skill-position weighting
-              -- (see _position_weights) actually differentiates by position
-              -- instead of silently falling back to the generic default.
               r.position
             FROM latest
             LEFT JOIN nfl_dp_rosters r
@@ -340,14 +471,51 @@ def fetch_nfl_injury_nowcast(
              AND r.team = latest.team
              AND r.player_id = latest.player_id
             """
-        ),
-        {
+        params: Dict[str, Any] = {
             "season": season,
             "home_team": home_team,
             "away_team": away_team,
-        },
-    ).fetchall()
-    injury_rows = [dict(row._mapping) for row in rows]
+        }
+    else:
+        sql = """
+            SELECT
+              i.season, i.week, i.team, i.player_key, i.player_name,
+              i.report_status, i.practice_status, i.injury, i.updated_at,
+              r.position
+            FROM nfl_dp_injuries i
+            LEFT JOIN nfl_dp_rosters r
+              ON r.season = i.season
+             AND r.team = i.team
+             AND r.player_id = i.player_id
+            WHERE i.season = :season
+              AND i.week = :week
+              AND (i.team = :home_team OR i.team = :away_team)
+            """
+        params = {
+            "season": season,
+            "week": int(week),
+            "home_team": home_team,
+            "away_team": away_team,
+        }
+    rows = session.execute(text(sql), params).fetchall()
+    return [dict(row._mapping) for row in rows]
+
+
+def fetch_nfl_injury_nowcast(
+    session: Any,
+    *,
+    season_year: Optional[int],
+    home_team: str,
+    away_team: str,
+) -> Dict[str, Any]:
+    season = int(season_year) if season_year is not None else datetime.now(timezone.utc).year
+    injury_rows = _fetch_injury_rows_for_week(
+        session,
+        season=season,
+        home_team=home_team,
+        away_team=away_team,
+        week=None,
+    )
     home_key = _normalize_team_key(home_team)
     away_key = _normalize_team_key(away_team)
 
@@ -363,6 +531,42 @@ def fetch_nfl_injury_nowcast(
     ]
     home_nowcast = _aggregate_team_nowcast(home_rows)
     away_nowcast = _aggregate_team_nowcast(away_rows)
+
+    # Info velocity: compare latest week vs prior week listings (same season).
+    latest_weeks = [int(r["week"]) for r in injury_rows if r.get("week") is not None]
+    as_of_week = max(latest_weeks) if latest_weeks else None
+    prior_week = (as_of_week - 1) if as_of_week is not None and as_of_week > 1 else None
+    prior_rows: List[Dict[str, Any]] = []
+    if prior_week is not None:
+        try:
+            prior_rows = _fetch_injury_rows_for_week(
+                session,
+                season=season,
+                home_team=home_team,
+                away_team=away_team,
+                week=prior_week,
+            )
+        except Exception:
+            prior_rows = []
+
+    home_prior = [
+        row
+        for row in prior_rows
+        if _normalize_team_key(str(row.get("team") or "")) == home_key
+    ]
+    away_prior = [
+        row
+        for row in prior_rows
+        if _normalize_team_key(str(row.get("team") or "")) == away_key
+    ]
+    home_velocity = compute_team_info_velocity(home_rows, home_prior)
+    away_velocity = compute_team_info_velocity(away_rows, away_prior)
+    home_nowcast["info_velocity"] = home_velocity
+    away_nowcast["info_velocity"] = away_velocity
+    home_nowcast["info_velocity_score"] = home_velocity.get("velocity_score")
+    away_nowcast["info_velocity_score"] = away_velocity.get("velocity_score")
+    home_nowcast["hours_since_change"] = home_velocity.get("hours_since_change")
+    away_nowcast["hours_since_change"] = away_velocity.get("hours_since_change")
 
     # Layer in known offseason roster moves (see nfl_roster_continuity.py)
     # -- e.g. a season-long free-agency/trade departure that the current
@@ -395,5 +599,7 @@ def fetch_nfl_injury_nowcast(
         "home": home_nowcast,
         "away": away_nowcast,
         "game_confidence": game_confidence,
+        "info_velocity_as_of_week": as_of_week,
+        "info_velocity_prior_week": prior_week,
     }
 

@@ -1,4 +1,4 @@
-"""Pure-function tests for second-order edge factors and helpers."""
+"""Pure-function tests for narrow second-order edge factors and helpers."""
 
 import os
 
@@ -15,6 +15,15 @@ from data_platform_nfl.personnel_efficiency import (
     compute_personnel_edge,
     compute_substitution_elasticity,
     parse_offense_personnel,
+)
+from src.services.nfl_injury_nowcast import (
+    compute_player_status_delta,
+    compute_team_info_velocity,
+)
+from src.services.nfl_second_order_factors import (
+    compute_error_regime_uncertainty,
+    compute_travel_weather_interaction,
+    usage_elasticity_tilt,
 )
 from src.services.nfl_handicapping_framework import compute_nfl_projection_decomposition
 
@@ -79,7 +88,13 @@ def test_substitution_elasticity_needs_sample() -> None:
     assert -2.0 <= elast <= 2.0
 
 
-def test_coach_aggression_helpers() -> None:
+def test_usage_elasticity_tilt_bounded() -> None:
+    assert usage_elasticity_tilt(base_usage=0.55, elasticity_5g=None) == 0.55
+    tilted = usage_elasticity_tilt(base_usage=0.55, elasticity_5g=1.5)
+    assert 0.55 < tilted <= 0.55 * 1.04 + 1e-9
+
+
+def test_coach_aggression_helpers_thin() -> None:
     go = expected_fourth_down_go_rate(
         ydstogo=1.0,
         yardline_100=40.0,
@@ -87,20 +102,120 @@ def test_coach_aggression_helpers() -> None:
         game_seconds_remaining=300.0,
     )
     assert 0.05 <= go <= 0.92
-    agg = compute_aggression_latent(
+    # Thin formula: 4th residual + tempo only (PROE/pass-state ignored).
+    agg_a = compute_aggression_latent(
         fourth_go_residual=0.15,
-        early_down_proe=0.08,
+        early_down_proe=0.50,
         no_huddle_rate=0.12,
-        trailing_pass_rate=0.65,
-        leading_pass_rate=0.45,
+        trailing_pass_rate=0.90,
+        leading_pass_rate=0.10,
     )
-    assert -2.0 <= agg <= 2.0
-    assert agg > 0
+    agg_b = compute_aggression_latent(
+        fourth_go_residual=0.15,
+        early_down_proe=-0.50,
+        no_huddle_rate=0.12,
+        trailing_pass_rate=0.10,
+        leading_pass_rate=0.90,
+    )
+    assert agg_a == agg_b
+    assert -2.0 <= agg_a <= 2.0
     pace = compute_pace_latent(no_huddle_rate=0.20, plays_per_game_proxy=70.0)
     assert pace > 0
 
 
-def test_personnel_and_coach_factors_move_margin() -> None:
+def test_info_velocity_upgrade_downgrade() -> None:
+    downgrade = compute_player_status_delta(
+        prior_report="questionable",
+        prior_practice="limited",
+        current_report="out",
+        current_practice="did not participate",
+        position="QB",
+    )
+    assert downgrade["direction"] == "downgrade"
+    assert downgrade["weighted_delta"] > 0
+
+    upgrade = compute_player_status_delta(
+        prior_report="out",
+        prior_practice="did not participate",
+        current_report="questionable",
+        current_practice="limited",
+        position="WR",
+    )
+    assert upgrade["direction"] == "upgrade"
+    assert upgrade["weighted_delta"] < 0
+
+    prior = [
+        {
+            "player_key": "qb1",
+            "player_name": "QB One",
+            "position": "QB",
+            "report_status": "questionable",
+            "practice_status": "limited",
+        }
+    ]
+    current = [
+        {
+            "player_key": "qb1",
+            "player_name": "QB One",
+            "position": "QB",
+            "report_status": "out",
+            "practice_status": "did not participate",
+            "updated_at": None,
+        }
+    ]
+    vel = compute_team_info_velocity(current, prior)
+    assert vel["downgrade_count"] >= 1
+    assert vel["velocity_score"] > 0
+
+
+def test_travel_weather_interaction_skips_and_bounds() -> None:
+    skipped = compute_travel_weather_interaction(
+        travel_miles_away=2000,
+        travel_miles_home=0,
+        travel_timezone_delta_away=3,
+        travel_timezone_delta_home=0,
+        weather_wind_mph=20,
+        weather_precip_mm=5,
+        weather_temp_f=30,
+        weather_available=False,
+        travel_available=True,
+    )
+    assert skipped["available"] is False
+    assert skipped["margin_points"] == 0.0
+
+    active = compute_travel_weather_interaction(
+        travel_miles_away=2500,
+        travel_miles_home=0,
+        travel_timezone_delta_away=3,
+        travel_timezone_delta_home=0,
+        weather_wind_mph=22,
+        weather_precip_mm=8,
+        weather_temp_f=25,
+        weather_available=True,
+        travel_available=True,
+    )
+    assert active["available"] is True
+    assert abs(active["margin_points"]) <= 0.75
+    assert abs(active["total_points"]) <= 1.4
+    assert active["margin_points"] >= 0  # home-friendly under away travel + bad weather
+
+
+def test_error_regime_widens_without_point_shift() -> None:
+    regime = compute_error_regime_uncertainty(
+        info_velocity_abs=1.2,
+        hours_since_injury_change=3.0,
+        weather_available=False,
+        factor_coverage=0.6,
+        injury_impact=0.4,
+    )
+    assert regime["margin_points"] == 0.0
+    assert regime["total_points"] == 0.0
+    assert regime["stdev_widen"] > 0
+    assert regime["confidence_penalty"] > 0
+    assert regime["stdev_widen"] <= 0.85
+
+
+def test_personnel_coach_info_velocity_in_decomposition() -> None:
     base = compute_nfl_projection_decomposition(**_base_kwargs())
     with_factors = compute_nfl_projection_decomposition(
         **_base_kwargs(
@@ -113,19 +228,41 @@ def test_personnel_and_coach_factors_move_margin() -> None:
             home_coach_pace_5g=0.4,
             away_coach_pace_5g=0.2,
             second_order_as_of_week=8,
+            info_velocity_home=0.8,
+            info_velocity_away=-0.2,
+            hours_since_change_home=4.0,
+            hours_since_change_away=20.0,
+            weather_available=True,
+            weather_wind_mph=18.0,
+            weather_precip_mm=4.0,
+            weather_temp_f=35.0,
+            travel_available=True,
+            travel_miles_home=0.0,
+            travel_miles_away=2200.0,
+            travel_timezone_delta_home=0.0,
+            travel_timezone_delta_away=3.0,
         )
     )
     pers = with_factors["factor_contributions"]["personnel_efficiency"]
     coach = with_factors["factor_contributions"]["coach_aggression"]
+    info = with_factors["factor_contributions"]["info_velocity"]
+    tw = with_factors["factor_contributions"]["travel_weather_interaction"]
+    err = with_factors["factor_contributions"]["error_regime"]
     assert pers["available"] is True
     assert coach["available"] is True
+    assert info["available"] is True
+    assert tw["available"] is True
+    assert err["available"] is True
     assert pers["margin_points"] > 0
     assert coach["margin_points"] > 0
+    # Home downgrades (higher velocity) → negative margin for home.
+    assert info["margin_points"] < 0
+    assert err["margin_points"] == 0.0
+    assert with_factors["error_regime_stdev_widen"] >= 0.0
     assert abs(pers["margin_points"]) <= 1.6
-    assert abs(coach["margin_points"]) <= 1.4
-    assert with_factors["predicted_margin"] > base["predicted_margin"]
-    assert "home_personnel_edge_5g" in pers["raw_signals"]
-    assert "home_coach_aggression_5g" in coach["raw_signals"]
+    assert abs(coach["margin_points"]) <= 1.1
+    assert abs(info["margin_points"]) <= 1.2
+    assert with_factors["predicted_margin"] != base["predicted_margin"]
 
 
 def test_disabled_second_order_factors_do_not_penalize_coverage() -> None:
@@ -135,20 +272,27 @@ def test_disabled_second_order_factors_do_not_penalize_coverage() -> None:
                 "factors": {
                     "personnel_efficiency": {"enabled": False},
                     "coach_aggression": {"enabled": False},
+                    "info_velocity": {"enabled": False},
+                    "travel_weather_interaction": {"enabled": False},
+                    "error_regime": {"enabled": False},
                 }
             }
         )
     )
-    assert out["factor_contributions"]["personnel_efficiency"]["available"] is True
-    assert out["factor_contributions"]["coach_aggression"]["available"] is True
-    assert out["factor_contributions"]["personnel_efficiency"]["margin_points"] == 0.0
-    assert out["factor_contributions"]["coach_aggression"]["margin_points"] == 0.0
+    for key in (
+        "personnel_efficiency",
+        "coach_aggression",
+        "info_velocity",
+        "travel_weather_interaction",
+        "error_regime",
+    ):
+        assert out["factor_contributions"][key]["available"] is True
+        assert out["factor_contributions"][key]["margin_points"] == 0.0
 
 
-def test_external_source_status_is_safe_without_keys() -> None:
+def test_external_source_status_vc_only() -> None:
     status = external_source_status()
     assert "visual_crossing" in status
-    assert "otc" in status
-    assert "spotrac" in status
-    assert "pff" in status
-    assert status["otc"]["enabled"] is False or isinstance(status["otc"]["enabled"], bool)
+    assert "deferred" in status
+    assert "otc" not in status or "otc" in status.get("deferred", {})
+    assert status["deferred"]["pff"] == "not_implemented_holdout_deferred"

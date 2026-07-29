@@ -112,6 +112,11 @@ class NflGameInputs:
     home_coach_pace_5g: Optional[float] = None
     away_coach_pace_5g: Optional[float] = None
     second_order_as_of_week: Optional[int] = None
+    # Injury/practice information velocity (E).
+    info_velocity_home: Optional[float] = None
+    info_velocity_away: Optional[float] = None
+    hours_since_change_home: Optional[float] = None
+    hours_since_change_away: Optional[float] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -514,13 +519,20 @@ def simulate_nfl_game(
         home_coach_pace_5g=inputs.home_coach_pace_5g,
         away_coach_pace_5g=inputs.away_coach_pace_5g,
         second_order_as_of_week=inputs.second_order_as_of_week,
+        info_velocity_home=inputs.info_velocity_home,
+        info_velocity_away=inputs.info_velocity_away,
+        hours_since_change_home=inputs.hours_since_change_home,
+        hours_since_change_away=inputs.hours_since_change_away,
         config_overrides=config_overrides,
     )
 
     mean_home = max(7.5, float(decomposition["expected_home_points"]))
     mean_away = max(7.0, float(decomposition["expected_away_points"]))
+    error_stdev_widen = float(decomposition.get("error_regime_stdev_widen") or 0.0)
     stdev = _clamp(
-        float(framework_config["priors"]["base_score_stdev"]) + float(totals_adjustments["stdev_points"]),
+        float(framework_config["priors"]["base_score_stdev"])
+        + float(totals_adjustments["stdev_points"])
+        + error_stdev_widen,
         7.6,
         12.2,
     )
