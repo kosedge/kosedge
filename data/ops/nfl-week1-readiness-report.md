@@ -102,3 +102,22 @@ Projections Hub: Projected | Actual — Actual live via `/nfl/ops/projection-act
 
 **Act on:** selective sides + ML EV; futures from 100k; player season totals board publish-ready (honest).  
 **Do not claim:** 9.5 / full-slate ready.
+
+
+---
+
+## Prod verification (2026-07-29 evening)
+
+| Check | Result |
+| --- | --- |
+| Railway `/health` | **200** ok |
+| Railway fair-lines | **167** rows · ~**24** spread PLAY · `publish_tag_ml` present · `season_type=REG` |
+| Railway `/nfl/ops/projection-actuals?season=2026` | **200** empty scaffold (preseason) |
+| Vercel `/pro/nfl/projections` | **200** |
+| PR | https://github.com/kosedge/kosedge/pull/24 |
+| Deploy branch | `deploy-vercel` includes second-order merge |
+
+Railway notes fixed during this pass: clear dashboard `rootDirectory` when using
+`--path-as-root`; service domain target port **8080** (was 8000 → 502).
+Worker/beat may still need a follow-up `railway up` sync (API is the board path).
+
