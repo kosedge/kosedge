@@ -1,0 +1,567 @@
+{
+  "generated_at": "2026-07-29T07:13:57.832710+00:00",
+  "elapsed_sec": 244.6,
+  "method": "additive_delta_on_stored_v3_projections",
+  "leakage_rule": "personnel/coach/info_velocity use week G-1 only; weather/travel from stored pre-kickoff inputs",
+  "policy": "spread_play_v2_cap7",
+  "warehouse": {
+    "board_rows_2023_2025": 855,
+    "personnel_weekly_rows": 0,
+    "coach_weekly_rows": 1710,
+    "pbp_offense_personnel_filled_2023_2025": 0,
+    "second_order_keys": 1710,
+    "velocity_game_keys": 1694,
+    "visual_crossing_key_present": false
+  },
+  "variants": {
+    "baseline": {
+      "enabled": {
+        "personnel_efficiency": false,
+        "coach_aggression": false,
+        "info_velocity": false,
+        "travel_weather_interaction": false,
+        "error_regime": false
+      },
+      "confirmatory_2024_2025": {
+        "n": 229,
+        "hits": 167,
+        "hit_rate": 0.7293,
+        "roi": 0.3922,
+        "units": 89.818,
+        "mean_abs_edge": 4.451,
+        "n_clv_move": 207,
+        "clv_positive_rate": 0.6039,
+        "gate": "GREEN",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 112,
+        "hits": 78,
+        "hit_rate": 0.6964,
+        "roi": 0.3295,
+        "units": 36.909,
+        "mean_abs_edge": 4.664,
+        "n_clv_move": 100,
+        "clv_positive_rate": 0.58,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "A_coach": {
+      "enabled": {
+        "personnel_efficiency": false,
+        "coach_aggression": true,
+        "info_velocity": false,
+        "travel_weather_interaction": false,
+        "error_regime": false
+      },
+      "confirmatory_2024_2025": {
+        "n": 223,
+        "hits": 162,
+        "hit_rate": 0.7265,
+        "roi": 0.3869,
+        "units": 86.273,
+        "mean_abs_edge": 4.408,
+        "n_clv_move": 201,
+        "clv_positive_rate": 0.602,
+        "gate": "GREEN",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 475,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 109,
+        "hits": 75,
+        "hit_rate": 0.6881,
+        "roi": 0.3136,
+        "units": 34.182,
+        "mean_abs_edge": 4.588,
+        "n_clv_move": 97,
+        "clv_positive_rate": 0.5773,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 238,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "B_personnel": {
+      "enabled": {
+        "personnel_efficiency": true,
+        "coach_aggression": false,
+        "info_velocity": false,
+        "travel_weather_interaction": false,
+        "error_regime": false
+      },
+      "confirmatory_2024_2025": {
+        "n": 229,
+        "hits": 167,
+        "hit_rate": 0.7293,
+        "roi": 0.3922,
+        "units": 89.818,
+        "mean_abs_edge": 4.451,
+        "n_clv_move": 207,
+        "clv_positive_rate": 0.6039,
+        "gate": "GREEN",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 112,
+        "hits": 78,
+        "hit_rate": 0.6964,
+        "roi": 0.3295,
+        "units": 36.909,
+        "mean_abs_edge": 4.664,
+        "n_clv_move": 100,
+        "clv_positive_rate": 0.58,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "E_info_velocity": {
+      "enabled": {
+        "personnel_efficiency": false,
+        "coach_aggression": false,
+        "info_velocity": true,
+        "travel_weather_interaction": false,
+        "error_regime": false
+      },
+      "confirmatory_2024_2025": {
+        "n": 232,
+        "hits": 161,
+        "hit_rate": 0.694,
+        "roi": 0.3248,
+        "units": 75.364,
+        "mean_abs_edge": 4.532,
+        "n_clv_move": 211,
+        "clv_positive_rate": 0.5972,
+        "gate": "GREEN",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 474,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 116,
+        "hits": 79,
+        "hit_rate": 0.681,
+        "roi": 0.3002,
+        "units": 34.818,
+        "mean_abs_edge": 4.591,
+        "n_clv_move": 105,
+        "clv_positive_rate": 0.5524,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 238,
+          "travel_weather_interaction": 0,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "H_travel_weather": {
+      "enabled": {
+        "personnel_efficiency": false,
+        "coach_aggression": false,
+        "info_velocity": false,
+        "travel_weather_interaction": true,
+        "error_regime": false
+      },
+      "confirmatory_2024_2025": {
+        "n": 220,
+        "hits": 162,
+        "hit_rate": 0.7364,
+        "roi": 0.4058,
+        "units": 89.273,
+        "mean_abs_edge": 4.455,
+        "n_clv_move": 197,
+        "clv_positive_rate": 0.6041,
+        "gate": "YELLOW",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 508,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 107,
+        "hits": 77,
+        "hit_rate": 0.7196,
+        "roi": 0.3738,
+        "units": 40.0,
+        "mean_abs_edge": 4.71,
+        "n_clv_move": 95,
+        "clv_positive_rate": 0.5895,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 265,
+          "error_regime": 0
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "D_error_regime": {
+      "enabled": {
+        "personnel_efficiency": false,
+        "coach_aggression": false,
+        "info_velocity": false,
+        "travel_weather_interaction": false,
+        "error_regime": true
+      },
+      "confirmatory_2024_2025": {
+        "n": 229,
+        "hits": 167,
+        "hit_rate": 0.7293,
+        "roi": 0.3922,
+        "units": 89.818,
+        "mean_abs_edge": 4.451,
+        "n_clv_move": 207,
+        "clv_positive_rate": 0.6039,
+        "gate": "GREEN",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 570
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 112,
+        "hits": 78,
+        "hit_rate": 0.6964,
+        "roi": 0.3295,
+        "units": 36.909,
+        "mean_abs_edge": 4.664,
+        "n_clv_move": 100,
+        "clv_positive_rate": 0.58,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 0,
+          "error_regime": 285
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "all_enabled": {
+      "enabled": {
+        "personnel_efficiency": true,
+        "coach_aggression": true,
+        "info_velocity": true,
+        "travel_weather_interaction": true,
+        "error_regime": true
+      },
+      "confirmatory_2024_2025": {
+        "n": 227,
+        "hits": 159,
+        "hit_rate": 0.7004,
+        "roi": 0.3372,
+        "units": 76.545,
+        "mean_abs_edge": 4.576,
+        "n_clv_move": 204,
+        "clv_positive_rate": 0.6029,
+        "gate": "GREEN",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 475,
+          "info_velocity": 474,
+          "travel_weather_interaction": 508,
+          "error_regime": 570
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 117,
+        "hits": 81,
+        "hit_rate": 0.6923,
+        "roi": 0.3217,
+        "units": 37.636,
+        "mean_abs_edge": 4.679,
+        "n_clv_move": 104,
+        "clv_positive_rate": 0.5673,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "personnel_efficiency": 0,
+          "coach_aggression": 238,
+          "info_velocity": 238,
+          "travel_weather_interaction": 265,
+          "error_regime": 285
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "full_slate_scan_note": "Ablation grades selective PLAY only; full-slate remains product RED unless enterprise gates re-run."
+    },
+    "recommended": {
+      "enabled": {
+        "coach_aggression": true,
+        "personnel_efficiency": false,
+        "info_velocity": false,
+        "travel_weather_interaction": true,
+        "error_regime": true
+      },
+      "confirmatory_2024_2025": {
+        "n": 218,
+        "hits": 162,
+        "hit_rate": 0.7431,
+        "roi": 0.4187,
+        "units": 91.273,
+        "mean_abs_edge": 4.499,
+        "n_clv_move": 195,
+        "clv_positive_rate": 0.6051,
+        "gate": "YELLOW",
+        "n_games_scanned": 570,
+        "factor_signal_rows": {
+          "coach_aggression": 475,
+          "personnel_efficiency": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 508,
+          "error_regime": 570
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      },
+      "primary_2025": {
+        "n": 107,
+        "hits": 77,
+        "hit_rate": 0.7196,
+        "roi": 0.3738,
+        "units": 40.0,
+        "mean_abs_edge": 4.741,
+        "n_clv_move": 95,
+        "clv_positive_rate": 0.5895,
+        "gate": "YELLOW",
+        "n_games_scanned": 285,
+        "factor_signal_rows": {
+          "coach_aggression": 238,
+          "personnel_efficiency": 0,
+          "info_velocity": 0,
+          "travel_weather_interaction": 265,
+          "error_regime": 285
+        },
+        "play_policy": "spread_play_v2_cap7",
+        "spread_band": [
+          2.5,
+          7.0
+        ]
+      }
+    }
+  },
+  "decisions": {
+    "A_coach": {
+      "promote": true,
+      "reasons": [
+        "no_material_lift_keep_if_not_worse"
+      ],
+      "delta_hit_rate": -0.0028,
+      "delta_clv": -0.0019,
+      "delta_n": -6
+    },
+    "B_personnel": {
+      "promote": false,
+      "reasons": [
+        "no_personnel_signal_coverage_offense_personnel_missing_from_public_pbp"
+      ],
+      "delta_hit_rate": 0.0,
+      "delta_clv": 0.0,
+      "delta_n": 0
+    },
+    "E_info_velocity": {
+      "promote": false,
+      "reasons": [
+        "ats_worsened_-0.0353"
+      ],
+      "delta_hit_rate": -0.0353,
+      "delta_clv": -0.0067,
+      "delta_n": 3
+    },
+    "H_travel_weather": {
+      "promote": true,
+      "reasons": [
+        "clears_worsen_bar"
+      ],
+      "delta_hit_rate": 0.0071,
+      "delta_clv": 0.0002,
+      "delta_n": -9
+    },
+    "D_error_regime": {
+      "promote": true,
+      "reasons": [
+        "no_material_lift_keep_if_not_worse"
+      ],
+      "delta_hit_rate": 0.0,
+      "delta_clv": 0.0,
+      "delta_n": 0
+    },
+    "all_enabled": {
+      "promote": false,
+      "reasons": [
+        "ats_worsened_-0.0289"
+      ],
+      "delta_hit_rate": -0.0289,
+      "delta_clv": -0.001,
+      "delta_n": -2
+    },
+    "recommended": {
+      "promote": true,
+      "reasons": [
+        "clears_worsen_bar"
+      ],
+      "delta_hit_rate": 0.0138,
+      "delta_clv": 0.0012,
+      "delta_n": -11
+    }
+  },
+  "promoted": [
+    "A_coach",
+    "H_travel_weather",
+    "D_error_regime"
+  ],
+  "killed": [
+    "B_personnel",
+    "E_info_velocity"
+  ],
+  "recommended_enabled": {
+    "coach_aggression": true,
+    "personnel_efficiency": false,
+    "info_velocity": false,
+    "travel_weather_interaction": true,
+    "error_regime": true
+  },
+  "promote_thresholds": {
+    "ats_worsen_pp": 0.005,
+    "clv_worsen_pp": 0.01,
+    "n_drop_frac": 0.15
+  }
+}

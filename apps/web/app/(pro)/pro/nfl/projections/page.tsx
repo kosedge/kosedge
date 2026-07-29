@@ -6,7 +6,7 @@ import {
 } from "@/lib/nfl-preseason-artifacts";
 import {
   formatActual,
-  loadNflProjectionActuals,
+  loadNflProjectionActualsAsync,
   playerActualsFor,
   teamActualWins,
 } from "@/lib/nfl-projection-actuals";
@@ -104,7 +104,7 @@ export default async function NflProjectionsPage({
 }) {
   const search = await searchParams;
   const bundle = loadLatestNflPreseasonBundle2026();
-  const actuals = loadNflProjectionActuals(2026);
+  const actuals = await loadNflProjectionActualsAsync(2026);
   if (!bundle) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">

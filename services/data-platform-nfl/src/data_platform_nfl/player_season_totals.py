@@ -128,6 +128,21 @@ _WEEKLY_STAT_KEYS = (
 # counter) is always preferred over this leaguewide constant when available.
 FALLBACK_EXPECTED_GAMES_GIVEN_APPEARANCE = 26.0 / 14.0
 
+# Season-total QB room lock — mirrors model-service compute_qb_starter_shares
+# winner-take-most template. Applied at aggregation time so hub CSVs can be
+# regenerated without a full 100k season MC re-run. Leakage-safe signals only:
+# week-1 depth chart + prior-season pass attempts (never same-season results).
+_QB_PRIMARY_SHARE = 0.92
+_QB_SECONDARY_SHARE = 0.06
+_QB_TERTIARY_SHARE = 0.02
+
+# Skill prior-anchor calibration (RB rush / WR+TE receiving). Leakage-safe:
+# REG weeks 1–18 from seasons strictly before the projection season only.
+# Upward-only blend toward max prior YPG × games_projected — corrects
+# compressed elite ceilings without cutting publish floors.
+_SKILL_PRIOR_MIN_GAMES = 8
+_SKILL_PRIOR_LOOKBACK_SEASONS = 2
+
 
 def aggregate_weekly_projection_rows(weekly_rows: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
     """Pure aggregation: turn a player's list of real-week baseline rows into
@@ -202,11 +217,489 @@ def _fetch_real_weekly_rows(
     return by_player
 
 
+def _qb_depth_score(depth_order: Optional[float]) -> float:
+    if depth_order is None:
+        return 0.15
+    d = float(depth_order)
+    if d <= 1.0:
+        return 1.0
+    if d <= 2.0:
+        return 0.35
+    if d <= 3.0:
+        return 0.12
+    return 0.04
+
+
+def _allocate_qb_winner_take_most(ranked_keys: List[str]) -> Dict[str, float]:
+    out: Dict[str, float] = {key: 0.0 for key in ranked_keys}
+    if not ranked_keys:
+        return out
+    if len(ranked_keys) == 1:
+        out[ranked_keys[0]] = 1.0
+        return out
+    out[ranked_keys[0]] = _QB_PRIMARY_SHARE
+    out[ranked_keys[1]] = _QB_SECONDARY_SHARE
+    if len(ranked_keys) == 2:
+        out[ranked_keys[0]] = _QB_PRIMARY_SHARE + _QB_TERTIARY_SHARE
+        return out
+    residual = _QB_TERTIARY_SHARE
+    others = ranked_keys[2:]
+    each = residual / len(others)
+    for key in others:
+        out[key] = each
+    return out
+
+
+def designate_qb_starter_shares(
+    *,
+    player_ids: List[str],
+    depth_orders: Dict[str, float],
+    prior_attempts: Dict[str, float],
+) -> Dict[str, float]:
+    """Leakage-safe QB1 designation shares for one team room.
+
+    Scoring mirrors `compute_qb_starter_shares` in nfl_player_projection_engine:
+    prior-season attempts + week-1 depth beat inflated backup baselines.
+    """
+    keys = [str(pid) for pid in player_ids if pid]
+    if not keys:
+        return {}
+    if len(keys) == 1:
+        return {keys[0]: 1.0}
+
+    prior_total = sum(float(prior_attempts.get(k) or 0.0) for k in keys)
+    has_prior = prior_total > 0.0
+    has_depth = any(k in depth_orders for k in keys)
+    if not has_prior and not has_depth:
+        # No signal — leave equal full share; caller should not invent an order.
+        return {k: 1.0 for k in keys}
+
+    scores: Dict[str, float] = {}
+    for k in keys:
+        prior_share = float(prior_attempts.get(k) or 0.0) / prior_total if prior_total > 0.0 else 0.0
+        depth_score = _qb_depth_score(depth_orders.get(k) if k in depth_orders else None)
+        if has_prior:
+            scores[k] = (0.55 * prior_share) + (0.45 * depth_score)
+        else:
+            scores[k] = depth_score
+    if has_prior:
+        ordered = sorted(((float(prior_attempts.get(k) or 0.0), k) for k in keys), reverse=True)
+        top_att, top_key = ordered[0]
+        second_att = ordered[1][0] if len(ordered) > 1 else 0.0
+        if top_att >= 120.0 and top_att >= (1.2 * max(second_att, 1.0)):
+            scores[top_key] = scores.get(top_key, 0.0) + 0.22
+    ranked = sorted(
+        keys,
+        key=lambda k: (-scores[k], float(depth_orders.get(k, 99.0) or 99.0), str(k)),
+    )
+    return _allocate_qb_winner_take_most(ranked)
+
+
+def apply_qb_starter_volume_lock(
+    rows: List[Dict[str, Any]],
+    *,
+    depth_by_team: Dict[str, Dict[str, float]],
+    prior_attempts_by_team: Dict[str, Dict[str, float]],
+) -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Scale QB pass(/rush) season totals to one starter-level volume per team.
+
+    Root failure: weekly baselines still emit near-starter `pass_yards_mean` for
+    backups (Flacco 3845 vs Burrow 2290) even when week-1 depth correctly lists
+    the starter. Lock at season-total layer so hub regen does not need a full MC.
+
+    Method: designate shares via depth + prior attempts; take the room's max
+    pass-yard total as the "full-rate" unit; assign starter = full_rate and
+    backups = full_rate * (share / primary_share). Scale pass_tds with the same
+    factor; scale QB rush yards for non-primaries the same way (backup rush
+    from spot-start baselines is also inflated).
+    """
+    by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        if str(row.get("position") or "").upper() != "QB":
+            continue
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+
+    audit_rooms: List[Dict[str, Any]] = []
+    for team, room in by_team.items():
+        if len(room) < 2:
+            continue
+        id_to_row: Dict[str, Dict[str, Any]] = {}
+        for r in room:
+            pid = str(r.get("player_id") or "")
+            if not pid:
+                # Fallback key used when uid missing: "TEAM:player_id"
+                key = str(r.get("player_key") or "")
+                pid = key.split(":", 1)[-1] if ":" in key else key
+            if pid:
+                id_to_row[pid] = r
+        if len(id_to_row) < 2:
+            continue
+        depths = depth_by_team.get(team) or {}
+        priors = prior_attempts_by_team.get(team) or {}
+        shares = designate_qb_starter_shares(
+            player_ids=list(id_to_row.keys()),
+            depth_orders=depths,
+            prior_attempts=priors,
+        )
+        if not shares or all(abs(float(v) - 1.0) < 1e-9 for v in shares.values()):
+            audit_rooms.append(
+                {
+                    "team": team,
+                    "status": "skipped_no_decisive_signal",
+                    "qbs": [
+                        {
+                            "player_name": r.get("player_name"),
+                            "player_id": pid,
+                            "pass_yards_before": float(r.get("pass_yards_total") or 0.0),
+                        }
+                        for pid, r in id_to_row.items()
+                    ],
+                }
+            )
+            continue
+        primary_share = max(float(v) for v in shares.values()) or _QB_PRIMARY_SHARE
+        full_rate = max(float(r.get("pass_yards_total") or 0.0) for r in id_to_row.values())
+        if full_rate <= 0.0:
+            continue
+        room_audit: List[Dict[str, Any]] = []
+        for pid, r in id_to_row.items():
+            share = float(shares.get(pid) or 0.0)
+            factor = share / primary_share if primary_share > 0 else 0.0
+            before = float(r.get("pass_yards_total") or 0.0)
+            after = round(full_rate * factor, 3)
+            scale = (after / before) if before > 1e-9 else 0.0
+            r["pass_yards_total"] = after
+            r["pass_tds_total"] = round(float(r.get("pass_tds_total") or 0.0) * scale, 3)
+            # Backup rush from spot-start baselines is similarly inflated.
+            if factor < 0.99:
+                r["rush_yards_total"] = round(float(r.get("rush_yards_total") or 0.0) * factor, 3)
+                r["rush_tds_total"] = round(float(r.get("rush_tds_total") or 0.0) * factor, 3)
+            room_audit.append(
+                {
+                    "player_name": r.get("player_name"),
+                    "player_id": pid,
+                    "share": round(share, 4),
+                    "pass_yards_before": round(before, 1),
+                    "pass_yards_after": after,
+                    "is_primary": share >= primary_share - 1e-9,
+                }
+            )
+        audit_rooms.append(
+            {
+                "team": team,
+                "status": "locked",
+                "full_rate_pass_yards": round(full_rate, 1),
+                "qbs": room_audit,
+            }
+        )
+
+    rows.sort(
+        key=lambda r: (
+            -(
+                float(r.get("pass_yards_total") or 0.0)
+                + float(r.get("rush_yards_total") or 0.0)
+                + float(r.get("receiving_yards_total") or 0.0)
+            ),
+            str(r.get("player_name") or ""),
+        )
+    )
+    locked_n = sum(1 for a in audit_rooms if a.get("status") == "locked")
+    return rows, {
+        "teams_locked": locked_n,
+        "rooms": audit_rooms,
+        "method": "depth_week1_plus_prior_attempts_winner_take_most",
+        "primary_share": _QB_PRIMARY_SHARE,
+        "secondary_share": _QB_SECONDARY_SHARE,
+    }
+
+
+def fetch_qb_room_lock_signals(
+    session: Any, *, season: int
+) -> tuple[Dict[str, Dict[str, float]], Dict[str, Dict[str, float]]]:
+    """Load leakage-safe designation inputs: week-1 depth + prior-season attempts."""
+    depth_by_team: Dict[str, Dict[str, float]] = {}
+    # Prefer inferred weekly depth (has depth_order + depth_slot). Fall back to
+    # official depth_team when inferred missing for a team.
+    inferred = session.execute(
+        text(
+            """
+            SELECT team, player_id, depth_order
+            FROM nfl_dp_depth_chart_weekly
+            WHERE season = :season AND week = 1 AND upper(position) = 'QB'
+              AND player_id IS NOT NULL AND player_id <> ''
+            """
+        ),
+        {"season": int(season)},
+    ).mappings().all()
+    for row in inferred:
+        team = str(row["team"] or "")
+        pid = str(row["player_id"] or "")
+        if not team or not pid:
+            continue
+        depth_by_team.setdefault(team, {})[pid] = float(row["depth_order"] or 99.0)
+
+    if not depth_by_team:
+        official = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (team, player_id)
+                  team, player_id, depth_team
+                FROM nfl_dp_official_depth_charts
+                WHERE season = :season AND upper(position) LIKE '%%QB%%'
+                  AND player_id IS NOT NULL AND player_id <> ''
+                ORDER BY team, player_id, week ASC
+                """
+            ),
+            {"season": int(season)},
+        ).mappings().all()
+        for row in official:
+            team = str(row["team"] or "")
+            pid = str(row["player_id"] or "")
+            if not team or not pid:
+                continue
+            depth_by_team.setdefault(team, {})[pid] = float(row["depth_team"] or 99.0)
+
+    prior_by_team: Dict[str, Dict[str, float]] = {}
+    prior_season = int(season) - 1
+    prior_rows = session.execute(
+        text(
+            """
+            SELECT team, player_id, SUM(COALESCE(pass_attempts, 0))::float AS att
+            FROM nfl_dp_player_usage_weekly
+            WHERE season = :prior_season AND upper(position) = 'QB'
+              AND player_id IS NOT NULL AND player_id <> ''
+            GROUP BY team, player_id
+            """
+        ),
+        {"prior_season": prior_season},
+    ).mappings().all()
+    for row in prior_rows:
+        team = str(row["team"] or "")
+        pid = str(row["player_id"] or "")
+        if not team or not pid:
+            continue
+        prior_by_team.setdefault(team, {})[pid] = float(row["att"] or 0.0)
+    return depth_by_team, prior_by_team
+
+
+def _skill_prior_blend_weight(prior_season_yards: float, *, kind: str) -> float:
+    """Higher weight for established volume leaders; 0 below meaningful floors."""
+    y = float(prior_season_yards or 0.0)
+    if kind == "rush":
+        if y >= 1200.0:
+            return 0.55
+        if y >= 800.0:
+            return 0.40
+        if y >= 500.0:
+            return 0.25
+        return 0.0
+    # receiving
+    if y >= 1200.0:
+        return 0.55
+    if y >= 900.0:
+        return 0.45
+    if y >= 600.0:
+        return 0.30
+    return 0.0
+
+
+def fetch_skill_prior_anchors(session: Any, *, season: int) -> Dict[str, Dict[str, float]]:
+    """Per-player max REG YPG (rush / receiving) over the prior lookback window.
+
+    Leakage-safe: seasons in [season-lookback, season-1], weeks 1–18 only.
+    Requires `_SKILL_PRIOR_MIN_GAMES` involvement games in that season row.
+    Keyed by GSIS `player_id` (same id used on baseline rows).
+    """
+    lookback = int(_SKILL_PRIOR_LOOKBACK_SEASONS)
+    seasons = [int(season) - i for i in range(1, lookback + 1) if int(season) - i >= 2000]
+    if not seasons:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT season, player_id,
+                   COUNT(*) FILTER (
+                     WHERE COALESCE(rush_attempts, 0) > 0
+                        OR COALESCE(targets, 0) > 0
+                        OR COALESCE(rush_yards, 0) > 0
+                        OR COALESCE(receiving_yards, 0) > 0
+                   ) AS games,
+                   SUM(COALESCE(rush_yards, 0))::float AS rush,
+                   SUM(COALESCE(receiving_yards, 0))::float AS rec,
+                   SUM(COALESCE(receptions, 0))::float AS receptions
+            FROM nfl_dp_player_usage_weekly
+            WHERE season = ANY(:seasons)
+              AND week BETWEEN 1 AND 18
+              AND upper(position) IN ('RB', 'WR', 'TE')
+              AND player_id IS NOT NULL AND player_id <> ''
+            GROUP BY season, player_id
+            """
+        ),
+        {"seasons": seasons},
+    ).mappings().all()
+
+    anchors: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        games = int(row["games"] or 0)
+        if games < _SKILL_PRIOR_MIN_GAMES:
+            continue
+        pid = str(row["player_id"])
+        rush_ypg = float(row["rush"] or 0.0) / games
+        rec_ypg = float(row["rec"] or 0.0) / games
+        rec_gpg = float(row["receptions"] or 0.0) / games
+        cur = anchors.setdefault(
+            pid,
+            {
+                "rush_ypg": 0.0,
+                "rec_ypg": 0.0,
+                "rec_gpg": 0.0,
+                "rush_games": 0.0,
+                "rec_games": 0.0,
+            },
+        )
+        if rush_ypg > float(cur["rush_ypg"]):
+            cur["rush_ypg"] = rush_ypg
+            cur["rush_games"] = float(games)
+        if rec_ypg > float(cur["rec_ypg"]):
+            cur["rec_ypg"] = rec_ypg
+            cur["rec_games"] = float(games)
+            cur["rec_gpg"] = rec_gpg
+    return anchors
+
+
+def apply_skill_prior_anchor_calibration(
+    rows: List[Dict[str, Any]],
+    *,
+    anchors_by_player_id: Dict[str, Dict[str, float]],
+) -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Upward-only blend of RB rush / WR+TE receiving toward prior YPG anchors.
+
+    Root failure: weekly baselines compress elites (low WR role_confidence,
+    soft talent factors) so season sums undershoot historical leader floors
+    (rush ≥1400, rec ≥1300, 3× WR ≥1200) even when games_projected=17.
+
+    Method: for each player with a leakage-safe prior REG sample (≥8 games),
+    anchor = max_prior_ypg × games_projected. If model total < anchor, blend
+    toward the anchor with volume-tiered weight. Scale related counting stats
+    (TDs, receptions) by the same factor. Never pulls yards down.
+    """
+    adjusted: List[Dict[str, Any]] = []
+    for row in rows:
+        pos = str(row.get("position") or "").upper()
+        pid = str(row.get("player_id") or "")
+        if not pid:
+            key = str(row.get("player_key") or "")
+            # Fallback when uid-keyed: "TEAM:gsis" — take trailing segment.
+            pid = key.split(":", 1)[-1] if ":" in key else ""
+        anchor = anchors_by_player_id.get(pid) if pid else None
+        if not anchor:
+            continue
+        games = float(row.get("games_projected") or 0.0)
+        if games <= 0.0:
+            continue
+
+        if pos == "RB" and float(anchor.get("rush_ypg") or 0.0) > 0.0:
+            prior_games = float(anchor.get("rush_games") or 0.0)
+            prior_abs = float(anchor["rush_ypg"]) * prior_games
+            target = float(anchor["rush_ypg"]) * games
+            weight = _skill_prior_blend_weight(prior_abs, kind="rush")
+            before = float(row.get("rush_yards_total") or 0.0)
+            if weight > 0.0 and before + 1e-9 < target:
+                after = (1.0 - weight) * before + weight * target
+                scale = after / before if before > 1e-9 else 0.0
+                row["rush_yards_total"] = round(after, 3)
+                row["rush_tds_total"] = round(float(row.get("rush_tds_total") or 0.0) * scale, 3)
+                adjusted.append(
+                    {
+                        "stat": "rush",
+                        "player_name": row.get("player_name"),
+                        "player_id": pid,
+                        "team": row.get("team"),
+                        "position": pos,
+                        "before": round(before, 1),
+                        "after": round(after, 1),
+                        "anchor": round(target, 1),
+                        "prior_season_yards": round(prior_abs, 1),
+                        "blend_weight": weight,
+                    }
+                )
+
+        if pos in {"WR", "TE"} and float(anchor.get("rec_ypg") or 0.0) > 0.0:
+            prior_games = float(anchor.get("rec_games") or 0.0)
+            prior_abs = float(anchor["rec_ypg"]) * prior_games
+            target = float(anchor["rec_ypg"]) * games
+            weight = _skill_prior_blend_weight(prior_abs, kind="rec")
+            before = float(row.get("receiving_yards_total") or 0.0)
+            if weight > 0.0 and before + 1e-9 < target:
+                after = (1.0 - weight) * before + weight * target
+                scale = after / before if before > 1e-9 else 0.0
+                row["receiving_yards_total"] = round(after, 3)
+                row["rec_tds_total"] = round(float(row.get("rec_tds_total") or 0.0) * scale, 3)
+                # Prefer prior catch rate when scaling receptions; else yards scale.
+                prior_rec_gpg = float(anchor.get("rec_gpg") or 0.0)
+                if prior_rec_gpg > 0.0 and scale > 0.0:
+                    # Blend receptions toward prior gpg × games with same weight.
+                    before_rec = float(row.get("receptions_total") or 0.0)
+                    rec_target = prior_rec_gpg * games
+                    if before_rec + 1e-9 < rec_target:
+                        row["receptions_total"] = round(
+                            (1.0 - weight) * before_rec + weight * rec_target, 3
+                        )
+                    else:
+                        row["receptions_total"] = round(before_rec * scale, 3)
+                else:
+                    row["receptions_total"] = round(
+                        float(row.get("receptions_total") or 0.0) * scale, 3
+                    )
+                adjusted.append(
+                    {
+                        "stat": "receiving",
+                        "player_name": row.get("player_name"),
+                        "player_id": pid,
+                        "team": row.get("team"),
+                        "position": pos,
+                        "before": round(before, 1),
+                        "after": round(after, 1),
+                        "anchor": round(target, 1),
+                        "prior_season_yards": round(prior_abs, 1),
+                        "blend_weight": weight,
+                    }
+                )
+
+    rows.sort(
+        key=lambda r: (
+            -(
+                float(r.get("pass_yards_total") or 0.0)
+                + float(r.get("rush_yards_total") or 0.0)
+                + float(r.get("receiving_yards_total") or 0.0)
+            ),
+            str(r.get("player_name") or ""),
+        )
+    )
+    adjusted.sort(key=lambda a: -float(a.get("after") or 0.0))
+    return rows, {
+        "applied": True,
+        "method": "prior_reg_ypg_upward_blend_max_lookback2",
+        "min_prior_games": _SKILL_PRIOR_MIN_GAMES,
+        "lookback_seasons": _SKILL_PRIOR_LOOKBACK_SEASONS,
+        "players_adjusted": len(adjusted),
+        "top_adjustments": adjusted[:25],
+    }
+
+
 def generate_player_regular_season_totals(
-    session: Any, *, season: int, model_version: str = "nfl-player-v1"
-) -> List[Dict[str, Any]]:
+    session: Any,
+    *,
+    season: int,
+    model_version: str = "nfl-player-v1",
+    apply_qb_lock: bool = True,
+    apply_skill_prior: bool = True,
+) -> tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
     """Season-total rows for every player with at least one real regular-season
-    weekly projection, in `CSV_FIELDNAMES` shape."""
+    weekly projection, in `CSV_FIELDNAMES` shape.
+
+    Returns (rows, qb_lock_audit, skill_prior_audit).
+    """
     by_player = _fetch_real_weekly_rows(session, season=season, model_version=model_version)
 
     output_rows: List[Dict[str, Any]] = []
@@ -217,14 +710,42 @@ def generate_player_regular_season_totals(
             {
                 "season": season,
                 "player_key": player_key,
+                "player_id": latest.get("player_id"),
                 "player_name": latest["player_name"],
                 "team": latest["team"],
                 "position": latest["position"],
                 **totals,
             }
         )
-    output_rows.sort(key=lambda r: (-r["pass_yards_total"] - r["rush_yards_total"] - r["receiving_yards_total"], r["player_name"]))
-    return output_rows
+    lock_audit: Dict[str, Any] = {"applied": False, "teams_locked": 0, "rooms": []}
+    if apply_qb_lock:
+        depth_by_team, prior_by_team = fetch_qb_room_lock_signals(session, season=season)
+        output_rows, lock_audit = apply_qb_starter_volume_lock(
+            output_rows,
+            depth_by_team=depth_by_team,
+            prior_attempts_by_team=prior_by_team,
+        )
+        lock_audit["applied"] = True
+
+    skill_audit: Dict[str, Any] = {"applied": False, "players_adjusted": 0}
+    if apply_skill_prior:
+        anchors = fetch_skill_prior_anchors(session, season=season)
+        output_rows, skill_audit = apply_skill_prior_anchor_calibration(
+            output_rows, anchors_by_player_id=anchors
+        )
+        skill_audit["anchors_loaded"] = len(anchors)
+    elif not apply_qb_lock:
+        output_rows.sort(
+            key=lambda r: (
+                -(
+                    float(r.get("pass_yards_total") or 0.0)
+                    + float(r.get("rush_yards_total") or 0.0)
+                    + float(r.get("receiving_yards_total") or 0.0)
+                ),
+                str(r.get("player_name") or ""),
+            )
+        )
+    return output_rows, lock_audit, skill_audit
 
 
 def evaluate_season_skill_leader_quality(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -347,19 +868,87 @@ def evaluate_season_pass_leader_quality(rows: List[Dict[str, Any]]) -> Dict[str,
     return checks
 
 
+def generate_player_playoff_totals_from_regular(
+    regular_rows: List[Dict[str, Any]],
+    *,
+    expected_playoff_games_by_team: Dict[str, float],
+) -> List[Dict[str, Any]]:
+    """Playoff totals from (possibly QB-locked) regular-season rates.
+
+    Prefer this over re-aggregating weekly baselines so the season-total QB
+    lock carries into playoff CSVs without a second designation pass.
+    """
+    output_rows: List[Dict[str, Any]] = []
+    for row in regular_rows:
+        team = str(row.get("team") or "")
+        expected_games = float(expected_playoff_games_by_team.get(team, 0.0))
+        real_games = float(row.get("games_projected") or 0.0)
+        if real_games <= 0.0 or expected_games <= 0.0:
+            pass_ypg = rush_ypg = rec_ypg = rec_g = pass_tdg = rush_tdg = rec_tdg = 0.0
+            mean_p = 0.0
+        else:
+            pass_ypg = float(row.get("pass_yards_total") or 0.0) / real_games
+            rush_ypg = float(row.get("rush_yards_total") or 0.0) / real_games
+            rec_ypg = float(row.get("receiving_yards_total") or 0.0) / real_games
+            rec_g = float(row.get("receptions_total") or 0.0) / real_games
+            pass_tdg = float(row.get("pass_tds_total") or 0.0) / real_games
+            rush_tdg = float(row.get("rush_tds_total") or 0.0) / real_games
+            rec_tdg = float(row.get("rec_tds_total") or 0.0) / real_games
+            # Invert the season anytime formula to a per-game rate when possible.
+            season_p = max(0.0, min(1.0, float(row.get("anytime_td_prob") or 0.0)))
+            mean_p = 1.0 - ((1.0 - season_p) ** (1.0 / real_games)) if season_p < 1.0 else 1.0
+        playoff_anytime = round(1.0 - (1.0 - mean_p) ** expected_games, 4)
+        output_rows.append(
+            {
+                "season": row.get("season"),
+                "player_key": row.get("player_key"),
+                "player_name": row.get("player_name"),
+                "team": team,
+                "position": row.get("position"),
+                "games_projected": round(expected_games, 4),
+                "pass_yards_total": round(pass_ypg * expected_games, 3),
+                "rush_yards_total": round(rush_ypg * expected_games, 3),
+                "receiving_yards_total": round(rec_ypg * expected_games, 3),
+                "receptions_total": round(rec_g * expected_games, 3),
+                "pass_tds_total": round(pass_tdg * expected_games, 3),
+                "rush_tds_total": round(rush_tdg * expected_games, 3),
+                "rec_tds_total": round(rec_tdg * expected_games, 3),
+                "anytime_td_prob": playoff_anytime,
+            }
+        )
+    output_rows.sort(
+        key=lambda r: (
+            -(
+                float(r.get("pass_yards_total") or 0.0)
+                + float(r.get("rush_yards_total") or 0.0)
+                + float(r.get("receiving_yards_total") or 0.0)
+            ),
+            str(r.get("player_name") or ""),
+        )
+    )
+    return output_rows
+
+
 def generate_player_playoff_totals(
     session: Any,
     *,
     season: int,
     expected_playoff_games_by_team: Dict[str, float],
     model_version: str = "nfl-player-v1",
+    regular_rows: Optional[List[Dict[str, Any]]] = None,
 ) -> List[Dict[str, Any]]:
-    """Expectation-weighted playoff season-total rows (see module docstring
-    for the full methodology). `expected_playoff_games_by_team` should be the
-    real per-team expected-games-played value from the season Monte Carlo;
-    any team missing from the dict is treated as 0 expected playoff games
-    (did not make the field in this simulation).
+    """Expectation-weighted playoff season-total rows (see module docstring).
+
+    When `regular_rows` is provided (preferred), rates are taken from those
+    season totals so QB starter locks propagate. Otherwise falls back to
+    weekly baseline aggregation (legacy path).
     """
+    if regular_rows is not None:
+        return generate_player_playoff_totals_from_regular(
+            regular_rows,
+            expected_playoff_games_by_team=expected_playoff_games_by_team,
+        )
+
     by_player = _fetch_real_weekly_rows(session, season=season, model_version=model_version)
 
     output_rows: List[Dict[str, Any]] = []
@@ -429,18 +1018,36 @@ def generate_and_write_player_season_totals(
     """The single entry point called from scripts/nfl/simulate_2026_season.py.
     Writes both CSVs directly into `out_dir` and returns a small summary dict
     suitable for embedding in that script's run_summary.json."""
-    regular_rows = generate_player_regular_season_totals(session, season=season, model_version=model_version)
+    regular_rows, qb_lock_audit, skill_prior_audit = generate_player_regular_season_totals(
+        session,
+        season=season,
+        model_version=model_version,
+        apply_qb_lock=True,
+        apply_skill_prior=True,
+    )
     playoff_rows = generate_player_playoff_totals(
         session,
         season=season,
         expected_playoff_games_by_team=expected_playoff_games_by_team,
         model_version=model_version,
+        regular_rows=regular_rows,
     )
     write_player_totals_csv(regular_rows, os.path.join(out_dir, "player_regular_season_totals.csv"))
     write_player_totals_csv(playoff_rows, os.path.join(out_dir, "player_playoff_totals.csv"))
     pass_quality = evaluate_season_pass_leader_quality(regular_rows)
     skill_quality = evaluate_season_skill_leader_quality(regular_rows)
-    quality = {"pass": pass_quality, "skill": skill_quality}
+    quality = {
+        "pass": pass_quality,
+        "skill": skill_quality,
+        "qb_starter_lock": qb_lock_audit,
+        "skill_prior_anchor": {
+            "applied": skill_prior_audit.get("applied"),
+            "method": skill_prior_audit.get("method"),
+            "players_adjusted": skill_prior_audit.get("players_adjusted"),
+            "anchors_loaded": skill_prior_audit.get("anchors_loaded"),
+            "top_adjustments": skill_prior_audit.get("top_adjustments"),
+        },
+    }
     quality_path = os.path.join(out_dir, "player_season_pass_quality.json")
     with open(quality_path, "w") as fh:
         json.dump(quality, fh, indent=2, sort_keys=True)
@@ -455,5 +1062,16 @@ def generate_and_write_player_season_totals(
         "distinct_games_projected_values": games_projected_values,
         "pass_leader_quality": pass_quality,
         "skill_leader_quality": skill_quality,
+        "qb_starter_lock": {
+            "applied": qb_lock_audit.get("applied"),
+            "teams_locked": qb_lock_audit.get("teams_locked"),
+            "method": qb_lock_audit.get("method"),
+        },
+        "skill_prior_anchor": {
+            "applied": skill_prior_audit.get("applied"),
+            "method": skill_prior_audit.get("method"),
+            "players_adjusted": skill_prior_audit.get("players_adjusted"),
+            "anchors_loaded": skill_prior_audit.get("anchors_loaded"),
+        },
         "publish_ready": publish_ready,
     }

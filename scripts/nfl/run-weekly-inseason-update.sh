@@ -144,6 +144,19 @@ else
   log "Skipping awards (SKIP_AWARDS=1)"
 fi
 
+# --- Projections Hub Actual column (team W/L + player season-to-date) ---
+log "Writing Projections Hub actuals JSON"
+if [[ "${DRY_RUN}" -eq 1 ]]; then
+  log "DRY-RUN skip write_projection_actuals.py"
+else
+  (
+    cd "${ROOT_DIR}"
+    DATABASE_URL="${DATABASE_URL}" \
+      "${PYTHON_BIN}" scripts/nfl/write_projection_actuals.py --season "${SEASON}" --from-db \
+      || log "WARN: projection actuals writer failed (hub can still use live /nfl/ops/projection-actuals)"
+  )
+fi
+
 log "Done. Re-run safely any time; DP steps upsert/replace, model ops enqueue/idempotent rematerialize."
 log "STRICT=${STRICT} (set STRICT=1 to fail the script on model-step errors)."
-log "Desk: /pro/nfl/fair-lines → /pro/nfl/edges → /pro/nfl/props"
+log "Desk: /pro/nfl/fair-lines → /pro/nfl/edges → /pro/nfl/props → /pro/nfl/projections"

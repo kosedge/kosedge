@@ -154,6 +154,7 @@ Tables:
   - rest-day effects
   - home-field advantage
   - matchup/rolling feature-pack signals (`nfl_dp_matchup_features_weekly`) with bounded point adjustments and safe fallback-to-baseline when features are missing
+  - **KAV** (Kos Edge Adjusted Value) — owned opponent-adjusted EPA efficiency, lagged week−1 (see `docs/NFL_KAV.md`); handicapping factor `kav_efficiency`
   - totals-specific bounded signals:
     - tempo/pass-rate proxy
     - offense-vs-defense EPA interaction terms

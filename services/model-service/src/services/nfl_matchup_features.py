@@ -41,7 +41,21 @@ def fetch_latest_matchup_feature_pack(
                 home_success_defense_allowed_5g, away_success_defense_allowed_5g,
                 diff_off_epa_5g, diff_def_epa_allowed_5g,
                 diff_pressure_generated_5g, diff_pressure_allowed_5g,
-                diff_red_zone_td_rate_5g
+                diff_red_zone_td_rate_5g,
+                home_kav_offense_5g, away_kav_offense_5g,
+                home_kav_defense_5g, away_kav_defense_5g,
+                home_kav_net_5g, away_kav_net_5g,
+                home_kav_offense_ytd, away_kav_offense_ytd,
+                home_kav_defense_ytd, away_kav_defense_ytd,
+                home_kav_net_ytd, away_kav_net_ytd,
+                diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
+                kav_as_of_week,
+                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
+                home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
+                home_sub_elasticity_5g, away_sub_elasticity_5g,
+                home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
+                home_coach_pace_5g, away_coach_pace_5g,
+                second_order_as_of_week
               FROM nfl_dp_matchup_features_weekly
               WHERE game_id = :game_id
               UNION ALL
@@ -59,7 +73,21 @@ def fetch_latest_matchup_feature_pack(
                 home_success_defense_allowed_5g, away_success_defense_allowed_5g,
                 diff_off_epa_5g, diff_def_epa_allowed_5g,
                 diff_pressure_generated_5g, diff_pressure_allowed_5g,
-                diff_red_zone_td_rate_5g
+                diff_red_zone_td_rate_5g,
+                home_kav_offense_5g, away_kav_offense_5g,
+                home_kav_defense_5g, away_kav_defense_5g,
+                home_kav_net_5g, away_kav_net_5g,
+                home_kav_offense_ytd, away_kav_offense_ytd,
+                home_kav_defense_ytd, away_kav_defense_ytd,
+                home_kav_net_ytd, away_kav_net_ytd,
+                diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
+                kav_as_of_week,
+                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
+                home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
+                home_sub_elasticity_5g, away_sub_elasticity_5g,
+                home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
+                home_coach_pace_5g, away_coach_pace_5g,
+                second_order_as_of_week
               FROM nfl_dp_matchup_features_weekly
               WHERE :season IS NOT NULL
                 AND season = :season
@@ -79,7 +107,21 @@ def fetch_latest_matchup_feature_pack(
               home_success_defense_allowed_5g, away_success_defense_allowed_5g,
               diff_off_epa_5g, diff_def_epa_allowed_5g,
               diff_pressure_generated_5g, diff_pressure_allowed_5g,
-              diff_red_zone_td_rate_5g
+              diff_red_zone_td_rate_5g,
+              home_kav_offense_5g, away_kav_offense_5g,
+              home_kav_defense_5g, away_kav_defense_5g,
+              home_kav_net_5g, away_kav_net_5g,
+              home_kav_offense_ytd, away_kav_offense_ytd,
+              home_kav_defense_ytd, away_kav_defense_ytd,
+              home_kav_net_ytd, away_kav_net_ytd,
+              diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
+              kav_as_of_week,
+              home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
+              home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
+              home_sub_elasticity_5g, away_sub_elasticity_5g,
+              home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
+              home_coach_pace_5g, away_coach_pace_5g,
+              second_order_as_of_week
             FROM candidates
             ORDER BY priority, season DESC, week DESC
             LIMIT 1
@@ -137,5 +179,32 @@ def matchup_pack_to_sim_input_kwargs(
         "matchup_diff_pressure_allowed_5g": _to_float(matchup_pack.get("diff_pressure_allowed_5g")),
         "matchup_diff_red_zone_td_rate_5g": _to_float(matchup_pack.get("diff_red_zone_td_rate_5g")),
         "matchup_diff_success_rate_5g": diff_success_rate,
-        "feature_pack_version": "nfl-v1-matchup-pack",
+        "home_kav_offense_5g": _to_float(matchup_pack.get("home_kav_offense_5g")),
+        "away_kav_offense_5g": _to_float(matchup_pack.get("away_kav_offense_5g")),
+        "home_kav_defense_5g": _to_float(matchup_pack.get("home_kav_defense_5g")),
+        "away_kav_defense_5g": _to_float(matchup_pack.get("away_kav_defense_5g")),
+        "home_kav_net_5g": _to_float(matchup_pack.get("home_kav_net_5g")),
+        "away_kav_net_5g": _to_float(matchup_pack.get("away_kav_net_5g")),
+        "kav_as_of_week": (
+            int(matchup_pack["kav_as_of_week"])
+            if matchup_pack.get("kav_as_of_week") is not None
+            else None
+        ),
+        "home_st_kav_net_5g": _to_float(matchup_pack.get("home_st_kav_net_5g")),
+        "away_st_kav_net_5g": _to_float(matchup_pack.get("away_st_kav_net_5g")),
+        "diff_st_kav_net_5g": _to_float(matchup_pack.get("diff_st_kav_net_5g")),
+        "home_personnel_edge_5g": _to_float(matchup_pack.get("home_personnel_edge_5g")),
+        "away_personnel_edge_5g": _to_float(matchup_pack.get("away_personnel_edge_5g")),
+        "home_sub_elasticity_5g": _to_float(matchup_pack.get("home_sub_elasticity_5g")),
+        "away_sub_elasticity_5g": _to_float(matchup_pack.get("away_sub_elasticity_5g")),
+        "home_coach_aggression_5g": _to_float(matchup_pack.get("home_coach_aggression_5g")),
+        "away_coach_aggression_5g": _to_float(matchup_pack.get("away_coach_aggression_5g")),
+        "home_coach_pace_5g": _to_float(matchup_pack.get("home_coach_pace_5g")),
+        "away_coach_pace_5g": _to_float(matchup_pack.get("away_coach_pace_5g")),
+        "second_order_as_of_week": (
+            int(matchup_pack["second_order_as_of_week"])
+            if matchup_pack.get("second_order_as_of_week") is not None
+            else None
+        ),
+        "feature_pack_version": "nfl-v1.3-matchup-pack-second-order",
     }

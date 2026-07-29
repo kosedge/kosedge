@@ -55,6 +55,13 @@ def _row(i: int) -> dict:
         "diff_pressure_allowed_5g": -pressure_delta * 0.9,
         "diff_red_zone_td_rate_5g": off_delta * 0.4,
         "diff_success_rate_5g": (off_delta * 0.5) - (defense_delta * 0.3),
+        "home_kav_offense_5g": 0.12 + off_delta,
+        "away_kav_offense_5g": -0.05 - off_delta * 0.5,
+        "home_kav_defense_5g": -0.08 - defense_delta,
+        "away_kav_defense_5g": 0.06 + defense_delta,
+        "home_kav_net_5g": 0.20 + off_delta - defense_delta,
+        "away_kav_net_5g": -0.11 - off_delta + defense_delta,
+        "diff_kav_net_5g": 0.31 + (2 * off_delta) - (2 * defense_delta),
         "home_injury_impact": 0.3 + injury_delta,
         "away_injury_impact": 0.3 - injury_delta,
         "diff_injury_impact": injury_delta * 2,
@@ -81,7 +88,7 @@ def test_fit_nfl_supervised_models_returns_metrics() -> None:
     assert metrics["test_total_mae"] is not None
     assert metrics["test_margin_mae"] is not None
     assert len(out["feature_keys"]) == len(FEATURE_KEYS)
-    assert out["schema_version"] == 2
+    assert out["schema_version"] == 3
     assert set(out["models_pickle_b64"].keys()) == {"win", "total", "margin"}
     assert "feature_importance" in out
 
@@ -103,6 +110,13 @@ def test_apply_supervised_blend_overlays_markets() -> None:
         "diff_pressure_allowed_5g": -0.04,
         "diff_red_zone_td_rate_5g": 0.04,
         "diff_success_rate_5g": 0.09,
+        "home_kav_offense_5g": 0.25,
+        "away_kav_offense_5g": -0.10,
+        "home_kav_defense_5g": -0.15,
+        "away_kav_defense_5g": 0.08,
+        "home_kav_net_5g": 0.40,
+        "away_kav_net_5g": -0.18,
+        "diff_kav_net_5g": 0.58,
         "home_injury_impact": 0.1,
         "away_injury_impact": 0.6,
         "diff_injury_impact": -0.5,
@@ -133,7 +147,7 @@ def test_apply_supervised_blend_overlays_markets() -> None:
     assert isinstance(out["fair_home_ml"], int)
     overlay = out.get("supervised_overlay", {})
     assert overlay.get("applied") is True
-    assert overlay.get("schema_version") == 2
+    assert overlay.get("schema_version") == 3
     assert "supervised_spread_home" in overlay
 
 

@@ -1,0 +1,13 @@
+{
+  "updated_at": "2026-07-28T16:33:18.043246+00:00",
+  "todo_total": 96,
+  "completed_in_run": 96,
+  "games_processed": 369,
+  "projections_inserted": 369,
+  "last": {
+    "game_date": "2026-01-18",
+    "games_processed": 4,
+    "projections_inserted": 4,
+    "slate_pre_mean": 45.8275
+  }
+}

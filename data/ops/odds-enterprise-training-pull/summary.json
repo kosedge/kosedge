@@ -1,0 +1,78 @@
+{
+  "updated_at": "2026-07-28T15:06:43.970105+00:00",
+  "credits_spent": 6022,
+  "credits_remaining": 2993254,
+  "credits_starting": 2999276,
+  "stop_reason": null,
+  "by_sport": {
+    "nfl": {
+      "mainline_dates_attempted": 244,
+      "mainline_requests": 200,
+      "mainline_skipped_cached": 0,
+      "mainline_skipped_owned_range": 144,
+      "mainline_skipped_empty": 0,
+      "mainline_events": 3824,
+      "mainline_snapshots": 19174,
+      "prop_events_pulled": 0,
+      "prop_events_skipped_owned": 0,
+      "prop_events_skipped_no_match": 0,
+      "prop_rows": 0,
+      "prop_open_pulled": 0,
+      "errors": 0
+    }
+  },
+  "status": "completed",
+  "inventory": {
+    "nfl": {
+      "mainline_games": 1868,
+      "prop_rows": 20322,
+      "prop_events": 468,
+      "prop_markets": [
+        "pass_yds",
+        "receptions",
+        "rec_yds",
+        "rush_yds"
+      ]
+    },
+    "mlb": {
+      "mainline_games": 48,
+      "prop_rows": 0,
+      "prop_events": 0,
+      "prop_markets": null
+    },
+    "nba": {
+      "mainline_games": 0,
+      "prop_rows": 0,
+      "prop_events": 0,
+      "prop_markets": null
+    },
+    "nhl": {
+      "mainline_games": 0,
+      "prop_rows": 0,
+      "prop_events": 0,
+      "prop_markets": null
+    },
+    "wnba": {
+      "mainline_games": 0,
+      "prop_rows": 0,
+      "prop_events": 0,
+      "prop_markets": null
+    },
+    "cfb": {
+      "mainline_games": 0,
+      "props": "excluded"
+    },
+    "ncaam": {
+      "mainline_games": 0,
+      "props": "excluded"
+    }
+  },
+  "tables_written": [
+    "odds_snapshots",
+    "games/teams/seasons/leagues/sports",
+    "nfl_player_prop_market_snapshots",
+    "player_prop_market_snapshots",
+    "odds_api_request_cache",
+    "odds_api_credit_ledger"
+  ]
+}

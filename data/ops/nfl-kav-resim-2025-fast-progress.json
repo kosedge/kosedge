@@ -1,0 +1,14 @@
+{
+  "updated_at": "2026-07-28T16:32:10.564102+00:00",
+  "i": 94,
+  "todo": 94,
+  "games": 366,
+  "inserted": 366,
+  "elapsed_sec": 2894.6,
+  "last": {
+    "day": "2025-09-07",
+    "games_processed": 13,
+    "projections_inserted": 13,
+    "slate_pre_mean": 44.6738
+  }
+}

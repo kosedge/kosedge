@@ -31,6 +31,8 @@ from src.services.nfl_handicapping_framework import (
     get_nfl_handicapping_config,
 )
 from src.services.nfl_totals_calibration import fetch_nfl_totals_calibration
+from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as nfl_publish_moneyline_tag
+from src.services.nfl_side_total_publish_policy import publish_tag as nfl_publish_tag
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
 log = logging.getLogger(__name__)
@@ -3068,6 +3070,41 @@ def nfl_fair_lines(
         if compare_spread_home is not None and spread_home is not None:
             spread_edge = round(spread_home - float(compare_spread_home), 3)
 
+        # Product gate defaults YELLOW until ops artifact promotes GREEN.
+        # Fair-lines slate is REG (nfl_dp_schedules); PRE still blocked if passed.
+        _gate = str(os.getenv("NFL_PRODUCT_GATE_STATUS", "YELLOW")).upper()
+        _season_type = str(mapped.get("season_type") or "REG")
+        spread_pub = nfl_publish_tag(
+            market="spread",
+            abs_edge=abs(spread_edge) if spread_edge is not None else None,
+            product_gate_status=_gate,
+            season_type=_season_type,
+        )
+        total_pub = nfl_publish_tag(
+            market="total",
+            abs_edge=abs(total_edge) if total_edge is not None else None,
+            product_gate_status=_gate,
+            season_type=_season_type,
+        )
+        # ML PLAY only when spread PLAY + vig-aware EV ≥ 2%.
+        lean_home_ml = spread_edge is not None and float(spread_edge) < 0
+        ml_model_wp = None
+        ml_offered = None
+        if lean_home_ml:
+            ml_model_wp = home_win_prob
+            ml_offered = market_home_ml
+        else:
+            ml_model_wp = away_win_prob
+            ml_offered = market_away_ml
+        ml_pub = nfl_publish_moneyline_tag(
+            spread_tag=str(spread_pub.get("tag") or "PASS"),
+            spread_stake_eligible=bool(spread_pub.get("stake_eligible")),
+            model_win_prob=ml_model_wp,
+            offered_american=float(ml_offered) if ml_offered is not None else None,
+            product_gate_status=_gate,
+            season_type=_season_type,
+        )
+
         home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
         away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
 
@@ -3077,6 +3114,7 @@ def nfl_fair_lines(
                 "game_id": str(mapped.get("game_id")),
                 "season": int(mapped.get("season") or season),
                 "week": int(week_val) if week_val is not None else None,
+                "season_type": _season_type,
                 "start_time": mapped.get("start_time"),
                 "game_date": mapped.get("game_date"),
                 "home_team": home_display,
@@ -3111,6 +3149,16 @@ def nfl_fair_lines(
                 "total_edge": total_edge,
                 "spread_edge": spread_edge,
                 "market_joined": has_market,
+                "publish_tag_spread": spread_pub.get("tag"),
+                "publish_tag_total": total_pub.get("tag"),
+                "publish_tag_ml": ml_pub.get("tag"),
+                "stake_eligible_spread": bool(spread_pub.get("stake_eligible")),
+                "stake_eligible_total": bool(total_pub.get("stake_eligible")),
+                "stake_eligible_ml": bool(ml_pub.get("stake_eligible")),
+                "publish_reason_spread": spread_pub.get("reason"),
+                "publish_reason_total": total_pub.get("reason"),
+                "publish_reason_ml": ml_pub.get("reason"),
+                "ml_ev": ml_pub.get("ev"),
             }
         )
 
@@ -3240,6 +3288,10 @@ def run_nfl_simulation(
             injury_nowcast_source=str(injury_nowcast.get("source") or "nfl_dp_injuries"),
             injury_nowcast_home_drivers=home_nowcast.get("top_drivers") if isinstance(home_nowcast.get("top_drivers"), list) else [],
             injury_nowcast_away_drivers=away_nowcast.get("top_drivers") if isinstance(away_nowcast.get("top_drivers"), list) else [],
+            info_velocity_home=_to_float(home_nowcast.get("info_velocity_score")),
+            info_velocity_away=_to_float(away_nowcast.get("info_velocity_score")),
+            hours_since_change_home=_to_float(home_nowcast.get("hours_since_change")),
+            hours_since_change_away=_to_float(away_nowcast.get("hours_since_change")),
             weather_available=bool(weather_payload.get("available")),
             weather_wind_mph=_to_float(weather_payload.get("wind_mph")),
             weather_precip_mm=_to_float(weather_payload.get("precip_mm")),
@@ -3779,6 +3831,56 @@ def nfl_award_projections_board(
         return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
     finally:
         session.close()
+
+
+@router.get("/ops/projection-actuals")
+def nfl_projection_actuals(
+    season: int = Query(..., ge=2010, le=2100),
+) -> Dict[str, Any]:
+    """Season-to-date team W/L + player yards/receptions/TDs for Projections Hub."""
+    import psycopg
+    from data_platform_nfl.projection_actuals import empty_bundle, load_from_db
+
+    url = os.environ.get("DATABASE_URL", "")
+    if not url:
+        return empty_bundle(season, notes="DATABASE_URL missing")
+    url = (
+        url.replace("postgresql+psycopg://", "postgresql://")
+        .replace("postgres://", "postgresql://")
+    )
+    try:
+        with psycopg.connect(url) as conn:
+            bundle = load_from_db(conn, int(season))
+    except Exception as exc:  # noqa: BLE001
+        log.exception("projection-actuals load failed")
+        out = empty_bundle(season, notes=f"load_failed: {exc}")
+        out["error"] = str(exc)
+        return out
+    # Drop non-hub meta for a stable contract.
+    return {
+        "season": bundle.get("season"),
+        "asOfUtc": bundle.get("asOfUtc"),
+        "source": bundle.get("source"),
+        "teams": bundle.get("teams") or {},
+        "players": bundle.get("players") or {},
+        "notes": bundle.get("notes"),
+    }
+
+
+@router.post("/ops/write-projection-actuals")
+def nfl_write_projection_actuals(
+    season: int = Query(..., ge=2010, le=2100),
+) -> Dict[str, Any]:
+    """Write `data/ops/nfl-projection-actuals-{season}.json` (ops / weekly cadence)."""
+    task = celery_app.send_task(
+        "src.tasks.write_nfl_projection_actuals",
+        kwargs={"season": int(season)},
+    )
+    return {
+        "task_id": task.id,
+        "task_name": "src.tasks.write_nfl_projection_actuals",
+        "season": season,
+    }
 
 
 @router.get("/ops/projections-readiness")

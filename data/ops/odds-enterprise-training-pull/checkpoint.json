@@ -1,0 +1,68 @@
+{
+  "completed_sports": [
+    "mlb",
+    "nba",
+    "nhl",
+    "wnba",
+    "cfb",
+    "ncaam",
+    "nfl"
+  ],
+  "completed_phases": {
+    "nfl:props": {
+      "at": "2026-07-25T16:46:50.227824+00:00",
+      "targets": 855
+    },
+    "mlb:mainlines": {
+      "at": "2026-07-25T18:14:33.258565+00:00",
+      "dates": 1239
+    },
+    "mlb:props": {
+      "at": "2026-07-26T14:44:03.251210+00:00",
+      "dates": 757
+    },
+    "nba:mainlines": {
+      "at": "2026-07-26T15:52:49.004181+00:00",
+      "dates": 1417
+    },
+    "nba:props": {
+      "at": "2026-07-27T05:54:34.278186+00:00",
+      "dates": 768
+    },
+    "nhl:mainlines": {
+      "at": "2026-07-27T07:13:28.545904+00:00",
+      "dates": 1464
+    },
+    "nhl:props": {
+      "at": "2026-07-27T20:34:13.271711+00:00",
+      "dates": 822
+    },
+    "wnba:mainlines": {
+      "at": "2026-07-27T20:55:36.881834+00:00",
+      "dates": 836
+    },
+    "wnba:props": {
+      "at": "2026-07-27T23:11:03.736132+00:00",
+      "dates": 543
+    },
+    "cfb:mainlines": {
+      "at": "2026-07-28T02:40:43.734663+00:00",
+      "dates": 840
+    },
+    "ncaam:mainlines": {
+      "at": "2026-07-28T06:10:05.359242+00:00",
+      "dates": 894
+    },
+    "nfl:mainlines": {
+      "at": "2026-07-28T15:06:34.216834+00:00",
+      "dates": 244
+    }
+  },
+  "gap_densify_note": {
+    "reason": "2020-2023 mainline OC missing after DB restore swap; re-run NFL mainlines DB-first",
+    "cleared_phase": {
+      "at": "2026-07-25T12:47:06.761733+00:00",
+      "dates": 373
+    }
+  }
+}

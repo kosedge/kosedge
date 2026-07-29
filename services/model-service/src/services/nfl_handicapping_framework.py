@@ -4,7 +4,12 @@ import os
 from copy import deepcopy
 from typing import Any, Dict, Iterable, List, Optional
 
-NFL_HANDICAPPING_FRAMEWORK_VERSION = "nfl-handicap-core-v2"
+from .nfl_second_order_factors import (
+    compute_error_regime_uncertainty,
+    compute_travel_weather_interaction,
+)
+
+NFL_HANDICAPPING_FRAMEWORK_VERSION = "nfl-handicap-core-v3.1"
 
 
 def _env_float(name: str, default: float) -> float:
@@ -132,6 +137,63 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
                 "min_reliability": _clamp(_env_float("NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY", 0.35), 0.1, 1.0),
                 "max_reliability": _clamp(_env_float("NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY", 0.85), 0.2, 1.0),
             },
+            # Owned opponent-adjusted efficiency (KAV). Ground-truth for the model.
+            "kav_efficiency": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_KAV_ENABLED"), True),
+                "margin_weight": _env_float("NFL_FRAMEWORK_KAV_MARGIN_WEIGHT", 3.2),
+                "total_weight": _env_float("NFL_FRAMEWORK_KAV_TOTAL_WEIGHT", 2.4),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS", 3.5),
+                "max_total_points": _env_float("NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS", 2.8),
+            },
+            # Optional public DVOA second opinion — never used for training; placeholder only.
+            "external_dvoa": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED"), False),
+                "margin_weight": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT", 0.0),
+                "total_weight": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT", 0.0),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS", 0.0),
+                "max_total_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS", 0.0),
+            },
+            # Second-order: personnel package EPA edge (DISABLED — no public PBP personnel; holdout N/A).
+            "personnel_efficiency": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_PERSONNEL_ENABLED"), False),
+                "margin_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT", 0.85),
+                "total_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT", 0.45),
+                "elasticity_margin_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT", 0.15),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS", 1.6),
+                "max_total_points": _env_float("NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS", 1.1),
+            },
+            # Second-order thin coach (DISABLED — confirmatory ATS/CLV slight regress; ST/QB discipline).
+            "coach_aggression": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED"), False),
+                "margin_weight": _env_float("NFL_FRAMEWORK_COACH_MARGIN_WEIGHT", 0.55),
+                "total_weight": _env_float("NFL_FRAMEWORK_COACH_TOTAL_WEIGHT", 0.45),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS", 1.1),
+                "max_total_points": _env_float("NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS", 1.0),
+            },
+            # Injury/practice info velocity (DISABLED — confirmatory ATS −3.5pp).
+            "info_velocity": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_INFO_VELOCITY_ENABLED"), False),
+                "margin_weight": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT", 0.90),
+                "total_weight": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT", 0.35),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS", 1.2),
+                "max_total_points": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS", 0.8),
+            },
+            # Bounded travel × weather (PROMOTED — confirmatory ATS +0.71pp, CLV flat+).
+            "travel_weather_interaction": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED"), True),
+                "miles_wind_weight_total": _env_float("NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL", -0.000035),
+                "tz_precip_weight_margin": _env_float("NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN", 0.04),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS", 0.75),
+                "max_total_points": _env_float("NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS", 1.4),
+            },
+            # Error-regime meta: uncertainty widening only (PROMOTED — no point shift).
+            "error_regime": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_ERROR_REGIME_ENABLED"), True),
+                "max_stdev_widen": _env_float("NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN", 0.85),
+                "confidence_penalty_weight": _clamp(
+                    _env_float("NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY", 0.06), 0.0, 0.25
+                ),
+            },
         },
         "uncertainty": {
             "base_confidence": _clamp(_env_float("NFL_FRAMEWORK_BASE_CONFIDENCE", 0.72), 0.05, 0.99),
@@ -182,6 +244,28 @@ def compute_nfl_projection_decomposition(
     travel_timezone_delta_home: Optional[float] = None,
     travel_timezone_delta_away: Optional[float] = None,
     travel_available: Optional[bool] = None,
+    home_kav_net_5g: Optional[float] = None,
+    away_kav_net_5g: Optional[float] = None,
+    home_kav_offense_5g: Optional[float] = None,
+    away_kav_offense_5g: Optional[float] = None,
+    home_kav_defense_5g: Optional[float] = None,
+    away_kav_defense_5g: Optional[float] = None,
+    kav_as_of_week: Optional[int] = None,
+    external_dvoa_home: Optional[float] = None,
+    external_dvoa_away: Optional[float] = None,
+    home_personnel_edge_5g: Optional[float] = None,
+    away_personnel_edge_5g: Optional[float] = None,
+    home_sub_elasticity_5g: Optional[float] = None,
+    away_sub_elasticity_5g: Optional[float] = None,
+    home_coach_aggression_5g: Optional[float] = None,
+    away_coach_aggression_5g: Optional[float] = None,
+    home_coach_pace_5g: Optional[float] = None,
+    away_coach_pace_5g: Optional[float] = None,
+    second_order_as_of_week: Optional[int] = None,
+    info_velocity_home: Optional[float] = None,
+    info_velocity_away: Optional[float] = None,
+    hours_since_change_home: Optional[float] = None,
+    hours_since_change_away: Optional[float] = None,
     config_overrides: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     cfg = get_nfl_handicapping_config(config_overrides=config_overrides)
@@ -435,7 +519,265 @@ def compute_nfl_projection_decomposition(
                 "reliability": round(regression_reliability, 4),
             },
         },
+        "kav_efficiency": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Owned KAV (opponent-adjusted EPA). Strict week-1 lag.",
+            "raw_signals": {},
+        },
+        "external_dvoa": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Optional public DVOA second opinion; disabled for training.",
+            "raw_signals": {},
+        },
+        "personnel_efficiency": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Personnel package EPA edge + sub elasticity. Strict week-1 lag.",
+            "raw_signals": {},
+        },
+        "coach_aggression": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Thin 4th-down / tempo rates. Strict week-1 lag.",
+            "raw_signals": {},
+        },
+        "info_velocity": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Injury/practice upgrade-downgrade velocity + hours since change.",
+            "raw_signals": {},
+        },
+        "travel_weather_interaction": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Bounded travel × weather outdoor stress; skips if feeds missing.",
+            "raw_signals": {},
+        },
+        "error_regime": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Uncertainty widening only; no unsupervised point shift.",
+            "raw_signals": {},
+        },
     }
+
+    kav_cfg = factors_cfg["kav_efficiency"]
+    kav_enabled = bool(kav_cfg.get("enabled"))
+    kav_home_net = _to_float(home_kav_net_5g)
+    kav_away_net = _to_float(away_kav_net_5g)
+    if kav_enabled and kav_home_net is not None and kav_away_net is not None:
+        kav_diff = kav_home_net - kav_away_net
+        kav_margin = _clamp(
+            kav_diff * float(kav_cfg["margin_weight"]),
+            -float(kav_cfg["max_margin_points"]),
+            float(kav_cfg["max_margin_points"]),
+        )
+        home_off_k = _to_float(home_kav_offense_5g, 0.0) or 0.0
+        away_off_k = _to_float(away_kav_offense_5g, 0.0) or 0.0
+        home_def_k = _to_float(home_kav_defense_5g, 0.0) or 0.0
+        away_def_k = _to_float(away_kav_defense_5g, 0.0) or 0.0
+        kav_total_signal = home_off_k + away_off_k + home_def_k + away_def_k
+        kav_total = _clamp(
+            kav_total_signal * float(kav_cfg["total_weight"]) * 0.5,
+            -float(kav_cfg["max_total_points"]),
+            float(kav_cfg["max_total_points"]),
+        )
+        contributions["kav_efficiency"] = {
+            "margin_points": round(kav_margin, 4),
+            "total_points": round(kav_total, 4),
+            "available": True,
+            "notes": "Owned KAV (opponent-adjusted EPA). Strict week-1 lag.",
+            "raw_signals": {
+                "home_kav_net_5g": round(kav_home_net, 6),
+                "away_kav_net_5g": round(kav_away_net, 6),
+                "diff_kav_net_5g": round(kav_diff, 6),
+                "kav_as_of_week": kav_as_of_week,
+            },
+        }
+
+    ext_cfg = factors_cfg["external_dvoa"]
+    ext_home = _to_float(external_dvoa_home)
+    ext_away = _to_float(external_dvoa_away)
+    if bool(ext_cfg.get("enabled")) and ext_home is not None and ext_away is not None:
+        ext_diff = ext_home - ext_away
+        ext_margin = _clamp(
+            ext_diff * float(ext_cfg["margin_weight"]),
+            -float(ext_cfg["max_margin_points"]),
+            float(ext_cfg["max_margin_points"]),
+        )
+        contributions["external_dvoa"] = {
+            "margin_points": round(ext_margin, 4),
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Optional public DVOA second opinion (not used in training).",
+            "raw_signals": {
+                "external_dvoa_home": round(ext_home, 6),
+                "external_dvoa_away": round(ext_away, 6),
+            },
+        }
+
+    pers_cfg = factors_cfg["personnel_efficiency"]
+    if not bool(pers_cfg.get("enabled")):
+        contributions["personnel_efficiency"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Personnel efficiency disabled via env.",
+            "raw_signals": {"disabled": True},
+        }
+    else:
+        p_home = _to_float(home_personnel_edge_5g)
+        p_away = _to_float(away_personnel_edge_5g)
+        e_home = _to_float(home_sub_elasticity_5g, 0.0) or 0.0
+        e_away = _to_float(away_sub_elasticity_5g, 0.0) or 0.0
+        if p_home is not None and p_away is not None:
+            p_diff = p_home - p_away
+            e_diff = e_home - e_away
+            pers_margin = _clamp(
+                p_diff * float(pers_cfg["margin_weight"])
+                + e_diff * float(pers_cfg["elasticity_margin_weight"]),
+                -float(pers_cfg["max_margin_points"]),
+                float(pers_cfg["max_margin_points"]),
+            )
+            pers_total = _clamp(
+                (p_home + p_away) * float(pers_cfg["total_weight"]) * 0.35,
+                -float(pers_cfg["max_total_points"]),
+                float(pers_cfg["max_total_points"]),
+            )
+            contributions["personnel_efficiency"] = {
+                "margin_points": round(pers_margin, 4),
+                "total_points": round(pers_total, 4),
+                "available": True,
+                "notes": "Personnel package EPA edge + sub elasticity. Strict week-1 lag.",
+                "raw_signals": {
+                    "home_personnel_edge_5g": round(p_home, 6),
+                    "away_personnel_edge_5g": round(p_away, 6),
+                    "home_sub_elasticity_5g": round(e_home, 6),
+                    "away_sub_elasticity_5g": round(e_away, 6),
+                    "second_order_as_of_week": second_order_as_of_week,
+                },
+            }
+
+    coach_cfg = factors_cfg["coach_aggression"]
+    if not bool(coach_cfg.get("enabled")):
+        contributions["coach_aggression"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Coach aggression disabled via env.",
+            "raw_signals": {"disabled": True},
+        }
+    else:
+        c_home = _to_float(home_coach_aggression_5g)
+        c_away = _to_float(away_coach_aggression_5g)
+        pace_home = _to_float(home_coach_pace_5g, 0.0) or 0.0
+        pace_away = _to_float(away_coach_pace_5g, 0.0) or 0.0
+        if c_home is not None and c_away is not None:
+            c_diff = c_home - c_away
+            coach_margin = _clamp(
+                c_diff * float(coach_cfg["margin_weight"]),
+                -float(coach_cfg["max_margin_points"]),
+                float(coach_cfg["max_margin_points"]),
+            )
+            pace_sum = pace_home + pace_away
+            coach_total = _clamp(
+                pace_sum * float(coach_cfg["total_weight"]) * 0.5,
+                -float(coach_cfg["max_total_points"]),
+                float(coach_cfg["max_total_points"]),
+            )
+            contributions["coach_aggression"] = {
+                "margin_points": round(coach_margin, 4),
+                "total_points": round(coach_total, 4),
+                "available": True,
+                "notes": "Thin 4th-down / tempo rates. Strict week-1 lag.",
+                "raw_signals": {
+                    "home_coach_aggression_5g": round(c_home, 6),
+                    "away_coach_aggression_5g": round(c_away, 6),
+                    "home_coach_pace_5g": round(pace_home, 6),
+                    "away_coach_pace_5g": round(pace_away, 6),
+                    "second_order_as_of_week": second_order_as_of_week,
+                },
+            }
+
+    info_cfg = factors_cfg["info_velocity"]
+    if not bool(info_cfg.get("enabled")):
+        contributions["info_velocity"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Info velocity disabled via env.",
+            "raw_signals": {"disabled": True},
+        }
+    else:
+        v_home = _to_float(info_velocity_home)
+        v_away = _to_float(info_velocity_away)
+        if v_home is not None and v_away is not None:
+            # Positive velocity = net downgrades. Home downgrades hurt home margin.
+            v_diff = v_away - v_home
+            info_margin = _clamp(
+                v_diff * float(info_cfg["margin_weight"]),
+                -float(info_cfg["max_margin_points"]),
+                float(info_cfg["max_margin_points"]),
+            )
+            info_total = _clamp(
+                -(abs(v_home) + abs(v_away)) * float(info_cfg["total_weight"]) * 0.35,
+                -float(info_cfg["max_total_points"]),
+                float(info_cfg["max_total_points"]),
+            )
+            contributions["info_velocity"] = {
+                "margin_points": round(info_margin, 4),
+                "total_points": round(info_total, 4),
+                "available": True,
+                "notes": "Injury/practice upgrade-downgrade velocity + hours since change.",
+                "raw_signals": {
+                    "info_velocity_home": round(v_home, 6),
+                    "info_velocity_away": round(v_away, 6),
+                    "hours_since_change_home": hours_since_change_home,
+                    "hours_since_change_away": hours_since_change_away,
+                },
+            }
+
+    tw_cfg = factors_cfg["travel_weather_interaction"]
+    if not bool(tw_cfg.get("enabled")):
+        contributions["travel_weather_interaction"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Travel×weather disabled via env.",
+            "raw_signals": {"disabled": True},
+        }
+    else:
+        tw = compute_travel_weather_interaction(
+            travel_miles_away=travel_miles_away,
+            travel_miles_home=travel_miles_home,
+            travel_timezone_delta_away=travel_timezone_delta_away,
+            travel_timezone_delta_home=travel_timezone_delta_home,
+            weather_wind_mph=weather_wind_mph,
+            weather_precip_mm=weather_precip_mm,
+            weather_temp_f=weather_temp_f,
+            weather_available=bool(weather_available),
+            travel_available=bool(travel_available),
+            miles_wind_weight_total=float(tw_cfg["miles_wind_weight_total"]),
+            tz_precip_weight_margin=float(tw_cfg["tz_precip_weight_margin"]),
+            max_margin_points=float(tw_cfg["max_margin_points"]),
+            max_total_points=float(tw_cfg["max_total_points"]),
+        )
+        contributions["travel_weather_interaction"] = {
+            "margin_points": tw["margin_points"],
+            "total_points": tw["total_points"],
+            "available": bool(tw["available"]),
+            "notes": "Bounded travel × weather outdoor stress; skips if feeds missing.",
+            "raw_signals": tw.get("raw_signals") or {},
+        }
 
     predicted_margin = float(
         contributions["base_efficiency"]["margin_points"]
@@ -446,6 +788,12 @@ def compute_nfl_projection_decomposition(
         + contributions["travel_schedule"]["margin_points"]
         + contributions["situational_flags"]["margin_points"]
         + contributions["regression_luck"]["margin_points"]
+        + contributions["kav_efficiency"]["margin_points"]
+        + contributions["external_dvoa"]["margin_points"]
+        + contributions["personnel_efficiency"]["margin_points"]
+        + contributions["coach_aggression"]["margin_points"]
+        + contributions["info_velocity"]["margin_points"]
+        + contributions["travel_weather_interaction"]["margin_points"]
     )
     predicted_total = float(
         priors["base_total_points"]
@@ -455,6 +803,12 @@ def compute_nfl_projection_decomposition(
         + contributions["weather_environment"]["total_points"]
         + contributions["travel_schedule"]["total_points"]
         + contributions["regression_luck"]["total_points"]
+        + contributions["kav_efficiency"]["total_points"]
+        + contributions["external_dvoa"]["total_points"]
+        + contributions["personnel_efficiency"]["total_points"]
+        + contributions["coach_aggression"]["total_points"]
+        + contributions["info_velocity"]["total_points"]
+        + contributions["travel_weather_interaction"]["total_points"]
     )
     predicted_total = _clamp(predicted_total, 30.0, 66.0)
 
@@ -470,6 +824,64 @@ def compute_nfl_projection_decomposition(
         _to_float(injury_nowcast_freshness_home_hours, 0.0) or 0.0,
         _to_float(injury_nowcast_freshness_away_hours, 0.0) or 0.0,
     )
+
+    err_cfg = factors_cfg["error_regime"]
+    v_home_abs = abs(_to_float(info_velocity_home, 0.0) or 0.0)
+    v_away_abs = abs(_to_float(info_velocity_away, 0.0) or 0.0)
+    hours_change = None
+    for candidate in (hours_since_change_home, hours_since_change_away):
+        val = _to_float(candidate)
+        if val is None:
+            continue
+        hours_change = val if hours_change is None else min(hours_change, val)
+    injury_impact_avg = (
+        (_to_float(injury_nowcast_impact_home, 0.0) or 0.0)
+        + (_to_float(injury_nowcast_impact_away, 0.0) or 0.0)
+    ) / 2.0
+    if not bool(err_cfg.get("enabled")):
+        contributions["error_regime"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Error regime disabled via env.",
+            "raw_signals": {"disabled": True, "stdev_widen": 0.0},
+        }
+        error_regime = {
+            "stdev_widen": 0.0,
+            "confidence_penalty": 0.0,
+            "regime_score": 0.0,
+        }
+    else:
+        season_week = second_order_as_of_week if second_order_as_of_week is not None else kav_as_of_week
+        error_regime = compute_error_regime_uncertainty(
+            info_velocity_abs=max(v_home_abs, v_away_abs),
+            hours_since_injury_change=hours_change,
+            weather_available=bool(weather_available),
+            factor_coverage=factor_coverage,
+            injury_impact=injury_impact_avg,
+            max_stdev_widen=float(err_cfg["max_stdev_widen"]),
+            confidence_penalty_weight=float(err_cfg["confidence_penalty_weight"]),
+            season_week=int(season_week) if season_week is not None else None,
+        )
+        contributions["error_regime"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": error_regime.get("notes") or "Uncertainty widening only.",
+            "raw_signals": {
+                "regime_score": error_regime["regime_score"],
+                "stdev_widen": error_regime["stdev_widen"],
+                "confidence_penalty": error_regime["confidence_penalty"],
+                "early_season_boost": error_regime.get("early_season_boost"),
+                "season_week": season_week,
+            },
+        }
+
+    # Recompute coverage after error_regime is filled.
+    available_count = sum(1 for item in contributions.values() if bool(item.get("available")))
+    factor_coverage = available_count / max(1, len(contributions))
+    missing_count = len(contributions) - available_count
+
     penalties = {
         "missing_data": round(missing_count * uncertainty_cfg["missing_factor_penalty"], 4),
         "injury_staleness": round(
@@ -486,6 +898,7 @@ def compute_nfl_projection_decomposition(
             * uncertainty_cfg["regression_penalty_weight"],
             4,
         ),
+        "error_regime": round(float(error_regime.get("confidence_penalty") or 0.0), 4),
     }
     total_penalty = round(sum(penalties.values()), 4)
     confidence_score = _clamp(uncertainty_cfg["base_confidence"] - total_penalty, 0.05, 0.99)
@@ -499,6 +912,7 @@ def compute_nfl_projection_decomposition(
         "factor_contributions": contributions,
         "factor_coverage": round(factor_coverage, 4),
         "confidence_score": round(confidence_score, 4),
+        "error_regime_stdev_widen": round(float(error_regime.get("stdev_widen") or 0.0), 4),
         "uncertainty_penalties": {
             **penalties,
             "total_penalty": total_penalty,

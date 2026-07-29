@@ -136,6 +136,9 @@ export function fairLinesToEdgeBoardRows(
     const bestTotalBook = line.bestTotalBook ?? undefined;
 
     const week = line.week ?? undefined;
+    const seasonType = line.seasonType ?? undefined;
+    const publishTagSpread = line.publishTagSpread ?? undefined;
+    const publishTagTotal = line.publishTagTotal ?? undefined;
 
     rows.push({
       id: `${idBase}-spread`,
@@ -157,6 +160,8 @@ export function fairLinesToEdgeBoardRows(
       bestJuiceHome: formatJuice(line.bestSpreadHomeJuice),
       kei: keiHome,
       week,
+      seasonType,
+      publishTag: publishTagSpread,
     } as EdgeBoardRow);
 
     rows.push({
@@ -176,6 +181,8 @@ export function fairLinesToEdgeBoardRows(
       bestJuiceHome: formatJuice(line.bestTotalUnderJuice),
       kei: keiTotal,
       week,
+      seasonType,
+      publishTag: publishTagTotal,
     } as EdgeBoardRow);
   }
 

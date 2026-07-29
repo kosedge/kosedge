@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-07-28T12:51:51.342593+00:00",
+  "database_url_host": "127.0.0.1:5432/kosedge_nfl_restore",
+  "source": "pre-KAV-wired-resim sprint artifact (nfl-odds-open-close-grading.json @ sprint)",
+  "coverage": {
+    "schedule_games_2020_2025": 1693,
+    "owned_open_close_games": 724,
+    "rows_with_owned_oc_join": 296,
+    "rows_using_nflverse_close_fallback": 1530,
+    "rows_with_model_projection": 1693
+  },
+  "model": {
+    "spread_mae": 9.6127,
+    "total_mae": 10.1226,
+    "ml_brier": 0.1995,
+    "ats_hit_rate": 0.4932,
+    "clv_spread_avg": 2.022,
+    "clv_spread_positive_rate": 0.6604,
+    "clv_total_avg": 1.2863,
+    "clv_total_positive_rate": 0.6325,
+    "n_spread": 1693,
+    "n_total": 1693,
+    "n_clv_spread": 159,
+    "n_clv_total": 117
+  }
+}

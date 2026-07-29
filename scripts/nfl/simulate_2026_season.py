@@ -78,7 +78,8 @@ from src.tasks import (  # noqa: E402
 NFL_PLAYER_PROJECTION_MODEL_VERSION = "nfl-player-v1"
 
 SEASON = 2026
-N_REPLICATES = 50000
+# Default 50k; set NFL_SEASON_SIMS=100000 for production futures / win-total boards.
+N_REPLICATES = int(os.getenv("NFL_SEASON_SIMS", "50000"))
 NEUTRAL_SIM_COUNT = 900
 
 CONFERENCE_OF = {abbr: div.split("_")[0] for abbr, div in NFL_TEAM_DIVISION.items()}

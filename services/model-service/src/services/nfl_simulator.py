@@ -94,6 +94,29 @@ class NflGameInputs:
     tendency_proe_away: Optional[float] = None
     tendency_total_signal: Optional[float] = None
     tendency_spread_signal: Optional[float] = None
+    # Owned KAV (lagged opponent-adjusted efficiency). Never same-week.
+    home_kav_offense_5g: Optional[float] = None
+    away_kav_offense_5g: Optional[float] = None
+    home_kav_defense_5g: Optional[float] = None
+    away_kav_defense_5g: Optional[float] = None
+    home_kav_net_5g: Optional[float] = None
+    away_kav_net_5g: Optional[float] = None
+    kav_as_of_week: Optional[int] = None
+    # Second-order edge (week-lagged personnel / coach aggression).
+    home_personnel_edge_5g: Optional[float] = None
+    away_personnel_edge_5g: Optional[float] = None
+    home_sub_elasticity_5g: Optional[float] = None
+    away_sub_elasticity_5g: Optional[float] = None
+    home_coach_aggression_5g: Optional[float] = None
+    away_coach_aggression_5g: Optional[float] = None
+    home_coach_pace_5g: Optional[float] = None
+    away_coach_pace_5g: Optional[float] = None
+    second_order_as_of_week: Optional[int] = None
+    # Injury/practice information velocity (E).
+    info_velocity_home: Optional[float] = None
+    info_velocity_away: Optional[float] = None
+    hours_since_change_home: Optional[float] = None
+    hours_since_change_away: Optional[float] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -480,12 +503,36 @@ def simulate_nfl_game(
         travel_timezone_delta_home=inputs.travel_timezone_delta_home,
         travel_timezone_delta_away=inputs.travel_timezone_delta_away,
         travel_available=inputs.travel_available,
+        home_kav_net_5g=inputs.home_kav_net_5g,
+        away_kav_net_5g=inputs.away_kav_net_5g,
+        home_kav_offense_5g=inputs.home_kav_offense_5g,
+        away_kav_offense_5g=inputs.away_kav_offense_5g,
+        home_kav_defense_5g=inputs.home_kav_defense_5g,
+        away_kav_defense_5g=inputs.away_kav_defense_5g,
+        kav_as_of_week=inputs.kav_as_of_week,
+        home_personnel_edge_5g=inputs.home_personnel_edge_5g,
+        away_personnel_edge_5g=inputs.away_personnel_edge_5g,
+        home_sub_elasticity_5g=inputs.home_sub_elasticity_5g,
+        away_sub_elasticity_5g=inputs.away_sub_elasticity_5g,
+        home_coach_aggression_5g=inputs.home_coach_aggression_5g,
+        away_coach_aggression_5g=inputs.away_coach_aggression_5g,
+        home_coach_pace_5g=inputs.home_coach_pace_5g,
+        away_coach_pace_5g=inputs.away_coach_pace_5g,
+        second_order_as_of_week=inputs.second_order_as_of_week,
+        info_velocity_home=inputs.info_velocity_home,
+        info_velocity_away=inputs.info_velocity_away,
+        hours_since_change_home=inputs.hours_since_change_home,
+        hours_since_change_away=inputs.hours_since_change_away,
+        config_overrides=config_overrides,
     )
 
     mean_home = max(7.5, float(decomposition["expected_home_points"]))
     mean_away = max(7.0, float(decomposition["expected_away_points"]))
+    error_stdev_widen = float(decomposition.get("error_regime_stdev_widen") or 0.0)
     stdev = _clamp(
-        float(framework_config["priors"]["base_score_stdev"]) + float(totals_adjustments["stdev_points"]),
+        float(framework_config["priors"]["base_score_stdev"])
+        + float(totals_adjustments["stdev_points"])
+        + error_stdev_widen,
         7.6,
         12.2,
     )
@@ -659,6 +706,13 @@ def simulate_nfl_game(
             "matchup_diff_pressure_allowed_5g": inputs.matchup_diff_pressure_allowed_5g,
             "matchup_diff_red_zone_td_rate_5g": inputs.matchup_diff_red_zone_td_rate_5g,
             "matchup_diff_success_rate_5g": inputs.matchup_diff_success_rate_5g,
+            "home_kav_offense_5g": inputs.home_kav_offense_5g,
+            "away_kav_offense_5g": inputs.away_kav_offense_5g,
+            "home_kav_defense_5g": inputs.home_kav_defense_5g,
+            "away_kav_defense_5g": inputs.away_kav_defense_5g,
+            "home_kav_net_5g": inputs.home_kav_net_5g,
+            "away_kav_net_5g": inputs.away_kav_net_5g,
+            "kav_as_of_week": inputs.kav_as_of_week,
             "feature_pack_version": inputs.feature_pack_version,
             "injury_nowcast_confidence_home": inputs.injury_nowcast_confidence_home,
             "injury_nowcast_confidence_away": inputs.injury_nowcast_confidence_away,

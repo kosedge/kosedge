@@ -3119,6 +3119,10 @@ def run_nfl_market_simulations(
                 injury_nowcast_source=str(injury_nowcast.get("source") or "nfl_dp_injuries"),
                 injury_nowcast_home_drivers=home_nowcast.get("top_drivers") if isinstance(home_nowcast.get("top_drivers"), list) else [],
                 injury_nowcast_away_drivers=away_nowcast.get("top_drivers") if isinstance(away_nowcast.get("top_drivers"), list) else [],
+                info_velocity_home=_to_float(home_nowcast.get("info_velocity_score")),
+                info_velocity_away=_to_float(away_nowcast.get("info_velocity_score")),
+                hours_since_change_home=_to_float(home_nowcast.get("hours_since_change")),
+                hours_since_change_away=_to_float(away_nowcast.get("hours_since_change")),
                 weather_available=bool(weather_payload.get("available")),
                 weather_wind_mph=_to_float(weather_payload.get("wind_mph")),
                 weather_precip_mm=_to_float(weather_payload.get("precip_mm")),
@@ -3204,6 +3208,36 @@ def run_nfl_market_simulations(
                     "diff_pressure_allowed_5g": _to_float(mp.get("diff_pressure_allowed_5g")),
                     "diff_red_zone_td_rate_5g": _to_float(mp.get("diff_red_zone_td_rate_5g")),
                     "diff_success_rate_5g": _to_float(mk.get("matchup_diff_success_rate_5g")),
+                    "home_kav_offense_5g": _to_float(mp.get("home_kav_offense_5g")),
+                    "away_kav_offense_5g": _to_float(mp.get("away_kav_offense_5g")),
+                    "home_kav_defense_5g": _to_float(mp.get("home_kav_defense_5g")),
+                    "away_kav_defense_5g": _to_float(mp.get("away_kav_defense_5g")),
+                    "home_kav_net_5g": _to_float(mp.get("home_kav_net_5g")),
+                    "away_kav_net_5g": _to_float(mp.get("away_kav_net_5g")),
+                    "diff_kav_net_5g": (
+                        None
+                        if _to_float(mp.get("home_kav_net_5g")) is None
+                        or _to_float(mp.get("away_kav_net_5g")) is None
+                        else float(_to_float(mp.get("home_kav_net_5g")))
+                        - float(_to_float(mp.get("away_kav_net_5g")))
+                    ),
+                    # ST-KAV supervised inputs are opt-in only (failed v4 holdout).
+                    # Warehouse columns may still exist on matchup packs.
+                    **(
+                        {
+                            "home_st_kav_net_5g": _to_float(mp.get("home_st_kav_net_5g")),
+                            "away_st_kav_net_5g": _to_float(mp.get("away_st_kav_net_5g")),
+                            "diff_st_kav_net_5g": (
+                                None
+                                if _to_float(mp.get("home_st_kav_net_5g")) is None
+                                or _to_float(mp.get("away_st_kav_net_5g")) is None
+                                else float(_to_float(mp.get("home_st_kav_net_5g")))
+                                - float(_to_float(mp.get("away_st_kav_net_5g")))
+                            ),
+                        }
+                        if os.getenv("NFL_SUPERVISED_INCLUDE_ST_KAV", "0") == "1"
+                        else {}
+                    ),
                     "home_injury_impact": home_injury_impact,
                     "away_injury_impact": away_injury_impact,
                     "diff_injury_impact": home_injury_impact - away_injury_impact,
@@ -4494,6 +4528,22 @@ def _fetch_nfl_supervised_training_rows(
                   - COALESCE(mf.home_success_defense_allowed_5g, 0.0)
                 )
               ) / 2.0 AS diff_success_rate_5g,
+              mf.home_kav_offense_5g,
+              mf.away_kav_offense_5g,
+              mf.home_kav_defense_5g,
+              mf.away_kav_defense_5g,
+              mf.home_kav_net_5g,
+              mf.away_kav_net_5g,
+              CASE
+                WHEN mf.home_kav_net_5g IS NULL OR mf.away_kav_net_5g IS NULL THEN NULL
+                ELSE mf.home_kav_net_5g - mf.away_kav_net_5g
+              END AS diff_kav_net_5g,
+              mf.home_st_kav_net_5g,
+              mf.away_st_kav_net_5g,
+              CASE
+                WHEN mf.home_st_kav_net_5g IS NULL OR mf.away_st_kav_net_5g IS NULL THEN NULL
+                ELSE mf.diff_st_kav_net_5g
+              END AS diff_st_kav_net_5g,
               sch.home_team,
               sch.away_team,
               sch.roof,
@@ -11937,3 +11987,54 @@ def run_nfl_data_freshness_check(*, persist_alert: bool = True) -> Dict[str, Any
     from src.services.nfl_resilience_cycle import run_data_freshness_check
 
     return run_data_freshness_check(persist_alert=persist_alert)
+
+
+@celery_app.task(name="src.tasks.write_nfl_projection_actuals")
+def write_nfl_projection_actuals(*, season: int = 2026) -> Dict[str, Any]:
+    """Materialize Projections Hub actuals JSON from owned DB tables."""
+    import json
+    import os
+    from pathlib import Path
+
+    import psycopg
+
+    from data_platform_nfl.projection_actuals import empty_bundle, load_from_db
+
+    url = os.environ.get("DATABASE_URL", "")
+    url = (
+        url.replace("postgresql+psycopg://", "postgresql://")
+        .replace("postgres://", "postgresql://")
+    )
+    try:
+        with psycopg.connect(url) as conn:
+            bundle = load_from_db(conn, int(season))
+    except Exception as exc:  # noqa: BLE001
+        bundle = empty_bundle(int(season), notes=f"load_failed: {exc}")
+
+    payload = {
+        "season": bundle.get("season"),
+        "asOfUtc": bundle.get("asOfUtc"),
+        "source": bundle.get("source"),
+        "teams": bundle.get("teams") or {},
+        "players": bundle.get("players") or {},
+        "notes": bundle.get("notes"),
+    }
+
+    # Prefer monorepo root data/ops; fall back to model-service-local path.
+    candidates = [
+        Path(__file__).resolve().parents[3] / "data" / "ops",
+        Path(__file__).resolve().parents[2] / "data" / "ops",
+        Path("/app/data/ops"),
+    ]
+    out_dir = next((p for p in candidates if p.parent.exists() or p.exists()), candidates[0])
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"nfl-projection-actuals-{int(season)}.json"
+    out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "season": int(season),
+        "wrote": str(out_path),
+        "teams": len(payload["teams"]),
+        "playerKeys": len(payload["players"]),
+        "source": payload.get("source"),
+        "asOfUtc": payload.get("asOfUtc"),
+    }

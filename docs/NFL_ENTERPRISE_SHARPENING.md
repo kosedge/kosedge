@@ -77,8 +77,15 @@ These are real ceiling raises — code paths are ready to consume them:
 3. **Props continuity** (Sportradar or higher Odds API tier) for alt lines + CLV.
 4. **Coverage / personnel / blitz** licensed PBP for matchup packs.
 
-Until those land, the free stack (nflverse snaps+injuries+PBP+tendencies+market blend)
+Until those land, the free stack (nflverse snaps+injuries+PBP+tendencies+**KAV**+market blend)
 is the production path — sharpened, gated, and re-runnable every week.
+
+### KAV (owned efficiency)
+
+- Spec: `docs/NFL_KAV.md`
+- Tables: `nfl_dp_team_kav_game`, `nfl_dp_team_kav_weekly` (`041_nfl_kav_efficiency.sql`)
+- Wired into matchup packs, handicapping `kav_efficiency`, supervised schema v3
+- External public DVOA remains an optional second-opinion placeholder only — never training ground truth
 
 ## Honesty rules (non-negotiable)
 
@@ -86,3 +93,6 @@ is the production path — sharpened, gated, and re-runnable every week.
 2. Pass props stay research-only while densified MAE > 12.
 3. Dual ≥1000-yard RB rooms on the same team are a desk red flag (`skill` quality JSON).
 4. Market blend 0.30 on sides/totals stays; win by knowing _when_ to deviate.
+5. Sides/totals betting-product claim requires GREEN gates in
+   `docs/NFL_ENTERPRISE_GATES.md` (`scripts/nfl/evaluate_enterprise_gates.py`).
+   Full-slate PASS is default; PLAY is selective.

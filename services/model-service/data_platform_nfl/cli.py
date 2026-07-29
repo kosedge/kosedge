@@ -53,6 +53,16 @@ def main() -> None:
         help="Delete existing matchup-feature rows for target seasons before rebuild",
     )
     parser.add_argument(
+        "--materialize-kav",
+        action="store_true",
+        help="Build owned KAV opponent-adjusted efficiency tables from PBP",
+    )
+    parser.add_argument(
+        "--replace-kav",
+        action="store_true",
+        help="Delete existing KAV rows for target seasons before rebuild",
+    )
+    parser.add_argument(
         "--materialize-player-projection-features",
         action="store_true",
         help="Build weekly player projection features from usage/situational tables",
@@ -243,12 +253,85 @@ def main() -> None:
         action="store_true",
         help="Print the executable source fallback matrix JSON",
     )
+    parser.add_argument(
+        "--materialize-personnel-efficiency",
+        action="store_true",
+        help="Build personnel efficiency + substitution elasticity weekly (week-lagged)",
+    )
+    parser.add_argument(
+        "--replace-personnel-efficiency",
+        action="store_true",
+        help="Delete existing personnel/sub-elasticity rows for target seasons before rebuild",
+    )
+    parser.add_argument(
+        "--materialize-coach-aggression",
+        action="store_true",
+        help="Build coach aggression weekly latents from PBP (week-lagged)",
+    )
+    parser.add_argument(
+        "--replace-coach-aggression",
+        action="store_true",
+        help="Delete existing coach aggression rows for target seasons before rebuild",
+    )
+    parser.add_argument(
+        "--ingest-participation",
+        action="store_true",
+        help="Ingest nflverse participation/snap participation into weekly table",
+    )
+    parser.add_argument(
+        "--ingest-draft-picks",
+        action="store_true",
+        help="Ingest nflverse draft picks into nfl_dp_raw_objects",
+    )
+    parser.add_argument(
+        "--print-external-source-status",
+        action="store_true",
+        help="Print Visual Crossing env status (OTC/Spotrac/PFF deferred; no network)",
+    )
     args = parser.parse_args()
     seasons = _parse_seasons(args.seasons)
     if args.print_source_matrix:
         from .source_matrix import source_matrix_payload
 
         result = source_matrix_payload()
+    elif args.print_external_source_status:
+        from .external_sources import external_source_status
+
+        result = external_source_status()
+    elif args.ingest_participation:
+        from .extended_ingest import ingest_participation_weekly
+
+        result = ingest_participation_weekly(seasons=seasons, replace_existing=False)
+    elif args.ingest_draft_picks:
+        from .extended_ingest import ingest_draft_picks_raw
+
+        result = ingest_draft_picks_raw(seasons=seasons)
+    elif args.materialize_personnel_efficiency:
+        from .personnel_efficiency import (
+            attach_personnel_to_matchup_features,
+            materialize_personnel_efficiency,
+        )
+        from .db import SessionLocal
+
+        result = materialize_personnel_efficiency(
+            seasons=seasons,
+            replace_existing=args.replace_personnel_efficiency,
+        )
+        if result.get("ok"):
+            session = SessionLocal()
+            try:
+                result["matchup_attach"] = attach_personnel_to_matchup_features(
+                    session, seasons=seasons
+                )
+            finally:
+                session.close()
+    elif args.materialize_coach_aggression:
+        from .coach_aggression import materialize_coach_aggression
+
+        result = materialize_coach_aggression(
+            seasons=seasons,
+            replace_existing=args.replace_coach_aggression,
+        )
     elif args.run_dr_backup:
         from .dr_backup import run_dr_backup
 
@@ -345,6 +428,13 @@ def main() -> None:
             result = materialize_matchup_features_from_usage(
                 seasons=seasons,
                 replace_existing=args.replace_matchup_features,
+            )
+        elif args.materialize_kav:
+            from .kav import materialize_kav
+
+            result = materialize_kav(
+                seasons=seasons,
+                replace_existing=args.replace_kav,
             )
         elif args.materialize_player_projection_features:
             result = materialize_player_projection_features(

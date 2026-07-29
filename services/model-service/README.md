@@ -32,6 +32,26 @@ or point its **Config File** setting to the matching `railway.*.json` above.
 - `ODDS_API_KEY_BACKUP` — optional fallback if the primary key is rate-limited
   or revoked (see `services/odds_api.py`).
 
+### Optional — Visual Crossing weather (NFL H travel×weather)
+
+H (`travel_weather_interaction`) already runs on Open-Meteo → climatology when
+no VC key is present. Adding a key upgrades stadium-day weather quality.
+
+1. Sign up / get a free key: [Visual Crossing Weather API](https://www.visualcrossing.com/weather-api)
+2. Set **`VISUAL_CROSSING_API_KEY`** on local `.env` and Railway **model-service**
+   (production). Alias `VISUALCROSSING_API_KEY` also works.
+3. Leave `NFL_VC_WEATHER_ENABLED=true` (default). Disable to force Open-Meteo.
+4. Free tier is ~**1000 requests/day**. Production path caches by
+   location+date (~18h TTL in `nfl_dp_weather_forecast_cache`) and spaces
+   network calls (~1.1s min interval).
+
+Dry-run (no network when key missing):
+
+```bash
+cd services/model-service
+python -m data_platform_nfl.cli --print-external-source-status
+```
+
 ## Odds API credit budget — read before turning the scheduler on
 
 The default schedule in `celerybeat_schedule.py` pulls live odds every 30

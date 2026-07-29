@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-07-28T23:11:04.309579+00:00",
+  "required_input_keys": [
+    "home_kav_net_5g",
+    "away_kav_net_5g",
+    "rest_days_home",
+    "rest_days_away",
+    "injury_nowcast_impact_home",
+    "injury_nowcast_impact_away"
+  ],
+  "by_season": {
+    "2026": {
+      "n": 309,
+      "missing": {
+        "home_kav_net_5g": 309,
+        "away_kav_net_5g": 309,
+        "rest_days_home": 0,
+        "rest_days_away": 0,
+        "injury_nowcast_impact_home": 0,
+        "injury_nowcast_impact_away": 0
+      },
+      "has_inputs_obj": 309,
+      "pct_with_inputs_obj": 1.0,
+      "pct_missing": {
+        "home_kav_net_5g": 1.0,
+        "away_kav_net_5g": 1.0,
+        "rest_days_home": 0.0,
+        "rest_days_away": 0.0,
+        "injury_nowcast_impact_home": 0.0,
+        "injury_nowcast_impact_away": 0.0
+      }
+    },
+    "2025": {
+      "n": 366,
+      "missing": {
+        "home_kav_net_5g": 126,
+        "away_kav_net_5g": 126,
+        "rest_days_home": 0,
+        "rest_days_away": 0,
+        "injury_nowcast_impact_home": 0,
+        "injury_nowcast_impact_away": 0
+      },
+      "has_inputs_obj": 366,
+      "pct_with_inputs_obj": 1.0,
+      "pct_missing": {
+        "home_kav_net_5g": 0.3442622950819672,
+        "away_kav_net_5g": 0.3442622950819672,
+        "rest_days_home": 0.0,
+        "rest_days_away": 0.0,
+        "injury_nowcast_impact_home": 0.0,
+        "injury_nowcast_impact_away": 0.0
+      }
+    }
+  },
+  "notes": [
+    "Missing KAV/rest/injury fields degrade auditability even if sim used them live.",
+    "Weather/travel are optional (null outdoors/dome) \u2014 not counted as required."
+  ]
+}

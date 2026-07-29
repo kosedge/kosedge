@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-07-28T17:10:00Z",
+  "branch": "nfl-kav-sharpen",
+  "database": "127.0.0.1:5432/kosedge",
+  "betting_product_ready": false,
+  "gate_overall": "RED",
+  "honest_score_out_of_10": 6.7,
+  "prior_score": 5.5,
+  "supervised": {
+    "schema_version": 3,
+    "features": 41,
+    "has_kav": true,
+    "train_rows": 2992,
+    "test_rows": 570,
+    "test_brier": 0.1482,
+    "test_margin_mae": 7.48,
+    "test_total_mae": 9.20,
+    "holdout_gate": "GREEN"
+  },
+  "resim_2025": {
+    "days": 97,
+    "games_processed": 370,
+    "simulations": 500,
+    "artifact": "data/ops/nfl-kav-resim-summary.json"
+  },
+  "densify_2020_2023": {
+    "credits_spent": 6022,
+    "credits_remaining": 2993254,
+    "owned_open_close_games_before": 724,
+    "owned_open_close_games_after": 1931
+  },
+  "grading_before_after": {
+    "before": "data/ops/nfl-kav-grading-before.json",
+    "after": "data/ops/nfl-kav-grading-after.json",
+    "spread_mae": [9.6127, 9.5513],
+    "total_mae": [10.1226, 10.086],
+    "ml_brier": [0.1995, 0.1933],
+    "ats_hit_rate": [0.4932, 0.495],
+    "n_clv_spread": [159, 601],
+    "clv_spread_positive_rate": [0.6604, 0.5092],
+    "n_clv_total": [117, 378]
+  },
+  "artifacts": [
+    "data/ops/nfl-kav-supervised-retrain-v3.json",
+    "data/ops/nfl-kav-holdout-report.md",
+    "data/ops/nfl-kav-resim-summary.json",
+    "data/ops/nfl-kav-grading-before.json",
+    "data/ops/nfl-kav-grading-after.json",
+    "data/ops/nfl-owned-oc-densify-2020-2023.json",
+    "data/ops/nfl-owned-oc-densify-2020-2023.md",
+    "data/ops/nfl-enterprise-gates-latest.json",
+    "data/ops/nfl-enterprise-gates-latest.md",
+    "docs/NFL_ENTERPRISE_GATES.md"
+  ]
+}

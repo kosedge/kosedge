@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-07-28T21:22:03.741544+00:00",
+  "candidate_pairs": 52,
+  "unique_pairs_used": 52,
+  "target_conflicts_skipped": 0,
+  "snapshots_relinked": 24,
+  "coverage_after": [
+    {
+      "season": 2020,
+      "owned_2plus": 269,
+      "still_zero": 0,
+      "n": 269
+    },
+    {
+      "season": 2021,
+      "owned_2plus": 285,
+      "still_zero": 0,
+      "n": 285
+    },
+    {
+      "season": 2022,
+      "owned_2plus": 284,
+      "still_zero": 0,
+      "n": 284
+    },
+    {
+      "season": 2023,
+      "owned_2plus": 285,
+      "still_zero": 0,
+      "n": 285
+    },
+    {
+      "season": 2024,
+      "owned_2plus": 285,
+      "still_zero": 0,
+      "n": 285
+    },
+    {
+      "season": 2025,
+      "owned_2plus": 285,
+      "still_zero": 0,
+      "n": 285
+    }
+  ]
+}

@@ -133,7 +133,7 @@
             "quality_score": 0
           },
           "odds_events_seen": 0,
-          "odds_feed_error": "HTTPSConnectionPool(host='api.the-odds-api.com', port=443): Max retries exceeded with url: /v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h%2Ctotals&oddsFormat=american&dateFormat=iso&apiKey=90a633a22cbe3597b2bceab5eb665d48 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+          "odds_feed_error": "HTTPSConnectionPool(host='api.the-odds-api.com', port=443): Max retries exceeded with url: /v4/sports/americanfootball_nfl/odds?regions=us&markets=h2h%2Ctotals&oddsFormat=american&dateFormat=iso&apiKey=REDACTED (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
           "odds_feed_status": "degraded",
           "tuning_latest_run_id": "a325b6ee-e326-4c4c-81a5-d40323958da4"
         },
