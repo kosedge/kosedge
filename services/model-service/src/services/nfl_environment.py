@@ -2,12 +2,24 @@ from __future__ import annotations
 
 import math
 import os
+import time
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 
 OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+OPEN_METEO_ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
+
+# Forecast API covers near-term (+16d) and recent past via start_date / past runs.
+# Archive covers older days (ERA5; ~2d lag). Deep history stays on climatology.
+OPEN_METEO_FORECAST_PAST_DAYS = 14
+OPEN_METEO_FORECAST_FUTURE_DAYS = 16
+OPEN_METEO_ARCHIVE_MAX_PAST_DAYS = 90
+OPEN_METEO_CACHE_TTL_SEC = 3600.0
+
+# Process-local Open-Meteo cache: key -> (expires_monotonic, payload).
+_om_response_cache: Dict[str, Tuple[float, Dict[str, Any]]] = {}
 
 
 def _try_visual_crossing_weather(
@@ -16,7 +28,12 @@ def _try_visual_crossing_weather(
     lon: float,
     kickoff: datetime,
 ) -> Optional[Dict[str, Any]]:
-    """Optional Visual Crossing overlay; never raises into the sim path."""
+    """Optional Visual Crossing overlay; never raises into the sim path.
+
+    Requires ``VISUAL_CROSSING_API_KEY`` (alias ``VISUALCROSSING_API_KEY``).
+    Free tier ~1000 req/day; DB cache TTL ~18h in ``nfl_dp_weather_forecast_cache``.
+    Without a key, callers fall through to Open-Meteo (then climatology).
+    """
     key = (os.getenv("VISUAL_CROSSING_API_KEY") or os.getenv("VISUALCROSSING_API_KEY") or "").strip()
     if not key:
         return None
@@ -55,6 +72,65 @@ def _try_visual_crossing_weather(
         }
     except Exception:
         return None
+
+
+def _om_cache_key(lat: float, lon: float, day: str, endpoint: str) -> str:
+    return f"{endpoint}|{round(lat, 3)}|{round(lon, 3)}|{day}"
+
+
+def _om_cache_get(cache_key: str) -> Optional[Dict[str, Any]]:
+    row = _om_response_cache.get(cache_key)
+    if not row:
+        return None
+    expires_at, payload = row
+    if time.monotonic() > expires_at:
+        _om_response_cache.pop(cache_key, None)
+        return None
+    return payload
+
+
+def _om_cache_set(cache_key: str, payload: Dict[str, Any]) -> None:
+    _om_response_cache[cache_key] = (time.monotonic() + OPEN_METEO_CACHE_TTL_SEC, payload)
+
+
+def _mean_or_none(values: List[Optional[float]]) -> Optional[float]:
+    nums = [v for v in values if v is not None]
+    if not nums:
+        return None
+    return sum(nums) / float(len(nums))
+
+
+def _extract_kickoff_weather(
+    *,
+    hourly: Dict[str, Any],
+    kickoff: datetime,
+) -> Dict[str, Any]:
+    """Nearest hour ±1h mean for wind/temp; precip uses the kickoff hour (mm/h)."""
+    timestamps = hourly.get("time") if isinstance(hourly.get("time"), list) else []
+    temps = hourly.get("temperature_2m") if isinstance(hourly.get("temperature_2m"), list) else []
+    winds = hourly.get("windspeed_10m") if isinstance(hourly.get("windspeed_10m"), list) else []
+    if not winds:
+        winds = hourly.get("wind_speed_10m") if isinstance(hourly.get("wind_speed_10m"), list) else []
+    precip = hourly.get("precipitation") if isinstance(hourly.get("precipitation"), list) else []
+    if not timestamps:
+        raise ValueError("weather_times_missing")
+    kickoff_hour = kickoff.replace(minute=0, second=0, microsecond=0)
+    idx = min(
+        range(len(timestamps)),
+        key=lambda i: abs(
+            (_coerce_datetime(timestamps[i]) or kickoff_hour) - kickoff_hour
+        ).total_seconds(),
+    )
+    window = [j for j in (idx - 1, idx, idx + 1) if 0 <= j < len(timestamps)]
+    wind_vals = [_safe_float(winds[j]) if j < len(winds) else None for j in window]
+    temp_vals = [_safe_float(temps[j]) if j < len(temps) else None for j in window]
+    precip_val = _safe_float(precip[idx]) if idx < len(precip) else None
+    return {
+        "wind_mph": _mean_or_none(wind_vals),
+        "temp_f": _mean_or_none(temp_vals),
+        "precip_mm": precip_val,
+        "at": timestamps[idx],
+    }
 
 # Approximate stadium/home-market coordinates and standard offsets.
 TEAM_HOME_GEO: Dict[str, Dict[str, float]] = {
@@ -201,8 +277,10 @@ def fetch_game_weather_context(
         }
     today_utc = datetime.now(timezone.utc).date()
     kickoff_date = kickoff.date()
-    # Forecast endpoint is near-term; avoid costly calls for deep-history backfills.
-    if kickoff_date < (today_utc - timedelta(days=3)) or kickoff_date > (today_utc + timedelta(days=16)):
+    days_ahead = (kickoff_date - today_utc).days
+    days_ago = (today_utc - kickoff_date).days
+    # Prefer VC when keyed; otherwise Open-Meteo forecast/archive; else climatology upstream.
+    if days_ahead > OPEN_METEO_FORECAST_FUTURE_DAYS or days_ago > OPEN_METEO_ARCHIVE_MAX_PAST_DAYS:
         return {
             "available": False,
             "source": "open-meteo",
@@ -217,52 +295,49 @@ def fetch_game_weather_context(
     if vc is not None and bool(vc.get("available")):
         return vc
 
+    use_archive = days_ago > OPEN_METEO_FORECAST_PAST_DAYS
+    endpoint = "archive" if use_archive else "forecast"
+    url = OPEN_METEO_ARCHIVE_URL if use_archive else OPEN_METEO_FORECAST_URL
+    day = kickoff_date.isoformat()
+    cache_key = _om_cache_key(resolved_lat, resolved_lon, day, endpoint)
+
     try:
-        start_date = kickoff.date().isoformat()
-        end_date = start_date
-        response = requests.get(
-            OPEN_METEO_FORECAST_URL,
-            params={
-                "latitude": resolved_lat,
-                "longitude": resolved_lon,
-                "hourly": "temperature_2m,precipitation,windspeed_10m",
-                "temperature_unit": "fahrenheit",
-                "wind_speed_unit": "mph",
-                "timezone": "UTC",
-                "start_date": start_date,
-                "end_date": end_date,
-            },
-            timeout=10,
-        )
-        response.raise_for_status()
-        payload = response.json() or {}
+        payload = _om_cache_get(cache_key)
+        cache_hit = payload is not None
+        if payload is None:
+            response = requests.get(
+                url,
+                params={
+                    "latitude": resolved_lat,
+                    "longitude": resolved_lon,
+                    "hourly": "temperature_2m,precipitation,windspeed_10m",
+                    "temperature_unit": "fahrenheit",
+                    "wind_speed_unit": "mph",
+                    "timezone": "UTC",
+                    "start_date": day,
+                    "end_date": day,
+                },
+                timeout=10,
+            )
+            response.raise_for_status()
+            payload = response.json() or {}
+            if isinstance(payload, dict):
+                _om_cache_set(cache_key, payload)
         hourly = payload.get("hourly") if isinstance(payload.get("hourly"), dict) else {}
-        timestamps = hourly.get("time") if isinstance(hourly.get("time"), list) else []
-        temps = hourly.get("temperature_2m") if isinstance(hourly.get("temperature_2m"), list) else []
-        winds = hourly.get("windspeed_10m") if isinstance(hourly.get("windspeed_10m"), list) else []
-        precip = hourly.get("precipitation") if isinstance(hourly.get("precipitation"), list) else []
-        if not timestamps:
-            raise ValueError("weather_times_missing")
-        kickoff_hour = kickoff.replace(minute=0, second=0, microsecond=0)
-        idx = min(
-            range(len(timestamps)),
-            key=lambda i: abs(
-                (_coerce_datetime(timestamps[i]) or kickoff_hour) - kickoff_hour
-            ).total_seconds(),
-        )
+        extracted = _extract_kickoff_weather(hourly=hourly, kickoff=kickoff)
         return {
             "available": True,
-            "source": "open-meteo",
-            "status": "ok",
-            "wind_mph": _safe_float(winds[idx]) if idx < len(winds) else None,
-            "temp_f": _safe_float(temps[idx]) if idx < len(temps) else None,
-            "precip_mm": _safe_float(precip[idx]) if idx < len(precip) else None,
-            "at": timestamps[idx],
+            "source": "open-meteo-archive" if use_archive else "open-meteo",
+            "status": "cache_hit" if cache_hit else "ok",
+            "wind_mph": extracted["wind_mph"],
+            "temp_f": extracted["temp_f"],
+            "precip_mm": extracted["precip_mm"],
+            "at": extracted["at"],
         }
     except Exception as exc:
         return {
             "available": False,
-            "source": "open-meteo",
+            "source": "open-meteo-archive" if use_archive else "open-meteo",
             "status": "unavailable",
             "error": str(exc)[:200],
             "wind_mph": None,

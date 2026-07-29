@@ -306,12 +306,18 @@ def fetch_visual_crossing_weather(
 
 def external_source_status() -> Dict[str, Any]:
     """Diagnostics for ops / dry-run without hitting network."""
+    has_key = bool(
+        (os.getenv("VISUAL_CROSSING_API_KEY") or os.getenv("VISUALCROSSING_API_KEY") or "").strip()
+    )
     return {
         "visual_crossing": {
             "enabled": _env_bool("NFL_VC_WEATHER_ENABLED", True),
-            "has_key": bool(
-                (os.getenv("VISUAL_CROSSING_API_KEY") or os.getenv("VISUALCROSSING_API_KEY") or "").strip()
-            ),
+            "has_key": has_key,
+            "env_var": "VISUAL_CROSSING_API_KEY",
+            "signup_url": "https://www.visualcrossing.com/weather-api",
+            "free_tier_note": "~1000 requests/day; cache TTL ~18h in nfl_dp_weather_forecast_cache",
+            "min_interval_sec": VC_MIN_INTERVAL_SEC,
+            "fallback_without_key": "open-meteo then climatology-heuristic",
         },
         "deferred": {
             "otc": "not_implemented_holdout_deferred",

@@ -307,3 +307,69 @@ def test_external_source_status_vc_only() -> None:
     assert "deferred" in status
     assert "otc" not in status or "otc" in status.get("deferred", {})
     assert status["deferred"]["pff"] == "not_implemented_holdout_deferred"
+    assert status["visual_crossing"]["env_var"] == "VISUAL_CROSSING_API_KEY"
+    assert "visualcrossing.com" in status["visual_crossing"]["signup_url"]
+    assert status["visual_crossing"]["fallback_without_key"].startswith("open-meteo")
+
+
+def test_open_meteo_kickoff_window_and_cache(monkeypatch) -> None:
+    from datetime import datetime, timezone
+
+    from src.services import nfl_environment as env
+
+    env._om_response_cache.clear()
+    kickoff = datetime(2026, 8, 1, 17, 0, tzinfo=timezone.utc)
+    calls = {"n": 0}
+
+    def fake_get(url, params=None, timeout=10):  # noqa: ARG001
+        calls["n"] += 1
+
+        class _Resp:
+            def raise_for_status(self) -> None:
+                return None
+
+            def json(self):
+                return {
+                    "hourly": {
+                        "time": [
+                            "2026-08-01T16:00",
+                            "2026-08-01T17:00",
+                            "2026-08-01T18:00",
+                        ],
+                        "temperature_2m": [60.0, 63.0, 66.0],
+                        "windspeed_10m": [8.0, 10.0, 12.0],
+                        "precipitation": [0.0, 1.5, 0.0],
+                    }
+                }
+
+        return _Resp()
+
+    monkeypatch.setattr(env.requests, "get", fake_get)
+    monkeypatch.setattr(env, "_try_visual_crossing_weather", lambda **_k: None)
+
+    first = env.fetch_game_weather_context(
+        game_time_iso=kickoff.isoformat(),
+        lat=42.7738,
+        lon=-78.7868,
+    )
+    second = env.fetch_game_weather_context(
+        game_time_iso=kickoff.isoformat(),
+        lat=42.7738,
+        lon=-78.7868,
+    )
+    assert first["available"] is True
+    assert first["source"] == "open-meteo"
+    assert first["status"] == "ok"
+    assert abs(float(first["wind_mph"]) - 10.0) < 1e-6  # mean of 8/10/12
+    assert abs(float(first["temp_f"]) - 63.0) < 1e-6
+    assert float(first["precip_mm"]) == 1.5
+    assert second["status"] == "cache_hit"
+    assert calls["n"] == 1
+
+    deep = env.fetch_game_weather_context(
+        game_time_iso="2019-09-08T17:00:00+00:00",
+        lat=42.7738,
+        lon=-78.7868,
+    )
+    assert deep["available"] is False
+    assert deep["status"] == "outside_forecast_window"

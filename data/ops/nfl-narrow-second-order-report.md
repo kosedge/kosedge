@@ -24,7 +24,7 @@ Policy: **`spread_play_v2_cap7`**
 | Coach thin materializer | **1710** weekly rows (2023–25, SQL aggregate) |
 | Personnel materializer | **0 rows** — public nflverse PBP parquet has **no** `offense_personnel` |
 | Info velocity inputs | Injuries 2023–25 available; WoW velocity computed at grade time (1694 keys) |
-| Visual Crossing | Key **absent** — H uses stored weather/travel from projection inputs (Open-Meteo/climatology path) |
+| Visual Crossing | Key **absent** locally (`.env` / `infra/.env.docker`); Railway model-service vars **unverified** this session (CLI/API auth blocked). H stays on Open-Meteo (+ archive for recent past) → climatology. **User must paste** `VISUAL_CROSSING_API_KEY` — see signup below. |
 
 ---
 
@@ -83,7 +83,7 @@ Env kill-switches remain (`NFL_FRAMEWORK_*_ENABLED`).
 | --- | --- |
 | KAV v3 + selective PLAY (stored) | **GREEN** |
 | Simulator / Railway degrade | **GREEN** |
-| H travel×weather (promoted) | **YELLOW** (promoted on lift; CLV n soft; no VC key) |
+| H travel×weather (promoted) | **YELLOW** (promoted on lift; CLV n soft; no VC key yet; Open-Meteo path hardened) |
 | D error-regime (promoted) | **GREEN** (uncertainty-only) |
 | E info velocity | **RED** (holdout fail — disabled) |
 | A coach thin | **YELLOW→OFF** (materialized but disabled) |
@@ -108,11 +108,29 @@ No score bump. Provisional 7.7 revoked after ablation: highest-priority E **fail
 
 ---
 
+## Visual Crossing — user action still needed
+
+| Item | Status |
+| --- | --- |
+| Key in local `.env` / `infra/.env.docker` | **Absent** |
+| Railway model-service production | **Not set from this session** (auth blocked; assume absent until pasted) |
+| Backfill / VC fetch | **Skipped** — no key; inventing one is forbidden |
+| Open-Meteo dry-run (BUF, +3d) | **OK** — hourly forecast returned |
+| Rate limit | VC free ~**1000/day**; cache ~18h + 1.1s spacing when keyed |
+
+**Signup:** https://www.visualcrossing.com/weather-api → Get Free API Key → set `VISUAL_CROSSING_API_KEY` locally + Railway model-service.  
+Verify: `python -m data_platform_nfl.cli --print-external-source-status` (`has_key: true`).
+
+Open-Meteo (no-key) wins shipped: ±1h wind/temp mean, 1h process cache, forecast past **14d** + archive to **90d** before climatology.
+
+---
+
 ## Env keys
 
 | Var | Needed? |
 | --- | --- |
-| `VISUAL_CROSSING_API_KEY` | Optional — improves H weather source |
+| `VISUAL_CROSSING_API_KEY` | Optional — improves H weather source (**user paste required**) |
+| `NFL_VC_WEATHER_ENABLED` | Default true when keyed |
 | `NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED=true` | Default ON (promoted) |
 | `NFL_FRAMEWORK_ERROR_REGIME_ENABLED=true` | Default ON (promoted) |
 | `NFL_FRAMEWORK_INFO_VELOCITY_ENABLED` | Default OFF |
