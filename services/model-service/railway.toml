@@ -1,0 +1,14 @@
+# Used when Railway's service root / path-as-root is services/model-service.
+# Dockerfile lives here (not at monorepo root). Prefer GHA:
+#   railway up services/model-service --path-as-root
+# Do NOT connect native GitHub auto-deploy with empty rootDirectory — Metal
+# will unpack the monorepo and fail with "couldn't locate the dockerfile".
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
