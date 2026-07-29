@@ -1,12 +1,60 @@
 from __future__ import annotations
 
 import math
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional
 
 import requests
 
 OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+
+
+def _try_visual_crossing_weather(
+    *,
+    lat: float,
+    lon: float,
+    kickoff: datetime,
+) -> Optional[Dict[str, Any]]:
+    """Optional Visual Crossing overlay; never raises into the sim path."""
+    key = (os.getenv("VISUAL_CROSSING_API_KEY") or os.getenv("VISUALCROSSING_API_KEY") or "").strip()
+    if not key:
+        return None
+    enabled = (os.getenv("NFL_VC_WEATHER_ENABLED") or "true").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if not enabled:
+        return None
+    try:
+        from data_platform_nfl.db import SessionLocal
+        from data_platform_nfl.external_sources import fetch_visual_crossing_weather
+
+        session = SessionLocal()
+        try:
+            result = fetch_visual_crossing_weather(
+                session,
+                lat=lat,
+                lon=lon,
+                forecast_date=kickoff.date(),
+            )
+        finally:
+            session.close()
+        if not result.get("available"):
+            return None
+        return {
+            "available": True,
+            "source": "visual_crossing",
+            "status": "ok" if not result.get("cache_hit") else "cache_hit",
+            "wind_mph": _safe_float(result.get("wind_mph")),
+            "temp_f": _safe_float(result.get("temp_f")),
+            "precip_mm": _safe_float(result.get("precip_mm")),
+            "at": kickoff.replace(minute=0, second=0, microsecond=0).isoformat(),
+        }
+    except Exception:
+        return None
 
 # Approximate stadium/home-market coordinates and standard offsets.
 TEAM_HOME_GEO: Dict[str, Dict[str, float]] = {
@@ -164,6 +212,10 @@ def fetch_game_weather_context(
             "precip_mm": None,
             "at": None,
         }
+
+    vc = _try_visual_crossing_weather(lat=resolved_lat, lon=resolved_lon, kickoff=kickoff)
+    if vc is not None and bool(vc.get("available")):
+        return vc
 
     try:
         start_date = kickoff.date().isoformat()

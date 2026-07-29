@@ -412,7 +412,10 @@ def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False
                       complete_pass, incomplete_pass, interception, touchdown, first_down, sack, qb_hit,
                       fumble, penalty, epa, wpa, success, score_differential, play_description,
                       shotgun, no_huddle, qb_dropback, pass_location, run_location, run_gap,
-                      xpass, cp, xyac_epa, source,
+                      xpass, cp, xyac_epa,
+                      offense_personnel, defense_personnel, wp, vegas_wp,
+                      fixed_drive, series, qtr, half_seconds_remaining, game_seconds_remaining,
+                      source,
                       object_key, updated_at
                     )
                     SELECT
@@ -585,6 +588,15 @@ def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False
                       CASE WHEN trim(COALESCE(payload->>'xpass', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'xpass')::numeric ELSE NULL END AS xpass,
                       CASE WHEN trim(COALESCE(payload->>'cp', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'cp')::numeric ELSE NULL END AS cp,
                       CASE WHEN trim(COALESCE(payload->>'xyac_epa', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'xyac_epa')::numeric ELSE NULL END AS xyac_epa,
+                      NULLIF(payload->>'offense_personnel', '') AS offense_personnel,
+                      NULLIF(payload->>'defense_personnel', '') AS defense_personnel,
+                      CASE WHEN trim(COALESCE(payload->>'wp', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'wp')::numeric ELSE NULL END AS wp,
+                      CASE WHEN trim(COALESCE(payload->>'vegas_wp', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'vegas_wp')::numeric ELSE NULL END AS vegas_wp,
+                      CASE WHEN trim(COALESCE(payload->>'fixed_drive', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'fixed_drive')::numeric::int ELSE NULL END AS fixed_drive,
+                      CASE WHEN trim(COALESCE(payload->>'series', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'series')::numeric::int ELSE NULL END AS series,
+                      CASE WHEN trim(COALESCE(payload->>'qtr', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'qtr')::numeric::int ELSE NULL END AS qtr,
+                      CASE WHEN trim(COALESCE(payload->>'half_seconds_remaining', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'half_seconds_remaining')::numeric ELSE NULL END AS half_seconds_remaining,
+                      CASE WHEN trim(COALESCE(payload->>'game_seconds_remaining', '')) ~ '^-?[0-9]+(\.[0-9]+)?$' THEN (payload->>'game_seconds_remaining')::numeric ELSE NULL END AS game_seconds_remaining,
                       source,
                       object_key,
                       NOW()
@@ -642,6 +654,15 @@ def normalize_pbp_from_raw(*, seasons: List[int], replace_existing: bool = False
                       xpass = EXCLUDED.xpass,
                       cp = EXCLUDED.cp,
                       xyac_epa = EXCLUDED.xyac_epa,
+                      offense_personnel = EXCLUDED.offense_personnel,
+                      defense_personnel = EXCLUDED.defense_personnel,
+                      wp = EXCLUDED.wp,
+                      vegas_wp = EXCLUDED.vegas_wp,
+                      fixed_drive = EXCLUDED.fixed_drive,
+                      series = EXCLUDED.series,
+                      qtr = EXCLUDED.qtr,
+                      half_seconds_remaining = EXCLUDED.half_seconds_remaining,
+                      game_seconds_remaining = EXCLUDED.game_seconds_remaining,
                       source = EXCLUDED.source,
                       object_key = EXCLUDED.object_key,
                       updated_at = EXCLUDED.updated_at
