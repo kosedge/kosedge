@@ -1,0 +1,59 @@
+{
+  "output_dir": "/Users/ryankos/kosedge/data/ops/nfl-preseason-sim-2026-20260729T160818Z",
+  "generated_at_utc": "2026-07-29T16:12:46.331676+00:00",
+  "season": 2026,
+  "season_monte_carlo_iterations": 100000,
+  "model_version": "nfl-v1.5-matchup-sim",
+  "game_simulation_count_neutral": 900,
+  "games_regular": 272,
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 7.9996,
+    "sum_playoff_prob": 13.9999
+  },
+  "files": [
+    "team_regular_season_outcomes.csv",
+    "super_bowl_winner_probabilities.csv",
+    "quality_checks.json",
+    "player_regular_season_totals.csv",
+    "player_playoff_totals.csv",
+    "player_season_pass_quality.json"
+  ],
+  "player_projection_model_version": "nfl-player-v1",
+  "player_publish_ready": true,
+  "player_publish_ready_why": [],
+  "note": "Player projection CSVs regenerated from nfl_player_projection_baselines with QB starter lock + skill prior-anchor (no 100k re-run). Team MC used NFL_SEASON_SIMS=100000. publish_ready true after honest skill floors — thresholds not cut.",
+  "player_totals_regenerated_at_utc": "2026-07-29T18:37:38.377102+00:00",
+  "qb_starter_lock": {
+    "applied": true,
+    "teams_locked": 32,
+    "method": "depth_week1_plus_prior_attempts_winner_take_most"
+  },
+  "pass_leader_quality": {
+    "dual_full_volume_qb_rooms_count": 0,
+    "publish_ready": true,
+    "top_passer": {
+      "player_name": "J.Goff",
+      "pass_yards_total": 4122.8
+    }
+  },
+  "skill_leader_quality": {
+    "publish_ready_skill": true,
+    "top_rusher": {
+      "player_name": "S.Barkley",
+      "pass_yards_total": null,
+      "rush_yards_total": 1649.8
+    },
+    "top_receiver": {
+      "player_name": "J.Chase",
+      "receiving_yards_total": 1495.1
+    },
+    "wr_with_1200_plus_count": 5
+  },
+  "skill_prior_anchor": {
+    "applied": true,
+    "method": "prior_reg_ypg_upward_blend_max_lookback2",
+    "players_adjusted": 116,
+    "anchors_loaded": 380
+  }
+}

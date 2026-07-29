@@ -4,6 +4,12 @@ import {
   type PlayerProjectionTotalsRow,
   type TeamProjectionRow,
 } from "@/lib/nfl-preseason-artifacts";
+import {
+  formatActual,
+  loadNflProjectionActuals,
+  playerActualsFor,
+  teamActualWins,
+} from "@/lib/nfl-projection-actuals";
 
 type SearchValue = string | string[] | undefined;
 
@@ -62,6 +68,35 @@ function sortPlayerRows(
   return sortable;
 }
 
+function ProjActualCell({
+  projected,
+  actual,
+  digits = 0,
+}: {
+  projected: number;
+  actual: number | null | undefined;
+  digits?: number;
+}) {
+  const p =
+    digits > 0 ? projected.toFixed(digits) : String(Math.round(projected));
+  return (
+    <div className="leading-tight">
+      <div className="text-sm font-semibold text-kos-gold tabular-nums">
+        {p}
+      </div>
+      <div className="text-[11px] uppercase tracking-wide text-kos-text/45">
+        Proj
+      </div>
+      <div className="mt-1 text-sm tabular-nums text-kos-text/85">
+        {formatActual(actual, digits)}
+      </div>
+      <div className="text-[11px] uppercase tracking-wide text-kos-text/45">
+        Actual
+      </div>
+    </div>
+  );
+}
+
 export default async function NflProjectionsPage({
   searchParams,
 }: {
@@ -69,6 +104,7 @@ export default async function NflProjectionsPage({
 }) {
   const search = await searchParams;
   const bundle = loadLatestNflPreseasonBundle2026();
+  const actuals = loadNflProjectionActuals(2026);
   if (!bundle) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -130,18 +166,26 @@ export default async function NflProjectionsPage({
               2026 NFL Projections Hub
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-              Betting + Fantasy Decision Center
+              Projected vs Actual
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Browse projected wins, playoff/Super Bowl probabilities, and
-              player totals in one place. Filters keep the view focused for bet
-              prep and fantasy drafting.
+              Every key metric shows <span className="text-kos-gold">Projected</span>{" "}
+              beside <span className="text-kos-text">Actual</span>. Actual stays{" "}
+              <span className="font-mono">—</span> until regular-season weeks
+              settle; drop a weekly{" "}
+              <span className="font-mono text-xs">
+                data/ops/nfl-projection-actuals-2026.json
+              </span>{" "}
+              to refresh.
             </p>
             <p className="mt-2 text-xs text-kos-text/65">
               Source: {bundle.bundleDirName}
               {bundle.generatedAtUtc
                 ? ` • Generated ${new Date(bundle.generatedAtUtc).toLocaleString()}`
                 : ""}
+              {actuals.asOfUtc
+                ? ` • Actuals as of ${new Date(actuals.asOfUtc).toLocaleString()}`
+                : " • Actuals: awaiting Week 1+"}
             </p>
           </div>
           <Link
@@ -167,13 +211,18 @@ export default async function NflProjectionsPage({
         </article>
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
           <p className="text-xs uppercase tracking-wide text-kos-text/60">
-            Wins Leader
+            Wins Leader (Projected)
           </p>
           <p className="mt-2 text-2xl font-semibold text-kos-text">
             {winsLeader?.team ?? "N/A"}
           </p>
           <p className="text-sm text-kos-gold">
-            {(winsLeader?.expectedWins ?? 0).toFixed(2)} projected wins
+            {(winsLeader?.expectedWins ?? 0).toFixed(2)} proj ·{" "}
+            {formatActual(
+              winsLeader ? teamActualWins(actuals, winsLeader.team) : null,
+              0,
+            )}{" "}
+            actual
           </p>
         </article>
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4">
@@ -197,8 +246,28 @@ export default async function NflProjectionsPage({
           <p className="text-sm text-kos-gold">
             {totalYards(
               fantasyLeader ?? ({} as PlayerProjectionTotalsRow),
-            ).toFixed(1)}{" "}
-            combined yards
+            ).toFixed(0)}{" "}
+            proj yards ·{" "}
+            {formatActual(
+              fantasyLeader
+                ? (() => {
+                    const a = playerActualsFor(actuals, fantasyLeader.playerKey);
+                    if (
+                      a.passYards == null &&
+                      a.rushYards == null &&
+                      a.receivingYards == null
+                    )
+                      return null;
+                    return (
+                      (a.passYards ?? 0) +
+                      (a.rushYards ?? 0) +
+                      (a.receivingYards ?? 0)
+                    );
+                  })()
+                : null,
+              0,
+            )}{" "}
+            actual
           </p>
         </article>
       </section>
@@ -292,10 +361,11 @@ export default async function NflProjectionsPage({
       <section className="mt-6 grid gap-6 xl:grid-cols-2">
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
           <h2 className="text-xl font-semibold text-kos-text">
-            Team Betting Outlook
+            Team Wins · Projected | Actual
           </h2>
           <p className="mt-1 text-sm text-kos-text/70">
-            Projected wins and futures probabilities for market framing.
+            Expected wins and futures probabilities. Actual wins fill after Week
+            1+.
           </p>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full border-separate border-spacing-0">
@@ -303,7 +373,7 @@ export default async function NflProjectionsPage({
                 <tr>
                   {[
                     "Team",
-                    "Expected W",
+                    "Wins",
                     "P10-P90",
                     "Playoff",
                     "Division",
@@ -319,13 +389,17 @@ export default async function NflProjectionsPage({
                 </tr>
               </thead>
               <tbody>
-                {teamRows.slice(0, 24).map((row) => (
+                {teamRows.slice(0, 32).map((row) => (
                   <tr key={row.team} className="odd:bg-white/3">
                     <td className="border-b border-white/5 px-3 py-2 text-sm font-semibold text-kos-text">
                       {row.team}
                     </td>
-                    <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                      {row.expectedWins.toFixed(2)}
+                    <td className="border-b border-white/5 px-3 py-2">
+                      <ProjActualCell
+                        projected={row.expectedWins}
+                        actual={teamActualWins(actuals, row.team)}
+                        digits={1}
+                      />
                     </td>
                     <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
                       {row.winsP10}-{row.winsP90}
@@ -349,40 +423,48 @@ export default async function NflProjectionsPage({
         <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
           <h2 className="text-xl font-semibold text-kos-text">
             {phase === "playoff"
-              ? "Playoff Fantasy Totals"
-              : "Regular Season Fantasy Totals"}
+              ? "Playoff Player Totals · Projected | Actual"
+              : "Regular Season Player Totals · Projected | Actual"}
           </h2>
           <p className="mt-1 text-sm text-kos-text/70">
-            Use totals to compare volume tiers for draft, props, and ladder
-            ideas.
+            Yards, receptions, and TDs side-by-side. Actual stays — until season
+            data lands.
           </p>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full border-separate border-spacing-0">
               <thead>
                 <tr>
-                  {[
-                    "Player",
-                    "Tm",
-                    "Pos",
-                    "Games",
-                    "Yards",
-                    "Rec",
-                    "TDs",
-                    "ATD",
-                  ].map((label) => (
-                    <th
-                      key={label}
-                      className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
-                    >
-                      {label}
-                    </th>
-                  ))}
+                  {["Player", "Tm", "Pos", "Yards", "Rec", "TDs"].map(
+                    (label) => (
+                      <th
+                        key={label}
+                        className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
+                      >
+                        {label}
+                      </th>
+                    ),
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {players.slice(0, 40).map((row) => {
                   const touchdowns =
                     row.passTdsTotal + row.rushTdsTotal + row.recTdsTotal;
+                  const a = playerActualsFor(actuals, row.playerKey);
+                  const actualYards =
+                    a.passYards == null &&
+                    a.rushYards == null &&
+                    a.receivingYards == null
+                      ? null
+                      : (a.passYards ?? 0) +
+                        (a.rushYards ?? 0) +
+                        (a.receivingYards ?? 0);
+                  const actualTds =
+                    a.passTds == null &&
+                    a.rushTds == null &&
+                    a.recTds == null
+                      ? null
+                      : (a.passTds ?? 0) + (a.rushTds ?? 0) + (a.recTds ?? 0);
                   return (
                     <tr
                       key={`${row.playerKey}-${row.team}`}
@@ -397,20 +479,26 @@ export default async function NflProjectionsPage({
                       <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
                         {row.position}
                       </td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                        {row.gamesProjected}
+                      <td className="border-b border-white/5 px-3 py-2">
+                        <ProjActualCell
+                          projected={totalYards(row)}
+                          actual={actualYards}
+                          digits={0}
+                        />
                       </td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-gold">
-                        {totalYards(row).toFixed(1)}
+                      <td className="border-b border-white/5 px-3 py-2">
+                        <ProjActualCell
+                          projected={row.receptionsTotal}
+                          actual={a.receptions}
+                          digits={0}
+                        />
                       </td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                        {row.receptionsTotal.toFixed(1)}
-                      </td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                        {touchdowns.toFixed(1)}
-                      </td>
-                      <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                        {row.anytimeTdProbTotal.toFixed(2)}
+                      <td className="border-b border-white/5 px-3 py-2">
+                        <ProjActualCell
+                          projected={touchdowns}
+                          actual={actualTds}
+                          digits={1}
+                        />
                       </td>
                     </tr>
                   );

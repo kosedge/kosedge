@@ -1,0 +1,280 @@
+{
+  "metadata": {
+    "season": 2026,
+    "model_version": "nfl-v1.5-matchup-sim",
+    "game_simulation_count": 900,
+    "season_monte_carlo_iterations": 100000,
+    "note": "Regular season reuses persisted nfl_market_projections home_win_prob per real game (current fixed model); playoffs use a precomputed pairwise matrix from the same simulator with neutral context."
+  },
+  "counts": {
+    "games_total": 272,
+    "games_regular": 272,
+    "team_outcome_rows": 32,
+    "super_bowl_rows": 32
+  },
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 7.9996,
+    "sum_playoff_prob": 13.9999
+  },
+  "top10_playoff_odds": [
+    {
+      "season": 2026,
+      "team": "SEA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 11.126,
+      "wins_p10": 9,
+      "wins_p90": 14,
+      "playoff_prob": 0.8346,
+      "division_title_prob": 0.4303,
+      "super_bowl_win_prob": 0.0984
+    },
+    {
+      "season": 2026,
+      "team": "BAL",
+      "conference": "AFC",
+      "division": "AFC North",
+      "expected_wins": 11.124,
+      "wins_p10": 9,
+      "wins_p90": 14,
+      "playoff_prob": 0.8738,
+      "division_title_prob": 0.7266,
+      "super_bowl_win_prob": 0.0767
+    },
+    {
+      "season": 2026,
+      "team": "LA",
+      "conference": "NFC",
+      "division": "NFC West",
+      "expected_wins": 11.124,
+      "wins_p10": 9,
+      "wins_p90": 14,
+      "playoff_prob": 0.8364,
+      "division_title_prob": 0.4319,
+      "super_bowl_win_prob": 0.1056
+    },
+    {
+      "season": 2026,
+      "team": "BUF",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 11.047,
+      "wins_p10": 9,
+      "wins_p90": 13,
+      "playoff_prob": 0.8613,
+      "division_title_prob": 0.5888,
+      "super_bowl_win_prob": 0.09782
+    },
+    {
+      "season": 2026,
+      "team": "PHI",
+      "conference": "NFC",
+      "division": "NFC East",
+      "expected_wins": 10.582,
+      "wins_p10": 8,
+      "wins_p90": 13,
+      "playoff_prob": 0.7854,
+      "division_title_prob": 0.6499,
+      "super_bowl_win_prob": 0.07122
+    },
+    {
+      "season": 2026,
+      "team": "DET",
+      "conference": "NFC",
+      "division": "NFC North",
+      "expected_wins": 10.332,
+      "wins_p10": 8,
+      "wins_p90": 13,
+      "playoff_prob": 0.7195,
+      "division_title_prob": 0.4434,
+      "super_bowl_win_prob": 0.05215
+    },
+    {
+      "season": 2026,
+      "team": "NE",
+      "conference": "AFC",
+      "division": "AFC East",
+      "expected_wins": 10.326,
+      "wins_p10": 8,
+      "wins_p90": 13,
+      "playoff_prob": 0.7641,
+      "division_title_prob": 0.3935,
+      "super_bowl_win_prob": 0.06394
+    },
+    {
+      "season": 2026,
+      "team": "KC",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 9.874,
+      "wins_p10": 7,
+      "wins_p90": 12,
+      "playoff_prob": 0.6817,
+      "division_title_prob": 0.3858,
+      "super_bowl_win_prob": 0.04762
+    },
+    {
+      "season": 2026,
+      "team": "HOU",
+      "conference": "AFC",
+      "division": "AFC South",
+      "expected_wins": 9.742,
+      "wins_p10": 7,
+      "wins_p90": 12,
+      "playoff_prob": 0.6693,
+      "division_title_prob": 0.4495,
+      "super_bowl_win_prob": 0.05165
+    },
+    {
+      "season": 2026,
+      "team": "DEN",
+      "conference": "AFC",
+      "division": "AFC West",
+      "expected_wins": 9.688,
+      "wins_p10": 7,
+      "wins_p90": 12,
+      "playoff_prob": 0.6452,
+      "division_title_prob": 0.3463,
+      "super_bowl_win_prob": 0.04923
+    }
+  ],
+  "top10_super_bowl": [
+    {
+      "season": 2026,
+      "team": "LA",
+      "super_bowl_win_prob": 0.1056
+    },
+    {
+      "season": 2026,
+      "team": "SEA",
+      "super_bowl_win_prob": 0.0984
+    },
+    {
+      "season": 2026,
+      "team": "BUF",
+      "super_bowl_win_prob": 0.09782
+    },
+    {
+      "season": 2026,
+      "team": "BAL",
+      "super_bowl_win_prob": 0.0767
+    },
+    {
+      "season": 2026,
+      "team": "PHI",
+      "super_bowl_win_prob": 0.07122
+    },
+    {
+      "season": 2026,
+      "team": "NE",
+      "super_bowl_win_prob": 0.06394
+    },
+    {
+      "season": 2026,
+      "team": "DET",
+      "super_bowl_win_prob": 0.05215
+    },
+    {
+      "season": 2026,
+      "team": "HOU",
+      "super_bowl_win_prob": 0.05165
+    },
+    {
+      "season": 2026,
+      "team": "DEN",
+      "super_bowl_win_prob": 0.04923
+    },
+    {
+      "season": 2026,
+      "team": "KC",
+      "super_bowl_win_prob": 0.04762
+    }
+  ],
+  "expected_playoff_games_by_team": {
+    "ARI": 0.0253,
+    "ATL": 0.4253,
+    "BAL": 1.6829,
+    "BUF": 1.7085,
+    "CAR": 0.3263,
+    "CHI": 0.7646,
+    "CIN": 0.693,
+    "CLE": 0.1961,
+    "DAL": 0.6369,
+    "DEN": 1.2313,
+    "DET": 1.3566,
+    "GB": 1.0991,
+    "HOU": 1.2885,
+    "IND": 0.6984,
+    "JAX": 1.0303,
+    "KC": 1.2742,
+    "LA": 1.7122,
+    "LAC": 1.0353,
+    "LV": 0.0706,
+    "MIA": 0.079,
+    "MIN": 0.417,
+    "NE": 1.4582,
+    "NO": 0.6176,
+    "NYG": 0.3996,
+    "NYJ": 0.063,
+    "PHI": 1.537,
+    "PIT": 0.4129,
+    "SEA": 1.6796,
+    "SF": 0.968,
+    "TB": 0.808,
+    "TEN": 0.0779,
+    "WAS": 0.2267
+  },
+  "player_season_totals": {
+    "status": "ok",
+    "season": 2026,
+    "model_version": "nfl-player-v1",
+    "regular_season_player_rows": 2907,
+    "playoff_player_rows": 2907,
+    "distinct_games_projected_values": [
+      17
+    ],
+    "pass_leader_quality": {
+      "top_passer": {
+        "player_name": "J.Goff",
+        "pass_yards_total": 4122.8
+      },
+      "top_passer_yards_gte_3800": true,
+      "top_passer_not_bridge_marker": true,
+      "dual_full_volume_qb_rooms": [],
+      "dual_full_volume_qb_rooms_count": 0,
+      "no_dual_full_volume_qb_rooms": true,
+      "publish_ready": true
+    },
+    "skill_leader_quality": {
+      "top_rusher": {
+        "player_name": "S.Barkley",
+        "pass_yards_total": null,
+        "rush_yards_total": 1649.8
+      },
+      "top_receiver": {
+        "player_name": "J.Chase",
+        "receiving_yards_total": 1495.1
+      },
+      "top_rusher_yards_gte_1400": true,
+      "top_receiver_yards_gte_1300": true,
+      "wr_with_1200_plus_count": 5,
+      "rb_with_1400_plus_count": 3,
+      "dual_1000_yard_rb_rooms": [],
+      "dual_1000_yard_rb_rooms_count": 0,
+      "publish_ready_skill": true
+    },
+    "qb_starter_lock": {
+      "applied": true,
+      "teams_locked": 32,
+      "method": "depth_week1_plus_prior_attempts_winner_take_most"
+    },
+    "skill_prior_anchor": {
+      "applied": true,
+      "method": "prior_reg_ypg_upward_blend_max_lookback2",
+      "players_adjusted": 116,
+      "anchors_loaded": 380
+    },
+    "publish_ready": true
+  }
+}
