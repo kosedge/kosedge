@@ -11987,3 +11987,54 @@ def run_nfl_data_freshness_check(*, persist_alert: bool = True) -> Dict[str, Any
     from src.services.nfl_resilience_cycle import run_data_freshness_check
 
     return run_data_freshness_check(persist_alert=persist_alert)
+
+
+@celery_app.task(name="src.tasks.write_nfl_projection_actuals")
+def write_nfl_projection_actuals(*, season: int = 2026) -> Dict[str, Any]:
+    """Materialize Projections Hub actuals JSON from owned DB tables."""
+    import json
+    import os
+    from pathlib import Path
+
+    import psycopg
+
+    from data_platform_nfl.projection_actuals import empty_bundle, load_from_db
+
+    url = os.environ.get("DATABASE_URL", "")
+    url = (
+        url.replace("postgresql+psycopg://", "postgresql://")
+        .replace("postgres://", "postgresql://")
+    )
+    try:
+        with psycopg.connect(url) as conn:
+            bundle = load_from_db(conn, int(season))
+    except Exception as exc:  # noqa: BLE001
+        bundle = empty_bundle(int(season), notes=f"load_failed: {exc}")
+
+    payload = {
+        "season": bundle.get("season"),
+        "asOfUtc": bundle.get("asOfUtc"),
+        "source": bundle.get("source"),
+        "teams": bundle.get("teams") or {},
+        "players": bundle.get("players") or {},
+        "notes": bundle.get("notes"),
+    }
+
+    # Prefer monorepo root data/ops; fall back to model-service-local path.
+    candidates = [
+        Path(__file__).resolve().parents[3] / "data" / "ops",
+        Path(__file__).resolve().parents[2] / "data" / "ops",
+        Path("/app/data/ops"),
+    ]
+    out_dir = next((p for p in candidates if p.parent.exists() or p.exists()), candidates[0])
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"nfl-projection-actuals-{int(season)}.json"
+    out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "season": int(season),
+        "wrote": str(out_path),
+        "teams": len(payload["teams"]),
+        "playerKeys": len(payload["players"]),
+        "source": payload.get("source"),
+        "asOfUtc": payload.get("asOfUtc"),
+    }

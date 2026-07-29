@@ -1,8 +1,8 @@
 {
   "season": 2026,
-  "asOfUtc": null,
+  "asOfUtc": "2026-07-29T20:58:08.877054+00:00",
   "source": "empty_preseason_scaffold",
   "teams": {},
   "players": {},
-  "notes": "Actual cells stay null / UI '\u2014' until REG weeks settle. Re-run with --from-db after kickoffs to populate."
+  "notes": "No final REG scores or player stats yet \u2014 wrote empty scaffold."
 }

@@ -3102,6 +3102,7 @@ def nfl_fair_lines(
             model_win_prob=ml_model_wp,
             offered_american=float(ml_offered) if ml_offered is not None else None,
             product_gate_status=_gate,
+            season_type=_season_type,
         )
 
         home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
@@ -3830,6 +3831,56 @@ def nfl_award_projections_board(
         return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
     finally:
         session.close()
+
+
+@router.get("/ops/projection-actuals")
+def nfl_projection_actuals(
+    season: int = Query(..., ge=2010, le=2100),
+) -> Dict[str, Any]:
+    """Season-to-date team W/L + player yards/receptions/TDs for Projections Hub."""
+    import psycopg
+    from data_platform_nfl.projection_actuals import empty_bundle, load_from_db
+
+    url = os.environ.get("DATABASE_URL", "")
+    if not url:
+        return empty_bundle(season, notes="DATABASE_URL missing")
+    url = (
+        url.replace("postgresql+psycopg://", "postgresql://")
+        .replace("postgres://", "postgresql://")
+    )
+    try:
+        with psycopg.connect(url) as conn:
+            bundle = load_from_db(conn, int(season))
+    except Exception as exc:  # noqa: BLE001
+        log.exception("projection-actuals load failed")
+        out = empty_bundle(season, notes=f"load_failed: {exc}")
+        out["error"] = str(exc)
+        return out
+    # Drop non-hub meta for a stable contract.
+    return {
+        "season": bundle.get("season"),
+        "asOfUtc": bundle.get("asOfUtc"),
+        "source": bundle.get("source"),
+        "teams": bundle.get("teams") or {},
+        "players": bundle.get("players") or {},
+        "notes": bundle.get("notes"),
+    }
+
+
+@router.post("/ops/write-projection-actuals")
+def nfl_write_projection_actuals(
+    season: int = Query(..., ge=2010, le=2100),
+) -> Dict[str, Any]:
+    """Write `data/ops/nfl-projection-actuals-{season}.json` (ops / weekly cadence)."""
+    task = celery_app.send_task(
+        "src.tasks.write_nfl_projection_actuals",
+        kwargs={"season": int(season)},
+    )
+    return {
+        "task_id": task.id,
+        "task_name": "src.tasks.write_nfl_projection_actuals",
+        "season": season,
+    }
 
 
 @router.get("/ops/projections-readiness")
