@@ -73,7 +73,13 @@ without a fresh confirmatory holdout + explicit unfreeze.
 | Market blend weight | locked | No retune without holdout |
 | PLAY band | `spread_play_v2_cap7` | Do not widen |
 
-See `data/ops/nfl-factor-freeze-aug25.md`.
+See `data/ops/nfl-factor-freeze-aug25.md` and
+`data/ops/nfl-factor-freeze-operator-checklist.md`.
+
+Early-season W1–W4: D-style uncertainty boost only (no 50% blend) —
+`data/ops/nfl-early-season-uncertainty.md`.
+
+Weekly cadence: `data/ops/nfl-weekly-ops-cadence.md`.
 
 ## Ops commands
 

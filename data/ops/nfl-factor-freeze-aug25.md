@@ -29,6 +29,10 @@
 - Totals sides-only (`TOTAL_PLAY_ENABLED=false`).
 - Preseason info desk — never mix PRE ATS into season PLAY gates.
 
+## Operator checklist
+
+See `data/ops/nfl-factor-freeze-operator-checklist.md` (env table + day-of checks).
+
 ## Unfreeze protocol
 
 1. Pre-register candidate + holdout seasons.

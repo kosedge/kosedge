@@ -1,6 +1,6 @@
 # NFL paper book (2025)
 
-- Generated: `2026-07-29T15:25:38.214157+00:00`
+- Generated: `2026-07-29T20:58:54.920946+00:00`
 - Policy: `spread_play_v2_cap7` (locked)
 - Gate: YELLOW
 - Board rows: 256
