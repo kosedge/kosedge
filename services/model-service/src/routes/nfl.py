@@ -31,6 +31,7 @@ from src.services.nfl_handicapping_framework import (
     get_nfl_handicapping_config,
 )
 from src.services.nfl_totals_calibration import fetch_nfl_totals_calibration
+from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as nfl_publish_moneyline_tag
 from src.services.nfl_side_total_publish_policy import publish_tag as nfl_publish_tag
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
@@ -3070,15 +3071,36 @@ def nfl_fair_lines(
             spread_edge = round(spread_home - float(compare_spread_home), 3)
 
         # Product gate defaults YELLOW until ops artifact promotes GREEN.
+        # Fair-lines slate is REG (nfl_dp_schedules); PRE still blocked if passed.
         _gate = str(os.getenv("NFL_PRODUCT_GATE_STATUS", "YELLOW")).upper()
+        _season_type = str(mapped.get("season_type") or "REG")
         spread_pub = nfl_publish_tag(
             market="spread",
             abs_edge=abs(spread_edge) if spread_edge is not None else None,
             product_gate_status=_gate,
+            season_type=_season_type,
         )
         total_pub = nfl_publish_tag(
             market="total",
             abs_edge=abs(total_edge) if total_edge is not None else None,
+            product_gate_status=_gate,
+            season_type=_season_type,
+        )
+        # ML PLAY only when spread PLAY + vig-aware EV ≥ 2%.
+        lean_home_ml = spread_edge is not None and float(spread_edge) < 0
+        ml_model_wp = None
+        ml_offered = None
+        if lean_home_ml:
+            ml_model_wp = home_win_prob
+            ml_offered = market_home_ml
+        else:
+            ml_model_wp = away_win_prob
+            ml_offered = market_away_ml
+        ml_pub = nfl_publish_moneyline_tag(
+            spread_tag=str(spread_pub.get("tag") or "PASS"),
+            spread_stake_eligible=bool(spread_pub.get("stake_eligible")),
+            model_win_prob=ml_model_wp,
+            offered_american=float(ml_offered) if ml_offered is not None else None,
             product_gate_status=_gate,
         )
 
@@ -3091,6 +3113,7 @@ def nfl_fair_lines(
                 "game_id": str(mapped.get("game_id")),
                 "season": int(mapped.get("season") or season),
                 "week": int(week_val) if week_val is not None else None,
+                "season_type": _season_type,
                 "start_time": mapped.get("start_time"),
                 "game_date": mapped.get("game_date"),
                 "home_team": home_display,
@@ -3127,10 +3150,14 @@ def nfl_fair_lines(
                 "market_joined": has_market,
                 "publish_tag_spread": spread_pub.get("tag"),
                 "publish_tag_total": total_pub.get("tag"),
+                "publish_tag_ml": ml_pub.get("tag"),
                 "stake_eligible_spread": bool(spread_pub.get("stake_eligible")),
                 "stake_eligible_total": bool(total_pub.get("stake_eligible")),
+                "stake_eligible_ml": bool(ml_pub.get("stake_eligible")),
                 "publish_reason_spread": spread_pub.get("reason"),
                 "publish_reason_total": total_pub.get("reason"),
+                "publish_reason_ml": ml_pub.get("reason"),
+                "ml_ev": ml_pub.get("ev"),
             }
         )
 

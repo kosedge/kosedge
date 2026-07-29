@@ -23,9 +23,10 @@ def test_candidate_tag_spread_play_and_lean_disabled():
     assert candidate_tag("spread", 0.5) == "PASS"
 
 
-def test_candidate_tag_total_narrow_play_band():
-    assert candidate_tag("total", 2.7) == "PLAY"
-    assert candidate_tag("total", 3.5) == "PASS"  # oversized toxic
+def test_candidate_tag_total_sides_only_launch():
+    # Week-1 launch: TOTAL_PLAY_ENABLED=False — confirmatory totals CLV RED.
+    assert candidate_tag("total", 2.7) == "PASS"
+    assert candidate_tag("total", 3.5) == "PASS"
     assert candidate_tag("total", 2.0) == "PASS"
 
 

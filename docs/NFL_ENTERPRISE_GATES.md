@@ -48,12 +48,32 @@ Rules (v2 `spread_play_v2_cap7` — see `nfl-play-only-holdout.json`):
    (confirmatory 2024–25: n=227, ATS 73.1%, movement-CLV+ 61.2% n=206).
 3. **Spread \|edge\| ≥ 7.0** → PASS (mega-edge size-down / research).
 4. **Spread LEAN disabled** — 1.1–2.5 band settled −14% ROI (n=174).
-5. **Total PLAY** only if 2.5 ≤ \|edge\| < 3.0 (narrow band that cleared ATS).
-6. **Total ≥ 3.0** → PASS (toxic / size-down research only).
+5. **Totals: sides-only at Week-1 launch** — confirmatory totals CLV RED (~0.35).
+   `TOTAL_PLAY_ENABLED=False`. Narrow 2.5–3.0 band retained for research re-enable only.
+6. **ML PLAY** only when spread PLAY + vig-aware EV ≥ 2% (`ml_from_spread_play_v1`).
 7. If product gate is **RED**, force PASS even for large edges.
 8. Props stay research-only until a pre-registered holdout flips
    `PLAY_STAKE_ELIGIBLE`.
 9. Product CLV+ uses **movement sample** (open≠close, n_snaps≥2).
+10. **Preseason** (`NFL_PRESEASON_MODE=info`): PRE games never receive season PLAY tags.
+
+## Factor freeze (Aug 25, 2026)
+
+**Freeze date: 2026-08-25** — no new factor promotion into the Week-1 product path
+without a fresh confirmatory holdout + explicit unfreeze.
+
+| Factor | Default | Status |
+| --- | --- | --- |
+| KAV v3 | ON | Locked product core |
+| H travel×weather | ON | Promoted (ablation) |
+| D error-regime | ON | Promoted (uncertainty only) |
+| E info velocity | OFF | Killed (ATS −3.5pp) |
+| B personnel | OFF | Killed (unmaterializable) |
+| A coach aggression | OFF | Killed (regress) |
+| Market blend weight | locked | No retune without holdout |
+| PLAY band | `spread_play_v2_cap7` | Do not widen |
+
+See `data/ops/nfl-factor-freeze-aug25.md`.
 
 ## Ops commands
 

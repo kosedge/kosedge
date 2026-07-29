@@ -11,10 +11,13 @@ Hard rules:
   - Full-slate PASS is the product default.
   - Props remain research-only (see nfl_prop_edge_policy.PLAY_STAKE_ELIGIBLE).
   - When product-level gates are RED, force PASS even if edge is large.
+  - Preseason (PRE) never receives season PLAY tags when NFL_PRESEASON_MODE=info.
+  - Week-1 2026 launch: totals are sides-only (confirmatory totals CLV RED).
 """
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from typing import Any, Dict, Literal, Optional
 
@@ -49,18 +52,36 @@ RESEARCH_SPREAD_PLAY_BANDS = (
 SPREAD_LEAN_ENABLED = False
 SPREAD_LEAN_MIN = 1.1
 
-# Totals: only the narrow 2.5–3.0 PLAY band cleared ATS in the shipped sim;
-# ≥3.0 was toxic (size-down / PASS).
+# Totals: narrow 2.5–3.0 band cleared ATS historically, but confirmatory 2024–25
+# movement-CLV is RED (~0.35). Week-1 launch posture = sides-only product.
+# Keep band constants for research re-enable; do not stake totals.
 TOTAL_PLAY_MIN = 2.5
 TOTAL_PLAY_MAX = 3.0
+TOTAL_PLAY_ENABLED = False  # sides-only launch; see data/ops/nfl-totals-band-review.md
 TOTAL_LEAN_ENABLED = False
 TOTAL_LEAN_MIN = 2.1
+
+# Preseason info desk — never mix exhibition ATS into season PLAY gates.
+PRESEASON_MODE = (os.getenv("NFL_PRESEASON_MODE", "info") or "info").strip().lower()
 
 # Segment evidence floors (tag-level when full-slate cannot pass).
 MIN_SEGMENT_N = 60
 MIN_SEGMENT_ATS = BREAKEVEN_ATS
 MIN_SEGMENT_CLV_POS_RATE = 0.55
 MIN_SEGMENT_CLV_N = 40
+
+
+def is_preseason_info_mode() -> bool:
+    """True when PRE games must not receive season PLAY tags."""
+    mode = (os.getenv("NFL_PRESEASON_MODE", "info") or "info").strip().lower()
+    return mode in {"info", "watch", "pass", "1", "true", "yes"}
+
+
+def is_preseason_season_type(season_type: Optional[str]) -> bool:
+    if not season_type:
+        return False
+    token = str(season_type).strip().upper()
+    return token in {"PRE", "PRESEASON", "PRE_SEASON", "EXHIBITION"}
 
 
 @dataclass(frozen=True)
@@ -93,6 +114,7 @@ class SegmentEvidence:
 
 # Locked evidence: v2 band on 2024–25 confirmatory holdout (movement CLV).
 # Update via scripts/nfl/play_only_holdout.py + evaluate_enterprise_gates.py.
+# total:PLAY evidence intentionally fails CLV clear (confirmatory RED).
 DEFAULT_SEGMENT_EVIDENCE: Dict[str, SegmentEvidence] = {
     "spread:PLAY": SegmentEvidence(
         n_ats=227,
@@ -109,11 +131,11 @@ DEFAULT_SEGMENT_EVIDENCE: Dict[str, SegmentEvidence] = {
         clv_positive_rate=None,
     ),
     "total:PLAY": SegmentEvidence(
-        n_ats=63,
-        ats_hit_rate=0.5714,
+        n_ats=52,
+        ats_hit_rate=0.6154,
         beats_minus_110=True,
-        n_clv=45,
-        clv_positive_rate=0.556,
+        n_clv=43,
+        clv_positive_rate=0.3488,  # confirmatory RED — does not clear
     ),
     "total:LEAN": SegmentEvidence(
         n_ats=464,
@@ -134,7 +156,9 @@ def candidate_tag(market: Market, abs_edge: float) -> Tag:
         if SPREAD_LEAN_ENABLED and e >= SPREAD_LEAN_MIN:
             return "LEAN"
         return "PASS"
-    # total
+    # total — launch sides-only (band retained for research re-enable)
+    if not TOTAL_PLAY_ENABLED:
+        return "PASS"
     if TOTAL_PLAY_MIN <= e < TOTAL_PLAY_MAX:
         return "PLAY"
     if TOTAL_LEAN_ENABLED and e >= TOTAL_LEAN_MIN:
@@ -148,6 +172,7 @@ def publish_tag(
     abs_edge: Optional[float],
     product_gate_status: str = "YELLOW",
     segment_evidence: Optional[Dict[str, SegmentEvidence]] = None,
+    season_type: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Return tag + stake eligibility for a side/total edge.
 
@@ -155,12 +180,32 @@ def publish_tag(
       GREEN  — selective PLAY/LEAN allowed when segment clears
       YELLOW — PLAY only (no LEAN); still requires segment clear
       RED    — force PASS (research board only)
+
+    season_type:
+      PRE / PRESEASON — blocked when NFL_PRESEASON_MODE=info (default).
     """
+    if is_preseason_season_type(season_type) and is_preseason_info_mode():
+        return {
+            "tag": "PASS",
+            "stake_eligible": False,
+            "reason": "preseason_info_desk",
+            "candidate_tag": "PASS",
+            "preseason_mode": os.getenv("NFL_PRESEASON_MODE", "info"),
+        }
+
     if abs_edge is None:
         return {
             "tag": "PASS",
             "stake_eligible": False,
             "reason": "missing_edge",
+            "candidate_tag": "PASS",
+        }
+
+    if market == "total" and not TOTAL_PLAY_ENABLED:
+        return {
+            "tag": "PASS",
+            "stake_eligible": False,
+            "reason": "totals_sides_only_launch",
             "candidate_tag": "PASS",
         }
 
