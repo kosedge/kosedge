@@ -4,5 +4,5 @@
   "source": "empty_preseason_scaffold",
   "teams": {},
   "players": {},
-  "notes": "Actual cells stay null / UI '—' until REG weeks settle. Weekly updater overwrites this file."
+  "notes": "Actual cells stay null / UI '\u2014' until REG weeks settle. Re-run with --from-db after kickoffs to populate."
 }

@@ -22,10 +22,34 @@
   "player_projection_model_version": "nfl-player-v1",
   "player_publish_ready": false,
   "player_publish_ready_why": [
-    "dual_full_volume_qb_rooms_count=7",
-    "top_rusher_yards_gte_1400=false (1307.5)",
-    "top_receiver_yards_gte_1300=false (1234.9)",
-    "wr_with_1200_plus_count=1 (need 3)"
+    "skill_gate rush>=False rec>=False wr1200=1"
   ],
-  "note": "Player projection CSVs are freshly generated every run from nfl_player_projection_baselines. Team MC used NFL_SEASON_SIMS=100000. publish_ready left false — do not fake."
+  "note": "Player projection CSVs are freshly generated every run from nfl_player_projection_baselines. Team MC used NFL_SEASON_SIMS=100000. publish_ready left false \u2014 do not fake.",
+  "player_totals_regenerated_at_utc": "2026-07-29T18:07:35.083730+00:00",
+  "qb_starter_lock": {
+    "applied": true,
+    "teams_locked": 32,
+    "method": "depth_week1_plus_prior_attempts_winner_take_most"
+  },
+  "pass_leader_quality": {
+    "dual_full_volume_qb_rooms_count": 0,
+    "publish_ready": true,
+    "top_passer": {
+      "player_name": "J.Goff",
+      "pass_yards_total": 4122.8
+    }
+  },
+  "skill_leader_quality": {
+    "publish_ready_skill": false,
+    "top_rusher": {
+      "player_name": "J.Taylor",
+      "pass_yards_total": null,
+      "rush_yards_total": 1307.5
+    },
+    "top_receiver": {
+      "player_name": "J.Chase",
+      "receiving_yards_total": 1234.9
+    },
+    "wr_with_1200_plus_count": 1
+  }
 }

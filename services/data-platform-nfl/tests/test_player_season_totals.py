@@ -3,6 +3,9 @@ from __future__ import annotations
 from data_platform_nfl.player_season_totals import (
     FALLBACK_EXPECTED_GAMES_GIVEN_APPEARANCE,
     aggregate_weekly_projection_rows,
+    apply_qb_starter_volume_lock,
+    designate_qb_starter_shares,
+    evaluate_season_pass_leader_quality,
 )
 
 
@@ -72,3 +75,80 @@ def test_fallback_expected_playoff_games_matches_bracket_derivation() -> None:
     # 13 games = 26 team-game appearances, spread over the 14 playoff teams.
     assert FALLBACK_EXPECTED_GAMES_GIVEN_APPEARANCE == 26.0 / 14.0
     assert 1.8 < FALLBACK_EXPECTED_GAMES_GIVEN_APPEARANCE < 1.9
+
+
+def test_designate_qb_starter_shares_prefers_depth_one_with_prior() -> None:
+    # CIN-shaped room: Burrow depth=1 with solid prior; Flacco depth=2 with
+    # near-equal injury-year attempts must NOT stay co-primary.
+    shares = designate_qb_starter_shares(
+        player_ids=["burrow", "flacco"],
+        depth_orders={"burrow": 1.0, "flacco": 2.0},
+        prior_attempts={"burrow": 278.0, "flacco": 264.0},
+    )
+    assert shares["burrow"] > shares["flacco"]
+    assert shares["burrow"] >= 0.90
+
+
+def test_apply_qb_starter_volume_lock_clears_dual_full_volume_room() -> None:
+    rows = [
+        {
+            "team": "CIN",
+            "position": "QB",
+            "player_id": "burrow",
+            "player_name": "J.Burrow",
+            "player_key": "burrow",
+            "pass_yards_total": 2290.0,
+            "pass_tds_total": 15.0,
+            "rush_yards_total": 200.0,
+            "rush_tds_total": 2.0,
+            "receiving_yards_total": 0.0,
+            "receptions_total": 0.0,
+            "rec_tds_total": 0.0,
+            "games_projected": 17,
+            "anytime_td_prob": 0.5,
+        },
+        {
+            "team": "CIN",
+            "position": "QB",
+            "player_id": "flacco",
+            "player_name": "J.Flacco",
+            "player_key": "flacco",
+            "pass_yards_total": 3845.0,
+            "pass_tds_total": 25.0,
+            "rush_yards_total": 40.0,
+            "rush_tds_total": 0.0,
+            "receiving_yards_total": 0.0,
+            "receptions_total": 0.0,
+            "rec_tds_total": 0.0,
+            "games_projected": 17,
+            "anytime_td_prob": 0.4,
+        },
+        {
+            "team": "CIN",
+            "position": "WR",
+            "player_id": "chase",
+            "player_name": "J.Chase",
+            "player_key": "chase",
+            "pass_yards_total": 0.0,
+            "pass_tds_total": 0.0,
+            "rush_yards_total": 0.0,
+            "rush_tds_total": 0.0,
+            "receiving_yards_total": 1400.0,
+            "receptions_total": 100.0,
+            "rec_tds_total": 10.0,
+            "games_projected": 17,
+            "anytime_td_prob": 0.9,
+        },
+    ]
+    locked, audit = apply_qb_starter_volume_lock(
+        rows,
+        depth_by_team={"CIN": {"burrow": 1.0, "flacco": 2.0}},
+        prior_attempts_by_team={"CIN": {"burrow": 278.0, "flacco": 264.0}},
+    )
+    by_id = {r["player_id"]: r for r in locked if r["position"] == "QB"}
+    assert by_id["burrow"]["pass_yards_total"] >= 3800.0
+    assert by_id["flacco"]["pass_yards_total"] < 400.0
+    assert audit["teams_locked"] == 1
+    quality = evaluate_season_pass_leader_quality(locked)
+    assert quality["dual_full_volume_qb_rooms_count"] == 0
+    assert quality["publish_ready"] is True

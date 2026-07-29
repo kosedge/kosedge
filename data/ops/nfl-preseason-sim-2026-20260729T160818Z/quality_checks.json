@@ -241,106 +241,10 @@
       },
       "top_passer_yards_gte_3800": true,
       "top_passer_not_bridge_marker": true,
-      "dual_full_volume_qb_rooms": [
-        {
-          "team": "CIN",
-          "qbs": [
-            {
-              "player_name": "J.Flacco",
-              "pass_yards_total": 3845.347
-            },
-            {
-              "player_name": "J.Burrow",
-              "pass_yards_total": 2290.214
-            }
-          ]
-        },
-        {
-          "team": "CLE",
-          "qbs": [
-            {
-              "player_name": "Deshaun Watson",
-              "pass_yards_total": 3609.938
-            },
-            {
-              "player_name": "S.Sanders",
-              "pass_yards_total": 2050.397
-            }
-          ]
-        },
-        {
-          "team": "NO",
-          "qbs": [
-            {
-              "player_name": "T.Shough",
-              "pass_yards_total": 3644.52
-            },
-            {
-              "player_name": "S.Rattler",
-              "pass_yards_total": 2727.666
-            }
-          ]
-        },
-        {
-          "team": "ATL",
-          "qbs": [
-            {
-              "player_name": "T.Tagovailoa",
-              "pass_yards_total": 3585.19
-            },
-            {
-              "player_name": "M.Penix",
-              "pass_yards_total": 2439.05
-            }
-          ]
-        },
-        {
-          "team": "SF",
-          "qbs": [
-            {
-              "player_name": "B.Purdy",
-              "pass_yards_total": 3397.006
-            },
-            {
-              "player_name": "M.Jones",
-              "pass_yards_total": 2674.764
-            }
-          ]
-        },
-        {
-          "team": "MIN",
-          "qbs": [
-            {
-              "player_name": "J.McCarthy",
-              "pass_yards_total": 3260.903
-            },
-            {
-              "player_name": "C.Wentz",
-              "pass_yards_total": 2094.713
-            },
-            {
-              "player_name": "K.Murray",
-              "pass_yards_total": 2043.709
-            }
-          ]
-        },
-        {
-          "team": "WAS",
-          "qbs": [
-            {
-              "player_name": "M.Mariota",
-              "pass_yards_total": 3087.774
-            },
-            {
-              "player_name": "J.Daniels",
-              "pass_yards_total": 2650.915
-            }
-          ]
-        }
-      ],
-      "dual_full_volume_qb_rooms_count": 7,
-      "no_dual_full_volume_qb_rooms": false,
-      "publish_ready": false
+      "dual_full_volume_qb_rooms": [],
+      "dual_full_volume_qb_rooms_count": 0,
+      "no_dual_full_volume_qb_rooms": true,
+      "publish_ready": true
     },
     "skill_leader_quality": {
       "top_rusher": {
@@ -359,6 +263,11 @@
       "dual_1000_yard_rb_rooms": [],
       "dual_1000_yard_rb_rooms_count": 0,
       "publish_ready_skill": false
+    },
+    "qb_starter_lock": {
+      "applied": true,
+      "teams_locked": 32,
+      "method": "depth_week1_plus_prior_attempts_winner_take_most"
     },
     "publish_ready": false
   }
