@@ -286,7 +286,7 @@ def main() -> None:
     parser.add_argument(
         "--print-external-source-status",
         action="store_true",
-        help="Print Visual Crossing / OTC / Spotrac / PFF env status (no network)",
+        help="Print Visual Crossing env status (OTC/Spotrac/PFF deferred; no network)",
     )
     args = parser.parse_args()
     seasons = _parse_seasons(args.seasons)

@@ -1,4 +1,7 @@
-"""Coach aggression latents from play-calling (nflverse PBP).
+"""Thin coach aggression rates from play-calling (nflverse PBP).
+
+Simple state-dependent rates only: 4th-down go residual + tempo (no-huddle /
+plays). Not a multi-factor latent overfit machine.
 
 Leakage: weekly row for week W is as-of end of W. Pre-game joins use W-1.
 """
@@ -13,8 +16,10 @@ from sqlalchemy import text
 
 from .kav import assert_no_future_leakage
 
-COACH_AGGRESSION_VERSION = "coach-agg-v1"
+COACH_AGGRESSION_VERSION = "coach-agg-v1-thin"
 MIN_PLAYS = 40
+# League-ish baseline go-rate used as a simple residual anchor (not a fit model).
+LEAGUE_FOURTH_GO_BASELINE = 0.28
 
 
 def _now() -> datetime:
@@ -39,7 +44,7 @@ def expected_fourth_down_go_rate(
     score_differential: float,
     game_seconds_remaining: Optional[float],
 ) -> float:
-    """Heuristic baseline go-rate (not a full model). Higher when short + late + trailing."""
+    """Thin situational baseline go-rate. Higher when short + late + trailing."""
     dist_term = _clamp(1.0 - (ydstogo / 10.0), 0.05, 0.95)
     field_term = _clamp(1.0 - (yardline_100 / 100.0), 0.1, 0.9)
     trail = 1.0 if score_differential < 0 else (0.55 if score_differential == 0 else 0.35)
@@ -52,24 +57,23 @@ def expected_fourth_down_go_rate(
 def compute_aggression_latent(
     *,
     fourth_go_residual: float,
-    early_down_proe: float,
+    early_down_proe: float = 0.0,
     no_huddle_rate: float,
-    trailing_pass_rate: float,
-    leading_pass_rate: float,
+    trailing_pass_rate: float = 0.0,
+    leading_pass_rate: float = 0.0,
 ) -> float:
-    """Bounded coach aggression score (~[-2, 2])."""
-    pass_state_tilt = trailing_pass_rate - leading_pass_rate
-    raw = (
-        1.2 * fourth_go_residual
-        + 0.9 * early_down_proe
-        + 0.6 * (no_huddle_rate - 0.08)
-        + 0.35 * pass_state_tilt
-    )
+    """Bounded thin aggression from 4th-down residual + tempo only (~[-2, 2]).
+
+    early_down_proe / pass-state args are accepted for API compatibility but
+    intentionally unused (prevents overfit tilt into the live factor).
+    """
+    del early_down_proe, trailing_pass_rate, leading_pass_rate
+    raw = 1.35 * fourth_go_residual + 0.75 * (no_huddle_rate - 0.08)
     return _clamp(raw, -2.0, 2.0)
 
 
 def compute_pace_latent(*, no_huddle_rate: float, plays_per_game_proxy: float) -> float:
-    """Mild pace latent from no-huddle + play volume proxy."""
+    """Mild tempo score from no-huddle + play volume proxy."""
     raw = 1.4 * (no_huddle_rate - 0.08) + 0.02 * (plays_per_game_proxy - 62.0)
     return _clamp(raw, -2.0, 2.0)
 
