@@ -216,7 +216,17 @@ def test_error_regime_widens_without_point_shift() -> None:
 
 
 def test_personnel_coach_info_velocity_in_decomposition() -> None:
-    base = compute_nfl_projection_decomposition(**_base_kwargs())
+    # Opt-in killed factors for pure-fn wiring checks (defaults are OFF post-ablation).
+    enable_all = {
+        "factors": {
+            "personnel_efficiency": {"enabled": True},
+            "coach_aggression": {"enabled": True},
+            "info_velocity": {"enabled": True},
+            "travel_weather_interaction": {"enabled": True},
+            "error_regime": {"enabled": True},
+        }
+    }
+    base = compute_nfl_projection_decomposition(**_base_kwargs(config_overrides=enable_all))
     with_factors = compute_nfl_projection_decomposition(
         **_base_kwargs(
             home_personnel_edge_5g=1.2,
@@ -241,6 +251,7 @@ def test_personnel_coach_info_velocity_in_decomposition() -> None:
             travel_miles_away=2200.0,
             travel_timezone_delta_home=0.0,
             travel_timezone_delta_away=3.0,
+            config_overrides=enable_all,
         )
     )
     pers = with_factors["factor_contributions"]["personnel_efficiency"]
