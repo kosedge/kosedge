@@ -1,8 +1,6 @@
-# Brave-art model-service: GHA uses
-#   railway up services/model-service --path-as-root
-# Dashboard rootDirectory is ALSO services/model-service, so Metal resolves
-# Dockerfile at services/model-service/Dockerfile *inside* the uploaded tree
-# (= nested path). Keep services/model-service/Dockerfile in sync with ./Dockerfile.
+# Brave-art: GHA `railway up services/model-service --path-as-root`.
+# Keep dashboard rootDirectory empty when using path-as-root (no double nest).
+# Nested copy Dockerfile retained as fallback if rootDirectory is re-set.
 
 [build]
 builder = "DOCKERFILE"
@@ -11,4 +9,4 @@ dockerfilePath = "Dockerfile"
 [deploy]
 restartPolicyType = "ON_FAILURE"
 healthcheckPath = "/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 120
