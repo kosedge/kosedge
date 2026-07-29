@@ -102,6 +102,16 @@ class NflGameInputs:
     home_kav_net_5g: Optional[float] = None
     away_kav_net_5g: Optional[float] = None
     kav_as_of_week: Optional[int] = None
+    # Second-order edge (week-lagged personnel / coach aggression).
+    home_personnel_edge_5g: Optional[float] = None
+    away_personnel_edge_5g: Optional[float] = None
+    home_sub_elasticity_5g: Optional[float] = None
+    away_sub_elasticity_5g: Optional[float] = None
+    home_coach_aggression_5g: Optional[float] = None
+    away_coach_aggression_5g: Optional[float] = None
+    home_coach_pace_5g: Optional[float] = None
+    away_coach_pace_5g: Optional[float] = None
+    second_order_as_of_week: Optional[int] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -495,6 +505,15 @@ def simulate_nfl_game(
         home_kav_defense_5g=inputs.home_kav_defense_5g,
         away_kav_defense_5g=inputs.away_kav_defense_5g,
         kav_as_of_week=inputs.kav_as_of_week,
+        home_personnel_edge_5g=inputs.home_personnel_edge_5g,
+        away_personnel_edge_5g=inputs.away_personnel_edge_5g,
+        home_sub_elasticity_5g=inputs.home_sub_elasticity_5g,
+        away_sub_elasticity_5g=inputs.away_sub_elasticity_5g,
+        home_coach_aggression_5g=inputs.home_coach_aggression_5g,
+        away_coach_aggression_5g=inputs.away_coach_aggression_5g,
+        home_coach_pace_5g=inputs.home_coach_pace_5g,
+        away_coach_pace_5g=inputs.away_coach_pace_5g,
+        second_order_as_of_week=inputs.second_order_as_of_week,
         config_overrides=config_overrides,
     )
 

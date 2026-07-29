@@ -50,7 +50,12 @@ def fetch_latest_matchup_feature_pack(
                 home_kav_net_ytd, away_kav_net_ytd,
                 diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
                 kav_as_of_week,
-                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g
+                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
+                home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
+                home_sub_elasticity_5g, away_sub_elasticity_5g,
+                home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
+                home_coach_pace_5g, away_coach_pace_5g,
+                second_order_as_of_week
               FROM nfl_dp_matchup_features_weekly
               WHERE game_id = :game_id
               UNION ALL
@@ -77,7 +82,12 @@ def fetch_latest_matchup_feature_pack(
                 home_kav_net_ytd, away_kav_net_ytd,
                 diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
                 kav_as_of_week,
-                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g
+                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
+                home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
+                home_sub_elasticity_5g, away_sub_elasticity_5g,
+                home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
+                home_coach_pace_5g, away_coach_pace_5g,
+                second_order_as_of_week
               FROM nfl_dp_matchup_features_weekly
               WHERE :season IS NOT NULL
                 AND season = :season
@@ -106,7 +116,12 @@ def fetch_latest_matchup_feature_pack(
               home_kav_net_ytd, away_kav_net_ytd,
               diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
               kav_as_of_week,
-              home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g
+              home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
+              home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
+              home_sub_elasticity_5g, away_sub_elasticity_5g,
+              home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
+              home_coach_pace_5g, away_coach_pace_5g,
+              second_order_as_of_week
             FROM candidates
             ORDER BY priority, season DESC, week DESC
             LIMIT 1
@@ -178,5 +193,18 @@ def matchup_pack_to_sim_input_kwargs(
         "home_st_kav_net_5g": _to_float(matchup_pack.get("home_st_kav_net_5g")),
         "away_st_kav_net_5g": _to_float(matchup_pack.get("away_st_kav_net_5g")),
         "diff_st_kav_net_5g": _to_float(matchup_pack.get("diff_st_kav_net_5g")),
-        "feature_pack_version": "nfl-v1.2-matchup-pack-kav-st",
+        "home_personnel_edge_5g": _to_float(matchup_pack.get("home_personnel_edge_5g")),
+        "away_personnel_edge_5g": _to_float(matchup_pack.get("away_personnel_edge_5g")),
+        "home_sub_elasticity_5g": _to_float(matchup_pack.get("home_sub_elasticity_5g")),
+        "away_sub_elasticity_5g": _to_float(matchup_pack.get("away_sub_elasticity_5g")),
+        "home_coach_aggression_5g": _to_float(matchup_pack.get("home_coach_aggression_5g")),
+        "away_coach_aggression_5g": _to_float(matchup_pack.get("away_coach_aggression_5g")),
+        "home_coach_pace_5g": _to_float(matchup_pack.get("home_coach_pace_5g")),
+        "away_coach_pace_5g": _to_float(matchup_pack.get("away_coach_pace_5g")),
+        "second_order_as_of_week": (
+            int(matchup_pack["second_order_as_of_week"])
+            if matchup_pack.get("second_order_as_of_week") is not None
+            else None
+        ),
+        "feature_pack_version": "nfl-v1.3-matchup-pack-second-order",
     }

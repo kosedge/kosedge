@@ -148,6 +148,23 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
                 "max_margin_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS", 0.0),
                 "max_total_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS", 0.0),
             },
+            # Second-order: personnel package EPA edge + substitution elasticity (week-lagged).
+            "personnel_efficiency": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_PERSONNEL_ENABLED"), True),
+                "margin_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT", 0.85),
+                "total_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT", 0.45),
+                "elasticity_margin_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT", 0.35),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS", 1.6),
+                "max_total_points": _env_float("NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS", 1.1),
+            },
+            # Second-order: coach aggression / conditional play-calling (week-lagged).
+            "coach_aggression": {
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED"), True),
+                "margin_weight": _env_float("NFL_FRAMEWORK_COACH_MARGIN_WEIGHT", 0.70),
+                "total_weight": _env_float("NFL_FRAMEWORK_COACH_TOTAL_WEIGHT", 0.55),
+                "max_margin_points": _env_float("NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS", 1.4),
+                "max_total_points": _env_float("NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS", 1.2),
+            },
         },
         "uncertainty": {
             "base_confidence": _clamp(_env_float("NFL_FRAMEWORK_BASE_CONFIDENCE", 0.72), 0.05, 0.99),
@@ -207,6 +224,15 @@ def compute_nfl_projection_decomposition(
     kav_as_of_week: Optional[int] = None,
     external_dvoa_home: Optional[float] = None,
     external_dvoa_away: Optional[float] = None,
+    home_personnel_edge_5g: Optional[float] = None,
+    away_personnel_edge_5g: Optional[float] = None,
+    home_sub_elasticity_5g: Optional[float] = None,
+    away_sub_elasticity_5g: Optional[float] = None,
+    home_coach_aggression_5g: Optional[float] = None,
+    away_coach_aggression_5g: Optional[float] = None,
+    home_coach_pace_5g: Optional[float] = None,
+    away_coach_pace_5g: Optional[float] = None,
+    second_order_as_of_week: Optional[int] = None,
     config_overrides: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     cfg = get_nfl_handicapping_config(config_overrides=config_overrides)
@@ -474,6 +500,20 @@ def compute_nfl_projection_decomposition(
             "notes": "Optional public DVOA second opinion; disabled for training.",
             "raw_signals": {},
         },
+        "personnel_efficiency": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Personnel package EPA edge + sub elasticity. Strict week-1 lag.",
+            "raw_signals": {},
+        },
+        "coach_aggression": {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": False,
+            "notes": "Coach aggression / pace latents. Strict week-1 lag.",
+            "raw_signals": {},
+        },
     }
 
     kav_cfg = factors_cfg["kav_efficiency"]
@@ -531,6 +571,89 @@ def compute_nfl_projection_decomposition(
             },
         }
 
+    pers_cfg = factors_cfg["personnel_efficiency"]
+    if not bool(pers_cfg.get("enabled")):
+        contributions["personnel_efficiency"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Personnel efficiency disabled via env.",
+            "raw_signals": {"disabled": True},
+        }
+    else:
+        p_home = _to_float(home_personnel_edge_5g)
+        p_away = _to_float(away_personnel_edge_5g)
+        e_home = _to_float(home_sub_elasticity_5g, 0.0) or 0.0
+        e_away = _to_float(away_sub_elasticity_5g, 0.0) or 0.0
+        if p_home is not None and p_away is not None:
+            p_diff = p_home - p_away
+            e_diff = e_home - e_away
+            pers_margin = _clamp(
+                p_diff * float(pers_cfg["margin_weight"])
+                + e_diff * float(pers_cfg["elasticity_margin_weight"]),
+                -float(pers_cfg["max_margin_points"]),
+                float(pers_cfg["max_margin_points"]),
+            )
+            pers_total = _clamp(
+                (p_home + p_away) * float(pers_cfg["total_weight"]) * 0.35,
+                -float(pers_cfg["max_total_points"]),
+                float(pers_cfg["max_total_points"]),
+            )
+            contributions["personnel_efficiency"] = {
+                "margin_points": round(pers_margin, 4),
+                "total_points": round(pers_total, 4),
+                "available": True,
+                "notes": "Personnel package EPA edge + sub elasticity. Strict week-1 lag.",
+                "raw_signals": {
+                    "home_personnel_edge_5g": round(p_home, 6),
+                    "away_personnel_edge_5g": round(p_away, 6),
+                    "home_sub_elasticity_5g": round(e_home, 6),
+                    "away_sub_elasticity_5g": round(e_away, 6),
+                    "second_order_as_of_week": second_order_as_of_week,
+                },
+            }
+
+    coach_cfg = factors_cfg["coach_aggression"]
+    if not bool(coach_cfg.get("enabled")):
+        contributions["coach_aggression"] = {
+            "margin_points": 0.0,
+            "total_points": 0.0,
+            "available": True,
+            "notes": "Coach aggression disabled via env.",
+            "raw_signals": {"disabled": True},
+        }
+    else:
+        c_home = _to_float(home_coach_aggression_5g)
+        c_away = _to_float(away_coach_aggression_5g)
+        pace_home = _to_float(home_coach_pace_5g, 0.0) or 0.0
+        pace_away = _to_float(away_coach_pace_5g, 0.0) or 0.0
+        if c_home is not None and c_away is not None:
+            c_diff = c_home - c_away
+            coach_margin = _clamp(
+                c_diff * float(coach_cfg["margin_weight"]),
+                -float(coach_cfg["max_margin_points"]),
+                float(coach_cfg["max_margin_points"]),
+            )
+            pace_sum = pace_home + pace_away
+            coach_total = _clamp(
+                pace_sum * float(coach_cfg["total_weight"]) * 0.5,
+                -float(coach_cfg["max_total_points"]),
+                float(coach_cfg["max_total_points"]),
+            )
+            contributions["coach_aggression"] = {
+                "margin_points": round(coach_margin, 4),
+                "total_points": round(coach_total, 4),
+                "available": True,
+                "notes": "Coach aggression / pace latents. Strict week-1 lag.",
+                "raw_signals": {
+                    "home_coach_aggression_5g": round(c_home, 6),
+                    "away_coach_aggression_5g": round(c_away, 6),
+                    "home_coach_pace_5g": round(pace_home, 6),
+                    "away_coach_pace_5g": round(pace_away, 6),
+                    "second_order_as_of_week": second_order_as_of_week,
+                },
+            }
+
     predicted_margin = float(
         contributions["base_efficiency"]["margin_points"]
         + contributions["home_field_advantage"]["margin_points"]
@@ -542,6 +665,8 @@ def compute_nfl_projection_decomposition(
         + contributions["regression_luck"]["margin_points"]
         + contributions["kav_efficiency"]["margin_points"]
         + contributions["external_dvoa"]["margin_points"]
+        + contributions["personnel_efficiency"]["margin_points"]
+        + contributions["coach_aggression"]["margin_points"]
     )
     predicted_total = float(
         priors["base_total_points"]
@@ -553,6 +678,8 @@ def compute_nfl_projection_decomposition(
         + contributions["regression_luck"]["total_points"]
         + contributions["kav_efficiency"]["total_points"]
         + contributions["external_dvoa"]["total_points"]
+        + contributions["personnel_efficiency"]["total_points"]
+        + contributions["coach_aggression"]["total_points"]
     )
     predicted_total = _clamp(predicted_total, 30.0, 66.0)
 
