@@ -1,0 +1,8 @@
+{
+  "season": 2026,
+  "asOfUtc": null,
+  "source": "empty_preseason_scaffold",
+  "teams": {},
+  "players": {},
+  "notes": "Actual cells stay null / UI '—' until REG weeks settle. Weekly updater overwrites this file."
+}
