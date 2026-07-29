@@ -62,6 +62,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
       market: "Betting Desk",
+      props: "Props & Fantasy",
       intel: "Team Intel",
     },
   },
@@ -162,24 +163,6 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
     ];
   }
 
-  if (sportKey === "nfl") {
-    return [
-      {
-        href: "/pro/nfl/props",
-        label: "Player props board",
-        hint: "Model mean vs line, fair odds, and confidence — market edges when books join.",
-        premium: true,
-        status: "active",
-      },
-      {
-        href: "/pro/props-center",
-        label: "Cross-sport props center",
-        hint: "Portfolio-style scan across supported pro leagues.",
-        status: "active",
-      },
-    ];
-  }
-
   if (sportKey === "mlb") {
     return [
       {
@@ -214,99 +197,204 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
   ];
 }
 
-const NFL_INTEL_LINKS: OverviewSectionLink[] = [
-  {
-    href: "/pro/nfl/projections",
-    label: "Projections hub",
-    hint: "Team wins/futures plus player fantasy totals in one betting view.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/fair-lines",
-    label: "KEI Lines board",
-    hint: "Kosedge spreads, totals, and fair moneylines for the upcoming slate.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/edges",
-    label: "Edges desk",
-    hint: "Actionable game + prop edges that clear Kosedge vs Vegas thresholds.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/odds/nfl",
-    label: "Compare odds",
-    hint: "Side-by-side spreads and totals across all 9 books (best cells highlighted).",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/props",
-    label: "Props board",
-    hint: "Player prop model means, fair prices, and confidence by market.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/fantasy",
-    label: "Fantasy draft board",
-    hint: "Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers and scoring toggles.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/awards",
-    label: "MVP & OPOY race",
-    hint: "Real projected award contenders with the supporting team + stat evidence behind each rank.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/wall-chart/nfl-2026",
-    label: "2026 NFL wall chart",
-    hint: "Printable 24×18 schedule tracker for laminated wet-erase use.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/teams",
-    label: "Team research hub",
-    hint: "Team cards with writer preview slots, depth/stats/injuries/tendencies intel.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/stats",
-    label: "League stats",
-    hint: "Weekly league-level production and situational context.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/standings",
-    label: "League standings",
-    hint: "Division and conference race context with tiebreak outlook.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/depth-charts",
-    label: "Depth charts",
-    hint: "Role hierarchy and rotational snapshots by position group.",
-    premium: true,
-    status: "active",
-  },
-  {
-    href: "/pro/nfl/injuries",
-    label: "Injuries",
-    hint: "Availability, return windows, and practice progression tracker.",
-    premium: true,
-    status: "active",
-  },
-];
+function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
+  return [
+    {
+      title: "Weekly Slate",
+      subtitle:
+        "Move from macro board context into matchup-level detail and preview coverage.",
+      links: [
+        {
+          href: "/pro/nfl/slate/today",
+          label: "Weekly Slate",
+          hint: "Collapsed matchup cards with model reference context.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/slate/today",
+          label: "Matchups",
+          hint: "Open the slate to drill into per-game matchup briefs.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/teams",
+          label: "Team Previews",
+          hint: "Team cards with writer-owned season preview slots.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/awards",
+          label: "Player Previews",
+          hint: "Closest live player outlook surface (MVP & OPOY race). Dedicated player preview index TBD.",
+          premium: true,
+          status: "active",
+        },
+      ],
+    },
+    {
+      title: "Betting Desk",
+      subtitle: deskPathSubtitle,
+      links: [
+        {
+          href: "/pro/nfl/fair-lines",
+          label: "KEI Lines",
+          hint: "Kosedge spreads, totals, and fair moneylines for the slate.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/odds/nfl",
+          label: "Compare Odds",
+          hint: "Side-by-side spreads and totals across books.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/edges",
+          label: "Edges",
+          hint: "Thresholded game + prop edges with side and confidence.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/prediction-market",
+          label: "Prediction Markets",
+          hint: "Prediction market data and insights.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/props",
+          label: "Props",
+          hint: "Full player prop board — model means, fair prices, market joins.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/execution",
+          label: "Execution Monitor",
+          hint: "Book dispersion, timing windows, and price quality checks.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/projections",
+          label: "Futures",
+          hint: "Team wins, playoff, and Super Bowl probability tables.",
+          premium: true,
+          status: "active",
+        },
+      ],
+    },
+    {
+      title: "Props & Fantasy",
+      subtitle:
+        "Surface player-level opportunities where feeds are launch-ready while preserving risk discipline.",
+      links: [
+        {
+          href: "/pro/nfl/props",
+          label: "Player Props Board",
+          hint: "Model mean vs line, fair odds, and confidence by market.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/fantasy",
+          label: "Fantasy Draft Board",
+          hint: "VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/projections",
+          label: "Weekly Fantasy Projections",
+          hint: "Player fantasy totals from the latest projection bundle.",
+          premium: true,
+          status: "active",
+        },
+      ],
+    },
+    {
+      title: "Team Intel",
+      subtitle:
+        "Premium team and league context cards for roster quality, health, and competitive positioning.",
+      links: [
+        {
+          href: "/pro/nfl/teams",
+          label: "Team Research Hub",
+          hint: "Team cards with depth, stats, injuries, and tendencies intel.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/standings",
+          label: "Standings",
+          hint: "Division and conference race context with tiebreak outlook.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/stats",
+          label: "League Stats",
+          hint: "Weekly league-level production and situational context.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/depth-charts",
+          label: "Depth Charts",
+          hint: "Role hierarchy and rotational snapshots by position group.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/injuries",
+          label: "Injuries",
+          hint: "Availability, return windows, and practice progression tracker.",
+          premium: true,
+          status: "active",
+        },
+      ],
+    },
+    {
+      title: "Model Governance & Health",
+      subtitle:
+        "Stay outcome-neutral with process quality, CLV, and calibration visibility.",
+      links: [
+        {
+          href: "/pro/model-transparency",
+          label: "Model Transparency",
+          hint: "Model vs open/close and edge capture accountability.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/tracking",
+          label: "Sport Tracking",
+          hint: "CLV and post-close quality review pipeline.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/clv-tracker",
+          label: "Global CLV Tracker",
+          hint: "Cross-market close-line value distribution monitor.",
+          status: "active",
+        },
+        {
+          href: "/pro/model-transparency",
+          label: "Performance",
+          hint: "Closest live performance metrics surface (ROI / EV / sport backtests). Dedicated Performance page TBD.",
+          premium: true,
+          status: "active",
+        },
+      ],
+    },
+  ];
+}
 
 function mlbIntelLinks(base: string): OverviewSectionLink[] {
   return [
@@ -438,7 +526,6 @@ function intelLinksForSport(
   sportKey: string,
   base: string,
 ): OverviewSectionLink[] {
-  if (sportKey === "nfl") return NFL_INTEL_LINKS;
   if (sportKey === "mlb") return mlbIntelLinks(base);
   return genericIntelLinks(sportKey, base);
 }
@@ -507,10 +594,13 @@ export function buildSportOverviewSections({
   content: OverviewContent;
 }): OverviewSection[] {
   const desk = getSportDeskConfig(sportKey);
+
+  if (sportKey === "nfl") {
+    return buildNflOverviewSections(desk.pathSubtitle);
+  }
+
   const slateLabel =
-    sportKey === "nfl" || sportKey === "cfb"
-      ? "Weekly slate board"
-      : "Daily slate board";
+    sportKey === "cfb" ? "Weekly slate board" : "Daily slate board";
 
   const sections: OverviewSection[] = [
     {
@@ -526,7 +616,7 @@ export function buildSportOverviewSections({
           status: "active",
         },
         {
-          href: sportKey === "nfl" ? "/pro/nfl/teams" : `${base}/teams`,
+          href: `${base}/teams`,
           label: "Team research hub",
           hint: "Per-team handicapping research pages with writer preview ownership.",
           status: "active",
@@ -547,9 +637,7 @@ export function buildSportOverviewSections({
     {
       title: content.sectionTitles.intel ?? "League Intel",
       subtitle:
-        sportKey === "nfl"
-          ? "Premium team and league context cards for roster quality, health, and competitive positioning."
-          : "League context, odds compare, and sport-specific intel surfaces — live where feeds are ready.",
+        "League context, odds compare, and sport-specific intel surfaces — live where feeds are ready.",
       links: intelLinksForSport(sportKey, base),
     },
     {

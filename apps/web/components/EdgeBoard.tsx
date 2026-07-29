@@ -1,6 +1,7 @@
 import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { getKeiCode } from "@/lib/kei-brand";
+import { nflPublishTag } from "@/lib/nfl-publish-policy";
 import { generateGameOverview } from "@/lib/sports";
 
 // Flat API row format (from Odds API / model); kei = our projected line/total
@@ -144,13 +145,11 @@ function shortTeamLabel(name: string): string {
 
 function tagClassName(tag: Tag, compact = false): string {
   const base = compact
-    ? "inline-flex px-2 py-0.5 rounded text-[11px] font-semibold"
-    : "inline-flex items-center justify-center px-2 py-1 rounded-lg text-[12px] font-semibold";
-  if (tag === "PLAY")
-    return `${base} bg-edge-green/20 text-edge-green border border-edge-green/30`;
-  if (tag === "LEAN")
-    return `${base} bg-kos-gold/20 text-kos-gold border border-kos-gold/30`;
-  return `${base} bg-white/5 text-gray-400 border border-white/10`;
+    ? "inline-flex px-2.5 py-1 rounded-md text-[12px] font-bold tracking-wide"
+    : "inline-flex items-center justify-center min-w-[3.5rem] px-2.5 py-1.5 rounded-md text-[13px] font-bold tracking-wide";
+  if (tag === "PLAY") return `${base} bg-edge-green text-black`;
+  if (tag === "LEAN") return `${base} bg-amber-500 text-black`;
+  return `${base} bg-white/10 text-gray-400`;
 }
 
 function EdgeSideCell({
@@ -163,14 +162,16 @@ function EdgeSideCell({
   tag?: Tag;
 }) {
   if (edgeNum == null) {
-    return <span className="text-gray-500">—</span>;
+    return <span className="text-gray-500 text-sm">—</span>;
   }
   return (
     <div className="leading-tight">
-      <div className="font-semibold tabular-nums">{edgeNum.toFixed(1)}</div>
+      <div className="text-[17px] font-bold tabular-nums tracking-tight">
+        {edgeNum.toFixed(1)}
+      </div>
       {favor ? (
         <div
-          className={`mt-0.5 text-[11px] font-semibold truncate ${favorTextClass(tag)}`}
+          className={`mt-1 text-[12px] font-bold truncate ${favorTextClass(tag)}`}
         >
           {favor}
         </div>
@@ -196,13 +197,13 @@ function TagPlayCell({
       <span className={tagClassName(tag, compact)}>{tag}</span>
       {play && tag !== "PASS" ? (
         <div
-          className={`mt-1 text-[11px] font-semibold truncate ${favorTextClass(tag)}`}
+          className={`mt-1.5 text-[12px] font-bold truncate ${favorTextClass(tag)}`}
         >
           {play}
         </div>
       ) : null}
       {caution && tag !== "PASS" ? (
-        <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-300/90">
+        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-300/90">
           Size down
         </div>
       ) : null}
@@ -259,10 +260,9 @@ function HeaderStack({ a, b }: { a: string; b?: string }) {
 type EdgeMarket = "line" | "total";
 
 /**
- * NFL tag bands (pts of |KEI − best book|):
- *   Spread: PASS <1.1 · LEAN 1.1–2.49 · PLAY ≥2.5
- *   Total:  PASS <2.1 · LEAN 2.1–2.49 · PLAY ≥2.5
- *           ≥3.0 keeps PLAY but shows "Size down" (3–4pt settled ROI was toxic)
+ * NFL: selective publish (see lib/nfl-publish-policy.ts + docs/NFL_ENTERPRISE_GATES.md).
+ *   Spread: PASS default · PLAY ≥2.5 with ATS evidence · LEAN disabled
+ *   Total:  PASS default · PLAY only in [2.5, 3.0) · ≥3.0 PASS (toxic)
  * Other sports keep the legacy 1.0 / 2.5 cut for both markets.
  */
 function edgeToTag(
@@ -272,15 +272,13 @@ function edgeToTag(
 ): Tag | undefined {
   if (edgeNum == null) return undefined;
   const nfl = String(sportKey).toLowerCase() === "nfl";
-  if (nfl && market === "total") {
-    if (edgeNum >= 2.5) return "PLAY";
-    if (edgeNum >= 2.1) return "LEAN";
-    return "PASS";
-  }
-  if (nfl && market === "line") {
-    if (edgeNum >= 2.5) return "PLAY";
-    if (edgeNum >= 1.1) return "LEAN";
-    return "PASS";
+  if (nfl) {
+    const pub = nflPublishTag(
+      market === "total" ? "total" : "spread",
+      edgeNum,
+      "YELLOW",
+    );
+    return pub.tag;
   }
   if (edgeNum >= 2.5) return "PLAY";
   if (edgeNum >= 1.0) return "LEAN";
@@ -299,33 +297,41 @@ function isNflTotalCaution(
   );
 }
 
-/** Cell chrome matches the tag — gray PASS, gold LEAN, green PLAY. */
+/** Cell chrome matches the tag — muted PASS, amber LEAN, green PLAY. */
 function edgeCellClass(tag: Tag | undefined): string {
   if (tag == null) return "bg-white/5 text-gray-500";
-  if (tag === "PLAY") return "bg-edge-green/20 text-edge-green font-semibold";
-  if (tag === "LEAN") return "bg-kos-gold/25 text-kos-gold font-medium";
-  return "bg-kos-gray/25 text-kos-muted";
+  if (tag === "PLAY") return "bg-edge-green/25 text-edge-green";
+  if (tag === "LEAN") return "bg-amber-500/20 text-amber-400";
+  return "bg-white/[0.04] text-gray-400";
 }
 
 function favorTextClass(tag: Tag | undefined): string {
   if (tag === "PLAY") return "text-edge-green";
-  if (tag === "LEAN") return "text-kos-gold";
+  if (tag === "LEAN") return "text-amber-400";
   return "text-gray-400";
 }
 
+/** Market (Best) vs Model (KEI) column chrome — contrast without card clutter. */
+const COL_MARKET = "bg-white/[0.035] border-l border-white/10";
+const COL_MODEL = "bg-kos-gold/[0.07] border-l border-kos-gold/25";
+const COL_DECISION = "border-l border-white/12";
+const TH_BASE = "py-3.5 px-3";
+const TD_BASE = "py-3.5 px-3 align-top";
+const TD_DECISION = "py-3.5 px-2.5 align-top";
+
 const COL_WIDTHS = [
-  "160px",
-  "85px",
-  "85px",
-  "85px",
-  "85px",
-  "85px",
-  "85px",
-  "85px",
-  "80px",
-  "80px",
-  "100px",
-  "100px",
+  "168px",
+  "88px",
+  "88px",
+  "88px",
+  "92px",
+  "92px",
+  "92px",
+  "92px",
+  "88px",
+  "88px",
+  "112px",
+  "112px",
 ] as const;
 
 export function flatRowsToLegacy(
@@ -647,24 +653,28 @@ export default function EdgeBoard({
             <table className="w-full text-sm">
               <thead className="bg-white/5">
                 <tr className="text-left text-gray-300">
-                  <th className="py-2.5 px-3">Game</th>
-                  <th className="py-2.5 px-3">Best Line</th>
-                  <th className="py-2.5 px-3">Best O/U</th>
-                  <th className="py-2.5 px-3">Edge L/OU</th>
-                  <th className="py-2.5 px-3">Tag</th>
+                  <th className="py-3.5 px-3">Game</th>
+                  <th className="py-3.5 px-3 text-gray-100">Best Line</th>
+                  <th className="py-3.5 px-3 text-kos-gold">{keiCode}</th>
+                  <th className="py-3.5 px-3 text-[13px] font-bold text-white">
+                    Edge
+                  </th>
+                  <th className="py-3.5 px-3 text-[13px] font-bold text-white">
+                    Tag
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10 text-gray-200">
+              <tbody className="divide-y divide-white/[0.08] text-gray-200">
                 {data.map((r) => (
-                  <tr key={r.id} className="hover:bg-white/5 transition">
-                    <td className="py-2.5 px-3 align-top">
+                  <tr key={r.id} className="hover:bg-white/[0.035] transition">
+                    <td className="py-3.5 px-3 align-top">
                       <div className="font-semibold">
                         {r.teamA.name} vs {r.teamB.name}
                       </div>
                       <div className="text-[11px] text-gray-400 tabular-nums">
                         {r.time ?? "—"}
                       </div>
-                      <details className="mt-1 group/details">
+                      <details className="mt-1.5 group/details">
                         <summary className="cursor-pointer text-[12px] text-kos-gold hover:underline list-none [&::-webkit-details-marker]:hidden">
                           Overview ▾
                         </summary>
@@ -673,31 +683,42 @@ export default function EdgeBoard({
                         </div>
                       </details>
                     </td>
-                    <td className="py-2.5 px-3">
-                      <div>{r.bestLine.top.label}</div>
+                    <td className={`py-3.5 px-3 ${COL_MARKET}`}>
+                      <div className="text-[10px] uppercase tracking-wide text-gray-500 mb-1">
+                        Market
+                      </div>
+                      <div className="font-semibold text-gray-50">
+                        {r.bestLine.top.label}
+                      </div>
                       <div className="text-[11px] text-gray-400">
                         ({r.bestLine.top.juice})
                       </div>
                       {r.bestLineBook ? (
-                        <div className="mt-1">
+                        <div className="mt-1.5">
                           <SportsbookBadge book={r.bestLineBook} compact />
                         </div>
                       ) : null}
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <div>{r.bestOU.top.label}</div>
+                      <div className="mt-2 font-semibold text-gray-50">
+                        {r.bestOU.top.label}
+                      </div>
                       <div className="text-[11px] text-gray-400">
                         ({r.bestOU.top.juice})
                       </div>
-                      {r.bestOUBook ? (
-                        <div className="mt-1">
-                          <SportsbookBadge book={r.bestOUBook} compact />
-                        </div>
-                      ) : null}
                     </td>
-                    <td className="py-2.5 px-3">
+                    <td className={`py-3.5 px-3 ${COL_MODEL}`}>
+                      <div className="text-[10px] uppercase tracking-wide text-kos-gold/80 mb-1">
+                        Model
+                      </div>
+                      <div className="font-semibold text-kos-gold">
+                        {(r.keiLine ?? COMING_SOON_PAIR).top.label}
+                      </div>
+                      <div className="mt-2 font-semibold text-kos-gold">
+                        {(r.keiOU ?? COMING_SOON_PAIR).top.label}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-3">
                       <div
-                        className={`rounded px-1 py-0.5 ${edgeCellClass(r.tagLine)}`}
+                        className={`rounded-md px-1.5 py-1 ${edgeCellClass(r.tagLine)}`}
                       >
                         <EdgeSideCell
                           edgeNum={r.edgeLineNum}
@@ -706,7 +727,7 @@ export default function EdgeBoard({
                         />
                       </div>
                       <div
-                        className={`mt-1 rounded px-1 py-0.5 ${edgeCellClass(r.tagOU)}`}
+                        className={`mt-1.5 rounded-md px-1.5 py-1 ${edgeCellClass(r.tagOU)}`}
                       >
                         <EdgeSideCell
                           edgeNum={r.edgeOUNum}
@@ -715,9 +736,9 @@ export default function EdgeBoard({
                         />
                       </div>
                     </td>
-                    <td className="py-2.5 px-3">
+                    <td className="py-3.5 px-3">
                       <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
-                      <div className="mt-1">
+                      <div className="mt-1.5">
                         <TagPlayCell
                           tag={r.tagOU}
                           play={r.playOU}
@@ -732,7 +753,7 @@ export default function EdgeBoard({
             </table>
           </div>
           <div className="mt-4 text-xs text-gray-400">
-            Best Line/O/U (book) • Edge Line + O/U • Tag • Overview
+            Market (Best) vs Model ({keiCode}) • Edge • Tag • Overview
           </div>
         </div>
       </div>
@@ -742,7 +763,7 @@ export default function EdgeBoard({
   const DesktopTable = (
     <div className="hidden lg:block mt-6">
       <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/10">
           <div className="text-sm text-gray-300">
             Live books • Open + Best + juice • Edge vs {keiCode}
           </div>
@@ -753,56 +774,85 @@ export default function EdgeBoard({
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-[1100px] w-full table-fixed text-[12.75px] tabular-nums">
+          <table className="min-w-[1180px] w-full table-fixed text-[13px] tabular-nums">
             <colgroup>
               {COL_WIDTHS.map((w, i) => (
                 <col key={i} style={{ width: w }} />
               ))}
             </colgroup>
-            <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-[13px]">
+            <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-[12px]">
+              <tr className="text-left text-[10px] tracking-[0.14em] text-gray-500 normal-case">
+                <th className={`${TH_BASE} pb-0`} colSpan={4} />
+                <th
+                  className={`${TH_BASE} pb-0 ${COL_MARKET} text-gray-400`}
+                  colSpan={2}
+                >
+                  Market
+                </th>
+                <th
+                  className={`${TH_BASE} pb-0 ${COL_MODEL} text-kos-gold`}
+                  colSpan={2}
+                >
+                  Model
+                </th>
+                <th
+                  className={`${TH_BASE} pb-0 ${COL_DECISION} text-gray-300`}
+                  colSpan={4}
+                >
+                  Decision
+                </th>
+              </tr>
               <tr className="text-left">
-                <th className="py-2.5 px-3">
+                <th className={TH_BASE}>
                   <HeaderStack a="Game" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={TH_BASE}>
                   <HeaderStack a="Time" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={TH_BASE}>
                   <HeaderStack a="Open" b="O/U" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={TH_BASE}>
                   <HeaderStack a="Open" b="Line" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
                   <HeaderStack a="Best" b="Line" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
                   <HeaderStack a="Best" b="O/U" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
                   <HeaderStack a={keiCode} b="Line" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
                   <HeaderStack a={keiCode} b="O/U" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th
+                  className={`${TH_BASE} ${COL_DECISION} text-[14px] font-bold text-white normal-case tracking-normal`}
+                >
                   <HeaderStack a="Edge" b="Line" />
                 </th>
-                <th className="py-2.5 px-3">
+                <th
+                  className={`${TH_BASE} text-[14px] font-bold text-white normal-case tracking-normal`}
+                >
                   <HeaderStack a="Edge" b="O/U" />
                 </th>
-                <th className="py-2.5 px-3 text-center">
+                <th
+                  className={`${TH_BASE} text-center text-[14px] font-bold text-white normal-case tracking-normal`}
+                >
                   <HeaderStack a="Tag" b="Line" />
                 </th>
-                <th className="py-2.5 px-3 text-center">
+                <th
+                  className={`${TH_BASE} text-center text-[14px] font-bold text-white normal-case tracking-normal`}
+                >
                   <HeaderStack a="Tag" b="O/U" />
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10 text-gray-200">
+            <tbody className="divide-y divide-white/[0.08] text-gray-200">
               {data.map((r) => (
-                <tr key={r.id} className="hover:bg-white/5 transition">
-                  <td className="py-2.5 px-3 align-top relative pb-7 overflow-visible">
+                <tr key={r.id} className="hover:bg-white/[0.035] transition">
+                  <td className={`${TD_BASE} relative pb-8 overflow-visible`}>
                     <div className="font-semibold truncate">
                       {r.teamA.name}
                       {r.teamA.keiNumber != null ? (
@@ -823,7 +873,7 @@ export default function EdgeBoard({
                       {r.teamA.record ? ` • ${r.teamA.record}` : ""}
                       {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
                     </div>
-                    <div className="mt-1 font-semibold truncate">
+                    <div className="mt-1.5 font-semibold truncate">
                       {r.teamB.name}
                       {r.teamB.keiNumber != null ? (
                         <span className="ml-1 text-kos-gold tabular-nums">
@@ -843,7 +893,7 @@ export default function EdgeBoard({
                       {r.teamB.record ? ` • ${r.teamB.record}` : ""}
                       {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
                     </div>
-                    <details className="absolute bottom-2 left-3 group/details">
+                    <details className="absolute bottom-2.5 left-3 group/details">
                       <summary className="cursor-pointer text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
                         Overview ▾
                       </summary>
@@ -852,64 +902,64 @@ export default function EdgeBoard({
                       </div>
                     </details>
                   </td>
-                  <td className="py-2.5 px-1 align-top relative pb-7 overflow-hidden">
+                  <td className="py-3.5 px-1 align-top relative pb-8 overflow-hidden">
                     <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
                       {r.time ?? "—"}
                     </div>
                     <button
-                      className="absolute bottom-2 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
+                      className="absolute bottom-2.5 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
                       type="button"
                       title="Expandable panel coming soon"
                     >
                       Stats ▾
                     </button>
                   </td>
-                  <td className="py-2.5 px-3 align-top text-gray-400">
+                  <td className={`${TD_BASE} text-gray-400`}>
                     <PriceCell
                       p={r.openOU}
                       compact
                       valueClassName="text-gray-400 font-medium"
                     />
                   </td>
-                  <td className="py-2.5 px-3 align-top text-gray-400">
+                  <td className={`${TD_BASE} text-gray-400`}>
                     <PriceCell
                       p={r.openLine}
                       compact
                       valueClassName="text-gray-400 font-medium"
                     />
                   </td>
-                  <td className="py-2.5 px-3 align-top">
+                  <td className={`${TD_BASE} ${COL_MARKET}`}>
                     <PriceCell
                       p={r.bestLine}
                       compact
-                      valueClassName="text-gray-100 font-semibold"
+                      valueClassName="text-gray-50 font-semibold"
                       book={r.bestLineBook}
                     />
                   </td>
-                  <td className="py-2.5 px-3 align-top">
+                  <td className={`${TD_BASE} ${COL_MARKET}`}>
                     <PriceCell
                       p={r.bestOU}
                       compact
-                      valueClassName="text-gray-100 font-semibold"
+                      valueClassName="text-gray-50 font-semibold"
                       book={r.bestOUBook}
                     />
                   </td>
-                  <td className="py-2.5 px-2 align-top">
+                  <td className={`${TD_DECISION} ${COL_MODEL}`}>
                     <PriceCell
                       p={r.keiLine ?? COMING_SOON_PAIR}
                       compact
-                      valueClassName="text-kos-gold/90 font-medium"
+                      valueClassName="text-kos-gold font-semibold"
                     />
                   </td>
-                  <td className="py-2.5 px-2 align-top">
+                  <td className={`${TD_DECISION} ${COL_MODEL}`}>
                     <PriceCell
                       p={r.keiOU ?? COMING_SOON_PAIR}
                       compact
-                      valueClassName="text-kos-gold/90 font-medium"
+                      valueClassName="text-kos-gold font-semibold"
                     />
                   </td>
                   <td
-                    className={`py-2.5 px-2 align-top rounded ${edgeCellClass(r.tagLine)}`}
+                    className={`${TD_DECISION} ${COL_DECISION} ${edgeCellClass(r.tagLine)}`}
                   >
                     <EdgeSideCell
                       edgeNum={r.edgeLineNum}
@@ -917,19 +967,17 @@ export default function EdgeBoard({
                       tag={r.tagLine}
                     />
                   </td>
-                  <td
-                    className={`py-2.5 px-2 align-top rounded ${edgeCellClass(r.tagOU)}`}
-                  >
+                  <td className={`${TD_DECISION} ${edgeCellClass(r.tagOU)}`}>
                     <EdgeSideCell
                       edgeNum={r.edgeOUNum}
                       favor={r.edgeOUFavor}
                       tag={r.tagOU}
                     />
                   </td>
-                  <td className="py-2.5 px-2 align-top text-center">
+                  <td className={`${TD_DECISION} text-center`}>
                     <TagPlayCell tag={r.tagLine} play={r.playLine} />
                   </td>
-                  <td className="py-2.5 px-2 align-top text-center">
+                  <td className={`${TD_DECISION} text-center`}>
                     <TagPlayCell
                       tag={r.tagOU}
                       play={r.playOU}
@@ -941,9 +989,9 @@ export default function EdgeBoard({
             </tbody>
           </table>
         </div>
-        <div className="px-4 py-3 text-[10px] text-gray-400 border-t border-white/10">
+        <div className="px-4 py-3.5 text-[10px] text-gray-400 border-t border-white/10">
           {isNfl
-            ? "NFL tags — Spread: PASS <1.1 · LEAN 1.1–2.4 · PLAY ≥2.5. Total: PASS <2.1 · LEAN 2.1–2.4 · PLAY ≥2.5 (size down if ≥3). "
+            ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
             : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           Edge shows pts + side favored. Tag shows the action at the best book.{" "}
           {keiCode}: Kos Edge Index.

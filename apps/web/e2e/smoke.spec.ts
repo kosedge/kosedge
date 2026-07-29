@@ -13,5 +13,5 @@ test("homepage renders brand and CTA", async ({ page }) => {
 test("edge board route responds", async ({ page }) => {
   await page.goto("/edge-board");
   await expect(page).toHaveURL(/\/edge-board\/ncaam$/);
-  await expect(page.getByText("Edge Board")).toBeVisible();
+  await expect(page.getByText("Edge Board", { exact: true })).toBeVisible();
 });

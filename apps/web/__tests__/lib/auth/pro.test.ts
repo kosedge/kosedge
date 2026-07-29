@@ -1,5 +1,5 @@
 // apps/web/__tests__/lib/auth/pro.test.ts
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
 import { UserRole, SubscriptionStatus } from "#prisma";
 
 // Mock dependencies
@@ -22,8 +22,29 @@ const { isProUser, hasRole, getUserRole, getProAccessState } =
   await import("@/lib/auth/pro");
 
 describe("Auth Pro Utilities", () => {
+  const originalOpenAccessPreview = process.env.OPEN_ACCESS_PREVIEW;
+  const originalPublicOpenAccessPreview =
+    process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.OPEN_ACCESS_PREVIEW = "false";
+    process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW = "false";
+  });
+
+  afterAll(() => {
+    if (originalOpenAccessPreview === undefined) {
+      delete process.env.OPEN_ACCESS_PREVIEW;
+    } else {
+      process.env.OPEN_ACCESS_PREVIEW = originalOpenAccessPreview;
+    }
+
+    if (originalPublicOpenAccessPreview === undefined) {
+      delete process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW;
+    } else {
+      process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW =
+        originalPublicOpenAccessPreview;
+    }
   });
 
   describe("isProUser", () => {
