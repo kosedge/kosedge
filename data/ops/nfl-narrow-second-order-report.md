@@ -1,134 +1,120 @@
-# NFL Narrow Second-Order Path — Report
+# NFL Narrow Second-Order Path — Holdout Report
 
-Generated: 2026-07-29T05:55:00Z  
+Generated: 2026-07-29T07:20:00Z  
 Branch: `nfl-second-order-edge`  
-Parent baseline: `nfl-path-to-95-report.md` (score **7.6 / 10**, selective PLAY GREEN)
+Ablation artifact: `data/ops/nfl-second-order-ablation.{json,md}`  
+Policy: **`spread_play_v2_cap7`**
 
-## Verdict
+## Honest verdict
 
-Narrowed the Grok-scale A–H build into a **holdout-safe, additive** slice: **E (priority) + H + B + thin A + light D**. Stripped unfinished OTC/Spotrac/PFF. **Did not re-run full PLAY/holdout warehouse** in this session (unit pure-fn coverage green; materializer dry-run required before promoting weights). Product gates unchanged until confirmatory holdout.
-
-| Gate | Status |
+| Claim | Status |
 | --- | --- |
-| `selective_play_ready` | **true** (unchanged claim; v2 PLAY band) |
+| Ablation completed (additive Δ on stored v3 boards) | **YES** |
+| `selective_play_ready` | **true** (locked v2 PLAY claim on stored boards; unchanged) |
 | `betting_product_ready` | **false** (full-slate still RED) |
-| Honest model score | **7.7 / 10** (+0.1 provisional for shipping E/H/D wiring; **not** a holdout-confirmed bump) |
+| Honest model score | **7.6 / 10** (provisional 7.7 **revoked** — E failed; B unmaterializable; A regresses) |
 
 ---
 
-## 1) Reverted / stripped vs kept vs shipped
+## Warehouse prep
 
-### Stripped (this session)
-- **OTC / Spotrac / PFF** client skeletons removed from `external_sources.py` (deferred markers only).
-- CLI status no longer advertises OTC/PFF as live paths.
-- Fancy multi-signal coach latent **slimmed** to 4th-down residual + tempo only (PROE / pass-state tilt ignored).
+| Step | Result |
+| --- | --- |
+| Migrations 043 + 044 | Applied on local `127.0.0.1:5432/kosedge` |
+| Coach thin materializer | **1710** weekly rows (2023–25, SQL aggregate) |
+| Personnel materializer | **0 rows** — public nflverse PBP parquet has **no** `offense_personnel` |
+| Info velocity inputs | Injuries 2023–25 available; WoW velocity computed at grade time (1694 keys) |
+| Visual Crossing | Key **absent** — H uses stored weather/travel from projection inputs (Open-Meteo/climatology path) |
 
-### Kept from prior Grok commits (hardened)
-- Migration **043** tables: PBP personnel/wp cols, VC weather cache, external cache, participation, personnel efficiency, sub elasticity, coach aggression weekly, matchup pack cols.
-- **B** Personnel efficiency materializer + framework factor (elasticity weight default **lowered** 0.35 → 0.15).
-- **H** Visual Crossing overlay with graceful skip → Open-Meteo / climatology.
-- Participation / draft ingest CLI (nflverse; not PFF).
+---
 
-### Newly shipped (narrow path)
-| ID | Module | What landed |
+## Confirmatory PLAY ablation (2024–25 spreads, v2 band)
+
+Method: stored pre-kickoff projections + week−1 lagged factor deltas.  
+Baseline matches prior play-only holdout (~72.9% ATS / ~60.4% CLV+).
+
+| Variant | n | ATS | CLV+ (move) | n_clv | Gate | Decision |
+| --- | ---: | ---: | ---: | ---: | --- | --- |
+| **baseline** | 229 | **0.7293** | **0.6039** | **207** | **GREEN** | — |
+| A coach | 223 | 0.7265 | 0.6020 | 201 | GREEN | **KILL** (ATS regress) |
+| B personnel | 229 | 0.7293 | 0.6039 | 207 | GREEN | **KILL** (no signal) |
+| E info velocity | 232 | 0.6940 | 0.5972 | 211 | GREEN | **KILL** (ATS −3.5pp) |
+| **H travel×weather** | 220 | **0.7364** | **0.6041** | 197 | YELLOW | **PROMOTE** |
+| **D error regime** | 229 | 0.7293 | 0.6039 | 207 | GREEN | **PROMOTE** (0 pt shift) |
+| all enabled | 227 | 0.7004 | 0.6029 | 204 | GREEN | **KILL combo** |
+| H+D (+A prior script) | 218 | 0.7431 | 0.6051 | 195 | YELLOW | see below |
+
+### Primary 2025 PLAY
+
+| Variant | n | ATS | CLV+ | Gate |
+| --- | ---: | ---: | ---: | --- |
+| baseline | 112 | 0.6964 | 0.5800 | YELLOW |
+| H alone | 107 | 0.7196 | 0.5895 | YELLOW |
+
+---
+
+## Promoted vs killed (defaults shipped)
+
+| Factor | Default | Why |
 | --- | --- | --- |
-| **E** | Info velocity | Week-over-week upgrade/downgrade + hours since change; factor `info_velocity` in decomposition; wired through nowcast → sim/tasks/routes |
-| **H** | Travel×weather | Factor `travel_weather_interaction` (bounded; skips if weather or travel missing) |
-| **B** | Personnel | Kept + light `usage_elasticity_tilt` helper for player usage |
-| **A** | Coach thin | `coach-agg-v1-thin`; smaller default caps/weights |
-| **D** | Error regime | Factor `error_regime`: **stdev widen + confidence penalty only** (0 point shift) |
+| **H** `travel_weather_interaction` | **ON** | Confirmatory ATS +0.71pp; CLV+ flat/+; graceful skip if feeds missing |
+| **D** `error_regime` | **ON** | Uncertainty widen / confidence penalty only; PLAY points unchanged |
+| **E** `info_velocity` | **OFF** | Confirmatory ATS 0.729 → 0.694 (−3.5pp) |
+| **B** `personnel_efficiency` | **OFF** | Cannot materialize — `offense_personnel` missing from public PBP |
+| **A** `coach_aggression` | **OFF** | Slight ATS/CLV regress vs baseline (ST/QB discipline) |
 
-### Deferred entirely
-- PFF scraping, OTC/Spotrac org belief, scheme-fit interactions, SGP/parlay correlation upgrades.
-
----
-
-## 2) Migrations
-
-| File | Purpose |
-| --- | --- |
-| `043_nfl_second_order_edge.sql` | Foundation (already on branch) |
-| `044_nfl_narrow_second_order.sql` | Injury WoW index + `nfl_dp_injury_info_velocity_weekly` + matchup velocity cols |
+Env kill-switches remain (`NFL_FRAMEWORK_*_ENABLED`).
 
 ---
 
-## 3) Leakage / degrade rules
+## Gate status
 
-- Personnel / coach: join **week = game.week − 1** (existing `assert_no_future_leakage`).
-- Info velocity live path: latest week vs prior week listings (same pattern as live nowcast; historical supervised joins should use `nfl_dp_injury_info_velocity_weekly` as_of W−1 when materializer is run).
-- Disabled factors mark `available=True` with 0 points (no coverage penalty).
-- VC / travel×weather: graceful skip → 0 contribution when feeds missing.
-
----
-
-## 4) Tests
-
-`tests/test_nfl_second_order_edge.py` — pure fns for personnel, thin coach, info velocity, travel×weather, error regime, decomposition wiring, VC-only status.  
-Also green: `test_nfl_injury_nowcast.py`, `test_nfl_handicapping_framework.py`.
+| Gate | Status | Note |
+| --- | --- | --- |
+| selective_play_ready | **true** | Locked v2 on stored boards still GREEN (n_clv≥200) |
+| betting_product_ready | **false** | Full-slate RED unchanged |
+| Ablation H-only board | YELLOW | n_clv 197 softens under 200 — live H is small additive challenger |
 
 ---
 
-## 5) Holdout / PLAY metrics
-
-**Not re-run this session** (no warehouse materialize + full-slate re-sim).
-
-| Metric | Status |
-| --- | --- |
-| PLAY confirmatory ATS/CLV (v2) | Prior GREEN — assume held until re-grade |
-| Supervised v3 holdout | Prior GREEN — new factors **not** in supervised FEATURE_KEYS yet |
-| Full-slate ATS/CLV | Prior RED |
-
-### Dry-run grading note (ops)
-1. Apply `043` + `044`.
-2. `python -m data_platform_nfl.cli --normalize-pbp-from-raw --replace-normalized --seasons=2023,2024,2025`
-3. `--materialize-personnel-efficiency --materialize-coach-aggression --seasons=...`
-4. Board sim; inspect `decomposition.factor_contributions` for `info_velocity`, `travel_weather_interaction`, `error_regime`, `personnel_efficiency`, `coach_aggression`.
-5. Ablation: disable new factors via env → compare PLAY ATS/CLV on confirmatory window. **Promote weights only if holdout does not worsen** (same discipline as ST KAV / QB).
-6. If holdout worsens: set `NFL_FRAMEWORK_INFO_VELOCITY_ENABLED=false` (etc.) — do not leave broken imports.
-
----
-
-## 6) Model health
+## Model health
 
 | Area | Light |
 | --- | --- |
-| KAV v3 + selective PLAY gates | **GREEN** (untouched product path) |
-| Simulator / Railway-safe degrade | **GREEN** (new factors optional / skip) |
-| Info velocity (E) | **YELLOW** — shipped + unit tested; needs live board + holdout ablation |
-| Weather VC (H) | **YELLOW** — code path ready; needs `VISUAL_CROSSING_API_KEY` |
-| Personnel / coach materializers (B/A) | **YELLOW** — code ready; needs PBP normalize + materialize |
-| Error regime (D) | **YELLOW** — widens uncertainty only; monitor PASS rate |
-| OTC/PFF/Spotrac / scheme / SGP | **RED** — deferred by design |
-| Full-slate product readiness | **RED** |
+| KAV v3 + selective PLAY (stored) | **GREEN** |
+| Simulator / Railway degrade | **GREEN** |
+| H travel×weather (promoted) | **YELLOW** (promoted on lift; CLV n soft; no VC key) |
+| D error-regime (promoted) | **GREEN** (uncertainty-only) |
+| E info velocity | **RED** (holdout fail — disabled) |
+| A coach thin | **YELLOW→OFF** (materialized but disabled) |
+| B personnel | **RED** (no data path) |
+| Full-slate product | **RED** |
 
 ---
 
-## 7) Gaps to 9.5
+## Honest score: **7.6 / 10**
 
-1. Confirmatory holdout ablation for E/H/B/A/D before raising weights.
-2. Materialize personnel/coach + optional info-velocity weekly cache for 2023–25.
-3. Live 2026 paper→stake under locked v2 as scores land.
-4. Supervised FEATURE_KEYS only if chronological holdout improves.
-5. Keep ST KAV / QB continuity **unpromoted**.
+No score bump. Provisional 7.7 revoked after ablation: highest-priority E **fails** holdout; B cannot ship; A does not clear improve bar. H/D are small additive promotions that do not move the product readiness claim.
 
 ---
 
-## 8) Env keys needed from user
+## Gaps to 9.5
 
-| Var | Required? | Purpose |
-| --- | --- | --- |
-| `VISUAL_CROSSING_API_KEY` (or `VISUALCROSSING_API_KEY`) | Optional | Prefer VC weather (~1000/day free); else Open-Meteo |
-| `NFL_VC_WEATHER_ENABLED` | Optional (default true) | Toggle VC preference |
-| `NFL_FRAMEWORK_INFO_VELOCITY_ENABLED` | Optional (default true) | Kill-switch for E |
-| `NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED` | Optional (default true) | Kill-switch for H interaction |
-| `NFL_FRAMEWORK_ERROR_REGIME_ENABLED` | Optional (default true) | Kill-switch for D |
-| `NFL_FRAMEWORK_PERSONNEL_ENABLED` / `NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED` | Optional | Kill-switches for B/A |
-| `NFL_PRODUCT_GATE_STATUS=YELLOW` | Product | Surface selective PLAY tags |
-
-**Not needed now:** `OTC_*`, `SPOTRAC_*`, `PFF_*`.
+1. Find a real personnel source (participation/package feed) before re-probing B.
+2. Retune E (velocity weights / lag) offline — do not re-enable until ablation clears.
+3. Optional: re-probe A at lower weights after more seasons of coach materialization.
+4. Add `VISUAL_CROSSING_API_KEY` to strengthen H weather quality (not required for promote).
+5. Live 2026 paper→stake under locked v2; keep full-slate RED until proven.
 
 ---
 
-## 9) Framework version
+## Env keys
 
-`nfl-handicap-core-v3.1` — additive factors; MC loop untouched.
+| Var | Needed? |
+| --- | --- |
+| `VISUAL_CROSSING_API_KEY` | Optional — improves H weather source |
+| `NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED=true` | Default ON (promoted) |
+| `NFL_FRAMEWORK_ERROR_REGIME_ENABLED=true` | Default ON (promoted) |
+| `NFL_FRAMEWORK_INFO_VELOCITY_ENABLED` | Default OFF |
+| `NFL_FRAMEWORK_PERSONNEL_ENABLED` | Default OFF |
+| `NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED` | Default OFF |

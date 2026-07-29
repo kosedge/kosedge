@@ -153,32 +153,32 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
                 "max_margin_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS", 0.0),
                 "max_total_points": _env_float("NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS", 0.0),
             },
-            # Second-order: personnel package EPA edge + light sub elasticity (week-lagged).
+            # Second-order: personnel package EPA edge (DISABLED — no public PBP personnel; holdout N/A).
             "personnel_efficiency": {
-                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_PERSONNEL_ENABLED"), True),
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_PERSONNEL_ENABLED"), False),
                 "margin_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT", 0.85),
                 "total_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT", 0.45),
                 "elasticity_margin_weight": _env_float("NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT", 0.15),
                 "max_margin_points": _env_float("NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS", 1.6),
                 "max_total_points": _env_float("NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS", 1.1),
             },
-            # Second-order thin: 4th-down / tempo rates (week-lagged).
+            # Second-order thin coach (DISABLED — confirmatory ATS/CLV slight regress; ST/QB discipline).
             "coach_aggression": {
-                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED"), True),
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED"), False),
                 "margin_weight": _env_float("NFL_FRAMEWORK_COACH_MARGIN_WEIGHT", 0.55),
                 "total_weight": _env_float("NFL_FRAMEWORK_COACH_TOTAL_WEIGHT", 0.45),
                 "max_margin_points": _env_float("NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS", 1.1),
                 "max_total_points": _env_float("NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS", 1.0),
             },
-            # Injury/practice information velocity (upgrade/downgrade + hours since change).
+            # Injury/practice info velocity (DISABLED — confirmatory ATS −3.5pp).
             "info_velocity": {
-                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_INFO_VELOCITY_ENABLED"), True),
+                "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_INFO_VELOCITY_ENABLED"), False),
                 "margin_weight": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT", 0.90),
                 "total_weight": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT", 0.35),
                 "max_margin_points": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS", 1.2),
                 "max_total_points": _env_float("NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS", 0.8),
             },
-            # Bounded travel × weather interaction (outdoor stress; graceful skip).
+            # Bounded travel × weather (PROMOTED — confirmatory ATS +0.71pp, CLV flat+).
             "travel_weather_interaction": {
                 "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED"), True),
                 "miles_wind_weight_total": _env_float("NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL", -0.000035),
@@ -186,7 +186,7 @@ def get_nfl_handicapping_config(config_overrides: Optional[Dict[str, Any]] = Non
                 "max_margin_points": _env_float("NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS", 0.75),
                 "max_total_points": _env_float("NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS", 1.4),
             },
-            # Error-regime meta: uncertainty widening only (no large point shifts).
+            # Error-regime meta: uncertainty widening only (PROMOTED — no point shift).
             "error_regime": {
                 "enabled": _to_bool(os.getenv("NFL_FRAMEWORK_ERROR_REGIME_ENABLED"), True),
                 "max_stdev_widen": _env_float("NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN", 0.85),
