@@ -111,19 +111,24 @@ TASK_MLB_QUALITY_GRADING = os.getenv(
     "src.tasks.run_mlb_quality_grading",
 )
 
-ACTIVE_START_HOUR = os.getenv("ODDS_PULL_ACTIVE_START_HOUR", "7")   # 7am
-ACTIVE_END_HOUR = os.getenv("ODDS_PULL_ACTIVE_END_HOUR", "21")      # 9pm
-LATE_START_HOUR = os.getenv("ODDS_PULL_LATE_START_HOUR", "22")      # 10pm
-LATE_END_HOUR = os.getenv("ODDS_PULL_LATE_END_HOUR", "23")          # 11pm
+ACTIVE_START_HOUR = os.getenv("ODDS_PULL_ACTIVE_START_HOUR", "7")   # 7am ET window
+ACTIVE_END_HOUR = os.getenv("ODDS_PULL_ACTIVE_END_HOUR", "23")      # through late windows
+LATE_START_HOUR = os.getenv("ODDS_PULL_LATE_START_HOUR", "0")       # overnight trickle
+LATE_END_HOUR = os.getenv("ODDS_PULL_LATE_END_HOUR", "6")           # before morning ramp
 
-ACTIVE_MINUTE_PATTERN = os.getenv("ODDS_PULL_ACTIVE_MINUTE_PATTERN", "*/30")
-LATE_MINUTE = os.getenv("ODDS_PULL_LATE_MINUTE", "0")
+# Season default: every 10 minutes (override to */5 on gameday if needed).
+# Do NOT redeploy containers for board freshness — beat drives data refresh.
+ACTIVE_MINUTE_PATTERN = os.getenv("ODDS_PULL_ACTIVE_MINUTE_PATTERN", "*/10")
+LATE_MINUTE_PATTERN = os.getenv("ODDS_PULL_LATE_MINUTE_PATTERN", "*/30")
+LATE_MINUTE = os.getenv("ODDS_PULL_LATE_MINUTE", "0")  # legacy alias
+NFL_BOARD_REFRESH_MINUTE = os.getenv("NFL_SEASON_BOARD_REFRESH_MINUTE", "*/10")
+NFL_BOARD_REFRESH_HOURS = os.getenv("NFL_SEASON_BOARD_REFRESH_HOURS", "8-23")
 
 ODDS_QUEUE = os.getenv("CELERY_ODDS_QUEUE", "odds")
 MODELS_QUEUE = os.getenv("CELERY_MODELS_QUEUE", "models")
 
 beat_schedule: Dict[str, Dict[str, Any]] = {
-    "pull-odds-every-30-min-active": {
+    "pull-odds-season-cadence": {
         "task": TASK_PULL_ODDS_SNAPSHOT,
         "schedule": crontab(
             minute=ACTIVE_MINUTE_PATTERN,
@@ -131,13 +136,36 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         ),
         "options": {"queue": ODDS_QUEUE},
     },
-    "pull-odds-hourly-late": {
+    "pull-odds-overnight-trickle": {
         "task": TASK_PULL_ODDS_SNAPSHOT,
         "schedule": crontab(
-            minute=LATE_MINUTE,
+            minute=LATE_MINUTE_PATTERN if LATE_MINUTE_PATTERN else LATE_MINUTE,
             hour=f"{LATE_START_HOUR}-{LATE_END_HOUR}",
         ),
         "options": {"queue": ODDS_QUEUE},
+    },
+    # Light NFL board cycle: context + sims so fair-lines/edges stay fresh
+    # without a container redeploy. Full weekly sharpening stays on Tuesday.
+    "run-nfl-season-board-refresh": {
+        "task": TASK_RUN_NFL_SIMULATIONS,
+        "schedule": crontab(
+            minute=NFL_BOARD_REFRESH_MINUTE,
+            hour=NFL_BOARD_REFRESH_HOURS,
+        ),
+        "kwargs": {
+            "simulations": int(os.getenv("NFL_SEASON_BOARD_SIM_COUNT", "1500")),
+            "model_version": os.getenv("NFL_BASE_MODEL_VERSION", "nfl-v1.5-matchup-sim"),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "pull-nfl-context-season-cadence": {
+        "task": TASK_PULL_NFL_CONTEXT,
+        "schedule": crontab(
+            minute=os.getenv("NFL_CONTEXT_REFRESH_MINUTE", "7,37"),
+            hour=NFL_BOARD_REFRESH_HOURS,
+        ),
+        "kwargs": {"days_ahead": int(os.getenv("NFL_CONTEXT_DAYS_AHEAD", "14"))},
+        "options": {"queue": MODELS_QUEUE},
     },
     "pull-mlb-context-morning": {
         "task": TASK_PULL_MLB_CONTEXT,
