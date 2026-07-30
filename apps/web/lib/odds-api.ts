@@ -400,6 +400,15 @@ export type OddsComparisonRow = {
       homePoint?: number;
     }
   >;
+  moneyline: Record<
+    string,
+    {
+      away: string;
+      home: string;
+      awayPrice?: number;
+      homePrice?: number;
+    }
+  >;
   total: Record<
     string,
     {
@@ -412,6 +421,8 @@ export type OddsComparisonRow = {
   /** Book keys winning Best Line / Best O/U across the configured set. */
   bestSpreadBook?: string;
   bestTotalBook?: string;
+  bestMlAwayBook?: string;
+  bestMlHomeBook?: string;
 };
 
 export async function fetchOddsComparison(
@@ -424,7 +435,7 @@ export async function fetchOddsComparison(
   const isMlb = normalizedSport === "mlb";
   const sportBooks = configuredBooksForSport(normalizedSport);
 
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
+  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,h2h,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     const text = await res.text();
@@ -443,6 +454,7 @@ export async function fetchOddsComparison(
 
     const bookmakers = filterBooksBySport(ev.bookmakers ?? [], normalizedSport);
     const spread: OddsComparisonRow["spread"] = {};
+    const moneyline: OddsComparisonRow["moneyline"] = {};
     const total: OddsComparisonRow["total"] = {};
     const formatJuice = (
       price: number | undefined | null,
@@ -454,6 +466,10 @@ export async function fetchOddsComparison(
 
     const spreadEntries: SpreadBookEntry[] = [];
     const totalEntries: TotalBookEntry[] = [];
+    let bestMlAwayBook: string | undefined;
+    let bestMlAwayPrice: number | null = null;
+    let bestMlHomeBook: string | undefined;
+    let bestMlHomePrice: number | null = null;
 
     for (const b of bookmakers) {
       const spreadM = b.markets?.find((x) => x.key === "spreads");
@@ -489,6 +505,27 @@ export async function fetchOddsComparison(
           });
         }
       }
+      const mlM = b.markets?.find((x) => x.key === "h2h");
+      if (mlM) {
+        const awayO = mlM.outcomes?.find((o) => o.name === ev.away_team);
+        const homeO = mlM.outcomes?.find((o) => o.name === ev.home_team);
+        if (awayO?.price != null && homeO?.price != null) {
+          moneyline[b.key] = {
+            away: formatJuice(awayO.price) ?? String(awayO.price),
+            home: formatJuice(homeO.price) ?? String(homeO.price),
+            awayPrice: awayO.price,
+            homePrice: homeO.price,
+          };
+          if (americanOddsBetter(awayO.price, bestMlAwayPrice)) {
+            bestMlAwayPrice = awayO.price;
+            bestMlAwayBook = b.key;
+          }
+          if (americanOddsBetter(homeO.price, bestMlHomePrice)) {
+            bestMlHomePrice = homeO.price;
+            bestMlHomeBook = b.key;
+          }
+        }
+      }
       const totalM = b.markets?.find((x) => x.key === "totals");
       if (totalM) {
         const over = totalM.outcomes?.find((o) => o.name === "Over");
@@ -520,9 +557,12 @@ export async function fetchOddsComparison(
       time: timeWithDate,
       commenceTime: ev.commence_time,
       spread,
+      moneyline,
       total,
       bestSpreadBook: pickBestSpreadEntry(spreadEntries)?.book,
       bestTotalBook: pickBestTotalEntry(totalEntries)?.book,
+      bestMlAwayBook,
+      bestMlHomeBook,
     });
   }
 

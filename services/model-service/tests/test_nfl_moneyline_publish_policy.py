@@ -13,7 +13,10 @@ from src.services.nfl_moneyline_publish_policy import (
     ev_per_unit,
     publish_moneyline_tag,
 )
-from src.services.nfl_side_total_publish_policy import publish_tag
+from src.services.nfl_side_total_publish_policy import (
+    is_market_side_disagreement,
+    publish_tag,
+)
 
 
 def test_american_converters():
@@ -103,3 +106,20 @@ def test_totals_sides_only_launch():
     )
     assert out["tag"] == "PASS"
     assert out["reason"] == "totals_sides_only_launch"
+
+
+def test_market_side_disagreement_blocks_spread_play():
+    assert is_market_side_disagreement(
+        model_spread_home=-3.07, market_spread_home=2.6
+    )
+    out = publish_tag(
+        market="spread",
+        abs_edge=5.57,
+        product_gate_status="GREEN",
+        season_type="REG",
+        model_spread_home=-3.07,
+        market_spread_home=2.6,
+    )
+    assert out["tag"] == "PASS"
+    assert out["reason"] == "market_side_disagreement"
+    assert out["stake_eligible"] is False

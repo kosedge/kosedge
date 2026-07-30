@@ -3038,8 +3038,18 @@ def run_nfl_market_simulations(
             if season_year is not None and season_year not in priors_cache:
                 priors_cache[season_year] = _load_team_strength_priors(session, season_year=season_year)
             team_priors = priors_cache.get(season_year or -1, {})
-            home_prior = team_priors.get(str(m.get("home_team") or ""), {})
-            away_prior = team_priors.get(str(m.get("away_team") or ""), {})
+            # Rolling features are keyed by abbreviation; games rows expose
+            # both abbr and full name. Prefer abbr, then full name.
+            home_prior = (
+                team_priors.get(str(m.get("home_abbr") or ""))
+                or team_priors.get(str(m.get("home_team") or ""))
+                or {}
+            )
+            away_prior = (
+                team_priors.get(str(m.get("away_abbr") or ""))
+                or team_priors.get(str(m.get("away_team") or ""))
+                or {}
+            )
             if season_year is not None and season_year not in tendency_proe_cache:
                 try:
                     from .services.nfl_tendency_pricing import fetch_team_proe_map

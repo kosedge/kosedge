@@ -158,19 +158,24 @@ def test_apply_supervised_blend_returns_base_markets_when_no_fit() -> None:
 
 
 class _FakeRow:
-    def __init__(self, team: str, distinct_values: int) -> None:
+    def __init__(self, team: str, distinct_values: int = 0, reg_games: int = 0) -> None:
         self.team = team
         self.distinct_values = distinct_values
+        self.reg_games = reg_games
 
 
 class _FakeRollingFeaturesSession:
-    """Mimics a season where KC has real, week-varying data (played games)
-    and NE is still a flat placeholder (season not yet played)."""
+    """Mimics preseason hydration that copied week-varying EPA into 2026
+    for KC/NE, but only KC has completed REG games this season."""
 
     def execute(self, sql, params=None):
+        sql_text = str(sql)
         class _Result:
             def fetchall(self_inner):
-                return [_FakeRow("KC", 5), _FakeRow("NE", 1)]
+                if "reg_games" in sql_text or "nfl_dp_schedules" in sql_text:
+                    # KC has played enough; NE has not (still preseason).
+                    return [_FakeRow("KC", reg_games=4), _FakeRow("NE", reg_games=0)]
+                return [_FakeRow("KC", distinct_values=5), _FakeRow("NE", distinct_values=5)]
 
         return _Result()
 
@@ -178,10 +183,34 @@ class _FakeRollingFeaturesSession:
 def test_detect_real_rolling_features_flags_flat_placeholder_teams() -> None:
     session = _FakeRollingFeaturesSession()
     result = detect_real_rolling_features(session, season=2026, teams=["KC", "NE", "MISSING"])
+    # EPA variance alone is insufficient — need completed REG games too.
     assert result["KC"] is True
     assert result["NE"] is False
-    # A team with no rows at all (e.g. bye week or bad code) defaults to False (safe/conservative).
+    # A team with no rows at all defaults to False (safe/conservative).
     assert result["MISSING"] is False
+
+
+def test_detect_real_rolling_features_blocks_preseason_variance_without_games() -> None:
+    """Week-varying hydrated EPA without completed REG games must NOT unlock
+    validated supervised weights (root cause of DAL@NYG-style side flips)."""
+
+    class _HydratedNoGamesSession:
+        def execute(self, sql, params=None):
+            sql_text = str(sql)
+
+            class _Result:
+                def fetchall(self_inner):
+                    if "nfl_dp_schedules" in sql_text or "reg_games" in sql_text:
+                        return [_FakeRow("NYG", reg_games=0), _FakeRow("DAL", reg_games=0)]
+                    return [_FakeRow("NYG", distinct_values=8), _FakeRow("DAL", distinct_values=8)]
+
+            return _Result()
+
+    result = detect_real_rolling_features(
+        _HydratedNoGamesSession(), season=2026, teams=["NYG", "DAL"]
+    )
+    assert result["NYG"] is False
+    assert result["DAL"] is False
 
 
 def test_apply_supervised_blend_validated_weights_lean_harder_on_model() -> None:

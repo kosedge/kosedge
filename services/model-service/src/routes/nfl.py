@@ -3079,6 +3079,10 @@ def nfl_fair_lines(
             abs_edge=abs(spread_edge) if spread_edge is not None else None,
             product_gate_status=_gate,
             season_type=_season_type,
+            model_spread_home=spread_home,
+            market_spread_home=float(compare_spread_home)
+            if compare_spread_home is not None
+            else None,
         )
         total_pub = nfl_publish_tag(
             market="total",
