@@ -9,7 +9,7 @@
 
 Jaxson Dart’s Year 2 will be the most watchable story in East Rutherford. It is not, by itself, a reason to invent eight wins.
 
-That distinction still matters. What changed is the board. New York finished 4-13 in 2025, last in the NFC East, and enters 2026 with John Harbaugh, a Matt Nagy offense, and a sophomore quarterback who flashed dual-threat juice as a rookie. The public still hears “Harbaugh + Dart + Nabers” and reaches for a soft improvement total. The primary number this desk is arguing is **5.5**. That is a floor — six wins as the ask — not a hope hang. Young-QB optimism is still not an automatic Over. At 5.5, optimism is no longer required to clear threshold.
+That distinction still matters. What changed is the board. New York finished 4-13 in 2025, last in the NFC East, and enters 2026 with John Harbaugh, a Matt Nagy offense, and a sophomore quarterback who flashed dual-threat juice as a rookie. The public still hears “Harbaugh + Dart + Nabers” and reaches for a soft improvement total. The primary number this desk is arguing is **5.5**. That is a floor — six wins as the ask — not a hope hang. Young-QB optimism is still not an automatic Over. At 5.5, optimism is no longer required to clear threshold. Older **7.5** boards are a different ticket if they still exist — Pass there; do not import this Over lean.
 
 ## Greenbrier first: process before projection
 
@@ -40,7 +40,7 @@ The franchise won seven games *combined* over the prior two seasons. Clearing si
 
 ## Schedule caution, not a veto
 
-Multiple outlets grade the Giants’ 2026 slate among the harder third of the league. Pair that with a developmental offense installing under center and a secondary that still has to travel, and 8+ wins remain a stretch. Six wins do not. BetMGM-style notes on Dart’s adjusted EPA looking better overall than in true coin-flip leverage are a soft warning for close-game equity — exactly how floor totals fail. Keep confidence capped.
+Multiple outlets grade the Giants’ 2026 slate among the harder third of the league. Pair that with a developmental offense installing under center and a secondary that still has to travel, and 8+ wins remain a stretch. Six wins do not. Close-game equity is how floor totals fail — keep confidence capped.
 
 ## What the market may be wrong about
 
@@ -48,11 +48,11 @@ Overweighting one good camp stretch into a 9-win spike narrative — that was th
 
 ## Betting Guide
 
-- **Win total 5.5:** Lean **Over** at prices no worse than −120. Model ~7.75 / research ~6.8–7.4 both clear. **Pass** if Over juice past −135.
-- **If a shop hangs 7.5:** **Pass** — different market.
-- **NFC East (+600 range):** Pass. Long shots need cleaner paths than “Dart jumps.”
-- **Sides:** Prefer Giants as home dogs against the public until early-down success shows. Avoid as road favorites off narrative.
-- **Props:** Nabers volume when active; Skattebo rush TDs if role holds. Dart passing yards can clear in a 6–7 win season — do not chain props to a higher win total.
+- **Win total 5.5:** Lean **Over** at prices no worse than −120. Model ~7.75 / research ~6.8–7.4 both clear. **Pass** if Over juice past −135.  
+- **If a shop hangs 7.5:** **Pass** — different market.  
+- **NFC East (+600 range):** Pass. Long shots need cleaner paths than “Dart jumps.”  
+- **Sides:** Prefer Giants as home dogs against the public until early-down success shows. Avoid as road favorites off narrative.  
+- **Props:** Nabers volume when active; Skattebo rush TDs if role holds. Dart passing yards can clear in a 6–7 win season — do not chain props to a higher win total.  
 - **Camp watch:** Nabers’ team-drill progression (Raanan), Dart’s under-center efficiency, OL pressure allowed (Duggan / Schwartz).
 
 **Handicapper’s Note**  
