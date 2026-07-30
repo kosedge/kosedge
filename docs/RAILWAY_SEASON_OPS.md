@@ -4,11 +4,13 @@
 
 | Cadence | What runs | What does **not** |
 | --- | --- | --- |
-| **Every 5–10 min** | Celery **beat** → odds pull + NFL board refresh (sims/context) | Container redeploy |
+| **Hourly 7:00–23:00 (current)** | Odds (:00) + context (:20) + light board sims (:15) | Container redeploy |
+| **3:00am ET daily** | Full **data** refresh: odds → context → fuller sims → market history | Redeploying Vercel/web |
 | **On code change** | One-button / CI `railway up --path-as-root` for api+worker+beat | — |
-| **Weekly** | Enterprise sharpening, retrain, DR | — |
+| **In-season (later)** | Tight windows around injury reports (e.g. */5–*/10) — env overrides only | Blind 24/7 spam |
 
-Redeploying every 5–10 minutes is wrong and will thrash the site. **Data refresh ≠ deploy.**
+Redeploying every few minutes is wrong. **Data refresh ≠ deploy.**  
+“Reset the whole website at 3am” = refresh **boards/odds/projections data**, not rebuild the Next.js app.
 
 ## Services
 
@@ -40,13 +42,16 @@ Dashboard `rootDirectory` must stay **empty** when using path-as-root.
 
 ## Season refresh knobs (env)
 
-| Variable | Default | Meaning |
+| Variable | Default (pre-season) | Meaning |
 | --- | --- | --- |
-| `ODDS_PULL_ACTIVE_MINUTE_PATTERN` | `*/10` | Odds every 10 min (set `*/5` on heavy gamedays) |
-| `NFL_SEASON_BOARD_REFRESH_MINUTE` | `*/10` | Light NFL sims for fair-lines |
-| `NFL_SEASON_BOARD_SIM_COUNT` | `1500` | Sims per board refresh (keep modest) |
-| `NFL_CONTEXT_REFRESH_MINUTE` | `7,37` | Context twice per hour in season window |
+| `ODDS_PULL_ACTIVE_MINUTE_PATTERN` | `0` | Odds at :00 each hour 7–23 |
+| `ODDS_PULL_LATE_START/END_HOUR` | `3` / `3` | Single 3:00am odds pull |
+| `NFL_SEASON_BOARD_REFRESH_MINUTE` | `15` | Light sims at :15 each hour 7–23 |
+| `NFL_CONTEXT_REFRESH_MINUTE` | `20` | Context at :20 each hour 7–23 |
+| `NFL_SIM_3AM_COUNT` | `4000` | Fuller sims in the 3:15am refresh |
 | `NFL_PRODUCT_GATE_STATUS` | `YELLOW` | Selective PLAY |
+
+In-season: set `ODDS_PULL_ACTIVE_MINUTE_PATTERN=*/5` (or `*/10`) around report windows only.
 
 ## Smoke checks after deploy
 
