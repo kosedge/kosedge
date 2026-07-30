@@ -9,20 +9,20 @@
 
 The market already wrote the bounce-back script. At **8.5**, it wrote nine wins into it.
 
-Two seasons ago, Jayden Daniels dragged this franchise to 12-5 and an NFC Championship Game. Last season he played seven games through knee, hamstring, and elbow issues, Terry McLaurin missed significant time, the defense finished near the bottom of the league in yards allowed, and Washington closed **5-12**. The board answered with an **8.5** total. That is not a sleeping-giant bargain. It is a recovery number that asks for nine before camp has proven sustainability.
+Two seasons ago, Jayden Daniels dragged this franchise to 12-5 and an NFC Championship Game. Last season he played seven games through knee, hamstring, and elbow issues, Terry McLaurin missed significant time, the defense finished near the bottom of the league in yards allowed, and Washington closed **5-12**. The board answered with an **8.5** total. That is not a sleeping-giant bargain. It is a recovery number that asks for nine before camp has proven sustainability. Older **7.5** boards are a different ticket if they still exist — re-price; do not import this Under lean onto a lower number.
 
 Sustainability — of Daniels’ availability, of efficiency under David Blough, of a rebuilt defense climbing from last year’s mess — is the actual bet. The leap is the narrative. Narratives are usually expensive.
 
 ## Three sustainability pillars (fail one, the Over dies)
 
 **1. Daniels’ body.**  
-OddsShopper’s season breakdown walked 2025 without romance: knee in Week 2, hamstring in Week 7, elbow in Week 9, re-aggravation later, shutdown with the season gone. Seven appearances, 1,262 passing yards, eight passing scores. Everything about Washington’s betting profile is downstream of whether that file stays closed — especially when the market asks for nine.
+Seven appearances in 2025 after knee, hamstring, and elbow issues. Everything about Washington’s betting profile is downstream of whether that file stays closed — especially when the market asks for nine. Keim’s Ashburn notes track full participation and leadership language; neither replaces a clean September medical sheet.
 
 **2. Blough’s install.**  
-First-time OC variance on a dual-threat QB is not free. Keim’s Ashburn notes and Standig’s Day-1 notebook stress more under-center work and red-zone emphasis under Dan Quinn. Helmet-cam anecdotes about Daniels directing alignments are process wins for Quinn’s staff. Process wins in July are how teams get better. They are how bettors get overconfident on Overs that need nine.
+First-time OC variance on a dual-threat QB is not free. Keim’s camp file and Standig’s Day-1 notebook stress more under-center work and red-zone emphasis under Dan Quinn. Process wins in July are how teams get better. They are how bettors get overconfident on Overs that need nine.
 
 **3. Defensive climb.**  
-Last year’s profile forced a spending spree: Odafe Oweh’s four-year deal, Sonny Styles at No. 7, veteran corners Amik Robertson, Ahkello Witherspoon, Rasul Douglas, Leo Chenal. Improvement from historically bad is likely. Improvement all the way to “supports nine wins through a hard first six weeks” is the claim the Over needs. Those are different claims.
+Odafe Oweh, Sonny Styles at No. 7, and veteran corners (Amik Robertson, Ahkello Witherspoon, Rasul Douglas, Leo Chenal) are real adds. Improvement from historically bad is likely. Improvement that supports nine wins through a hard first six weeks is the Over claim.
 
 Fail any pillar for a meaningful stretch and 8.5 becomes a grind. Nail all three and ten wins is in play. That variance band is why confidence stays capped even when direction is clear.
 
@@ -51,10 +51,11 @@ Linear continuation — treating 2024 as the true talent line and 2025 as pure i
 
 ## Betting Guide
 
-- **Win total 8.5:** Lean **Under** if juice is roughly even or better on the Under. Model ~6.9 / research ~7.5–8.1 both sit under. **Pass** if Under past −130.
-- **NFC East (~+460 to +500):** Pass. Too much variance after the leap narrative.
-- **Sides:** Prefer Washington as a home dog with Daniels confirmed active. Fade as a road favorite in September if OL/skill availability looks thin.
-- **Props:** Daniels scramble/rush volume can express “he’s back” cleaner than the team Over — and is also the durability risk. McLaurin yards over boom TD props.
+- **Win total 8.5:** Lean **Under** if juice is roughly even or better on the Under. Model ~6.9 / research ~7.5–8.1 both sit under. **Pass** if Under past −130.  
+- **If a shop hangs 7.5:** re-price — different ticket; do not import this Under lean blindly.  
+- **NFC East (~+460 to +500):** Pass. Too much variance after the leap narrative.  
+- **Sides:** Prefer Washington as a home dog with Daniels confirmed active. Fade as a road favorite in September if OL/skill availability looks thin.  
+- **Props:** Daniels scramble/rush volume can express “he’s back” cleaner than the team Over — and is also the durability risk. McLaurin yards over boom TD props.  
 - **Camp watch:** Daniels’ full participation (Keim), McLaurin’s workload, Oweh’s pressure rate (Standig), Blough’s under-center hit rate on the QB.
 
 **Handicapper’s Note**  
