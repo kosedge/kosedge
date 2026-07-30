@@ -12,7 +12,7 @@ Subscription desk package for Kos Edge. Condensed versions feed the betting guid
 | [Chicago Bears](CHI.md) | Casey Voss | Market misprice — Year-2 Caleb efficiency vs NFC North physicality |
 | [Cincinnati Bengals](CIN.md) | Reese Quinn | Burrow’s health rewrites the board — and the market already priced the rewrite; juice is where edges go to die |
 | [Cleveland Browns](CLE.md) | Reese Quinn | A defense searching for a new identity while the offense searches for a script — QB fog sits on top of both |
-| [Dallas Cowboys](DAL.md) | Jordan Vale | Stars sell tickets; OL/defense cash them |
+| [Dallas Cowboys](DAL.md) | Jordan Vale | Stars sell tickets; OL/defense cash them — desk 8.5, shop noise at 9.5 |
 | [Denver Broncos](DEN.md) | Sam Ortiz | Bo Nix leap narrative vs AFC West reality |
 | [Detroit Lions](DET.md) | Casey Voss | Contender pricing meets the hardest division — at 9.5, not 10.5 |
 | [Green Bay Packers](GB.md) | Casey Voss | Love’s supporting cast and scheme continuity decide the number |
@@ -23,7 +23,7 @@ Subscription desk package for Kos Edge. Condensed versions feed the betting guid
 | [Las Vegas Raiders](LV.md) | Sam Ortiz | Reset year — noise ≠ edge |
 | [Los Angeles Chargers](LAC.md) | Sam Ortiz | Herbert’s arm vs availability math |
 | [Los Angeles Rams](LAR.md) | Morgan Hale | Stafford–McVay steal weeks; 9.5 no longer prices excellence — Over discipline |
-| [Miami Dolphins](MIA.md) | Taylor Brooks | Speed travels; durability and OL do not — basement total at 4.5 |
+| [Miami Dolphins](MIA.md) | Taylor Brooks | Speed travels; durability and OL do not — desk 8.5 teardown tax (live shops ~4.5) |
 | [Minnesota Vikings](MIN.md) | Casey Voss | The QB competition is the entire fair number — Pass until camp names a starter |
 | [New England Patriots](NE.md) | Taylor Brooks | Elevated win total after the coaching/roster reset worked — scrutinize the 9.5 (and leftover 10.5 juice) |
 | [New Orleans Saints](NO.md) | Avery Cole | Saints football in the margins — scheme, coaching, competitive window |
