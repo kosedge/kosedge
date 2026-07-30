@@ -449,7 +449,11 @@ def apply_supervised_blend(
         max_margin_deviation = VALIDATED_MAX_MARGIN_DEVIATION
         max_total_deviation = VALIDATED_MAX_TOTAL_DEVIATION
     else:
-        blending = fit_payload.get("blending") or CONSERVATIVE_BLENDING_WEIGHTS
+        # Do NOT trust fit_payload["blending"] here — active fits were often
+        # saved with validated (0.85 spread) weights. Using that dict on the
+        # "conservative" path silently re-enabled high-trust blends and flipped
+        # market sides on early-season boards (DAL@NYG).
+        blending = {**CONSERVATIVE_BLENDING_WEIGHTS}
         max_margin_deviation = CONSERVATIVE_MAX_MARGIN_DEVIATION
         max_total_deviation = CONSERVATIVE_MAX_TOTAL_DEVIATION
     if not isinstance(feature_keys, list):
