@@ -41,11 +41,10 @@ Watch Louis-Jacques’ practice participation notes on Achane and Austin Jackson
 
 ## Betting Guide
 
-- **Win total:** **Pass** as default at juiced Under prices. Prefer **Over 4.5** only at plus money or true pick’em (−110 or better) after Achane’s early-camp workload looks clean. If Under shortens past −145 without negative Achane/OL news, stay Pass — do not chase.
-- **Sides:** Prefer spots where Miami’s speed can create one-score chaos at home; fade Miami as a road dog in bad weather or against elite fronts until the line proves it.
-- **Props:** Achane rushing + receiving as the primary skill prop; Willis pass attempts only after two preseason games clarify Hafley’s early-down mix.
-- **Futures:** AFC East and Super Bowl prices are lottery tickets. The win total is the only Miami futures market that belongs on a process desk this summer — and even there, juice discipline matters.
-- **Camp tells:** Clean Achane workload + Proctor settling at tackle → Over at pick’em becomes playable. OL sieve in joint practices → Pass or soft Under only if the price is not crushed.
+- **Win total:** **Pass** as default at juiced Under prices. Prefer **Over 4.5** only at plus money or true pick’em (−110 or better) after Achane’s early-camp workload looks clean.
+- **Sides:** Prefer Miami’s speed in home one-score spots; fade as a road dog in bad weather or against elite fronts until the OL proves it.
+- **Props:** Achane rushing + receiving first; Willis pass attempts only after two preseason games clarify the early-down mix.
+- **Camp tells:** Clean Achane + Proctor at tackle → Over at pick’em is playable. OL sieve in joints → stay Pass on juiced Unders.
 
 **Handicapper’s Note**  
 Fair number: ~5.0–5.5 (research-adjusted; rebuild + hard slate + Achane ceiling)  
