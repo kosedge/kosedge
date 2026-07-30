@@ -3263,8 +3263,15 @@ def run_nfl_market_simulations(
                     season=int(season_year) if season_year is not None else 0,
                     teams=[str(m.get("home_abbr") or ""), str(m.get("away_abbr") or "")],
                 )
+                # Never unlock high-trust supervised weights in weeks 1–4 of a
+                # season — even if hydrated EPA looks week-varying. Validated
+                # 85% blend on OOD early features was flipping market sides
+                # (DAL@NYG). Require real features AND week >= 5.
+                matchup_week = _to_int_like(mp.get("week"))
+                early_season_week = matchup_week is not None and int(matchup_week) <= 4
                 use_validated_weights = bool(
-                    real_features_by_team.get(str(m.get("home_abbr") or ""))
+                    (not early_season_week)
+                    and real_features_by_team.get(str(m.get("home_abbr") or ""))
                     and real_features_by_team.get(str(m.get("away_abbr") or ""))
                 )
                 blended_markets = apply_supervised_blend(
