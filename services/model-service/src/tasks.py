@@ -3165,7 +3165,17 @@ def run_nfl_market_simulations(
                 market_total=market_lines.get("market_total"),
             )
             markets = projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
-            if supervised_fit:
+            # Skip supervised overlay entirely for weeks 1–4 until in-season
+            # rolling features are real. High-trust / saved-fit blends were
+            # dominating the simulator and flipping market sides on the 2026
+            # preseason board (see data/ops/nfl-model-sanity-fix-report.md).
+            matchup_week_for_supervised = _to_int_like(
+                (matchup_pack or {}).get("week") if isinstance(matchup_pack, dict) else None
+            )
+            skip_supervised_early = (
+                matchup_week_for_supervised is not None and int(matchup_week_for_supervised) <= 4
+            )
+            if supervised_fit and not skip_supervised_early:
                 mp = matchup_pack if isinstance(matchup_pack, dict) else {}
                 mk = matchup_kwargs if isinstance(matchup_kwargs, dict) else {}
                 venue_row = session.execute(
