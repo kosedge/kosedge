@@ -166,6 +166,30 @@ def candidate_tag(market: Market, abs_edge: float) -> Tag:
     return "PASS"
 
 
+def is_market_side_disagreement(
+    *,
+    model_spread_home: Optional[float],
+    market_spread_home: Optional[float],
+    min_abs_delta: float = 1.5,
+) -> bool:
+    """True when model and market disagree on which side is favored by ≥ min_abs_delta.
+
+    Used to block PLAY tags on calibration failures (e.g. model home favorite
+    while market has home as a dog). Research board may still show the number.
+    """
+    if model_spread_home is None or market_spread_home is None:
+        return False
+    try:
+        model = float(model_spread_home)
+        market = float(market_spread_home)
+    except (TypeError, ValueError):
+        return False
+    if model == 0.0 or market == 0.0:
+        return False
+    opposite = (model > 0 and market < 0) or (model < 0 and market > 0)
+    return bool(opposite and abs(model - market) >= float(min_abs_delta))
+
+
 def publish_tag(
     *,
     market: Market,
@@ -173,6 +197,8 @@ def publish_tag(
     product_gate_status: str = "YELLOW",
     segment_evidence: Optional[Dict[str, SegmentEvidence]] = None,
     season_type: Optional[str] = None,
+    model_spread_home: Optional[float] = None,
+    market_spread_home: Optional[float] = None,
 ) -> Dict[str, Any]:
     """Return tag + stake eligibility for a side/total edge.
 
@@ -199,6 +225,17 @@ def publish_tag(
             "stake_eligible": False,
             "reason": "missing_edge",
             "candidate_tag": "PASS",
+        }
+
+    if market == "spread" and is_market_side_disagreement(
+        model_spread_home=model_spread_home,
+        market_spread_home=market_spread_home,
+    ):
+        return {
+            "tag": "PASS",
+            "stake_eligible": False,
+            "reason": "market_side_disagreement",
+            "candidate_tag": candidate_tag(market, abs_edge),
         }
 
     if market == "total" and not TOTAL_PLAY_ENABLED:

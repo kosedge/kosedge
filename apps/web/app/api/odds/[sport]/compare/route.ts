@@ -20,7 +20,7 @@ const compareCache = new Map<
   string,
   { data: { rows: unknown[]; books: unknown[] }; ts: number }
 >();
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v3`;
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v4`;
 
 export async function GET(
   _req: Request,

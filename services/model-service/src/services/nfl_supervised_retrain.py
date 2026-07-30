@@ -348,31 +348,87 @@ def detect_real_rolling_features(
     *,
     season: int,
     teams: Sequence[str],
+    min_completed_reg_games: int = 3,
 ) -> Dict[str, bool]:
-    """True per team if that team's nfl_dp_team_rolling_features_weekly rows
-    for this season show real week-to-week variation (a season that has
-    actually been played, at least partially). False if every week has an
-    identical value -- the signature of a not-yet-played season hydrated
-    with a flat placeholder prior (see VALIDATED_BLENDING_WEIGHTS docstring).
-    `games_in_window_5` is NOT a reliable signal for this -- it's populated
-    with a plausible-looking ramp (1,2,3,4,5,5,5...) even for placeholder
-    seasons, so this checks actual EPA variance instead."""
+    """True per team only when rolling features are safe for high-trust
+    supervised blending.
+
+    Historical bug (2026 preseason board): week-varying EPA can appear in
+    `nfl_dp_team_rolling_features_weekly` for a future season after
+    situational hydration / carry-forward copies prior-season shape into the
+    new season's week grid. Distinct EPA counts alone then returned True and
+    unlocked VALIDATED_BLENDING_WEIGHTS (85% supervised spread) on
+    out-of-distribution inputs — flipping market sides (e.g. DAL@NYG).
+
+    Gate is now AND:
+      1) week-to-week EPA variation (not a flat placeholder), AND
+      2) the team has enough *completed REG* games in this season
+         (default ≥3) so the rolling window is in-sample for the fit.
+    """
     if not teams:
         return {}
-    rows = session.execute(
+    team_list = [str(t) for t in teams if t]
+    if not team_list:
+        return {}
+    min_games = max(0, int(min_completed_reg_games))
+    result = {team: False for team in team_list}
+
+    epa_rows = session.execute(
         text(
             """
             SELECT team, COUNT(DISTINCT off_epa_per_play_5g) AS distinct_values
             FROM nfl_dp_team_rolling_features_weekly
-            WHERE season = :season AND team = ANY(:teams) AND off_epa_per_play_5g IS NOT NULL
+            WHERE season = :season
+              AND team = ANY(:teams)
+              AND off_epa_per_play_5g IS NOT NULL
             GROUP BY team
             """
         ),
-        {"season": int(season), "teams": list(teams)},
+        {"season": int(season), "teams": team_list},
     ).fetchall()
-    result = {team: False for team in teams}
-    for row in rows:
-        result[str(row.team)] = int(row.distinct_values) > 1
+    distinct_by_team = {str(row.team): int(row.distinct_values or 0) for row in epa_rows}
+
+    completed_by_team: Dict[str, int] = {team: 0 for team in team_list}
+    try:
+        # nfl_dp_schedules has no season_type column; REG weeks are 1–18 with
+        # final scores. Preseason rows either lack scores or use week outside
+        # that band depending on ingest — require scored games in weeks 1–18.
+        completed_rows = session.execute(
+            text(
+                """
+                SELECT team, COUNT(*)::int AS reg_games
+                FROM (
+                  SELECT home_team AS team
+                  FROM nfl_dp_schedules
+                  WHERE season = :season
+                    AND week BETWEEN 1 AND 18
+                    AND home_score IS NOT NULL
+                    AND away_score IS NOT NULL
+                  UNION ALL
+                  SELECT away_team AS team
+                  FROM nfl_dp_schedules
+                  WHERE season = :season
+                    AND week BETWEEN 1 AND 18
+                    AND home_score IS NOT NULL
+                    AND away_score IS NOT NULL
+                ) played
+                WHERE team = ANY(:teams)
+                GROUP BY team
+                """
+            ),
+            {"season": int(season), "teams": team_list},
+        ).fetchall()
+        for row in completed_rows:
+            completed_by_team[str(row.team)] = int(row.reg_games or 0)
+    except Exception:
+        # Unit-test fakes / missing schedules table → treat as zero completed
+        # REG games (conservative: never unlock validated weights).
+        completed_by_team = {team: 0 for team in team_list}
+
+    for team in team_list:
+        distinct_ok = distinct_by_team.get(team, 0) > 1
+        games_ok = completed_by_team.get(team, 0) >= min_games
+        result[team] = bool(distinct_ok and games_ok)
     return result
 
 

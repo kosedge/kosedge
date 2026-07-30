@@ -113,8 +113,9 @@ This analysis is for informational and educational purposes only. Sports betting
 | Morgan Hale | NFC West |
 | Taylor Brooks | AFC East |
 | Avery Cole | NFC South |
-
-Unassigned divisions (AFC South, AFC West, NFC East): assign the closest matrix writer or ask the user before drafting.
+| Jordan Vale | NFC East |
+| Drew Kessler | AFC South |
+| Sam Ortiz | AFC West |
 
 ## Shared files (always load)
 

@@ -31,6 +31,26 @@ DEFAULT_NFL_MODEL_VERSION = "nfl-v1.5-matchup-sim"
 # because it averages out each side's idiosyncratic misses.
 NFL_MARKET_BLEND_SPREAD_WEIGHT = float(os.getenv("NFL_MARKET_BLEND_SPREAD_WEIGHT", "0.30"))
 NFL_MARKET_BLEND_TOTAL_WEIGHT = float(os.getenv("NFL_MARKET_BLEND_TOTAL_WEIGHT", "0.30"))
+# Extra market weight in weeks 1–4 while in-season sample is thin / hydrated.
+# Base 0.30 + boost → week-1 ~0.55. Env: NFL_EARLY_SEASON_MARKET_BLEND_BOOST_W1 etc.
+_EARLY_SEASON_MARKET_BLEND_BOOST = {
+    1: float(os.getenv("NFL_EARLY_SEASON_MARKET_BLEND_BOOST_W1", "0.25")),
+    2: float(os.getenv("NFL_EARLY_SEASON_MARKET_BLEND_BOOST_W2", "0.20")),
+    3: float(os.getenv("NFL_EARLY_SEASON_MARKET_BLEND_BOOST_W3", "0.15")),
+    4: float(os.getenv("NFL_EARLY_SEASON_MARKET_BLEND_BOOST_W4", "0.10")),
+}
+
+
+def _market_blend_weight_for_week(base_weight: float, season_week: Optional[int]) -> float:
+    weight = _clamp(float(base_weight), 0.0, 1.0)
+    if season_week is None:
+        return weight
+    try:
+        week = int(season_week)
+    except (TypeError, ValueError):
+        return weight
+    boost = float(_EARLY_SEASON_MARKET_BLEND_BOOST.get(week, 0.0) or 0.0)
+    return _clamp(weight + max(0.0, boost), 0.0, 0.85)
 
 
 @dataclass
@@ -547,8 +567,9 @@ def simulate_nfl_game(
         margins.append(home_score - away_score)
 
     market_blend: Dict[str, Any] = {"spread_applied": False, "total_applied": False}
+    season_week = inputs.matchup_week
     if market_spread_home is not None and margins:
-        weight = _clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0)
+        weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_SPREAD_WEIGHT, season_week)
         pre_blend_margin = sum(margins) / len(margins)
         market_margin = -float(market_spread_home)
         post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
@@ -557,6 +578,8 @@ def simulate_nfl_game(
         market_blend.update(
             spread_applied=True,
             spread_weight=round(weight, 3),
+            base_spread_weight=round(_clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0), 3),
+            season_week=season_week,
             market_spread_home=round(float(market_spread_home), 3),
             pre_blend_margin_mean=round(pre_blend_margin, 3),
             post_blend_margin_mean=round(post_blend_margin, 3),
@@ -564,7 +587,7 @@ def simulate_nfl_game(
         )
 
     if market_total is not None and totals:
-        weight = _clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0)
+        weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_TOTAL_WEIGHT, season_week)
         pre_blend_total = sum(totals) / len(totals)
         post_blend_total = ((1.0 - weight) * pre_blend_total) + (weight * float(market_total))
         shift = post_blend_total - pre_blend_total
@@ -572,6 +595,8 @@ def simulate_nfl_game(
         market_blend.update(
             total_applied=True,
             total_weight=round(weight, 3),
+            base_total_weight=round(_clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0), 3),
+            season_week=season_week,
             market_total=round(float(market_total), 3),
             pre_blend_total_mean=round(pre_blend_total, 3),
             post_blend_total_mean=round(post_blend_total, 3),

@@ -1,13 +1,10 @@
 import Link from "next/link";
 import { headers } from "next/headers";
-import { env } from "@/lib/config/env";
+import type { ReactNode } from "react";
 import { getSport, SPORTS } from "@/lib/sports";
 import type { OddsComparisonRow } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
-
-/** Sports that have the live odds widget (key kept server-side). Rest show shell. */
-const WIDGET_SPORTS: string[] = ["ncaam"];
 
 async function getRequestOrigin(): Promise<string> {
   const h = await headers();
@@ -38,45 +35,21 @@ async function getOddsData(
   };
 }
 
-function totalLine(
-  value: OddsComparisonRow["total"][string] | string | undefined,
-): string {
-  if (!value) return "—";
-  if (typeof value === "string") return value;
-  return value.line || "—";
-}
-
-function totalOverJuice(
-  value: OddsComparisonRow["total"][string] | string | undefined,
-): string | undefined {
-  if (!value || typeof value === "string") return undefined;
-  return value.overJuice;
-}
-
-function Cell({
-  primary,
-  secondary,
+function BookCell({
+  children,
   highlight,
 }: {
-  primary: string;
-  secondary?: string;
+  children: ReactNode;
   highlight?: boolean;
 }) {
   return (
     <td
       className={[
-        "py-3 px-2 text-center border-l border-white/10 align-top",
+        "py-2 px-1.5 text-center border-l border-white/10 align-top min-w-[4.25rem]",
         highlight ? "bg-kos-gold/15 text-kos-gold font-semibold" : "",
       ].join(" ")}
     >
-      <div>{primary}</div>
-      {secondary ? (
-        <div
-          className={`text-[10px] ${highlight ? "text-kos-gold/80" : "text-gray-500"}`}
-        >
-          {secondary}
-        </div>
-      ) : null}
+      {children}
     </td>
   );
 }
@@ -93,8 +66,6 @@ export default async function OddsComparePage({
   const sportKey = String(resolved?.sport ?? "nfl");
   const sport = getSport(sportKey);
   const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const hasWidget =
-    env.ODDS_WIDGET_ACCESS_KEY?.trim() && WIDGET_SPORTS.includes(sportKey);
 
   const origin = await getRequestOrigin();
   const { rows, books } = await getOddsData(sportKey, origin);
@@ -114,8 +85,8 @@ export default async function OddsComparePage({
               Compare Odds
             </h1>
             <p className="mt-2 text-sm text-gray-200/80 max-w-2xl">
-              Side-by-side lines from {books.length || 9} books. Gold cells mark
-              the best away spread and best O/U number used on the Edge Board.
+              Spread, moneyline, and totals from {books.length || 9} books. Gold
+              marks the best away spread, best ML prices, and best O/U number.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -164,38 +135,18 @@ export default async function OddsComparePage({
           </p>
         ) : null}
 
-        {/* Live odds widget (proxied so key never hits the client) or shell */}
-        <section className="mt-6">
-          <h2 className="text-lg font-bebas text-kos-gold tracking-wide mb-3">
-            Live odds widget
-          </h2>
-          {hasWidget ? (
-            <div className="rounded-2xl border border-white/12 bg-black/30 overflow-hidden shadow-xl">
-              <iframe
-                title={`${sportName} odds`}
-                src={`${origin}/api/odds-widget/${sportKey}`}
-                className="w-full min-h-[25rem] border-0"
-                style={{ height: "28rem" }}
-              />
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-white/12 bg-black/30 border-dashed p-12 text-center text-gray-500">
-              {WIDGET_SPORTS.includes(sportKey)
-                ? "Set ODDS_WIDGET_ACCESS_KEY in .env to show the widget."
-                : "Widget for this sport coming soon. Compare table below uses the live Odds API."}
-            </div>
-          )}
-        </section>
-
-        {/* Compare odds table */}
         <section className="mt-8">
           <h2 className="text-lg font-bebas text-kos-gold tracking-wide mb-3">
-            Compare odds by book
+            Odds by book
           </h2>
+          <p className="text-xs text-gray-500 mb-3">
+            Per book: away spread · moneyline (away / home) · total (Over). Main
+            markets only — no live widget.
+          </p>
           <div className="mt-3 bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
             <div className="overflow-x-auto">
               {rows.length > 0 && books.length > 0 ? (
-                <table className="min-w-[1100px] w-full text-sm tabular-nums">
+                <table className="min-w-[1400px] w-full text-sm tabular-nums">
                   <thead className="bg-white/5 text-gray-300 uppercase tracking-wide text-xs">
                     <tr className="text-left">
                       <th className="py-3 px-4 sticky left-0 bg-white/5 z-10">
@@ -205,7 +156,7 @@ export default async function OddsComparePage({
                       {books.map((b) => (
                         <th
                           key={b.key}
-                          colSpan={2}
+                          colSpan={3}
                           className="py-3 px-2 text-center border-l border-white/10"
                         >
                           {b.label}
@@ -218,10 +169,10 @@ export default async function OddsComparePage({
                       {books.map((b) => (
                         <th
                           key={`${b.key}-sub`}
-                          colSpan={2}
+                          colSpan={3}
                           className="py-1 px-2 text-center border-l border-white/10 font-normal"
                         >
-                          Away spread · O/U
+                          Spread · ML · O/U
                         </th>
                       ))}
                     </tr>
@@ -232,46 +183,54 @@ export default async function OddsComparePage({
                         <td className="py-3 px-4 sticky left-0 bg-black/30 z-10 font-semibold">
                           {r.game}
                         </td>
-                        <td className="py-3 px-2 text-gray-400 whitespace-nowrap">
+                        <td className="py-3 px-2 text-gray-400 whitespace-nowrap text-xs">
                           {r.time}
                         </td>
                         {books.map((b) => {
                           const spread = r.spread[b.key];
+                          const ml = r.moneyline?.[b.key];
                           const total = r.total[b.key];
-                          const line = totalLine(total);
-                          const overJuice = totalOverJuice(total);
                           const isBestSpread = r.bestSpreadBook === b.key;
                           const isBestTotal = r.bestTotalBook === b.key;
-                          return (
-                            <td
-                              key={b.key}
-                              colSpan={2}
-                              className="py-0 px-0 border-l border-white/10"
-                            >
-                              <table className="w-full">
-                                <tbody>
-                                  <tr>
-                                    <Cell
-                                      primary={spread?.away ?? "—"}
-                                      secondary={
-                                        spread?.awayJuice
-                                          ? `(${spread.awayJuice})`
-                                          : undefined
-                                      }
-                                      highlight={isBestSpread}
-                                    />
-                                    <Cell
-                                      primary={line === "—" ? "—" : `o${line}`}
-                                      secondary={
-                                        overJuice ? `(${overJuice})` : undefined
-                                      }
-                                      highlight={isBestTotal}
-                                    />
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                          );
+                          const isBestMl =
+                            r.bestMlAwayBook === b.key ||
+                            r.bestMlHomeBook === b.key;
+                          return [
+                            <BookCell key={`${b.key}-s`} highlight={isBestSpread}>
+                              <div className="text-[12px] leading-tight">
+                                {spread?.away ?? "—"}
+                              </div>
+                              {spread?.awayJuice ? (
+                                <div
+                                  className={`text-[10px] ${isBestSpread ? "text-kos-gold/80" : "text-gray-500"}`}
+                                >
+                                  ({spread.awayJuice})
+                                </div>
+                              ) : null}
+                            </BookCell>,
+                            <BookCell key={`${b.key}-ml`} highlight={isBestMl}>
+                              <div className="text-[11px] leading-tight">
+                                {ml ? `${ml.away}` : "—"}
+                              </div>
+                              <div
+                                className={`text-[11px] leading-tight ${isBestMl ? "text-kos-gold/90" : "text-gray-400"}`}
+                              >
+                                {ml ? ml.home : ""}
+                              </div>
+                            </BookCell>,
+                            <BookCell key={`${b.key}-t`} highlight={isBestTotal}>
+                              <div className="text-[12px] leading-tight">
+                                {total?.line ? `o${total.line}` : "—"}
+                              </div>
+                              {total?.overJuice ? (
+                                <div
+                                  className={`text-[10px] ${isBestTotal ? "text-kos-gold/80" : "text-gray-500"}`}
+                                >
+                                  ({total.overJuice})
+                                </div>
+                              ) : null}
+                            </BookCell>,
+                          ];
                         })}
                       </tr>
                     ))}
@@ -279,15 +238,16 @@ export default async function OddsComparePage({
                 </table>
               ) : (
                 <div className="p-12 text-center text-gray-400">
-                  No odds data. Add ODDS_API_KEY and ensure games are in season.
+                  No odds data yet. Ensure ODDS_API_KEY is set and games are
+                  posted at the books.
                 </div>
               )}
             </div>
           </div>
           <p className="mt-3 text-xs text-gray-500">
-            Best Line = highest away spread number across books (better juice
-            wins ties). Best O/U = highest total number across books (better
-            Over juice wins ties).
+            Best spread = highest away number (better juice wins ties). Best ML =
+            highest American price for that side. Best O/U = highest total
+            (better Over juice wins ties).
           </p>
         </section>
       </main>
