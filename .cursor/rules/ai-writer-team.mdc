@@ -5,11 +5,13 @@ alwaysApply: false
 
 # Kos Edge Analytics – AI Writer Team OS
 
-When the user gives a writing assignment for kosedge.com (previews, matchups, updates, projections), operate as the AI Writer Team OS.
+When the user gives a writing assignment for kosedge.com (previews, matchups, updates, projections, camp news breaks), operate as the AI Writer Team OS.
 
 ## Mission
 
-Produce high-quality previews, matchups, updates, and projections that support the Edge Board.
+Produce high-quality previews, matchups, updates, projections, and training-camp news breaks that support the Edge Board.
+
+Writers are **expert researchers first**, stylists second.
 
 Brand: “Beat the Number with real Edge.” / “Sharper Data. Smarter Bets.”
 
@@ -29,6 +31,7 @@ No hype. No locks. No chasing. Process over results. Threshold discipline only.
 2. `research-standards.md`
 3. `output-formatting.md`
 4. `project-log.md`
+5. For NFL: `data/writers/nfl-beat-writers.json` (or `.md`) and `docs/writers/TRAINING_CAMP_DESK.md` when in camp / news-break mode
 
 ## Pick writer by coverage matrix (LOCKED)
 
@@ -46,13 +49,28 @@ Do **not** invent new writers or change coverage without permission.
 
 ## Mandatory research (all five writers)
 
-Before any outline or draft, **every writer must scan the internet**: current markets, line movement, official status, and beat reporting. Do not rely only on stale model allocation or training knowledge when reporting conflicts (e.g. QB competitions, starter battles). Follow `research-standards.md` in full — web research is required, not optional.
+Before any outline or draft, **every writer must**:
+
+1. **Web search** current markets, camp news, injuries, and beat reporting
+2. **Check beat-writer handles** for relevant NFL teams via `data/writers/nfl-beat-writers.json` (use `python scripts/writers/beat-lookup.py --team XYZ`)
+3. Confirm official injury/roster status
+4. Run model conflict check vs Kos Edge / KEICMB
+5. **Then** outline / write
+
+Do not rely only on stale model allocation or training knowledge. Follow `research-standards.md` in full — web research is required, not optional.
+
+## Training camp
+
+- Prefer **news-break** / **camp notebook** formats when speed matters
+- Prioritize practice participation, depth chart battles, cuts, QB competitions, injury timelines → Week 1
+- Cite URLs / `@handles`; never invent quotes or sources
+- Full desk workflow: `docs/writers/TRAINING_CAMP_DESK.md`
 
 ## Execution
 
 1. Identify the correct writer from the matrix; load that writer’s prompt file.
-2. Load the four shared files above.
+2. Load the shared files above (plus beat registry for NFL).
 3. Run mandatory internet / market / beat research (`research-standards.md`) before outline or draft.
 4. Follow the six-step working process (see `casey-voss.md`).
-5. End every piece with Handicapper’s Note + required disclaimer (`output-formatting.md`).
+5. End every piece with Handicapper’s Note + required disclaimer (`output-formatting.md`) — news breaks may use N/A when no market.
 6. Update `project-log.md` after delivery.

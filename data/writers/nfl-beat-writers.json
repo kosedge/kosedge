@@ -1,0 +1,381 @@
+{
+  "version": "2026.07.30",
+  "season": "2026",
+  "era": "training-camp",
+  "updated": "2026-07-30",
+  "notes": "Primary ESPN NFL Nation reporters verified against ESPN 2026 training camp hub (espn.com/nfl/story/_/id/49368181). Athletic/local writers cross-checked via Unabated (2025), ReadTheBench, Fiddle list, and outlet bios. Handles marked medium when not confirmed via recent byline/bio tweet attribution. Prefer verifying before sole-source citation.",
+  "league_breakers": [
+    {"name": "Adam Schefter", "outlet": "ESPN", "x": ["@AdamSchefter"], "role": "national"},
+    {"name": "Ian Rapoport", "outlet": "NFL Network", "x": ["@RapSheet"], "role": "national"},
+    {"name": "Tom Pelissero", "outlet": "NFL Network", "x": ["@TomPelissero"], "role": "national"},
+    {"name": "Mike Garafolo", "outlet": "NFL Network", "x": ["@MikeGarafolo"], "role": "national"},
+    {"name": "32 Beat Writers", "outlet": "Aggregator", "x": ["@32BeatWriters"], "role": "curator"}
+  ],
+  "teams": {
+    "ARI": {
+      "team": "Arizona Cardinals",
+      "division": "NFC West",
+      "kos_edge_writer": "Morgan Hale",
+      "confidence": "high",
+      "writers": [
+        {"name": "Josh Weinfuss", "outlet": "ESPN", "x": ["@joshweinfuss"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Bo Brack", "outlet": "PHNX Sports", "x": ["@BoBrack"], "role": "local"},
+        {"name": "Darren Urban", "outlet": "AZCardinals.com", "x": ["@Cardschatter"], "role": "team_site", "confidence": "medium", "notes": "Longtime team site; confirm handle still active"}
+      ]
+    },
+    "ATL": {
+      "team": "Atlanta Falcons",
+      "division": "NFC South",
+      "kos_edge_writer": "Avery Cole",
+      "confidence": "high",
+      "writers": [
+        {"name": "Marc Raimondi", "outlet": "ESPN", "x": ["@marcraimondi"], "role": "primary", "notes": "ESPN NFL Nation since 2024; 2026 camp tweets attributed"},
+        {"name": "D. Orlando Ledbetter", "outlet": "Atlanta Journal-Constitution", "x": ["@DOrlandoAJC"], "role": "local"},
+        {"name": "Tori McElhaney", "outlet": "AtlantaFalcons.com", "x": ["@Tori_McElhaney"], "role": "team_site"}
+      ]
+    },
+    "BAL": {
+      "team": "Baltimore Ravens",
+      "division": "AFC North",
+      "kos_edge_writer": "Reese Quinn",
+      "confidence": "high",
+      "writers": [
+        {"name": "Jamison Hensley", "outlet": "ESPN", "x": ["@jamisonhensley"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Jeff Zrebiec", "outlet": "The Athletic", "x": ["@jeffzrebiec"], "role": "primary"},
+        {"name": "Jonas Shaffer", "outlet": "Baltimore Banner", "x": ["@jonas_shaffer"], "role": "local"}
+      ]
+    },
+    "BUF": {
+      "team": "Buffalo Bills",
+      "division": "AFC East",
+      "kos_edge_writer": "Taylor Brooks",
+      "confidence": "high",
+      "writers": [
+        {"name": "Alaina Getzenberg", "outlet": "ESPN", "x": ["@agetzenberg"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Joe Buscaglia", "outlet": "The Athletic", "x": ["@JoeBuscaglia"], "role": "primary"},
+        {"name": "Matt Parrino", "outlet": "Syracuse.com", "x": ["@MattParrino"], "role": "local"},
+        {"name": "Sal Maiorana", "outlet": "Democrat & Chronicle / local", "x": ["@SalMaiorana", "@SalSports"], "role": "local", "confidence": "medium"}
+      ]
+    },
+    "CAR": {
+      "team": "Carolina Panthers",
+      "division": "NFC South",
+      "kos_edge_writer": "Avery Cole",
+      "confidence": "medium",
+      "notes": "ESPN NFL Nation seat open after David Newton retirement (2026). Prefer Athletic + strong locals until ESPN replacement confirmed.",
+      "writers": [
+        {"name": "Joseph Person", "outlet": "The Athletic", "x": ["@josephperson"], "role": "primary"},
+        {"name": "Sheena Quick", "outlet": "FOX Sports / local", "x": ["@Sheena_Marie3"], "role": "local"},
+        {"name": "Darin Gantt", "outlet": "Panthers.com / local", "x": ["@daringantt"], "role": "candidate", "confidence": "medium"},
+        {"name": "David Newton", "outlet": "ESPN (retired)", "x": ["@DNewtonespn"], "role": "historical", "notes": "Retired 2026; do not treat as current primary"}
+      ]
+    },
+    "CHI": {
+      "team": "Chicago Bears",
+      "division": "NFC North",
+      "kos_edge_writer": "Casey Voss",
+      "confidence": "high",
+      "writers": [
+        {"name": "Courtney Cronin", "outlet": "ESPN", "x": ["@CourtneyRCronin"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Kevin Fishbain", "outlet": "The Athletic", "x": ["@kfishbain"], "role": "primary"},
+        {"name": "Adam Jahns", "outlet": "The Athletic", "x": ["@adamjahns"], "role": "primary"},
+        {"name": "Brad Biggs", "outlet": "Chicago Tribune", "x": ["@BradBiggs"], "role": "local"}
+      ]
+    },
+    "CIN": {
+      "team": "Cincinnati Bengals",
+      "division": "AFC North",
+      "kos_edge_writer": "Reese Quinn",
+      "confidence": "high",
+      "writers": [
+        {"name": "Ben Baby", "outlet": "ESPN", "x": ["@Ben_Baby"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Paul Dehner Jr.", "outlet": "The Athletic", "x": ["@pauldehnerjr"], "role": "primary"},
+        {"name": "Kelsey Conway", "outlet": "Cincinnati Enquirer", "x": ["@KelseyLConway"], "role": "local"}
+      ]
+    },
+    "CLE": {
+      "team": "Cleveland Browns",
+      "division": "AFC North",
+      "kos_edge_writer": "Reese Quinn",
+      "confidence": "high",
+      "writers": [
+        {"name": "Daniel Oyefusi", "outlet": "ESPN", "x": ["@DanielOyefusi"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Mary Kay Cabot", "outlet": "Cleveland.com", "x": ["@MaryKayCabot"], "role": "local"},
+        {"name": "Zac Jackson", "outlet": "The Athletic", "x": ["@AkronJackson"], "role": "primary"}
+      ]
+    },
+    "DAL": {
+      "team": "Dallas Cowboys",
+      "division": "NFC East",
+      "kos_edge_writer": null,
+      "notes": "No locked Kos Edge primary in coverage matrix; assign by story (NFC East overflow).",
+      "confidence": "high",
+      "writers": [
+        {"name": "Todd Archer", "outlet": "ESPN", "x": ["@toddarcher"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Clarence Hill Jr.", "outlet": "Fort Worth Star-Telegram / local", "x": ["@ClarenceHillJr"], "role": "local"},
+        {"name": "David Moore", "outlet": "Dallas Morning News", "x": ["@DavidMooreDMN"], "role": "local"},
+        {"name": "Calvin Watkins", "outlet": "Dallas Morning News", "x": ["@CalvinWatkins"], "role": "local"}
+      ]
+    },
+    "DEN": {
+      "team": "Denver Broncos",
+      "division": "AFC West",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Jeff Legwold", "outlet": "ESPN", "x": ["@Jeff_Legwold"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Mike Klis", "outlet": "9NEWS", "x": ["@mikeklis"], "role": "local"},
+        {"name": "Troy Renck", "outlet": "Denver7", "x": ["@TroyRenck"], "role": "local"},
+        {"name": "Nicki Jhabvala", "outlet": "The Athletic / Washington Post (verify)", "x": [], "role": "candidate", "confidence": "medium", "notes": "Has covered Broncos historically; confirm current beat before citing"}
+      ]
+    },
+    "DET": {
+      "team": "Detroit Lions",
+      "division": "NFC North",
+      "kos_edge_writer": "Casey Voss",
+      "confidence": "high",
+      "writers": [
+        {"name": "Eric Woodyard", "outlet": "ESPN", "x": ["@E_Woodyard"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Colton Pouncy", "outlet": "The Athletic", "x": ["@colton_pouncy"], "role": "primary"},
+        {"name": "Dave Birkett", "outlet": "Detroit Free Press", "x": ["@davebirkett"], "role": "local"},
+        {"name": "Justin Rogers", "outlet": "Detroit Football Network", "x": ["@Justin_Rogers"], "role": "local"}
+      ]
+    },
+    "GB": {
+      "team": "Green Bay Packers",
+      "division": "NFC North",
+      "kos_edge_writer": "Casey Voss",
+      "confidence": "high",
+      "writers": [
+        {"name": "Rob Demovsky", "outlet": "ESPN", "x": ["@RobDemovsky"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Matt Schneidman", "outlet": "The Athletic", "x": ["@mattschneidman"], "role": "primary"},
+        {"name": "Tom Silverstein", "outlet": "Milwaukee Journal Sentinel / PackersNews", "x": ["@TomSilverstein"], "role": "local"},
+        {"name": "Wes Hodkiewicz", "outlet": "Packers.com", "x": ["@WesHod"], "role": "team_site", "confidence": "medium"}
+      ]
+    },
+    "HOU": {
+      "team": "Houston Texans",
+      "division": "AFC South",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "DJ Bien-Aime", "outlet": "ESPN", "x": ["@djbienaime"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Jonathan M. Alexander", "outlet": "Houston Chronicle", "x": ["@jonmalexander"], "role": "local"},
+        {"name": "Aaron Wilson", "outlet": "KPRC / local", "x": ["@AaronWilson_NFL"], "role": "local"}
+      ]
+    },
+    "IND": {
+      "team": "Indianapolis Colts",
+      "division": "AFC South",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Stephen Holder", "outlet": "ESPN", "x": ["@HolderStephen"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Mike Chappell", "outlet": "FOX59", "x": ["@mchappell51"], "role": "local"},
+        {"name": "George Bremer", "outlet": "CNHI / Herald Bulletin", "x": ["@GMbremer"], "role": "local"}
+      ]
+    },
+    "JAX": {
+      "team": "Jacksonville Jaguars",
+      "division": "AFC South",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Michael DiRocco", "outlet": "ESPN", "x": ["@ESPNdirocco"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Demetrius Harvey", "outlet": "Florida Times-Union", "x": ["@Demetrius82"], "role": "local"},
+        {"name": "John Shipley", "outlet": "Jaguars on SI", "x": ["@_John_Shipley"], "role": "local"},
+        {"name": "Hays Carlyon", "outlet": "1010 XL", "x": ["@HaysCarlyon"], "role": "local"}
+      ]
+    },
+    "KC": {
+      "team": "Kansas City Chiefs",
+      "division": "AFC West",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Nate Taylor", "outlet": "ESPN", "x": ["@ByNateTaylor"], "role": "primary", "notes": "Joined ESPN July 2025; replaced Adam Teicher; 2026 camp hub"},
+        {"name": "Matt Derrick", "outlet": "Chiefs Digest", "x": ["@mattderrick"], "role": "local"},
+        {"name": "Jesse Newell", "outlet": "The Athletic / local", "x": ["@jessenewell"], "role": "local", "confidence": "medium"}
+      ]
+    },
+    "LAC": {
+      "team": "Los Angeles Chargers",
+      "division": "AFC West",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Kris Rhim", "outlet": "ESPN", "x": ["@krisrhim1"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Daniel Popper", "outlet": "The Athletic", "x": ["@danielrpopper"], "role": "primary"}
+      ]
+    },
+    "LAR": {
+      "team": "Los Angeles Rams",
+      "division": "NFC West",
+      "kos_edge_writer": "Morgan Hale",
+      "confidence": "high",
+      "writers": [
+        {"name": "Sarah Barshop", "outlet": "ESPN", "x": ["@sarahbarshop"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Jourdan Rodrigue", "outlet": "The Athletic", "x": ["@JourdanRodrigue"], "role": "primary", "notes": "Senior NFL writer; still essential Rams/NFL source"},
+        {"name": "Gary Klein", "outlet": "Los Angeles Times", "x": ["@LATimesklein"], "role": "local"}
+      ]
+    },
+    "LV": {
+      "team": "Las Vegas Raiders",
+      "division": "AFC West",
+      "kos_edge_writer": null,
+      "confidence": "medium",
+      "notes": "ESPN primary Ryan McFadden confirmed via camp hub/bio; X handle listed as candidate pending bio link confirmation.",
+      "writers": [
+        {"name": "Ryan McFadden", "outlet": "ESPN", "x": ["@ryanmcfadden_"], "role": "primary", "confidence": "medium", "notes": "ESPN NFL Nation; 2026 camp hub. Confirm X handle before sole-source cite."},
+        {"name": "Tashan Reed", "outlet": "The Athletic", "x": ["@tashanreed"], "role": "primary"},
+        {"name": "Vincent Bonsignore", "outlet": "Las Vegas Review-Journal", "x": ["@VinnyBonsignore"], "role": "local"},
+        {"name": "Paul Gutierrez", "outlet": "ESPN (prior Raiders)", "x": ["@PGutierrezESPN"], "role": "candidate", "confidence": "medium", "notes": "Longtime Raiders ESPN voice; confirm current assignment"}
+      ]
+    },
+    "MIA": {
+      "team": "Miami Dolphins",
+      "division": "AFC East",
+      "kos_edge_writer": "Taylor Brooks",
+      "confidence": "high",
+      "writers": [
+        {"name": "Marcel Louis-Jacques", "outlet": "ESPN", "x": ["@Marcel_LJ"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "David Furones", "outlet": "Sun Sentinel", "x": ["@DavidFurones_"], "role": "local"},
+        {"name": "Joe Schad", "outlet": "Palm Beach Post", "x": ["@schadjoe"], "role": "local"}
+      ]
+    },
+    "MIN": {
+      "team": "Minnesota Vikings",
+      "division": "NFC North",
+      "kos_edge_writer": "Casey Voss",
+      "confidence": "high",
+      "writers": [
+        {"name": "Kevin Seifert", "outlet": "ESPN", "x": ["@SeifertESPN"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub; key for QB competition reporting"},
+        {"name": "Alec Lewis", "outlet": "The Athletic", "x": ["@alec_lewis"], "role": "primary"},
+        {"name": "Ben Goessling", "outlet": "Minnesota Star Tribune", "x": ["@BenGoessling"], "role": "local"}
+      ]
+    },
+    "NE": {
+      "team": "New England Patriots",
+      "division": "AFC East",
+      "kos_edge_writer": "Taylor Brooks",
+      "confidence": "high",
+      "writers": [
+        {"name": "Mike Reiss", "outlet": "ESPN", "x": ["@MikeReiss"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Phil Perry", "outlet": "NBC Sports Boston", "x": ["@PhilAPerry"], "role": "local"},
+        {"name": "Evan Lazar", "outlet": "Patriots.com / local", "x": ["@ezlazar"], "role": "local"}
+      ]
+    },
+    "NO": {
+      "team": "New Orleans Saints",
+      "division": "NFC South",
+      "kos_edge_writer": "Avery Cole",
+      "confidence": "high",
+      "writers": [
+        {"name": "Katherine Terrell", "outlet": "ESPN", "x": ["@Kat_Terrell"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Mike Triplett", "outlet": "NewOrleans.football / local", "x": ["@MikeTriplett"], "role": "local"},
+        {"name": "Nick Underhill", "outlet": "New Orleans Advocate / local", "x": ["@nick_underhill"], "role": "local"}
+      ]
+    },
+    "NYG": {
+      "team": "New York Giants",
+      "division": "NFC East",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Jordan Raanan", "outlet": "ESPN", "x": ["@JordanRaanan"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Dan Duggan", "outlet": "The Athletic", "x": ["@DDuggan21"], "role": "primary"},
+        {"name": "Paul Schwartz", "outlet": "New York Post", "x": ["@NYPost_Schwartz"], "role": "local"},
+        {"name": "Ryan Dunleavy", "outlet": "New York Post", "x": ["@rydunleavy"], "role": "local"}
+      ]
+    },
+    "NYJ": {
+      "team": "New York Jets",
+      "division": "AFC East",
+      "kos_edge_writer": "Taylor Brooks",
+      "confidence": "high",
+      "writers": [
+        {"name": "Rich Cimini", "outlet": "ESPN", "x": ["@RichCimini"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Zack Rosenblatt", "outlet": "The Athletic", "x": ["@ZackBlatt"], "role": "primary"},
+        {"name": "Brian Costello", "outlet": "New York Post", "x": ["@BrianCoz"], "role": "local"}
+      ]
+    },
+    "PHI": {
+      "team": "Philadelphia Eagles",
+      "division": "NFC East",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Tim McManus", "outlet": "ESPN", "x": ["@Tim_McManus"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Jeff McLane", "outlet": "Philadelphia Inquirer", "x": ["@Jeff_McLane"], "role": "local"},
+        {"name": "Brooks Kubena", "outlet": "The Athletic", "x": ["@BKubena"], "role": "primary"},
+        {"name": "Zach Berman", "outlet": "PHLY", "x": ["@ZBerm"], "role": "local"}
+      ]
+    },
+    "PIT": {
+      "team": "Pittsburgh Steelers",
+      "division": "AFC North",
+      "kos_edge_writer": "Reese Quinn",
+      "confidence": "high",
+      "writers": [
+        {"name": "Brooke Pryor", "outlet": "ESPN", "x": ["@bepryor"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub; handle from longstanding ESPN bio attribution"},
+        {"name": "Mark Kaboly", "outlet": "The Athletic / Pat McAfee", "x": ["@MarkKaboly"], "role": "primary"},
+        {"name": "Dale Lolley", "outlet": "Steelers.com / DK", "x": ["@dlolley_pgh"], "role": "local"}
+      ]
+    },
+    "SF": {
+      "team": "San Francisco 49ers",
+      "division": "NFC West",
+      "kos_edge_writer": "Morgan Hale",
+      "confidence": "high",
+      "writers": [
+        {"name": "Nick Wagoner", "outlet": "ESPN", "x": ["@nwagoner"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Vic Tafur", "outlet": "The Athletic", "x": ["@VicTafur"], "role": "primary", "notes": "Moved from Raiders to 49ers beat at The Athletic"},
+        {"name": "Eric Branch", "outlet": "San Francisco Chronicle", "x": ["@Eric_Branch"], "role": "local"},
+        {"name": "David Lombardi", "outlet": "The Athletic / independent", "x": ["@LombardiHimself"], "role": "local"}
+      ]
+    },
+    "SEA": {
+      "team": "Seattle Seahawks",
+      "division": "NFC West",
+      "kos_edge_writer": "Morgan Hale",
+      "confidence": "high",
+      "writers": [
+        {"name": "Brady Henderson", "outlet": "ESPN", "x": ["@BradyHenderson"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Bob Condotta", "outlet": "Seattle Times", "x": ["@bcondotta"], "role": "local"},
+        {"name": "Gregg Bell", "outlet": "Tacoma News Tribune", "x": ["@gbellseattle"], "role": "local"}
+      ]
+    },
+    "TB": {
+      "team": "Tampa Bay Buccaneers",
+      "division": "NFC South",
+      "kos_edge_writer": "Avery Cole",
+      "confidence": "high",
+      "writers": [
+        {"name": "Jenna Laine", "outlet": "ESPN", "x": ["@JennaLaineESPN"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Greg Auman", "outlet": "FOX Sports", "x": ["@gregauman"], "role": "local"},
+        {"name": "Rick Stroud", "outlet": "Tampa Bay Times", "x": ["@NFLSTROUD"], "role": "local"}
+      ]
+    },
+    "TEN": {
+      "team": "Tennessee Titans",
+      "division": "AFC South",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "Turron Davenport", "outlet": "ESPN", "x": ["@TDavenport_NFL"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Jim Wyatt", "outlet": "Titans.com", "x": ["@jwyattsports"], "role": "team_site"},
+        {"name": "Terry McCormick", "outlet": "TitanInsider", "x": ["@terrymc13"], "role": "local"}
+      ]
+    },
+    "WAS": {
+      "team": "Washington Commanders",
+      "division": "NFC East",
+      "kos_edge_writer": null,
+      "confidence": "high",
+      "writers": [
+        {"name": "John Keim", "outlet": "ESPN", "x": ["@john_keim"], "role": "primary", "notes": "ESPN NFL Nation; 2026 camp hub"},
+        {"name": "Ben Standig", "outlet": "The Athletic", "x": ["@BenStandig"], "role": "primary"}
+      ]
+    }
+  }
+}

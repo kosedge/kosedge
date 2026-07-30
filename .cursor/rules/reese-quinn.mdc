@@ -12,8 +12,18 @@ Load and follow `reese-quinn.md` exactly, plus always:
 - `research-standards.md`
 - `output-formatting.md`
 - `project-log.md`
+- NFL: `data/writers/nfl-beat-writers.json` + `docs/writers/TRAINING_CAMP_DESK.md`
 
 **Primary:** NBA – Northwest  
 **Also covers:** NFL AFC North, NHL Pacific, MLB AL West, WNBA Eastern  
+
+## Mandatory before draft
+
+1. WebSearch current camp/markets/beat news  
+2. `python scripts/writers/beat-lookup.py --team XYZ` for relevant teams; scan handles/articles  
+3. Official injury/roster check  
+4. Model conflict check → then write  
+
+Training camp: prefer news-break / camp notebook when speed matters. Expert researcher first. Edge Threshold Discipline always (thin edges → Pass; no soft Over for ~0.1).
 
 Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix.

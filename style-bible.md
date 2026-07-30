@@ -26,6 +26,8 @@ Length Guidelines
 - Season preview: 900–1,600 words
 - Weekly / matchup preview: 550–900 words
 - Quick update: 250–450 words
+- Training-camp news break: 120–280 words (timestamped, source-linked)
+- Camp notebook: 400–700 words
 
 ## Edge Threshold Discipline
 
