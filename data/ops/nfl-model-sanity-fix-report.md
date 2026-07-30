@@ -19,14 +19,34 @@ Not HFA alone and not a single-game bug.
    - Early-season market blend stayed at 0.30 even in Week 1.
    - PLAY tags could fire on market-side disagreements (Giants PLAY as favorite while market has them as dogs).
 
-## Fixes shipped
+## Fixes shipped (on `nfl-second-order-edge`)
 
 | Change | File | Effect |
 | --- | --- | --- |
-| Real-features gate requires ≥3 **scored REG** games (weeks 1–18) **and** EPA variance | `nfl_supervised_retrain.py` | Blocks validated weights until in-sample season |
-| Prior lookup prefers `home_abbr` / `away_abbr` | `tasks.py` | EPA priors actually apply |
+| Real-features gate requires ≥3 **scored REG** games **and** EPA variance | `nfl_supervised_retrain.py` | Blocks validated weights until in-sample season |
+| Ignore `fit_payload["blending"]` on conservative path | `nfl_supervised_retrain.py` | Stops saved 0.85 weights from leaking back in |
+| Matchup pack lookup uses **team abbr** (not full name) | `tasks.py` | Week/features actually load; early-season gates can fire |
+| Skip supervised overlay entirely for weeks 1–4 (and missing pack on 2026+) | `tasks.py` | No OOD supervised margin on early board |
+| Prior lookup prefers `home_abbr` / `away_abbr` | `tasks.py` | EPA priors apply |
 | Early-season market blend boost (W1 +0.25 → ~0.55) | `nfl_simulator.py` | Anchors thin weeks to consensus |
-| PLAY blocked on market side disagreement (≥1.5 pts opposite favorite) | `nfl_side_total_publish_policy.py` + fair-lines route | No stake tags on flip failures |
+| PLAY blocked on market side disagreement | `nfl_side_total_publish_policy.py` + fair-lines | **Already live on API** — DAL@NYG spread/ML are PASS |
+| Drop ST-KAV kwargs from `NflGameInputs` | `nfl_matchup_features.py` | Unblocked Celery re-sims (were FAILING) |
+| `worker_build_id` canary in sim task result | `tasks.py` | Confirm worker image after deploy |
+
+## Live status (as of last check)
+
+- **API publish gate:** LIVE — DAL@NYG `publish_reason_spread=market_side_disagreement`, tags PASS.
+- **Raw POST `/nfl/simulations/{id}` (no supervised):** ~`spread_home -0.5` (near pick’em) — correct direction vs market dog.
+- **Celery re-sim numbers:** still republishing `-3.07` with identical `slate_pre_mean=43.9915` across deploys — strongly suggests **worker container not yet on latest build**, or result path not picking the new logic. After next successful worker deploy, task result must include `worker_build_id` starting with `sanity-fix-20260730c`. Then re-queue:
+
+```bash
+bash scripts/deploy-railway-model-service.sh --wait
+for d in $(curl -sS 'https://model-service-production-e253.up.railway.app/nfl/fair-lines?days_ahead=120' \
+  | python3 -c "import json,sys;print(' '.join(sorted({str(r['game_date'])[:10] for r in json.load(sys.stdin)['lines']})))"); do
+  curl -sS -X POST "https://model-service-production-e253.up.railway.app/api/jobs/run-nfl-simulations?game_date=$d&simulations=2500"
+  echo
+done
+```
 
 ## Validation example (DAL @ NYG)
 
