@@ -2977,12 +2977,15 @@ def run_nfl_market_simulations(
                 and str(m.get("game_status") or "").lower() in {"final", "closed", "completed"}
             ):
                 continue
+            # Matchup feature packs are keyed by abbreviation (NYG/DAL), while
+            # games joins expose full names. Prefer abbr or the pack lookup
+            # misses, week stays null, and early-season supervised skips never fire.
             matchup_pack = fetch_latest_matchup_feature_pack(
                 session,
                 game_id=str(m["game_id"]),
                 season_year=_to_int_like(m.get("season_year")),
-                home_team=str(m["home_team"]),
-                away_team=str(m["away_team"]),
+                home_team=str(m.get("home_abbr") or m.get("home_team") or ""),
+                away_team=str(m.get("away_abbr") or m.get("away_team") or ""),
             )
             injury_nowcast = fetch_nfl_injury_nowcast(
                 session,
