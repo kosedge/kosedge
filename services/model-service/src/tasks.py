@@ -2915,6 +2915,8 @@ def run_nfl_market_simulations(
     projection_created_at_mode: str = "now",
     kickoff_buffer_minutes: int = 30,
 ) -> Dict[str, Any]:
+    # Canary: proves which worker build executed (sanity fix 2026-07-30).
+    worker_build_id = "sanity-fix-20260730c-abbr-skip-supervised-w1-4"
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
     processed = 0
@@ -3172,11 +3174,22 @@ def run_nfl_market_simulations(
             # rolling features are real. High-trust / saved-fit blends were
             # dominating the simulator and flipping market sides on the 2026
             # preseason board (see data/ops/nfl-model-sanity-fix-report.md).
+            # Also skip when the pack is missing (lookup miss) for the upcoming
+            # season — otherwise week=null silently re-enables supervised.
             matchup_week_for_supervised = _to_int_like(
                 (matchup_pack or {}).get("week") if isinstance(matchup_pack, dict) else None
             )
-            skip_supervised_early = (
-                matchup_week_for_supervised is not None and int(matchup_week_for_supervised) <= 4
+            season_for_supervised = _to_int_like(m.get("season_year"))
+            skip_supervised_early = bool(
+                (
+                    matchup_week_for_supervised is not None
+                    and int(matchup_week_for_supervised) <= 4
+                )
+                or (
+                    matchup_pack is None
+                    and season_for_supervised is not None
+                    and int(season_for_supervised) >= 2026
+                )
             )
             if supervised_fit and not skip_supervised_early:
                 mp = matchup_pack if isinstance(matchup_pack, dict) else {}
@@ -3436,6 +3449,7 @@ def run_nfl_market_simulations(
             "games_processed": processed,
             "projections_inserted": inserted,
             "slate_pre_mean": round(float(slate_pre_mean), 4) if slate_pre_mean is not None else None,
+            "worker_build_id": worker_build_id,
         }
     except Exception:
         session.rollback()
