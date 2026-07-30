@@ -190,9 +190,8 @@ def matchup_pack_to_sim_input_kwargs(
             if matchup_pack.get("kav_as_of_week") is not None
             else None
         ),
-        "home_st_kav_net_5g": _to_float(matchup_pack.get("home_st_kav_net_5g")),
-        "away_st_kav_net_5g": _to_float(matchup_pack.get("away_st_kav_net_5g")),
-        "diff_st_kav_net_5g": _to_float(matchup_pack.get("diff_st_kav_net_5g")),
+        # ST-KAV columns exist on matchup packs for supervised analysis only.
+        # NflGameInputs does not accept them (failed v4 holdout; not wired).
         "home_personnel_edge_5g": _to_float(matchup_pack.get("home_personnel_edge_5g")),
         "away_personnel_edge_5g": _to_float(matchup_pack.get("away_personnel_edge_5g")),
         "home_sub_elasticity_5g": _to_float(matchup_pack.get("home_sub_elasticity_5g")),
