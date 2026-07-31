@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { logError } from "@/lib/logger";
-import { ErrorScreen } from "@/components/error/ErrorScreen";
+import { BOOT_SHELL_CSS } from "@/components/BootShell";
 
 export default function GlobalError({
   error,
@@ -19,16 +19,31 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
+    <html lang="en">
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: BOOT_SHELL_CSS }} />
+      </head>
       <body>
-        <ErrorScreen
-          title="Application Error"
-          message="A critical error occurred. The application needs to reload."
-          secondaryMessage="Our team has been notified and is working on a fix."
-          primaryLabel="Reload Application"
-          onPrimary={reset}
-          error={error}
-        />
+        <div className="kos-boot">
+          <div className="kos-boot__card">
+            <p className="kos-boot__brand">
+              <span>Kos</span> <span>Edge</span>
+            </p>
+            <h1 className="kos-boot__title">Application Error</h1>
+            <p className="kos-boot__msg">
+              A critical error occurred. Reload to pick up the latest
+              deployment — never leave this as a blank black screen.
+            </p>
+            <button type="button" className="kos-boot__btn" onClick={reset}>
+              Reload Application
+            </button>
+            <div>
+              <a className="kos-boot__link" href="/">
+                Go Home
+              </a>
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   );

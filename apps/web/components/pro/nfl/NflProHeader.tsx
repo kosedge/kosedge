@@ -25,7 +25,7 @@ export default function NflProHeader({
         <div className="flex items-center justify-between gap-4 py-3">
           <Link href="/" className="flex shrink-0 items-center gap-2.5">
             <Image
-              src="/Brand/kosedge-logo.png"
+              src="/brand/kosedge-logo.png"
               alt="Kos Edge Analytics"
               width={140}
               height={42}

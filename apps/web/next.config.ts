@@ -77,6 +77,36 @@ const nextConfig: NextConfig = {
         destination: "/pro/nfl/player-previews",
         permanent: false,
       },
+      // Case-sensitive hosts: legacy /Brand/* → /brand/*
+      {
+        source: "/Brand/:path*",
+        destination: "/brand/:path*",
+        permanent: false,
+      },
+    ];
+  },
+
+  async headers() {
+    return [
+      {
+        // HTML documents must never be served from a long-lived cache across deploys.
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 
