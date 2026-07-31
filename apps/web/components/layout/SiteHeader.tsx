@@ -6,7 +6,7 @@ export default function SiteHeader() {
     <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
       <Link href="/" className="flex items-center gap-3">
         <Image
-          src="/Brand/kosedge-logo.png"
+          src="/brand/kosedge-logo.png"
           alt="Kos Edge Analytics"
           width={160}
           height={48}
