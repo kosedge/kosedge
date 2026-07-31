@@ -20,7 +20,8 @@ const compareCache = new Map<
   string,
   { data: { rows: unknown[]; books: unknown[] }; ts: number }
 >();
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v4`;
+/** v5: bust empty rows cached after Odds API credit failures. */
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v5`;
 
 export async function GET(
   _req: Request,
@@ -45,31 +46,41 @@ export async function GET(
 
   const now = Date.now();
   const cached = compareCache.get(sport);
-  if (cached && now - cached.ts < ODDS_CACHE_TTL_MS) {
+  if (
+    cached &&
+    cached.data.rows.length > 0 &&
+    now - cached.ts < ODDS_CACHE_TTL_MS
+  ) {
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   const distributed = await getCache<{
     data: { rows: unknown[]; books: unknown[] };
     ts: number;
   }>(compareCacheKeyForSport(sport));
-  if (distributed && now - distributed.ts < ODDS_CACHE_TTL_MS) {
+  if (
+    distributed &&
+    distributed.data.rows.length > 0 &&
+    now - distributed.ts < ODDS_CACHE_TTL_MS
+  ) {
     compareCache.set(sport, distributed);
     return NextResponse.json(distributed.data, { headers: CACHE_HEADERS });
   }
 
   let rows: Awaited<ReturnType<typeof fetchOddsComparison>> = [];
+  let fetchErrors = 0;
   for (const key of keys) {
     try {
       rows = await fetchOddsComparison(sport, key);
       if (rows.length > 0) break;
     } catch (e) {
+      fetchErrors += 1;
       logError(e instanceof Error ? e : new Error(String(e)), {
         sport,
         route: "odds/compare",
       });
     }
   }
-  if (rows.length === 0 && cached) {
+  if (rows.length === 0 && cached && cached.data.rows.length > 0) {
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   try {
@@ -79,19 +90,23 @@ export async function GET(
     }));
     const data = { rows, books };
     const payload = { data, ts: now };
-    compareCache.set(sport, payload);
-    await setCache(
-      compareCacheKeyForSport(sport),
-      payload,
-      Math.ceil(ODDS_CACHE_TTL_MS / 1000),
-    );
+    // Never persist empty payloads after API failures — that froze Compare Odds
+    // for the full 6h TTL when the primary key was out of credits.
+    if (rows.length > 0 || fetchErrors === 0) {
+      compareCache.set(sport, payload);
+      await setCache(
+        compareCacheKeyForSport(sport),
+        payload,
+        Math.ceil(ODDS_CACHE_TTL_MS / 1000),
+      );
+    }
     return NextResponse.json(data, { headers: CACHE_HEADERS });
   } catch (e) {
     logError(e instanceof Error ? e : new Error(String(e)), {
       sport,
       route: "odds/compare",
     });
-    if (cached)
+    if (cached && cached.data.rows.length > 0)
       return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
     return NextResponse.json(
       { rows: [], books: [] },
