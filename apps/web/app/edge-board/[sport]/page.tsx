@@ -6,7 +6,11 @@ import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner"
 import { env } from "@/lib/config/env";
 import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
-import { getSport, SPORTS } from "@/lib/sports";
+import {
+  resolveSportKey,
+  sportDisplayLabel,
+  SPORTS,
+} from "@/lib/sports";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
@@ -78,9 +82,8 @@ export default async function EdgeBoardSportPage({
     params && typeof (params as Promise<unknown>).then === "function"
       ? await (params as Promise<{ sport?: string }>)
       : ((params as { sport?: string }) ?? {});
-  const sportKey = String(resolved?.sport ?? "ncaam");
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const sportKey = resolveSportKey(resolved?.sport, "ncaam");
+  const sportName = sportDisplayLabel(sportKey);
   const keiCode = getKeiCode(sportKey);
 
   const sp =

@@ -1,5 +1,9 @@
 import Link from "next/link";
-import { getSport } from "@/lib/sports";
+import {
+  resolveSportKey,
+  safeUpperCase,
+  sportDisplayLabel,
+} from "@/lib/sports";
 
 const SPORT_CONTEXT_LABELS: Record<
   string,
@@ -42,8 +46,12 @@ const SPORT_CONTEXT_LABELS: Record<
   },
 };
 
-function parseSlugTeams(slug: string): { away: string; home: string } | null {
-  const parts = slug.toUpperCase().split(/[@-]/);
+function parseSlugTeams(
+  slug: string | null | undefined,
+): { away: string; home: string } | null {
+  const token = safeUpperCase(slug);
+  if (!token) return null;
+  const parts = token.split(/[@-]/);
   if (parts.length >= 2 && parts[0] && parts[1]) {
     return { away: parts[0]!, home: parts[1]! };
   }
@@ -55,10 +63,12 @@ export default async function MatchupPage({
 }: {
   params: Promise<{ sport: string; date: string; slug: string }>;
 }) {
-  const { sport: sportKey, date, slug } = await params;
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const context = SPORT_CONTEXT_LABELS[sportKey];
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const date = String(resolved?.date ?? "today");
+  const slug = String(resolved?.slug ?? "");
+  const sportName = sportDisplayLabel(sportKey);
+  const context = sportKey ? SPORT_CONTEXT_LABELS[sportKey] : undefined;
   const hasSportTemplate = Boolean(context);
   const teams = parseSlugTeams(slug);
   const isNfl = sportKey === "nfl";

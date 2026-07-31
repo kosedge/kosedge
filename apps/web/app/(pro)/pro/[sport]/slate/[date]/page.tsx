@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getSport } from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 type SlateTemplate = {
   market: string;
@@ -52,17 +52,18 @@ export default async function SlatePage({
 }: {
   params: Promise<{ sport: string; date: string }>;
 }) {
-  const { sport: sportKey, date } = await params;
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const date = String(resolved?.date ?? "today");
 
   // NFL has a dedicated populated slate route.
   if (sportKey === "nfl") {
     redirect(`/pro/nfl/slate/${date || "today"}`);
   }
 
-  const base = `/pro/${sportKey}`;
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const template = SPORT_SLATE_TEMPLATES[sportKey];
+  const base = `/pro/${sportKey || "nfl"}`;
+  const sportName = sportDisplayLabel(sportKey);
+  const template = sportKey ? SPORT_SLATE_TEMPLATES[sportKey] : undefined;
   const hasData = Boolean(template);
 
   const games = [

@@ -78,6 +78,23 @@ describe("UserMenu", () => {
     expect(screen.getByText("test@example.com")).toBeInTheDocument();
   });
 
+  it("should not crash avatar initial when name and email are missing", () => {
+    vi.mocked(useSession).mockReturnValue({
+      data: {
+        user: {
+          id: "user-1",
+          email: undefined,
+          name: "",
+          role: "USER",
+        },
+      },
+      status: "authenticated",
+    } as any);
+
+    render(<UserMenu />);
+    expect(screen.getByText("?")).toBeInTheDocument();
+  });
+
   it("should call signOut when sign out button is clicked", async () => {
     const mockSignOut = vi.fn();
     vi.mocked(signOut).mockImplementation(mockSignOut);

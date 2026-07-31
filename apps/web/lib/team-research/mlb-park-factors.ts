@@ -35,8 +35,14 @@ export const MLB_PARK_FACTOR_RUNS: Record<string, number> = {
   WSH: 1.0,
 };
 
-export function mlbParkFactorLabel(code: string): string | null {
-  const factor = MLB_PARK_FACTOR_RUNS[code.toUpperCase()];
+export function mlbParkFactorLabel(
+  code: string | null | undefined,
+): string | null {
+  const token = String(code ?? "")
+    .trim()
+    .toUpperCase();
+  if (!token) return null;
+  const factor = MLB_PARK_FACTOR_RUNS[token];
   if (typeof factor !== "number") return null;
   const pct = Math.round((factor - 1) * 100);
   if (pct === 0) return `${factor.toFixed(2)} · league-neutral run environment`;

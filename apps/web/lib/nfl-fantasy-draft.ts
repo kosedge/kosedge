@@ -239,8 +239,10 @@ export function draftTierBadgeClass(tier: string): string {
   }
 }
 
-export function draftPositionBadgeClass(position: string): string {
-  switch (position.toUpperCase()) {
+export function draftPositionBadgeClass(
+  position: string | null | undefined,
+): string {
+  switch (String(position ?? "").toUpperCase()) {
     case "QB":
       return "border-rose-400/40 bg-rose-400/10 text-rose-300";
     case "RB":

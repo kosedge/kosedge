@@ -1,5 +1,5 @@
 import type { SportKey } from "@/lib/sports";
-import { getSport } from "@/lib/sports";
+import { safeUpperCase, sportDisplayLabel } from "@/lib/sports";
 import { findTeamInDirectory, getTeamDirectory } from "./directories";
 import { mlbParkFactorLabel } from "./mlb-park-factors";
 import { getTeamResearchSportConfig } from "./sport-config";
@@ -12,7 +12,8 @@ export function isTeamResearchSport(sportKey: string): sportKey is SportKey {
 
 export function teamResearchHref(sportKey: SportKey, teamSlug: string): string {
   if (sportKey === "nfl") {
-    return `/pro/nfl/teams/${teamSlug.toUpperCase()}/overview`;
+    const code = safeUpperCase(teamSlug, "TEAM");
+    return `/pro/nfl/teams/${code}/overview`;
   }
   return `/pro/${sportKey}/teams/${teamSlug}`;
 }
@@ -49,7 +50,7 @@ export function listDirectoryForSport(sportKey: SportKey) {
 }
 
 export function sportDisplayName(sportKey: string): string {
-  return getSport(sportKey)?.fullName ?? sportKey.toUpperCase();
+  return sportDisplayLabel(sportKey);
 }
 
 export function parkFactorForTeam(

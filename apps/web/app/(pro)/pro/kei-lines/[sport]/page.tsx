@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
-import { getSport } from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import { getKeiLines } from "@/lib/kei-lines";
 import { KeiLinesTable } from "./KeiLinesTable";
 import { NcaamKeiLinesClient } from "./NcaamKeiLinesClient";
@@ -12,9 +12,9 @@ export default async function KeiLinesSportPage({
 }: {
   params: Promise<{ sport: string }>;
 }) {
-  const { sport: sportKey } = await params;
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const sportName = sportDisplayLabel(sportKey);
   const keiCode = getKeiCode(sportKey);
   const games = getKeiLines(sportKey);
   const isNcaam = sportKey === "ncaam";

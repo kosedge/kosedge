@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import { HIGHLIGHTED_GAMES } from "@/lib/featured-games";
 import { getGameBySlug } from "@/lib/edge-board-tonight";
 import { buildProArticleContent } from "@/lib/pro-article-content";
-import { getSport } from "@/lib/sports";
+import { sportDisplayLabel } from "@/lib/sports";
 
-function toSportLabel(sport: string): string {
-  return getSport(sport)?.fullName ?? sport.toUpperCase();
+function toSportLabel(sport: string | null | undefined): string {
+  return sportDisplayLabel(sport);
 }
 
 export default async function GameArticlePage({
