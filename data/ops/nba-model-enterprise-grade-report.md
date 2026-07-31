@@ -4,9 +4,10 @@
 **Phase reached:** Phase 2 complete (close-line join + calibrate + publish posture)  
 **Model version:** `nba-v1-poss-sim`  
 **Worker canary:** `nba-poss-sim-20260731-phase2`  
-**SHA:** `85186dd` (+ uuid/text cast follow-up)  
-**Railway CI:** [30672022566](https://github.com/kosedge/kosedge/actions/runs/30672022566) success  
-**Vercel Production:** deploy-vercel push (kosedge)
+**SHA:** `d6b9e26`  
+**Railway CI:** [30672293540](https://github.com/kosedge/kosedge/actions/runs/30672293540) success  
+**Vercel Production:** `dpl_FppfiCBjbRN3x4iUjzojXt8JyJkh` (Ready)  
+**PR:** [#42](https://github.com/kosedge/kosedge/pull/42) (merged)
 
 ## Executive status
 
