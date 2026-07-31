@@ -11,9 +11,9 @@ import {
 } from "@/lib/sports";
 
 const SPORT_PROPS_COPY: Record<string, string> = {
-  nba: "NBA player props (points, rebounds, assists, threes) stage here once the props board is wired.",
-  nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation.",
-  wnba: "WNBA player props stage here once usage feeds clear validation.",
+  nba: "NBA player props (points, rebounds, assists, threes) stage here once a validated props board exists. Odds mainlines restore when the NBA board posts — no invented prop cards.",
+  nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
+  wnba: "WNBA player props stage here once usage feeds clear validation. Live game slate below is market context from Odds — not player-prop numbers.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
   cfb: "College football props remain data-pending for soft launch.",
   ncaam: "College basketball props remain data-pending for soft launch.",

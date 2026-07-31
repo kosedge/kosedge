@@ -196,7 +196,13 @@ export default async function SportOverviewPage({
           <div className="mt-4">
             <WeeklyGamesScroller games={tonightGames} sport={sportKey} />
           </div>
-        ) : null}
+        ) : (
+          <p className="mt-4 text-sm text-kos-text/60">
+            {sportKey === "nba" || sportKey === "ncaam"
+              ? `No ${sportName} game board posted on Odds API right now (offseason / no live slate). Shell stays ready — we do not invent matchups or KEI.`
+              : `No live ${sportName} slate rows yet. Edge Board and Compare Odds refresh when books post.`}
+          </p>
+        )}
       </section>
 
       {/* Betting Desk */}

@@ -1,2 +1,4 @@
 .vercel
 .env*
+# Local Odds API dumps used to rebuild edge_board_fallback_*.json
+data/processed/odds_raw_*.json
