@@ -8,6 +8,7 @@ import {
   formatTotal,
   formatWinProb,
 } from "@/lib/mlb-fair-lines-format";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export type { MlbFairLineRow };
 export {
@@ -95,12 +96,10 @@ export async function fetchMlbFairLines(params?: {
   if (params?.modelVersion)
     url.searchParams.set("model_version", params.modelVersion);
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60000);
   try {
-    const response = await fetch(url.toString(), {
+    const response = await upstreamFetch(url.toString(), {
       cache: "no-store",
-      signal: controller.signal,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
       headers: {
         accept: "application/json",
         ...(env.INTERNAL_API_SECRET
@@ -144,7 +143,5 @@ export async function fetchMlbFairLines(params?: {
       lines: [],
       error: "Unable to reach model service.",
     };
-  } finally {
-    clearTimeout(timeout);
   }
 }

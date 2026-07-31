@@ -9,6 +9,7 @@ import {
   type MlbDeskMarketType,
 } from "@/lib/mlb-desk-helpers";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export type { MlbDeskEdgeRow, MlbDeskMarketType };
 export {
@@ -67,17 +68,15 @@ export async function fetchMlbEdgesDesk(params: {
   }
 
   const url = new URL(`${base.replace(/\/+$/, "")}/mlb/edges/today`);
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60000);
 
   let edgesTodayError: string | undefined;
   let modelVersion = "";
   let todayRows: MlbDeskEdgeRow[] = [];
 
   try {
-    const response = await fetch(url.toString(), {
+    const response = await upstreamFetch(url.toString(), {
       cache: "no-store",
-      signal: controller.signal,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
       headers: {
         accept: "application/json",
         ...(env.INTERNAL_API_SECRET
@@ -100,8 +99,6 @@ export async function fetchMlbEdgesDesk(params: {
     }
   } catch {
     edgesTodayError = "Unable to reach model service.";
-  } finally {
-    clearTimeout(timeout);
   }
 
   let runLineRows: MlbDeskEdgeRow[] = [];

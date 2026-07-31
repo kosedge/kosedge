@@ -1,5 +1,6 @@
 import "server-only";
 import { env } from "@/lib/config/env";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export type NflFairLineRow = {
   gameId: string;
@@ -201,13 +202,11 @@ export async function fetchNflFairLines(params: {
     url.searchParams.set("bookmakers", params.bookmakers);
   }
 
-  const controller = new AbortController();
-  // Odds join + DB board query can exceed 15s on a cold model-service.
-  const timeout = setTimeout(() => controller.abort(), 60000);
   try {
-    const response = await fetch(url.toString(), {
+    const response = await upstreamFetch(url.toString(), {
       cache: "no-store",
-      signal: controller.signal,
+      // Cap board waits so Overview / Edge Board never hang on a cold Railway.
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
       headers: {
         accept: "application/json",
         ...(env.INTERNAL_API_SECRET
@@ -311,8 +310,6 @@ export async function fetchNflFairLines(params: {
       diagnostics: emptyDiagnostics,
       error: "Unable to reach model service.",
     };
-  } finally {
-    clearTimeout(timeout);
   }
 }
 

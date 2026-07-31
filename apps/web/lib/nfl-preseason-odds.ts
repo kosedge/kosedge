@@ -1,6 +1,7 @@
 import "server-only";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { bookDisplay, configuredBooksForSport } from "@/lib/odds-api";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { normalizeNflAbbr } from "@/lib/nfl-preseason-desk";
 
@@ -144,9 +145,10 @@ export async function fetchNflPreseasonOddsMarkets(): Promise<{
     url.searchParams.set("apiKey", apiKey);
 
     try {
-      const response = await fetch(url.toString(), {
+      const response = await upstreamFetch(url.toString(), {
         next: { revalidate: 900 },
         headers: { accept: "application/json" },
+        timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
       });
       if (response.status === 401 || response.status === 403) {
         lastStatus = "unauthorized";

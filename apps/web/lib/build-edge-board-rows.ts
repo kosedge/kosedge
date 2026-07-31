@@ -55,17 +55,19 @@ async function assembleNflEdgeBoardRows(
 ): Promise<EdgeBoardRow[]> {
   const slate = options?.slate ?? "live";
 
-  const pulledOdds = await pullNflOddsRows();
+  // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
+  const [pulledOdds, fair] = await Promise.all([
+    pullNflOddsRows(),
+    // Fair-lines pull also persists Odds API events into odds_snapshots for training.
+    fetchNflFairLines({
+      season: NFL_EDGE_BOARD_SEASON,
+      daysAhead: 200,
+      includePastDays: 14,
+      bookmakers: ALLOWED_BOOKS.join(","),
+    }),
+  ]);
   const odds =
     countPriced(pulledOdds) >= countPriced(oddsRows) ? pulledOdds : oddsRows;
-
-  // Fair-lines pull also persists Odds API events into odds_snapshots for training.
-  const fair = await fetchNflFairLines({
-    season: NFL_EDGE_BOARD_SEASON,
-    daysAhead: 200,
-    includePastDays: 14,
-    bookmakers: ALLOWED_BOOKS.join(","),
-  });
 
   let keiGames: KeiLineGame[] = [];
   let rows: EdgeBoardRow[] = [];

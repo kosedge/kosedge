@@ -7,6 +7,7 @@ import { env } from "@/lib/config/env";
 import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { getSport, SPORTS } from "@/lib/sports";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
 
@@ -36,10 +37,16 @@ async function getRows(
   if (env.INTERNAL_API_SECRET)
     headersObj["x-kosedge-secret"] = env.INTERNAL_API_SECRET;
 
-  const res = await fetch(`${origin}/api/edge-board/${sport}/today`, {
-    cache: "no-store",
-    headers: headersObj,
-  });
+  let res: Response;
+  try {
+    res = await upstreamFetch(`${origin}/api/edge-board/${sport}/today`, {
+      cache: "no-store",
+      headers: headersObj,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
+    });
+  } catch {
+    return [];
+  }
 
   if (!res.ok) return [];
 

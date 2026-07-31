@@ -1,4 +1,5 @@
 import { env } from "@/lib/config/env";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export type NflDataFreshnessPayload = {
   status: "ok" | "degraded" | "failed" | string;
@@ -26,11 +27,12 @@ export async function fetchNflDataFreshness(): Promise<NflDataFreshnessPayload> 
     };
   }
   try {
-    const res = await fetch(
+    const res = await upstreamFetch(
       `${base.replace(/\/$/, "")}/health/nfl-data-freshness`,
       {
         cache: "no-store",
         next: { revalidate: 0 },
+        timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
       },
     );
     const body = (await res

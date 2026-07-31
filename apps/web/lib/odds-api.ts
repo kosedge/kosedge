@@ -6,6 +6,8 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+
 const ODDS_API_BASE = "https://api.the-odds-api.com/v4";
 
 /** Sport key (our app) → Odds API sport key */
@@ -246,7 +248,10 @@ export async function fetchEdgeBoard(
   const sportBooks = configuredBooksForSport(normalizedSport);
 
   const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
-  const res = await fetch(url, { cache: "no-store" });
+  const res = await upstreamFetch(url, {
+    cache: "no-store",
+    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+  });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
@@ -436,7 +441,10 @@ export async function fetchOddsComparison(
   const sportBooks = configuredBooksForSport(normalizedSport);
 
   const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,h2h,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
-  const res = await fetch(url, { cache: "no-store" });
+  const res = await upstreamFetch(url, {
+    cache: "no-store",
+    timeoutMs: UPSTREAM_TIMEOUT_MS.heavy,
+  });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
