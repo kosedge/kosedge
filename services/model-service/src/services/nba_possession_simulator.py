@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Literal, Optional, TypedDict
 DEFAULT_NBA_MODEL_VERSION = "nba-v1-poss-sim"
 NBA_WORKER_BUILD_ID = os.getenv(
     "NBA_WORKER_BUILD_ID",
-    "nba-poss-sim-20260731-phase0b",
+    "nba-poss-sim-20260731-phase1",
 )
 
 # Market blend defaults (NFL lesson): shrink thin early-season signal toward

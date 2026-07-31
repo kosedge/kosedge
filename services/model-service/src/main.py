@@ -35,6 +35,12 @@ TASK_PULL_MLB_DATA_LAKE = "src.tasks.pull_mlb_data_lake_snapshot"
 TASK_PULL_NBA_CONTEXT = "src.tasks.pull_nba_context_snapshot"
 TASK_RUN_NBA_SIMULATIONS = "src.tasks.run_nba_market_simulations"
 TASK_PULL_NBA_INGEST = "src.tasks.pull_nba_schedule_ingest"
+TASK_PULL_NBA_SEASON_INGEST = "src.tasks.pull_nba_season_ingest"
+TASK_NBA_ROLLING_FEATURES = "src.tasks.materialize_nba_team_rolling_features"
+TASK_NBA_ODDS_DENSIFY = "src.tasks.pull_nba_historical_odds_densify"
+TASK_NBA_WALKFORWARD = "src.tasks.run_nba_walkforward_sample"
+TASK_NBA_PHASE1_BOOTSTRAP = "src.tasks.run_nba_phase1_bootstrap"
+TASK_NBA_INVENTORY = "src.tasks.nba_db_inventory"
 TASK_PULL_NFL_CONTEXT = "src.tasks.pull_nfl_context_snapshot"
 TASK_RUN_NFL_SIMULATIONS = "src.tasks.run_nfl_market_simulations"
 TASK_BACKFILL_NFL_HISTORICAL_PROJECTIONS = "src.tasks.backfill_nfl_historical_projections"
@@ -748,6 +754,119 @@ def job_pull_nba_ingest(
     except Exception as e:
         log.exception("Failed to enqueue pull-nba-ingest")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nba-season-ingest")
+def job_pull_nba_season_ingest(
+    seasons: Optional[str] = Query(
+        None, description="Comma-separated NBA seasons, e.g. 2021-22,2022-23"
+    ),
+) -> Dict[str, str]:
+    try:
+        season_list = (
+            [s.strip() for s in seasons.split(",") if s.strip()] if seasons else None
+        )
+        async_result = celery_app.send_task(
+            TASK_PULL_NBA_SEASON_INGEST,
+            kwargs={"seasons": season_list},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_NBA_SEASON_INGEST}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nba-season-ingest")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/materialize-nba-rolling-features")
+def job_materialize_nba_rolling_features(
+    days_back: int = Query(2000, ge=1, le=4000),
+    window_games: int = Query(10, ge=1, le=40),
+    pbp_sample_games: int = Query(8, ge=0, le=40),
+    player_stub_sample_games: int = Query(8, ge=0, le=40),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NBA_ROLLING_FEATURES,
+            kwargs={
+                "days_back": days_back,
+                "window_games": window_games,
+                "pbp_sample_games": pbp_sample_games,
+                "player_stub_sample_games": player_stub_sample_games,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NBA_ROLLING_FEATURES}
+    except Exception as e:
+        log.exception("Failed to enqueue materialize-nba-rolling-features")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nba-historical-odds-densify")
+def job_pull_nba_historical_odds_densify(
+    max_credit_spend: int = Query(300000, ge=0, le=400000),
+    max_requests: int = Query(200, ge=1, le=2000),
+    skip_if_mainline_games_ge: int = Query(100, ge=0, le=100000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NBA_ODDS_DENSIFY,
+            kwargs={
+                "max_credit_spend": max_credit_spend,
+                "max_requests": max_requests,
+                "skip_if_mainline_games_ge": skip_if_mainline_games_ge,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NBA_ODDS_DENSIFY}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nba-historical-odds-densify")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nba-walkforward-sample")
+def job_run_nba_walkforward_sample(
+    limit_games: int = Query(60, ge=5, le=400),
+    simulations: int = Query(800, ge=300, le=5000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NBA_WALKFORWARD,
+            kwargs={"limit_games": limit_games, "simulations": simulations},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NBA_WALKFORWARD}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nba-walkforward-sample")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nba-phase1-bootstrap")
+def job_run_nba_phase1_bootstrap(
+    densify_odds: bool = Query(True),
+    max_credit_spend: int = Query(300000, ge=0, le=400000),
+    walkforward_games: int = Query(60, ge=5, le=400),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NBA_PHASE1_BOOTSTRAP,
+            kwargs={
+                "densify_odds": densify_odds,
+                "max_credit_spend": max_credit_spend,
+                "walkforward_games": walkforward_games,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NBA_PHASE1_BOOTSTRAP}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nba-phase1-bootstrap")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.get("/api/jobs/nba-inventory")
+def job_nba_inventory_sync() -> Dict[str, Any]:
+    """Synchronous inventory against model-service DATABASE_URL."""
+    try:
+        from src.tasks import nba_db_inventory
+
+        return nba_db_inventory()
+    except Exception as e:
+        log.exception("Failed NBA inventory")
+        raise HTTPException(status_code=500, detail=f"inventory_failed: {e}")
 
 
 @app.post("/api/jobs/run-nba-simulations")

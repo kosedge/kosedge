@@ -115,6 +115,14 @@ def ensure_nba_model_tables(session: Any) -> None:
     session.execute(
         text(
             """
+            CREATE INDEX IF NOT EXISTS idx_nba_team_rolling_as_of
+              ON nba_team_rolling_features (as_of_date DESC, team_key)
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
             CREATE TABLE IF NOT EXISTS nba_possessions (
               id BIGSERIAL PRIMARY KEY,
               external_game_id TEXT NOT NULL,
@@ -136,6 +144,14 @@ def ensure_nba_model_tables(session: Any) -> None:
     session.execute(
         text(
             """
+            CREATE INDEX IF NOT EXISTS idx_nba_possessions_game
+              ON nba_possessions (external_game_id)
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
             CREATE TABLE IF NOT EXISTS nba_games_ingest (
               external_game_id TEXT PRIMARY KEY,
               game_date DATE,
@@ -150,6 +166,94 @@ def ensure_nba_model_tables(session: Any) -> None:
               raw JSONB,
               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE INDEX IF NOT EXISTS idx_nba_games_ingest_date
+              ON nba_games_ingest (game_date DESC)
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE INDEX IF NOT EXISTS idx_nba_games_ingest_season
+              ON nba_games_ingest (season, game_date)
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE TABLE IF NOT EXISTS nba_team_game_features (
+              external_game_id TEXT NOT NULL,
+              team_key TEXT NOT NULL,
+              game_date DATE NOT NULL,
+              is_home BOOLEAN,
+              opponent_key TEXT,
+              pace DOUBLE PRECISION,
+              ortg DOUBLE PRECISION,
+              drtg DOUBLE PRECISION,
+              three_pt_rate DOUBLE PRECISION,
+              three_pt_pct DOUBLE PRECISION,
+              two_pt_pct DOUBLE PRECISION,
+              ft_rate DOUBLE PRECISION,
+              ft_pct DOUBLE PRECISION,
+              to_rate DOUBLE PRECISION,
+              orb_rate DOUBLE PRECISION,
+              points DOUBLE PRECISION,
+              possessions DOUBLE PRECISION,
+              rest_days DOUBLE PRECISION,
+              season TEXT,
+              source TEXT,
+              payload JSONB,
+              updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+              PRIMARY KEY (external_game_id, team_key)
+            )
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE INDEX IF NOT EXISTS idx_nba_team_game_features_team_date
+              ON nba_team_game_features (team_key, game_date DESC)
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE TABLE IF NOT EXISTS nba_player_game_stubs (
+              external_game_id TEXT NOT NULL,
+              player_id TEXT NOT NULL,
+              player_name TEXT,
+              team_key TEXT,
+              game_date DATE,
+              minutes DOUBLE PRECISION,
+              usage_proxy DOUBLE PRECISION,
+              pts DOUBLE PRECISION,
+              reb DOUBLE PRECISION,
+              ast DOUBLE PRECISION,
+              fga DOUBLE PRECISION,
+              fta DOUBLE PRECISION,
+              tov DOUBLE PRECISION,
+              source TEXT,
+              payload JSONB,
+              updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+              PRIMARY KEY (external_game_id, player_id)
+            )
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            CREATE INDEX IF NOT EXISTS idx_nba_player_game_stubs_team_date
+              ON nba_player_game_stubs (team_key, game_date DESC)
             """
         )
     )

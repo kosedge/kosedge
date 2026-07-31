@@ -221,7 +221,7 @@ def nba_health() -> Dict[str, Any]:
             "worker_build_id": NBA_WORKER_BUILD_ID,
             "projections_stored": proj_count,
             "simulator": "possession_monte_carlo",
-            "phase": "phase0",
+            "phase": "phase1",
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"nba_health_failed: {exc}") from exc
@@ -411,8 +411,27 @@ def nba_fair_lines(
             "lines": lines,
             "slate_status": slate_status,
             "message": message,
-            "phase": "phase0",
+            "phase": "phase1",
         }
+    finally:
+        session.close()
+
+
+@router.get("/ops/inventory")
+def nba_ops_inventory() -> Dict[str, Any]:
+    """Live Postgres truth for NBA games/odds/model tables (Phase 1 verify)."""
+    from src.tasks import collect_nba_db_inventory
+
+    session = SessionLocal()
+    try:
+        inv = collect_nba_db_inventory(session)
+        session.commit()
+        inv["worker_build_id"] = NBA_WORKER_BUILD_ID
+        inv["phase"] = "phase1"
+        return inv
+    except Exception as exc:
+        session.rollback()
+        raise HTTPException(status_code=500, detail=f"nba_inventory_failed: {exc}") from exc
     finally:
         session.close()
 

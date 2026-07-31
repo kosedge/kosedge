@@ -55,4 +55,6 @@ def test_enterprise_report_stub() -> None:
     )
     assert report["sport"] == "nba"
     assert report["publish_policy"]["props"] == "queued_until_mainlines_honest"
-    assert report["data_policy"]["odds_api_historical_repull"] is False
+    assert "targeted_mainlines_only_if_empty" in str(
+        report["data_policy"]["odds_api_historical_repull"]
+    )

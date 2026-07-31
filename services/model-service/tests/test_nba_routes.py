@@ -132,7 +132,7 @@ def test_nba_health_and_fair_lines_empty_slate(monkeypatch) -> None:
     body = health.json()
     assert body["ok"] is True
     assert body["sport"] == "nba"
-    assert body["phase"] == "phase0"
+    assert body["phase"] == "phase1"
     assert "worker_build_id" in body
     assert body["worker_build_id"].startswith("nba-poss-sim-")
 
@@ -147,7 +147,7 @@ def test_nba_health_and_fair_lines_empty_slate(monkeypatch) -> None:
         "schema_not_ready",
     }
     assert "model_version" in payload
-    assert payload["phase"] == "phase0"
+    assert payload["phase"] == "phase1"
 
 
 def test_nba_fair_lines_shape_with_rows(monkeypatch) -> None:
@@ -211,5 +211,9 @@ def test_nba_router_registered() -> None:
     assert "/nba/health" in paths
     assert "/nba/fair-lines" in paths
     assert "/nba/simulations/demo" in paths
+    assert "/nba/ops/inventory" in paths
     assert "/api/jobs/run-nba-simulations" in paths
     assert "/api/jobs/pull-nba-context" in paths
+    assert "/api/jobs/pull-nba-season-ingest" in paths
+    assert "/api/jobs/run-nba-phase1-bootstrap" in paths
+    assert "/api/jobs/nba-inventory" in paths

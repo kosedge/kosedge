@@ -1,17 +1,18 @@
 # NBA Model Build Plan
 
-**Status:** Phase 0 scaffold shipped · Phase 1 ingest started  
-**Canary / worker_build_id:** `nba-poss-sim-20260731-phase0b`  
+**Status:** Phase 1 in progress (ingest + features + inventory + densify path)  
+**Canary / worker_build_id:** `nba-poss-sim-20260731-phase1`  
 **Default model version:** `nba-v1-poss-sim`  
 **Prod web branch:** `deploy-vercel`  
-**Model service:** Railway (`scripts/deploy-railway-model-service.sh`)
+**Model service:** Railway brave-art (`scripts/deploy-railway-model-service.sh` / GH Actions)
 
 ## Architecture (locked)
 
 - Mirror NFL matchup sim + MLB pitch-by-pitch philosophy.
 - **v1 = possession-level Monte Carlo** → ML / spread / total distributions.
-- Typed **event-PBP interfaces** (`PossessionEvent`, `PossessionEventType`, shot/foul/rebound/FT) under the hood so chains deepen without rewrite.
-- No college props. Do **not** burn Odds API credits on historical re-pull (~3M reserved for live). Market blend reads existing `odds_snapshots` only.
+- Typed **event-PBP interfaces** under the hood.
+- No college props. No fake KEI. Props publish deferred to Phase 3.
+- Odds: read owned `odds_snapshots` first; **targeted** historical densify only if NBA mainlines empty, hard credit cap (~200–400k), leave ≥1.5M for live.
 
 ## Phase 0 — Scaffold (DONE)
 
@@ -19,53 +20,62 @@
 |-------------|----------|
 | `NbaGameInputs` + possession MC | `services/model-service/src/services/nba_possession_simulator.py` |
 | Schema ensure | `services/model-service/src/services/nba_schema.py` |
-| Routes: health, fair-lines, demo/sim, ops | `services/model-service/src/routes/nba.py` |
-| Celery `run_nba_market_simulations` + canary | `services/model-service/src/tasks.py` |
-| Router registration | `main.py`, `routes/__init__.py`, `celery_app.py`, beat schedule |
-| Pro desk wired to real API | `/pro/nba/fair-lines`, `lib/nba-fair-lines.ts`, `resolve-kei-lines.ts` |
-| Tests | `tests/test_nba_possession_simulator.py`, `tests/test_nba_routes.py` |
+| Routes / Celery / Pro desk | `/nba/*`, `tasks.py`, `/pro/nba/fair-lines` |
+| Canary | `nba-poss-sim-20260731-phase0b` @ SHA `514ca97` |
 
-Fair-lines empty slate is labeled honestly (`slate_status: offseason_empty | no_projections_yet`).
-
-## Phase 1 — Ingest + features (IN PROGRESS)
+## Phase 1 — Ingest + features (THIS PASS)
 
 | Deliverable | Location / notes |
 |-------------|------------------|
-| stats.nba.com scoreboard / box / PBP | `services/model-service/src/services/nba_data.py` |
-| Schedule ingest task | `pull_nba_schedule_ingest` → `nba_games_ingest` |
-| PBP → possessions | `derive_possessions_from_pbp` → `nba_possessions` |
-| Rolling pace / ORtg / DRtg / 3PT | `materialize_nba_team_rolling_features` → `nba_team_rolling_features` |
-| Context assemble | `pull_nba_context_snapshot` → `nba_game_context` |
-| SportsDataIO | Optional only if keys already present |
+| Foundation SQL | `infra/db/045_nba_model_foundation.sql` (+ runtime `ensure_nba_model_tables`) |
+| Season ingest (leaguegamelog) | `pull_nba_season_ingest` → `nba_games_ingest` + `nba_team_game_features` |
+| Rolling pace/ORtg/DRtg/3PT/rest | `materialize_nba_team_rolling_features` → `nba_team_rolling_features` |
+| Player minutes/usage stubs | `nba_player_game_stubs` (not published) |
+| Context → sim ratings | `pull_nba_context_snapshot` uses rolling features + rest |
+| Inventory truth | `GET /nba/ops/inventory`, `GET /api/jobs/nba-inventory` |
+| Targeted odds densify | `pull_nba_historical_odds_densify` (skip if owned) |
+| Thin walkforward | `run_nba_walkforward_sample` |
+| Bootstrap orchestration | `run_nba_phase1_bootstrap` / `POST /api/jobs/run-nba-phase1-bootstrap` |
 
-Availability/rest from public endpoints: rest_days columns exist on context; empirical rest tables next.
+### DB inventory note (critical)
+
+Cloud-agent `RAILWAY_TOKEN` is a **joyful-clarity** project token. That Postgres has **0 public tables** and is **not** the brave-art model-service warehouse. Live NBA odds/games counts must be read from model-service:
+
+```bash
+curl -sS https://model-service-production-e253.up.railway.app/nba/ops/inventory
+curl -sS https://model-service-production-e253.up.railway.app/api/jobs/nba-inventory
+```
+
+Document before/after counts from those endpoints into the enterprise grade report.
+
+### Bootstrap
+
+```bash
+# After Railway deploy of phase1 canary:
+curl -sS -X POST 'https://model-service-production-e253.up.railway.app/api/jobs/run-nba-phase1-bootstrap?max_credit_spend=300000&walkforward_games=60'
+```
 
 ## Phase 2 — Calibrate
 
-1. Fit possession rates + pace; walkforward vs closing spread/total from existing `odds_snapshots`.
-2. Market blend + thin-sample rules (NFL lessons already stubbed in simulator).
-3. Publish policy; nightly assemble → sim → persist (beat jobs registered).
+1. Fit possession rates + pace; walkforward vs closing spread/total.
+2. Market blend + thin-sample rules.
+3. Publish policy; nightly assemble → sim → persist.
 4. Metrics → `data/ops/nba-model-enterprise-grade-report.md`.
 
 ## Phase 3 — Props (ONLY after mainlines honest)
 
-- Reuse existing NBA prop snapshots; role/minutes integrity; no cosmetic nudges.
-- Stub/queue until Phase 2 incomplete — do not rush fake props.
+- Reuse NBA prop snapshots; role/minutes integrity; no cosmetic nudges.
 
 ## Verify
 
 ```bash
-# Model service
 curl -sS https://model-service-production-e253.up.railway.app/nba/health
 curl -sS https://model-service-production-e253.up.railway.app/nba/fair-lines
-curl -sS -X POST 'https://model-service-production-e253.up.railway.app/nba/simulations/demo?simulations=800&seed=42'
-
-# Local unit tests
-cd services/model-service && python -m pytest tests/test_nba_possession_simulator.py tests/test_nba_routes.py -q
+curl -sS https://model-service-production-e253.up.railway.app/nba/ops/inventory
+cd services/model-service && python -m pytest tests/test_nba_possession_simulator.py tests/test_nba_routes.py tests/test_nba_data.py -q
 ```
 
 ## Constraints
 
-- Research-first UI copy.
+- Research-first UI copy. Preserve NFL/MLB.
 - Preserve DeploymentRecovery / BootShell / SportProShell.
-- Restore `data_platform_nfl` if vendor sync dirties.

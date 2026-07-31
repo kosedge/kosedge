@@ -122,8 +122,10 @@ def build_enterprise_report_stub(
             "props": "queued_until_mainlines_honest",
         },
         "data_policy": {
-            "odds_api_historical_repull": False,
-            "market_blend_source": "existing_odds_snapshots_only",
-            "primary_ingest": "stats.nba.com",
+            "odds_api_historical_repull": (
+                "targeted_mainlines_only_if_empty_with_credit_cap"
+            ),
+            "market_blend_source": "existing_odds_snapshots_plus_targeted_densify",
+            "primary_ingest": "stats.nba.com/leaguegamelog",
         },
     }
