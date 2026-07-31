@@ -7908,7 +7908,7 @@ def run_nba_market_simulations(
                 JOIN leagues l ON l.id = s.league_id
                 JOIN teams home ON home.id = g.home_team_id
                 JOIN teams away ON away.id = g.away_team_id
-                LEFT JOIN nba_game_context c ON c.game_id = g.id
+                LEFT JOIN nba_game_context c ON c.game_id = g.id::text
                 WHERE l.code = 'nba'
                   AND g.game_date = :game_date
                 ORDER BY g.start_time NULLS LAST
@@ -8623,7 +8623,13 @@ def run_nba_phase2_calibrate(
         apply_market_blend=False,
     )
     context = pull_nba_context_snapshot(days_ahead=3)
-    sims = run_nba_market_simulations(simulations=2000)
+    sims: Dict[str, Any]
+    try:
+        # Offseason: daily cycle skips empty slate; calibrate still attempts once.
+        sims = run_nba_market_simulations(simulations=2000)
+    except Exception as exc:
+        log.exception("Phase2 calibrate simulations failed (non-fatal)")
+        sims = {"status": "error", "error": str(exc)[:500]}
     inventory_after = nba_db_inventory()
     return {
         "status": "ok",

@@ -160,7 +160,7 @@ def _fetch_upcoming_games(session: Any, target_date: date) -> List[Dict[str, Any
                 JOIN leagues l ON l.id = s.league_id
                 JOIN teams home ON home.id = g.home_team_id
                 JOIN teams away ON away.id = g.away_team_id
-                LEFT JOIN nba_game_context c ON c.game_id = g.id
+                LEFT JOIN nba_game_context c ON c.game_id = g.id::text
                 WHERE l.code = 'nba'
                   AND g.game_date = :game_date
                 ORDER BY g.start_time NULLS LAST
@@ -276,7 +276,7 @@ def nba_fair_lines(
                           mp.model_version,
                           mp.created_at AS projected_at
                         FROM nba_market_projections mp
-                        LEFT JOIN games g ON g.id = mp.game_id
+                        LEFT JOIN games g ON g.id::text = mp.game_id
                         LEFT JOIN teams home ON home.id = g.home_team_id
                         LEFT JOIN teams away ON away.id = g.away_team_id
                         WHERE mp.model_version = :model_version
@@ -307,7 +307,7 @@ def nba_fair_lines(
                           mp.model_version,
                           mp.created_at AS projected_at
                         FROM nba_market_projections mp
-                        LEFT JOIN games g ON g.id = mp.game_id
+                        LEFT JOIN games g ON g.id::text = mp.game_id
                         LEFT JOIN teams home ON home.id = g.home_team_id
                         LEFT JOIN teams away ON away.id = g.away_team_id
                         WHERE mp.model_version = :model_version
@@ -520,8 +520,8 @@ def nba_run_single_game_simulation(
                     JOIN leagues l ON l.id = s.league_id
                     JOIN teams home ON home.id = g.home_team_id
                     JOIN teams away ON away.id = g.away_team_id
-                    LEFT JOIN nba_game_context c ON c.game_id = g.id
-                    WHERE l.code = 'nba' AND g.id = :game_id
+                    LEFT JOIN nba_game_context c ON c.game_id = g.id::text
+                    WHERE l.code = 'nba' AND g.id::text = :game_id
                     LIMIT 1
                     """
                 ),
