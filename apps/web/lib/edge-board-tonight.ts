@@ -1,13 +1,10 @@
-import { headers } from "next/headers";
 import type {
   FlatEdgeBoardRow,
   LegacyEdgeBoardRow,
 } from "@/components/EdgeBoard";
 import { flatRowsToLegacy } from "@/components/EdgeBoard";
-import { env } from "@/lib/config/env";
-import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { getSport, SPORTS } from "@/lib/sports";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 /** Build a URL slug from away/home team names (e.g. "Duke", "UNC" -> "duke-unc"). */
 export function slugifyGame(away: string, home: string): string {
@@ -29,53 +26,16 @@ export function tonightSlug(sport: string, away: string, home: string): string {
   return `${sport}-${slugifyGame(away, home)}`;
 }
 
-async function getRequestOrigin(): Promise<string> {
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const proto = h.get("x-forwarded-proto") ?? "http";
-  return `${proto}://${host}`;
-}
-
-type EdgeBoardApiResponse =
-  | FlatEdgeBoardRow[]
-  | { rows: FlatEdgeBoardRow[]; cached?: boolean; ttl?: number }
-  | { error: string; [k: string]: unknown };
-
-/** Fetch edge board flat rows for a sport (same as edge board page: API + KEI merge). */
+/** Fetch edge board flat rows for a sport (direct assemble — no self-HTTP). */
 export async function getEdgeBoardRows(
   sport: string,
 ): Promise<FlatEdgeBoardRow[]> {
-  const origin = await getRequestOrigin();
-  const headersObj: Record<string, string> = { accept: "application/json" };
-  if (env.INTERNAL_API_SECRET)
-    headersObj["x-kosedge-secret"] = env.INTERNAL_API_SECRET;
-
-  let res: Response;
+  if (!getSport(sport)) return [];
   try {
-    res = await upstreamFetch(`${origin}/api/edge-board/${sport}/today`, {
-      cache: "no-store",
-      headers: headersObj,
-      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
-    });
+    return await loadAssembledEdgeBoardRows(sport);
   } catch {
     return [];
   }
-
-  if (!res.ok) return [];
-
-  const json = (await res.json()) as EdgeBoardApiResponse;
-  let rows: FlatEdgeBoardRow[] = [];
-  if (Array.isArray(json)) rows = json;
-  else if (
-    json &&
-    typeof json === "object" &&
-    "rows" in json &&
-    Array.isArray((json as { rows?: unknown }).rows)
-  ) {
-    rows = (json as { rows: FlatEdgeBoardRow[] }).rows;
-  }
-
-  return assembleEdgeBoardRows(sport, rows);
 }
 
 export type TonightGame = {

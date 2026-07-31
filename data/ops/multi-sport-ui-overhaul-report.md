@@ -1,28 +1,28 @@
 # Multi-Sport UI Overhaul — Progress Report
 
-**Branch:** `cursor/multi-sport-ui-shell-a93a` → `deploy-vercel`  
+**Branch:** `cursor/multi-sport-densify-37e9` → `deploy-vercel`  
 **Last updated:** 2026-07-31  
 **Philosophy:** “I give the info, you make the picks.”  
-**PR:** https://github.com/kosedge/kosedge/pull/33
+**PR #33 (merged):** https://github.com/kosedge/kosedge/pull/33 — merge SHA `c03d3e40ae2d2d233a27214b0716aec39e853ddf`  
+**Prod deploy:** Vercel Production `kosedge-3bpoiiiy3` (GitHub deployment id `5695853078`)
 
-## Slice 1 shipped — Shared SportProShell + Overview pattern
+## Slice 1–3 shipped — Shared SportProShell + Overview pattern
 
-### Foundation
+See PR #33 history. Foundation: `SportProShell` / `SportProHeader`, per-sport nav IA, Overview/Edge Board/Odds consistency, college Tempo, NHL Goalie Desk, MLB desk chrome, mobile stacked cards.
+
+## Slice 4 shipped — Densify with real feeds (no fakes)
+
+### Data wiring
 | Item | Status | Notes |
 |------|--------|-------|
-| `SportProShell` / `SportProHeader` | DONE | Generalizes NflProShell across all sports |
-| `lib/sport-pro-nav.ts` | DONE | Per-sport primary + tool nav; NFL-only Wall Chart/Fantasy/DFS/Awards |
-| `[sport]/layout` + `mlb/layout` + `nfl/layout` | DONE | Consistent chrome |
-| Edge Board header+nav all sports | DONE | Overview + Slate + Odds CTAs; ET callout |
-| Odds Compare header+nav all sports | DONE | Mobile stacked cards + desktop table |
-| Edge Board mobile stacked cards | DONE | Replaced wide mobile table |
-| Sport Overview (NFL pattern) | DONE | At a Glance, Workflow, elevated Slate, no Article Highlights wall |
-| College props omitted | DONE | No props section/nav; `/props` redirects to Tempo |
-| Edges desk (generic) | DONE | Board-derived separations; honest empty state |
-| Tempo desk (NCAAM/CFB) | DONE | Tempo/Havoc research shell |
-| Goalie Desk (NHL) | DONE | Confirmation-framed shell |
-| Power Ratings shell (non-NFL) | DONE | SportProShell wrap |
-| KEI Lines sport pages | DONE | SportProShell wrap |
+| Direct edge-board assemble (no self-HTTP) | DONE | `loadAssembledEdgeBoardRows` for pages + `getTonightGames` |
+| Odds quota fallback snapshots | DONE | `edge_board_fallback_{cfb,nhl,mlb}.json` when Odds API empty |
+| MLB KEI from model-service fair-lines | DONE | `resolveKeiGames("mlb")` + board merge |
+| Fair Lines market context (no KEI) | DONE | Labeled “Market lines on the board” — never as fair prices |
+| Edges slate context | DONE | Quantified seps when present; market slate otherwise |
+| MLB Props research densify | DONE | Fair-line game slate + stake gate honesty |
+| NCAAM Power Ratings | DONE | `power_ratings_ncaam.json` (365 teams) live |
+| NCAAM Fair Lines KEI | DONE | `kei_lines_ncaam.json` |
 
 ### Completion matrix (sport × page)
 
@@ -31,73 +31,57 @@ Legend: **DONE** · **PARTIAL** · **BLOCKED** (feed missing)
 | Page | NFL | NCAAM | CFB | NBA | MLB | NHL | WNBA |
 |------|-----|-------|-----|-----|-----|-----|------|
 | Overview | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| Edge Board | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| KEI / Fair Lines | DONE | DONE* | PARTIAL | PARTIAL | DONE | PARTIAL | PARTIAL |
-| Edges | DONE | PARTIAL | PARTIAL | PARTIAL | DONE | PARTIAL | PARTIAL |
+| Edge Board | DONE | DONE | DONE† | PARTIAL | DONE† | DONE† | PARTIAL |
+| KEI / Fair Lines | DONE | DONE | PARTIAL‡ | PARTIAL‡ | DONE | PARTIAL‡ | PARTIAL‡ |
+| Edges | DONE | PARTIAL | PARTIAL‡ | PARTIAL‡ | DONE | PARTIAL‡ | PARTIAL‡ |
 | Compare Odds | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| Power Ratings | DONE | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL |
+| Power Ratings | DONE | DONE | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED |
 | Team Research Hub | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| Weekly/Daily Slate | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| Execution Monitor | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
+| Weekly/Daily Slate | DONE | DONE | DONE† | PARTIAL | DONE† | DONE† | PARTIAL |
+| Execution Monitor | DONE | DONE | DONE† | PARTIAL | DONE† | DONE† | PARTIAL |
 | Model / CLV | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| Sport desk (Tempo/Props/RL/Goalie) | DONE* | DONE | DONE | PARTIAL | DONE | DONE | PARTIAL |
+| Sport desk (Tempo/Props/RL/Goalie) | DONE* | DONE | DONE† | PARTIAL | DONE | DONE† | PARTIAL |
+| Props | DONE | n/a | n/a | PARTIAL | PARTIAL§ | PARTIAL | PARTIAL |
 
 \*NFL desk = Props/Fantasy/Wall Chart (kept).  
-\*NCAAM Fair Lines = DONE when `kei_lines_ncaam.json` is present (wired in slice 2).  
-PARTIAL elsewhere = honest shells / board-derived metrics; full model boards pending feed join (not faked).
+†Board rows from Odds live pull **or** shipped last-known snapshot when Odds API is out of credits.  
+‡Fair Lines / Edges show market board context; KEI model board still pending (not faked).  
+§MLB props: game slate from fair-lines; player-prop stake gate remains off.
 
-## Slice 2 shipped — Slate / Execution / Teams / Fair Lines data
+### Remaining PARTIAL / BLOCKED
 
-- Slate pages use live `getTonightGames` (no fake Away/Home placeholders)
-- Execution Monitor for all sports (NFL fair-lines diagnostic + board-derived for others)
-- Team Research detail: Overview + Edge Board nav, touch targets, sport desk links
-- Fair Lines surfaces KEI JSON when available (NCAAM live file)
-- Mobile stacked cards on slate/execution/fair-lines
+| Gap | Why |
+|-----|-----|
+| NBA / WNBA Edge Board + Slate density | No Odds snapshot + Odds API out of credits; no model-service fair-lines |
+| CFB / NHL / NBA / WNBA KEI Fair Lines | No `kei_lines_*.json` and no model-service board (except MLB/NFL/NCAAM) |
+| Non-NFL Edges quantified seps | Need KEI + market join; market slate shown honestly until then |
+| NBA / WNBA / NHL Props | No validated props feed on model-service |
+| Power Ratings CFB/NBA/MLB/NHL/WNBA | No `power_ratings_*.json` / engine export yet |
+| NHL Goalie starter names | Confirmation feed not connected — slate + totals only |
+| Tempo dedicated pace/havoc columns | Board totals used until college tempo feed join |
 
-## Slice 3 shipped — MLB desk chrome + tracking + mobile
+### Live smoke (www.kosedge.com) — post PR #33 merge
 
-- MLB Fair Lines / Edges headers match research-desk pattern (Overview + Edge Board)
-- Removed “Actionable” picks energy from MLB Edges title
-- MLB Fair Lines + Edges: mobile stacked cards
-- Non-NFL Tracking uses SportHubShell with honest CLV-pending state
-
-### Live URLs (www.kosedge.com — after deploy)
-
-- Overview: `/pro/{sport}/overview`
-- Edge Board: `/edge-board/{sport}`
-- Fair Lines: `/pro/{sport}/fair-lines` (MLB/NFL dedicated)
-- Edges: `/pro/{sport}/edges` (MLB/NFL dedicated)
-- Tempo: `/pro/ncaam/tempo`, `/pro/cfb/tempo`
-- Goalie Desk: `/pro/nhl/goalies`
-- Teams: `/pro/{sport}/teams`
-- Slate: `/pro/{sport}/slate/today`
-- Odds: `/odds/{sport}`
-- Power: `/pro/power-ratings/{sport}`
-- KEI: `/pro/kei-lines/{sport}`
-
-### Local smoke (127.0.0.1:3000) — 2026-07-31
-
-All sports × Overview / Edge Board / Fair Lines / Edges / Teams / Slate / Odds / Power Ratings → **HTTP 200**, logo present, Overview + Edge Board nav present, no Application errors.
-
-| Check | Result |
-|-------|--------|
-| NBA Overview At a Glance / Workflow | Present; no Article Highlights; no Wall Chart |
-| NFL Overview Wall Chart | Present (NFL-only preserved) |
-| NCAAM Fair Lines KEI file | “KEI projections on file” (38 games) |
-| College `/props` | Redirects to `/tempo` (NEXT_REDIRECT 307) |
-| NBA `/tempo` | 404 (college-only desk) |
-| NHL Goalie Desk | 200 |
-| Sport hub chips on Edge Board | CBB CFB MLB NBA NFL NHL WNBA |
-
-Vercel preview for PR #33 is SSO-gated; production URLs land after merge to `deploy-vercel`.
-
-### Next slices
-1. Merge PR #33 → `deploy-vercel` when ready  
-2. Wire remaining Fair Lines/Edges when model boards exist (NBA/NHL/WNBA/CFB)  
-3. Props densify NBA/WNBA/MLB where feeds support  
-4. Power ratings densify non-NFL  
-5. Final www + mobile viewport smoke on production
+| Route | HTTP | SportProShell / logo / nav |
+|-------|------|----------------------------|
+| `/pro/nfl/overview` | 200 | At a Glance, Workflow, Wall Chart (NFL-only), logo |
+| `/pro/ncaam/overview` | 200 | At a Glance, Workflow, Tempo, logo |
+| `/pro/cfb/overview` | 200 | At a Glance, Workflow, logo |
+| `/pro/nba/overview` | 200 | At a Glance, Workflow, logo |
+| `/pro/mlb/overview` | 200 | At a Glance, Workflow, Run Line, logo |
+| `/pro/nhl/overview` | 200 | At a Glance, Workflow, logo |
+| `/pro/wnba/overview` | 200 | At a Glance, Workflow, logo |
+| `/edge-board/{sport}` ×7 | 200 | Overview + Edge Board nav; not SSO-gated |
+| `/pro/{sport}/fair-lines` ×7 | 200 | NCAAM KEI live; NBA/CFB honest “Model board pending” |
 
 ### Preserved
 - DeploymentRecovery, BootShell, logo paths, upstream timeouts  
 - NFL-only Wall Chart / Fantasy / DFS / Awards / Depth Charts / Futures / Prediction Markets
+
+### Next slices
+1. Replenish Odds API credits / raise tier — restores live Open/Best for all sports  
+2. Export KEI boards for CFB/NBA/NHL/WNBA when engines exist  
+3. Props boards for NBA/WNBA/MLB when feeds clear validation  
+4. Power-ratings exports for non-NCAAM/non-NFL  
+5. Goalie confirmation feed join  
+6. Refresh edge_board_fallback_*.json on a cadence while Odds quota is tight

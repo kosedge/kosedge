@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
+import { getTonightGames } from "@/lib/edge-board-tonight";
+import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import {
   resolveSportKey,
@@ -12,7 +14,7 @@ const SPORT_PROPS_COPY: Record<string, string> = {
   nba: "NBA player props (points, rebounds, assists, threes) stage here once the props board is wired.",
   nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation.",
   wnba: "WNBA player props stage here once usage feeds clear validation.",
-  mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch.",
+  mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
   cfb: "College football props remain data-pending for soft launch.",
   ncaam: "College basketball props remain data-pending for soft launch.",
 };
@@ -38,6 +40,11 @@ export default async function PropsPage({
     (sportKey ? SPORT_PROPS_COPY[sportKey] : undefined) ??
     `${sportName} props are staged for this hub pending model feed validation.`;
 
+  const boardGames =
+    sportKey === "mlb" ? [] : await getTonightGames(sportKey || "nba");
+  const mlbBoard =
+    sportKey === "mlb" ? await fetchMlbFairLines() : null;
+
   return (
     <SportHubShell
       sportKey={sportKey}
@@ -60,6 +67,13 @@ export default async function PropsPage({
           {propsEnabled ? "Props board pending" : "Coming soon"}
         </p>
         <p className="mt-2 text-sm text-kos-text/70 sm:text-base">{detail}</p>
+        {sportKey === "mlb" && mlbBoard ? (
+          <p className="mt-3 text-sm text-kos-text/60">
+            {mlbBoard.count > 0
+              ? `${mlbBoard.count} MLB fair-line games available for game-level research (${mlbBoard.modelVersion || "model"}). Player props stay research-gated — no invented prop cards.`
+              : "No MLB fair-line games on the model board for this date yet."}
+          </p>
+        ) : null}
         <p className="mt-4 text-sm text-kos-text/60">
           NFL props are live under the NFL hub. This surface stays
           sport-specific — it will not redirect you into NFL language or
@@ -67,7 +81,9 @@ export default async function PropsPage({
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
-            href={`${base}/fair-lines`}
+            href={
+              sportKey === "mlb" ? "/pro/mlb/fair-lines" : `${base}/fair-lines`
+            }
             className="inline-flex rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
           >
             Fair lines path →
@@ -80,6 +96,65 @@ export default async function PropsPage({
           </Link>
         </div>
       </div>
+
+      {boardGames.length > 0 ? (
+        <section className="mt-6">
+          <h2 className="text-lg font-semibold text-kos-text">
+            Slate context (not props)
+          </h2>
+          <p className="mt-1 text-sm text-kos-text/65">
+            Live board matchups while player-prop feeds finish validation. No
+            fabricated prop numbers.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {boardGames.slice(0, 9).map((g) => (
+              <div
+                key={g.slug}
+                className="rounded-xl border border-white/10 bg-black/35 p-4"
+              >
+                <div className="text-sm font-semibold text-kos-text">
+                  {g.row.teamA?.name ?? "Away"} @ {g.row.teamB?.name ?? "Home"}
+                </div>
+                <p className="mt-2 text-xs text-kos-text/60">
+                  Total{" "}
+                  {g.row.bestOU?.top?.label ?? g.row.keiOU?.top?.label ?? "—"}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {sportKey === "mlb" && mlbBoard && mlbBoard.lines.length > 0 ? (
+        <section className="mt-6">
+          <h2 className="text-lg font-semibold text-kos-text">
+            Game slate (fair lines)
+          </h2>
+          <p className="mt-1 text-sm text-kos-text/65">
+            Model game baselines — use Fair Lines / Run Line desks for depth.
+            Props stay gated.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {mlbBoard.lines.slice(0, 9).map((line) => (
+              <Link
+                key={line.gameId}
+                href="/pro/mlb/fair-lines"
+                className="rounded-xl border border-white/10 bg-black/35 p-4 transition hover:border-kos-gold/40"
+              >
+                <div className="text-sm font-semibold text-kos-text">
+                  {line.awayTeam} @ {line.homeTeam}
+                </div>
+                <p className="mt-2 text-xs text-kos-text/60">
+                  Fair total{" "}
+                  <span className="tabular-nums text-kos-gold">
+                    {line.fairTotal ?? line.totalMean ?? "—"}
+                  </span>
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </SportHubShell>
   );
 }

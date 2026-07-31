@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import SportProHeader from "@/components/pro/SportProHeader";
 import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
-import { env } from "@/lib/config/env";
-import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import {
   resolveSportKey,
@@ -12,62 +10,19 @@ import {
   SPORTS,
 } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
-
-async function getRequestOrigin(): Promise<string> {
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const proto = h.get("x-forwarded-proto") ?? "http";
-  return `${proto}://${host}`;
-}
-
-type EdgeBoardApiResponse =
-  | EdgeBoardRow[]
-  | { rows: EdgeBoardRow[]; cached?: boolean; ttl?: number }
-  | { error: string; [k: string]: unknown };
 
 async function getRows(
   sport: string,
   slate: "live" | "all",
 ): Promise<EdgeBoardRow[]> {
-  // NFL: assemble directly from fair-lines + Odds (avoids empty Open/Best from stale API cache).
-  if (sport.toLowerCase() === "nfl") {
-    return assembleEdgeBoardRows("nfl", [], { slate });
-  }
-
-  const origin = await getRequestOrigin();
-  const headersObj: Record<string, string> = { accept: "application/json" };
-  if (env.INTERNAL_API_SECRET)
-    headersObj["x-kosedge-secret"] = env.INTERNAL_API_SECRET;
-
-  let res: Response;
+  // Direct assemble for every sport — avoids serverless self-HTTP + empty Odds pulls.
   try {
-    res = await upstreamFetch(`${origin}/api/edge-board/${sport}/today`, {
-      cache: "no-store",
-      headers: headersObj,
-      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
-    });
+    return await loadAssembledEdgeBoardRows(sport, { slate });
   } catch {
     return [];
   }
-
-  if (!res.ok) return [];
-
-  const json = (await res.json()) as EdgeBoardApiResponse;
-  let rows: EdgeBoardRow[] = [];
-  if (Array.isArray(json)) rows = json;
-  else if (
-    json &&
-    typeof json === "object" &&
-    "rows" in json &&
-    Array.isArray((json as { rows?: unknown }).rows)
-  ) {
-    rows = (json as { rows: EdgeBoardRow[] }).rows;
-  }
-
-  return assembleEdgeBoardRows(sport, rows);
 }
 
 export default async function EdgeBoardSportPage({

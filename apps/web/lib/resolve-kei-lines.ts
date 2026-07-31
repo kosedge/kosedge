@@ -1,12 +1,15 @@
 /**
  * Resolve KEI games for a sport. NFL prefers live Kosedge fair-lines
- * (spread_home / total_mean); falls back to kei_lines_nfl.json.
+ * (spread_home / total_mean); MLB prefers model-service fair-lines;
+ * others fall back to kei_lines_{sport}.json.
  */
 
 import "server-only";
 
 import type { KeiLineGame } from "@/lib/kei-lines";
 import { getKeiLines } from "@/lib/kei-lines";
+import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
+import { keiGamesFromMlbFairLines } from "@/lib/mlb-kei-from-fair-lines";
 import { fetchNflFairLines, type NflFairLineRow } from "@/lib/nfl-fair-lines";
 
 const NFL_KEI_SEASON = 2026;
@@ -29,7 +32,9 @@ export function keiGamesFromNflFairLines(
 export async function resolveKeiGames(
   sportKey: string,
 ): Promise<KeiLineGame[]> {
-  if (sportKey.toLowerCase() === "nfl") {
+  const sport = sportKey.toLowerCase();
+
+  if (sport === "nfl") {
     try {
       const board = await fetchNflFairLines({
         season: NFL_KEI_SEASON,
@@ -43,5 +48,17 @@ export async function resolveKeiGames(
       // fall through to file export
     }
   }
-  return getKeiLines(sportKey);
+
+  if (sport === "mlb") {
+    try {
+      const board = await fetchMlbFairLines();
+      if (board.lines.length > 0) {
+        return keiGamesFromMlbFairLines(board.lines);
+      }
+    } catch {
+      // fall through to file export
+    }
+  }
+
+  return getKeiLines(sport);
 }

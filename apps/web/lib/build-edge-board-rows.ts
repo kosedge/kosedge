@@ -2,6 +2,8 @@
  * Shared edge-board assembly.
  * NFL: pulls fair-lines + Odds API, persists odds via model-service fair-lines,
  * Live = current week slate, Full = all games with sportsbook odds.
+ * MLB: seeds from model-service fair-lines when Odds is empty.
+ * Other sports: Odds rows + KEI JSON merge, with shipped fallback snapshots.
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
@@ -9,6 +11,7 @@ import {
   ensureAllKeiGamesOnBoard,
   mergeKeiIntoEdgeBoardRows,
 } from "@/lib/edge-board-kei";
+import { loadEdgeBoardFallback } from "@/lib/edge-board-fallback";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
 import {
@@ -36,17 +39,25 @@ function countPriced(rows: EdgeBoardRow[]): number {
   return rows.filter((r) => Boolean(r.best || r.open)).length;
 }
 
-async function pullNflOddsRows(): Promise<EdgeBoardRow[]> {
+async function pullOddsRows(sport: string): Promise<EdgeBoardRow[]> {
   const keys = getOddsApiKeys();
   for (const key of keys) {
     try {
-      const rows = await fetchEdgeBoard("nfl", key);
+      const rows = await fetchEdgeBoard(sport, key);
       if (rows.length > 0) return rows;
     } catch {
       // try next key
     }
   }
   return [];
+}
+
+function withFallback(
+  sport: string,
+  oddsRows: EdgeBoardRow[],
+): EdgeBoardRow[] {
+  if (countPriced(oddsRows) > 0 || oddsRows.length > 0) return oddsRows;
+  return loadEdgeBoardFallback(sport);
 }
 
 async function assembleNflEdgeBoardRows(
@@ -57,7 +68,7 @@ async function assembleNflEdgeBoardRows(
 
   // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
   const [pulledOdds, fair] = await Promise.all([
-    pullNflOddsRows(),
+    pullOddsRows("nfl"),
     // Fair-lines pull also persists Odds API events into odds_snapshots for training.
     fetchNflFairLines({
       season: NFL_EDGE_BOARD_SEASON,
@@ -82,9 +93,7 @@ async function assembleNflEdgeBoardRows(
     rows = ensureAllKeiGamesOnBoard(odds, "nfl", keiGames);
     rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
     rows = sortNflEdgeBoardRows(rows);
-    return slate === "live"
-      ? filterNflOddsPostedRows(rows)
-      : filterNflOddsPostedRows(rows);
+    return filterNflOddsPostedRows(rows);
   }
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
@@ -97,16 +106,36 @@ async function assembleNflEdgeBoardRows(
   return filterNflOddsPostedRows(rows);
 }
 
+/**
+ * Pull live Odds (or fallback snapshot) and assemble KEI merge for any sport.
+ * Preferred path for SSR pages — avoids serverless self-HTTP to /api/edge-board.
+ */
+export async function loadAssembledEdgeBoardRows(
+  sportKey: string,
+  options?: AssembleEdgeBoardOptions,
+): Promise<EdgeBoardRow[]> {
+  const sport = sportKey.toLowerCase();
+  if (sport === "nfl") {
+    return assembleEdgeBoardRows("nfl", [], options);
+  }
+
+  const pulled = await pullOddsRows(sport);
+  const odds = withFallback(sport, pulled);
+  return assembleEdgeBoardRows(sport, odds, options);
+}
+
 export async function assembleEdgeBoardRows(
   sportKey: string,
   oddsRows: EdgeBoardRow[],
   options?: AssembleEdgeBoardOptions,
 ): Promise<EdgeBoardRow[]> {
-  if (sportKey.toLowerCase() === "nfl") {
+  const sport = sportKey.toLowerCase();
+  if (sport === "nfl") {
     return assembleNflEdgeBoardRows(oddsRows, options);
   }
 
-  const keiGames = await resolveKeiGames(sportKey);
-  const seeded = ensureAllKeiGamesOnBoard(oddsRows, sportKey, keiGames);
-  return mergeKeiIntoEdgeBoardRows(seeded, sportKey, keiGames);
+  const odds = withFallback(sport, oddsRows);
+  const keiGames = await resolveKeiGames(sport);
+  const seeded = ensureAllKeiGamesOnBoard(odds, sport, keiGames);
+  return mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);
 }
