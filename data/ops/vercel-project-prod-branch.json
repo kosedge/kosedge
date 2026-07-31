@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-07-31T16:05:00Z",
+  "domain": "www.kosedge.com",
+  "project": {
+    "name": "kosedge",
+    "id": "prj_C6AKSLK2gHV3G9A6TI5lml6MHIJe",
+    "team": "kos-edge-analytics-projects",
+    "teamId": "team_hmIaPkOAqXs6gr3Yt4pyEVqi"
+  },
+  "productionBranch": "deploy-vercel",
+  "gitTip": {
+    "branch": "origin/deploy-vercel",
+    "sha": "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
+    "includesOverhaul": [
+      "005ec21c41cd2c642f1fa48f3ae916b7673a8468",
+      "338a7109fe63c7ddf63f06e570d8791a144374a3",
+      "e6f0901f8e740fac108a0c20f1f9530fe220fc3b"
+    ],
+    "prs": [27, 28]
+  },
+  "productionDeployment": {
+    "id": "dpl_6pvq5hpLp5d3T4shmzaY8wJmd3Kv",
+    "sha": "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
+    "matchesGitTip": true,
+    "aliases": ["www.kosedge.com", "kosedge.com", "kosedge.vercel.app"]
+  },
+  "liveHtmlMarkers": {
+    "url": "https://www.kosedge.com/pro/nfl/overview",
+    "present": [
+      "Research desk",
+      "NFL research desk",
+      "NFL Overview",
+      "At a Glance",
+      "Open Live Edgeboard"
+    ]
+  },
+  "diagnosis": {
+    "wrongProductionBranch": false,
+    "tipNotDeployed": false,
+    "domainOnWrongProject": false,
+    "buildFailed": false,
+    "userLikelyIssue": "Homepage /pro previously redirected to legacy /pro/welcome (old multi-sport hub), so users on www.kosedge.com clicking Pro did not land on the NFL overhaul shell."
+  },
+  "entryPathFix": {
+    "proRootRedirect": "/pro/nfl/overview",
+    "homepageProCta": "/pro/nfl/overview"
+  }
+}

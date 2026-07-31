@@ -68,6 +68,29 @@ export default function ProWelcomeHub() {
 
   return (
     <section className="w-full">
+      <div className="mb-5 rounded-2xl border border-kos-gold/35 bg-kos-gold/10 px-5 py-4 sm:px-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
+          Research desk
+        </p>
+        <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight text-kos-text sm:text-2xl">
+              NFL Overview is live
+            </h2>
+            <p className="mt-1 text-sm text-kos-text/70">
+              Shared shell, At a Glance, Weekly Slate, and Edge Board — open the
+              NFL research desk.
+            </p>
+          </div>
+          <Link
+            href="/pro/nfl/overview"
+            className="shrink-0 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
+          >
+            Open NFL Overview →
+          </Link>
+        </div>
+      </div>
+
       {/* Hero: logo + branding + nav + sport links — no Edge Board */}
       <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 sm:p-7 shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">

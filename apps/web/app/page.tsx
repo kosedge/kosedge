@@ -110,7 +110,7 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/pro"
+              href="/pro/nfl/overview"
               className="px-4 sm:px-5 py-2.5 rounded-lg font-bold text-sm text-black bg-kos-gold hover:brightness-110 transition shadow-lg shadow-kos-gold/25"
             >
               Pro
@@ -260,7 +260,7 @@ export default function Home() {
                   View the Edge Board
                 </Link>
                 <Link
-                  href="/pro"
+                  href="/pro/nfl/overview"
                   className="px-4 py-3 rounded-xl bg-kos-gold text-black hover:brightness-110 transition text-center font-semibold shadow-lg shadow-kos-gold/20"
                 >
                   Pro
