@@ -19,6 +19,7 @@ import {
   fetchNflPreseasonOddsMarkets,
   type NflPreseasonMarketSnap,
 } from "@/lib/nfl-preseason-odds";
+import { safeUpperCase } from "@/lib/sports";
 
 export type NflSlateCard = {
   id: string;
@@ -74,7 +75,7 @@ export type NflWeeklySlate = {
 };
 
 function tagNote(row: Pick<NflFairLineRow, "publishTagSpread" | "publishTagTotal" | "seasonType">): string {
-  if ((row.seasonType ?? "").toUpperCase() === "PRE") {
+  if (safeUpperCase(row.seasonType) === "PRE") {
     return "Preseason — informational only; season PLAY tags stay blocked.";
   }
   const tags = [row.publishTagSpread, row.publishTagTotal].filter(Boolean);
@@ -85,22 +86,24 @@ function tagNote(row: Pick<NflFairLineRow, "publishTagSpread" | "publishTagTotal
 }
 
 function fairLineToCard(row: NflFairLineRow): NflSlateCard {
-  const seasonType = ((row.seasonType ?? "REG").toUpperCase() || "REG") as
+  const seasonType = (safeUpperCase(row.seasonType, "REG") || "REG") as
     | "PRE"
     | "REG"
     | "POST";
   const dateToken = (row.gameDate || row.startTime || "today").slice(0, 10);
-  const slug = `${row.awayAbbr}-${row.homeAbbr}`.toLowerCase();
+  const awayAbbr = safeUpperCase(row.awayAbbr, "AWAY");
+  const homeAbbr = safeUpperCase(row.homeAbbr, "HOME");
+  const slug = `${awayAbbr}-${homeAbbr}`.toLowerCase();
   return {
     id: row.gameId || `${seasonType}-${row.week}-${slug}`,
     seasonType,
     week: row.week,
     startTime: row.startTime,
     kickoffLabel: formatKickoff(row.startTime),
-    awayAbbr: row.awayAbbr,
-    homeAbbr: row.homeAbbr,
-    awayTeam: row.awayTeam,
-    homeTeam: row.homeTeam,
+    awayAbbr,
+    homeAbbr,
+    awayTeam: row.awayTeam || awayAbbr,
+    homeTeam: row.homeTeam || homeAbbr,
     marketSpread: formatSpread(
       row.bestSpreadHome ?? row.marketSpreadHome,
     ),
@@ -115,8 +118,8 @@ function fairLineToCard(row: NflFairLineRow): NflSlateCard {
     bestSpreadBook: row.bestSpreadBook,
     bestTotalBook: row.bestTotalBook,
     matchupHref: `/pro/nfl/matchups/${dateToken}/${slug}`,
-    previewAwayHref: `/pro/nfl/previews/${row.awayAbbr}`,
-    previewHomeHref: `/pro/nfl/previews/${row.homeAbbr}`,
+    previewAwayHref: `/pro/nfl/previews/${awayAbbr}`,
+    previewHomeHref: `/pro/nfl/previews/${homeAbbr}`,
     source: "fair-lines",
     note: tagNote(row),
   };
@@ -128,10 +131,12 @@ function espnToCard(
   oddsSnap?: NflPreseasonMarketSnap | null,
 ): NflSlateCard {
   const dateToken = (game.startTime || "today").slice(0, 10);
-  const slug = `${game.awayAbbr}-${game.homeAbbr}`.toLowerCase();
+  const awayAbbr = safeUpperCase(game.awayAbbr, "AWAY");
+  const homeAbbr = safeUpperCase(game.homeAbbr, "HOME");
+  const slug = `${awayAbbr}-${homeAbbr}`.toLowerCase();
   const campSpread = campReferenceSpreadHome(
-    game.homeAbbr,
-    game.awayAbbr,
+    homeAbbr,
+    awayAbbr,
     strength,
   );
   const marketSpreadNum =
@@ -158,10 +163,10 @@ function espnToCard(
     week: game.week,
     startTime: game.startTime,
     kickoffLabel: formatKickoff(game.startTime || null),
-    awayAbbr: game.awayAbbr,
-    homeAbbr: game.homeAbbr,
-    awayTeam: game.awayTeam,
-    homeTeam: game.homeTeam,
+    awayAbbr,
+    homeAbbr,
+    awayTeam: game.awayTeam || awayAbbr,
+    homeTeam: game.homeTeam || homeAbbr,
     marketSpread: formatSpread(marketSpreadNum),
     modelSpread: formatSpread(campSpread),
     marketTotal: formatTotal(marketTotalNum),
@@ -179,8 +184,8 @@ function espnToCard(
         ? "ESPN consensus"
         : null,
     matchupHref: `/pro/nfl/matchups/${dateToken}/${slug}`,
-    previewAwayHref: `/pro/nfl/previews/${game.awayAbbr}`,
-    previewHomeHref: `/pro/nfl/previews/${game.homeAbbr}`,
+    previewAwayHref: `/pro/nfl/previews/${awayAbbr}`,
+    previewHomeHref: `/pro/nfl/previews/${homeAbbr}`,
     source: hasCampRef ? "camp-ref" : "espn",
     note: campReferenceContextNote({
       hasMarket,
@@ -190,12 +195,14 @@ function espnToCard(
   };
 }
 
-function resolveDateToken(date: string): {
+function resolveDateToken(date: string | null | undefined): {
   mode: "today" | "week" | "iso";
   week?: number;
   iso?: string;
 } {
-  const token = date.trim().toLowerCase();
+  const token = String(date ?? "")
+    .trim()
+    .toLowerCase();
   if (!token || token === "today" || token === "latest") {
     return { mode: "today" };
   }

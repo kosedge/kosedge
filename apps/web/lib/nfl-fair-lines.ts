@@ -94,9 +94,9 @@ function toIsoOrNull(value: unknown): string | null {
 function normalizePublishTag(
   value: unknown,
 ): "PLAY" | "LEAN" | "PASS" | null {
-  const token = String(value ?? "")
-    .trim()
-    .toUpperCase();
+  if (value == null) return null;
+  const token = String(value).trim().toUpperCase();
+  if (!token) return null;
   if (token === "PLAY" || token === "LEAN" || token === "PASS") return token;
   return null;
 }

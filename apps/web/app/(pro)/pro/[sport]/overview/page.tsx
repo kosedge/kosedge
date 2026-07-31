@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSport } from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import { HIGHLIGHTED_GAMES } from "@/lib/featured-games";
 import { getTonightGames } from "@/lib/edge-board-tonight";
 import {
@@ -51,11 +51,11 @@ export default async function SportOverviewPage({
 }: {
   params: Promise<{ sport: string }>;
 }) {
-  const { sport: sportKey } = await params;
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const base = `/pro/${sportKey}`;
-  const edgeBoardHref = `/edge-board/${sportKey}`;
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const sportName = sportDisplayLabel(sportKey);
+  const base = `/pro/${sportKey || "nfl"}`;
+  const edgeBoardHref = `/edge-board/${sportKey || "nfl"}`;
   const content = buildSportOverviewContent(sportKey, sportName);
   const desk = getSportDeskConfig(sportKey);
 

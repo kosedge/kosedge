@@ -2,7 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
-import { getSport, supportsPropsFantasy } from "@/lib/sports";
+import {
+  resolveSportKey,
+  sportDisplayLabel,
+  supportsPropsFantasy,
+} from "@/lib/sports";
 
 const SPORT_PROPS_COPY: Record<string, string> = {
   nba: "NBA player props (points, rebounds, assists, threes) stage here once the props board is wired.",
@@ -18,16 +22,16 @@ export default async function PropsPage({
 }: {
   params: Promise<{ sport: string }>;
 }) {
-  const { sport: sportKey } = await params;
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
   if (sportKey === "nfl") redirect("/pro/nfl/props");
 
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const base = `/pro/${sportKey}`;
+  const sportName = sportDisplayLabel(sportKey);
+  const base = `/pro/${sportKey || "nfl"}`;
   const desk = getSportDeskConfig(sportKey);
   const propsEnabled = supportsPropsFantasy(sportKey);
   const detail =
-    SPORT_PROPS_COPY[sportKey] ??
+    (sportKey ? SPORT_PROPS_COPY[sportKey] : undefined) ??
     `${sportName} props are staged for this hub pending model feed validation.`;
 
   return (

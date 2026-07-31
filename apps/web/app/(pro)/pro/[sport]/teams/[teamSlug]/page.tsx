@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import TeamResearchDetail from "@/components/pro/team-research/TeamResearchDetail";
+import { resolveSportKey, safeUpperCase } from "@/lib/sports";
 import {
   findTeamInDirectory,
   getTeamDirectory,
@@ -25,9 +26,11 @@ export default async function SportTeamResearchPage({
 }: {
   params: Promise<{ sport: string; teamSlug: string }>;
 }) {
-  const { sport: sportKey, teamSlug } = await params;
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const teamSlug = String(resolved?.teamSlug ?? "");
   if (sportKey === "nfl") {
-    redirect(`/pro/nfl/teams/${teamSlug.toUpperCase()}/overview`);
+    redirect(`/pro/nfl/teams/${safeUpperCase(teamSlug, "TEAM")}/overview`);
   }
   if (!isTeamResearchSport(sportKey)) notFound();
 

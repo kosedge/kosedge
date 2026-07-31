@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSport } from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import {
   fetchNflFairLines,
   formatKickoff,
@@ -51,10 +51,10 @@ export default async function ExecutionPage({
 }: {
   params: Promise<{ sport: string }>;
 }) {
-  const { sport: sportKey } = await params;
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const base = `/pro/${sportKey}`;
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const sportName = sportDisplayLabel(sportKey);
+  const base = `/pro/${sportKey || "nfl"}`;
 
   if (sportKey === "nfl") {
     const fairLines = await fetchNflFairLines({

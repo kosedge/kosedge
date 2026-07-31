@@ -16,9 +16,12 @@ const KEI_CODES: Record<SportKey, string> = {
   wnba: "KEIWNBA",
 };
 
-export function getKeiCode(sportKey: string): string {
-  const key = sportKey.toLowerCase() as SportKey;
-  return KEI_CODES[key] ?? `KEI${sportKey.toUpperCase()}`;
+export function getKeiCode(sportKey: string | null | undefined): string {
+  const key = String(sportKey ?? "")
+    .trim()
+    .toLowerCase() as SportKey;
+  if (!key) return "KEI";
+  return KEI_CODES[key] ?? `KEI${key.toUpperCase()}`;
 }
 
 export function getKeiProductLabel(sportKey: string): string {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSport } from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import {
   getNflPowerRatingsBoard,
   getPowerRatings,
@@ -86,9 +86,9 @@ export default async function PowerRatingsSportPage({
   params: Promise<{ sport: string }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const { sport: sportKey } = await params;
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
+  const sportName = sportDisplayLabel(sportKey);
   const sp = searchParams ? await searchParams : {};
   const bundleRaw = Array.isArray(sp.bundle) ? sp.bundle[0] : sp.bundle;
 

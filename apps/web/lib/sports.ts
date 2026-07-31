@@ -118,8 +118,34 @@ export const SPORTS: {
   },
 ];
 
-export function getSport(key: string) {
+/** Null-safe uppercase for team/sport tokens from params or upstream payloads. */
+export function safeUpperCase(value: unknown, fallback = ""): string {
+  if (value == null) return fallback;
+  const token = String(value).trim();
+  if (!token) return fallback;
+  return token.toUpperCase();
+}
+
+/** Normalize a sport route/param token; empty when missing. */
+export function resolveSportKey(value: unknown, fallback = ""): string {
+  if (value == null) return fallback;
+  const token = String(value).trim().toLowerCase();
+  return token || fallback;
+}
+
+export function getSport(key: string | null | undefined) {
+  if (!key) return null;
   return SPORTS.find((s) => s.key === key) ?? null;
+}
+
+/** Display label that never throws on missing sport codes. */
+export function sportDisplayLabel(
+  key: string | null | undefined,
+  fallback = "Sport",
+): string {
+  const sportKey = resolveSportKey(key);
+  if (!sportKey) return fallback;
+  return getSport(sportKey)?.fullName ?? safeUpperCase(sportKey, fallback);
 }
 
 export function isProSport(key: string): boolean {

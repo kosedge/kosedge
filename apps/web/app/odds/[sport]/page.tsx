@@ -2,7 +2,11 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import NflProHeader from "@/components/pro/nfl/NflProHeader";
-import { getSport, SPORTS } from "@/lib/sports";
+import {
+  resolveSportKey,
+  sportDisplayLabel,
+  SPORTS,
+} from "@/lib/sports";
 import type { OddsComparisonRow } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
@@ -64,9 +68,8 @@ export default async function OddsComparePage({
     params && typeof (params as Promise<unknown>).then === "function"
       ? await (params as Promise<{ sport?: string }>)
       : ((params as { sport?: string }) ?? {});
-  const sportKey = String(resolved?.sport ?? "nfl");
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const sportKey = resolveSportKey(resolved?.sport, "nfl");
+  const sportName = sportDisplayLabel(sportKey);
 
   const origin = await getRequestOrigin();
   const { rows, books } = await getOddsData(sportKey, origin);

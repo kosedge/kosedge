@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
-import { getSport } from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 const SPORT_FAIR_LINES_COPY: Record<
   string,
@@ -40,15 +40,15 @@ export default async function FairLinesPage({
 }: {
   params: Promise<{ sport: string }>;
 }) {
-  const { sport: sportKey } = await params;
+  const resolved = await params;
+  const sportKey = resolveSportKey(resolved?.sport);
   if (sportKey === "nfl") redirect("/pro/nfl/fair-lines");
   if (sportKey === "mlb") redirect("/pro/mlb/fair-lines");
 
-  const sport = getSport(sportKey);
-  const sportName = sport?.fullName ?? sportKey.toUpperCase();
-  const base = `/pro/${sportKey}`;
+  const sportName = sportDisplayLabel(sportKey);
+  const base = `/pro/${sportKey || "nfl"}`;
   const desk = getSportDeskConfig(sportKey);
-  const copy = SPORT_FAIR_LINES_COPY[sportKey] ?? {
+  const copy = (sportKey ? SPORT_FAIR_LINES_COPY[sportKey] : undefined) ?? {
     markets: "spreads, totals, and moneylines",
     pendingNote: `${sportName} projections are not connected to this surface yet.`,
   };
