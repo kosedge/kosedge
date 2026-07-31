@@ -123,6 +123,14 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     footerCards: [
       ...SHARED_FOOTER("nfl"),
       {
+        href: "/pro/nfl/previews",
+        title: "2026 Season Previews",
+        description:
+          "All 32 writer-owned team previews with angles, win-total guides, and handicapper notes.",
+        cta: "Read the desk package →",
+        accent: "gold",
+      },
+      {
         href: "/pro/nfl/projections",
         title: "Projections Hub",
         description:

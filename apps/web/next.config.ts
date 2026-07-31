@@ -31,6 +31,17 @@ const nextConfig: NextConfig = {
   // simulation bundle was found yet") despite the files being committed.
   outputFileTracingIncludes: {
     "/pro/nfl/projections": ["../../data/ops/**/*"],
+    "/pro/nfl/previews": ["../../content/writers/season-previews-2026/**/*"],
+    "/pro/nfl/previews/[team]": [
+      "../../content/writers/season-previews-2026/**/*",
+    ],
+    "/pro/nfl/stats": ["../../data/ops/**/*"],
+    "/pro/nfl/slate/[date]": ["../../data/ops/**/*"],
+    "/pro/prediction-market": [
+      "../../data/ops/**/*",
+      "../../content/writers/season-previews-2026/**/*",
+    ],
+    "/pro/power-ratings/[sport]": ["../../data/ops/**/*"],
     "/pro/clv-tracker": ["../../data/ops/**/*"],
     "/pro/model-transparency": ["../../data/ops/**/*"],
   },

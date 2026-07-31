@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getSport } from "@/lib/sports";
 
 type SlateTemplate = {
@@ -8,12 +9,6 @@ type SlateTemplate = {
 };
 
 const SPORT_SLATE_TEMPLATES: Record<string, SlateTemplate> = {
-  nfl: {
-    market: "PHI -2.5 | 47.5",
-    model: "PHI -3.0 | 46.8",
-    writeup:
-      "This matchup is shaped by key-number pressure, pressure-rate mismatch, and late injury designations. Priority is execution quality around 3 and 7 as limits mature.",
-  },
   cfb: {
     market: "UTAH -4.0 | 52.5",
     model: "UTAH -4.8 | 51.7",
@@ -52,20 +47,27 @@ const SPORT_SLATE_TEMPLATES: Record<string, SlateTemplate> = {
   },
 };
 
-export default function SlatePage({
+export default async function SlatePage({
   params,
 }: {
-  params: { sport: string; date: string };
+  params: Promise<{ sport: string; date: string }>;
 }) {
-  const base = `/pro/${params.sport}`;
-  const sport = getSport(params.sport);
-  const sportName = sport?.fullName ?? params.sport.toUpperCase();
-  const template = SPORT_SLATE_TEMPLATES[params.sport];
+  const { sport: sportKey, date } = await params;
+
+  // NFL has a dedicated populated slate route.
+  if (sportKey === "nfl") {
+    redirect(`/pro/nfl/slate/${date || "today"}`);
+  }
+
+  const base = `/pro/${sportKey}`;
+  const sport = getSport(sportKey);
+  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const template = SPORT_SLATE_TEMPLATES[sportKey];
   const hasData = Boolean(template);
 
   const games = [
     {
-      slug: `${params.sport}-premium-placeholder`,
+      slug: `${sportKey}-premium-placeholder`,
       away: `${sportName} Away`,
       home: `${sportName} Home`,
       market: template?.market ?? "Market pending",
@@ -81,7 +83,7 @@ export default function SlatePage({
       <div className="flex items-end justify-between gap-6">
         <div>
           <h2 className="text-2xl font-semibold">
-            {sportName} Slate: {params.date}
+            {sportName} Slate: {date}
           </h2>
           <p className="mt-2 text-kos-text/70">
             {hasData
@@ -115,14 +117,13 @@ export default function SlatePage({
               </div>
 
               <Link
-                href={`${base}/matchups/${params.date}/${g.slug}`}
+                href={`${base}/matchups/${date}/${g.slug}`}
                 className="rounded-xl border border-kos-border bg-kos-surface/20 px-4 py-2 text-sm hover:border-kos-gold/40"
               >
                 {hasData ? "Open Matchup" : "Open Placeholder Brief"}
               </Link>
             </div>
 
-            {/* Collapsed by default */}
             <details className="mt-4">
               <summary className="cursor-pointer select-none text-sm text-kos-gold hover:text-edge-green">
                 View matchup context

@@ -340,6 +340,7 @@ export default async function NflTeamIntelViewPage({
         <div className="mt-5">
           <TeamPreviewSlot
             teamName={teamDisplayName(selectedTeam)}
+            teamCode={selectedTeam}
             writer={previewAssignment.writer}
             assignmentNote={previewAssignment.note}
             provisional={previewAssignment.provisional}
