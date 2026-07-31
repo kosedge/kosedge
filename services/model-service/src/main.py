@@ -46,6 +46,9 @@ TASK_RUN_NFL_DECOMPOSITION_DRIFT = "src.tasks.run_nfl_decomposition_drift_monito
 TASK_RUN_NFL_LAUNCH_HARDENING = "src.tasks.run_nfl_launch_hardening_cycle"
 TASK_NFL_PLAYER_BASELINES = "src.tasks.materialize_nfl_player_baseline_projections"
 TASK_NFL_PLAYER_PROPS = "src.tasks.materialize_nfl_player_props_edges"
+TASK_NFL_PLAYER_FEATURES = "src.tasks.materialize_nfl_player_projection_features"
+TASK_NFL_PLAYER_BOX_SIMS = "src.tasks.materialize_nfl_player_box_score_sims"
+TASK_NFL_PROPS_LAYER_REBUILD = "src.tasks.run_nfl_props_layer_rebuild"
 TASK_NFL_FANTASY = "src.tasks.materialize_nfl_fantasy_projections"
 TASK_NFL_PLAYER_CYCLE = "src.tasks.run_nfl_player_projection_cycle"
 TASK_NFL_PLAYER_PROP_MARKETS = "src.tasks.pull_nfl_player_prop_market_snapshots"
@@ -989,6 +992,75 @@ def job_run_nfl_player_baselines(
         return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_BASELINES}
     except Exception as e:
         log.exception("Failed to enqueue run-nfl-player-baselines")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-player-features")
+def job_run_nfl_player_features(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    replace_existing: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_PLAYER_FEATURES,
+            kwargs={"season": season, "week": week, "replace_existing": replace_existing},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_FEATURES}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-player-features")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-player-box-sims")
+def job_run_nfl_player_box_sims(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NFL_PLAYER_BOX_SIMS,
+            kwargs={"season": season, "week": week},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_BOX_SIMS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-player-box-sims")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nfl-props-layer-rebuild")
+def job_run_nfl_props_layer_rebuild(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    weeks: Optional[str] = Query(None, description="Comma-separated weeks"),
+    model_version: str = Query("nfl-player-v1"),
+    replace_features: bool = Query(True),
+    rematerialize_season_features: bool = Query(False),
+) -> Dict[str, Any]:
+    try:
+        week_list = None
+        if weeks:
+            week_list = sorted({int(part.strip()) for part in weeks.split(",") if part.strip()})
+        async_result = celery_app.send_task(
+            TASK_NFL_PROPS_LAYER_REBUILD,
+            kwargs={
+                "season": season,
+                "week": week,
+                "weeks": week_list,
+                "model_version": model_version,
+                "replace_features": replace_features,
+                "rematerialize_season_features": rematerialize_season_features,
+            },
+        )
+        return {
+            "task_id": async_result.id,
+            "task_name": TASK_NFL_PROPS_LAYER_REBUILD,
+            "season": season,
+            "week": week,
+            "weeks": week_list,
+        }
+    except Exception as e:
+        log.exception("Failed to enqueue run-nfl-props-layer-rebuild")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

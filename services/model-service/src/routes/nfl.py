@@ -40,6 +40,10 @@ MODEL_STATE_KEY = "nfl_active_model"
 TASK_EVAL_NFL_PROMOTION = "src.tasks.evaluate_nfl_model_promotion"
 TASK_NFL_PLAYER_BASELINES = "src.tasks.materialize_nfl_player_baseline_projections"
 TASK_NFL_PLAYER_PROPS = "src.tasks.materialize_nfl_player_props_edges"
+TASK_NFL_PLAYER_FEATURES = "src.tasks.materialize_nfl_player_projection_features"
+TASK_NFL_PLAYER_BOX_SIMS = "src.tasks.materialize_nfl_player_box_score_sims"
+TASK_NFL_PROPS_LAYER_REBUILD = "src.tasks.run_nfl_props_layer_rebuild"
+TASK_NFL_ENTERPRISE_WEEKLY_SHARPENING = "src.tasks.run_nfl_enterprise_weekly_sharpening_cycle"
 TASK_NFL_FANTASY = "src.tasks.materialize_nfl_fantasy_projections"
 TASK_NFL_FANTASY_DRAFT_RANKINGS = "src.tasks.materialize_nfl_fantasy_season_draft_rankings"
 TASK_NFL_AWARD_PROJECTIONS = "src.tasks.materialize_nfl_award_projections"
@@ -3920,6 +3924,157 @@ def nfl_projection_layer_readiness(
         return {"season": season, "week": week, "model_version": model_version, "overall_status": overall, "layers": layer_payload}
     finally:
         session.close()
+
+
+@router.get("/ops/player-layer-coverage")
+def nfl_player_layer_coverage(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+) -> Dict[str, Any]:
+    """Row counts for usage → features → baselines → box → props (diagnose upsert=0)."""
+    session = SessionLocal()
+    try:
+        week_filter = "AND week = :week" if week is not None else ""
+        params: Dict[str, Any] = {"season": int(season)}
+        if week is not None:
+            params["week"] = int(week)
+
+        def _count(table: str) -> int:
+            return int(
+                session.execute(
+                    text(f"SELECT COUNT(*)::int FROM {table} WHERE season = :season {week_filter}"),
+                    params,
+                ).scalar_one()
+                or 0
+            )
+
+        by_week = session.execute(
+            text(
+                """
+                SELECT week,
+                       (SELECT COUNT(*)::int FROM nfl_dp_player_usage_weekly u
+                          WHERE u.season = :season AND u.week = w.week) AS usage_rows,
+                       (SELECT COUNT(*)::int FROM nfl_player_projection_features_weekly f
+                          WHERE f.season = :season AND f.week = w.week) AS feature_rows,
+                       (SELECT COUNT(*)::int FROM nfl_player_projection_baselines b
+                          WHERE b.season = :season AND b.week = w.week) AS baseline_rows,
+                       (SELECT COUNT(*)::int FROM nfl_player_game_box_score_sims s
+                          WHERE s.season = :season AND s.week = w.week) AS box_rows,
+                       (SELECT COUNT(*)::int FROM nfl_player_prop_model_edges e
+                          WHERE e.season = :season AND e.week = w.week) AS prop_edge_rows
+                FROM (
+                  SELECT DISTINCT week FROM nfl_dp_player_usage_weekly WHERE season = :season
+                  UNION
+                  SELECT DISTINCT week FROM nfl_player_projection_features_weekly WHERE season = :season
+                  UNION
+                  SELECT DISTINCT week FROM nfl_player_projection_baselines WHERE season = :season
+                ) w
+                WHERE (:week IS NULL OR week = :week)
+                ORDER BY week
+                """
+            ),
+            {"season": int(season), "week": int(week) if week is not None else None},
+        ).mappings().all()
+
+        return {
+            "season": int(season),
+            "week": int(week) if week is not None else None,
+            "totals": {
+                "usage_rows": _count("nfl_dp_player_usage_weekly"),
+                "feature_rows": _count("nfl_player_projection_features_weekly"),
+                "baseline_rows": _count("nfl_player_projection_baselines"),
+                "box_rows": _count("nfl_player_game_box_score_sims"),
+                "prop_edge_rows": _count("nfl_player_prop_model_edges"),
+            },
+            "by_week": [dict(r) for r in by_week],
+            "diagnosis": (
+                "features_empty_baselines_will_upsert_zero"
+                if week is not None
+                and any(int(r.get("feature_rows") or 0) == 0 and int(r.get("usage_rows") or 0) >= 0 for r in by_week)
+                and all(int(r.get("feature_rows") or 0) == 0 for r in by_week)
+                else "ok"
+            ),
+        }
+    finally:
+        session.close()
+
+
+@router.post("/ops/materialize-player-features")
+def nfl_trigger_player_feature_materialization(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    replace_existing: bool = Query(True),
+) -> Dict[str, Any]:
+    task = celery_app.send_task(
+        TASK_NFL_PLAYER_FEATURES,
+        kwargs={
+            "season": int(season),
+            "week": int(week) if week is not None else None,
+            "replace_existing": bool(replace_existing),
+        },
+    )
+    return {
+        "task_id": task.id,
+        "task_name": TASK_NFL_PLAYER_FEATURES,
+        "season": season,
+        "week": week,
+        "replace_existing": replace_existing,
+    }
+
+
+@router.post("/ops/materialize-player-box-sims")
+def nfl_trigger_player_box_sim_materialization(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+) -> Dict[str, Any]:
+    task = celery_app.send_task(
+        TASK_NFL_PLAYER_BOX_SIMS,
+        kwargs={"season": int(season), "week": int(week) if week is not None else None},
+    )
+    return {
+        "task_id": task.id,
+        "task_name": TASK_NFL_PLAYER_BOX_SIMS,
+        "season": season,
+        "week": week,
+    }
+
+
+@router.post("/ops/rebuild-props-layers")
+def nfl_trigger_props_layer_rebuild(
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    weeks: Optional[str] = Query(
+        None,
+        description="Comma-separated weeks (e.g. 14,15,16,17). Overrides week when set.",
+    ),
+    model_version: str = Query("nfl-player-v1"),
+    replace_features: bool = Query(True),
+    rematerialize_season_features: bool = Query(False),
+) -> Dict[str, Any]:
+    week_list: Optional[List[int]] = None
+    if weeks:
+        week_list = sorted({int(part.strip()) for part in weeks.split(",") if part.strip()})
+    task = celery_app.send_task(
+        TASK_NFL_PROPS_LAYER_REBUILD,
+        kwargs={
+            "season": int(season),
+            "week": int(week) if week is not None else None,
+            "weeks": week_list,
+            "model_version": model_version,
+            "replace_features": bool(replace_features),
+            "rematerialize_season_features": bool(rematerialize_season_features),
+        },
+    )
+    return {
+        "task_id": task.id,
+        "task_name": TASK_NFL_PROPS_LAYER_REBUILD,
+        "season": season,
+        "week": week,
+        "weeks": week_list,
+        "model_version": model_version,
+        "replace_features": replace_features,
+        "rematerialize_season_features": rematerialize_season_features,
+    }
 
 
 @router.post("/ops/materialize-player-baselines")
