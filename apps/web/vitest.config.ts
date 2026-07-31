@@ -44,6 +44,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./"),
       "#prisma": path.resolve(__dirname, "./src/generated/prisma"),
+      // Next.js server boundary package is not installed for Vitest.
+      "server-only": path.resolve(__dirname, "./test/stubs/server-only.ts"),
     },
   },
 });

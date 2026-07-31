@@ -73,12 +73,15 @@ export default async function StatsPage({
             NFL League Stats
           </h1>
           <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
-            Weekly EPA / pass-rate intel is empty in the offseason. Showing 2026
-            preseason simulation strength table until in-season stats materialize.
+            <span className="font-semibold text-kos-gold/90">
+              Offseason fallback · preseason sim strength
+            </span>
+            . Weekly EPA / pass-rate intel is empty until 2026 weeks play — this
+            table is expected wins / playoff probs, not fake EPA.
           </p>
           <p className="mt-2 text-xs text-kos-text/60">
             Bundle {bundle?.bundleDirName ?? "unavailable"} · {rows.length}{" "}
-            teams
+            teams · switches to intel stats when weekly rows exist
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

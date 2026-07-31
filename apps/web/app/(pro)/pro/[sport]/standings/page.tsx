@@ -85,11 +85,15 @@ export default async function StandingsPage({
             NFL Standings
           </h1>
           <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
-            Prior-season final standings while 2026 weekly intel tables are
-            empty in the offseason. Use projections for 2026 race context.
+            <span className="font-semibold text-kos-gold/90">
+              Offseason fallback · {priorSeason} final
+            </span>
+            . 2026 weekly intel tables are empty until games complete — this is
+            not a live 2026 table. Use projections for race context.
           </p>
           <p className="mt-2 text-xs text-kos-text/60">
-            Season {priorSeason} final · {filtered.length} teams · source ESPN
+            Season {priorSeason} final · {filtered.length} teams · source ESPN ·
+            switches to model intel automatically when rows exist
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

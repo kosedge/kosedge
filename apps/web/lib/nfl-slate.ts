@@ -10,6 +10,15 @@ import {
   fetchEspnPreseasonSlate,
   type EspnNflGame,
 } from "@/lib/nfl-espn-schedule";
+import {
+  campReferenceContextNote,
+  campReferenceSpreadHome,
+  loadPreseasonStrengthMap,
+} from "@/lib/nfl-preseason-desk";
+import {
+  fetchNflPreseasonOddsMarkets,
+  type NflPreseasonMarketSnap,
+} from "@/lib/nfl-preseason-odds";
 
 export type NflSlateCard = {
   id: string;
@@ -25,6 +34,8 @@ export type NflSlateCard = {
   modelSpread: string;
   marketTotal: string;
   modelTotal: string;
+  /** UI label for the model/reference column (e.g. Model vs Camp ref). */
+  referenceLabel: "Model" | "Camp ref";
   publishTagSpread: "PLAY" | "LEAN" | "PASS" | null;
   publishTagTotal: "PLAY" | "LEAN" | "PASS" | null;
   spreadEdge: number | null;
@@ -34,7 +45,7 @@ export type NflSlateCard = {
   matchupHref: string;
   previewAwayHref: string;
   previewHomeHref: string;
-  source: "fair-lines" | "espn";
+  source: "fair-lines" | "espn" | "camp-ref";
   note: string;
 };
 
@@ -53,8 +64,12 @@ export type NflWeeklySlate = {
   diagnostics: {
     fairLineCount: number;
     preseasonCount: number;
+    campRefJoinedCount: number;
+    preseasonOddsStatus: string;
+    preseasonOddsJoinedCount: number;
     marketJoinedCount: number;
     oddsFeedStatus: string;
+    campBundle: string | null;
   };
 };
 
@@ -92,6 +107,7 @@ function fairLineToCard(row: NflFairLineRow): NflSlateCard {
     modelSpread: formatSpread(row.spreadHome),
     marketTotal: formatTotal(row.bestTotal ?? row.marketTotal),
     modelTotal: formatTotal(row.totalMean),
+    referenceLabel: "Model",
     publishTagSpread: row.publishTagSpread,
     publishTagTotal: row.publishTagTotal,
     spreadEdge: row.spreadEdge,
@@ -106,9 +122,36 @@ function fairLineToCard(row: NflFairLineRow): NflSlateCard {
   };
 }
 
-function espnToCard(game: EspnNflGame): NflSlateCard {
+function espnToCard(
+  game: EspnNflGame,
+  strength: ReturnType<typeof loadPreseasonStrengthMap>,
+  oddsSnap?: NflPreseasonMarketSnap | null,
+): NflSlateCard {
   const dateToken = (game.startTime || "today").slice(0, 10);
   const slug = `${game.awayAbbr}-${game.homeAbbr}`.toLowerCase();
+  const campSpread = campReferenceSpreadHome(
+    game.homeAbbr,
+    game.awayAbbr,
+    strength,
+  );
+  const marketSpreadNum =
+    oddsSnap?.bestSpreadHome ??
+    oddsSnap?.marketSpreadHome ??
+    game.marketSpreadHome;
+  const marketTotalNum =
+    oddsSnap?.bestTotal ?? oddsSnap?.marketTotal ?? game.marketTotal;
+  const hasMarket = marketSpreadNum != null || marketTotalNum != null;
+  const hasCampRef = campSpread != null;
+  const spreadEdge =
+    hasCampRef && marketSpreadNum != null
+      ? Math.round((campSpread! - marketSpreadNum) * 100) / 100
+      : null;
+  const marketBookLabel = oddsSnap
+    ? oddsSnap.bestSpreadBook ?? "Odds API PRE"
+    : game.marketDetail
+      ? "ESPN consensus"
+      : null;
+
   return {
     id: game.id,
     seasonType: game.seasonType,
@@ -119,22 +162,31 @@ function espnToCard(game: EspnNflGame): NflSlateCard {
     homeAbbr: game.homeAbbr,
     awayTeam: game.awayTeam,
     homeTeam: game.homeTeam,
-    marketSpread: formatSpread(game.marketSpreadHome),
-    modelSpread: "—",
-    marketTotal: formatTotal(game.marketTotal),
+    marketSpread: formatSpread(marketSpreadNum),
+    modelSpread: formatSpread(campSpread),
+    marketTotal: formatTotal(marketTotalNum),
+    // Honest: do not invent PRE totals from REG sims.
     modelTotal: "—",
+    referenceLabel: "Camp ref",
     publishTagSpread: null,
     publishTagTotal: null,
-    spreadEdge: null,
+    spreadEdge,
     totalEdge: null,
-    bestSpreadBook: game.marketDetail ? "ESPN consensus" : null,
-    bestTotalBook: game.marketTotal != null ? "ESPN consensus" : null,
+    bestSpreadBook: marketBookLabel,
+    bestTotalBook: oddsSnap
+      ? oddsSnap.bestTotalBook ?? marketBookLabel
+      : marketTotalNum != null
+        ? "ESPN consensus"
+        : null,
     matchupHref: `/pro/nfl/matchups/${dateToken}/${slug}`,
     previewAwayHref: `/pro/nfl/previews/${game.awayAbbr}`,
     previewHomeHref: `/pro/nfl/previews/${game.homeAbbr}`,
-    source: "espn",
-    note:
-      "Preseason board from ESPN schedule. Kos Edge fair-lines attach when sims cover PRE games.",
+    source: hasCampRef ? "camp-ref" : "espn",
+    note: campReferenceContextNote({
+      hasMarket,
+      hasCampRef,
+      bundleDirName: strength?.bundleDirName,
+    }),
   };
 }
 
@@ -158,14 +210,16 @@ export async function buildNflWeeklySlate(
 ): Promise<NflWeeklySlate> {
   const season = 2026;
   const resolved = resolveDateToken(dateToken);
+  const strength = loadPreseasonStrengthMap();
 
-  const [fairLines, preseasonGames] = await Promise.all([
+  const [fairLines, preseasonGames, preseasonOdds] = await Promise.all([
     fetchNflFairLines({
       season,
       daysAhead: 120,
       includePastDays: 2,
     }),
     fetchEspnPreseasonSlate({ year: season, weeks: [1, 2, 3, 4] }),
+    fetchNflPreseasonOddsMarkets(),
   ]);
 
   const fairCards = fairLines.lines.map(fairLineToCard);
@@ -194,7 +248,12 @@ export async function buildNflWeeklySlate(
       const ts = Date.parse(game.startTime);
       return Number.isFinite(ts) ? ts >= now - 6 * 3600_000 : true;
     })
-    .map(espnToCard);
+    .map((game) => {
+      const oddsSnap =
+        preseasonOdds.byMatchup.get(`${game.awayAbbr}@${game.homeAbbr}`) ??
+        null;
+      return espnToCard(game, strength, oddsSnap);
+    });
 
   // Prefer PRE week 1–2 as the immediate board before kickoff of REG.
   const preCards =
@@ -202,13 +261,22 @@ export async function buildNflWeeklySlate(
       ? upcomingPre.filter((card) => card.week === resolved.week)
       : upcomingPre.filter((card) => (card.week ?? 99) <= 2);
 
+  const campRefJoinedCount = preCards.filter(
+    (card) => card.source === "camp-ref",
+  ).length;
+  const preseasonOddsJoinedCount = preCards.filter((card) =>
+    Boolean(
+      preseasonOdds.byMatchup.get(`${card.awayAbbr}@${card.homeAbbr}`),
+    ),
+  ).length;
+
   const sections: NflWeeklySlate["sections"] = [];
   if (preCards.length > 0) {
     sections.push({
       key: "preseason",
       title: "Preseason board",
       subtitle:
-        "Hall of Fame / Weeks 1–2 from the league schedule. Market numbers when ESPN posts consensus; model fair-lines join as PRE sims publish.",
+        "Hall of Fame / Weeks 1–2 — book/ESPN market when posted, plus camp strength reference from REG expected-wins. Not a PRE-game sim; season PLAY tags stay blocked.",
       cards: preCards,
     });
   }
@@ -237,8 +305,12 @@ export async function buildNflWeeklySlate(
     diagnostics: {
       fairLineCount: fairLines.count,
       preseasonCount: preCards.length,
+      campRefJoinedCount,
+      preseasonOddsStatus: preseasonOdds.status,
+      preseasonOddsJoinedCount,
       marketJoinedCount: fairLines.diagnostics.marketJoinedCount,
       oddsFeedStatus: fairLines.diagnostics.oddsFeedStatus,
+      campBundle: strength?.bundleDirName ?? null,
     },
   };
 }

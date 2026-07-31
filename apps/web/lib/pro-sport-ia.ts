@@ -57,7 +57,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Weekly NFL workflow for the betting desk (KEI Lines → Edges → Props), key-number execution, matchup briefs, and governance checkpoints.",
+      "Preseason desk live: weekly slate with PRE market + camp strength refs, Training Camp Desk beats, 32 season previews, and the betting path (KEI Lines → Edges → Props).",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
@@ -202,19 +202,19 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Weekly Slate",
       subtitle:
-        "Move from macro board context into matchup-level detail and preview coverage.",
+        "Move from macro board context into matchup-level detail, camp cadence, and preview coverage.",
       links: [
         {
           href: "/pro/nfl/slate/today",
           label: "Weekly Slate",
-          hint: "Collapsed matchup cards with model reference context.",
+          hint: "PRE market + camp strength refs, then REG fair-lines with publish tags.",
           premium: true,
           status: "active",
         },
         {
-          href: "/pro/nfl/slate/today",
-          label: "Matchups",
-          hint: "Open the slate to drill into per-game matchup briefs.",
+          href: "/pro/nfl/camp",
+          label: "Training Camp Desk",
+          hint: "Beat map, public camp headlines, and writer coverage owners.",
           premium: true,
           status: "active",
         },
@@ -332,14 +332,14 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/standings",
           label: "Standings",
-          hint: "Division and conference race context with tiebreak outlook.",
+          hint: "2025 final standings until 2026 weekly intel materializes (labeled fallback).",
           premium: true,
           status: "active",
         },
         {
           href: "/pro/nfl/stats",
           label: "League Stats",
-          hint: "Weekly league-level production and situational context.",
+          hint: "Offseason: preseason sim strength table until EPA intel weeks exist.",
           premium: true,
           status: "active",
         },
@@ -353,7 +353,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/injuries",
           label: "Injuries",
-          hint: "Availability, return windows, and practice progression tracker.",
+          hint: "Latest available report week (may be prior-season until 2026 camp reports land).",
           premium: true,
           status: "active",
         },

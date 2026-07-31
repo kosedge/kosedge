@@ -123,12 +123,28 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     footerCards: [
       ...SHARED_FOOTER("nfl"),
       {
+        href: "/pro/nfl/camp",
+        title: "Training Camp Desk",
+        description:
+          "Beat map, public camp headlines, and writer ownership so the NFL section stays live daily into kickoff.",
+        cta: "Open camp desk →",
+        accent: "green",
+      },
+      {
         href: "/pro/nfl/previews",
         title: "2026 Season Previews",
         description:
           "All 32 writer-owned team previews with angles, win-total guides, and handicapper notes.",
         cta: "Read the desk package →",
         accent: "gold",
+      },
+      {
+        href: "/pro/nfl/slate/today",
+        title: "Weekly Slate",
+        description:
+          "PRE market + camp strength reference cards, then REG fair-lines with publish tags.",
+        cta: "Open weekly slate →",
+        accent: "neutral",
       },
       {
         href: "/pro/nfl/projections",

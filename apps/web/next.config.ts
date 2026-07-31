@@ -37,6 +37,10 @@ const nextConfig: NextConfig = {
     ],
     "/pro/nfl/stats": ["../../data/ops/**/*"],
     "/pro/nfl/slate/[date]": ["../../data/ops/**/*"],
+    "/pro/nfl/camp": [
+      "../../data/writers/**/*",
+      "../../data/ops/**/*",
+    ],
     "/pro/prediction-market": [
       "../../data/ops/**/*",
       "../../content/writers/season-previews-2026/**/*",
@@ -44,6 +48,26 @@ const nextConfig: NextConfig = {
     "/pro/power-ratings/[sport]": ["../../data/ops/**/*"],
     "/pro/clv-tracker": ["../../data/ops/**/*"],
     "/pro/model-transparency": ["../../data/ops/**/*"],
+  },
+
+  async redirects() {
+    return [
+      {
+        source: "/pro/nfl/odds",
+        destination: "/odds/nfl",
+        permanent: false,
+      },
+      {
+        source: "/pro/nfl/intel",
+        destination: "/pro/nfl/teams",
+        permanent: false,
+      },
+      {
+        source: "/pro/nfl/hub",
+        destination: "/pro/nfl/overview",
+        permanent: false,
+      },
+    ];
   },
 
   // If you ever load remote images, add domains here

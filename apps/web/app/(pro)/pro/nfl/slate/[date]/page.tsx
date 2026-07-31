@@ -43,15 +43,18 @@ export default async function NflWeeklySlatePage({
             {date === "today" ? "Current board" : `Slate · ${date}`}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Preseason schedule plus regular-season fair-lines with market join.
-            Model reference is informational — publish tags enforce desk
-            discipline.
+            Preseason market + camp strength reference, plus regular-season
+            fair-lines with market join. PRE numbers are informational —
+            season PLAY tags stay blocked.
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
             {totalCards} games · model {slate.modelVersion || "—"} · odds feed{" "}
             {slate.diagnostics.oddsFeedStatus}
             {slate.diagnostics.marketJoinedCount
               ? ` · ${slate.diagnostics.marketJoinedCount} market-joined`
+              : ""}
+            {slate.diagnostics.campRefJoinedCount
+              ? ` · ${slate.diagnostics.campRefJoinedCount} camp-ref PRE`
               : ""}
           </p>
         </div>
@@ -61,6 +64,12 @@ export default async function NflWeeklySlatePage({
             className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
           >
             Back to Hub
+          </Link>
+          <Link
+            href="/pro/nfl/camp"
+            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
+          >
+            Camp Desk
           </Link>
           <Link
             href="/odds/nfl"
@@ -129,7 +138,20 @@ export default async function NflWeeklySlatePage({
                           Market spread {card.marketSpread} · total{" "}
                           {card.marketTotal}
                           {" · "}
-                          Model {card.modelSpread} / {card.modelTotal}
+                          {card.referenceLabel} {card.modelSpread}
+                          {card.referenceLabel === "Model"
+                            ? ` / ${card.modelTotal}`
+                            : card.modelTotal !== "—"
+                              ? ` / ${card.modelTotal}`
+                              : " · total ref n/a"}
+                          {card.spreadEdge != null &&
+                          card.seasonType === "PRE" ? (
+                            <span className="text-kos-text/55">
+                              {" "}
+                              · ref vs market {card.spreadEdge > 0 ? "+" : ""}
+                              {card.spreadEdge.toFixed(1)}
+                            </span>
+                          ) : null}
                         </p>
                         <p className="mt-1 text-xs text-kos-text/55">
                           {card.note}

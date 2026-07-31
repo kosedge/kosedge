@@ -124,6 +124,40 @@ export default async function SportOverviewPage({
         <WeeklyGamesScroller games={tonightGames} sport={sportKey} />
       </div>
 
+      {sportKey === "nfl" ? (
+        <section className="mt-6 rounded-2xl border border-kos-gold/20 bg-linear-to-r from-kos-gold/10 via-black/35 to-black/55 p-5 sm:p-6">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="max-w-2xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+                Training Camp Desk
+              </p>
+              <h2 className="mt-2 text-xl font-semibold tracking-tight text-kos-text">
+                Daily camp cadence into preseason week 1
+              </h2>
+              <p className="mt-2 text-sm text-kos-text/75">
+                Beat map, public camp headlines, and writer ownership — so the
+                NFL Pro hub stays live while PRE boards use market + camp
+                strength references (not empty model dashes).
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/pro/nfl/camp"
+                className="rounded-xl border border-kos-gold/35 bg-kos-gold/15 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
+              >
+                Open Camp Desk →
+              </Link>
+              <Link
+                href="/pro/nfl/slate/today"
+                className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/35"
+              >
+                PRE + REG slate
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="mt-6">
         <div className="mb-3 flex items-end justify-between gap-3">
           <div>
