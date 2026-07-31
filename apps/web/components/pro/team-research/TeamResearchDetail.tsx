@@ -30,45 +30,81 @@ export default function TeamResearchDetail({
     config.sections.map((section) => [section.key, section]),
   );
 
+  const edgeHref = `/edge-board/${config.sportKey}`;
+
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <nav className="mb-3 flex flex-wrap items-center gap-2 text-xs text-kos-text/65">
-        <Link href={hubHref} className="hover:text-kos-gold">
+        <Link
+          href={hubHref}
+          className="min-h-11 inline-flex items-center hover:text-kos-gold sm:min-h-0"
+        >
           {sportName} Overview
         </Link>
         <span>/</span>
-        <Link href={indexHref} className="hover:text-kos-gold">
+        <Link
+          href={indexHref}
+          className="min-h-11 inline-flex items-center hover:text-kos-gold sm:min-h-0"
+        >
           Teams
+        </Link>
+        <span>/</span>
+        <Link
+          href={edgeHref}
+          className="min-h-11 inline-flex items-center hover:text-kos-gold sm:min-h-0"
+        >
+          Edge Board
         </Link>
         <span>/</span>
         <span className="text-kos-text">{team.name}</span>
       </nav>
 
-      <section className="rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/45 to-black/65 p-5 sm:p-6">
-        <p className="text-xs uppercase tracking-[0.15em] text-kos-gold">
-          Team research
+      <section className="relative overflow-hidden rounded-2xl border border-kos-gold/20 bg-[radial-gradient(ellipse_at_top_left,_rgba(245,185,66,0.12),_transparent_55%),linear-gradient(160deg,#0c0c0e_0%,#141218_45%,#0a0a0c_100%)] p-5 sm:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
+          Team research · {sportName}
         </p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <h1 className="text-3xl font-semibold tracking-tight text-kos-text">
               {team.name}
             </h1>
             <p className="mt-2 text-sm text-kos-text/75">
               {team.code} · {conferenceLine}
             </p>
+            <div className="mt-3 flex flex-wrap gap-3 text-xs">
+              <Link
+                href={hubHref}
+                className="min-h-11 inline-flex items-center font-medium text-kos-gold/90 hover:text-kos-gold sm:min-h-0"
+              >
+                ← {sportName} Overview
+              </Link>
+              <Link
+                href={edgeHref}
+                className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
+              >
+                Edge Board →
+              </Link>
+            </div>
           </div>
-          <div className="grid gap-2 text-right text-sm text-kos-text/80">
-            <p>
-              <span className="text-kos-text/55">Record</span> · data pending
-            </p>
-            <p>
-              <span className="text-kos-text/55">Next game</span> · data pending
-            </p>
+          <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
+            <Link
+              href={edgeHref}
+              className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold"
+            >
+              Open Edge Board
+            </Link>
+            <Link
+              href={`/pro/${config.sportKey}/slate/today`}
+              className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text"
+            >
+              Open Slate
+            </Link>
           </div>
         </div>
         <p className="mt-3 max-w-3xl text-sm text-kos-text/70">
-          Handicapping research shell for {sportName}. Live sections show wired
-          data only; everything else stays explicitly pending.
+          Handicapping research for {sportName}. Live sections show wired data
+          only — pending sections stay empty rather than inventing numbers. You
+          make the picks.
         </p>
       </section>
 
@@ -169,7 +205,7 @@ export default function TeamResearchDetail({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="inline-flex rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
+                  className="min-h-11 inline-flex items-center rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
                 >
                   {link.label} →
                 </Link>

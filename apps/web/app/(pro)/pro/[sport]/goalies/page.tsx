@@ -85,8 +85,10 @@ export default async function NhlGoalieDeskPage({
                   </p>
                   <p className="mt-1 text-xs text-kos-text/55">
                     Total{" "}
-                    {g.row.bestOU?.top?.label ?? g.row.keiOU?.label ?? "—"} ·
-                    Research via Edge Board
+                    {g.row.bestOU?.top?.label ??
+                      g.row.keiOU?.top?.label ??
+                      "—"}{" "}
+                    · Research via Edge Board
                   </p>
                 </div>
               ))}
@@ -120,7 +122,7 @@ export default async function NhlGoalieDeskPage({
                       </td>
                       <td className="px-4 py-3 tabular-nums text-kos-text/80">
                         {g.row.bestOU?.top?.label ??
-                          g.row.keiOU?.label ??
+                          g.row.keiOU?.top?.label ??
                           "—"}
                       </td>
                     </tr>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
+import { getKeiLines } from "@/lib/kei-lines";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
@@ -35,6 +36,16 @@ const SPORT_FAIR_LINES_COPY: Record<
   },
 };
 
+function fmtSpread(n: number | null | undefined): string {
+  if (n == null || !Number.isFinite(n)) return "—";
+  return n > 0 ? `+${n.toFixed(1)}` : n.toFixed(1);
+}
+
+function fmtTotal(n: number | null | undefined): string {
+  if (n == null || !Number.isFinite(n)) return "—";
+  return n.toFixed(1);
+}
+
 export default async function FairLinesPage({
   params,
 }: {
@@ -52,13 +63,14 @@ export default async function FairLinesPage({
     markets: "spreads, totals, and moneylines",
     pendingNote: `${sportName} projections are not connected to this surface yet.`,
   };
+  const keiGames = getKeiLines(sportKey);
 
   return (
     <SportHubShell
       sportKey={sportKey}
       sportName={sportName}
       base={base}
-      badge={`${sportName} Betting Desk`}
+      badge={`${sportName} Betting Desk · ET`}
       title={`${sportName} Fair Lines`}
       summary={`Model reference for ${copy.markets}. Neutral presentation — no picks. Desk path: ${desk.pathLabel}.`}
       primaryHref={`/edge-board/${sportKey}`}
@@ -66,32 +78,124 @@ export default async function FairLinesPage({
       secondaryHref={`/odds/${sportKey}`}
       secondaryLabel="Compare odds →"
     >
-      <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6 sm:p-8">
-        <p className="text-sm font-semibold text-kos-gold">
-          Model board pending
-        </p>
-        <p className="mt-2 text-sm text-kos-text/70 sm:text-base">
-          {copy.pendingNote}
-        </p>
-        <p className="mt-4 text-sm text-kos-text/60">
-          Until then, use the public edge board and odds compare for live market
-          context. NFL and MLB fair-lines boards are live under their hubs.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            href={`/pro/kei-lines/${sportKey}`}
-            className="inline-flex rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
-          >
-            KEI projections →
-          </Link>
-          <Link
-            href={`${base}/overview`}
-            className="inline-flex rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text transition hover:border-kos-gold/35"
-          >
-            Hub overview →
-          </Link>
+      {keiGames.length > 0 ? (
+        <>
+          <p className="mb-3 text-sm text-kos-text/65">
+            {keiGames.length} KEI projections on file. Research baselines — you
+            make the picks.
+          </p>
+
+          <div className="grid gap-3 md:hidden">
+            {keiGames.slice(0, 40).map((g, idx) => (
+              <div
+                key={g.id ?? `${g.awayTeam}-${g.homeTeam}-${idx}`}
+                className="rounded-xl border border-white/10 bg-black/35 p-4"
+              >
+                <div className="text-sm font-semibold text-kos-text">
+                  {g.awayTeam} @ {g.homeTeam}
+                </div>
+                {g.commenceTime ? (
+                  <p className="mt-1 text-xs text-kos-text/55">
+                    {g.commenceTime} · ET
+                  </p>
+                ) : null}
+                <div className="mt-2 flex flex-wrap gap-4 text-xs">
+                  <span>
+                    Spread{" "}
+                    <strong className="text-kos-gold">
+                      {fmtSpread(g.projSpreadHome)}
+                    </strong>{" "}
+                    (home)
+                  </span>
+                  <span>
+                    Total{" "}
+                    <strong className="text-kos-gold">
+                      {fmtTotal(g.projTotal)}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden overflow-hidden rounded-2xl border border-white/10 md:block">
+            <table className="w-full text-sm">
+              <thead className="bg-white/5 text-left text-xs uppercase tracking-wide text-kos-text/60">
+                <tr>
+                  <th className="px-4 py-3">Matchup</th>
+                  <th className="px-4 py-3">Time (ET)</th>
+                  <th className="px-4 py-3">KEI spread (home)</th>
+                  <th className="px-4 py-3">KEI total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {keiGames.slice(0, 80).map((g, idx) => (
+                  <tr
+                    key={g.id ?? `${g.awayTeam}-${g.homeTeam}-${idx}`}
+                    className="border-t border-white/8 hover:bg-white/[0.03]"
+                  >
+                    <td className="px-4 py-3 font-medium text-kos-text">
+                      {g.awayTeam} @ {g.homeTeam}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-kos-text/60">
+                      {g.commenceTime ?? "—"}
+                    </td>
+                    <td className="px-4 py-3 tabular-nums text-kos-gold">
+                      {fmtSpread(g.projSpreadHome)}
+                    </td>
+                    <td className="px-4 py-3 tabular-nums text-kos-gold">
+                      {fmtTotal(g.projTotal)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href={`/pro/kei-lines/${sportKey}`}
+              className="min-h-11 inline-flex items-center rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold"
+            >
+              Full KEI table →
+            </Link>
+            <Link
+              href={`${base}/edges`}
+              className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text"
+            >
+              Edges desk →
+            </Link>
+          </div>
+        </>
+      ) : (
+        <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6 sm:p-8">
+          <p className="text-sm font-semibold text-kos-gold">
+            Model board pending
+          </p>
+          <p className="mt-2 text-sm text-kos-text/70 sm:text-base">
+            {copy.pendingNote}
+          </p>
+          <p className="mt-4 text-sm text-kos-text/60">
+            Until then, use the public edge board and odds compare for live
+            market context. We do not invent fair prices. NFL and MLB fair-lines
+            boards are live under their hubs.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href={`/pro/kei-lines/${sportKey}`}
+              className="min-h-11 inline-flex items-center rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
+            >
+              KEI projections →
+            </Link>
+            <Link
+              href={`/edge-board/${sportKey}`}
+              className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text transition hover:border-kos-gold/35"
+            >
+              Edge board →
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </SportHubShell>
   );
 }

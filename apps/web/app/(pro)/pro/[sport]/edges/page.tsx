@@ -39,7 +39,7 @@ export default async function SportEdgesPage({
         lineEdge,
         totalEdge,
         max,
-        tip: g.row.tip ?? g.row.commence_time ?? null,
+        tip: g.row.time ?? null,
       };
     })
     .filter((r) => r.max != null && (r.max as number) > 0)

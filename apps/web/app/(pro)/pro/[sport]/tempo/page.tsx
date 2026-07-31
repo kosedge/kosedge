@@ -93,13 +93,13 @@ export default async function SportTempoPage({
                   Board total:{" "}
                   <span className="tabular-nums text-kos-text">
                     {g.row.bestOU?.top?.label ??
-                      g.row.keiOU?.label ??
+                      g.row.keiOU?.top?.label ??
                       "—"}
                   </span>
                   {" · "}
                   KEI:{" "}
                   <span className="tabular-nums text-kos-gold">
-                    {g.row.keiOU?.label ?? "—"}
+                    {g.row.keiOU?.top?.label ?? "—"}
                   </span>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default async function SportTempoPage({
               <tbody>
                 {games.slice(0, 20).map((g) => {
                   const market = g.row.bestOU?.top?.label ?? "—";
-                  const kei = g.row.keiOU?.label ?? "—";
+                  const kei = g.row.keiOU?.top?.label ?? "—";
                   const sep = g.row.edgeOUNum;
                   return (
                     <tr

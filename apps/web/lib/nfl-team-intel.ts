@@ -336,7 +336,10 @@ export function resolveTeamCode(
   if (normalizedCandidate && normalizedAvailable.includes(normalizedCandidate))
     return normalizedCandidate;
 
-  if (normalizedAvailable.length > 0) return normalizedAvailable[0];
+  // Unknown / empty candidate: prefer first available intel team, else BUF
+  // only as a last-resort directory anchor — never remap a valid directory
+  // code (handled above) onto Buffalo when feeds lag.
+  if (normalizedAvailable.length > 0) return normalizedAvailable[0]!;
   return "BUF";
 }
 

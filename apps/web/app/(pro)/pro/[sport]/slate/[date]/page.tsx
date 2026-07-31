@@ -1,51 +1,41 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import SportHubShell from "@/components/pro/SportHubShell";
+import { getTonightGames } from "@/lib/edge-board-tonight";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
-type SlateTemplate = {
-  market: string;
-  model: string;
-  writeup: string;
-};
+function formatMarket(game: Awaited<ReturnType<typeof getTonightGames>>[number]) {
+  const line =
+    game.row.bestLine?.top?.label ?? game.row.keiLine?.top?.label ?? "—";
+  const total =
+    game.row.bestOU?.top?.label ?? game.row.keiOU?.top?.label ?? "—";
+  return `${line} · ${total}`;
+}
 
-const SPORT_SLATE_TEMPLATES: Record<string, SlateTemplate> = {
-  cfb: {
-    market: "UTAH -4.0 | 52.5",
-    model: "UTAH -4.8 | 51.7",
-    writeup:
-      "Primary drivers are tempo divergence, havoc differential, and red-zone efficiency variance. Late quarterback and weather confirmations remain the swing factors.",
-  },
-  nba: {
-    market: "BOS -5.5 | 228.5",
-    model: "BOS -6.2 | 227.1",
-    writeup:
-      "Rotation stability and pace-state assumptions drive this projection. Final confirmation is tied to late availability and back-to-back fatigue adjustments.",
-  },
-  wnba: {
-    market: "NYL -4.5 | 164.5",
-    model: "NYL -5.1 | 163.8",
-    writeup:
-      "Usage concentration and turnover control are the primary levers. Watch travel compression and late guard status for any final repricing.",
-  },
-  mlb: {
-    market: "LAD -128 | 8.5",
-    model: "LAD -136 | 8.1",
-    writeup:
-      "Starter arsenal fit, bullpen leverage depth, and weather-adjusted run environment define the edge. Lineup cards and bullpen burn rates are final checks.",
-  },
-  nhl: {
-    market: "EDM -132 | 6.5",
-    model: "EDM -138 | 6.2",
-    writeup:
-      "Goaltender confirmation and five-on-five chance quality drive this setup. Special-teams volatility remains the dominant downside risk.",
-  },
-  ncaam: {
-    market: "GONZ -6.0 | 149.5",
-    model: "GONZ -6.8 | 148.7",
-    writeup:
-      "Tempo profile, offensive rebounding leverage, and whistle environment determine projection quality. Late lineup notes can still move this market.",
-  },
-};
+function formatModel(game: Awaited<ReturnType<typeof getTonightGames>>[number]) {
+  const line = game.row.keiLine?.top?.label ?? "—";
+  const total = game.row.keiOU?.top?.label ?? "—";
+  return `${line} · ${total}`;
+}
+
+function contextBlurb(sportKey: string): string {
+  switch (sportKey) {
+    case "cfb":
+      return "Weekly framing: tempo, havoc, and key-number context beside model vs market.";
+    case "ncaam":
+      return "Daily framing: tempo, variance, and conference efficiency beside model vs market.";
+    case "mlb":
+      return "Daily framing: SP, bullpen, park factors, ML / run line / totals.";
+    case "nhl":
+      return "Daily framing: goalie confirmation sensitivity for ML, totals, and puck line.";
+    case "nba":
+      return "Daily framing: pace, rest, and availability before props research.";
+    case "wnba":
+      return "Daily framing: usage, travel, rest, and pace before props research.";
+    default:
+      return "Model vs market slate cards for research — not a picks feed.";
+  }
+}
 
 export default async function SlatePage({
   params,
@@ -56,87 +46,116 @@ export default async function SlatePage({
   const sportKey = resolveSportKey(resolved?.sport);
   const date = String(resolved?.date ?? "today");
 
-  // NFL has a dedicated populated slate route.
   if (sportKey === "nfl") {
     redirect(`/pro/nfl/slate/${date || "today"}`);
   }
 
   const base = `/pro/${sportKey || "nfl"}`;
   const sportName = sportDisplayLabel(sportKey);
-  const template = sportKey ? SPORT_SLATE_TEMPLATES[sportKey] : undefined;
-  const hasData = Boolean(template);
-
-  const games = [
-    {
-      slug: `${sportKey}-premium-placeholder`,
-      away: `${sportName} Away`,
-      home: `${sportName} Home`,
-      market: template?.market ?? "Market pending",
-      model: template?.model ?? "Model pending",
-      writeup:
-        template?.writeup ??
-        "Premium placeholder state: matchup narratives publish once validated market and model inputs are available for this date.",
-    },
-  ];
+  const isWeekly = sportKey === "cfb";
+  const slateLabel = isWeekly ? "Weekly Slate" : "Daily Slate";
+  const games = await getTonightGames(sportKey);
 
   return (
-    <main>
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold">
-            {sportName} Slate: {date}
-          </h2>
-          <p className="mt-2 text-kos-text/70">
-            {hasData
-              ? "Write-ups are collapsed by default. Model reference is informational only."
-              : "Premium placeholder mode: slate cards expand automatically when validated game feeds are available."}
+    <SportHubShell
+      sportKey={sportKey}
+      sportName={sportName}
+      base={base}
+      badge={`${sportName} · ${slateLabel} · ET`}
+      title={`${sportName} ${slateLabel}`}
+      summary={`${contextBlurb(sportKey)} Date: ${date}. You make the picks.`}
+      primaryHref={`/edge-board/${sportKey}`}
+      primaryLabel="Edge board →"
+      secondaryHref={`${base}/fair-lines`}
+      secondaryLabel="KEI Lines →"
+    >
+      {games.length === 0 ? (
+        <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6">
+          <p className="text-sm font-semibold text-kos-gold">
+            No live slate rows yet
           </p>
-        </div>
-
-        <Link
-          href={`${base}/overview`}
-          className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
-        >
-          Back to Hub
-        </Link>
-      </div>
-
-      <div className="mt-8 space-y-4">
-        {games.map((g) => (
-          <div
-            key={g.slug}
-            className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <div className="text-lg font-semibold">
-                  {g.away} @ {g.home}
-                </div>
-                <div className="mt-1 text-sm text-kos-text/70">
-                  Market: {g.market} · Model: {g.model}
-                </div>
-              </div>
-
-              <Link
-                href={`${base}/matchups/${date}/${g.slug}`}
-                className="rounded-xl border border-kos-border bg-kos-surface/20 px-4 py-2 text-sm hover:border-kos-gold/40"
-              >
-                {hasData ? "Open Matchup" : "Open Placeholder Brief"}
-              </Link>
-            </div>
-
-            <details className="mt-4">
-              <summary className="cursor-pointer select-none text-sm text-kos-gold hover:text-edge-green">
-                View matchup context
-              </summary>
-              <p className="mt-3 text-kos-text/80">{g.writeup}</p>
-              <p className="mt-4 text-sm text-kos-text/60">
-                Model Reference (Not a Recommendation): {g.model}
-              </p>
-            </details>
+          <p className="mt-2 text-sm text-kos-text/70">
+            When books and KEI lines post for this sport, matchup cards appear
+            here. We do not invent sample games. Use Edge Board and Compare Odds
+            for market scanning in the meantime.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href={`/edge-board/${sportKey}`}
+              className="min-h-11 inline-flex items-center rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-sm font-semibold text-kos-gold"
+            >
+              Edge Board
+            </Link>
+            <Link
+              href={`/odds/${sportKey}`}
+              className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text"
+            >
+              Compare Odds
+            </Link>
           </div>
-        ))}
-      </div>
-    </main>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {games.map((g) => {
+            const away = g.row.teamA?.name ?? "Away";
+            const home = g.row.teamB?.name ?? "Home";
+            const tip = g.row.time ?? null;
+            const lineEdge = g.row.edgeLineNum;
+            const totalEdge = g.row.edgeOUNum;
+            return (
+              <article
+                key={g.slug}
+                className="rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-5"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="text-base font-semibold text-kos-text sm:text-lg">
+                      {away} @ {home}
+                    </h3>
+                    <p className="mt-1 text-xs tabular-nums text-kos-text/55">
+                      {tip ? String(tip) : "Tip TBD"} · ET
+                    </p>
+                    <p className="mt-2 text-sm text-kos-text/75">
+                      Market: {formatMarket(g)}
+                    </p>
+                    <p className="text-sm text-kos-gold/90">
+                      Model: {formatModel(g)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2 sm:items-end">
+                    {(lineEdge != null && lineEdge > 0) ||
+                    (totalEdge != null && totalEdge > 0) ? (
+                      <span className="rounded-md border border-edge-green/35 bg-edge-green/10 px-2 py-1 text-xs font-semibold text-edge-green">
+                        Sep{" "}
+                        {Math.max(lineEdge ?? 0, totalEdge ?? 0).toFixed(1)}
+                      </span>
+                    ) : (
+                      <span className="rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-kos-text/55">
+                        Monitoring
+                      </span>
+                    )}
+                    <Link
+                      href={`/edge-board/${sportKey}`}
+                      className="min-h-11 inline-flex items-center rounded-xl border border-kos-border bg-kos-surface/20 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
+                    >
+                      Open on Edge Board
+                    </Link>
+                  </div>
+                </div>
+                <details className="mt-3">
+                  <summary className="min-h-11 cursor-pointer list-none text-sm font-medium text-kos-gold hover:underline [&::-webkit-details-marker]:hidden">
+                    Matchup context ▾
+                  </summary>
+                  <p className="mt-2 text-sm leading-relaxed text-kos-text/75 whitespace-pre-wrap">
+                    {g.row.overview ??
+                      `${away} at ${home}. Use KEI Lines and Edge Board for model vs market hierarchy. Research framing only.`}
+                  </p>
+                </details>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </SportHubShell>
   );
 }

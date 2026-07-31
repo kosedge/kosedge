@@ -2,7 +2,8 @@
 
 **Branch:** `cursor/multi-sport-ui-shell-a93a` → `deploy-vercel`  
 **Last updated:** 2026-07-31  
-**Philosophy:** “I give the info, you make the picks.”
+**Philosophy:** “I give the info, you make the picks.”  
+**PR:** https://github.com/kosedge/kosedge/pull/33
 
 ## Slice 1 shipped — Shared SportProShell + Overview pattern
 
@@ -31,18 +32,27 @@ Legend: **DONE** · **PARTIAL** · **BLOCKED** (feed missing)
 |------|-----|-------|-----|-----|-----|-----|------|
 | Overview | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
 | Edge Board | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
-| KEI / Fair Lines | DONE | PARTIAL | PARTIAL | PARTIAL | DONE | PARTIAL | PARTIAL |
+| KEI / Fair Lines | DONE | DONE* | PARTIAL | PARTIAL | DONE | PARTIAL | PARTIAL |
 | Edges | DONE | PARTIAL | PARTIAL | PARTIAL | DONE | PARTIAL | PARTIAL |
 | Compare Odds | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
 | Power Ratings | DONE | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL |
-| Team Research Hub | DONE | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL |
-| Weekly/Daily Slate | DONE | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL |
-| Execution Monitor | DONE | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL |
+| Team Research Hub | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
+| Weekly/Daily Slate | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
+| Execution Monitor | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
 | Model / CLV | DONE | DONE | DONE | DONE | DONE | DONE | DONE |
 | Sport desk (Tempo/Props/RL/Goalie) | DONE* | DONE | DONE | PARTIAL | DONE | DONE | PARTIAL |
 
 \*NFL desk = Props/Fantasy/Wall Chart (kept).  
-PARTIAL Fair Lines/Edges for non-NFL/MLB = honest shells wired to board data where available; full model boards pending feed join (not faked).
+\*NCAAM Fair Lines = DONE when `kei_lines_ncaam.json` is present (wired in slice 2).  
+PARTIAL elsewhere = honest shells / board-derived metrics; full model boards pending feed join (not faked).
+
+## Slice 2 shipped — Slate / Execution / Teams / Fair Lines data
+
+- Slate pages use live `getTonightGames` (no fake Away/Home placeholders)
+- Execution Monitor for all sports (NFL fair-lines diagnostic + board-derived for others)
+- Team Research detail: Overview + Edge Board nav, touch targets, sport desk links
+- Fair Lines surfaces KEI JSON when available (NCAAM live file)
+- Mobile stacked cards on slate/execution/fair-lines
 
 ### Live URLs (www.kosedge.com — after deploy)
 
@@ -59,11 +69,10 @@ PARTIAL Fair Lines/Edges for non-NFL/MLB = honest shells wired to board data whe
 - KEI: `/pro/kei-lines/{sport}`
 
 ### Next slices
-1. Deep Team Research polish + routing fixes  
-2. Slate + Execution mobile parity for every sport  
-3. Wire remaining Fair Lines/Edges when model boards exist  
-4. Props boards for NBA/WNBA/MLB where feeds support  
-5. Final mobile smoke on www
+1. Wire remaining Fair Lines/Edges when model boards exist (NBA/NHL/WNBA/CFB)  
+2. Props boards for NBA/WNBA/MLB where feeds support  
+3. Power ratings densify for non-NFL  
+4. Final mobile smoke on www + merge to deploy-vercel
 
 ### Preserved
 - DeploymentRecovery, BootShell, logo paths, upstream timeouts  

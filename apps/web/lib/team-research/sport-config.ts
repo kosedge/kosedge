@@ -32,13 +32,21 @@ function marketLinks(
       { href: `${base}/overview`, label: "MLB hub" },
     ];
   }
-  return [
+  const links = [
     { href: `/edge-board/${sportKey}`, label: "Edge board" },
-    { href: `${base}/fair-lines`, label: "Fair lines" },
+    { href: `${base}/fair-lines`, label: "KEI lines" },
+    { href: `${base}/edges`, label: "Edges desk" },
     { href: `/odds/${sportKey}`, label: "Compare odds" },
     { href: `/pro/power-ratings/${sportKey}`, label: "Power ratings" },
     { href: `${base}/overview`, label: "Sport hub" },
   ];
+  if (sportKey === "ncaam" || sportKey === "cfb") {
+    links.splice(3, 0, { href: `${base}/tempo`, label: "Tempo desk" });
+  }
+  if (sportKey === "nhl") {
+    links.splice(3, 0, { href: `${base}/goalies`, label: "Goalie desk" });
+  }
+  return links;
 }
 
 const PREVIEW = (sportName: string) =>
