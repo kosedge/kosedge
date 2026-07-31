@@ -5,12 +5,18 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List
 
-import nflreadpy as nfl
 from sqlalchemy import text
 
 from .db import SessionLocal
 from .nfl_com import NflComError, fetch_nfl_com_team_intel_snapshot
 from .team_intel import build_standings_rows, infer_depth_chart_rows
+
+
+def _nflreadpy():
+    """Lazy import — workers rematerializing SQL features need not ship nflreadpy."""
+    import nflreadpy as nfl
+
+    return nfl
 
 
 def _now() -> datetime:
@@ -1957,6 +1963,7 @@ def materialize_depth_chart_weekly(
 
 
 def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) -> Dict[str, Any]:
+    nfl = _nflreadpy()
     session = SessionLocal()
     run_id = None
     metrics = {
