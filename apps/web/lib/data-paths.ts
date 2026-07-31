@@ -19,3 +19,8 @@ export function getPowerRatingsPath(sportKey: string): string {
 export function getKeiLinesPath(sportKey: string): string {
   return join(getDataProcessedDir(), `kei_lines_${sportKey}.json`);
 }
+
+/** Last-known Odds API board rows when live pulls are empty (quota/outage). */
+export function getEdgeBoardFallbackPath(sportKey: string): string {
+  return join(getDataProcessedDir(), `edge_board_fallback_${sportKey}.json`);
+}

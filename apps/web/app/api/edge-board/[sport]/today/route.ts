@@ -4,6 +4,7 @@ import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
 import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import { loadEdgeBoardFallback } from "@/lib/edge-board-fallback";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
 import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
@@ -111,6 +112,11 @@ export async function GET(
     (cached.rows as unknown[]).length > 0
   ) {
     return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
+  }
+
+  // When Odds API is empty (quota/outage), use shipped last-known snapshot.
+  if (oddsRows.length === 0) {
+    oddsRows = loadEdgeBoardFallback(sport);
   }
 
   try {
