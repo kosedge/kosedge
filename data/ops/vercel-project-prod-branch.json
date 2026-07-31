@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-07-31T16:05:00Z",
+  "checkedAt": "2026-07-31T16:07:30Z",
   "domain": "www.kosedge.com",
   "project": {
     "name": "kosedge",
@@ -10,22 +10,32 @@
   "productionBranch": "deploy-vercel",
   "gitTip": {
     "branch": "origin/deploy-vercel",
-    "sha": "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
+    "sha": "df75e3743bd3452d82b6b1fbc33d5747a6f2a323",
     "includesOverhaul": [
       "005ec21c41cd2c642f1fa48f3ae916b7673a8468",
       "338a7109fe63c7ddf63f06e570d8791a144374a3",
-      "e6f0901f8e740fac108a0c20f1f9530fe220fc3b"
+      "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
+      "df75e3743bd3452d82b6b1fbc33d5747a6f2a323"
     ],
-    "prs": [27, 28]
+    "prs": [
+      27,
+      28,
+      29
+    ]
   },
   "productionDeployment": {
-    "id": "dpl_6pvq5hpLp5d3T4shmzaY8wJmd3Kv",
-    "sha": "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
+    "id": "dpl_D8RjR2VEpix8KNn5vLfpfuwrJusH",
+    "sha": "df75e3743bd3452d82b6b1fbc33d5747a6f2a323",
     "matchesGitTip": true,
-    "aliases": ["www.kosedge.com", "kosedge.com", "kosedge.vercel.app"]
+    "aliases": [
+      "www.kosedge.com",
+      "kosedge.com",
+      "kosedge.vercel.app"
+    ]
   },
   "liveHtmlMarkers": {
     "url": "https://www.kosedge.com/pro/nfl/overview",
+    "viaProRoot": "https://www.kosedge.com/pro \u2192 /pro/nfl/overview",
     "present": [
       "Research desk",
       "NFL research desk",
@@ -39,10 +49,11 @@
     "tipNotDeployed": false,
     "domainOnWrongProject": false,
     "buildFailed": false,
-    "userLikelyIssue": "Homepage /pro previously redirected to legacy /pro/welcome (old multi-sport hub), so users on www.kosedge.com clicking Pro did not land on the NFL overhaul shell."
+    "userLikelyIssue": "Homepage /pro previously redirected to legacy /pro/welcome (old multi-sport hub), so users on www.kosedge.com clicking Pro did not land on the NFL overhaul shell. Overhaul HTML was already live on /pro/nfl/overview."
   },
   "entryPathFix": {
     "proRootRedirect": "/pro/nfl/overview",
-    "homepageProCta": "/pro/nfl/overview"
+    "homepageProCta": "/pro/nfl/overview",
+    "deployed": true
   }
 }
