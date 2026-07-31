@@ -54,6 +54,13 @@ PARTIAL elsewhere = honest shells / board-derived metrics; full model boards pen
 - Fair Lines surfaces KEI JSON when available (NCAAM live file)
 - Mobile stacked cards on slate/execution/fair-lines
 
+## Slice 3 shipped — MLB desk chrome + tracking + mobile
+
+- MLB Fair Lines / Edges headers match research-desk pattern (Overview + Edge Board)
+- Removed “Actionable” picks energy from MLB Edges title
+- MLB Fair Lines + Edges: mobile stacked cards
+- Non-NFL Tracking uses SportHubShell with honest CLV-pending state
+
 ### Live URLs (www.kosedge.com — after deploy)
 
 - Overview: `/pro/{sport}/overview`
