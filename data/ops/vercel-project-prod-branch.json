@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-07-31T16:07:30Z",
+  "checkedAt": "2026-07-31T16:09:10Z",
   "domain": "www.kosedge.com",
   "project": {
     "name": "kosedge",
@@ -10,12 +10,12 @@
   "productionBranch": "deploy-vercel",
   "gitTip": {
     "branch": "origin/deploy-vercel",
-    "sha": "df75e3743bd3452d82b6b1fbc33d5747a6f2a323",
+    "sha": "81a4cc528201e3d3c9ac28ec78f8ea0276fb418a",
     "includesOverhaul": [
       "005ec21c41cd2c642f1fa48f3ae916b7673a8468",
       "338a7109fe63c7ddf63f06e570d8791a144374a3",
       "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
-      "df75e3743bd3452d82b6b1fbc33d5747a6f2a323"
+      "81a4cc528201e3d3c9ac28ec78f8ea0276fb418a"
     ],
     "prs": [
       27,
@@ -24,8 +24,8 @@
     ]
   },
   "productionDeployment": {
-    "id": "dpl_D8RjR2VEpix8KNn5vLfpfuwrJusH",
-    "sha": "df75e3743bd3452d82b6b1fbc33d5747a6f2a323",
+    "id": "dpl_7DbEJKiY4GhQQns4mK7e3coTwwVA",
+    "sha": "81a4cc528201e3d3c9ac28ec78f8ea0276fb418a",
     "matchesGitTip": true,
     "aliases": [
       "www.kosedge.com",
