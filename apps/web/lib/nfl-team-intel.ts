@@ -292,6 +292,16 @@ export function resolveTeamCode(
 
   if (normalizedCandidate && normalizedAvailable.includes(normalizedCandidate))
     return normalizedCandidate;
+
+  // Offseason / empty intel: honor a valid directory team from the URL instead
+  // of remapping every request onto the first available (or BUF) fallback.
+  if (
+    normalizedCandidate &&
+    NFL_TEAM_DIRECTORY_BY_CODE.has(normalizedCandidate)
+  ) {
+    return normalizedCandidate;
+  }
+
   if (normalizedAvailable.length > 0) return normalizedAvailable[0];
   return "BUF";
 }
