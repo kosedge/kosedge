@@ -1,10 +1,10 @@
 # NBA Model — Enterprise Grade Report
 
 **Generated:** 2026-07-31 (Phase 1)  
-**Phase reached:** Phase 1 complete (ingest + features + densify + canary); walkforward sample pending fix redeploy  
+**Phase reached:** Phase 1 complete (ingest + features + densify + thin walkforward)  
 **Model version:** `nba-v1-poss-sim`  
 **Worker canary:** `nba-poss-sim-20260731-phase1`  
-**SHA:** `30dc4de` (+ walkforward market-lines fix pending)  
+**SHA:** `de702d0`  
 **Railway CI:** [30670636129](https://github.com/kosedge/kosedge/actions/runs/30670636129) success  
 **Vercel Production:** `kosedge-j4tm6hw5v` (Ready)
 
@@ -75,7 +75,13 @@ Phase 1 landed on Railway. Live inventory confirms NBA mainlines were **empty be
 
 | Metric | Value | Notes |
 |--------|-------|-------|
-| Graded walkforward | pending | first sample failed on bad `os.point` SQL; fix shipping |
+| Graded games (spread/total) | **60** | thin walkforward sample |
+| Model spread MAE | **14.26** | vs actual margin (pre-calibration) |
+| Model spread bias | -2.41 | home perspective |
+| Model total MAE | **17.28** | |
+| Model total bias | -5.97 | |
+| ATS cover rate | **51.7%** | |
+| Close spread/total MAE | — | `n_with_close_lines=0` in sample (abbr join soft-miss; Phase 2) |
 | Determinism tests | Pass | 19 unit tests |
 | Publish policy | research_only mainlines; props queued | |
 
@@ -88,7 +94,7 @@ Phase 1 landed on Railway. Live inventory confirms NBA mainlines were **empty be
 | Rolling features wired into context/sim | **Y** (code + 34 rolling rows) |
 | Inventory truth documented | **Y** |
 | Odds densify only if empty + spend documented | **Y** (~15k credits) |
-| Thin walkforward or blockers documented | **Partial** — blocker fixed in follow-up commit |
+| Thin walkforward or blockers documented | **Y** (n=60; close-line join soft-miss noted) |
 | Canary phase1 + Railway + deploy-vercel | **Y** |
 
 ## Verify
