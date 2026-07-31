@@ -5,9 +5,46 @@ import {
   formatKickoff,
   formatSpread,
   formatTotal,
+  type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
 
 export const dynamic = "force-dynamic";
+
+function absOrNull(value: number | null | undefined): number | null {
+  if (value == null || !Number.isFinite(value)) return null;
+  return Math.abs(value);
+}
+
+function mean(values: number[]): number | null {
+  if (values.length === 0) return null;
+  return values.reduce((s, v) => s + v, 0) / values.length;
+}
+
+function dispersionLabel(row: NflFairLineRow): string {
+  const spreadGap = absOrNull(
+    (row.bestSpreadHome ?? row.marketSpreadHome) != null &&
+      row.spreadHome != null
+      ? (row.bestSpreadHome ?? row.marketSpreadHome)! - row.spreadHome
+      : null,
+  );
+  const totalGap = absOrNull(
+    (row.bestTotal ?? row.marketTotal) != null && row.totalMean != null
+      ? (row.bestTotal ?? row.marketTotal)! - row.totalMean
+      : null,
+  );
+  const max = Math.max(spreadGap ?? 0, totalGap ?? 0);
+  if (max >= 2.5) return "Wide";
+  if (max >= 1.0) return "Moderate";
+  if (spreadGap != null || totalGap != null) return "Tight";
+  return "—";
+}
+
+function priceQuality(row: NflFairLineRow): string {
+  if (!row.marketJoined) return "Model only";
+  const books = [row.bestSpreadBook, row.bestTotalBook].filter(Boolean);
+  if (books.length >= 1) return "Joined";
+  return "Partial";
+}
 
 export default async function ExecutionPage({
   params,
@@ -20,8 +57,6 @@ export default async function ExecutionPage({
   const base = `/pro/${sportKey}`;
 
   if (sportKey === "nfl") {
-    // Preseason → Week 1 spans >21 days from late July; keep the execution
-    // board populated with the same REG window as KEI Lines / slate.
     const fairLines = await fetchNflFairLines({
       season: 2026,
       daysAhead: 120,
@@ -37,30 +72,56 @@ export default async function ExecutionPage({
         : fairLines.lines.filter((row) => (row.week ?? 99) <= 2)
     ).sort((a, b) => (a.startTime || "").localeCompare(b.startTime || ""));
 
+    const spreadGaps = rows
+      .map((r) =>
+        absOrNull(
+          r.spreadHome != null &&
+            (r.bestSpreadHome ?? r.marketSpreadHome) != null
+            ? (r.bestSpreadHome ?? r.marketSpreadHome)! - r.spreadHome
+            : null,
+        ),
+      )
+      .filter((v): v is number => v != null);
+    const totalGaps = rows
+      .map((r) =>
+        absOrNull(
+          r.totalMean != null && (r.bestTotal ?? r.marketTotal) != null
+            ? (r.bestTotal ?? r.marketTotal)! - r.totalMean
+            : null,
+        ),
+      )
+      .filter((v): v is number => v != null);
+    const joined = rows.filter((r) => r.marketJoined).length;
+    const avgSpread = mean(spreadGaps);
+    const avgTotal = mean(totalGaps);
+
     return (
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-semibold text-kos-text">
-              NFL Execution Monitor
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+              Week {week} · 2026 · Research diagnostic
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold text-kos-text">
+              Execution Monitor
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-kos-text/70">
-              Best numbers by book, market-vs-model separation, and timing
-              context for the active slate. Execution support only — not a
-              pick feed.
-            </p>
-            <p className="mt-2 text-xs text-kos-text/55">
-              Weeks {week}–{week + 1} · {rows.length} games · odds{" "}
-              {fairLines.diagnostics.oddsFeedStatus} · books{" "}
-              {fairLines.diagnostics.bookmakers.slice(0, 6).join(", ") || "—"}
+              Market dispersion, price quality, and timing context for the
+              active slate. Research support only — not a pick feed.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
-              href={`${base}/overview`}
+              href="/pro/nfl/overview"
               className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
             >
-              Back to Hub
+              NFL Overview
+            </Link>
+            <Link
+              href="/edge-board/nfl"
+              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
+            >
+              Edge Board
             </Link>
             <Link
               href="/odds/nfl"
@@ -71,9 +132,56 @@ export default async function ExecutionPage({
           </div>
         </div>
 
+        <section className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+            <h2 className="text-sm font-semibold text-kos-gold">
+              Market Dispersion
+            </h2>
+            <p className="mt-2 text-2xl font-semibold text-kos-text">
+              {avgSpread != null ? avgSpread.toFixed(1) : "—"}
+              <span className="text-sm font-normal text-kos-text/50">
+                {" "}
+                pts avg
+              </span>
+            </p>
+            <p className="mt-1 text-xs text-kos-text/55">
+              Mean |KEI − best book| on spreads
+              {avgTotal != null
+                ? ` · totals ${avgTotal.toFixed(1)} pts`
+                : ""}
+            </p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+            <h2 className="text-sm font-semibold text-kos-gold">Price Quality</h2>
+            <p className="mt-2 text-2xl font-semibold text-kos-text">
+              {joined}/{rows.length}
+            </p>
+            <p className="mt-1 text-xs text-kos-text/55">
+              Games with a joined sportsbook price · feed{" "}
+              {fairLines.diagnostics.oddsFeedStatus}
+            </p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+            <h2 className="text-sm font-semibold text-kos-gold">
+              Line Movement & Timing
+            </h2>
+            <p className="mt-2 text-sm text-kos-text/75">
+              Kickoffs shown in ET. Movement history populates as snapshot
+              retention expands — current board shows best available number.
+            </p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+            <h2 className="text-sm font-semibold text-kos-gold">Book Snapshot</h2>
+            <p className="mt-2 text-sm text-kos-text/75">
+              {fairLines.diagnostics.bookmakers.slice(0, 8).join(" · ") ||
+                "No books joined yet"}
+            </p>
+          </div>
+        </section>
+
         {fairLines.error ? (
           <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-            {fairLines.error}
+            Model service unreachable for this diagnostic window.
           </div>
         ) : null}
 
@@ -82,12 +190,13 @@ export default async function ExecutionPage({
             <thead className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/55">
               <tr>
                 <th className="px-4 py-3">Matchup</th>
-                <th className="px-4 py-3">Kickoff</th>
+                <th className="px-4 py-3">Kickoff (ET)</th>
                 <th className="px-4 py-3">Best spread</th>
-                <th className="px-4 py-3">Model</th>
+                <th className="px-4 py-3">KEI</th>
                 <th className="px-4 py-3">Best total</th>
-                <th className="px-4 py-3">Model</th>
-                <th className="px-4 py-3">Tags</th>
+                <th className="px-4 py-3">KEI</th>
+                <th className="px-4 py-3">Dispersion</th>
+                <th className="px-4 py-3">Price quality</th>
               </tr>
             </thead>
             <tbody>
@@ -108,27 +217,29 @@ export default async function ExecutionPage({
                       {row.bestSpreadBook ?? ""}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{formatSpread(row.spreadHome)}</td>
+                  <td className="px-4 py-3 text-kos-gold">
+                    {formatSpread(row.spreadHome)}
+                  </td>
                   <td className="px-4 py-3">
                     {formatTotal(row.bestTotal ?? row.marketTotal)}
                     <span className="ml-1 text-xs text-kos-text/45">
                       {row.bestTotalBook ?? ""}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{formatTotal(row.totalMean)}</td>
-                  <td className="px-4 py-3 text-xs">
-                    S:{row.publishTagSpread ?? "—"} · T:
-                    {row.publishTagTotal ?? "—"}
+                  <td className="px-4 py-3 text-kos-gold">
+                    {formatTotal(row.totalMean)}
                   </td>
+                  <td className="px-4 py-3 text-xs">{dispersionLabel(row)}</td>
+                  <td className="px-4 py-3 text-xs">{priceQuality(row)}</td>
                 </tr>
               ))}
               {rows.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-4 py-8 text-center text-kos-text/60"
                   >
-                    No executable slate rows yet for the active week window.
+                    No slate rows yet for the active week window.
                   </td>
                 </tr>
               ) : null}

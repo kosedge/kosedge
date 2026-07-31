@@ -38,18 +38,37 @@ export default function NflSeasonPreviewsIndexPage() {
         />
         <div className="relative">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-            Kos Edge · NFL Pro
+            Research desk · Team Previews
           </p>
           <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
             2026 Season Previews
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-kos-text/80 sm:text-base">
-            Thirty-two team essays from the subscription desk — market number
-            first, beat context second, model conflict check before any lean.
-            Each piece ships a betting guide and handicapper&apos;s note.
+            Thirty-two writer-owned team essays — market number first, beat
+            context second, model conflict check before any lean.
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/edge-board/nfl"
+              className="rounded-lg border border-kos-gold/35 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
+            >
+              Edge Board
+            </Link>
+            <a
+              href="#afc"
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+            >
+              Jump AFC
+            </a>
+            <a
+              href="#nfc"
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+            >
+              Jump NFC
+            </a>
+          </div>
           <p className="mt-4 text-xs text-kos-text/60">
-            {articles.length} teams published · late-July camp package
+            At a Glance · {articles.length}/32 published
           </p>
         </div>
       </section>
@@ -63,7 +82,14 @@ export default function NflSeasonPreviewsIndexPage() {
       ) : (
         <div className="mt-8 space-y-8">
           {groups.map((group) => (
-            <section key={`${group.conference}-${group.division}`}>
+            <section
+              key={`${group.conference}-${group.division}`}
+              id={
+                group.division === "East"
+                  ? group.conference.toLowerCase()
+                  : undefined
+              }
+            >
               <div className="mb-3 flex items-end justify-between gap-3">
                 <h2 className="text-lg font-semibold text-kos-text">
                   {group.conference} {group.division}

@@ -162,17 +162,15 @@ export default async function NflTeamIntelViewPage({
   });
   const teamCodes = extractTeamCodes(standings.rows);
   const selectedTeam = resolveTeamCode(requestedTeam, teamCodes);
+  // Path segment is the source of truth. Ignore stale ?team= query params
+  // (legacy filter forms) so every team card opens its own page — not Bills.
   const queryTeam = firstQueryValue(rawSearch.team);
-  const queryTeamResolved = queryTeam
-    ? resolveTeamCode(queryTeam, teamCodes)
-    : null;
-  if (queryTeamResolved && queryTeamResolved !== selectedTeam) {
+  if (queryTeam) {
     const query = new URLSearchParams();
     if (filters.season) query.set("season", String(filters.season));
     if (filters.week) query.set("week", String(filters.week));
-    redirect(
-      `/pro/nfl/teams/${queryTeamResolved}/${view}${query.toString() ? `?${query.toString()}` : ""}`,
-    );
+    const suffix = query.toString() ? `?${query.toString()}` : "";
+    redirect(`/pro/nfl/teams/${selectedTeam}/${view}${suffix}`);
   }
 
   const [stats, statsComparison, depth, injuries, rosters] = await Promise.all([

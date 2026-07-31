@@ -121,44 +121,52 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       },
     ],
     footerCards: [
-      ...SHARED_FOOTER("nfl"),
+      // Bottom resource grid: no KEI Lines duplicate (lives in Betting Desk).
+      {
+        href: "/pro/power-ratings/nfl",
+        title: "Power Ratings",
+        description:
+          "Team strength, offense/defense splits, and weekly movement from the model engine.",
+        cta: "View ratings →",
+        accent: "gold",
+      },
+      {
+        href: "/pro/nfl/previews",
+        title: "Team Previews",
+        description:
+          "All 32 writer-owned 2026 season previews with angles and win-total guides.",
+        cta: "Read previews →",
+        accent: "gold",
+      },
+      {
+        href: "/pro/nfl/teams",
+        title: "Team Research Hub",
+        description:
+          "32-team directory with depth, injuries, tendencies, and preview slots.",
+        cta: "Open team hub →",
+        accent: "neutral",
+      },
       {
         href: "/pro/nfl/camp",
         title: "Training Camp Desk",
         description:
-          "Beat map, public camp headlines, and writer ownership so the NFL section stays live daily into kickoff.",
+          "Beat map, public camp headlines, and writer ownership into kickoff.",
         cta: "Open camp desk →",
         accent: "green",
       },
       {
-        href: "/pro/nfl/previews",
-        title: "2026 Season Previews",
-        description:
-          "All 32 writer-owned team previews with angles, win-total guides, and handicapper notes.",
-        cta: "Read the desk package →",
-        accent: "gold",
-      },
-      {
-        href: "/pro/nfl/slate/today",
-        title: "Weekly Slate",
-        description:
-          "PRE market + camp strength reference cards, then REG fair-lines with publish tags.",
-        cta: "Open weekly slate →",
-        accent: "neutral",
-      },
-      {
         href: "/pro/nfl/projections",
-        title: "Projections Hub",
+        title: "Futures",
         description:
-          "User-friendly wins, futures, and player fantasy projection tables built from the latest preseason bundle.",
-        cta: "Open projections hub →",
+          "Wins, division, conference, and Super Bowl projections from the sim bundle.",
+        cta: "Open futures →",
         accent: "gold",
       },
       {
         href: "/wall-chart/nfl-2026",
         title: "2026 Wall Chart",
         description:
-          "Printable 24×18 NFL schedule tracker — laminated wet-erase friendly with full 2026 matchups.",
+          "Interactive + print-friendly 24×18 schedule tracker for the full season.",
         cta: "Open wall chart →",
         accent: "green",
       },
@@ -166,25 +174,41 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/nfl/fantasy",
         title: "Fantasy Draft Board",
         description:
-          "Full VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers, position filters, and scoring toggles.",
+          "VOR-ranked draft board across QB/RB/WR/TE/K/DST with scoring toggles.",
         cta: "Open draft board →",
         accent: "gold",
+      },
+      {
+        href: "/pro/nfl/dfs",
+        title: "DFS Board",
+        description:
+          "DraftKings and FanDuel salary, projection, value, and ownership research.",
+        cta: "Open DFS →",
+        accent: "neutral",
       },
       {
         href: "/pro/nfl/player-previews",
         title: "Player Previews",
         description:
-          "MVP/OPOY races plus skill-position draft outlooks — the dedicated player preview index.",
+          "Selective star and role-change outlooks with position filters.",
         cta: "Open player previews →",
         accent: "neutral",
       },
       {
         href: "/pro/nfl/awards",
-        title: "MVP & OPOY Race",
+        title: "Awards",
         description:
-          "Real projected award contenders with the team success + stat evidence behind every ranking.",
-        cta: "View award race →",
+          "MVP, OPOY, DPOY, Rookie, and Coach races with ranked evidence tables.",
+        cta: "View awards →",
         accent: "neutral",
+      },
+      {
+        href: "/pro/model-transparency",
+        title: "Model Health",
+        description:
+          "Transparency, CLV tracking, and performance accountability.",
+        cta: "Open model health →",
+        accent: "green",
       },
     ],
   },

@@ -49,6 +49,9 @@ describe("nfl-team-intel helpers", () => {
     expect(resolveTeamCode("mia", ["BUF", "MIA", "NE"])).toBe("MIA");
     expect(resolveTeamCode("zzz", ["BUF", "MIA", "NE"])).toBe("BUF");
     expect(resolveTeamCode(undefined, [])).toBe("BUF");
+    // Directory codes always win — never remap KC onto BUF when intel is empty.
+    expect(resolveTeamCode("KC", [])).toBe("KC");
+    expect(resolveTeamCode("dal", ["BUF"])).toBe("DAL");
   });
 
   it("filters directory by conference/division/search", () => {

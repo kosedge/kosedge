@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
+import NflProShell from "@/components/pro/nfl/NflProShell";
 import { SPORTS } from "@/lib/sports";
 
-export default async function ProLayout({
+export default async function ProSportLayout({
   children,
   params,
 }: {
@@ -11,6 +11,10 @@ export default async function ProLayout({
 }) {
   const resolved = await Promise.resolve(params);
   const sport = String(resolved.sport || "").toLowerCase();
+
+  if (sport === "nfl") {
+    return <NflProShell>{children}</NflProShell>;
+  }
 
   return (
     <div className="min-h-screen bg-kos-black text-kos-text">
@@ -37,7 +41,7 @@ export default async function ProLayout({
               return (
                 <Link
                   key={s.key}
-                  href={`/pro/${s.key}`}
+                  href={s.key === "nfl" ? "/pro/nfl/overview" : `/pro/${s.key}`}
                   aria-current={active ? "page" : undefined}
                   className={
                     active
@@ -52,8 +56,6 @@ export default async function ProLayout({
           </nav>
         </div>
       </header>
-
-      {sport === "nfl" ? <NflDataFreshnessBanner /> : null}
 
       {children}
     </div>

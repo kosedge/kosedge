@@ -80,15 +80,15 @@ export default async function NflFairLinesPage({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              {season} KEI Lines
+              KEI Lines · {season}
+              {board.currentWeek ? ` · Week ${board.currentWeek}` : ""}
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-              Kosedge Makes Its Own Lines
+              KEI Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Neutral model fair values — spread, total, and moneylines — for
-              the slate. Market columns appear when Vegas joins; otherwise you
-              still get the Kosedge reference alone.
+              Model fair spreads, totals, and moneylines beside the market when
+              books join. Research baseline — not a picks feed. Kickoffs in ET.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">

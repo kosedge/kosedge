@@ -228,7 +228,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/player-previews",
           label: "Player Previews",
-          hint: "MVP/OPOY races plus skill-position draft outlooks from the player model.",
+          hint: "Selective star and role-change outlooks with position filters.",
           premium: true,
           status: "active",
         },
@@ -309,9 +309,16 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/pro/nfl/projections",
+          href: "/pro/nfl/weekly-fantasy",
           label: "Weekly Fantasy Projections",
-          hint: "Player fantasy totals from the latest projection bundle.",
+          hint: "Weekly leaders and player fantasy totals with scoring filters.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/dfs",
+          label: "DFS Board",
+          hint: "DraftKings and FanDuel salary, projection, value, and ownership.",
           premium: true,
           status: "active",
         },

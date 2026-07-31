@@ -1,5 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import type { TeamIntelFilters } from "@/lib/nfl-team-intel";
+import {
+  InstantFilterBar,
+  InstantSelect,
+  InstantTextInput,
+} from "@/components/pro/InstantFilterBar";
 
 type TeamOption = {
   code: string;
@@ -25,121 +34,158 @@ export default function TeamIntelFilterBar({
   showTeamSelect?: boolean;
   showLeagueFilters?: boolean;
 }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
   const season = filters.season ? String(filters.season) : "";
   const week = filters.week ? String(filters.week) : "";
   const conference = filters.conference ?? "";
   const division = filters.division ?? "";
   const query = filters.query ?? "";
 
+  function buildHref(updates: Record<string, string | null | undefined>) {
+    const params = new URLSearchParams();
+    const next = {
+      season,
+      week,
+      conference: showLeagueFilters ? conference : "",
+      division: showLeagueFilters ? division : "",
+      q: query,
+      ...updates,
+    };
+    for (const [key, value] of Object.entries(next)) {
+      if (value) params.set(key, value);
+    }
+    const qs = params.toString();
+
+    // Team changes navigate by path segment — never via ?team= (avoids Bills remap bugs).
+    if (showTeamSelect && updates.team != null && updates.team !== "") {
+      const viewMatch = basePath.match(
+        /\/pro\/nfl\/teams\/[^/]+\/([^/?]+)/,
+      );
+      const view = viewMatch?.[1] ?? "overview";
+      const path = `/pro/nfl/teams/${updates.team}/${view}`;
+      return qs ? `${path}?${qs}` : path;
+    }
+
+    return qs ? `${basePath}?${qs}` : basePath;
+  }
+
+  function navigate(updates: Record<string, string | null | undefined>) {
+    startTransition(() => {
+      router.replace(buildHref(updates), { scroll: false });
+    });
+  }
+
   return (
-    <section className="sticky top-16 z-20 rounded-2xl border border-white/10 bg-black/75 p-4 shadow-xl backdrop-blur-xl">
+    <InstantFilterBar>
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-kos-gold">
-            Team Intel Controls
+            Research filters
           </p>
           <h2 className="mt-1 text-lg font-semibold text-kos-text">{title}</h2>
           <p className="mt-1 text-xs text-kos-text/70">{subtitle}</p>
         </div>
-        <Link
-          href="/pro/nfl/overview"
-          className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text transition hover:border-kos-gold/40 hover:text-kos-gold"
-        >
-          Back to NFL Overview
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/pro/nfl/overview"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text transition hover:border-kos-gold/40 hover:text-kos-gold"
+          >
+            NFL Overview
+          </Link>
+          <Link
+            href="/edge-board/nfl"
+            className="rounded-lg border border-kos-gold/30 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold transition hover:border-kos-gold/50"
+          >
+            Edge Board
+          </Link>
+        </div>
       </div>
 
-      <form
-        action={basePath}
-        className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6"
-      >
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
         {showTeamSelect ? (
-          <label className="flex flex-col gap-1 text-xs text-kos-text/70">
-            Team
-            <select
-              name="team"
-              defaultValue={selectedTeam ?? ""}
-              className="rounded-lg border border-white/15 bg-black/50 px-2 py-2 text-sm text-kos-text outline-none transition focus:border-kos-gold/50"
-            >
-              {teamOptions.map((team) => (
-                <option key={team.code} value={team.code}>
-                  {team.code} · {team.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <InstantSelect
+            name="team"
+            label="Team"
+            value={selectedTeam ?? ""}
+            pending={pending}
+            onChange={(value) => navigate({ team: value })}
+            options={teamOptions.map((team) => ({
+              value: team.code,
+              label: `${team.code} · ${team.name}`,
+            }))}
+          />
         ) : null}
-        <label className="flex flex-col gap-1 text-xs text-kos-text/70">
-          Season
-          <input
-            type="number"
-            name="season"
-            min={2010}
-            max={2100}
-            defaultValue={season}
-            placeholder="Latest"
-            className="rounded-lg border border-white/15 bg-black/50 px-2 py-2 text-sm text-kos-text outline-none transition focus:border-kos-gold/50"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-xs text-kos-text/70">
-          Week
-          <input
-            type="number"
-            name="week"
-            min={1}
-            max={25}
-            defaultValue={week}
-            placeholder="Latest"
-            className="rounded-lg border border-white/15 bg-black/50 px-2 py-2 text-sm text-kos-text outline-none transition focus:border-kos-gold/50"
-          />
-        </label>
+        <InstantSelect
+          name="season"
+          label="Season"
+          value={season}
+          pending={pending}
+          onChange={(value) => navigate({ season: value || null })}
+          options={[
+            { value: "", label: "Latest" },
+            { value: "2026", label: "2026" },
+            { value: "2025", label: "2025" },
+            { value: "2024", label: "2024" },
+          ]}
+        />
+        <InstantSelect
+          name="week"
+          label="Week"
+          value={week}
+          pending={pending}
+          onChange={(value) => navigate({ week: value || null })}
+          options={[
+            { value: "", label: "Latest" },
+            ...Array.from({ length: 22 }, (_, i) => ({
+              value: String(i + 1),
+              label: `Week ${i + 1}`,
+            })),
+          ]}
+        />
         {showLeagueFilters ? (
-          <label className="flex flex-col gap-1 text-xs text-kos-text/70">
-            Conference
-            <select
-              name="conference"
-              defaultValue={conference}
-              className="rounded-lg border border-white/15 bg-black/50 px-2 py-2 text-sm text-kos-text outline-none transition focus:border-kos-gold/50"
-            >
-              <option value="">All</option>
-              <option value="AFC">AFC</option>
-              <option value="NFC">NFC</option>
-            </select>
-          </label>
+          <InstantSelect
+            name="conference"
+            label="Conference"
+            value={conference}
+            pending={pending}
+            onChange={(value) => navigate({ conference: value || null })}
+            options={[
+              { value: "", label: "All" },
+              { value: "AFC", label: "AFC" },
+              { value: "NFC", label: "NFC" },
+            ]}
+          />
         ) : null}
         {showLeagueFilters ? (
-          <label className="flex flex-col gap-1 text-xs text-kos-text/70">
-            Division
-            <select
-              name="division"
-              defaultValue={division}
-              className="rounded-lg border border-white/15 bg-black/50 px-2 py-2 text-sm text-kos-text outline-none transition focus:border-kos-gold/50"
-            >
-              <option value="">All</option>
-              <option value="East">East</option>
-              <option value="North">North</option>
-              <option value="South">South</option>
-              <option value="West">West</option>
-            </select>
-          </label>
-        ) : null}
-        <label className="flex flex-col gap-1 text-xs text-kos-text/70">
-          Team Search
-          <input
-            type="text"
-            name="q"
-            defaultValue={query}
-            placeholder="Bills, BUF, Chiefs..."
-            className="rounded-lg border border-white/15 bg-black/50 px-2 py-2 text-sm text-kos-text outline-none transition focus:border-kos-gold/50"
+          <InstantSelect
+            name="division"
+            label="Division"
+            value={division}
+            pending={pending}
+            onChange={(value) => navigate({ division: value || null })}
+            options={[
+              { value: "", label: "All" },
+              { value: "East", label: "East" },
+              { value: "North", label: "North" },
+              { value: "South", label: "South" },
+              { value: "West", label: "West" },
+            ]}
           />
-        </label>
-        <button
-          type="submit"
-          className="rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-2 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
-        >
-          Apply Filters
-        </button>
-      </form>
-    </section>
+        ) : null}
+        <InstantTextInput
+          name="q"
+          label="Team search"
+          value={query}
+          placeholder="Chiefs, KC, Packers…"
+          pending={pending}
+          onCommit={(value) => navigate({ q: value.trim() || null })}
+        />
+      </div>
+      {pending ? (
+        <p className="mt-2 text-[11px] text-kos-text/45">Updating…</p>
+      ) : null}
+    </InstantFilterBar>
   );
 }

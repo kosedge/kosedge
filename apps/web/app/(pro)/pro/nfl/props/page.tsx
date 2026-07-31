@@ -50,10 +50,11 @@ export default async function NflPropsBoardPage({
       ? weekRaw
       : DEFAULT_WEEK;
   const market = (firstValue(search.market) ?? "ALL").toLowerCase();
-  const tagRaw = (firstValue(search.tag) ?? "ALL").toUpperCase();
+  // Default to PLAY so high-confidence research surfaces first.
+  const tagRaw = (firstValue(search.tag) ?? "PLAY").toUpperCase();
   const tag = TAG_TABS.includes(tagRaw as (typeof TAG_TABS)[number])
     ? tagRaw
-    : "ALL";
+    : "PLAY";
   const team = (firstValue(search.team) ?? "").toUpperCase();
   const limitRaw = Number(firstValue(search.limit));
   const limit = LIMIT_OPTIONS.includes(
@@ -80,35 +81,21 @@ export default async function NflPropsBoardPage({
     limit: String(limit),
   };
 
-  const topEdge = [...board.rows]
-    .filter((row) => row.edgeOver !== null || row.edgeUnder !== null)
-    .sort((a, b) => {
-      const aMax = Math.max(
-        Math.abs(a.edgeOver ?? 0),
-        Math.abs(a.edgeUnder ?? 0),
-      );
-      const bMax = Math.max(
-        Math.abs(b.edgeOver ?? 0),
-        Math.abs(b.edgeUnder ?? 0),
-      );
-      return bMax - aMax;
-    })[0];
-
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <section className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              {season} Week {week} Props Board
+              Week {week} · {season} · Props research
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-              Kosedge Player Props
+              Props
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Selective stake board: calibrated Monte Carlo means, de-vigged
-              edges, and sparse PLAY tags. Most props are PASS by design. Edges
-              appear only when a book line is joined — never invented.
+              Player prop board with model means and fair prices. PLAY tags
+              surface high-confidence research rows — not bet recommendations.
+              Market edges appear only when a book line is joined.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -116,74 +103,41 @@ export default async function NflPropsBoardPage({
               href="/pro/nfl/overview"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
-              Back to NFL Overview
+              NFL Overview
             </Link>
             <Link
-              href="/pro/nfl/edges"
-              className="rounded-xl border border-edge-green/35 bg-edge-green/10 px-4 py-2 text-center text-sm font-semibold text-edge-green transition hover:border-edge-green/55"
+              href="/edge-board/nfl"
+              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
             >
-              Edges Desk →
-            </Link>
-            <Link
-              href="/pro/nfl/fair-lines"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
-            >
-              KEI Lines Board →
+              Edge Board →
             </Link>
           </div>
         </div>
+        <nav className="mt-5 flex flex-wrap gap-2" aria-label="Props destinations">
+          <span className="rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold">
+            Player Props Board
+          </span>
+          <Link
+            href="/pro/nfl/weekly-fantasy"
+            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
+          >
+            Weekly Fantasy Points
+          </Link>
+        </nav>
       </section>
 
       {board.error ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {board.error} The props board will populate once the model service is
-          reachable.
+          The props board will populate once the model service is reachable.
         </section>
       ) : null}
 
       {!board.error && board.diagnostics.kosedgeOnly ? (
         <section className="mt-6 rounded-2xl border border-sky-400/25 bg-sky-400/10 p-5 text-sm text-sky-100">
-          No market-joined prop edges yet (with_mkt = 0). Showing Kosedge model
-          means and fair prices only — market edge columns stay blank until
-          books join.
+          Showing model means and fair prices. Book edge columns stay blank
+          until markets join.
         </section>
       ) : null}
-
-      {!board.error ? (
-        <section className="mt-6 grid gap-4 md:grid-cols-3">
-          <StatCard
-            label="Props on board"
-            value={String(board.count)}
-            detail={`${season} · Week ${week}`}
-          />
-          <StatCard
-            label="Market joins"
-            value={String(board.diagnostics.marketJoinedCount)}
-            detail={
-              board.diagnostics.marketJoinedCount > 0
-                ? "Rows with live over/under book prices"
-                : "Kosedge-only fair prices"
-            }
-          />
-          <StatCard
-            label="Research tags"
-            value={`${board.diagnostics.playCount ?? 0} PLAY · ${board.diagnostics.watchCount ?? board.diagnostics.leanCount ?? 0} WATCH`}
-            detail={
-              board.diagnostics.boxScoreSourcedCount
-                ? `${board.diagnostics.boxScoreSourcedCount} rows from box-score MC`
-                : topEdge
-                  ? `Top edge: ${topEdge.playerName}`
-                  : "PLAY = research highlight only"
-            }
-          />
-        </section>
-      ) : null}
-
-      <section className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 text-sm text-kos-text/75">
-        No confirmed stake edge after holdout validation. PLAY highlights are
-        research-only (not bet recommendations). Pass/rush high-z tags are
-        WATCH. KEI lines and model means still publish when books join.
-      </section>
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -404,22 +358,3 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
   );
 }
 
-function StatCard({
-  label,
-  value,
-  detail,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/55">
-        {label}
-      </p>
-      <p className="mt-2 text-lg font-semibold text-kos-text">{value}</p>
-      <p className="mt-1 text-xs text-kos-text/60">{detail}</p>
-    </div>
-  );
-}

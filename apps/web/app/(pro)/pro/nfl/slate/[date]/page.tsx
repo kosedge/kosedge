@@ -27,35 +27,20 @@ export default async function NflWeeklySlatePage({
 }) {
   const { date } = await params;
   const slate = await buildNflWeeklySlate(date);
-  const totalCards = slate.sections.reduce(
-    (sum, section) => sum + section.cards.length,
-    0,
-  );
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-            NFL Pro · Weekly slate
+            Primary writer home · Weekly slate
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
-            {date === "today" ? "Current board" : `Slate · ${date}`}
+            {date === "today" ? "Weekly Slate" : `Slate · ${date}`}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Preseason market + camp strength reference, plus regular-season
-            fair-lines with market join. PRE numbers are informational —
-            season PLAY tags stay blocked.
-          </p>
-          <p className="mt-2 text-xs text-kos-text/55">
-            {totalCards} games · model {slate.modelVersion || "—"} · odds feed{" "}
-            {slate.diagnostics.oddsFeedStatus}
-            {slate.diagnostics.marketJoinedCount
-              ? ` · ${slate.diagnostics.marketJoinedCount} market-joined`
-              : ""}
-            {slate.diagnostics.campRefJoinedCount
-              ? ` · ${slate.diagnostics.campRefJoinedCount} camp-ref PRE`
-              : ""}
+            Slate snapshot and matchup cards for writer briefs. Model lines and
+            market context when joined — research desk, not a picks feed.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -63,19 +48,25 @@ export default async function NflWeeklySlatePage({
             href="/pro/nfl/overview"
             className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
           >
-            Back to Hub
+            NFL Overview
+          </Link>
+          <Link
+            href="/edge-board/nfl"
+            className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
+          >
+            Edge Board →
+          </Link>
+          <Link
+            href="/pro/nfl/previews"
+            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
+          >
+            Team Previews
           </Link>
           <Link
             href="/pro/nfl/camp"
             className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
           >
             Camp Desk
-          </Link>
-          <Link
-            href="/odds/nfl"
-            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
-          >
-            Compare Odds
           </Link>
           <Link
             href="/pro/nfl/fair-lines"

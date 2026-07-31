@@ -156,80 +156,124 @@ function mapPlayerTotalsRows(rows: CsvRow[]): PlayerProjectionTotalsRow[] {
   }));
 }
 
+function loadBundleFromDir(
+  dataOpsPath: string,
+  bundleDirName: string,
+): NflPreseasonBundle | null {
+  const bundlePath = path.join(dataOpsPath, bundleDirName);
+  const teamPath = path.join(bundlePath, "team_regular_season_outcomes.csv");
+  const regularPath = path.join(bundlePath, "player_regular_season_totals.csv");
+  const playoffPath = path.join(bundlePath, "player_playoff_totals.csv");
+  const checksPath = path.join(bundlePath, "quality_checks.json");
+  const summaryPath = path.join(bundlePath, "run_summary.json");
+  if (
+    !existsSync(teamPath) ||
+    !existsSync(regularPath) ||
+    !existsSync(playoffPath)
+  ) {
+    return null;
+  }
+
+  const teamRows = mapTeamRows(parseCsvRows(readFileSync(teamPath, "utf8")));
+  const playerTotalsRegular = mapPlayerTotalsRows(
+    parseCsvRows(readFileSync(regularPath, "utf8")),
+  );
+  const playerTotalsPlayoff = mapPlayerTotalsRows(
+    parseCsvRows(readFileSync(playoffPath, "utf8")),
+  );
+
+  let generatedAtUtc: string | null = null;
+  if (existsSync(summaryPath)) {
+    try {
+      const parsed = JSON.parse(readFileSync(summaryPath, "utf8")) as {
+        generated_at_utc?: string;
+      };
+      generatedAtUtc = parsed.generated_at_utc ?? null;
+    } catch {
+      generatedAtUtc = null;
+    }
+  }
+
+  let qualityChecks: NflPreseasonBundle["qualityChecks"] = {};
+  if (existsSync(checksPath)) {
+    try {
+      const parsed = JSON.parse(readFileSync(checksPath, "utf8")) as {
+        sanity?: {
+          sum_super_bowl_prob?: number;
+          sum_division_title_prob?: number;
+          sum_playoff_prob?: number;
+        };
+      };
+      qualityChecks = {
+        sumSuperBowlProb: parsed.sanity?.sum_super_bowl_prob,
+        sumDivisionTitleProb: parsed.sanity?.sum_division_title_prob,
+        sumPlayoffProb: parsed.sanity?.sum_playoff_prob,
+      };
+    } catch {
+      qualityChecks = {};
+    }
+  }
+
+  return {
+    bundleDirName,
+    bundlePath,
+    generatedAtUtc,
+    qualityChecks,
+    teamRows,
+    playerTotalsRegular,
+    playerTotalsPlayoff,
+  };
+}
+
 export function loadLatestNflPreseasonBundle2026(): NflPreseasonBundle | null {
   const repoRoot = findRepoRoot();
   if (!repoRoot) return null;
   const dataOpsPath = path.join(repoRoot, "data", "ops");
   const bundleDirs = list2026BundleDirectories(dataOpsPath);
-  if (bundleDirs.length === 0) return null;
-
   for (const bundleDirName of bundleDirs) {
-    const bundlePath = path.join(dataOpsPath, bundleDirName);
-    const teamPath = path.join(bundlePath, "team_regular_season_outcomes.csv");
-    const regularPath = path.join(
-      bundlePath,
-      "player_regular_season_totals.csv",
-    );
-    const playoffPath = path.join(bundlePath, "player_playoff_totals.csv");
-    const checksPath = path.join(bundlePath, "quality_checks.json");
-    const summaryPath = path.join(bundlePath, "run_summary.json");
-    if (
-      !existsSync(teamPath) ||
-      !existsSync(regularPath) ||
-      !existsSync(playoffPath)
-    )
-      continue;
-
-    const teamRows = mapTeamRows(parseCsvRows(readFileSync(teamPath, "utf8")));
-    const playerTotalsRegular = mapPlayerTotalsRows(
-      parseCsvRows(readFileSync(regularPath, "utf8")),
-    );
-    const playerTotalsPlayoff = mapPlayerTotalsRows(
-      parseCsvRows(readFileSync(playoffPath, "utf8")),
-    );
-
-    let generatedAtUtc: string | null = null;
-    if (existsSync(summaryPath)) {
-      try {
-        const parsed = JSON.parse(readFileSync(summaryPath, "utf8")) as {
-          generated_at_utc?: string;
-        };
-        generatedAtUtc = parsed.generated_at_utc ?? null;
-      } catch {
-        generatedAtUtc = null;
-      }
-    }
-
-    let qualityChecks: NflPreseasonBundle["qualityChecks"] = {};
-    if (existsSync(checksPath)) {
-      try {
-        const parsed = JSON.parse(readFileSync(checksPath, "utf8")) as {
-          sanity?: {
-            sum_super_bowl_prob?: number;
-            sum_division_title_prob?: number;
-            sum_playoff_prob?: number;
-          };
-        };
-        qualityChecks = {
-          sumSuperBowlProb: parsed.sanity?.sum_super_bowl_prob,
-          sumDivisionTitleProb: parsed.sanity?.sum_division_title_prob,
-          sumPlayoffProb: parsed.sanity?.sum_playoff_prob,
-        };
-      } catch {
-        qualityChecks = {};
-      }
-    }
-
-    return {
-      bundleDirName,
-      bundlePath,
-      generatedAtUtc,
-      qualityChecks,
-      teamRows,
-      playerTotalsRegular,
-      playerTotalsPlayoff,
-    };
+    const bundle = loadBundleFromDir(dataOpsPath, bundleDirName);
+    if (bundle) return bundle;
   }
-
   return null;
+}
+
+/** Latest N valid 2026 preseason sim bundles (newest first). Used for weekly Δ. */
+export function loadNflPreseasonBundles2026(
+  limit = 2,
+): NflPreseasonBundle[] {
+  const repoRoot = findRepoRoot();
+  if (!repoRoot) return [];
+  const dataOpsPath = path.join(repoRoot, "data", "ops");
+  const bundleDirs = list2026BundleDirectories(dataOpsPath);
+  const out: NflPreseasonBundle[] = [];
+  for (const bundleDirName of bundleDirs) {
+    const bundle = loadBundleFromDir(dataOpsPath, bundleDirName);
+    if (bundle) out.push(bundle);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+/** Bundle directory names available for the week/history selector. */
+export function listNflPreseasonBundleIds2026(): string[] {
+  const repoRoot = findRepoRoot();
+  if (!repoRoot) return [];
+  const dataOpsPath = path.join(repoRoot, "data", "ops");
+  return list2026BundleDirectories(dataOpsPath).filter((name) => {
+    const teamPath = path.join(
+      dataOpsPath,
+      name,
+      "team_regular_season_outcomes.csv",
+    );
+    return existsSync(teamPath);
+  });
+}
+
+export function loadNflPreseasonBundleById2026(
+  bundleId: string,
+): NflPreseasonBundle | null {
+  if (!bundleId.startsWith("nfl-preseason-sim-2026-")) return null;
+  const repoRoot = findRepoRoot();
+  if (!repoRoot) return null;
+  return loadBundleFromDir(path.join(repoRoot, "data", "ops"), bundleId);
 }

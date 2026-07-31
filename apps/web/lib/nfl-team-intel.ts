@@ -290,17 +290,17 @@ export function resolveTeamCode(
     .map((team) => normalizeTeamCode(team))
     .filter(Boolean) as string[];
 
-  if (normalizedCandidate && normalizedAvailable.includes(normalizedCandidate))
-    return normalizedCandidate;
-
-  // Offseason / empty intel: honor a valid directory team from the URL instead
-  // of remapping every request onto the first available (or BUF) fallback.
+  // Always honor a valid NFL directory code from the URL first.
+  // Never remap KC/DAL/etc. onto BUF when intel rows are empty or lagged.
   if (
     normalizedCandidate &&
     NFL_TEAM_DIRECTORY_BY_CODE.has(normalizedCandidate)
   ) {
     return normalizedCandidate;
   }
+
+  if (normalizedCandidate && normalizedAvailable.includes(normalizedCandidate))
+    return normalizedCandidate;
 
   if (normalizedAvailable.length > 0) return normalizedAvailable[0];
   return "BUF";

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   fetchNflEdgesDesk,
-  formatConfidence,
   formatKickoff,
   type DeskEdgeRow,
   type DeskMarketType,
@@ -113,29 +112,29 @@ export default async function NflEdgesDeskPage({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              {season} Betting Desk · Edges
+              Week {week} · {season} · Research desk
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-              Actionable Kosedge Edges
+              Model vs Market Edges
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              KEI Lines → Edges → Bets. Game and prop edges that clear your
-              thresholds — Kosedge line vs Vegas, side, and confidence. Empty
-              when nothing clears the cut.
+              Meaningful separations between Kos Edge lines and the joined
+              market. Research context only — not a pick sheet. Empty when
+              nothing clears the cut.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
             <Link
-              href="/pro/nfl/fair-lines"
+              href="/pro/nfl/overview"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
-              ← KEI Lines
+              NFL Overview
             </Link>
             <Link
-              href="/pro/nfl/props"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
+              href="/edge-board/nfl"
+              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
             >
-              Props Board →
+              Edge Board →
             </Link>
           </div>
         </div>
@@ -216,7 +215,7 @@ export default async function NflEdgesDeskPage({
                   : "text-kos-text/60"
               }`}
             >
-              W{w}
+              Week {w} · {season}
             </Link>
           ))}
         </div>
@@ -224,10 +223,9 @@ export default async function NflEdgesDeskPage({
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-xl font-semibold text-kos-text">Edges Board</h2>
-          <p className="text-xs text-kos-text/60">
-            {desk.count} edge{desk.count === 1 ? "" : "s"}
-          </p>
+          <h2 className="text-xl font-semibold text-kos-text">
+            Edges · Week {week} · {season}
+          </h2>
         </div>
 
         {!fetchError && desk.rows.length === 0 ? (
@@ -257,13 +255,12 @@ export default async function NflEdgesDeskPage({
               <thead className="text-xs uppercase tracking-wide text-kos-text/55">
                 <tr className="border-b border-white/10">
                   <th className="px-3 py-2 font-semibold">Matchup / Player</th>
-                  <th className="px-3 py-2 font-semibold">Market</th>
-                  <th className="px-3 py-2 font-semibold">Kosedge</th>
-                  <th className="px-3 py-2 font-semibold">Vegas</th>
-                  <th className="px-3 py-2 font-semibold">Edge</th>
-                  <th className="px-3 py-2 font-semibold">Side</th>
-                  <th className="px-3 py-2 font-semibold">Confidence</th>
-                  <th className="px-3 py-2 font-semibold">Kickoff</th>
+                  <th className="px-3 py-2 font-semibold">Type</th>
+                  <th className="px-3 py-2 font-semibold">KEI</th>
+                  <th className="px-3 py-2 font-semibold">Book</th>
+                  <th className="px-3 py-2 font-semibold">Separation</th>
+                  <th className="px-3 py-2 font-semibold">Lean</th>
+                  <th className="px-3 py-2 font-semibold">Kickoff (ET)</th>
                 </tr>
               </thead>
               <tbody>
@@ -301,10 +298,7 @@ function EdgeRow({ row }: { row: DeskEdgeRow }) {
       <td className="px-3 py-3 font-semibold text-edge-green">
         {row.edgeDisplay}
       </td>
-      <td className="px-3 py-3 text-edge-green">{row.side}</td>
-      <td className="px-3 py-3 text-kos-text/80">
-        {formatConfidence(row.confidence)}
-      </td>
+      <td className="px-3 py-3 text-kos-text/85">{row.side}</td>
       <td className="px-3 py-3 text-xs text-kos-text/60">
         {formatKickoff(row.kickoff)}
       </td>
