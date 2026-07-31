@@ -3,8 +3,8 @@
 **Branch:** `cursor/multi-sport-densify-37e9` → `deploy-vercel`  
 **Last updated:** 2026-07-31  
 **Philosophy:** “I give the info, you make the picks.”  
-**PR #33 (merged):** https://github.com/kosedge/kosedge/pull/33 — merge SHA `c03d3e40ae2d2d233a27214b0716aec39e853ddf`  
-**Prod deploy:** Vercel Production `kosedge-3bpoiiiy3` (GitHub deployment id `5695853078`)
+**PR #33 (merged):** https://github.com/kosedge/kosedge/pull/33 — merge SHA `c03d3e40ae2d2d233a27214b0716aec39e853ddf` → dpl `dpl_2mq4inYonuiinK8W3bBqLt49svp9`  
+**PR #34 (merged):** https://github.com/kosedge/kosedge/pull/34 — merge SHA `0c0abf253f052ccd5f22ca6703eaa0df08de2a50` → dpl `dpl_Hr4SgQw8ieTekmvgxPpwop3x6Fes` (current www)
 
 ## Slice 1–3 shipped — Shared SportProShell + Overview pattern
 
@@ -60,19 +60,27 @@ Legend: **DONE** · **PARTIAL** · **BLOCKED** (feed missing)
 | NHL Goalie starter names | Confirmation feed not connected — slate + totals only |
 | Tempo dedicated pace/havoc columns | Board totals used until college tempo feed join |
 
-### Live smoke (www.kosedge.com) — post PR #33 merge
+### Live smoke (www.kosedge.com) — post PR #34 densify
 
-| Route | HTTP | SportProShell / logo / nav |
-|-------|------|----------------------------|
-| `/pro/nfl/overview` | 200 | At a Glance, Workflow, Wall Chart (NFL-only), logo |
-| `/pro/ncaam/overview` | 200 | At a Glance, Workflow, Tempo, logo |
-| `/pro/cfb/overview` | 200 | At a Glance, Workflow, logo |
-| `/pro/nba/overview` | 200 | At a Glance, Workflow, logo |
-| `/pro/mlb/overview` | 200 | At a Glance, Workflow, Run Line, logo |
-| `/pro/nhl/overview` | 200 | At a Glance, Workflow, logo |
-| `/pro/wnba/overview` | 200 | At a Glance, Workflow, logo |
-| `/edge-board/{sport}` ×7 | 200 | Overview + Edge Board nav; not SSO-gated |
-| `/pro/{sport}/fair-lines` ×7 | 200 | NCAAM KEI live; NBA/CFB honest “Model board pending” |
+| Route | HTTP | Notes |
+|-------|------|-------|
+| `/pro/nfl/overview` | 200 | At a Glance, Workflow, Wall Chart, logo |
+| `/pro/ncaam/overview` | 200 | At a Glance, Workflow, Tempo; slate teams present |
+| `/pro/cfb/overview` | 200 | At a Glance + live fallback slate (Tar Heels / Horned Frogs) |
+| `/pro/nba/overview` | 200 | Shell live; slate empty (no Odds/model board) |
+| `/pro/mlb/overview` | 200 | Run Line nav; Yankees on slate |
+| `/pro/nhl/overview` | 200 | Goalie nav; Panthers on slate |
+| `/pro/wnba/overview` | 200 | Shell live; slate empty |
+| `/edge-board/cfb\|nhl\|mlb` | 200 | Fallback/model rows live (not SSO-gated) |
+| `/edge-board/nba\|wnba` | 200 | Honest empty / No live |
+| `/pro/ncaam/fair-lines` | 200 | KEI projections on file |
+| `/pro/cfb/fair-lines` | 200 | Model pending + Market lines on the board |
+| `/pro/nhl/fair-lines` | 200 | Model pending + Market lines on the board |
+| `/pro/cfb/edges` | 200 | Board slate live (market context) |
+| `/pro/cfb/tempo` | 200 | Board totals from fallback slate |
+| `/pro/nhl/goalies` | 200 | Slate + Confirmation pending (no fake starters) |
+| `/pro/mlb/props` | 200 | Props gated + fair-line game slate |
+| `/pro/power-ratings/ncaam` | 200 | teams ranked (365) |
 
 ### Preserved
 - DeploymentRecovery, BootShell, logo paths, upstream timeouts  
