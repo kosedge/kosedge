@@ -219,9 +219,9 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/pro/nfl/teams",
+          href: "/pro/nfl/previews",
           label: "Team Previews",
-          hint: "Team cards with writer-owned season preview slots.",
+          hint: "All 32 writer-owned 2026 season previews with betting guides.",
           premium: true,
           status: "active",
         },

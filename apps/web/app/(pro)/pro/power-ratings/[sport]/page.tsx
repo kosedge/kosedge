@@ -23,7 +23,9 @@ export default async function PowerRatingsSportPage({
             {sportName} — Power Ratings
           </h1>
           <p className="mt-2 text-kos-text/70">
-            Team strength and model rankings.
+            {sportKey === "nfl"
+              ? "Team strength ranked from the latest Kos Edge 2026 preseason simulation (expected wins)."
+              : "Team strength and model rankings."}
           </p>
         </div>
         <Link

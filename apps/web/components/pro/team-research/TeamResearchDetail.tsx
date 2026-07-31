@@ -76,6 +76,7 @@ export default function TeamResearchDetail({
         {sectionByKey.preview ? (
           <TeamPreviewSlot
             teamName={team.name}
+            teamCode={config.sportKey === "nfl" ? team.code : undefined}
             writer={assignment.writer}
             assignmentNote={assignment.note}
             provisional={assignment.provisional}

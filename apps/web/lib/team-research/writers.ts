@@ -27,6 +27,21 @@ export const WRITERS: Record<WriterId, WriterProfile> = {
     name: "Avery Cole",
     shortName: "Avery",
   },
+  "jordan-vale": {
+    id: "jordan-vale",
+    name: "Jordan Vale",
+    shortName: "Jordan",
+  },
+  "drew-kessler": {
+    id: "drew-kessler",
+    name: "Drew Kessler",
+    shortName: "Drew",
+  },
+  "sam-ortiz": {
+    id: "sam-ortiz",
+    name: "Sam Ortiz",
+    shortName: "Sam",
+  },
 };
 
 /**
@@ -42,10 +57,9 @@ const NFL_DIVISION_OWNER: Record<string, WriterId> = {
   "NFC|West": "morgan-hale",
   "AFC|East": "taylor-brooks",
   "NFC|South": "avery-cole",
-  // Extended affinity (not in locked matrix primary/also list):
-  "AFC|South": "avery-cole",
-  "AFC|West": "morgan-hale",
-  "NFC|East": "taylor-brooks",
+  "NFC|East": "jordan-vale",
+  "AFC|South": "drew-kessler",
+  "AFC|West": "sam-ortiz",
 };
 
 const MLB_OWNER: Record<string, WriterId> = {
@@ -137,19 +151,10 @@ export function assignTeamPreviewWriter(
       NFL_DIVISION_OWNER[key(conf, div)] ??
       NFL_DIVISION_OWNER[key(conf, "North")] ??
       "casey-voss";
-    const inMatrix = [
-      "NFC|North",
-      "AFC|North",
-      "NFC|West",
-      "AFC|East",
-      "NFC|South",
-    ].includes(key(conf, div));
     return {
       writer: WRITERS[id],
-      note: inMatrix
-        ? `Coverage matrix · ${conf} ${div ?? ""}`.trim()
-        : `Desk affinity extension · ${conf} ${div ?? ""}`.trim(),
-      provisional: !inMatrix,
+      note: `Coverage matrix · ${conf} ${div ?? ""}`.trim(),
+      provisional: false,
     };
   }
 

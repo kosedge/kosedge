@@ -353,7 +353,15 @@ function hockeySections(): TeamResearchSectionConfig[] {
 /** NFL uses dedicated intel routes; research sections overlay overview. */
 function nflResearchSections(): TeamResearchSectionConfig[] {
   return [
-    PREVIEW("NFL"),
+    section({
+      key: "preview",
+      title: "Season preview",
+      description:
+        "Writer-owned 2026 season preview with angle, market, and betting guide.",
+      status: "live",
+      emptyCopy:
+        "Season preview copy publishes after research delivery — no placeholder text is invented.",
+    }),
     section({
       key: "roster",
       title: "Roster",
