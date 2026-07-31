@@ -77,12 +77,9 @@ const nextConfig: NextConfig = {
         destination: "/pro/nfl/player-previews",
         permanent: false,
       },
-      // Case-sensitive hosts: legacy /Brand/* → /brand/*
-      {
-        source: "/Brand/:path*",
-        destination: "/brand/:path*",
-        permanent: false,
-      },
+      // NOTE: Do NOT add a /Brand → /brand redirect. Next/Vercel matchers are
+      // case-insensitive, so that redirect infinite-loops and breaks next/image.
+      // Both `public/brand` and `public/Brand` are shipped instead.
     ];
   },
 

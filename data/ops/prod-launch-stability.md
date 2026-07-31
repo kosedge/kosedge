@@ -29,7 +29,7 @@ Site chrome uses near-black `#070a0f`. Any failure that clears the React tree lo
 | Visible loading (not void) | `app/loading.tsx`, `app/(pro)/loading.tsx` |
 | Inline-styled error UI (works if CSS chunk missing) | `global-error.tsx`, `error.tsx`, `BootShell` |
 | React error boundary | `components/error/ErrorBoundary.tsx` |
-| Brand path case safety | `/brand/*` assets + `/Brand/:path*` → `/brand/:path*` redirect + `public/Brand` copies |
+| Brand path case safety | Ship both `public/brand` and `public/Brand` (no case redirect — Next matchers are case-insensitive and would loop) |
 | Immutable hashed assets | `Cache-Control` on `/_next/static/*` |
 | Upstream timeouts | shared `upstreamFetch` (see prod-stack-health notes) |
 
