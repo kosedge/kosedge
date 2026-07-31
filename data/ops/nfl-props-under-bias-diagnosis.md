@@ -203,7 +203,68 @@ Rematerialize jobs on brave-art were failing with:
 | `model_role_collapse` PASS | 0 | 19 |
 | Addison / Harrison / McMillan PLAY Under | yes | **cleared** (PASS / disagreement) |
 
-### Residual notes
-- Baseline rematerialize returned `baseline_rows_upserted=0` on a follow-up run (features/week resolve) — projection lift for featured WR1s still needs a clean baselines+box cycle when feature rows are present.
-- Board still shows some legacy `box_score` diagnostic rows alongside refreshed baseline-sourced edges.
-- Featured line≥40 raw gap remains negative until baselines/box are rebuilt with usage-rank depth; **tag asymmetry is fixed** so collapsed raw no longer publishes as PLAY Under.
+### Residual notes (pre-rebuild)
+- Baseline rematerialize returned `baseline_rows_upserted=0` on a follow-up run — see §10.
+- Featured line≥40 raw gap remained negative until baselines/box rebuilt with usage-rank depth; **tag asymmetry was already fixed**.
+
+---
+
+## 10. Why `baseline_rows_upserted=0` + clean rebuild (20260731c)
+
+**Root cause (confirmed live):** `nfl_player_projection_features_weekly` was **empty** for 2025 W10–W16 (and W17 until rematerialize), while `nfl_dp_player_usage_weekly` still had rows (e.g. W17 usage=324, features=0). Baselines only SELECT features → upsert 0. Props kept serving **stale** baselines (324) and had **box_score_rows=0**.
+
+Not a season-filter bug when `week` is explicit. Likely prior feature wipe / failed rematerialize; worker also could not import `data_platform_nfl.ingest` because `nflreadpy` was a hard module import (SQL feature path does not need it).
+
+**Ops shipped (PR #39):**
+- `GET /nfl/ops/player-layer-coverage`
+- `POST /nfl/ops/materialize-player-features`
+- `POST /nfl/ops/materialize-player-box-sims`
+- `POST /nfl/ops/rebuild-props-layers` (features → baselines → box → props)
+- Lazy `nflreadpy` import; vendor sync no longer clobbers richer `data_platform_nfl`
+- Canary: `props-under-bias-20260731c-baselines-box-rebuild`
+
+**Rebuild success (2025 W10–17):**
+
+| Week | feature_rows | baseline_upserted | box_upserted | prop_edges | PLAY n |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 10 | 276 | 276 | 276 | 1380 | 0 |
+| 11 | 294 | 294 | 294 | 1470 | 0 |
+| 12 | 273 | 273 | 273 | 1365 | 3 |
+| 13 | 307 | 307 | 307 | 1535 | 9 |
+| 14 | 290 | 290 | 290 | 1450 | 9 |
+| 15 | 308 | 308 | 308 | 1540 | 8 |
+| 16 | 328 | 328 | 328 | 1640 | 7 |
+| 17 | 324 | 324 | 324 | 1620 | 6 |
+
+All props rows `projection_source=box_score` after rebuild.
+
+### Sample means BEFORE → AFTER (W17 rec_yds, raw)
+
+| Player | Line | Before raw | After raw | Notes |
+| --- | ---: | ---: | ---: | --- |
+| T.McMillan (CAR) | 52.5 | ~21–23 | **57.2** | Toward book; was PLAY Under |
+| J.Chase | 90.5 | 65.0 | **94.2** | Aligned |
+| C.Lamb | 82.5 | — | **91.0** | Slightly over |
+| J.Addison | 41.5 | 9.8–12.7 | **22.1** | Lifted; still under book → PASS |
+| M.Harrison | 36.5 | 10.3–11.9 | **13.6** | Residual collapse (role≈WR2 floor) |
+| S.Barkley (rec) | 12.5 | 2.2 | **2.3** | RB receiving still crushed |
+| T.McBride (TE) | 82.5 | — | **92.8** | Near book |
+| T.Warren (TE) | 49.5 | — | **53.1** | Near book |
+
+Featured line≥40 mean **raw − line**: before rebuild **−27.5** (stale baseline board) → after **+8.8** (n=44). Original pre-tag-fix featured gap was ≈ −14.
+
+### PLAY Under% AFTER rebuild
+
+| Week | PLAY n | Under | Over | Under % |
+| ---: | ---: | ---: | ---: | ---: |
+| 14 | 9 | 1 | 8 | **11%** |
+| 16 | 7 | 2 | 5 | **29%** |
+| 17 | 6 | 2 | 4 | **33%** |
+
+No systematic 100% Under board. PLAY is sparse (disagreement + role-collapse gates).
+
+### Residual / paid feeds
+- Remaining under-shoots: London / Pickens / McConkey / Harrison class — not publishing as PLAY Under.
+- Some alphas overshoot (Jefferson, Wan'Dale) → disagreement PASS.
+- Snap counts still not backfilled (`snap_counts:not_backfilled_yet`) — would improve role/target concentration; **optional**, not required to clear Under bias.
+- No paid feed is required for further Under-bias remediation. Optional: SportsDataIO / Action Network **closing props** for denser holdout grading only.
