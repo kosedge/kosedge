@@ -3124,8 +3124,8 @@ def run_nfl_market_simulations(
     projection_created_at_mode: str = "now",
     kickoff_buffer_minutes: int = 30,
 ) -> Dict[str, Any]:
-    # Canary: proves which worker build executed (props under-bias fix 2026-07-31).
-    worker_build_id = "props-under-bias-20260731b-celery-props-task"
+    # Canary: proves which worker build executed (props baselines+box rebuild 2026-07-31).
+    worker_build_id = "props-under-bias-20260731c-baselines-box-rebuild"
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
     processed = 0
@@ -9082,6 +9082,146 @@ def _team_qb_starter_shares(
     return shares
 
 
+@celery_app.task(name="src.tasks.materialize_nfl_player_projection_features")
+def materialize_nfl_player_projection_features_task(
+    *,
+    season: int,
+    week: Optional[int] = None,
+    replace_existing: bool = True,
+) -> Dict[str, Any]:
+    """Rematerialize `nfl_player_projection_features_weekly` from owned usage.
+
+    Empty feature rows for a season/week are the root cause of
+    `baseline_rows_upserted=0` — baselines read features only.
+    """
+    from data_platform_nfl.ingest import materialize_player_projection_features
+
+    result = materialize_player_projection_features(
+        seasons=[int(season)],
+        week=int(week) if week is not None else None,
+        replace_existing=bool(replace_existing),
+    )
+    feature_rows = int((result.get("rows") or {}).get("projection_feature_rows") or 0)
+    return {
+        "season": int(season),
+        "week": int(week) if week is not None else None,
+        "replace_existing": bool(replace_existing),
+        "feature_rows": feature_rows,
+        "status": "ok" if feature_rows > 0 else "empty",
+        "result": result,
+    }
+
+
+@celery_app.task(name="src.tasks.run_nfl_props_layer_rebuild")
+def run_nfl_props_layer_rebuild(
+    *,
+    season: int,
+    week: Optional[int] = None,
+    weeks: Optional[List[int]] = None,
+    model_version: str = "nfl-player-v1",
+    replace_features: bool = True,
+    rematerialize_season_features: bool = False,
+) -> Dict[str, Any]:
+    """Features → baselines → box sims → props for one or more weeks.
+
+    Use when baselines report `feature_rows=0` / `baseline_rows_upserted=0`,
+    or when depth-floor fixes need a clean projection rematerialize (not a
+    market nudge).
+    """
+    session = SessionLocal()
+    try:
+        if weeks:
+            target_weeks = sorted({int(w) for w in weeks})
+        else:
+            target_weeks = [int(_resolve_nfl_week(session, season=season, week=week))]
+    finally:
+        session.close()
+
+    # Coverage probe before features rematerialize (usage must exist).
+    session = SessionLocal()
+    pre_coverage: Dict[str, Any] = {"weeks": {}}
+    try:
+        for tw in target_weeks:
+            usage_n = session.execute(
+                text(
+                    """
+                    SELECT COUNT(*)::int
+                    FROM nfl_dp_player_usage_weekly
+                    WHERE season = :season AND week = :week
+                    """
+                ),
+                {"season": int(season), "week": int(tw)},
+            ).scalar_one()
+            feat_n = session.execute(
+                text(
+                    """
+                    SELECT COUNT(*)::int
+                    FROM nfl_player_projection_features_weekly
+                    WHERE season = :season AND week = :week
+                    """
+                ),
+                {"season": int(season), "week": int(tw)},
+            ).scalar_one()
+            pre_coverage["weeks"][str(tw)] = {
+                "usage_rows": int(usage_n or 0),
+                "feature_rows": int(feat_n or 0),
+            }
+    finally:
+        session.close()
+
+    features_result: Dict[str, Any]
+    if rematerialize_season_features:
+        features_result = materialize_nfl_player_projection_features_task(
+            season=int(season),
+            week=None,
+            replace_existing=bool(replace_features),
+        )
+    else:
+        # Rematerialize each requested week (keeps unrelated weeks intact).
+        per_week_features = []
+        for tw in target_weeks:
+            per_week_features.append(
+                materialize_nfl_player_projection_features_task(
+                    season=int(season),
+                    week=int(tw),
+                    replace_existing=bool(replace_features),
+                )
+            )
+        features_result = {
+            "mode": "per_week",
+            "weeks": per_week_features,
+            "feature_rows": sum(int(r.get("feature_rows") or 0) for r in per_week_features),
+        }
+
+    week_results: List[Dict[str, Any]] = []
+    for tw in target_weeks:
+        baseline = materialize_nfl_player_baseline_projections(
+            season=int(season), week=int(tw), model_version=model_version
+        )
+        box = materialize_nfl_player_box_score_sims(season=int(season), week=int(tw))
+        props = materialize_nfl_player_props_edges(
+            season=int(season), week=int(tw), model_version=model_version
+        )
+        week_results.append(
+            {
+                "week": int(tw),
+                "baseline": baseline,
+                "box": box,
+                "props": props,
+            }
+        )
+
+    return {
+        "season": int(season),
+        "weeks": target_weeks,
+        "pre_coverage": pre_coverage,
+        "features": features_result,
+        "week_results": week_results,
+        "worker_build_id": "props-under-bias-20260731c-baselines-box-rebuild",
+        "status": "ok",
+    }
+
+
 @celery_app.task(name="src.tasks.materialize_nfl_player_baseline_projections")
 def materialize_nfl_player_baseline_projections(
     *,
@@ -9557,7 +9697,16 @@ def materialize_nfl_player_baseline_projections(
                 "freshness": json.dumps({"max_feature_updated_at": str(freshness_row.max_updated_at) if freshness_row is not None else None}),
                 "calibration_flags": json.dumps({"calibrated": False, "reason": "v1-heuristic-baseline"}),
                 "readiness_status": "go" if len(rows) >= 40 else "warning",
-                "metrics": json.dumps({"baseline_rows_upserted": upserted}),
+                "metrics": json.dumps(
+                    {
+                        "baseline_rows_upserted": upserted,
+                        "empty_reason": (
+                            None
+                            if upserted > 0
+                            else "nfl_player_projection_features_weekly_empty_for_season_week"
+                        ),
+                    }
+                ),
             },
         )
         session.commit()
@@ -9566,6 +9715,12 @@ def materialize_nfl_player_baseline_projections(
             "week": int(target_week),
             "model_version": model_version,
             "baseline_rows_upserted": upserted,
+            "feature_rows": len(rows),
+            "empty_reason": (
+                None
+                if upserted > 0
+                else "nfl_player_projection_features_weekly_empty_for_season_week"
+            ),
         }
     except Exception:
         session.rollback()
@@ -10619,6 +10774,7 @@ def materialize_nfl_player_props_edges(
                                 if projection_source == "box_score"
                                 else None,
                                 "created_from_baseline_model_version": model_version,
+                                "worker_build_id": "props-under-bias-20260731c-baselines-box-rebuild",
                                 "raw_model_mean": round(float(raw_mean), 4),
                                 "raw_model_std": round(float(raw_std), 4),
                                 "z_over": edge.get("z_over"),
@@ -12341,9 +12497,16 @@ def run_nfl_enterprise_weekly_sharpening_cycle(
     finally:
         session.close()
 
-    dp_root = Path(__file__).resolve().parents[2] / "data-platform-nfl" / "src"
-    if str(dp_root) not in sys.path:
-        sys.path.insert(0, str(dp_root))
+    # Vendored package lives at services/model-service/data_platform_nfl
+    # (PYTHONPATH=/app in Docker). Keep hyphenated monorepo path as fallback.
+    model_service_root = Path(__file__).resolve().parents[2]
+    for candidate in (
+        model_service_root,  # import data_platform_nfl from /app
+        model_service_root / "data-platform-nfl" / "src",
+        model_service_root.parent / "data-platform-nfl" / "src",
+    ):
+        if candidate.exists() and str(candidate) not in sys.path:
+            sys.path.insert(0, str(candidate))
 
     from data_platform_nfl.inseason_weekly_update import run_data_platform_inseason_weekly_update
 
