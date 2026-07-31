@@ -164,14 +164,19 @@ from .services.nba_data import (
     derive_possessions_from_pbp,
     estimate_player_usage_stub,
     estimate_team_features_from_box,
+    features_from_data_nba_team_stats,
     fetch_boxscore_traditional,
+    fetch_game_detail_data_nba,
     fetch_play_by_play,
     fetch_schedule_window,
+    fetch_season_schedule_data_nba,
     fetch_season_team_gamelog,
     iter_season_labels,
     normalize_team_key as normalize_nba_team_key,
     pair_season_games_from_gamelog,
+    player_stubs_from_data_nba_detail,
     rolling_average_features,
+    season_label_to_start_year,
     try_sportsdata_games_by_date,
 )
 from .services.nba_possession_simulator import (
@@ -6973,19 +6978,34 @@ def pull_nba_schedule_ingest(
 def pull_nba_season_ingest(
     seasons: Optional[List[str]] = None,
     season_type: str = "Regular Season",
-    sleep_s: float = 0.75,
+    sleep_s: float = 0.35,
+    enrich_details: bool = True,
+    max_detail_games: int = 2500,
+    player_stub_details: int = 40,
 ) -> Dict[str, Any]:
-    """Bulk ingest seasons via leaguegamelog → games + team_game_features."""
+    """Bulk ingest seasons via data.nba.com schedule (+ gamedetail features).
+
+    Prefer data.nba.com because stats.nba.com frequently times out from
+    cloud/Railway egress. Falls back to leaguegamelog when schedule empty.
+    """
     session = SessionLocal()
     season_labels = iter_season_labels(seasons or list(DEFAULT_NBA_INGEST_SEASONS))
     games_upserted = 0
     feature_rows = 0
+    player_stubs = 0
+    details_fetched = 0
     per_season: Dict[str, int] = {}
+    source_used: Dict[str, str] = {}
     try:
         ensure_nba_model_tables(session)
         for idx, season in enumerate(season_labels):
-            rows = fetch_season_team_gamelog(season, season_type=season_type)
-            paired = pair_season_games_from_gamelog(rows, season=season)
+            paired = fetch_season_schedule_data_nba(season)
+            source = "data.nba.com/schedule"
+            if not paired:
+                rows = fetch_season_team_gamelog(season, season_type=season_type)
+                paired = pair_season_games_from_gamelog(rows, season=season)
+                source = "stats.nba.com/leaguegamelog"
+            source_used[season] = source
             rest_map = compute_rest_days_by_team(paired)
             count = 0
             for g in paired:
@@ -6993,33 +7013,145 @@ def pull_nba_season_ingest(
                     continue
                 games_upserted += 1
                 count += 1
-                gid = str(g["external_game_id"])
-                try:
-                    gd = date.fromisoformat(str(g["game_date"])[:10])
-                except Exception:
-                    continue
-                home_key = normalize_nba_team_key(str(g.get("home_team_key") or ""))
-                away_key = normalize_nba_team_key(str(g.get("away_team_key") or ""))
-                for team_key, feat, is_home, opp in (
-                    (home_key, g.get("home_features") or {}, True, away_key),
-                    (away_key, g.get("away_features") or {}, False, home_key),
-                ):
-                    if not team_key or team_key == "UNK":
-                        continue
-                    _upsert_nba_team_game_features(
-                        session,
-                        external_game_id=gid,
-                        team_key=team_key,
-                        game_date_val=gd,
-                        is_home=is_home,
-                        opponent_key=opp,
-                        feat=feat,
-                        rest_days=rest_map.get((gid, team_key)),
-                        season=season,
-                        source="stats.nba.com/leaguegamelog",
-                    )
-                    feature_rows += 1
             per_season[season] = count
+            session.commit()
+
+            if enrich_details and source.startswith("data.nba.com"):
+                try:
+                    season_year = season_label_to_start_year(season)
+                except ValueError:
+                    season_year = None
+                finals = [
+                    g
+                    for g in paired
+                    if str(g.get("status") or "").lower().startswith("final")
+                    and g.get("home_score") is not None
+                ]
+                for g in finals:
+                    if details_fetched >= int(max_detail_games):
+                        break
+                    if season_year is None:
+                        break
+                    gid = str(g["external_game_id"])
+                    detail = fetch_game_detail_data_nba(season_year, gid)
+                    details_fetched += 1
+                    if not detail:
+                        time_module.sleep(sleep_s)
+                        continue
+                    home_block = detail.get("hls") or {}
+                    away_block = detail.get("vls") or {}
+                    home_feat = features_from_data_nba_team_stats(home_block)
+                    away_feat = features_from_data_nba_team_stats(away_block)
+                    if home_feat and away_feat:
+                        home_feat["drtg"] = away_feat.get("ortg")
+                        away_feat["drtg"] = home_feat.get("ortg")
+                    try:
+                        gd = date.fromisoformat(str(g["game_date"])[:10])
+                    except Exception:
+                        time_module.sleep(sleep_s)
+                        continue
+                    home_key = normalize_nba_team_key(
+                        str(home_block.get("ta") or g.get("home_team_key") or "")
+                    )
+                    away_key = normalize_nba_team_key(
+                        str(away_block.get("ta") or g.get("away_team_key") or "")
+                    )
+                    for team_key, feat, is_home, opp in (
+                        (home_key, home_feat, True, away_key),
+                        (away_key, away_feat, False, home_key),
+                    ):
+                        if not team_key or team_key == "UNK" or not feat:
+                            continue
+                        _upsert_nba_team_game_features(
+                            session,
+                            external_game_id=gid,
+                            team_key=team_key,
+                            game_date_val=gd,
+                            is_home=is_home,
+                            opponent_key=opp,
+                            feat=feat,
+                            rest_days=rest_map.get((gid, team_key)),
+                            season=season,
+                            source="data.nba.com/gamedetail",
+                        )
+                        feature_rows += 1
+                    if details_fetched <= int(player_stub_details):
+                        for stub in player_stubs_from_data_nba_detail(detail):
+                            if not stub.get("player_id"):
+                                continue
+                            session.execute(
+                                text(
+                                    """
+                                    INSERT INTO nba_player_game_stubs (
+                                      external_game_id, player_id, player_name, team_key,
+                                      game_date, minutes, usage_proxy, pts, reb, ast,
+                                      fga, fta, tov, source, payload, updated_at
+                                    ) VALUES (
+                                      :external_game_id, :player_id, :player_name, :team_key,
+                                      :game_date, :minutes, :usage_proxy, :pts, :reb, :ast,
+                                      :fga, :fta, :tov, :source, CAST(:payload AS jsonb), :updated_at
+                                    )
+                                    ON CONFLICT (external_game_id, player_id) DO UPDATE SET
+                                      minutes = EXCLUDED.minutes,
+                                      usage_proxy = EXCLUDED.usage_proxy,
+                                      pts = EXCLUDED.pts,
+                                      reb = EXCLUDED.reb,
+                                      ast = EXCLUDED.ast,
+                                      updated_at = EXCLUDED.updated_at
+                                    """
+                                ),
+                                {
+                                    "external_game_id": gid,
+                                    "player_id": stub["player_id"],
+                                    "player_name": stub.get("player_name"),
+                                    "team_key": stub.get("team_key"),
+                                    "game_date": gd,
+                                    "minutes": stub.get("minutes"),
+                                    "usage_proxy": stub.get("usage_proxy"),
+                                    "pts": stub.get("pts"),
+                                    "reb": stub.get("reb"),
+                                    "ast": stub.get("ast"),
+                                    "fga": stub.get("fga"),
+                                    "fta": stub.get("fta"),
+                                    "tov": stub.get("tov"),
+                                    "source": "data.nba.com/gamedetail",
+                                    "payload": json.dumps({}),
+                                    "updated_at": _now_utc(),
+                                },
+                            )
+                            player_stubs += 1
+                    if details_fetched % 25 == 0:
+                        session.commit()
+                    time_module.sleep(sleep_s)
+            elif paired and paired[0].get("home_features"):
+                # leaguegamelog path already carries features.
+                for g in paired:
+                    gid = str(g["external_game_id"])
+                    try:
+                        gd = date.fromisoformat(str(g["game_date"])[:10])
+                    except Exception:
+                        continue
+                    home_key = normalize_nba_team_key(str(g.get("home_team_key") or ""))
+                    away_key = normalize_nba_team_key(str(g.get("away_team_key") or ""))
+                    for team_key, feat, is_home, opp in (
+                        (home_key, g.get("home_features") or {}, True, away_key),
+                        (away_key, g.get("away_features") or {}, False, home_key),
+                    ):
+                        if not team_key or team_key == "UNK":
+                            continue
+                        _upsert_nba_team_game_features(
+                            session,
+                            external_game_id=gid,
+                            team_key=team_key,
+                            game_date_val=gd,
+                            is_home=is_home,
+                            opponent_key=opp,
+                            feat=feat,
+                            rest_days=rest_map.get((gid, team_key)),
+                            season=season,
+                            source=source,
+                        )
+                        feature_rows += 1
             session.commit()
             if sleep_s > 0 and idx < len(season_labels) - 1:
                 time_module.sleep(sleep_s)
@@ -7027,7 +7159,10 @@ def pull_nba_season_ingest(
             "seasons": season_labels,
             "games_upserted": games_upserted,
             "team_game_feature_rows": feature_rows,
+            "player_stubs_upserted": player_stubs,
+            "details_fetched": details_fetched,
             "per_season": per_season,
+            "source_used": source_used,
             "season_type": season_type,
         }
     except Exception:
@@ -8154,21 +8289,32 @@ def run_nba_phase1_bootstrap(
     densify_odds: bool = True,
     max_credit_spend: int = 300000,
     walkforward_games: int = 60,
-    pbp_sample_games: int = 8,
-    player_stub_sample_games: int = 8,
+    pbp_sample_games: int = 0,
+    player_stub_sample_games: int = 0,
+    max_detail_games: int = 900,
 ) -> Dict[str, Any]:
-    """Phase 1 orchestration: ingest → features → optional densify → walkforward."""
+    """Phase 1 orchestration: schedule → densify → details/features → walkforward."""
     inventory_before = nba_db_inventory()
-    ingest = pull_nba_season_ingest(seasons=seasons)
+    # Fast path: land game dates first so densify can run on game-days.
+    ingest_schedule = pull_nba_season_ingest(
+        seasons=seasons,
+        enrich_details=False,
+    )
+    densify: Dict[str, Any] = {"status": "skipped_by_flag"}
+    if densify_odds:
+        densify = pull_nba_historical_odds_densify(max_credit_spend=max_credit_spend)
+    ingest_details = pull_nba_season_ingest(
+        seasons=seasons,
+        enrich_details=True,
+        max_detail_games=max_detail_games,
+        player_stub_details=min(40, max_detail_games),
+    )
     features = materialize_nba_team_rolling_features(
         days_back=2000,
         window_games=10,
         pbp_sample_games=pbp_sample_games,
         player_stub_sample_games=player_stub_sample_games,
     )
-    densify: Dict[str, Any] = {"status": "skipped_by_flag"}
-    if densify_odds:
-        densify = pull_nba_historical_odds_densify(max_credit_spend=max_credit_spend)
     context = pull_nba_context_snapshot(days_ahead=3)
     walkforward = run_nba_walkforward_sample(limit_games=walkforward_games)
     inventory_after = nba_db_inventory()
@@ -8177,7 +8323,8 @@ def run_nba_phase1_bootstrap(
         "phase": "phase1",
         "worker_build_id": NBA_WORKER_BUILD_ID,
         "inventory_before": inventory_before,
-        "ingest": ingest,
+        "ingest_schedule": ingest_schedule,
+        "ingest_details": ingest_details,
         "features": features,
         "densify": densify,
         "context": context,

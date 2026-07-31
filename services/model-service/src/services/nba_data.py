@@ -6,6 +6,7 @@ endpoints. Does not call The Odds API here. SportsDataIO only when keys present.
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import re
@@ -18,6 +19,10 @@ import httpx
 log = logging.getLogger(__name__)
 
 NBA_STATS_BASE = os.getenv("NBA_STATS_BASE_URL", "https://stats.nba.com/stats")
+NBA_DATA_BASE = os.getenv(
+    "NBA_DATA_BASE_URL",
+    "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba",
+)
 NBA_STATS_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (compatible; KosEdgeNbaModel/1.0; +https://www.kosedge.com)"
@@ -28,6 +33,13 @@ NBA_STATS_HEADERS = {
     "Referer": "https://www.nba.com/",
     "x-nba-stats-origin": "stats",
     "x-nba-stats-token": "true",
+}
+NBA_DATA_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; KosEdgeNbaModel/1.0; +https://www.kosedge.com)"
+    ),
+    "Accept": "application/json, text/plain, */*",
+    "Referer": "https://www.nba.com/",
 }
 
 # Canonical team abbreviations used in rolling features / context.
@@ -96,9 +108,10 @@ def _nba_stats_get(
     path: str,
     params: Dict[str, Any],
     *,
-    timeout: float = 90.0,
-    retries: int = 3,
+    timeout: float = 25.0,
+    retries: int = 1,
 ) -> Dict[str, Any]:
+    """stats.nba.com helper — short timeouts; prefer data.nba.com for bulk ingest."""
     url = f"{NBA_STATS_BASE.rstrip('/')}/{path.lstrip('/')}"
     last_exc: Optional[Exception] = None
     for attempt in range(max(1, retries)):
@@ -111,7 +124,7 @@ def _nba_stats_get(
                 return resp.json()
         except Exception as exc:
             last_exc = exc
-            sleep_s = 1.2 * (attempt + 1)
+            sleep_s = 0.8 * (attempt + 1)
             log.warning(
                 "NBA stats GET %s attempt %s failed: %s; sleep %.1fs",
                 path,
@@ -121,6 +134,29 @@ def _nba_stats_get(
             )
             time.sleep(sleep_s)
     raise RuntimeError(f"NBA stats GET failed for {path}: {last_exc}")
+
+
+def _nba_data_get(url: str, *, timeout: float = 60.0) -> Dict[str, Any]:
+    with httpx.Client(
+        timeout=timeout, headers=NBA_DATA_HEADERS, follow_redirects=True
+    ) as client:
+        resp = client.get(url)
+        resp.raise_for_status()
+        # Some NBA CDN payloads include a UTF-8 BOM.
+        return json.loads(resp.text.lstrip("\ufeff"))
+
+
+def season_label_to_start_year(season: str) -> int:
+    """'2023-24' → 2023."""
+    s = (season or "").strip()
+    if len(s) >= 4 and s[:4].isdigit():
+        return int(s[:4])
+    raise ValueError(f"Unrecognized NBA season label: {season}")
+
+
+def season_start_year_to_label(year: int) -> str:
+    yy = (int(year) + 1) % 100
+    return f"{int(year)}-{yy:02d}"
 
 
 def _result_sets_to_dicts(
@@ -254,12 +290,132 @@ def fetch_season_team_gamelog(
                 "SeasonType": season_type,
                 "Sorter": "DATE",
             },
-            timeout=120.0,
+            timeout=25.0,
+            retries=1,
         )
     except Exception as exc:
         log.warning("NBA leaguegamelog failed for %s: %s", season, str(exc)[:240])
         return []
     return _result_sets_to_dicts(payload, "LeagueGameLog")
+
+
+def fetch_season_schedule_data_nba(season: str) -> List[Dict[str, Any]]:
+    """Full season schedule+scores from data.nba.com (reliable vs stats.nba.com)."""
+    try:
+        year = season_label_to_start_year(season)
+    except ValueError:
+        return []
+    url = f"{NBA_DATA_BASE.rstrip('/')}/{year}/league/00_full_schedule.json"
+    try:
+        payload = _nba_data_get(url, timeout=60.0)
+    except Exception as exc:
+        log.warning("data.nba.com schedule failed for %s: %s", season, str(exc)[:240])
+        return []
+    games_out: List[Dict[str, Any]] = []
+    for month in payload.get("lscd") or []:
+        mscd = month.get("mscd") or {}
+        for g in mscd.get("g") or []:
+            gid = str(g.get("gid") or "").strip()
+            if not gid:
+                continue
+            home = g.get("h") or {}
+            away = g.get("v") or {}
+            home_key = str(home.get("ta") or "").upper()
+            away_key = str(away.get("ta") or "").upper()
+            home_score = home.get("s")
+            away_score = away.get("s")
+            try:
+                home_score_i = int(home_score) if home_score not in (None, "") else None
+            except (TypeError, ValueError):
+                home_score_i = None
+            try:
+                away_score_i = int(away_score) if away_score not in (None, "") else None
+            except (TypeError, ValueError):
+                away_score_i = None
+            stt = str(g.get("stt") or "")
+            status = stt or str(g.get("st") or "")
+            games_out.append(
+                {
+                    "external_game_id": gid,
+                    "game_date": str(g.get("gdte") or "")[:10] or None,
+                    "home_team_key": home_key,
+                    "away_team_key": away_key,
+                    "home_score": home_score_i,
+                    "away_score": away_score_i,
+                    "status": status or ("Final" if home_score_i is not None else ""),
+                    "season": season,
+                    "source": "data.nba.com/schedule",
+                    "raw": g,
+                    "season_year": year,
+                }
+            )
+    games_out.sort(key=lambda x: (x.get("game_date") or "", x["external_game_id"]))
+    return games_out
+
+
+def fetch_game_detail_data_nba(season_year: int, game_id: str) -> Dict[str, Any]:
+    """Box/team/player detail from data.nba.com gamedetail JSON."""
+    gid = str(game_id).strip()
+    url = (
+        f"{NBA_DATA_BASE.rstrip('/')}/{int(season_year)}/scores/gamedetail/"
+        f"{gid}_gamedetail.json"
+    )
+    try:
+        payload = _nba_data_get(url, timeout=45.0)
+    except Exception as exc:
+        log.warning("data.nba.com gamedetail failed for %s: %s", gid, str(exc)[:200])
+        return {}
+    return payload.get("g") or {}
+
+
+def features_from_data_nba_team_stats(
+    team_block: Dict[str, Any],
+) -> Dict[str, float]:
+    """Map data.nba.com tstsg block → pace/efficiency proxies."""
+    stats = team_block.get("tstsg") or {}
+    row = {
+        "FGA": stats.get("fga"),
+        "FTA": stats.get("fta"),
+        "TOV": stats.get("tov"),
+        "OREB": stats.get("oreb"),
+        "DREB": stats.get("dreb"),
+        "FG3A": stats.get("tpa"),
+        "FG3M": stats.get("tpm"),
+        "FGM": stats.get("fgm"),
+        "FTM": stats.get("ftm"),
+        "PTS": team_block.get("s"),
+    }
+    return features_from_gamelog_row(row)
+
+
+def player_stubs_from_data_nba_detail(
+    detail: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    stubs: List[Dict[str, Any]] = []
+    for side_key in ("hls", "vls"):
+        block = detail.get(side_key) or {}
+        team_key = str(block.get("ta") or "").upper()
+        for p in block.get("pstsg") or []:
+            minutes = float(p.get("min") or 0) + float(p.get("sec") or 0) / 60.0
+            fga = float(p.get("fga") or 0)
+            fta = float(p.get("fta") or 0)
+            tov = float(p.get("tov") or 0)
+            stubs.append(
+                {
+                    "player_id": str(p.get("pid") or ""),
+                    "player_name": f"{p.get('fn', '')} {p.get('ln', '')}".strip(),
+                    "team_key": team_key,
+                    "minutes": minutes,
+                    "usage_proxy": fga + 0.44 * fta + tov,
+                    "pts": float(p.get("pts") or 0),
+                    "reb": float(p.get("reb") or 0),
+                    "ast": float(p.get("ast") or 0),
+                    "fga": fga,
+                    "fta": fta,
+                    "tov": tov,
+                }
+            )
+    return stubs
 
 
 def _parse_game_date(raw: Any) -> Optional[date]:

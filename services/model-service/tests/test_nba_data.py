@@ -3,16 +3,40 @@ from src.services.nba_data import (
     derive_possessions_from_pbp,
     estimate_player_usage_stub,
     estimate_team_features_from_box,
+    features_from_data_nba_team_stats,
     features_from_gamelog_row,
     normalize_team_key,
     pair_season_games_from_gamelog,
     rolling_average_features,
+    season_label_to_start_year,
 )
 
 
 def test_normalize_team_key() -> None:
     assert normalize_team_key("Boston Celtics") == "BOS"
     assert normalize_team_key("LAL") == "LAL"
+    assert season_label_to_start_year("2023-24") == 2023
+
+
+def test_features_from_data_nba_team_stats() -> None:
+    feat = features_from_data_nba_team_stats(
+        {
+            "s": 104,
+            "tstsg": {
+                "fga": 81,
+                "fgm": 40,
+                "tpa": 25,
+                "tpm": 11,
+                "fta": 16,
+                "ftm": 13,
+                "oreb": 4,
+                "dreb": 40,
+                "tov": 14,
+            },
+        }
+    )
+    assert feat["ortg"] > 0
+    assert 0 < feat["three_pt_rate"] < 1
 
 
 def test_estimate_team_features_from_box() -> None:
