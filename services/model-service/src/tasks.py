@@ -302,19 +302,115 @@ def _load_latest_tuning_config_overrides(
     return None
 
 
+def _fetch_live_nfl_market_lines_by_abbr() -> Dict[Tuple[str, str], Dict[str, Optional[float]]]:
+    """Pull current NFL odds and key consensus lines by (home_abbr, away_abbr).
+
+    Used when ``odds_snapshots`` are missing for the schedule ``game_id``
+    (common when Odds API ingest created a parallel games row). Without this,
+    early-season market blend silently no-ops and HFA can leave home dogs
+    looking like favorites.
+    """
+    out: Dict[Tuple[str, str], Dict[str, Optional[float]]] = {}
+    try:
+        bookmakers = _resolve_nfl_odds_bookmakers(None)
+        payload = fetch_odds(
+            endpoint="sports/americanfootball_nfl/odds",
+            params={
+                "regions": "us,us2",
+                "markets": "h2h,spreads,totals",
+                "oddsFormat": "american",
+                "dateFormat": "iso",
+                "bookmakers": bookmakers,
+            },
+        )
+    except Exception:
+        log.exception("Live NFL odds pull failed for market-sim blend")
+        return out
+    if not isinstance(payload, list):
+        return out
+    for event in payload:
+        if not isinstance(event, dict):
+            continue
+        home_name = str(event.get("home_team") or "")
+        away_name = str(event.get("away_team") or "")
+        home_abbr = NFL_FULL_NAME_TO_ABBR.get(home_name) or str(home_name).strip().upper()
+        away_abbr = NFL_FULL_NAME_TO_ABBR.get(away_name) or str(away_name).strip().upper()
+        if not home_abbr or not away_abbr:
+            continue
+        spreads: List[float] = []
+        totals: List[float] = []
+        for book in event.get("bookmakers") or []:
+            for market in book.get("markets") or []:
+                key = market.get("key")
+                if key == "spreads":
+                    for outcome in market.get("outcomes") or []:
+                        if outcome.get("name") == home_name and outcome.get("point") is not None:
+                            try:
+                                spreads.append(float(outcome["point"]))
+                            except (TypeError, ValueError):
+                                continue
+                elif key == "totals":
+                    for outcome in market.get("outcomes") or []:
+                        if outcome.get("name") == "Over" and outcome.get("point") is not None:
+                            try:
+                                totals.append(float(outcome["point"]))
+                            except (TypeError, ValueError):
+                                continue
+        if not spreads and not totals:
+            continue
+        out[(home_abbr, away_abbr)] = {
+            "market_spread_home": round(sum(spreads) / len(spreads), 3) if spreads else None,
+            "market_total": round(sum(totals) / len(totals), 3) if totals else None,
+        }
+    return out
+
+
 def _fetch_nfl_market_consensus_lines(
     session: Any,
     *,
     game_id: str,
+    home_abbr: Optional[str] = None,
+    away_abbr: Optional[str] = None,
+    home_team: Optional[str] = None,
+    away_team: Optional[str] = None,
+    game_date: Optional[date] = None,
 ) -> Dict[str, Optional[float]]:
     """Latest consensus spread/total across sportsbooks for a game, used to
     anchor the model toward the market when a live line exists. Takes each
     sportsbook's most recent snapshot per market (avoids double-counting
-    stale historical snapshots) and averages across books."""
+    stale historical snapshots) and averages across books.
+
+    Odds ingest via The Odds API often creates a parallel ``games`` row
+    (different UUID) for the same matchup. Looking up snapshots only by the
+    schedule ``game_id`` then silently returns null and skips market blend —
+    which left early-season boards unanchored (DAL@NYG class of failure).
+    Fall back to any NFL game row on the same date with the same teams.
+    """
     row = session.execute(
         text(
             """
-            WITH latest AS (
+            WITH candidate_games AS (
+              SELECT CAST(:game_id AS uuid) AS id
+              UNION
+              SELECT g.id
+              FROM games g
+              JOIN seasons s ON s.id = g.season_id
+              JOIN leagues l ON l.id = s.league_id
+              JOIN teams home ON home.id = g.home_team_id
+              JOIN teams away ON away.id = g.away_team_id
+              WHERE l.code = 'nfl'
+                AND CAST(:game_date AS date) IS NOT NULL
+                AND g.game_date = CAST(:game_date AS date)
+                AND (
+                  (CAST(:home_abbr AS text) IS NOT NULL AND home.abbr = CAST(:home_abbr AS text))
+                  OR (CAST(:home_team AS text) IS NOT NULL AND home.name = CAST(:home_team AS text))
+                )
+                AND (
+                  (CAST(:away_abbr AS text) IS NOT NULL AND away.abbr = CAST(:away_abbr AS text))
+                  OR (CAST(:away_team AS text) IS NOT NULL AND away.name = CAST(:away_team AS text))
+                )
+            ),
+            latest AS (
               SELECT
                 os.sportsbook_id,
                 os.market_id,
@@ -325,7 +421,7 @@ def _fetch_nfl_market_consensus_lines(
                   ORDER BY os.captured_at DESC
                 ) AS rn
               FROM odds_snapshots os
-              WHERE os.game_id = :game_id
+              WHERE os.game_id IN (SELECT id FROM candidate_games)
             )
             SELECT
               (
@@ -340,7 +436,14 @@ def _fetch_nfl_market_consensus_lines(
               ) AS market_total
             """
         ),
-        {"game_id": game_id},
+        {
+            "game_id": game_id,
+            "game_date": game_date,
+            "home_abbr": (str(home_abbr).strip().upper() if home_abbr else None),
+            "away_abbr": (str(away_abbr).strip().upper() if away_abbr else None),
+            "home_team": (str(home_team).strip() if home_team else None),
+            "away_team": (str(away_team).strip() if away_team else None),
+        },
     ).fetchone()
     if row is None:
         return {"market_spread_home": None, "market_total": None}
@@ -350,11 +453,114 @@ def _fetch_nfl_market_consensus_lines(
     }
 
 
+def _epa_to_strength_indices(
+    *,
+    off_epa: float,
+    def_epa_allowed: float,
+    pressure_generated: float = 0.0,
+    pressure_allowed: float = 0.0,
+) -> Dict[str, float]:
+    """Map rolling EPA/pressure into the offense/defense index contract used by
+    the handicapping framework (higher defense_index = stronger defense)."""
+    pressure_delta = float(pressure_generated) - float(pressure_allowed)
+    offense_index = _clamp(1.0 + (float(off_epa) * 0.75) + (pressure_delta * 0.18), 0.82, 1.22)
+    defense_index = _clamp(1.0 + ((-float(def_epa_allowed)) * 0.90) + (pressure_delta * 0.14), 0.82, 1.24)
+    return {
+        "offense_index": round(offense_index, 6),
+        "defense_index": round(defense_index, 6),
+    }
+
+
+def _priors_from_matchup_pack(
+    matchup_pack: Optional[Dict[str, Any]],
+) -> Optional[Tuple[Dict[str, float], Dict[str, float]]]:
+    """Build home/away strength priors from the week-aligned matchup pack.
+
+    Season-max-week rolling priors can be OOD on a not-yet-played season
+    (hydrated week-18 shape). The matchup pack is already keyed to the game
+    week, so its EPA is the correct prior source when present.
+    """
+    if not isinstance(matchup_pack, dict):
+        return None
+    home_off = _to_float(matchup_pack.get("home_off_epa_5g"))
+    away_off = _to_float(matchup_pack.get("away_off_epa_5g"))
+    home_def = _to_float(matchup_pack.get("home_def_epa_allowed_5g"))
+    away_def = _to_float(matchup_pack.get("away_def_epa_allowed_5g"))
+    if home_off is None or away_off is None or home_def is None or away_def is None:
+        return None
+    season = _to_float(matchup_pack.get("season")) or 0.0
+    week = _to_float(matchup_pack.get("week")) or 0.0
+    home = _epa_to_strength_indices(
+        off_epa=float(home_off),
+        def_epa_allowed=float(home_def),
+        pressure_generated=_to_float(matchup_pack.get("home_pressure_generated_5g")) or 0.0,
+        pressure_allowed=_to_float(matchup_pack.get("home_pressure_allowed_5g")) or 0.0,
+    )
+    away = _epa_to_strength_indices(
+        off_epa=float(away_off),
+        def_epa_allowed=float(away_def),
+        pressure_generated=_to_float(matchup_pack.get("away_pressure_generated_5g")) or 0.0,
+        pressure_allowed=_to_float(matchup_pack.get("away_pressure_allowed_5g")) or 0.0,
+    )
+    home["_season"] = float(season)
+    away["_season"] = float(season)
+    home["_week"] = float(week)
+    away["_week"] = float(week)
+    return home, away
+
+
+def _count_completed_reg_games_season(session: Any, season_year: int) -> int:
+    """Count finished REG games for early-season gating.
+
+    Require a past ``game_date`` so placeholder scores on future hydrated
+    rows (or mislabeled preseason) cannot unlock OOD KAV/injury/supervised
+    paths before the season has actually been played.
+    """
+    try:
+        n = session.execute(
+            text(
+                """
+                SELECT COUNT(*)::int AS n
+                FROM nfl_dp_schedules
+                WHERE season = :season
+                  AND week BETWEEN 1 AND 18
+                  AND home_score IS NOT NULL
+                  AND away_score IS NOT NULL
+                  AND game_date IS NOT NULL
+                  AND game_date < CURRENT_DATE
+                """
+            ),
+            {"season": int(season_year)},
+        ).scalar()
+        return int(n or 0)
+    except Exception:
+        return 0
+
+
 def _load_team_strength_priors(
     session: Any,
     *,
     season_year: int,
+    as_of_week: Optional[int] = None,
 ) -> Dict[str, Dict[str, float]]:
+    """Load EPA-based team strength priors.
+
+    Important early-season behavior: when the target season has no completed
+    REG games yet, ignore that season's hydrated week grid (week DESC would
+    pick week 18 carry-forward) and use the prior season's latest week.
+    When games have been played, prefer rows with week <= as_of_week so a
+    Week-1 board does not silently use Week-18 features.
+    """
+    completed = _count_completed_reg_games_season(session, int(season_year))
+    primary_season = int(season_year)
+    fallback_season = int(season_year) - 1
+    if completed < 1:
+        seasons = [fallback_season]
+        week_cap = None
+    else:
+        seasons = [primary_season, fallback_season]
+        week_cap = int(as_of_week) if as_of_week is not None else None
+
     rows = session.execute(
         text(
             """
@@ -372,7 +578,8 @@ def _load_team_strength_priors(
                   ORDER BY week DESC
                 ) AS rn
               FROM nfl_dp_team_rolling_features_weekly
-              WHERE season IN (:season_year, :fallback_season)
+              WHERE season = ANY(:seasons)
+                AND (:week_cap IS NULL OR week <= :week_cap)
             )
             SELECT
               season,
@@ -386,7 +593,7 @@ def _load_team_strength_priors(
             WHERE rn = 1
             """
         ),
-        {"season_year": int(season_year), "fallback_season": int(season_year) - 1},
+        {"seasons": seasons, "week_cap": week_cap},
     ).fetchall()
     out: Dict[str, Dict[str, float]] = {}
     for row in rows:
@@ -397,17 +604,16 @@ def _load_team_strength_priors(
         # Prefer exact-season priors; only fallback to prior season when needed.
         if team in out and int(out[team].get("_season", 0)) >= season:
             continue
-        off_epa = _to_float(row.off_epa_per_play_5g) or 0.0
-        def_epa_allowed = _to_float(row.def_epa_allowed_per_play_5g) or 0.0
-        pressure_generated = _to_float(row.pressure_rate_generated_5g) or 0.0
-        pressure_allowed = _to_float(row.pressure_rate_allowed_5g) or 0.0
-        pressure_delta = pressure_generated - pressure_allowed
-        offense_index = _clamp(1.0 + (off_epa * 0.75) + (pressure_delta * 0.18), 0.82, 1.22)
-        defense_index = _clamp(1.0 + ((-def_epa_allowed) * 0.90) + (pressure_delta * 0.14), 0.82, 1.24)
+        indices = _epa_to_strength_indices(
+            off_epa=_to_float(row.off_epa_per_play_5g) or 0.0,
+            def_epa_allowed=_to_float(row.def_epa_allowed_per_play_5g) or 0.0,
+            pressure_generated=_to_float(row.pressure_rate_generated_5g) or 0.0,
+            pressure_allowed=_to_float(row.pressure_rate_allowed_5g) or 0.0,
+        )
         out[team] = {
-            "offense_index": round(offense_index, 6),
-            "defense_index": round(defense_index, 6),
+            **indices,
             "_season": float(season),
+            "_week": float(_to_float(row.week) or 0.0),
         }
     return out
 
@@ -2916,7 +3122,7 @@ def run_nfl_market_simulations(
     kickoff_buffer_minutes: int = 30,
 ) -> Dict[str, Any]:
     # Canary: proves which worker build executed (sanity fix 2026-07-30).
-    worker_build_id = "sanity-fix-20260730c-abbr-skip-supervised-w1-4"
+    worker_build_id = "sanity-fix-20260730i-live-odds-blend"
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
     processed = 0
@@ -2930,8 +3136,11 @@ def run_nfl_market_simulations(
         )
         supervised_fit = _load_latest_supervised_fit(session, model_version=model_version)
         tuning_config_overrides = _load_latest_tuning_config_overrides(session, model_version=model_version)
-        priors_cache: Dict[int, Dict[str, Dict[str, float]]] = {}
+        # Cache key: (season_year, as_of_week_or_None, unplayed_bool encoded in week sentinel)
+        priors_cache: Dict[Tuple[int, Optional[int]], Dict[str, Dict[str, float]]] = {}
+        completed_reg_cache: Dict[int, int] = {}
         tendency_proe_cache: Dict[int, Dict[str, float]] = {}
+        live_market_by_abbr = _fetch_live_nfl_market_lines_by_abbr()
         # Multi-season lookback so level bias (under-projection) is estimated
         # from enough completed games; 240d was too short and produced fragile fits.
         totals_calibration = fetch_nfl_totals_calibration(
@@ -3040,21 +3249,74 @@ def run_nfl_market_simulations(
                     travel_payload = fallback_travel
             matchup_kwargs = matchup_pack_to_sim_input_kwargs(matchup_pack)
             season_year = _to_int_like(m.get("season_year"))
-            if season_year is not None and season_year not in priors_cache:
-                priors_cache[season_year] = _load_team_strength_priors(session, season_year=season_year)
-            team_priors = priors_cache.get(season_year or -1, {})
-            # Rolling features are keyed by abbreviation; games rows expose
-            # both abbr and full name. Prefer abbr, then full name.
-            home_prior = (
-                team_priors.get(str(m.get("home_abbr") or ""))
-                or team_priors.get(str(m.get("home_team") or ""))
-                or {}
+            matchup_week_for_priors = _to_int_like(
+                (matchup_pack or {}).get("week") if isinstance(matchup_pack, dict) else None
             )
-            away_prior = (
-                team_priors.get(str(m.get("away_abbr") or ""))
-                or team_priors.get(str(m.get("away_team") or ""))
-                or {}
+            if season_year is not None and int(season_year) not in completed_reg_cache:
+                completed_reg_cache[int(season_year)] = _count_completed_reg_games_season(
+                    session, int(season_year)
+                )
+            completed_reg_season = (
+                int(completed_reg_cache.get(int(season_year), 0)) if season_year is not None else 0
             )
+            season_too_early = completed_reg_season < 3
+            # Hydrated KAV / second-order / roster-continuity nowcasts are OOD
+            # before real REG games. Keep EPA pack + market blend; drop the rest.
+            early_season_ood_dampened = False
+            if season_too_early and isinstance(matchup_kwargs, dict):
+                early_season_ood_dampened = True
+                for _k in (
+                    "home_kav_offense_5g",
+                    "away_kav_offense_5g",
+                    "home_kav_defense_5g",
+                    "away_kav_defense_5g",
+                    "home_kav_net_5g",
+                    "away_kav_net_5g",
+                    "kav_as_of_week",
+                    "home_personnel_edge_5g",
+                    "away_personnel_edge_5g",
+                    "home_sub_elasticity_5g",
+                    "away_sub_elasticity_5g",
+                    "home_coach_aggression_5g",
+                    "away_coach_aggression_5g",
+                    "home_coach_pace_5g",
+                    "away_coach_pace_5g",
+                    "second_order_as_of_week",
+                ):
+                    matchup_kwargs[_k] = None
+                if matchup_kwargs.get("matchup_week") is not None:
+                    matchup_kwargs["matchup_week"] = int(matchup_week_for_priors or 1)
+            # Prefer week-aligned matchup-pack EPA for base strength indices.
+            # Season-max-week rolling priors on a hydrated preseason grid were
+            # fighting the week-1 pack and flipping sides vs market.
+            pack_priors = _priors_from_matchup_pack(
+                matchup_pack if isinstance(matchup_pack, dict) else None
+            )
+            prior_source = "matchup_pack"
+            if pack_priors is not None:
+                home_prior, away_prior = pack_priors
+            else:
+                prior_source = "rolling_features"
+                cache_key = (int(season_year or -1), matchup_week_for_priors)
+                if season_year is not None and cache_key not in priors_cache:
+                    priors_cache[cache_key] = _load_team_strength_priors(
+                        session,
+                        season_year=season_year,
+                        as_of_week=matchup_week_for_priors,
+                    )
+                team_priors = priors_cache.get(cache_key, {})
+                # Rolling features are keyed by abbreviation; games rows expose
+                # both abbr and full name. Prefer abbr, then full name.
+                home_prior = (
+                    team_priors.get(str(m.get("home_abbr") or ""))
+                    or team_priors.get(str(m.get("home_team") or ""))
+                    or {}
+                )
+                away_prior = (
+                    team_priors.get(str(m.get("away_abbr") or ""))
+                    or team_priors.get(str(m.get("away_team") or ""))
+                    or {}
+                )
             if season_year is not None and season_year not in tendency_proe_cache:
                 try:
                     from .services.nfl_tendency_pricing import fetch_team_proe_map
@@ -3094,14 +3356,41 @@ def run_nfl_market_simulations(
                 home_prior=home_prior,
                 away_prior=away_prior,
             )
+            # Neutralize injury/roster-continuity nowcast before REG games —
+            # preseason depth charts and continuity shocks were swinging
+            # margins several points past the EPA pack + market.
+            if season_too_early:
+                home_off_mult = 1.0
+                away_off_mult = 1.0
+                home_def_mult = 1.0
+                away_def_mult = 1.0
+                home_injury_conf = None
+                away_injury_conf = None
+                home_injury_impact = None
+                away_injury_impact = None
+                home_info_vel = None
+                away_info_vel = None
+                home_hours_change = None
+                away_hours_change = None
+            else:
+                home_off_mult = _to_float(home_nowcast.get("offense_multiplier")) or 1.0
+                away_off_mult = _to_float(away_nowcast.get("offense_multiplier")) or 1.0
+                home_def_mult = _to_float(home_nowcast.get("defense_multiplier")) or 1.0
+                away_def_mult = _to_float(away_nowcast.get("defense_multiplier")) or 1.0
+                home_injury_conf = _to_float(home_nowcast.get("confidence"))
+                away_injury_conf = _to_float(away_nowcast.get("confidence"))
+                home_injury_impact = _to_float(home_nowcast.get("impact_score"))
+                away_injury_impact = _to_float(away_nowcast.get("impact_score"))
+                home_info_vel = _to_float(home_nowcast.get("info_velocity_score"))
+                away_info_vel = _to_float(away_nowcast.get("info_velocity_score"))
+                home_hours_change = _to_float(home_nowcast.get("hours_since_change"))
+                away_hours_change = _to_float(away_nowcast.get("hours_since_change"))
             inputs = NflGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
                 away_team=str(m["away_team"]),
-                offense_index_home=float(offense_home)
-                * (_to_float(home_nowcast.get("offense_multiplier")) or 1.0),
-                offense_index_away=float(offense_away)
-                * (_to_float(away_nowcast.get("offense_multiplier")) or 1.0),
+                offense_index_home=float(offense_home) * float(home_off_mult),
+                offense_index_away=float(offense_away) * float(away_off_mult),
                 # defense_index is "higher = stronger defense" (see
                 # _load_team_strength_priors: defense_index rises with
                 # *negative* EPA allowed, and compute_nfl_projection_decomposition
@@ -3115,29 +3404,43 @@ def run_nfl_market_simulations(
                 # nfl_roster_continuity.py): with the old `* multiplier`,
                 # weakening a team's own defense measurably *raised* their
                 # win probability.
-                defense_index_home=float(defense_home)
-                / (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
-                defense_index_away=float(defense_away)
-                / (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
+                defense_index_home=float(defense_home) / float(home_def_mult or 1.0),
+                defense_index_away=float(defense_away) / float(away_def_mult or 1.0),
                 rest_days_home=_to_float(m.get("rest_days_home")) or 7.0,
                 rest_days_away=_to_float(m.get("rest_days_away")) or 7.0,
-                injury_nowcast_confidence_home=_to_float(home_nowcast.get("confidence")),
-                injury_nowcast_confidence_away=_to_float(away_nowcast.get("confidence")),
+                injury_nowcast_confidence_home=home_injury_conf,
+                injury_nowcast_confidence_away=away_injury_conf,
                 injury_nowcast_freshness_home_hours=_to_float(home_nowcast.get("freshness_hours")),
                 injury_nowcast_freshness_away_hours=_to_float(away_nowcast.get("freshness_hours")),
-                injury_nowcast_impact_home=_to_float(home_nowcast.get("impact_score")),
-                injury_nowcast_impact_away=_to_float(away_nowcast.get("impact_score")),
-                injury_nowcast_offense_multiplier_home=_to_float(home_nowcast.get("offense_multiplier")),
-                injury_nowcast_offense_multiplier_away=_to_float(away_nowcast.get("offense_multiplier")),
-                injury_nowcast_defense_multiplier_home=_to_float(home_nowcast.get("defense_multiplier")),
-                injury_nowcast_defense_multiplier_away=_to_float(away_nowcast.get("defense_multiplier")),
+                injury_nowcast_impact_home=home_injury_impact,
+                injury_nowcast_impact_away=away_injury_impact,
+                injury_nowcast_offense_multiplier_home=home_off_mult if not season_too_early else None,
+                injury_nowcast_offense_multiplier_away=away_off_mult if not season_too_early else None,
+                injury_nowcast_defense_multiplier_home=home_def_mult if not season_too_early else None,
+                injury_nowcast_defense_multiplier_away=away_def_mult if not season_too_early else None,
                 injury_nowcast_source=str(injury_nowcast.get("source") or "nfl_dp_injuries"),
-                injury_nowcast_home_drivers=home_nowcast.get("top_drivers") if isinstance(home_nowcast.get("top_drivers"), list) else [],
-                injury_nowcast_away_drivers=away_nowcast.get("top_drivers") if isinstance(away_nowcast.get("top_drivers"), list) else [],
-                info_velocity_home=_to_float(home_nowcast.get("info_velocity_score")),
-                info_velocity_away=_to_float(away_nowcast.get("info_velocity_score")),
-                hours_since_change_home=_to_float(home_nowcast.get("hours_since_change")),
-                hours_since_change_away=_to_float(away_nowcast.get("hours_since_change")),
+                injury_nowcast_home_drivers=(
+                    []
+                    if season_too_early
+                    else (
+                        home_nowcast.get("top_drivers")
+                        if isinstance(home_nowcast.get("top_drivers"), list)
+                        else []
+                    )
+                ),
+                injury_nowcast_away_drivers=(
+                    []
+                    if season_too_early
+                    else (
+                        away_nowcast.get("top_drivers")
+                        if isinstance(away_nowcast.get("top_drivers"), list)
+                        else []
+                    )
+                ),
+                info_velocity_home=home_info_vel,
+                info_velocity_away=away_info_vel,
+                hours_since_change_home=home_hours_change,
+                hours_since_change_away=away_hours_change,
                 weather_available=bool(weather_payload.get("available")),
                 weather_wind_mph=_to_float(weather_payload.get("wind_mph")),
                 weather_precip_mm=_to_float(weather_payload.get("precip_mm")),
@@ -3148,16 +3451,46 @@ def run_nfl_market_simulations(
                 travel_miles_away=_to_float(travel_payload.get("travel_miles_away")),
                 travel_timezone_delta_home=_to_float(travel_payload.get("timezone_delta_home")),
                 travel_timezone_delta_away=_to_float(travel_payload.get("timezone_delta_away")),
-                tendency_proe_home=home_proe,
-                tendency_proe_away=away_proe,
-                tendency_total_signal=float(tendency_signals.get("total_signal") or 0.0),
-                tendency_spread_signal=float(tendency_signals.get("spread_signal") or 0.0),
+                tendency_proe_home=home_proe if not season_too_early else None,
+                tendency_proe_away=away_proe if not season_too_early else None,
+                tendency_total_signal=(
+                    0.0 if season_too_early else float(tendency_signals.get("total_signal") or 0.0)
+                ),
+                tendency_spread_signal=(
+                    0.0 if season_too_early else float(tendency_signals.get("spread_signal") or 0.0)
+                ),
                 **matchup_kwargs,
             )
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)
-            market_lines = _fetch_nfl_market_consensus_lines(session, game_id=inputs.game_id)
+            market_lines = _fetch_nfl_market_consensus_lines(
+                session,
+                game_id=inputs.game_id,
+                home_abbr=str(m.get("home_abbr") or "") or None,
+                away_abbr=str(m.get("away_abbr") or "") or None,
+                home_team=str(m.get("home_team") or "") or None,
+                away_team=str(m.get("away_team") or "") or None,
+                game_date=(
+                    m.get("game_date")
+                    if isinstance(m.get("game_date"), date)
+                    else target_date
+                ),
+            )
+            if (
+                market_lines.get("market_spread_home") is None
+                and market_lines.get("market_total") is None
+            ):
+                live_hit = live_market_by_abbr.get(
+                    (str(m.get("home_abbr") or ""), str(m.get("away_abbr") or ""))
+                )
+                if isinstance(live_hit, dict):
+                    market_lines = {
+                        "market_spread_home": live_hit.get("market_spread_home"),
+                        "market_total": live_hit.get("market_total"),
+                    }
             # Defer linear totals calibration until after supervised blend so the
             # published total_mean gets a single mean-preserving level correction.
+            # Skip tuning overrides on unplayed seasons — they were fit on
+            # in-sample boards and can re-introduce OOD margin tilt.
             projection = simulate_nfl_game(
                 inputs,
                 simulations=simulations,
@@ -3165,23 +3498,24 @@ def run_nfl_market_simulations(
                 model_version=model_version,
                 totals_calibration=totals_calibration,
                 apply_linear_totals_calibration=False,
-                config_overrides=tuning_config_overrides,
+                config_overrides=None if season_too_early else tuning_config_overrides,
                 market_spread_home=market_lines.get("market_spread_home"),
                 market_total=market_lines.get("market_total"),
             )
             markets = projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
-            # Skip supervised overlay entirely for weeks 1–4 until in-season
-            # rolling features are real. High-trust / saved-fit blends were
-            # dominating the simulator and flipping market sides on the 2026
-            # preseason board (see data/ops/nfl-model-sanity-fix-report.md).
-            # Also skip when the pack is missing (lookup miss) for the upcoming
-            # season — otherwise week=null silently re-enables supervised.
-            matchup_week_for_supervised = _to_int_like(
-                (matchup_pack or {}).get("week") if isinstance(matchup_pack, dict) else None
-            )
-            season_for_supervised = _to_int_like(m.get("season_year"))
+            # Skip supervised overlay until the season has real in-sample
+            # REG games. High-trust / saved-fit blends were dominating the
+            # simulator and flipping market sides on the 2026 preseason board
+            # (see data/ops/nfl-model-sanity-fix-report.md).
+            # Gates (any one skips):
+            #   - season has <3 completed REG games (unplayed / too early)
+            #   - matchup week 1–4
+            #   - pack missing on 2026+ (week=null would otherwise re-enable)
+            matchup_week_for_supervised = matchup_week_for_priors
+            season_for_supervised = season_year
             skip_supervised_early = bool(
-                (
+                season_too_early
+                or (
                     matchup_week_for_supervised is not None
                     and int(matchup_week_for_supervised) <= 4
                 )
@@ -3191,6 +3525,7 @@ def run_nfl_market_simulations(
                     and int(season_for_supervised) >= 2026
                 )
             )
+            supervised_applied = False
             if supervised_fit and not skip_supervised_early:
                 mp = matchup_pack if isinstance(matchup_pack, dict) else {}
                 mk = matchup_kwargs if isinstance(matchup_kwargs, dict) else {}
@@ -3307,6 +3642,11 @@ def run_nfl_market_simulations(
                     use_validated_weights=use_validated_weights,
                 )
                 projection["markets"] = blended_markets
+                supervised_applied = bool(
+                    isinstance(blended_markets, dict)
+                    and isinstance(blended_markets.get("supervised_overlay"), dict)
+                    and blended_markets["supervised_overlay"].get("applied")
+                )
             markets = projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
             pre_calibration_total = _to_float_like(markets.get("total_mean"))
             projection_created_at = _resolve_nfl_projection_created_at(
@@ -3325,6 +3665,21 @@ def run_nfl_market_simulations(
                     "home_prior": home_prior if isinstance(home_prior, dict) else {},
                     "away_prior": away_prior if isinstance(away_prior, dict) else {},
                     "season_year": season_year,
+                    "prior_source": prior_source,
+                    "matchup_week": matchup_week_for_supervised,
+                    "matchup_pack_hit": bool(isinstance(matchup_pack, dict)),
+                    "skip_supervised_early": bool(skip_supervised_early),
+                    "supervised_applied": bool(supervised_applied),
+                    "completed_reg_games_season": int(completed_reg_season),
+                    "early_season_ood_dampened": bool(early_season_ood_dampened),
+                    "home_abbr": str(m.get("home_abbr") or ""),
+                    "away_abbr": str(m.get("away_abbr") or ""),
+                    "market_spread_home": market_lines.get("market_spread_home"),
+                    "market_total": market_lines.get("market_total"),
+                    "offense_index_home": float(offense_home) * float(home_off_mult),
+                    "offense_index_away": float(offense_away) * float(away_off_mult),
+                    "defense_index_home": float(defense_home) / float(home_def_mult or 1.0),
+                    "defense_index_away": float(defense_away) / float(away_def_mult or 1.0),
                 }
             )
             processed += 1
@@ -3408,10 +3763,21 @@ def run_nfl_market_simulations(
                     "totals_calibration": totals_calibration,
                     "final_totals_calibration": final_calibration,
                     "tuning_config_applied": bool(tuning_config_overrides),
+                    "worker_build_id": worker_build_id,
                     "team_prior_anchor": {
                         "home": item.get("home_prior") or {},
                         "away": item.get("away_prior") or {},
                         "season_year": item.get("season_year"),
+                        "source": item.get("prior_source"),
+                    },
+                    "early_season_gates": {
+                        "matchup_week": item.get("matchup_week"),
+                        "matchup_pack_hit": item.get("matchup_pack_hit"),
+                        "skip_supervised_early": item.get("skip_supervised_early"),
+                        "supervised_applied": item.get("supervised_applied"),
+                        "completed_reg_games_season": item.get("completed_reg_games_season"),
+                        "prior_source": item.get("prior_source"),
+                        "early_season_ood_dampened": item.get("early_season_ood_dampened"),
                     },
                 }
             )
@@ -3445,11 +3811,70 @@ def run_nfl_market_simulations(
             )
             inserted += 1
         session.commit()
+        sample_gate = None
+        probe = None
+        if pending_projections:
+            sample = pending_projections[0]
+            sample_gate = {
+                "prior_source": sample.get("prior_source"),
+                "matchup_week": sample.get("matchup_week"),
+                "matchup_pack_hit": sample.get("matchup_pack_hit"),
+                "skip_supervised_early": sample.get("skip_supervised_early"),
+                "supervised_applied": sample.get("supervised_applied"),
+                "completed_reg_games_season": sample.get("completed_reg_games_season"),
+                "early_season_ood_dampened": sample.get("early_season_ood_dampened"),
+                "home_abbr": sample.get("home_abbr"),
+                "away_abbr": sample.get("away_abbr"),
+            }
+            # Prefer a home-dog / market-disagreement probe when present.
+            for item in pending_projections:
+                markets = (item.get("projection") or {}).get("markets") or {}
+                diag = (item.get("projection") or {}).get("diagnostics") or {}
+                model_spread = markets.get("spread_home")
+                market_spread = item.get("market_spread_home")
+                disagree = (
+                    model_spread is not None
+                    and market_spread is not None
+                    and ((float(model_spread) > 0 and float(market_spread) < 0)
+                         or (float(model_spread) < 0 and float(market_spread) > 0))
+                )
+                if item.get("home_abbr") == "NYG" or disagree:
+                    probe = {
+                        "home_abbr": item.get("home_abbr"),
+                        "away_abbr": item.get("away_abbr"),
+                        "prior_source": item.get("prior_source"),
+                        "matchup_week": item.get("matchup_week"),
+                        "matchup_pack_hit": item.get("matchup_pack_hit"),
+                        "skip_supervised_early": item.get("skip_supervised_early"),
+                        "supervised_applied": item.get("supervised_applied"),
+                        "early_season_ood_dampened": item.get("early_season_ood_dampened"),
+                        "completed_reg_games_season": item.get("completed_reg_games_season"),
+                        "market_spread_home": item.get("market_spread_home"),
+                        "market_total": item.get("market_total"),
+                        "model_spread_home": model_spread,
+                        "home_win_prob": markets.get("home_win_prob"),
+                        "total_mean": markets.get("total_mean"),
+                        "offense_index_home": item.get("offense_index_home"),
+                        "offense_index_away": item.get("offense_index_away"),
+                        "defense_index_home": item.get("defense_index_home"),
+                        "defense_index_away": item.get("defense_index_away"),
+                        "market_blend": diag.get("market_blend"),
+                        "framework_margin": (diag.get("framework") or {}).get("predicted_margin"),
+                        "matchup_spread_signal": (
+                            (diag.get("matchup_feature_adjustments") or {}).get("spread_signal")
+                        ),
+                        "mean_home_points": diag.get("mean_home_points"),
+                        "mean_away_points": diag.get("mean_away_points"),
+                    }
+                    if item.get("home_abbr") == "NYG":
+                        break
         return {
             "games_processed": processed,
             "projections_inserted": inserted,
             "slate_pre_mean": round(float(slate_pre_mean), 4) if slate_pre_mean is not None else None,
             "worker_build_id": worker_build_id,
+            "sample_early_season_gate": sample_gate,
+            "sanity_probe": probe,
         }
     except Exception:
         session.rollback()

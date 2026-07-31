@@ -404,6 +404,8 @@ def detect_real_rolling_features(
                     AND week BETWEEN 1 AND 18
                     AND home_score IS NOT NULL
                     AND away_score IS NOT NULL
+                    AND game_date IS NOT NULL
+                    AND game_date < CURRENT_DATE
                   UNION ALL
                   SELECT away_team AS team
                   FROM nfl_dp_schedules
@@ -411,6 +413,8 @@ def detect_real_rolling_features(
                     AND week BETWEEN 1 AND 18
                     AND home_score IS NOT NULL
                     AND away_score IS NOT NULL
+                    AND game_date IS NOT NULL
+                    AND game_date < CURRENT_DATE
                 ) played
                 WHERE team = ANY(:teams)
                 GROUP BY team

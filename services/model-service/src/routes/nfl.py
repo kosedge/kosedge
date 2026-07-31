@@ -3205,7 +3205,9 @@ def run_nfl_simulation(
                   g.id AS game_id,
                   s.season_year,
                   home.name AS home_team,
+                  home.abbr AS home_abbr,
                   away.name AS away_team,
+                  away.abbr AS away_abbr,
                   c.offense_index_home,
                   c.offense_index_away,
                   c.defense_index_home,
@@ -3233,12 +3235,15 @@ def run_nfl_simulation(
             model_version=model_version,
             lookback_days=int(float(os.getenv("NFL_TOTALS_CALIBRATION_LOOKBACK_DAYS", "1500"))),
         )
+        # Matchup packs are keyed by abbreviation; prefer abbr when present.
+        home_team_for_pack = str(m.get("home_abbr") or m.get("home_team") or "")
+        away_team_for_pack = str(m.get("away_abbr") or m.get("away_team") or "")
         matchup_pack = fetch_latest_matchup_feature_pack(
             session,
             game_id=str(m["game_id"]),
             season_year=_to_int(m.get("season_year")),
-            home_team=str(m["home_team"]),
-            away_team=str(m["away_team"]),
+            home_team=home_team_for_pack or str(m["home_team"]),
+            away_team=away_team_for_pack or str(m["away_team"]),
         )
         injury_nowcast = fetch_nfl_injury_nowcast(
             session,
