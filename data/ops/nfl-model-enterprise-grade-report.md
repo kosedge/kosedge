@@ -132,11 +132,9 @@ Medium.
 
 ```bash
 curl -sS https://model-service-production-e253.up.railway.app/health
-# After worker deploy + rematerialize 2025 W17:
-# POST /api/jobs/run-nfl-player-baselines?season=2025&week=17
-# POST box-score materialize (player cycle) then
-# POST /api/jobs/run-nfl-player-props?season=2025&week=17
+curl -sS 'https://model-service-production-e253.up.railway.app/nfl/ops/player-layer-coverage?season=2025&week=17'
+# POST /nfl/ops/rebuild-props-layers?season=2025&weeks=14,16,17&replace_features=true
 # Re-pull /nfl/props/board?season=2025&week=17&tag=PLAY
 ```
 
-Success: PLAY Under % no longer ~100% for structural reasons; featured line≥40 raw gap materially smaller; canary id visible on sim task results.
+Success criteria met: PLAY Under % not ~100% structurally; featured line≥40 raw gap flipped from largely negative to **+8.8**; canary `props-under-bias-20260731c-baselines-box-rebuild` on props diagnostics.
