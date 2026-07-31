@@ -6,7 +6,8 @@
 **PR #33 (merged):** https://github.com/kosedge/kosedge/pull/33 — merge SHA `c03d3e40ae2d2d233a27214b0716aec39e853ddf` → dpl `dpl_2mq4inYonuiinK8W3bBqLt49svp9`  
 **PR #34 (merged):** https://github.com/kosedge/kosedge/pull/34 — merge SHA `0c0abf253f052ccd5f22ca6703eaa0df08de2a50` → dpl `dpl_Hr4SgQw8ieTekmvgxPpwop3x6Fes`  
 **PR #35 (merged):** https://github.com/kosedge/kosedge/pull/35 — docs dpl record  
-**Odds key rotation redeploy (env-only):** `dpl_5ethEXS86u6xTsid9bfG3wQdG7sd` (www — post ODDS_API_KEY restore)
+**PR #36 (merged):** https://github.com/kosedge/kosedge/pull/36 — merge SHA `ef73eb7236c182ad89384487cd85aeb0b30f9e90` → **current www** `dpl_37VXRuDq2SywrVTBwU75N6PCqEUe`  
+**Odds key rotation redeploy (env-only, pre-merge):** `dpl_5ethEXS86u6xTsid9bfG3wQdG7sd`
 
 ## Slice 1–3 shipped — Shared SportProShell + Overview pattern
 
@@ -66,7 +67,7 @@ Legend: **DONE** · **PARTIAL** · **BLOCKED** (feed missing)
 | Tempo dedicated pace/havoc columns | Board totals used until college tempo feed join |
 | NBA live mainlines | Offseason — Odds API inactive for `basketball_nba` until board posts |
 
-### Live smoke (www.kosedge.com) — post Odds key restore (`dpl_5ethEXS86u6xTsid9bfG3wQdG7sd`)
+### Live smoke (www.kosedge.com) — post PR #36 (`dpl_37VXRuDq2SywrVTBwU75N6PCqEUe`)
 
 | Route | HTTP | Notes |
 |-------|------|-------|
