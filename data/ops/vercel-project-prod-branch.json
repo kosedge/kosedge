@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-07-31T16:09:10Z",
+  "checkedAt": "2026-07-31T16:42:00Z",
   "domain": "www.kosedge.com",
   "project": {
     "name": "kosedge",
@@ -10,50 +10,45 @@
   "productionBranch": "deploy-vercel",
   "gitTip": {
     "branch": "origin/deploy-vercel",
-    "sha": "81a4cc528201e3d3c9ac28ec78f8ea0276fb418a",
-    "includesOverhaul": [
-      "005ec21c41cd2c642f1fa48f3ae916b7673a8468",
-      "338a7109fe63c7ddf63f06e570d8791a144374a3",
-      "e6f0901f8e740fac108a0c20f1f9530fe220fc3b",
-      "81a4cc528201e3d3c9ac28ec78f8ea0276fb418a"
-    ],
-    "prs": [
-      27,
-      28,
-      29
-    ]
+    "sha": "bf5d88f",
+    "includesOverhaul": true,
+    "prs": [27, 28, 29, 30]
   },
   "productionDeployment": {
-    "id": "dpl_7DbEJKiY4GhQQns4mK7e3coTwwVA",
-    "sha": "81a4cc528201e3d3c9ac28ec78f8ea0276fb418a",
+    "id": "dpl_77DNWuVSVmWSRpH98XfYmuUQreC9",
+    "sha": "bf5d88f",
     "matchesGitTip": true,
     "aliases": [
       "www.kosedge.com",
       "kosedge.com",
       "kosedge.vercel.app"
-    ]
+    ],
+    "url": "https://kosedge-n0tjvu3b3-kos-edge-analytics-projects.vercel.app"
   },
   "liveHtmlMarkers": {
     "url": "https://www.kosedge.com/pro/nfl/overview",
-    "viaProRoot": "https://www.kosedge.com/pro \u2192 /pro/nfl/overview",
     "present": [
       "Research desk",
-      "NFL research desk",
       "NFL Overview",
       "At a Glance",
       "Open Live Edgeboard"
     ]
   },
   "diagnosis": {
+    "hardOutage": false,
     "wrongProductionBranch": false,
     "tipNotDeployed": false,
     "domainOnWrongProject": false,
     "buildFailed": false,
-    "userLikelyIssue": "Homepage /pro previously redirected to legacy /pro/welcome (old multi-sport hub), so users on www.kosedge.com clicking Pro did not land on the NFL overhaul shell. Overhaul HTML was already live on /pro/nfl/overview."
+    "hangRiskFixed": true,
+    "userLikelyIssue": "SSR could hang when Odds API or Railway stalled (unbounded/60s fetches). Also /pro/nfl/slate without date 404'd."
   },
-  "entryPathFix": {
-    "proRootRedirect": "/pro/nfl/overview",
-    "homepageProCta": "/pro/nfl/overview",
-    "deployed": true
+  "postDeployVerify": {
+    "home": "200 ~0.5s",
+    "overview": "200 ~0.7s",
+    "slateAlias": "200 redirect → /pro/nfl/slate/today",
+    "edgeBoard": "200 ~2.2s",
+    "railwayHealth": "200",
+    "fairLines200d": "count 241 joined 241"
   }
 }

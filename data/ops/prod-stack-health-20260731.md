@@ -46,5 +46,19 @@
 
 - Project: `prj_C6AKSLK2gHV3G9A6TI5lml6MHIJe` (team `kos-edge-analytics-projects`)
 - Prod branch: `deploy-vercel`
+- Live deployment: `dpl_77DNWuVSVmWSRpH98XfYmuUQreC9` (SHA `bf5d88f`)
+- PR: https://github.com/kosedge/kosedge/pull/30
 - Model service: `https://model-service-production-e253.up.railway.app`
 - Env present on Vercel prod: `MODEL_SERVICE_URL`, `INTERNAL_API_SECRET`, `ODDS_API_KEY`, `DATABASE_URL` (no `REDIS_URL`)
+
+## Post-deploy verify (after `vercel --prod`)
+
+| Check | Result |
+|-------|--------|
+| `/` | 200 |
+| `/pro/nfl/overview` | 200 + overhaul markers |
+| `/pro/nfl/slate` | 200 → `/pro/nfl/slate/today` |
+| `/pro/nfl/boards` | 200 → `/edge-board/nfl` |
+| `/edge-board/nfl` | 200 ~2.2s |
+| `/api/ping` | 200 |
+| Railway health + fair-lines(200d) | 200 / count 241 |
