@@ -2,10 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
+import {
+  fetchNhlGoalieConfirmations,
+  formatGoalieCell,
+  matchGoalieConfirmation,
+} from "@/lib/nhl-goalie-confirmation";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 /**
  * NHL Goalie Desk — starter confirmation framing for ML / totals / puck line.
+ * Source: ESPN scoreboard probables when posted; otherwise honest Pending.
  */
 export default async function NhlGoalieDeskPage({
   params,
@@ -17,7 +23,14 @@ export default async function NhlGoalieDeskPage({
   if (sportKey !== "nhl") notFound();
 
   const sportName = sportDisplayLabel(sportKey);
-  const games = await getTonightGames(sportKey);
+  const [games, confirmations] = await Promise.all([
+    getTonightGames(sportKey),
+    fetchNhlGoalieConfirmations(),
+  ]);
+
+  const namedStarters = confirmations.filter(
+    (m) => m.away.goalieName || m.home.goalieName,
+  ).length;
 
   return (
     <SportHubShell
@@ -63,35 +76,53 @@ export default async function NhlGoalieDeskPage({
         <h2 className="text-lg font-semibold text-kos-text">Tonight’s slate</h2>
         <p className="mt-1 text-sm text-kos-text/65">
           {games.length > 0
-            ? "Matchups from the live board. Dedicated starter confirmation feed joins here when available — we do not invent goalie names."
+            ? namedStarters > 0
+              ? `Matchups from the live board. ESPN scoreboard posted starter names on ${namedStarters} event${namedStarters === 1 ? "" : "s"}; remaining nets stay Pending — we do not invent goalies.`
+              : "Matchups from the live board. ESPN scoreboard is connected but is not posting starter/probable names for these games yet — Confirmation pending (not fabricated)."
             : "No live NHL board rows yet. Desk remains ready without fabricated starter cards."}
         </p>
 
         {games.length > 0 ? (
           <>
             <div className="mt-4 grid gap-3 md:hidden">
-              {games.map((g) => (
-                <div
-                  key={g.slug}
-                  className="rounded-xl border border-white/10 bg-black/35 p-4"
-                >
-                  <div className="text-sm font-semibold text-kos-text">
-                    {g.row.teamA?.name ?? "Away"} @{" "}
-                    {g.row.teamB?.name ?? "Home"}
+              {games.map((g) => {
+                const away = g.row.teamA?.name ?? "Away";
+                const home = g.row.teamB?.name ?? "Home";
+                const matched = matchGoalieConfirmation(
+                  away,
+                  home,
+                  confirmations,
+                );
+                return (
+                  <div
+                    key={g.slug}
+                    className="rounded-xl border border-white/10 bg-black/35 p-4"
+                  >
+                    <div className="text-sm font-semibold text-kos-text">
+                      {away} @ {home}
+                    </div>
+                    <p className="mt-2 text-xs text-kos-text/65">
+                      Away:{" "}
+                      <span className="text-kos-gold">
+                        {formatGoalieCell(matched?.away ?? null)}
+                      </span>
+                    </p>
+                    <p className="mt-1 text-xs text-kos-text/65">
+                      Home:{" "}
+                      <span className="text-kos-gold">
+                        {formatGoalieCell(matched?.home ?? null)}
+                      </span>
+                    </p>
+                    <p className="mt-1 text-xs text-kos-text/55">
+                      Total{" "}
+                      {g.row.bestOU?.top?.label ??
+                        g.row.keiOU?.top?.label ??
+                        "—"}{" "}
+                      · Research via Edge Board
+                    </p>
                   </div>
-                  <p className="mt-2 text-xs text-kos-text/65">
-                    Starter confirmation:{" "}
-                    <span className="text-kos-gold">Pending feed</span>
-                  </p>
-                  <p className="mt-1 text-xs text-kos-text/55">
-                    Total{" "}
-                    {g.row.bestOU?.top?.label ??
-                      g.row.keiOU?.top?.label ??
-                      "—"}{" "}
-                    · Research via Edge Board
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="mt-4 hidden overflow-hidden rounded-2xl border border-white/10 md:block">
@@ -105,37 +136,45 @@ export default async function NhlGoalieDeskPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {games.map((g) => (
-                    <tr
-                      key={g.slug}
-                      className="border-t border-white/8 hover:bg-white/[0.03]"
-                    >
-                      <td className="px-4 py-3 font-medium text-kos-text">
-                        {g.row.teamA?.name ?? "Away"} @{" "}
-                        {g.row.teamB?.name ?? "Home"}
-                      </td>
-                      <td className="px-4 py-3 text-kos-text/55">
-                        Confirmation pending
-                      </td>
-                      <td className="px-4 py-3 text-kos-text/55">
-                        Confirmation pending
-                      </td>
-                      <td className="px-4 py-3 tabular-nums text-kos-text/80">
-                        {g.row.bestOU?.top?.label ??
-                          g.row.keiOU?.top?.label ??
-                          "—"}
-                      </td>
-                    </tr>
-                  ))}
+                  {games.map((g) => {
+                    const away = g.row.teamA?.name ?? "Away";
+                    const home = g.row.teamB?.name ?? "Home";
+                    const matched = matchGoalieConfirmation(
+                      away,
+                      home,
+                      confirmations,
+                    );
+                    return (
+                      <tr
+                        key={g.slug}
+                        className="border-t border-white/8 hover:bg-white/[0.03]"
+                      >
+                        <td className="px-4 py-3 font-medium text-kos-text">
+                          {away} @ {home}
+                        </td>
+                        <td className="px-4 py-3 text-kos-text/80">
+                          {formatGoalieCell(matched?.away ?? null)}
+                        </td>
+                        <td className="px-4 py-3 text-kos-text/80">
+                          {formatGoalieCell(matched?.home ?? null)}
+                        </td>
+                        <td className="px-4 py-3 tabular-nums text-kos-text/80">
+                          {g.row.bestOU?.top?.label ??
+                            g.row.keiOU?.top?.label ??
+                            "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
           </>
         ) : (
           <div className="mt-4 rounded-2xl border border-kos-border bg-kos-surface/30 p-6 text-sm text-kos-text/70">
-            When the goalie confirmation feed is connected, expected starters
-            and confirmation status will populate this desk. Until then, use
-            Edge Board and team pages for market context.
+            ESPN scoreboard is the confirmation source when books/probables
+            post. Until starter names appear there, this desk stays Pending —
+            use Edge Board and team pages for market context.
           </div>
         )}
       </section>

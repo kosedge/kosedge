@@ -1,0 +1,8 @@
+{
+  "sport": "nba",
+  "source": "odds-api-live-pull",
+  "capturedAt": "2026-07-31T18:12:23Z",
+  "eventCount": 0,
+  "rows": [],
+  "note": "Odds API basketball_nba returned 0 events (offseason / no posted board)."
+}
