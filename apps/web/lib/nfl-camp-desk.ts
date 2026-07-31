@@ -1,5 +1,5 @@
 import "server-only";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
@@ -24,16 +24,30 @@ export type CampNewsItem = {
   source: "espn-news";
 };
 
+export type CampWriterIntelItem = {
+  team: string;
+  teamName: string;
+  author: string;
+  angle: string | null;
+  campRefsMarkdown: string;
+  previewHref: string;
+  sourceLinks: Array<{ label: string; href: string }>;
+};
+
 export type CampDeskPayload = {
   generatedAt: string;
   eraLabel: string;
   hubHref: string;
   news: CampNewsItem[];
+  injuryNews: CampNewsItem[];
+  writerIntel: CampWriterIntelItem[];
   beats: CampBeatLink[];
   writers: Array<{ name: string; coverage: string }>;
   notes: string[];
   diagnostics: {
     newsCount: number;
+    injuryNewsCount: number;
+    writerIntelCount: number;
     beatCount: number;
     beatRegistryVersion: string | null;
   };
@@ -121,6 +135,33 @@ const CAMP_KEYWORDS = [
   "contract",
 ];
 
+const INJURY_KEYWORDS = [
+  "injury",
+  "injured",
+  "acl",
+  "mcl",
+  "pcl",
+  "achilles",
+  "concussion",
+  "hamstring",
+  "quad",
+  "ankle",
+  "knee",
+  "shoulder",
+  "foot",
+  "wrist",
+  "dnp",
+  "did not practice",
+  "limited",
+  "questionable",
+  "doubtful",
+  "out for",
+  "carted",
+  "surgery",
+  "rehab",
+  "return timeline",
+];
+
 function findRepoRoot(): string | null {
   let current = process.cwd();
   for (let depth = 0; depth < 6; depth += 1) {
@@ -149,9 +190,76 @@ function isCampRelevant(headline: string, description: string): boolean {
   return CAMP_KEYWORDS.some((kw) => blob.includes(kw));
 }
 
-export async function fetchEspnCampNews(limit = 12): Promise<CampNewsItem[]> {
-  const url =
-    "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=50";
+function isInjuryRelevant(headline: string, description: string): boolean {
+  const blob = `${headline} ${description}`.toLowerCase();
+  return INJURY_KEYWORDS.some((kw) => blob.includes(kw));
+}
+
+function parseMarkdownLinks(
+  markdown: string,
+): Array<{ label: string; href: string }> {
+  const links: Array<{ label: string; href: string }> = [];
+  const pattern = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(markdown)) !== null) {
+    links.push({ label: match[1].trim(), href: match[2].trim() });
+  }
+  return links;
+}
+
+function loadWriterCampIntel(): CampWriterIntelItem[] {
+  const root = findRepoRoot();
+  if (!root) return [];
+  const dir = path.join(root, "content", "writers", "season-previews-2026");
+  if (!existsSync(dir)) return [];
+  const byCode = new Map(
+    NFL_TEAM_DIRECTORY.map((entry) => [entry.code, entry] as const),
+  );
+  const items: CampWriterIntelItem[] = [];
+  for (const name of readdirSync(dir)) {
+    if (!name.endsWith(".md") || name === "INDEX.md") continue;
+    const team = name.replace(/\.md$/, "").toUpperCase();
+    let raw = "";
+    try {
+      raw = readFileSync(path.join(dir, name), "utf8");
+    } catch {
+      continue;
+    }
+    const campRefs =
+      raw.match(/\*\*Camp\s*\/\s*market refs:\*\*\s*(.+)$/im)?.[1]?.trim() ??
+      "";
+    const sources =
+      raw.match(/\*\*Sources(?:\s*\(beat desk\))?:\*\*\s*(.+)$/im)?.[1]?.trim() ??
+      "";
+    const market =
+      raw
+        .match(
+          /\*\*Market(?:\s*\([^)]*\))?:\*\*\s*(.+)$/im,
+        )?.[1]
+        ?.trim() ?? "";
+    const refsBlob = [campRefs, sources, market].filter(Boolean).join(" · ");
+    if (!refsBlob) continue;
+    const author =
+      raw.match(
+        /\*\*By\s+([^*]+?)\*\*\s*·\s*Kos Edge Analytics/i,
+      )?.[1]?.trim() ?? "Kos Edge Desk";
+    const angle = raw.match(/\*\*Angle:\*\*\s*(.+)$/im)?.[1]?.trim() ?? null;
+    const sourceLinks = parseMarkdownLinks(refsBlob).slice(0, 4);
+    items.push({
+      team,
+      teamName: byCode.get(team)?.name ?? team,
+      author,
+      angle,
+      campRefsMarkdown: refsBlob,
+      previewHref: `/pro/nfl/previews/${team}`,
+      sourceLinks,
+    });
+  }
+  return items.sort((a, b) => a.teamName.localeCompare(b.teamName));
+}
+
+async function fetchEspnNflArticles(limit = 50): Promise<CampNewsItem[]> {
+  const url = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=${limit}`;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
   try {
@@ -176,7 +284,6 @@ export async function fetchEspnCampNews(limit = 12): Promise<CampNewsItem[]> {
       const description = (article.description ?? "").trim();
       const href = article.links?.web?.href ?? "";
       if (!headline || !href) continue;
-      if (!isCampRelevant(headline, description)) continue;
       items.push({
         id: String(article.id ?? href),
         headline,
@@ -185,7 +292,6 @@ export async function fetchEspnCampNews(limit = 12): Promise<CampNewsItem[]> {
         href,
         source: "espn-news",
       });
-      if (items.length >= limit) break;
     }
     return items;
   } catch {
@@ -193,6 +299,20 @@ export async function fetchEspnCampNews(limit = 12): Promise<CampNewsItem[]> {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function fetchEspnCampNews(limit = 12): Promise<CampNewsItem[]> {
+  const articles = await fetchEspnNflArticles(50);
+  return articles
+    .filter((item) => isCampRelevant(item.headline, item.description))
+    .slice(0, limit);
+}
+
+export async function fetchEspnInjuryNews(limit = 10): Promise<CampNewsItem[]> {
+  const articles = await fetchEspnNflArticles(50);
+  return articles
+    .filter((item) => isInjuryRelevant(item.headline, item.description))
+    .slice(0, limit);
 }
 
 function buildBeats(registry: BeatRegistry | null): CampBeatLink[] {
@@ -217,7 +337,14 @@ function buildBeats(registry: BeatRegistry | null): CampBeatLink[] {
 
 export async function buildNflCampDesk(): Promise<CampDeskPayload> {
   const registry = loadBeatRegistry();
-  const news = await fetchEspnCampNews(14);
+  const articles = await fetchEspnNflArticles(50);
+  const news = articles
+    .filter((item) => isCampRelevant(item.headline, item.description))
+    .slice(0, 14);
+  const injuryNews = articles
+    .filter((item) => isInjuryRelevant(item.headline, item.description))
+    .slice(0, 8);
+  const writerIntel = loadWriterCampIntel();
   const beats = buildBeats(registry);
   return {
     generatedAt: new Date().toISOString(),
@@ -225,15 +352,19 @@ export async function buildNflCampDesk(): Promise<CampDeskPayload> {
     hubHref:
       "https://www.espn.com/nfl/story/_/id/49368181/training-camp-2026-latest-news-intel-updates-buzz-all-32-teams",
     news,
+    injuryNews,
+    writerIntel,
     beats,
     writers: WRITER_COVERAGE,
     notes: [
       "Camp Desk surfaces public beat hubs + ESPN camp news. Kos Edge writers own the Pass/Lean judgment — thin edges stay Pass.",
       "PRE boards use market + camp strength reference; season PLAY tags remain blocked under the info desk.",
-      "Writer news breaks ship via docs/writers/TRAINING_CAMP_DESK.md templates when a number-moving item clears research standards.",
+      "Writer camp intel below is sourced from published 2026 season-preview beat refs — full news-break templates live in docs/writers/TRAINING_CAMP_DESK.md.",
     ],
     diagnostics: {
       newsCount: news.length,
+      injuryNewsCount: injuryNews.length,
+      writerIntelCount: writerIntel.length,
       beatCount: beats.length,
       beatRegistryVersion: registry?.version ?? null,
     },

@@ -226,9 +226,9 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/pro/nfl/awards",
+          href: "/pro/nfl/player-previews",
           label: "Player Previews",
-          hint: "Closest live player outlook surface (MVP & OPOY race). Dedicated player preview index TBD.",
+          hint: "MVP/OPOY races plus skill-position draft outlooks from the player model.",
           premium: true,
           status: "active",
         },

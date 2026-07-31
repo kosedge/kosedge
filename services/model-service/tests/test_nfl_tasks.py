@@ -388,3 +388,113 @@ def test_resolve_team_strength_indices_falls_back_to_record_on_genuine_cold_star
     assert offense_away == 1.0
     assert defense_home == 1.062
     assert defense_away == 1.0
+
+
+def test_priors_from_matchup_pack_aligns_base_strength_to_week_epa() -> None:
+    """Residual DAL@NYG failure mode after supervised skip: season-max-week
+    hydrated priors fought the Week-1 matchup pack. Pack-derived indices must
+    prefer the away club when pack EPA clearly favors them."""
+    pack = {
+        "season": 2026,
+        "week": 1,
+        "home_off_epa_5g": -0.05165,
+        "away_off_epa_5g": 0.03415,
+        "home_def_epa_allowed_5g": 0.07218,
+        "away_def_epa_allowed_5g": 0.07718,
+        "home_pressure_generated_5g": 0.1694,
+        "away_pressure_generated_5g": 0.1775,
+        "home_pressure_allowed_5g": 0.2068,
+        "away_pressure_allowed_5g": 0.1393,
+    }
+    priors = tasks._priors_from_matchup_pack(pack)
+    assert priors is not None
+    home_prior, away_prior = priors
+    # Away offense stronger; home allows much more pressure → away should be
+    # the stronger club on offense index.
+    assert away_prior["offense_index"] > home_prior["offense_index"]
+    assert home_prior["_week"] == 1.0
+
+
+def test_load_team_strength_priors_uses_prior_season_when_unplayed(monkeypatch) -> None:
+    """On a not-yet-played season, week DESC against the hydrated grid would
+    pick week-18 carry-forward. Force prior-season latest week instead."""
+    Row = namedtuple(
+        "Row",
+        "season week team off_epa_per_play_5g def_epa_allowed_per_play_5g "
+        "pressure_rate_generated_5g pressure_rate_allowed_5g",
+    )
+
+    class _FakeSession:
+        def __init__(self):
+            self.queries = []
+
+        def execute(self, sql, params=None):
+            query = str(sql)
+            self.queries.append((query, dict(params or {})))
+            if "COUNT(*)" in query and "nfl_dp_schedules" in query:
+                return _Result(row=namedtuple("C", "n")(n=0))
+            if "nfl_dp_team_rolling_features_weekly" in query:
+                # Only prior season should be requested when unplayed.
+                assert params["seasons"] == [2025]
+                return _Result(
+                    rows=[
+                        Row(2025, 18, "NYG", -0.05, 0.07, 0.17, 0.20),
+                        Row(2025, 18, "DAL", 0.03, 0.08, 0.18, 0.14),
+                    ]
+                )
+            raise AssertionError(f"Unexpected SQL: {query}")
+
+    session = _FakeSession()
+    # scalar() path: our _Result needs scalar support
+    class _ScalarResult(_Result):
+        def scalar(self):
+            if self._row is not None and hasattr(self._row, "n"):
+                return self._row.n
+            return 0
+
+    orig_execute = session.execute
+
+    def execute_with_scalar(sql, params=None):
+        result = orig_execute(sql, params)
+        query = str(sql)
+        if "COUNT(*)" in query:
+            return _ScalarResult(row=namedtuple("C", "n")(n=0))
+        return result
+
+    session.execute = execute_with_scalar  # type: ignore[method-assign]
+    out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=1)
+    assert "NYG" in out and "DAL" in out
+    assert out["DAL"]["offense_index"] > out["NYG"]["offense_index"]
+    assert out["NYG"]["_season"] == 2025.0
+
+
+def test_fetch_nfl_market_consensus_lines_passes_team_date_fallback_params() -> None:
+    """Odds may live on a parallel games UUID; fetch must pass team/date fallback."""
+
+    class _FakeSession:
+        def __init__(self):
+            self.params = None
+
+        def execute(self, sql, params=None):
+            self.params = dict(params or {})
+            query = str(sql)
+            assert "candidate_games" in query
+            assert "game_date" in query
+            Row = namedtuple("Row", "market_spread_home market_total")
+            return _Result(row=Row(market_spread_home=2.5, market_total=48.0))
+
+    session = _FakeSession()
+    out = tasks._fetch_nfl_market_consensus_lines(
+        session,
+        game_id="c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+        home_abbr="NYG",
+        away_abbr="DAL",
+        home_team="New York Giants",
+        away_team="Dallas Cowboys",
+        game_date=date(2026, 9, 13),
+    )
+    assert out["market_spread_home"] == 2.5
+    assert out["market_total"] == 48.0
+    assert session.params["home_abbr"] == "NYG"
+    assert session.params["away_abbr"] == "DAL"
+    assert session.params["game_date"] == date(2026, 9, 13)

@@ -49,6 +49,8 @@ export default async function NflCampDeskPage() {
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
             {desk.diagnostics.newsCount} camp headlines ·{" "}
+            {desk.diagnostics.injuryNewsCount} injury headlines ·{" "}
+            {desk.diagnostics.writerIntelCount} writer camp notes ·{" "}
             {desk.diagnostics.beatCount} team beats
             {desk.diagnostics.beatRegistryVersion
               ? ` · registry ${desk.diagnostics.beatRegistryVersion}`
@@ -108,6 +110,119 @@ export default async function NflCampDeskPage() {
         </div>
       </section>
 
+      {desk.writerIntel.length > 0 ? (
+        <section className="mt-8">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-kos-text">
+              Writer camp intel
+            </h2>
+            <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
+              Desk-owned camp / market references from published 2026 season
+              previews — the live substitute for full news-break posts until
+              dedicated breaks clear research standards.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {desk.writerIntel.map((item) => (
+              <article
+                key={item.team}
+                className="rounded-2xl border border-white/10 bg-black/30 p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-kos-text/50">
+                      {item.team}
+                    </p>
+                    <h3 className="mt-0.5 font-semibold text-kos-text">
+                      {item.teamName}
+                    </h3>
+                  </div>
+                  <span className="rounded-md border border-kos-gold/25 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
+                    {item.author}
+                  </span>
+                </div>
+                {item.angle ? (
+                  <p className="mt-2 text-sm text-kos-text/80">{item.angle}</p>
+                ) : null}
+                {item.sourceLinks.length > 0 ? (
+                  <ul className="mt-3 space-y-1.5 text-sm">
+                    {item.sourceLinks.map((link) => (
+                      <li key={link.href}>
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-kos-gold/90 underline-offset-2 hover:underline"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-3 text-sm text-kos-text/65">
+                    {item.campRefsMarkdown}
+                  </p>
+                )}
+                <Link
+                  href={item.previewHref}
+                  className="mt-3 inline-flex rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm hover:border-kos-gold/35"
+                >
+                  Full preview →
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {desk.injuryNews.length > 0 ? (
+        <section className="mt-8">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-kos-text">
+              Camp injury / availability
+            </h2>
+            <p className="mt-1 text-sm text-kos-text/65">
+              Public ESPN headlines that mention injuries or practice
+              availability. Official weekly designations still live on the
+              injuries intel table.
+            </p>
+          </div>
+          <div className="space-y-3">
+            {desk.injuryNews.map((item) => (
+              <a
+                key={`inj-${item.id}`}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 transition hover:border-amber-400/40"
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-100/70">
+                  Injury / availability
+                  {item.published ? ` · ${formatPublished(item.published)}` : ""}
+                </p>
+                <h3 className="mt-1 text-base font-semibold text-kos-text">
+                  {item.headline}
+                </h3>
+                {item.description ? (
+                  <p className="mt-2 text-sm text-kos-text/70">
+                    {item.description}
+                  </p>
+                ) : null}
+              </a>
+            ))}
+          </div>
+          <div className="mt-3">
+            <Link
+              href="/pro/nfl/injuries"
+              className="text-sm text-kos-gold/90 underline-offset-2 hover:underline"
+            >
+              Open injuries intel table →
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <section className="mt-8">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -133,7 +248,7 @@ export default async function NflCampDeskPage() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-2xl border border-white/10 bg-black/35 p-5 transition hover:border-kos-gold/35"
+                className="block rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-5 transition hover:border-kos-gold/35"
               >
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/50">
                   ESPN

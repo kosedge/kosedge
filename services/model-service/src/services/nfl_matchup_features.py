@@ -157,9 +157,20 @@ def matchup_pack_to_sim_input_kwargs(
         success_terms.append(away_success_def - home_success_def)
     diff_success_rate = (sum(success_terms) / len(success_terms)) if success_terms else None
 
+    matchup_week_raw = matchup_pack.get("week")
+    try:
+        matchup_week = int(round(float(matchup_week_raw))) if matchup_week_raw is not None else None
+    except (TypeError, ValueError):
+        matchup_week = None
+    matchup_season_raw = matchup_pack.get("season")
+    try:
+        matchup_season = int(round(float(matchup_season_raw))) if matchup_season_raw is not None else None
+    except (TypeError, ValueError):
+        matchup_season = None
+
     return {
-        "matchup_season": matchup_pack.get("season"),
-        "matchup_week": matchup_pack.get("week"),
+        "matchup_season": matchup_season,
+        "matchup_week": matchup_week,
         "matchup_game_id": matchup_pack.get("game_id"),
         "matchup_home_team": matchup_pack.get("home_team"),
         "matchup_away_team": matchup_pack.get("away_team"),
@@ -190,9 +201,8 @@ def matchup_pack_to_sim_input_kwargs(
             if matchup_pack.get("kav_as_of_week") is not None
             else None
         ),
-        "home_st_kav_net_5g": _to_float(matchup_pack.get("home_st_kav_net_5g")),
-        "away_st_kav_net_5g": _to_float(matchup_pack.get("away_st_kav_net_5g")),
-        "diff_st_kav_net_5g": _to_float(matchup_pack.get("diff_st_kav_net_5g")),
+        # ST-KAV columns exist on matchup packs for supervised analysis only.
+        # NflGameInputs does not accept them (failed v4 holdout; not wired).
         "home_personnel_edge_5g": _to_float(matchup_pack.get("home_personnel_edge_5g")),
         "away_personnel_edge_5g": _to_float(matchup_pack.get("away_personnel_edge_5g")),
         "home_sub_elasticity_5g": _to_float(matchup_pack.get("home_sub_elasticity_5g")),

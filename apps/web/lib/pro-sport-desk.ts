@@ -171,6 +171,14 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "gold",
       },
       {
+        href: "/pro/nfl/player-previews",
+        title: "Player Previews",
+        description:
+          "MVP/OPOY races plus skill-position draft outlooks — the dedicated player preview index.",
+        cta: "Open player previews →",
+        accent: "neutral",
+      },
+      {
         href: "/pro/nfl/awards",
         title: "MVP & OPOY Race",
         description:

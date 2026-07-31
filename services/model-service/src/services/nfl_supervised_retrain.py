@@ -404,6 +404,8 @@ def detect_real_rolling_features(
                     AND week BETWEEN 1 AND 18
                     AND home_score IS NOT NULL
                     AND away_score IS NOT NULL
+                    AND game_date IS NOT NULL
+                    AND game_date < CURRENT_DATE
                   UNION ALL
                   SELECT away_team AS team
                   FROM nfl_dp_schedules
@@ -411,6 +413,8 @@ def detect_real_rolling_features(
                     AND week BETWEEN 1 AND 18
                     AND home_score IS NOT NULL
                     AND away_score IS NOT NULL
+                    AND game_date IS NOT NULL
+                    AND game_date < CURRENT_DATE
                 ) played
                 WHERE team = ANY(:teams)
                 GROUP BY team
@@ -449,7 +453,11 @@ def apply_supervised_blend(
         max_margin_deviation = VALIDATED_MAX_MARGIN_DEVIATION
         max_total_deviation = VALIDATED_MAX_TOTAL_DEVIATION
     else:
-        blending = fit_payload.get("blending") or CONSERVATIVE_BLENDING_WEIGHTS
+        # Do NOT trust fit_payload["blending"] here — active fits were often
+        # saved with validated (0.85 spread) weights. Using that dict on the
+        # "conservative" path silently re-enabled high-trust blends and flipped
+        # market sides on early-season boards (DAL@NYG).
+        blending = {**CONSERVATIVE_BLENDING_WEIGHTS}
         max_margin_deviation = CONSERVATIVE_MAX_MARGIN_DEVIATION
         max_total_deviation = CONSERVATIVE_MAX_TOTAL_DEVIATION
     if not isinstance(feature_keys, list):

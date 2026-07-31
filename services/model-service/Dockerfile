@@ -34,4 +34,6 @@ RUN chmod +x /app/scripts/nfl/*.sh 2>/dev/null || true \
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
-CMD ["sh", "-c", "case \"${PROCESS_TYPE:-api}\" in worker) exec celery -A src.celery_app worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-4};; beat) exec celery -A src.celery_app beat --loglevel=info;; *) exec uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000};; esac"]
+# API default PORT 8080 matches Railway public domain. Worker must listen on
+# default+odds+models or season 5–10min odds/board jobs never run.
+CMD ["sh", "-c", "case \"${PROCESS_TYPE:-api}\" in worker) exec celery -A src.celery_app worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-4} -Q ${CELERY_WORKER_QUEUES:-default,odds,models};; beat) exec celery -A src.celery_app beat --loglevel=info;; *) exec uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8080};; esac"]

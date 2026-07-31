@@ -1,6 +1,9 @@
-# Brave-art: GHA `railway up services/model-service --path-as-root`.
-# Keep dashboard rootDirectory empty when using path-as-root (no double nest).
-# Nested copy Dockerfile retained as fallback if rootDirectory is re-set.
+# Brave-art: ALWAYS `railway up services/model-service --path-as-root`.
+# Keep dashboard rootDirectory EMPTY with path-as-root (no double nest).
+#
+# API service only: healthcheck /health on PORT 8080, PROCESS_TYPE=api.
+# Worker/beat MUST use railway.worker.json / railway.beat.json (no /health).
+# See docs/RAILWAY_SEASON_OPS.md — data refresh is Celery beat, not redeploy.
 
 [build]
 builder = "DOCKERFILE"

@@ -336,6 +336,111 @@ def test_market_blend_not_applied_when_no_market_line() -> None:
     assert diag == {"spread_applied": False, "total_applied": False}
 
 
+def test_early_season_side_disagreement_boosts_market_blend() -> None:
+    """When week-1 raw margin favors home but market has home as a dog,
+    blend weight must rise above the ordinary early-season boost."""
+    from src.services.nfl_simulator import (
+        _early_season_side_disagreement_boost,
+        _market_blend_weight_for_week,
+    )
+
+    # Home favored raw (+4 margin) vs market home dog (+2.6 spread => -2.6 margin)
+    boost = _early_season_side_disagreement_boost(
+        season_week=1,
+        pre_blend_margin=4.0,
+        market_spread_home=2.6,
+    )
+    assert boost == 0.30
+    base = _market_blend_weight_for_week(0.30, 1)
+    assert base == 0.55
+    assert _clamp_blend(base + boost) >= 0.85
+
+    # Same side as market → no disagreement boost
+    assert (
+        _early_season_side_disagreement_boost(
+            season_week=1,
+            pre_blend_margin=-3.0,
+            market_spread_home=2.6,
+        )
+        == 0.0
+    )
+    # Week 5+ → no boost
+    assert (
+        _early_season_side_disagreement_boost(
+            season_week=5,
+            pre_blend_margin=4.0,
+            market_spread_home=2.6,
+        )
+        == 0.0
+    )
+
+
+def _clamp_blend(weight: float) -> float:
+    return max(0.0, min(0.85, weight))
+
+
+def test_week1_pack_aligned_indices_stay_dog_side_of_market() -> None:
+    """Integration guard for the DAL@NYG class of failure: week-1 pack EPA
+    that favors the away club + market home dog must not publish a home
+    favorite near -3 after early-season market blend."""
+    from src.services.nfl_matchup_features import matchup_pack_to_sim_input_kwargs
+    from src.tasks import _priors_from_matchup_pack
+
+    pack = {
+        "season": 2026,
+        "week": 1,
+        "game_id": "2026_01_AWAY_HOME",
+        "home_team": "HOME",
+        "away_team": "AWAY",
+        "home_off_epa_5g": -0.05165,
+        "away_off_epa_5g": 0.03415,
+        "home_def_epa_allowed_5g": 0.07218,
+        "away_def_epa_allowed_5g": 0.07718,
+        "home_pressure_generated_5g": 0.1694,
+        "away_pressure_generated_5g": 0.1775,
+        "home_pressure_allowed_5g": 0.2068,
+        "away_pressure_allowed_5g": 0.1393,
+        "home_pass_rate_5g": 0.53,
+        "away_pass_rate_5g": 0.59,
+        "home_red_zone_td_rate_5g": 0.16,
+        "away_red_zone_td_rate_5g": 0.20,
+        "home_success_offense_5g": 0.42,
+        "away_success_offense_5g": 0.46,
+        "home_success_defense_allowed_5g": 0.47,
+        "away_success_defense_allowed_5g": 0.49,
+        "diff_off_epa_5g": -0.0858,
+        "diff_def_epa_allowed_5g": 0.0050,
+        "diff_pressure_generated_5g": -0.0081,
+        "diff_pressure_allowed_5g": -0.0675,
+        "diff_red_zone_td_rate_5g": -0.0391,
+    }
+    home_prior, away_prior = _priors_from_matchup_pack(pack)
+    mk = matchup_pack_to_sim_input_kwargs(pack)
+    inputs = NflGameInputs(
+        game_id="g-early-pack",
+        home_team="Home",
+        away_team="Away",
+        offense_index_home=float(home_prior["offense_index"]),
+        offense_index_away=float(away_prior["offense_index"]),
+        defense_index_home=float(home_prior["defense_index"]),
+        defense_index_away=float(away_prior["defense_index"]),
+        **mk,
+    )
+    out = simulate_nfl_game(
+        inputs,
+        simulations=3000,
+        seed=7,
+        market_spread_home=2.6,
+        market_total=48.2,
+        apply_linear_totals_calibration=False,
+    )
+    spread = float(out["markets"]["spread_home"])
+    # Must stay on the market dog side (positive home spread) or within ~1.5
+    # of market — never a heavy home favorite like -3.
+    assert spread > -1.5
+    assert spread > 0.0 or abs(spread - 2.6) <= 1.5
+
+
 def test_simulator_environment_contributions_activate_when_available() -> None:
     inputs = NflGameInputs(
         game_id="g-env",

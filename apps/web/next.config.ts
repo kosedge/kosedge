@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
     "/pro/nfl/camp": [
       "../../data/writers/**/*",
       "../../data/ops/**/*",
+      "../../content/writers/season-previews-2026/**/*",
+    ],
+    "/pro/nfl/injuries": [
+      "../../data/writers/**/*",
+      "../../content/writers/season-previews-2026/**/*",
     ],
     "/pro/prediction-market": [
       "../../data/ops/**/*",
@@ -65,6 +70,11 @@ const nextConfig: NextConfig = {
       {
         source: "/pro/nfl/hub",
         destination: "/pro/nfl/overview",
+        permanent: false,
+      },
+      {
+        source: "/pro/nfl/players",
+        destination: "/pro/nfl/player-previews",
         permanent: false,
       },
     ];

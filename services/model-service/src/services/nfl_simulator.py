@@ -53,6 +53,39 @@ def _market_blend_weight_for_week(base_weight: float, season_week: Optional[int]
     return _clamp(weight + max(0.0, boost), 0.0, 0.85)
 
 
+def _early_season_side_disagreement_boost(
+    *,
+    season_week: Optional[int],
+    pre_blend_margin: float,
+    market_spread_home: float,
+    min_abs_delta: float = 1.5,
+) -> float:
+    """Extra market weight when early-season model and market disagree on side.
+
+    Thin / hydrated weeks can still produce a home-favorite raw margin while
+    the market has the home club as a dog (or vice versa). Pull harder toward
+    consensus without requiring a team-specific special case.
+    """
+    if season_week is None:
+        return 0.0
+    try:
+        week = int(season_week)
+    except (TypeError, ValueError):
+        return 0.0
+    if week < 1 or week > 4:
+        return 0.0
+    market_margin = -float(market_spread_home)
+    opposite = (pre_blend_margin > 0 and market_margin < 0) or (
+        pre_blend_margin < 0 and market_margin > 0
+    )
+    if not opposite:
+        return 0.0
+    if abs(float(pre_blend_margin) - float(market_margin)) < float(min_abs_delta):
+        return 0.0
+    # Week-1 gets the strongest disagreement pull; decays through week 4.
+    return float({1: 0.30, 2: 0.22, 3: 0.15, 4: 0.08}.get(week, 0.0))
+
+
 @dataclass
 class NflGameInputs:
     game_id: str
@@ -571,6 +604,13 @@ def simulate_nfl_game(
     if market_spread_home is not None and margins:
         weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_SPREAD_WEIGHT, season_week)
         pre_blend_margin = sum(margins) / len(margins)
+        disagreement_boost = _early_season_side_disagreement_boost(
+            season_week=season_week,
+            pre_blend_margin=float(pre_blend_margin),
+            market_spread_home=float(market_spread_home),
+        )
+        if disagreement_boost > 0:
+            weight = _clamp(weight + disagreement_boost, 0.0, 0.85)
         market_margin = -float(market_spread_home)
         post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
         shift = post_blend_margin - pre_blend_margin
@@ -579,6 +619,7 @@ def simulate_nfl_game(
             spread_applied=True,
             spread_weight=round(weight, 3),
             base_spread_weight=round(_clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0), 3),
+            side_disagreement_boost=round(float(disagreement_boost), 3),
             season_week=season_week,
             market_spread_home=round(float(market_spread_home), 3),
             pre_blend_margin_mean=round(pre_blend_margin, 3),

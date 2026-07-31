@@ -20,15 +20,22 @@ export default async function ExecutionPage({
   const base = `/pro/${sportKey}`;
 
   if (sportKey === "nfl") {
+    // Preseason → Week 1 spans >21 days from late July; keep the execution
+    // board populated with the same REG window as KEI Lines / slate.
     const fairLines = await fetchNflFairLines({
       season: 2026,
-      daysAhead: 21,
+      daysAhead: 120,
       includePastDays: 1,
     });
     const week = fairLines.currentWeek || 1;
-    const rows = fairLines.lines
-      .filter((row) => row.week === week || row.week === week + 1)
-      .sort((a, b) => (a.startTime || "").localeCompare(b.startTime || ""));
+    const weekRows = fairLines.lines.filter(
+      (row) => row.week === week || row.week === week + 1,
+    );
+    const rows = (
+      weekRows.length > 0
+        ? weekRows
+        : fairLines.lines.filter((row) => (row.week ?? 99) <= 2)
+    ).sort((a, b) => (a.startTime || "").localeCompare(b.startTime || ""));
 
     return (
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">

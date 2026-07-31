@@ -121,39 +121,52 @@ export default async function NflWeeklySlatePage({
                 {section.cards.map((card) => (
                   <article
                     key={card.id}
-                    className="rounded-2xl border border-white/10 bg-black/35 p-5 backdrop-blur-xl"
+                    className="rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-5 backdrop-blur-xl"
                   >
-                    <div className="flex flex-wrap items-start justify-between gap-4">
-                      <div>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+                      <div className="min-w-0 flex-1">
                         <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/55">
                           {card.seasonType} · Week {card.week ?? "—"} ·{" "}
                           {card.kickoffLabel}
                         </p>
-                        <h3 className="mt-1 text-lg font-semibold text-kos-text">
-                          {card.awayTeam}{" "}
-                          <span className="text-kos-text/45">@</span>{" "}
-                          {card.homeTeam}
+                        <h3 className="mt-1 text-base font-semibold text-kos-text sm:text-lg">
+                          <span className="sm:hidden">
+                            {card.awayAbbr}{" "}
+                            <span className="text-kos-text/45">@</span>{" "}
+                            {card.homeAbbr}
+                          </span>
+                          <span className="hidden sm:inline">
+                            {card.awayTeam}{" "}
+                            <span className="text-kos-text/45">@</span>{" "}
+                            {card.homeTeam}
+                          </span>
                         </h3>
-                        <p className="mt-2 text-sm text-kos-text/75">
-                          Market spread {card.marketSpread} · total{" "}
-                          {card.marketTotal}
-                          {" · "}
-                          {card.referenceLabel} {card.modelSpread}
-                          {card.referenceLabel === "Model"
-                            ? ` / ${card.modelTotal}`
-                            : card.modelTotal !== "—"
+                        <div className="mt-3 grid grid-cols-2 gap-2 text-sm text-kos-text/80 sm:flex sm:flex-wrap sm:gap-x-4 sm:gap-y-1">
+                          <p>
+                            <span className="text-kos-text/50">Market</span>{" "}
+                            {card.marketSpread} / {card.marketTotal}
+                          </p>
+                          <p>
+                            <span className="text-kos-text/50">
+                              {card.referenceLabel}
+                            </span>{" "}
+                            {card.modelSpread}
+                            {card.referenceLabel === "Model"
                               ? ` / ${card.modelTotal}`
-                              : " · total ref n/a"}
+                              : card.modelTotal !== "—"
+                                ? ` / ${card.modelTotal}`
+                                : ""}
+                          </p>
                           {card.spreadEdge != null &&
                           card.seasonType === "PRE" ? (
-                            <span className="text-kos-text/55">
-                              {" "}
-                              · ref vs market {card.spreadEdge > 0 ? "+" : ""}
+                            <p className="col-span-2 text-kos-text/55">
+                              Ref vs market{" "}
+                              {card.spreadEdge > 0 ? "+" : ""}
                               {card.spreadEdge.toFixed(1)}
-                            </span>
+                            </p>
                           ) : null}
-                        </p>
-                        <p className="mt-1 text-xs text-kos-text/55">
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-kos-text/55">
                           {card.note}
                           {card.bestSpreadBook
                             ? ` · Best spread book ${card.bestSpreadBook}`
