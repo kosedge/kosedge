@@ -20,6 +20,13 @@ def test_props_celery_task_names_include_features_box_rebuild() -> None:
     assert "props-under-bias-20260731c-baselines-box-rebuild" in text
 
 
+def test_ingest_module_lazy_loads_nflreadpy() -> None:
+    ingest_path = Path(__file__).resolve().parents[1] / "data_platform_nfl" / "ingest.py"
+    text = ingest_path.read_text(encoding="utf-8")
+    assert "import nflreadpy as nfl" not in text.split("def _nflreadpy")[0]
+    assert "def _nflreadpy()" in text
+    assert "nfl = _nflreadpy()" in text
+
 def test_vendor_sync_script_preserves_existing_package() -> None:
     script = Path(__file__).resolve().parents[3] / "scripts" / "nfl" / "sync-model-service-vendor.sh"
     text = script.read_text(encoding="utf-8")
