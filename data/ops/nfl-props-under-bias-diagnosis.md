@@ -184,3 +184,26 @@ Rematerialize jobs on brave-art were failing with:
 **Cause:** `@celery_app.task(name="src.tasks.materialize_nfl_player_props_edges")` was accidentally decorating the helper `_box_dist_moments` instead of `materialize_nfl_player_props_edges`. In-process callers still worked; Celery `send_task` did not — board `updated_at` stuck at 2026-07-21.
 
 **Fix:** move decorator onto the materializer; canary `props-under-bias-20260731b-celery-props-task`; regression test `test_nfl_props_celery_task_binding.py`.
+
+
+---
+
+## 9. AFTER verify (Railway canary live)
+
+**Canary:** `props-under-bias-20260731b-celery-props-task`  
+**Rematerialize:** `POST /api/jobs/run-nfl-player-props?season=2025&week=17` → SUCCESS (`prop_edges_upserted=1620`)
+
+### PLAY mix (2025 W17)
+
+| | Before | After |
+| --- | ---: | ---: |
+| PLAY n | 5 | 42 |
+| PLAY Under | 5 (100%) | 12 (**29%**) |
+| PLAY Over | 0 | 30 (**71%**) |
+| `model_role_collapse` PASS | 0 | 19 |
+| Addison / Harrison / McMillan PLAY Under | yes | **cleared** (PASS / disagreement) |
+
+### Residual notes
+- Baseline rematerialize returned `baseline_rows_upserted=0` on a follow-up run (features/week resolve) — projection lift for featured WR1s still needs a clean baselines+box cycle when feature rows are present.
+- Board still shows some legacy `box_score` diagnostic rows alongside refreshed baseline-sourced edges.
+- Featured line≥40 raw gap remains negative until baselines/box are rebuilt with usage-rank depth; **tag asymmetry is fixed** so collapsed raw no longer publishes as PLAY Under.

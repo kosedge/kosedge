@@ -8,7 +8,7 @@
 
 ## Overall enterprise readiness: **B−**
 
-Props research board is usable after the under-bias structural fix; stake PLAY remains research-only. Sides/totals/ML are market-blended for early season with publish gates. Not yet subscription-grade for stake props.
+Props research board usable; **2025 W17 PLAY Under 100% → 29%** after canary rematerialize; stake PLAY remains research-only. Sides/totals/ML are market-blended for early season with publish gates. Not yet subscription-grade for stake props.
 
 | Market family | Grade | Confidence |
 | --- | :---: | :---: |
@@ -48,8 +48,13 @@ Props research board is usable after the under-bias structural fix; stake PLAY r
 2. Holdout confirm before any stake promotion (`PLAY_STAKE_ELIGIBLE` stays false).
 3. Align Vercel `MODEL_SERVICE_URL` with brave-art (`model-service-production-e253`) — agent secret currently points at joyful-clarity stub.
 
+### AFTER verify W17
+- PLAY: **30 Over / 12 Under (29% Under)**; 19 `model_role_collapse` blocks
+- Celery props task SUCCESS; canary `…20260731b…` live
+- Residual: rebuild baselines+box when feature rows available to lift featured WR raw gaps
+
 ### Confidence
-Medium on root cause (strong live evidence). Medium on post-redeploy calibration until rematerialize numbers land.
+High on Under-tag root cause + tag fix. Medium on full projection recalibration until baselines/box rebuild completes.
 
 ---
 
