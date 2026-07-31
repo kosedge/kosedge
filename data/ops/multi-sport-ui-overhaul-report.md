@@ -75,11 +75,28 @@ PARTIAL elsewhere = honest shells / board-derived metrics; full model boards pen
 - Power: `/pro/power-ratings/{sport}`
 - KEI: `/pro/kei-lines/{sport}`
 
+### Local smoke (127.0.0.1:3000) — 2026-07-31
+
+All sports × Overview / Edge Board / Fair Lines / Edges / Teams / Slate / Odds / Power Ratings → **HTTP 200**, logo present, Overview + Edge Board nav present, no Application errors.
+
+| Check | Result |
+|-------|--------|
+| NBA Overview At a Glance / Workflow | Present; no Article Highlights; no Wall Chart |
+| NFL Overview Wall Chart | Present (NFL-only preserved) |
+| NCAAM Fair Lines KEI file | “KEI projections on file” (38 games) |
+| College `/props` | Redirects to `/tempo` (NEXT_REDIRECT 307) |
+| NBA `/tempo` | 404 (college-only desk) |
+| NHL Goalie Desk | 200 |
+| Sport hub chips on Edge Board | CBB CFB MLB NBA NFL NHL WNBA |
+
+Vercel preview for PR #33 is SSO-gated; production URLs land after merge to `deploy-vercel`.
+
 ### Next slices
-1. Wire remaining Fair Lines/Edges when model boards exist (NBA/NHL/WNBA/CFB)  
-2. Props boards for NBA/WNBA/MLB where feeds support  
-3. Power ratings densify for non-NFL  
-4. Final mobile smoke on www + merge to deploy-vercel
+1. Merge PR #33 → `deploy-vercel` when ready  
+2. Wire remaining Fair Lines/Edges when model boards exist (NBA/NHL/WNBA/CFB)  
+3. Props densify NBA/WNBA/MLB where feeds support  
+4. Power ratings densify non-NFL  
+5. Final www + mobile viewport smoke on production
 
 ### Preserved
 - DeploymentRecovery, BootShell, logo paths, upstream timeouts  
