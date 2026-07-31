@@ -69,13 +69,14 @@ Production base: https://www.kosedge.com
 | Check | Result |
 |-------|--------|
 | `origin/deploy-vercel` includes PR #27 (`005ec21`) | PASS |
-| Prod deploy SHA | `f6606b2401a39ac45a3f2131f0484ee4db22fbfe` (pre-verify tip; Ready) |
+| Prod deploy SHA | `338a7109fe63c7ddf63f06e570d8791a144374a3` (verify fixes; Ready) |
 | Vercel production branch | `deploy-vercel` |
 | www.kosedge.com Ready | PASS |
 | KC / DAL team pages | PASS (Chiefs / Cowboys) |
-| WSH alias (pre-fix) | FAIL → Bills (fixed in verify PR) |
-| CLV shell (pre-fix) | FAIL → no Overview/Edge Board header (fixed) |
-| Slate matchup links (pre-fix) | FAIL → `matchupHref` unused (fixed) |
+| WSH / JAC aliases (post-fix) | PASS → WAS Commanders / JAX Jaguars |
+| Unknown team codes | PASS → 404 (no silent BUF) |
+| CLV / Model Health shell | PASS (NflProShell + Overview/Edge Board) |
+| Slate matchup links | PASS (`matchupHref` wired; 98 links on today slate) |
 
 ---
 
