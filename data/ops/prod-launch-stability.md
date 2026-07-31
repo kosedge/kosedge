@@ -68,3 +68,10 @@ curl -sS --max-time 15 "$MODEL_SERVICE_URL/health/db"
 - Prefer fewer, larger production deploys over dozens of tiny ones in an hour.
 - Preview deploys are fine; promote one Ready build to production aliases.
 - After merge to `deploy-vercel`, wait for Ready before further force-pushes that invalidate chunks again.
+
+## Latest verified production (2026-07-31)
+
+- SHA: `74a888b0091901e783f974eed36e6215bd820536`
+- Deploy: `dpl_4Xd1vt4g47kxtWAfNYtiWankBy9P`
+- Smoke: `scripts/prod-smoke.sh` **PASSED**
+- Browser: `/`, `/pro/nfl/overview`, `/pro/nfl/slate/today`, `/edge-board/nfl` visible; logos load; no pageerrors
