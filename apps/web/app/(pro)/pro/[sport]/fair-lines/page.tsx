@@ -55,6 +55,7 @@ export default async function FairLinesPage({
 
   return (
     <SportHubShell
+      sportKey={sportKey}
       sportName={sportName}
       base={base}
       badge={`${sportName} Betting Desk`}

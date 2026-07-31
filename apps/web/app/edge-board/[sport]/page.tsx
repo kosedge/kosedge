@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
-import NflProHeader from "@/components/pro/nfl/NflProHeader";
+import SportProHeader from "@/components/pro/SportProHeader";
 import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
 import { env } from "@/lib/config/env";
 import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
@@ -11,6 +11,7 @@ import {
   sportDisplayLabel,
   SPORTS,
 } from "@/lib/sports";
+import { getSportOverviewHref } from "@/lib/sport-pro-nav";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
@@ -102,14 +103,13 @@ export default async function EdgeBoardSportPage({
 
   const isNfl = sportKey === "nfl";
 
+  const slateLabel =
+    sportKey === "nfl" || sportKey === "cfb" ? "Weekly Slate" : "Daily Slate";
+
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
-      {isNfl ? (
-        <>
-          <NflProHeader activeSport="nfl" />
-          <NflDataFreshnessBanner />
-        </>
-      ) : null}
+      <SportProHeader activeSport={sportKey} />
+      {isNfl ? <NflDataFreshnessBanner /> : null}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
         <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
@@ -125,59 +125,41 @@ export default async function EdgeBoardSportPage({
         <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
-      <main className="relative z-10 w-full px-5 sm:px-6 pt-8 pb-16">
+      <main className="relative z-10 w-full px-5 sm:px-6 pt-6 pb-16 sm:pt-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} · Model vs Market · {getKeiProductLabel(sportKey)}
+              {sportName} · Model vs Market · {getKeiProductLabel(sportKey)} ·
+              ET
             </div>
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
-              {isNfl ? "NFL Edge Board" : "Today's Edge Board"}
+            <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
+              {sportName} Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
               {isNfl
                 ? slate === "live"
                   ? `Central research board for the current week. ${keiCode} lines always; Open/Best/separation when books post. You make the picks.`
                   : `All NFL games with sportsbook odds on file. Research board — not a picks feed.`
-                : `Same board every sport. Live Open/Best. ${keiCode} Line and O/U are Kosedge projections.`}
+                : `Model vs market hierarchy. Live Open/Best when books post. ${keiCode} Line and O/U are Kosedge projections — research, not picks.`}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            {isNfl ? (
-              <>
-                <Link
-                  href="/pro/nfl/overview"
-                  className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-                >
-                  NFL Overview
-                </Link>
-                <Link
-                  href="/pro/nfl/slate/today"
-                  className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-                >
-                  Weekly Slate
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/"
-                  className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-                >
-                  ← Home
-                </Link>
-                <Link
-                  href={`/pro/${sportKey}`}
-                  className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
-                >
-                  {sportName} Hub
-                </Link>
-              </>
-            )}
+            <Link
+              href={getSportOverviewHref(sportKey)}
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold inline-flex items-center"
+            >
+              {sportName} Overview
+            </Link>
+            <Link
+              href={`/pro/${sportKey}/slate/today`}
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold inline-flex items-center"
+            >
+              {slateLabel}
+            </Link>
             <Link
               href={`/odds/${sportKey}`}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold inline-flex items-center"
             >
               Compare Odds
             </Link>

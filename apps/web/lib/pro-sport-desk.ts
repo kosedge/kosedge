@@ -61,10 +61,10 @@ function stubFairLines(sportKey: string, marketNoun: string): BettingDeskCard {
 
 function stubEdges(sportKey: string, edgeHint: string): BettingDeskCard {
   return {
-    href: `/pro/${sportKey}/fair-lines`,
+    href: `/pro/${sportKey}/edges`,
     title: "Edges",
     description: edgeHint,
-    cta: "Open edges path →",
+    cta: "Open edges desk →",
     accent: "green",
     status: "active",
   };
@@ -312,8 +312,8 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       stubThirdCard(
         "nhl",
         "Goalie Desk",
-        "Starter confirmation and total sensitivity — pending live goalie feed wiring.",
-        "/pro/nhl/teams",
+        "Starter confirmation and total sensitivity for ML and totals research.",
+        "/pro/nhl/goalies",
       ),
     ],
     footerCards: [
@@ -383,8 +383,8 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       stubThirdCard(
         "cfb",
         "Tempo Signals",
-        "Pace and havoc context for market translation — data pending soft launch.",
-        "/pro/cfb/execution",
+        "Pace and havoc context for key-number market translation.",
+        "/pro/cfb/tempo",
       ),
     ],
     footerCards: [
@@ -419,8 +419,8 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       stubThirdCard(
         "ncaam",
         "Tempo Signals",
-        "Tempo and variance context for market translation — data pending soft launch.",
-        "/pro/ncaam/execution",
+        "Tempo and variance context for market translation.",
+        "/pro/ncaam/tempo",
       ),
     ],
     footerCards: [

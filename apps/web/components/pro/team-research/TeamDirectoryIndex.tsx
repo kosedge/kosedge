@@ -27,6 +27,7 @@ export default function TeamDirectoryIndex({
 
   return (
     <SportHubShell
+      sportKey={config.sportKey}
       sportName={sportName}
       base={base}
       badge={`${sportName} League Intel`}

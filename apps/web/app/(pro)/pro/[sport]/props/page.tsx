@@ -25,6 +25,10 @@ export default async function PropsPage({
   const resolved = await params;
   const sportKey = resolveSportKey(resolved?.sport);
   if (sportKey === "nfl") redirect("/pro/nfl/props");
+  // College sports: no props desk — send researchers to Tempo / Fair Lines.
+  if (sportKey === "ncaam" || sportKey === "cfb") {
+    redirect(`/pro/${sportKey}/tempo`);
+  }
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey || "nfl"}`;
@@ -36,14 +40,15 @@ export default async function PropsPage({
 
   return (
     <SportHubShell
+      sportKey={sportKey}
       sportName={sportName}
       base={base}
       badge={`${sportName} Betting Desk`}
       title={`${sportName} Props`}
       summary={
         propsEnabled
-          ? `Prop analyzer and edge screens for ${sportName}. Desk path: ${desk.pathLabel}.`
-          : `Premium placeholder: props and fantasy modules are staged for this college sport pending player-data validation.`
+          ? `Prop analyzer and edge screens for ${sportName}. Desk path: ${desk.pathLabel}. Research only — you make the picks.`
+          : `Props are not part of this sport’s soft-launch desk.`
       }
       primaryHref={`/edge-board/${sportKey}`}
       primaryLabel="Open edge board →"

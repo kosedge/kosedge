@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
-import NflProHeader from "@/components/pro/nfl/NflProHeader";
+import SportProHeader from "@/components/pro/SportProHeader";
 import {
   resolveSportKey,
   sportDisplayLabel,
   SPORTS,
 } from "@/lib/sports";
+import { getSportOverviewHref } from "@/lib/sport-pro-nav";
 import type { OddsComparisonRow } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
@@ -73,60 +74,49 @@ export default async function OddsComparePage({
 
   const origin = await getRequestOrigin();
   const { rows, books } = await getOddsData(sportKey, origin);
-  const isNfl = sportKey === "nfl";
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
-      {isNfl ? <NflProHeader activeSport="nfl" /> : null}
+      <SportProHeader activeSport={sportKey} />
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
       </div>
 
-      <main className="relative z-10 w-full px-5 sm:px-6 pt-8 pb-16">
+      <main className="relative z-10 w-full px-5 sm:px-6 pt-6 pb-16 sm:pt-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} · Market research
+              {sportName} · Market research · ET
             </div>
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
+            <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
               Compare Odds
             </h1>
             <p className="mt-2 text-sm text-gray-200/80 max-w-2xl">
               Best numbers across books with KEI context when available. Gold
               marks the best away spread, best ML prices, and best O/U number.
+              Research surface — you make the picks.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            {isNfl ? (
-              <Link
-                href="/pro/nfl/overview"
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold"
-              >
-                NFL Overview
-              </Link>
-            ) : (
-              <Link
-                href="/"
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold"
-              >
-                ← Home
-              </Link>
-            )}
+            <Link
+              href={getSportOverviewHref(sportKey)}
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
+            >
+              {sportName} Overview
+            </Link>
             <Link
               href={`/edge-board/${sportKey}`}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold"
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
             >
               Edge Board
             </Link>
-            {isNfl ? (
-              <Link
-                href="/pro/nfl/fair-lines"
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold"
-              >
-                KEI Lines
-              </Link>
-            ) : null}
+            <Link
+              href={`/pro/${sportKey}/fair-lines`}
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
+            >
+              KEI Lines
+            </Link>
           </div>
         </div>
 
@@ -160,7 +150,54 @@ export default async function OddsComparePage({
             Per book: away spread · moneyline (away / home) · total (Over). Main
             markets only — no live widget.
           </p>
-          <div className="mt-3 bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
+          {/* Mobile: stacked game cards with best numbers */}
+          {rows.length > 0 ? (
+            <div className="mt-3 grid gap-3 lg:hidden">
+              {rows.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-xl border border-white/12 bg-black/40 p-4"
+                >
+                  <div className="text-sm font-semibold text-gray-100">
+                    {r.game}
+                  </div>
+                  <div className="mt-1 text-xs text-gray-400">{r.time} ET</div>
+                  <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                    <div className="rounded-lg border border-white/10 bg-white/5 p-2">
+                      <div className="text-[10px] uppercase text-gray-500">
+                        Best spread
+                      </div>
+                      <div className="mt-1 font-semibold text-kos-gold tabular-nums">
+                        {r.bestSpreadBook
+                          ? (r.spread[r.bestSpreadBook]?.away ?? "—")
+                          : "—"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-white/10 bg-white/5 p-2">
+                      <div className="text-[10px] uppercase text-gray-500">
+                        Best total
+                      </div>
+                      <div className="mt-1 font-semibold text-kos-gold tabular-nums">
+                        {r.bestTotalBook && r.total[r.bestTotalBook]?.line
+                          ? `o${r.total[r.bestTotalBook]!.line}`
+                          : "—"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-white/10 bg-white/5 p-2">
+                      <div className="text-[10px] uppercase text-gray-500">
+                        Books
+                      </div>
+                      <div className="mt-1 font-semibold text-gray-200">
+                        {books.length}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="mt-3 hidden bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl lg:block">
             <div className="overflow-x-auto">
               {rows.length > 0 && books.length > 0 ? (
                 <table className="min-w-[1400px] w-full text-sm tabular-nums">

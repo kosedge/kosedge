@@ -666,126 +666,118 @@ export default function EdgeBoard({
   }
 
   const MobileCards = (
-    <div className="lg:hidden mt-6">
-      <div className="relative">
-        <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
-        <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
-            <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
-              {safeRows.length
-                ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games`
-                : "Live"}
-            </span>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <table className="w-full text-sm">
-              <thead className="bg-white/5">
-                <tr className="text-left text-gray-300">
-                  <th className="py-3.5 px-3">Game</th>
-                  <th className="py-3.5 px-3 text-gray-100">Best Line</th>
-                  <th className="py-3.5 px-3 text-kos-gold">{keiCode}</th>
-                  <th className="py-3.5 px-3 text-[13px] font-bold text-white">
-                    Edge
-                  </th>
-                  <th className="py-3.5 px-3 text-[13px] font-bold text-white">
-                    Tag
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.08] text-gray-200">
-                {data.map((r) => (
-                  <tr key={r.id} className="hover:bg-white/[0.035] transition">
-                    <td className="py-3.5 px-3 align-top">
-                      <div className="font-semibold">
-                        {r.teamA.name} vs {r.teamB.name}
-                      </div>
-                      <div className="text-[11px] text-gray-400 tabular-nums">
-                        {r.time ?? "—"}
-                      </div>
-                      <details className="mt-1.5 group/details">
-                        <summary className="cursor-pointer text-[12px] text-kos-gold hover:underline list-none [&::-webkit-details-marker]:hidden">
-                          Overview ▾
-                        </summary>
-                        <div className="mt-2 p-3 rounded-lg border border-white/10 bg-black/60 text-[11px] text-gray-300 leading-relaxed whitespace-pre-wrap">
-                          {r.overview ?? "No overview available."}
-                        </div>
-                      </details>
-                    </td>
-                    <td className={`py-3.5 px-3 ${COL_MARKET}`}>
-                      <div className="text-[10px] uppercase tracking-wide text-gray-500 mb-1">
-                        Market
-                      </div>
-                      <div className="font-semibold text-gray-50">
-                        {r.bestLine.top.label}
-                      </div>
-                      <div className="text-[11px] text-gray-400">
-                        ({r.bestLine.top.juice})
-                      </div>
-                      {r.bestLineBook ? (
-                        <div className="mt-1.5">
-                          <SportsbookBadge book={r.bestLineBook} compact />
-                        </div>
-                      ) : null}
-                      <div className="mt-2 font-semibold text-gray-50">
-                        {r.bestOU.top.label}
-                      </div>
-                      <div className="text-[11px] text-gray-400">
-                        ({r.bestOU.top.juice})
-                      </div>
-                    </td>
-                    <td className={`py-3.5 px-3 ${COL_MODEL}`}>
-                      <div className="text-[10px] uppercase tracking-wide text-kos-gold/80 mb-1">
-                        Model
-                      </div>
-                      <div className="font-semibold text-kos-gold">
-                        {(r.keiLine ?? COMING_SOON_PAIR).top.label}
-                      </div>
-                      <div className="mt-2 font-semibold text-kos-gold">
-                        {(r.keiOU ?? COMING_SOON_PAIR).top.label}
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-3">
-                      <div
-                        className={`rounded-md px-1.5 py-1 ${edgeCellClass(r.tagLine)}`}
-                      >
-                        <EdgeSideCell
-                          edgeNum={r.edgeLineNum}
-                          favor={r.edgeLineFavor}
-                          tag={r.tagLine}
-                        />
-                      </div>
-                      <div
-                        className={`mt-1.5 rounded-md px-1.5 py-1 ${edgeCellClass(r.tagOU)}`}
-                      >
-                        <EdgeSideCell
-                          edgeNum={r.edgeOUNum}
-                          favor={r.edgeOUFavor}
-                          tag={r.tagOU}
-                        />
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-3">
-                      <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
-                      <div className="mt-1.5">
-                        <TagPlayCell
-                          tag={r.tagOU}
-                          play={r.playOU}
-                          compact
-                          caution={r.edgeOUCaution}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-4 text-xs text-gray-400">
-            Market (Best) vs Model ({keiCode}) • Edge • Tag • Overview
-          </div>
-        </div>
+    <div className="lg:hidden mt-6 space-y-3">
+      <div className="flex items-center justify-between px-1">
+        <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
+        <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
+          {safeRows.length
+            ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games`
+            : "Live"}
+        </span>
       </div>
+      <p className="px-1 text-xs text-gray-400">
+        Model ({keiCode}) vs Market · Edge · Tag · ET
+      </p>
+      {data.map((r) => (
+        <article
+          key={r.id}
+          className="rounded-2xl border border-white/12 bg-black/45 p-4 backdrop-blur-xl"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-gray-100">
+                {r.teamA.name} @ {r.teamB.name}
+              </h3>
+              <p className="mt-0.5 text-[11px] tabular-nums text-gray-400">
+                {r.time ?? "—"}
+              </p>
+            </div>
+            <div className="shrink-0 text-right">
+              <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
+            </div>
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}>
+              <div className="text-[10px] uppercase tracking-wide text-gray-500">
+                Market
+              </div>
+              <div className="mt-1 font-semibold text-gray-50">
+                {r.bestLine.top.label}{" "}
+                <span className="text-[11px] font-normal text-gray-400">
+                  ({r.bestLine.top.juice})
+                </span>
+              </div>
+              <div className="mt-1 font-semibold text-gray-50">
+                {r.bestOU.top.label}{" "}
+                <span className="text-[11px] font-normal text-gray-400">
+                  ({r.bestOU.top.juice})
+                </span>
+              </div>
+              {r.bestLineBook ? (
+                <div className="mt-2">
+                  <SportsbookBadge book={r.bestLineBook} compact />
+                </div>
+              ) : null}
+            </div>
+            <div className={`rounded-xl border border-kos-gold/25 p-3 ${COL_MODEL}`}>
+              <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
+                Model · {keiCode}
+              </div>
+              <div className="mt-1 font-semibold text-kos-gold">
+                {(r.keiLine ?? COMING_SOON_PAIR).top.label}
+              </div>
+              <div className="mt-1 font-semibold text-kos-gold">
+                {(r.keiOU ?? COMING_SOON_PAIR).top.label}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div
+              className={`rounded-xl border border-white/10 px-3 py-2 ${edgeCellClass(r.tagLine)}`}
+            >
+              <div className="text-[10px] uppercase text-gray-500">
+                Spread edge
+              </div>
+              <EdgeSideCell
+                edgeNum={r.edgeLineNum}
+                favor={r.edgeLineFavor}
+                tag={r.tagLine}
+              />
+            </div>
+            <div
+              className={`rounded-xl border border-white/10 px-3 py-2 ${edgeCellClass(r.tagOU)}`}
+            >
+              <div className="text-[10px] uppercase text-gray-500">
+                Total edge
+              </div>
+              <EdgeSideCell
+                edgeNum={r.edgeOUNum}
+                favor={r.edgeOUFavor}
+                tag={r.tagOU}
+              />
+              <div className="mt-1">
+                <TagPlayCell
+                  tag={r.tagOU}
+                  play={r.playOU}
+                  compact
+                  caution={r.edgeOUCaution}
+                />
+              </div>
+            </div>
+          </div>
+
+          <details className="mt-3">
+            <summary className="min-h-11 cursor-pointer list-none text-xs font-medium text-kos-gold hover:underline [&::-webkit-details-marker]:hidden">
+              Matchup overview ▾
+            </summary>
+            <div className="mt-2 rounded-lg border border-white/10 bg-black/60 p-3 text-[11px] leading-relaxed whitespace-pre-wrap text-gray-300">
+              {r.overview ?? "No overview available."}
+            </div>
+          </details>
+        </article>
+      ))}
     </div>
   );
 

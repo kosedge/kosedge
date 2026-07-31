@@ -275,22 +275,22 @@ describe("pro sport IA", () => {
     ).toBe(true);
   });
 
-  it("builds placeholder props links for college sports", () => {
-    const content = buildSportOverviewContent("cfb", "College Football");
-    const sections = buildSportOverviewSections({
-      sportKey: "cfb",
-      base: "/pro/cfb",
-      edgeBoardHref: "/edge-board/cfb",
-      content,
-    });
-    const propsSection = sections.find(
-      (section) => section.title === content.sectionTitles.props,
-    );
-    expect(propsSection?.links.length).toBeGreaterThan(0);
-    expect(propsSection?.links.every((link) => !link.href)).toBe(true);
-    expect(
-      propsSection?.links.every((link) => link.status === "placeholder"),
-    ).toBe(true);
+  it("omits props walls for college sports (no forced props on NCAAM/CFB)", () => {
+    for (const sportKey of ["cfb", "ncaam"] as const) {
+      const content = buildSportOverviewContent(sportKey, sportKey.toUpperCase());
+      const sections = buildSportOverviewSections({
+        sportKey,
+        base: `/pro/${sportKey}`,
+        edgeBoardHref: `/edge-board/${sportKey}`,
+        content,
+      });
+      const propsSection = sections.find(
+        (section) =>
+          section.title === content.sectionTitles.props ||
+          section.title.toLowerCase().includes("props"),
+      );
+      expect(propsSection).toBeUndefined();
+    }
   });
 
   it("requires line and total labels for article-ready cards", () => {
