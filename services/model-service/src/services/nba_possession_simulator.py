@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Literal, Optional, TypedDict
 DEFAULT_NBA_MODEL_VERSION = "nba-v1-poss-sim"
 NBA_WORKER_BUILD_ID = os.getenv(
     "NBA_WORKER_BUILD_ID",
-    "nba-poss-sim-20260731-phase0",
+    "nba-poss-sim-20260731-phase0b",
 )
 
 # Market blend defaults (NFL lesson): shrink thin early-season signal toward
@@ -422,8 +422,8 @@ def simulate_nba_game(
     event_sample: List[Dict[str, Any]] = []
 
     for sim_idx in range(sims):
-        # Stochastic possession count around pace (Poisson-like via gauss).
-        n_poss = max(80, int(round(rng.gauss(expected_poss, 3.5))))
+        # Pace is possessions *per team* per 48; full game ≈ 2× pace alternating.
+        n_poss = max(160, int(round(rng.gauss(2.0 * expected_poss, 5.0))))
         home = 0
         away = 0
         # Alternate possessions; home usually tips → slight first-poss edge.

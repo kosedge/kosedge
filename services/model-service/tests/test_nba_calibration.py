@@ -49,7 +49,7 @@ def test_summarize_walkforward_basic() -> None:
 
 def test_enterprise_report_stub() -> None:
     report = build_enterprise_report_stub(
-        worker_build_id="nba-poss-sim-20260731-phase0",
+        worker_build_id="nba-poss-sim-20260731-phase0b",
         model_version="nba-v1-poss-sim",
         phase="phase0",
     )

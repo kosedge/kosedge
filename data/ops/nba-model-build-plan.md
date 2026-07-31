@@ -1,7 +1,7 @@
 # NBA Model Build Plan
 
 **Status:** Phase 0 scaffold shipped · Phase 1 ingest started  
-**Canary / worker_build_id:** `nba-poss-sim-20260731-phase0`  
+**Canary / worker_build_id:** `nba-poss-sim-20260731-phase0b`  
 **Default model version:** `nba-v1-poss-sim`  
 **Prod web branch:** `deploy-vercel`  
 **Model service:** Railway (`scripts/deploy-railway-model-service.sh`)

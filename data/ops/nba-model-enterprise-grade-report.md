@@ -3,7 +3,7 @@
 **Generated:** 2026-07-31  
 **Phase reached:** Phase 0 complete · Phase 1 ingest scaffolded · Phase 2 calibration helpers stubbed  
 **Model version:** `nba-v1-poss-sim`  
-**Worker canary:** `nba-poss-sim-20260731-phase0`
+**Worker canary:** `nba-poss-sim-20260731-phase0b`
 
 ## Executive status
 

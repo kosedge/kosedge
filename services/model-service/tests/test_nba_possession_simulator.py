@@ -32,7 +32,8 @@ def test_simulate_nba_game_outputs_expected_shape() -> None:
     assert out["model_version"] == DEFAULT_NBA_MODEL_VERSION
     assert out["worker_build_id"] == NBA_WORKER_BUILD_ID
     assert 0.0 <= markets["home_win_prob"] <= 1.0
-    assert markets["total_mean"] > 0
+    # Pace≈100/team → regulation totals should land in a real NBA band.
+    assert 190.0 <= markets["total_mean"] <= 260.0
     assert isinstance(markets["fair_home_ml"], int)
     assert isinstance(markets["fair_away_ml"], int)
     assert markets["total_p10"] <= markets["total_p50"] <= markets["total_p90"]
