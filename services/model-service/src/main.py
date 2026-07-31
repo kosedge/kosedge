@@ -13,7 +13,8 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from src.celery_app import celery_app, celery_healthcheck
 from src.db import engine
-from src.routes import edge_board_router, mlb_router, nfl_router
+from src.routes import edge_board_router, mlb_router, nba_router, nfl_router
+from src.services.nba_possession_simulator import DEFAULT_NBA_MODEL_VERSION
 from src.services.nfl_simulator import DEFAULT_NFL_MODEL_VERSION
 
 APP_NAME: str = os.getenv("APP_NAME", "kosedge")
@@ -31,6 +32,9 @@ TASK_PULL_MLB_CONTEXT = "src.tasks.pull_mlb_context_snapshot"
 TASK_RUN_MLB_SIMULATIONS = "src.tasks.run_mlb_market_simulations"
 TASK_PULL_MLB_OUTCOMES = "src.tasks.pull_mlb_outcomes"
 TASK_PULL_MLB_DATA_LAKE = "src.tasks.pull_mlb_data_lake_snapshot"
+TASK_PULL_NBA_CONTEXT = "src.tasks.pull_nba_context_snapshot"
+TASK_RUN_NBA_SIMULATIONS = "src.tasks.run_nba_market_simulations"
+TASK_PULL_NBA_INGEST = "src.tasks.pull_nba_schedule_ingest"
 TASK_PULL_NFL_CONTEXT = "src.tasks.pull_nfl_context_snapshot"
 TASK_RUN_NFL_SIMULATIONS = "src.tasks.run_nfl_market_simulations"
 TASK_BACKFILL_NFL_HISTORICAL_PROJECTIONS = "src.tasks.backfill_nfl_historical_projections"
@@ -245,6 +249,7 @@ app = FastAPI(
 # Routers
 app.include_router(edge_board_router)
 app.include_router(mlb_router)
+app.include_router(nba_router)
 app.include_router(nfl_router)
 
 # CORS (single middleware registration)
@@ -714,6 +719,55 @@ def job_run_mlb_simulations(
         return {"task_id": async_result.id, "task_name": TASK_RUN_MLB_SIMULATIONS}
     except Exception as e:
         log.exception("Failed to enqueue run-mlb-simulations")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nba-context")
+def job_pull_nba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_PULL_NBA_CONTEXT, kwargs={"days_ahead": days_ahead}
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_NBA_CONTEXT}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nba-context")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-nba-ingest")
+def job_pull_nba_ingest(
+    days_back: int = Query(7, ge=0, le=60),
+    days_ahead: int = Query(3, ge=0, le=14),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_PULL_NBA_INGEST,
+            kwargs={"days_back": days_back, "days_ahead": days_ahead},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_NBA_INGEST}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-nba-ingest")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nba-simulations")
+def job_run_nba_simulations(
+    game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
+    simulations: int = Query(4000, ge=300, le=20000),
+    model_version: str = Query(DEFAULT_NBA_MODEL_VERSION),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_NBA_SIMULATIONS,
+            kwargs={
+                "game_date": game_date,
+                "simulations": simulations,
+                "model_version": model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_NBA_SIMULATIONS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nba-simulations")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

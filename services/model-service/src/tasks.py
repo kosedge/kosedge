@@ -156,9 +156,28 @@ from .services.nfl_totals_calibration import (
     apply_totals_calibration,
     fetch_nfl_totals_calibration,
 )
+from .services.nba_data import (
+    default_league_average_inputs,
+    derive_possessions_from_pbp,
+    estimate_team_features_from_box,
+    fetch_boxscore_traditional,
+    fetch_play_by_play,
+    fetch_schedule_window,
+    normalize_team_key as normalize_nba_team_key,
+    try_sportsdata_games_by_date,
+)
+from .services.nba_possession_simulator import (
+    DEFAULT_NBA_MODEL_VERSION,
+    NBA_WORKER_BUILD_ID,
+    NbaGameInputs,
+    simulate_nba_game,
+)
+from .services.nba_schema import ensure_nba_model_tables
 from .services.odds_api import fetch_odds, fetch_odds_with_metadata, odds_key_diagnostics
 
 log = logging.getLogger(__name__)
+
+NBA_MODEL_STATE_KEY = "nba_active_model"
 
 SPORT_MAP: Dict[str, Tuple[str, str, str]] = {
     # odds-api sport_key -> (sport_code, sport_name, league_name)
@@ -6703,6 +6722,638 @@ def run_mlb_market_simulations(
     except Exception:
         session.rollback()
         log.exception("Failed running MLB market simulations")
+        raise
+    finally:
+        session.close()
+
+
+def _insert_nba_projection(session: Any, projection: Dict[str, Any]) -> None:
+    markets = projection.get("markets") or {}
+    session.execute(
+        text(
+            """
+            INSERT INTO nba_market_projections (
+              game_id, model_version, simulation_count,
+              home_win_prob, total_mean, margin_mean,
+              fair_home_ml, fair_total, fair_spread_home, home_cover_prob,
+              worker_build_id, projection, created_at
+            ) VALUES (
+              :game_id, :model_version, :simulation_count,
+              :home_win_prob, :total_mean, :margin_mean,
+              :fair_home_ml, :fair_total, :fair_spread_home, :home_cover_prob,
+              :worker_build_id, CAST(:projection AS jsonb), :created_at
+            )
+            """
+        ),
+        {
+            "game_id": projection["game_id"],
+            "model_version": projection["model_version"],
+            "simulation_count": projection["simulation_count"],
+            "home_win_prob": markets.get("home_win_prob"),
+            "total_mean": markets.get("total_mean"),
+            "margin_mean": markets.get("margin_mean"),
+            "fair_home_ml": markets.get("fair_home_ml"),
+            "fair_total": markets.get("fair_total"),
+            "fair_spread_home": markets.get("fair_spread_home"),
+            "home_cover_prob": markets.get("home_cover_prob"),
+            "worker_build_id": projection.get("worker_build_id") or NBA_WORKER_BUILD_ID,
+            "projection": json.dumps(projection),
+            "created_at": _now_utc(),
+        },
+    )
+
+
+def _nba_market_lines_for_game(session: Any, game_id: str) -> Dict[str, Optional[float]]:
+    """Read latest spread/total from existing odds_snapshots — no Odds API burn."""
+    try:
+        row = session.execute(
+            text(
+                """
+                SELECT
+                  MAX(CASE WHEN m.code = 'spread' THEN os.point END) AS spread_home,
+                  MAX(CASE WHEN m.code = 'total' THEN os.point END) AS total
+                FROM odds_snapshots os
+                JOIN markets m ON m.id = os.market_id
+                JOIN games g ON g.id = os.game_id
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                WHERE l.code = 'nba'
+                  AND os.game_id = :game_id
+                  AND m.code IN ('spread', 'total')
+                """
+            ),
+            {"game_id": game_id},
+        ).fetchone()
+    except Exception:
+        return {"market_spread_home": None, "market_total": None}
+    if not row:
+        return {"market_spread_home": None, "market_total": None}
+    return {
+        "market_spread_home": _to_float(row[0]),
+        "market_total": _to_float(row[1]),
+    }
+
+
+@celery_app.task(name="src.tasks.pull_nba_schedule_ingest")
+def pull_nba_schedule_ingest(
+    days_back: int = 7,
+    days_ahead: int = 3,
+) -> Dict[str, int]:
+    """Ingest scoreboard window into nba_games_ingest (stats.nba.com primary)."""
+    session = SessionLocal()
+    upserted = 0
+    try:
+        ensure_nba_model_tables(session)
+        start = date.today() - timedelta(days=max(0, days_back))
+        end = date.today() + timedelta(days=max(0, days_ahead))
+        games = fetch_schedule_window(start, end, sleep_s=0.55)
+        if not games:
+            # Optional SportsDataIO only if keys already present.
+            for offset in range(-max(0, days_back), max(0, days_ahead) + 1):
+                d = date.today() + timedelta(days=offset)
+                games.extend(try_sportsdata_games_by_date(d))
+
+        for g in games:
+            external_id = str(g.get("external_game_id") or "").strip()
+            if not external_id:
+                continue
+            game_date_raw = g.get("game_date")
+            try:
+                game_date_val = (
+                    date.fromisoformat(str(game_date_raw)[:10])
+                    if game_date_raw
+                    else date.today()
+                )
+            except ValueError:
+                game_date_val = date.today()
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nba_games_ingest (
+                      external_game_id, game_date, start_time,
+                      home_team_key, away_team_key,
+                      home_score, away_score, status, season, source, raw, updated_at
+                    ) VALUES (
+                      :external_game_id, :game_date, NULL,
+                      :home_team_key, :away_team_key,
+                      :home_score, :away_score, :status, :season, :source,
+                      CAST(:raw AS jsonb), :updated_at
+                    )
+                    ON CONFLICT (external_game_id) DO UPDATE SET
+                      game_date = EXCLUDED.game_date,
+                      home_team_key = EXCLUDED.home_team_key,
+                      away_team_key = EXCLUDED.away_team_key,
+                      home_score = EXCLUDED.home_score,
+                      away_score = EXCLUDED.away_score,
+                      status = EXCLUDED.status,
+                      season = EXCLUDED.season,
+                      source = EXCLUDED.source,
+                      raw = EXCLUDED.raw,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "external_game_id": external_id,
+                    "game_date": game_date_val,
+                    "home_team_key": normalize_nba_team_key(
+                        str(g.get("home_team_key") or g.get("home_team") or "")
+                    ),
+                    "away_team_key": normalize_nba_team_key(
+                        str(g.get("away_team_key") or g.get("away_team") or "")
+                    ),
+                    "home_score": g.get("home_score"),
+                    "away_score": g.get("away_score"),
+                    "status": str(g.get("status") or ""),
+                    "season": str(g.get("season") or ""),
+                    "source": str(g.get("source") or "stats.nba.com"),
+                    "raw": json.dumps(g.get("raw_header") or g.get("raw") or g),
+                    "updated_at": _now_utc(),
+                },
+            )
+            upserted += 1
+        session.commit()
+        return {"games_upserted": upserted, "window_start": str(start), "window_end": str(end)}
+    except Exception:
+        session.rollback()
+        log.exception("Failed NBA schedule ingest")
+        raise
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.materialize_nba_team_rolling_features")
+def materialize_nba_team_rolling_features(
+    days_back: int = 30,
+    window_games: int = 10,
+) -> Dict[str, int]:
+    """Build team rolling pace/ORtg/DRtg/3PT features from recent final boxes."""
+    session = SessionLocal()
+    teams_updated = 0
+    possessions_inserted = 0
+    try:
+        ensure_nba_model_tables(session)
+        start = date.today() - timedelta(days=max(1, days_back))
+        rows = session.execute(
+            text(
+                """
+                SELECT external_game_id, home_team_key, away_team_key, game_date, status
+                FROM nba_games_ingest
+                WHERE game_date >= :start
+                ORDER BY game_date DESC
+                """
+            ),
+            {"start": start},
+        ).fetchall()
+
+        # Per-team game feature samples (most recent first).
+        team_samples: Dict[str, List[Dict[str, float]]] = {}
+        for r in rows:
+            m = dict(r._mapping)
+            gid = str(m.get("external_game_id") or "")
+            status = str(m.get("status") or "").lower()
+            if not gid:
+                continue
+            # Only pull boxes for likely-final games to limit traffic.
+            if status and ("final" not in status and status not in {"3", "closed", "completed"}):
+                # During offseason many rows may be empty; still try a small cap.
+                pass
+            box = fetch_boxscore_traditional(gid)
+            team_stats = box.get("team_stats") or []
+            if not team_stats:
+                continue
+            feats = estimate_team_features_from_box(team_stats)
+            for abbr, feat in feats.items():
+                team_samples.setdefault(abbr, []).append(feat)
+
+            # PBP → possessions (best-effort; skip soft failures).
+            home_key = str(m.get("home_team_key") or "")
+            away_key = str(m.get("away_team_key") or "")
+            if home_key and away_key:
+                pbp = fetch_play_by_play(gid)
+                if pbp:
+                    poss = derive_possessions_from_pbp(
+                        pbp, home_team_key=home_key, away_team_key=away_key
+                    )
+                    for p in poss[:320]:
+                        session.execute(
+                            text(
+                                """
+                                INSERT INTO nba_possessions (
+                                  external_game_id, possession_index,
+                                  offense_team_key, defense_team_key,
+                                  points, ended_by, period, clock_seconds,
+                                  events, source
+                                ) VALUES (
+                                  :external_game_id, :possession_index,
+                                  :offense_team_key, :defense_team_key,
+                                  :points, :ended_by, :period, :clock_seconds,
+                                  CAST(:events AS jsonb), :source
+                                )
+                                ON CONFLICT (external_game_id, possession_index, source) DO NOTHING
+                                """
+                            ),
+                            {
+                                "external_game_id": gid,
+                                "possession_index": p["possession_index"],
+                                "offense_team_key": p.get("offense_team_key"),
+                                "defense_team_key": p.get("defense_team_key"),
+                                "points": p.get("points"),
+                                "ended_by": p.get("ended_by"),
+                                "period": p.get("period"),
+                                "clock_seconds": p.get("clock_seconds"),
+                                "events": json.dumps(p.get("events") or []),
+                                "source": p.get("source") or "stats.nba.com",
+                            },
+                        )
+                        possessions_inserted += 1
+
+        as_of = date.today()
+        for team_key, samples in team_samples.items():
+            window = samples[: max(1, window_games)]
+            if not window:
+                continue
+
+            def _avg(key: str, default: float) -> float:
+                vals = [float(s[key]) for s in window if s.get(key) is not None]
+                return sum(vals) / len(vals) if vals else default
+
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nba_team_rolling_features (
+                      team_key, as_of_date, window_games,
+                      pace, ortg, drtg, three_pt_rate, three_pt_pct,
+                      two_pt_pct, ft_rate, ft_pct, to_rate, orb_rate,
+                      sample_games, feature_pack_version, payload, updated_at
+                    ) VALUES (
+                      :team_key, :as_of_date, :window_games,
+                      :pace, :ortg, :drtg, :three_pt_rate, :three_pt_pct,
+                      :two_pt_pct, :ft_rate, :ft_pct, :to_rate, :orb_rate,
+                      :sample_games, :feature_pack_version, CAST(:payload AS jsonb), :updated_at
+                    )
+                    ON CONFLICT (team_key, as_of_date, window_games) DO UPDATE SET
+                      pace = EXCLUDED.pace,
+                      ortg = EXCLUDED.ortg,
+                      drtg = EXCLUDED.drtg,
+                      three_pt_rate = EXCLUDED.three_pt_rate,
+                      three_pt_pct = EXCLUDED.three_pt_pct,
+                      two_pt_pct = EXCLUDED.two_pt_pct,
+                      ft_rate = EXCLUDED.ft_rate,
+                      to_rate = EXCLUDED.to_rate,
+                      orb_rate = EXCLUDED.orb_rate,
+                      sample_games = EXCLUDED.sample_games,
+                      feature_pack_version = EXCLUDED.feature_pack_version,
+                      payload = EXCLUDED.payload,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "team_key": team_key,
+                    "as_of_date": as_of,
+                    "window_games": window_games,
+                    "pace": _avg("pace", 100.0),
+                    "ortg": _avg("ortg", 114.0),
+                    "drtg": _avg("drtg", 114.0),
+                    "three_pt_rate": _avg("three_pt_rate", 0.39),
+                    "three_pt_pct": _avg("three_pt_pct", 0.36),
+                    "two_pt_pct": _avg("two_pt_pct", 0.55),
+                    "ft_rate": _avg("ft_rate", 0.22),
+                    "ft_pct": 0.78,
+                    "to_rate": _avg("to_rate", 0.135),
+                    "orb_rate": _avg("orb_rate", 0.27),
+                    "sample_games": len(window),
+                    "feature_pack_version": "nba-rolling-box-v1",
+                    "payload": json.dumps({"n": len(window)}),
+                    "updated_at": _now_utc(),
+                },
+            )
+            teams_updated += 1
+
+        session.commit()
+        return {
+            "teams_updated": teams_updated,
+            "possessions_inserted": possessions_inserted,
+            "games_scanned": len(rows),
+        }
+    except Exception:
+        session.rollback()
+        log.exception("Failed materializing NBA rolling features")
+        raise
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.pull_nba_context_snapshot")
+def pull_nba_context_snapshot(days_ahead: int = 3) -> Dict[str, int]:
+    """Assemble nba_game_context for upcoming slate from rolling features."""
+    session = SessionLocal()
+    updated = 0
+    try:
+        ensure_nba_model_tables(session)
+        # Refresh schedule first (best-effort).
+        try:
+            pull_nba_schedule_ingest(days_back=2, days_ahead=days_ahead)
+        except Exception:
+            log.warning("NBA schedule ingest soft-failed inside context snapshot")
+
+        end = date.today() + timedelta(days=max(0, days_ahead))
+        games = session.execute(
+            text(
+                """
+                SELECT
+                  g.id AS game_id,
+                  home.abbr AS home_abbr,
+                  away.abbr AS away_abbr,
+                  home.name AS home_team,
+                  away.name AS away_team,
+                  g.game_date
+                FROM games g
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                JOIN teams home ON home.id = g.home_team_id
+                JOIN teams away ON away.id = g.away_team_id
+                WHERE l.code = 'nba'
+                  AND g.game_date >= :today
+                  AND g.game_date <= :end
+                """
+            ),
+            {"today": date.today(), "end": end},
+        ).fetchall()
+
+        # Fall back to ingest table when hierarchy empty (offseason).
+        if not games:
+            ingest = session.execute(
+                text(
+                    """
+                    SELECT
+                      external_game_id AS game_id,
+                      home_team_key AS home_abbr,
+                      away_team_key AS away_abbr,
+                      home_team_key AS home_team,
+                      away_team_key AS away_team,
+                      game_date
+                    FROM nba_games_ingest
+                    WHERE game_date >= :today AND game_date <= :end
+                    """
+                ),
+                {"today": date.today(), "end": end},
+            ).fetchall()
+            games = ingest
+
+        as_of = date.today()
+        for r in games:
+            m = dict(r._mapping)
+            home_key = normalize_nba_team_key(str(m.get("home_abbr") or m.get("home_team") or ""))
+            away_key = normalize_nba_team_key(str(m.get("away_abbr") or m.get("away_team") or ""))
+
+            def _feat(team_key: str) -> Dict[str, Any]:
+                row = session.execute(
+                    text(
+                        """
+                        SELECT *
+                        FROM nba_team_rolling_features
+                        WHERE team_key = :team_key
+                          AND as_of_date <= :as_of
+                        ORDER BY as_of_date DESC
+                        LIMIT 1
+                        """
+                    ),
+                    {"team_key": team_key, "as_of": as_of},
+                ).fetchone()
+                return dict(row._mapping) if row else {}
+
+            hf = _feat(home_key)
+            af = _feat(away_key)
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nba_game_context (
+                      game_id, pace_home, pace_away, ortg_home, ortg_away,
+                      drtg_home, drtg_away, three_pt_rate_home, three_pt_rate_away,
+                      three_pt_pct_home, three_pt_pct_away,
+                      rest_days_home, rest_days_away,
+                      sample_games_home, sample_games_away,
+                      feature_pack_version, context, updated_at
+                    ) VALUES (
+                      :game_id, :pace_home, :pace_away, :ortg_home, :ortg_away,
+                      :drtg_home, :drtg_away, :three_pt_rate_home, :three_pt_rate_away,
+                      :three_pt_pct_home, :three_pt_pct_away,
+                      :rest_days_home, :rest_days_away,
+                      :sample_games_home, :sample_games_away,
+                      :feature_pack_version, CAST(:context AS jsonb), :updated_at
+                    )
+                    ON CONFLICT (game_id) DO UPDATE SET
+                      pace_home = EXCLUDED.pace_home,
+                      pace_away = EXCLUDED.pace_away,
+                      ortg_home = EXCLUDED.ortg_home,
+                      ortg_away = EXCLUDED.ortg_away,
+                      drtg_home = EXCLUDED.drtg_home,
+                      drtg_away = EXCLUDED.drtg_away,
+                      three_pt_rate_home = EXCLUDED.three_pt_rate_home,
+                      three_pt_rate_away = EXCLUDED.three_pt_rate_away,
+                      three_pt_pct_home = EXCLUDED.three_pt_pct_home,
+                      three_pt_pct_away = EXCLUDED.three_pt_pct_away,
+                      sample_games_home = EXCLUDED.sample_games_home,
+                      sample_games_away = EXCLUDED.sample_games_away,
+                      feature_pack_version = EXCLUDED.feature_pack_version,
+                      context = EXCLUDED.context,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "game_id": str(m["game_id"]),
+                    "pace_home": _to_float(hf.get("pace")) or 100.0,
+                    "pace_away": _to_float(af.get("pace")) or 100.0,
+                    "ortg_home": _to_float(hf.get("ortg")) or 114.0,
+                    "ortg_away": _to_float(af.get("ortg")) or 114.0,
+                    "drtg_home": _to_float(hf.get("drtg")) or 114.0,
+                    "drtg_away": _to_float(af.get("drtg")) or 114.0,
+                    "three_pt_rate_home": _to_float(hf.get("three_pt_rate")) or 0.39,
+                    "three_pt_rate_away": _to_float(af.get("three_pt_rate")) or 0.39,
+                    "three_pt_pct_home": _to_float(hf.get("three_pt_pct")) or 0.36,
+                    "three_pt_pct_away": _to_float(af.get("three_pt_pct")) or 0.36,
+                    "rest_days_home": 2.0,
+                    "rest_days_away": 2.0,
+                    "sample_games_home": _to_float(hf.get("sample_games")) or 0,
+                    "sample_games_away": _to_float(af.get("sample_games")) or 0,
+                    "feature_pack_version": (
+                        hf.get("feature_pack_version")
+                        or af.get("feature_pack_version")
+                        or "nba-league-avg-v0"
+                    ),
+                    "context": json.dumps(
+                        {
+                            "home_team": m.get("home_team"),
+                            "away_team": m.get("away_team"),
+                            "home_abbr": home_key,
+                            "away_abbr": away_key,
+                        }
+                    ),
+                    "updated_at": _now_utc(),
+                },
+            )
+            updated += 1
+
+        session.commit()
+        return {"games_context_updated": updated}
+    except Exception:
+        session.rollback()
+        log.exception("Failed NBA context snapshot")
+        raise
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.run_nba_market_simulations")
+def run_nba_market_simulations(
+    game_date: Optional[str] = None,
+    simulations: int = 4000,
+    model_version: str = DEFAULT_NBA_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Celery: possession-level Monte Carlo for NBA slate → fair lines."""
+    worker_build_id = NBA_WORKER_BUILD_ID
+    if game_date:
+        try:
+            target_date = date.fromisoformat(game_date)
+        except ValueError as e:
+            raise ValueError(f"game_date must be YYYY-MM-DD, got {game_date}") from e
+    else:
+        target_date = date.today()
+
+    session = SessionLocal()
+    processed = 0
+    inserted = 0
+    try:
+        ensure_nba_model_tables(session)
+        session.commit()
+
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  g.id AS game_id,
+                  g.status AS game_status,
+                  home.name AS home_team,
+                  away.name AS away_team,
+                  c.pace_home, c.pace_away,
+                  c.ortg_home, c.ortg_away,
+                  c.drtg_home, c.drtg_away,
+                  c.three_pt_rate_home, c.three_pt_rate_away,
+                  c.three_pt_pct_home, c.three_pt_pct_away,
+                  c.rest_days_home, c.rest_days_away,
+                  c.sample_games_home, c.sample_games_away,
+                  c.feature_pack_version,
+                  c.context
+                FROM games g
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                JOIN teams home ON home.id = g.home_team_id
+                JOIN teams away ON away.id = g.away_team_id
+                LEFT JOIN nba_game_context c ON c.game_id = g.id
+                WHERE l.code = 'nba'
+                  AND g.game_date = :game_date
+                ORDER BY g.start_time NULLS LAST
+                """
+            ),
+            {"game_date": target_date},
+        ).fetchall()
+
+        if not rows:
+            # Offseason / hierarchy-empty: simulate from ingest + context if present.
+            rows = session.execute(
+                text(
+                    """
+                    SELECT
+                      i.external_game_id AS game_id,
+                      i.status AS game_status,
+                      COALESCE(i.home_team_key, 'Home') AS home_team,
+                      COALESCE(i.away_team_key, 'Away') AS away_team,
+                      c.pace_home, c.pace_away,
+                      c.ortg_home, c.ortg_away,
+                      c.drtg_home, c.drtg_away,
+                      c.three_pt_rate_home, c.three_pt_rate_away,
+                      c.three_pt_pct_home, c.three_pt_pct_away,
+                      c.rest_days_home, c.rest_days_away,
+                      c.sample_games_home, c.sample_games_away,
+                      c.feature_pack_version,
+                      c.context
+                    FROM nba_games_ingest i
+                    LEFT JOIN nba_game_context c ON c.game_id = i.external_game_id
+                    WHERE i.game_date = :game_date
+                    """
+                ),
+                {"game_date": target_date},
+            ).fetchall()
+
+        for r in rows:
+            m = dict(r._mapping)
+            status = str(m.get("game_status") or "").strip().lower()
+            if status in {"final", "closed", "completed"}:
+                continue
+            market = _nba_market_lines_for_game(session, str(m["game_id"]))
+            inputs = NbaGameInputs(
+                game_id=str(m["game_id"]),
+                home_team=str(m.get("home_team") or "Home"),
+                away_team=str(m.get("away_team") or "Away"),
+                pace_home=_to_float(m.get("pace_home")) or 100.0,
+                pace_away=_to_float(m.get("pace_away")) or 100.0,
+                ortg_home=_to_float(m.get("ortg_home")) or 114.0,
+                ortg_away=_to_float(m.get("ortg_away")) or 114.0,
+                drtg_home=_to_float(m.get("drtg_home")) or 114.0,
+                drtg_away=_to_float(m.get("drtg_away")) or 114.0,
+                three_pt_rate_home=_to_float(m.get("three_pt_rate_home")) or 0.39,
+                three_pt_rate_away=_to_float(m.get("three_pt_rate_away")) or 0.39,
+                three_pt_pct_home=_to_float(m.get("three_pt_pct_home")) or 0.36,
+                three_pt_pct_away=_to_float(m.get("three_pt_pct_away")) or 0.36,
+                rest_days_home=_to_float(m.get("rest_days_home")) or 2.0,
+                rest_days_away=_to_float(m.get("rest_days_away")) or 2.0,
+                sample_games_home=int(m["sample_games_home"])
+                if m.get("sample_games_home") is not None
+                else 0,
+                sample_games_away=int(m["sample_games_away"])
+                if m.get("sample_games_away") is not None
+                else 0,
+                feature_pack_version=m.get("feature_pack_version"),
+                market_spread_home=market.get("market_spread_home"),
+                market_total=market.get("market_total"),
+            )
+            # If context missing entirely, stamp league-average feature pack.
+            if m.get("ortg_home") is None and m.get("ortg_away") is None:
+                defaults = default_league_average_inputs(
+                    inputs.game_id, inputs.home_team, inputs.away_team
+                )
+                inputs = NbaGameInputs(
+                    **{
+                        **defaults,
+                        "market_spread_home": market.get("market_spread_home"),
+                        "market_total": market.get("market_total"),
+                    }
+                )
+
+            seed = _default_projection_seed(inputs.game_id, model_version, simulations)
+            projection = simulate_nba_game(
+                inputs,
+                simulations=simulations,
+                seed=seed,
+                model_version=model_version,
+            )
+            projection["worker_build_id"] = worker_build_id
+            projection.setdefault("diagnostics", {})["worker_build_id"] = worker_build_id
+            _insert_nba_projection(session, projection)
+            processed += 1
+            inserted += 1
+
+        session.commit()
+        return {
+            "games_processed": processed,
+            "projections_inserted": inserted,
+            "game_date": str(target_date),
+            "model_version": model_version,
+            "worker_build_id": worker_build_id,
+        }
+    except Exception:
+        session.rollback()
+        log.exception("Failed running NBA market simulations")
         raise
     finally:
         session.close()

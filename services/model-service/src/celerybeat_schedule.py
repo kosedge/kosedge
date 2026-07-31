@@ -86,6 +86,14 @@ TASK_PULL_MLB_OUTCOMES = os.getenv("TASK_PULL_MLB_OUTCOMES", "src.tasks.pull_mlb
 TASK_PULL_MLB_DATA_LAKE = os.getenv("TASK_PULL_MLB_DATA_LAKE", "src.tasks.pull_mlb_data_lake_snapshot")
 TASK_RUN_MLB_DAILY_CYCLE = os.getenv("TASK_RUN_MLB_DAILY_CYCLE", "src.tasks.run_mlb_daily_cycle")
 TASK_EVAL_MLB_PROMOTION = os.getenv("TASK_EVAL_MLB_PROMOTION", "src.tasks.evaluate_mlb_model_promotion")
+TASK_PULL_NBA_CONTEXT = os.getenv("TASK_PULL_NBA_CONTEXT", "src.tasks.pull_nba_context_snapshot")
+TASK_RUN_NBA_SIMULATIONS = os.getenv(
+    "TASK_RUN_NBA_SIMULATIONS", "src.tasks.run_nba_market_simulations"
+)
+TASK_PULL_NBA_INGEST = os.getenv("TASK_PULL_NBA_INGEST", "src.tasks.pull_nba_schedule_ingest")
+TASK_NBA_ROLLING_FEATURES = os.getenv(
+    "TASK_NBA_ROLLING_FEATURES", "src.tasks.materialize_nba_team_rolling_features"
+)
 TASK_MLB_NOWCAST_REPRICING = os.getenv(
     "TASK_MLB_NOWCAST_REPRICING",
     "src.tasks.run_mlb_lineup_nowcast_repricing",
@@ -196,6 +204,40 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "task": TASK_PULL_MLB_CONTEXT,
         "schedule": crontab(minute="15", hour="6"),
         "kwargs": {"days_ahead": 5},
+        "options": {"queue": MODELS_QUEUE},
+    },
+    # NBA Phase 0/1 — light cadence; offseason empty slate is honest.
+    "pull-nba-ingest-morning": {
+        "task": TASK_PULL_NBA_INGEST,
+        "schedule": crontab(minute="20", hour="6"),
+        "kwargs": {
+            "days_back": int(os.getenv("NBA_INGEST_DAYS_BACK", "7")),
+            "days_ahead": int(os.getenv("NBA_INGEST_DAYS_AHEAD", "3")),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "pull-nba-context-morning": {
+        "task": TASK_PULL_NBA_CONTEXT,
+        "schedule": crontab(minute="30", hour="6"),
+        "kwargs": {"days_ahead": int(os.getenv("NBA_CONTEXT_DAYS_AHEAD", "3"))},
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-nba-simulations-morning": {
+        "task": TASK_RUN_NBA_SIMULATIONS,
+        "schedule": crontab(minute="40", hour="6"),
+        "kwargs": {
+            "simulations": int(os.getenv("NBA_SIM_DAILY_COUNT", "4000")),
+            "model_version": os.getenv("NBA_BASE_MODEL_VERSION", "nba-v1-poss-sim"),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "materialize-nba-rolling-features-nightly": {
+        "task": TASK_NBA_ROLLING_FEATURES,
+        "schedule": crontab(minute="50", hour="3"),
+        "kwargs": {
+            "days_back": int(os.getenv("NBA_ROLLING_DAYS_BACK", "30")),
+            "window_games": int(os.getenv("NBA_ROLLING_WINDOW_GAMES", "10")),
+        },
         "options": {"queue": MODELS_QUEUE},
     },
     "pull-nfl-context-morning": {

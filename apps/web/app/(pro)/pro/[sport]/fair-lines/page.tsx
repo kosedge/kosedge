@@ -14,7 +14,7 @@ const SPORT_FAIR_LINES_COPY: Record<
   nba: {
     markets: "spreads, totals, and moneylines",
     pendingNote:
-      "NBA fair-lines join the desk once the basketball model board is connected to Pro.",
+      "NBA possession-sim fair-lines are live under /pro/nba/fair-lines. Empty offseason slate is intentional.",
   },
   nhl: {
     markets: "moneylines and totals (puck line staged next)",
@@ -57,6 +57,7 @@ export default async function FairLinesPage({
   const sportKey = resolveSportKey(resolved?.sport);
   if (sportKey === "nfl") redirect("/pro/nfl/fair-lines");
   if (sportKey === "mlb") redirect("/pro/mlb/fair-lines");
+  if (sportKey === "nba") redirect("/pro/nba/fair-lines");
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey || "nfl"}`;
