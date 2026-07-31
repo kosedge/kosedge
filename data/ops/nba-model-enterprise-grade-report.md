@@ -1,15 +1,16 @@
 # NBA Model — Enterprise Grade Report
 
-**Generated:** 2026-07-31 (Phase 1 pass)  
-**Phase reached:** Phase 1 (ingest/features/densify path) — awaiting Railway bootstrap results  
+**Generated:** 2026-07-31 (Phase 1)  
+**Phase reached:** Phase 1 complete (ingest + features + densify + canary); walkforward sample pending fix redeploy  
 **Model version:** `nba-v1-poss-sim`  
-**Worker canary:** `nba-poss-sim-20260731-phase1`
+**Worker canary:** `nba-poss-sim-20260731-phase1`  
+**SHA:** `30dc4de` (+ walkforward market-lines fix pending)  
+**Railway CI:** [30670636129](https://github.com/kosedge/kosedge/actions/runs/30670636129) success  
+**Vercel Production:** `kosedge-j4tm6hw5v` (Ready)
 
 ## Executive status
 
-Possession Monte Carlo remains live. Phase 1 adds foundation SQL, leaguegamelog season ingest, rolling team features (pace/ORtg/DRtg/3PT/rest), player minutes/usage stubs, inventory endpoints, and a **credit-capped** NBA mainline densify path (only if empty).
-
-No fake KEI. Props not published.
+Phase 1 landed on Railway. Live inventory confirms NBA mainlines were **empty before densify** and are now populated. Schedule/box features ingest via **data.nba.com** (stats.nba.com times out from Railway egress). No fake KEI. Props not published.
 
 ## Live Postgres inventory (truth)
 
@@ -17,83 +18,83 @@ No fake KEI. Props not published.
 
 | Check | Value |
 |-------|-------|
-| Host | `sakura.proxy.rlwy.net` (public) / `postgres.railway.internal` |
-| `information_schema` public tables | **0** |
-| Verdict | **Not the model warehouse.** Do not use for NBA/NFL/MLB counts. |
+| Public tables | **0** |
+| Verdict | Not the model warehouse |
 
-### brave-art model-service DB (authoritative)
+### brave-art model-service DB (authoritative via `/nba/ops/inventory`)
 
-Read after phase1 deploy:
+| Metric | Before densify | After densify |
+|--------|----------------|---------------|
+| `odds.mainline_games` | **0** | **1345** |
+| `odds.odds_snapshot_rows` | **0** | **32698** |
+| `games.hierarchy_nba` | 0 | **1347** |
+| `nba_games_ingest` | **5583** | **5583** |
+| `nba_team_game_features` | ~1650→ | **3444+** (details still enriching) |
+| `nba_team_rolling_features` | 0 | **34** |
+| `nba_player_game_stubs` | **1557** | **1557** |
+| `nba_market_projections` | 0 | 0 (offseason) |
 
-```bash
-curl -sS https://model-service-production-e253.up.railway.app/nba/ops/inventory
-```
+**Explore note verified:** enterprise pull summary `mainline_games=0` for NBA was **true** on the live model-service DB before this densify.
 
-| Metric | Before Phase 1 bootstrap | After |
-|--------|--------------------------|-------|
-| `odds.mainline_games` (l.code=nba) | _pending inventory endpoint_ | _pending_ |
-| `odds.odds_snapshot_rows` | _pending_ | _pending_ |
-| `games.hierarchy_nba` | _pending_ | _pending_ |
-| `nba_games_ingest` | _pending_ | _pending_ |
-| `nba_team_game_features` | _pending_ | _pending_ |
-| `nba_team_rolling_features` | _pending_ | _pending_ |
-
-Explore summaries that reported `mainline_games=0` for NBA must be re-verified against `/nba/ops/inventory` on model-service — not joyful-clarity.
-
-## Odds API credits
+## Odds API spend (documented)
 
 | Item | Value |
 |------|-------|
-| Probe (historical NBA one-shot, 2026-07-31) | ~30 credits (`x-requests-last`) |
-| Remaining after probe | **2,989,372** |
-| Used | ~2,010,628 |
-| Densify policy | Cap **≤300k** this pass; floor **≥1.5M** remaining; skip if `mainline_games ≥ 100` |
-| Markets | h2h, spreads, totals only (open+close on game-days) |
+| Credits before densify | 2,989,372 |
+| Credits after densify | 2,974,372 |
+| **Spent this densify** | **~15,000** |
+| Probe earlier (1 historical call) | ~30 |
+| Cap / floor policy | cap 300k / floor ≥1.5M |
+| Markets | h2h, spreads, totals |
+| Bookmakers | DraftKings, FanDuel |
+| Window | 2023-10-24 → 2025-06-22 game-days |
+| Requests | 500 (open+close style snapshots) |
+| Result | `mainline_games` 0 → 1345 |
+
+## Ingest row counts
+
+| Source | Count |
+|--------|-------|
+| Seasons | 2021-22 … 2024-25 |
+| `nba_games_ingest` | 5583 |
+| Team game features (gamedetail) | 3444+ (still filling) |
+| Player stubs | 1557 |
+| Rolling features (30 teams) | 34 rows |
 
 ## Architecture
 
 | Layer | Implementation |
 |-------|----------------|
 | Simulator | Possession MC + typed PBP events |
-| Ingest | `stats.nba.com/leaguegamelog` seasons 2021–22…2024–25 |
-| Features | `nba_team_game_features` → rolling pack `nba-rolling-gamelog-v1` |
-| Rest | Derived from prior `nba_games_ingest` dates |
-| Player stubs | `nba_player_game_stubs` (minutes/usage proxy) — not published |
-| Odds | Owned snapshots first; targeted densify if empty |
-| Persistence | See `infra/db/045_nba_model_foundation.sql` |
+| Ingest | **data.nba.com** schedule + gamedetail (primary); stats.nba.com fallback |
+| Features | `nba-rolling-gamelog-v1` pace/ORtg/DRtg/3PT/rest |
+| Odds | Targeted densify when empty; skip if owned |
+| Foundation SQL | `infra/db/045_nba_model_foundation.sql` |
 
-## Metrics (current)
+## Metrics
 
 | Metric | Value | Notes |
 |--------|-------|-------|
-| Graded games (spread) | pending bootstrap | Phase 1 walkforward sample |
-| Graded games (total) | pending bootstrap | |
-| Model spread MAE | — | fill after `run_nba_walkforward_sample` |
-| Close spread MAE | — | requires densify or owned closes |
-| ATS cover rate | — | |
-| Determinism tests | Pass (unit) | |
-
-## Publish policy
-
-- **Mainlines:** research_only until walkforward sample lands.
-- **Props:** queued (Phase 3).
+| Graded walkforward | pending | first sample failed on bad `os.point` SQL; fix shipping |
+| Determinism tests | Pass | 19 unit tests |
+| Publish policy | research_only mainlines; props queued | |
 
 ## Phase 1 exit criteria
 
 | Criterion | Met? |
 |-----------|------|
-| Foundation tables present (`045` / ensure) | Y (code) / pending Railway apply |
-| Season ingest 2021–2025 rows | pending bootstrap |
-| Rolling features wired into context/sim | Y (code) |
-| Inventory truth documented | partial (joyful-clarity empty verified; brave-art pending endpoint) |
-| Odds densify only if empty + spend documented | Y (code path) |
-| Thin walkforward or blockers documented | pending bootstrap |
-| Canary phase1 + Railway + deploy-vercel | pending deploy |
+| Foundation tables present | **Y** |
+| Season ingest 2021–2025 rows | **Y** (5583) |
+| Rolling features wired into context/sim | **Y** (code + 34 rolling rows) |
+| Inventory truth documented | **Y** |
+| Odds densify only if empty + spend documented | **Y** (~15k credits) |
+| Thin walkforward or blockers documented | **Partial** — blocker fixed in follow-up commit |
+| Canary phase1 + Railway + deploy-vercel | **Y** |
 
 ## Verify
 
 ```bash
-curl -sS "$MODEL_SERVICE_URL/nba/health"
-curl -sS "$MODEL_SERVICE_URL/nba/ops/inventory"
-curl -sS -X POST "$MODEL_SERVICE_URL/api/jobs/run-nba-phase1-bootstrap?max_credit_spend=300000"
+curl -sS https://model-service-production-e253.up.railway.app/nba/health
+curl -sS https://model-service-production-e253.up.railway.app/nba/ops/inventory
+curl -sS -X POST 'https://model-service-production-e253.up.railway.app/api/jobs/run-nba-walkforward-sample?limit_games=60'
 ```

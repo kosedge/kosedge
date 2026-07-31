@@ -6776,28 +6776,96 @@ def _insert_nba_projection(session: Any, projection: Dict[str, Any]) -> None:
     )
 
 
-def _nba_market_lines_for_game(session: Any, game_id: str) -> Dict[str, Optional[float]]:
+def _nba_market_lines_for_game(
+    session: Any,
+    game_id: str,
+    *,
+    game_date: Optional[date] = None,
+    home_team_key: Optional[str] = None,
+    away_team_key: Optional[str] = None,
+) -> Dict[str, Optional[float]]:
     """Read latest spread/total from existing odds_snapshots — no Odds API burn."""
     try:
-        row = session.execute(
-            text(
-                """
-                SELECT
-                  MAX(CASE WHEN m.code = 'spread' THEN os.point END) AS spread_home,
-                  MAX(CASE WHEN m.code = 'total' THEN os.point END) AS total
-                FROM odds_snapshots os
-                JOIN markets m ON m.id = os.market_id
-                JOIN games g ON g.id = os.game_id
-                JOIN seasons s ON s.id = g.season_id
-                JOIN leagues l ON l.id = s.league_id
-                WHERE l.code = 'nba'
-                  AND os.game_id = :game_id
-                  AND m.code IN ('spread', 'total')
-                """
-            ),
-            {"game_id": game_id},
-        ).fetchone()
+        # Prefer direct UUID match when game_id is a hierarchy id.
+        row = None
+        try:
+            import uuid as _uuid
+
+            _uuid.UUID(str(game_id))
+            is_uuid = True
+        except Exception:
+            is_uuid = False
+        if is_uuid:
+            row = session.execute(
+                text(
+                    """
+                    SELECT
+                      (
+                        SELECT AVG(os.spread_home)
+                        FROM odds_snapshots os
+                        JOIN markets m ON m.id = os.market_id
+                        WHERE os.game_id = CAST(:game_id AS uuid)
+                          AND m.code = 'spread'
+                          AND os.spread_home IS NOT NULL
+                      ) AS spread_home,
+                      (
+                        SELECT AVG(os.total_points)
+                        FROM odds_snapshots os
+                        JOIN markets m ON m.id = os.market_id
+                        WHERE os.game_id = CAST(:game_id AS uuid)
+                          AND m.code = 'total'
+                          AND os.total_points IS NOT NULL
+                      ) AS total
+                    """
+                ),
+                {"game_id": str(game_id)},
+            ).fetchone()
+        if (row is None or (row[0] is None and row[1] is None)) and game_date and home_team_key:
+            # Match densified hierarchy rows by date + team abbreviations.
+            row = session.execute(
+                text(
+                    """
+                    SELECT
+                      (
+                        SELECT AVG(os.spread_home)
+                        FROM odds_snapshots os
+                        JOIN markets m ON m.id = os.market_id
+                        WHERE os.game_id = g.id
+                          AND m.code = 'spread'
+                          AND os.spread_home IS NOT NULL
+                      ) AS spread_home,
+                      (
+                        SELECT AVG(os.total_points)
+                        FROM odds_snapshots os
+                        JOIN markets m ON m.id = os.market_id
+                        WHERE os.game_id = g.id
+                          AND m.code = 'total'
+                          AND os.total_points IS NOT NULL
+                      ) AS total
+                    FROM games g
+                    JOIN seasons s ON s.id = g.season_id
+                    JOIN leagues l ON l.id = s.league_id
+                    JOIN teams home ON home.id = g.home_team_id
+                    JOIN teams away ON away.id = g.away_team_id
+                    WHERE l.code = 'nba'
+                      AND g.game_date = :game_date
+                      AND UPPER(COALESCE(home.abbr, '')) = :home
+                      AND UPPER(COALESCE(away.abbr, '')) = :away
+                    ORDER BY g.start_time NULLS LAST
+                    LIMIT 1
+                    """
+                ),
+                {
+                    "game_date": game_date,
+                    "home": str(home_team_key or "").upper(),
+                    "away": str(away_team_key or "").upper(),
+                },
+            ).fetchone()
     except Exception:
+        try:
+            session.rollback()
+        except Exception:
+            pass
         return {"market_spread_home": None, "market_total": None}
     if not row:
         return {"market_spread_home": None, "market_total": None}
@@ -8238,7 +8306,13 @@ def run_nba_walkforward_sample(
                 sample_games_away=10,
                 feature_pack_version="nba-rolling-gamelog-v1",
             )
-            market = _nba_market_lines_for_game(session, str(m["game_id"]))
+            market = _nba_market_lines_for_game(
+                session,
+                str(m["game_id"]),
+                game_date=gd if isinstance(gd, date) else None,
+                home_team_key=home,
+                away_team_key=away,
+            )
             inputs.market_spread_home = market.get("market_spread_home")
             inputs.market_total = market.get("market_total")
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)

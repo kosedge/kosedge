@@ -1,7 +1,8 @@
 # NBA Model Build Plan
 
-**Status:** Phase 1 in progress (ingest + features + inventory + densify path)  
+**Status:** Phase 1 complete on Railway (ingest + features + densify); walkforward sample fix follow-up  
 **Canary / worker_build_id:** `nba-poss-sim-20260731-phase1`  
+**SHA:** `30dc4de` (+ market-lines fix)  
 **Default model version:** `nba-v1-poss-sim`  
 **Prod web branch:** `deploy-vercel`  
 **Model service:** Railway brave-art (`scripts/deploy-railway-model-service.sh` / GH Actions)
