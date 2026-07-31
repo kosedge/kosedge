@@ -171,3 +171,16 @@ Default W17 PLAY Unders (Addison / Harrison / McMillan class) are in the removed
 | Paid prop CLOSING lines densify | Odds historical credits; continue densify batches for holdouts |
 
 No purchase is **blocking** this Under-bias fix. Optional: SportsDataIO / Action Network closing props for denser holdout grading.
+
+
+---
+
+## 8. Deploy blocker found & fixed (same PR)
+
+Rematerialize jobs on brave-art were failing with:
+
+`_box_dist_moments() got an unexpected keyword argument 'season'`
+
+**Cause:** `@celery_app.task(name="src.tasks.materialize_nfl_player_props_edges")` was accidentally decorating the helper `_box_dist_moments` instead of `materialize_nfl_player_props_edges`. In-process callers still worked; Celery `send_task` did not — board `updated_at` stuck at 2026-07-21.
+
+**Fix:** move decorator onto the materializer; canary `props-under-bias-20260731b-celery-props-task`; regression test `test_nfl_props_celery_task_binding.py`.

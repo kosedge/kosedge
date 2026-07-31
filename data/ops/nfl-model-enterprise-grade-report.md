@@ -1,7 +1,7 @@
 # NFL Model Enterprise Grade Report
 
 **Date:** 2026-07-31  
-**Canary target:** `props-under-bias-20260731a-usage-depth-role`  
+**Canary target:** `props-under-bias-20260731b-celery-props-task`  
 **Related:** `data/ops/nfl-props-under-bias-diagnosis.md`, DAL@NYG sanity fix (`sanity-fix-20260730i-live-odds-blend`)
 
 ---
@@ -42,6 +42,8 @@ Props research board is usable after the under-bias structural fix; stake PLAY r
 - Prop closing densify limited by Odds API credits.
 
 ### P0 remaining
+0. ~~Celery props task decorator miswire~~ — fixed in `20260731b` (was blocking all `/api/jobs/run-nfl-player-props`).
+
 1. Rematerialize baselines → box → props on **brave-art** after canary live; re-measure W17 PLAY mix + featured raw gap.
 2. Holdout confirm before any stake promotion (`PLAY_STAKE_ELIGIBLE` stays false).
 3. Align Vercel `MODEL_SERVICE_URL` with brave-art (`model-service-production-e253`) — agent secret currently points at joyful-clarity stub.

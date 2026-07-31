@@ -3125,7 +3125,7 @@ def run_nfl_market_simulations(
     kickoff_buffer_minutes: int = 30,
 ) -> Dict[str, Any]:
     # Canary: proves which worker build executed (props under-bias fix 2026-07-31).
-    worker_build_id = "props-under-bias-20260731a-usage-depth-role"
+    worker_build_id = "props-under-bias-20260731b-celery-props-task"
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
     processed = 0
@@ -10107,7 +10107,6 @@ def materialize_nfl_player_season_box_score_sims(
         session.close()
 
 
-@celery_app.task(name="src.tasks.materialize_nfl_player_props_edges")
 def _box_dist_moments(dist_obj: Any) -> tuple[Optional[float], Optional[float], Optional[float]]:
     """Extract (mean, std, p50) from a box-score *_dist jsonb block."""
     if dist_obj is None:
@@ -10125,6 +10124,7 @@ def _box_dist_moments(dist_obj: Any) -> tuple[Optional[float], Optional[float], 
     return mean, std, p50
 
 
+@celery_app.task(name="src.tasks.materialize_nfl_player_props_edges")
 def materialize_nfl_player_props_edges(
     *,
     season: int,
