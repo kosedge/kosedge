@@ -42,56 +42,145 @@ const SPORT_CONTEXT_LABELS: Record<
   },
 };
 
-export default function MatchupPage({
+function parseSlugTeams(slug: string): { away: string; home: string } | null {
+  const parts = slug.toUpperCase().split(/[@-]/);
+  if (parts.length >= 2 && parts[0] && parts[1]) {
+    return { away: parts[0]!, home: parts[1]! };
+  }
+  return null;
+}
+
+export default async function MatchupPage({
   params,
 }: {
-  params: { sport: string; date: string; slug: string };
+  params: Promise<{ sport: string; date: string; slug: string }>;
 }) {
-  const sport = getSport(params.sport);
-  const sportName = sport?.fullName ?? params.sport.toUpperCase();
-  const context = SPORT_CONTEXT_LABELS[params.sport];
+  const { sport: sportKey, date, slug } = await params;
+  const sport = getSport(sportKey);
+  const sportName = sport?.fullName ?? sportKey.toUpperCase();
+  const context = SPORT_CONTEXT_LABELS[sportKey];
   const hasSportTemplate = Boolean(context);
+  const teams = parseSlugTeams(slug);
+  const isNfl = sportKey === "nfl";
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <Link
-        href={`/pro/${params.sport}/slate/${params.date}`}
-        className="inline-flex items-center gap-2 text-sm text-kos-gold/90 hover:text-kos-gold"
-      >
-        ← Back to {sportName} slate
-      </Link>
-      <h2 className="mt-4 text-2xl font-semibold text-kos-text">
-        {sportName} Matchup
-      </h2>
-      <p className="mt-2 text-kos-text/70">
-        {sportName} · {params.date} · {params.slug}
+    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+      <div className="flex flex-wrap gap-3 text-sm">
+        <Link
+          href={
+            isNfl ? "/pro/nfl/slate/today" : `/pro/${sportKey}/slate/${date}`
+          }
+          className="text-kos-gold/90 hover:text-kos-gold"
+        >
+          ← Weekly Slate
+        </Link>
+        {isNfl ? (
+          <>
+            <Link href="/pro/nfl/overview" className="text-kos-text/65 hover:text-kos-text">
+              NFL Overview
+            </Link>
+            <Link href="/edge-board/nfl" className="text-kos-text/65 hover:text-kos-text">
+              Edge Board
+            </Link>
+          </>
+        ) : null}
+      </div>
+
+      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+        {isNfl ? "Writer matchup brief" : `${sportName} matchup`}
+      </p>
+      <h1 className="mt-2 text-3xl font-semibold text-kos-text">
+        {teams ? `${teams.away} @ ${teams.home}` : `${sportName} Matchup`}
+      </h1>
+      <p className="mt-2 text-sm text-kos-text/70">
+        {sportName} · {date} · {slug}
       </p>
 
-      <div className="mt-8 grid gap-6">
-        <section className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6">
-          <h3 className="text-lg font-semibold">Fair Lines vs Market</h3>
-          <p className="mt-2 text-kos-text/80">
-            {hasSportTemplate
-              ? `Premium placeholder: ${sportName} fair-line and best-price table will publish once validated feeds are available.`
-              : "Premium placeholder: model reference and best available numbers are pending data sync."}
+      {isNfl ? (
+        <section className="mt-6 rounded-2xl border border-kos-gold/25 bg-linear-to-r from-kos-gold/10 via-black/40 to-black/60 p-5">
+          <h2 className="text-lg font-semibold text-kos-text">Writer preview</h2>
+          <p className="mt-2 text-sm text-kos-text/75">
+            Featured matchup brief lands here from the Weekly Slate writer desk.
+            Until the brief is attached, use Team Previews and Edge Board for
+            research context.
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {teams ? (
+              <>
+                <Link
+                  href={`/pro/nfl/previews/${teams.away}`}
+                  className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+                >
+                  {teams.away} preview
+                </Link>
+                <Link
+                  href={`/pro/nfl/previews/${teams.home}`}
+                  className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+                >
+                  {teams.home} preview
+                </Link>
+                <Link
+                  href={`/pro/nfl/teams/${teams.away}/overview`}
+                  className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+                >
+                  {teams.away} research
+                </Link>
+                <Link
+                  href={`/pro/nfl/teams/${teams.home}/overview`}
+                  className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+                >
+                  {teams.home} research
+                </Link>
+              </>
+            ) : null}
+            <Link
+              href="/edge-board/nfl"
+              className="rounded-lg border border-kos-gold/35 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
+            >
+              Open Edge Board
+            </Link>
+            <Link
+              href="/pro/nfl/props"
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+            >
+              Props
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
+      <div className="mt-6 grid gap-6">
+        <section className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6">
+          <h2 className="text-lg font-semibold">Model vs Market</h2>
+          <p className="mt-2 text-sm text-kos-text/80">
+            {hasSportTemplate
+              ? `KEI lines and best book prices for this matchup — jump to Edge Board or KEI Lines for the live board.`
+              : "Model reference and best available numbers pending data sync."}
+          </p>
+          {isNfl ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href="/pro/nfl/fair-lines"
+                className="text-sm font-semibold text-kos-gold hover:underline"
+              >
+                KEI Lines →
+              </Link>
+              <Link
+                href="/odds/nfl"
+                className="text-sm font-semibold text-kos-text/70 hover:text-kos-gold"
+              >
+                Compare Odds →
+              </Link>
+            </div>
+          ) : null}
         </section>
 
         <section className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6">
-          <h3 className="text-lg font-semibold">Matchup Context</h3>
-          <p className="mt-2 text-kos-text/80">
-            {hasSportTemplate
-              ? `Primary drivers: ${context.drivers}. Briefing copy stays in data-pending mode until matchup-level inputs are complete.`
-              : "Premium placeholder: short-form informational write-up unlocks when matchup data is ready."}
-          </p>
-        </section>
-
-        <section className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6">
-          <h3 className="text-lg font-semibold">Execution & Availability</h3>
-          <p className="mt-2 text-kos-text/80">
-            {hasSportTemplate
-              ? `Execution focus: ${context.execution}. Core risk watch: ${context.risk}.`
-              : "Premium placeholder: execution matrix and availability signals are pending."}
+          <h2 className="text-lg font-semibold">Key stats & personnel</h2>
+          <p className="mt-2 text-sm text-kos-text/80">
+            Drivers: {context?.drivers ?? "matchup efficiency variables"}.
+            Execution focus: {context?.execution ?? "timing windows"}. Risk:{" "}
+            {context?.risk ?? "availability and environment"}.
           </p>
         </section>
       </div>

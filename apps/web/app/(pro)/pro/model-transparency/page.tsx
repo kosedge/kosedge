@@ -54,19 +54,29 @@ export default function ModelTransparencyPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
-      <Link
-        href="/pro/welcome"
-        className="inline-flex items-center gap-2 text-sm text-kos-gold/90 hover:text-kos-gold mb-6"
-      >
-        ← Pro
-      </Link>
+      <div className="mb-6 flex flex-wrap gap-3 text-sm">
+        <Link
+          href="/pro/nfl/overview"
+          className="text-kos-gold/90 hover:text-kos-gold"
+        >
+          ← NFL Overview
+        </Link>
+        <Link href="/edge-board/nfl" className="text-kos-text/65 hover:text-kos-text">
+          Edge Board
+        </Link>
+        <Link href="/pro/clv-tracker" className="text-kos-text/65 hover:text-kos-text">
+          CLV Tracker
+        </Link>
+        <Link href="/pro/welcome" className="text-kos-text/65 hover:text-kos-text">
+          Pro home
+        </Link>
+      </div>
       <h1 className="text-3xl font-semibold text-kos-text">
-        Model Transparency Panel
+        Model Health &amp; Governance
       </h1>
       <p className="mt-2 text-kos-text/70">
-        We don&apos;t ask you to trust the model — we show you the backtest.
-        Every number below is reproducible from the source scripts linked at the
-        bottom of this page.
+        Accountability surface — model transparency, CLV, and performance.
+        We don&apos;t ask you to trust the model; we show the backtest.
       </p>
 
       {report ? (

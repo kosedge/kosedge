@@ -23,16 +23,16 @@ Production base: https://www.kosedge.com
 | 9 | Team pages (routing fix) | **DONE** | [/pro/nfl/teams/KC/overview](https://www.kosedge.com/pro/nfl/teams/KC/overview) | Path segment is source of truth; directory codes never remap to BUF |
 | 10 | Prediction Markets | **DONE** | [/pro/prediction-market](https://www.kosedge.com/pro/prediction-market) | Week + ML/Total; Kalshi/Polymarket/Novig placeholders |
 | 11 | Execution Monitor | **DONE** | [/pro/nfl/execution](https://www.kosedge.com/pro/nfl/execution) | Dispersion, Price Quality, Timing, Book Snapshot |
-| 12 | Futures | **PARTIAL** | [/pro/nfl/projections](https://www.kosedge.com/pro/nfl/projections) | Existing team/player projection tables; tab polish follow-on |
+| 12 | Futures | **DONE** | [/pro/nfl/projections](https://www.kosedge.com/pro/nfl/projections) | Team \| Player tabs; instant filters; research copy |
 | 13 | Standings | **DONE** | [/pro/nfl/standings](https://www.kosedge.com/pro/nfl/standings) | Division/Conference/League; KEI proj wins + playoff prob |
 | 14 | Depth Charts | **DONE** | [/pro/nfl/depth-charts](https://www.kosedge.com/pro/nfl/depth-charts) | Cleaner columns; source/noisy zeros removed |
 | 15 | Injuries | **DONE** | [/pro/nfl/injuries](https://www.kosedge.com/pro/nfl/injuries) | Team-first intel + ESPN headlines; ET times |
 | 16 | Fantasy Draft Board | **DONE** | [/pro/nfl/fantasy](https://www.kosedge.com/pro/nfl/fantasy) | Existing VOR board; inherits NFL shell |
 | 17 | Weekly Fantasy | **DONE** | [/pro/nfl/weekly-fantasy](https://www.kosedge.com/pro/nfl/weekly-fantasy) | New real page (no redirect); scoring + pos filters |
 | 18 | DFS | **DONE** | [/pro/nfl/dfs](https://www.kosedge.com/pro/nfl/dfs) | DK/FD toggle; salary/own placeholders; model proj live |
-| 19 | Model Health & Governance | **PARTIAL** | [/pro/model-transparency](https://www.kosedge.com/pro/model-transparency), [/pro/clv-tracker](https://www.kosedge.com/pro/clv-tracker) | Linked from overview tools; dedicated NFL chrome wrap follow-on |
+| 19 | Model Health & Governance | **DONE** | [/pro/model-transparency](https://www.kosedge.com/pro/model-transparency), [/pro/clv-tracker](https://www.kosedge.com/pro/clv-tracker) | Overview/Edge Board/CLV nav; accountability tone |
 | 20 | Weekly Slate | **DONE** | [/pro/nfl/slate/today](https://www.kosedge.com/pro/nfl/slate/today) | Elevated as writer home; Edge Board jump |
-| 21 | Matchups (game pages) | **PARTIAL** | via slate / articles | Game article path exists; dedicated matchup template polish follow-on |
+| 21 | Matchups (game pages) | **DONE** | `/pro/nfl/matchups/[date]/[slug]` | Writer preview slot, Model vs Market, jumps to Edge Board / teams / props |
 | 22 | Team Previews | **DONE** | [/pro/nfl/previews](https://www.kosedge.com/pro/nfl/previews) | At a Glance; AFC/NFC jumps; author + Read preview |
 | 23 | Player Previews | **DONE** | [/pro/nfl/player-previews](https://www.kosedge.com/pro/nfl/player-previews) | Dedicated index (not Awards redirect) |
 | 24 | Awards | **DONE** | [/pro/nfl/awards](https://www.kosedge.com/pro/nfl/awards) | Existing tabs; inherits NFL shell |

@@ -11,13 +11,33 @@ function percent(value: number, digits = 0): string {
   return `${(value * 100).toFixed(digits)}%`;
 }
 
-export default async function NflAwardsPage() {
+const AWARD_TABS = [
+  { id: "mvp", label: "MVP", live: true },
+  { id: "opoy", label: "OPOY", live: true },
+  { id: "dpoy", label: "DPOY", live: false },
+  { id: "oroy", label: "OROY", live: false },
+  { id: "droy", label: "DROY", live: false },
+  { id: "coach", label: "Coach", live: false },
+] as const;
+
+export default async function NflAwardsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const season = DEFAULT_SEASON;
+  const sp = searchParams ? await searchParams : {};
+  const tabRaw = Array.isArray(sp.tab) ? sp.tab[0] : sp.tab;
+  const tab =
+    AWARD_TABS.find((t) => t.id === (tabRaw ?? "").toLowerCase())?.id ?? "mvp";
+
   const [mvp, opoy] = await Promise.all([
     fetchNflAwardProjections({ season, award: "mvp", limit: 10 }),
     fetchNflAwardProjections({ season, award: "opoy", limit: 10 }),
   ]);
   const error = mvp.error ?? opoy.error;
+  const liveRows = tab === "opoy" ? opoy.rows : mvp.rows;
+  const isLive = tab === "mvp" || tab === "opoy";
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -25,15 +45,15 @@ export default async function NflAwardsPage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              {season} Award Race
+              {season} Awards · Research
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-              MVP &amp; Offensive Player of the Year
+              Award Races
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Real projected contenders ranked by team success, position voting
-              history, and season stat projections — with the exact supporting
-              numbers behind each ranking, not just a name.
+              Ranked contenders with team success and stat evidence. MVP and
+              OPOY are live from the player model; other races stay listed until
+              their engines ship.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -41,47 +61,87 @@ export default async function NflAwardsPage() {
               href="/pro/nfl/overview"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
-              Back to NFL Overview
+              NFL Overview
             </Link>
             <Link
-              href="/pro/nfl/fantasy"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
+              href="/edge-board/nfl"
+              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
             >
-              Fantasy Draft Board →
+              Edge Board →
             </Link>
           </div>
+        </div>
+        <nav className="mt-5 flex flex-wrap gap-2" aria-label="Award races">
+          {AWARD_TABS.map((item) => (
+            <Link
+              key={item.id}
+              href={`/pro/nfl/awards?tab=${item.id}`}
+              className={
+                tab === item.id
+                  ? "rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold"
+                  : "rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-kos-text/70"
+              }
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      </section>
+
+      <section className="mt-6 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+          <h2 className="text-sm font-semibold text-kos-gold">At a Glance</h2>
+          <p className="mt-2 text-sm text-kos-text/75">
+            {isLive
+              ? `${liveRows[0]?.playerName ?? "—"} leads the ${tab.toUpperCase()} board`
+              : `${tab.toUpperCase()} board pending model coverage`}
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-black/35 p-4 sm:col-span-2">
+          <h2 className="text-sm font-semibold text-kos-gold">
+            Top contenders
+          </h2>
+          <p className="mt-2 text-sm text-kos-text/75">
+            {isLive
+              ? liveRows
+                  .slice(0, 3)
+                  .map((r) => `#${r.rankOverall} ${r.playerName}`)
+                  .join(" · ") || "—"
+              : "Placeholder race — methodology below."}
+          </p>
         </div>
       </section>
 
       {error ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {error} The award boards will populate once the model service is
-          reachable.
+          Award boards will populate once the model service is reachable.
+        </section>
+      ) : isLive ? (
+        <section className="mt-6">
+          <AwardBoard
+            title={tab === "opoy" ? "OPOY Favorites" : "MVP Favorites"}
+            subtitle={
+              tab === "opoy"
+                ? "Weighted 65% player stat composite, 35% team success — no QB bias."
+                : "Weighted 45% team success, 35% player stat composite, 20% QB voting-history prior."
+            }
+            rows={liveRows}
+          />
         </section>
       ) : (
-        <section className="mt-6 grid gap-6 xl:grid-cols-2">
-          <AwardBoard
-            title="MVP Favorites"
-            subtitle="Weighted 45% team success, 35% player stat composite, 20% QB voting-history prior — a merely-good QB season on a great team still edges a middling non-QB season."
-            rows={mvp.rows}
-          />
-          <AwardBoard
-            title="Offensive Player of the Year Favorites"
-            subtitle="Weighted 65% player stat composite, 35% team success — no QB bias. Any offensive position can win purely on statistical dominance."
-            rows={opoy.rows}
-          />
+        <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-6 text-sm text-kos-text/70">
+          {tab.toUpperCase()} rankings will publish when the corresponding award
+          engine is live. MVP and OPOY are available now.
         </section>
       )}
 
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
-        <p>
-          Team success score blends each contender&apos;s projected
-          regular-season win total and division-title probability from the
-          current season Monte Carlo. Stat composite compares each player only
-          against same-position peers, so a QB&apos;s passing yardage is never
-          compared directly to a WR&apos;s receiving yardage — only each
-          player&apos;s standing within their own position group feeds the
-          cross-position score.
+      <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/60">
+        <p className="text-xs font-semibold uppercase tracking-wide text-kos-text/45">
+          Methodology (secondary)
+        </p>
+        <p className="mt-2">
+          Team success blends projected wins and division-title probability from
+          the Monte Carlo. Stat composite compares same-position peers only.
         </p>
       </section>
     </main>
