@@ -3,6 +3,8 @@ import {
   buildTrendSnippets,
   buildTeamIntelHref,
   filterTeamDirectory,
+  isNflDirectoryTeamCode,
+  normalizeTeamCode,
   parseTeamIntelFilters,
   resolveTeamCode,
 } from "@/lib/nfl-team-intel";
@@ -52,6 +54,18 @@ describe("nfl-team-intel helpers", () => {
     // Directory codes always win — never remap KC onto BUF when intel is empty.
     expect(resolveTeamCode("KC", [])).toBe("KC");
     expect(resolveTeamCode("dal", ["BUF"])).toBe("DAL");
+    // ESPN / legacy aliases must resolve to directory teams, not BUF.
+    expect(resolveTeamCode("WSH", ["BUF"])).toBe("WAS");
+    expect(resolveTeamCode("jac", [])).toBe("JAX");
+    expect(resolveTeamCode("LA", ["LAC", "LAR"])).toBe("LAR");
+  });
+
+  it("normalizes ESPN and legacy team abbreviations", () => {
+    expect(normalizeTeamCode("wsh")).toBe("WAS");
+    expect(normalizeTeamCode("JAC")).toBe("JAX");
+    expect(normalizeTeamCode("sd")).toBe("LAC");
+    expect(isNflDirectoryTeamCode("WSH")).toBe(true);
+    expect(isNflDirectoryTeamCode("BOS")).toBe(false);
   });
 
   it("filters directory by conference/division/search", () => {

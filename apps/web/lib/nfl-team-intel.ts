@@ -187,6 +187,33 @@ const NFL_TEAM_DIRECTORY_BY_CODE = new Map(
   NFL_TEAM_DIRECTORY.map((entry) => [entry.code, entry] as const),
 );
 
+/**
+ * Common schedule / ESPN / legacy abbreviations → Kos Edge directory codes.
+ * Keeps /pro/nfl/teams/WSH (etc.) from silently falling through to BUF.
+ */
+const NFL_TEAM_CODE_ALIASES: Record<string, string> = {
+  LA: "LAR",
+  LAR: "LAR",
+  WSH: "WAS",
+  WAS: "WAS",
+  JAC: "JAX",
+  JAX: "JAX",
+  ARZ: "ARI",
+  NOR: "NO",
+  GNB: "GB",
+  KAN: "KC",
+  SFO: "SF",
+  TAM: "TB",
+  NWE: "NE",
+  SD: "LAC",
+  OAK: "LV",
+  STL: "LAR",
+  PHX: "ARI",
+  CLT: "IND",
+  RAV: "BAL",
+  OTI: "TEN",
+};
+
 export function isNflTeamIntelView(value: string): value is NflTeamIntelView {
   return VIEW_ORDER.includes(value as NflTeamIntelView);
 }
@@ -197,7 +224,14 @@ export function normalizeTeamCode(
   if (!value) return null;
   const normalized = value.trim().toUpperCase();
   if (!normalized) return null;
-  return normalized;
+  return NFL_TEAM_CODE_ALIASES[normalized] ?? normalized;
+}
+
+export function isNflDirectoryTeamCode(
+  value: string | undefined | null,
+): boolean {
+  const normalized = normalizeTeamCode(value);
+  return Boolean(normalized && NFL_TEAM_DIRECTORY_BY_CODE.has(normalized));
 }
 
 export function parseTeamIntelFilters(

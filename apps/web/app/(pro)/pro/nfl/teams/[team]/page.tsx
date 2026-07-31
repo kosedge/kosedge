@@ -1,5 +1,9 @@
-import { redirect } from "next/navigation";
-import { firstQueryValue } from "@/lib/nfl-team-intel";
+import { notFound, redirect } from "next/navigation";
+import {
+  firstQueryValue,
+  isNflDirectoryTeamCode,
+  normalizeTeamCode,
+} from "@/lib/nfl-team-intel";
 
 export default async function NflTeamPage({
   params,
@@ -9,6 +13,9 @@ export default async function NflTeamPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { team } = await params;
+  const canonical = normalizeTeamCode(team);
+  if (!canonical || !isNflDirectoryTeamCode(canonical)) notFound();
+
   const rawSearch = await searchParams;
   const query = new URLSearchParams();
   const season = firstQueryValue(rawSearch.season);
@@ -16,5 +23,5 @@ export default async function NflTeamPage({
   if (season) query.set("season", season);
   if (week) query.set("week", week);
   const suffix = query.toString() ? `?${query.toString()}` : "";
-  redirect(`/pro/nfl/teams/${team.toUpperCase()}/overview${suffix}`);
+  redirect(`/pro/nfl/teams/${canonical}/overview${suffix}`);
 }

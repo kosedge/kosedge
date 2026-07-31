@@ -179,6 +179,12 @@ export default async function NflWeeklySlatePage({
                     </div>
                     <div className="mt-4 flex flex-wrap gap-2 text-sm">
                       <Link
+                        href={card.matchupHref}
+                        className="rounded-lg border border-kos-gold/30 bg-kos-gold/10 px-3 py-1.5 font-medium text-kos-gold hover:border-kos-gold/50"
+                      >
+                        Matchup brief
+                      </Link>
+                      <Link
                         href={card.previewAwayHref}
                         className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
                       >
@@ -191,10 +197,28 @@ export default async function NflWeeklySlatePage({
                         {card.homeAbbr} preview
                       </Link>
                       <Link
+                        href={`/pro/nfl/teams/${card.awayAbbr}/overview`}
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                      >
+                        {card.awayAbbr} desk
+                      </Link>
+                      <Link
+                        href={`/pro/nfl/teams/${card.homeAbbr}/overview`}
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                      >
+                        {card.homeAbbr} desk
+                      </Link>
+                      <Link
                         href="/pro/nfl/fair-lines"
-                        className="rounded-lg border border-kos-gold/30 bg-kos-gold/10 px-3 py-1.5 text-kos-gold hover:border-kos-gold/50"
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
                       >
                         Open KEI desk
+                      </Link>
+                      <Link
+                        href="/edge-board/nfl"
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                      >
+                        Edge Board
                       </Link>
                       <Link
                         href="/odds/nfl"

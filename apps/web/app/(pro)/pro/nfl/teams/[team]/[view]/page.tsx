@@ -20,8 +20,10 @@ import {
   buildTrendSnippets,
   extractTeamCodes,
   firstQueryValue,
+  isNflDirectoryTeamCode,
   isNflTeamIntelView,
   NFL_TEAM_DIRECTORY,
+  normalizeTeamCode,
   parseTeamIntelFilters,
   resolveTeamCode,
   teamDisplayName,
@@ -155,17 +157,23 @@ export default async function NflTeamIntelViewPage({
   const rawSearch = await searchParams;
   if (!isNflTeamIntelView(view)) notFound();
 
+  const canonicalTeam = normalizeTeamCode(requestedTeam);
+  if (!canonicalTeam || !isNflDirectoryTeamCode(canonicalTeam)) notFound();
+
   const filters = parseTeamIntelFilters(rawSearch);
   const standings = await fetchNflIntel("standings", {
     season: filters.season,
     week: filters.week,
   });
   const teamCodes = extractTeamCodes(standings.rows);
-  const selectedTeam = resolveTeamCode(requestedTeam, teamCodes);
-  // Path segment is the source of truth. Ignore stale ?team= query params
-  // (legacy filter forms) so every team card opens its own page — not Bills.
+  const selectedTeam = resolveTeamCode(canonicalTeam, teamCodes);
+
+  // Canonicalize aliases (WSH→WAS) and strip stale ?team= query params so
+  // directory / ESPN codes never silently render as Bills.
   const queryTeam = firstQueryValue(rawSearch.team);
-  if (queryTeam) {
+  const pathNeedsCanonical =
+    requestedTeam.trim().toUpperCase() !== selectedTeam;
+  if (queryTeam || pathNeedsCanonical) {
     const query = new URLSearchParams();
     if (filters.season) query.set("season", String(filters.season));
     if (filters.week) query.set("week", String(filters.week));
