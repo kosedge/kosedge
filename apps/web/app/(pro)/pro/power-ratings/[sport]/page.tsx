@@ -7,7 +7,7 @@ import {
 } from "@/lib/power-ratings";
 import { fetchNflIntel } from "@/lib/nfl-intel";
 import { PowerRatingsTable } from "./PowerRatingsTable";
-import NflProShell from "@/components/pro/nfl/NflProShell";
+import SportProShell from "@/components/pro/SportProShell";
 
 export const dynamic = "force-dynamic";
 
@@ -134,7 +134,8 @@ export default async function PowerRatingsSportPage({
     });
 
     return (
-      <NflProShell
+      <SportProShell
+        sport="nfl"
         pageTitle="NFL Power Ratings"
         pageSubtitle="Team strength from the Kos Edge preseason simulation engine (expected wins). Off/Def use owned EPA when available. Weekly Δ compares sim snapshots."
       >
@@ -243,34 +244,37 @@ export default async function PowerRatingsSportPage({
             on the current week yet.
           </p>
         </main>
-      </NflProShell>
+      </SportProShell>
     );
   }
 
   const ratings = getPowerRatings(sportKey);
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-semibold text-kos-text">
-            {sportName} — Power Ratings
-          </h1>
-          <p className="mt-2 text-kos-text/70">
-            Team strength and model rankings.
+    <SportProShell
+      sport={sportKey}
+      pageTitle={`${sportName} Power Ratings`}
+      pageSubtitle="Team strength, tiering, and model rankings for slate research. Neutral presentation — not picks."
+    >
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <p className="text-sm text-kos-text/65">
+            {ratings.length
+              ? `${ratings.length} teams ranked`
+              : "Ratings feed pending for this sport — shell stays ready without invented numbers."}
           </p>
+          <Link
+            href="/pro/power-ratings"
+            className="min-h-11 inline-flex items-center rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
+          >
+            All sports
+          </Link>
         </div>
-        <Link
-          href="/pro/power-ratings"
-          className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
-        >
-          ← All sports
-        </Link>
-      </div>
 
-      <div className="mt-8">
-        <PowerRatingsTable ratings={ratings} sportName={sportName} />
-      </div>
-    </main>
+        <div className="mt-6">
+          <PowerRatingsTable ratings={ratings} sportName={sportName} />
+        </div>
+      </main>
+    </SportProShell>
   );
 }

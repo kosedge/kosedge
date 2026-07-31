@@ -618,7 +618,7 @@ export function buildSportOverviewSections({
         {
           href: `${base}/slate/today`,
           label: slateLabel,
-          hint: "Collapsed matchup cards with model reference context.",
+          hint: "Collapsed matchup cards with model reference context. Times in ET.",
           premium: true,
           status: "active",
         },
@@ -635,16 +635,23 @@ export function buildSportOverviewSections({
       subtitle: desk.pathSubtitle,
       links: marketLinksForSport({ sportKey, base, edgeBoardHref }),
     },
-    {
+  ];
+
+  // Never force empty props walls onto NCAAM/CFB.
+  if (supportsPropsFantasy(sportKey)) {
+    sections.push({
       title: content.sectionTitles.props,
       subtitle:
-        "Surface player-level opportunities where feeds are launch-ready while preserving risk discipline.",
+        "Player-level research where feeds are launch-ready — no pick language.",
       links: propsLinks(sportKey, base),
-    },
+    });
+  }
+
+  sections.push(
     {
       title: content.sectionTitles.intel ?? "League Intel",
       subtitle:
-        "League context, odds compare, and sport-specific intel surfaces — live where feeds are ready.",
+        "League context, odds compare, and sport-specific intel — live where feeds are ready.",
       links: intelLinksForSport(sportKey, base),
     },
     {
@@ -674,7 +681,7 @@ export function buildSportOverviewSections({
         },
       ],
     },
-  ];
+  );
 
   return sections;
 }

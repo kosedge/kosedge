@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SportHubShell from "@/components/pro/SportHubShell";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import { env } from "@/lib/config/env";
 
@@ -116,9 +117,15 @@ export default async function TrackingPage({
           <div className="flex flex-wrap gap-2">
             <Link
               href={`${base}/overview`}
-              className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
+              className="min-h-11 inline-flex items-center rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
             >
-              Back to Hub
+              ← NFL Overview
+            </Link>
+            <Link
+              href="/edge-board/nfl"
+              className="min-h-11 inline-flex items-center rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
+            >
+              Edge Board
             </Link>
             <Link
               href="/pro/clv-tracker"
@@ -191,29 +198,42 @@ export default async function TrackingPage({
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-kos-text">
-            {sportName} Tracking
-          </h2>
-          <p className="mt-2 text-kos-text/70">
-            CLV and review dashboards. Outcome-neutral evaluation.
-          </p>
-        </div>
-        <Link
-          href={`${base}/overview`}
-          className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
-        >
-          Back to Hub
-        </Link>
-      </div>
-      <div className="mt-8 rounded-2xl border border-kos-border bg-kos-surface/30 p-8">
-        <p className="text-kos-text/60">
-          Sport tracking is live for NFL via CLV summary. Other leagues follow
-          as close-line attribution lands.
+    <SportHubShell
+      sportKey={sportKey}
+      sportName={sportName}
+      base={base}
+      badge={`${sportName} Model Health`}
+      title={`${sportName} Tracking`}
+      summary="CLV and post-close quality review. Outcome-neutral evaluation — process quality over narrative."
+      primaryHref="/pro/clv-tracker"
+      primaryLabel="Global CLV Tracker →"
+      secondaryHref="/pro/model-transparency"
+      secondaryLabel="Model Transparency →"
+    >
+      <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6 sm:p-8">
+        <p className="text-sm font-semibold text-kos-gold">
+          Sport CLV summary pending
         </p>
+        <p className="mt-2 text-sm text-kos-text/70">
+          Close-line attribution is live for NFL. {sportName} tracking populates
+          here when the league’s closed-ticket pipeline lands — we do not invent
+          CLV rates.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href="/pro/clv-tracker"
+            className="min-h-11 inline-flex items-center rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold"
+          >
+            Global CLV Tracker
+          </Link>
+          <Link
+            href="/pro/model-transparency"
+            className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text"
+          >
+            Model Transparency
+          </Link>
+        </div>
       </div>
-    </main>
+    </SportHubShell>
   );
 }

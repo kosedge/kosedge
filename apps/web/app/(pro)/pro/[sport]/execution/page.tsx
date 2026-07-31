@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
+import SportHubShell from "@/components/pro/SportHubShell";
+import { getTonightGames } from "@/lib/edge-board-tonight";
 import {
   fetchNflFairLines,
   formatKickoff,
@@ -7,6 +8,7 @@ import {
   formatTotal,
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
+import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
 
@@ -107,25 +109,28 @@ export default async function ExecutionPage({
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-kos-text/70">
               Market dispersion, price quality, and timing context for the
-              active slate. Research support only — not a pick feed.
+              active slate. Research support only — not a pick feed. Times in
+              ET.
             </p>
+            <div className="mt-2 flex flex-wrap gap-3 text-xs">
+              <Link
+                href="/pro/nfl/overview"
+                className="min-h-11 inline-flex items-center font-medium text-kos-gold/90 hover:text-kos-gold sm:min-h-0"
+              >
+                ← NFL Overview
+              </Link>
+              <Link
+                href="/edge-board/nfl"
+                className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
+              >
+                Edge Board →
+              </Link>
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
-              href="/pro/nfl/overview"
-              className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
-            >
-              NFL Overview
-            </Link>
-            <Link
-              href="/edge-board/nfl"
-              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
-            >
-              Edge Board
-            </Link>
-            <Link
               href="/odds/nfl"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
+              className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
             >
               Compare Odds
             </Link>
@@ -146,9 +151,7 @@ export default async function ExecutionPage({
             </p>
             <p className="mt-1 text-xs text-kos-text/55">
               Mean |KEI − best book| on spreads
-              {avgTotal != null
-                ? ` · totals ${avgTotal.toFixed(1)} pts`
-                : ""}
+              {avgTotal != null ? ` · totals ${avgTotal.toFixed(1)} pts` : ""}
             </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-black/35 p-4">
@@ -185,7 +188,48 @@ export default async function ExecutionPage({
           </div>
         ) : null}
 
-        <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+        {/* Mobile cards */}
+        <div className="mt-8 grid gap-3 md:hidden">
+          {rows.map((row) => (
+            <div
+              key={row.gameId}
+              className="rounded-xl border border-white/10 bg-black/35 p-4"
+            >
+              <div className="text-sm font-semibold text-kos-text">
+                {row.awayAbbr} @ {row.homeAbbr}
+              </div>
+              <p className="mt-1 text-xs text-kos-text/55">
+                {formatKickoff(row.startTime)} ET
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <div className="text-kos-text/50">Best / KEI spread</div>
+                  <div className="mt-0.5 text-kos-text">
+                    {formatSpread(row.bestSpreadHome ?? row.marketSpreadHome)} /{" "}
+                    <span className="text-kos-gold">
+                      {formatSpread(row.spreadHome)}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-kos-text/50">Best / KEI total</div>
+                  <div className="mt-0.5 text-kos-text">
+                    {formatTotal(row.bestTotal ?? row.marketTotal)} /{" "}
+                    <span className="text-kos-gold">
+                      {formatTotal(row.totalMean)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-2 flex gap-3 text-xs text-kos-text/65">
+                <span>{dispersionLabel(row)}</span>
+                <span>{priceQuality(row)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 hidden overflow-x-auto rounded-2xl border border-white/10 bg-black/30 md:block">
           <table className="min-w-full text-left text-sm">
             <thead className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/55">
               <tr>
@@ -250,30 +294,160 @@ export default async function ExecutionPage({
     );
   }
 
+  // Non-NFL: board-derived execution diagnostic (honest, no invented books).
+  const games = await getTonightGames(sportKey);
+  const withMarket = games.filter(
+    (g) =>
+      (g.row.bestLine?.top?.label && g.row.bestLine.top.label !== "—") ||
+      (g.row.bestOU?.top?.label && g.row.bestOU.top.label !== "—"),
+  );
+  const withModel = games.filter(
+    (g) => g.row.keiLine?.top?.label || g.row.keiOU?.top?.label,
+  );
+  const separations = games
+    .map((g) => Math.max(g.row.edgeLineNum ?? 0, g.row.edgeOUNum ?? 0))
+    .filter((n) => n > 0);
+  const avgSep = mean(separations);
+
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-kos-text">
-            {sportName} Execution
-          </h2>
-          <p className="mt-2 text-kos-text/70">
-            Best numbers by book, dispersion, timing. Execution support only.
+    <SportHubShell
+      sportKey={sportKey}
+      sportName={sportName}
+      base={base}
+      badge={`${sportName} Execution · ET`}
+      title={`${sportName} Execution Monitor`}
+      summary="Book dispersion, timing windows, and price quality from the live board. Research diagnostic — not a pick feed."
+      primaryHref={`/edge-board/${sportKey}`}
+      primaryLabel="Edge board →"
+      secondaryHref={`/odds/${sportKey}`}
+      secondaryLabel="Compare odds →"
+    >
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+          <h2 className="text-sm font-semibold text-kos-gold">Slate coverage</h2>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {games.length}
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">Games on the live board</p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+          <h2 className="text-sm font-semibold text-kos-gold">Price quality</h2>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {withMarket.length}/{games.length || 0}
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">
+            Games with a posted Open/Best market number
           </p>
         </div>
-        <Link
-          href={`${base}/overview`}
-          className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
-        >
-          Back to Hub
-        </Link>
-      </div>
-      <div className="mt-8 rounded-2xl border border-kos-border bg-kos-surface/30 p-8">
-        <p className="text-kos-text/60">
-          Execution monitor is live for NFL. Other sports wire as market feeds
-          clear launch quality.
-        </p>
-      </div>
-    </main>
+        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+          <h2 className="text-sm font-semibold text-kos-gold">Model join</h2>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {withModel.length}/{games.length || 0}
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">
+            Games with a KEI line or total
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+          <h2 className="text-sm font-semibold text-kos-gold">
+            Avg separation
+          </h2>
+          <p className="mt-2 text-2xl font-semibold text-kos-text">
+            {avgSep != null ? avgSep.toFixed(1) : "—"}
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">
+            Mean max |model − market| where both exist
+          </p>
+        </div>
+      </section>
+
+      {games.length === 0 ? (
+        <div className="mt-6 rounded-2xl border border-kos-border bg-kos-surface/30 p-6 text-sm text-kos-text/70">
+          No live board rows yet for {sportName}. Execution metrics populate
+          when Open/Best and KEI lines join — we do not invent dispersion.
+        </div>
+      ) : (
+        <>
+          <div className="mt-6 grid gap-3 md:hidden">
+            {games.map((g) => (
+              <div
+                key={g.slug}
+                className="rounded-xl border border-white/10 bg-black/35 p-4"
+              >
+                <div className="text-sm font-semibold text-kos-text">
+                  {g.row.teamA?.name ?? "Away"} @ {g.row.teamB?.name ?? "Home"}
+                </div>
+                <p className="mt-1 text-xs text-kos-text/55">
+                  {g.row.time ?? "Tip TBD"} · ET
+                </p>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <div className="text-kos-text/50">Market</div>
+                    <div className="text-kos-text">
+                      {g.row.bestLine?.top?.label ?? "—"} /{" "}
+                      {g.row.bestOU?.top?.label ?? "—"}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-kos-text/50">Model</div>
+                    <div className="text-kos-gold">
+                      {g.row.keiLine?.top?.label ?? "—"} /{" "}
+                      {g.row.keiOU?.top?.label ?? "—"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 hidden overflow-hidden rounded-2xl border border-white/10 md:block">
+            <table className="w-full text-sm">
+              <thead className="bg-white/5 text-left text-xs uppercase tracking-wide text-kos-text/60">
+                <tr>
+                  <th className="px-4 py-3">Matchup</th>
+                  <th className="px-4 py-3">Time (ET)</th>
+                  <th className="px-4 py-3">Market</th>
+                  <th className="px-4 py-3">Model</th>
+                  <th className="px-4 py-3">Max sep</th>
+                </tr>
+              </thead>
+              <tbody>
+                {games.map((g) => {
+                  const max = Math.max(
+                    g.row.edgeLineNum ?? 0,
+                    g.row.edgeOUNum ?? 0,
+                  );
+                  return (
+                    <tr
+                      key={g.slug}
+                      className="border-t border-white/8 hover:bg-white/[0.03]"
+                    >
+                      <td className="px-4 py-3 font-medium text-kos-text">
+                        {g.row.teamA?.name ?? "Away"} @{" "}
+                        {g.row.teamB?.name ?? "Home"}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-kos-text/60">
+                        {g.row.time ?? "—"}
+                      </td>
+                      <td className="px-4 py-3 tabular-nums text-kos-text/80">
+                        {g.row.bestLine?.top?.label ?? "—"} /{" "}
+                        {g.row.bestOU?.top?.label ?? "—"}
+                      </td>
+                      <td className="px-4 py-3 tabular-nums text-kos-gold">
+                        {g.row.keiLine?.top?.label ?? "—"} /{" "}
+                        {g.row.keiOU?.top?.label ?? "—"}
+                      </td>
+                      <td className="px-4 py-3 tabular-nums text-kos-text/80">
+                        {max > 0 ? max.toFixed(1) : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </SportHubShell>
   );
 }

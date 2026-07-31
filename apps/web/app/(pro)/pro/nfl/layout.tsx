@@ -1,14 +1,12 @@
-import NflProShell from "@/components/pro/nfl/NflProShell";
+import SportProShell from "@/components/pro/SportProShell";
 
 /**
- * Wraps all static /pro/nfl/* routes with the shared NFL Pro chrome.
- * Dynamic [sport] NFL routes (overview historically, standings, etc.) use
- * [sport]/layout which also mounts NflProShell for sport === "nfl".
+ * Wraps all static /pro/nfl/* routes with the shared Pro chrome.
  */
 export default function NflProLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <NflProShell>{children}</NflProShell>;
+  return <SportProShell sport="nfl">{children}</SportProShell>;
 }
