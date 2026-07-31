@@ -40,6 +40,9 @@ TASK_NBA_ROLLING_FEATURES = "src.tasks.materialize_nba_team_rolling_features"
 TASK_NBA_ODDS_DENSIFY = "src.tasks.pull_nba_historical_odds_densify"
 TASK_NBA_WALKFORWARD = "src.tasks.run_nba_walkforward_sample"
 TASK_NBA_PHASE1_BOOTSTRAP = "src.tasks.run_nba_phase1_bootstrap"
+TASK_NBA_PHASE2_CALIBRATE = "src.tasks.run_nba_phase2_calibrate"
+TASK_NBA_DAILY_CYCLE = "src.tasks.run_nba_daily_cycle"
+TASK_NBA_REPAIR_ABBRS = "src.tasks.repair_nba_odds_team_abbrs"
 TASK_NBA_INVENTORY = "src.tasks.nba_db_inventory"
 TASK_PULL_NFL_CONTEXT = "src.tasks.pull_nfl_context_snapshot"
 TASK_RUN_NFL_SIMULATIONS = "src.tasks.run_nfl_market_simulations"
@@ -854,6 +857,56 @@ def job_run_nba_phase1_bootstrap(
         return {"task_id": async_result.id, "task_name": TASK_NBA_PHASE1_BOOTSTRAP}
     except Exception as e:
         log.exception("Failed to enqueue run-nba-phase1-bootstrap")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nba-phase2-calibrate")
+def job_run_nba_phase2_calibrate(
+    walkforward_games: int = Query(80, ge=5, le=400),
+    simulations: int = Query(1000, ge=300, le=5000),
+    repair_abbrs: bool = Query(True),
+) -> Dict[str, str]:
+    """Phase 2: repair abbrs + walkforward with real closes (no Odds densify by default)."""
+    try:
+        async_result = celery_app.send_task(
+            TASK_NBA_PHASE2_CALIBRATE,
+            kwargs={
+                "repair_abbrs": repair_abbrs,
+                "walkforward_games": walkforward_games,
+                "simulations": simulations,
+                "densify_odds": False,
+                "max_credit_spend": 0,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NBA_PHASE2_CALIBRATE}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nba-phase2-calibrate")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/repair-nba-odds-team-abbrs")
+def job_repair_nba_odds_team_abbrs() -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(TASK_NBA_REPAIR_ABBRS)
+        return {"task_id": async_result.id, "task_name": TASK_NBA_REPAIR_ABBRS}
+    except Exception as e:
+        log.exception("Failed to enqueue repair-nba-odds-team-abbrs")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nba-daily-cycle")
+def job_run_nba_daily_cycle(
+    days_ahead: int = Query(3, ge=0, le=14),
+    simulations: int = Query(4000, ge=300, le=20000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_NBA_DAILY_CYCLE,
+            kwargs={"days_ahead": days_ahead, "simulations": simulations},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_NBA_DAILY_CYCLE}
+    except Exception as e:
+        log.exception("Failed to enqueue run-nba-daily-cycle")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

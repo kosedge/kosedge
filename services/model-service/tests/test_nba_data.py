@@ -15,7 +15,26 @@ from src.services.nba_data import (
 def test_normalize_team_key() -> None:
     assert normalize_team_key("Boston Celtics") == "BOS"
     assert normalize_team_key("LAL") == "LAL"
+    assert normalize_team_key("GS") == "GSW"
+    assert normalize_team_key("UTAH") == "UTA"
+    assert normalize_team_key("BRK") == "BKN"
     assert season_label_to_start_year("2023-24") == 2023
+
+
+def test_nba_full_names_and_aliases_for_close_join() -> None:
+    from src.services.nba_data import (
+        nba_abbr_match_keys,
+        nba_full_names_for_abbr,
+        nba_season_year_from_date,
+    )
+    from datetime import date
+
+    names = nba_full_names_for_abbr("BOS")
+    assert "Boston Celtics" in names
+    assert "BOS" in names
+    assert "GS" in nba_abbr_match_keys("GSW")
+    assert nba_season_year_from_date(date(2024, 1, 15)) == 2023
+    assert nba_season_year_from_date(date(2024, 11, 1)) == 2024
 
 
 def test_features_from_data_nba_team_stats() -> None:

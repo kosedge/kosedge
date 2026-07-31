@@ -132,7 +132,7 @@ def test_nba_health_and_fair_lines_empty_slate(monkeypatch) -> None:
     body = health.json()
     assert body["ok"] is True
     assert body["sport"] == "nba"
-    assert body["phase"] == "phase1"
+    assert body["phase"] == "phase2"
     assert "worker_build_id" in body
     assert body["worker_build_id"].startswith("nba-poss-sim-")
 
@@ -147,7 +147,8 @@ def test_nba_health_and_fair_lines_empty_slate(monkeypatch) -> None:
         "schema_not_ready",
     }
     assert "model_version" in payload
-    assert payload["phase"] == "phase1"
+    assert payload["phase"] == "phase2"
+    assert payload["publish_posture"]["props"] == "queued_until_mainlines_honest"
 
 
 def test_nba_fair_lines_shape_with_rows(monkeypatch) -> None:

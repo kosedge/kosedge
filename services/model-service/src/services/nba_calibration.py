@@ -58,6 +58,40 @@ def cover_rate(
     return covers / decisions
 
 
+def market_ats_cover_rate(
+    *,
+    model_spread_home: Sequence[float],
+    close_spread_home: Sequence[float],
+    actual_margins: Sequence[float],
+) -> Optional[float]:
+    """ATS hit rate of betting the model side vs the closing home spread."""
+    if not model_spread_home or len(model_spread_home) != len(actual_margins):
+        return None
+    if len(model_spread_home) != len(close_spread_home):
+        return None
+    covers = 0
+    decisions = 0
+    for model_sp, close_sp, margin in zip(
+        model_spread_home, close_spread_home, actual_margins
+    ):
+        # Model edge vs close: prefer home when model is lower (more negative) than close.
+        edge = float(close_sp) - float(model_sp)
+        if abs(edge) < 1e-9:
+            continue
+        # Home side of close line covers when margin + close_spread > 0.
+        home_covers = (float(margin) + float(close_sp)) > 0
+        push = (float(margin) + float(close_sp)) == 0
+        if push:
+            continue
+        decisions += 1
+        bet_home = edge > 0
+        if bet_home == home_covers:
+            covers += 1
+    if decisions == 0:
+        return None
+    return covers / decisions
+
+
 def summarize_walkforward(rows: List[NbaWalkforwardRow]) -> Dict[str, Any]:
     spread_err: List[float] = []
     total_err: List[float] = []
@@ -65,6 +99,9 @@ def summarize_walkforward(rows: List[NbaWalkforwardRow]) -> Dict[str, Any]:
     actual_margins: List[float] = []
     close_spread_err: List[float] = []
     close_total_err: List[float] = []
+    model_vs_close_spreads: List[float] = []
+    close_spreads_for_ats: List[float] = []
+    margins_for_ats: List[float] = []
 
     for r in rows:
         if r.actual_margin is not None:
@@ -76,25 +113,53 @@ def summarize_walkforward(rows: List[NbaWalkforwardRow]) -> Dict[str, Any]:
             if r.close_spread_home is not None:
                 close_pred = -float(r.close_spread_home)
                 close_spread_err.append(close_pred - float(r.actual_margin))
+                model_vs_close_spreads.append(float(r.model_spread_home))
+                close_spreads_for_ats.append(float(r.close_spread_home))
+                margins_for_ats.append(float(r.actual_margin))
         if r.actual_total is not None:
             total_err.append(float(r.model_total) - float(r.actual_total))
             if r.close_total is not None:
                 close_total_err.append(float(r.close_total) - float(r.actual_total))
 
+    n_with_close = sum(
+        1 for r in rows if r.close_spread_home is not None or r.close_total is not None
+    )
+    model_spread_mae = mae(spread_err)
+    close_spread_mae = mae(close_spread_err)
+    # NFL lesson: when model MAE >> close MAE, lean on market blend (not cosmetics).
+    blend_hint = "hold"
+    if (
+        model_spread_mae is not None
+        and close_spread_mae is not None
+        and close_spread_mae > 0
+    ):
+        ratio = model_spread_mae / close_spread_mae
+        if ratio >= 1.25:
+            blend_hint = "raise_market_blend"
+        elif ratio <= 0.95:
+            blend_hint = "lower_market_blend"
+
     return {
         "n_games": len(rows),
         "n_spread_graded": len(spread_err),
         "n_total_graded": len(total_err),
-        "model_spread_mae": mae(spread_err),
+        "n_with_close_lines": n_with_close,
+        "model_spread_mae": model_spread_mae,
         "model_spread_bias": bias(spread_err),
         "model_total_mae": mae(total_err),
         "model_total_bias": bias(total_err),
-        "close_spread_mae": mae(close_spread_err),
+        "close_spread_mae": close_spread_mae,
         "close_total_mae": mae(close_total_err),
         "model_ats_cover_rate": cover_rate(
             model_spread_home=model_spreads,
             actual_margins=actual_margins,
         ),
+        "model_vs_close_ats_cover_rate": market_ats_cover_rate(
+            model_spread_home=model_vs_close_spreads,
+            close_spread_home=close_spreads_for_ats,
+            actual_margins=margins_for_ats,
+        ),
+        "blend_hint": blend_hint,
         "status": "ready" if spread_err or total_err else "awaiting_outcomes",
     }
 
@@ -126,6 +191,7 @@ def build_enterprise_report_stub(
                 "targeted_mainlines_only_if_empty_with_credit_cap"
             ),
             "market_blend_source": "existing_odds_snapshots_plus_targeted_densify",
-            "primary_ingest": "stats.nba.com/leaguegamelog",
+            "primary_ingest": "data.nba.com/schedule+gamedetail",
+            "close_line_join": "et_date_plus_full_name_or_abbr_aliases",
         },
     }

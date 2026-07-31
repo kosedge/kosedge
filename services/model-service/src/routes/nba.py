@@ -18,6 +18,7 @@ from src.services.nba_possession_simulator import (
     NbaGameInputs,
     simulate_nba_game,
 )
+from src.services.nba_publish_policy import board_publish_posture, publish_tag
 from src.services.nba_schema import ensure_nba_model_tables
 
 router = APIRouter(prefix="/nba", tags=["nba-model"])
@@ -221,7 +222,7 @@ def nba_health() -> Dict[str, Any]:
             "worker_build_id": NBA_WORKER_BUILD_ID,
             "projections_stored": proj_count,
             "simulator": "possession_monte_carlo",
-            "phase": "phase1",
+            "phase": "phase2",
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"nba_health_failed: {exc}") from exc
@@ -361,6 +362,8 @@ def nba_fair_lines(
                 except Exception:
                     pass
 
+            fair_spread = _to_float(m.get("fair_spread_home"))
+            fair_total = _to_float(m.get("fair_total"))
             lines.append(
                 {
                     "game_id": m["game_id"],
@@ -371,12 +374,27 @@ def nba_fair_lines(
                     "home_win_prob": _to_float(m.get("home_win_prob")),
                     "fair_home_ml": _to_int(m.get("fair_home_ml")),
                     "total_mean": _to_float(m.get("total_mean")),
-                    "fair_total": _to_float(m.get("fair_total")),
-                    "fair_spread_home": _to_float(m.get("fair_spread_home")),
+                    "fair_total": fair_total,
+                    "fair_spread_home": fair_spread,
                     "home_cover_prob": _to_float(m.get("home_cover_prob")),
                     "margin_mean": _to_float(m.get("margin_mean")),
                     "worker_build_id": m.get("worker_build_id"),
                     "projected_at": m.get("projected_at"),
+                    # Research-only until close-line ATS clears evidence floors.
+                    "publish": {
+                        "spread": publish_tag(
+                            "spread",
+                            model_line=fair_spread,
+                            market_line=None,
+                            force_research_only=True,
+                        ),
+                        "total": publish_tag(
+                            "total",
+                            model_line=fair_total,
+                            market_line=None,
+                            force_research_only=True,
+                        ),
+                    },
                 }
             )
 
@@ -403,6 +421,7 @@ def nba_fair_lines(
             slate_status = "ok"
             message = None
 
+        posture = board_publish_posture()
         return {
             "game_date": target_date,
             "model_version": effective_model_version,
@@ -411,7 +430,13 @@ def nba_fair_lines(
             "lines": lines,
             "slate_status": slate_status,
             "message": message,
-            "phase": "phase1",
+            "publish_posture": posture,
+            "features_mode": (
+                "rolling_features_when_assembled"
+                if in_regular_season_window
+                else "offseason_honest_empty"
+            ),
+            "phase": "phase2",
         }
     finally:
         session.close()
@@ -427,7 +452,7 @@ def nba_ops_inventory() -> Dict[str, Any]:
         inv = collect_nba_db_inventory(session)
         session.commit()
         inv["worker_build_id"] = NBA_WORKER_BUILD_ID
-        inv["phase"] = "phase1"
+        inv["phase"] = "phase2"
         return inv
     except Exception as exc:
         session.rollback()

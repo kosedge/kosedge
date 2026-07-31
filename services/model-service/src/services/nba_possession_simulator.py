@@ -17,13 +17,14 @@ from typing import Any, Dict, List, Literal, Optional, TypedDict
 DEFAULT_NBA_MODEL_VERSION = "nba-v1-poss-sim"
 NBA_WORKER_BUILD_ID = os.getenv(
     "NBA_WORKER_BUILD_ID",
-    "nba-poss-sim-20260731-phase1",
+    "nba-poss-sim-20260731-phase2",
 )
 
 # Market blend defaults (NFL lesson): shrink thin early-season signal toward
-# closing consensus when available. Weights stay modest until walkforward lands.
-NBA_MARKET_BLEND_SPREAD_WEIGHT = float(os.getenv("NBA_MARKET_BLEND_SPREAD_WEIGHT", "0.25"))
-NBA_MARKET_BLEND_TOTAL_WEIGHT = float(os.getenv("NBA_MARKET_BLEND_TOTAL_WEIGHT", "0.25"))
+# closing consensus when available. Phase-1 raw MAE was weak with n_with_close=0;
+# Phase-2 raises base weights once closes join (still capped; evidence-tuned).
+NBA_MARKET_BLEND_SPREAD_WEIGHT = float(os.getenv("NBA_MARKET_BLEND_SPREAD_WEIGHT", "0.40"))
+NBA_MARKET_BLEND_TOTAL_WEIGHT = float(os.getenv("NBA_MARKET_BLEND_TOTAL_WEIGHT", "0.45"))
 
 TeamSide = Literal["home", "away"]
 

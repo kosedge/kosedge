@@ -94,6 +94,7 @@ TASK_PULL_NBA_INGEST = os.getenv("TASK_PULL_NBA_INGEST", "src.tasks.pull_nba_sch
 TASK_NBA_ROLLING_FEATURES = os.getenv(
     "TASK_NBA_ROLLING_FEATURES", "src.tasks.materialize_nba_team_rolling_features"
 )
+TASK_NBA_DAILY_CYCLE = os.getenv("TASK_NBA_DAILY_CYCLE", "src.tasks.run_nba_daily_cycle")
 TASK_MLB_NOWCAST_REPRICING = os.getenv(
     "TASK_MLB_NOWCAST_REPRICING",
     "src.tasks.run_mlb_lineup_nowcast_repricing",
@@ -226,6 +227,17 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "task": TASK_RUN_NBA_SIMULATIONS,
         "schedule": crontab(minute="40", hour="6"),
         "kwargs": {
+            "simulations": int(os.getenv("NBA_SIM_DAILY_COUNT", "4000")),
+            "model_version": os.getenv("NBA_BASE_MODEL_VERSION", "nba-v1-poss-sim"),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    # Phase 2 chained cycle: rolling → context → sim (skips empty offseason).
+    "run-nba-daily-cycle-3am": {
+        "task": TASK_NBA_DAILY_CYCLE,
+        "schedule": crontab(minute="45", hour="3"),
+        "kwargs": {
+            "days_ahead": int(os.getenv("NBA_CONTEXT_DAYS_AHEAD", "3")),
             "simulations": int(os.getenv("NBA_SIM_DAILY_COUNT", "4000")),
             "model_version": os.getenv("NBA_BASE_MODEL_VERSION", "nba-v1-poss-sim"),
         },

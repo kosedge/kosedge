@@ -58,3 +58,32 @@ def test_enterprise_report_stub() -> None:
     assert "targeted_mainlines_only_if_empty" in str(
         report["data_policy"]["odds_api_historical_repull"]
     )
+
+
+def test_summarize_walkforward_close_join_metrics() -> None:
+    rows = [
+        NbaWalkforwardRow(
+            game_id="1",
+            game_date=date(2025, 1, 10),
+            model_spread_home=-5.0,
+            model_total=220.0,
+            close_spread_home=-3.5,
+            close_total=222.0,
+            actual_margin=6.0,
+            actual_total=218.0,
+        ),
+        NbaWalkforwardRow(
+            game_id="2",
+            game_date=date(2025, 1, 11),
+            model_spread_home=2.5,
+            model_total=230.0,
+            close_spread_home=None,
+            close_total=None,
+            actual_margin=-5.0,
+            actual_total=235.0,
+        ),
+    ]
+    summary = summarize_walkforward(rows)
+    assert summary["n_with_close_lines"] == 1
+    assert summary["close_spread_mae"] is not None
+    assert summary["blend_hint"] in {"hold", "raise_market_blend", "lower_market_blend"}

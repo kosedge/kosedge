@@ -77,6 +77,21 @@ NBA_TEAM_ABBREV = {
     "Washington Wizards": "WAS",
 }
 
+# data.nba.com / legacy abbr variants → canonical keys used in features.
+NBA_TEAM_ABBR_ALIASES: Dict[str, str] = {
+    "GS": "GSW",
+    "NY": "NYK",
+    "NO": "NOP",
+    "NOR": "NOP",
+    "SA": "SAS",
+    "SAN": "SAS",
+    "UTAH": "UTA",
+    "WSH": "WAS",
+    "PHO": "PHX",
+    "BRK": "BKN",
+    "CHO": "CHA",
+}
+
 # Default Phase 1 seasons (NBA season labels).
 DEFAULT_NBA_INGEST_SEASONS = (
     "2021-22",
@@ -90,9 +105,45 @@ def normalize_team_key(name: str) -> str:
     raw = (name or "").strip()
     if not raw:
         return "UNK"
-    if raw.upper() in {v for v in NBA_TEAM_ABBREV.values()}:
-        return raw.upper()
-    return NBA_TEAM_ABBREV.get(raw, raw.upper()[:3])
+    if raw in NBA_TEAM_ABBREV:
+        return NBA_TEAM_ABBREV[raw]
+    upper = raw.upper()
+    if upper in NBA_TEAM_ABBR_ALIASES:
+        return NBA_TEAM_ABBR_ALIASES[upper]
+    canonical = {v for v in NBA_TEAM_ABBREV.values()}
+    if upper in canonical:
+        return upper
+    # Soft title-case for odd casing on full names.
+    titled = " ".join(part.capitalize() for part in raw.split())
+    if titled in NBA_TEAM_ABBREV:
+        return NBA_TEAM_ABBREV[titled]
+    return upper[:3]
+
+
+def nba_full_names_for_abbr(abbr: str) -> List[str]:
+    """Odds API / display names that map to a canonical abbr."""
+    key = normalize_team_key(abbr)
+    names = {name for name, code in NBA_TEAM_ABBREV.items() if code == key}
+    # Always include the canonical abbr itself for repaired hierarchy rows.
+    names.add(key)
+    return sorted(names)
+
+
+def nba_abbr_match_keys(abbr: str) -> List[str]:
+    """All abbr tokens that should match a team in hierarchy joins."""
+    key = normalize_team_key(abbr)
+    keys = {key}
+    for alias, canon in NBA_TEAM_ABBR_ALIASES.items():
+        if canon == key:
+            keys.add(alias)
+    return sorted(keys)
+
+
+def nba_season_year_from_date(game_date: date) -> int:
+    """NBA season start year (Aug–Jul calendar → season that tips off in Oct)."""
+    if game_date.month >= 8:
+        return game_date.year
+    return game_date.year - 1
 
 
 def _sportsdata_key() -> Optional[str]:

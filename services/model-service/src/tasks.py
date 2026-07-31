@@ -159,6 +159,7 @@ from .services.nfl_totals_calibration import (
 )
 from .services.nba_data import (
     DEFAULT_NBA_INGEST_SEASONS,
+    NBA_TEAM_ABBREV,
     compute_rest_days_by_team,
     default_league_average_inputs,
     derive_possessions_from_pbp,
@@ -172,6 +173,9 @@ from .services.nba_data import (
     fetch_season_schedule_data_nba,
     fetch_season_team_gamelog,
     iter_season_labels,
+    nba_abbr_match_keys,
+    nba_full_names_for_abbr,
+    nba_season_year_from_date,
     normalize_team_key as normalize_nba_team_key,
     pair_season_games_from_gamelog,
     player_stubs_from_data_nba_detail,
@@ -1208,13 +1212,22 @@ def _normalize_team_name_for_lookup(sport_key: str, team_name: str) -> str:
     the bulk-loaded schedule rows for that sport, so team resolution doesn't
     fork into duplicate "ghost" rows. Falls back to the raw name unchanged
     when no mapping is known (e.g. non-NFL sports, or an already-abbreviated
-    name)."""
+    name).
+
+    NBA densify keeps Odds API full names as ``teams.name`` (so existing
+    Phase-1 rows still resolve) and relies on canonical ``abbr`` + join
+    helpers for close-line matching.
+    """
     if sport_key == "americanfootball_nfl":
         return NFL_FULL_NAME_TO_ABBR.get(team_name, team_name)
     return team_name
 
 
-def _abbr_for_team(team_name: str) -> str:
+def _abbr_for_team(team_name: str, *, sport_key: Optional[str] = None) -> str:
+    if sport_key == "basketball_nba":
+        key = normalize_nba_team_key(team_name)
+        if key and key != "UNK":
+            return key
     letters = re.findall(r"[A-Za-z]+", team_name or "")
     if not letters:
         return "TEAM"
@@ -1345,7 +1358,11 @@ def _ensure_hierarchy(
         sport_key,
         ("unknown", sport_key.upper(), sport_key.upper()),
     )
-    season_year = game_dt.year
+    # NBA seasons tip off in Oct; calendar-year bucketing splits mid-season.
+    if sport_key == "basketball_nba":
+        season_year = nba_season_year_from_date(game_dt.date())
+    else:
+        season_year = game_dt.year
     home_team = _normalize_team_name_for_lookup(sport_key, home_team)
     away_team = _normalize_team_name_for_lookup(sport_key, away_team)
 
@@ -1393,6 +1410,9 @@ def _ensure_hierarchy(
         cache=cache,
     )
 
+    home_abbr = _abbr_for_team(home_team, sport_key=sport_key)
+    away_abbr = _abbr_for_team(away_team, sport_key=sport_key)
+
     home_team_id = _get_or_create(
         session,
         table="teams",
@@ -1405,7 +1425,7 @@ def _ensure_hierarchy(
         insert_params={
             "league_id": league_id,
             "external_id": None,
-            "abbr": _abbr_for_team(home_team),
+            "abbr": home_abbr,
             "name": home_team,
             "market": None,
             "created_at": _now_utc(),
@@ -1425,13 +1445,25 @@ def _ensure_hierarchy(
         insert_params={
             "league_id": league_id,
             "external_id": None,
-            "abbr": _abbr_for_team(away_team),
+            "abbr": away_abbr,
             "name": away_team,
             "market": None,
             "created_at": _now_utc(),
         },
         cache=cache,
     )
+
+    # NBA tip times are UTC; store ET calendar date so ingest gdte joins land.
+    if sport_key == "basketball_nba":
+        try:
+            from zoneinfo import ZoneInfo
+
+            et_date = game_dt.astimezone(ZoneInfo("America/New_York")).date()
+        except Exception:
+            et_date = (game_dt - timedelta(hours=5)).date()
+        game_date_val = et_date
+    else:
+        game_date_val = game_dt.date()
 
     game_id = _get_or_create(
         session,
@@ -1443,7 +1475,7 @@ def _ensure_hierarchy(
         where_params={
             "season_id": season_id,
             "external_id": event_id,
-            "game_date": game_dt.date(),
+            "game_date": game_date_val,
             "home_team_id": home_team_id,
             "away_team_id": away_team_id,
         },
@@ -1457,7 +1489,7 @@ def _ensure_hierarchy(
         insert_params={
             "season_id": season_id,
             "external_id": event_id,
-            "game_date": game_dt.date(),
+            "game_date": game_date_val,
             "start_time": game_dt,
             "status": "scheduled",
             "home_team_id": home_team_id,
@@ -6784,9 +6816,17 @@ def _nba_market_lines_for_game(
     home_team_key: Optional[str] = None,
     away_team_key: Optional[str] = None,
 ) -> Dict[str, Optional[float]]:
-    """Read latest spread/total from existing odds_snapshots — no Odds API burn."""
+    """Read closing-ish spread/total from owned odds_snapshots — no Odds API burn.
+
+    Phase-2 join fix (soft-miss root causes):
+      1) densify stores Odds API *full names* with heuristic abbrs (BOCE≠BOS)
+      2) UTC commence_time can shift ``games.game_date`` vs ingest ``gdte`` (ET)
+      3) ingest ids are nba.com gids, not hierarchy UUIDs
+
+    Match path: UUID → (ET tip date | date±1) + (full name | abbr aliases).
+    Closing line ≈ mean of latest captured_at snapshot per sportsbook.
+    """
     try:
-        # Prefer direct UUID match when game_id is a hierarchy id.
         row = None
         try:
             import uuid as _uuid
@@ -6799,66 +6839,109 @@ def _nba_market_lines_for_game(
             row = session.execute(
                 text(
                     """
+                    WITH latest AS (
+                      SELECT DISTINCT ON (os.sportsbook_id, m.code)
+                        m.code AS market_code,
+                        os.spread_home,
+                        os.total_points
+                      FROM odds_snapshots os
+                      JOIN markets m ON m.id = os.market_id
+                      WHERE os.game_id = CAST(:game_id AS uuid)
+                        AND m.code IN ('spread', 'total')
+                      ORDER BY os.sportsbook_id, m.code, os.captured_at DESC
+                    )
                     SELECT
-                      (
-                        SELECT AVG(os.spread_home)
-                        FROM odds_snapshots os
-                        JOIN markets m ON m.id = os.market_id
-                        WHERE os.game_id = CAST(:game_id AS uuid)
-                          AND m.code = 'spread'
-                          AND os.spread_home IS NOT NULL
-                      ) AS spread_home,
-                      (
-                        SELECT AVG(os.total_points)
-                        FROM odds_snapshots os
-                        JOIN markets m ON m.id = os.market_id
-                        WHERE os.game_id = CAST(:game_id AS uuid)
-                          AND m.code = 'total'
-                          AND os.total_points IS NOT NULL
-                      ) AS total
+                      AVG(spread_home) FILTER (WHERE market_code = 'spread') AS spread_home,
+                      AVG(total_points) FILTER (WHERE market_code = 'total') AS total
+                    FROM latest
                     """
                 ),
                 {"game_id": str(game_id)},
             ).fetchone()
         if (row is None or (row[0] is None and row[1] is None)) and game_date and home_team_key:
-            # Match densified hierarchy rows by date + team abbreviations.
+            home_key = normalize_nba_team_key(str(home_team_key or ""))
+            away_key = normalize_nba_team_key(str(away_team_key or ""))
+            home_names = [n.upper() for n in nba_full_names_for_abbr(home_key)]
+            away_names = [n.upper() for n in nba_full_names_for_abbr(away_key)]
+            home_abbrs = [a.upper() for a in nba_abbr_match_keys(home_key)]
+            away_abbrs = [a.upper() for a in nba_abbr_match_keys(away_key)]
+            season_year = nba_season_year_from_date(game_date)
             row = session.execute(
                 text(
                     """
+                    WITH candidates AS (
+                      SELECT
+                        g.id AS game_id,
+                        g.start_time,
+                        CASE
+                          WHEN g.start_time IS NOT NULL
+                            AND (
+                              (g.start_time AT TIME ZONE 'UTC')
+                              AT TIME ZONE 'America/New_York'
+                            )::date = CAST(:game_date AS date)
+                          THEN 0
+                          WHEN g.game_date = CAST(:game_date AS date) THEN 1
+                          WHEN g.game_date = CAST(:game_date AS date) - INTERVAL '1 day' THEN 2
+                          WHEN g.game_date = CAST(:game_date AS date) + INTERVAL '1 day' THEN 3
+                          ELSE 9
+                        END AS date_rank
+                      FROM games g
+                      JOIN seasons s ON s.id = g.season_id
+                      JOIN leagues l ON l.id = s.league_id
+                      JOIN teams home ON home.id = g.home_team_id
+                      JOIN teams away ON away.id = g.away_team_id
+                      WHERE l.code = 'nba'
+                        AND (
+                          s.season_year = :season_year
+                          OR s.season_year = :season_year + 1
+                          OR s.season_year = CAST(EXTRACT(YEAR FROM CAST(:game_date AS date)) AS int)
+                        )
+                        AND (
+                          g.game_date BETWEEN CAST(:game_date AS date) - INTERVAL '1 day'
+                                         AND CAST(:game_date AS date) + INTERVAL '1 day'
+                          OR (
+                            g.start_time IS NOT NULL
+                            AND (
+                              (g.start_time AT TIME ZONE 'UTC')
+                              AT TIME ZONE 'America/New_York'
+                            )::date = CAST(:game_date AS date)
+                          )
+                        )
+                        AND (
+                          UPPER(TRIM(home.name)) = ANY(CAST(:home_names AS text[]))
+                          OR UPPER(COALESCE(home.abbr, '')) = ANY(CAST(:home_abbrs AS text[]))
+                        )
+                        AND (
+                          UPPER(TRIM(away.name)) = ANY(CAST(:away_names AS text[]))
+                          OR UPPER(COALESCE(away.abbr, '')) = ANY(CAST(:away_abbrs AS text[]))
+                        )
+                      ORDER BY date_rank ASC, g.start_time NULLS LAST
+                      LIMIT 1
+                    ),
+                    latest AS (
+                      SELECT DISTINCT ON (os.sportsbook_id, m.code)
+                        m.code AS market_code,
+                        os.spread_home,
+                        os.total_points
+                      FROM odds_snapshots os
+                      JOIN markets m ON m.id = os.market_id
+                      JOIN candidates c ON c.game_id = os.game_id
+                      WHERE m.code IN ('spread', 'total')
+                      ORDER BY os.sportsbook_id, m.code, os.captured_at DESC
+                    )
                     SELECT
-                      (
-                        SELECT AVG(os.spread_home)
-                        FROM odds_snapshots os
-                        JOIN markets m ON m.id = os.market_id
-                        WHERE os.game_id = g.id
-                          AND m.code = 'spread'
-                          AND os.spread_home IS NOT NULL
-                      ) AS spread_home,
-                      (
-                        SELECT AVG(os.total_points)
-                        FROM odds_snapshots os
-                        JOIN markets m ON m.id = os.market_id
-                        WHERE os.game_id = g.id
-                          AND m.code = 'total'
-                          AND os.total_points IS NOT NULL
-                      ) AS total
-                    FROM games g
-                    JOIN seasons s ON s.id = g.season_id
-                    JOIN leagues l ON l.id = s.league_id
-                    JOIN teams home ON home.id = g.home_team_id
-                    JOIN teams away ON away.id = g.away_team_id
-                    WHERE l.code = 'nba'
-                      AND g.game_date = :game_date
-                      AND UPPER(COALESCE(home.abbr, '')) = :home
-                      AND UPPER(COALESCE(away.abbr, '')) = :away
-                    ORDER BY g.start_time NULLS LAST
-                    LIMIT 1
+                      AVG(spread_home) FILTER (WHERE market_code = 'spread') AS spread_home,
+                      AVG(total_points) FILTER (WHERE market_code = 'total') AS total
+                    FROM latest
                     """
                 ),
                 {
                     "game_date": game_date,
-                    "home": str(home_team_key or "").upper(),
-                    "away": str(away_team_key or "").upper(),
+                    "season_year": season_year,
+                    "home_names": home_names,
+                    "away_names": away_names,
+                    "home_abbrs": home_abbrs,
+                    "away_abbrs": away_abbrs,
                 },
             ).fetchone()
     except Exception:
@@ -6873,6 +6956,56 @@ def _nba_market_lines_for_game(
         "market_spread_home": _to_float(row[0]),
         "market_total": _to_float(row[1]),
     }
+
+
+@celery_app.task(name="src.tasks.repair_nba_odds_team_abbrs")
+def repair_nba_odds_team_abbrs() -> Dict[str, Any]:
+    """Rewrite densified NBA ``teams.abbr`` from Odds full names → canonical keys.
+
+    Does not burn Odds API credits. Safe to re-run.
+    """
+    session = SessionLocal()
+    updated = 0
+    scanned = 0
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT t.id, t.name, t.abbr
+                FROM teams t
+                JOIN leagues l ON l.id = t.league_id
+                WHERE l.code = 'nba'
+                """
+            )
+        ).fetchall()
+        for r in rows:
+            scanned += 1
+            m = dict(r._mapping)
+            canon = normalize_nba_team_key(str(m.get("name") or ""))
+            if not canon or canon == "UNK":
+                continue
+            old = str(m.get("abbr") or "").upper()
+            if old == canon:
+                continue
+            session.execute(
+                text("UPDATE teams SET abbr = :abbr WHERE id = CAST(:id AS uuid)"),
+                {"abbr": canon, "id": str(m["id"])},
+            )
+            updated += 1
+        session.commit()
+        return {
+            "status": "ok",
+            "scanned": scanned,
+            "updated": updated,
+            "worker_build_id": NBA_WORKER_BUILD_ID,
+            "canonical_name_map_size": len(NBA_TEAM_ABBREV),
+        }
+    except Exception:
+        session.rollback()
+        log.exception("Failed repair_nba_odds_team_abbrs")
+        raise
+    finally:
+        session.close()
 
 
 def _upsert_nba_game_ingest(session: Any, g: Dict[str, Any]) -> bool:
@@ -7755,9 +7888,12 @@ def run_nba_market_simulations(
                 """
                 SELECT
                   g.id AS game_id,
+                  g.game_date,
                   g.status AS game_status,
                   home.name AS home_team,
                   away.name AS away_team,
+                  home.abbr AS home_abbr,
+                  away.abbr AS away_abbr,
                   c.pace_home, c.pace_away,
                   c.ortg_home, c.ortg_away,
                   c.drtg_home, c.drtg_away,
@@ -7788,9 +7924,12 @@ def run_nba_market_simulations(
                     """
                     SELECT
                       i.external_game_id AS game_id,
+                      i.game_date,
                       i.status AS game_status,
                       COALESCE(i.home_team_key, 'Home') AS home_team,
                       COALESCE(i.away_team_key, 'Away') AS away_team,
+                      i.home_team_key AS home_abbr,
+                      i.away_team_key AS away_abbr,
                       c.pace_home, c.pace_away,
                       c.ortg_home, c.ortg_away,
                       c.drtg_home, c.drtg_away,
@@ -7813,7 +7952,14 @@ def run_nba_market_simulations(
             status = str(m.get("game_status") or "").strip().lower()
             if status in {"final", "closed", "completed"}:
                 continue
-            market = _nba_market_lines_for_game(session, str(m["game_id"]))
+            gd = m.get("game_date")
+            market = _nba_market_lines_for_game(
+                session,
+                str(m["game_id"]),
+                game_date=gd if isinstance(gd, date) else target_date,
+                home_team_key=str(m.get("home_abbr") or m.get("home_team") or ""),
+                away_team_key=str(m.get("away_abbr") or m.get("away_team") or ""),
+            )
             inputs = NbaGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m.get("home_team") or "Home"),
@@ -8213,16 +8359,26 @@ def run_nba_walkforward_sample(
     limit_games: int = 80,
     simulations: int = 800,
     model_version: str = DEFAULT_NBA_MODEL_VERSION,
+    prefer_odds_window: bool = True,
+    apply_market_blend: bool = True,
 ) -> Dict[str, Any]:
-    """Thin walkforward: rolling features → sim → grade vs finals + closes."""
+    """Thin walkforward: prior features → sim → grade vs finals + closes."""
     from .services.nba_calibration import NbaWalkforwardRow, summarize_walkforward
+    from .services.nba_publish_policy import board_publish_posture
 
     session = SessionLocal()
     try:
         ensure_nba_model_tables(session)
+        # Prefer densify window (owned mainlines) so close-line join can prove out.
+        odds_window_sql = ""
+        if prefer_odds_window:
+            odds_window_sql = """
+                  AND i.game_date >= DATE '2023-10-24'
+                  AND i.game_date <= DATE '2025-06-22'
+            """
         rows = session.execute(
             text(
-                """
+                f"""
                 SELECT
                   i.external_game_id AS game_id,
                   i.game_date,
@@ -8252,40 +8408,64 @@ def run_nba_walkforward_sample(
                 WHERE i.home_score IS NOT NULL
                   AND i.away_score IS NOT NULL
                   AND i.game_date IS NOT NULL
+                  {odds_window_sql}
                 ORDER BY i.game_date DESC
                 LIMIT :lim
                 """
             ),
-            {"lim": max(1, int(limit_games))},
+            {"lim": max(1, int(limit_games) * 3)},
         ).fetchall()
 
         wf_rows: List[Any] = []
+        join_misses = 0
+        scanned = 0
         for r in rows:
+            if len(wf_rows) >= int(limit_games):
+                break
             m = dict(r._mapping)
-            # Prior-game rolling averages (exclude current game).
+            scanned += 1
+
             def _prior(team_key: str, before: date) -> Dict[str, Any]:
+                # Include raw aliases (GS/UTAH/…) — Phase-1 rows may predate normalize.
+                keys = {
+                    *nba_abbr_match_keys(team_key),
+                    normalize_nba_team_key(team_key),
+                    str(team_key or "").upper(),
+                }
                 prior = session.execute(
                     text(
                         """
                         SELECT pace, ortg, drtg, three_pt_rate, three_pt_pct, rest_days
                         FROM nba_team_game_features
-                        WHERE team_key = :team AND game_date < :before
+                        WHERE team_key = ANY(CAST(:teams AS text[]))
+                          AND game_date < :before
                         ORDER BY game_date DESC
                         LIMIT 10
                         """
                     ),
-                    {"team": team_key, "before": before},
+                    {"teams": sorted(k for k in keys if k), "before": before},
                 ).fetchall()
                 samples = [dict(x._mapping) for x in prior]
                 return rolling_average_features(samples) if samples else {}
 
             gd = m["game_date"]
-            home = str(m.get("home_team_key") or "")
-            away = str(m.get("away_team_key") or "")
+            home = normalize_nba_team_key(str(m.get("home_team_key") or ""))
+            away = normalize_nba_team_key(str(m.get("away_team_key") or ""))
+            if not isinstance(gd, date) or home == "UNK" or away == "UNK":
+                continue
             hf = _prior(home, gd)
             af = _prior(away, gd)
             if not hf or not af:
                 continue
+            market = _nba_market_lines_for_game(
+                session,
+                str(m["game_id"]),
+                game_date=gd,
+                home_team_key=home,
+                away_team_key=away,
+            )
+            if market.get("market_spread_home") is None and market.get("market_total") is None:
+                join_misses += 1
             inputs = NbaGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=home,
@@ -8306,15 +8486,9 @@ def run_nba_walkforward_sample(
                 sample_games_away=10,
                 feature_pack_version="nba-rolling-gamelog-v1",
             )
-            market = _nba_market_lines_for_game(
-                session,
-                str(m["game_id"]),
-                game_date=gd if isinstance(gd, date) else None,
-                home_team_key=home,
-                away_team_key=away,
-            )
-            inputs.market_spread_home = market.get("market_spread_home")
-            inputs.market_total = market.get("market_total")
+            if apply_market_blend:
+                inputs.market_spread_home = market.get("market_spread_home")
+                inputs.market_total = market.get("market_total")
             seed = _default_projection_seed(inputs.game_id, model_version, simulations)
             proj = simulate_nba_game(
                 inputs,
@@ -8347,6 +8521,17 @@ def run_nba_walkforward_sample(
             1
             for r in wf_rows
             if r.close_spread_home is not None or r.close_total is not None
+        )
+        summary["close_line_join"] = {
+            "scanned_candidates": scanned,
+            "graded": len(wf_rows),
+            "join_misses": join_misses,
+            "prefer_odds_window": prefer_odds_window,
+            "apply_market_blend": apply_market_blend,
+        }
+        summary["publish_posture"] = board_publish_posture(
+            n_with_close_lines=int(summary["n_with_close_lines"]),
+            ats=summary.get("model_vs_close_ats_cover_rate"),
         )
         return summary
     except Exception:
@@ -8404,6 +8589,91 @@ def run_nba_phase1_bootstrap(
         "context": context,
         "walkforward": walkforward,
         "inventory_after": inventory_after,
+    }
+
+
+@celery_app.task(name="src.tasks.run_nba_phase2_calibrate")
+def run_nba_phase2_calibrate(
+    *,
+    repair_abbrs: bool = True,
+    walkforward_games: int = 80,
+    simulations: int = 1000,
+    densify_odds: bool = False,
+    max_credit_spend: int = 0,
+) -> Dict[str, Any]:
+    """Phase 2: repair close-line join → walkforward with real closes → posture."""
+    inventory_before = nba_db_inventory()
+    repair: Dict[str, Any] = {"status": "skipped"}
+    if repair_abbrs:
+        repair = repair_nba_odds_team_abbrs()
+    densify: Dict[str, Any] = {"status": "skipped_by_flag"}
+    if densify_odds and max_credit_spend > 0:
+        densify = pull_nba_historical_odds_densify(max_credit_spend=max_credit_spend)
+    walkforward = run_nba_walkforward_sample(
+        limit_games=walkforward_games,
+        simulations=simulations,
+        prefer_odds_window=True,
+        apply_market_blend=True,
+    )
+    # Raw (no blend) diagnostic pass on a smaller sample for blend_hint honesty.
+    raw_diag = run_nba_walkforward_sample(
+        limit_games=min(40, walkforward_games),
+        simulations=max(400, simulations // 2),
+        prefer_odds_window=True,
+        apply_market_blend=False,
+    )
+    context = pull_nba_context_snapshot(days_ahead=3)
+    sims = run_nba_market_simulations(simulations=2000)
+    inventory_after = nba_db_inventory()
+    return {
+        "status": "ok",
+        "phase": "phase2",
+        "worker_build_id": NBA_WORKER_BUILD_ID,
+        "inventory_before": inventory_before,
+        "repair_abbrs": repair,
+        "densify": densify,
+        "walkforward": walkforward,
+        "walkforward_raw_no_blend": raw_diag,
+        "context": context,
+        "simulations": sims,
+        "inventory_after": inventory_after,
+    }
+
+
+@celery_app.task(name="src.tasks.run_nba_daily_cycle")
+def run_nba_daily_cycle(
+    *,
+    days_ahead: int = 3,
+    simulations: int = 4000,
+    model_version: str = DEFAULT_NBA_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Nightly/beat: rolling features → context → sim → persist (when slate exists)."""
+    features = materialize_nba_team_rolling_features(
+        days_back=int(os.getenv("NBA_ROLLING_DAYS_BACK", "45")),
+        window_games=10,
+    )
+    context = pull_nba_context_snapshot(days_ahead=days_ahead)
+    games_assembled = int(context.get("games_context_updated") or 0)
+    sims: Dict[str, Any]
+    if games_assembled > 0:
+        sims = run_nba_market_simulations(
+            simulations=simulations,
+            model_version=model_version,
+        )
+    else:
+        sims = {
+            "status": "skipped_empty_slate",
+            "note": "Offseason / no upcoming games — honest empty, no fake projections",
+            "processed": 0,
+            "inserted": 0,
+        }
+    return {
+        "status": "ok",
+        "phase": "phase2",
+        "worker_build_id": NBA_WORKER_BUILD_ID,
+        "features": features,
+        "context": context,
+        "simulations": sims,
     }
 
 
