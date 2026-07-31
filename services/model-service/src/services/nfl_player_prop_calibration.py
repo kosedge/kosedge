@@ -46,6 +46,9 @@ FROZEN_STD_MULTIPLIER: Dict[str, float] = {
 # Mild market shrink for solid roles keeps means playable vs books without
 # inventing edges (pulls inflated YPA/volume toward the close). Stronger
 # shrink when role confidence is weak (backup / uncertain involvement).
+# IMPORTANT: callers must pass *effective* role_confidence (depth / usage-rank
+# floors applied). The raw features-table involvement score has p50 ≈ 0.20 and
+# must not be compared to LOW_ROLE_CONFIDENCE=0.55 or every prop looks weak.
 # Stake PLAY tags remain gated separately and stay research-only until
 # a pre-registered holdout confirms.
 MARKET_SHRINK_BASE = 0.12

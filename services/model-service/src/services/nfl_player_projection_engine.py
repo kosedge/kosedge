@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any, Dict, Iterable, Mapping
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -490,6 +490,83 @@ def depth_role_confidence_floor(position: str, depth_order: float | None) -> flo
     return None
 
 
+def usage_rank_depth_orders(
+    players: Iterable[Mapping[str, Any]],
+    *,
+    positions: Iterable[str],
+    usage_key: str,
+) -> Dict[str, Dict[str, float]]:
+    """Assign depth_order 1..n within team from trailing usage when chart misses.
+
+    Production failure (2025 W17 props board): official depth-chart joins miss
+    for many WR1s (id / week gaps), so depth floors never fire and receiving
+    means collapse to ~12–20 yd against 40–90 yd books — then PLAY tags the
+    residual as Under. Ranking by the same usage share the feature table
+    already stores (target_proxy / rush_share) restores a leakage-safe depth
+    prior without inventing market-driven volume.
+    """
+    pos_set = {str(p or "").upper() for p in positions}
+    # Rank within team × position so WR1 and TE1 can both be depth_order=1.
+    buckets: Dict[tuple[str, str], list[tuple[float, str]]] = {}
+    for row in players:
+        pos = str(row.get("position") or "").upper()
+        if pos not in pos_set:
+            continue
+        team = str(row.get("team") or "").strip().upper()
+        pid = str(row.get("player_id") or "").strip()
+        if not team or not pid:
+            continue
+        usage = _safe_float(row.get(usage_key), 0.0)
+        buckets.setdefault((team, pos), []).append((usage, pid))
+
+    out: Dict[str, Dict[str, float]] = {}
+    for (team, _pos), items in buckets.items():
+        # Stable: higher usage first; player_id tie-break.
+        ordered = sorted(items, key=lambda it: (-it[0], it[1]))
+        team_map = out.setdefault(team, {})
+        for idx, (_usage, pid) in enumerate(ordered, start=1):
+            team_map[pid] = float(idx)
+    return out
+
+
+def merge_depth_orders(
+    primary: Mapping[str, Mapping[str, float]] | None,
+    fallback: Mapping[str, Mapping[str, float]] | None,
+) -> Dict[str, Dict[str, float]]:
+    """Chart depth wins; usage-rank fills missing player_ids only."""
+    merged: Dict[str, Dict[str, float]] = {}
+    for team, cmap in (primary or {}).items():
+        merged[str(team)] = {str(pid): float(depth) for pid, depth in dict(cmap).items()}
+    for team, fmap in (fallback or {}).items():
+        slot = merged.setdefault(str(team), {})
+        for pid, depth in dict(fmap).items():
+            slot.setdefault(str(pid), float(depth))
+    return merged
+
+
+def effective_skill_role_confidence(
+    *,
+    position: str,
+    role_confidence: float,
+    depth_order: float | None,
+    rush_share: float = 0.0,
+) -> float:
+    """Apply the same depth / bell-cow floors used by baseline + box materializers.
+
+    Props edge tagging historically read the compact involvement score from
+    `nfl_player_projection_features_weekly` (skill p50 ≈ 0.20) and compared it
+    to starter-probability thresholds (0.55), so every prop looked "low role".
+    """
+    role = _clamp(_safe_float(role_confidence, 0.65), 0.0, 1.0)
+    pos = (position or "").upper()
+    floor = depth_role_confidence_floor(pos, depth_order)
+    if floor is not None:
+        role = max(role, float(floor))
+    if pos in {"RB", "FB", "HB"} and float(rush_share or 0.0) >= 0.55:
+        role = max(role, 0.84)
+    return role
+
+
 def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, Any]:
     position = (inputs.position or "").upper()
     volume_signal = _clamp(
@@ -925,6 +1002,7 @@ def evaluate_prop_edge(
     position: str = "",
     role_confidence: float | None = None,
     availability_confidence: float | None = None,
+    raw_model_mean: float | None = None,
 ) -> Dict[str, Any]:
     # De-vig + PLAY/WATCH tags live in nfl_prop_edge_policy (enterprise path).
     from .nfl_prop_edge_policy import evaluate_prop_edge as _evaluate_prop_edge
@@ -939,6 +1017,7 @@ def evaluate_prop_edge(
         position=position,
         role_confidence=role_confidence,
         availability_confidence=availability_confidence,
+        raw_model_mean=raw_model_mean,
     )
 
 

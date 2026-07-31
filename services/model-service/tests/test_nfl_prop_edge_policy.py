@@ -132,6 +132,43 @@ def test_disagreement_gate_blocks_fake_unders() -> None:
     assert tag["tag_reason"] == "model_market_disagreement"
 
 
+def test_role_collapse_blocks_under_play_from_crushed_raw() -> None:
+    """Featured WR1 raw << line must not become PLAY Under (live W17 failure)."""
+    tag = classify_prop_tag(
+        market_key="rec_yds",
+        position="WR",
+        z_over=-0.75,
+        edge_over=-0.08,
+        edge_under=0.08,
+        market_joined=True,
+        model_mean=24.0,
+        line=41.5,
+        role_confidence=0.88,
+        availability_confidence=0.9,
+        raw_model_mean=12.7,
+    )
+    assert tag["tag"] == "PASS"
+    assert tag["tag_reason"] == "model_role_collapse"
+
+
+def test_role_collapse_does_not_block_healthy_under() -> None:
+    tag = classify_prop_tag(
+        market_key="rec_yds",
+        position="WR",
+        z_over=-0.70,
+        edge_over=-0.07,
+        edge_under=0.07,
+        market_joined=True,
+        model_mean=48.0,
+        line=58.5,
+        role_confidence=0.88,
+        availability_confidence=0.9,
+        raw_model_mean=46.0,
+    )
+    assert tag["tag"] == "PLAY"
+    assert tag["tag_side"] == "Under"
+
+
 def test_anytime_td_poisson() -> None:
     p = anytime_td_prob_from_td_mean(0.55)
     assert 0.35 < p < 0.55

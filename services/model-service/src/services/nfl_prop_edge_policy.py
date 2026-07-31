@@ -44,11 +44,23 @@ MAX_ABS_MEAN_GAP = {
     "anytime_td": 0.30,
 }
 
-# role_confidence in nfl_player_projection_features_weekly is a compact
-# involvement score (skill-position p50 ≈ 0.20 in 2025 W17) — NOT a 0–1
-# "probability of being the starter". Gate scraps, not starters.
-MIN_ROLE_CONFIDENCE_PLAY = 0.12
+# After props materializer applies depth / usage-rank floors, role_confidence
+# is on the starter-probability scale (WR1 ≈ 0.88). Raw involvement scores
+# (~0.20) must be floored before reaching this gate — see
+# effective_skill_role_confidence(). Still allow None (unknown) through.
+MIN_ROLE_CONFIDENCE_PLAY = 0.50
 MIN_AVAILABILITY_CONFIDENCE_PLAY = 0.50
+
+# Refuse Under tags when the *raw* (pre-shrink) mean implies role collapse
+# vs the book. Live 2025 W17: featured WR1s raw ≈ line − 14 yd; PLAY Unders
+# were the residual just inside MAX_ABS_MEAN_GAP — model failure, not edge.
+ROLE_COLLAPSE_RAW_FRAC = 0.55
+ROLE_COLLAPSE_MIN_LINE = {
+    "pass_yds": 180.0,
+    "rush_yds": 25.0,
+    "rec_yds": 25.0,
+    "receptions": 3.5,
+}
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -115,6 +127,7 @@ def evaluate_prop_edge(
     position: str = "",
     role_confidence: Optional[float] = None,
     availability_confidence: Optional[float] = None,
+    raw_model_mean: Optional[float] = None,
 ) -> Dict[str, Any]:
     """Model CDF vs de-vigged market mid, plus PLAY/WATCH/PASS tag."""
     bounded_std = max(0.65, float(model_std))
@@ -146,6 +159,7 @@ def evaluate_prop_edge(
         line=float(line),
         role_confidence=role_confidence,
         availability_confidence=availability_confidence,
+        raw_model_mean=raw_model_mean,
     )
 
     return {
@@ -182,6 +196,26 @@ def _favored_side(
     return side, edge_mag
 
 
+def _role_collapse_under(
+    *,
+    market_key: str,
+    line: Optional[float],
+    raw_model_mean: Optional[float],
+    side: Optional[str],
+) -> bool:
+    """True when Under favor is driven by a collapsed raw projection vs book."""
+    if side != "Under" or line is None or raw_model_mean is None:
+        return False
+    min_line = ROLE_COLLAPSE_MIN_LINE.get(str(market_key or ""))
+    if min_line is None:
+        return False
+    line_f = float(line)
+    raw_f = float(raw_model_mean)
+    if line_f < float(min_line) or line_f <= 0.0:
+        return False
+    return raw_f < (ROLE_COLLAPSE_RAW_FRAC * line_f)
+
+
 def classify_prop_tag(
     *,
     market_key: str,
@@ -194,6 +228,7 @@ def classify_prop_tag(
     line: Optional[float] = None,
     role_confidence: Optional[float] = None,
     availability_confidence: Optional[float] = None,
+    raw_model_mean: Optional[float] = None,
 ) -> Dict[str, Any]:
     """Selective staking tags grounded in calibrated Vegas cuts."""
     if not market_joined:
@@ -232,6 +267,21 @@ def classify_prop_tag(
             "size_down": False,
             "stake_eligible": False,
             "tag_reason": "below_watch_floor",
+        }
+
+    if _role_collapse_under(
+        market_key=mk,
+        line=line,
+        raw_model_mean=raw_model_mean,
+        side=side,
+    ):
+        return {
+            "tag": "PASS",
+            "tag_side": None,
+            "tag_action": None,
+            "size_down": False,
+            "stake_eligible": False,
+            "tag_reason": "model_role_collapse",
         }
 
     size_down = abs_z >= SIZE_DOWN_ABS_Z

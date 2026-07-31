@@ -8,10 +8,13 @@ from src.services.nfl_player_projection_engine import (
     compute_qb_starter_shares,
     compute_rb_rush_shares,
     depth_role_confidence_floor,
+    effective_skill_role_confidence,
     evaluate_prop_edge,
     fantasy_points_from_projection,
+    merge_depth_orders,
     qb_talent_factor_from_prior_ypg,
     skill_talent_factor_from_prior_ypg,
+    usage_rank_depth_orders,
 )
 
 
@@ -466,6 +469,33 @@ def test_low_role_confidence_does_not_crush_depth1_wr_when_floored() -> None:
     assert floored["receiving_yards_mean"] > crushed["receiving_yards_mean"]
     assert floored["receiving_yards_mean"] > 80.0
     assert skill_talent_factor_from_prior_ypg(100.0, position="WR") > 1.08
+
+
+def test_usage_rank_depth_fills_chart_gaps_for_wr1() -> None:
+    chart = {"MIN": {"other-wr": 2.0}}
+    usage = usage_rank_depth_orders(
+        [
+            {"team": "MIN", "player_id": "addison", "position": "WR", "target_proxy": 0.22},
+            {"team": "MIN", "player_id": "jefferson", "position": "WR", "target_proxy": 0.31},
+            {"team": "MIN", "player_id": "other-wr", "position": "WR", "target_proxy": 0.11},
+            {"team": "MIN", "player_id": "hock", "position": "TE", "target_proxy": 0.14},
+        ],
+        positions=("WR", "TE"),
+        usage_key="target_proxy",
+    )
+    merged = merge_depth_orders(chart, usage)
+    # Chart depth wins for known ids.
+    assert merged["MIN"]["other-wr"] == 2.0
+    # Usage rank fills Jefferson as WR1 and Addison as WR2 (WR-only ranking).
+    assert merged["MIN"]["jefferson"] == 1.0
+    assert merged["MIN"]["addison"] == 2.0
+    # TE ranked separately — Hockenson is TE1, not WR3.
+    assert merged["MIN"]["hock"] == 1.0
+    assert effective_skill_role_confidence(
+        position="WR",
+        role_confidence=0.16,
+        depth_order=merged["MIN"]["jefferson"],
+    ) >= 0.88
 
 
 def test_elite_rb_season_rush_scale() -> None:

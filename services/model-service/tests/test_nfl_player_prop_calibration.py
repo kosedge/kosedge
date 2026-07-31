@@ -24,18 +24,19 @@ def test_apply_widens_std_and_applies_pass_intercept() -> None:
 
 
 def test_market_shrink_stronger_when_low_role() -> None:
+    # Use rush_yds: pass_yds solid-role base (0.32) already exceeds low-role (0.30).
     solid = apply_prop_calibration(
-        model_mean=200.0,
-        model_std=40.0,
-        market_key="pass_yds",
-        market_line=210.0,  # small gap — base shrink only
+        model_mean=70.0,
+        model_std=20.0,
+        market_key="rush_yds",
+        market_line=75.0,  # small gap — base shrink only
         role_confidence=0.8,
     )
     weak = apply_prop_calibration(
-        model_mean=200.0,
-        model_std=40.0,
-        market_key="pass_yds",
-        market_line=210.0,
+        model_mean=70.0,
+        model_std=20.0,
+        market_key="rush_yds",
+        market_line=75.0,
         role_confidence=0.4,
     )
     assert solid["market_shrink"] >= 0.12

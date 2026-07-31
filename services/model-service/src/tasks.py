@@ -95,10 +95,13 @@ from .services.nfl_player_projection_engine import (
     compute_qb_starter_shares,
     compute_rb_rush_shares,
     depth_role_confidence_floor,
+    effective_skill_role_confidence,
     evaluate_prop_edge,
     fantasy_points_from_projection,
+    merge_depth_orders,
     qb_talent_factor_from_prior_ypg,
     skill_talent_factor_from_prior_ypg,
+    usage_rank_depth_orders,
 )
 from .services.nfl_prop_edge_policy import anytime_td_prob_from_td_mean
 from .services.nfl_player_prop_calibration import (
@@ -3121,8 +3124,8 @@ def run_nfl_market_simulations(
     projection_created_at_mode: str = "now",
     kickoff_buffer_minutes: int = 30,
 ) -> Dict[str, Any]:
-    # Canary: proves which worker build executed (sanity fix 2026-07-30).
-    worker_build_id = "sanity-fix-20260730i-live-odds-blend"
+    # Canary: proves which worker build executed (props under-bias fix 2026-07-31).
+    worker_build_id = "props-under-bias-20260731a-usage-depth-role"
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
     processed = 0
@@ -9144,6 +9147,26 @@ def materialize_nfl_player_baseline_projections(
         )
         rb_depth_by_team = _rb_depth_orders_by_team(session, season=int(season), week=int(target_week))
         wr_te_depth_by_team = _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        # Official depth-chart joins miss for many skill players (id/week gaps).
+        # Fill from trailing usage ranks so WR1/RB1 floors still fire.
+        feature_maps = [
+            {
+                "team": str(r.team or ""),
+                "player_id": str(r.player_id or ""),
+                "position": str(r.position or ""),
+                "target_proxy": float(r.target_proxy or 0.0),
+                "rush_share": float(r.rush_share or 0.0),
+            }
+            for r in rows
+        ]
+        wr_te_depth_by_team = merge_depth_orders(
+            wr_te_depth_by_team,
+            usage_rank_depth_orders(feature_maps, positions=("WR", "TE"), usage_key="target_proxy"),
+        )
+        rb_depth_by_team = merge_depth_orders(
+            rb_depth_by_team,
+            usage_rank_depth_orders(feature_maps, positions=("RB", "FB", "HB"), usage_key="rush_share"),
+        )
         prior_snap_pcts = _skill_prior_offense_snap_pct_by_player(session, season=int(season))
         # Prefer same-week bridged snaps; fall back to prior-season averages.
         rb_snap_pcts_for_rooms = {**prior_snap_pcts, **rb_week_snap_pcts}
@@ -9675,6 +9698,24 @@ def materialize_nfl_player_box_score_sims(
         depth_orders_by_team = _qb_depth_orders_by_team(session, season=int(season), week=int(target_week))
         rb_depth_by_team = _rb_depth_orders_by_team(session, season=int(season), week=int(target_week))
         wr_te_depth_by_team = _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week))
+        box_feature_maps = [
+            {
+                "team": str(r.team or ""),
+                "player_id": str(r.player_id or ""),
+                "position": str(r.position or ""),
+                "target_proxy": float(r.target_proxy or 0.0),
+                "rush_share": float(r.rush_share or 0.0),
+            }
+            for r in rows
+        ]
+        wr_te_depth_by_team = merge_depth_orders(
+            wr_te_depth_by_team,
+            usage_rank_depth_orders(box_feature_maps, positions=("WR", "TE"), usage_key="target_proxy"),
+        )
+        rb_depth_by_team = merge_depth_orders(
+            rb_depth_by_team,
+            usage_rank_depth_orders(box_feature_maps, positions=("RB", "FB", "HB"), usage_key="rush_share"),
+        )
         qb_prior_production = _qb_prior_production_by_player(session, season=int(season))
         skill_prior_ypg = _skill_prior_ypg_by_player(session, season=int(season))
         prior_attempts_by_team_player = _qb_prior_attempts_by_team_player(session, season=int(season))
@@ -10116,20 +10157,52 @@ def materialize_nfl_player_props_edges(
         role_rows = session.execute(
             text(
                 """
-                SELECT player_id, team, role_confidence, availability_confidence
+                SELECT player_id, team, position, role_confidence, availability_confidence,
+                       target_proxy, rush_share
                 FROM nfl_player_projection_features_weekly
                 WHERE season = :season AND week = :week
                 """
             ),
             {"season": int(season), "week": int(target_week)},
         ).fetchall()
-        role_by_player: Dict[tuple[str, str], tuple[float, float]] = {
-            (str(r.player_id), str(r.team)): (
-                float(r.role_confidence or 0.65),
+        prop_feature_maps = [
+            {
+                "team": str(r.team or ""),
+                "player_id": str(r.player_id or ""),
+                "position": str(r.position or ""),
+                "target_proxy": float(r.target_proxy or 0.0),
+                "rush_share": float(r.rush_share or 0.0),
+            }
+            for r in role_rows
+        ]
+        wr_te_depth_props = merge_depth_orders(
+            _wr_te_depth_orders_by_team(session, season=int(season), week=int(target_week)),
+            usage_rank_depth_orders(prop_feature_maps, positions=("WR", "TE"), usage_key="target_proxy"),
+        )
+        rb_depth_props = merge_depth_orders(
+            _rb_depth_orders_by_team(session, season=int(season), week=int(target_week)),
+            usage_rank_depth_orders(prop_feature_maps, positions=("RB", "FB", "HB"), usage_key="rush_share"),
+        )
+        role_by_player: Dict[tuple[str, str], tuple[float, float]] = {}
+        for r in role_rows:
+            pos_u = str(r.position or "").upper()
+            team_u = str(r.team or "")
+            pid_u = str(r.player_id or "")
+            if pos_u in {"WR", "TE"}:
+                depth_ord = wr_te_depth_props.get(team_u, {}).get(pid_u)
+            elif pos_u in {"RB", "FB", "HB"}:
+                depth_ord = rb_depth_props.get(team_u, {}).get(pid_u)
+            else:
+                depth_ord = None
+            role_by_player[(pid_u, team_u)] = (
+                effective_skill_role_confidence(
+                    position=pos_u,
+                    role_confidence=float(r.role_confidence or 0.65),
+                    depth_order=depth_ord,
+                    rush_share=float(r.rush_share or 0.0),
+                ),
                 float(r.availability_confidence or 0.75),
             )
-            for r in role_rows
-        }
         baselines = session.execute(
             text(
                 """
@@ -10440,6 +10513,7 @@ def materialize_nfl_player_props_edges(
                         position=position,
                         role_confidence=role_conf,
                         availability_confidence=avail_conf,
+                        raw_model_mean=float(raw_mean),
                     )
                 else:
                     model_floor = max(0.0, model_mean - (1.0 * model_std))
@@ -10456,6 +10530,7 @@ def materialize_nfl_player_props_edges(
                         position=position,
                         role_confidence=role_conf,
                         availability_confidence=avail_conf,
+                        raw_model_mean=float(raw_mean),
                     )
                     if line is None:
                         # Projection-only row: no book to beat.
