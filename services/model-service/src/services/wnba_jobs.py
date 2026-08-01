@@ -616,6 +616,21 @@ def materialize_wnba_team_rolling_features(
             ),
             {"start": start, "as_of": as_of},
         ).fetchall()
+        # If the lookback misses (e.g. 2026 CDN denied → no fresh boxes yet),
+        # fall back to latest available gamelog rows so rolling priors exist.
+        if not rows:
+            rows = session.execute(
+                text(
+                    """
+                    SELECT team_key, game_date, pace, ortg, drtg, three_pt_rate, three_pt_pct,
+                           two_pt_pct, ft_rate, ft_pct, to_rate, orb_rate
+                    FROM wnba_team_game_features
+                    WHERE game_date <= :as_of
+                    ORDER BY team_key, game_date DESC
+                    """
+                ),
+                {"as_of": as_of},
+            ).fetchall()
         by_team: Dict[str, List[Dict[str, Any]]] = {}
         for r in rows:
             m = dict(r._mapping)
@@ -694,10 +709,8 @@ def pull_wnba_context_snapshot(days_ahead: int = 3) -> Dict[str, int]:
     updated = 0
     try:
         ensure_wnba_model_tables(session)
-        try:
-            pull_wnba_schedule_ingest(days_back=2, days_ahead=days_ahead)
-        except Exception:
-            log.warning("WNBA schedule ingest soft-failed inside context snapshot")
+        # Do NOT nest schedule ingest here — it can wedge the models worker under
+        # lock contention. Run POST /api/jobs/pull-wnba-ingest separately.
 
         end = date.today() + timedelta(days=max(0, days_ahead))
         games = session.execute(
