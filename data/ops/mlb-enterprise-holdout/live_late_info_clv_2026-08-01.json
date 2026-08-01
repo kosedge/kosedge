@@ -1,0 +1,35 @@
+{
+  "status": "ok",
+  "start_date": "2026-05-20",
+  "end_date": "2026-07-17",
+  "model_version": "mlb-v1-pa-sim",
+  "max_hours": 3.0,
+  "late_info_n": 0,
+  "clv": null,
+  "lake": {
+    "lake_dir": "/app/data/mlb/lineup_sp_snapshots",
+    "jsonl_files": 638,
+    "total_snapshots": 3180,
+    "live_source_games": 10,
+    "densify_reconstruct_only_games": 628,
+    "late_info_live_n": 0,
+    "max_hours": 3.0,
+    "note": "Live \u22643h CLV requires nowcast-persisted confirms. Densify reconstruct cannot invent confirm clocks; n=0 means needs live accumulation."
+  },
+  "recommendation": {
+    "ship_late_info_slice": false,
+    "note": "Live \u22643h snapshot lake has no confirmed late-info games yet. Keep nowcast persistence; do not fake densify late-info n."
+  },
+  "unused_holdout": {
+    "title": "MLB enterprise unused holdout (fallback constants)",
+    "status": "frozen_unused",
+    "registered_at": null,
+    "source": "fallback_constants",
+    "window_count": 2,
+    "date_count": 23,
+    "first_date": "2026-07-18",
+    "last_date": "2026-08-10",
+    "props_play_stake_eligible": false,
+    "stake_marketing_requires_unused_pass": true
+  }
+}
