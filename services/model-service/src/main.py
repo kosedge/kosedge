@@ -1817,7 +1817,8 @@ def job_mlb_lineup_nowcast_repricing(
 def job_mlb_walkforward_backtest(
     model_version: str = Query("mlb-v1-pa-sim"),
     lookback_days: int = Query(180, ge=30, le=730),
-    training_days: int = Query(45, ge=14, le=365),
+    # Midseason densify windows often need short folds (local ops uses 10).
+    training_days: int = Query(45, ge=7, le=365),
     step_days: int = Query(7, ge=1, le=30),
     apply_calibration: bool = Query(True),
 ) -> Dict[str, str]:
@@ -1933,6 +1934,14 @@ def job_mlb_historical_resim(
     simulations: int = Query(2000, ge=500, le=10000),
     model_version: str = Query("mlb-v1-pa-sim"),
     max_games: int = Query(200, ge=1, le=2000),
+    force_resim: bool = Query(
+        False,
+        description="Delete existing projections in-window and re-sim with current PA-sim features",
+    ),
+    skip_outcomes_pull: bool = Query(
+        False,
+        description="Skip MLB Stats API outcomes pull (implied when force_resim=true)",
+    ),
 ) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(
@@ -1943,6 +1952,8 @@ def job_mlb_historical_resim(
                 "simulations": int(simulations),
                 "model_version": model_version,
                 "max_games": int(max_games),
+                "force_resim": bool(force_resim),
+                "skip_outcomes_pull": bool(skip_outcomes_pull or force_resim),
             },
         )
         return {"task_id": async_result.id, "task_name": TASK_MLB_HISTORICAL_RESIM}
