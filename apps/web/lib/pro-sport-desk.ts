@@ -340,15 +340,23 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     pathSubtitle:
       "WNBA desk path: Fair Lines → Edges → Props, with usage and travel into execution.",
     cards: [
-      stubFairLines("wnba", "spread / total / ML"),
+      {
+        href: "/pro/wnba/fair-lines",
+        title: "Fair Lines",
+        description:
+          "Possession-sim ML / spread / total reference board — research only. Harmonic-mean pace, 40-min scaling.",
+        cta: "Open fair lines →",
+        accent: "gold",
+        status: "active",
+      },
       stubEdges(
         "wnba",
-        "Thresholded game edges once the WNBA model board is connected.",
+        "Thresholded game edges from WNBA fair lines vs live books.",
       ),
       stubThirdCard(
         "wnba",
         "Props",
-        "Player props staged for launch once usage feeds clear validation.",
+        "Player props (pts/reb/ast/threes) research board — role-collapse Under refusal; never stake-eligible.",
       ),
     ],
     footerCards: [

@@ -95,6 +95,15 @@ TASK_NBA_ROLLING_FEATURES = os.getenv(
     "TASK_NBA_ROLLING_FEATURES", "src.tasks.materialize_nba_team_rolling_features"
 )
 TASK_NBA_DAILY_CYCLE = os.getenv("TASK_NBA_DAILY_CYCLE", "src.tasks.run_nba_daily_cycle")
+TASK_PULL_WNBA_CONTEXT = os.getenv("TASK_PULL_WNBA_CONTEXT", "src.tasks.pull_wnba_context_snapshot")
+TASK_RUN_WNBA_SIMULATIONS = os.getenv(
+    "TASK_RUN_WNBA_SIMULATIONS", "src.tasks.run_wnba_market_simulations"
+)
+TASK_PULL_WNBA_INGEST = os.getenv("TASK_PULL_WNBA_INGEST", "src.tasks.pull_wnba_schedule_ingest")
+TASK_WNBA_ROLLING_FEATURES = os.getenv(
+    "TASK_WNBA_ROLLING_FEATURES", "src.tasks.materialize_wnba_team_rolling_features"
+)
+TASK_WNBA_DAILY_CYCLE = os.getenv("TASK_WNBA_DAILY_CYCLE", "src.tasks.run_wnba_daily_cycle")
 TASK_MLB_NOWCAST_REPRICING = os.getenv(
     "TASK_MLB_NOWCAST_REPRICING",
     "src.tasks.run_mlb_lineup_nowcast_repricing",
@@ -249,6 +258,50 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "kwargs": {
             "days_back": int(os.getenv("NBA_ROLLING_DAYS_BACK", "30")),
             "window_games": int(os.getenv("NBA_ROLLING_WINDOW_GAMES", "10")),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    # WNBA Phase 0–3 — May–Oct in-season; empty slate honest offseason.
+    "pull-wnba-ingest-morning": {
+        "task": TASK_PULL_WNBA_INGEST,
+        "schedule": crontab(minute="22", hour="6"),
+        "kwargs": {
+            "days_back": int(os.getenv("WNBA_INGEST_DAYS_BACK", "7")),
+            "days_ahead": int(os.getenv("WNBA_INGEST_DAYS_AHEAD", "3")),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "pull-wnba-context-morning": {
+        "task": TASK_PULL_WNBA_CONTEXT,
+        "schedule": crontab(minute="32", hour="6"),
+        "kwargs": {"days_ahead": int(os.getenv("WNBA_CONTEXT_DAYS_AHEAD", "3"))},
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-wnba-simulations-morning": {
+        "task": TASK_RUN_WNBA_SIMULATIONS,
+        "schedule": crontab(minute="42", hour="6"),
+        "kwargs": {
+            "simulations": int(os.getenv("WNBA_SIM_DAILY_COUNT", "4000")),
+            "model_version": os.getenv("WNBA_BASE_MODEL_VERSION", "wnba-v1-poss-sim"),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "run-wnba-daily-cycle-3am": {
+        "task": TASK_WNBA_DAILY_CYCLE,
+        "schedule": crontab(minute="48", hour="3"),
+        "kwargs": {
+            "days_ahead": int(os.getenv("WNBA_CONTEXT_DAYS_AHEAD", "3")),
+            "simulations": int(os.getenv("WNBA_SIM_DAILY_COUNT", "4000")),
+            "model_version": os.getenv("WNBA_BASE_MODEL_VERSION", "wnba-v1-poss-sim"),
+        },
+        "options": {"queue": MODELS_QUEUE},
+    },
+    "materialize-wnba-rolling-features-nightly": {
+        "task": TASK_WNBA_ROLLING_FEATURES,
+        "schedule": crontab(minute="52", hour="3"),
+        "kwargs": {
+            "days_back": int(os.getenv("WNBA_ROLLING_DAYS_BACK", "45")),
+            "window_games": int(os.getenv("WNBA_ROLLING_WINDOW_GAMES", "10")),
         },
         "options": {"queue": MODELS_QUEUE},
     },

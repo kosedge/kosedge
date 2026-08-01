@@ -13,6 +13,8 @@ import { keiGamesFromMlbFairLines } from "@/lib/mlb-kei-from-fair-lines";
 import { fetchNbaFairLines } from "@/lib/nba-fair-lines";
 import { keiGamesFromNbaFairLines } from "@/lib/nba-kei-from-fair-lines";
 import { fetchNflFairLines, type NflFairLineRow } from "@/lib/nfl-fair-lines";
+import { fetchWnbaFairLines } from "@/lib/wnba-fair-lines";
+import { keiGamesFromWnbaFairLines } from "@/lib/wnba-kei-from-fair-lines";
 
 const NFL_KEI_SEASON = 2026;
 
@@ -67,6 +69,17 @@ export async function resolveKeiGames(
       const board = await fetchNbaFairLines({ daysAhead: 5 });
       if (board.lines.length > 0) {
         return keiGamesFromNbaFairLines(board.lines);
+      }
+    } catch {
+      // fall through to file export
+    }
+  }
+
+  if (sport === "wnba") {
+    try {
+      const board = await fetchWnbaFairLines({ daysAhead: 5 });
+      if (board.lines.length > 0) {
+        return keiGamesFromWnbaFairLines(board.lines);
       }
     } catch {
       // fall through to file export
