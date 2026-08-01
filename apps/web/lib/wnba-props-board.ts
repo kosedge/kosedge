@@ -74,7 +74,7 @@ export async function fetchWnbaPropsBoard(options?: {
   const url = `${base}/wnba/props/board?${params.toString()}`;
   try {
     const res = await upstreamFetch(url, {
-      timeoutMs: UPSTREAM_TIMEOUT_MS.fairLines,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
       headers: env.INTERNAL_API_SECRET
         ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
         : undefined,
