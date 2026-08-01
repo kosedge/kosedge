@@ -686,7 +686,7 @@ export const NHL_TEAM_DIRECTORY: TeamDirectoryEntry[] = [
   },
 ];
 
-/** WNBA — 13 teams (incl. Golden State Valkyries) */
+/** WNBA — 15 teams (2026 expansion: Portland Fire + Toronto Tempo) */
 export const WNBA_TEAM_DIRECTORY: TeamDirectoryEntry[] = [
   { slug: "atl", code: "ATL", name: "Atlanta Dream", conference: "Eastern" },
   { slug: "chi", code: "CHI", name: "Chicago Sky", conference: "Eastern" },
@@ -704,7 +704,9 @@ export const WNBA_TEAM_DIRECTORY: TeamDirectoryEntry[] = [
   { slug: "min", code: "MIN", name: "Minnesota Lynx", conference: "Western" },
   { slug: "ny", code: "NY", name: "New York Liberty", conference: "Eastern" },
   { slug: "phx", code: "PHX", name: "Phoenix Mercury", conference: "Western" },
+  { slug: "por", code: "POR", name: "Portland Fire", conference: "Western" },
   { slug: "sea", code: "SEA", name: "Seattle Storm", conference: "Western" },
+  { slug: "tor", code: "TOR", name: "Toronto Tempo", conference: "Eastern" },
   {
     slug: "wsh",
     code: "WSH",

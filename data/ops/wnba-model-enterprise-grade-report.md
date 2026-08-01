@@ -22,7 +22,7 @@
 2. **Harmonic-mean pace** — expected game pace = `2ab/(a+b)` (not arithmetic).
 3. **League priors** — pace 81, ORtg/DRtg 103, home court 2.25, 3PT rate ~0.34.
 4. **Season year** — tip year / May-start rule (`wnba_season_year_from_date`).
-5. **13-team map** — ATL/CHI/CON/DAL/GSV/IND/LAS/LA/MIN/NY/PHX/SEA/WSH + aliases LVA→LAS, NYL→NY, WAS→WSH.
+5. **15-team map (2026)** — ATL/CHI/CON/DAL/GSV/IND/LAS/LA/MIN/NY/PHX/POR/SEA/TOR/WSH + aliases LVA→LAS, GS→GSV, NYL→NY, WAS→WSH (Portland Fire + Toronto Tempo expansion).
 6. **Abbr collisions** — all hierarchy joins use `leagues.code='wnba'`.
 7. **Props** — 40-min minutes cap; higher usage soft-scale; role-collapse Under refuse.
 

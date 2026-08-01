@@ -11,12 +11,17 @@ from src.services.wnba_data import (
 )
 
 
-def test_thirteen_team_directory() -> None:
-    assert len(WNBA_TEAM_ABBREV) == 13
+def test_fifteen_team_directory() -> None:
+    assert len(WNBA_TEAM_ABBREV) == 15
     assert "Golden State Valkyries" in WNBA_TEAM_ABBREV
     assert WNBA_TEAM_ABBREV["Las Vegas Aces"] == "LAS"
     assert WNBA_TEAM_ABBREV["New York Liberty"] == "NY"
     assert WNBA_TEAM_ABBREV["Washington Mystics"] == "WSH"
+    assert WNBA_TEAM_ABBREV["Portland Fire"] == "POR"
+    assert WNBA_TEAM_ABBREV["Toronto Tempo"] == "TOR"
+    assert normalize_team_key("GS") == "GSV"
+    assert normalize_team_key("POR") == "POR"
+    assert normalize_team_key("Toronto Tempo") == "TOR"
 
 
 def test_abbr_aliases_avoid_nba_collision_confusion() -> None:
