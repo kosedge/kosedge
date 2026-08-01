@@ -21,7 +21,9 @@ import requests
 
 SAVANT_SEARCH_CSV = "https://baseballsavant.mlb.com/statcast_search/csv"
 MIN_PITCHES_STUFF = 200
-CACHE_DIR = Path(os.getenv("MLB_STATCAST_CACHE_DIR") or "data/mlb/statcast_cache")
+_DEFAULT_CACHE = Path(__file__).resolve().parents[3] / "data" / "mlb" / "statcast_cache"
+# Prefer env; else services/model-service/data/... (Railway --path-as-root), else repo-root data/.
+CACHE_DIR = Path(os.getenv("MLB_STATCAST_CACHE_DIR") or _DEFAULT_CACHE)
 
 # Approximate MLB pitcher means / spreads for z-scores (stuff → run-allowed factor).
 LEAGUE_WHIFF_PCT = 0.112  # whiffs / pitches
