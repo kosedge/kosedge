@@ -14,7 +14,10 @@ MLB_STATS_API = "https://statsapi.mlb.com/api/v1"
 #   kbb_only (S3 trial): predictive K/BB/GB shape only (no ERA/WHIP)
 #   fip_proxy (SP talent v2): FIP from HR/BB/HBP/K/IP counting stats
 #   xfip_proxy (SP talent v2): xFIP-style, HR replaced by GB/AO-implied expected HR
-STARTER_QUALITY_MODES = frozenset({"era_whip", "kbb_only", "fip_proxy", "xfip_proxy"})
+#   stuff_proxy (Statcast as-of): whiff/chase/zone/EV/barrel → quality (else KBB)
+STARTER_QUALITY_MODES = frozenset(
+    {"era_whip", "kbb_only", "fip_proxy", "xfip_proxy", "stuff_proxy"}
+)
 STARTER_QUALITY_MODE = (os.getenv("MLB_STARTER_QUALITY_MODE") or "era_whip").strip().lower()
 
 # FIP constant (~MLB recent); quality maps relative to league-average FIP.
@@ -392,6 +395,13 @@ def extract_probable_pitchers_from_live_feed(payload: Dict[str, Any]) -> Dict[st
     return out
 
 
+def clear_game_lineup_features_cache() -> None:
+    """Drop stale feed/live lineup cache (nowcast must see late cards / SP flips)."""
+    cache_fn = globals().get("fetch_game_lineup_features")
+    if cache_fn is not None and hasattr(cache_fn, "cache_clear"):
+        cache_fn.cache_clear()
+
+
 @lru_cache(maxsize=512)
 def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
     response = requests.get(
@@ -417,12 +427,28 @@ def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
         weighted_ops = 0.0
         total_weight = 0.0
         player_summaries: List[Dict[str, Any]] = []
+        pitcher_slots = 0
         for slot in sorted(lineup_by_slot):
             player = lineup_by_slot[slot]
             batting = (player.get("seasonStats") or {}).get("batting") or {}
             ops = _safe_rate(batting.get("ops"))
             plate_appearances = _safe_float(batting.get("plateAppearances"))
+            pos_abbr = ((player.get("position") or {}).get("abbreviation") or "").upper()
             weight = LINEUP_ORDER_WEIGHTS.get(slot, 1.0)
+            # Universal DH: skip pitcher batting slots so they do not dilute OPS.
+            if pos_abbr == "P":
+                pitcher_slots += 1
+                player_summaries.append(
+                    {
+                        "slot": slot,
+                        "name": (player.get("person") or {}).get("fullName"),
+                        "ops": ops,
+                        "plate_appearances": plate_appearances,
+                        "position": pos_abbr,
+                        "excluded_from_strength": True,
+                    }
+                )
+                continue
             if ops is not None:
                 weighted_ops += ops * weight
                 total_weight += weight
@@ -432,19 +458,21 @@ def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
                     "name": (player.get("person") or {}).get("fullName"),
                     "ops": ops,
                     "plate_appearances": plate_appearances,
-                    "position": ((player.get("position") or {}).get("abbreviation") or ""),
+                    "position": pos_abbr,
                 }
             )
 
         lineup_ops = (weighted_ops / total_weight) if total_weight > 0 else None
+        batting_known = len(lineup_by_slot) - pitcher_slots
         out[side] = {
             "lineup_strength_index": _rate_index(lineup_ops),
             "weighted_ops": lineup_ops,
-            "known_players": len(lineup_by_slot),
+            "known_players": batting_known,
             "players": player_summaries,
-            "lineup_confirmed": len(lineup_by_slot) >= 8,
+            "lineup_confirmed": batting_known >= 8,
             "probable_pitcher": live_pitchers.get(side),
             "source": "feed/live",
+            "fetched_ok": True,
         }
     return out
 
@@ -540,7 +568,7 @@ def fetch_mlb_schedule(start_date: date, end_date: date) -> List[Dict[str, Any]]
         "sportId": 1,  # MLB
         "startDate": _iso_date(start_date),
         "endDate": _iso_date(end_date),
-        "hydrate": "probablePitcher,team,linescore,venue,weather,decisions,officials",
+        "hydrate": "probablePitcher,team,linescore,venue,weather,decisions,officials,lineups",
     }
     response = requests.get(f"{MLB_STATS_API}/schedule", params=params, timeout=20)
     response.raise_for_status()
@@ -748,8 +776,11 @@ def lineup_confidence(
     lineup_confirmed: bool,
     probable_pitcher_home: Optional[str],
     probable_pitcher_away: Optional[str],
+    known_home: Optional[int] = None,
+    known_away: Optional[int] = None,
 ) -> Dict[str, float]:
     # Confidence in modeled batting context (0..1). Starter confirmation helps even if lineup not final.
+    # When per-side known counts are provided, allow mild asymmetry (timing sharp path).
     base = 0.75
     if lineup_confirmed:
         base += 0.20
@@ -758,7 +789,15 @@ def lineup_confidence(
     if probable_pitcher_away:
         base += 0.025
     c = max(0.35, min(1.0, base))
-    return {"home": c, "away": c}
+    if known_home is None and known_away is None:
+        return {"home": c, "away": c}
+    home = c
+    away = c
+    if known_home is not None:
+        home = max(0.35, min(1.0, c + (0.04 if int(known_home) >= 8 else -0.04 if int(known_home) < 5 else 0.0)))
+    if known_away is not None:
+        away = max(0.35, min(1.0, c + (0.04 if int(known_away) >= 8 else -0.04 if int(known_away) < 5 else 0.0)))
+    return {"home": home, "away": away}
 
 
 def _select_pitcher_candidate(people: List[Dict[str, Any]], normalized_name: str) -> Optional[Dict[str, Any]]:
@@ -879,6 +918,7 @@ def _starter_features_from_stat(
     )
 
     mode = STARTER_QUALITY_MODE
+    stuff_meta: Optional[Dict[str, Any]] = None
     if mode == "kbb_only":
         starter_quality = _quality_from_kbb_shape(
             k_per_9=k_per_9,
@@ -905,6 +945,34 @@ def _starter_features_from_stat(
                 bb_per_9=bb_per_9,
                 ground_outs_to_air_outs=ground_outs_to_air_outs,
             )
+    elif mode == "stuff_proxy":
+        # Statcast as-of arsenal proxies; thin/missing → KBB (never ERA leak).
+        from .mlb_statcast_stuff import get_pitcher_stuff_as_of, quality_from_stuff_metrics
+
+        stuff_as_of = as_of or date.today()
+        stuff = get_pitcher_stuff_as_of(
+            int(player_id),
+            as_of=stuff_as_of,
+            season=season,
+            fetch_if_missing=True,
+        )
+        if stuff is not None:
+            starter_quality = quality_from_stuff_metrics(stuff)
+            stuff_meta = {
+                "whiff_pct": round(float(stuff.get("whiff_pct") or 0), 4),
+                "chase_pct": round(float(stuff.get("chase_pct") or 0), 4),
+                "zone_pct": round(float(stuff.get("zone_pct") or 0), 4),
+                "avg_ev": round(float(stuff.get("avg_ev") or 0), 3),
+                "barrel_pct": round(float(stuff.get("barrel_pct") or 0), 4),
+                "pitches": round(float(stuff.get("pitches") or 0), 1),
+                "as_of_pitches_through": stuff.get("as_of_pitches_through"),
+            }
+        else:
+            starter_quality = _quality_from_kbb_shape(
+                k_per_9=k_per_9,
+                bb_per_9=bb_per_9,
+                ground_outs_to_air_outs=ground_outs_to_air_outs,
+            )
     else:
         # era_whip (S0 default)
         starter_quality = 1.0
@@ -919,7 +987,7 @@ def _starter_features_from_stat(
         "bb_factor": max(0.86, min(1.18, round(bb_factor, 4))),
         "gb_factor": max(0.88, min(1.18, round(gb_factor, 4))),
         "handedness": handedness if handedness in {"L", "R"} else "U",
-        "source": "mlb-stats-api",
+        "source": "mlb-stats-api" if mode != "stuff_proxy" or stuff_meta is None else "statcast-stuff",
         "player_id": player_id,
         "player_name": starter_name,
         "season": season,
@@ -930,6 +998,8 @@ def _starter_features_from_stat(
         out["fip"] = round(fip, 4)
     if xfip is not None:
         out["xfip"] = round(xfip, 4)
+    if stuff_meta is not None:
+        out["stuff"] = stuff_meta
     if as_of is not None:
         out["as_of"] = as_of.isoformat()
     return out

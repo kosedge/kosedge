@@ -3,7 +3,7 @@
 **Status:** Research / not subscription-worthy for stake marketing  
 **Production web branch:** `deploy-vercel`  
 **Model service:** `model-service-production-e253.up.railway.app`  
-**Model version:** `mlb-v1-pa-sim` (S0 stack: HFA 1.025 + matchup ON + wind-dir ON + ERA/WHIP quality)  
+**Model version:** `mlb-v1-pa-sim` (S0 stack: HFA 1.025 + matchup ON + wind-dir ON + ERA/WHIP quality; stuff_proxy **off**; lineup timing **off**)  
 **Unused holdout (frozen):** 2026-07-18 → 2026-08-10 — train-excluded; stake grade below  
 **Odds densify:** not run (credit floor)
 
@@ -11,12 +11,12 @@
 
 | Area | Grade | Notes |
 |------|:-----:|-------|
-| Moneyline sharpness (Brier) | **D+** | Densify walkforward ~**0.2496–0.2502**; gate ≤0.24 fail |
-| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after SP FIP/xFIP + BP role trials; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
+| Moneyline sharpness (Brier) | **D+** | Densify walkforward ~**0.2496–0.2511**; gate ≤0.24 fail |
+| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after FIP/xFIP, BP role, **Statcast stuff**, and **lineup timing** trials; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
 | Calibration (ECE) | **B** | **0.017–0.027** ≪ 0.06 |
-| Leakage hygiene | **A** | **0** on HFA + stack ablation runs |
+| Leakage hygiene | **A** | **0** on HFA + stack + talent + timing ablation runs |
 | Totals MAE | **C+** | ~**3.47–3.52**; prod full-n total CLV ~+0.088 |
-| Run-line CLV | **C-** | Densify intersection **+0.05–0.06** (S0); S2 wind-dir-off → **0** |
+| Run-line CLV | **C-** | Densify intersection **+0.01–0.06** depending on trial; S2 wind-dir-off → **0** |
 | Props stake | **F / blocked** | `research_only` — unused holdout + props gates not cleared |
 | Overall subscription | **D / no-go** | Fail Brier + CLV vs marketing bar; leakage clean |
 
@@ -31,6 +31,7 @@
 | [#53](https://github.com/kosedge/kosedge/pull/53) | Unused-holdout stake no-go artifacts | merged |
 | [#55](https://github.com/kosedge/kosedge/pull/55) | Stack ablation flags + S0–S3 densify grader | merged + Railway; **no stack ship** |
 | [#57](https://github.com/kosedge/kosedge/pull/57) | SP talent v2 (FIP/xFIP) + bullpen role flags + as-of densify | Railway deployed; **no default flip** (T1/T2/B1 fail gates) |
+| [#58](https://github.com/kosedge/kosedge/pull/58) | Statcast `stuff_proxy` (T3) + lineup nowcast wiring + timing L0/L1 | Railway deployed; **no default flip** (T3/L1 fail gates); wiring stays |
 
 ### Engineering detail
 
@@ -40,7 +41,8 @@
 4. **Matchup PA** — present in prod; **ablation says leave ON** (S1 does not clear +0.015 gate).
 5. **Stack ablation (S0–S3)** — see `stack_ablation_2026-08-01.md`. Intersection n=476; matchup-off / wind-dir-off / K-BB-only quality do **not** restore subscription CLV.
 6. **SP talent v2 (T0–T2) + bullpen B1** — see `sp_talent_v2_2026-08-01.md`. FIP/xFIP and role-weighted bullpen do **not** clear +0.010 intersection ML CLV; production stays **era_whip** + bullpen quality off.
-7. **Optional ML head** — still skipped.
+7. **Statcast stuff (T3) + lineup timing (L0/L1)** — see `statcast_stuff_2026-08-01.md` and `lineup_nowcast_timing_2026-08-01.md`. T3 and L1 both **fail** gates; keep wiring fixes; leave `stuff_proxy` / timing **off**.
+8. **Optional ML head** — still skipped.
 
 ## Densify HFA ladder (prior session)
 
@@ -81,6 +83,20 @@ Fixed densify closing-line set **n=476**. Stack = S0 (HFA 1.025, matchup ON, win
 **Ship:** none. T2’s ML edge over T0 is **+0.00008** (noise). B1 **worsens** ML for a Brier cosmetic. Defaults stay `era_whip` + bullpen role **off**.  
 Detail: `sp_talent_v2_2026-08-01.md`.
 
+## Statcast stuff + lineup timing (2026-08-01) — decision table
+
+Fixed densify closing-line set **n=476**. Stack = S0.
+
+| Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | Leak |
+|--------|-------------:|-------------:|----------------:|---------:|-----:|
+| T0 era_whip | **+0.00426** | +0.025 | +0.002 | **0.24999** | 0 |
+| T3 stuff_proxy | +0.00414 | +0.051 | +0.002 | 0.25114 | 0 |
+| L0 timing off | +0.00413 | +0.013 | +0.002 | **0.24955** | 0 |
+| L1 timing sharp | +0.00389 | +0.013 | +0.002 | 0.25042 | 0 |
+
+**Ship:** none of T3 / L1 defaults. T3 and L1 both soften intersection ML vs their baselines. Keep nowcast wiring fixes; leave `MLB_STARTER_QUALITY_MODE=era_whip` and `MLB_LINEUP_TIMING_MODE=off`.  
+Detail: `statcast_stuff_2026-08-01.md`, `lineup_nowcast_timing_2026-08-01.md`.
+
 ## Unused-holdout stake verdict
 
 | Item | Result |
@@ -96,13 +112,17 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 ## Blocking subscription-worthiness
 
 1. ML Brier still ≥0.248 vs 0.24 gate.  
-2. Intersection ML CLV ~+0.004 ≪ +0.015 gate after stack **and** SP FIP/xFIP / BP role trials; prior +0.023 was confounded.  
+2. Intersection ML CLV ~+0.004 ≪ +0.010/+0.015 gate after stack, FIP/xFIP, BP role, **Statcast stuff**, and **lineup timing** trials; prior +0.023 was confounded.  
 3. Unused holdout not large enough / not stake-green.  
-4. RL/total CLV must not be softened further for Brier cosmetics (S2 / B1 rejected).
+4. RL/total CLV must not be softened further for Brier cosmetics (S2 / B1 / L1 rejected).
 
 ## Artifacts
 
-- `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.md` ← **latest talent decision**
+- `data/ops/mlb-enterprise-holdout/statcast_stuff_2026-08-01.md` ← **latest Track 1 decision**
+- `data/ops/mlb-enterprise-holdout/lineup_nowcast_timing_2026-08-01.md` ← **latest Track 2 decision**
+- `data/ops/mlb-enterprise-holdout/statcast_stuff_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/lineup_nowcast_timing_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/sp_talent_v2_bullpen_b1_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.md`

@@ -1,0 +1,5 @@
+
+# keep compact index; ignore bulky CSV
+data/mlb/statcast_cache/**/pitches_*.csv
+data/mlb/statcast_cache/**/pitches_*.meta.json
+data/mlb/statcast_cache/**/pitcher_raw_counts.json
