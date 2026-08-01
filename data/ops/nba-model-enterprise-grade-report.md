@@ -1,20 +1,19 @@
 # NBA Model — Enterprise Grade Report
 
-**Generated:** 2026-07-31 (Phase 2)  
-**Phase reached:** Phase 2 complete (close-line join + calibrate + publish posture)  
+**Generated:** 2026-07-31 (Phase 3)  
+**Phase reached:** Phase 3 complete (props research board)  
 **Model version:** `nba-v1-poss-sim`  
-**Worker canary:** `nba-poss-sim-20260731-phase2`  
-**SHA:** `d6b9e26`  
-**Railway CI:** [30672293540](https://github.com/kosedge/kosedge/actions/runs/30672293540) success  
-**Vercel Production:** `dpl_FppfiCBjbRN3x4iUjzojXt8JyJkh` (Ready)  
-**PR:** [#42](https://github.com/kosedge/kosedge/pull/42) (merged)
+**Props model:** `nba-player-props-v1`  
+**Worker canary:** `nba-poss-sim-20260731-phase3-props`  
 
 ## Executive status
 
-Phase 2 unblocked real calibration. Close-line join now lands **79/80** on the
-walkforward sample (was **0**). Owned densified odds reused — **no Phase-2 Odds
-API burn**. Publish posture stays **research_only** (model-vs-close ATS ~50.6%).
-Props not published. NFL/MLB preserved. Offseason fair-lines stay empty/honest.
+Phases 0–2 remain live (possession sim, densify, close-line join, research_only
+mainlines). Phase 3 adds player props from stub minutes/usage + team pace/ORtg
+for pts/reb/ast/threes. Tags are **research_only** (`stake_eligible=False`);
+role-collapse Under refusal ports the NFL props lesson. Market lines join when
+`player_prop_market_snapshots` exist — never invent books. Offseason fair-lines
+stay empty/honest. NFL/MLB preserved.
 
 ## Close-line join fix (root cause)
 
@@ -71,9 +70,10 @@ Props not published. NFL/MLB preserved. Offseason fair-lines stay empty/honest.
 | Data ownership / densify discipline | **A** | Owned mainlines; no Phase-2 burn |
 | Close-line join | **A** | 79/80; 30 teams abbr-repaired |
 | Mainline calibration | **B-** | Near close MAE; vs-close ATS ~50.6% → research_only |
-| Publish honesty | **A** | research_only; props queued; offseason empty |
-| Nightly/beat pipeline | **B+** | `run_nba_daily_cycle` + 3am beat |
-| **Overall Phase 2** | **B+** | Join blocker cleared; stake tags deferred |
+| Publish honesty | **A** | research_only mainlines + props; offseason empty |
+| Nightly/beat pipeline | **B+** | `run_nba_daily_cycle` includes props materialize |
+| Props projection integrity | **B** | Stub rates + env scale; no market nudge; O/U balance diagnostic |
+| **Overall Phase 3** | **B+** | Full sim stack through research props board |
 
 ## Architecture
 
@@ -84,23 +84,25 @@ Props not published. NFL/MLB preserved. Offseason fair-lines stay empty/honest.
 | Features | `nba-rolling-gamelog-v1` |
 | Close lines | Owned `odds_snapshots` via name/abbr/ET join |
 | Publish | `nba_publish_policy` — PASS default |
-| Nightly | context → sim → persist when slate exists |
+| Props | `nba_player_prop_projection` + `nba_prop_edge_policy` |
+| Nightly | context → sim → props → persist when slate exists |
 
-## Phase 2 exit criteria
+## Phase exit criteria
 
 | Criterion | Met? |
 |-----------|------|
 | Close-line join `n_with_close_lines >> 0` | **Y** (79/80) |
-| Walkforward with real closes + blend tune | **Y** (hint=hold) |
-| Publish policy research_only / props queued | **Y** |
-| Nightly/beat daily cycle | **Y** |
-| Enterprise report + letter grades | **Y** |
-| Canary phase2 + Railway + deploy-vercel | **Y** |
+| Walkforward with real closes + blend tune | **Y** |
+| Props board API + research tags | **Y** |
+| Role-collapse Under refusal | **Y** |
+| Nightly cycle includes props | **Y** |
+| Canary phase3 | **Y** |
 
 ## Verify
 
 ```bash
 curl -sS https://model-service-production-e253.up.railway.app/nba/health
+curl -sS https://model-service-production-e253.up.railway.app/nba/props/board
 curl -sS https://model-service-production-e253.up.railway.app/nba/ops/inventory
-curl -sS -X POST 'https://model-service-production-e253.up.railway.app/api/jobs/run-nba-walkforward-sample?limit_games=80&simulations=1000'
+curl -sS -X POST 'https://model-service-production-e253.up.railway.app/api/jobs/run-nba-phase3-props-bootstrap'
 ```

@@ -222,7 +222,8 @@ def nba_health() -> Dict[str, Any]:
             "worker_build_id": NBA_WORKER_BUILD_ID,
             "projections_stored": proj_count,
             "simulator": "possession_monte_carlo",
-            "phase": "phase2",
+            "props_model_version": "nba-player-props-v1",
+            "phase": "phase3",
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"nba_health_failed: {exc}") from exc
@@ -436,15 +437,128 @@ def nba_fair_lines(
                 if in_regular_season_window
                 else "offseason_honest_empty"
             ),
-            "phase": "phase2",
+            "phase": "phase3",
         }
+    finally:
+        session.close()
+
+
+@router.get("/props/board")
+def nba_props_board(
+    as_of_date: Optional[date] = Query(None),
+    model_version: str = Query("nba-player-props-v1"),
+    market_key: Optional[str] = Query(None),
+    team: Optional[str] = Query(None),
+    tag: Optional[str] = Query(None, description="PLAY | WATCH | PASS"),
+    limit: int = Query(250, ge=1, le=2000),
+) -> Dict[str, Any]:
+    """Research-only NBA player props board (pts/reb/ast/threes)."""
+    from src.services.nba_prop_edge_policy import ou_balance_report
+
+    session = SessionLocal()
+    try:
+        try:
+            ensure_nba_model_tables(session)
+            session.commit()
+        except Exception:
+            session.rollback()
+
+        target = as_of_date or date.today()
+        tag_filter = (tag or "").strip().upper() or None
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  model_version, as_of_date, player_id, player_name, team_key,
+                  market_key, line, model_mean, model_std,
+                  over_prob, under_prob, fair_over_price, fair_under_price,
+                  market_over_price, market_under_price, edge_over, edge_under,
+                  confidence, diagnostics, worker_build_id, updated_at
+                FROM nba_player_prop_model_edges
+                WHERE as_of_date = :as_of_date
+                  AND model_version = :model_version
+                  AND (CAST(:market_key AS text) IS NULL OR market_key = CAST(:market_key AS text))
+                  AND (CAST(:team AS text) IS NULL OR team_key = CAST(:team AS text))
+                ORDER BY
+                  GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) DESC,
+                  player_name ASC
+                LIMIT :limit
+                """
+            ),
+            {
+                "as_of_date": target,
+                "model_version": model_version,
+                "market_key": market_key,
+                "team": team.upper() if team else None,
+                "limit": limit,
+            },
+        ).fetchall()
+
+        lines: List[Dict[str, Any]] = []
+        for r in rows:
+            diag = r[18] if len(r) > 18 else {}
+            if isinstance(diag, str):
+                try:
+                    diag = json.loads(diag)
+                except Exception:
+                    diag = {}
+            if not isinstance(diag, dict):
+                diag = {}
+            row_tag = str(diag.get("tag") or "PASS").upper()
+            if tag_filter and row_tag != tag_filter:
+                continue
+            lines.append(
+                {
+                    "model_version": r[0],
+                    "as_of_date": r[1],
+                    "player_id": r[2],
+                    "player_name": r[3],
+                    "team": r[4],
+                    "market_key": r[5],
+                    "line": _to_float(r[6]),
+                    "model_mean": _to_float(r[7]),
+                    "model_std": _to_float(r[8]),
+                    "over_prob": _to_float(r[9]),
+                    "under_prob": _to_float(r[10]),
+                    "fair_over_price": _to_int(r[11]),
+                    "fair_under_price": _to_int(r[12]),
+                    "market_over_price": _to_int(r[13]),
+                    "market_under_price": _to_int(r[14]),
+                    "edge_over": _to_float(r[15]),
+                    "edge_under": _to_float(r[16]),
+                    "confidence": _to_float(r[17]),
+                    "diagnostics": diag,
+                    "worker_build_id": r[19],
+                    "updated_at": r[20],
+                    "stake_eligible": False,
+                }
+            )
+
+        balance = ou_balance_report(lines)
+        return {
+            "as_of_date": target,
+            "model_version": model_version,
+            "worker_build_id": NBA_WORKER_BUILD_ID,
+            "count": len(lines),
+            "lines": lines,
+            "ou_balance": balance,
+            "publish_posture": board_publish_posture(),
+            "phase": "phase3",
+            "message": (
+                None
+                if lines
+                else "No NBA prop edges materialized for this date. Run phase3 props bootstrap."
+            ),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"nba_props_board_failed: {exc}") from exc
     finally:
         session.close()
 
 
 @router.get("/ops/inventory")
 def nba_ops_inventory() -> Dict[str, Any]:
-    """Live Postgres truth for NBA games/odds/model tables (Phase 1 verify)."""
+    """Live Postgres truth for NBA games/odds/model tables."""
     from src.tasks import collect_nba_db_inventory
 
     session = SessionLocal()
@@ -452,7 +566,7 @@ def nba_ops_inventory() -> Dict[str, Any]:
         inv = collect_nba_db_inventory(session)
         session.commit()
         inv["worker_build_id"] = NBA_WORKER_BUILD_ID
-        inv["phase"] = "phase2"
+        inv["phase"] = "phase3"
         return inv
     except Exception as exc:
         session.rollback()

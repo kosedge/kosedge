@@ -461,6 +461,7 @@ def player_stubs_from_data_nba_detail(
                     "pts": float(p.get("pts") or 0),
                     "reb": float(p.get("reb") or 0),
                     "ast": float(p.get("ast") or 0),
+                    "fg3m": float(p.get("tpm") or p.get("fg3m") or 0),
                     "fga": fga,
                     "fta": fta,
                     "tov": tov,

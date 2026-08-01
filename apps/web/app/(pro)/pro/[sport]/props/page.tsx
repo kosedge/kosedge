@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
+import { fetchNbaPropsBoard } from "@/lib/nba-props-board";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import {
   resolveSportKey,
@@ -11,7 +12,7 @@ import {
 } from "@/lib/sports";
 
 const SPORT_PROPS_COPY: Record<string, string> = {
-  nba: "NBA player props (points, rebounds, assists, threes) stage here once a validated props board exists. Odds mainlines restore when the NBA board posts — no invented prop cards.",
+  nba: "NBA player props (pts / reb / ast / threes) from possession-aware usage stubs. Research only — PLAY tags are never stake-eligible until holdout clears.",
   nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
   wnba: "WNBA player props stage here once usage feeds clear validation. Live game slate below is market context from Odds — not player-prop numbers.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
@@ -41,9 +42,13 @@ export default async function PropsPage({
     `${sportName} props are staged for this hub pending model feed validation.`;
 
   const boardGames =
-    sportKey === "mlb" ? [] : await getTonightGames(sportKey || "nba");
+    sportKey === "mlb" || sportKey === "nba"
+      ? []
+      : await getTonightGames(sportKey || "nba");
   const mlbBoard =
     sportKey === "mlb" ? await fetchMlbFairLines() : null;
+  const nbaBoard =
+    sportKey === "nba" ? await fetchNbaPropsBoard({ limit: 120 }) : null;
 
   return (
     <SportHubShell
@@ -64,7 +69,11 @@ export default async function PropsPage({
     >
       <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6 sm:p-8">
         <p className="text-sm font-semibold text-kos-gold">
-          {propsEnabled ? "Props board pending" : "Coming soon"}
+          {sportKey === "nba"
+            ? "NBA props research board"
+            : propsEnabled
+              ? "Props board pending"
+              : "Coming soon"}
         </p>
         <p className="mt-2 text-sm text-kos-text/70 sm:text-base">{detail}</p>
         {sportKey === "mlb" && mlbBoard ? (
@@ -73,6 +82,80 @@ export default async function PropsPage({
               ? `${mlbBoard.count} MLB fair-line games available for game-level research (${mlbBoard.modelVersion || "model"}). Player props stay research-gated — no invented prop cards.`
               : "No MLB fair-line games on the model board for this date yet."}
           </p>
+        ) : null}
+        {sportKey === "nba" && nbaBoard ? (
+          <div className="mt-4 space-y-3">
+            <p className="text-sm text-kos-text/60">
+              {nbaBoard.error
+                ? `Board unavailable: ${nbaBoard.error}`
+                : nbaBoard.count > 0
+                  ? `${nbaBoard.count} prop rows · ${nbaBoard.modelVersion} · ${nbaBoard.workerBuildId || "canary"} · research only (no stake tags)`
+                  : nbaBoard.message ||
+                    "No prop edges materialized yet — bootstrap Phase 3 on model-service."}
+            </p>
+            {nbaBoard.ouBalance ? (
+              <p className="text-xs text-kos-text/50">
+                PLAY balance: {nbaBoard.ouBalance.play_over ?? 0} Over /{" "}
+                {nbaBoard.ouBalance.play_under ?? 0} Under
+                {nbaBoard.ouBalance.play_under_pct != null
+                  ? ` (${Math.round(nbaBoard.ouBalance.play_under_pct * 100)}% Under)`
+                  : ""}
+                {nbaBoard.ouBalance.balanced === false
+                  ? " · imbalance flag"
+                  : ""}
+              </p>
+            ) : null}
+            {nbaBoard.lines.length > 0 ? (
+              <div className="overflow-x-auto rounded-xl border border-white/10">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="bg-white/5 text-xs uppercase tracking-wide text-kos-text/50">
+                    <tr>
+                      <th className="px-3 py-2">Player</th>
+                      <th className="px-3 py-2">Mkt</th>
+                      <th className="px-3 py-2">Line</th>
+                      <th className="px-3 py-2">Model</th>
+                      <th className="px-3 py-2">Tag</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {nbaBoard.lines.slice(0, 40).map((row) => (
+                      <tr
+                        key={`${row.playerId}-${row.marketKey}`}
+                        className="border-t border-white/5"
+                      >
+                        <td className="px-3 py-2">
+                          <div className="font-medium text-kos-text">
+                            {row.playerName}
+                          </div>
+                          <div className="text-xs text-kos-text/45">
+                            {row.team}
+                          </div>
+                        </td>
+                        <td className="px-3 py-2 uppercase text-kos-text/70">
+                          {row.marketKey}
+                        </td>
+                        <td className="px-3 py-2 text-kos-text/70">
+                          {row.line ?? "—"}
+                        </td>
+                        <td className="px-3 py-2 text-kos-text/80">
+                          {row.modelMean?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className="px-3 py-2">
+                          <span className="text-kos-gold">{row.tag}</span>
+                          {row.tagSide ? (
+                            <span className="text-kos-text/45">
+                              {" "}
+                              {row.tagSide}
+                            </span>
+                          ) : null}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
+          </div>
         ) : null}
         <p className="mt-4 text-sm text-kos-text/60">
           NFL props are live under the NFL hub. This surface stays

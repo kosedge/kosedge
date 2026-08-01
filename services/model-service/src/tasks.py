@@ -7285,11 +7285,11 @@ def pull_nba_season_ingest(
                                     """
                                     INSERT INTO nba_player_game_stubs (
                                       external_game_id, player_id, player_name, team_key,
-                                      game_date, minutes, usage_proxy, pts, reb, ast,
+                                      game_date, minutes, usage_proxy, pts, reb, ast, fg3m,
                                       fga, fta, tov, source, payload, updated_at
                                     ) VALUES (
                                       :external_game_id, :player_id, :player_name, :team_key,
-                                      :game_date, :minutes, :usage_proxy, :pts, :reb, :ast,
+                                      :game_date, :minutes, :usage_proxy, :pts, :reb, :ast, :fg3m,
                                       :fga, :fta, :tov, :source, CAST(:payload AS jsonb), :updated_at
                                     )
                                     ON CONFLICT (external_game_id, player_id) DO UPDATE SET
@@ -7298,6 +7298,7 @@ def pull_nba_season_ingest(
                                       pts = EXCLUDED.pts,
                                       reb = EXCLUDED.reb,
                                       ast = EXCLUDED.ast,
+                                      fg3m = EXCLUDED.fg3m,
                                       updated_at = EXCLUDED.updated_at
                                     """
                                 ),
@@ -7312,6 +7313,7 @@ def pull_nba_season_ingest(
                                     "pts": stub.get("pts"),
                                     "reb": stub.get("reb"),
                                     "ast": stub.get("ast"),
+                                    "fg3m": stub.get("fg3m"),
                                     "fga": stub.get("fga"),
                                     "fta": stub.get("fta"),
                                     "tov": stub.get("tov"),
@@ -7535,11 +7537,11 @@ def materialize_nba_team_rolling_features(
                             """
                             INSERT INTO nba_player_game_stubs (
                               external_game_id, player_id, player_name, team_key,
-                              game_date, minutes, usage_proxy, pts, reb, ast,
+                              game_date, minutes, usage_proxy, pts, reb, ast, fg3m,
                               fga, fta, tov, source, payload, updated_at
                             ) VALUES (
                               :external_game_id, :player_id, :player_name, :team_key,
-                              :game_date, :minutes, :usage_proxy, :pts, :reb, :ast,
+                              :game_date, :minutes, :usage_proxy, :pts, :reb, :ast, :fg3m,
                               :fga, :fta, :tov, :source, CAST(:payload AS jsonb), :updated_at
                             )
                             ON CONFLICT (external_game_id, player_id) DO UPDATE SET
@@ -7548,6 +7550,7 @@ def materialize_nba_team_rolling_features(
                               pts = EXCLUDED.pts,
                               reb = EXCLUDED.reb,
                               ast = EXCLUDED.ast,
+                              fg3m = EXCLUDED.fg3m,
                               updated_at = EXCLUDED.updated_at
                             """
                         ),
@@ -7562,6 +7565,7 @@ def materialize_nba_team_rolling_features(
                             "pts": stub.get("pts"),
                             "reb": stub.get("reb"),
                             "ast": stub.get("ast"),
+                            "fg3m": stub.get("fg3m"),
                             "fga": stub.get("fga"),
                             "fta": stub.get("fta"),
                             "tov": stub.get("tov"),
@@ -8090,6 +8094,9 @@ def collect_nba_db_inventory(session: Any) -> Dict[str, Any]:
             "nba_game_context": _count("SELECT COUNT(*) FROM nba_game_context"),
             "nba_possessions": _count("SELECT COUNT(*) FROM nba_possessions"),
             "nba_player_game_stubs": _count("SELECT COUNT(*) FROM nba_player_game_stubs"),
+            "nba_player_prop_model_edges": _count(
+                "SELECT COUNT(*) FROM nba_player_prop_model_edges"
+            ),
             "nba_market_projections": _count("SELECT COUNT(*) FROM nba_market_projections"),
         },
         "odds": {
@@ -8646,6 +8653,290 @@ def run_nba_phase2_calibrate(
     }
 
 
+@celery_app.task(name="src.tasks.materialize_nba_player_props_edges")
+def materialize_nba_player_props_edges(
+    *,
+    as_of_date: Optional[str] = None,
+    lookback_games: int = 8,
+    min_minutes: float = 12.0,
+    limit_players: int = 200,
+) -> Dict[str, Any]:
+    """Phase 3: project props from stubs, join books when present, research tags only."""
+    from src.services.nba_player_prop_projection import (
+        NBA_PROP_MODEL_VERSION,
+        project_from_stub_groups,
+    )
+    from src.services.nba_prop_edge_policy import (
+        evaluate_nba_prop_edge,
+        ou_balance_report,
+    )
+
+    as_of = date.fromisoformat(as_of_date) if as_of_date else date.today()
+    session = SessionLocal()
+    try:
+        ensure_nba_model_tables(session)
+        session.commit()
+
+        stub_rows = session.execute(
+            text(
+                """
+                SELECT player_id, player_name, team_key, game_date, minutes,
+                       usage_proxy, pts, reb, ast, fg3m
+                FROM nba_player_game_stubs
+                WHERE game_date IS NOT NULL
+                  AND minutes IS NOT NULL
+                  AND minutes >= 1
+                ORDER BY player_id, game_date DESC
+                """
+            )
+        ).fetchall()
+
+        by_player: Dict[str, List[Dict[str, Any]]] = {}
+        for r in stub_rows:
+            pid = str(r[0] or "")
+            if not pid:
+                continue
+            bucket = by_player.setdefault(pid, [])
+            if len(bucket) >= lookback_games:
+                continue
+            bucket.append(
+                {
+                    "player_id": pid,
+                    "player_name": r[1],
+                    "team_key": r[2],
+                    "game_date": r[3],
+                    "minutes": r[4],
+                    "usage_proxy": r[5],
+                    "pts": r[6],
+                    "reb": r[7],
+                    "ast": r[8],
+                    "fg3m": r[9],
+                }
+            )
+
+        # Prefer players with most recent activity.
+        ordered = sorted(
+            by_player.values(),
+            key=lambda rows: max((x.get("game_date") or date.min) for x in rows),
+            reverse=True,
+        )[: max(1, int(limit_players))]
+
+        pace_rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (team_key) team_key, pace
+                FROM nba_team_rolling_features
+                ORDER BY team_key, as_of_date DESC NULLS LAST, updated_at DESC
+                """
+            )
+        ).fetchall()
+        ortg_rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (team_key) team_key, ortg
+                FROM nba_team_rolling_features
+                ORDER BY team_key, as_of_date DESC NULLS LAST, updated_at DESC
+                """
+            )
+        ).fetchall()
+        pace_map = {str(r[0]).upper(): float(r[1] or 100.0) for r in pace_rows if r[0]}
+        ortg_map = {str(r[0]).upper(): float(r[1] or 114.0) for r in ortg_rows if r[0]}
+
+        projections = project_from_stub_groups(
+            ordered,
+            team_pace_by_key=pace_map,
+            team_ortg_by_key=ortg_map,
+            min_minutes=min_minutes,
+        )
+
+        # Optional market join from enterprise prop snapshots table.
+        market_by_key: Dict[Tuple[str, str], Dict[str, Any]] = {}
+        try:
+            mrows = session.execute(
+                text(
+                    """
+                    SELECT DISTINCT ON (player_name, market_key)
+                      lower(player_name) AS pname,
+                      market_key,
+                      line,
+                      over_price,
+                      under_price
+                    FROM player_prop_market_snapshots
+                    WHERE sport_key IN ('basketball_nba', 'nba')
+                      AND market_key IN ('pts', 'reb', 'ast', 'threes')
+                    ORDER BY player_name, market_key, captured_at DESC NULLS LAST
+                    """
+                )
+            ).fetchall()
+            for mr in mrows:
+                market_by_key[(str(mr[0] or ""), str(mr[1] or ""))] = {
+                    "line": mr[2],
+                    "over_price": mr[3],
+                    "under_price": mr[4],
+                }
+        except Exception:
+            session.rollback()
+            ensure_nba_model_tables(session)
+            session.commit()
+            market_by_key = {}
+
+        upserted = 0
+        board_rows: List[Dict[str, Any]] = []
+        for proj in projections:
+            mkt = market_by_key.get(
+                (proj.player_name.lower(), proj.market_key)
+            ) or market_by_key.get(("", proj.market_key))
+            line = None
+            over_price = under_price = None
+            if mkt:
+                try:
+                    line = float(mkt["line"]) if mkt.get("line") is not None else None
+                except (TypeError, ValueError):
+                    line = None
+                try:
+                    over_price = (
+                        int(mkt["over_price"])
+                        if mkt.get("over_price") is not None
+                        else None
+                    )
+                    under_price = (
+                        int(mkt["under_price"])
+                        if mkt.get("under_price") is not None
+                        else None
+                    )
+                except (TypeError, ValueError):
+                    over_price = under_price = None
+
+            edge = evaluate_nba_prop_edge(
+                market_key=proj.market_key,
+                model_mean=proj.model_mean,
+                model_std=proj.model_std,
+                line=line,
+                over_price=over_price,
+                under_price=under_price,
+                sample_games=proj.sample_games,
+                projection_source=proj.projection_source,
+            )
+            confidence = 0.35 + min(0.45, 0.04 * proj.sample_games)
+            if edge.get("market_joined"):
+                confidence += 0.1
+            diagnostics = {
+                "tag": edge.get("tag"),
+                "tag_side": edge.get("tag_side"),
+                "reason": edge.get("reason"),
+                "stake_eligible": False,
+                "z": edge.get("z"),
+                "projection_source": proj.projection_source,
+                "minutes": proj.minutes,
+                "usage_proxy": proj.usage_proxy,
+                "sample_games": proj.sample_games,
+                "policy_version": edge.get("policy_version"),
+            }
+            session.execute(
+                text(
+                    """
+                    INSERT INTO nba_player_prop_model_edges (
+                      model_version, as_of_date, player_id, player_name, team_key,
+                      market_key, line, model_mean, model_std,
+                      over_prob, under_prob, fair_over_price, fair_under_price,
+                      market_over_price, market_under_price, edge_over, edge_under,
+                      confidence, diagnostics, worker_build_id, updated_at
+                    ) VALUES (
+                      :model_version, :as_of_date, :player_id, :player_name, :team_key,
+                      :market_key, :line, :model_mean, :model_std,
+                      :over_prob, :under_prob, :fair_over_price, :fair_under_price,
+                      :market_over_price, :market_under_price, :edge_over, :edge_under,
+                      :confidence, CAST(:diagnostics AS jsonb), :worker_build_id, :updated_at
+                    )
+                    ON CONFLICT (model_version, as_of_date, player_id, market_key)
+                    DO UPDATE SET
+                      line = EXCLUDED.line,
+                      model_mean = EXCLUDED.model_mean,
+                      model_std = EXCLUDED.model_std,
+                      over_prob = EXCLUDED.over_prob,
+                      under_prob = EXCLUDED.under_prob,
+                      fair_over_price = EXCLUDED.fair_over_price,
+                      fair_under_price = EXCLUDED.fair_under_price,
+                      market_over_price = EXCLUDED.market_over_price,
+                      market_under_price = EXCLUDED.market_under_price,
+                      edge_over = EXCLUDED.edge_over,
+                      edge_under = EXCLUDED.edge_under,
+                      confidence = EXCLUDED.confidence,
+                      diagnostics = EXCLUDED.diagnostics,
+                      worker_build_id = EXCLUDED.worker_build_id,
+                      updated_at = EXCLUDED.updated_at
+                    """
+                ),
+                {
+                    "model_version": NBA_PROP_MODEL_VERSION,
+                    "as_of_date": as_of,
+                    "player_id": proj.player_id,
+                    "player_name": proj.player_name,
+                    "team_key": proj.team_key,
+                    "market_key": proj.market_key,
+                    "line": line,
+                    "model_mean": proj.model_mean,
+                    "model_std": proj.model_std,
+                    "over_prob": edge.get("over_prob"),
+                    "under_prob": edge.get("under_prob"),
+                    "fair_over_price": edge.get("fair_over_price"),
+                    "fair_under_price": edge.get("fair_under_price"),
+                    "market_over_price": over_price,
+                    "market_under_price": under_price,
+                    "edge_over": edge.get("edge_over"),
+                    "edge_under": edge.get("edge_under"),
+                    "confidence": round(confidence, 3),
+                    "diagnostics": json.dumps(diagnostics),
+                    "worker_build_id": NBA_WORKER_BUILD_ID,
+                    "updated_at": _now_utc(),
+                },
+            )
+            upserted += 1
+            board_rows.append({"tag": edge.get("tag"), "tag_side": edge.get("tag_side"), "diagnostics": diagnostics})
+
+        session.commit()
+        balance = ou_balance_report(board_rows)
+        return {
+            "status": "ok",
+            "phase": "phase3",
+            "worker_build_id": NBA_WORKER_BUILD_ID,
+            "model_version": NBA_PROP_MODEL_VERSION,
+            "as_of_date": as_of.isoformat(),
+            "players_considered": len(ordered),
+            "edges_upserted": upserted,
+            "market_keys_joined": len(market_by_key),
+            "ou_balance": balance,
+        }
+    except Exception:
+        session.rollback()
+        log.exception("materialize_nba_player_props_edges failed")
+        raise
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.run_nba_phase3_props_bootstrap")
+def run_nba_phase3_props_bootstrap(
+    *,
+    lookback_games: int = 8,
+    limit_players: int = 200,
+) -> Dict[str, Any]:
+    inventory_before = nba_db_inventory()
+    props = materialize_nba_player_props_edges(
+        lookback_games=lookback_games,
+        limit_players=limit_players,
+    )
+    inventory_after = nba_db_inventory()
+    return {
+        "status": "ok",
+        "phase": "phase3",
+        "worker_build_id": NBA_WORKER_BUILD_ID,
+        "inventory_before": inventory_before,
+        "props": props,
+        "inventory_after": inventory_after,
+    }
+
+
 @celery_app.task(name="src.tasks.run_nba_daily_cycle")
 def run_nba_daily_cycle(
     *,
@@ -8653,7 +8944,7 @@ def run_nba_daily_cycle(
     simulations: int = 4000,
     model_version: str = DEFAULT_NBA_MODEL_VERSION,
 ) -> Dict[str, Any]:
-    """Nightly/beat: rolling features → context → sim → persist (when slate exists)."""
+    """Nightly/beat: rolling features → context → sim → props → persist."""
     features = materialize_nba_team_rolling_features(
         days_back=int(os.getenv("NBA_ROLLING_DAYS_BACK", "45")),
         window_games=10,
@@ -8673,13 +8964,20 @@ def run_nba_daily_cycle(
             "processed": 0,
             "inserted": 0,
         }
+    props: Dict[str, Any]
+    try:
+        props = materialize_nba_player_props_edges()
+    except Exception as exc:
+        log.exception("Daily cycle props materialize failed (non-fatal)")
+        props = {"status": "error", "error": str(exc)[:400]}
     return {
         "status": "ok",
-        "phase": "phase2",
+        "phase": "phase3",
         "worker_build_id": NBA_WORKER_BUILD_ID,
         "features": features,
         "context": context,
         "simulations": sims,
+        "props": props,
     }
 
 

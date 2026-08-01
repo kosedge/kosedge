@@ -1,7 +1,7 @@
-"""NBA sides/totals publish policy (Phase 2).
+"""NBA sides/totals publish policy (Phase 2+) + props posture (Phase 3).
 
 Default tag is PASS / research_only until walkforward vs *real closes*
-clears evidence floors. Props stay queued — never published here.
+clears evidence floors. Props board is research_only (never stake-eligible).
 
 Mirrors NFL side/total discipline without copying NFL edge bands:
   - Full-slate PASS is the product default.
@@ -19,6 +19,7 @@ Market = Literal["spread", "total"]
 
 BREAKEVEN_ATS = 0.5238
 POLICY_VERSION = "nba_mainlines_phase2_research_v1"
+PROPS_POLICY_VERSION = "nba_props_phase3_research_v1"
 
 # Magnitude bands (pts). Conservative until close-line ATS clears.
 SPREAD_PLAY_MIN = 3.0
@@ -124,8 +125,10 @@ def board_publish_posture(*, n_with_close_lines: int = 0, ats: Optional[float] =
         mainlines = "calibrating"
     return {
         "policy_version": POLICY_VERSION,
+        "props_policy_version": PROPS_POLICY_VERSION,
         "mainlines": mainlines,
-        "props": "queued_until_mainlines_honest",
+        # Props board is live as research desk; stake tags stay off.
+        "props": "research_only",
         "force_research_only": mainlines == "research_only",
         "n_with_close_lines": n_with_close_lines,
         "ats": ats,
