@@ -67,6 +67,22 @@ from .services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
 from .services.mlb_pa_feature_sharpen import platoon_split_for_hand, sharpen_game_inputs
 from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from .services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE as MLB_PROPS_PLAY_STAKE_ELIGIBLE
+from .services.mlb_lineup_sp_snapshots import (
+    build_snapshot,
+    is_late_info_snapshot,
+    persist_snapshot,
+    reconstruct_densify_snapshot,
+    summarize_late_info_slice,
+)
+from .services.mlb_park_orientation import (
+    apply_totals_park_rel_wind_flag,
+    get_totals_park_rel_wind_enabled,
+)
+from .services.mlb_pitch_matchup import (
+    apply_pitch_matchup_flag,
+    get_pitch_matchup_enabled,
+    get_pitcher_arsenal_as_of,
+)
 from .services.mlb_simulator import (
     DEFAULT_MODEL_VERSION,
     MlbGameInputs,
@@ -9928,6 +9944,28 @@ def run_mlb_lineup_nowcast_repricing(
                 prev_conf_sum += prev_avg
                 confidence_delta_sum += abs(next_avg - prev_avg)
                 prev_conf_count += 1
+            try:
+                persist_snapshot(
+                    build_snapshot(
+                        game_id=str(m["game_id"]),
+                        hours_to_first_pitch=hours_to_pitch,
+                        known_home=known_home,
+                        known_away=known_away,
+                        sp_home=next_sp_home,
+                        sp_away=next_sp_away,
+                        lineup_confirmed=lineup_confirmed,
+                        lineup_confidence_home=float(nowcast["home"]),
+                        lineup_confidence_away=float(nowcast["away"]),
+                        observed_at=now,
+                        source="nowcast_live",
+                        extras={"freshness": freshness, "live_fetch_ok": live_fetch_ok},
+                    )
+                )
+            except Exception:
+                log.exception(
+                    "Failed persisting lineup/SP snapshot",
+                    extra={"game_id": str(m.get("game_id"))},
+                )
             lineup_strength_home = float(m["lineup_strength_index_home"]) if m.get("lineup_strength_index_home") is not None else 1.0
             lineup_strength_away = float(m["lineup_strength_index_away"]) if m.get("lineup_strength_index_away") is not None else 1.0
             if live_home_lineup.get("lineup_strength_index") is not None:
@@ -10043,12 +10081,33 @@ def run_mlb_lineup_nowcast_repricing(
             )
             updated_context += 1
 
+            nowcast_arsenal_home = None
+            nowcast_arsenal_away = None
+            if get_pitch_matchup_enabled():
+                pid_h = starter_home_feat.get("player_id")
+                pid_a = starter_away_feat.get("player_id")
+                as_of_live = now.date()
+                if pid_h is not None:
+                    try:
+                        nowcast_arsenal_home = get_pitcher_arsenal_as_of(
+                            int(pid_h), as_of=as_of_live, fetch_if_missing=False
+                        )
+                    except Exception:
+                        nowcast_arsenal_home = None
+                if pid_a is not None:
+                    try:
+                        nowcast_arsenal_away = get_pitcher_arsenal_as_of(
+                            int(pid_a), as_of=as_of_live, fetch_if_missing=False
+                        )
+                    except Exception:
+                        nowcast_arsenal_away = None
             inputs = MlbGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
                 away_team=str(m["away_team"]),
                 starter_home=next_sp_home,
                 starter_away=next_sp_away,
+                home_abbr=str(m.get("home_abbr") or "") or None,
                 starter_quality_home=float(starter_home_feat.get("starter_quality") or 1.0),
                 starter_quality_away=float(starter_away_feat.get("starter_quality") or 1.0),
                 starter_k_factor_home=float(starter_home_feat.get("k_factor") or 1.0),
@@ -10087,6 +10146,8 @@ def run_mlb_lineup_nowcast_repricing(
                 umpire_run_factor=float(m["umpire_run_factor"]) if m.get("umpire_run_factor") is not None else 1.0,
                 info_freshness_score_home=freshness,
                 info_freshness_score_away=freshness,
+                pitcher_arsenal_home=nowcast_arsenal_home,
+                pitcher_arsenal_away=nowcast_arsenal_away,
             )
             inputs, sharpen_diag = _sharpen_mlb_inputs(
                 inputs,
@@ -11060,12 +11121,15 @@ def backfill_mlb_historical_resim(
     max_games: int = 200,
     force_resim: bool = False,
     skip_outcomes_pull: bool = False,
+    hours_to_first_pitch: float = 3.0,
 ) -> Dict[str, Any]:
     """Re-sim completed MLB games so walkforward holdout n can approach ≥120.
 
     Requires MLB_ALLOW_HISTORICAL_SIM=true. Pulls outcomes first for the window
     unless skip_outcomes_pull / force_resim. When force_resim=True, deletes
     existing projections in-window and re-sims with current PA-sim sharpening.
+
+    hours_to_first_pitch controls densify stamp + snapshot tier (default −3h).
     """
     if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
         raise ValueError(
@@ -11073,6 +11137,7 @@ def backfill_mlb_historical_resim(
         )
     end = date.fromisoformat(end_date) if end_date else date.today() - timedelta(days=1)
     start = date.fromisoformat(start_date) if start_date else end - timedelta(days=45)
+    stamp_hours = max(0.5, min(24.0, float(hours_to_first_pitch)))
     if skip_outcomes_pull or force_resim:
         outcomes = {"skipped": True, "reason": "skip_outcomes_pull_or_force_resim"}
     else:
@@ -11255,12 +11320,38 @@ def backfill_mlb_historical_resim(
                     )
                     bp_quality_home = float(home_bp_live.get("bullpen_quality") or 1.0)
                     bp_quality_away = float(away_bp_live.get("bullpen_quality") or 1.0)
+                arsenal_home = None
+                arsenal_away = None
+                if get_pitch_matchup_enabled() and game_as_of is not None:
+                    pid_h = starter_home_feat.get("player_id")
+                    pid_a = starter_away_feat.get("player_id")
+                    if pid_h is not None:
+                        try:
+                            arsenal_home = get_pitcher_arsenal_as_of(
+                                int(pid_h),
+                                as_of=game_as_of,
+                                season=game_season,
+                                fetch_if_missing=False,
+                            )
+                        except Exception:
+                            arsenal_home = None
+                    if pid_a is not None:
+                        try:
+                            arsenal_away = get_pitcher_arsenal_as_of(
+                                int(pid_a),
+                                as_of=game_as_of,
+                                season=game_season,
+                                fetch_if_missing=False,
+                            )
+                        except Exception:
+                            arsenal_away = None
                 inputs = MlbGameInputs(
                     game_id=str(m["game_id"]),
                     home_team=str(m["home_team"]),
                     away_team=str(m["away_team"]),
                     starter_home=m.get("probable_pitcher_home"),
                     starter_away=m.get("probable_pitcher_away"),
+                    home_abbr=str(m.get("home_abbr") or "") or None,
                     starter_quality_home=float(starter_home_feat.get("starter_quality") or 1.0),
                     starter_quality_away=float(starter_away_feat.get("starter_quality") or 1.0),
                     starter_k_factor_home=float(starter_home_feat.get("k_factor") or 1.0),
@@ -11287,6 +11378,8 @@ def backfill_mlb_historical_resim(
                     recent_form_index_away=float(m["recent_form_index_away"]) if m.get("recent_form_index_away") is not None else 1.0,
                     lineup_strength_index_home=float(m["lineup_strength_index_home"]) if m.get("lineup_strength_index_home") is not None else 1.0,
                     lineup_strength_index_away=float(m["lineup_strength_index_away"]) if m.get("lineup_strength_index_away") is not None else 1.0,
+                    pitcher_arsenal_home=arsenal_home,
+                    pitcher_arsenal_away=arsenal_away,
                     bullpen_fatigue_home=float(m.get("bullpen_fatigue_home") or 0.50),
                     bullpen_fatigue_away=float(m.get("bullpen_fatigue_away") or 0.50),
                     bullpen_availability_home=float(m.get("bullpen_availability_home") or 0.65),
@@ -11310,21 +11403,46 @@ def backfill_mlb_historical_resim(
                     rest_days_home=_to_float(context_payload.get("rest_days_home")),
                     rest_days_away=_to_float(context_payload.get("rest_days_away")),
                 )
-                # Densify stamp is −3h; apply timing sharpness against stamped card depth.
+                # Densify stamp hours (default −3h); snapshot lake + timing use same horizon.
                 known_h = known_players_from_context(context_payload, "home")
                 known_a = known_players_from_context(context_payload, "away")
                 if known_h == 0 and bool(m.get("lineup_confirmed")):
                     known_h = 9
                 if known_a == 0 and bool(m.get("lineup_confirmed")):
                     known_a = 9
-                inputs, timing_diag = apply_lineup_timing_to_inputs(
-                    inputs,
+                start_dt = _coerce_datetime_utc(m.get("start_time"))
+                if start_dt is None and m.get("game_date") is not None:
+                    start_dt = datetime.combine(
+                        m["game_date"], datetime.min.time(), tzinfo=timezone.utc
+                    ) + timedelta(hours=23)
+                snap = reconstruct_densify_snapshot(
+                    game_id=str(m["game_id"]),
+                    hours_to_first_pitch=stamp_hours,
                     known_home=known_h,
                     known_away=known_a,
-                    hours_to_first_pitch=3.0,
+                    sp_home=m.get("probable_pitcher_home"),
+                    sp_away=m.get("probable_pitcher_away"),
+                    lineup_confirmed=bool(m.get("lineup_confirmed") or False),
+                    lineup_confidence_home=float(m.get("lineup_confidence_home") or 0.85),
+                    lineup_confidence_away=float(m.get("lineup_confidence_away") or 0.85),
+                    start_time=start_dt,
+                    persist=True,
+                )
+                inputs, timing_diag = apply_lineup_timing_to_inputs(
+                    inputs,
+                    known_home=int(snap.known_home),
+                    known_away=int(snap.known_away),
+                    hours_to_first_pitch=stamp_hours,
                     freshness_score=1.0,
                 )
                 sharpen_diag.update(timing_diag)
+                sharpen_diag["lineup_sp_snapshot"] = {
+                    "hours_to_first_pitch": stamp_hours,
+                    "lineup_hash": snap.lineup_hash,
+                    "lineup_confirmed": snap.lineup_confirmed,
+                    "late_info_le3h": is_late_info_snapshot(snap, max_hours=3.0),
+                    "late_info_le6h": is_late_info_snapshot(snap, max_hours=6.0),
+                }
                 seed = _default_projection_seed(str(m["game_id"]), model_version, simulations)
                 projection = _run_simulation_by_model(
                     inputs,
@@ -11334,12 +11452,7 @@ def backfill_mlb_historical_resim(
                 )
                 projection.setdefault("diagnostics", {}).update(sharpen_diag)
                 # Stamp pre-first-pitch so historical densify stays leakage-clean.
-                start_dt = _coerce_datetime_utc(m.get("start_time"))
-                if start_dt is None and m.get("game_date") is not None:
-                    start_dt = datetime.combine(
-                        m["game_date"], datetime.min.time(), tzinfo=timezone.utc
-                    ) + timedelta(hours=23)
-                as_of = (start_dt or _now_utc()) - timedelta(hours=3)
+                as_of = (start_dt or _now_utc()) - timedelta(hours=stamp_hours)
                 _insert_mlb_projection_and_audit(
                     session, projection, seed=seed, created_at=as_of
                 )
@@ -11412,6 +11525,7 @@ def backfill_mlb_historical_resim(
             "start_date": start.isoformat(),
             "end_date": end.isoformat(),
             "force_resim": bool(force_resim),
+            "hours_to_first_pitch": stamp_hours,
             "deleted_prior_projections": deleted_prior,
             "outcomes": outcomes,
             "games_selected": len(rows),
@@ -12177,6 +12291,554 @@ def run_mlb_lineup_timing_ablation(
                 for k, v in (intersection.get("by_config") or {}).items()
             },
         },
+        "recommendation": recommendation,
+        "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+    }
+
+
+_LATE_INFO_STAMP_CONFIGS: Dict[str, Dict[str, Any]] = {
+    "H0": {"hours_to_first_pitch": 6.0, "model_suffix": "lateinfo-h0"},
+    "H1": {"hours_to_first_pitch": 3.0, "model_suffix": "lateinfo-h1"},
+    "H2": {"hours_to_first_pitch": 1.0, "model_suffix": "lateinfo-h2"},
+}
+
+_PITCH_MATCHUP_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
+    "M0": {"pitch_matchup_enabled": False, "model_suffix": "pitchmux-m0"},
+    "M1": {"pitch_matchup_enabled": True, "model_suffix": "pitchmux-m1"},
+}
+
+_TOTALS_PARK_WIND_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
+    "W0": {"totals_park_rel_wind_enabled": False, "model_suffix": "parkwind-w0"},
+    "W1": {"totals_park_rel_wind_enabled": True, "model_suffix": "parkwind-w1"},
+}
+
+
+def _grade_densify_ablation_config(
+    *,
+    model_version: str,
+    start: date,
+    end: date,
+    simulations: int,
+    max_games: int,
+    lookback_days: int,
+    hours_to_first_pitch: float = 3.0,
+) -> Dict[str, Any]:
+    resim = backfill_mlb_historical_resim(
+        start_date=start.isoformat(),
+        end_date=end.isoformat(),
+        simulations=int(simulations),
+        model_version=model_version,
+        max_games=int(max_games),
+        force_resim=True,
+        skip_outcomes_pull=True,
+        hours_to_first_pitch=float(hours_to_first_pitch),
+    )
+    session = SessionLocal()
+    try:
+        clv_full = compute_mlb_clv_with_spread(
+            session,
+            model_version=model_version,
+            lookback_days=int(lookback_days),
+        )
+        window_items = _filter_clv_items_to_window(
+            session,
+            list(clv_full.get("items") or []),
+            start_date=start,
+            end_date=end,
+        )
+        densify_clv = _summarize_clv_items(window_items)
+        quality = run_mlb_quality_grading(
+            model_version=model_version,
+            lookback_days=int(lookback_days),
+        )
+        walkforward = run_mlb_walkforward_backtest(
+            model_version=model_version,
+            lookback_days=int(lookback_days),
+            training_days=10,
+            step_days=3,
+            apply_calibration=True,
+        )
+    finally:
+        session.close()
+    return {
+        "model_version": model_version,
+        "resim": {
+            "status": resim.get("status"),
+            "simulated": resim.get("simulated"),
+            "games_selected": resim.get("games_selected"),
+            "deleted_prior_projections": resim.get("deleted_prior_projections"),
+            "leakage_rows_repaired": resim.get("leakage_rows_repaired"),
+            "hours_to_first_pitch": resim.get("hours_to_first_pitch"),
+            "holdout": resim.get("holdout"),
+        },
+        "full_n_clv": {
+            "count": clv_full.get("count"),
+            "ml_sample_size": clv_full.get("ml_sample_size"),
+            "avg_ml_clv": clv_full.get("avg_ml_clv"),
+            "avg_total_clv": clv_full.get("avg_total_clv"),
+            "avg_spread_clv": clv_full.get("avg_spread_clv"),
+        },
+        "densify_window_clv": {k: v for k, v in densify_clv.items() if k != "ml_game_ids"},
+        "ml_game_ids": densify_clv.get("ml_game_ids") or [],
+        "walkforward": {
+            "sample_size": walkforward.get("sample_size"),
+            "base_brier_ml": walkforward.get("base_brier_ml"),
+            "calibrated_brier_ml": walkforward.get("calibrated_brier_ml"),
+            "base_mae_total_runs": walkforward.get("base_mae_total_runs"),
+            "leakage_violations": walkforward.get("leakage_violations"),
+        },
+        "quality": (quality.get("quality") or {}) if isinstance(quality, dict) else {},
+    }
+
+
+def _finalize_intersection_clv(
+    results: Dict[str, Any],
+    *,
+    selected: List[str],
+    start: date,
+    end: date,
+    lookback_days: int,
+) -> Dict[str, Any]:
+    id_sets = [
+        set(results[name].get("ml_game_ids") or [])
+        for name in selected
+        if name in results
+    ]
+    intersection_ids = set.intersection(*id_sets) if id_sets else set()
+    intersection: Dict[str, Any] = {"n": len(intersection_ids), "by_config": {}}
+    for name in selected:
+        if name not in results:
+            continue
+        model_version = results[name]["model_version"]
+        session = SessionLocal()
+        try:
+            clv_full = compute_mlb_clv_with_spread(
+                session,
+                model_version=model_version,
+                lookback_days=int(lookback_days),
+            )
+            window_items = _filter_clv_items_to_window(
+                session,
+                list(clv_full.get("items") or []),
+                start_date=start,
+                end_date=end,
+            )
+            inter_items = [
+                i for i in window_items if str(i.get("game_id")) in intersection_ids
+            ]
+            intersection["by_config"][name] = _summarize_clv_items(inter_items)
+            results[name].pop("ml_game_ids", None)
+            results[name]["intersection_clv"] = {
+                k: v
+                for k, v in intersection["by_config"][name].items()
+                if k != "ml_game_ids"
+            }
+        finally:
+            session.close()
+    return {
+        "n": intersection["n"],
+        "by_config": {
+            k: {kk: vv for kk, vv in v.items() if kk != "ml_game_ids"}
+            for k, v in (intersection.get("by_config") or {}).items()
+        },
+    }
+
+
+def _late_info_clv_slice(
+    *,
+    model_version: str,
+    start: date,
+    end: date,
+    lookback_days: int,
+    max_hours: float,
+    intersection_ids: Optional[set] = None,
+) -> Dict[str, Any]:
+    late_meta = summarize_late_info_slice([], max_hours=max_hours)
+    session = SessionLocal()
+    try:
+        clv_full = compute_mlb_clv_with_spread(
+            session,
+            model_version=model_version,
+            lookback_days=int(lookback_days),
+        )
+        window_items = _filter_clv_items_to_window(
+            session,
+            list(clv_full.get("items") or []),
+            start_date=start,
+            end_date=end,
+        )
+        gids = [str(i.get("game_id")) for i in window_items if i.get("game_id")]
+        late_meta = summarize_late_info_slice(gids, max_hours=max_hours)
+        late_ids = set(late_meta.get("late_info_game_ids") or [])
+        if intersection_ids is not None:
+            late_ids &= set(intersection_ids)
+        late_items = [i for i in window_items if str(i.get("game_id")) in late_ids]
+        summary = _summarize_clv_items(late_items)
+        summary.pop("ml_game_ids", None)
+        return {
+            "max_hours": float(max_hours),
+            "late_info_n": len(late_ids),
+            "clv": summary,
+            "lake": {k: v for k, v in late_meta.items() if k != "late_info_game_ids"},
+        }
+    finally:
+        session.close()
+
+
+@celery_app.task(name="src.tasks.run_mlb_late_info_stamp_ablation")
+def run_mlb_late_info_stamp_ablation(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    simulations: int = 2000,
+    max_games: int = 1200,
+    lookback_days: int = 90,
+    configs: Optional[List[str]] = None,
+    base_model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Densify stamp horizons H0=−6h / H1=−3h / H2=−1h + late-info CLV slices."""
+    if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
+        raise ValueError(
+            "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for late-info ablation"
+        )
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    selected = configs or ["H0", "H1", "H2"]
+    unknown = [c for c in selected if c not in _LATE_INFO_STAMP_CONFIGS]
+    if unknown:
+        raise ValueError(f"unknown late-info stamp configs: {unknown}")
+
+    prior_timing = get_lineup_timing_mode()
+    prior_quality = get_starter_quality_mode()
+    prior_bp = get_bullpen_role_quality_mode()
+    prior_pitch = get_pitch_matchup_enabled()
+    prior_wind = get_totals_park_rel_wind_enabled()
+    prior_flags = get_stack_ablation_flags()
+    results: Dict[str, Any] = {}
+    try:
+        apply_starter_quality_mode("era_whip")
+        apply_bullpen_role_quality_mode("off")
+        apply_lineup_timing_mode("off")
+        apply_pitch_matchup_flag(False)
+        apply_totals_park_rel_wind_flag(False)
+        apply_stack_ablation_flags(matchup_mul_enabled=True, weather_wind_dir_mul_enabled=True)
+        for name in selected:
+            cfg = _LATE_INFO_STAMP_CONFIGS[name]
+            model_version = f"{base_model_version}-{cfg['model_suffix']}"
+            log.info(
+                "Late-info stamp ablation config start",
+                extra={"config": name, "model_version": model_version, "flags": cfg},
+            )
+            graded = _grade_densify_ablation_config(
+                model_version=model_version,
+                start=start,
+                end=end,
+                simulations=simulations,
+                max_games=max_games,
+                lookback_days=lookback_days,
+                hours_to_first_pitch=float(cfg["hours_to_first_pitch"]),
+            )
+            graded["config"] = cfg
+            results[name] = graded
+    finally:
+        apply_lineup_timing_mode(prior_timing or "off")
+        apply_starter_quality_mode(prior_quality or "era_whip")
+        apply_bullpen_role_quality_mode(prior_bp or "off")
+        apply_pitch_matchup_flag(prior_pitch)
+        apply_totals_park_rel_wind_flag(prior_wind)
+        apply_stack_ablation_flags(
+            matchup_mul_enabled=bool(prior_flags.get("matchup_mul_enabled", True)),
+            weather_wind_dir_mul_enabled=bool(
+                prior_flags.get("weather_wind_dir_mul_enabled", True)
+            ),
+        )
+
+    intersection = _finalize_intersection_clv(
+        results, selected=selected, start=start, end=end, lookback_days=lookback_days
+    )
+    inter_ids = set()
+    # Rebuild id set from intersection n via H1 densify lake (best-effort).
+    for name in selected:
+        late3 = _late_info_clv_slice(
+            model_version=results[name]["model_version"],
+            start=start,
+            end=end,
+            lookback_days=lookback_days,
+            max_hours=3.0,
+        )
+        late6 = _late_info_clv_slice(
+            model_version=results[name]["model_version"],
+            start=start,
+            end=end,
+            lookback_days=lookback_days,
+            max_hours=6.0,
+        )
+        results[name]["late_info_clv_le3h"] = late3
+        results[name]["late_info_clv_le6h"] = late6
+
+    h1 = (intersection.get("by_config") or {}).get("H1") or {}
+    h2 = (intersection.get("by_config") or {}).get("H2") or {}
+    h1_ml = h1.get("avg_ml_clv")
+    h2_ml = h2.get("avg_ml_clv")
+    h2_late = ((results.get("H2") or {}).get("late_info_clv_le3h") or {}).get("clv") or {}
+    late_ml = h2_late.get("avg_ml_clv")
+    recommendation = {
+        "ship_late_stamp_h2": bool(
+            h2_ml is not None
+            and h1_ml is not None
+            and float(h2_ml) >= 0.010
+            and float(h2_ml) > float(h1_ml)
+        ),
+        "ship_late_info_slice": bool(late_ml is not None and float(late_ml) >= 0.010),
+        "stretch_target_hit": bool(
+            (h2_ml is not None and float(h2_ml) >= 0.015)
+            or (late_ml is not None and float(late_ml) >= 0.015)
+        ),
+        "note": (
+            "Ship a late-info stamp only if intersection or ≤3h late-info ML CLV "
+            "≥ +0.010 with leakage=0. Snapshot lake enables ongoing live grading."
+        ),
+    }
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "lookback_days": int(lookback_days),
+        "configs": selected,
+        "results": results,
+        "intersection": intersection,
+        "recommendation": recommendation,
+        "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+        "_unused_inter_ids": list(inter_ids),
+    }
+
+
+@celery_app.task(name="src.tasks.run_mlb_pitch_matchup_ablation")
+def run_mlb_pitch_matchup_ablation(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    simulations: int = 2000,
+    max_games: int = 1200,
+    lookback_days: int = 90,
+    configs: Optional[List[str]] = None,
+    base_model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """M0 (S0 / pitch matchup off) vs M1 (pitch-level arsenal PA matchup on)."""
+    if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
+        raise ValueError(
+            "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for pitch matchup ablation"
+        )
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    selected = configs or ["M0", "M1"]
+    unknown = [c for c in selected if c not in _PITCH_MATCHUP_ABLATION_CONFIGS]
+    if unknown:
+        raise ValueError(f"unknown pitch matchup configs: {unknown}")
+
+    prior_pitch = get_pitch_matchup_enabled()
+    prior_wind = get_totals_park_rel_wind_enabled()
+    prior_timing = get_lineup_timing_mode()
+    prior_quality = get_starter_quality_mode()
+    prior_bp = get_bullpen_role_quality_mode()
+    prior_flags = get_stack_ablation_flags()
+    results: Dict[str, Any] = {}
+    try:
+        apply_starter_quality_mode("era_whip")
+        apply_bullpen_role_quality_mode("off")
+        apply_lineup_timing_mode("off")
+        apply_totals_park_rel_wind_flag(False)
+        apply_stack_ablation_flags(matchup_mul_enabled=True, weather_wind_dir_mul_enabled=True)
+        for name in selected:
+            cfg = _PITCH_MATCHUP_ABLATION_CONFIGS[name]
+            model_version = f"{base_model_version}-{cfg['model_suffix']}"
+            apply_pitch_matchup_flag(bool(cfg["pitch_matchup_enabled"]))
+            log.info(
+                "Pitch matchup ablation config start",
+                extra={"config": name, "model_version": model_version, "flags": cfg},
+            )
+            graded = _grade_densify_ablation_config(
+                model_version=model_version,
+                start=start,
+                end=end,
+                simulations=simulations,
+                max_games=max_games,
+                lookback_days=lookback_days,
+                hours_to_first_pitch=3.0,
+            )
+            graded["config"] = cfg
+            graded["pitch_matchup_enabled"] = get_pitch_matchup_enabled()
+            results[name] = graded
+    finally:
+        apply_pitch_matchup_flag(prior_pitch)
+        apply_totals_park_rel_wind_flag(prior_wind)
+        apply_lineup_timing_mode(prior_timing or "off")
+        apply_starter_quality_mode(prior_quality or "era_whip")
+        apply_bullpen_role_quality_mode(prior_bp or "off")
+        apply_stack_ablation_flags(
+            matchup_mul_enabled=bool(prior_flags.get("matchup_mul_enabled", True)),
+            weather_wind_dir_mul_enabled=bool(
+                prior_flags.get("weather_wind_dir_mul_enabled", True)
+            ),
+        )
+
+    intersection = _finalize_intersection_clv(
+        results, selected=selected, start=start, end=end, lookback_days=lookback_days
+    )
+    m0 = (intersection.get("by_config") or {}).get("M0") or {}
+    m1 = (intersection.get("by_config") or {}).get("M1") or {}
+    m0_ml = m0.get("avg_ml_clv")
+    m1_ml = m1.get("avg_ml_clv")
+    recommendation = {
+        "ship_pitch_matchup": bool(
+            m1_ml is not None
+            and m0_ml is not None
+            and float(m1_ml) >= 0.010
+            and float(m1_ml) > float(m0_ml)
+        ),
+        "stretch_target_hit": bool(m1_ml is not None and float(m1_ml) >= 0.015),
+        "m1_delta_vs_m0": (
+            round(float(m1_ml) - float(m0_ml), 5)
+            if m1_ml is not None and m0_ml is not None
+            else None
+        ),
+        "note": (
+            "Ship MLB_PITCH_MATCHUP_ENABLED only if intersection ML CLV ≥ +0.010 "
+            "and beats M0 without torching RL/total. Not a starter_quality rewrite."
+        ),
+    }
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "lookback_days": int(lookback_days),
+        "configs": selected,
+        "results": results,
+        "intersection": intersection,
+        "recommendation": recommendation,
+        "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+    }
+
+
+@celery_app.task(name="src.tasks.run_mlb_totals_park_wind_ablation")
+def run_mlb_totals_park_wind_ablation(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    simulations: int = 2000,
+    max_games: int = 1200,
+    lookback_days: int = 90,
+    configs: Optional[List[str]] = None,
+    base_model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """W0 (S0) vs W1 (park-relative wind on totals only). ML must not regress."""
+    if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
+        raise ValueError(
+            "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for park-wind ablation"
+        )
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    selected = configs or ["W0", "W1"]
+    unknown = [c for c in selected if c not in _TOTALS_PARK_WIND_ABLATION_CONFIGS]
+    if unknown:
+        raise ValueError(f"unknown park-wind configs: {unknown}")
+
+    prior_pitch = get_pitch_matchup_enabled()
+    prior_wind = get_totals_park_rel_wind_enabled()
+    prior_timing = get_lineup_timing_mode()
+    prior_quality = get_starter_quality_mode()
+    prior_bp = get_bullpen_role_quality_mode()
+    prior_flags = get_stack_ablation_flags()
+    results: Dict[str, Any] = {}
+    try:
+        apply_starter_quality_mode("era_whip")
+        apply_bullpen_role_quality_mode("off")
+        apply_lineup_timing_mode("off")
+        apply_pitch_matchup_flag(False)
+        apply_stack_ablation_flags(matchup_mul_enabled=True, weather_wind_dir_mul_enabled=True)
+        for name in selected:
+            cfg = _TOTALS_PARK_WIND_ABLATION_CONFIGS[name]
+            model_version = f"{base_model_version}-{cfg['model_suffix']}"
+            apply_totals_park_rel_wind_flag(bool(cfg["totals_park_rel_wind_enabled"]))
+            log.info(
+                "Totals park-wind ablation config start",
+                extra={"config": name, "model_version": model_version, "flags": cfg},
+            )
+            graded = _grade_densify_ablation_config(
+                model_version=model_version,
+                start=start,
+                end=end,
+                simulations=simulations,
+                max_games=max_games,
+                lookback_days=lookback_days,
+                hours_to_first_pitch=3.0,
+            )
+            graded["config"] = cfg
+            graded["totals_park_rel_wind_enabled"] = get_totals_park_rel_wind_enabled()
+            results[name] = graded
+    finally:
+        apply_pitch_matchup_flag(prior_pitch)
+        apply_totals_park_rel_wind_flag(prior_wind)
+        apply_lineup_timing_mode(prior_timing or "off")
+        apply_starter_quality_mode(prior_quality or "era_whip")
+        apply_bullpen_role_quality_mode(prior_bp or "off")
+        apply_stack_ablation_flags(
+            matchup_mul_enabled=bool(prior_flags.get("matchup_mul_enabled", True)),
+            weather_wind_dir_mul_enabled=bool(
+                prior_flags.get("weather_wind_dir_mul_enabled", True)
+            ),
+        )
+
+    intersection = _finalize_intersection_clv(
+        results, selected=selected, start=start, end=end, lookback_days=lookback_days
+    )
+    w0 = (intersection.get("by_config") or {}).get("W0") or {}
+    w1 = (intersection.get("by_config") or {}).get("W1") or {}
+    w0_ml = w0.get("avg_ml_clv")
+    w1_ml = w1.get("avg_ml_clv")
+    w0_tot = w0.get("avg_total_clv")
+    w1_tot = w1.get("avg_total_clv")
+    w0_mae = ((results.get("W0") or {}).get("walkforward") or {}).get("base_mae_total_runs")
+    w1_mae = ((results.get("W1") or {}).get("walkforward") or {}).get("base_mae_total_runs")
+    totals_improved = bool(
+        (w1_tot is not None and w0_tot is not None and float(w1_tot) > float(w0_tot))
+        or (w1_mae is not None and w0_mae is not None and float(w1_mae) < float(w0_mae))
+    )
+    ml_ok = bool(
+        w1_ml is not None
+        and w0_ml is not None
+        and float(w1_ml) >= float(w0_ml) - 0.0005  # allow tiny noise
+    )
+    recommendation = {
+        "ship_totals_park_rel_wind": bool(totals_improved and ml_ok),
+        "totals_improved": totals_improved,
+        "ml_not_regressed": ml_ok,
+        "w1_delta_total_clv": (
+            round(float(w1_tot) - float(w0_tot), 5)
+            if w1_tot is not None and w0_tot is not None
+            else None
+        ),
+        "w1_delta_ml_clv": (
+            round(float(w1_ml) - float(w0_ml), 5)
+            if w1_ml is not None and w0_ml is not None
+            else None
+        ),
+        "note": (
+            "Ship MLB_TOTALS_PARK_REL_WIND_ENABLED only if totals MAE/CLV improve "
+            "and intersection ML CLV does not regress. ML wind-dir path stays S0."
+        ),
+    }
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "lookback_days": int(lookback_days),
+        "configs": selected,
+        "results": results,
+        "intersection": intersection,
         "recommendation": recommendation,
         "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
         "unused_holdout": unused_holdout_summary(),
