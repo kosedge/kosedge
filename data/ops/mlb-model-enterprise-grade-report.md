@@ -3,7 +3,7 @@
 **Status:** Research / not subscription-worthy for stake marketing  
 **Production web branch:** `deploy-vercel`  
 **Model service:** `model-service-production-e253.up.railway.app`  
-**Model version:** `mlb-v1-pa-sim`  
+**Model version:** `mlb-v1-pa-sim` (S0 stack: HFA 1.025 + matchup ON + wind-dir ON + ERA/WHIP quality)  
 **Unused holdout (frozen):** 2026-07-18 → 2026-08-10 — train-excluded; stake grade below  
 **Odds densify:** not run (credit floor)
 
@@ -11,14 +11,14 @@
 
 | Area | Grade | Notes |
 |------|:-----:|-------|
-| Moneyline sharpness (Brier) | **D+** | Best densify walkforward **0.24896** (HFA off) / **0.2499** (HFA 1.025); gate ≤0.24 fail |
-| Moneyline CLV | **D** | +0.023 → ~**+0.006–0.007**; HFA ablation did not recover |
-| Calibration (ECE) | **B** | **0.017–0.028** ≪ 0.06 |
-| Leakage hygiene | **A** | **11 → 0** via lookback stamp repair |
-| Totals MAE | **C+** | ~**3.51–3.52** (gate ~3.5 borderline); total CLV still +0.09 |
-| Run-line CLV | **C-** | +0.11 → **+0.05–0.07** under later stacks |
+| Moneyline sharpness (Brier) | **D+** | Densify walkforward ~**0.2496–0.2502**; gate ≤0.24 fail |
+| Moneyline CLV | **D** | Intersection densify **~+0.004–0.005** (n=476); prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
+| Calibration (ECE) | **B** | **0.017–0.027** ≪ 0.06 |
+| Leakage hygiene | **A** | **0** on HFA + stack ablation runs |
+| Totals MAE | **C+** | ~**3.47–3.52**; prod full-n total CLV ~+0.088 |
+| Run-line CLV | **C-** | Densify intersection **+0.05–0.06** (S0); S2 wind-dir-off → **0** |
 | Props stake | **F / blocked** | `research_only` — unused holdout + props gates not cleared |
-| Overall subscription | **D / no-go** | Fail Brier + CLV vs marketing bar; leakage now clean |
+| Overall subscription | **D / no-go** | Fail Brier + CLV vs marketing bar; leakage clean |
 
 ## What shipped
 
@@ -29,17 +29,18 @@
 | [#51](https://github.com/kosedge/kosedge/pull/51) | HFA-off trial + 1.025 grade artifacts | merged |
 | [#52](https://github.com/kosedge/kosedge/pull/52) | Restore **HFA=1.025** + enterprise report | merged + Railway |
 | [#53](https://github.com/kosedge/kosedge/pull/53) | Unused-holdout stake no-go artifacts | merged |
+| [#55](https://github.com/kosedge/kosedge/pull/55) | Stack ablation flags + S0–S3 densify grader | merged + Railway; **no stack ship** |
 
 ### Engineering detail
 
-1. **HFA ablation** — synthetic + production densify grades; see `hfa_ablation_2026-08-01.md` / `hfa1025_resim_grade_2026-08-01.md`.
-2. **Leakage** — root cause: repair only covered densify window; walkforward lookback saw wall-clock stamps. Fix: `_repair_mlb_leakage_stamps` with `LEAST(start−3h, completed_at−1m)` on lookback, run before grade/resim.
-3. **SP identity** — live-first Stats API, alias/Jr strip, last-name unique match, expanded priors, season-aware + platoon refresh on historical resim.
-4. **Matchup PA** — bounded `_offense_pitcher_matchup_mul` (K/BB vs contact proxy, GB vs elevated recent).
-5. **Totals MAE track** — weather reliability 0.72 when temp present but wind missing (no global ML nudge).
-6. **Optional ML head** — **skipped**; runs quality already competitive vs ML; CLV regression not a Brier-calibration problem that a market-free head would fix without OOS proof.
+1. **HFA ablation** — winner **1.025**; HFA-off worsens CLV.
+2. **Leakage** — lookback stamp repair; stays **0**.
+3. **SP identity** — live-first Stats API + priors on historical resim.
+4. **Matchup PA** — present in prod; **ablation says leave ON** (S1 does not clear +0.015 gate).
+5. **Stack ablation (S0–S3)** — see `stack_ablation_2026-08-01.md`. Intersection n=476; matchup-off / wind-dir-off / K-BB-only quality do **not** restore subscription CLV.
+6. **Optional ML head** — still skipped.
 
-## Densify-window metrics (2026-05-20 → 2026-07-17)
+## Densify HFA ladder (prior session)
 
 | Config | Base Brier | ML CLV | Total CLV | RL CLV | ECE | Leakage | Totals MAE |
 |--------|-----------:|-------:|----------:|-------:|----:|--------:|-----------:|
@@ -48,7 +49,21 @@
 | HFA **1.025** + ships | **0.249888** | +0.00681 | +0.091 | +0.075 | **0.0167** | **0** | 3.514 |
 | HFA 1.0 (off) | **0.248963** | +0.00564 | +0.091 | +0.047 | 0.0223 | **0** | 3.515 |
 
-**Final HFA choice: 1.025** — among leakage-clean candidates, best ML CLV without abandoning Brier/ECE gains. Turning HFA fully off did **not** restore +0.023 CLV (so CLV damage is not HFA-alone; suspect sample/feature stack from PR #48+matchup).
+## Stack ablation intersection (2026-08-01) — decision table
+
+Fixed densify closing-line set **n=476** (≈ prior ~498 universe). HFA=1.025 for all.
+
+| Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | MAE | ECE | Leak |
+|--------|-------------:|-------------:|----------------:|---------:|----:|----:|-----:|
+| S0 baseline | +0.00435 | +0.063 | +0.002 | 0.25023 | 3.483 | 0.027 | 0 |
+| S1 matchup OFF | **+0.00454** | +0.051 | +0.002 | 0.25001 | 3.483 | 0.024 | 0 |
+| S2 + wind-dir OFF | +0.00393 | **0.000** | +0.002 | **0.24957** | **3.468** | 0.024 | 0 |
+| S3 + K-BB quality | +0.00428 | +0.038 | +0.002 | 0.25021 | 3.481 | 0.024 | 0 |
+
+**Ship:** none of S1/S2/S3. Production stays S0.  
+**Narrative:** prior +0.023 does **not** appear on intersection even for S0 → treat as sample-composition, not matchup damage. Pivot to deeper SP talent / BP role quality.
+
+Production full-n CLV after ablation (lookback 90): ML **+0.0049**, total **+0.088**, RL **+0.079** (count 971).
 
 ## Unused-holdout stake verdict
 
@@ -65,12 +80,14 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 ## Blocking subscription-worthiness
 
 1. ML Brier still ≥0.248 vs 0.24 gate.  
-2. ML CLV collapsed vs subscription baseline and did not return under HFA ablation.  
+2. Intersection ML CLV ~+0.004–0.005 ≪ +0.015 gate; prior +0.023 was confounded.  
 3. Unused holdout not large enough / not stake-green.  
-4. RL CLV degraded under later stacks — protect before marketing run-line.
+4. RL/total CLV must not be softened further for Brier cosmetics (S2 rejected).
 
 ## Artifacts
 
+- `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.md` ← **latest decision**
+- `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/hfa_ablation_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/hfa1025_resim_grade_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/unused_holdout_stake_verdict_2026-08-01.md`
