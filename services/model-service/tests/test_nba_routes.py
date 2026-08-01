@@ -148,7 +148,7 @@ def test_nba_health_and_fair_lines_empty_slate(monkeypatch) -> None:
     }
     assert "model_version" in payload
     assert payload["phase"] == "phase3"
-    assert payload["publish_posture"]["props"] == "queued_until_mainlines_honest"
+    assert payload["publish_posture"]["props"] == "research_only"
 
 
 def test_nba_fair_lines_shape_with_rows(monkeypatch) -> None:
