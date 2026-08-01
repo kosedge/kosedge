@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 from typing import Any, Dict, Iterable, List, Optional
@@ -7,6 +8,32 @@ from typing import Any, Dict, Iterable, List, Optional
 import requests
 
 MLB_STATS_API = "https://statsapi.mlb.com/api/v1"
+
+# starter_quality construction:
+#   era_whip (default / S0–S2): ERA + WHIP results signal
+#   kbb_only (S3 trial): predictive K/BB/GB shape only (no ERA/WHIP)
+STARTER_QUALITY_MODE = (os.getenv("MLB_STARTER_QUALITY_MODE") or "era_whip").strip().lower()
+
+
+def apply_starter_quality_mode(mode: str) -> str:
+    """Process-local override for densify stack ablation (clears live SP cache)."""
+    global STARTER_QUALITY_MODE
+    normalized = (mode or "era_whip").strip().lower()
+    if normalized not in {"era_whip", "kbb_only"}:
+        raise ValueError(f"unsupported starter quality mode: {mode}")
+    STARTER_QUALITY_MODE = normalized
+    cache_fn = globals().get("_live_starter_features")
+    if cache_fn is not None and hasattr(cache_fn, "cache_clear"):
+        cache_fn.cache_clear()
+    return STARTER_QUALITY_MODE
+
+
+def get_starter_quality_mode() -> str:
+    return STARTER_QUALITY_MODE
+
+
+def reset_starter_quality_mode_from_env() -> str:
+    return apply_starter_quality_mode((os.getenv("MLB_STARTER_QUALITY_MODE") or "era_whip").strip().lower())
 OPEN_METEO_FORECAST_API = "https://api.open-meteo.com/v1/forecast"
 LEAGUE_BASELINE_OPS = 0.720
 RECENT_FORM_WINDOW_DAYS = 30
@@ -724,12 +751,6 @@ def _starter_features_from_stat(
     if era is None and whip is None and k_per_9 is None and bb_per_9 is None:
         return None
 
-    starter_quality = 1.0
-    if era is not None:
-        starter_quality += (era - 4.10) * 0.045
-    if whip is not None:
-        starter_quality += (whip - 1.28) * 0.18
-
     k_factor = 1.0 if k_per_9 is None else 1.0 + (k_per_9 - 8.5) * 0.028
     bb_factor = 1.0 if bb_per_9 is None else 1.0 + (bb_per_9 - 3.1) * 0.045
     gb_factor = (
@@ -737,6 +758,22 @@ def _starter_features_from_stat(
         if ground_outs_to_air_outs is None
         else 1.0 + (ground_outs_to_air_outs - 1.0) * 0.06
     )
+
+    if STARTER_QUALITY_MODE == "kbb_only":
+        # Predictive run-allowed factor: more K / GB suppress; more BB inflate.
+        starter_quality = 1.0
+        if k_per_9 is not None:
+            starter_quality -= (k_per_9 - 8.5) * 0.035
+        if bb_per_9 is not None:
+            starter_quality += (bb_per_9 - 3.1) * 0.055
+        if ground_outs_to_air_outs is not None:
+            starter_quality -= (ground_outs_to_air_outs - 1.0) * 0.04
+    else:
+        starter_quality = 1.0
+        if era is not None:
+            starter_quality += (era - 4.10) * 0.045
+        if whip is not None:
+            starter_quality += (whip - 1.28) * 0.18
 
     return {
         "starter_quality": max(0.82, min(1.18, round(starter_quality, 4))),
@@ -748,6 +785,7 @@ def _starter_features_from_stat(
         "player_id": player_id,
         "player_name": starter_name,
         "season": season,
+        "quality_mode": STARTER_QUALITY_MODE,
     }
 
 
@@ -974,21 +1012,34 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
 
     known = STARTER_QUALITY_PRIORS.get(key) or STARTER_QUALITY_PRIORS.get(normalize_team_key(starter_name))
     if known:
+        k_factor = float(known["k_factor"])
+        bb_factor = float(known["bb_factor"])
+        gb_factor = float(known["gb_factor"])
+        if STARTER_QUALITY_MODE == "kbb_only":
+            # Reconstruct quality from prior shape so S3 does not inherit ERA priors.
+            quality = 1.0 - (k_factor - 1.0) * 0.55 + (bb_factor - 1.0) * 0.70 - (gb_factor - 1.0) * 0.15
+            quality = max(0.85, min(1.15, round(quality, 4)))
+        else:
+            quality = float(known["quality"])
         return {
-            "starter_quality": float(known["quality"]),
-            "k_factor": float(known["k_factor"]),
-            "bb_factor": float(known["bb_factor"]),
-            "gb_factor": float(known["gb_factor"]),
+            "starter_quality": quality,
+            "k_factor": k_factor,
+            "bb_factor": bb_factor,
+            "gb_factor": gb_factor,
             "handedness": str(known["handedness"]),
             "source": "static-prior",
+            "quality_mode": STARTER_QUALITY_MODE,
         }
 
     # Deterministic fallback from identity signature (low firmness path).
     score = sum(ord(c) for c in key if c.isalpha())
-    quality = 1.0 + ((score % 13) - 6) * 0.01
     k_factor = 1.0 + ((score % 11) - 5) * 0.008
     bb_factor = 1.0 - ((score % 9) - 4) * 0.007
     gb_factor = 1.0 + ((score % 7) - 3) * 0.01
+    if STARTER_QUALITY_MODE == "kbb_only":
+        quality = 1.0 - (k_factor - 1.0) * 0.55 + (bb_factor - 1.0) * 0.70 - (gb_factor - 1.0) * 0.15
+    else:
+        quality = 1.0 + ((score % 13) - 6) * 0.01
     hand = "L" if key.split(" ")[-1].endswith(("ez", "er", "is")) and (score % 5 == 0) else "R"
     return {
         "starter_quality": max(0.85, min(1.15, round(quality, 4))),
@@ -997,6 +1048,7 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
         "gb_factor": max(0.90, min(1.16, round(gb_factor, 4))),
         "handedness": hand,
         "source": "heuristic-fallback",
+        "quality_mode": STARTER_QUALITY_MODE,
     }
 
 

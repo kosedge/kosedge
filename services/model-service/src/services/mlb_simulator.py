@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import os
 import random
 from dataclasses import dataclass
 from typing import Dict, List, Optional
@@ -19,6 +20,48 @@ MAX_EXTRA_INNINGS = 9
 # giving back the Brier/ECE gains. Pre-HFA +0.023 CLV not recovered.
 HOME_FIELD_OFFENSE_MUL = 1.025
 AWAY_FIELD_OFFENSE_MUL = 1.0 / HOME_FIELD_OFFENSE_MUL
+
+
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None or str(raw).strip() == "":
+        return default
+    return str(raw).strip().lower() in {"1", "true", "yes", "on"}
+
+
+# Stack ablation knobs (env defaults; overridable via apply_stack_ablation_flags).
+# S0 production baseline: matchup ON, wind-dir mul ON.
+MATCHUP_MUL_ENABLED = _env_flag("MLB_MATCHUP_MUL_ENABLED", True)
+WEATHER_WIND_DIR_MUL_ENABLED = _env_flag("MLB_WEATHER_WIND_DIR_MUL_ENABLED", True)
+
+
+def apply_stack_ablation_flags(
+    *,
+    matchup_mul_enabled: Optional[bool] = None,
+    weather_wind_dir_mul_enabled: Optional[bool] = None,
+) -> Dict[str, bool]:
+    """Process-local flag overrides for densify stack ablation (S0–S3)."""
+    global MATCHUP_MUL_ENABLED, WEATHER_WIND_DIR_MUL_ENABLED
+    if matchup_mul_enabled is not None:
+        MATCHUP_MUL_ENABLED = bool(matchup_mul_enabled)
+    if weather_wind_dir_mul_enabled is not None:
+        WEATHER_WIND_DIR_MUL_ENABLED = bool(weather_wind_dir_mul_enabled)
+    return get_stack_ablation_flags()
+
+
+def get_stack_ablation_flags() -> Dict[str, bool]:
+    return {
+        "matchup_mul_enabled": bool(MATCHUP_MUL_ENABLED),
+        "weather_wind_dir_mul_enabled": bool(WEATHER_WIND_DIR_MUL_ENABLED),
+    }
+
+
+def reset_stack_ablation_flags_from_env() -> Dict[str, bool]:
+    """Restore flags from environment (used after ablation loops)."""
+    return apply_stack_ablation_flags(
+        matchup_mul_enabled=_env_flag("MLB_MATCHUP_MUL_ENABLED", True),
+        weather_wind_dir_mul_enabled=_env_flag("MLB_WEATHER_WIND_DIR_MUL_ENABLED", True),
+    )
 
 
 @dataclass
@@ -208,7 +251,11 @@ def _environment_run_multiplier(inputs: MlbGameInputs) -> float:
     hum_mul = 1.0 + _clamp((humidity - 50.0) * 0.0008, -0.03, 0.03)
 
     # Crude proxy: quartering/out-to-center winds (around 120-240 deg) slightly increase runs.
-    dir_mul = 1.02 if 120.0 <= wind_dir <= 240.0 else 0.99
+    # Absolute compass (not park CF bearing) — gated for stack ablation / totals-only weather.
+    if WEATHER_WIND_DIR_MUL_ENABLED:
+        dir_mul = 1.02 if 120.0 <= wind_dir <= 240.0 else 0.99
+    else:
+        dir_mul = 1.0
     ump_mul = _clamp(inputs.umpire_run_factor, 0.94, 1.06)
     raw = park * temp_mul * wind_mul * hum_mul * dir_mul * ump_mul
     # Dome / missing-weather: blend toward park-only so Open-Meteo noise cannot dominate.
@@ -370,22 +417,26 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         inputs.lineup_confidence_away,
         inputs.info_freshness_score_away,
     )
-    matchup_home = _offense_pitcher_matchup_mul(
-        offense_split=inputs.offense_split_home,
-        recent_form=inputs.recent_form_index_home,
-        opp_k_factor=inputs.starter_k_factor_away,
-        opp_bb_factor=inputs.starter_bb_factor_away,
-        opp_gb_factor=inputs.starter_gb_factor_away,
-        opp_firmness=firm_away,
-    )
-    matchup_away = _offense_pitcher_matchup_mul(
-        offense_split=inputs.offense_split_away,
-        recent_form=inputs.recent_form_index_away,
-        opp_k_factor=inputs.starter_k_factor_home,
-        opp_bb_factor=inputs.starter_bb_factor_home,
-        opp_gb_factor=inputs.starter_gb_factor_home,
-        opp_firmness=firm_home,
-    )
+    if MATCHUP_MUL_ENABLED:
+        matchup_home = _offense_pitcher_matchup_mul(
+            offense_split=inputs.offense_split_home,
+            recent_form=inputs.recent_form_index_home,
+            opp_k_factor=inputs.starter_k_factor_away,
+            opp_bb_factor=inputs.starter_bb_factor_away,
+            opp_gb_factor=inputs.starter_gb_factor_away,
+            opp_firmness=firm_away,
+        )
+        matchup_away = _offense_pitcher_matchup_mul(
+            offense_split=inputs.offense_split_away,
+            recent_form=inputs.recent_form_index_away,
+            opp_k_factor=inputs.starter_k_factor_home,
+            opp_bb_factor=inputs.starter_bb_factor_home,
+            opp_gb_factor=inputs.starter_gb_factor_home,
+            opp_firmness=firm_home,
+        )
+    else:
+        matchup_home = 1.0
+        matchup_away = 1.0
     offense_home_full = _effective_offense_index(
         season_index=inputs.offense_home,
         split_index=inputs.offense_split_home,
