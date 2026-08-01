@@ -21,6 +21,7 @@ from .services.mlb_data import (
     apply_bullpen_role_quality_mode,
     apply_starter_quality_mode,
     build_team_offense_context,
+    clear_game_lineup_features_cache,
     fetch_mlb_standings,
     fetch_forecast_for_game,
     fetch_game_lineup_features,
@@ -35,6 +36,14 @@ from .services.mlb_data import (
     park_factor_for_team,
     starter_identity_features,
     umpire_run_factor,
+)
+from .services.mlb_lineup_timing import (
+    allow_late_sp_clear,
+    apply_lineup_timing_mode,
+    apply_lineup_timing_to_inputs,
+    get_lineup_timing_mode,
+    known_players_from_context,
+    per_side_lineup_confidence,
 )
 from .services.mlb_calibration import (
     apply_prob_calibrator as apply_mlb_prob_calibrator,
@@ -6459,6 +6468,7 @@ def pull_mlb_context_snapshot(days_ahead: int = 5) -> Dict[str, int]:
     games_seen = 0
     team_bullpen_cache: Dict[int, Dict[str, float]] = {}
     try:
+        clear_game_lineup_features_cache()
         for g in schedule:
             event_id = g["external_game_id"]
             game_dt = _parse_iso_datetime(g.get("game_time")) or _now_utc()
@@ -6486,11 +6496,16 @@ def pull_mlb_context_snapshot(days_ahead: int = 5) -> Dict[str, int]:
                 game_lineups = {"home": {}, "away": {}}
             home_lineup = game_lineups.get("home") or {}
             away_lineup = game_lineups.get("away") or {}
-            lineup_confirmed = (
-                bool(g.get("lineup_confirmed"))
-                or bool(home_lineup.get("lineup_confirmed"))
-                or bool(away_lineup.get("lineup_confirmed"))
-            )
+            if get_lineup_timing_mode() == "sharp":
+                lineup_confirmed = bool(home_lineup.get("lineup_confirmed")) and bool(
+                    away_lineup.get("lineup_confirmed")
+                )
+            else:
+                lineup_confirmed = (
+                    bool(g.get("lineup_confirmed"))
+                    or bool(home_lineup.get("lineup_confirmed"))
+                    or bool(away_lineup.get("lineup_confirmed"))
+                )
 
             weather = fetch_forecast_for_game(
                 team_abbr=g["home_abbr"],
@@ -9813,28 +9828,59 @@ def run_mlb_lineup_nowcast_repricing(
             {"now_ts": now, "end_ts": end_ts},
         ).fetchall()
 
+        # Never serve stale empty cards from morning context pull.
+        clear_game_lineup_features_cache()
         for r in rows:
             m = dict(r._mapping)
             seen_games += 1
+            live_fetch_ok = False
             try:
-                live_lineups = fetch_game_lineup_features(str(m.get("external_id"))) if m.get("external_id") else {"home": {}, "away": {}}
+                if m.get("external_id"):
+                    live_lineups = fetch_game_lineup_features(str(m.get("external_id")))
+                    live_fetch_ok = True
+                else:
+                    live_lineups = {"home": {}, "away": {}}
             except Exception:
                 live_lineups = {"home": {}, "away": {}}
             live_home_lineup = live_lineups.get("home") or {}
             live_away_lineup = live_lineups.get("away") or {}
-            lineup_confirmed = (
-                bool(m["lineup_confirmed"]) if m.get("lineup_confirmed") is not None else False
-            ) or bool(live_home_lineup.get("lineup_confirmed")) or bool(live_away_lineup.get("lineup_confirmed"))
-            freshness = _info_freshness_score(
-                updated_at=m.get("context_updated_at"),
+            known_home = int(live_home_lineup.get("known_players") or 0)
+            known_away = int(live_away_lineup.get("known_players") or 0)
+            hours_to_pitch = _hours_to_game(m.get("start_time"))
+            # Live fetch age is ~0; do not damp late info with stale context.updated_at.
+            if live_fetch_ok:
+                freshness = 1.0 if (known_home >= 8 or known_away >= 8) else 0.92
+            else:
+                freshness = _info_freshness_score(
+                    updated_at=m.get("context_updated_at"),
+                    lineup_confirmed=bool(m.get("lineup_confirmed")),
+                )
+            if get_lineup_timing_mode() == "sharp":
+                side_conf = per_side_lineup_confidence(
+                    known_home=known_home,
+                    known_away=known_away,
+                    probable_pitcher_home=live_home_lineup.get("probable_pitcher"),
+                    probable_pitcher_away=live_away_lineup.get("probable_pitcher"),
+                    hours_to_first_pitch=hours_to_pitch,
+                    freshness_score=freshness,
+                )
+                lineup_confirmed = bool(side_conf["lineup_confirmed"])
+            else:
+                lineup_confirmed = (
+                    bool(m["lineup_confirmed"]) if m.get("lineup_confirmed") is not None else False
+                ) or bool(live_home_lineup.get("lineup_confirmed")) or bool(
+                    live_away_lineup.get("lineup_confirmed")
+                )
+            allow_clear = allow_late_sp_clear(
+                hours_to_first_pitch=hours_to_pitch,
                 lineup_confirmed=lineup_confirmed,
             )
-            hours_to_pitch = _hours_to_game(m.get("start_time"))
             starter_resolve = resolve_nowcast_starters(
                 context_home=m.get("probable_pitcher_home"),
                 context_away=m.get("probable_pitcher_away"),
                 live_home=live_home_lineup.get("probable_pitcher") or live_home_lineup.get("starter_name"),
                 live_away=live_away_lineup.get("probable_pitcher") or live_away_lineup.get("starter_name"),
+                allow_clear=allow_clear,
             )
             prior_starter_home = starter_resolve["prior_home"]
             prior_starter_away = starter_resolve["prior_away"]
@@ -9842,13 +9888,30 @@ def run_mlb_lineup_nowcast_repricing(
             next_sp_away = starter_resolve["new_away"]
             if starter_resolve["any_changed"]:
                 sp_change_games += 1
-            nowcast = _lineup_nowcast_confidence(
-                hours_to_first_pitch=hours_to_pitch,
-                lineup_confirmed=lineup_confirmed,
-                probable_pitcher_home=next_sp_home,
-                probable_pitcher_away=next_sp_away,
-                freshness_score=freshness,
-            )
+            if get_lineup_timing_mode() == "sharp":
+                nowcast = {
+                    "home": float(side_conf["home"]),
+                    "away": float(side_conf["away"]),
+                }
+                # Recompute with resolved SPs (firmness of named arms).
+                side_conf = per_side_lineup_confidence(
+                    known_home=known_home,
+                    known_away=known_away,
+                    probable_pitcher_home=next_sp_home,
+                    probable_pitcher_away=next_sp_away,
+                    hours_to_first_pitch=hours_to_pitch,
+                    freshness_score=freshness,
+                )
+                nowcast = {"home": float(side_conf["home"]), "away": float(side_conf["away"])}
+                lineup_confirmed = bool(side_conf["lineup_confirmed"])
+            else:
+                nowcast = _lineup_nowcast_confidence(
+                    hours_to_first_pitch=hours_to_pitch,
+                    lineup_confirmed=lineup_confirmed,
+                    probable_pitcher_home=next_sp_home,
+                    probable_pitcher_away=next_sp_away,
+                    freshness_score=freshness,
+                )
             prev_home = float(m["lineup_confidence_home"]) if m.get("lineup_confidence_home") is not None else None
             prev_away = float(m["lineup_confidence_away"]) if m.get("lineup_confidence_away") is not None else None
             prev_avg = (
@@ -9907,13 +9970,23 @@ def run_mlb_lineup_nowcast_repricing(
                     fallback_split=offense_split_away,
                 )
             # Update context with nowcast confidence as live pre-lock estimate.
-            session.execute(
-                text(
-                    """
-                    UPDATE mlb_game_context
-                    SET
+            # When allow_clear, write NULL SP explicitly (no COALESCE keep-prior).
+            if allow_clear:
+                sp_sql = """
+                      probable_pitcher_home = :probable_pitcher_home,
+                      probable_pitcher_away = :probable_pitcher_away,
+                """
+            else:
+                sp_sql = """
                       probable_pitcher_home = COALESCE(:probable_pitcher_home, probable_pitcher_home),
                       probable_pitcher_away = COALESCE(:probable_pitcher_away, probable_pitcher_away),
+                """
+            session.execute(
+                text(
+                    f"""
+                    UPDATE mlb_game_context
+                    SET
+                      {sp_sql}
                       lineup_confidence_home = :lineup_confidence_home,
                       lineup_confidence_away = :lineup_confidence_away,
                       lineup_strength_index_home = :lineup_strength_index_home,
@@ -9921,7 +9994,7 @@ def run_mlb_lineup_nowcast_repricing(
                       offense_split_index_home = :offense_split_index_home,
                       offense_split_index_away = :offense_split_index_away,
                       lineup_confirmed = :lineup_confirmed,
-                      context = COALESCE(context, '{}'::jsonb) || CAST(:context_patch AS jsonb),
+                      context = COALESCE(context, '{{}}'::jsonb) || CAST(:context_patch AS jsonb),
                       updated_at = :updated_at
                     WHERE game_id = :game_id
                     """
@@ -9955,6 +10028,10 @@ def run_mlb_lineup_nowcast_repricing(
                                 "starter_away": next_sp_away,
                                 "sp_changed_home": bool(starter_resolve["home_changed"]),
                                 "sp_changed_away": bool(starter_resolve["away_changed"]),
+                                "allow_clear": bool(allow_clear),
+                                "timing_mode": get_lineup_timing_mode(),
+                                "known_home": known_home,
+                                "known_away": known_away,
                                 "home_lineup_players": live_home_lineup.get("players") or [],
                                 "away_lineup_players": live_away_lineup.get("players") or [],
                                 "generated_at": _now_utc().isoformat(),
@@ -10005,6 +10082,8 @@ def run_mlb_lineup_nowcast_repricing(
                 bullpen_availability_away=float(m["bullpen_availability_away"]) if m.get("bullpen_availability_away") is not None else 0.65,
                 bullpen_high_lev_availability_home=float(m["bullpen_high_leverage_availability_home"]) if m.get("bullpen_high_leverage_availability_home") is not None else 0.62,
                 bullpen_high_lev_availability_away=float(m["bullpen_high_leverage_availability_away"]) if m.get("bullpen_high_leverage_availability_away") is not None else 0.62,
+                bullpen_quality_home=float(context_payload.get("bullpen_quality_home") or 1.0),
+                bullpen_quality_away=float(context_payload.get("bullpen_quality_away") or 1.0),
                 umpire_run_factor=float(m["umpire_run_factor"]) if m.get("umpire_run_factor") is not None else 1.0,
                 info_freshness_score_home=freshness,
                 info_freshness_score_away=freshness,
@@ -10016,6 +10095,13 @@ def run_mlb_lineup_nowcast_repricing(
                 home_abbr=str(m.get("home_abbr") or "") or None,
                 rest_days_home=_to_float(context_payload.get("rest_days_home")),
                 rest_days_away=_to_float(context_payload.get("rest_days_away")),
+            )
+            inputs, timing_diag = apply_lineup_timing_to_inputs(
+                inputs,
+                known_home=known_home,
+                known_away=known_away,
+                hours_to_first_pitch=hours_to_pitch,
+                freshness_score=freshness,
             )
             prior_conf_home = float(m["lineup_confidence_home"]) if m.get("lineup_confidence_home") is not None else nowcast["home"]
             prior_conf_away = float(m["lineup_confidence_away"]) if m.get("lineup_confidence_away") is not None else nowcast["away"]
@@ -10029,6 +10115,7 @@ def run_mlb_lineup_nowcast_repricing(
                 prior_starter_quality_away=float(prior_away_feat.get("starter_quality") or 1.0),
             )
             shock_diag.update(sharpen_diag)
+            shock_diag.update(timing_diag)
 
             seed_base = _default_projection_seed(inputs.game_id, base_model_version, simulations)
             projection_base = _run_simulation_by_model(
@@ -10066,6 +10153,8 @@ def run_mlb_lineup_nowcast_repricing(
             "avg_confidence_delta": round(confidence_delta_sum / max(1, prev_conf_count), 4) if prev_conf_count > 0 else None,
             "avg_freshness_score": round(freshness_sum / max(1, updated_context), 4),
             "lineup_confirmed_share": round(confirmed_count / max(1, updated_context), 4),
+            "sp_change_games": sp_change_games,
+            "lineup_timing_mode": get_lineup_timing_mode(),
         }
         _persist_snapshot(
             session,
@@ -11221,6 +11310,21 @@ def backfill_mlb_historical_resim(
                     rest_days_home=_to_float(context_payload.get("rest_days_home")),
                     rest_days_away=_to_float(context_payload.get("rest_days_away")),
                 )
+                # Densify stamp is −3h; apply timing sharpness against stamped card depth.
+                known_h = known_players_from_context(context_payload, "home")
+                known_a = known_players_from_context(context_payload, "away")
+                if known_h == 0 and bool(m.get("lineup_confirmed")):
+                    known_h = 9
+                if known_a == 0 and bool(m.get("lineup_confirmed")):
+                    known_a = 9
+                inputs, timing_diag = apply_lineup_timing_to_inputs(
+                    inputs,
+                    known_home=known_h,
+                    known_away=known_a,
+                    hours_to_first_pitch=3.0,
+                    freshness_score=1.0,
+                )
+                sharpen_diag.update(timing_diag)
                 seed = _default_projection_seed(str(m["game_id"]), model_version, simulations)
                 projection = _run_simulation_by_model(
                     inputs,
@@ -11634,11 +11738,28 @@ _SP_TALENT_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
         "bullpen_role_quality_mode": "off",
         "model_suffix": "talent-t2",
     },
+    # T3: Statcast stuff-proxy (as-of whiff/chase/zone/EV/barrel)
+    "T3": {
+        "starter_quality_mode": "stuff_proxy",
+        "bullpen_role_quality_mode": "off",
+        "model_suffix": "talent-t3",
+    },
     # B1: bullpen role-weighted quality on T0 baseline (Track B independence check)
     "B1": {
         "starter_quality_mode": "era_whip",
         "bullpen_role_quality_mode": "role_weighted",
         "model_suffix": "talent-b1",
+    },
+}
+
+_LINEUP_TIMING_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
+    "L0": {
+        "lineup_timing_mode": "off",
+        "model_suffix": "timing-l0",
+    },
+    "L1": {
+        "lineup_timing_mode": "sharp",
+        "model_suffix": "timing-l1",
     },
 }
 
@@ -11665,13 +11786,14 @@ def run_mlb_sp_talent_ablation(
         )
     start = date.fromisoformat(start_date)
     end = date.fromisoformat(end_date)
-    selected = configs or ["T0", "T1", "T2"]
+    selected = configs or ["T0", "T3"]
     unknown = [c for c in selected if c not in _SP_TALENT_ABLATION_CONFIGS]
     if unknown:
         raise ValueError(f"unknown SP talent ablation configs: {unknown}")
 
     prior_quality_mode = get_starter_quality_mode()
     prior_bp_mode = get_bullpen_role_quality_mode()
+    prior_timing_mode = get_lineup_timing_mode()
     results: Dict[str, Any] = {}
     try:
         for name in selected:
@@ -11679,6 +11801,8 @@ def run_mlb_sp_talent_ablation(
             model_version = f"{base_model_version}-{cfg['model_suffix']}"
             apply_starter_quality_mode(str(cfg["starter_quality_mode"]))
             apply_bullpen_role_quality_mode(str(cfg["bullpen_role_quality_mode"]))
+            # Keep timing off so talent A/B is not confounded.
+            apply_lineup_timing_mode("off")
             log.info(
                 "SP talent ablation config start",
                 extra={"config": name, "model_version": model_version, "flags": cfg},
@@ -11755,6 +11879,7 @@ def run_mlb_sp_talent_ablation(
     finally:
         apply_starter_quality_mode(prior_quality_mode or "era_whip")
         apply_bullpen_role_quality_mode(prior_bp_mode or "off")
+        apply_lineup_timing_mode(prior_timing_mode or "off")
 
     id_sets = [
         set(results[name].get("ml_game_ids") or [])
@@ -11796,10 +11921,12 @@ def run_mlb_sp_talent_ablation(
     t0 = (intersection.get("by_config") or {}).get("T0") or {}
     t1 = (intersection.get("by_config") or {}).get("T1") or {}
     t2 = (intersection.get("by_config") or {}).get("T2") or {}
+    t3 = (intersection.get("by_config") or {}).get("T3") or {}
     b1 = (intersection.get("by_config") or {}).get("B1") or {}
     t0_ml = t0.get("avg_ml_clv")
     t1_ml = t1.get("avg_ml_clv")
     t2_ml = t2.get("avg_ml_clv")
+    t3_ml = t3.get("avg_ml_clv")
     b1_ml = b1.get("avg_ml_clv")
 
     def _beats(challenger: Any, baseline: Any, *, margin: float = 0.0) -> bool:
@@ -11811,7 +11938,7 @@ def run_mlb_sp_talent_ablation(
 
     best_name = "T0"
     best_ml = t0_ml
-    for name, ml in (("T1", t1_ml), ("T2", t2_ml), ("B1", b1_ml)):
+    for name, ml in (("T1", t1_ml), ("T2", t2_ml), ("T3", t3_ml), ("B1", b1_ml)):
         if ml is None:
             continue
         if best_ml is None or float(ml) > float(best_ml):
@@ -11826,6 +11953,9 @@ def run_mlb_sp_talent_ablation(
         "ship_xfip_proxy": bool(
             t2_ml is not None and float(t2_ml) >= 0.010 and _beats(t2_ml, t0_ml)
         ),
+        "ship_stuff_proxy": bool(
+            t3_ml is not None and float(t3_ml) >= 0.010 and _beats(t3_ml, t0_ml)
+        ),
         "ship_bullpen_role": bool(
             b1_ml is not None and float(b1_ml) >= 0.010 and _beats(b1_ml, t0_ml)
         ),
@@ -11837,6 +11967,202 @@ def run_mlb_sp_talent_ablation(
         ),
     }
 
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "lookback_days": int(lookback_days),
+        "configs": selected,
+        "results": results,
+        "intersection": {
+            "n": intersection["n"],
+            "by_config": {
+                k: {kk: vv for kk, vv in v.items() if kk != "ml_game_ids"}
+                for k, v in (intersection.get("by_config") or {}).items()
+            },
+        },
+        "recommendation": recommendation,
+        "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+    }
+
+
+@celery_app.task(name="src.tasks.run_mlb_lineup_timing_ablation")
+def run_mlb_lineup_timing_ablation(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    simulations: int = 2000,
+    max_games: int = 1200,
+    lookback_days: int = 90,
+    configs: Optional[List[str]] = None,
+    base_model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Force-resim densify under lineup timing flags; grade intersection CLV vs L0."""
+    if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
+        raise ValueError(
+            "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for lineup timing ablation"
+        )
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    selected = configs or ["L0", "L1"]
+    unknown = [c for c in selected if c not in _LINEUP_TIMING_ABLATION_CONFIGS]
+    if unknown:
+        raise ValueError(f"unknown lineup timing ablation configs: {unknown}")
+
+    prior_timing = get_lineup_timing_mode()
+    prior_quality = get_starter_quality_mode()
+    prior_bp = get_bullpen_role_quality_mode()
+    results: Dict[str, Any] = {}
+    try:
+        # Hold production talent stack constant (S0 / era_whip).
+        apply_starter_quality_mode("era_whip")
+        apply_bullpen_role_quality_mode("off")
+        for name in selected:
+            cfg = _LINEUP_TIMING_ABLATION_CONFIGS[name]
+            model_version = f"{base_model_version}-{cfg['model_suffix']}"
+            apply_lineup_timing_mode(str(cfg["lineup_timing_mode"]))
+            log.info(
+                "Lineup timing ablation config start",
+                extra={"config": name, "model_version": model_version, "flags": cfg},
+            )
+            resim = backfill_mlb_historical_resim(
+                start_date=start.isoformat(),
+                end_date=end.isoformat(),
+                simulations=int(simulations),
+                model_version=model_version,
+                max_games=int(max_games),
+                force_resim=True,
+                skip_outcomes_pull=True,
+            )
+            session = SessionLocal()
+            try:
+                clv_full = compute_mlb_clv_with_spread(
+                    session,
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                )
+                window_items = _filter_clv_items_to_window(
+                    session,
+                    list(clv_full.get("items") or []),
+                    start_date=start,
+                    end_date=end,
+                )
+                densify_clv = _summarize_clv_items(window_items)
+                quality = run_mlb_quality_grading(
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                )
+                walkforward = run_mlb_walkforward_backtest(
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                    training_days=10,
+                    step_days=3,
+                    apply_calibration=True,
+                )
+            finally:
+                session.close()
+            results[name] = {
+                "config": cfg,
+                "model_version": model_version,
+                "lineup_timing_mode": get_lineup_timing_mode(),
+                "resim": {
+                    "status": resim.get("status"),
+                    "simulated": resim.get("simulated"),
+                    "games_selected": resim.get("games_selected"),
+                    "deleted_prior_projections": resim.get("deleted_prior_projections"),
+                    "leakage_rows_repaired": resim.get("leakage_rows_repaired"),
+                },
+                "full_n_clv": {
+                    "count": clv_full.get("count"),
+                    "ml_sample_size": clv_full.get("ml_sample_size"),
+                    "avg_ml_clv": clv_full.get("avg_ml_clv"),
+                    "avg_total_clv": clv_full.get("avg_total_clv"),
+                    "avg_spread_clv": clv_full.get("avg_spread_clv"),
+                },
+                "densify_window_clv": {
+                    k: v for k, v in densify_clv.items() if k != "ml_game_ids"
+                },
+                "ml_game_ids": densify_clv.get("ml_game_ids") or [],
+                "walkforward": {
+                    "sample_size": walkforward.get("sample_size"),
+                    "base_brier_ml": walkforward.get("base_brier_ml"),
+                    "calibrated_brier_ml": walkforward.get("calibrated_brier_ml"),
+                    "base_mae_total_runs": walkforward.get("base_mae_total_runs"),
+                    "leakage_violations": walkforward.get("leakage_violations"),
+                },
+                "quality": (quality.get("quality") or {}) if isinstance(quality, dict) else {},
+            }
+    finally:
+        apply_lineup_timing_mode(prior_timing or "off")
+        apply_starter_quality_mode(prior_quality or "era_whip")
+        apply_bullpen_role_quality_mode(prior_bp or "off")
+
+    id_sets = [
+        set(results[name].get("ml_game_ids") or [])
+        for name in selected
+        if name in results
+    ]
+    intersection_ids = set.intersection(*id_sets) if id_sets else set()
+    intersection: Dict[str, Any] = {"n": len(intersection_ids), "by_config": {}}
+    for name in selected:
+        if name not in results:
+            continue
+        model_version = results[name]["model_version"]
+        session = SessionLocal()
+        try:
+            clv_full = compute_mlb_clv_with_spread(
+                session,
+                model_version=model_version,
+                lookback_days=int(lookback_days),
+            )
+            window_items = _filter_clv_items_to_window(
+                session,
+                list(clv_full.get("items") or []),
+                start_date=start,
+                end_date=end,
+            )
+            inter_items = [
+                i for i in window_items if str(i.get("game_id")) in intersection_ids
+            ]
+            intersection["by_config"][name] = _summarize_clv_items(inter_items)
+            results[name].pop("ml_game_ids", None)
+            results[name]["intersection_clv"] = {
+                k: v
+                for k, v in intersection["by_config"][name].items()
+                if k != "ml_game_ids"
+            }
+        finally:
+            session.close()
+
+    l0 = (intersection.get("by_config") or {}).get("L0") or {}
+    l1 = (intersection.get("by_config") or {}).get("L1") or {}
+    l0_ml = l0.get("avg_ml_clv")
+    l1_ml = l1.get("avg_ml_clv")
+    recommendation = {
+        "best_intersection_config": (
+            "L1"
+            if l1_ml is not None and l0_ml is not None and float(l1_ml) > float(l0_ml)
+            else "L0"
+        ),
+        "best_intersection_ml_clv": (
+            l1_ml
+            if l1_ml is not None and l0_ml is not None and float(l1_ml) > float(l0_ml)
+            else l0_ml
+        ),
+        "ship_lineup_timing_sharp": bool(
+            l1_ml is not None
+            and l0_ml is not None
+            and float(l1_ml) >= 0.010
+            and float(l1_ml) > float(l0_ml)
+        ),
+        "stretch_target_hit": bool(l1_ml is not None and float(l1_ml) >= 0.015),
+        "note": (
+            "Ship MLB_LINEUP_TIMING_MODE=sharp only if intersection ML CLV ≥ +0.010 "
+            "and beats L0, leakage=0, RL/total not torched. Wiring fixes (cache clear, "
+            "live freshness, BP quality) stay regardless."
+        ),
+    }
     return {
         "status": "ok",
         "start_date": start.isoformat(),

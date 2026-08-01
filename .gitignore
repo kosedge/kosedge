@@ -113,3 +113,8 @@ data/backups/
 # Vendored into image via CI sync + committed snapshot for Railway --path-as-root uploads.
 # (Previously ignored, which stripped the package from `railway up` archives.)
 
+
+# MLB Statcast stuff cache — keep compact as-of index; ignore bulky CSV chunks
+data/mlb/statcast_cache/**/pitches_*.csv
+data/mlb/statcast_cache/**/pitches_*.meta.json
+data/mlb/statcast_cache/**/pitcher_raw_counts.json

@@ -29,12 +29,27 @@ def resolve_nowcast_starters(
     context_away: Optional[str],
     live_home: Optional[str] = None,
     live_away: Optional[str] = None,
+    allow_clear: bool = False,
 ) -> Dict[str, Any]:
-    """Merge context + live feed pitchers; flag SP identity changes."""
+    """Merge context + live feed pitchers; flag SP identity changes.
+
+    When allow_clear=True (late confirmed cards), a missing live probable clears
+    the prior SP instead of COALESCE-keeping a scratched name.
+    """
     prior_home = context_home
     prior_away = context_away
-    new_home = live_home if live_home else context_home
-    new_away = live_away if live_away else context_away
+    if live_home:
+        new_home = live_home
+    elif allow_clear:
+        new_home = None
+    else:
+        new_home = context_home
+    if live_away:
+        new_away = live_away
+    elif allow_clear:
+        new_away = None
+    else:
+        new_away = context_away
     home_changed = normalize_pitcher_key(prior_home) != normalize_pitcher_key(new_home)
     away_changed = normalize_pitcher_key(prior_away) != normalize_pitcher_key(new_away)
     return {
@@ -45,6 +60,7 @@ def resolve_nowcast_starters(
         "home_changed": home_changed,
         "away_changed": away_changed,
         "any_changed": home_changed or away_changed,
+        "allow_clear": bool(allow_clear),
     }
 
 
