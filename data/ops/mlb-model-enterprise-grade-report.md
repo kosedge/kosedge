@@ -54,11 +54,13 @@
 | Item | Result |
 |------|--------|
 | Train exclusion | Enforced (`unused_holdout_excluded_from_train=true`) |
-| Eval n available (walkforward peek) | ~51 (≪ 120 target) |
-| Stake marketing | **OFF** — fail Brier gate, fail CLV vs prior bar, holdout n short |
+| Eval resim | 117 games (2026-07-18→08-01), leakage=0 |
+| Eval n available (walkforward unused pts) | **51** (� games (2026-07-18→08-01), leakage=0 |
+| Eval n available (walkforward unused pts) | **51** (≪ 120 target) |
+| Stake marketing | **OFF** — fail Brier, fail CLV vs prior bar, holdout n short |
 | Props PLAY stake | **OFF** / `research_only` |
 
-Do not flip stake-eligibility flags.
+Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 
 ## Blocking subscription-worthiness
 
