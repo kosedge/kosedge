@@ -4,6 +4,8 @@ import random
 from typing import Dict, List, Optional
 
 from .mlb_simulator import (
+    AWAY_FIELD_OFFENSE_MUL,
+    HOME_FIELD_OFFENSE_MUL,
     MlbGameInputs,
     _effective_lineup_confidence,
     _effective_offense_index,
@@ -239,7 +241,7 @@ def simulate_mlb_game_pitch_by_pitch(
         lineup_index=inputs.lineup_strength_index_home,
         effective_confidence=eff_conf_home,
         starter_facing=True,
-    )
+    ) * HOME_FIELD_OFFENSE_MUL
     offense_away_early = _effective_offense_index(
         season_index=inputs.offense_away,
         split_index=inputs.offense_split_away,
@@ -247,7 +249,7 @@ def simulate_mlb_game_pitch_by_pitch(
         lineup_index=inputs.lineup_strength_index_away,
         effective_confidence=eff_conf_away,
         starter_facing=True,
-    )
+    ) * AWAY_FIELD_OFFENSE_MUL
     offense_home_late = _effective_offense_index(
         season_index=inputs.offense_home,
         split_index=inputs.offense_split_home,
@@ -255,7 +257,7 @@ def simulate_mlb_game_pitch_by_pitch(
         lineup_index=inputs.lineup_strength_index_home,
         effective_confidence=eff_conf_home,
         starter_facing=False,
-    )
+    ) * HOME_FIELD_OFFENSE_MUL
     offense_away_late = _effective_offense_index(
         season_index=inputs.offense_away,
         split_index=inputs.offense_split_away,
@@ -263,7 +265,7 @@ def simulate_mlb_game_pitch_by_pitch(
         lineup_index=inputs.lineup_strength_index_away,
         effective_confidence=eff_conf_away,
         starter_facing=False,
-    )
+    ) * AWAY_FIELD_OFFENSE_MUL
 
     defense_home_st = _clamp(1.0 / max(0.01, inputs.starter_quality_home), 0.75, 1.30)
     defense_away_st = _clamp(1.0 / max(0.01, inputs.starter_quality_away), 0.75, 1.30)

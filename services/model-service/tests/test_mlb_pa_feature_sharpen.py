@@ -3,6 +3,7 @@ from src.services.mlb_pa_feature_sharpen import (
     apply_missing_pitcher_shrink,
     bullpen_quality_from_state,
     compute_sp_change_shock,
+    platoon_split_for_hand,
     rest_day_multipliers,
     sharpen_game_inputs,
     starter_firmness,
@@ -89,6 +90,44 @@ def test_sharpen_and_lineup_shock_bounded() -> None:
     )
     assert "sp_change_shock" in shock_diag
     assert 0.78 <= shocked.offense_home <= 1.25
+
+
+def test_platoon_split_for_hand_picks_matchup_index() -> None:
+    assert platoon_split_for_hand(
+        season_index=1.0,
+        split_vs_l=1.08,
+        split_vs_r=0.96,
+        opponent_hand="L",
+    ) == 1.08
+    assert platoon_split_for_hand(
+        season_index=1.0,
+        split_vs_l=1.08,
+        split_vs_r=0.96,
+        opponent_hand="R",
+    ) == 0.96
+    assert platoon_split_for_hand(
+        season_index=1.02,
+        split_vs_l=None,
+        split_vs_r=None,
+        opponent_hand="U",
+        fallback_split=1.01,
+    ) == 1.01
+
+
+def test_sharpen_does_not_double_count_bullpen_fatigue() -> None:
+    """Fatigue/availability stay on the simulator path; sharpen only applies rest stress."""
+    tired = MlbGameInputs(
+        game_id="g-bp",
+        home_team="A",
+        away_team="B",
+        bullpen_fatigue_home=0.90,
+        bullpen_availability_home=0.30,
+        bullpen_high_lev_availability_home=0.25,
+        bullpen_quality_home=1.0,
+        rest_days_home=1.0,
+    )
+    sharpened, _diag = sharpen_game_inputs(tired, home_abbr="NYY", rest_days_home=1.0)
+    assert abs(sharpened.bullpen_quality_home - 1.0) < 1e-9
 
 
 def test_missing_pitcher_increases_totals_vs_firm_ace() -> None:

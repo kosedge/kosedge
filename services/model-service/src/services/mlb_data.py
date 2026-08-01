@@ -359,19 +359,30 @@ def build_team_offense_context(
         anchor=1.0,
     )
 
-    sit_code = None
     opponent_handedness = (opponent_starter_handedness or "U").upper()
-    if opponent_handedness == "L":
-        sit_code = "vl"
-    elif opponent_handedness == "R":
-        sit_code = "vr"
-    split_profile = fetch_team_hitting_profile(team_id, season=as_of.year, sit_code=sit_code)
-    split_index = _shrink_index(
-        split_profile.get("ops_index"),
-        sample_size=split_profile.get("plate_appearances"),
+    split_vs_l_profile = fetch_team_hitting_profile(team_id, season=as_of.year, sit_code="vl")
+    split_vs_r_profile = fetch_team_hitting_profile(team_id, season=as_of.year, sit_code="vr")
+    split_vs_l = _shrink_index(
+        split_vs_l_profile.get("ops_index"),
+        sample_size=split_vs_l_profile.get("plate_appearances"),
         target_sample=900.0,
         anchor=season_index,
     )
+    split_vs_r = _shrink_index(
+        split_vs_r_profile.get("ops_index"),
+        sample_size=split_vs_r_profile.get("plate_appearances"),
+        target_sample=900.0,
+        anchor=season_index,
+    )
+    if opponent_handedness == "L":
+        split_profile = split_vs_l_profile
+        split_index = split_vs_l
+    elif opponent_handedness == "R":
+        split_profile = split_vs_r_profile
+        split_index = split_vs_r
+    else:
+        split_profile = {}
+        split_index = season_index
 
     recent_start = as_of - timedelta(days=RECENT_FORM_WINDOW_DAYS)
     recent_profile = fetch_team_hitting_profile(
@@ -404,11 +415,15 @@ def build_team_offense_context(
     return {
         "offense_index": round(season_index, 4),
         "offense_split_index": round(split_index, 4),
+        "offense_split_vs_l": round(split_vs_l, 4),
+        "offense_split_vs_r": round(split_vs_r, 4),
         "recent_form_index": round(recent_index, 4),
         "lineup_strength_index": round(lineup_index, 4),
         "offense_composite_index": round(composite_index, 4),
         "season_profile": season_profile,
         "split_profile": split_profile,
+        "split_vs_l_profile": split_vs_l_profile,
+        "split_vs_r_profile": split_vs_r_profile,
         "recent_profile": recent_profile,
         "lineup_profile": lineup_features,
         "opponent_starter_handedness": opponent_handedness,
