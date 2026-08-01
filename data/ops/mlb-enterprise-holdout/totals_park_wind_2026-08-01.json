@@ -1,0 +1,214 @@
+{
+  "status": "ok",
+  "start_date": "2026-05-20",
+  "end_date": "2026-07-17",
+  "lookback_days": 90,
+  "configs": [
+    "W0",
+    "W1"
+  ],
+  "results": {
+    "W0": {
+      "model_version": "mlb-v1-pa-sim-parkwind-w0",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.249639,
+          "calibrated_brier_ml": 0.252662,
+          "base_mae_total_runs": 3.4803,
+          "calibrated_mae_total_runs": 3.5252,
+          "brier_improvement": -0.003024,
+          "mae_improvement": -0.0449,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00386,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.02532
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00386,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.02532
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.249639,
+        "calibrated_brier_ml": 0.252662,
+        "base_mae_total_runs": 3.4803,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250254,
+        "mae_total_runs": 3.5181,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.024411,
+        "max_bin_error": 0.507,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00386,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.02532,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "totals_park_rel_wind_enabled": false,
+        "model_suffix": "parkwind-w0"
+      },
+      "totals_park_rel_wind_enabled": false,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00386,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.02532
+      }
+    },
+    "W1": {
+      "model_version": "mlb-v1-pa-sim-parkwind-w1",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.250387,
+          "calibrated_brier_ml": 0.252698,
+          "base_mae_total_runs": 3.4874,
+          "calibrated_mae_total_runs": 3.5269,
+          "brier_improvement": -0.002311,
+          "mae_improvement": -0.0394,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00391,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.02532
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00391,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.02532
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.250387,
+        "calibrated_brier_ml": 0.252698,
+        "base_mae_total_runs": 3.4874,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250552,
+        "mae_total_runs": 3.5221,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.023303,
+        "max_bin_error": 0.160833,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00391,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.02532,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "totals_park_rel_wind_enabled": true,
+        "model_suffix": "parkwind-w1"
+      },
+      "totals_park_rel_wind_enabled": true,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00391,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.02532
+      }
+    }
+  },
+  "intersection": {
+    "n": 476,
+    "by_config": {
+      "W0": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00386,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.02532
+      },
+      "W1": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00391,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.02532
+      }
+    }
+  },
+  "recommendation": {
+    "ship_totals_park_rel_wind": true,
+    "totals_improved": true,
+    "ml_not_regressed": true,
+    "w1_delta_total_clv": 0.0021,
+    "w1_delta_ml_clv": 5e-05,
+    "note": "Ship MLB_TOTALS_PARK_REL_WIND_ENABLED only if totals MAE/CLV improve and intersection ML CLV does not regress. ML wind-dir path stays S0."
+  },
+  "props_play_stake_eligible": false,
+  "unused_holdout": {
+    "title": "MLB enterprise unused holdout (fallback constants)",
+    "status": "frozen_unused",
+    "registered_at": null,
+    "source": "fallback_constants",
+    "window_count": 2,
+    "date_count": 23,
+    "first_date": "2026-07-18",
+    "last_date": "2026-08-10",
+    "props_play_stake_eligible": false,
+    "stake_marketing_requires_unused_pass": true
+  },
+  "_task_id": "7463805c-da6c-446a-84ee-e80dc7016e26",
+  "_state": "SUCCESS"
+}

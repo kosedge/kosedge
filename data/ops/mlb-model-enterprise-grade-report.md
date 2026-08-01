@@ -3,7 +3,7 @@
 **Status:** Research / not subscription-worthy for stake marketing  
 **Production web branch:** `deploy-vercel`  
 **Model service:** `model-service-production-e253.up.railway.app`  
-**Model version:** `mlb-v1-pa-sim` (S0 stack: HFA 1.025 + matchup ON + wind-dir ON + ERA/WHIP quality; stuff_proxy **off**; lineup timing **off**)  
+**Model version:** `mlb-v1-pa-sim` (S0 stack: HFA 1.025 + matchup ON + wind-dir ON + ERA/WHIP quality; stuff_proxy **off**; lineup timing **off**; pitch matchup **off**; park-rel totals wind **off**)  
 **Unused holdout (frozen):** 2026-07-18 → 2026-08-10 — train-excluded; stake grade below  
 **Odds densify:** not run (credit floor)
 
@@ -12,11 +12,11 @@
 | Area | Grade | Notes |
 |------|:-----:|-------|
 | Moneyline sharpness (Brier) | **D+** | Densify walkforward ~**0.2496–0.2511**; gate ≤0.24 fail |
-| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after FIP/xFIP, BP role, **Statcast stuff**, and **lineup timing** trials; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
+| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after FIP/xFIP, BP role, Statcast stuff, lineup timing, **late-info stamps**, **pitch matchup**, and **park-rel totals**; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
 | Calibration (ECE) | **B** | **0.017–0.027** ≪ 0.06 |
-| Leakage hygiene | **A** | **0** on HFA + stack + talent + timing ablation runs |
-| Totals MAE | **C+** | ~**3.47–3.52**; prod full-n total CLV ~+0.088 |
-| Run-line CLV | **C-** | Densify intersection **+0.01–0.06** depending on trial; S2 wind-dir-off → **0** |
+| Leakage hygiene | **A** | **0** on all densify ablation runs this session |
+| Totals MAE | **C+** | ~**3.47–3.52**; park-rel wind did not clear MAE |
+| Run-line CLV | **C-** | Densify intersection **+0.01–0.06** depending on trial; late −1h stamp → **0** |
 | Props stake | **F / blocked** | `research_only` — unused holdout + props gates not cleared |
 | Overall subscription | **D / no-go** | Fail Brier + CLV vs marketing bar; leakage clean |
 
@@ -32,6 +32,7 @@
 | [#55](https://github.com/kosedge/kosedge/pull/55) | Stack ablation flags + S0–S3 densify grader | merged + Railway; **no stack ship** |
 | [#57](https://github.com/kosedge/kosedge/pull/57) | SP talent v2 (FIP/xFIP) + bullpen role flags + as-of densify | Railway deployed; **no default flip** (T1/T2/B1 fail gates) |
 | [#58](https://github.com/kosedge/kosedge/pull/58) | Statcast `stuff_proxy` (T3) + lineup nowcast wiring + timing L0/L1 | Railway deployed; **no default flip** (T3/L1 fail gates); wiring stays |
+| [#59](https://github.com/kosedge/kosedge/pull/59) | Late-info snapshots + pitch matchup + park-rel totals wind | Railway deployed; **no default flip** (H*/M1/W1 fail honest gates); wiring stays |
 
 ### Engineering detail
 
@@ -42,7 +43,8 @@
 5. **Stack ablation (S0–S3)** — see `stack_ablation_2026-08-01.md`. Intersection n=476; matchup-off / wind-dir-off / K-BB-only quality do **not** restore subscription CLV.
 6. **SP talent v2 (T0–T2) + bullpen B1** — see `sp_talent_v2_2026-08-01.md`. FIP/xFIP and role-weighted bullpen do **not** clear +0.010 intersection ML CLV; production stays **era_whip** + bullpen quality off.
 7. **Statcast stuff (T3) + lineup timing (L0/L1)** — see `statcast_stuff_2026-08-01.md` and `lineup_nowcast_timing_2026-08-01.md`. T3 and L1 both **fail** gates; keep wiring fixes; leave `stuff_proxy` / timing **off**.
-8. **Optional ML head** — still skipped.
+8. **Late-info stamps (H0–H2) + pitch matchup (M0/M1) + park-rel totals (W0/W1)** — see latest decision tables below. All **no-ship** on defaults; snapshot lake + totals-only wind path + pitch-matchup flag remain for live measurement / future trials.
+9. **Optional ML head** — still skipped.
 
 ## Densify HFA ladder (prior session)
 
@@ -64,14 +66,9 @@ Fixed densify closing-line set **n=476** (≈ prior ~498 universe). HFA=1.025 fo
 | S2 + wind-dir OFF | +0.00393 | **0.000** | +0.002 | **0.24957** | **3.468** | 0.024 | 0 |
 | S3 + K-BB quality | +0.00428 | +0.038 | +0.002 | 0.25021 | 3.481 | 0.024 | 0 |
 
-**Ship:** none of S1/S2/S3. Production stays S0.  
-**Narrative:** prior +0.023 does **not** appear on intersection even for S0 → treat as sample-composition, not matchup damage. Pivot to deeper SP talent / BP role quality.
-
-Production full-n CLV after ablation (lookback 90): ML **+0.0049**, total **+0.088**, RL **+0.079** (count 971).
+**Ship:** none of S1/S2/S3. Production stays S0.
 
 ## SP talent v2 + bullpen role (2026-08-01) — decision table
-
-Fixed densify closing-line set **n=476**. Stack = S0 (HFA 1.025, matchup ON, wind-dir ON). T0 adds as-of season stats vs prior S0.
 
 | Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | Leak |
 |--------|-------------:|-------------:|----------------:|---------:|-----:|
@@ -80,12 +77,9 @@ Fixed densify closing-line set **n=476**. Stack = S0 (HFA 1.025, matchup ON, win
 | T2 xfip_proxy | **+0.00434** | +0.038 | +0.002 | 0.25012 | 0 |
 | B1 bullpen role | +0.00399 | +0.038 | +0.002 | **0.24946** | 0 |
 
-**Ship:** none. T2’s ML edge over T0 is **+0.00008** (noise). B1 **worsens** ML for a Brier cosmetic. Defaults stay `era_whip` + bullpen role **off**.  
-Detail: `sp_talent_v2_2026-08-01.md`.
+**Ship:** none. Defaults stay `era_whip` + bullpen role **off**.
 
 ## Statcast stuff + lineup timing (2026-08-01) — decision table
-
-Fixed densify closing-line set **n=476**. Stack = S0.
 
 | Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | Leak |
 |--------|-------------:|-------------:|----------------:|---------:|-----:|
@@ -94,8 +88,28 @@ Fixed densify closing-line set **n=476**. Stack = S0.
 | L0 timing off | +0.00413 | +0.013 | +0.002 | **0.24955** | 0 |
 | L1 timing sharp | +0.00389 | +0.013 | +0.002 | 0.25042 | 0 |
 
-**Ship:** none of T3 / L1 defaults. T3 and L1 both soften intersection ML vs their baselines. Keep nowcast wiring fixes; leave `MLB_STARTER_QUALITY_MODE=era_whip` and `MLB_LINEUP_TIMING_MODE=off`.  
-Detail: `statcast_stuff_2026-08-01.md`, `lineup_nowcast_timing_2026-08-01.md`.
+**Ship:** none of T3 / L1 defaults.
+
+## Late-info stamps + pitch matchup + park-rel totals (2026-08-01) — decision table
+
+Fixed densify closing-line set **n=476**. Stack = S0 unless noted.
+
+| Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | MAE | Leak |
+|--------|-------------:|-------------:|----------------:|---------:|----:|-----:|
+| H0 stamp −6h | **+0.00442** | +0.038 | +0.004 | 0.24977 | 3.485 | 0 |
+| H1 stamp −3h | +0.00371 | +0.025 | +0.002 | 0.25034 | 3.486 | 0 |
+| H2 stamp −1h | +0.00362 | **0.000** | +0.006 | **0.24933** | 3.483 | 0 |
+| M0 pitch off | +0.00383 | +0.051 | +0.004 | 0.25047 | 3.483 | 0 |
+| M1 pitch on | **+0.00444** | **+0.063** | +0.002 | **0.24985** | **3.478** | 0 |
+| W0 park-rel off | +0.00386 | +0.025 | +0.002 | **0.24964** | **3.480** | 0 |
+| W1 park-rel on | +0.00391 | +0.025 | **+0.004** | 0.25039 | 3.487 | 0 |
+
+**Ship:** none.
+- Late-info densify slices **n=0** (reconstructed cards lack confirmed/known depth); live snapshot lake still valuable.
+- M1 gains **+0.00061** ML vs M0 — directionally right, far below +0.010.
+- W1 total CLV +0.002 but **MAE worse** → human **no-ship** (noise).
+
+Detail: `late_info_stamp_2026-08-01.md`, `pitch_matchup_2026-08-01.md`, `totals_park_wind_2026-08-01.md`.
 
 ## Unused-holdout stake verdict
 
@@ -112,24 +126,27 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 ## Blocking subscription-worthiness
 
 1. ML Brier still ≥0.248 vs 0.24 gate.  
-2. Intersection ML CLV ~+0.004 ≪ +0.010/+0.015 gate after stack, FIP/xFIP, BP role, **Statcast stuff**, and **lineup timing** trials; prior +0.023 was confounded.  
+2. Intersection ML CLV ~+0.004 ≪ +0.010/+0.015 after exhaustive stack / talent / stuff / timing / late-stamp / pitch-matchup / park-wind trials; prior +0.023 was confounded.  
 3. Unused holdout not large enough / not stake-green.  
-4. RL/total CLV must not be softened further for Brier cosmetics (S2 / B1 / L1 rejected).
+4. RL/total must not be softened for cosmetics (S2 / B1 / L1 / H2 rejected).
+
+## Next lever (if all miss)
+
+1. **True pitch-type arsenal index** (not stuff-shape fallback) + batter-level Statcast contact by family — only if join + as-of clean  
+2. **Live late-info CLV** once snapshot lake has real ≤3h confirms (densify reconstruct cannot invent confirm clocks)  
+3. **Park factors / weather interaction for totals** with cross-validated MAE (not absolute wind as ML lever)  
+4. Research-grade hold until +0.010 intersection ML clears — do **not** open stake marketing
 
 ## Artifacts
 
-- `data/ops/mlb-enterprise-holdout/statcast_stuff_2026-08-01.md` ← **latest Track 1 decision**
-- `data/ops/mlb-enterprise-holdout/lineup_nowcast_timing_2026-08-01.md` ← **latest Track 2 decision**
-- `data/ops/mlb-enterprise-holdout/statcast_stuff_2026-08-01.json`
-- `data/ops/mlb-enterprise-holdout/lineup_nowcast_timing_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/late_info_stamp_2026-08-01.md` ← **Track 1 decision**
+- `data/ops/mlb-enterprise-holdout/pitch_matchup_2026-08-01.md` ← **Track 2 decision**
+- `data/ops/mlb-enterprise-holdout/totals_park_wind_2026-08-01.md` ← **Track 3 decision**
+- `data/ops/mlb-enterprise-holdout/late_info_stamp_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/pitch_matchup_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/totals_park_wind_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/statcast_stuff_2026-08-01.md`
+- `data/ops/mlb-enterprise-holdout/lineup_nowcast_timing_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.md`
-- `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.json`
-- `data/ops/mlb-enterprise-holdout/sp_talent_v2_bullpen_b1_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.md`
-- `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.json`
-- `data/ops/mlb-enterprise-holdout/hfa_ablation_2026-08-01.md`
-- `data/ops/mlb-enterprise-holdout/hfa1025_resim_grade_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/unused_holdout_stake_verdict_2026-08-01.md`
-- `data/ops/mlb-enterprise-holdout/*_hfa1025_2026-08-01.json`
-- `data/ops/mlb-enterprise-holdout/*_hfa100_2026-08-01.json`
-- `data/ops/mlb-enterprise-holdout/ml_sharpness_resim_grade_2026-08-01.md` (prior)
