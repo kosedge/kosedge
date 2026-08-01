@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-08-01T12:21:00Z",
+  "pr_merged": 48,
+  "resim_window": {"start_date": "2026-05-20", "end_date": "2026-07-17"},
+  "unused_holdout": {"start_date": "2026-07-18", "end_date": "2026-08-10", "status": "frozen_unused"},
+  "odds_densify": false,
+  "tasks": {
+    "force_resim": "48267eef-643a-4ca2-9e7f-1b83796522c0",
+    "fill_missing": "b9f9d0af-5d5f-4223-9c5e-da5314c83e2c",
+    "walkforward_final": "e1f0c68f-77c1-4619-978f-69d363169fe9",
+    "quality_final": "50dbb3e0-a930-4854-9849-6f3afa4bc06e",
+    "clv_final": "665768b6-a2e4-449f-9352-a2811c3d64e8"
+  },
+  "before_subscription_sharpen": {
+    "sample_size": 347,
+    "base_brier_ml": 0.251616,
+    "avg_ml_clv": 0.0232,
+    "avg_total_clv": 0.33233,
+    "avg_spread_clv": 0.22967,
+    "clv_count": 498
+  },
+  "after_full_window": {
+    "sample_size": 778,
+    "fold_count": 22,
+    "base_brier_ml": 0.250502,
+    "calibrated_brier_ml": 0.251474,
+    "base_mae_total_runs": 3.5128,
+    "ece": 0.027706,
+    "avg_ml_clv": 0.00702,
+    "avg_total_clv": 0.09293,
+    "avg_spread_clv": 0.1118,
+    "clv_count": 1009,
+    "leakage_violations": 11,
+    "unused_holdout_excluded_from_train": true,
+    "unused_holdout_train_points_skipped": 195,
+    "unused_holdout_eval_points_available": 51
+  },
+  "resim_coverage": {
+    "force_simulated": 400,
+    "fill_simulated": 228,
+    "deleted_prior_projections": 619
+  },
+  "verdict": {
+    "brier_gate_0_24": false,
+    "closer_to_gate": true,
+    "ml_clv_regressed": true,
+    "rl_total_clv_regressed": true,
+    "props_research_only": true
+  }
+}

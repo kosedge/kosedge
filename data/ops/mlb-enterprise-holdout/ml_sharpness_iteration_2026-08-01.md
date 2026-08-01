@@ -43,10 +43,15 @@ This is a wiring sanity check, **not** a walkforward / unused-holdout grade.
 
 ### Full walkforward / CLV
 
-**Not re-run** in this iteration (needs densified DB + historical resim; Odds densify blocked by credit-floor policy). Expectation after force-resim:
+**Completed 2026-08-01** — see [`ml_sharpness_resim_grade_2026-08-01.md`](./ml_sharpness_resim_grade_2026-08-01.md).
 
-- Walkforward Brier should move toward the gate from ~0.249–0.252 if HFA was a material bias.
-- RL / totals means should stay near-flat (synthetic total Δ ≈ −0.02); re-check CLV after resim.
+| | Before (subscription) | After (full May–Jul resim) |
+|--|----------------------:|---------------------------:|
+| Base Brier | 0.251616 | **0.250502** |
+| ML CLV | +0.0232 | **+0.00702** |
+| ECE | — | 0.0277 |
+
+Brier moved slightly toward the 0.24 gate; ML / RL / total CLV regressed. Unused holdout still frozen.
 
 ### Unit / integration
 
