@@ -1,0 +1,137 @@
+import "server-only";
+import { env } from "@/lib/config/env";
+import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+
+export type WnbaPropBoardRow = {
+  playerId: string;
+  playerName: string;
+  team: string;
+  marketKey: string;
+  line: number | null;
+  modelMean: number | null;
+  modelStd: number | null;
+  overProb: number | null;
+  underProb: number | null;
+  edgeOver: number | null;
+  edgeUnder: number | null;
+  confidence: number | null;
+  tag: string;
+  tagSide: string | null;
+  reason: string | null;
+  stakeEligible: false;
+};
+
+export type WnbaPropsBoardResponse = {
+  asOfDate: string;
+  modelVersion: string;
+  workerBuildId: string;
+  count: number;
+  lines: WnbaPropBoardRow[];
+  ouBalance?: {
+    play_n?: number;
+    play_over?: number;
+    play_under?: number;
+    play_under_pct?: number | null;
+    balanced?: boolean;
+  };
+  phase?: string;
+  message?: string;
+  error?: string;
+};
+
+function toNumberOrNull(value: unknown): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+export async function fetchWnbaPropsBoard(options?: {
+  marketKey?: string;
+  tag?: string;
+  limit?: number;
+}): Promise<WnbaPropsBoardResponse> {
+  const base = env.MODEL_SERVICE_URL?.replace(/\/$/, "");
+  if (!base) {
+    return {
+      asOfDate: new Date().toISOString().slice(0, 10),
+      modelVersion: "wnba-player-props-v1",
+      workerBuildId: "",
+      count: 0,
+      lines: [],
+      error: "MODEL_SERVICE_URL not configured",
+    };
+  }
+
+  const params = new URLSearchParams();
+  if (options?.marketKey) params.set("market_key", options.marketKey);
+  if (options?.tag) params.set("tag", options.tag);
+  params.set("limit", String(options?.limit ?? 200));
+
+  const url = `${base}/wnba/props/board?${params.toString()}`;
+  try {
+    const res = await upstreamFetch(url, {
+      timeoutMs: UPSTREAM_TIMEOUT_MS.fairLines,
+      headers: env.KOSEDGE_INTERNAL_SECRET
+        ? { "x-kosedge-secret": env.KOSEDGE_INTERNAL_SECRET }
+        : undefined,
+    });
+    if (!res.ok) {
+      return {
+        asOfDate: new Date().toISOString().slice(0, 10),
+        modelVersion: "wnba-player-props-v1",
+        workerBuildId: "",
+        count: 0,
+        lines: [],
+        error: `props board HTTP ${res.status}`,
+      };
+    }
+    const raw = (await res.json()) as Record<string, unknown>;
+    const linesRaw = Array.isArray(raw.lines) ? raw.lines : [];
+    const lines: WnbaPropBoardRow[] = linesRaw.map((row) => {
+      const r = row as Record<string, unknown>;
+      const diag = (r.diagnostics || {}) as Record<string, unknown>;
+      return {
+        playerId: String(r.player_id ?? ""),
+        playerName: String(r.player_name ?? ""),
+        team: String(r.team ?? ""),
+        marketKey: String(r.market_key ?? ""),
+        line: toNumberOrNull(r.line),
+        modelMean: toNumberOrNull(r.model_mean),
+        modelStd: toNumberOrNull(r.model_std),
+        overProb: toNumberOrNull(r.over_prob),
+        underProb: toNumberOrNull(r.under_prob),
+        edgeOver: toNumberOrNull(r.edge_over),
+        edgeUnder: toNumberOrNull(r.edge_under),
+        confidence: toNumberOrNull(r.confidence),
+        tag: String(diag.tag ?? "PASS"),
+        tagSide:
+          typeof diag.tag_side === "string" ? diag.tag_side : null,
+        reason: typeof diag.reason === "string" ? diag.reason : null,
+        stakeEligible: false,
+      };
+    });
+    return {
+      asOfDate: String(raw.as_of_date ?? "").slice(0, 10),
+      modelVersion: String(raw.model_version ?? "wnba-player-props-v1"),
+      workerBuildId: String(raw.worker_build_id ?? ""),
+      count: lines.length,
+      lines,
+      ouBalance: (raw.ou_balance as WnbaPropsBoardResponse["ouBalance"]) || undefined,
+      phase: typeof raw.phase === "string" ? raw.phase : undefined,
+      message: typeof raw.message === "string" ? raw.message : undefined,
+    };
+  } catch (err) {
+    return {
+      asOfDate: new Date().toISOString().slice(0, 10),
+      modelVersion: "wnba-player-props-v1",
+      workerBuildId: "",
+      count: 0,
+      lines: [],
+      error: err instanceof Error ? err.message : "props fetch failed",
+    };
+  }
+}

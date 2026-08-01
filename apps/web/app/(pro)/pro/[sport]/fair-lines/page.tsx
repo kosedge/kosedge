@@ -24,7 +24,7 @@ const SPORT_FAIR_LINES_COPY: Record<
   wnba: {
     markets: "spreads, totals, and moneylines",
     pendingNote:
-      "WNBA fair-lines join the desk once the model board is connected to Pro.",
+      "WNBA possession-sim fair-lines are live under /pro/wnba/fair-lines. Empty offseason slate is intentional.",
   },
   cfb: {
     markets: "spreads and totals with key-number awareness",
@@ -58,6 +58,7 @@ export default async function FairLinesPage({
   if (sportKey === "nfl") redirect("/pro/nfl/fair-lines");
   if (sportKey === "mlb") redirect("/pro/mlb/fair-lines");
   if (sportKey === "nba") redirect("/pro/nba/fair-lines");
+  if (sportKey === "wnba") redirect("/pro/wnba/fair-lines");
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey || "nfl"}`;

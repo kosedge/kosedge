@@ -201,6 +201,7 @@ SPORT_MAP: Dict[str, Tuple[str, str, str]] = {
     "basketball_ncaab": ("ncaam", "NCAAM", "NCAA Men's Basketball"),
     "baseball_mlb": ("mlb", "MLB", "Major League Baseball"),
     "basketball_nba": ("nba", "NBA", "National Basketball Association"),
+    "basketball_wnba": ("wnba", "WNBA", "Women's National Basketball Association"),
     "americanfootball_nfl": ("nfl", "NFL", "National Football League"),
 }
 
@@ -1228,6 +1229,12 @@ def _abbr_for_team(team_name: str, *, sport_key: Optional[str] = None) -> str:
         key = normalize_nba_team_key(team_name)
         if key and key != "UNK":
             return key
+    if sport_key == "basketball_wnba":
+        from .services.wnba_data import normalize_team_key as normalize_wnba_team_key
+
+        key = normalize_wnba_team_key(team_name)
+        if key and key != "UNK":
+            return key
     letters = re.findall(r"[A-Za-z]+", team_name or "")
     if not letters:
         return "TEAM"
@@ -1361,6 +1368,11 @@ def _ensure_hierarchy(
     # NBA seasons tip off in Oct; calendar-year bucketing splits mid-season.
     if sport_key == "basketball_nba":
         season_year = nba_season_year_from_date(game_dt.date())
+    elif sport_key == "basketball_wnba":
+        # WNBA: calendar tip year (May–Oct); Jan–Apr → prior tip year.
+        from .services.wnba_data import wnba_season_year_from_date
+
+        season_year = wnba_season_year_from_date(game_dt.date())
     else:
         season_year = game_dt.year
     home_team = _normalize_team_name_for_lookup(sport_key, home_team)
@@ -1453,8 +1465,8 @@ def _ensure_hierarchy(
         cache=cache,
     )
 
-    # NBA tip times are UTC; store ET calendar date so ingest gdte joins land.
-    if sport_key == "basketball_nba":
+    # NBA/WNBA tip times are UTC; store ET calendar date so ingest gdte joins land.
+    if sport_key in {"basketball_nba", "basketball_wnba"}:
         try:
             from zoneinfo import ZoneInfo
 
@@ -8979,6 +8991,131 @@ def run_nba_daily_cycle(
         "simulations": sims,
         "props": props,
     }
+
+
+# --- WNBA model tasks (thin wrappers → src.services.wnba_jobs) ---
+
+
+@celery_app.task(name="src.tasks.pull_wnba_schedule_ingest")
+def pull_wnba_schedule_ingest(days_back: int = 7, days_ahead: int = 3) -> Dict[str, int]:
+    from .services.wnba_jobs import pull_wnba_schedule_ingest as _impl
+
+    return _impl(days_back=days_back, days_ahead=days_ahead)
+
+
+@celery_app.task(name="src.tasks.pull_wnba_season_ingest")
+def pull_wnba_season_ingest(
+    seasons: Optional[List[str]] = None,
+    sleep_s: float = 0.35,
+    enrich_details: bool = True,
+    max_detail_games: int = 1200,
+    player_stub_details: int = 60,
+) -> Dict[str, Any]:
+    from .services.wnba_jobs import pull_wnba_season_ingest as _impl
+
+    return _impl(
+        seasons=seasons,
+        sleep_s=sleep_s,
+        enrich_details=enrich_details,
+        max_detail_games=max_detail_games,
+        player_stub_details=player_stub_details,
+    )
+
+
+@celery_app.task(name="src.tasks.materialize_wnba_team_rolling_features")
+def materialize_wnba_team_rolling_features(
+    days_back: int = 45,
+    window_games: int = 10,
+) -> Dict[str, Any]:
+    from .services.wnba_jobs import materialize_wnba_team_rolling_features as _impl
+
+    return _impl(days_back=days_back, window_games=window_games)
+
+
+@celery_app.task(name="src.tasks.pull_wnba_context_snapshot")
+def pull_wnba_context_snapshot(days_ahead: int = 3) -> Dict[str, int]:
+    from .services.wnba_jobs import pull_wnba_context_snapshot as _impl
+
+    return _impl(days_ahead=days_ahead)
+
+
+@celery_app.task(name="src.tasks.run_wnba_market_simulations")
+def run_wnba_market_simulations(
+    game_date: Optional[str] = None,
+    simulations: int = 4000,
+    model_version: Optional[str] = None,
+) -> Dict[str, Any]:
+    from .services.wnba_jobs import run_wnba_market_simulations as _impl
+    from .services.wnba_possession_simulator import DEFAULT_WNBA_MODEL_VERSION
+
+    return _impl(
+        game_date=game_date,
+        simulations=simulations,
+        model_version=model_version or DEFAULT_WNBA_MODEL_VERSION,
+    )
+
+
+@celery_app.task(name="src.tasks.wnba_db_inventory")
+def wnba_db_inventory() -> Dict[str, Any]:
+    from .services.wnba_jobs import wnba_db_inventory as _impl
+
+    return _impl()
+
+
+@celery_app.task(name="src.tasks.pull_wnba_historical_odds_densify")
+def pull_wnba_historical_odds_densify(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import pull_wnba_historical_odds_densify as _impl
+
+    return _impl(**kwargs)
+
+
+@celery_app.task(name="src.tasks.run_wnba_walkforward_sample")
+def run_wnba_walkforward_sample(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import run_wnba_walkforward_sample as _impl
+
+    return _impl(**kwargs)
+
+
+@celery_app.task(name="src.tasks.repair_wnba_odds_team_abbrs")
+def repair_wnba_odds_team_abbrs() -> Dict[str, Any]:
+    from .services.wnba_jobs import repair_wnba_odds_team_abbrs as _impl
+
+    return _impl()
+
+
+@celery_app.task(name="src.tasks.materialize_wnba_player_props_edges")
+def materialize_wnba_player_props_edges(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import materialize_wnba_player_props_edges as _impl
+
+    return _impl(**kwargs)
+
+
+@celery_app.task(name="src.tasks.run_wnba_phase1_bootstrap")
+def run_wnba_phase1_bootstrap(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import run_wnba_phase1_bootstrap as _impl
+
+    return _impl(**kwargs)
+
+
+@celery_app.task(name="src.tasks.run_wnba_phase2_calibrate")
+def run_wnba_phase2_calibrate(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import run_wnba_phase2_calibrate as _impl
+
+    return _impl(**kwargs)
+
+
+@celery_app.task(name="src.tasks.run_wnba_phase3_props_bootstrap")
+def run_wnba_phase3_props_bootstrap(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import run_wnba_phase3_props_bootstrap as _impl
+
+    return _impl(**kwargs)
+
+
+@celery_app.task(name="src.tasks.run_wnba_daily_cycle")
+def run_wnba_daily_cycle(**kwargs: Any) -> Dict[str, Any]:
+    from .services.wnba_jobs import run_wnba_daily_cycle as _impl
+
+    return _impl(**kwargs)
 
 
 @celery_app.task(name="src.tasks.pull_mlb_outcomes")

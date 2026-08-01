@@ -4,6 +4,7 @@ import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import { fetchNbaPropsBoard } from "@/lib/nba-props-board";
+import { fetchWnbaPropsBoard } from "@/lib/wnba-props-board";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import {
   resolveSportKey,
@@ -14,7 +15,7 @@ import {
 const SPORT_PROPS_COPY: Record<string, string> = {
   nba: "NBA player props (pts / reb / ast / threes) from possession-aware usage stubs. Research only — PLAY tags are never stake-eligible until holdout clears.",
   nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
-  wnba: "WNBA player props stage here once usage feeds clear validation. Live game slate below is market context from Odds — not player-prop numbers.",
+  wnba: "WNBA player props (pts / reb / ast / threes) from usage stubs + team pace/ORtg. Research only — role-collapse Under refusal; never stake-eligible.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
   cfb: "College football props remain data-pending for soft launch.",
   ncaam: "College basketball props remain data-pending for soft launch.",
@@ -42,13 +43,15 @@ export default async function PropsPage({
     `${sportName} props are staged for this hub pending model feed validation.`;
 
   const boardGames =
-    sportKey === "mlb" || sportKey === "nba"
+    sportKey === "mlb" || sportKey === "nba" || sportKey === "wnba"
       ? []
       : await getTonightGames(sportKey || "nba");
   const mlbBoard =
     sportKey === "mlb" ? await fetchMlbFairLines() : null;
   const nbaBoard =
     sportKey === "nba" ? await fetchNbaPropsBoard({ limit: 120 }) : null;
+  const wnbaBoard =
+    sportKey === "wnba" ? await fetchWnbaPropsBoard({ limit: 120 }) : null;
 
   return (
     <SportHubShell
@@ -71,9 +74,11 @@ export default async function PropsPage({
         <p className="text-sm font-semibold text-kos-gold">
           {sportKey === "nba"
             ? "NBA props research board"
-            : propsEnabled
-              ? "Props board pending"
-              : "Coming soon"}
+            : sportKey === "wnba"
+              ? "WNBA props research board"
+              : propsEnabled
+                ? "Props board pending"
+                : "Coming soon"}
         </p>
         <p className="mt-2 text-sm text-kos-text/70 sm:text-base">{detail}</p>
         {sportKey === "mlb" && mlbBoard ? (
@@ -119,6 +124,80 @@ export default async function PropsPage({
                   </thead>
                   <tbody>
                     {nbaBoard.lines.slice(0, 40).map((row) => (
+                      <tr
+                        key={`${row.playerId}-${row.marketKey}`}
+                        className="border-t border-white/5"
+                      >
+                        <td className="px-3 py-2">
+                          <div className="font-medium text-kos-text">
+                            {row.playerName}
+                          </div>
+                          <div className="text-xs text-kos-text/45">
+                            {row.team}
+                          </div>
+                        </td>
+                        <td className="px-3 py-2 uppercase text-kos-text/70">
+                          {row.marketKey}
+                        </td>
+                        <td className="px-3 py-2 text-kos-text/70">
+                          {row.line ?? "—"}
+                        </td>
+                        <td className="px-3 py-2 text-kos-text/80">
+                          {row.modelMean?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className="px-3 py-2">
+                          <span className="text-kos-gold">{row.tag}</span>
+                          {row.tagSide ? (
+                            <span className="text-kos-text/45">
+                              {" "}
+                              {row.tagSide}
+                            </span>
+                          ) : null}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        {sportKey === "wnba" && wnbaBoard ? (
+          <div className="mt-4 space-y-3">
+            <p className="text-sm text-kos-text/60">
+              {wnbaBoard.error
+                ? `Board unavailable: ${wnbaBoard.error}`
+                : wnbaBoard.count > 0
+                  ? `${wnbaBoard.count} prop rows · ${wnbaBoard.modelVersion} · ${wnbaBoard.workerBuildId || "canary"} · research only (no stake tags)`
+                  : wnbaBoard.message ||
+                    "No prop edges materialized yet — bootstrap Phase 3 on model-service."}
+            </p>
+            {wnbaBoard.ouBalance ? (
+              <p className="text-xs text-kos-text/50">
+                PLAY balance: {wnbaBoard.ouBalance.play_over ?? 0} Over /{" "}
+                {wnbaBoard.ouBalance.play_under ?? 0} Under
+                {wnbaBoard.ouBalance.play_under_pct != null
+                  ? ` (${Math.round(wnbaBoard.ouBalance.play_under_pct * 100)}% Under)`
+                  : ""}
+                {wnbaBoard.ouBalance.balanced === false
+                  ? " · imbalance flag"
+                  : ""}
+              </p>
+            ) : null}
+            {wnbaBoard.lines.length > 0 ? (
+              <div className="overflow-x-auto rounded-xl border border-white/10">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="bg-white/5 text-xs uppercase tracking-wide text-kos-text/50">
+                    <tr>
+                      <th className="px-3 py-2">Player</th>
+                      <th className="px-3 py-2">Mkt</th>
+                      <th className="px-3 py-2">Line</th>
+                      <th className="px-3 py-2">Model</th>
+                      <th className="px-3 py-2">Tag</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {wnbaBoard.lines.slice(0, 40).map((row) => (
                       <tr
                         key={`${row.playerId}-${row.marketKey}`}
                         className="border-t border-white/5"

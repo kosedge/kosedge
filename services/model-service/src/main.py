@@ -13,9 +13,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from src.celery_app import celery_app, celery_healthcheck
 from src.db import engine
-from src.routes import edge_board_router, mlb_router, nba_router, nfl_router
+from src.routes import edge_board_router, mlb_router, nba_router, nfl_router, wnba_router
 from src.services.nba_possession_simulator import DEFAULT_NBA_MODEL_VERSION
 from src.services.nfl_simulator import DEFAULT_NFL_MODEL_VERSION
+from src.services.wnba_possession_simulator import DEFAULT_WNBA_MODEL_VERSION
 
 APP_NAME: str = os.getenv("APP_NAME", "kosedge")
 LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -46,6 +47,20 @@ TASK_NBA_MATERIALIZE_PROPS = "src.tasks.materialize_nba_player_props_edges"
 TASK_NBA_DAILY_CYCLE = "src.tasks.run_nba_daily_cycle"
 TASK_NBA_REPAIR_ABBRS = "src.tasks.repair_nba_odds_team_abbrs"
 TASK_NBA_INVENTORY = "src.tasks.nba_db_inventory"
+TASK_PULL_WNBA_CONTEXT = "src.tasks.pull_wnba_context_snapshot"
+TASK_RUN_WNBA_SIMULATIONS = "src.tasks.run_wnba_market_simulations"
+TASK_PULL_WNBA_INGEST = "src.tasks.pull_wnba_schedule_ingest"
+TASK_PULL_WNBA_SEASON_INGEST = "src.tasks.pull_wnba_season_ingest"
+TASK_WNBA_ROLLING_FEATURES = "src.tasks.materialize_wnba_team_rolling_features"
+TASK_WNBA_ODDS_DENSIFY = "src.tasks.pull_wnba_historical_odds_densify"
+TASK_WNBA_WALKFORWARD = "src.tasks.run_wnba_walkforward_sample"
+TASK_WNBA_PHASE1_BOOTSTRAP = "src.tasks.run_wnba_phase1_bootstrap"
+TASK_WNBA_PHASE2_CALIBRATE = "src.tasks.run_wnba_phase2_calibrate"
+TASK_WNBA_PHASE3_PROPS = "src.tasks.run_wnba_phase3_props_bootstrap"
+TASK_WNBA_MATERIALIZE_PROPS = "src.tasks.materialize_wnba_player_props_edges"
+TASK_WNBA_DAILY_CYCLE = "src.tasks.run_wnba_daily_cycle"
+TASK_WNBA_REPAIR_ABBRS = "src.tasks.repair_wnba_odds_team_abbrs"
+TASK_WNBA_INVENTORY = "src.tasks.wnba_db_inventory"
 TASK_PULL_NFL_CONTEXT = "src.tasks.pull_nfl_context_snapshot"
 TASK_RUN_NFL_SIMULATIONS = "src.tasks.run_nfl_market_simulations"
 TASK_BACKFILL_NFL_HISTORICAL_PROJECTIONS = "src.tasks.backfill_nfl_historical_projections"
@@ -262,6 +277,7 @@ app.include_router(edge_board_router)
 app.include_router(mlb_router)
 app.include_router(nba_router)
 app.include_router(nfl_router)
+app.include_router(wnba_router)
 
 # CORS (single middleware registration)
 origins, allow_credentials = _resolve_cors_settings()
@@ -981,6 +997,129 @@ def job_run_nba_simulations(
     except Exception as e:
         log.exception("Failed to enqueue run-nba-simulations")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-wnba-context")
+def job_pull_wnba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_PULL_WNBA_CONTEXT, kwargs={"days_ahead": days_ahead}
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_WNBA_CONTEXT}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-wnba-context")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-wnba-simulations")
+def job_run_wnba_simulations(
+    game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
+    simulations: int = Query(4000, ge=300, le=20000),
+    model_version: str = Query(DEFAULT_WNBA_MODEL_VERSION),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_RUN_WNBA_SIMULATIONS,
+            kwargs={
+                "game_date": game_date,
+                "simulations": simulations,
+                "model_version": model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_RUN_WNBA_SIMULATIONS}
+    except Exception as e:
+        log.exception("Failed to enqueue run-wnba-simulations")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-wnba-phase1-bootstrap")
+def job_run_wnba_phase1_bootstrap(
+    densify_odds: bool = Query(True),
+    max_credit_spend: int = Query(200000, ge=0, le=400000),
+    walkforward_games: int = Query(60, ge=5, le=400),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_WNBA_PHASE1_BOOTSTRAP,
+            kwargs={
+                "densify_odds": densify_odds,
+                "max_credit_spend": max_credit_spend,
+                "walkforward_games": walkforward_games,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_WNBA_PHASE1_BOOTSTRAP}
+    except Exception as e:
+        log.exception("Failed to enqueue run-wnba-phase1-bootstrap")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-wnba-phase2-calibrate")
+def job_run_wnba_phase2_calibrate(
+    walkforward_games: int = Query(60, ge=5, le=400),
+    simulations: int = Query(1000, ge=300, le=5000),
+    repair_abbrs: bool = Query(True),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_WNBA_PHASE2_CALIBRATE,
+            kwargs={
+                "repair_abbrs": repair_abbrs,
+                "walkforward_games": walkforward_games,
+                "simulations": simulations,
+                "densify_odds": False,
+                "max_credit_spend": 0,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_WNBA_PHASE2_CALIBRATE}
+    except Exception as e:
+        log.exception("Failed to enqueue run-wnba-phase2-calibrate")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-wnba-phase3-props-bootstrap")
+def job_run_wnba_phase3_props_bootstrap(
+    lookback_games: int = Query(8, ge=3, le=20),
+    limit_players: int = Query(200, ge=20, le=500),
+) -> Dict[str, str]:
+    try:
+        task = celery_app.send_task(
+            TASK_WNBA_PHASE3_PROPS,
+            kwargs={
+                "lookback_games": lookback_games,
+                "limit_players": limit_players,
+            },
+        )
+        return {"task_id": task.id, "status": "queued"}
+    except Exception:
+        log.exception("Failed to enqueue run-wnba-phase3-props-bootstrap")
+        raise HTTPException(status_code=500, detail="enqueue_failed")
+
+
+@app.post("/api/jobs/run-wnba-daily-cycle")
+def job_run_wnba_daily_cycle(
+    days_ahead: int = Query(3, ge=0, le=14),
+    simulations: int = Query(4000, ge=300, le=20000),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_WNBA_DAILY_CYCLE,
+            kwargs={"days_ahead": days_ahead, "simulations": simulations},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_WNBA_DAILY_CYCLE}
+    except Exception as e:
+        log.exception("Failed to enqueue run-wnba-daily-cycle")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.get("/api/jobs/wnba-inventory")
+def job_wnba_inventory_sync() -> Dict[str, Any]:
+    try:
+        from src.services.wnba_jobs import wnba_db_inventory
+
+        return wnba_db_inventory()
+    except Exception as e:
+        log.exception("Failed WNBA inventory")
+        raise HTTPException(status_code=500, detail=f"inventory_failed: {e}")
 
 
 @app.post("/api/jobs/pull-nfl-context")
