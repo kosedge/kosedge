@@ -999,6 +999,64 @@ def job_run_nba_simulations(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
+@app.post("/api/jobs/pull-wnba-ingest")
+def job_pull_wnba_ingest(
+    days_back: int = Query(7, ge=0, le=60),
+    days_ahead: int = Query(7, ge=0, le=21),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_PULL_WNBA_INGEST,
+            kwargs={"days_back": days_back, "days_ahead": days_ahead},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_WNBA_INGEST}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-wnba-ingest")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/pull-wnba-season-ingest")
+def job_pull_wnba_season_ingest(
+    seasons: Optional[str] = Query(
+        None, description="Comma-separated tip years, e.g. 2025,2026"
+    ),
+    enrich_details: bool = Query(False),
+    max_detail_games: int = Query(200, ge=0, le=1200),
+) -> Dict[str, str]:
+    try:
+        season_list = (
+            [s.strip() for s in seasons.split(",") if s.strip()] if seasons else None
+        )
+        async_result = celery_app.send_task(
+            TASK_PULL_WNBA_SEASON_INGEST,
+            kwargs={
+                "seasons": season_list,
+                "enrich_details": enrich_details,
+                "max_detail_games": max_detail_games,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_PULL_WNBA_SEASON_INGEST}
+    except Exception as e:
+        log.exception("Failed to enqueue pull-wnba-season-ingest")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/materialize-wnba-rolling-features")
+def job_materialize_wnba_rolling_features(
+    days_back: int = Query(120, ge=7, le=2000),
+    window_games: int = Query(10, ge=3, le=40),
+) -> Dict[str, str]:
+    try:
+        async_result = celery_app.send_task(
+            TASK_WNBA_ROLLING_FEATURES,
+            kwargs={"days_back": days_back, "window_games": window_games},
+        )
+        return {"task_id": async_result.id, "task_name": TASK_WNBA_ROLLING_FEATURES}
+    except Exception as e:
+        log.exception("Failed to enqueue materialize-wnba-rolling-features")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
 @app.post("/api/jobs/pull-wnba-context")
 def job_pull_wnba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, str]:
     try:

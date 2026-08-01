@@ -442,6 +442,19 @@ def pull_wnba_season_ingest(
         for season in season_labels:
             paired = fetch_season_schedule_data_wnba(season)
             source = "data.wnba.com/schedule"
+            if not paired:
+                # 2026+ CDN often AccessDenied — ESPN near-term window (not full May–Oct).
+                try:
+                    season_year = season_label_to_start_year(season)
+                except ValueError:
+                    season_year = None
+                if season_year is not None:
+                    today = date.today()
+                    espn_start = max(date(season_year, 5, 1), today - timedelta(days=45))
+                    espn_end = min(date(season_year, 10, 20), today + timedelta(days=14))
+                    if espn_end >= espn_start:
+                        paired = fetch_schedule_window(espn_start, espn_end, sleep_s=0.25)
+                        source = "espn.scoreboard_window"
             source_used[season] = source
             rest_map = compute_rest_days_by_team(paired)
             count = 0

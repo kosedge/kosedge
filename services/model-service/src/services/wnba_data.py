@@ -55,7 +55,8 @@ WNBA_DATA_HEADERS = {
 }
 
 # Canonical team abbreviations — matches apps/web WNBA_TEAM_DIRECTORY.
-# Sport-scoped: CHI/DAL/IND/MIN/PHX also exist in NBA — always join via leagues.code='wnba'.
+# 2026 expansion: Portland Fire + Toronto Tempo (15 clubs). Sport-scoped:
+# CHI/DAL/IND/MIN/PHX also exist in NBA — always join via leagues.code='wnba'.
 WNBA_TEAM_ABBREV = {
     "Atlanta Dream": "ATL",
     "Chicago Sky": "CHI",
@@ -68,7 +69,9 @@ WNBA_TEAM_ABBREV = {
     "Minnesota Lynx": "MIN",
     "New York Liberty": "NY",
     "Phoenix Mercury": "PHX",
+    "Portland Fire": "POR",
     "Seattle Storm": "SEA",
+    "Toronto Tempo": "TOR",
     "Washington Mystics": "WSH",
 }
 
@@ -88,6 +91,10 @@ WNBA_TEAM_ABBR_ALIASES: Dict[str, str] = {
     "CT": "CON",
     "GS": "GSV",
     "GSW": "GSV",
+    "PDX": "POR",
+    "PORT": "POR",
+    "TT": "TOR",
+    "TEMP": "TOR",
 }
 
 # Exhibition / All-Star / international visitors in full_schedule — skip for features.
@@ -533,14 +540,17 @@ def fetch_schedule_window(
     start: date,
     end: date,
     *,
-    sleep_s: float = 0.55,
+    sleep_s: float = 0.35,
 ) -> List[Dict[str, Any]]:
+    """Near-term slate. Prefer ESPN — data.wnba.com/stats often 403/timeout in 2026."""
     games: List[Dict[str, Any]] = []
     cur = start
     while cur <= end:
-        day_games = fetch_scoreboard(cur)
+        day_games = fetch_espn_scoreboard(cur)
         if not day_games:
-            day_games = fetch_espn_scoreboard(cur)
+            day_games = fetch_scoreboard(cur)
+        if not day_games:
+            day_games = try_sportsdata_games_by_date(cur)
         games.extend(day_games)
         cur += timedelta(days=1)
         if sleep_s > 0 and cur <= end:
