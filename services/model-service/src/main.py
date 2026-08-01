@@ -95,6 +95,7 @@ TASK_MLB_HISTORICAL_ODDS_DENSIFY = "src.tasks.pull_mlb_historical_odds_densify"
 TASK_MLB_CLV_ATTRIBUTION = "src.tasks.run_mlb_clv_attribution"
 TASK_MLB_QUALITY_GRADING = "src.tasks.run_mlb_quality_grading"
 TASK_MLB_HISTORICAL_RESIM = "src.tasks.backfill_mlb_historical_resim"
+TASK_MLB_STACK_ABLATION = "src.tasks.run_mlb_stack_ablation"
 MLB_MODEL_STATE_KEY = "mlb_active_model"
 
 
@@ -1959,6 +1960,40 @@ def job_mlb_historical_resim(
         return {"task_id": async_result.id, "task_name": TASK_MLB_HISTORICAL_RESIM}
     except Exception as e:
         log.exception("Failed to enqueue mlb-historical-resim")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-stack-ablation")
+def job_mlb_stack_ablation(
+    start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
+    end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
+    simulations: int = Query(2000, ge=500, le=10000),
+    max_games: int = Query(1200, ge=1, le=2000),
+    lookback_days: int = Query(90, ge=30, le=365),
+    configs: str = Query(
+        "S0,S1,S2,S3",
+        description="Comma-separated stack configs: S0 baseline, S1 matchup-off, S2 +wind-dir-off, S3 +kbb quality",
+    ),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    """Densify stack ablation (S0–S3). Writes to `{base}-ablate-sN` model versions."""
+    try:
+        cfg_list = [c.strip() for c in (configs or "").split(",") if c.strip()]
+        async_result = celery_app.send_task(
+            TASK_MLB_STACK_ABLATION,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": int(simulations),
+                "max_games": int(max_games),
+                "lookback_days": int(lookback_days),
+                "configs": cfg_list,
+                "base_model_version": base_model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_STACK_ABLATION}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-stack-ablation")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

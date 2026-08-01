@@ -18,6 +18,7 @@ from sqlalchemy import text
 from .celery_app import celery_app
 from .db import SessionLocal
 from .services.mlb_data import (
+    apply_starter_quality_mode,
     build_team_offense_context,
     fetch_mlb_standings,
     fetch_forecast_for_game,
@@ -26,6 +27,7 @@ from .services.mlb_data import (
     fetch_team_hitting_profile,
     fetch_team_roster,
     fetch_team_bullpen_fatigue,
+    get_starter_quality_mode,
     lineup_confidence,
     park_factor_for_team,
     starter_identity_features,
@@ -53,7 +55,13 @@ from .services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
 from .services.mlb_pa_feature_sharpen import platoon_split_for_hand, sharpen_game_inputs
 from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from .services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE as MLB_PROPS_PLAY_STAKE_ELIGIBLE
-from .services.mlb_simulator import DEFAULT_MODEL_VERSION, MlbGameInputs, simulate_mlb_game
+from .services.mlb_simulator import (
+    DEFAULT_MODEL_VERSION,
+    MlbGameInputs,
+    apply_stack_ablation_flags,
+    get_stack_ablation_flags,
+    simulate_mlb_game,
+)
 from .services.mlb_unused_holdout import (
     filter_points_excluding_unused_holdout,
     filter_points_in_unused_holdout,
@@ -11285,6 +11293,285 @@ def backfill_mlb_historical_resim(
         }
     finally:
         session.close()
+
+
+_STACK_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
+    # S0: HFA 1.025 + current production stack
+    "S0": {
+        "matchup_mul_enabled": True,
+        "weather_wind_dir_mul_enabled": True,
+        "starter_quality_mode": "era_whip",
+        "model_suffix": "ablate-s0",
+    },
+    # S1: matchup mul OFF
+    "S1": {
+        "matchup_mul_enabled": False,
+        "weather_wind_dir_mul_enabled": True,
+        "starter_quality_mode": "era_whip",
+        "model_suffix": "ablate-s1",
+    },
+    # S2: S1 + wind dir mul OFF
+    "S2": {
+        "matchup_mul_enabled": False,
+        "weather_wind_dir_mul_enabled": False,
+        "starter_quality_mode": "era_whip",
+        "model_suffix": "ablate-s2",
+    },
+    # S3: S1 + K-BB-only starter quality (no ERA/WHIP)
+    "S3": {
+        "matchup_mul_enabled": False,
+        "weather_wind_dir_mul_enabled": True,
+        "starter_quality_mode": "kbb_only",
+        "model_suffix": "ablate-s3",
+    },
+}
+
+
+def _filter_clv_items_to_window(
+    session: Any,
+    items: List[Dict[str, Any]],
+    *,
+    start_date: date,
+    end_date: date,
+) -> List[Dict[str, Any]]:
+    if not items:
+        return []
+    ids = [str(i.get("game_id")) for i in items if i.get("game_id")]
+    if not ids:
+        return []
+    rows = session.execute(
+        text(
+            """
+            SELECT g.id::text AS game_id
+            FROM games g
+            WHERE g.id::text = ANY(:ids)
+              AND g.game_date BETWEEN :start_date AND :end_date
+            """
+        ),
+        {"ids": ids, "start_date": start_date, "end_date": end_date},
+    ).fetchall()
+    keep = {str(r._mapping["game_id"]) for r in rows}
+    return [i for i in items if str(i.get("game_id")) in keep]
+
+
+def _summarize_clv_items(items: List[Dict[str, Any]]) -> Dict[str, Any]:
+    ml_vals = [float(i["ml_clv"]) for i in items if i.get("ml_clv") is not None]
+    total_vals = [float(i["total_clv"]) for i in items if i.get("total_clv") is not None]
+    spread_vals = [float(i["spread_clv"]) for i in items if i.get("spread_clv") is not None]
+    return {
+        "count": len(items),
+        "ml_sample_size": len(ml_vals),
+        "total_sample_size": len(total_vals),
+        "spread_sample_size": len(spread_vals),
+        "avg_ml_clv": round(sum(ml_vals) / len(ml_vals), 5) if ml_vals else None,
+        "avg_total_clv": round(sum(total_vals) / len(total_vals), 5) if total_vals else None,
+        "avg_spread_clv": round(sum(spread_vals) / len(spread_vals), 5) if spread_vals else None,
+        "ml_game_ids": sorted({str(i["game_id"]) for i in items if i.get("ml_clv") is not None}),
+    }
+
+
+@celery_app.task(name="src.tasks.run_mlb_stack_ablation")
+def run_mlb_stack_ablation(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    simulations: int = 2000,
+    max_games: int = 1200,
+    lookback_days: int = 90,
+    configs: Optional[List[str]] = None,
+    base_model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Force-resim densify window under S0–S3 stack flags; grade full-n + intersection CLV.
+
+    Writes each config to `{base}-ablate-sN` so production `{base}` is not overwritten
+    until a winning config is explicitly promoted.
+    """
+    if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
+        raise ValueError(
+            "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for stack ablation"
+        )
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    selected = configs or ["S0", "S1", "S2", "S3"]
+    unknown = [c for c in selected if c not in _STACK_ABLATION_CONFIGS]
+    if unknown:
+        raise ValueError(f"unknown stack ablation configs: {unknown}")
+
+    prior_flags = get_stack_ablation_flags()
+    prior_quality_mode = get_starter_quality_mode()
+    results: Dict[str, Any] = {}
+    try:
+        for name in selected:
+            cfg = _STACK_ABLATION_CONFIGS[name]
+            model_version = f"{base_model_version}-{cfg['model_suffix']}"
+            apply_stack_ablation_flags(
+                matchup_mul_enabled=bool(cfg["matchup_mul_enabled"]),
+                weather_wind_dir_mul_enabled=bool(cfg["weather_wind_dir_mul_enabled"]),
+            )
+            apply_starter_quality_mode(str(cfg["starter_quality_mode"]))
+            log.info(
+                "Stack ablation config start",
+                extra={"config": name, "model_version": model_version, "flags": cfg},
+            )
+            resim = backfill_mlb_historical_resim(
+                start_date=start.isoformat(),
+                end_date=end.isoformat(),
+                simulations=int(simulations),
+                model_version=model_version,
+                max_games=int(max_games),
+                force_resim=True,
+                skip_outcomes_pull=True,
+            )
+            session = SessionLocal()
+            try:
+                clv_full = compute_mlb_clv_with_spread(
+                    session,
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                )
+                window_items = _filter_clv_items_to_window(
+                    session,
+                    list(clv_full.get("items") or []),
+                    start_date=start,
+                    end_date=end,
+                )
+                densify_clv = _summarize_clv_items(window_items)
+                quality = run_mlb_quality_grading(
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                )
+                walkforward = run_mlb_walkforward_backtest(
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                    training_days=10,
+                    step_days=3,
+                    apply_calibration=True,
+                )
+            finally:
+                session.close()
+            results[name] = {
+                "config": cfg,
+                "model_version": model_version,
+                "flags": get_stack_ablation_flags(),
+                "starter_quality_mode": get_starter_quality_mode(),
+                "resim": {
+                    "status": resim.get("status"),
+                    "simulated": resim.get("simulated"),
+                    "games_selected": resim.get("games_selected"),
+                    "deleted_prior_projections": resim.get("deleted_prior_projections"),
+                    "leakage_rows_repaired": resim.get("leakage_rows_repaired"),
+                    "holdout": resim.get("holdout"),
+                },
+                "full_n_clv": {
+                    "count": clv_full.get("count"),
+                    "ml_sample_size": clv_full.get("ml_sample_size"),
+                    "avg_ml_clv": clv_full.get("avg_ml_clv"),
+                    "avg_total_clv": clv_full.get("avg_total_clv"),
+                    "avg_spread_clv": clv_full.get("avg_spread_clv"),
+                },
+                "densify_window_clv": {
+                    k: v for k, v in densify_clv.items() if k != "ml_game_ids"
+                },
+                "ml_game_ids": densify_clv.get("ml_game_ids") or [],
+                "walkforward": {
+                    "sample_size": walkforward.get("sample_size"),
+                    "base_brier_ml": walkforward.get("base_brier_ml"),
+                    "calibrated_brier_ml": walkforward.get("calibrated_brier_ml"),
+                    "base_mae_total_runs": walkforward.get("base_mae_total_runs"),
+                    "leakage_violations": walkforward.get("leakage_violations"),
+                },
+                "quality": (quality.get("quality") or {}) if isinstance(quality, dict) else {},
+            }
+    finally:
+        apply_stack_ablation_flags(
+            matchup_mul_enabled=bool(prior_flags.get("matchup_mul_enabled", True)),
+            weather_wind_dir_mul_enabled=bool(
+                prior_flags.get("weather_wind_dir_mul_enabled", True)
+            ),
+        )
+        apply_starter_quality_mode(prior_quality_mode or "era_whip")
+
+    # Intersection: identical densify-window game_ids with ML CLV across all graded configs.
+    id_sets = [
+        set(results[name].get("ml_game_ids") or [])
+        for name in selected
+        if name in results
+    ]
+    intersection_ids = set.intersection(*id_sets) if id_sets else set()
+    intersection: Dict[str, Any] = {"n": len(intersection_ids), "by_config": {}}
+    for name in selected:
+        if name not in results:
+            continue
+        model_version = results[name]["model_version"]
+        session = SessionLocal()
+        try:
+            clv_full = compute_mlb_clv_with_spread(
+                session,
+                model_version=model_version,
+                lookback_days=int(lookback_days),
+            )
+            window_items = _filter_clv_items_to_window(
+                session,
+                list(clv_full.get("items") or []),
+                start_date=start,
+                end_date=end,
+            )
+            inter_items = [
+                i for i in window_items if str(i.get("game_id")) in intersection_ids
+            ]
+            intersection["by_config"][name] = _summarize_clv_items(inter_items)
+            # Drop bulky ids from per-config payload after intersection computed.
+            results[name].pop("ml_game_ids", None)
+            results[name]["intersection_clv"] = {
+                k: v
+                for k, v in intersection["by_config"][name].items()
+                if k != "ml_game_ids"
+            }
+        finally:
+            session.close()
+
+    # Decision helper (does not auto-promote).
+    s1 = (intersection.get("by_config") or {}).get("S1") or {}
+    s0 = (intersection.get("by_config") or {}).get("S0") or {}
+    s1_ml = s1.get("avg_ml_clv")
+    s0_ml = s0.get("avg_ml_clv")
+    recommendation = {
+        "ship_matchup_off": bool(
+            s1_ml is not None and float(s1_ml) >= 0.015
+        ),
+        "stretch_target_hit": bool(
+            s1_ml is not None and float(s1_ml) >= 0.020
+        ),
+        "s1_beats_s0_intersection": bool(
+            s1_ml is not None
+            and s0_ml is not None
+            and float(s1_ml) > float(s0_ml)
+        ),
+        "note": (
+            "Ship S1 (matchup-off, keep HFA 1.025) only if intersection ML CLV "
+            "≥ +0.015 without wrecking Brier/RL/total. Else treat prior +0.023 as "
+            "sample-composition and pivot to SP talent (S3) without nostalgia."
+        ),
+    }
+
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "lookback_days": int(lookback_days),
+        "configs": selected,
+        "results": results,
+        "intersection": {
+            "n": intersection["n"],
+            "by_config": {
+                k: {kk: vv for kk, vv in v.items() if kk != "ml_game_ids"}
+                for k, v in (intersection.get("by_config") or {}).items()
+            },
+        },
+        "recommendation": recommendation,
+        "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+    }
 
 
 def _resolve_nfl_week(session: Any, season: int, week: Optional[int]) -> int:

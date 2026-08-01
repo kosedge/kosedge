@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 from .mlb_simulator import (
     AWAY_FIELD_OFFENSE_MUL,
     HOME_FIELD_OFFENSE_MUL,
+    MATCHUP_MUL_ENABLED,
     MlbGameInputs,
     _effective_lineup_confidence,
     _effective_offense_index,
@@ -237,22 +238,26 @@ def simulate_mlb_game_pitch_by_pitch(
     )
     firm_home = _clamp(float(getattr(inputs, "starter_firmness_home", 0.85) or 0.85), 0.35, 1.0)
     firm_away = _clamp(float(getattr(inputs, "starter_firmness_away", 0.85) or 0.85), 0.35, 1.0)
-    matchup_home = _offense_pitcher_matchup_mul(
-        offense_split=inputs.offense_split_home,
-        recent_form=inputs.recent_form_index_home,
-        opp_k_factor=inputs.starter_k_factor_away,
-        opp_bb_factor=inputs.starter_bb_factor_away,
-        opp_gb_factor=inputs.starter_gb_factor_away,
-        opp_firmness=firm_away,
-    )
-    matchup_away = _offense_pitcher_matchup_mul(
-        offense_split=inputs.offense_split_away,
-        recent_form=inputs.recent_form_index_away,
-        opp_k_factor=inputs.starter_k_factor_home,
-        opp_bb_factor=inputs.starter_bb_factor_home,
-        opp_gb_factor=inputs.starter_gb_factor_home,
-        opp_firmness=firm_home,
-    )
+    if MATCHUP_MUL_ENABLED:
+        matchup_home = _offense_pitcher_matchup_mul(
+            offense_split=inputs.offense_split_home,
+            recent_form=inputs.recent_form_index_home,
+            opp_k_factor=inputs.starter_k_factor_away,
+            opp_bb_factor=inputs.starter_bb_factor_away,
+            opp_gb_factor=inputs.starter_gb_factor_away,
+            opp_firmness=firm_away,
+        )
+        matchup_away = _offense_pitcher_matchup_mul(
+            offense_split=inputs.offense_split_away,
+            recent_form=inputs.recent_form_index_away,
+            opp_k_factor=inputs.starter_k_factor_home,
+            opp_bb_factor=inputs.starter_bb_factor_home,
+            opp_gb_factor=inputs.starter_gb_factor_home,
+            opp_firmness=firm_home,
+        )
+    else:
+        matchup_home = 1.0
+        matchup_away = 1.0
     offense_home_early = (
         _effective_offense_index(
             season_index=inputs.offense_home,
