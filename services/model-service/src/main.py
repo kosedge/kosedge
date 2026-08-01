@@ -96,6 +96,7 @@ TASK_MLB_CLV_ATTRIBUTION = "src.tasks.run_mlb_clv_attribution"
 TASK_MLB_QUALITY_GRADING = "src.tasks.run_mlb_quality_grading"
 TASK_MLB_HISTORICAL_RESIM = "src.tasks.backfill_mlb_historical_resim"
 TASK_MLB_STACK_ABLATION = "src.tasks.run_mlb_stack_ablation"
+TASK_MLB_SP_TALENT_ABLATION = "src.tasks.run_mlb_sp_talent_ablation"
 MLB_MODEL_STATE_KEY = "mlb_active_model"
 
 
@@ -1994,6 +1995,40 @@ def job_mlb_stack_ablation(
         return {"task_id": async_result.id, "task_name": TASK_MLB_STACK_ABLATION}
     except Exception as e:
         log.exception("Failed to enqueue mlb-stack-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-sp-talent-ablation")
+def job_mlb_sp_talent_ablation(
+    start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
+    end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
+    simulations: int = Query(2000, ge=500, le=10000),
+    max_games: int = Query(1200, ge=1, le=2000),
+    lookback_days: int = Query(90, ge=30, le=365),
+    configs: str = Query(
+        "T0,T1,T2",
+        description="Comma-separated: T0 era/whip, T1 fip_proxy, T2 xfip_proxy, B1 bullpen role",
+    ),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    """Densify SP talent / bullpen role ablation. Writes to `{base}-talent-*` versions."""
+    try:
+        cfg_list = [c.strip() for c in (configs or "").split(",") if c.strip()]
+        async_result = celery_app.send_task(
+            TASK_MLB_SP_TALENT_ABLATION,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": int(simulations),
+                "max_games": int(max_games),
+                "lookback_days": int(lookback_days),
+                "configs": cfg_list,
+                "base_model_version": base_model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_SP_TALENT_ABLATION}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-sp-talent-ablation")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

@@ -187,7 +187,7 @@ def test_starter_identity_features_uses_live_pitcher_stats(monkeypatch) -> None:
                                         "era": "2.78",
                                         "whip": "0.91",
                                         "strikeoutsPer9Inn": "11.4",
-                                        "baseOnBallsPer9Inn": "1.8",
+                                        "walksPer9Inn": "1.8",
                                         "groundOutsToAirouts": "1.23",
                                     }
                                 }

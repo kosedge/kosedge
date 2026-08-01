@@ -116,7 +116,7 @@ def test_kbb_only_starter_quality_ignores_era_whip(monkeypatch) -> None:
                                         "era": "6.50",
                                         "whip": "1.55",
                                         "strikeoutsPer9Inn": "12.0",
-                                        "baseOnBallsPer9Inn": "1.6",
+                                        "walksPer9Inn": "1.6",
                                         "groundOutsToAirouts": "1.30",
                                     }
                                 }

@@ -18,6 +18,7 @@ from sqlalchemy import text
 from .celery_app import celery_app
 from .db import SessionLocal
 from .services.mlb_data import (
+    apply_bullpen_role_quality_mode,
     apply_starter_quality_mode,
     build_team_offense_context,
     fetch_mlb_standings,
@@ -27,8 +28,10 @@ from .services.mlb_data import (
     fetch_team_hitting_profile,
     fetch_team_roster,
     fetch_team_bullpen_fatigue,
+    get_bullpen_role_quality_mode,
     get_starter_quality_mode,
     lineup_confidence,
+    mlb_team_id_for_abbr,
     park_factor_for_team,
     starter_identity_features,
     umpire_run_factor,
@@ -6642,6 +6645,8 @@ def pull_mlb_context_snapshot(days_ahead: int = 5) -> Dict[str, int]:
                             "bullpen_appearances_last3_away": away_bp["bullpen_appearances_last3"],
                             "bullpen_high_leverage_availability_home": home_bp["bullpen_high_leverage_availability_score"],
                             "bullpen_high_leverage_availability_away": away_bp["bullpen_high_leverage_availability_score"],
+                            "bullpen_quality_home": home_bp.get("bullpen_quality", 1.0),
+                            "bullpen_quality_away": away_bp.get("bullpen_quality", 1.0),
                             "starter_home_features": starter_home_features,
                             "starter_away_features": starter_away_features,
                             "home_offense_context": home_offense,
@@ -6752,8 +6757,12 @@ def run_mlb_market_simulations(
             status = str(m.get("game_status") or "").strip().lower()
             if status in {"final", "closed", "completed"}:
                 continue
-            starter_home_feat = starter_identity_features(m.get("probable_pitcher_home"))
-            starter_away_feat = starter_identity_features(m.get("probable_pitcher_away"))
+            starter_home_feat = starter_identity_features(
+                m.get("probable_pitcher_home"), as_of=target_date
+            )
+            starter_away_feat = starter_identity_features(
+                m.get("probable_pitcher_away"), as_of=target_date
+            )
             freshness = _info_freshness_score(
                 updated_at=m.get("context_updated_at"),
                 lineup_confirmed=bool(m["lineup_confirmed"]) if m.get("lineup_confirmed") is not None else False,
@@ -6805,6 +6814,8 @@ def run_mlb_market_simulations(
                 bullpen_availability_away=float(m["bullpen_availability_away"]) if m.get("bullpen_availability_away") is not None else 0.65,
                 bullpen_high_lev_availability_home=float(m["bullpen_high_leverage_availability_home"]) if m.get("bullpen_high_leverage_availability_home") is not None else 0.62,
                 bullpen_high_lev_availability_away=float(m["bullpen_high_leverage_availability_away"]) if m.get("bullpen_high_leverage_availability_away") is not None else 0.62,
+                bullpen_quality_home=float(context_payload.get("bullpen_quality_home") or 1.0),
+                bullpen_quality_away=float(context_payload.get("bullpen_quality_away") or 1.0),
                 umpire_run_factor=float(m["umpire_run_factor"]) if m.get("umpire_run_factor") is not None else 1.0,
                 info_freshness_score_home=freshness,
                 info_freshness_score_away=freshness,
@@ -11082,11 +11093,24 @@ def backfill_mlb_historical_resim(
                         game_season = int(str(m["game_date"])[:4])
                     except (TypeError, ValueError):
                         game_season = None
+                game_as_of: Optional[date] = None
+                if m.get("game_date") is not None:
+                    if isinstance(m["game_date"], date):
+                        game_as_of = m["game_date"]
+                    else:
+                        try:
+                            game_as_of = date.fromisoformat(str(m["game_date"])[:10])
+                        except ValueError:
+                            game_as_of = None
                 starter_home_feat = starter_identity_features(
-                    m.get("probable_pitcher_home"), season=game_season
+                    m.get("probable_pitcher_home"),
+                    season=game_season,
+                    as_of=game_as_of,
                 )
                 starter_away_feat = starter_identity_features(
-                    m.get("probable_pitcher_away"), season=game_season
+                    m.get("probable_pitcher_away"),
+                    season=game_season,
+                    as_of=game_as_of,
                 )
                 context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
                 if isinstance(m.get("context"), str):
@@ -11127,6 +11151,21 @@ def backfill_mlb_historical_resim(
                     opponent_hand=str(starter_home_feat.get("handedness") or "U"),
                     fallback_split=offense_split_away,
                 )
+                bp_quality_home = 1.0
+                bp_quality_away = 1.0
+                if get_bullpen_role_quality_mode() == "role_weighted" and game_as_of is not None:
+                    # Talent-only refetch; fatigue/availability stay from stamped context
+                    # so we do not double-count stress into bullpen_quality.
+                    home_bp_live = fetch_team_bullpen_fatigue(
+                        mlb_team_id_for_abbr(str(m.get("home_abbr") or "")),
+                        game_as_of,
+                    )
+                    away_bp_live = fetch_team_bullpen_fatigue(
+                        mlb_team_id_for_abbr(str(m.get("away_abbr") or "")),
+                        game_as_of,
+                    )
+                    bp_quality_home = float(home_bp_live.get("bullpen_quality") or 1.0)
+                    bp_quality_away = float(away_bp_live.get("bullpen_quality") or 1.0)
                 inputs = MlbGameInputs(
                     game_id=str(m["game_id"]),
                     home_team=str(m["home_team"]),
@@ -11171,6 +11210,8 @@ def backfill_mlb_historical_resim(
                     ),
                     bullpen_ip_last3_home=float(m.get("bullpen_ip_last3_home") or 9.0),
                     bullpen_ip_last3_away=float(m.get("bullpen_ip_last3_away") or 9.0),
+                    bullpen_quality_home=bp_quality_home,
+                    bullpen_quality_away=bp_quality_away,
                 )
                 inputs, sharpen_diag = _sharpen_mlb_inputs(
                     inputs,
@@ -11551,6 +11592,248 @@ def run_mlb_stack_ablation(
             "Ship S1 (matchup-off, keep HFA 1.025) only if intersection ML CLV "
             "≥ +0.015 without wrecking Brier/RL/total. Else treat prior +0.023 as "
             "sample-composition and pivot to SP talent (S3) without nostalgia."
+        ),
+    }
+
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "lookback_days": int(lookback_days),
+        "configs": selected,
+        "results": results,
+        "intersection": {
+            "n": intersection["n"],
+            "by_config": {
+                k: {kk: vv for kk, vv in v.items() if kk != "ml_game_ids"}
+                for k, v in (intersection.get("by_config") or {}).items()
+            },
+        },
+        "recommendation": recommendation,
+        "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+    }
+
+
+_SP_TALENT_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
+    # T0: production S0 stack + as-of season stats (era/whip quality)
+    "T0": {
+        "starter_quality_mode": "era_whip",
+        "bullpen_role_quality_mode": "off",
+        "model_suffix": "talent-t0",
+    },
+    # T1: FIP-proxy starter quality (Track A primary)
+    "T1": {
+        "starter_quality_mode": "fip_proxy",
+        "bullpen_role_quality_mode": "off",
+        "model_suffix": "talent-t1",
+    },
+    # T2: xFIP-proxy starter quality (Track A secondary knob)
+    "T2": {
+        "starter_quality_mode": "xfip_proxy",
+        "bullpen_role_quality_mode": "off",
+        "model_suffix": "talent-t2",
+    },
+    # B1: bullpen role-weighted quality on T0 baseline (Track B independence check)
+    "B1": {
+        "starter_quality_mode": "era_whip",
+        "bullpen_role_quality_mode": "role_weighted",
+        "model_suffix": "talent-b1",
+    },
+}
+
+
+@celery_app.task(name="src.tasks.run_mlb_sp_talent_ablation")
+def run_mlb_sp_talent_ablation(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    simulations: int = 2000,
+    max_games: int = 1200,
+    lookback_days: int = 90,
+    configs: Optional[List[str]] = None,
+    base_model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Force-resim densify under SP talent / bullpen role flags; grade intersection CLV.
+
+    Writes each config to `{base}-talent-tN` / `{base}-talent-bN` so production
+    `{base}` is not overwritten until a winning config is explicitly promoted.
+    """
+    if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
+        raise ValueError(
+            "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for SP talent ablation"
+        )
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    selected = configs or ["T0", "T1", "T2"]
+    unknown = [c for c in selected if c not in _SP_TALENT_ABLATION_CONFIGS]
+    if unknown:
+        raise ValueError(f"unknown SP talent ablation configs: {unknown}")
+
+    prior_quality_mode = get_starter_quality_mode()
+    prior_bp_mode = get_bullpen_role_quality_mode()
+    results: Dict[str, Any] = {}
+    try:
+        for name in selected:
+            cfg = _SP_TALENT_ABLATION_CONFIGS[name]
+            model_version = f"{base_model_version}-{cfg['model_suffix']}"
+            apply_starter_quality_mode(str(cfg["starter_quality_mode"]))
+            apply_bullpen_role_quality_mode(str(cfg["bullpen_role_quality_mode"]))
+            log.info(
+                "SP talent ablation config start",
+                extra={"config": name, "model_version": model_version, "flags": cfg},
+            )
+            resim = backfill_mlb_historical_resim(
+                start_date=start.isoformat(),
+                end_date=end.isoformat(),
+                simulations=int(simulations),
+                model_version=model_version,
+                max_games=int(max_games),
+                force_resim=True,
+                skip_outcomes_pull=True,
+            )
+            session = SessionLocal()
+            try:
+                clv_full = compute_mlb_clv_with_spread(
+                    session,
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                )
+                window_items = _filter_clv_items_to_window(
+                    session,
+                    list(clv_full.get("items") or []),
+                    start_date=start,
+                    end_date=end,
+                )
+                densify_clv = _summarize_clv_items(window_items)
+                quality = run_mlb_quality_grading(
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                )
+                walkforward = run_mlb_walkforward_backtest(
+                    model_version=model_version,
+                    lookback_days=int(lookback_days),
+                    training_days=10,
+                    step_days=3,
+                    apply_calibration=True,
+                )
+            finally:
+                session.close()
+            results[name] = {
+                "config": cfg,
+                "model_version": model_version,
+                "starter_quality_mode": get_starter_quality_mode(),
+                "bullpen_role_quality_mode": get_bullpen_role_quality_mode(),
+                "resim": {
+                    "status": resim.get("status"),
+                    "simulated": resim.get("simulated"),
+                    "games_selected": resim.get("games_selected"),
+                    "deleted_prior_projections": resim.get("deleted_prior_projections"),
+                    "leakage_rows_repaired": resim.get("leakage_rows_repaired"),
+                    "holdout": resim.get("holdout"),
+                },
+                "full_n_clv": {
+                    "count": clv_full.get("count"),
+                    "ml_sample_size": clv_full.get("ml_sample_size"),
+                    "avg_ml_clv": clv_full.get("avg_ml_clv"),
+                    "avg_total_clv": clv_full.get("avg_total_clv"),
+                    "avg_spread_clv": clv_full.get("avg_spread_clv"),
+                },
+                "densify_window_clv": {
+                    k: v for k, v in densify_clv.items() if k != "ml_game_ids"
+                },
+                "ml_game_ids": densify_clv.get("ml_game_ids") or [],
+                "walkforward": {
+                    "sample_size": walkforward.get("sample_size"),
+                    "base_brier_ml": walkforward.get("base_brier_ml"),
+                    "calibrated_brier_ml": walkforward.get("calibrated_brier_ml"),
+                    "base_mae_total_runs": walkforward.get("base_mae_total_runs"),
+                    "leakage_violations": walkforward.get("leakage_violations"),
+                },
+                "quality": (quality.get("quality") or {}) if isinstance(quality, dict) else {},
+            }
+    finally:
+        apply_starter_quality_mode(prior_quality_mode or "era_whip")
+        apply_bullpen_role_quality_mode(prior_bp_mode or "off")
+
+    id_sets = [
+        set(results[name].get("ml_game_ids") or [])
+        for name in selected
+        if name in results
+    ]
+    intersection_ids = set.intersection(*id_sets) if id_sets else set()
+    intersection: Dict[str, Any] = {"n": len(intersection_ids), "by_config": {}}
+    for name in selected:
+        if name not in results:
+            continue
+        model_version = results[name]["model_version"]
+        session = SessionLocal()
+        try:
+            clv_full = compute_mlb_clv_with_spread(
+                session,
+                model_version=model_version,
+                lookback_days=int(lookback_days),
+            )
+            window_items = _filter_clv_items_to_window(
+                session,
+                list(clv_full.get("items") or []),
+                start_date=start,
+                end_date=end,
+            )
+            inter_items = [
+                i for i in window_items if str(i.get("game_id")) in intersection_ids
+            ]
+            intersection["by_config"][name] = _summarize_clv_items(inter_items)
+            results[name].pop("ml_game_ids", None)
+            results[name]["intersection_clv"] = {
+                k: v
+                for k, v in intersection["by_config"][name].items()
+                if k != "ml_game_ids"
+            }
+        finally:
+            session.close()
+
+    t0 = (intersection.get("by_config") or {}).get("T0") or {}
+    t1 = (intersection.get("by_config") or {}).get("T1") or {}
+    t2 = (intersection.get("by_config") or {}).get("T2") or {}
+    b1 = (intersection.get("by_config") or {}).get("B1") or {}
+    t0_ml = t0.get("avg_ml_clv")
+    t1_ml = t1.get("avg_ml_clv")
+    t2_ml = t2.get("avg_ml_clv")
+    b1_ml = b1.get("avg_ml_clv")
+
+    def _beats(challenger: Any, baseline: Any, *, margin: float = 0.0) -> bool:
+        return (
+            challenger is not None
+            and baseline is not None
+            and float(challenger) > float(baseline) + margin
+        )
+
+    best_name = "T0"
+    best_ml = t0_ml
+    for name, ml in (("T1", t1_ml), ("T2", t2_ml), ("B1", b1_ml)):
+        if ml is None:
+            continue
+        if best_ml is None or float(ml) > float(best_ml):
+            best_name, best_ml = name, ml
+
+    recommendation = {
+        "best_intersection_config": best_name,
+        "best_intersection_ml_clv": best_ml,
+        "ship_fip_proxy": bool(
+            t1_ml is not None and float(t1_ml) >= 0.010 and _beats(t1_ml, t0_ml)
+        ),
+        "ship_xfip_proxy": bool(
+            t2_ml is not None and float(t2_ml) >= 0.010 and _beats(t2_ml, t0_ml)
+        ),
+        "ship_bullpen_role": bool(
+            b1_ml is not None and float(b1_ml) >= 0.010 and _beats(b1_ml, t0_ml)
+        ),
+        "stretch_target_hit": bool(best_ml is not None and float(best_ml) >= 0.015),
+        "note": (
+            "Ship a talent mode only if intersection ML CLV ≥ +0.010 vs T0 "
+            "(stretch +0.015), leakage=0, and RL/total CLV / Brier not torched. "
+            "Else leave production on era_whip (S0)."
         ),
     }
 
