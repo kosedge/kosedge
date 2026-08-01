@@ -50,7 +50,7 @@ from .services.mlb_enterprise_ops import (
 )
 from .services.mlb_lineup_shock import apply_lineup_shock, resolve_nowcast_starters
 from .services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
-from .services.mlb_pa_feature_sharpen import sharpen_game_inputs
+from .services.mlb_pa_feature_sharpen import platoon_split_for_hand, sharpen_game_inputs
 from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from .services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE as MLB_PROPS_PLAY_STAKE_ELIGIBLE
 from .services.mlb_simulator import DEFAULT_MODEL_VERSION, MlbGameInputs, simulate_mlb_game
@@ -9813,6 +9813,33 @@ def run_mlb_lineup_nowcast_repricing(
                     context_payload = {}
             prior_home_feat = starter_identity_features(prior_starter_home)
             prior_away_feat = starter_identity_features(prior_starter_away)
+            starter_home_feat = starter_identity_features(next_sp_home)
+            starter_away_feat = starter_identity_features(next_sp_away)
+            # Refresh platoon splits when SP handedness flips (context stores both hands).
+            home_off_ctx = context_payload.get("home_offense_context") if isinstance(context_payload.get("home_offense_context"), dict) else {}
+            away_off_ctx = context_payload.get("away_offense_context") if isinstance(context_payload.get("away_offense_context"), dict) else {}
+            offense_split_home = float(m["offense_split_index_home"]) if m.get("offense_split_index_home") is not None else 1.0
+            offense_split_away = float(m["offense_split_index_away"]) if m.get("offense_split_index_away") is not None else 1.0
+            prior_away_hand = str(prior_away_feat.get("handedness") or "U").upper()
+            next_away_hand = str(starter_away_feat.get("handedness") or "U").upper()
+            prior_home_hand = str(prior_home_feat.get("handedness") or "U").upper()
+            next_home_hand = str(starter_home_feat.get("handedness") or "U").upper()
+            if next_away_hand != prior_away_hand or starter_resolve["away_changed"]:
+                offense_split_home = platoon_split_for_hand(
+                    season_index=float(m["offense_index_home"]) if m.get("offense_index_home") is not None else 1.0,
+                    split_vs_l=_to_float(home_off_ctx.get("offense_split_vs_l")),
+                    split_vs_r=_to_float(home_off_ctx.get("offense_split_vs_r")),
+                    opponent_hand=next_away_hand,
+                    fallback_split=offense_split_home,
+                )
+            if next_home_hand != prior_home_hand or starter_resolve["home_changed"]:
+                offense_split_away = platoon_split_for_hand(
+                    season_index=float(m["offense_index_away"]) if m.get("offense_index_away") is not None else 1.0,
+                    split_vs_l=_to_float(away_off_ctx.get("offense_split_vs_l")),
+                    split_vs_r=_to_float(away_off_ctx.get("offense_split_vs_r")),
+                    opponent_hand=next_home_hand,
+                    fallback_split=offense_split_away,
+                )
             # Update context with nowcast confidence as live pre-lock estimate.
             session.execute(
                 text(
@@ -9825,6 +9852,8 @@ def run_mlb_lineup_nowcast_repricing(
                       lineup_confidence_away = :lineup_confidence_away,
                       lineup_strength_index_home = :lineup_strength_index_home,
                       lineup_strength_index_away = :lineup_strength_index_away,
+                      offense_split_index_home = :offense_split_index_home,
+                      offense_split_index_away = :offense_split_index_away,
                       lineup_confirmed = :lineup_confirmed,
                       context = COALESCE(context, '{}'::jsonb) || CAST(:context_patch AS jsonb),
                       updated_at = :updated_at
@@ -9839,6 +9868,8 @@ def run_mlb_lineup_nowcast_repricing(
                     "lineup_confidence_away": nowcast["away"],
                     "lineup_strength_index_home": lineup_strength_home,
                     "lineup_strength_index_away": lineup_strength_away,
+                    "offense_split_index_home": offense_split_home,
+                    "offense_split_index_away": offense_split_away,
                     "lineup_confirmed": lineup_confirmed,
                     "context_patch": json.dumps(
                         {
@@ -9850,6 +9881,8 @@ def run_mlb_lineup_nowcast_repricing(
                                 "confidence_away": round(nowcast["away"], 4),
                                 "lineup_strength_home": round(lineup_strength_home, 4),
                                 "lineup_strength_away": round(lineup_strength_away, 4),
+                                "offense_split_home": round(offense_split_home, 4),
+                                "offense_split_away": round(offense_split_away, 4),
                                 "prior_starter_home": prior_starter_home,
                                 "prior_starter_away": prior_starter_away,
                                 "starter_home": next_sp_home,
@@ -9867,8 +9900,6 @@ def run_mlb_lineup_nowcast_repricing(
             )
             updated_context += 1
 
-            starter_home_feat = starter_identity_features(next_sp_home)
-            starter_away_feat = starter_identity_features(next_sp_away)
             inputs = MlbGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
@@ -9892,8 +9923,8 @@ def run_mlb_lineup_nowcast_repricing(
                 park_factor_runs=float(m["park_factor_runs"]) if m.get("park_factor_runs") is not None else None,
                 offense_home=float(m["offense_index_home"]) if m.get("offense_index_home") is not None else 1.0,
                 offense_away=float(m["offense_index_away"]) if m.get("offense_index_away") is not None else 1.0,
-                offense_split_home=float(m["offense_split_index_home"]) if m.get("offense_split_index_home") is not None else 1.0,
-                offense_split_away=float(m["offense_split_index_away"]) if m.get("offense_split_index_away") is not None else 1.0,
+                offense_split_home=offense_split_home,
+                offense_split_away=offense_split_away,
                 recent_form_index_home=float(m["recent_form_index_home"]) if m.get("recent_form_index_home") is not None else 1.0,
                 recent_form_index_away=float(m["recent_form_index_away"]) if m.get("recent_form_index_away") is not None else 1.0,
                 lineup_strength_index_home=lineup_strength_home,

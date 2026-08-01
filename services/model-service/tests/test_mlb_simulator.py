@@ -146,6 +146,19 @@ def test_pitch_by_pitch_simulator_is_stable_with_seed() -> None:
     assert a["diagnostics"]["simulator_type"] == "pitch_by_pitch"
 
 
+def test_neutral_slate_has_home_field_moneyline_edge() -> None:
+    """MLB HFA: neutral inputs should favor home ~53–55%, not a coin flip."""
+    inputs = MlbGameInputs(
+        game_id="game-hfa",
+        home_team="Chicago Cubs",
+        away_team="St. Louis Cardinals",
+    )
+    markets = simulate_mlb_game(inputs, simulations=6000, seed=11)["markets"]
+    assert 0.52 <= markets["fg_home_win_prob"] <= 0.56
+    # Totals-neutral design: product of HFA muls ≈ 1, so total stays near baseline.
+    assert 8.5 <= markets["fg_total_mean"] <= 9.7
+
+
 def test_full_game_moneyline_never_pushes_after_resolution_logic() -> None:
     inputs = MlbGameInputs(
         game_id="game-7",

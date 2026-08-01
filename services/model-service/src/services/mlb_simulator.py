@@ -9,6 +9,10 @@ from typing import Dict, List, Optional
 DEFAULT_MODEL_VERSION = "mlb-v1-pa-sim"
 EXTRA_INNING_GHOST_RUNNER_FACTOR = 1.32
 MAX_EXTRA_INNINGS = 9
+# MLB home teams win ~53.5–54% historically. Keep the product ≈1.0 so
+# totals means stay nearly neutral while moneyline win probs move.
+HOME_FIELD_OFFENSE_MUL = 1.035
+AWAY_FIELD_OFFENSE_MUL = 1.0 / HOME_FIELD_OFFENSE_MUL
 
 
 @dataclass
@@ -371,13 +375,16 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
     )
 
     uncertainty_mul = _clamp(float(getattr(inputs, "uncertainty_total_mul", 1.0) or 1.0), 1.0, 1.04)
+    # Totals-neutral home-field split: lifts home win prob without a large totals shift.
+    hfa_home = HOME_FIELD_OFFENSE_MUL
+    hfa_away = AWAY_FIELD_OFFENSE_MUL
     full_home = _clamp(
-        base_full_game * offense_home_full * away_allowed_factor * env_mul * uncertainty_mul,
+        base_full_game * offense_home_full * away_allowed_factor * env_mul * uncertainty_mul * hfa_home,
         2.0,
         8.8,
     )
     full_away = _clamp(
-        base_full_game * offense_away_full * home_allowed_factor * env_mul * uncertainty_mul,
+        base_full_game * offense_away_full * home_allowed_factor * env_mul * uncertainty_mul * hfa_away,
         2.0,
         8.8,
     )
@@ -388,7 +395,8 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         * offense_home_f5
         * _clamp(away_starter_run_factor, 0.70, 1.35)
         * env_mul
-        * uncertainty_mul,
+        * uncertainty_mul
+        * hfa_home,
         0.8,
         5.2,
     )
@@ -397,7 +405,8 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         * offense_away_f5
         * _clamp(home_starter_run_factor, 0.70, 1.35)
         * env_mul
-        * uncertainty_mul,
+        * uncertainty_mul
+        * hfa_away,
         0.8,
         5.2,
     )

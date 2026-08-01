@@ -1,0 +1,22 @@
+{
+  "games": 80,
+  "simulations": 2500,
+  "assumed_home_win_rate": 0.54,
+  "hfa_home_mul": 1.035,
+  "hfa_away_mul": 0.9661835748792271,
+  "before_no_hfa": {
+    "avg_model_home_win_prob": 0.499,
+    "avg_fg_total_mean": 9.0686,
+    "brier_ml": 0.25359
+  },
+  "after_hfa": {
+    "avg_model_home_win_prob": 0.54158,
+    "avg_fg_total_mean": 9.0469,
+    "brier_ml": 0.249427
+  },
+  "delta_brier_ml": -0.004163,
+  "delta_avg_total_mean": -0.0217,
+  "brier_coin_flip_0_5": 0.25,
+  "brier_constant_home_prior": 0.2466,
+  "note": "Synthetic labels use a fixed home-win prior; this is a wiring / HFA sanity check, not a walkforward holdout grade. Negative delta_brier is better."
+}

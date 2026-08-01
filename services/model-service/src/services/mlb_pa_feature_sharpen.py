@@ -101,6 +101,25 @@ def platoon_split_weight(*, firmness_opponent_starter: float, split_index: float
     return _clamp(0.35 + 0.45 * float(firmness_opponent_starter) + 0.40 * split_signal, 0.25, 0.95)
 
 
+def platoon_split_for_hand(
+    *,
+    season_index: float,
+    split_vs_l: Optional[float],
+    split_vs_r: Optional[float],
+    opponent_hand: str,
+    fallback_split: Optional[float] = None,
+) -> float:
+    """Pick the matchup split for the opposing starter's hand (bounded)."""
+    hand = (opponent_hand or "U").upper()
+    if hand == "L" and split_vs_l is not None:
+        return _clamp(float(split_vs_l), 0.78, 1.25)
+    if hand == "R" and split_vs_r is not None:
+        return _clamp(float(split_vs_r), 0.78, 1.25)
+    if fallback_split is not None:
+        return _clamp(float(fallback_split), 0.78, 1.25)
+    return _clamp(float(season_index), 0.78, 1.25)
+
+
 def weather_reliability_mul(
     *,
     home_abbr: Optional[str],
@@ -143,9 +162,9 @@ def compute_sp_change_shock(
         return {"allowed_mul": 1.0, "changed": 0.0, "quality_delta": 0.0}
     if prior_key == new_key:
         return {"allowed_mul": 1.0, "changed": 0.0, "quality_delta": 0.0}
-    # Lower quality => more runs allowed by this pitcher.
+    # starter_quality is a run-allowed factor: lower = better pitcher = fewer runs.
     quality_delta = float(new_quality) - float(prior_quality)
-    # If we went from named → missing, treat as +neutral uncertainty (more runs).
+    # Named → missing: treat as uncertainty toward more runs allowed.
     if prior_key and not new_key:
         quality_delta = max(quality_delta, 0.06)
     if (not prior_key) and new_key:
@@ -188,27 +207,19 @@ def sharpen_game_inputs(
         rest_days_away if rest_days_away is not None else inputs.rest_days_away
     )
 
-    bp_home = (
-        inputs.bullpen_quality_home
-        if abs(float(inputs.bullpen_quality_home) - 1.0) > 1e-9
-        else bullpen_quality_from_state(
-            fatigue=inputs.bullpen_fatigue_home,
-            availability=inputs.bullpen_availability_home,
-            high_lev_availability=inputs.bullpen_high_lev_availability_home,
-        )
+    # Do not bake fatigue/availability into bullpen_quality here — the PA / pitch
+    # simulators already apply those levers. Double-counting compressed late-game
+    # edges and muddied moneyline sharpness. Keep only rest-day bullpen stress.
+    bp_home = _clamp(
+        float(inputs.bullpen_quality_home) * (1.0 - rest_home["bullpen_stress"] * 0.5),
+        0.80,
+        1.20,
     )
-    bp_away = (
-        inputs.bullpen_quality_away
-        if abs(float(inputs.bullpen_quality_away) - 1.0) > 1e-9
-        else bullpen_quality_from_state(
-            fatigue=inputs.bullpen_fatigue_away,
-            availability=inputs.bullpen_availability_away,
-            high_lev_availability=inputs.bullpen_high_lev_availability_away,
-        )
+    bp_away = _clamp(
+        float(inputs.bullpen_quality_away) * (1.0 - rest_away["bullpen_stress"] * 0.5),
+        0.80,
+        1.20,
     )
-    # Short rest taxes bullpen quality slightly.
-    bp_home = _clamp(bp_home * (1.0 - rest_home["bullpen_stress"] * 0.5), 0.80, 1.20)
-    bp_away = _clamp(bp_away * (1.0 - rest_away["bullpen_stress"] * 0.5), 0.80, 1.20)
 
     # Platoon lean: amplify split index modestly when opponent SP is firm.
     split_w_home = platoon_split_weight(
