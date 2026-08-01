@@ -8996,14 +8996,22 @@ def run_nba_daily_cycle(
 # --- WNBA model tasks (thin wrappers → src.services.wnba_jobs) ---
 
 
-@celery_app.task(name="src.tasks.pull_wnba_schedule_ingest")
+@celery_app.task(
+    name="src.tasks.pull_wnba_schedule_ingest",
+    soft_time_limit=180,
+    time_limit=240,
+)
 def pull_wnba_schedule_ingest(days_back: int = 7, days_ahead: int = 3) -> Dict[str, int]:
     from .services.wnba_jobs import pull_wnba_schedule_ingest as _impl
 
     return _impl(days_back=days_back, days_ahead=days_ahead)
 
 
-@celery_app.task(name="src.tasks.pull_wnba_season_ingest")
+@celery_app.task(
+    name="src.tasks.pull_wnba_season_ingest",
+    soft_time_limit=1800,
+    time_limit=2100,
+)
 def pull_wnba_season_ingest(
     seasons: Optional[List[str]] = None,
     sleep_s: float = 0.35,
@@ -9090,14 +9098,22 @@ def materialize_wnba_player_props_edges(**kwargs: Any) -> Dict[str, Any]:
     return _impl(**kwargs)
 
 
-@celery_app.task(name="src.tasks.run_wnba_phase1_bootstrap")
+@celery_app.task(
+    name="src.tasks.run_wnba_phase1_bootstrap",
+    soft_time_limit=3600,
+    time_limit=3900,
+)
 def run_wnba_phase1_bootstrap(**kwargs: Any) -> Dict[str, Any]:
     from .services.wnba_jobs import run_wnba_phase1_bootstrap as _impl
 
     return _impl(**kwargs)
 
 
-@celery_app.task(name="src.tasks.run_wnba_phase2_calibrate")
+@celery_app.task(
+    name="src.tasks.run_wnba_phase2_calibrate",
+    soft_time_limit=1800,
+    time_limit=2100,
+)
 def run_wnba_phase2_calibrate(**kwargs: Any) -> Dict[str, Any]:
     from .services.wnba_jobs import run_wnba_phase2_calibrate as _impl
 

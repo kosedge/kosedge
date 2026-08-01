@@ -1983,3 +1983,22 @@ def job_status(task_id: str) -> Dict[str, Any]:
         payload["error"] = str(res.result)
 
     return payload
+
+
+@app.post("/api/jobs/{task_id}/revoke")
+def job_revoke(
+    task_id: str,
+    terminate: bool = Query(True, description="Send SIGTERM to running worker child"),
+) -> Dict[str, Any]:
+    """Ops escape hatch for stuck Celery tasks (e.g. zombie WNBA bootstrap)."""
+    try:
+        celery_app.control.revoke(task_id, terminate=terminate, signal="SIGTERM")
+        return {
+            "task_id": task_id,
+            "revoked": True,
+            "terminate": terminate,
+            "state": celery_app.AsyncResult(task_id).state,
+        }
+    except Exception as e:
+        log.exception("Failed to revoke task %s", task_id)
+        raise HTTPException(status_code=500, detail=f"revoke_failed: {e}") from e
