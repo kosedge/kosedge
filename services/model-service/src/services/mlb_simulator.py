@@ -11,12 +11,14 @@ EXTRA_INNING_GHOST_RUNNER_FACTOR = 1.32
 MAX_EXTRA_INNINGS = 9
 # MLB home teams win ~53.5–54% historically. Keep the product ≈1.0 so
 # totals means stay nearly neutral while moneyline win probs move.
-# Ablation on densify window (2026-08-01):
-#   1.035 → ML CLV +0.007 (failed vs pre-HFA +0.023)
-#   1.025 → ML CLV +0.0068 (no CLV recovery; Brier 0.2499; leakage=0)
-# Reverting HFA-off to reclaim CLV; keep leakage/SP/matchup ships.
-HOME_FIELD_OFFENSE_MUL = 1.0
-AWAY_FIELD_OFFENSE_MUL = 1.0
+# Densify ablation (same SP/matchup/leakage stack, 2026-08-01):
+#   1.035 (PR48 alone): ML CLV +0.0070, Brier 0.2505, leakage=11
+#   1.025: ML CLV +0.0068, Brier 0.2499, leakage=0, ECE 0.017
+#   1.0:   ML CLV +0.0056, Brier 0.2490, leakage=0  (CLV worse)
+# Winner: 1.025 — best CLV among clean (leakage=0) candidates without
+# giving back the Brier/ECE gains. Pre-HFA +0.023 CLV not recovered.
+HOME_FIELD_OFFENSE_MUL = 1.025
+AWAY_FIELD_OFFENSE_MUL = 1.0 / HOME_FIELD_OFFENSE_MUL
 
 
 @dataclass
