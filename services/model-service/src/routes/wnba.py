@@ -11,9 +11,15 @@ from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import text
 
 from src.db import SessionLocal
-from src.services.wnba_data import default_league_average_inputs, normalize_team_key
+from src.services.wnba_data import (
+    default_league_average_inputs,
+    normalize_team_key,
+)
 from src.services.wnba_possession_simulator import (
     DEFAULT_WNBA_MODEL_VERSION,
+    WNBA_LEAGUE_DRTG,
+    WNBA_LEAGUE_ORTG,
+    WNBA_LEAGUE_PACE,
     WNBA_WORKER_BUILD_ID,
     WnbaGameInputs,
     simulate_wnba_game,
@@ -72,20 +78,21 @@ def _resolve_active_model_version(
 
 
 def _inputs_from_context_row(m: Dict[str, Any]) -> WnbaGameInputs:
+    # Never fall back to NBA pace/ORtg priors.
     return WnbaGameInputs(
         game_id=str(m["game_id"]),
         home_team=str(m.get("home_team") or m.get("home_team_key") or "Home"),
         away_team=str(m.get("away_team") or m.get("away_team_key") or "Away"),
-        pace_home=_to_float(m.get("pace_home")) or 100.0,
-        pace_away=_to_float(m.get("pace_away")) or 100.0,
-        ortg_home=_to_float(m.get("ortg_home")) or 114.0,
-        ortg_away=_to_float(m.get("ortg_away")) or 114.0,
-        drtg_home=_to_float(m.get("drtg_home")) or 114.0,
-        drtg_away=_to_float(m.get("drtg_away")) or 114.0,
-        three_pt_rate_home=_to_float(m.get("three_pt_rate_home")) or 0.39,
-        three_pt_rate_away=_to_float(m.get("three_pt_rate_away")) or 0.39,
-        three_pt_pct_home=_to_float(m.get("three_pt_pct_home")) or 0.36,
-        three_pt_pct_away=_to_float(m.get("three_pt_pct_away")) or 0.36,
+        pace_home=_to_float(m.get("pace_home")) or WNBA_LEAGUE_PACE,
+        pace_away=_to_float(m.get("pace_away")) or WNBA_LEAGUE_PACE,
+        ortg_home=_to_float(m.get("ortg_home")) or WNBA_LEAGUE_ORTG,
+        ortg_away=_to_float(m.get("ortg_away")) or WNBA_LEAGUE_ORTG,
+        drtg_home=_to_float(m.get("drtg_home")) or WNBA_LEAGUE_DRTG,
+        drtg_away=_to_float(m.get("drtg_away")) or WNBA_LEAGUE_DRTG,
+        three_pt_rate_home=_to_float(m.get("three_pt_rate_home")) or 0.34,
+        three_pt_rate_away=_to_float(m.get("three_pt_rate_away")) or 0.34,
+        three_pt_pct_home=_to_float(m.get("three_pt_pct_home")) or 0.34,
+        three_pt_pct_away=_to_float(m.get("three_pt_pct_away")) or 0.34,
         rest_days_home=_to_float(m.get("rest_days_home")) or 2.0,
         rest_days_away=_to_float(m.get("rest_days_away")) or 2.0,
         sample_games_home=_to_int(m.get("sample_games_home")),
@@ -200,33 +207,45 @@ def _fetch_upcoming_games(session: Any, target_date: date) -> List[Dict[str, Any
 
 @router.get("/health")
 def wnba_health() -> Dict[str, Any]:
-    """Lightweight WNBA model health / canary probe."""
+    """Lightweight WNBA model health / canary probe.
+
+    Avoid DDL here — concurrent bootstrap/densify can hold locks that make
+    CREATE TABLE/INDEX IF NOT EXISTS block the canary indefinitely.
+    """
     session = SessionLocal()
+    schema_ready = False
     try:
-        ensure_wnba_model_tables(session)
-        session.commit()
-        active = _resolve_active_model_version(session)
-        proj_count = 0
         try:
-            row = session.execute(
-                text("SELECT COUNT(*) FROM wnba_market_projections")
-            ).fetchone()
-            proj_count = int(row[0]) if row else 0
-        except Exception:
+            session.execute(text("SET LOCAL lock_timeout = '1500ms'"))
+            session.execute(text("SET LOCAL statement_timeout = '2500ms'"))
+            active = _resolve_active_model_version(session)
             proj_count = 0
-        return {
-            "ok": True,
-            "sport": "wnba",
-            "active_model_version": active,
-            "default_model_version": DEFAULT_WNBA_MODEL_VERSION,
-            "worker_build_id": WNBA_WORKER_BUILD_ID,
-            "projections_stored": proj_count,
-            "simulator": "possession_monte_carlo",
-            "props_model_version": "wnba-player-props-v1",
-            "phase": "phase3",
-        }
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"wnba_health_failed: {exc}") from exc
+            try:
+                row = session.execute(
+                    text("SELECT COUNT(*) FROM wnba_market_projections")
+                ).fetchone()
+                proj_count = int(row[0]) if row else 0
+                schema_ready = True
+            except Exception:
+                session.rollback()
+                proj_count = 0
+                active = DEFAULT_WNBA_MODEL_VERSION
+            return {
+                "ok": True,
+                "sport": "wnba",
+                "active_model_version": active,
+                "default_model_version": DEFAULT_WNBA_MODEL_VERSION,
+                "worker_build_id": WNBA_WORKER_BUILD_ID,
+                "projections_stored": proj_count,
+                "simulator": "possession_monte_carlo",
+                "props_model_version": "wnba-player-props-v1",
+                "phase": "phase3",
+                "schema_ready": schema_ready,
+                "pace_method": "harmonic_mean",
+                "game_minutes": 40,
+            }
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=f"wnba_health_failed: {exc}") from exc
     finally:
         session.close()
 
@@ -245,6 +264,7 @@ def wnba_fair_lines(
     session = SessionLocal()
     try:
         try:
+            session.execute(text("SET LOCAL lock_timeout = '2s'"))
             ensure_wnba_model_tables(session)
             session.commit()
         except Exception:
