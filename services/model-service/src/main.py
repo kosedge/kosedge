@@ -100,6 +100,7 @@ TASK_MLB_SP_TALENT_ABLATION = "src.tasks.run_mlb_sp_talent_ablation"
 TASK_MLB_LINEUP_TIMING_ABLATION = "src.tasks.run_mlb_lineup_timing_ablation"
 TASK_MLB_LATE_INFO_STAMP_ABLATION = "src.tasks.run_mlb_late_info_stamp_ablation"
 TASK_MLB_PITCH_MATCHUP_ABLATION = "src.tasks.run_mlb_pitch_matchup_ablation"
+TASK_MLB_LIVE_LATE_INFO_CLV = "src.tasks.run_mlb_live_late_info_clv_grade"
 TASK_MLB_TOTALS_PARK_WIND_ABLATION = "src.tasks.run_mlb_totals_park_wind_ablation"
 MLB_MODEL_STATE_KEY = "mlb_active_model"
 
@@ -2113,11 +2114,11 @@ def job_mlb_pitch_matchup_ablation(
     lookback_days: int = Query(90, ge=30, le=365),
     configs: str = Query(
         "M0,M1",
-        description="Comma-separated: M0 pitch matchup off, M1 pitch-level arsenal on",
+        description="Comma-separated: M0 off, M1 true pitch-type arsenal + batter-family",
     ),
     base_model_version: str = Query("mlb-v1-pa-sim"),
 ) -> Dict[str, str]:
-    """Densify pitch-level matchup ablation. Writes `{base}-pitchmux-*`."""
+    """Densify true pitch-type matchup ablation. Writes `{base}-pitchmux-*`."""
     try:
         cfg_list = [c.strip() for c in (configs or "").split(",") if c.strip()]
         async_result = celery_app.send_task(
@@ -2135,6 +2136,32 @@ def job_mlb_pitch_matchup_ablation(
         return {"task_id": async_result.id, "task_name": TASK_MLB_PITCH_MATCHUP_ABLATION}
     except Exception as e:
         log.exception("Failed to enqueue mlb-pitch-matchup-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-live-late-info-clv")
+def job_mlb_live_late_info_clv(
+    start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
+    end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
+    lookback_days: int = Query(90, ge=30, le=365),
+    max_hours: float = Query(3.0, ge=0.5, le=12.0),
+    model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    """Grade live ≤3h snapshot-lake CLV (honest n=0 if lake empty)."""
+    try:
+        async_result = celery_app.send_task(
+            TASK_MLB_LIVE_LATE_INFO_CLV,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "lookback_days": int(lookback_days),
+                "max_hours": float(max_hours),
+                "model_version": model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_LIVE_LATE_INFO_CLV}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-live-late-info-clv")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

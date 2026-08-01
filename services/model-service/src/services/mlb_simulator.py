@@ -146,6 +146,9 @@ class MlbGameInputs:
     # Pitch-level arsenal matchup (Track 2); None ⇒ neutral when flag on.
     pitcher_arsenal_home: Optional[Dict[str, float]] = None
     pitcher_arsenal_away: Optional[Dict[str, float]] = None
+    # Team batter-family contact/whiff vs hard/break/soft (as-of Statcast).
+    batter_family_home: Optional[Dict[str, float]] = None
+    batter_family_away: Optional[Dict[str, float]] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -465,18 +468,20 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
     else:
         matchup_home = 1.0
         matchup_away = 1.0
-    # Track 2: pitch-type arsenal PA shape (orthogonal to season K/BB/GB matchup_mul).
+    # Track 2: true pitch-type arsenal × batter-family (orthogonal to season matchup_mul).
     pitch_mul_home = pitch_level_matchup_mul(
         offense_split=inputs.offense_split_home,
         recent_form=inputs.recent_form_index_home,
         arsenal=getattr(inputs, "pitcher_arsenal_away", None),
         opp_firmness=firm_away,
+        batter_family=getattr(inputs, "batter_family_home", None),
     )
     pitch_mul_away = pitch_level_matchup_mul(
         offense_split=inputs.offense_split_away,
         recent_form=inputs.recent_form_index_away,
         arsenal=getattr(inputs, "pitcher_arsenal_home", None),
         opp_firmness=firm_home,
+        batter_family=getattr(inputs, "batter_family_away", None),
     )
     matchup_home = _clamp(matchup_home * pitch_mul_home, 0.95, 1.05)
     matchup_away = _clamp(matchup_away * pitch_mul_away, 0.95, 1.05)

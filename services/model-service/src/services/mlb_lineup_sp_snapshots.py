@@ -285,3 +285,39 @@ def summarize_late_info_slice(
         "as_of_date": as_of_date.isoformat() if as_of_date else None,
         "lake_dir": str(LAKE_DIR),
     }
+
+
+def inventory_snapshot_lake(*, max_hours: float = 3.0) -> Dict[str, Any]:
+    """Scan on-disk lake for live confirms (excludes densify_reconstruct)."""
+    LAKE_DIR.mkdir(parents=True, exist_ok=True)
+    files = sorted(LAKE_DIR.glob("*.jsonl"))
+    live_games = 0
+    late_live: List[str] = []
+    densify_only = 0
+    total_snaps = 0
+    for path in files:
+        snaps = load_snapshots(path.stem)
+        if not snaps:
+            continue
+        total_snaps += len(snaps)
+        live = [s for s in snaps if str(s.source) != "densify_reconstruct"]
+        if not live:
+            densify_only += 1
+            continue
+        live_games += 1
+        if any(is_late_info_snapshot(s, max_hours=max_hours) for s in live):
+            late_live.append(path.stem)
+    return {
+        "lake_dir": str(LAKE_DIR),
+        "jsonl_files": len(files),
+        "total_snapshots": total_snaps,
+        "live_source_games": live_games,
+        "densify_reconstruct_only_games": densify_only,
+        "late_info_live_n": len(late_live),
+        "late_info_live_game_ids": sorted(late_live),
+        "max_hours": float(max_hours),
+        "note": (
+            "Live ≤3h CLV requires nowcast-persisted confirms. Densify reconstruct "
+            "cannot invent confirm clocks; n=0 means needs live accumulation."
+        ),
+    }

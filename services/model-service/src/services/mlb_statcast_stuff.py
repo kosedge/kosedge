@@ -21,9 +21,40 @@ import requests
 
 SAVANT_SEARCH_CSV = "https://baseballsavant.mlb.com/statcast_search/csv"
 MIN_PITCHES_STUFF = 200
-_DEFAULT_CACHE = Path(__file__).resolve().parents[2] / "data" / "mlb" / "statcast_cache"
+
+
+def _resolve_statcast_cache_dir() -> Path:
+    """Prefer env, then service data/ (Railway), then repo-root data/ if CSVs live there.
+
+    On Railway path-as-root the file lives at `/app/src/services/...` so only
+    parents[0..2] exist — never index past len(parents).
+    """
+    env = (os.getenv("MLB_STATCAST_CACHE_DIR") or "").strip()
+    if env:
+        return Path(env)
+    here = Path(__file__).resolve()
+    parents = here.parents
+    service_cache = parents[2] / "data" / "mlb" / "statcast_cache"
+    candidates = [service_cache]
+    # Repo-root cache only when running from a full monorepo checkout.
+    if len(parents) > 4:
+        candidates.append(parents[4] / "data" / "mlb" / "statcast_cache")
+    for cand in candidates:
+        try:
+            if any(cand.glob("*/pitches_*.csv")):
+                return cand
+        except OSError:
+            continue
+    for cand in candidates:
+        if (cand / "2026" / "pitcher_asof_index.json").exists():
+            return cand
+        if (cand / "2026" / "pitcher_arsenal_asof_index.json").exists():
+            return cand
+    return service_cache
+
+
 # Prefer env; else services/model-service/data/... (Railway --path-as-root), else repo-root data/.
-CACHE_DIR = Path(os.getenv("MLB_STATCAST_CACHE_DIR") or _DEFAULT_CACHE)
+CACHE_DIR = _resolve_statcast_cache_dir()
 
 # Approximate MLB pitcher means / spreads for z-scores (stuff → run-allowed factor).
 LEAGUE_WHIFF_PCT = 0.112  # whiffs / pitches
@@ -201,11 +232,25 @@ def quality_from_stuff_metrics(metrics: Dict[str, float]) -> float:
     return max(0.82, min(1.18, round(quality, 4)))
 
 
+def _normalize_csv_fieldname(name: Optional[str]) -> str:
+    """Strip UTF-8 BOM / wrapping quotes that Savant sometimes embeds in headers."""
+    return (name or "").lstrip("\ufeff").strip().strip('"').strip()
+
+
 def _parse_csv_text(text: str) -> List[Dict[str, str]]:
-    if not text or text.strip().startswith("<!"):
+    if not text:
         return []
-    reader = csv.DictReader(io.StringIO(text))
-    return [dict(row) for row in reader]
+    cleaned = text.lstrip("\ufeff")
+    if cleaned.strip().startswith("<!"):
+        return []
+    reader = csv.DictReader(io.StringIO(cleaned))
+    out: List[Dict[str, str]] = []
+    for row in reader:
+        item: Dict[str, str] = {}
+        for raw_k, v in row.items():
+            item[_normalize_csv_fieldname(raw_k)] = v
+        out.append(item)
+    return out
 
 
 def fetch_statcast_pitch_chunk(
@@ -220,7 +265,7 @@ def fetch_statcast_pitch_chunk(
         return []
     path = _cache_chunk_path(season, start, end)
     if path.exists() and path.stat().st_size > 0:
-        return _parse_csv_text(path.read_text(encoding="utf-8", errors="replace"))
+        return _parse_csv_text(path.read_text(encoding="utf-8-sig", errors="replace"))
 
     params = {
         "all": "true",
@@ -336,7 +381,7 @@ def ensure_statcast_pitches_through(*, season: int, through: date) -> None:
             _mark_fetched(season, cursor, chunk_end)
         elif path.exists() and not _index_covers_through(season, chunk_end):
             # Rebuild index from on-disk CSV without re-hitting Savant.
-            rows = _parse_csv_text(path.read_text(encoding="utf-8", errors="replace"))
+            rows = _parse_csv_text(path.read_text(encoding="utf-8-sig", errors="replace"))
             _ingest_rows_into_cumulative(season, rows)
             _mark_fetched(season, cursor, chunk_end)
         else:
