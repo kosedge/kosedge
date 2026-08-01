@@ -75,8 +75,8 @@ export async function fetchWnbaPropsBoard(options?: {
   try {
     const res = await upstreamFetch(url, {
       timeoutMs: UPSTREAM_TIMEOUT_MS.fairLines,
-      headers: env.KOSEDGE_INTERNAL_SECRET
-        ? { "x-kosedge-secret": env.KOSEDGE_INTERNAL_SECRET }
+      headers: env.INTERNAL_API_SECRET
+        ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
         : undefined,
     });
     if (!res.ok) {
