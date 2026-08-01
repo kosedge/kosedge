@@ -1,12 +1,21 @@
 /**
- * Merge KEI lines (our projected spread and O/U) into edge board rows.
+ * Merge KEI lines (our projected spread/ML and O/U) into edge board rows.
  * Used by /api/edge-board/[sport]/today and the edge-board page to populate
  * sport-specific KEI columns (KEICMB, KEINFL, …) on the shared board.
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
+import { formatAmericanOdds } from "@/lib/mlb-fair-lines-format";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
+
+type KeiProjection = {
+  projSpreadHome: number | null;
+  projTotal: number | null;
+  projHomeMl: number | null;
+  projAwayMl: number | null;
+  homeWinProb: number | null;
+};
 
 function normalizeGameKey(game: string): string {
   return game
@@ -93,16 +102,16 @@ function formatSpread(projSpreadHome: number): string {
 }
 
 function registerGame(
-  byGame: Map<
-    string,
-    { projSpreadHome: number | null; projTotal: number | null }
-  >,
+  byGame: Map<string, KeiProjection>,
   sportKey: string,
   g: KeiLineGame,
 ) {
-  const value = {
+  const value: KeiProjection = {
     projSpreadHome: g.projSpreadHome ?? null,
     projTotal: g.projTotal ?? null,
+    projHomeMl: g.projHomeMl ?? null,
+    projAwayMl: g.projAwayMl ?? null,
+    homeWinProb: g.homeWinProb ?? null,
   };
   const keys =
     sportKey.toLowerCase() === "nfl"
@@ -147,9 +156,13 @@ function rowMatchKeys(sportKey: string, game: string): string[] {
   return gameKeys(game);
 }
 
+function primaryLineMarket(sportKey: string): "Moneyline" | "Spread" {
+  return sportKey.toLowerCase() === "mlb" ? "Moneyline" : "Spread";
+}
+
 /**
  * Ensure every KEI/fair-line game appears on the board (PLAY / LEAN / PASS alike).
- * Odds rows win when present; missing games get skeleton Spread + Total rows.
+ * Odds rows win when present; missing games get skeleton Line + Total rows.
  */
 export function ensureAllKeiGamesOnBoard(
   rows: EdgeBoardRow[],
@@ -166,6 +179,8 @@ export function ensureAllKeiGamesOnBoard(
     }
   }
 
+  const lineMarket = primaryLineMarket(sportKey);
+  const lineIdSuffix = lineMarket === "Moneyline" ? "moneyline" : "spread";
   const seeded: EdgeBoardRow[] = [...rows];
   for (const g of games) {
     const gameStr = `${g.awayTeam} @ ${g.homeTeam}`;
@@ -177,11 +192,11 @@ export function ensureAllKeiGamesOnBoard(
       `${sportKey}-${g.awayAbbr ?? g.awayTeam}-${g.homeAbbr ?? g.homeTeam}-${g.commenceTime ?? "tba"}`;
     const time = formatKeiCommenceTime(g.commenceTime);
     seeded.push({
-      id: `${idBase}-spread`,
+      id: `${idBase}-${lineIdSuffix}`,
       game: gameStr,
       time,
       commenceTime: g.commenceTime,
-      market: "Spread",
+      market: lineMarket,
     });
     seeded.push({
       id: `${idBase}-total`,
@@ -198,8 +213,9 @@ export function ensureAllKeiGamesOnBoard(
 
 /**
  * Merges KEI projections into edge board rows. Mutates rows in place and returns them.
- * Each row with market "Spread" gets row.kei = our projected home spread (e.g. "-5.2").
- * Each row with market "Total" gets row.kei = our projected total (e.g. "148.5").
+ * Spread → row.kei = projected home spread (e.g. "-5.2").
+ * Moneyline → row.kei = fair home ML; keiAway = fair away ML; homeWinProb for edge.
+ * Total → row.kei = projected total (e.g. "148.5").
  * Pass gamesOverride for NFL live fair-lines (or tests); otherwise reads kei_lines_*.json.
  */
 export function mergeKeiIntoEdgeBoardRows(
@@ -210,10 +226,7 @@ export function mergeKeiIntoEdgeBoardRows(
   const games = gamesOverride ?? getKeiLines(sportKey);
   if (!games.length) return rows;
 
-  const byGame = new Map<
-    string,
-    { projSpreadHome: number | null; projTotal: number | null }
-  >();
+  const byGame = new Map<string, KeiProjection>();
   for (const g of games) {
     registerGame(byGame, sportKey, g);
   }
@@ -226,23 +239,33 @@ export function mergeKeiIntoEdgeBoardRows(
       sportKey.toLowerCase() === "nfl" && parts.length === 2
         ? nflGameKeys(parts[0]!, parts[1]!)
         : gameKeys(game);
-    let proj:
-      | { projSpreadHome: number | null; projTotal: number | null }
-      | undefined;
+    let proj: KeiProjection | undefined;
     for (const key of keys) {
       proj = byGame.get(key);
       if (proj) break;
     }
     if (!proj) continue;
 
-    if (row.market === "Spread" && proj.projSpreadHome != null) {
-      (row as EdgeBoardRow & { kei?: string }).kei = formatSpread(
-        proj.projSpreadHome,
-      );
+    const mutable = row as EdgeBoardRow & {
+      kei?: string;
+      keiAway?: string;
+      homeWinProb?: number;
+    };
+
+    if (row.market === "Moneyline") {
+      if (proj.projHomeMl != null) {
+        mutable.kei = formatAmericanOdds(proj.projHomeMl);
+      }
+      if (proj.projAwayMl != null) {
+        mutable.keiAway = formatAmericanOdds(proj.projAwayMl);
+      }
+      if (proj.homeWinProb != null) {
+        mutable.homeWinProb = proj.homeWinProb;
+      }
+    } else if (row.market === "Spread" && proj.projSpreadHome != null) {
+      mutable.kei = formatSpread(proj.projSpreadHome);
     } else if (row.market === "Total" && proj.projTotal != null) {
-      (row as EdgeBoardRow & { kei?: string }).kei = String(
-        Math.round(proj.projTotal * 10) / 10,
-      );
+      mutable.kei = String(Math.round(proj.projTotal * 10) / 10);
     }
   }
 
