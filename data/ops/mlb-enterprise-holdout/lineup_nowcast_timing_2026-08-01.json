@@ -1,0 +1,187 @@
+{
+  "status": "ok",
+  "start_date": "2026-05-20",
+  "end_date": "2026-07-17",
+  "lookback_days": 90,
+  "configs": [
+    "L0",
+    "L1"
+  ],
+  "results": {
+    "L0": {
+      "config": {
+        "lineup_timing_mode": "off",
+        "model_suffix": "timing-l0"
+      },
+      "model_version": "mlb-v1-pa-sim-timing-l0",
+      "lineup_timing_mode": "off",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00413,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00413,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.249552,
+        "calibrated_brier_ml": 0.25271,
+        "base_mae_total_runs": 3.4848,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250208,
+        "mae_total_runs": 3.5238,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.023498,
+        "max_bin_error": 0.067286,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00413,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00413,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      }
+    },
+    "L1": {
+      "config": {
+        "lineup_timing_mode": "sharp",
+        "model_suffix": "timing-l1"
+      },
+      "model_version": "mlb-v1-pa-sim-timing-l1",
+      "lineup_timing_mode": "sharp",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00389,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00389,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.250424,
+        "calibrated_brier_ml": 0.252407,
+        "base_mae_total_runs": 3.4775,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.251119,
+        "mae_total_runs": 3.5153,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.024108,
+        "max_bin_error": 0.491,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00389,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00389,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      }
+    }
+  },
+  "intersection": {
+    "n": 476,
+    "by_config": {
+      "L0": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00413,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "L1": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00389,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      }
+    }
+  },
+  "recommendation": {
+    "best_intersection_config": "L0",
+    "best_intersection_ml_clv": 0.00413,
+    "ship_lineup_timing_sharp": false,
+    "stretch_target_hit": false,
+    "note": "Ship MLB_LINEUP_TIMING_MODE=sharp only if intersection ML CLV \u2265 +0.010 and beats L0, leakage=0, RL/total not torched. Wiring fixes (cache clear, live freshness, BP quality) stay regardless."
+  },
+  "props_play_stake_eligible": false,
+  "unused_holdout": {
+    "title": "MLB enterprise unused holdout (fallback constants)",
+    "status": "frozen_unused",
+    "registered_at": null,
+    "source": "fallback_constants",
+    "window_count": 2,
+    "date_count": 23,
+    "first_date": "2026-07-18",
+    "last_date": "2026-08-10",
+    "props_play_stake_eligible": false,
+    "stake_marketing_requires_unused_pass": true
+  }
+}
