@@ -34,14 +34,49 @@ Use `GET /wnba/ops/inventory` (or `/api/jobs/wnba-inventory`) on the model-servi
 
 | Item | Value |
 |------|-------|
-| Feature tip | `cursor/wnba-model-phases-0-3-9ea3` |
-| Production branch | `deploy-vercel` |
+| Feature tip | `cursor/wnba-model-phases-0-3-9ea3` @ `5973de2` |
+| Production tip | `deploy-vercel` @ `06de551` |
 | Canary | `wnba-poss-sim-20260801-phase3` |
+| Model | `wnba-v1-poss-sim` / props `wnba-player-props-v1` |
 | Model service | `https://model-service-production-e253.up.railway.app` |
 | Pro fair-lines | `https://www.kosedge.com/pro/wnba/fair-lines` |
 | Pro props | `https://www.kosedge.com/pro/wnba/props` |
 
-Health canary intentionally skips DDL under lock pressure (bootstrap/densify). Demo sim is DB-free and validates harmonic-mean + 40-min priors. Ingest seasons include **2026** (in-season tip year).
+### Live inventory (post-bootstrap)
+
+| Metric | Count |
+|--------|------:|
+| hierarchy_wnba | 215 |
+| wnba_games_ingest | 913 |
+| team_game_features | 1589 |
+| team_rolling_features | 17 (12 teams updated from gamelog fallback) |
+| game_context | 17 |
+| market_projections | 2 (today’s slate) |
+| player_prop_edges | 560 |
+| odds mainline_games | 214 |
+| odds_snapshot_rows | 4294 |
+
+### Verified live
+
+- `/wnba/health` → ok, `pace_method=harmonic_mean`, `game_minutes=40`
+- `/wnba/fair-lines` → **2 lines** (LAS@CHI, NY@PHX), totals ~156–163 (WNBA band)
+- `/wnba/props/board` → 250 lines, `research_only`, `stake_eligible=false`
+- Pro pages HTTP 200; NBA `/nba/health` unchanged
+- 2026 schedule CDN denied → ESPN-first near-term ingest
+
+Health canary skips DDL under lock pressure. Nested schedule-ingest removed from context.
+
+### Phase 2 walkforward (n=40)
+
+| Metric | Value |
+|--------|------:|
+| n_with_close_lines | 36 |
+| model_spread_mae | 10.64 |
+| model_total_mae | 11.48 |
+| model_ats_cover_rate | 0.575 |
+| model_vs_close_ats | 0.600 |
+| blend_hint | hold |
+| board posture | research_only (force) |
 
 ## Live URLs
 
