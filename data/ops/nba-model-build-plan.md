@@ -1,18 +1,19 @@
 # NBA Model Build Plan
 
-**Status:** Phase 2 — close-line join fix + calibrate + publish posture  
-**Canary / worker_build_id:** `nba-poss-sim-20260731-phase2`  
+**Status:** Phase 3 — player props research board live  
+**Canary / worker_build_id:** `nba-poss-sim-20260731-phase3-props`  
 **Default model version:** `nba-v1-poss-sim`  
+**Props model version:** `nba-player-props-v1`  
 **Prod web branch:** `deploy-vercel`  
-**Model service:** Railway brave-art (`scripts/deploy-railway-model-service.sh` / GH Actions)
+**Model service:** Railway brave-art
 
 ## Architecture (locked)
 
 - Mirror NFL matchup sim + MLB pitch-by-pitch philosophy.
 - **v1 = possession-level Monte Carlo** → ML / spread / total distributions.
 - Typed **event-PBP interfaces** under the hood.
-- No college props. No fake KEI. Props publish deferred to Phase 3.
-- Odds: read owned `odds_snapshots` first; **targeted** historical densify only if NBA mainlines empty.
+- Props: pts/reb/ast/threes from minutes×usage stubs + team pace/ORtg; research-only tags.
+- Odds: owned densify; no large re-burn.
 
 ## Phase 0 — Scaffold (DONE)
 
@@ -24,44 +25,49 @@ Canary `nba-poss-sim-20260731-phase0b`.
 |-------------|-------|
 | data.nba.com ingest | 5583 games; features + rolling |
 | Targeted densify | 1345 mainline games / 32,698 rows (~15k credits) |
-| Thin walkforward | n=60; MAE weak; **`n_with_close_lines=0`** blocker |
-| Canary | `nba-poss-sim-20260731-phase1` @ `778eede` |
+| Canary | `nba-poss-sim-20260731-phase1` |
 
-## Phase 2 — Calibrate (THIS PASS)
+## Phase 2 — Calibrate (DONE)
+
+| Deliverable | Notes |
+|-------------|-------|
+| Close-line join | 79/80 with real closes |
+| Walkforward | spread MAE 12.64 / total 14.98 / ATS 57.5% |
+| Publish | research_only mainlines |
+| Canary | `nba-poss-sim-20260731-phase2` |
+
+## Phase 3 — Props (DONE)
 
 | Deliverable | Location |
 |-------------|----------|
-| Close-line join fix | `_nba_market_lines_for_game` — ET tip date ±1 + full name / abbr aliases |
-| Abbr repair | `repair_nba_odds_team_abbrs` |
-| NBA season_year + ET game_date on densify | `_ensure_hierarchy` |
-| Walkforward w/ real closes | `run_nba_walkforward_sample(prefer_odds_window=True)` |
-| Market blend tune | defaults 0.40 / 0.45 + thin-sample boost; `blend_hint` from MAE ratio |
-| Publish policy | `nba_publish_policy.py` — research_only PASS default |
-| Nightly cycle | `run_nba_daily_cycle` + beat `run-nba-daily-cycle-3am` |
-| Fair-lines honesty | phase2 + publish_posture; offseason empty |
-| Canary | `nba-poss-sim-20260731-phase2` |
+| Projection | `nba_player_prop_projection.py` |
+| Edge policy | `nba_prop_edge_policy.py` (role-collapse Under refuse; stake_eligible=False) |
+| Edges table | `nba_player_prop_model_edges` + `infra/db/046_nba_player_props.sql` |
+| Materialize | `materialize_nba_player_props_edges` |
+| API | `GET /nba/props/board` |
+| Jobs | `/api/jobs/run-nba-phase3-props-bootstrap` |
+| Web | `/pro/nba/props` via `nba-props-board.ts` |
+| Canary | `nba-poss-sim-20260731-phase3-props` |
 
-### Bootstrap (no Odds burn)
+### Bootstrap
 
 ```bash
-curl -sS -X POST 'https://model-service-production-e253.up.railway.app/api/jobs/run-nba-phase2-calibrate?walkforward_games=80&simulations=1000'
+curl -sS -X POST 'https://model-service-production-e253.up.railway.app/api/jobs/run-nba-phase3-props-bootstrap?lookback_games=8&limit_players=200'
+curl -sS 'https://model-service-production-e253.up.railway.app/nba/props/board'
 ```
-
-## Phase 3 — Props (ONLY after mainlines honest)
-
-- Reuse NBA prop snapshots; role/minutes integrity; no cosmetic nudges.
 
 ## Verify
 
 ```bash
 curl -sS https://model-service-production-e253.up.railway.app/nba/health
 curl -sS https://model-service-production-e253.up.railway.app/nba/fair-lines
+curl -sS https://model-service-production-e253.up.railway.app/nba/props/board
 curl -sS https://model-service-production-e253.up.railway.app/nba/ops/inventory
 cd services/model-service && python -m pytest tests/test_nba_*.py -q
 ```
 
 ## Constraints
 
-- Research-first UI copy. Preserve NFL/MLB.
-- Preserve DeploymentRecovery / BootShell / SportProShell.
-- Do not burn large Odds API densify in Phase 2.
+- Research-first. Preserve NFL/MLB.
+- No college props.
+- No stake-eligible PLAY until props holdout clears.

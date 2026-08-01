@@ -41,6 +41,8 @@ TASK_NBA_ODDS_DENSIFY = "src.tasks.pull_nba_historical_odds_densify"
 TASK_NBA_WALKFORWARD = "src.tasks.run_nba_walkforward_sample"
 TASK_NBA_PHASE1_BOOTSTRAP = "src.tasks.run_nba_phase1_bootstrap"
 TASK_NBA_PHASE2_CALIBRATE = "src.tasks.run_nba_phase2_calibrate"
+TASK_NBA_PHASE3_PROPS = "src.tasks.run_nba_phase3_props_bootstrap"
+TASK_NBA_MATERIALIZE_PROPS = "src.tasks.materialize_nba_player_props_edges"
 TASK_NBA_DAILY_CYCLE = "src.tasks.run_nba_daily_cycle"
 TASK_NBA_REPAIR_ABBRS = "src.tasks.repair_nba_odds_team_abbrs"
 TASK_NBA_INVENTORY = "src.tasks.nba_db_inventory"
@@ -858,6 +860,44 @@ def job_run_nba_phase1_bootstrap(
     except Exception as e:
         log.exception("Failed to enqueue run-nba-phase1-bootstrap")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/run-nba-phase3-props-bootstrap")
+def job_run_nba_phase3_props_bootstrap(
+    lookback_games: int = Query(8, ge=3, le=20),
+    limit_players: int = Query(200, ge=20, le=500),
+) -> Dict[str, str]:
+    try:
+        task = celery_app.send_task(
+            TASK_NBA_PHASE3_PROPS,
+            kwargs={
+                "lookback_games": lookback_games,
+                "limit_players": limit_players,
+            },
+        )
+        return {"task_id": task.id, "status": "queued"}
+    except Exception:
+        log.exception("Failed to enqueue run-nba-phase3-props-bootstrap")
+        raise HTTPException(status_code=500, detail="enqueue_failed")
+
+
+@app.post("/api/jobs/materialize-nba-player-props")
+def job_materialize_nba_player_props(
+    lookback_games: int = Query(8, ge=3, le=20),
+    limit_players: int = Query(200, ge=20, le=500),
+) -> Dict[str, str]:
+    try:
+        task = celery_app.send_task(
+            TASK_NBA_MATERIALIZE_PROPS,
+            kwargs={
+                "lookback_games": lookback_games,
+                "limit_players": limit_players,
+            },
+        )
+        return {"task_id": task.id, "status": "queued"}
+    except Exception:
+        log.exception("Failed to enqueue materialize-nba-player-props")
+        raise HTTPException(status_code=500, detail="enqueue_failed")
 
 
 @app.post("/api/jobs/run-nba-phase2-calibrate")
