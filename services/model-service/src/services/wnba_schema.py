@@ -9,6 +9,11 @@ from sqlalchemy import text
 
 def ensure_wnba_model_tables(session: Any) -> None:
     """Idempotent DDL for Phase 0–3 WNBA model persistence."""
+    # Prefer failing fast over blocking API workers when another job holds locks.
+    try:
+        session.execute(text("SET LOCAL lock_timeout = '15s'"))
+    except Exception:
+        pass
     session.execute(
         text(
             """

@@ -105,6 +105,9 @@ def test_wnba_health(monkeypatch) -> None:
     assert body["sport"] == "wnba"
     assert body["default_model_version"] == "wnba-v1-poss-sim"
     assert "worker_build_id" in body
+    assert body.get("pace_method") == "harmonic_mean"
+    assert body.get("game_minutes") == 40
+    assert "schema_ready" in body
 
 
 def test_wnba_fair_lines_empty_honest(monkeypatch) -> None:

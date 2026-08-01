@@ -30,12 +30,26 @@
 
 Use `GET /wnba/ops/inventory` (or `/api/jobs/wnba-inventory`) on the model-service DB — not explore summaries against empty Postgres.
 
+## Ship notes (2026-08-01)
+
+| Item | Value |
+|------|-------|
+| Feature tip | `cursor/wnba-model-phases-0-3-9ea3` |
+| Production branch | `deploy-vercel` |
+| Canary | `wnba-poss-sim-20260801-phase3` |
+| Model service | `https://model-service-production-e253.up.railway.app` |
+| Pro fair-lines | `https://www.kosedge.com/pro/wnba/fair-lines` |
+| Pro props | `https://www.kosedge.com/pro/wnba/props` |
+
+Health canary intentionally skips DDL under lock pressure (bootstrap/densify). Demo sim is DB-free and validates harmonic-mean + 40-min priors. Ingest seasons include **2026** (in-season tip year).
+
 ## Live URLs
 
 - Health: `/wnba/health`
 - Fair lines: `/wnba/fair-lines` → Pro `/pro/wnba/fair-lines`
 - Props board: `/wnba/props/board` → Pro `/pro/wnba/props`
 - Inventory: `/wnba/ops/inventory`
+- Demo: `POST /wnba/simulations/demo`
 
 ## Non-goals / preserved
 

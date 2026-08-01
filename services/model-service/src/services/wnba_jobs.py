@@ -559,7 +559,8 @@ def pull_wnba_season_ingest(
                                 },
                             )
                             player_stubs += 1
-                    if details_fetched % 25 == 0:
+                    # Commit often so API canaries are not blocked on long txn locks.
+                    if details_fetched % 5 == 0:
                         session.commit()
                     time_module.sleep(sleep_s)
         session.commit()

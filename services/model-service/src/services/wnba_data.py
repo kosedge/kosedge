@@ -94,7 +94,7 @@ WNBA_TEAM_ABBR_ALIASES: Dict[str, str] = {
 WNBA_NON_LEAGUE_TEAMS = frozenset({"BRA", "CLK", "COL", "TOY", "USA", "ROW", "TEAM"})
 
 # Calendar-year seasons (May–Oct). Tip year = season label.
-DEFAULT_WNBA_INGEST_SEASONS = ("2023", "2024", "2025")
+DEFAULT_WNBA_INGEST_SEASONS = ("2023", "2024", "2025", "2026")
 
 
 def normalize_team_key(name: str) -> str:
