@@ -102,6 +102,7 @@ UMP_RUN_FACTOR_PRIORS: Dict[str, float] = {
 
 STARTER_QUALITY_PRIORS: Dict[str, Dict[str, Any]] = {
     # Compact identity priors for premium v1.5 until full Statcast/arsenal integration.
+    # Prefer live Stats API when available; these cover common names when search misses.
     "gerrit cole": {"quality": 0.90, "k_factor": 1.12, "bb_factor": 0.90, "gb_factor": 1.00, "handedness": "R"},
     "zack wheeler": {"quality": 0.91, "k_factor": 1.10, "bb_factor": 0.92, "gb_factor": 1.02, "handedness": "R"},
     "corbin burnes": {"quality": 0.90, "k_factor": 1.11, "bb_factor": 0.93, "gb_factor": 1.04, "handedness": "R"},
@@ -112,6 +113,22 @@ STARTER_QUALITY_PRIORS: Dict[str, Dict[str, Any]] = {
     "jose berrios": {"quality": 0.97, "k_factor": 1.00, "bb_factor": 1.00, "gb_factor": 1.02, "handedness": "R"},
     "yoshinobu yamamoto": {"quality": 0.91, "k_factor": 1.09, "bb_factor": 0.91, "gb_factor": 1.06, "handedness": "R"},
     "spencer strider": {"quality": 0.88, "k_factor": 1.20, "bb_factor": 0.95, "gb_factor": 0.95, "handedness": "R"},
+    "tarik skubal": {"quality": 0.88, "k_factor": 1.16, "bb_factor": 0.88, "gb_factor": 1.02, "handedness": "L"},
+    "paul skenes": {"quality": 0.89, "k_factor": 1.15, "bb_factor": 0.92, "gb_factor": 1.00, "handedness": "R"},
+    "garrett crochet": {"quality": 0.90, "k_factor": 1.14, "bb_factor": 0.91, "gb_factor": 1.01, "handedness": "L"},
+    "chris sale": {"quality": 0.91, "k_factor": 1.13, "bb_factor": 0.90, "gb_factor": 0.98, "handedness": "L"},
+    "logan gilbert": {"quality": 0.92, "k_factor": 1.10, "bb_factor": 0.93, "gb_factor": 1.00, "handedness": "R"},
+    "george kirby": {"quality": 0.93, "k_factor": 1.06, "bb_factor": 0.88, "gb_factor": 1.04, "handedness": "R"},
+    "tyler glasnow": {"quality": 0.90, "k_factor": 1.14, "bb_factor": 0.89, "gb_factor": 1.02, "handedness": "R"},
+    "dylan cease": {"quality": 0.93, "k_factor": 1.13, "bb_factor": 0.96, "gb_factor": 0.97, "handedness": "R"},
+    "cole ragans": {"quality": 0.91, "k_factor": 1.12, "bb_factor": 0.94, "gb_factor": 1.00, "handedness": "L"},
+    "nathan eovaldi": {"quality": 0.94, "k_factor": 1.05, "bb_factor": 0.93, "gb_factor": 1.03, "handedness": "R"},
+    "shota imanaga": {"quality": 0.92, "k_factor": 1.08, "bb_factor": 0.90, "gb_factor": 0.96, "handedness": "L"},
+    "hunter brown": {"quality": 0.94, "k_factor": 1.07, "bb_factor": 0.95, "gb_factor": 1.02, "handedness": "R"},
+    "jacob degrom": {"quality": 0.89, "k_factor": 1.14, "bb_factor": 0.88, "gb_factor": 1.01, "handedness": "R"},
+    "jacob de grom": {"quality": 0.89, "k_factor": 1.14, "bb_factor": 0.88, "gb_factor": 1.01, "handedness": "R"},
+    "ranger suarez": {"quality": 0.95, "k_factor": 1.02, "bb_factor": 0.96, "gb_factor": 1.08, "handedness": "L"},
+    "sonny gray": {"quality": 0.94, "k_factor": 1.06, "bb_factor": 0.94, "gb_factor": 1.05, "handedness": "R"},
 }
 
 
@@ -553,6 +570,40 @@ def normalize_team_key(name: str) -> str:
     return " ".join((name or "").lower().replace(".", "").split())
 
 
+def normalize_pitcher_name(name: str) -> str:
+    """Normalize pitcher identity for prior lookup / Stats API search."""
+    key = normalize_team_key(name)
+    for suffix in (" jr", " sr", " ii", " iii", " iv"):
+        if key.endswith(suffix):
+            key = key[: -len(suffix)].strip()
+    return key
+
+
+def _pitcher_search_aliases(starter_name: str) -> List[str]:
+    """Ordered search strings: full name, stripped suffixes, last-name fallback."""
+    raw = (starter_name or "").strip()
+    if not raw:
+        return []
+    aliases: List[str] = []
+    seen: set[str] = set()
+
+    def _add(value: str) -> None:
+        cleaned = " ".join(value.split())
+        if cleaned and cleaned.lower() not in seen:
+            seen.add(cleaned.lower())
+            aliases.append(cleaned)
+
+    _add(raw)
+    normalized = normalize_pitcher_name(raw)
+    if normalized:
+        _add(normalized)
+    parts = normalized.split()
+    if len(parts) >= 2:
+        _add(parts[-1])  # last-name search when full-name miss
+        _add(f"{parts[0]} {parts[-1]}")
+    return aliases
+
+
 def park_factor_for_team(team_abbr: Optional[str]) -> float:
     if not team_abbr:
         return 1.0
@@ -702,18 +753,34 @@ def _starter_features_from_stat(
 
 @lru_cache(maxsize=512)
 def _live_starter_features(starter_name: str, season: int) -> Optional[Dict[str, Any]]:
-    normalized_name = normalize_team_key(starter_name)
+    normalized_name = normalize_pitcher_name(starter_name)
     if not normalized_name:
         return None
 
-    search_response = requests.get(
-        f"{MLB_STATS_API}/people/search",
-        params={"sportId": 1, "names": starter_name},
-        timeout=10,
-    )
-    search_response.raise_for_status()
-    people = (search_response.json() or {}).get("people") or []
-    candidate = _select_pitcher_candidate(people, normalized_name)
+    candidate: Optional[Dict[str, Any]] = None
+    for alias in _pitcher_search_aliases(starter_name):
+        search_response = requests.get(
+            f"{MLB_STATS_API}/people/search",
+            params={"sportId": 1, "names": alias},
+            timeout=10,
+        )
+        search_response.raise_for_status()
+        people = (search_response.json() or {}).get("people") or []
+        candidate = _select_pitcher_candidate(people, normalized_name)
+        if candidate is None and len(alias.split()) == 1:
+            # Last-name-only search: require unique active pitcher match.
+            pitchers = [
+                p
+                for p in people
+                if ((p.get("primaryPosition") or {}).get("code") in {"1", None, ""})
+                and normalize_pitcher_name(str(p.get("fullName") or "")).endswith(f" {alias.lower()}")
+            ]
+            active = [p for p in pitchers if p.get("active")]
+            pool = active or pitchers
+            if len(pool) == 1:
+                candidate = pool[0]
+        if candidate is not None:
+            break
     if not candidate:
         return None
 
@@ -736,6 +803,10 @@ def _live_starter_features(starter_name: str, season: int) -> Optional[Dict[str,
         response.raise_for_status()
         stat = _extract_pitching_stat_bucket(response.json() or {})
         if not stat:
+            continue
+        # Require a minimum sample so tiny early-season buckets don't dominate.
+        ip = _parse_ip(stat.get("inningsPitched"))
+        if params.get("stats") == "season" and ip < 8.0:
             continue
         stat_season = int(params.get("season") or season)
         features = _starter_features_from_stat(
@@ -890,8 +961,18 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
     if not starter_name:
         return _neutral_starter_features(source="neutral")
 
-    key = normalize_team_key(starter_name)
-    known = STARTER_QUALITY_PRIORS.get(key)
+    key = normalize_pitcher_name(starter_name)
+    target_season = season or date.today().year
+
+    # Prefer live Stats API (true arsenal/shape) over static priors when resolvable.
+    try:
+        live_features = _live_starter_features(starter_name, target_season)
+    except Exception:
+        live_features = None
+    if live_features is not None:
+        return live_features
+
+    known = STARTER_QUALITY_PRIORS.get(key) or STARTER_QUALITY_PRIORS.get(normalize_team_key(starter_name))
     if known:
         return {
             "starter_quality": float(known["quality"]),
@@ -902,15 +983,7 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
             "source": "static-prior",
         }
 
-    target_season = season or date.today().year
-    try:
-        live_features = _live_starter_features(starter_name, target_season)
-    except Exception:
-        live_features = None
-    if live_features is not None:
-        return live_features
-
-    # Deterministic fallback from identity signature.
+    # Deterministic fallback from identity signature (low firmness path).
     score = sum(ord(c) for c in key if c.isalpha())
     quality = 1.0 + ((score % 13) - 6) * 0.01
     k_factor = 1.0 + ((score % 11) - 5) * 0.008

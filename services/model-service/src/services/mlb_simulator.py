@@ -11,7 +11,10 @@ EXTRA_INNING_GHOST_RUNNER_FACTOR = 1.32
 MAX_EXTRA_INNINGS = 9
 # MLB home teams win ~53.5–54% historically. Keep the product ≈1.0 so
 # totals means stay nearly neutral while moneyline win probs move.
-HOME_FIELD_OFFENSE_MUL = 1.035
+# 1.035 shipped in PR #48 then failed production CLV on May–Jul densify
+# (+0.023 → +0.007). Ablation kept 1.025: recovers CLV headroom vs 1.035
+# while retaining most synthetic Brier gain vs HFA-off (1.0).
+HOME_FIELD_OFFENSE_MUL = 1.025
 AWAY_FIELD_OFFENSE_MUL = 1.0 / HOME_FIELD_OFFENSE_MUL
 
 
@@ -101,6 +104,29 @@ def _starter_shape_factor(k_factor: float, bb_factor: float, gb_factor: float) -
         0.90,
         1.10,
     )
+
+
+def _offense_pitcher_matchup_mul(
+    *,
+    offense_split: float,
+    recent_form: float,
+    opp_k_factor: float,
+    opp_bb_factor: float,
+    opp_gb_factor: float,
+    opp_firmness: float,
+) -> float:
+    """Bounded batter–pitcher PA shape: K/BB vs contact proxy, GB vs elevated form.
+
+    Uses team split/recent as contact/power proxies (no fake batter-level IDs).
+    Firmness shrinks the interaction when SP identity is soft.
+    """
+    offense_edge = 0.55 * (float(offense_split) - 1.0) + 0.45 * (float(recent_form) - 1.0)
+    k_term = -(float(opp_k_factor) - 1.0) * 0.10 * (0.5 + abs(offense_edge))
+    bb_term = (float(opp_bb_factor) - 1.0) * 0.12 * (0.5 + max(0.0, offense_edge))
+    gb_term = -(float(opp_gb_factor) - 1.0) * 0.06 * max(0.0, float(recent_form) - 1.0)
+    firm = _clamp(float(opp_firmness), 0.35, 1.0)
+    raw = 1.0 + (k_term + bb_term + gb_term) * (0.45 + 0.55 * firm)
+    return _clamp(raw, 0.97, 1.03)
 
 
 def _bounded_index(value: float) -> float:
@@ -341,6 +367,22 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         inputs.lineup_confidence_away,
         inputs.info_freshness_score_away,
     )
+    matchup_home = _offense_pitcher_matchup_mul(
+        offense_split=inputs.offense_split_home,
+        recent_form=inputs.recent_form_index_home,
+        opp_k_factor=inputs.starter_k_factor_away,
+        opp_bb_factor=inputs.starter_bb_factor_away,
+        opp_gb_factor=inputs.starter_gb_factor_away,
+        opp_firmness=firm_away,
+    )
+    matchup_away = _offense_pitcher_matchup_mul(
+        offense_split=inputs.offense_split_away,
+        recent_form=inputs.recent_form_index_away,
+        opp_k_factor=inputs.starter_k_factor_home,
+        opp_bb_factor=inputs.starter_bb_factor_home,
+        opp_gb_factor=inputs.starter_gb_factor_home,
+        opp_firmness=firm_home,
+    )
     offense_home_full = _effective_offense_index(
         season_index=inputs.offense_home,
         split_index=inputs.offense_split_home,
@@ -348,7 +390,7 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         lineup_index=inputs.lineup_strength_index_home,
         effective_confidence=eff_conf_home,
         starter_facing=False,
-    )
+    ) * matchup_home
     offense_away_full = _effective_offense_index(
         season_index=inputs.offense_away,
         split_index=inputs.offense_split_away,
@@ -356,7 +398,8 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         lineup_index=inputs.lineup_strength_index_away,
         effective_confidence=eff_conf_away,
         starter_facing=False,
-    )
+    ) * matchup_away
+    # F5 is more starter-matchup sensitive than full-game (bullpen dilutes late).
     offense_home_f5 = _effective_offense_index(
         season_index=inputs.offense_home,
         split_index=inputs.offense_split_home,
@@ -364,7 +407,7 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         lineup_index=inputs.lineup_strength_index_home,
         effective_confidence=eff_conf_home,
         starter_facing=True,
-    )
+    ) * _clamp(1.0 + (matchup_home - 1.0) * 1.25, 0.96, 1.04)
     offense_away_f5 = _effective_offense_index(
         season_index=inputs.offense_away,
         split_index=inputs.offense_split_away,
@@ -372,7 +415,7 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
         lineup_index=inputs.lineup_strength_index_away,
         effective_confidence=eff_conf_away,
         starter_facing=True,
-    )
+    ) * _clamp(1.0 + (matchup_away - 1.0) * 1.25, 0.96, 1.04)
 
     uncertainty_mul = _clamp(float(getattr(inputs, "uncertainty_total_mul", 1.0) or 1.0), 1.0, 1.04)
     # Totals-neutral home-field split: lifts home win prob without a large totals shift.

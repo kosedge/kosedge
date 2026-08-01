@@ -39,7 +39,8 @@ def test_bullpen_quality_from_state_moves_with_fatigue() -> None:
 
 def test_dome_weather_reliability_damped() -> None:
     assert weather_reliability_mul(home_abbr="TOR", weather_temp_f=72.0) < 0.5
-    assert weather_reliability_mul(home_abbr="NYY", weather_temp_f=72.0) == 1.0
+    assert weather_reliability_mul(home_abbr="NYY", weather_temp_f=72.0, weather_wind_mph=8.0) == 1.0
+    assert 0.6 <= weather_reliability_mul(home_abbr="NYY", weather_temp_f=72.0) < 1.0
 
 
 def test_sp_change_shock_detects_change() -> None:

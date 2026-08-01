@@ -147,16 +147,67 @@ def test_pitch_by_pitch_simulator_is_stable_with_seed() -> None:
 
 
 def test_neutral_slate_has_home_field_moneyline_edge() -> None:
-    """MLB HFA: neutral inputs should favor home ~53–55%, not a coin flip."""
+    """MLB HFA: neutral inputs should favor home ~52–55%, not a coin flip.
+
+    Production CLV rejected 1.035; current constant is 1.025 (see ablation ops note).
+    """
     inputs = MlbGameInputs(
         game_id="game-hfa",
         home_team="Chicago Cubs",
         away_team="St. Louis Cardinals",
     )
     markets = simulate_mlb_game(inputs, simulations=6000, seed=11)["markets"]
-    assert 0.52 <= markets["fg_home_win_prob"] <= 0.56
+    assert 0.515 <= markets["fg_home_win_prob"] <= 0.555
     # Totals-neutral design: product of HFA muls ≈ 1, so total stays near baseline.
     assert 8.5 <= markets["fg_total_mean"] <= 9.7
+
+
+def test_offense_pitcher_matchup_moves_home_win_prob() -> None:
+    from src.services.mlb_simulator import _offense_pitcher_matchup_mul
+
+    # High-K pitcher vs elevated offense should suppress more than free-passer.
+    suppress = _offense_pitcher_matchup_mul(
+        offense_split=1.08,
+        recent_form=1.06,
+        opp_k_factor=1.15,
+        opp_bb_factor=0.90,
+        opp_gb_factor=1.05,
+        opp_firmness=0.95,
+    )
+    amplify = _offense_pitcher_matchup_mul(
+        offense_split=1.08,
+        recent_form=1.06,
+        opp_k_factor=0.92,
+        opp_bb_factor=1.12,
+        opp_gb_factor=0.95,
+        opp_firmness=0.95,
+    )
+    assert suppress < 1.0
+    assert amplify > suppress
+
+    soft_sp = MlbGameInputs(
+        game_id="matchup-soft",
+        home_team="Yankees",
+        away_team="Red Sox",
+        offense_split_home=1.10,
+        recent_form_index_home=1.08,
+        starter_k_factor_away=1.14,
+        starter_bb_factor_away=0.90,
+        starter_firmness_away=0.95,
+    )
+    hard_walks = MlbGameInputs(
+        game_id="matchup-walks",
+        home_team="Yankees",
+        away_team="Red Sox",
+        offense_split_home=1.10,
+        recent_form_index_home=1.08,
+        starter_k_factor_away=0.92,
+        starter_bb_factor_away=1.14,
+        starter_firmness_away=0.95,
+    )
+    a = simulate_mlb_game(soft_sp, simulations=2500, seed=77)["markets"]
+    b = simulate_mlb_game(hard_walks, simulations=2500, seed=77)["markets"]
+    assert b["fg_home_win_prob"] > a["fg_home_win_prob"]
 
 
 def test_full_game_moneyline_never_pushes_after_resolution_logic() -> None:

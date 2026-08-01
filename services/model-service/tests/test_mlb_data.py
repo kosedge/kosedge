@@ -141,18 +141,21 @@ def test_park_and_lineup_helpers(monkeypatch) -> None:
     unknown = mlb_data.umpire_run_factor("Unknown Umpire")
     assert 0.95 <= known <= 1.05
     assert 0.97 <= unknown <= 1.03
-    starter_known = mlb_data.starter_identity_features("Gerrit Cole")
     mlb_data._live_starter_features.cache_clear()
     monkeypatch.setattr(
         mlb_data.requests,
         "get",
         lambda *args, **kwargs: _DummyResponse({"people": []}),
     )
+    # Live miss → static prior for known ace names.
+    starter_known = mlb_data.starter_identity_features("Gerrit Cole", season=2026)
     starter_unknown = mlb_data.starter_identity_features("Some Pitcher", season=2026)
     assert 0.85 <= starter_known["starter_quality"] <= 1.15
     assert starter_known["handedness"] in {"L", "R", "U"}
+    assert starter_known["source"] == "static-prior"
     assert 0.85 <= starter_unknown["starter_quality"] <= 1.15
     assert starter_unknown["source"] == "heuristic-fallback"
+    assert mlb_data.normalize_pitcher_name("Jacob deGrom Jr.") == "jacob degrom"
 
 
 def test_starter_identity_features_uses_live_pitcher_stats(monkeypatch) -> None:
