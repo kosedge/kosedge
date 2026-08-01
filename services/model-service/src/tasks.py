@@ -69,6 +69,7 @@ from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from .services.mlb_prop_edge_policy import PLAY_STAKE_ELIGIBLE as MLB_PROPS_PLAY_STAKE_ELIGIBLE
 from .services.mlb_lineup_sp_snapshots import (
     build_snapshot,
+    inventory_snapshot_lake,
     is_late_info_snapshot,
     persist_snapshot,
     reconstruct_densify_snapshot,
@@ -80,8 +81,11 @@ from .services.mlb_park_orientation import (
 )
 from .services.mlb_pitch_matchup import (
     apply_pitch_matchup_flag,
+    apply_pitch_matchup_stuff_fallback,
     get_pitch_matchup_enabled,
+    get_pitch_matchup_stuff_fallback,
     get_pitcher_arsenal_as_of,
+    get_team_batter_family_as_of,
 )
 from .services.mlb_simulator import (
     DEFAULT_MODEL_VERSION,
@@ -10083,6 +10087,8 @@ def run_mlb_lineup_nowcast_repricing(
 
             nowcast_arsenal_home = None
             nowcast_arsenal_away = None
+            nowcast_batter_family_home = None
+            nowcast_batter_family_away = None
             if get_pitch_matchup_enabled():
                 pid_h = starter_home_feat.get("player_id")
                 pid_a = starter_away_feat.get("player_id")
@@ -10090,17 +10096,39 @@ def run_mlb_lineup_nowcast_repricing(
                 if pid_h is not None:
                     try:
                         nowcast_arsenal_home = get_pitcher_arsenal_as_of(
-                            int(pid_h), as_of=as_of_live, fetch_if_missing=False
+                            int(pid_h),
+                            as_of=as_of_live,
+                            fetch_if_missing=False,
+                            allow_stuff_fallback=False,
                         )
                     except Exception:
                         nowcast_arsenal_home = None
                 if pid_a is not None:
                     try:
                         nowcast_arsenal_away = get_pitcher_arsenal_as_of(
-                            int(pid_a), as_of=as_of_live, fetch_if_missing=False
+                            int(pid_a),
+                            as_of=as_of_live,
+                            fetch_if_missing=False,
+                            allow_stuff_fallback=False,
                         )
                     except Exception:
                         nowcast_arsenal_away = None
+                try:
+                    nowcast_batter_family_home = get_team_batter_family_as_of(
+                        str(m.get("home_abbr") or ""),
+                        as_of=as_of_live,
+                        fetch_if_missing=False,
+                    )
+                except Exception:
+                    nowcast_batter_family_home = None
+                try:
+                    nowcast_batter_family_away = get_team_batter_family_as_of(
+                        str(m.get("away_abbr") or ""),
+                        as_of=as_of_live,
+                        fetch_if_missing=False,
+                    )
+                except Exception:
+                    nowcast_batter_family_away = None
             inputs = MlbGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
@@ -10148,6 +10176,8 @@ def run_mlb_lineup_nowcast_repricing(
                 info_freshness_score_away=freshness,
                 pitcher_arsenal_home=nowcast_arsenal_home,
                 pitcher_arsenal_away=nowcast_arsenal_away,
+                batter_family_home=nowcast_batter_family_home,
+                batter_family_away=nowcast_batter_family_away,
             )
             inputs, sharpen_diag = _sharpen_mlb_inputs(
                 inputs,
@@ -11322,6 +11352,8 @@ def backfill_mlb_historical_resim(
                     bp_quality_away = float(away_bp_live.get("bullpen_quality") or 1.0)
                 arsenal_home = None
                 arsenal_away = None
+                batter_family_home = None
+                batter_family_away = None
                 if get_pitch_matchup_enabled() and game_as_of is not None:
                     pid_h = starter_home_feat.get("player_id")
                     pid_a = starter_away_feat.get("player_id")
@@ -11332,6 +11364,7 @@ def backfill_mlb_historical_resim(
                                 as_of=game_as_of,
                                 season=game_season,
                                 fetch_if_missing=False,
+                                allow_stuff_fallback=False,
                             )
                         except Exception:
                             arsenal_home = None
@@ -11342,9 +11375,28 @@ def backfill_mlb_historical_resim(
                                 as_of=game_as_of,
                                 season=game_season,
                                 fetch_if_missing=False,
+                                allow_stuff_fallback=False,
                             )
                         except Exception:
                             arsenal_away = None
+                    try:
+                        batter_family_home = get_team_batter_family_as_of(
+                            str(m.get("home_abbr") or ""),
+                            as_of=game_as_of,
+                            season=game_season,
+                            fetch_if_missing=False,
+                        )
+                    except Exception:
+                        batter_family_home = None
+                    try:
+                        batter_family_away = get_team_batter_family_as_of(
+                            str(m.get("away_abbr") or ""),
+                            as_of=game_as_of,
+                            season=game_season,
+                            fetch_if_missing=False,
+                        )
+                    except Exception:
+                        batter_family_away = None
                 inputs = MlbGameInputs(
                     game_id=str(m["game_id"]),
                     home_team=str(m["home_team"]),
@@ -11380,6 +11432,8 @@ def backfill_mlb_historical_resim(
                     lineup_strength_index_away=float(m["lineup_strength_index_away"]) if m.get("lineup_strength_index_away") is not None else 1.0,
                     pitcher_arsenal_home=arsenal_home,
                     pitcher_arsenal_away=arsenal_away,
+                    batter_family_home=batter_family_home,
+                    batter_family_away=batter_family_away,
                     bullpen_fatigue_home=float(m.get("bullpen_fatigue_home") or 0.50),
                     bullpen_fatigue_away=float(m.get("bullpen_fatigue_away") or 0.50),
                     bullpen_availability_home=float(m.get("bullpen_availability_home") or 0.65),
@@ -12304,8 +12358,17 @@ _LATE_INFO_STAMP_CONFIGS: Dict[str, Dict[str, Any]] = {
 }
 
 _PITCH_MATCHUP_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
-    "M0": {"pitch_matchup_enabled": False, "model_suffix": "pitchmux-m0"},
-    "M1": {"pitch_matchup_enabled": True, "model_suffix": "pitchmux-m1"},
+    "M0": {
+        "pitch_matchup_enabled": False,
+        "stuff_fallback": False,
+        "model_suffix": "pitchmux-m0",
+    },
+    # True pitch-type arsenal + batter-family; stuff-shape fallback OFF.
+    "M1": {
+        "pitch_matchup_enabled": True,
+        "stuff_fallback": False,
+        "model_suffix": "pitchmux-m1t",
+    },
 }
 
 _TOTALS_PARK_WIND_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
@@ -12626,7 +12689,7 @@ def run_mlb_pitch_matchup_ablation(
     configs: Optional[List[str]] = None,
     base_model_version: str = DEFAULT_MODEL_VERSION,
 ) -> Dict[str, Any]:
-    """M0 (S0 / pitch matchup off) vs M1 (pitch-level arsenal PA matchup on)."""
+    """M0 (S0 / pitch matchup off) vs M1 (true pitch-type arsenal + batter-family)."""
     if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
         raise ValueError(
             "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for pitch matchup ablation"
@@ -12639,6 +12702,7 @@ def run_mlb_pitch_matchup_ablation(
         raise ValueError(f"unknown pitch matchup configs: {unknown}")
 
     prior_pitch = get_pitch_matchup_enabled()
+    prior_fallback = get_pitch_matchup_stuff_fallback()
     prior_wind = get_totals_park_rel_wind_enabled()
     prior_timing = get_lineup_timing_mode()
     prior_quality = get_starter_quality_mode()
@@ -12655,6 +12719,7 @@ def run_mlb_pitch_matchup_ablation(
             cfg = _PITCH_MATCHUP_ABLATION_CONFIGS[name]
             model_version = f"{base_model_version}-{cfg['model_suffix']}"
             apply_pitch_matchup_flag(bool(cfg["pitch_matchup_enabled"]))
+            apply_pitch_matchup_stuff_fallback(bool(cfg.get("stuff_fallback", False)))
             log.info(
                 "Pitch matchup ablation config start",
                 extra={"config": name, "model_version": model_version, "flags": cfg},
@@ -12670,9 +12735,11 @@ def run_mlb_pitch_matchup_ablation(
             )
             graded["config"] = cfg
             graded["pitch_matchup_enabled"] = get_pitch_matchup_enabled()
+            graded["pitch_matchup_stuff_fallback"] = get_pitch_matchup_stuff_fallback()
             results[name] = graded
     finally:
         apply_pitch_matchup_flag(prior_pitch)
+        apply_pitch_matchup_stuff_fallback(prior_fallback)
         apply_totals_park_rel_wind_flag(prior_wind)
         apply_lineup_timing_mode(prior_timing or "off")
         apply_starter_quality_mode(prior_quality or "era_whip")
@@ -12706,7 +12773,8 @@ def run_mlb_pitch_matchup_ablation(
         ),
         "note": (
             "Ship MLB_PITCH_MATCHUP_ENABLED only if intersection ML CLV ≥ +0.010 "
-            "and beats M0 without torching RL/total. Not a starter_quality rewrite."
+            "and beats M0 without torching RL/total. True pitch-type arsenal only "
+            "(stuff-shape fallback off)."
         ),
     }
     return {
@@ -12719,6 +12787,85 @@ def run_mlb_pitch_matchup_ablation(
         "intersection": intersection,
         "recommendation": recommendation,
         "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
+        "unused_holdout": unused_holdout_summary(),
+    }
+
+
+@celery_app.task(name="src.tasks.run_mlb_live_late_info_clv_grade")
+def run_mlb_live_late_info_clv_grade(
+    *,
+    start_date: str = "2026-05-20",
+    end_date: str = "2026-07-17",
+    lookback_days: int = 90,
+    max_hours: float = 3.0,
+    model_version: str = DEFAULT_MODEL_VERSION,
+) -> Dict[str, Any]:
+    """Grade ≤3h late-info CLV from live snapshot lake (no densify invent).
+
+    If lake has no live confirms, returns honest n=0 + infrastructure status.
+    Does not force-resim densify and does not flip production flags.
+    """
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    lake = inventory_snapshot_lake(max_hours=float(max_hours))
+    late_ids = set(lake.get("late_info_live_game_ids") or [])
+    if not late_ids:
+        return {
+            "status": "ok",
+            "start_date": start.isoformat(),
+            "end_date": end.isoformat(),
+            "model_version": model_version,
+            "max_hours": float(max_hours),
+            "late_info_n": 0,
+            "clv": None,
+            "lake": {k: v for k, v in lake.items() if k != "late_info_live_game_ids"},
+            "recommendation": {
+                "ship_late_info_slice": False,
+                "note": (
+                    "Live ≤3h snapshot lake has no confirmed late-info games yet. "
+                    "Keep nowcast persistence; do not fake densify late-info n."
+                ),
+            },
+            "unused_holdout": unused_holdout_summary(),
+        }
+
+    session = SessionLocal()
+    try:
+        clv_full = compute_mlb_clv_with_spread(
+            session,
+            model_version=model_version,
+            lookback_days=int(lookback_days),
+        )
+        window_items = _filter_clv_items_to_window(
+            session,
+            list(clv_full.get("items") or []),
+            start_date=start,
+            end_date=end,
+        )
+        late_items = [i for i in window_items if str(i.get("game_id")) in late_ids]
+        summary = _summarize_clv_items(late_items)
+        summary.pop("ml_game_ids", None)
+    finally:
+        session.close()
+
+    ml = summary.get("avg_ml_clv")
+    return {
+        "status": "ok",
+        "start_date": start.isoformat(),
+        "end_date": end.isoformat(),
+        "model_version": model_version,
+        "max_hours": float(max_hours),
+        "late_info_n": len(late_items),
+        "clv": summary,
+        "lake": {k: v for k, v in lake.items() if k != "late_info_live_game_ids"},
+        "recommendation": {
+            "ship_late_info_slice": bool(ml is not None and float(ml) >= 0.010),
+            "stretch_target_hit": bool(ml is not None and float(ml) >= 0.015),
+            "note": (
+                "Ship late-info stamp behavior only if live ≤3h ML CLV ≥ +0.010 "
+                "with leakage=0 on production S0 stack."
+            ),
+        },
         "unused_holdout": unused_holdout_summary(),
     }
 
