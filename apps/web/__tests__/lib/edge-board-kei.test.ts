@@ -121,6 +121,46 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     expect(seeded.filter((r) => r.game?.includes("Green Bay")).length).toBe(2);
   });
 
+  it("seeds MLB Moneyline + Total and merges fair ML + win prob", () => {
+    const seeded = ensureAllKeiGamesOnBoard(
+      [],
+      "mlb",
+      [
+        {
+          awayTeam: "New York Yankees",
+          homeTeam: "Chicago Cubs",
+          projSpreadHome: -1.5,
+          projTotal: 9.0,
+          projHomeMl: -120,
+          projAwayMl: 100,
+          homeWinProb: 0.55,
+        },
+      ],
+    );
+    expect(seeded.map((r) => r.market).sort()).toEqual([
+      "Moneyline",
+      "Total",
+    ]);
+
+    const merged = mergeKeiIntoEdgeBoardRows(seeded as any, "mlb", [
+      {
+        awayTeam: "New York Yankees",
+        homeTeam: "Chicago Cubs",
+        projSpreadHome: -1.5,
+        projTotal: 9.0,
+        projHomeMl: -120,
+        projAwayMl: 100,
+        homeWinProb: 0.55,
+      },
+    ]);
+    const ml = merged.find((r) => r.market === "Moneyline") as any;
+    const total = merged.find((r) => r.market === "Total") as any;
+    expect(ml?.kei).toBe("-120");
+    expect(ml?.keiAway).toBe("+100");
+    expect(ml?.homeWinProb).toBe(0.55);
+    expect(total?.kei).toBe("9");
+  });
+
   it("matches NFL Odds full names to KEINFL abbr or full-name exports", () => {
     vi.mocked(getKeiLines).mockReturnValue([
       {

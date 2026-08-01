@@ -2,9 +2,10 @@ import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { getKeiCode } from "@/lib/kei-brand";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
+import { noVigHomeProb } from "@/lib/american-odds";
 import { generateGameOverview } from "@/lib/sports";
 
-// Flat API row format (from Odds API / model); kei = our projected line/total
+// Flat API row format (from Odds API / model); kei = our projected line/total/ML
 export type FlatEdgeBoardRow = {
   id?: string;
   game?: string;
@@ -23,6 +24,10 @@ export type FlatEdgeBoardRow = {
   note?: string;
   commenceTime?: string;
   kei?: string;
+  /** Fair away moneyline (American) when market is Moneyline. */
+  keiAway?: string;
+  /** Model home win probability (0–1) for Moneyline edge in prob points. */
+  homeWinProb?: number;
   /** REG / PRE / POST — PRE blocked from season PLAY under info desk. */
   seasonType?: string;
   /** Authoritative server tag when present (fair-lines publish policy). */
@@ -235,14 +240,20 @@ function PriceCell({
     p.bottom.label === "Coming soon" ||
     p.top.label === "—" ||
     p.bottom.label === "—";
+  const showTopJuice = Boolean(p.top.juice && p.top.juice !== "—");
+  const showBottomJuice = Boolean(p.bottom.juice && p.bottom.juice !== "—");
 
   return (
     <div className={valueLeading}>
       <div className={valueClassName}>{p.top.label}</div>
-      <div className="text-[11px] text-gray-400">({p.top.juice})</div>
+      {showTopJuice ? (
+        <div className="text-[11px] text-gray-400">({p.top.juice})</div>
+      ) : null}
       <div className={`${sep} bg-white/10`} />
       <div className={`${topPad} ${valueClassName}`}>{p.bottom.label}</div>
-      <div className="text-[11px] text-gray-400">({p.bottom.juice})</div>
+      {showBottomJuice ? (
+        <div className="text-[11px] text-gray-400">({p.bottom.juice})</div>
+      ) : null}
       {!blank && book ? (
         <div className={`${topPad}`}>
           <SportsbookBadge book={book} compact />
@@ -351,6 +362,12 @@ const COL_WIDTHS = [
   "112px",
 ] as const;
 
+function parseAmericanLabel(s: string | undefined): number | null {
+  if (s == null || s === "" || s === "—") return null;
+  const n = Number(String(s).replace(/^\+/, "").trim());
+  return Number.isFinite(n) && n !== 0 ? n : null;
+}
+
 export function flatRowsToLegacy(
   flat: FlatEdgeBoardRow[],
   sportKey = "ncaam",
@@ -367,25 +384,31 @@ export function flatRowsToLegacy(
   );
   const byGame = new Map<
     string,
-    { spread?: FlatEdgeBoardRow; total?: FlatEdgeBoardRow }
+    {
+      moneyline?: FlatEdgeBoardRow;
+      spread?: FlatEdgeBoardRow;
+      total?: FlatEdgeBoardRow;
+    }
   >();
   for (const r of sorted) {
     const key = String(r?.game ?? r?.id ?? "unknown").trim() || "unknown";
     const entry = byGame.get(key) ?? {};
-    if (r?.market === "Spread") entry.spread = r;
+    if (r?.market === "Moneyline") entry.moneyline = r;
+    else if (r?.market === "Spread") entry.spread = r;
     else if (r?.market === "Total") entry.total = r;
     byGame.set(key, entry);
   }
   const result: LegacyEdgeBoardRow[] = [];
   for (const [gameKey, entry] of byGame) {
-    const spread = entry.spread ?? entry.total;
-    const total = entry.total ?? entry.spread;
-    if (!spread && !total) continue;
-    const game = String(spread?.game ?? total?.game ?? gameKey ?? "");
+    const lineRow = entry.moneyline ?? entry.spread;
+    const isMoneyline = Boolean(entry.moneyline);
+    const total = entry.total ?? lineRow;
+    if (!lineRow && !total) continue;
+    const game = String(lineRow?.game ?? total?.game ?? gameKey ?? "");
     const parts = game.includes(" @ ") ? game.split(" @ ") : game.split(" vs ");
     const away = (parts[0] ?? "Away").trim() || "Away";
     const home = (parts[1] ?? "Home").trim() || "Home";
-    const time = (spread ?? total)?.time ?? "—";
+    const time = (lineRow ?? total)?.time ?? "—";
     const flipSpread = (s: string | undefined): string => {
       const str = String(s ?? "").trim();
       if (!str) return "—";
@@ -393,28 +416,49 @@ export function flatRowsToLegacy(
       const n = parseFloat(str);
       return Number.isFinite(n) ? (n <= 0 ? `+${Math.abs(n)}` : `-${n}`) : "—";
     };
-    const spreadRow = spread as FlatEdgeBoardRow | undefined;
     const totalRow = total as FlatEdgeBoardRow | undefined;
     const juiceOr = (v: string | undefined) => v || "—";
 
-    const openLine: PricePair = spreadRow?.open
-      ? {
-          top: { label: spreadRow.open, juice: juiceOr(spreadRow.openJuice) },
-          bottom: {
-            label: flipSpread(spreadRow.open),
-            juice: juiceOr(spreadRow.openJuiceHome),
-          },
-        }
-      : EMPTY_PAIR;
-    const bestLine: PricePair = spreadRow?.best
-      ? {
-          top: { label: spreadRow.best, juice: juiceOr(spreadRow.bestJuice) },
-          bottom: {
-            label: flipSpread(spreadRow.best),
-            juice: juiceOr(spreadRow.bestJuiceHome),
-          },
-        }
-      : EMPTY_PAIR;
+    let openLine: PricePair = EMPTY_PAIR;
+    let bestLine: PricePair = EMPTY_PAIR;
+    if (isMoneyline && lineRow) {
+      // Americans are the price — do not flip like spreads.
+      const openAway = lineRow.open ?? lineRow.openJuice;
+      const openHome = lineRow.openJuiceHome;
+      const bestAway = lineRow.best ?? lineRow.bestJuice ?? openAway;
+      const bestHome = lineRow.bestJuiceHome ?? openHome;
+      openLine = openAway
+        ? {
+            top: { label: openAway, juice: "—" },
+            bottom: { label: openHome || "—", juice: "—" },
+          }
+        : EMPTY_PAIR;
+      bestLine = bestAway
+        ? {
+            top: { label: bestAway, juice: "—" },
+            bottom: { label: bestHome || "—", juice: "—" },
+          }
+        : EMPTY_PAIR;
+    } else if (lineRow?.open || lineRow?.best) {
+      openLine = lineRow?.open
+        ? {
+            top: { label: lineRow.open, juice: juiceOr(lineRow.openJuice) },
+            bottom: {
+              label: flipSpread(lineRow.open),
+              juice: juiceOr(lineRow.openJuiceHome),
+            },
+          }
+        : EMPTY_PAIR;
+      bestLine = lineRow?.best
+        ? {
+            top: { label: lineRow.best, juice: juiceOr(lineRow.bestJuice) },
+            bottom: {
+              label: flipSpread(lineRow.best),
+              juice: juiceOr(lineRow.bestJuiceHome),
+            },
+          }
+        : EMPTY_PAIR;
+    }
     const t = totalRow?.open ?? totalRow?.best ?? "—";
     const openOU: PricePair =
       t !== "—"
@@ -432,15 +476,25 @@ export function flatRowsToLegacy(
           }
         : EMPTY_PAIR;
 
-    const spreadKei = spreadRow?.kei;
+    const lineKei = lineRow?.kei;
     const totalKei = totalRow?.kei;
-    // KEI spread is home-side; flip so Away (top) / Home (bottom) match Open/Best.
-    const keiLine: PricePair = spreadKei
-      ? {
-          top: { label: flipSpread(spreadKei), juice: "—" },
-          bottom: { label: spreadKei, juice: "—" },
-        }
-      : EMPTY_PAIR;
+    let keiLine: PricePair = EMPTY_PAIR;
+    if (isMoneyline) {
+      const keiHome = lineKei;
+      const keiAway = lineRow?.keiAway;
+      if (keiHome || keiAway) {
+        keiLine = {
+          top: { label: keiAway || "—", juice: "—" },
+          bottom: { label: keiHome || "—", juice: "—" },
+        };
+      }
+    } else if (lineKei) {
+      // KEI spread is home-side; flip so Away (top) / Home (bottom) match Open/Best.
+      keiLine = {
+        top: { label: flipSpread(lineKei), juice: "—" },
+        bottom: { label: lineKei, juice: "—" },
+      };
+    }
     const keiOU: PricePair = totalKei
       ? {
           top: { label: `o${totalKei}`, juice: "—" },
@@ -457,28 +511,61 @@ export function flatRowsToLegacy(
       return Number.isFinite(n) ? n : null;
     };
     // Edge only vs a real sportsbook/market best — never vs KEINFL provisional.
-    const spreadBookKey = String(spreadRow?.bookKey ?? "").toLowerCase();
+    const lineBookKey = String(lineRow?.bookKey ?? "").toLowerCase();
     const totalBookKey = String(totalRow?.bookKey ?? "").toLowerCase();
-    const hasSportsbookSpread =
-      Boolean(spreadRow?.best) &&
-      spreadBookKey !== "" &&
-      spreadBookKey !== "keinfl";
+    const hasSportsbookLine =
+      Boolean(lineRow?.best || (isMoneyline && lineRow?.bestJuiceHome)) &&
+      lineBookKey !== "" &&
+      lineBookKey !== "keinfl";
     const hasSportsbookTotal =
       Boolean(totalRow?.best) &&
       totalBookKey !== "" &&
       totalBookKey !== "keinfl";
 
-    // Compare home-side market vs home-side KEI.
-    // Signed edge matches fair-lines / nfl-edges: kei_home - market_home.
-    // Negative => model likes Home more; positive => Away.
-    const bestSpreadNum = parseSpread(bestLine.bottom.label);
-    const keiSpreadNum = parseSpread(keiLine.bottom.label);
-    const signedLineEdge =
-      hasSportsbookSpread && bestSpreadNum != null && keiSpreadNum != null
-        ? keiSpreadNum - bestSpreadNum
-        : null;
-    const edgeLineNum =
-      signedLineEdge != null ? Math.abs(signedLineEdge) : undefined;
+    let signedLineEdge: number | null = null;
+    let edgeLineNum: number | undefined;
+    let leanHome: boolean | null = null;
+
+    if (isMoneyline) {
+      // Prob-point edge: model home win prob − market no-vig home (same book pair).
+      const modelHomeProb = lineRow?.homeWinProb;
+      const bestAwayAm = parseAmericanLabel(bestLine.top.label);
+      const bestHomeAm = parseAmericanLabel(bestLine.bottom.label);
+      const marketHome =
+        bestHomeAm != null && bestAwayAm != null
+          ? noVigHomeProb(bestHomeAm, bestAwayAm)
+          : null;
+      if (
+        hasSportsbookLine &&
+        modelHomeProb != null &&
+        Number.isFinite(modelHomeProb) &&
+        marketHome != null
+      ) {
+        const signedProb = modelHomeProb - marketHome;
+        signedLineEdge = signedProb;
+        // Display / tag thresholds use percentage points (aligns with ≥1 LEAN / ≥2.5 PLAY).
+        edgeLineNum = Math.abs(signedProb) * 100;
+        leanHome =
+          signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
+      }
+    } else {
+      // Compare home-side market vs home-side KEI.
+      // Signed edge matches fair-lines / nfl-edges: kei_home - market_home.
+      // Negative => model likes Home more; positive => Away.
+      const bestSpreadNum = parseSpread(bestLine.bottom.label);
+      const keiSpreadNum = parseSpread(keiLine.bottom.label);
+      signedLineEdge =
+        hasSportsbookLine && bestSpreadNum != null && keiSpreadNum != null
+          ? keiSpreadNum - bestSpreadNum
+          : null;
+      edgeLineNum =
+        signedLineEdge != null ? Math.abs(signedLineEdge) : undefined;
+      leanHome =
+        signedLineEdge != null && signedLineEdge !== 0
+          ? signedLineEdge < 0
+          : null;
+    }
+
     const bestTotalNum = parseTotal(bestOU.top.label);
     const keiTotalNum = parseTotal(keiOU.top.label);
     const signedOUEdge =
@@ -487,11 +574,6 @@ export function flatRowsToLegacy(
         : null;
     const edgeOUNum = signedOUEdge != null ? Math.abs(signedOUEdge) : undefined;
 
-    // Exact zero = no directional lean (tag will be PASS).
-    const leanHome =
-      signedLineEdge != null && signedLineEdge !== 0
-        ? signedLineEdge < 0
-        : null;
     const leanOver =
       signedOUEdge != null && signedOUEdge !== 0 ? signedOUEdge > 0 : null;
     const edgeLineFavor =
@@ -532,7 +614,7 @@ export function flatRowsToLegacy(
         : COMING_SOON_PAIR;
 
     result.push({
-      id: String(spread?.id ?? total?.id ?? gameKey),
+      id: String(lineRow?.id ?? total?.id ?? gameKey),
       time,
       teamA: {
         name: away,
@@ -554,7 +636,7 @@ export function flatRowsToLegacy(
       openLine,
       bestLine,
       bestOU,
-      bestLineBook: spreadRow?.bookKey ?? spreadRow?.book,
+      bestLineBook: lineRow?.bookKey ?? lineRow?.book,
       bestOUBook: totalRow?.bookKey ?? totalRow?.book,
       keiLine,
       keiOU,
@@ -571,14 +653,14 @@ export function flatRowsToLegacy(
         edgeLineNum,
         "line",
         sportKey,
-        spreadRow?.seasonType ?? totalRow?.seasonType,
-        spreadRow?.publishTag,
+        lineRow?.seasonType ?? totalRow?.seasonType,
+        lineRow?.publishTag,
       ),
       tagOU: edgeToTag(
         edgeOUNum,
         "total",
         sportKey,
-        totalRow?.seasonType ?? spreadRow?.seasonType,
+        totalRow?.seasonType ?? lineRow?.seasonType,
         totalRow?.publishTag,
       ),
       overview: generateGameOverview(away, home),
@@ -607,6 +689,9 @@ export default function EdgeBoard({
     : sampleRows;
   const data = hasRealData ? legacy : sampleRows;
   const isNfl = String(sportKey).toLowerCase() === "nfl";
+  const isMlb = String(sportKey).toLowerCase() === "mlb";
+  const lineLabel = isMlb ? "ML" : "Line";
+  const edgeLineLabel = isMlb ? "ML edge" : "Spread edge";
 
   if (variant === "home") {
     return (
@@ -738,7 +823,7 @@ export default function EdgeBoard({
               className={`rounded-xl border border-white/10 px-3 py-2 ${edgeCellClass(r.tagLine)}`}
             >
               <div className="text-[10px] uppercase text-gray-500">
-                Spread edge
+                {edgeLineLabel}
               </div>
               <EdgeSideCell
                 edgeNum={r.edgeLineNum}
@@ -834,16 +919,16 @@ export default function EdgeBoard({
                   <HeaderStack a="Open" b="O/U" />
                 </th>
                 <th className={TH_BASE}>
-                  <HeaderStack a="Open" b="Line" />
+                  <HeaderStack a="Open" b={lineLabel} />
                 </th>
                 <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
-                  <HeaderStack a="Best" b="Line" />
+                  <HeaderStack a="Best" b={lineLabel} />
                 </th>
                 <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
                   <HeaderStack a="Best" b="O/U" />
                 </th>
                 <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
-                  <HeaderStack a={keiCode} b="Line" />
+                  <HeaderStack a={keiCode} b={lineLabel} />
                 </th>
                 <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
                   <HeaderStack a={keiCode} b="O/U" />
@@ -851,7 +936,7 @@ export default function EdgeBoard({
                 <th
                   className={`${TH_BASE} ${COL_DECISION} text-[14px] font-bold text-white normal-case tracking-normal`}
                 >
-                  <HeaderStack a="Edge" b="Line" />
+                  <HeaderStack a="Edge" b={isMlb ? "ML" : "Line"} />
                 </th>
                 <th
                   className={`${TH_BASE} text-[14px] font-bold text-white normal-case tracking-normal`}
@@ -861,7 +946,7 @@ export default function EdgeBoard({
                 <th
                   className={`${TH_BASE} text-center text-[14px] font-bold text-white normal-case tracking-normal`}
                 >
-                  <HeaderStack a="Tag" b="Line" />
+                  <HeaderStack a="Tag" b={isMlb ? "ML" : "Line"} />
                 </th>
                 <th
                   className={`${TH_BASE} text-center text-[14px] font-bold text-white normal-case tracking-normal`}
@@ -1013,9 +1098,13 @@ export default function EdgeBoard({
         <div className="px-4 py-3.5 text-[10px] text-gray-400 border-t border-white/10">
           {isNfl
             ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
-            : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
-          Edge shows pts + side favored. Tag shows the action at the best book.{" "}
-          {keiCode}: Kos Edge Index.
+            : isMlb
+              ? "MLB tags — PASS / LEAN (≥1.0pp) / PLAY (≥2.5pp) on moneyline edge vs no-vig market. "
+              : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
+          {isMlb
+            ? "ML edge is model win-prob minus market no-vig (percentage points). "
+            : "Edge shows pts + side favored. "}
+          Tag shows the action at the best book. {keiCode}: Kos Edge Index.
         </div>
       </div>
     </div>

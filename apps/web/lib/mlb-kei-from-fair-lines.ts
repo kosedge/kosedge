@@ -13,7 +13,11 @@ export function keiGamesFromMlbFairLines(
     homeTeam: line.homeTeam,
     awayTeam: line.awayTeam,
     commenceTime: line.startTime ?? line.gameDate ?? undefined,
+    // Keep run-line fair for desks that still consume projSpreadHome.
     projSpreadHome: line.fairSpreadHome,
     projTotal: line.fairTotal ?? line.totalMean,
+    projHomeMl: line.fairHomeMl,
+    projAwayMl: line.fairAwayMl,
+    homeWinProb: line.homeWinProb,
   }));
 }

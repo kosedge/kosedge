@@ -16,6 +16,12 @@ export type KeiLineGame = {
   commenceTime?: string;
   projSpreadHome: number | null;
   projTotal: number | null;
+  /** Fair home moneyline (American). Used by MLB edge board. */
+  projHomeMl?: number | null;
+  /** Fair away moneyline (American). Used by MLB edge board. */
+  projAwayMl?: number | null;
+  /** Model home win probability (0–1). Used for MLB ML edge in prob points. */
+  homeWinProb?: number | null;
 };
 
 export function getKeiLines(sportKey: string): KeiLineGame[] {
