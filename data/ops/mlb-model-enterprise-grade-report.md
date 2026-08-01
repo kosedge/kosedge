@@ -12,7 +12,7 @@
 | Area | Grade | Notes |
 |------|:-----:|-------|
 | Moneyline sharpness (Brier) | **D+** | Densify walkforward ~**0.2496–0.2502**; gate ≤0.24 fail |
-| Moneyline CLV | **D** | Intersection densify **~+0.004–0.005** (n=476); prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
+| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after SP FIP/xFIP + BP role trials; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
 | Calibration (ECE) | **B** | **0.017–0.027** ≪ 0.06 |
 | Leakage hygiene | **A** | **0** on HFA + stack ablation runs |
 | Totals MAE | **C+** | ~**3.47–3.52**; prod full-n total CLV ~+0.088 |
@@ -30,15 +30,17 @@
 | [#52](https://github.com/kosedge/kosedge/pull/52) | Restore **HFA=1.025** + enterprise report | merged + Railway |
 | [#53](https://github.com/kosedge/kosedge/pull/53) | Unused-holdout stake no-go artifacts | merged |
 | [#55](https://github.com/kosedge/kosedge/pull/55) | Stack ablation flags + S0–S3 densify grader | merged + Railway; **no stack ship** |
+| [#57](https://github.com/kosedge/kosedge/pull/57) | SP talent v2 (FIP/xFIP) + bullpen role flags + as-of densify | Railway deployed; **no default flip** (T1/T2/B1 fail gates) |
 
 ### Engineering detail
 
 1. **HFA ablation** — winner **1.025**; HFA-off worsens CLV.
 2. **Leakage** — lookback stamp repair; stays **0**.
-3. **SP identity** — live-first Stats API + priors on historical resim.
+3. **SP identity** — live-first Stats API + priors on historical resim; densify now uses **as-of** `byDateRange`.
 4. **Matchup PA** — present in prod; **ablation says leave ON** (S1 does not clear +0.015 gate).
 5. **Stack ablation (S0–S3)** — see `stack_ablation_2026-08-01.md`. Intersection n=476; matchup-off / wind-dir-off / K-BB-only quality do **not** restore subscription CLV.
-6. **Optional ML head** — still skipped.
+6. **SP talent v2 (T0–T2) + bullpen B1** — see `sp_talent_v2_2026-08-01.md`. FIP/xFIP and role-weighted bullpen do **not** clear +0.010 intersection ML CLV; production stays **era_whip** + bullpen quality off.
+7. **Optional ML head** — still skipped.
 
 ## Densify HFA ladder (prior session)
 
@@ -65,6 +67,20 @@ Fixed densify closing-line set **n=476** (≈ prior ~498 universe). HFA=1.025 fo
 
 Production full-n CLV after ablation (lookback 90): ML **+0.0049**, total **+0.088**, RL **+0.079** (count 971).
 
+## SP talent v2 + bullpen role (2026-08-01) — decision table
+
+Fixed densify closing-line set **n=476**. Stack = S0 (HFA 1.025, matchup ON, wind-dir ON). T0 adds as-of season stats vs prior S0.
+
+| Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | Leak |
+|--------|-------------:|-------------:|----------------:|---------:|-----:|
+| T0 era_whip (as-of) | +0.00426 | +0.025 | +0.002 | 0.24999 | 0 |
+| T1 fip_proxy | +0.00423 | +0.038 | +0.004 | 0.25037 | 0 |
+| T2 xfip_proxy | **+0.00434** | +0.038 | +0.002 | 0.25012 | 0 |
+| B1 bullpen role | +0.00399 | +0.038 | +0.002 | **0.24946** | 0 |
+
+**Ship:** none. T2’s ML edge over T0 is **+0.00008** (noise). B1 **worsens** ML for a Brier cosmetic. Defaults stay `era_whip` + bullpen role **off**.  
+Detail: `sp_talent_v2_2026-08-01.md`.
+
 ## Unused-holdout stake verdict
 
 | Item | Result |
@@ -80,13 +96,16 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 ## Blocking subscription-worthiness
 
 1. ML Brier still ≥0.248 vs 0.24 gate.  
-2. Intersection ML CLV ~+0.004–0.005 ≪ +0.015 gate; prior +0.023 was confounded.  
+2. Intersection ML CLV ~+0.004 ≪ +0.015 gate after stack **and** SP FIP/xFIP / BP role trials; prior +0.023 was confounded.  
 3. Unused holdout not large enough / not stake-green.  
-4. RL/total CLV must not be softened further for Brier cosmetics (S2 rejected).
+4. RL/total CLV must not be softened further for Brier cosmetics (S2 / B1 rejected).
 
 ## Artifacts
 
-- `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.md` ← **latest decision**
+- `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.md` ← **latest talent decision**
+- `data/ops/mlb-enterprise-holdout/sp_talent_v2_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/sp_talent_v2_bullpen_b1_2026-08-01.json`
+- `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/stack_ablation_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/hfa_ablation_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/hfa1025_resim_grade_2026-08-01.md`

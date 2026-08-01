@@ -10,16 +10,27 @@ import requests
 MLB_STATS_API = "https://statsapi.mlb.com/api/v1"
 
 # starter_quality construction:
-#   era_whip (default / S0–S2): ERA + WHIP results signal
+#   era_whip (default / S0): ERA + WHIP results signal
 #   kbb_only (S3 trial): predictive K/BB/GB shape only (no ERA/WHIP)
+#   fip_proxy (SP talent v2): FIP from HR/BB/HBP/K/IP counting stats
+#   xfip_proxy (SP talent v2): xFIP-style, HR replaced by GB/AO-implied expected HR
+STARTER_QUALITY_MODES = frozenset({"era_whip", "kbb_only", "fip_proxy", "xfip_proxy"})
 STARTER_QUALITY_MODE = (os.getenv("MLB_STARTER_QUALITY_MODE") or "era_whip").strip().lower()
+
+# FIP constant (~MLB recent); quality maps relative to league-average FIP.
+FIP_CONSTANT = 3.20
+FIP_LEAGUE_AVG = 4.00
+# League HR/FB proxy when reconstructing xFIP without Statcast FB%.
+XFIP_LG_HR_FB = 0.105
+# Approximate FB share of air outs (popups + flies); keeps xFIP scale sane.
+XFIP_FB_SHARE_OF_AIR = 0.72
 
 
 def apply_starter_quality_mode(mode: str) -> str:
     """Process-local override for densify stack ablation (clears live SP cache)."""
     global STARTER_QUALITY_MODE
     normalized = (mode or "era_whip").strip().lower()
-    if normalized not in {"era_whip", "kbb_only"}:
+    if normalized not in STARTER_QUALITY_MODES:
         raise ValueError(f"unsupported starter quality mode: {mode}")
     STARTER_QUALITY_MODE = normalized
     cache_fn = globals().get("_live_starter_features")
@@ -34,6 +45,8 @@ def get_starter_quality_mode() -> str:
 
 def reset_starter_quality_mode_from_env() -> str:
     return apply_starter_quality_mode((os.getenv("MLB_STARTER_QUALITY_MODE") or "era_whip").strip().lower())
+
+
 OPEN_METEO_FORECAST_API = "https://api.open-meteo.com/v1/forecast"
 LEAGUE_BASELINE_OPS = 0.720
 RECENT_FORM_WINDOW_DAYS = 30
@@ -116,6 +129,54 @@ PARK_FACTOR_RUNS: Dict[str, float] = {
     "TOR": 1.01,
     "WSH": 1.00,
 }
+
+# Stats API team IDs for bullpen refetch on historical densify (abbr → mlb team id).
+MLB_TEAM_ID_BY_ABBR: Dict[str, int] = {
+    "AZ": 109,
+    "ARI": 109,
+    "ATL": 144,
+    "BAL": 110,
+    "BOS": 111,
+    "CHC": 112,
+    "CWS": 145,
+    "CHW": 145,
+    "CIN": 113,
+    "CLE": 114,
+    "COL": 115,
+    "DET": 116,
+    "HOU": 117,
+    "KC": 118,
+    "LAA": 108,
+    "LAD": 119,
+    "MIA": 146,
+    "MIL": 158,
+    "MIN": 142,
+    "NYM": 121,
+    "NYY": 147,
+    "OAK": 133,
+    "ATH": 133,
+    "PHI": 143,
+    "PIT": 134,
+    "SD": 135,
+    "SDP": 135,
+    "SEA": 136,
+    "SF": 137,
+    "SFG": 137,
+    "STL": 138,
+    "TB": 139,
+    "TBR": 139,
+    "TEX": 140,
+    "TOR": 141,
+    "WSH": 120,
+    "WAS": 120,
+}
+
+
+def mlb_team_id_for_abbr(abbr: Optional[str]) -> Optional[int]:
+    if not abbr:
+        return None
+    return MLB_TEAM_ID_BY_ABBR.get(str(abbr).strip().upper())
+
 
 UMP_RUN_FACTOR_PRIORS: Dict[str, float] = {
     # Coarse priors seeded from public historical run-environment discussions.
@@ -734,6 +795,54 @@ def _extract_pitching_stat_bucket(payload: Dict[str, Any]) -> Optional[Dict[str,
     return None
 
 
+def _bb_per_9_from_stat(stat: Dict[str, Any]) -> Optional[float]:
+    """Stats API exposes walksPer9Inn; older code looked for baseOnBallsPer9Inn (always null)."""
+    return _safe_float(stat.get("walksPer9Inn")) or _safe_float(stat.get("baseOnBallsPer9Inn"))
+
+
+def compute_fip_from_stat(stat: Dict[str, Any], *, use_xfip: bool = False) -> Optional[float]:
+    """FIP / xFIP-proxy from Stats API pitching counting stats. None if IP too small."""
+    ip = _parse_ip(stat.get("inningsPitched"))
+    if ip < 1.0:
+        return None
+    hr = float(_safe_int(stat.get("homeRuns")))
+    bb = float(_safe_int(stat.get("baseOnBalls")))
+    hbp = float(_safe_int(stat.get("hitByPitch")))
+    k = float(_safe_int(stat.get("strikeOuts")))
+    if use_xfip:
+        ground_outs = float(_safe_int(stat.get("groundOuts")))
+        air_outs = float(_safe_int(stat.get("airOuts")))
+        bip_air = ground_outs + air_outs
+        if bip_air > 0 and air_outs > 0:
+            fb_est = air_outs * XFIP_FB_SHARE_OF_AIR
+            hr = fb_est * XFIP_LG_HR_FB
+        else:
+            # Fall back to actual HR when GO/AO missing (still predictive via K/BB).
+            pass
+    return ((13.0 * hr) + (3.0 * (bb + hbp)) - (2.0 * k)) / ip + FIP_CONSTANT
+
+
+def _quality_from_fip(fip: float) -> float:
+    # Run-allowed factor: lower FIP ⇒ lower quality index (better pitcher).
+    return 1.0 + (float(fip) - FIP_LEAGUE_AVG) * 0.055
+
+
+def _quality_from_kbb_shape(
+    *,
+    k_per_9: Optional[float],
+    bb_per_9: Optional[float],
+    ground_outs_to_air_outs: Optional[float],
+) -> float:
+    starter_quality = 1.0
+    if k_per_9 is not None:
+        starter_quality -= (k_per_9 - 8.5) * 0.035
+    if bb_per_9 is not None:
+        starter_quality += (bb_per_9 - 3.1) * 0.055
+    if ground_outs_to_air_outs is not None:
+        starter_quality -= (ground_outs_to_air_outs - 1.0) * 0.04
+    return starter_quality
+
+
 def _starter_features_from_stat(
     *,
     starter_name: str,
@@ -741,14 +850,24 @@ def _starter_features_from_stat(
     season: int,
     handedness: str,
     stat: Dict[str, Any],
+    as_of: Optional[date] = None,
 ) -> Optional[Dict[str, Any]]:
     era = _safe_float(stat.get("era"))
     whip = _safe_float(stat.get("whip"))
     k_per_9 = _safe_float(stat.get("strikeoutsPer9Inn"))
-    bb_per_9 = _safe_float(stat.get("baseOnBallsPer9Inn"))
+    bb_per_9 = _bb_per_9_from_stat(stat)
     ground_outs_to_air_outs = _safe_float(stat.get("groundOutsToAirouts"))
+    ip = _parse_ip(stat.get("inningsPitched"))
+    fip = compute_fip_from_stat(stat, use_xfip=False)
+    xfip = compute_fip_from_stat(stat, use_xfip=True)
 
-    if era is None and whip is None and k_per_9 is None and bb_per_9 is None:
+    if (
+        era is None
+        and whip is None
+        and k_per_9 is None
+        and bb_per_9 is None
+        and fip is None
+    ):
         return None
 
     k_factor = 1.0 if k_per_9 is None else 1.0 + (k_per_9 - 8.5) * 0.028
@@ -759,23 +878,42 @@ def _starter_features_from_stat(
         else 1.0 + (ground_outs_to_air_outs - 1.0) * 0.06
     )
 
-    if STARTER_QUALITY_MODE == "kbb_only":
-        # Predictive run-allowed factor: more K / GB suppress; more BB inflate.
-        starter_quality = 1.0
-        if k_per_9 is not None:
-            starter_quality -= (k_per_9 - 8.5) * 0.035
-        if bb_per_9 is not None:
-            starter_quality += (bb_per_9 - 3.1) * 0.055
-        if ground_outs_to_air_outs is not None:
-            starter_quality -= (ground_outs_to_air_outs - 1.0) * 0.04
+    mode = STARTER_QUALITY_MODE
+    if mode == "kbb_only":
+        starter_quality = _quality_from_kbb_shape(
+            k_per_9=k_per_9,
+            bb_per_9=bb_per_9,
+            ground_outs_to_air_outs=ground_outs_to_air_outs,
+        )
+    elif mode == "fip_proxy":
+        if fip is not None and ip >= 8.0:
+            starter_quality = _quality_from_fip(fip)
+        else:
+            # Thin sample: fall back to K-BB shape (still predictive, no ERA leak).
+            starter_quality = _quality_from_kbb_shape(
+                k_per_9=k_per_9,
+                bb_per_9=bb_per_9,
+                ground_outs_to_air_outs=ground_outs_to_air_outs,
+            )
+    elif mode == "xfip_proxy":
+        talent = xfip if xfip is not None else fip
+        if talent is not None and ip >= 8.0:
+            starter_quality = _quality_from_fip(talent)
+        else:
+            starter_quality = _quality_from_kbb_shape(
+                k_per_9=k_per_9,
+                bb_per_9=bb_per_9,
+                ground_outs_to_air_outs=ground_outs_to_air_outs,
+            )
     else:
+        # era_whip (S0 default)
         starter_quality = 1.0
         if era is not None:
             starter_quality += (era - 4.10) * 0.045
         if whip is not None:
             starter_quality += (whip - 1.28) * 0.18
 
-    return {
+    out: Dict[str, Any] = {
         "starter_quality": max(0.82, min(1.18, round(starter_quality, 4))),
         "k_factor": max(0.88, min(1.18, round(k_factor, 4))),
         "bb_factor": max(0.86, min(1.18, round(bb_factor, 4))),
@@ -785,15 +923,38 @@ def _starter_features_from_stat(
         "player_id": player_id,
         "player_name": starter_name,
         "season": season,
-        "quality_mode": STARTER_QUALITY_MODE,
+        "quality_mode": mode,
+        "innings_pitched": round(ip, 3),
     }
+    if fip is not None:
+        out["fip"] = round(fip, 4)
+    if xfip is not None:
+        out["xfip"] = round(xfip, 4)
+    if as_of is not None:
+        out["as_of"] = as_of.isoformat()
+    return out
 
 
-@lru_cache(maxsize=512)
-def _live_starter_features(starter_name: str, season: int) -> Optional[Dict[str, Any]]:
+def _season_start_approx(season: int) -> date:
+    return date(int(season), 3, 20)
+
+
+@lru_cache(maxsize=1024)
+def _live_starter_features(
+    starter_name: str,
+    season: int,
+    as_of_iso: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
     normalized_name = normalize_pitcher_name(starter_name)
     if not normalized_name:
         return None
+
+    as_of: Optional[date] = None
+    if as_of_iso:
+        try:
+            as_of = date.fromisoformat(as_of_iso)
+        except ValueError:
+            as_of = None
 
     candidate: Optional[Dict[str, Any]] = None
     for alias in _pitcher_search_aliases(starter_name):
@@ -827,11 +988,32 @@ def _live_starter_features(starter_name: str, season: int) -> Optional[Dict[str,
         return None
     handedness = str(((candidate.get("pitchHand") or {}).get("code") or "U")).upper()
 
-    stat_queries = [
-        {"stats": "season", "group": "pitching", "season": season},
-        {"stats": "season", "group": "pitching", "season": season - 1},
-        {"stats": "career", "group": "pitching"},
-    ]
+    # Prefer as-of date-range (leakage-safe for historical densify), then full season / prior / career.
+    stat_queries: List[Dict[str, Any]] = []
+    if as_of is not None:
+        end_as_of = as_of - timedelta(days=1)
+        season_start = _season_start_approx(season)
+        if end_as_of >= season_start:
+            stat_queries.append(
+                {
+                    "stats": "byDateRange",
+                    "group": "pitching",
+                    "season": season,
+                    "startDate": season_start.isoformat(),
+                    "endDate": end_as_of.isoformat(),
+                }
+            )
+        # Prior season full (known before game year) as fallback for early-season.
+        stat_queries.append({"stats": "season", "group": "pitching", "season": season - 1})
+    else:
+        stat_queries.extend(
+            [
+                {"stats": "season", "group": "pitching", "season": season},
+                {"stats": "season", "group": "pitching", "season": season - 1},
+            ]
+        )
+    stat_queries.append({"stats": "career", "group": "pitching"})
+
     for params in stat_queries:
         response = requests.get(
             f"{MLB_STATS_API}/people/{player_id}/stats",
@@ -844,7 +1026,8 @@ def _live_starter_features(starter_name: str, season: int) -> Optional[Dict[str,
             continue
         # Require a minimum sample so tiny early-season buckets don't dominate.
         ip = _parse_ip(stat.get("inningsPitched"))
-        if params.get("stats") == "season" and ip < 8.0:
+        stats_type = str(params.get("stats") or "")
+        if stats_type in {"season", "byDateRange"} and ip < 8.0:
             continue
         stat_season = int(params.get("season") or season)
         features = _starter_features_from_stat(
@@ -853,8 +1036,15 @@ def _live_starter_features(starter_name: str, season: int) -> Optional[Dict[str,
             season=stat_season,
             handedness=handedness,
             stat=stat,
+            as_of=as_of,
         )
         if features is not None:
+            if stats_type == "byDateRange":
+                features["stat_window"] = "as_of_season"
+            elif stats_type == "season":
+                features["stat_window"] = "season"
+            else:
+                features["stat_window"] = "career"
             return features
     return None
 
@@ -914,30 +1104,73 @@ def _safe_int(v: Any) -> int:
         return 0
 
 
+# Bullpen talent (separate from fatigue/availability — do not double-count).
+#   off (default): bullpen_quality stays 1.0 (fatigue path handles stress)
+#   role_weighted: closer/setup-weighted FIP-lite from recent relief apps
+BULLPEN_ROLE_QUALITY_MODES = frozenset({"off", "role_weighted"})
+BULLPEN_ROLE_QUALITY_MODE = (os.getenv("MLB_BULLPEN_ROLE_QUALITY_MODE") or "off").strip().lower()
+
+
+def apply_bullpen_role_quality_mode(mode: str) -> str:
+    global BULLPEN_ROLE_QUALITY_MODE
+    normalized = (mode or "off").strip().lower()
+    if normalized not in BULLPEN_ROLE_QUALITY_MODES:
+        raise ValueError(f"unsupported bullpen role quality mode: {mode}")
+    BULLPEN_ROLE_QUALITY_MODE = normalized
+    return BULLPEN_ROLE_QUALITY_MODE
+
+
+def get_bullpen_role_quality_mode() -> str:
+    return BULLPEN_ROLE_QUALITY_MODE
+
+
+def _reliever_role_weight(stats: Dict[str, Any]) -> float:
+    """Closer/setup get more weight than low-leverage mop-up."""
+    if _safe_int(stats.get("saves")) > 0:
+        return 1.55
+    if _safe_int(stats.get("holds")) > 0:
+        return 1.30
+    if _safe_int(stats.get("blownSaves")) > 0:
+        return 1.25
+    if _safe_int(stats.get("gamesFinished")) > 0:
+        return 1.10
+    return 0.75
+
+
+def _reliever_app_fip_quality(stats: Dict[str, Any]) -> Optional[float]:
+    """Single-appearance FIP-lite quality (run-allowed factor). None if no IP."""
+    ip = _parse_ip(stats.get("inningsPitched"))
+    if ip <= 0:
+        return None
+    hr = float(_safe_int(stats.get("homeRuns")))
+    bb = float(_safe_int(stats.get("baseOnBalls"))) + float(_safe_int(stats.get("hitByPitch")))
+    k = float(_safe_int(stats.get("strikeOuts")))
+    fip = ((13.0 * hr) + (3.0 * bb) - (2.0 * k)) / ip + FIP_CONSTANT
+    return max(0.82, min(1.18, 1.0 + (fip - FIP_LEAGUE_AVG) * 0.045))
+
+
 def fetch_team_bullpen_fatigue(team_id: Optional[int], as_of: date) -> Dict[str, float]:
+    neutral = {
+        "bullpen_ip_last3": 3.0,
+        "bullpen_appearances_last3": 6.0,
+        "bullpen_fatigue_score": 0.50,
+        "bullpen_availability_score": 0.65,
+        "bullpen_high_leverage_availability_score": 0.62,
+        "bullpen_quality": 1.0,
+    }
     if not team_id:
-        return {
-            "bullpen_ip_last3": 3.0,
-            "bullpen_appearances_last3": 6.0,
-            "bullpen_fatigue_score": 0.50,
-            "bullpen_availability_score": 0.65,
-            "bullpen_high_leverage_availability_score": 0.62,
-        }
+        return dict(neutral)
 
     pks = _fetch_team_recent_final_games(team_id, as_of, limit=3)
     if not pks:
-        return {
-            "bullpen_ip_last3": 3.0,
-            "bullpen_appearances_last3": 6.0,
-            "bullpen_fatigue_score": 0.50,
-            "bullpen_availability_score": 0.65,
-            "bullpen_high_leverage_availability_score": 0.62,
-        }
+        return dict(neutral)
 
     bullpen_ip_total = 0.0
     bullpen_apps_total = 0.0
     high_lev_apps = 0.0
     high_lev_ip = 0.0
+    role_quality_num = 0.0
+    role_quality_den = 0.0
     for pk in pks:
         box = requests.get(f"{MLB_STATS_API}/game/{pk}/boxscore", timeout=20)
         box.raise_for_status()
@@ -975,6 +1208,11 @@ def fetch_team_bullpen_fatigue(team_id: Optional[int], as_of: date) -> Dict[str,
             if is_high_lev:
                 high_lev_apps += 1.0
                 high_lev_ip += ip
+            app_q = _reliever_app_fip_quality(stats)
+            if app_q is not None:
+                w = _reliever_role_weight(stats)
+                role_quality_num += app_q * w * ip
+                role_quality_den += w * ip
 
     # 0.5 is neutral, >0.5 means more taxed bullpen.
     fatigue = 0.5 + min(0.45, (bullpen_ip_total - 9.0) * 0.03 + (bullpen_apps_total - 9.0) * 0.015)
@@ -986,25 +1224,43 @@ def fetch_team_bullpen_fatigue(team_id: Optional[int], as_of: date) -> Dict[str,
         (high_lev_ip - 3.5) * 0.07 + (high_lev_apps - 4.0) * 0.04,
     )
     high_lev_availability = max(0.08, min(0.95, high_lev_availability))
+
+    bullpen_quality = 1.0
+    if BULLPEN_ROLE_QUALITY_MODE == "role_weighted" and role_quality_den > 0:
+        bullpen_quality = max(0.85, min(1.15, role_quality_num / role_quality_den))
+
     return {
         "bullpen_ip_last3": round(bullpen_ip_total, 3),
         "bullpen_appearances_last3": round(bullpen_apps_total, 3),
         "bullpen_fatigue_score": round(fatigue, 4),
         "bullpen_availability_score": round(availability, 4),
         "bullpen_high_leverage_availability_score": round(high_lev_availability, 4),
+        "bullpen_quality": round(bullpen_quality, 4),
     }
 
 
-def starter_identity_features(starter_name: Optional[str], *, season: Optional[int] = None) -> Dict[str, Any]:
+def _prior_quality_from_shape(k_factor: float, bb_factor: float, gb_factor: float) -> float:
+    """Predictive prior when ERA/WHIP quality would leak results into FIP/KBB modes."""
+    quality = 1.0 - (k_factor - 1.0) * 0.55 + (bb_factor - 1.0) * 0.70 - (gb_factor - 1.0) * 0.15
+    return max(0.85, min(1.15, round(quality, 4)))
+
+
+def starter_identity_features(
+    starter_name: Optional[str],
+    *,
+    season: Optional[int] = None,
+    as_of: Optional[date] = None,
+) -> Dict[str, Any]:
     if not starter_name:
         return _neutral_starter_features(source="neutral")
 
     key = normalize_pitcher_name(starter_name)
-    target_season = season or date.today().year
+    target_season = season or (as_of.year if as_of is not None else date.today().year)
+    as_of_iso = as_of.isoformat() if as_of is not None else None
 
     # Prefer live Stats API (true arsenal/shape) over static priors when resolvable.
     try:
-        live_features = _live_starter_features(starter_name, target_season)
+        live_features = _live_starter_features(starter_name, target_season, as_of_iso)
     except Exception:
         live_features = None
     if live_features is not None:
@@ -1015,10 +1271,9 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
         k_factor = float(known["k_factor"])
         bb_factor = float(known["bb_factor"])
         gb_factor = float(known["gb_factor"])
-        if STARTER_QUALITY_MODE == "kbb_only":
-            # Reconstruct quality from prior shape so S3 does not inherit ERA priors.
-            quality = 1.0 - (k_factor - 1.0) * 0.55 + (bb_factor - 1.0) * 0.70 - (gb_factor - 1.0) * 0.15
-            quality = max(0.85, min(1.15, round(quality, 4)))
+        if STARTER_QUALITY_MODE in {"kbb_only", "fip_proxy", "xfip_proxy"}:
+            # Reconstruct quality from prior shape so talent modes do not inherit ERA priors.
+            quality = _prior_quality_from_shape(k_factor, bb_factor, gb_factor)
         else:
             quality = float(known["quality"])
         return {
@@ -1029,6 +1284,7 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
             "handedness": str(known["handedness"]),
             "source": "static-prior",
             "quality_mode": STARTER_QUALITY_MODE,
+            "as_of": as_of_iso,
         }
 
     # Deterministic fallback from identity signature (low firmness path).
@@ -1036,8 +1292,8 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
     k_factor = 1.0 + ((score % 11) - 5) * 0.008
     bb_factor = 1.0 - ((score % 9) - 4) * 0.007
     gb_factor = 1.0 + ((score % 7) - 3) * 0.01
-    if STARTER_QUALITY_MODE == "kbb_only":
-        quality = 1.0 - (k_factor - 1.0) * 0.55 + (bb_factor - 1.0) * 0.70 - (gb_factor - 1.0) * 0.15
+    if STARTER_QUALITY_MODE in {"kbb_only", "fip_proxy", "xfip_proxy"}:
+        quality = _prior_quality_from_shape(k_factor, bb_factor, gb_factor)
     else:
         quality = 1.0 + ((score % 13) - 6) * 0.01
     hand = "L" if key.split(" ")[-1].endswith(("ez", "er", "is")) and (score % 5 == 0) else "R"
@@ -1049,6 +1305,7 @@ def starter_identity_features(starter_name: Optional[str], *, season: Optional[i
         "handedness": hand,
         "source": "heuristic-fallback",
         "quality_mode": STARTER_QUALITY_MODE,
+        "as_of": as_of_iso,
     }
 
 
