@@ -29,6 +29,9 @@ describe("keiGamesFromMlbFairLines", () => {
     expect(games[0]?.awayTeam).toBe("New York Yankees");
     expect(games[0]?.projSpreadHome).toBe(-1.5);
     expect(games[0]?.projTotal).toBe(9.0);
+    expect(games[0]?.projHomeMl).toBe(-120);
+    expect(games[0]?.projAwayMl).toBe(100);
+    expect(games[0]?.homeWinProb).toBe(0.55);
   });
 
   it("falls back to totalMean when fairTotal missing", () => {
