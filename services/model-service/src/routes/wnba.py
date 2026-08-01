@@ -734,8 +734,11 @@ def wnba_games(
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
-        ensure_wnba_model_tables(session)
-        session.commit()
+        try:
+            session.execute(text("SET LOCAL lock_timeout = '2s'"))
+            session.execute(text("SET LOCAL statement_timeout = '5s'"))
+        except Exception:
+            pass
         target = game_date or date.today()
         games = _fetch_upcoming_games(session, target)
         return {

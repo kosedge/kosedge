@@ -9040,7 +9040,11 @@ def materialize_wnba_team_rolling_features(
     return _impl(days_back=days_back, window_games=window_games)
 
 
-@celery_app.task(name="src.tasks.pull_wnba_context_snapshot")
+@celery_app.task(
+    name="src.tasks.pull_wnba_context_snapshot",
+    soft_time_limit=120,
+    time_limit=180,
+)
 def pull_wnba_context_snapshot(days_ahead: int = 3) -> Dict[str, int]:
     from .services.wnba_jobs import pull_wnba_context_snapshot as _impl
 
