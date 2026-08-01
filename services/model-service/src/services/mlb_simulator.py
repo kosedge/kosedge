@@ -6,6 +6,19 @@ import random
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
+from .mlb_park_orientation import (
+    apply_totals_park_rel_wind_flag,
+    get_totals_park_rel_wind_enabled,
+    park_relative_wind_totals_mul,
+    reset_totals_park_rel_wind_from_env,
+)
+from .mlb_pitch_matchup import (
+    apply_pitch_matchup_flag,
+    get_pitch_matchup_enabled,
+    pitch_level_matchup_mul,
+    reset_pitch_matchup_from_env,
+)
+
 
 DEFAULT_MODEL_VERSION = "mlb-v1-pa-sim"
 EXTRA_INNING_GHOST_RUNNER_FACTOR = 1.32
@@ -31,6 +44,7 @@ def _env_flag(name: str, default: bool) -> bool:
 
 # Stack ablation knobs (env defaults; overridable via apply_stack_ablation_flags).
 # S0 production baseline: matchup ON, wind-dir mul ON.
+# Pitch-matchup + totals park-rel wind default OFF until densify ship gates clear.
 MATCHUP_MUL_ENABLED = _env_flag("MLB_MATCHUP_MUL_ENABLED", True)
 WEATHER_WIND_DIR_MUL_ENABLED = _env_flag("MLB_WEATHER_WIND_DIR_MUL_ENABLED", True)
 
@@ -39,13 +53,19 @@ def apply_stack_ablation_flags(
     *,
     matchup_mul_enabled: Optional[bool] = None,
     weather_wind_dir_mul_enabled: Optional[bool] = None,
+    pitch_matchup_enabled: Optional[bool] = None,
+    totals_park_rel_wind_enabled: Optional[bool] = None,
 ) -> Dict[str, bool]:
-    """Process-local flag overrides for densify stack ablation (S0–S3)."""
+    """Process-local flag overrides for densify stack ablation (S0–S3 + levers)."""
     global MATCHUP_MUL_ENABLED, WEATHER_WIND_DIR_MUL_ENABLED
     if matchup_mul_enabled is not None:
         MATCHUP_MUL_ENABLED = bool(matchup_mul_enabled)
     if weather_wind_dir_mul_enabled is not None:
         WEATHER_WIND_DIR_MUL_ENABLED = bool(weather_wind_dir_mul_enabled)
+    if pitch_matchup_enabled is not None:
+        apply_pitch_matchup_flag(bool(pitch_matchup_enabled))
+    if totals_park_rel_wind_enabled is not None:
+        apply_totals_park_rel_wind_flag(bool(totals_park_rel_wind_enabled))
     return get_stack_ablation_flags()
 
 
@@ -53,11 +73,15 @@ def get_stack_ablation_flags() -> Dict[str, bool]:
     return {
         "matchup_mul_enabled": bool(MATCHUP_MUL_ENABLED),
         "weather_wind_dir_mul_enabled": bool(WEATHER_WIND_DIR_MUL_ENABLED),
+        "pitch_matchup_enabled": bool(get_pitch_matchup_enabled()),
+        "totals_park_rel_wind_enabled": bool(get_totals_park_rel_wind_enabled()),
     }
 
 
 def reset_stack_ablation_flags_from_env() -> Dict[str, bool]:
     """Restore flags from environment (used after ablation loops)."""
+    reset_pitch_matchup_from_env()
+    reset_totals_park_rel_wind_from_env()
     return apply_stack_ablation_flags(
         matchup_mul_enabled=_env_flag("MLB_MATCHUP_MUL_ENABLED", True),
         weather_wind_dir_mul_enabled=_env_flag("MLB_WEATHER_WIND_DIR_MUL_ENABLED", True),
@@ -71,6 +95,7 @@ class MlbGameInputs:
     away_team: str
     starter_home: Optional[str] = None
     starter_away: Optional[str] = None
+    home_abbr: Optional[str] = None
     weather_temp_f: Optional[float] = None
     weather_wind_mph: Optional[float] = None
     weather_wind_dir_deg: Optional[float] = None
@@ -118,6 +143,9 @@ class MlbGameInputs:
     rest_days_away: float = 1.0
     weather_reliability: float = 1.0
     uncertainty_total_mul: float = 1.0
+    # Pitch-level arsenal matchup (Track 2); None ⇒ neutral when flag on.
+    pitcher_arsenal_home: Optional[Dict[str, float]] = None
+    pitcher_arsenal_away: Optional[Dict[str, float]] = None
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -437,6 +465,21 @@ def _build_run_rates(inputs: MlbGameInputs) -> Dict[str, float]:
     else:
         matchup_home = 1.0
         matchup_away = 1.0
+    # Track 2: pitch-type arsenal PA shape (orthogonal to season K/BB/GB matchup_mul).
+    pitch_mul_home = pitch_level_matchup_mul(
+        offense_split=inputs.offense_split_home,
+        recent_form=inputs.recent_form_index_home,
+        arsenal=getattr(inputs, "pitcher_arsenal_away", None),
+        opp_firmness=firm_away,
+    )
+    pitch_mul_away = pitch_level_matchup_mul(
+        offense_split=inputs.offense_split_away,
+        recent_form=inputs.recent_form_index_away,
+        arsenal=getattr(inputs, "pitcher_arsenal_home", None),
+        opp_firmness=firm_home,
+    )
+    matchup_home = _clamp(matchup_home * pitch_mul_home, 0.95, 1.05)
+    matchup_away = _clamp(matchup_away * pitch_mul_away, 0.95, 1.05)
     offense_home_full = _effective_offense_index(
         season_index=inputs.offense_home,
         split_index=inputs.offense_split_home,
@@ -603,6 +646,23 @@ def simulate_mlb_game(
     fg_p50 = _quantile(fg_totals, 0.50)
     fg_p90 = _quantile(fg_totals, 0.90)
 
+    # Track 3: park-relative wind adjusts TOTALS ONLY (ML / spreads untouched).
+    totals_wind_mul = park_relative_wind_totals_mul(
+        home_abbr=getattr(inputs, "home_abbr", None),
+        wind_from_deg=inputs.weather_wind_dir_deg,
+        wind_mph=inputs.weather_wind_mph,
+        weather_reliability=float(getattr(inputs, "weather_reliability", 1.0) or 1.0),
+    )
+    if abs(totals_wind_mul - 1.0) >= 1e-9:
+        f5_mean *= totals_wind_mul
+        fg_mean *= totals_wind_mul
+        f5_p10 *= totals_wind_mul
+        f5_p50 *= totals_wind_mul
+        f5_p90 *= totals_wind_mul
+        fg_p10 *= totals_wind_mul
+        fg_p50 *= totals_wind_mul
+        fg_p90 *= totals_wind_mul
+
     drivers: List[Dict[str, object]] = []
     env_from_neutral = _environment_run_multiplier(inputs) - 1.0
     if abs(env_from_neutral) >= 0.015:
@@ -753,5 +813,8 @@ def simulate_mlb_game(
             else 0.0,
             "home_walkoff_rate": home_walkoff_wins / simulations,
             "drivers": drivers[:4],
+            "totals_park_rel_wind_mul": round(totals_wind_mul, 5),
+            "pitch_matchup_enabled": bool(get_pitch_matchup_enabled()),
+            "totals_park_rel_wind_enabled": bool(get_totals_park_rel_wind_enabled()),
         },
     }

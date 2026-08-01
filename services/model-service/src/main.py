@@ -98,6 +98,9 @@ TASK_MLB_HISTORICAL_RESIM = "src.tasks.backfill_mlb_historical_resim"
 TASK_MLB_STACK_ABLATION = "src.tasks.run_mlb_stack_ablation"
 TASK_MLB_SP_TALENT_ABLATION = "src.tasks.run_mlb_sp_talent_ablation"
 TASK_MLB_LINEUP_TIMING_ABLATION = "src.tasks.run_mlb_lineup_timing_ablation"
+TASK_MLB_LATE_INFO_STAMP_ABLATION = "src.tasks.run_mlb_late_info_stamp_ablation"
+TASK_MLB_PITCH_MATCHUP_ABLATION = "src.tasks.run_mlb_pitch_matchup_ablation"
+TASK_MLB_TOTALS_PARK_WIND_ABLATION = "src.tasks.run_mlb_totals_park_wind_ablation"
 MLB_MODEL_STATE_KEY = "mlb_active_model"
 
 
@@ -2064,6 +2067,111 @@ def job_mlb_lineup_timing_ablation(
         return {"task_id": async_result.id, "task_name": TASK_MLB_LINEUP_TIMING_ABLATION}
     except Exception as e:
         log.exception("Failed to enqueue mlb-lineup-timing-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-late-info-stamp-ablation")
+def job_mlb_late_info_stamp_ablation(
+    start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
+    end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
+    simulations: int = Query(2000, ge=500, le=10000),
+    max_games: int = Query(1200, ge=1, le=2000),
+    lookback_days: int = Query(90, ge=30, le=365),
+    configs: str = Query(
+        "H0,H1,H2",
+        description="Comma-separated: H0 −6h, H1 −3h, H2 −1h stamp + late-info CLV",
+    ),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    """Densify as-of stamp / late-info CLV ablation. Writes `{base}-lateinfo-*`."""
+    try:
+        cfg_list = [c.strip() for c in (configs or "").split(",") if c.strip()]
+        async_result = celery_app.send_task(
+            TASK_MLB_LATE_INFO_STAMP_ABLATION,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": int(simulations),
+                "max_games": int(max_games),
+                "lookback_days": int(lookback_days),
+                "configs": cfg_list,
+                "base_model_version": base_model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_LATE_INFO_STAMP_ABLATION}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-late-info-stamp-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-pitch-matchup-ablation")
+def job_mlb_pitch_matchup_ablation(
+    start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
+    end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
+    simulations: int = Query(2000, ge=500, le=10000),
+    max_games: int = Query(1200, ge=1, le=2000),
+    lookback_days: int = Query(90, ge=30, le=365),
+    configs: str = Query(
+        "M0,M1",
+        description="Comma-separated: M0 pitch matchup off, M1 pitch-level arsenal on",
+    ),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    """Densify pitch-level matchup ablation. Writes `{base}-pitchmux-*`."""
+    try:
+        cfg_list = [c.strip() for c in (configs or "").split(",") if c.strip()]
+        async_result = celery_app.send_task(
+            TASK_MLB_PITCH_MATCHUP_ABLATION,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": int(simulations),
+                "max_games": int(max_games),
+                "lookback_days": int(lookback_days),
+                "configs": cfg_list,
+                "base_model_version": base_model_version,
+            },
+        )
+        return {"task_id": async_result.id, "task_name": TASK_MLB_PITCH_MATCHUP_ABLATION}
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-pitch-matchup-ablation")
+        raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
+
+
+@app.post("/api/jobs/mlb-totals-park-wind-ablation")
+def job_mlb_totals_park_wind_ablation(
+    start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
+    end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
+    simulations: int = Query(2000, ge=500, le=10000),
+    max_games: int = Query(1200, ge=1, le=2000),
+    lookback_days: int = Query(90, ge=30, le=365),
+    configs: str = Query(
+        "W0,W1",
+        description="Comma-separated: W0 park-rel wind off, W1 totals-only park-rel on",
+    ),
+    base_model_version: str = Query("mlb-v1-pa-sim"),
+) -> Dict[str, str]:
+    """Densify totals-only park-relative wind ablation. Writes `{base}-parkwind-*`."""
+    try:
+        cfg_list = [c.strip() for c in (configs or "").split(",") if c.strip()]
+        async_result = celery_app.send_task(
+            TASK_MLB_TOTALS_PARK_WIND_ABLATION,
+            kwargs={
+                "start_date": start_date,
+                "end_date": end_date,
+                "simulations": int(simulations),
+                "max_games": int(max_games),
+                "lookback_days": int(lookback_days),
+                "configs": cfg_list,
+                "base_model_version": base_model_version,
+            },
+        )
+        return {
+            "task_id": async_result.id,
+            "task_name": TASK_MLB_TOTALS_PARK_WIND_ABLATION,
+        }
+    except Exception as e:
+        log.exception("Failed to enqueue mlb-totals-park-wind-ablation")
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 

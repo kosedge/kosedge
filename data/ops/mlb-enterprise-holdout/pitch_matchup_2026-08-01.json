@@ -1,0 +1,212 @@
+{
+  "status": "ok",
+  "start_date": "2026-05-20",
+  "end_date": "2026-07-17",
+  "lookback_days": 90,
+  "configs": [
+    "M0",
+    "M1"
+  ],
+  "results": {
+    "M0": {
+      "model_version": "mlb-v1-pa-sim-pitchmux-m0",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.250468,
+          "calibrated_brier_ml": 0.252345,
+          "base_mae_total_runs": 3.4828,
+          "calibrated_mae_total_runs": 3.5242,
+          "brier_improvement": -0.001878,
+          "mae_improvement": -0.0414,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.250468,
+        "calibrated_brier_ml": 0.252345,
+        "base_mae_total_runs": 3.4828,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250628,
+        "mae_total_runs": 3.5204,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.023334,
+        "max_bin_error": 0.498,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "pitch_matchup_enabled": false,
+        "model_suffix": "pitchmux-m0"
+      },
+      "pitch_matchup_enabled": false,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      }
+    },
+    "M1": {
+      "model_version": "mlb-v1-pa-sim-pitchmux-m1",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.249848,
+          "calibrated_brier_ml": 0.252704,
+          "base_mae_total_runs": 3.4779,
+          "calibrated_mae_total_runs": 3.5194,
+          "brier_improvement": -0.002856,
+          "mae_improvement": -0.0415,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00444,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.06329
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00444,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.06329
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.249848,
+        "calibrated_brier_ml": 0.252704,
+        "base_mae_total_runs": 3.4779,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250421,
+        "mae_total_runs": 3.5166,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.025592,
+        "max_bin_error": 0.5175,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00444,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.06329,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "pitch_matchup_enabled": true,
+        "model_suffix": "pitchmux-m1"
+      },
+      "pitch_matchup_enabled": true,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00444,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.06329
+      }
+    }
+  },
+  "intersection": {
+    "n": 476,
+    "by_config": {
+      "M0": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      },
+      "M1": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00444,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.06329
+      }
+    }
+  },
+  "recommendation": {
+    "ship_pitch_matchup": false,
+    "stretch_target_hit": false,
+    "m1_delta_vs_m0": 0.00061,
+    "note": "Ship MLB_PITCH_MATCHUP_ENABLED only if intersection ML CLV \u2265 +0.010 and beats M0 without torching RL/total. Not a starter_quality rewrite."
+  },
+  "props_play_stake_eligible": false,
+  "unused_holdout": {
+    "title": "MLB enterprise unused holdout (fallback constants)",
+    "status": "frozen_unused",
+    "registered_at": null,
+    "source": "fallback_constants",
+    "window_count": 2,
+    "date_count": 23,
+    "first_date": "2026-07-18",
+    "last_date": "2026-08-10",
+    "props_play_stake_eligible": false,
+    "stake_marketing_requires_unused_pass": true
+  },
+  "_task_id": "8092800b-971a-4381-9fb3-a3b6c6750ec0",
+  "_state": "SUCCESS"
+}

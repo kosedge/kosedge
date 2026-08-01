@@ -160,6 +160,9 @@ celery_app.conf.task_routes = {
     "src.tasks.run_mlb_stack_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_mlb_sp_talent_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_mlb_lineup_timing_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_late_info_stamp_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_pitch_matchup_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.run_mlb_totals_park_wind_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
 }
 
 # Beat schedule (optional; beat container can boot even if file missing)
