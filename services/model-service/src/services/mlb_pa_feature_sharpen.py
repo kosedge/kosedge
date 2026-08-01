@@ -124,13 +124,20 @@ def weather_reliability_mul(
     *,
     home_abbr: Optional[str],
     weather_temp_f: Optional[float],
+    weather_wind_mph: Optional[float] = None,
 ) -> float:
-    """Damp environmental weather when park is a dome / roof likely closed."""
+    """Damp environmental weather when park is a dome / roof likely closed.
+
+    Outdoor parks with temp-only (no wind) get partial credit — wind is the
+    dominant totals lever, so missing wind should not fully trust the env mul.
+    """
     abbr = (home_abbr or "").upper()
     if abbr in _DOME_OR_RETRACTABLE:
         return 0.35
     if weather_temp_f is None:
         return 0.55
+    if weather_wind_mph is None:
+        return 0.72
     return 1.0
 
 
@@ -268,6 +275,7 @@ def sharpen_game_inputs(
         weather_reliability=weather_reliability_mul(
             home_abbr=home_abbr,
             weather_temp_f=inputs.weather_temp_f,
+            weather_wind_mph=inputs.weather_wind_mph,
         ),
         uncertainty_total_mul=uncertainty_total_mul,
     )

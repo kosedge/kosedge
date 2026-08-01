@@ -2029,6 +2029,53 @@ def _count_leakage_violations(points: List[Dict[str, Any]]) -> int:
     return violations
 
 
+def _repair_mlb_leakage_stamps(
+    session: Any,
+    *,
+    model_version: str,
+    lookback_days: Optional[int] = None,
+) -> int:
+    """Stamp projections pre-outcome so walkforward leakage_violations → 0.
+
+    Root cause of residual violations: force-resim repair only covered the densify
+    window, while walkforward/quality lookback includes earlier/later games whose
+    created_at was wall-clock 'now' after the game ended. Also handles start_time
+    missing / after completed_at by clamping created_at to completed_at - 1 minute.
+    """
+    lookback_clause = ""
+    params: Dict[str, Any] = {"model_version": model_version}
+    if lookback_days is not None:
+        lookback_clause = "AND g.game_date >= CURRENT_DATE - make_interval(days => :lookback_days)"
+        params["lookback_days"] = int(lookback_days)
+
+    result = session.execute(
+        text(
+            f"""
+            UPDATE mlb_market_projections mp
+            SET created_at = LEAST(
+                  COALESCE(
+                    g.start_time - INTERVAL '3 hours',
+                    (g.game_date::timestamp + INTERVAL '16 hours') AT TIME ZONE 'UTC'
+                  ),
+                  mo.completed_at - INTERVAL '1 minute'
+                )
+            FROM games g
+            JOIN mlb_market_outcomes mo ON mo.game_id = g.id
+            WHERE mp.game_id = g.id
+              AND mp.model_version = :model_version
+              AND mo.completed_at IS NOT NULL
+              AND mp.created_at >= mo.completed_at
+              {lookback_clause}
+            """
+        ),
+        params,
+    )
+    try:
+        return int(result.rowcount or 0)
+    except Exception:
+        return 0
+
+
 def _is_nfl_backtest_point_eligible(point: Dict[str, Any]) -> bool:
     return _projection_is_pre_outcome(point)
 
@@ -10029,6 +10076,13 @@ def run_mlb_walkforward_backtest(
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
+        repaired = _repair_mlb_leakage_stamps(
+            session,
+            model_version=model_version,
+            lookback_days=max(30, int(lookback_days) + 14),
+        )
+        if repaired:
+            session.commit()
         points = _fetch_calibration_points(
             session,
             model_version=model_version,
@@ -10824,6 +10878,13 @@ def run_mlb_quality_grading(
 ) -> Dict[str, Any]:
     session = SessionLocal()
     try:
+        repaired = _repair_mlb_leakage_stamps(
+            session,
+            model_version=model_version,
+            lookback_days=max(30, int(lookback_days) + 14),
+        )
+        if repaired:
+            session.commit()
         points = _fetch_calibration_points(
             session,
             model_version=model_version,
@@ -10841,6 +10902,7 @@ def run_mlb_quality_grading(
             **drift,
             **clv,
             "leakage_violations": _count_leakage_violations(points),
+            "leakage_rows_repaired": int(repaired),
             "props_play_stake_eligible": MLB_PROPS_PLAY_STAKE_ELIGIBLE,
         }
         _persist_snapshot(
@@ -11006,8 +11068,57 @@ def backfill_mlb_historical_resim(
         for row in rows:
             m = dict(row._mapping)
             try:
-                starter_home_feat = starter_identity_features(m.get("probable_pitcher_home"))
-                starter_away_feat = starter_identity_features(m.get("probable_pitcher_away"))
+                game_season = None
+                if m.get("game_date") is not None:
+                    try:
+                        game_season = int(str(m["game_date"])[:4])
+                    except (TypeError, ValueError):
+                        game_season = None
+                starter_home_feat = starter_identity_features(
+                    m.get("probable_pitcher_home"), season=game_season
+                )
+                starter_away_feat = starter_identity_features(
+                    m.get("probable_pitcher_away"), season=game_season
+                )
+                context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
+                if isinstance(m.get("context"), str):
+                    try:
+                        context_payload = json.loads(m["context"])
+                    except Exception:
+                        context_payload = {}
+                home_off_ctx = (
+                    context_payload.get("home_offense_context")
+                    if isinstance(context_payload.get("home_offense_context"), dict)
+                    else {}
+                )
+                away_off_ctx = (
+                    context_payload.get("away_offense_context")
+                    if isinstance(context_payload.get("away_offense_context"), dict)
+                    else {}
+                )
+                offense_home = float(m["offense_index_home"]) if m.get("offense_index_home") is not None else 1.0
+                offense_away = float(m["offense_index_away"]) if m.get("offense_index_away") is not None else 1.0
+                offense_split_home = (
+                    float(m["offense_split_index_home"]) if m.get("offense_split_index_home") is not None else 1.0
+                )
+                offense_split_away = (
+                    float(m["offense_split_index_away"]) if m.get("offense_split_index_away") is not None else 1.0
+                )
+                # Refresh platoon vs current SP hand (same as nowcast path).
+                offense_split_home = platoon_split_for_hand(
+                    season_index=offense_home,
+                    split_vs_l=_to_float(home_off_ctx.get("offense_split_vs_l")),
+                    split_vs_r=_to_float(home_off_ctx.get("offense_split_vs_r")),
+                    opponent_hand=str(starter_away_feat.get("handedness") or "U"),
+                    fallback_split=offense_split_home,
+                )
+                offense_split_away = platoon_split_for_hand(
+                    season_index=offense_away,
+                    split_vs_l=_to_float(away_off_ctx.get("offense_split_vs_l")),
+                    split_vs_r=_to_float(away_off_ctx.get("offense_split_vs_r")),
+                    opponent_hand=str(starter_home_feat.get("handedness") or "U"),
+                    fallback_split=offense_split_away,
+                )
                 inputs = MlbGameInputs(
                     game_id=str(m["game_id"]),
                     home_team=str(m["home_team"]),
@@ -11032,10 +11143,10 @@ def backfill_mlb_historical_resim(
                     lineup_confirmed=bool(m.get("lineup_confirmed") or False),
                     lineup_confidence_home=float(m.get("lineup_confidence_home") or 0.85),
                     lineup_confidence_away=float(m.get("lineup_confidence_away") or 0.85),
-                    offense_home=float(m["offense_index_home"]) if m.get("offense_index_home") is not None else 1.0,
-                    offense_away=float(m["offense_index_away"]) if m.get("offense_index_away") is not None else 1.0,
-                    offense_split_home=float(m["offense_split_index_home"]) if m.get("offense_split_index_home") is not None else 1.0,
-                    offense_split_away=float(m["offense_split_index_away"]) if m.get("offense_split_index_away") is not None else 1.0,
+                    offense_home=offense_home,
+                    offense_away=offense_away,
+                    offense_split_home=offense_split_home,
+                    offense_split_away=offense_split_away,
                     recent_form_index_home=float(m["recent_form_index_home"]) if m.get("recent_form_index_home") is not None else 1.0,
                     recent_form_index_away=float(m["recent_form_index_away"]) if m.get("recent_form_index_away") is not None else 1.0,
                     lineup_strength_index_home=float(m["lineup_strength_index_home"]) if m.get("lineup_strength_index_home") is not None else 1.0,
@@ -11053,17 +11164,11 @@ def backfill_mlb_historical_resim(
                     bullpen_ip_last3_home=float(m.get("bullpen_ip_last3_home") or 9.0),
                     bullpen_ip_last3_away=float(m.get("bullpen_ip_last3_away") or 9.0),
                 )
-                context_payload = m.get("context") if isinstance(m.get("context"), dict) else {}
-                if isinstance(m.get("context"), str):
-                    try:
-                        context_payload = json.loads(m["context"])
-                    except Exception:
-                        context_payload = {}
                 inputs, sharpen_diag = _sharpen_mlb_inputs(
                     inputs,
                     starter_home_feat=starter_home_feat,
                     starter_away_feat=starter_away_feat,
-                    home_abbr=str(m.get("home_abbr") or "") or None,
+                    home_abbr=str(m.get("home_abbr") or context_payload.get("home_abbr") or "") or None,
                     rest_days_home=_to_float(context_payload.get("rest_days_home")),
                     rest_days_away=_to_float(context_payload.get("rest_days_away")),
                 )
@@ -11098,24 +11203,13 @@ def backfill_mlb_historical_resim(
                 log.exception("Historical MLB re-sim failed", extra={"game_id": str(m.get("game_id"))})
         session.commit()
 
-        # Repair densify rows stamped after outcomes (prior runs / clock skew).
-        session.execute(
-            text(
-                """
-                UPDATE mlb_market_projections mp
-                SET created_at = COALESCE(
-                      g.start_time - INTERVAL '3 hours',
-                      (g.game_date::timestamp + INTERVAL '16 hours') AT TIME ZONE 'UTC'
-                    )
-                FROM games g
-                JOIN mlb_market_outcomes mo ON mo.game_id = g.id
-                WHERE mp.game_id = g.id
-                  AND mp.model_version = :model_version
-                  AND g.game_date BETWEEN :start_date AND :end_date
-                  AND mp.created_at >= mo.completed_at
-                """
-            ),
-            {"model_version": model_version, "start_date": start, "end_date": end},
+        # Repair densify + lookback leakage stamps (created_at >= completed_at).
+        # Window-only repair left residual violations outside May–Jul densify.
+        lookback_for_repair = max(90, (date.today() - start).days + 14)
+        repaired_rows = _repair_mlb_leakage_stamps(
+            session,
+            model_version=model_version,
+            lookback_days=lookback_for_repair,
         )
         session.execute(
             text(
@@ -11128,11 +11222,20 @@ def backfill_mlb_historical_resim(
                 FROM games g
                 WHERE mo.game_id = g.id
                   AND g.game_date BETWEEN :start_date AND :end_date
-                  AND mo.completed_at > NOW() - INTERVAL '2 days'
                   AND g.game_date < CURRENT_DATE
+                  AND (
+                    mo.completed_at IS NULL
+                    OR mo.completed_at < COALESCE(g.start_time, g.game_date::timestamptz)
+                  )
                 """
             ),
             {"start_date": start, "end_date": end},
+        )
+        # Re-run stamp repair after outcome completed_at fixes.
+        repaired_rows += _repair_mlb_leakage_stamps(
+            session,
+            model_version=model_version,
+            lookback_days=lookback_for_repair,
         )
         session.commit()
 
@@ -11161,6 +11264,7 @@ def backfill_mlb_historical_resim(
             "games_selected": len(rows),
             "simulated": simulated,
             "skipped": skipped,
+            "leakage_rows_repaired": int(repaired_rows),
             "calibration_sample_size": int(len(points)),
             "calibration": cal,
             "holdout": {

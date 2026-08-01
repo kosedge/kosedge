@@ -9,6 +9,7 @@ from .mlb_simulator import (
     MlbGameInputs,
     _effective_lineup_confidence,
     _effective_offense_index,
+    _offense_pitcher_matchup_mul,
 )
 
 PITCH_SIM_MODEL_VERSION = "mlb-v2-pitch-sim"
@@ -234,38 +235,72 @@ def simulate_mlb_game_pitch_by_pitch(
         inputs.lineup_confidence_away,
         inputs.info_freshness_score_away,
     )
-    offense_home_early = _effective_offense_index(
-        season_index=inputs.offense_home,
-        split_index=inputs.offense_split_home,
-        recent_index=inputs.recent_form_index_home,
-        lineup_index=inputs.lineup_strength_index_home,
-        effective_confidence=eff_conf_home,
-        starter_facing=True,
-    ) * HOME_FIELD_OFFENSE_MUL
-    offense_away_early = _effective_offense_index(
-        season_index=inputs.offense_away,
-        split_index=inputs.offense_split_away,
-        recent_index=inputs.recent_form_index_away,
-        lineup_index=inputs.lineup_strength_index_away,
-        effective_confidence=eff_conf_away,
-        starter_facing=True,
-    ) * AWAY_FIELD_OFFENSE_MUL
-    offense_home_late = _effective_offense_index(
-        season_index=inputs.offense_home,
-        split_index=inputs.offense_split_home,
-        recent_index=inputs.recent_form_index_home,
-        lineup_index=inputs.lineup_strength_index_home,
-        effective_confidence=eff_conf_home,
-        starter_facing=False,
-    ) * HOME_FIELD_OFFENSE_MUL
-    offense_away_late = _effective_offense_index(
-        season_index=inputs.offense_away,
-        split_index=inputs.offense_split_away,
-        recent_index=inputs.recent_form_index_away,
-        lineup_index=inputs.lineup_strength_index_away,
-        effective_confidence=eff_conf_away,
-        starter_facing=False,
-    ) * AWAY_FIELD_OFFENSE_MUL
+    firm_home = _clamp(float(getattr(inputs, "starter_firmness_home", 0.85) or 0.85), 0.35, 1.0)
+    firm_away = _clamp(float(getattr(inputs, "starter_firmness_away", 0.85) or 0.85), 0.35, 1.0)
+    matchup_home = _offense_pitcher_matchup_mul(
+        offense_split=inputs.offense_split_home,
+        recent_form=inputs.recent_form_index_home,
+        opp_k_factor=inputs.starter_k_factor_away,
+        opp_bb_factor=inputs.starter_bb_factor_away,
+        opp_gb_factor=inputs.starter_gb_factor_away,
+        opp_firmness=firm_away,
+    )
+    matchup_away = _offense_pitcher_matchup_mul(
+        offense_split=inputs.offense_split_away,
+        recent_form=inputs.recent_form_index_away,
+        opp_k_factor=inputs.starter_k_factor_home,
+        opp_bb_factor=inputs.starter_bb_factor_home,
+        opp_gb_factor=inputs.starter_gb_factor_home,
+        opp_firmness=firm_home,
+    )
+    offense_home_early = (
+        _effective_offense_index(
+            season_index=inputs.offense_home,
+            split_index=inputs.offense_split_home,
+            recent_index=inputs.recent_form_index_home,
+            lineup_index=inputs.lineup_strength_index_home,
+            effective_confidence=eff_conf_home,
+            starter_facing=True,
+        )
+        * HOME_FIELD_OFFENSE_MUL
+        * _clamp(1.0 + (matchup_home - 1.0) * 1.25, 0.96, 1.04)
+    )
+    offense_away_early = (
+        _effective_offense_index(
+            season_index=inputs.offense_away,
+            split_index=inputs.offense_split_away,
+            recent_index=inputs.recent_form_index_away,
+            lineup_index=inputs.lineup_strength_index_away,
+            effective_confidence=eff_conf_away,
+            starter_facing=True,
+        )
+        * AWAY_FIELD_OFFENSE_MUL
+        * _clamp(1.0 + (matchup_away - 1.0) * 1.25, 0.96, 1.04)
+    )
+    offense_home_late = (
+        _effective_offense_index(
+            season_index=inputs.offense_home,
+            split_index=inputs.offense_split_home,
+            recent_index=inputs.recent_form_index_home,
+            lineup_index=inputs.lineup_strength_index_home,
+            effective_confidence=eff_conf_home,
+            starter_facing=False,
+        )
+        * HOME_FIELD_OFFENSE_MUL
+        * matchup_home
+    )
+    offense_away_late = (
+        _effective_offense_index(
+            season_index=inputs.offense_away,
+            split_index=inputs.offense_split_away,
+            recent_index=inputs.recent_form_index_away,
+            lineup_index=inputs.lineup_strength_index_away,
+            effective_confidence=eff_conf_away,
+            starter_facing=False,
+        )
+        * AWAY_FIELD_OFFENSE_MUL
+        * matchup_away
+    )
 
     defense_home_st = _clamp(1.0 / max(0.01, inputs.starter_quality_home), 0.75, 1.30)
     defense_away_st = _clamp(1.0 / max(0.01, inputs.starter_quality_away), 0.75, 1.30)

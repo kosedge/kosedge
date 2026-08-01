@@ -1,0 +1,35 @@
+{
+  "selected_hfa_home_mul": 1.025,
+  "candidates": [
+    {
+      "hfa_home_mul": 1.035,
+      "avg_model_home_win_prob": 0.5399,
+      "avg_fg_total_mean": 9.051,
+      "brier_ml": 0.248471,
+      "clv_proxy_vs_market": -0.00275
+    },
+    {
+      "hfa_home_mul": 1.025,
+      "avg_model_home_win_prob": 0.5269,
+      "avg_fg_total_mean": 9.049,
+      "brier_ml": 0.249645,
+      "clv_proxy_vs_market": -0.00485
+    },
+    {
+      "hfa_home_mul": 1.02,
+      "avg_model_home_win_prob": 0.5203,
+      "avg_fg_total_mean": 9.057,
+      "brier_ml": 0.250753,
+      "clv_proxy_vs_market": -0.00624
+    },
+    {
+      "hfa_home_mul": 1.0,
+      "avg_model_home_win_prob": 0.4991,
+      "avg_fg_total_mean": 9.07,
+      "brier_ml": 0.256108,
+      "clv_proxy_vs_market": -0.01195
+    }
+  ],
+  "selection_rule": "Exclude 1.035 per production CLV failure; keep 1.025",
+  "production_baseline_ml_clv_after_1035": 0.00702
+}
