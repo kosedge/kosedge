@@ -27,7 +27,8 @@
 | [#49](https://github.com/kosedge/kosedge/pull/49) | Ops grade + `force_resim` API | merged → `deploy-vercel` |
 | [#50](https://github.com/kosedge/kosedge/pull/50) | HFA→1.025, leakage repair, SP identity, matchup mul, weather wind damp | merged + Railway |
 | [#51](https://github.com/kosedge/kosedge/pull/51) | HFA-off trial + 1.025 grade artifacts | merged |
-| Follow-up | Restore **HFA=1.025** as ablation winner among leakage-clean runs | this commit / Railway |
+| [#52](https://github.com/kosedge/kosedge/pull/52) | Restore **HFA=1.025** + enterprise report | merged + Railway |
+| [#53](https://github.com/kosedge/kosedge/pull/53) | Unused-holdout stake no-go artifacts | merged |
 
 ### Engineering detail
 
@@ -55,7 +56,6 @@
 |------|--------|
 | Train exclusion | Enforced (`unused_holdout_excluded_from_train=true`) |
 | Eval resim | 117 games (2026-07-18→08-01), leakage=0 |
-| Eval n available (walkforward unused pts) | **51** (� games (2026-07-18→08-01), leakage=0 |
 | Eval n available (walkforward unused pts) | **51** (≪ 120 target) |
 | Stake marketing | **OFF** — fail Brier, fail CLV vs prior bar, holdout n short |
 | Props PLAY stake | **OFF** / `research_only` |
@@ -73,6 +73,7 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 
 - `data/ops/mlb-enterprise-holdout/hfa_ablation_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/hfa1025_resim_grade_2026-08-01.md`
+- `data/ops/mlb-enterprise-holdout/unused_holdout_stake_verdict_2026-08-01.md`
 - `data/ops/mlb-enterprise-holdout/*_hfa1025_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/*_hfa100_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/ml_sharpness_resim_grade_2026-08-01.md` (prior)
