@@ -146,10 +146,10 @@ def test_pitch_by_pitch_simulator_is_stable_with_seed() -> None:
     assert a["diagnostics"]["simulator_type"] == "pitch_by_pitch"
 
 
-def test_neutral_slate_has_home_field_moneyline_edge() -> None:
-    """MLB HFA: neutral inputs should favor home ~52–55%, not a coin flip.
+def test_neutral_slate_hfa_off_is_near_coin_flip() -> None:
+    """HFA currently off (1.0): densify-window CLV rejected 1.035/1.025.
 
-    Production CLV rejected 1.035; current constant is 1.025 (see ablation ops note).
+    Neutral slate should sit near 0.50 home; totals stay near baseline.
     """
     inputs = MlbGameInputs(
         game_id="game-hfa",
@@ -157,8 +157,7 @@ def test_neutral_slate_has_home_field_moneyline_edge() -> None:
         away_team="St. Louis Cardinals",
     )
     markets = simulate_mlb_game(inputs, simulations=6000, seed=11)["markets"]
-    assert 0.515 <= markets["fg_home_win_prob"] <= 0.555
-    # Totals-neutral design: product of HFA muls ≈ 1, so total stays near baseline.
+    assert 0.47 <= markets["fg_home_win_prob"] <= 0.53
     assert 8.5 <= markets["fg_total_mean"] <= 9.7
 
 
