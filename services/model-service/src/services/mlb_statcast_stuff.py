@@ -24,22 +24,32 @@ MIN_PITCHES_STUFF = 200
 
 
 def _resolve_statcast_cache_dir() -> Path:
-    """Prefer env, then service data/ (Railway), then repo-root data/ if CSVs live there."""
+    """Prefer env, then service data/ (Railway), then repo-root data/ if CSVs live there.
+
+    On Railway path-as-root the file lives at `/app/src/services/...` so only
+    parents[0..2] exist — never index past len(parents).
+    """
     env = (os.getenv("MLB_STATCAST_CACHE_DIR") or "").strip()
     if env:
         return Path(env)
     here = Path(__file__).resolve()
-    service_cache = here.parents[2] / "data" / "mlb" / "statcast_cache"
-    # parents[4] = repo root when path is services/model-service/src/services/*.py
-    repo_cache = here.parents[4] / "data" / "mlb" / "statcast_cache"
-    if any(service_cache.glob("*/pitches_*.csv")):
-        return service_cache
-    if any(repo_cache.glob("*/pitches_*.csv")):
-        return repo_cache
-    if (service_cache / "2026" / "pitcher_asof_index.json").exists():
-        return service_cache
-    if (repo_cache / "2026" / "pitcher_asof_index.json").exists():
-        return repo_cache
+    parents = here.parents
+    service_cache = parents[2] / "data" / "mlb" / "statcast_cache"
+    candidates = [service_cache]
+    # Repo-root cache only when running from a full monorepo checkout.
+    if len(parents) > 4:
+        candidates.append(parents[4] / "data" / "mlb" / "statcast_cache")
+    for cand in candidates:
+        try:
+            if any(cand.glob("*/pitches_*.csv")):
+                return cand
+        except OSError:
+            continue
+    for cand in candidates:
+        if (cand / "2026" / "pitcher_asof_index.json").exists():
+            return cand
+        if (cand / "2026" / "pitcher_arsenal_asof_index.json").exists():
+            return cand
     return service_cache
 
 

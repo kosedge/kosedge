@@ -402,9 +402,10 @@ def build_true_arsenal_indexes_from_cache(*, season: int, through: date) -> Dict
     # Also scan sibling repo cache if CACHE_DIR has index-only (Railway image).
     if not paths:
         here = Path(__file__).resolve()
-        alt = here.parents[4] / "data" / "mlb" / "statcast_cache" / str(season)
-        if alt.exists():
-            paths = sorted(alt.glob("pitches_*.csv"))
+        if len(here.parents) > 4:
+            alt = here.parents[4] / "data" / "mlb" / "statcast_cache" / str(season)
+            if alt.exists():
+                paths = sorted(alt.glob("pitches_*.csv"))
 
     for path in paths:
         try:
