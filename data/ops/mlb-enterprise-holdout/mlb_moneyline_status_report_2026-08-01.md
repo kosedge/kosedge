@@ -83,12 +83,15 @@ Detail artifacts: `stack_ablation_*`, `sp_talent_v2_*`, `statcast_stuff_*`, `lin
 
 **Hypothesis:** Team-family contact was too coarse; lineup-ID batter contact × pitcher pitch-type mix could move ML without killing RL.
 
-**Implementation (in flight on `mlb-batter-level-arsenal`):**
+**Implementation (branch `mlb-batter-level-arsenal`):**
 - Per-batter as-of `batter_contact_asof_index.json`
-- `get_batter_contact_as_of` + `blend_lineup_batter_contact`
-- Flag `MLB_PITCH_MATCHUP_BATTER_LEVEL` (default **false**)
+- `get_batter_contact_as_of` + `blend_lineup_batter_contact` + `resolve_batter_family_for_matchup`
+- Flag `MLB_PITCH_MATCHUP_BATTER_LEVEL` (default **false**); densify arm **M1b**
 - Lineup player `id` from Stats API in `fetch_game_lineup_features`
-- Densify grade pending — **no ship until Inter ML CLV ≥ +0.010, RL/total intact, leak 0**
+- Unit tests: **12 passed** (`test_mlb_batter_level_arsenal.py` + true arsenal)
+- Densify grade **not run yet** (needs Railway image with M1b) — **no ship until Inter ML CLV ≥ +0.010, RL/total intact, leak 0**
+
+Detail: `batter_level_arsenal_2026-08-01.md`.
 
 If densify also fails: stop multiplying PA muls; pivot to architecture (see §8).
 

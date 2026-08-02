@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import replace
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .mlb_simulator import MlbGameInputs
 
@@ -137,16 +137,22 @@ def apply_lineup_timing_to_inputs(
     }
 
 
-def known_players_from_context(context_payload: Dict[str, Any], side: str) -> int:
-    """Count lineup players stamped on context JSON (home_lineup_players / away)."""
+def lineup_players_from_context(
+    context_payload: Dict[str, Any], side: str
+) -> List[Dict[str, Any]]:
+    """Return stamped lineup player summaries (may include MLBAM ``id``)."""
     key = "home_lineup_players" if side == "home" else "away_lineup_players"
     players = context_payload.get(key) if isinstance(context_payload, dict) else None
     if isinstance(players, list):
-        return len(players)
-    # Nested nowcast stamp
+        return [p for p in players if isinstance(p, dict)]
     nowcast = context_payload.get("lineup_nowcast") if isinstance(context_payload, dict) else None
     if isinstance(nowcast, dict):
         nested = nowcast.get(key) or nowcast.get(f"{side}_lineup_players")
         if isinstance(nested, list):
-            return len(nested)
-    return 0
+            return [p for p in nested if isinstance(p, dict)]
+    return []
+
+
+def known_players_from_context(context_payload: Dict[str, Any], side: str) -> int:
+    """Count lineup players stamped on context JSON (home_lineup_players / away)."""
+    return len(lineup_players_from_context(context_payload, side))

@@ -2113,8 +2113,11 @@ def job_mlb_pitch_matchup_ablation(
     max_games: int = Query(1200, ge=1, le=2000),
     lookback_days: int = Query(90, ge=30, le=365),
     configs: str = Query(
-        "M0,M1",
-        description="Comma-separated: M0 off, M1 true pitch-type arsenal + batter-family",
+        "M0,M1,M1b",
+        description=(
+            "Comma-separated: M0 off, M1 team batter-family, "
+            "M1b lineup batter-level contact blend"
+        ),
     ),
     base_model_version: str = Query("mlb-v1-pa-sim"),
 ) -> Dict[str, str]:

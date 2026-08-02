@@ -43,6 +43,7 @@ from .services.mlb_lineup_timing import (
     apply_lineup_timing_to_inputs,
     get_lineup_timing_mode,
     known_players_from_context,
+    lineup_players_from_context,
     per_side_lineup_confidence,
 )
 from .services.mlb_calibration import (
@@ -80,12 +81,15 @@ from .services.mlb_park_orientation import (
     get_totals_park_rel_wind_enabled,
 )
 from .services.mlb_pitch_matchup import (
+    apply_pitch_matchup_batter_level,
     apply_pitch_matchup_flag,
     apply_pitch_matchup_stuff_fallback,
+    extract_lineup_batter_entries,
+    get_pitch_matchup_batter_level,
     get_pitch_matchup_enabled,
     get_pitch_matchup_stuff_fallback,
     get_pitcher_arsenal_as_of,
-    get_team_batter_family_as_of,
+    resolve_batter_family_for_matchup,
 )
 from .services.mlb_simulator import (
     DEFAULT_MODEL_VERSION,
@@ -10114,17 +10118,19 @@ def run_mlb_lineup_nowcast_repricing(
                     except Exception:
                         nowcast_arsenal_away = None
                 try:
-                    nowcast_batter_family_home = get_team_batter_family_as_of(
-                        str(m.get("home_abbr") or ""),
+                    nowcast_batter_family_home = resolve_batter_family_for_matchup(
+                        team_abbr=str(m.get("home_abbr") or ""),
                         as_of=as_of_live,
+                        lineup_players=live_home_lineup.get("players") or [],
                         fetch_if_missing=False,
                     )
                 except Exception:
                     nowcast_batter_family_home = None
                 try:
-                    nowcast_batter_family_away = get_team_batter_family_as_of(
-                        str(m.get("away_abbr") or ""),
+                    nowcast_batter_family_away = resolve_batter_family_for_matchup(
+                        team_abbr=str(m.get("away_abbr") or ""),
                         as_of=as_of_live,
+                        lineup_players=live_away_lineup.get("players") or [],
                         fetch_if_missing=False,
                     )
                 except Exception:
@@ -11379,20 +11385,34 @@ def backfill_mlb_historical_resim(
                             )
                         except Exception:
                             arsenal_away = None
+                    home_lu = _densify_lineup_players_for_pitch_matchup(
+                        context_payload=context_payload,
+                        side="home",
+                        lineup_confirmed=bool(m.get("lineup_confirmed") or False),
+                        external_id=str(m.get("external_id") or "") or None,
+                    )
+                    away_lu = _densify_lineup_players_for_pitch_matchup(
+                        context_payload=context_payload,
+                        side="away",
+                        lineup_confirmed=bool(m.get("lineup_confirmed") or False),
+                        external_id=str(m.get("external_id") or "") or None,
+                    )
                     try:
-                        batter_family_home = get_team_batter_family_as_of(
-                            str(m.get("home_abbr") or ""),
+                        batter_family_home = resolve_batter_family_for_matchup(
+                            team_abbr=str(m.get("home_abbr") or ""),
                             as_of=game_as_of,
                             season=game_season,
+                            lineup_players=home_lu,
                             fetch_if_missing=False,
                         )
                     except Exception:
                         batter_family_home = None
                     try:
-                        batter_family_away = get_team_batter_family_as_of(
-                            str(m.get("away_abbr") or ""),
+                        batter_family_away = resolve_batter_family_for_matchup(
+                            team_abbr=str(m.get("away_abbr") or ""),
                             as_of=game_as_of,
                             season=game_season,
+                            lineup_players=away_lu,
                             fetch_if_missing=False,
                         )
                     except Exception:
@@ -12360,16 +12380,55 @@ _LATE_INFO_STAMP_CONFIGS: Dict[str, Dict[str, Any]] = {
 _PITCH_MATCHUP_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
     "M0": {
         "pitch_matchup_enabled": False,
+        "batter_level": False,
         "stuff_fallback": False,
         "model_suffix": "pitchmux-m0",
     },
-    # True pitch-type arsenal + batter-family; stuff-shape fallback OFF.
+    # True pitch-type arsenal + team batter-family; stuff-shape fallback OFF.
     "M1": {
         "pitch_matchup_enabled": True,
+        "batter_level": False,
         "stuff_fallback": False,
         "model_suffix": "pitchmux-m1t",
     },
+    # True arsenal × lineup-ID batter contact blend (falls back to team-family).
+    "M1b": {
+        "pitch_matchup_enabled": True,
+        "batter_level": True,
+        "stuff_fallback": False,
+        "model_suffix": "pitchmux-m1b",
+    },
 }
+
+
+def _densify_lineup_players_for_pitch_matchup(
+    *,
+    context_payload: Dict[str, Any],
+    side: str,
+    lineup_confirmed: bool,
+    external_id: Optional[str],
+) -> List[Dict[str, Any]]:
+    """Resolve lineup player dicts for batter-level densify without leakage.
+
+    Prefer stamped context IDs. Only when the densify stamp already marked
+    ``lineup_confirmed`` may we fetch Stats API boxscore IDs (final batting
+    order ≈ pre-game confirmed card). Never fetch for unconfirmed stamps.
+    """
+    players = lineup_players_from_context(context_payload, side)
+    if extract_lineup_batter_entries(players):
+        return players
+    if not get_pitch_matchup_batter_level():
+        return players
+    if not lineup_confirmed or not external_id:
+        return players
+    try:
+        live = fetch_game_lineup_features(str(external_id))
+        fetched = ((live or {}).get(side) or {}).get("players") or []
+        if extract_lineup_batter_entries(fetched):
+            return [p for p in fetched if isinstance(p, dict)]
+    except Exception:
+        pass
+    return players
 
 _TOTALS_PARK_WIND_ABLATION_CONFIGS: Dict[str, Dict[str, Any]] = {
     "W0": {"totals_park_rel_wind_enabled": False, "model_suffix": "parkwind-w0"},
@@ -12689,20 +12748,21 @@ def run_mlb_pitch_matchup_ablation(
     configs: Optional[List[str]] = None,
     base_model_version: str = DEFAULT_MODEL_VERSION,
 ) -> Dict[str, Any]:
-    """M0 (S0 / pitch matchup off) vs M1 (true pitch-type arsenal + batter-family)."""
+    """M0 off vs M1 team-family vs M1b lineup batter-level contact blend."""
     if not _env_bool("MLB_ALLOW_HISTORICAL_SIM", False):
         raise ValueError(
             "Historical re-sim disabled; set MLB_ALLOW_HISTORICAL_SIM=true for pitch matchup ablation"
         )
     start = date.fromisoformat(start_date)
     end = date.fromisoformat(end_date)
-    selected = configs or ["M0", "M1"]
+    selected = configs or ["M0", "M1", "M1b"]
     unknown = [c for c in selected if c not in _PITCH_MATCHUP_ABLATION_CONFIGS]
     if unknown:
         raise ValueError(f"unknown pitch matchup configs: {unknown}")
 
     prior_pitch = get_pitch_matchup_enabled()
     prior_fallback = get_pitch_matchup_stuff_fallback()
+    prior_batter = get_pitch_matchup_batter_level()
     prior_wind = get_totals_park_rel_wind_enabled()
     prior_timing = get_lineup_timing_mode()
     prior_quality = get_starter_quality_mode()
@@ -12720,6 +12780,7 @@ def run_mlb_pitch_matchup_ablation(
             model_version = f"{base_model_version}-{cfg['model_suffix']}"
             apply_pitch_matchup_flag(bool(cfg["pitch_matchup_enabled"]))
             apply_pitch_matchup_stuff_fallback(bool(cfg.get("stuff_fallback", False)))
+            apply_pitch_matchup_batter_level(bool(cfg.get("batter_level", False)))
             log.info(
                 "Pitch matchup ablation config start",
                 extra={"config": name, "model_version": model_version, "flags": cfg},
@@ -12736,10 +12797,12 @@ def run_mlb_pitch_matchup_ablation(
             graded["config"] = cfg
             graded["pitch_matchup_enabled"] = get_pitch_matchup_enabled()
             graded["pitch_matchup_stuff_fallback"] = get_pitch_matchup_stuff_fallback()
+            graded["pitch_matchup_batter_level"] = get_pitch_matchup_batter_level()
             results[name] = graded
     finally:
         apply_pitch_matchup_flag(prior_pitch)
         apply_pitch_matchup_stuff_fallback(prior_fallback)
+        apply_pitch_matchup_batter_level(prior_batter)
         apply_totals_park_rel_wind_flag(prior_wind)
         apply_lineup_timing_mode(prior_timing or "off")
         apply_starter_quality_mode(prior_quality or "era_whip")
@@ -12756,25 +12819,44 @@ def run_mlb_pitch_matchup_ablation(
     )
     m0 = (intersection.get("by_config") or {}).get("M0") or {}
     m1 = (intersection.get("by_config") or {}).get("M1") or {}
+    m1b = (intersection.get("by_config") or {}).get("M1b") or {}
     m0_ml = m0.get("avg_ml_clv")
     m1_ml = m1.get("avg_ml_clv")
+    m1b_ml = m1b.get("avg_ml_clv")
+    candidate_ml = m1b_ml if m1b_ml is not None else m1_ml
+    candidate_name = "M1b" if m1b_ml is not None else "M1"
     recommendation = {
         "ship_pitch_matchup": bool(
-            m1_ml is not None
+            candidate_ml is not None
             and m0_ml is not None
-            and float(m1_ml) >= 0.010
-            and float(m1_ml) > float(m0_ml)
+            and float(candidate_ml) >= 0.010
+            and float(candidate_ml) > float(m0_ml)
         ),
-        "stretch_target_hit": bool(m1_ml is not None and float(m1_ml) >= 0.015),
+        "ship_batter_level": bool(
+            m1b_ml is not None
+            and m0_ml is not None
+            and float(m1b_ml) >= 0.010
+            and float(m1b_ml) > float(m0_ml)
+            and (m1_ml is None or float(m1b_ml) >= float(m1_ml))
+        ),
+        "stretch_target_hit": bool(
+            candidate_ml is not None and float(candidate_ml) >= 0.015
+        ),
+        "primary_candidate": candidate_name,
         "m1_delta_vs_m0": (
             round(float(m1_ml) - float(m0_ml), 5)
             if m1_ml is not None and m0_ml is not None
             else None
         ),
+        "m1b_delta_vs_m0": (
+            round(float(m1b_ml) - float(m0_ml), 5)
+            if m1b_ml is not None and m0_ml is not None
+            else None
+        ),
         "note": (
-            "Ship MLB_PITCH_MATCHUP_ENABLED only if intersection ML CLV ≥ +0.010 "
-            "and beats M0 without torching RL/total. True pitch-type arsenal only "
-            "(stuff-shape fallback off)."
+            "Ship MLB_PITCH_MATCHUP_ENABLED (+ BATTER_LEVEL for M1b) only if "
+            "intersection ML CLV ≥ +0.010 and beats M0 without torching RL/total. "
+            "True pitch-type arsenal only (stuff-shape fallback off)."
         ),
     }
     return {

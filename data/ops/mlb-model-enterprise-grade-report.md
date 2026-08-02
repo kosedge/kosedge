@@ -137,10 +137,13 @@ Detail: `true_arsenal_2026-08-01.md`, `live_late_info_clv_2026-08-01.md`.
 | Item | Status |
 |------|--------|
 | Flag | `MLB_PITCH_MATCHUP_BATTER_LEVEL` default **false** |
-| Densify arm | `M1b` (tasks ablation map) |
+| Densify arm | `M1b` (tasks ablation map; M0/M1/M1b) |
 | Index | `batter_contact_asof_index.json` (per batter MLBAM id) |
-| Densify grade | **Pending** — no metrics yet; **no-ship until graded** |
+| Unit tests | **12 passed** locally |
+| Densify grade | **Pending Railway** — no intersection metrics yet; **no-ship until graded** |
 | Gate | Inter ML CLV ≥ +0.010, RL/total not torched, leak 0 |
+
+Detail: `mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.md`.
 
 If M1b fails: stop PA-mul research; prefer market-aware ML head / architecture change with unused holdout frozen.
 
@@ -186,6 +189,7 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 ## Artifacts
 
 - `data/ops/mlb-enterprise-holdout/mlb_moneyline_status_report_2026-08-01.md` ← **Full status narrative**
+- `data/ops/mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.md` ← Batter-level wiring / densify pending
 - `data/ops/mlb-enterprise-holdout/true_arsenal_2026-08-01.md` ← True arsenal decision
 - `data/ops/mlb-enterprise-holdout/live_late_info_clv_2026-08-01.md` ← Live ≤3h decision
 - `data/ops/mlb-enterprise-holdout/true_arsenal_2026-08-01.json`

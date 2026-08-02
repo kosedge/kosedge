@@ -436,12 +436,19 @@ def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
             pos_abbr = ((player.get("position") or {}).get("abbreviation") or "").upper()
             weight = LINEUP_ORDER_WEIGHTS.get(slot, 1.0)
             # Universal DH: skip pitcher batting slots so they do not dilute OPS.
+            person = player.get("person") or {}
+            person_id = person.get("id")
+            try:
+                batter_mlbam_id = int(person_id) if person_id is not None else None
+            except (TypeError, ValueError):
+                batter_mlbam_id = None
             if pos_abbr == "P":
                 pitcher_slots += 1
                 player_summaries.append(
                     {
                         "slot": slot,
-                        "name": (player.get("person") or {}).get("fullName"),
+                        "id": batter_mlbam_id,
+                        "name": person.get("fullName"),
                         "ops": ops,
                         "plate_appearances": plate_appearances,
                         "position": pos_abbr,
@@ -455,7 +462,8 @@ def fetch_game_lineup_features(game_pk: str) -> Dict[str, Dict[str, Any]]:
             player_summaries.append(
                 {
                     "slot": slot,
-                    "name": (player.get("person") or {}).get("fullName"),
+                    "id": batter_mlbam_id,
+                    "name": person.get("fullName"),
                     "ops": ops,
                     "plate_appearances": plate_appearances,
                     "position": pos_abbr,

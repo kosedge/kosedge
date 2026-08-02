@@ -267,6 +267,7 @@ def test_build_indexes_from_local_cache_smoke() -> None:
     )
     assert paths["arsenal"].exists()
     assert paths["batter_family"].exists()
+    assert paths["batter_contact"].exists()
     # Leakage: as_of 2026-04-02 must not include 2026-04-02 pitches.
     sample = pitch.get_pitcher_arsenal_as_of(
         686613,

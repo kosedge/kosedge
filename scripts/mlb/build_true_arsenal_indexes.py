@@ -39,6 +39,7 @@ def main() -> int:
     for name in (
         "pitcher_arsenal_asof_index.json",
         "team_batter_family_asof_index.json",
+        "batter_contact_asof_index.json",
     ):
         target = svc_dir / name
         print(f"service_mirror {name}: exists={target.exists()} size={target.stat().st_size if target.exists() else 0}")
