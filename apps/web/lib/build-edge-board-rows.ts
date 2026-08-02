@@ -1,7 +1,8 @@
 /**
  * Shared edge-board assembly.
- * NFL: pulls fair-lines + Odds API, persists odds via model-service fair-lines,
- * Live = current week slate, Full = all games with sportsbook odds.
+ * NFL: pulls REG fair-lines + Odds API overlay (projection-backed; no PRE odds-only).
+ * Live = current REG week; Odds slate = projection-backed games with books.
+ * KEI = published fair line (identity — no fake Model vs KEI split).
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
  * NBA/WNBA: fair-lines → KEI handicap (model_* identity until pre_blend exists).
  * NCAAM: Odds + kei_lines_ncaam.json.
@@ -23,6 +24,7 @@ import {
   fairLinesToEdgeBoardRows,
   filterNflCurrentWeekRows,
   filterNflOddsPostedRows,
+  filterNflProjectionBackedRows,
   overlayOddsOntoFairLineRows,
   sortNflEdgeBoardRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
@@ -36,7 +38,7 @@ import {
 const NFL_EDGE_BOARD_SEASON = 2026;
 
 export type AssembleEdgeBoardOptions = {
-  /** NFL: `live` = current week; `all` = every game with sportsbook odds. */
+  /** NFL: `live` = current REG week; `all` = projection-backed games with books. */
   slate?: "live" | "all";
 };
 
@@ -94,20 +96,25 @@ async function assembleNflEdgeBoardRows(
     rows = fairLinesToEdgeBoardRows(fair.lines);
     rows = overlayOddsOntoFairLineRows(rows, odds);
   } else {
+    // File KEI fallback — still projection-backed; never surface PRE odds-only.
     keiGames = getKeiLines("nfl");
+    if (keiGames.length === 0) return [];
     rows = ensureAllKeiGamesOnBoard(odds, "nfl", keiGames);
     rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
+    rows = filterNflProjectionBackedRows(rows);
     rows = sortNflEdgeBoardRows(rows);
+    // Without fair-lines currentWeek, priced projection slate only (honest).
     return filterNflOddsPostedRows(rows);
   }
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
+  rows = filterNflProjectionBackedRows(rows);
   rows = sortNflEdgeBoardRows(rows);
 
   if (slate === "live") {
     return filterNflCurrentWeekRows(rows, currentWeek);
   }
-  // Full season tab: everything we currently have sportsbook odds on.
+  // Odds slate: projection-backed games that currently have sportsbook prices.
   return filterNflOddsPostedRows(rows);
 }
 

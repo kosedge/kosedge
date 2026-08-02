@@ -1120,7 +1120,7 @@ export default function EdgeBoard({
           {marketsOnly
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
-              ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
+              ? "NFL tags — PASS default. Spread PLAY ≥2.5 pts (LEAN off). Totals sides-only (no Total PLAY). Preseason games stay PASS (info desk). KEI = published fair line (not a separate Model column). "
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
@@ -1145,10 +1145,9 @@ export default function EdgeBoard({
           No Slate Yet
         </div>
         <p className="text-gray-400 text-sm max-w-md mx-auto">
-          No fair-lines or sportsbook rows for this sport right now (often
-          offseason or upstream timeout). We do not invent Open/Best or KEI
-          prices. When the model service or Odds API returns a slate, this board
-          populates automatically.
+          {isNfl
+            ? "No regular-season fair-lines in the pull window yet (common in early preseason or upstream timeout). We do not invent Open/Best or KEINFL prices, and we do not fill the board with preseason odds-only games."
+            : "No fair-lines or sportsbook rows for this sport right now (often offseason or upstream timeout). We do not invent Open/Best or KEI prices. When the model service or Odds API returns a slate, this board populates automatically."}
         </p>
       </div>
     );
