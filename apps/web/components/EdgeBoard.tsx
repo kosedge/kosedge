@@ -1,5 +1,6 @@
 import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
+import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
 import { noVigHomeProb } from "@/lib/american-odds";
@@ -83,12 +84,7 @@ export type LegacyEdgeBoardRow = {
   overview?: string;
 };
 
-const COMING_SOON_PAIR: PricePair = {
-  top: { label: "Coming soon", juice: "—" },
-  bottom: { label: "Coming soon", juice: "—" },
-};
-
-/** Empty market / KEI cell — not “coming soon”, just no number yet. */
+/** Empty market / KEI / edge cell — never show “Coming soon” on live boards. */
 const EMPTY_PAIR: PricePair = {
   top: { label: "—", juice: "—" },
   bottom: { label: "—", juice: "—" },
@@ -614,14 +610,14 @@ export function flatRowsToLegacy(
             top: { label: edgeLineNum.toFixed(1), juice: "—" },
             bottom: { label: edgeLineNum.toFixed(1), juice: "—" },
           }
-        : COMING_SOON_PAIR;
+        : EMPTY_PAIR;
     const edgeOUDisplay: PricePair =
       edgeOUNum != null
         ? {
             top: { label: edgeOUNum.toFixed(1), juice: "—" },
             bottom: { label: edgeOUNum.toFixed(1), juice: "—" },
           }
-        : COMING_SOON_PAIR;
+        : EMPTY_PAIR;
 
     result.push({
       id: String(lineRow?.id ?? total?.id ?? gameKey),
@@ -630,17 +626,13 @@ export function flatRowsToLegacy(
         name: away,
         site: "Away",
         keiNumber:
-          keiLine.top.label !== "—" && keiLine.top.label !== "Coming soon"
-            ? keiLine.top.label
-            : undefined,
+          keiLine.top.label !== "—" ? keiLine.top.label : undefined,
       },
       teamB: {
         name: home,
         site: "Home",
         keiNumber:
-          keiLine.bottom.label !== "—" && keiLine.bottom.label !== "Coming soon"
-            ? keiLine.bottom.label
-            : undefined,
+          keiLine.bottom.label !== "—" ? keiLine.bottom.label : undefined,
       },
       openOU,
       openLine,
@@ -700,8 +692,9 @@ export default function EdgeBoard({
   const data = hasRealData ? legacy : sampleRows;
   const isNfl = String(sportKey).toLowerCase() === "nfl";
   const isMlb = String(sportKey).toLowerCase() === "mlb";
+  const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
   const lineLabel = isMlb ? "Moneyline" : "Line";
-  // KEI = final handicap (not raw model). All sports use KEI headers.
+  // KEI = final handicap when a model exists. Markets-only sports leave cells "—".
   const keiLineHeader = "KEI";
   const keiOuHeader = "KEI";
   const edgeLineLabel = isMlb ? "ML edge" : "Spread edge";
@@ -745,12 +738,8 @@ export default function EdgeBoard({
                       </td>
                       <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
                       <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
-                      <td className={["py-2.5 px-3", edgeGreen].join(" ")}>
-                        Coming soon
-                      </td>
-                      <td className="py-2.5 px-3 font-bebas text-kos-gold tracking-wide">
-                        Coming soon
-                      </td>
+                      <td className="py-2.5 px-3 text-gray-500">—</td>
+                      <td className="py-2.5 px-3 text-gray-500">—</td>
                     </tr>
                   ))}
                 </tbody>
@@ -776,8 +765,16 @@ export default function EdgeBoard({
         </span>
       </div>
       <p className="px-1 text-xs text-gray-400">
-        KEI handicap ({keiCode}) vs Market · Edge · Tag · ET
+        {marketsOnly
+          ? `Markets only · ${keiCode} handicap not shipped yet · ET`
+          : `KEI handicap (${keiCode}) vs Market · Edge · Tag · ET`}
       </p>
+      {marketsOnly ? (
+        <p className="px-1 text-[11px] text-amber-200/80">
+          Open/Best from books when available. KEI Line / O/U / Edge stay blank
+          until a real model exists — we do not invent handicap numbers.
+        </p>
+      ) : null}
       {data.map((r) => (
         <article
           key={r.id}
@@ -825,10 +822,10 @@ export default function EdgeBoard({
                 KEI · {keiCode}
               </div>
               <div className="mt-1 font-semibold text-kos-gold">
-                {(r.keiLine ?? COMING_SOON_PAIR).top.label}
+                {(r.keiLine ?? EMPTY_PAIR).top.label}
               </div>
               <div className="mt-1 font-semibold text-kos-gold">
-                {(r.keiOU ?? COMING_SOON_PAIR).top.label}
+                {(r.keiOU ?? EMPTY_PAIR).top.label}
               </div>
             </div>
           </div>
@@ -883,10 +880,19 @@ export default function EdgeBoard({
 
   const DesktopTable = (
     <div className="hidden lg:block mt-6">
+      {marketsOnly ? (
+        <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100/90">
+          <span className="font-semibold text-amber-200">Markets only.</span>{" "}
+          {keiCode} handicap is not shipped for this sport yet — KEI / Edge /
+          Tag stay blank. We do not invent handicap numbers.
+        </div>
+      ) : null}
       <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
         <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/10">
           <div className="text-sm text-gray-300">
-            Live books • Open + Best + juice • Edge vs {keiCode}
+            {marketsOnly
+              ? `Live books • Open + Best + juice · ${keiCode} pending model`
+              : `Live books • Open + Best + juice • Edge vs ${keiCode}`}
           </div>
           <div className="text-xs text-gray-500">
             {safeRows.length
@@ -1067,14 +1073,14 @@ export default function EdgeBoard({
                   </td>
                   <td className={`${TD_DECISION} ${COL_MODEL}`}>
                     <PriceCell
-                      p={r.keiLine ?? COMING_SOON_PAIR}
+                      p={r.keiLine ?? EMPTY_PAIR}
                       compact
                       valueClassName="text-kos-gold font-semibold"
                     />
                   </td>
                   <td className={`${TD_DECISION} ${COL_MODEL}`}>
                     <PriceCell
-                      p={r.keiOU ?? COMING_SOON_PAIR}
+                      p={r.keiOU ?? EMPTY_PAIR}
                       compact
                       valueClassName="text-kos-gold font-semibold"
                     />
@@ -1111,15 +1117,20 @@ export default function EdgeBoard({
           </table>
         </div>
         <div className="px-4 py-3.5 text-[10px] text-gray-400 border-t border-white/10">
-          {isNfl
-            ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
-            : isMlb
-              ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
-              : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
-          {isMlb
-            ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
-            : "Edge shows pts + side favored vs KEI handicap. "}
-          Tag shows the action at the best book. {keiCode}: Kos Edge Index (handicap).
+          {marketsOnly
+            ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
+            : isNfl
+              ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
+              : isMlb
+                ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
+                : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
+          {!marketsOnly &&
+            (isMlb
+              ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
+              : "Edge shows pts + side favored vs KEI handicap. ")}
+          {!marketsOnly
+            ? `Tag shows the action at the best book. ${keiCode}: Kos Edge Index (handicap).`
+            : null}
         </div>
       </div>
     </div>

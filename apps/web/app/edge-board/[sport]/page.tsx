@@ -3,6 +3,7 @@ import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import SportProHeader from "@/components/pro/SportProHeader";
 import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
 import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import {
   resolveSportKey,
@@ -57,6 +58,7 @@ export default async function EdgeBoardSportPage({
   const gameCount = new Set(rows.map((r) => r.game).filter(Boolean)).size;
 
   const isNfl = sportKey === "nfl";
+  const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
 
   const slateLabel =
     sportKey === "nfl" || sportKey === "cfb" ? "Weekly Slate" : "Daily Slate";
@@ -84,17 +86,23 @@ export default async function EdgeBoardSportPage({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} · KEI vs Market · {getKeiProductLabel(sportKey)} · ET
+              {sportName} ·{" "}
+              {marketsOnly
+                ? "Markets only"
+                : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}{" "}
+              · ET
             </div>
             <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
               {sportName} Edge Board
             </h1>
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              {isNfl
-                ? slate === "live"
-                  ? `Central research board for the current week. ${keiCode} handicap lines always; Open/Best when books post. You make the picks.`
-                  : `All NFL games with sportsbook odds on file. Research board — not a picks feed.`
-                : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
+              {marketsOnly
+                ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
+                : isNfl
+                  ? slate === "live"
+                    ? `Central research board for the current week. ${keiCode} handicap lines always; Open/Best when books post. You make the picks.`
+                    : `All NFL games with sportsbook odds on file. Research board — not a picks feed.`
+                  : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
             </p>
           </div>
 

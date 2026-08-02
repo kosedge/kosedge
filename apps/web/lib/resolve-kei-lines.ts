@@ -10,7 +10,9 @@
  * - MLB: real split — model_* = first daily PA sim snapshot; handicap_* = nowcast re-sim.
  * - NFL / NBA / WNBA: published fair lines map to handicap (KEI). model_* is identity
  *   until fair-lines APIs expose pre_blend_* / raw model. Do not invent a fake split.
- * - College / NHL file exports: same identity contract when only proj* exists.
+ * - NCAAM: kei_lines_ncaam.json → handicap (identity).
+ * - NHL / CFB: **markets-only** — no fair-lines / kei_lines source yet. resolveKeiGames
+ *   returns []. UI must not invent KEI or show “Coming soon”; see sportIsMarketsOnlyEdgeBoard.
  */
 
 import "server-only";
@@ -75,6 +77,12 @@ export async function resolveKeiGames(
   sportKey: string,
 ): Promise<KeiLineGame[]> {
   const sport = sportKey.toLowerCase();
+
+  // Markets-only sports: no KEI source yet (NHL / CFB). Empty → EdgeBoard
+  // shows Open/Best only; never fabricate handicap lines.
+  if (sport === "nhl" || sport === "cfb") {
+    return [];
+  }
 
   if (sport === "nfl") {
     try {
