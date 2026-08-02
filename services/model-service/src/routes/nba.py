@@ -244,7 +244,10 @@ def nba_fair_lines(
     """
     session = SessionLocal()
     try:
+        # Match WNBA: never block the board on a long DDL/lock wait.
         try:
+            session.execute(text("SET LOCAL lock_timeout = '2s'"))
+            session.execute(text("SET LOCAL statement_timeout = '8s'"))
             ensure_nba_model_tables(session)
             session.commit()
         except Exception:
@@ -256,6 +259,10 @@ def nba_fair_lines(
         schema_ready = True
 
         try:
+            session.execute(text("SET LOCAL statement_timeout = '8s'"))
+            # Require a joined game date in the window. Do NOT include
+            # orphan projections (g.game_date IS NULL) — that path scanned the
+            # full table and N+1'd projection JSON, hanging the Edge Board.
             if game_date is not None or days_ahead == 0:
                 rows = session.execute(
                     text(
@@ -275,14 +282,16 @@ def nba_fair_lines(
                           mp.margin_mean,
                           mp.worker_build_id,
                           mp.model_version,
-                          mp.created_at AS projected_at
+                          mp.created_at AS projected_at,
+                          mp.projection
                         FROM nba_market_projections mp
-                        LEFT JOIN games g ON g.id::text = mp.game_id
+                        INNER JOIN games g ON g.id::text = mp.game_id
                         LEFT JOIN teams home ON home.id = g.home_team_id
                         LEFT JOIN teams away ON away.id = g.away_team_id
                         WHERE mp.model_version = :model_version
-                          AND (g.game_date = :game_date OR g.game_date IS NULL)
+                          AND g.game_date = :game_date
                         ORDER BY mp.game_id, mp.created_at DESC
+                        LIMIT 80
                         """
                     ),
                     {"model_version": effective_model_version, "game_date": target_date},
@@ -306,20 +315,18 @@ def nba_fair_lines(
                           mp.margin_mean,
                           mp.worker_build_id,
                           mp.model_version,
-                          mp.created_at AS projected_at
+                          mp.created_at AS projected_at,
+                          mp.projection
                         FROM nba_market_projections mp
-                        LEFT JOIN games g ON g.id::text = mp.game_id
+                        INNER JOIN games g ON g.id::text = mp.game_id
                         LEFT JOIN teams home ON home.id = g.home_team_id
                         LEFT JOIN teams away ON away.id = g.away_team_id
                         WHERE mp.model_version = :model_version
-                          AND (
-                            g.game_date IS NULL
-                            OR (
-                              g.game_date >= :game_date
-                              AND g.game_date <= CAST(:game_date AS date) + (:days_ahead * INTERVAL '1 day')
-                            )
-                          )
+                          AND g.game_date >= :game_date
+                          AND g.game_date <= CAST(:game_date AS date)
+                            + (:days_ahead * INTERVAL '1 day')
                         ORDER BY mp.game_id, mp.created_at DESC
+                        LIMIT 80
                         """
                     ),
                     {
@@ -335,31 +342,17 @@ def nba_fair_lines(
 
         for r in rows:
             m = dict(r._mapping)
-            # Prefer joined team names; fall back to projection JSON.
+            # Prefer joined team names; fall back to projection JSON (no N+1 query).
             home_team = m.get("home_team")
             away_team = m.get("away_team")
             if not home_team or not away_team:
                 try:
-                    proj_row = session.execute(
-                        text(
-                            """
-                            SELECT projection FROM nba_market_projections
-                            WHERE game_id = :game_id AND model_version = :model_version
-                            ORDER BY created_at DESC LIMIT 1
-                            """
-                        ),
-                        {
-                            "game_id": m["game_id"],
-                            "model_version": effective_model_version,
-                        },
-                    ).fetchone()
-                    if proj_row:
-                        proj = proj_row[0]
-                        if isinstance(proj, str):
-                            proj = json.loads(proj)
-                        inputs = (proj or {}).get("inputs") or {}
-                        home_team = home_team or inputs.get("home_team")
-                        away_team = away_team or inputs.get("away_team")
+                    proj = m.get("projection")
+                    if isinstance(proj, str):
+                        proj = json.loads(proj)
+                    inputs = (proj or {}).get("inputs") or {}
+                    home_team = home_team or inputs.get("home_team")
+                    away_team = away_team or inputs.get("away_team")
                 except Exception:
                     pass
 

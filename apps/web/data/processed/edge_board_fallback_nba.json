@@ -1,8 +1,8 @@
 {
   "sport": "nba",
   "source": "odds-api-live-pull",
-  "capturedAt": "2026-07-31T18:12:23Z",
+  "capturedAt": "2026-08-02T15:31:28Z",
   "eventCount": 0,
   "rows": [],
-  "note": "Odds API basketball_nba returned 0 events (offseason / no posted board)."
+  "note": "NBA Edge Board uses model-service /nba/fair-lines + Odds when available. Empty fallback is intentional in offseason \u2014 do not invent prices. KEI maps published fair lines (model_* identity until pre_blend exposed)."
 }

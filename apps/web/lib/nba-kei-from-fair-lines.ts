@@ -2,7 +2,8 @@
  * Map NBA model-service fair-lines into KEI games for board merge / Fair Lines.
  *
  * Published fair_* (may include market blend) → handicap (KEI).
- * TODO(model-honesty): when API exposes pre_blend_* / raw model, map to model_*.
+ * Honesty: pure Model snapshot is NOT separated yet — model_* = handicap (identity).
+ * When API exposes pre_blend_* / raw model, map those to model_*.
  */
 
 import {

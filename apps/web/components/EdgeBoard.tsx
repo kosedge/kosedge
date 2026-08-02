@@ -1117,33 +1117,27 @@ export default function EdgeBoard({
               ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
               : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {isMlb
-            ? "ML edge is model win-prob minus market no-vig (percentage points). "
-            : "Edge shows pts + side favored. "}
-          Tag shows the action at the best book. {keiCode}: Kos Edge Index.
+            ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
+            : "Edge shows pts + side favored vs KEI handicap. "}
+          Tag shows the action at the best book. {keiCode}: Kos Edge Index (handicap).
         </div>
       </div>
     </div>
   );
 
-  // Empty state for full variant when no real data (avoids misleading sample)
+  // Empty state for full variant when no real data (avoids misleading sample /
+  // "Coming soon" placeholders). Honest offseason / upstream empty.
   if (variant === "full" && !hasRealData) {
     return (
       <div className="mt-6 rounded-2xl border border-white/10 bg-black/30 backdrop-blur-xl p-8 sm:p-12 text-center">
         <div className="text-kos-gold text-2xl font-bebas tracking-wide mb-2">
-          No Live Data
+          No Slate Yet
         </div>
         <p className="text-gray-400 text-sm max-w-md mx-auto">
-          Add <strong>ODDS_API_KEY</strong> in Vercel → Project Settings →
-          Environment Variables, then redeploy. Get a key at{" "}
-          <a
-            href="https://the-odds-api.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-kos-gold hover:underline"
-          >
-            the-odds-api.com
-          </a>{" "}
-          (500 req/mo free).
+          No fair-lines or sportsbook rows for this sport right now (often
+          offseason or upstream timeout). We do not invent Open/Best or KEI
+          prices. When the model service or Odds API returns a slate, this board
+          populates automatically.
         </p>
       </div>
     );
