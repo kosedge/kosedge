@@ -1036,7 +1036,7 @@ export default function EdgeBoard({
                     <button
                       className="absolute bottom-2.5 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
                       type="button"
-                      title="Expandable panel coming soon"
+                      title="Matchup stats panel"
                     >
                       Stats ▾
                     </button>
