@@ -64,6 +64,10 @@ from .services.mlb_enterprise_ops import (
     upsert_mlb_clv_attribution,
 )
 from .services.mlb_lineup_shock import apply_lineup_shock, resolve_nowcast_starters
+from .services.mlb_model_handicap import (
+    annotate_projection_model_handicap,
+    extract_prior_model_markets,
+)
 from .services.mlb_odds_firewall import DEFAULT_PREFERRED_BOOK
 from .services.mlb_pa_feature_sharpen import platoon_split_for_hand, sharpen_game_inputs
 from .services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
@@ -1719,6 +1723,9 @@ def _lineup_nowcast_confidence(
 _MLB_PROJECTION_HAS_RUNLINE_COLS: Optional[bool] = None
 
 
+_MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS: Optional[bool] = None
+
+
 def _mlb_projection_has_runline_cols(session: Any) -> bool:
     global _MLB_PROJECTION_HAS_RUNLINE_COLS
     if _MLB_PROJECTION_HAS_RUNLINE_COLS is not None:
@@ -1739,14 +1746,79 @@ def _mlb_projection_has_runline_cols(session: Any) -> bool:
     return _MLB_PROJECTION_HAS_RUNLINE_COLS
 
 
+def _mlb_projection_has_model_handicap_cols(session: Any) -> bool:
+    global _MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS
+    if _MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS is not None:
+        return _MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS
+    row = session.execute(
+        text(
+            """
+            SELECT 1
+            FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name = 'mlb_market_projections'
+              AND column_name = 'model_fair_fg_home_ml'
+            LIMIT 1
+            """
+        )
+    ).fetchone()
+    _MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS = row is not None
+    return _MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS
+
+
+def _fetch_prior_mlb_model_markets(
+    session: Any,
+    *,
+    game_id: Any,
+    model_version: str,
+) -> Optional[Dict[str, Any]]:
+    """Latest prior projection's model snapshot for this game/version."""
+    has_cols = _mlb_projection_has_model_handicap_cols(session)
+    cols = (
+        """
+          mp.model_fg_home_win_prob,
+          mp.model_fg_total_mean,
+          mp.model_fair_fg_home_ml,
+          mp.model_fair_fg_total,
+          mp.model_fair_fg_spread_home,
+          mp.projection
+        """
+        if has_cols
+        else "mp.projection"
+    )
+    row = session.execute(
+        text(
+            f"""
+            SELECT {cols}
+            FROM mlb_market_projections mp
+            WHERE mp.game_id = :game_id
+              AND mp.model_version = :model_version
+            ORDER BY mp.created_at DESC
+            LIMIT 1
+            """
+        ),
+        {"game_id": game_id, "model_version": model_version},
+    ).fetchone()
+    return extract_prior_model_markets(row)
+
+
 def _insert_mlb_projection_and_audit(
     session: Any,
     projection: Dict[str, Any],
     *,
     seed: int,
     created_at: Optional[datetime] = None,
+    line_role: str = "model",
+    prior_model_markets: Optional[Dict[str, Any]] = None,
 ) -> None:
+    annotate_projection_model_handicap(
+        projection,
+        prior_model_markets=prior_model_markets,
+        line_role=line_role,
+    )
     markets = projection["markets"]
+    model_markets = projection.get("model_markets") or {}
+    handicap_markets = projection.get("handicap_markets") or markets
     diagnostics = projection.get("diagnostics") or {}
     stamped_at = created_at or _now_utc()
     base_params = {
@@ -1754,23 +1826,80 @@ def _insert_mlb_projection_and_audit(
         "model_version": projection["model_version"],
         "simulation_count": projection["simulation_count"],
         "f5_home_win_prob": markets["f5_home_win_prob"],
-        "fg_home_win_prob": markets["fg_home_win_prob"],
+        "fg_home_win_prob": handicap_markets.get(
+            "fg_home_win_prob", markets["fg_home_win_prob"]
+        ),
         "f5_total_mean": markets["f5_total_mean"],
-        "fg_total_mean": markets["fg_total_mean"],
+        "fg_total_mean": handicap_markets.get(
+            "fg_total_mean", markets["fg_total_mean"]
+        ),
         "fair_f5_home_ml": markets["fair_f5_home_ml"],
-        "fair_fg_home_ml": markets["fair_fg_home_ml"],
+        "fair_fg_home_ml": handicap_markets.get(
+            "fair_fg_home_ml", markets["fair_fg_home_ml"]
+        ),
         "fair_f5_total": markets["fair_f5_total"],
-        "fair_fg_total": markets["fair_fg_total"],
-        "fair_fg_spread_home": markets.get("fair_fg_spread_home"),
+        "fair_fg_total": handicap_markets.get(
+            "fair_fg_total", markets["fair_fg_total"]
+        ),
+        "fair_fg_spread_home": handicap_markets.get(
+            "fair_fg_spread_home", markets.get("fair_fg_spread_home")
+        ),
         "fair_f5_spread_home": markets.get("fair_f5_spread_home"),
         "fg_home_cover_prob_run_line": markets.get("fg_home_cover_prob_run_line"),
         "f5_home_cover_prob_run_line": markets.get("f5_home_cover_prob_run_line"),
         "fg_margin_mean": markets.get("fg_margin_mean"),
         "f5_margin_mean": markets.get("f5_margin_mean"),
+        "model_fg_home_win_prob": model_markets.get("fg_home_win_prob"),
+        "model_fg_total_mean": model_markets.get("fg_total_mean"),
+        "model_fair_fg_home_ml": model_markets.get("fair_fg_home_ml"),
+        "model_fair_fg_total": model_markets.get("fair_fg_total"),
+        "model_fair_fg_spread_home": model_markets.get("fair_fg_spread_home"),
+        "handicap_fg_home_win_prob": handicap_markets.get("fg_home_win_prob"),
+        "handicap_fg_total_mean": handicap_markets.get("fg_total_mean"),
+        "handicap_fair_fg_home_ml": handicap_markets.get("fair_fg_home_ml"),
+        "handicap_fair_fg_total": handicap_markets.get("fair_fg_total"),
+        "handicap_fair_fg_spread_home": handicap_markets.get("fair_fg_spread_home"),
         "projection": __import__("json").dumps(projection),
         "created_at": stamped_at,
     }
-    if _mlb_projection_has_runline_cols(session):
+    has_runline = _mlb_projection_has_runline_cols(session)
+    has_model_handicap = _mlb_projection_has_model_handicap_cols(session)
+    if has_runline and has_model_handicap:
+        session.execute(
+            text(
+                """
+                INSERT INTO mlb_market_projections (
+                  game_id, model_version, simulation_count,
+                  f5_home_win_prob, fg_home_win_prob, f5_total_mean, fg_total_mean,
+                  fair_f5_home_ml, fair_fg_home_ml, fair_f5_total, fair_fg_total,
+                  fair_fg_spread_home, fair_f5_spread_home,
+                  fg_home_cover_prob_run_line, f5_home_cover_prob_run_line,
+                  fg_margin_mean, f5_margin_mean,
+                  model_fg_home_win_prob, model_fg_total_mean,
+                  model_fair_fg_home_ml, model_fair_fg_total, model_fair_fg_spread_home,
+                  handicap_fg_home_win_prob, handicap_fg_total_mean,
+                  handicap_fair_fg_home_ml, handicap_fair_fg_total,
+                  handicap_fair_fg_spread_home,
+                  projection, created_at
+                ) VALUES (
+                  :game_id, :model_version, :simulation_count,
+                  :f5_home_win_prob, :fg_home_win_prob, :f5_total_mean, :fg_total_mean,
+                  :fair_f5_home_ml, :fair_fg_home_ml, :fair_f5_total, :fair_fg_total,
+                  :fair_fg_spread_home, :fair_f5_spread_home,
+                  :fg_home_cover_prob_run_line, :f5_home_cover_prob_run_line,
+                  :fg_margin_mean, :f5_margin_mean,
+                  :model_fg_home_win_prob, :model_fg_total_mean,
+                  :model_fair_fg_home_ml, :model_fair_fg_total, :model_fair_fg_spread_home,
+                  :handicap_fg_home_win_prob, :handicap_fg_total_mean,
+                  :handicap_fair_fg_home_ml, :handicap_fair_fg_total,
+                  :handicap_fair_fg_spread_home,
+                  CAST(:projection AS jsonb), :created_at
+                )
+                """
+            ),
+            base_params,
+        )
+    elif has_runline:
         session.execute(
             text(
                 """
@@ -10222,7 +10351,18 @@ def run_mlb_lineup_nowcast_repricing(
                 model_version=base_model_version,
             )
             projection_base.setdefault("diagnostics", {}).update(shock_diag)
-            _insert_mlb_projection_and_audit(session, projection_base, seed=seed_base)
+            prior_model_base = _fetch_prior_mlb_model_markets(
+                session,
+                game_id=inputs.game_id,
+                model_version=base_model_version,
+            )
+            _insert_mlb_projection_and_audit(
+                session,
+                projection_base,
+                seed=seed_base,
+                line_role="handicap",
+                prior_model_markets=prior_model_base,
+            )
             repriced_base += 1
 
             if run_challenger:
@@ -10234,7 +10374,18 @@ def run_mlb_lineup_nowcast_repricing(
                     model_version=challenger_model_version,
                 )
                 projection_ch.setdefault("diagnostics", {}).update(shock_diag)
-                _insert_mlb_projection_and_audit(session, projection_ch, seed=seed_ch)
+                prior_model_ch = _fetch_prior_mlb_model_markets(
+                    session,
+                    game_id=inputs.game_id,
+                    model_version=challenger_model_version,
+                )
+                _insert_mlb_projection_and_audit(
+                    session,
+                    projection_ch,
+                    seed=seed_ch,
+                    line_role="handicap",
+                    prior_model_markets=prior_model_ch,
+                )
                 repriced_challenger += 1
 
         summary = {

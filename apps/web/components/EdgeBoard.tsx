@@ -26,7 +26,7 @@ export type FlatEdgeBoardRow = {
   kei?: string;
   /** Fair away moneyline (American) when market is Moneyline. */
   keiAway?: string;
-  /** Model home win probability (0–1) for Moneyline edge in prob points. */
+  /** Handicap (KEI) home win probability (0–1) for Moneyline edge in prob points. */
   homeWinProb?: number;
   /** REG / PRE / POST — PRE blocked from season PLAY under info desk. */
   seasonType?: string;
@@ -347,9 +347,11 @@ function favorTextClass(tag: Tag | undefined): string {
   return "text-gray-400";
 }
 
-/** Market (Best) vs Model (KEI) column chrome — contrast without card clutter. */
+/** Market (Best) vs KEI handicap column chrome — contrast without card clutter. */
 const COL_MARKET = "bg-white/[0.035] border-l border-white/10";
-const COL_MODEL = "bg-kos-gold/[0.07] border-l border-kos-gold/25";
+const COL_KEI = "bg-kos-gold/[0.07] border-l border-kos-gold/25";
+/** @deprecated Use COL_KEI — kept as alias during migration. */
+const COL_MODEL = COL_KEI;
 const COL_DECISION = "border-l border-white/12";
 const TH_BASE = "py-3.5 px-3";
 const TD_BASE = "py-3.5 px-3 align-top";
@@ -699,8 +701,9 @@ export default function EdgeBoard({
   const isNfl = String(sportKey).toLowerCase() === "nfl";
   const isMlb = String(sportKey).toLowerCase() === "mlb";
   const lineLabel = isMlb ? "Moneyline" : "Line";
-  const modelLineHeader = isMlb ? "Our" : keiCode;
-  const modelOuHeader = isMlb ? "Our" : keiCode;
+  // KEI = final handicap (not raw model). All sports use KEI headers.
+  const keiLineHeader = "KEI";
+  const keiOuHeader = "KEI";
   const edgeLineLabel = isMlb ? "ML edge" : "Spread edge";
 
   if (variant === "home") {
@@ -773,7 +776,7 @@ export default function EdgeBoard({
         </span>
       </div>
       <p className="px-1 text-xs text-gray-400">
-        Model ({keiCode}) vs Market · Edge · Tag · ET
+        KEI handicap ({keiCode}) vs Market · Edge · Tag · ET
       </p>
       {data.map((r) => (
         <article
@@ -817,9 +820,9 @@ export default function EdgeBoard({
                 </div>
               ) : null}
             </div>
-            <div className={`rounded-xl border border-kos-gold/25 p-3 ${COL_MODEL}`}>
+            <div className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}>
               <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
-                Model · {keiCode}
+                KEI · {keiCode}
               </div>
               <div className="mt-1 font-semibold text-kos-gold">
                 {(r.keiLine ?? COMING_SOON_PAIR).top.label}
@@ -908,10 +911,10 @@ export default function EdgeBoard({
                   Market
                 </th>
                 <th
-                  className={`${TH_BASE} pb-0 ${COL_MODEL} text-kos-gold`}
+                  className={`${TH_BASE} pb-0 ${COL_KEI} text-kos-gold`}
                   colSpan={2}
                 >
-                  Model
+                  KEI
                 </th>
                 <th
                   className={`${TH_BASE} pb-0 ${COL_DECISION} text-gray-300`}
@@ -939,11 +942,11 @@ export default function EdgeBoard({
                 <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
                   <HeaderStack a="Best" b="O/U" />
                 </th>
-                <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
-                  <HeaderStack a={modelLineHeader} b={lineLabel} />
+                <th className={`${TH_BASE} ${COL_KEI} text-kos-gold`}>
+                  <HeaderStack a={keiLineHeader} b={lineLabel} />
                 </th>
-                <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
-                  <HeaderStack a={modelOuHeader} b="O/U" />
+                <th className={`${TH_BASE} ${COL_KEI} text-kos-gold`}>
+                  <HeaderStack a={keiOuHeader} b="O/U" />
                 </th>
                 <th
                   className={`${TH_BASE} ${COL_DECISION} text-[14px] font-bold text-white normal-case tracking-normal`}

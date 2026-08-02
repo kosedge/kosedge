@@ -5,16 +5,27 @@
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
-import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
+import {
+  getKeiLines,
+  resolveHandicapFields,
+  type KeiLineGame,
+} from "@/lib/kei-lines";
 import { formatAmericanOdds } from "@/lib/mlb-fair-lines-format";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
 type KeiProjection = {
+  /** Handicap (KEI) — what edgeboard shows and tags against. */
   projSpreadHome: number | null;
   projTotal: number | null;
   projHomeMl: number | null;
   projAwayMl: number | null;
   homeWinProb: number | null;
+  /** Optional pure-sim fields for future Model columns. */
+  modelSpreadHome: number | null;
+  modelTotal: number | null;
+  modelHomeMl: number | null;
+  modelAwayMl: number | null;
+  modelHomeWinProb: number | null;
 };
 
 function normalizeGameKey(game: string): string {
@@ -106,12 +117,19 @@ function registerGame(
   sportKey: string,
   g: KeiLineGame,
 ) {
+  // Edge / tags always use handicap (identity fallback to model / proj*).
+  const h = resolveHandicapFields(g);
   const value: KeiProjection = {
-    projSpreadHome: g.projSpreadHome ?? null,
-    projTotal: g.projTotal ?? null,
-    projHomeMl: g.projHomeMl ?? null,
-    projAwayMl: g.projAwayMl ?? null,
-    homeWinProb: g.homeWinProb ?? null,
+    projSpreadHome: h.spreadHome,
+    projTotal: h.total,
+    projHomeMl: h.homeMl,
+    projAwayMl: h.awayMl,
+    homeWinProb: h.homeWinProb,
+    modelSpreadHome: g.modelSpreadHome ?? h.spreadHome,
+    modelTotal: g.modelTotal ?? h.total,
+    modelHomeMl: g.modelHomeMl ?? h.homeMl,
+    modelAwayMl: g.modelAwayMl ?? h.awayMl,
+    modelHomeWinProb: g.modelHomeWinProb ?? h.homeWinProb,
   };
   const keys =
     sportKey.toLowerCase() === "nfl"
@@ -250,8 +268,12 @@ export function mergeKeiIntoEdgeBoardRows(
       kei?: string;
       keiAway?: string;
       homeWinProb?: number;
+      modelKei?: string;
+      modelKeiAway?: string;
+      modelHomeWinProb?: number;
     };
 
+    // Handicap → row.kei (edgeboard KEI columns + PLAY/LEAN tags)
     if (row.market === "Moneyline") {
       if (proj.projHomeMl != null) {
         mutable.kei = formatAmericanOdds(proj.projHomeMl);
@@ -262,10 +284,25 @@ export function mergeKeiIntoEdgeBoardRows(
       if (proj.homeWinProb != null) {
         mutable.homeWinProb = proj.homeWinProb;
       }
+      if (proj.modelHomeMl != null) {
+        mutable.modelKei = formatAmericanOdds(proj.modelHomeMl);
+      }
+      if (proj.modelAwayMl != null) {
+        mutable.modelKeiAway = formatAmericanOdds(proj.modelAwayMl);
+      }
+      if (proj.modelHomeWinProb != null) {
+        mutable.modelHomeWinProb = proj.modelHomeWinProb;
+      }
     } else if (row.market === "Spread" && proj.projSpreadHome != null) {
       mutable.kei = formatSpread(proj.projSpreadHome);
+      if (proj.modelSpreadHome != null) {
+        mutable.modelKei = formatSpread(proj.modelSpreadHome);
+      }
     } else if (row.market === "Total" && proj.projTotal != null) {
       mutable.kei = String(Math.round(proj.projTotal * 10) / 10);
+      if (proj.modelTotal != null) {
+        mutable.modelKei = String(Math.round(proj.modelTotal * 10) / 10);
+      }
     }
   }
 

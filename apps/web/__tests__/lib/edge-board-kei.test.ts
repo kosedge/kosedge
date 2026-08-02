@@ -1,8 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/kei-lines", () => ({
-  getKeiLines: vi.fn(),
-}));
+vi.mock("@/lib/kei-lines", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/kei-lines")>();
+  return {
+    ...actual,
+    getKeiLines: vi.fn(),
+  };
+});
 
 import { getKeiLines } from "@/lib/kei-lines";
 import {
@@ -189,5 +193,69 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     const out = mergeKeiIntoEdgeBoardRows(rows as any, "nfl");
     expect(out[0].kei).toBe("-3.5");
     expect(out[1].kei).toBe("41.3");
+  });
+
+  it("merges handicap into kei and attaches model fields without using them for kei", () => {
+    const rows: Row[] = [
+      {
+        id: "mlb-ml",
+        game: "Away @ Home",
+        market: "Moneyline" as any,
+      },
+      {
+        id: "mlb-total",
+        game: "Away @ Home",
+        market: "Total",
+      },
+    ];
+    const out = mergeKeiIntoEdgeBoardRows(rows as any, "mlb", [
+      {
+        awayTeam: "Away",
+        homeTeam: "Home",
+        projSpreadHome: -1.5,
+        projTotal: 9.0,
+        projHomeMl: -140,
+        projAwayMl: 120,
+        homeWinProb: 0.6,
+        handicapHomeMl: -140,
+        handicapAwayMl: 120,
+        handicapHomeWinProb: 0.6,
+        handicapTotal: 9.0,
+        modelHomeMl: -110,
+        modelAwayMl: -110,
+        modelHomeWinProb: 0.52,
+        modelTotal: 8.2,
+      },
+    ]);
+    const ml = out.find((r) => r.market === "Moneyline") as any;
+    const total = out.find((r) => r.market === "Total") as any;
+    expect(ml?.kei).toBe("-140");
+    expect(ml?.keiAway).toBe("+120");
+    expect(ml?.homeWinProb).toBe(0.6);
+    expect(ml?.modelKei).toBe("-110");
+    expect(ml?.modelHomeWinProb).toBe(0.52);
+    expect(total?.kei).toBe("9");
+    expect(total?.modelKei).toBe("8.2");
+  });
+
+  it("identity fallback: handicap missing uses model for kei", () => {
+    const rows: Row[] = [
+      {
+        id: "s1",
+        game: "A @ B",
+        market: "Spread",
+      },
+    ];
+    const out = mergeKeiIntoEdgeBoardRows(rows as any, "ncaam", [
+      {
+        awayTeam: "A",
+        homeTeam: "B",
+        projSpreadHome: null,
+        projTotal: null,
+        modelSpreadHome: -4.5,
+        modelTotal: 140,
+      },
+    ]);
+    expect(out[0]?.kei).toBe("-4.5");
   });
 });

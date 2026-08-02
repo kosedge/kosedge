@@ -26,6 +26,26 @@ function buildHref(base: Record<string, string | undefined>): string {
   return query ? `/pro/mlb/fair-lines?${query}` : "/pro/mlb/fair-lines";
 }
 
+function handicapMl(row: MlbFairLineRow): {
+  home: number | null;
+  away: number | null;
+} {
+  return {
+    home: row.handicapHomeMl ?? row.fairHomeMl,
+    away: row.handicapAwayMl ?? row.fairAwayMl,
+  };
+}
+
+function modelMl(row: MlbFairLineRow): {
+  home: number | null;
+  away: number | null;
+} {
+  return {
+    home: row.modelHomeMl ?? row.handicapHomeMl ?? row.fairHomeMl,
+    away: row.modelAwayMl ?? row.handicapAwayMl ?? row.fairAwayMl,
+  };
+}
+
 export default async function MlbFairLinesPage({
   searchParams,
 }: {
@@ -51,9 +71,10 @@ export default async function MlbFairLinesPage({
               KEI Lines
             </h1>
             <p className="mt-2 text-sm text-kos-text/75">
-              Neutral model fair values — moneyline, total runs, and run line.
-              Starter and bullpen context feed the projection. Research only —
-              you make the picks.
+              Model = pure sim research fair. KEI handicap = the product line
+              (model plus lineup/nowcast movement) shown on the Edge Board —
+              moneyline, total runs, and run line. Research only — you make the
+              picks.
             </p>
             <div className="mt-3 flex flex-wrap gap-3 text-xs">
               <Link
@@ -148,48 +169,76 @@ export default async function MlbFairLinesPage({
         {lines.length > 0 ? (
           <>
             <div className="mt-4 grid gap-3 md:hidden">
-              {lines.map((row) => (
-                <article
-                  key={row.gameId}
-                  className="rounded-xl border border-white/10 bg-black/35 p-4"
-                >
-                  <div className="text-sm font-semibold text-kos-text">
-                    {row.awayTeam} @ {row.homeTeam}
-                  </div>
-                  <p className="mt-1 text-xs text-kos-text/55">
-                    {formatKickoff(row.startTime)} · ET
-                  </p>
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                      <div className="text-kos-text/50">Fair ML</div>
-                      <div className="mt-0.5 text-kos-text">
-                        H {formatAmericanOdds(row.fairHomeMl)} / A{" "}
-                        {formatAmericanOdds(row.fairAwayMl)}
+              {lines.map((row) => {
+                const h = handicapMl(row);
+                const m = modelMl(row);
+                return (
+                  <article
+                    key={row.gameId}
+                    className="rounded-xl border border-white/10 bg-black/35 p-4"
+                  >
+                    <div className="text-sm font-semibold text-kos-text">
+                      {row.awayTeam} @ {row.homeTeam}
+                    </div>
+                    <p className="mt-1 text-xs text-kos-text/55">
+                      {formatKickoff(row.startTime)} · ET
+                    </p>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <div className="text-kos-text/50">Model ML</div>
+                        <div className="mt-0.5 text-kos-text/80">
+                          H {formatAmericanOdds(m.home)} / A{" "}
+                          {formatAmericanOdds(m.away)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-kos-gold/70">KEI ML</div>
+                        <div className="mt-0.5 font-semibold text-kos-gold">
+                          H {formatAmericanOdds(h.home)} / A{" "}
+                          {formatAmericanOdds(h.away)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-kos-text/50">Model total</div>
+                        <div className="mt-0.5 text-kos-text/80">
+                          {formatTotal(
+                            row.modelTotal ??
+                              row.modelTotalMean ??
+                              row.fairTotal ??
+                              row.totalMean,
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-kos-gold/70">KEI total</div>
+                        <div className="mt-0.5 font-semibold text-kos-gold">
+                          {formatTotal(
+                            row.handicapTotal ??
+                              row.fairTotal ??
+                              row.totalMean,
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-kos-text/50">Run line (home)</div>
+                        <div
+                          className={`mt-0.5 font-semibold ${focus === "run-line" ? "text-kos-gold" : "text-kos-text"}`}
+                        >
+                          {formatRunLine(
+                            row.handicapSpreadHome ?? row.fairSpreadHome,
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-kos-text/50">Home cover</div>
+                        <div className="mt-0.5 text-kos-text">
+                          {formatWinProb(row.runLineCoverProbHome)}
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <div className="text-kos-text/50">Fair total</div>
-                      <div className="mt-0.5 font-semibold text-kos-gold">
-                        {formatTotal(row.fairTotal ?? row.totalMean)}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-kos-text/50">Run line (home)</div>
-                      <div
-                        className={`mt-0.5 font-semibold ${focus === "run-line" ? "text-kos-gold" : "text-kos-text"}`}
-                      >
-                        {formatRunLine(row.fairSpreadHome)}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-kos-text/50">Home cover</div>
-                      <div className="mt-0.5 text-kos-text">
-                        {formatWinProb(row.runLineCoverProbHome)}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
             <div className="mt-4 hidden overflow-x-auto md:block">
               <table className="min-w-full text-left text-sm">
@@ -197,9 +246,18 @@ export default async function MlbFairLinesPage({
                   <tr className="border-b border-white/10">
                     <th className="px-3 py-2 font-semibold">Matchup</th>
                     <th className="px-3 py-2 font-semibold">First pitch</th>
-                    <th className="px-3 py-2 font-semibold">Fair ML</th>
-                    <th className="px-3 py-2 font-semibold">Win probs</th>
-                    <th className="px-3 py-2 font-semibold">Fair total</th>
+                    <th className="px-3 py-2 font-semibold">Model ML</th>
+                    <th className="px-3 py-2 font-semibold text-kos-gold/80">
+                      KEI ML
+                    </th>
+                    <th className="px-3 py-2 font-semibold">Model win</th>
+                    <th className="px-3 py-2 font-semibold text-kos-gold/80">
+                      KEI win
+                    </th>
+                    <th className="px-3 py-2 font-semibold">Model total</th>
+                    <th className="px-3 py-2 font-semibold text-kos-gold/80">
+                      KEI total
+                    </th>
                     <th
                       className={`px-3 py-2 font-semibold ${focus === "run-line" ? "text-kos-gold" : ""}`}
                     >
@@ -229,9 +287,10 @@ export default async function MlbFairLinesPage({
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
         <p>
-          MLB fair lines are simulation-backed reference prices — not picks. Run
-          line uses the model’s home cover probability and fair spread; Edges
-          desk joins live Vegas ML/totals when available.
+          Edge Board tags compare KEI handicap to the best market — not raw
+          model. When model and KEI match, no nowcast/lineup movement has been
+          applied yet. Run line uses the model’s home cover probability and fair
+          spread; Edges desk joins live Vegas ML/totals when available.
         </p>
       </section>
     </main>
@@ -245,6 +304,10 @@ function FairLineRow({
   row: MlbFairLineRow;
   emphasizeRunLine: boolean;
 }) {
+  const h = handicapMl(row);
+  const m = modelMl(row);
+  const modelWin = row.modelHomeWinProb ?? row.handicapHomeWinProb ?? row.homeWinProb;
+  const keiWin = row.handicapHomeWinProb ?? row.homeWinProb;
   return (
     <tr className="border-b border-white/5 transition hover:bg-white/5">
       <td className="px-3 py-3">
@@ -255,23 +318,34 @@ function FairLineRow({
       <td className="px-3 py-3 text-kos-text/80">
         {formatKickoff(row.startTime)}
       </td>
-      <td className="px-3 py-3 text-kos-text/90">
-        H {formatAmericanOdds(row.fairHomeMl)} / A{" "}
-        {formatAmericanOdds(row.fairAwayMl)}
+      <td className="px-3 py-3 text-kos-text/70">
+        H {formatAmericanOdds(m.home)} / A {formatAmericanOdds(m.away)}
       </td>
-      <td className="px-3 py-3 text-kos-text/80">
-        {formatWinProb(row.homeWinProb)}
-        {row.homeWinProb !== null
-          ? ` / ${formatWinProb(1 - row.homeWinProb)}`
+      <td className="px-3 py-3 font-semibold text-kos-gold">
+        H {formatAmericanOdds(h.home)} / A {formatAmericanOdds(h.away)}
+      </td>
+      <td className="px-3 py-3 text-kos-text/70">
+        {formatWinProb(modelWin)}
+        {modelWin !== null && modelWin !== undefined
+          ? ` / ${formatWinProb(1 - modelWin)}`
           : " / —"}
       </td>
+      <td className="px-3 py-3 text-kos-text/90">
+        {formatWinProb(keiWin ?? null)}
+        {keiWin != null ? ` / ${formatWinProb(1 - keiWin)}` : " / —"}
+      </td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatTotal(
+          row.modelTotal ?? row.modelTotalMean ?? row.fairTotal ?? row.totalMean,
+        )}
+      </td>
       <td className="px-3 py-3 font-semibold text-kos-text">
-        {formatTotal(row.fairTotal ?? row.totalMean)}
+        {formatTotal(row.handicapTotal ?? row.fairTotal ?? row.totalMean)}
       </td>
       <td
         className={`px-3 py-3 font-semibold ${emphasizeRunLine ? "text-kos-gold" : "text-kos-gold/90"}`}
       >
-        {formatRunLine(row.fairSpreadHome)}
+        {formatRunLine(row.handicapSpreadHome ?? row.fairSpreadHome)}
       </td>
       <td
         className={`px-3 py-3 font-semibold ${emphasizeRunLine ? "text-edge-green" : "text-kos-text/80"}`}

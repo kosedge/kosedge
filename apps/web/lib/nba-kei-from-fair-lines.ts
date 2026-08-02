@@ -1,19 +1,44 @@
 /**
  * Map NBA model-service fair-lines into KEI games for board merge / Fair Lines.
+ *
+ * Published fair_* (may include market blend) → handicap (KEI).
+ * TODO(model-honesty): when API exposes pre_blend_* / raw model, map to model_*.
  */
 
-import type { KeiLineGame } from "@/lib/kei-lines";
+import {
+  applyHandicapIdentity,
+  type KeiLineGame,
+} from "@/lib/kei-lines";
 import type { NbaFairLineRow } from "@/lib/nba-fair-lines-format";
 
 export function keiGamesFromNbaFairLines(
   lines: NbaFairLineRow[],
 ): KeiLineGame[] {
-  return lines.map((line) => ({
-    id: line.gameId,
-    homeTeam: line.homeTeam,
-    awayTeam: line.awayTeam,
-    commenceTime: line.startTime ?? line.gameDate ?? undefined,
-    projSpreadHome: line.fairSpreadHome,
-    projTotal: line.fairTotal ?? line.totalMean,
-  }));
+  return lines.map((line) => {
+    const raw = line as NbaFairLineRow & {
+      modelSpreadHome?: number | null;
+      modelTotal?: number | null;
+      preBlendSpreadHome?: number | null;
+      preBlendTotal?: number | null;
+    };
+    const handicapSpread = line.fairSpreadHome;
+    const handicapTotal = line.fairTotal ?? line.totalMean;
+    const modelSpread =
+      raw.modelSpreadHome ?? raw.preBlendSpreadHome ?? handicapSpread;
+    const modelTotal =
+      raw.modelTotal ?? raw.preBlendTotal ?? handicapTotal;
+
+    return applyHandicapIdentity({
+      id: line.gameId,
+      homeTeam: line.homeTeam,
+      awayTeam: line.awayTeam,
+      commenceTime: line.startTime ?? line.gameDate ?? undefined,
+      handicapSpreadHome: handicapSpread,
+      handicapTotal,
+      projSpreadHome: handicapSpread,
+      projTotal: handicapTotal,
+      modelSpreadHome: modelSpread,
+      modelTotal,
+    });
+  });
 }
