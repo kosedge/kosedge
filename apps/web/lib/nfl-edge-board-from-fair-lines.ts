@@ -201,13 +201,49 @@ function hasSportsbookPrice(row: EdgeBoardRow): boolean {
   return Boolean(row.best) && Boolean(bookKey) && bookKey !== "keinfl";
 }
 
-/** Live market = current NFL week slate (all scheduled games that week). */
+function rowHasKei(row: EdgeBoardRow): boolean {
+  return Boolean(row.kei && String(row.kei).trim() && String(row.kei) !== "—");
+}
+
+/**
+ * NFL Edge Board is projection-backed (REG fair-lines). Drop odds-only extras
+ * (common in PRE) that have Open/Best but no KEINFL — avoids empty-KEI noise.
+ */
+export function filterNflProjectionBackedRows(
+  rows: EdgeBoardRow[],
+): EdgeBoardRow[] {
+  const keiGames = new Set<string>();
+  for (const row of rows) {
+    if (row.game && rowHasKei(row)) keiGames.add(row.game);
+  }
+  if (keiGames.size === 0) return [];
+  return rows.filter((row) => row.game != null && keiGames.has(row.game));
+}
+
+/**
+ * Live tab = current REG week. If that week is missing from the pull window
+ * (early season / clock skew), show the nearest upcoming week — never dump
+ * the full multi-week board as a silent fallback.
+ */
 export function filterNflCurrentWeekRows(
   rows: EdgeBoardRow[],
   currentWeek: number,
 ): EdgeBoardRow[] {
-  const filtered = rows.filter((row) => rowWeek(row) === currentWeek);
-  return filtered.length > 0 ? filtered : rows;
+  const week = Number.isFinite(currentWeek) ? Math.max(1, currentWeek) : 1;
+  const filtered = rows.filter((row) => rowWeek(row) === week);
+  if (filtered.length > 0) return filtered;
+
+  const weeks = [
+    ...new Set(
+      rows
+        .map(rowWeek)
+        .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
+    ),
+  ].sort((a, b) => a - b);
+  if (weeks.length === 0) return [];
+
+  const next = weeks.find((w) => w >= week) ?? weeks[weeks.length - 1]!;
+  return rows.filter((row) => rowWeek(row) === next);
 }
 
 /** Full season board = every game we currently have sportsbook odds on. */
@@ -218,7 +254,9 @@ export function filterNflOddsPostedRows(rows: EdgeBoardRow[]): EdgeBoardRow[] {
       pricedGames.add(row.game);
     }
   }
-  if (pricedGames.size === 0) return rows;
+  // Odds slate with no books yet: keep projection-backed rows (empty Open/Best)
+  // rather than inventing a sportsbook slate.
+  if (pricedGames.size === 0) return filterNflProjectionBackedRows(rows);
   return rows.filter((row) => row.game != null && pricedGames.has(row.game));
 }
 
@@ -265,7 +303,6 @@ export function overlayOddsOntoFairLineRows(
     }
   }
 
-  const usedOdds = new Set<string>();
   for (const odds of oddsRows) {
     const game = String(odds.game ?? "");
     const market = String(odds.market ?? "");
@@ -276,7 +313,6 @@ export function overlayOddsOntoFairLineRows(
       if (target) break;
     }
     if (!target) continue;
-    usedOdds.add(String(odds.id ?? `${game}|${market}`));
     const src = odds as EdgeBoardRow & {
       bookKey?: string;
       openJuice?: string;
@@ -311,22 +347,7 @@ export function overlayOddsOntoFairLineRows(
     if (odds.commenceTime) target.commenceTime = odds.commenceTime;
   }
 
-  // Odds-only games (shouldn't happen often) — append so we don't drop them.
-  const extras: EdgeBoardRow[] = [];
-  for (const odds of oddsRows) {
-    const id = String(odds.id ?? `${odds.game}|${odds.market}`);
-    if (usedOdds.has(id)) continue;
-    const game = String(odds.game ?? "");
-    const market = String(odds.market ?? "");
-    let covered = false;
-    for (const gk of nflEdgeBoardMatchKeys(game)) {
-      if (byKey.has(`${gk}|${market}`)) {
-        covered = true;
-        break;
-      }
-    }
-    if (!covered) extras.push(odds);
-  }
-
-  return extras.length ? [...fairRows, ...extras] : fairRows;
+  // Do not append odds-only extras (PRE noise, unmatched books). NFL board is
+  // fair-line / KEINFL-backed; Odds overlays prices onto those rows only.
+  return fairRows;
 }

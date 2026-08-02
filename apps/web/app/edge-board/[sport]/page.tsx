@@ -100,8 +100,8 @@ export default async function EdgeBoardSportPage({
                 ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
                 : isNfl
                   ? slate === "live"
-                    ? `Central research board for the current week. ${keiCode} handicap lines always; Open/Best when books post. You make the picks.`
-                    : `All NFL games with sportsbook odds on file. Research board — not a picks feed.`
+                    ? `Regular-season research board for the current week. ${keiCode} is the published fair line (identity — no separate Model column yet). Open/Best when books post. Preseason odds are not mixed in. You make the picks.`
+                    : `Projection-backed NFL games with sportsbook odds on file. ${keiCode} = published fair line. Research board — not a picks feed.`
                   : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
             </p>
           </div>
@@ -145,27 +145,34 @@ export default async function EdgeBoardSportPage({
         </div>
 
         {sportKey === "nfl" ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link
-              href="/edge-board/nfl"
-              className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                slate === "live"
-                  ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
-                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
-              }`}
-            >
-              Current week
-            </Link>
-            <Link
-              href="/edge-board/nfl?slate=all"
-              className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                slate === "all"
-                  ? "bg-kos-gold/20 border border-kos-gold/50 text-kos-gold"
-                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
-              }`}
-            >
-              Odds slate
-            </Link>
+          <div className="mt-4 space-y-2">
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/edge-board/nfl"
+                className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                  slate === "live"
+                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
+                    : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+                }`}
+              >
+                Current week
+              </Link>
+              <Link
+                href="/edge-board/nfl?slate=all"
+                className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                  slate === "all"
+                    ? "bg-kos-gold/20 border border-kos-gold/50 text-kos-gold"
+                    : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+                }`}
+              >
+                Odds slate
+              </Link>
+            </div>
+            <p className="text-[11px] text-gray-500 max-w-3xl">
+              REG fair-lines only · PRE market noise filtered out · PLAY tags
+              blocked in preseason info mode · empty Open/Best means books
+              have not posted yet (not a missing model)
+            </p>
           </div>
         ) : null}
 

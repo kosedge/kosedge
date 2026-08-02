@@ -3,6 +3,7 @@ import {
   fairLinesToEdgeBoardRows,
   filterNflCurrentWeekRows,
   filterNflOddsPostedRows,
+  filterNflProjectionBackedRows,
   overlayOddsOntoFairLineRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
@@ -12,6 +13,7 @@ function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
     gameId: "g1",
     season: 2026,
     week: 1,
+    seasonType: "REG",
     startTime: "2026-09-10T00:15:00Z",
     gameDate: "2026-09-09",
     homeTeam: "Seattle Seahawks",
@@ -44,6 +46,9 @@ function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
     totalEdge: null,
     spreadEdge: null,
     marketJoined: true,
+    publishTagSpread: "PASS",
+    publishTagTotal: "PASS",
+    publishTagMl: "PASS",
     ...partial,
   };
 }
@@ -105,6 +110,22 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(spread.best).toBe("+4.5");
     expect((spread as any).bookKey).toBe("fanduel");
     expect(spread.kei).toBe("-3.5");
+  });
+
+  it("does not append PRE / odds-only extras without fair-line KEI", () => {
+    const base = fairLinesToEdgeBoardRows([line({})]);
+    const out = overlayOddsOntoFairLineRows(base, [
+      {
+        id: "pre-spread",
+        game: "Dallas Cowboys @ Los Angeles Chargers",
+        market: "Spread",
+        best: "+3",
+        bookKey: "draftkings",
+        book: "DraftKings",
+      } as any,
+    ]);
+    expect(out).toHaveLength(2);
+    expect(out.every((r) => r.game?.includes("Seahawks"))).toBe(true);
   });
 
   it("leaves Open/Best empty when no sportsbook market (KEI still set)", () => {
@@ -190,5 +211,40 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(oddsGames.has("New England Patriots @ Seattle Seahawks")).toBe(true);
     expect(oddsGames.has("Green Bay Packers @ Minnesota Vikings")).toBe(true);
     expect(oddsGames.has("San Francisco 49ers @ Los Angeles Rams")).toBe(false);
+  });
+
+  it("falls back to nearest upcoming week instead of dumping full board", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({ week: 2, gameId: "w2" }),
+      line({
+        week: 3,
+        gameId: "w3",
+        homeTeam: "Minnesota Vikings",
+        awayTeam: "Green Bay Packers",
+        homeAbbr: "MIN",
+        awayAbbr: "GB",
+      }),
+    ]);
+    const filtered = filterNflCurrentWeekRows(rows, 1);
+    const games = new Set(filtered.map((r) => r.game));
+    expect(games.size).toBe(1);
+    expect(games.has("New England Patriots @ Seattle Seahawks")).toBe(true);
+    expect(games.has("Green Bay Packers @ Minnesota Vikings")).toBe(false);
+  });
+
+  it("drops odds-only rows from projection-backed filter", () => {
+    const rows = [
+      ...fairLinesToEdgeBoardRows([line({})]),
+      {
+        id: "pre-only",
+        game: "Dallas Cowboys @ Los Angeles Chargers",
+        market: "Spread",
+        best: "+2.5",
+        bookKey: "fanduel",
+      } as any,
+    ];
+    const filtered = filterNflProjectionBackedRows(rows);
+    expect(filtered).toHaveLength(2);
+    expect(filtered.every((r) => r.kei)).toBe(true);
   });
 });

@@ -34,27 +34,17 @@ const NFL_KEI_SEASON = 2026;
 
 /**
  * Map NFL fair-lines → KEI games.
- * Published blended spread/total → handicap (KEI).
- * Honesty: pure Model snapshot is NOT separated yet — model_* = handicap (identity).
- * When fair-lines API exposes pre_blend_* / raw model, map those to model_*.
+ * Published fair line (spread_home / total_mean) → handicap (KEI).
+ * Honesty contract: no Model vs KEI split yet — leave model_* unset so
+ * applyHandicapIdentity copies handicap → model (identity). Do not invent
+ * a pure-model layer from untyped stubs.
  */
 export function keiGamesFromNflFairLines(
   lines: NflFairLineRow[],
 ): KeiLineGame[] {
   return lines.map((line) => {
-    // Prefer explicit model fields when API grows them (stubs today).
-    const raw = line as NflFairLineRow & {
-      modelSpreadHome?: number | null;
-      modelTotal?: number | null;
-      preBlendSpreadHome?: number | null;
-      preBlendTotal?: number | null;
-    };
     const handicapSpread = line.spreadHome;
     const handicapTotal = line.totalMean;
-    const modelSpread =
-      raw.modelSpreadHome ?? raw.preBlendSpreadHome ?? handicapSpread;
-    const modelTotal =
-      raw.modelTotal ?? raw.preBlendTotal ?? handicapTotal;
 
     return applyHandicapIdentity({
       id: line.gameId,
@@ -67,8 +57,6 @@ export function keiGamesFromNflFairLines(
       handicapTotal,
       projSpreadHome: handicapSpread,
       projTotal: handicapTotal,
-      modelSpreadHome: modelSpread,
-      modelTotal,
     });
   });
 }
