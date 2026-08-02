@@ -258,7 +258,8 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       {
         href: "/edge-board/mlb",
         title: "Public Edge Board",
-        description: "Open vs best prices with KEI and directional edge tags.",
+        description:
+          "Best Moneyline + Best O/U vs Our Moneyline / Our O/U; ML edge in prob points (LEAN ≥1.5pp / PLAY ≥3.0pp).",
         cta: "Open edge board →",
         accent: "green",
       },
