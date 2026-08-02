@@ -27,6 +27,10 @@ from .mlb_statcast_stuff import (
 
 MIN_PITCHES_ARSENAL = 180
 MIN_PITCHES_BATTER_FAMILY = 400
+# Individual batter contact sample; lower than team-family aggregate.
+MIN_PITCHES_BATTER_CONTACT = 120
+# Need this many lineup batters with adequate as-of pitches to prefer blend.
+MIN_LINEUP_BATTERS_FOR_BLEND = 4
 
 # League anchors (approx MLB means) for z-ish interaction.
 LEAGUE_BREAK_WHIFF = 0.135
@@ -65,8 +69,23 @@ _TEAM_ABBR_ALIASES: Dict[str, Tuple[str, ...]] = {
 
 _ARSENAL_CUMULATIVE: Dict[int, Dict[int, List[Tuple[str, Dict[str, float]]]]] = {}
 _BATTER_FAMILY_CUMULATIVE: Dict[int, Dict[str, List[Tuple[str, Dict[str, float]]]]] = {}
+_BATTER_CONTACT_CUMULATIVE: Dict[int, Dict[int, List[Tuple[str, Dict[str, float]]]]] = {}
 _ARSENAL_OVERRIDE: Dict[Tuple[int, int, str], Dict[str, float]] = {}
 _BATTER_FAMILY_OVERRIDE: Dict[Tuple[int, str, str], Dict[str, float]] = {}
+_BATTER_CONTACT_OVERRIDE: Dict[Tuple[int, int, str], Dict[str, float]] = {}
+
+# Default lineup-slot PA weights (mirror mlb_data.LINEUP_ORDER_WEIGHTS).
+_LINEUP_SLOT_WEIGHTS: Dict[int, float] = {
+    1: 1.08,
+    2: 1.07,
+    3: 1.12,
+    4: 1.10,
+    5: 1.03,
+    6: 0.97,
+    7: 0.93,
+    8: 0.89,
+    9: 0.86,
+}
 
 PITCH_MATCHUP_ENABLED = (
     str(os.getenv("MLB_PITCH_MATCHUP_ENABLED") or "false").strip().lower()
@@ -76,6 +95,11 @@ PITCH_MATCHUP_ENABLED = (
 # failed to parse (UTF-8 BOM). True arsenal path must not silently fall back.
 PITCH_MATCHUP_STUFF_FALLBACK = (
     str(os.getenv("MLB_PITCH_MATCHUP_STUFF_FALLBACK") or "false").strip().lower()
+    in {"1", "true", "yes", "on"}
+)
+# Default OFF — batter-level (lineup ID) contact blend; falls back to team-family.
+PITCH_MATCHUP_BATTER_LEVEL = (
+    str(os.getenv("MLB_PITCH_MATCHUP_BATTER_LEVEL") or "false").strip().lower()
     in {"1", "true", "yes", "on"}
 )
 
@@ -102,9 +126,24 @@ def get_pitch_matchup_stuff_fallback() -> bool:
     return bool(PITCH_MATCHUP_STUFF_FALLBACK)
 
 
+def apply_pitch_matchup_batter_level(enabled: Optional[bool] = None) -> bool:
+    global PITCH_MATCHUP_BATTER_LEVEL
+    if enabled is not None:
+        PITCH_MATCHUP_BATTER_LEVEL = bool(enabled)
+    return bool(PITCH_MATCHUP_BATTER_LEVEL)
+
+
+def get_pitch_matchup_batter_level() -> bool:
+    return bool(PITCH_MATCHUP_BATTER_LEVEL)
+
+
 def reset_pitch_matchup_from_env() -> bool:
     apply_pitch_matchup_stuff_fallback(
         str(os.getenv("MLB_PITCH_MATCHUP_STUFF_FALLBACK") or "false").strip().lower()
+        in {"1", "true", "yes", "on"}
+    )
+    apply_pitch_matchup_batter_level(
+        str(os.getenv("MLB_PITCH_MATCHUP_BATTER_LEVEL") or "false").strip().lower()
         in {"1", "true", "yes", "on"}
     )
     return apply_pitch_matchup_flag(
@@ -116,8 +155,10 @@ def reset_pitch_matchup_from_env() -> bool:
 def clear_pitch_matchup_caches() -> None:
     _ARSENAL_CUMULATIVE.clear()
     _BATTER_FAMILY_CUMULATIVE.clear()
+    _BATTER_CONTACT_CUMULATIVE.clear()
     _ARSENAL_OVERRIDE.clear()
     _BATTER_FAMILY_OVERRIDE.clear()
+    _BATTER_CONTACT_OVERRIDE.clear()
 
 
 def set_arsenal_metrics_override(
@@ -139,6 +180,18 @@ def set_batter_family_override(
 ) -> None:
     key = (int(season), str(team_abbr or "").upper(), as_of.isoformat())
     _BATTER_FAMILY_OVERRIDE[key] = dict(metrics)
+
+
+def set_batter_contact_override(
+    *,
+    season: int,
+    batter_id: int,
+    as_of: date,
+    metrics: Dict[str, float],
+) -> None:
+    _BATTER_CONTACT_OVERRIDE[(int(season), int(batter_id), as_of.isoformat())] = dict(
+        metrics
+    )
 
 
 def _family(pitch_type: str) -> Optional[str]:
@@ -387,16 +440,31 @@ def aggregate_arsenal_rows(rows: Iterable[Dict[str, Any]]) -> Dict[int, Dict[str
     return {pid: _arsenal_metrics_from_raw(raw) for pid, raw in acc.items()}
 
 
+def _append_asof_point(
+    series_map: Dict[Any, List[Tuple[str, Dict[str, float]]]],
+    key: Any,
+    gd: str,
+    metrics: Dict[str, float],
+) -> None:
+    series = series_map.setdefault(key, [])
+    if series and series[-1][0] == gd:
+        series[-1] = (gd, metrics)
+    else:
+        series.append((gd, metrics))
+
+
 def build_true_arsenal_indexes_from_cache(*, season: int, through: date) -> Dict[str, Path]:
-    """Full rebuild of pitcher arsenal + team batter-family as-of indexes from CSVs."""
+    """Rebuild pitcher arsenal + team/batter contact as-of indexes from CSVs."""
     season_dir = CACHE_DIR / str(season)
     season_dir.mkdir(parents=True, exist_ok=True)
     clear_pitch_matchup_caches()
 
     arsenal_map: Dict[int, List[Tuple[str, Dict[str, float]]]] = {}
     batter_map: Dict[str, List[Tuple[str, Dict[str, float]]]] = {}
+    batter_id_map: Dict[int, List[Tuple[str, Dict[str, float]]]] = {}
     arsenal_raw: Dict[int, Dict[str, float]] = {}
     batter_raw: Dict[str, Dict[str, float]] = {}
+    batter_id_raw: Dict[int, Dict[str, float]] = {}
 
     paths = sorted(season_dir.glob("pitches_*.csv"))
     # Also scan sibling repo cache if CACHE_DIR has index-only (Railway image).
@@ -425,6 +493,7 @@ def build_true_arsenal_indexes_from_cache(*, season: int, through: date) -> Dict
         for gd in sorted(by_day):
             day_arsenal: Dict[int, Dict[str, float]] = {}
             day_batter: Dict[str, Dict[str, float]] = {}
+            day_batter_id: Dict[int, Dict[str, float]] = {}
             for row in by_day[gd]:
                 try:
                     pid = int(float(row.get("pitcher") or 0))
@@ -437,34 +506,39 @@ def build_true_arsenal_indexes_from_cache(*, season: int, through: date) -> Dict
                 if team:
                     tb = day_batter.setdefault(team, _empty_batter_raw())
                     _accumulate_batter_row(tb, row)
+                try:
+                    bid = int(float(row.get("batter") or 0))
+                except (TypeError, ValueError):
+                    bid = 0
+                if bid > 0:
+                    bb = day_batter_id.setdefault(bid, _empty_batter_raw())
+                    _accumulate_batter_row(bb, row)
 
             for pid, inc in day_arsenal.items():
                 tot = arsenal_raw.setdefault(pid, _empty_arsenal_raw())
                 for k, v in inc.items():
                     tot[k] = tot.get(k, 0.0) + v
-                metrics = _arsenal_metrics_from_raw(tot)
-                series = arsenal_map.setdefault(pid, [])
-                if series and series[-1][0] == gd:
-                    series[-1] = (gd, metrics)
-                else:
-                    series.append((gd, metrics))
+                _append_asof_point(arsenal_map, pid, gd, _arsenal_metrics_from_raw(tot))
 
             for team, inc in day_batter.items():
                 tot = batter_raw.setdefault(team, _empty_batter_raw())
                 for k, v in inc.items():
                     tot[k] = tot.get(k, 0.0) + v
-                metrics = _batter_metrics_from_raw(tot)
-                series = batter_map.setdefault(team, [])
-                if series and series[-1][0] == gd:
-                    series[-1] = (gd, metrics)
-                else:
-                    series.append((gd, metrics))
+                _append_asof_point(batter_map, team, gd, _batter_metrics_from_raw(tot))
+
+            for bid, inc in day_batter_id.items():
+                tot = batter_id_raw.setdefault(bid, _empty_batter_raw())
+                for k, v in inc.items():
+                    tot[k] = tot.get(k, 0.0) + v
+                _append_asof_point(batter_id_map, bid, gd, _batter_metrics_from_raw(tot))
 
     _ARSENAL_CUMULATIVE[season] = arsenal_map
     _BATTER_FAMILY_CUMULATIVE[season] = batter_map
+    _BATTER_CONTACT_CUMULATIVE[season] = batter_id_map
 
     arsenal_path = season_dir / "pitcher_arsenal_asof_index.json"
     batter_path = season_dir / "team_batter_family_asof_index.json"
+    batter_id_path = season_dir / "batter_contact_asof_index.json"
     arsenal_path.write_text(
         json.dumps(
             {
@@ -483,18 +557,29 @@ def build_true_arsenal_indexes_from_cache(*, season: int, through: date) -> Dict
         ),
         encoding="utf-8",
     )
+    batter_id_path.write_text(
+        json.dumps(
+            {
+                str(bid): [{"d": d, **m} for d, m in series]
+                for bid, series in batter_id_map.items()
+            }
+        ),
+        encoding="utf-8",
+    )
     # Mirror into service image path when building from repo-root CSVs.
     here = Path(__file__).resolve()
     service_dir = here.parents[2] / "data" / "mlb" / "statcast_cache" / str(season)
     if service_dir.resolve() != season_dir.resolve():
         service_dir.mkdir(parents=True, exist_ok=True)
-        (service_dir / arsenal_path.name).write_text(
-            arsenal_path.read_text(encoding="utf-8"), encoding="utf-8"
-        )
-        (service_dir / batter_path.name).write_text(
-            batter_path.read_text(encoding="utf-8"), encoding="utf-8"
-        )
-    return {"arsenal": arsenal_path, "batter_family": batter_path}
+        for src in (arsenal_path, batter_path, batter_id_path):
+            (service_dir / src.name).write_text(
+                src.read_text(encoding="utf-8"), encoding="utf-8"
+            )
+    return {
+        "arsenal": arsenal_path,
+        "batter_family": batter_path,
+        "batter_contact": batter_id_path,
+    }
 
 
 # Back-compat alias used by older call sites / tests.
@@ -778,6 +863,244 @@ def get_team_batter_family_as_of(
     out["source"] = "team_batter_family"
     out["team"] = resolved
     return out
+
+
+def _batter_metric_keys() -> Tuple[str, ...]:
+    return (
+        "hard_pct_faced",
+        "break_pct_faced",
+        "soft_pct_faced",
+        "hard_whiff_pct",
+        "break_whiff_pct",
+        "soft_whiff_pct",
+        "hard_contact_pct",
+        "break_contact_pct",
+        "soft_contact_pct",
+        "hard_barrel_pct",
+    )
+
+
+def _load_batter_contact_index(season: int) -> None:
+    if season in _BATTER_CONTACT_CUMULATIVE and _BATTER_CONTACT_CUMULATIVE[season]:
+        return
+    index_path = CACHE_DIR / str(season) / "batter_contact_asof_index.json"
+    if not index_path.exists():
+        alt = (
+            Path(__file__).resolve().parents[2]
+            / "data"
+            / "mlb"
+            / "statcast_cache"
+            / str(season)
+            / "batter_contact_asof_index.json"
+        )
+        index_path = alt if alt.exists() else index_path
+    if not index_path.exists():
+        _BATTER_CONTACT_CUMULATIVE.setdefault(season, {})
+        return
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except Exception:
+        _BATTER_CONTACT_CUMULATIVE.setdefault(season, {})
+        return
+    season_map: Dict[int, List[Tuple[str, Dict[str, float]]]] = {}
+    for bid_s, points in (payload or {}).items():
+        series: List[Tuple[str, Dict[str, float]]] = []
+        for pt in points or []:
+            d = str(pt.get("d") or "")
+            if not d:
+                continue
+            series.append(
+                (
+                    d,
+                    {
+                        "pitches": float(pt.get("pitches") or 0),
+                        "hard_pct_faced": float(pt.get("hard_pct_faced") or 0),
+                        "break_pct_faced": float(pt.get("break_pct_faced") or 0),
+                        "soft_pct_faced": float(pt.get("soft_pct_faced") or 0),
+                        "hard_whiff_pct": float(
+                            pt.get("hard_whiff_pct") or LEAGUE_BATTER_HARD_WHIFF
+                        ),
+                        "break_whiff_pct": float(
+                            pt.get("break_whiff_pct") or LEAGUE_BATTER_BREAK_WHIFF
+                        ),
+                        "soft_whiff_pct": float(
+                            pt.get("soft_whiff_pct") or LEAGUE_BATTER_SOFT_WHIFF
+                        ),
+                        "hard_contact_pct": float(pt.get("hard_contact_pct") or 0.78),
+                        "break_contact_pct": float(pt.get("break_contact_pct") or 0.72),
+                        "soft_contact_pct": float(pt.get("soft_contact_pct") or 0.70),
+                        "hard_barrel_pct": float(
+                            pt.get("hard_barrel_pct") or LEAGUE_HARD_BARREL
+                        ),
+                    },
+                )
+            )
+        try:
+            season_map[int(bid_s)] = series
+        except (TypeError, ValueError):
+            continue
+    _BATTER_CONTACT_CUMULATIVE[season] = season_map
+
+
+def get_batter_contact_as_of(
+    batter_id: int,
+    *,
+    as_of: date,
+    season: Optional[int] = None,
+    fetch_if_missing: bool = True,
+    min_pitches: float = MIN_PITCHES_BATTER_CONTACT,
+) -> Optional[Dict[str, float]]:
+    """As-of cumulative contact/whiff/barrel by pitch family for one batter MLBAM id."""
+    season_i = int(season or as_of.year)
+    end_exclusive = as_of - timedelta(days=1)
+    override = _BATTER_CONTACT_OVERRIDE.get(
+        (season_i, int(batter_id), as_of.isoformat())
+    )
+    if override is not None:
+        return dict(override)
+
+    if fetch_if_missing:
+        try:
+            ensure_statcast_pitches_through(season=season_i, through=end_exclusive)
+            index_path = CACHE_DIR / str(season_i) / "batter_contact_asof_index.json"
+            season_dir = CACHE_DIR / str(season_i)
+            if (not index_path.exists()) and season_dir.exists() and any(
+                season_dir.glob("pitches_*.csv")
+            ):
+                build_true_arsenal_indexes_from_cache(
+                    season=season_i, through=end_exclusive
+                )
+        except Exception:
+            pass
+
+    _load_batter_contact_index(season_i)
+    series = (_BATTER_CONTACT_CUMULATIVE.get(season_i) or {}).get(int(batter_id)) or []
+    cutoff = end_exclusive.isoformat()
+    chosen: Optional[Dict[str, float]] = None
+    for d, metrics in series:
+        if d <= cutoff:
+            chosen = metrics
+        else:
+            break
+    if chosen is None or float(chosen.get("pitches") or 0) < float(min_pitches):
+        return None
+    out = dict(chosen)
+    out["as_of_pitches_through"] = cutoff
+    out["source"] = "batter_contact"
+    out["batter_id"] = float(batter_id)
+    return out
+
+
+def extract_lineup_batter_entries(
+    players: Optional[Iterable[Dict[str, Any]]],
+) -> List[Tuple[int, int]]:
+    """Parse (batter_id, slot) from lineup player summaries; skip pitcher slots."""
+    out: List[Tuple[int, int]] = []
+    for p in players or []:
+        if not isinstance(p, dict):
+            continue
+        if p.get("excluded_from_strength"):
+            continue
+        pos = str(p.get("position") or "").upper()
+        if pos == "P":
+            continue
+        try:
+            bid = int(p.get("id") or p.get("batter_id") or p.get("player_id") or 0)
+        except (TypeError, ValueError):
+            bid = 0
+        if bid <= 0:
+            continue
+        try:
+            slot = int(p.get("slot") or 0)
+        except (TypeError, ValueError):
+            slot = 0
+        if slot <= 0:
+            slot = len(out) + 1
+        out.append((bid, slot))
+    return out
+
+
+def blend_lineup_batter_contact(
+    batter_entries: Iterable[Tuple[int, int]],
+    *,
+    as_of: date,
+    season: Optional[int] = None,
+    fetch_if_missing: bool = False,
+    min_batters: int = MIN_LINEUP_BATTERS_FOR_BLEND,
+    min_pitches: float = MIN_PITCHES_BATTER_CONTACT,
+) -> Optional[Dict[str, float]]:
+    """Lineup-slot-weighted blend of per-batter contact vectors.
+
+    Returns None when fewer than ``min_batters`` have adequate as-of pitches
+    (caller should fall back to team-family).
+    """
+    weighted: Dict[str, float] = {k: 0.0 for k in _batter_metric_keys()}
+    total_w = 0.0
+    pitch_sum = 0.0
+    used = 0
+    used_ids: List[int] = []
+    for batter_id, slot in batter_entries:
+        metrics = get_batter_contact_as_of(
+            int(batter_id),
+            as_of=as_of,
+            season=season,
+            fetch_if_missing=fetch_if_missing,
+            min_pitches=min_pitches,
+        )
+        if metrics is None:
+            continue
+        w = float(_LINEUP_SLOT_WEIGHTS.get(int(slot), 1.0))
+        total_w += w
+        pitch_sum += float(metrics.get("pitches") or 0.0)
+        used += 1
+        used_ids.append(int(batter_id))
+        for k in _batter_metric_keys():
+            weighted[k] += w * float(metrics.get(k) or 0.0)
+    if used < int(min_batters) or total_w <= 0:
+        return None
+    out = {k: weighted[k] / total_w for k in _batter_metric_keys()}
+    out["pitches"] = pitch_sum
+    out["as_of_pitches_through"] = (as_of - timedelta(days=1)).isoformat()
+    out["source"] = "lineup_batter_blend"
+    out["batters_used"] = float(used)
+    out["lineup_weight_sum"] = total_w
+    return out
+
+
+def resolve_batter_family_for_matchup(
+    *,
+    team_abbr: str,
+    as_of: date,
+    season: Optional[int] = None,
+    lineup_players: Optional[Iterable[Dict[str, Any]]] = None,
+    fetch_if_missing: bool = False,
+    batter_level: Optional[bool] = None,
+) -> Optional[Dict[str, float]]:
+    """Prefer lineup-ID blend when batter-level flag on; else team-family.
+
+    Falls back to team-family when IDs missing / blend under-sampled.
+    """
+    use_batter = (
+        bool(PITCH_MATCHUP_BATTER_LEVEL) if batter_level is None else bool(batter_level)
+    )
+    if use_batter:
+        entries = extract_lineup_batter_entries(lineup_players)
+        if entries:
+            blended = blend_lineup_batter_contact(
+                entries,
+                as_of=as_of,
+                season=season,
+                fetch_if_missing=fetch_if_missing,
+            )
+            if blended is not None:
+                blended["team"] = str(team_abbr or "").upper()
+                return blended
+    return get_team_batter_family_as_of(
+        team_abbr,
+        as_of=as_of,
+        season=season,
+        fetch_if_missing=fetch_if_missing,
+    )
 
 
 def pitch_level_matchup_mul(
