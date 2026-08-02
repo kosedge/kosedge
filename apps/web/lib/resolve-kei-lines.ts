@@ -1,10 +1,16 @@
 /**
  * Resolve KEI games for a sport. NFL prefers live Kosedge fair-lines
- * (spread_home / total_mean); MLB/NBA prefer model-service fair-lines;
+ * (spread_home / total_mean); MLB/NBA/WNBA prefer model-service fair-lines;
  * others fall back to kei_lines_{sport}.json.
  *
  * Unified shape: handicap_* = KEI product line; model_* = pure sim when available.
- * Edgeboard always merges handicap (identity fallback).
+ * Edgeboard always merges handicap (identity fallback via applyHandicapIdentity).
+ *
+ * Model vs KEI honesty (2026-08):
+ * - MLB: real split — model_* = first daily PA sim snapshot; handicap_* = nowcast re-sim.
+ * - NFL / NBA / WNBA: published fair lines map to handicap (KEI). model_* is identity
+ *   until fair-lines APIs expose pre_blend_* / raw model. Do not invent a fake split.
+ * - College / NHL file exports: same identity contract when only proj* exists.
  */
 
 import "server-only";
@@ -27,8 +33,8 @@ const NFL_KEI_SEASON = 2026;
 /**
  * Map NFL fair-lines → KEI games.
  * Published blended spread/total → handicap (KEI).
- * TODO(model-honesty): when fair-lines API exposes pre_blend_* / raw model,
- * map those to model_*; until then model_* = handicap (identity) and UI says KEI.
+ * Honesty: pure Model snapshot is NOT separated yet — model_* = handicap (identity).
+ * When fair-lines API exposes pre_blend_* / raw model, map those to model_*.
  */
 export function keiGamesFromNflFairLines(
   lines: NflFairLineRow[],

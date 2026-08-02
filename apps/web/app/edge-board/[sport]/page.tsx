@@ -84,8 +84,7 @@ export default async function EdgeBoardSportPage({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} · Model vs Market · {getKeiProductLabel(sportKey)} ·
-              ET
+              {sportName} · KEI vs Market · {getKeiProductLabel(sportKey)} · ET
             </div>
             <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
               {sportName} Edge Board
@@ -93,9 +92,9 @@ export default async function EdgeBoardSportPage({
             <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
               {isNfl
                 ? slate === "live"
-                  ? `Central research board for the current week. ${keiCode} lines always; Open/Best/separation when books post. You make the picks.`
+                  ? `Central research board for the current week. ${keiCode} handicap lines always; Open/Best when books post. You make the picks.`
                   : `All NFL games with sportsbook odds on file. Research board — not a picks feed.`
-                : `Model vs market hierarchy. Live Open/Best when books post. ${keiCode} Line and O/U are Kosedge projections — research, not picks.`}
+                : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
             </p>
           </div>
 
@@ -173,7 +172,7 @@ export default async function EdgeBoardSportPage({
                     : " · with sportsbook odds"
                   : ""
               }`
-            : "No live data: add ODDS_API_KEY in Vercel → Project Settings → Environment Variables."}
+            : "No slate rows yet — waiting on fair-lines / Odds (or offseason empty). Boards never invent book prices."}
         </p>
       </main>
     </div>

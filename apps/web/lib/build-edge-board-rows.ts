@@ -2,8 +2,10 @@
  * Shared edge-board assembly.
  * NFL: pulls fair-lines + Odds API, persists odds via model-service fair-lines,
  * Live = current week slate, Full = all games with sportsbook odds.
- * MLB: seeds from model-service fair-lines when Odds is empty.
+ * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
+ * NBA/WNBA: fair-lines → KEI handicap (model_* identity until pre_blend exists).
  * Other sports: Odds rows + KEI JSON merge, with shipped fallback snapshots.
+ * Never invents sportsbook prices; empty offseason boards stay empty honestly.
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
