@@ -1,23 +1,24 @@
 {
   "sport": "mlb",
-  "source": "odds-api-live-pull",
+  "source": "odds-api-live-pull-converted-to-moneyline",
   "capturedAt": "2026-07-31T18:12:23Z",
   "eventCount": 29,
   "rows": [
     {
-      "id": "69b3161b9e45cd7a7054fba7043f41d6-spread",
+      "id": "69b3161b9e45cd7a7054fba7043f41d6-moneyline",
       "game": "New York Yankees @ Chicago Cubs",
       "time": "07/31 2:21 PM ET",
       "commenceTime": "2026-07-31T18:21:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetRivers",
       "bookKey": "betrivers",
-      "openJuice": "-144",
       "openJuiceHome": "+119",
+      "bestJuiceHome": "+130",
+      "open": "-144",
+      "best": "-159",
+      "openJuice": "-144",
       "bestJuice": "-159",
-      "bestJuiceHome": "+130"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "69b3161b9e45cd7a7054fba7043f41d6-total",
@@ -35,19 +36,20 @@
       "bestJuiceHome": "-120"
     },
     {
-      "id": "3ee3bc4062aa650bb871ebbc705fe19e-spread",
+      "id": "3ee3bc4062aa650bb871ebbc705fe19e-moneyline",
       "game": "Pittsburgh Pirates @ Cincinnati Reds",
       "time": "07/31 6:11 PM ET",
       "commenceTime": "2026-07-31T22:11:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "Hard Rock Bet",
       "bookKey": "hardrockbet",
-      "openJuice": "+121",
       "openJuiceHome": "-145",
+      "bestJuiceHome": "-150",
+      "open": "+121",
+      "best": "+140",
+      "openJuice": "+121",
       "bestJuice": "+140",
-      "bestJuiceHome": "-150"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "3ee3bc4062aa650bb871ebbc705fe19e-total",
@@ -65,19 +67,20 @@
       "bestJuiceHome": "-112"
     },
     {
-      "id": "df9eba7a564b0b80a2a4fbd790388ee4-spread",
+      "id": "df9eba7a564b0b80a2a4fbd790388ee4-moneyline",
       "game": "Philadelphia Phillies @ Baltimore Orioles",
       "time": "07/31 7:06 PM ET",
       "commenceTime": "2026-07-31T23:06:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetRivers",
       "bookKey": "betrivers",
-      "openJuice": "+159",
       "openJuiceHome": "-194",
+      "bestJuiceHome": "+165",
+      "open": "+159",
+      "best": "-215",
+      "openJuice": "+159",
       "bestJuice": "-215",
-      "bestJuiceHome": "+165"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "df9eba7a564b0b80a2a4fbd790388ee4-total",
@@ -95,19 +98,20 @@
       "bestJuiceHome": "+102"
     },
     {
-      "id": "ea0ee6a34b3c09534e603775fb85d6e6-spread",
+      "id": "ea0ee6a34b3c09534e603775fb85d6e6-moneyline",
       "game": "St. Louis Cardinals @ Toronto Blue Jays",
       "time": "07/31 7:08 PM ET",
       "commenceTime": "2026-07-31T23:08:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetRivers",
       "bookKey": "betrivers",
-      "openJuice": "-132",
       "openJuiceHome": "+109",
+      "bestJuiceHome": "+117",
+      "open": "-132",
+      "best": "-141",
+      "openJuice": "-132",
       "bestJuice": "-141",
-      "bestJuiceHome": "+117"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "ea0ee6a34b3c09534e603775fb85d6e6-total",
@@ -125,19 +129,20 @@
       "bestJuiceHome": "-105"
     },
     {
-      "id": "b097b0b3884c6bbe4b246fb1c9b140a8-spread",
+      "id": "b097b0b3884c6bbe4b246fb1c9b140a8-moneyline",
       "game": "Arizona Diamondbacks @ Cleveland Guardians",
       "time": "07/31 7:11 PM ET",
       "commenceTime": "2026-07-31T23:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetRivers",
       "bookKey": "betrivers",
-      "openJuice": "-172",
       "openJuiceHome": "+142",
+      "bestJuiceHome": "+155",
+      "open": "-172",
+      "best": "-190",
+      "openJuice": "-172",
       "bestJuice": "-190",
-      "bestJuiceHome": "+155"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "b097b0b3884c6bbe4b246fb1c9b140a8-total",
@@ -155,19 +160,20 @@
       "bestJuiceHome": "-104"
     },
     {
-      "id": "8b3666056a3b2912d05e6a2ef95a35f8-spread",
+      "id": "8b3666056a3b2912d05e6a2ef95a35f8-moneyline",
       "game": "Chicago White Sox @ Tampa Bay Rays",
       "time": "07/31 7:11 PM ET",
       "commenceTime": "2026-07-31T23:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "-182",
       "openJuiceHome": "+150",
+      "bestJuiceHome": "+154",
+      "open": "-182",
+      "best": "-190",
+      "openJuice": "-182",
       "bestJuice": "-190",
-      "bestJuiceHome": "+154"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "8b3666056a3b2912d05e6a2ef95a35f8-total",
@@ -185,19 +191,20 @@
       "bestJuiceHome": "-117"
     },
     {
-      "id": "5382f2f139958bbb12e0cd166e06d3ea-spread",
+      "id": "5382f2f139958bbb12e0cd166e06d3ea-moneyline",
       "game": "Miami Marlins @ New York Mets",
       "time": "07/31 7:11 PM ET",
       "commenceTime": "2026-07-31T23:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetRivers",
       "bookKey": "betrivers",
-      "openJuice": "-193",
       "openJuiceHome": "+158",
+      "bestJuiceHome": "+160",
+      "open": "-193",
+      "best": "-200",
+      "openJuice": "-193",
       "bestJuice": "-200",
-      "bestJuiceHome": "+160"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "5382f2f139958bbb12e0cd166e06d3ea-total",
@@ -215,19 +222,20 @@
       "bestJuiceHome": "-114"
     },
     {
-      "id": "ef1a6817e767ffb63f4d758bd10473bc-spread",
+      "id": "ef1a6817e767ffb63f4d758bd10473bc-moneyline",
       "game": "Washington Nationals @ Atlanta Braves",
       "time": "07/31 7:16 PM ET",
       "commenceTime": "2026-07-31T23:16:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "Hard Rock Bet",
       "bookKey": "hardrockbet",
-      "openJuice": "+154",
       "openJuiceHome": "-188",
+      "bestJuiceHome": "-180",
+      "open": "+154",
+      "best": "+170",
+      "openJuice": "+154",
       "bestJuice": "+170",
-      "bestJuiceHome": "-180"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "ef1a6817e767ffb63f4d758bd10473bc-total",
@@ -245,19 +253,20 @@
       "bestJuiceHome": "-130"
     },
     {
-      "id": "84ba20fe8604de6c1825c09817cc4123-spread",
+      "id": "84ba20fe8604de6c1825c09817cc4123-moneyline",
       "game": "Texas Rangers @ Houston Astros",
       "time": "07/31 8:16 PM ET",
       "commenceTime": "2026-08-01T00:16:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-186",
       "openJuiceHome": "+153",
+      "bestJuiceHome": "+172",
+      "open": "-186",
+      "best": "-210",
+      "openJuice": "-186",
       "bestJuice": "-210",
-      "bestJuiceHome": "+172"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "84ba20fe8604de6c1825c09817cc4123-total",
@@ -275,19 +284,20 @@
       "bestJuiceHome": "-106"
     },
     {
-      "id": "46f25bf1fcef5be6217eb3f4f200efc7-spread",
+      "id": "46f25bf1fcef5be6217eb3f4f200efc7-moneyline",
       "game": "Kansas City Royals @ Colorado Rockies",
       "time": "07/31 8:41 PM ET",
       "commenceTime": "2026-08-01T00:41:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+137",
       "openJuiceHome": "-166",
+      "bestJuiceHome": "-170",
+      "open": "+137",
+      "best": "+140",
+      "openJuice": "+137",
       "bestJuice": "+140",
-      "bestJuiceHome": "-170"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "46f25bf1fcef5be6217eb3f4f200efc7-total",
@@ -305,19 +315,20 @@
       "bestJuiceHome": "-120"
     },
     {
-      "id": "c69df1f1b8463bd572965f137748afe8-spread",
+      "id": "c69df1f1b8463bd572965f137748afe8-moneyline",
       "game": "Milwaukee Brewers @ Los Angeles Angels",
       "time": "07/31 9:39 PM ET",
       "commenceTime": "2026-08-01T01:39:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "DraftKings",
       "bookKey": "draftkings",
-      "openJuice": "-105",
       "openJuiceHome": "-114",
+      "bestJuiceHome": "-114",
+      "open": "-105",
+      "best": "-105",
+      "openJuice": "-105",
       "bestJuice": "-105",
-      "bestJuiceHome": "-114"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "c69df1f1b8463bd572965f137748afe8-total",
@@ -335,19 +346,20 @@
       "bestJuiceHome": "-110"
     },
     {
-      "id": "32710e16b4824b9b77a99c532f78131f-spread",
+      "id": "32710e16b4824b9b77a99c532f78131f-moneyline",
       "game": "Detroit Tigers @ Athletics",
       "time": "07/31 9:41 PM ET",
       "commenceTime": "2026-08-01T01:41:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "+104",
       "openJuiceHome": "-126",
+      "bestJuiceHome": "-134",
+      "open": "+104",
+      "best": "+112",
+      "openJuice": "+104",
       "bestJuice": "+112",
-      "bestJuiceHome": "-134"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "32710e16b4824b9b77a99c532f78131f-total",
@@ -365,19 +377,20 @@
       "bestJuiceHome": "-115"
     },
     {
-      "id": "fd2cf2d3dbd1656d7b968673de5f4cad-spread",
+      "id": "fd2cf2d3dbd1656d7b968673de5f4cad-moneyline",
       "game": "San Francisco Giants @ San Diego Padres",
       "time": "07/31 9:46 PM ET",
       "commenceTime": "2026-08-01T01:46:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "-171",
       "openJuiceHome": "+141",
+      "bestJuiceHome": "+145",
+      "open": "-171",
+      "best": "-175",
+      "openJuice": "-171",
       "bestJuice": "-175",
-      "bestJuiceHome": "+145"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "fd2cf2d3dbd1656d7b968673de5f4cad-total",
@@ -395,19 +408,20 @@
       "bestJuiceHome": "-105"
     },
     {
-      "id": "7d1b7a2bed8c47d5ecf945ba07f77d56-spread",
+      "id": "7d1b7a2bed8c47d5ecf945ba07f77d56-moneyline",
       "game": "Boston Red Sox @ Los Angeles Dodgers",
       "time": "07/31 10:11 PM ET",
       "commenceTime": "2026-08-01T02:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-194",
       "openJuiceHome": "+159",
+      "bestJuiceHome": "+164",
+      "open": "-194",
+      "best": "-200",
+      "openJuice": "-194",
       "bestJuice": "-200",
-      "bestJuiceHome": "+164"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "7d1b7a2bed8c47d5ecf945ba07f77d56-total",
@@ -425,19 +439,20 @@
       "bestJuiceHome": "-109"
     },
     {
-      "id": "0b314c94b53dbed0719087c29b520ace-spread",
+      "id": "0b314c94b53dbed0719087c29b520ace-moneyline",
       "game": "Minnesota Twins @ Seattle Mariners",
       "time": "07/31 10:11 PM ET",
       "commenceTime": "2026-08-01T02:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "DraftKings",
       "bookKey": "draftkings",
-      "openJuice": "-155",
       "openJuiceHome": "+128",
+      "bestJuiceHome": "+128",
+      "open": "-155",
+      "best": "-155",
+      "openJuice": "-155",
       "bestJuice": "-155",
-      "bestJuiceHome": "+128"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "0b314c94b53dbed0719087c29b520ace-total",
@@ -455,19 +470,20 @@
       "bestJuiceHome": "-117"
     },
     {
-      "id": "887515990979436aed352a22f6f8fdff-spread",
+      "id": "887515990979436aed352a22f6f8fdff-moneyline",
       "game": "St. Louis Cardinals @ Toronto Blue Jays",
       "time": "08/01 3:08 PM ET",
       "commenceTime": "2026-08-01T19:08:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-200",
       "openJuiceHome": "+164",
+      "bestJuiceHome": "+164",
+      "open": "-200",
+      "best": "-200",
+      "openJuice": "-200",
       "bestJuice": "-200",
-      "bestJuiceHome": "+164"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "887515990979436aed352a22f6f8fdff-total",
@@ -485,19 +501,20 @@
       "bestJuiceHome": "-110"
     },
     {
-      "id": "2984d38103bf67fc68bc0fb23e98ad8e-spread",
+      "id": "2984d38103bf67fc68bc0fb23e98ad8e-moneyline",
       "game": "Chicago White Sox @ Tampa Bay Rays",
       "time": "08/01 4:11 PM ET",
       "commenceTime": "2026-08-01T20:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-154",
       "openJuiceHome": "+128",
+      "bestJuiceHome": "+128",
+      "open": "-154",
+      "best": "-154",
+      "openJuice": "-154",
       "bestJuice": "-154",
-      "bestJuiceHome": "+128"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "2984d38103bf67fc68bc0fb23e98ad8e-total",
@@ -515,19 +532,20 @@
       "bestJuiceHome": "+100"
     },
     {
-      "id": "84746342d2944e433747b81eda041fa8-spread",
+      "id": "84746342d2944e433747b81eda041fa8-moneyline",
       "game": "Miami Marlins @ New York Mets",
       "time": "08/01 4:11 PM ET",
       "commenceTime": "2026-08-01T20:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-194",
       "openJuiceHome": "+160",
+      "bestJuiceHome": "+160",
+      "open": "-194",
+      "best": "-194",
+      "openJuice": "-194",
       "bestJuice": "-194",
-      "bestJuiceHome": "+160"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "84746342d2944e433747b81eda041fa8-total",
@@ -545,19 +563,20 @@
       "bestJuiceHome": "-110"
     },
     {
-      "id": "2dba5e88d89d78ac32b8892ae2214bb9-spread",
+      "id": "2dba5e88d89d78ac32b8892ae2214bb9-moneyline",
       "game": "Minnesota Twins @ Seattle Mariners",
       "time": "08/01 4:11 PM ET",
       "commenceTime": "2026-08-01T20:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-164",
       "openJuiceHome": "+136",
+      "bestJuiceHome": "+136",
+      "open": "-164",
+      "best": "-164",
+      "openJuice": "-164",
       "bestJuice": "-164",
-      "bestJuiceHome": "+136"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "2dba5e88d89d78ac32b8892ae2214bb9-total",
@@ -575,19 +594,20 @@
       "bestJuiceHome": "-120"
     },
     {
-      "id": "4cf22ff99815959994e2c4f8662d97bf-spread",
+      "id": "4cf22ff99815959994e2c4f8662d97bf-moneyline",
       "game": "Pittsburgh Pirates @ Cincinnati Reds",
       "time": "08/01 6:41 PM ET",
       "commenceTime": "2026-08-01T22:41:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+140",
       "openJuiceHome": "-170",
+      "bestJuiceHome": "-175",
+      "open": "+140",
+      "best": "+145",
+      "openJuice": "+140",
       "bestJuice": "+145",
-      "bestJuiceHome": "-175"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "4cf22ff99815959994e2c4f8662d97bf-total",
@@ -605,19 +625,20 @@
       "bestJuiceHome": "-114"
     },
     {
-      "id": "8ad8229352651cf1b573f9ee834b57ac-spread",
+      "id": "8ad8229352651cf1b573f9ee834b57ac-moneyline",
       "game": "Philadelphia Phillies @ Baltimore Orioles",
       "time": "08/01 7:06 PM ET",
       "commenceTime": "2026-08-01T23:06:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+118",
       "openJuiceHome": "-142",
+      "bestJuiceHome": "-155",
+      "open": "+118",
+      "best": "+125",
+      "openJuice": "+118",
       "bestJuice": "+125",
-      "bestJuiceHome": "-155"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "8ad8229352651cf1b573f9ee834b57ac-total",
@@ -635,19 +656,20 @@
       "bestJuiceHome": "-124"
     },
     {
-      "id": "dae6d7e042dc64a28ea484408927af8c-spread",
+      "id": "dae6d7e042dc64a28ea484408927af8c-moneyline",
       "game": "Texas Rangers @ Houston Astros",
       "time": "08/01 7:11 PM ET",
       "commenceTime": "2026-08-01T23:11:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+130",
       "openJuiceHome": "-156",
+      "bestJuiceHome": "-160",
+      "open": "+130",
+      "best": "+135",
+      "openJuice": "+130",
       "bestJuice": "+135",
-      "bestJuiceHome": "-160"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "dae6d7e042dc64a28ea484408927af8c-total",
@@ -665,19 +687,20 @@
       "bestJuiceHome": "-120"
     },
     {
-      "id": "65f625f15ac20a0c9dd7905ac686d7aa-spread",
+      "id": "65f625f15ac20a0c9dd7905ac686d7aa-moneyline",
       "game": "Arizona Diamondbacks @ Cleveland Guardians",
       "time": "08/01 7:16 PM ET",
       "commenceTime": "2026-08-01T23:16:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-164",
       "openJuiceHome": "+136",
+      "bestJuiceHome": "+136",
+      "open": "-164",
+      "best": "-164",
+      "openJuice": "-164",
       "bestJuice": "-164",
-      "bestJuiceHome": "+136"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "65f625f15ac20a0c9dd7905ac686d7aa-total",
@@ -695,19 +718,20 @@
       "bestJuiceHome": "-110"
     },
     {
-      "id": "07b62357ba8988490469a685727ecf38-spread",
+      "id": "07b62357ba8988490469a685727ecf38-moneyline",
       "game": "Washington Nationals @ Atlanta Braves",
       "time": "08/01 7:16 PM ET",
       "commenceTime": "2026-08-01T23:16:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-140",
       "openJuiceHome": "+116",
+      "bestJuiceHome": "+116",
+      "open": "-140",
+      "best": "-140",
+      "openJuice": "-140",
       "bestJuice": "-140",
-      "bestJuiceHome": "+116"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "07b62357ba8988490469a685727ecf38-total",
@@ -725,19 +749,20 @@
       "bestJuiceHome": "-120"
     },
     {
-      "id": "1a1c1a4c350d1fb71d29920db55c19f5-spread",
+      "id": "1a1c1a4c350d1fb71d29920db55c19f5-moneyline",
       "game": "New York Yankees @ Chicago Cubs",
       "time": "08/01 7:16 PM ET",
       "commenceTime": "2026-08-01T23:16:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+146",
       "openJuiceHome": "-178",
+      "bestJuiceHome": "-190",
+      "open": "+146",
+      "best": "+155",
+      "openJuice": "+146",
       "bestJuice": "+155",
-      "bestJuiceHome": "-190"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "1a1c1a4c350d1fb71d29920db55c19f5-total",
@@ -755,19 +780,20 @@
       "bestJuiceHome": "-115"
     },
     {
-      "id": "e22f383c06fc65d61b450e0039f9ec3f-spread",
+      "id": "e22f383c06fc65d61b450e0039f9ec3f-moneyline",
       "game": "Kansas City Royals @ Colorado Rockies",
       "time": "08/01 8:11 PM ET",
       "commenceTime": "2026-08-02T00:11:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "+146",
       "openJuiceHome": "-178",
+      "bestJuiceHome": "-178",
+      "open": "+146",
+      "best": "+146",
+      "openJuice": "+146",
       "bestJuice": "+146",
-      "bestJuiceHome": "-178"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "e22f383c06fc65d61b450e0039f9ec3f-total",
@@ -785,19 +811,20 @@
       "bestJuiceHome": "-126"
     },
     {
-      "id": "0d7964018e0254e779126e68c56e0a5e-spread",
+      "id": "0d7964018e0254e779126e68c56e0a5e-moneyline",
       "game": "Boston Red Sox @ Los Angeles Dodgers",
       "time": "08/01 9:11 PM ET",
       "commenceTime": "2026-08-02T01:11:00Z",
-      "market": "Spread",
-      "open": "+1.5",
-      "best": "+1.5",
+      "market": "Moneyline",
       "book": "FanDuel",
       "bookKey": "fanduel",
-      "openJuice": "-176",
       "openJuiceHome": "+146",
+      "bestJuiceHome": "+146",
+      "open": "-176",
+      "best": "-176",
+      "openJuice": "-176",
       "bestJuice": "-176",
-      "bestJuiceHome": "+146"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "0d7964018e0254e779126e68c56e0a5e-total",
@@ -815,19 +842,20 @@
       "bestJuiceHome": "+100"
     },
     {
-      "id": "77b8e5ac49b26052a451b5de23d0959e-spread",
+      "id": "77b8e5ac49b26052a451b5de23d0959e-moneyline",
       "game": "Milwaukee Brewers @ Los Angeles Angels",
       "time": "08/01 9:39 PM ET",
       "commenceTime": "2026-08-02T01:39:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+132",
       "openJuiceHome": "-162",
+      "bestJuiceHome": "-160",
+      "open": "+132",
+      "best": "+135",
+      "openJuice": "+132",
       "bestJuice": "+135",
-      "bestJuiceHome": "-160"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "77b8e5ac49b26052a451b5de23d0959e-total",
@@ -845,19 +873,20 @@
       "bestJuiceHome": "-120"
     },
     {
-      "id": "54d17e06d14159867e038e2ea043aabd-spread",
+      "id": "54d17e06d14159867e038e2ea043aabd-moneyline",
       "game": "Detroit Tigers @ Athletics",
       "time": "08/01 9:41 PM ET",
       "commenceTime": "2026-08-02T01:41:00Z",
-      "market": "Spread",
-      "open": "-1.5",
-      "best": "-1.5",
+      "market": "Moneyline",
       "book": "BetMGM",
       "bookKey": "betmgm",
-      "openJuice": "+112",
       "openJuiceHome": "-134",
+      "bestJuiceHome": "-140",
+      "open": "+112",
+      "best": "+115",
+      "openJuice": "+112",
       "bestJuice": "+115",
-      "bestJuiceHome": "-140"
+      "note": "Converted from prior run-line snapshot juices; live board uses Odds API h2h."
     },
     {
       "id": "54d17e06d14159867e038e2ea043aabd-total",
@@ -874,5 +903,6 @@
       "bestJuice": "-122",
       "bestJuiceHome": "+100"
     }
-  ]
+  ],
+  "note": "MLB edge board is moneyline + totals. Snapshot moneylines were converted from prior run-line juices for offline fallback only \u2014 prefer live Odds API h2h."
 }

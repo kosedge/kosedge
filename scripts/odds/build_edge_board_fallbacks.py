@@ -52,6 +52,12 @@ def pick_best_total(entries):
     )[0]
 
 
+def pick_best_moneyline(entries):
+    if not entries:
+        return None
+    return sorted(entries, key=lambda e: e["awayPrice"], reverse=True)[0]
+
+
 def events_to_rows(events, sport: str):
     rows = []
     events = sorted(events, key=lambda e: e.get("commence_time", ""))
@@ -61,58 +67,122 @@ def events_to_rows(events, sport: str):
         books = [b for b in (ev.get("bookmakers") or []) if b.get("key") in ALLOWED]
         books.sort(key=lambda b: ALLOWED.index(b["key"]) if b["key"] in ALLOWED else 99)
 
-        spread_entries = []
-        for b in books:
-            m = next(
-                (x for x in (b.get("markets") or []) if x.get("key") == "spreads"),
-                None,
-            )
-            if not m:
-                continue
-            away = next(
-                (o for o in m.get("outcomes") or [] if o.get("name") == ev["away_team"]),
-                None,
-            )
-            home = next(
-                (o for o in m.get("outcomes") or [] if o.get("name") == ev["home_team"]),
-                None,
-            )
-            if not away or away.get("point") is None:
-                continue
-            pt = away["point"]
-            if sport == "mlb" and abs(pt) > 2.5:
-                continue
-            line = f"+{pt}" if pt > 0 else str(pt)
-            spread_entries.append(
+        if sport == "mlb":
+            ml_entries = []
+            for b in books:
+                m = next(
+                    (x for x in (b.get("markets") or []) if x.get("key") == "h2h"),
+                    None,
+                )
+                if not m:
+                    continue
+                away = next(
+                    (
+                        o
+                        for o in m.get("outcomes") or []
+                        if o.get("name") == ev["away_team"]
+                    ),
+                    None,
+                )
+                home = next(
+                    (
+                        o
+                        for o in m.get("outcomes") or []
+                        if o.get("name") == ev["home_team"]
+                    ),
+                    None,
+                )
+                if not away or away.get("price") is None or not home or home.get("price") is None:
+                    continue
+                ml_entries.append(
+                    {
+                        "book": b["key"],
+                        "away": fmt_juice(away.get("price")),
+                        "home": fmt_juice(home.get("price")),
+                        "awayPrice": away["price"],
+                        "homePrice": home["price"],
+                    }
+                )
+            open_m = ml_entries[0] if ml_entries else None
+            best_m = pick_best_moneyline(ml_entries)
+            rows.append(
                 {
-                    "book": b["key"],
-                    "line": line,
-                    "point": pt,
-                    "juiceAway": fmt_juice(away.get("price")),
-                    "juiceHome": fmt_juice(home.get("price") if home else None),
+                    "id": f"{ev['id']}-moneyline",
+                    "game": game,
+                    "time": time,
+                    "commenceTime": ev["commence_time"],
+                    "market": "Moneyline",
+                    "open": open_m["away"] if open_m else None,
+                    "best": (best_m or open_m or {}).get("away"),
+                    "book": BOOK_DISPLAY.get((best_m or {}).get("book", ""))
+                    if best_m
+                    else None,
+                    "bookKey": (best_m or {}).get("book"),
+                    "openJuice": open_m.get("away") if open_m else None,
+                    "openJuiceHome": open_m.get("home") if open_m else None,
+                    "bestJuice": (best_m or open_m or {}).get("away"),
+                    "bestJuiceHome": (best_m or open_m or {}).get("home"),
                 }
             )
-        open_s = spread_entries[0] if spread_entries else None
-        best_s = pick_best_spread(spread_entries)
-        rows.append(
-            {
-                "id": f"{ev['id']}-spread",
-                "game": game,
-                "time": time,
-                "commenceTime": ev["commence_time"],
-                "market": "Spread",
-                "open": open_s["line"] if open_s else None,
-                "best": (best_s or open_s or {}).get("line"),
-                "book": BOOK_DISPLAY.get((best_s or {}).get("book", ""))
-                if best_s
-                else None,
-                "bookKey": (best_s or {}).get("book"),
-                "openJuice": open_s.get("juiceAway") if open_s else None,
-                "openJuiceHome": open_s.get("juiceHome") if open_s else None,
-                "bestJuice": (best_s or open_s or {}).get("juiceAway"),
-                "bestJuiceHome": (best_s or open_s or {}).get("juiceHome"),
-            }
-        )
+        else:
+            spread_entries = []
+            for b in books:
+                m = next(
+                    (x for x in (b.get("markets") or []) if x.get("key") == "spreads"),
+                    None,
+                )
+                if not m:
+                    continue
+                away = next(
+                    (
+                        o
+                        for o in m.get("outcomes") or []
+                        if o.get("name") == ev["away_team"]
+                    ),
+                    None,
+                )
+                home = next(
+                    (
+                        o
+                        for o in m.get("outcomes") or []
+                        if o.get("name") == ev["home_team"]
+                    ),
+                    None,
+                )
+                if not away or away.get("point") is None:
+                    continue
+                pt = away["point"]
+                line = f"+{pt}" if pt > 0 else str(pt)
+                spread_entries.append(
+                    {
+                        "book": b["key"],
+                        "line": line,
+                        "point": pt,
+                        "juiceAway": fmt_juice(away.get("price")),
+                        "juiceHome": fmt_juice(home.get("price") if home else None),
+                    }
+                )
+            open_s = spread_entries[0] if spread_entries else None
+            best_s = pick_best_spread(spread_entries)
+            rows.append(
+                {
+                    "id": f"{ev['id']}-spread",
+                    "game": game,
+                    "time": time,
+                    "commenceTime": ev["commence_time"],
+                    "market": "Spread",
+                    "open": open_s["line"] if open_s else None,
+                    "best": (best_s or open_s or {}).get("line"),
+                    "book": BOOK_DISPLAY.get((best_s or {}).get("book", ""))
+                    if best_s
+                    else None,
+                    "bookKey": (best_s or {}).get("book"),
+                    "openJuice": open_s.get("juiceAway") if open_s else None,
+                    "openJuiceHome": open_s.get("juiceHome") if open_s else None,
+                    "bestJuice": (best_s or open_s or {}).get("juiceAway"),
+                    "bestJuiceHome": (best_s or open_s or {}).get("juiceHome"),
+                }
+            )
 
         total_entries = []
         for b in books:

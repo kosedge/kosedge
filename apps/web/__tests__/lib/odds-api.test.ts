@@ -4,6 +4,7 @@ import {
   ALLOWED_BOOKS,
   fetchEdgeBoard,
   fetchOddsComparison,
+  pickBestMoneylineEntry,
   pickBestSpreadEntry,
   pickBestTotalEntry,
 } from "@/lib/odds-api";
@@ -21,7 +22,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("odds-api MLB run line guardrails", () => {
+describe("odds-api edge board markets", () => {
   it("requests NFL odds across all 9 configured books by default", async () => {
     const fetchSpy = vi
       .spyOn(globalThis, "fetch")
@@ -33,7 +34,20 @@ describe("odds-api MLB run line guardrails", () => {
     expect(url).toContain(
       `bookmakers=${encodeURIComponent(ALLOWED_BOOKS.join(","))}`,
     );
+    expect(url).toContain("markets=spreads,totals");
     expect(ALLOWED_BOOKS).toHaveLength(9);
+  });
+
+  it("requests MLB h2h+totals (moneyline board, not run line)", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(jsonResponse([]));
+
+    await fetchEdgeBoard("mlb", "fake-key");
+
+    const url = String(fetchSpy.mock.calls[0]?.[0] ?? "");
+    expect(url).toContain("markets=h2h,totals");
+    expect(url).not.toContain("markets=spreads");
   });
 
   it("picks Best Line / Best O/U across books with juice tiebreak", async () => {
@@ -160,7 +174,7 @@ describe("odds-api MLB run line guardrails", () => {
     expect(best?.book).toBe("circa");
   });
 
-  it("prefers canonical MLB run line over alternate values", async () => {
+  it("emits Moneyline rows for MLB and picks best away American", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       jsonResponse([
         {
@@ -175,10 +189,17 @@ describe("odds-api MLB run line guardrails", () => {
               title: "DraftKings",
               markets: [
                 {
-                  key: "spreads",
+                  key: "h2h",
                   outcomes: [
-                    { name: "New York Mets", point: 5.5, price: -110 },
-                    { name: "Toronto Blue Jays", point: -5.5, price: -110 },
+                    { name: "New York Mets", price: -105 },
+                    { name: "Toronto Blue Jays", price: -115 },
+                  ],
+                },
+                {
+                  key: "totals",
+                  outcomes: [
+                    { name: "Over", point: 8.5, price: -110 },
+                    { name: "Under", point: 8.5, price: -110 },
                   ],
                 },
               ],
@@ -188,10 +209,10 @@ describe("odds-api MLB run line guardrails", () => {
               title: "FanDuel",
               markets: [
                 {
-                  key: "spreads",
+                  key: "h2h",
                   outcomes: [
-                    { name: "New York Mets", point: 1.5, price: -120 },
-                    { name: "Toronto Blue Jays", point: -1.5, price: 100 },
+                    { name: "New York Mets", price: 110 },
+                    { name: "Toronto Blue Jays", price: -130 },
                   ],
                 },
               ],
@@ -202,45 +223,35 @@ describe("odds-api MLB run line guardrails", () => {
     );
 
     const rows = await fetchEdgeBoard("mlb", "fake-key");
-    const spread = rows.find((row) => row.market === "Spread");
+    const ml = rows.find((row) => row.market === "Moneyline");
+    const total = rows.find((row) => row.market === "Total");
 
-    expect(spread?.open).toBe("+1.5");
-    expect(spread?.best).toBe("+1.5");
+    expect(ml?.open).toBe("-105");
+    expect(ml?.best).toBe("+110");
+    expect(ml?.bookKey).toBe("fanduel");
+    expect(ml?.bestJuiceHome).toBe("-130");
+    expect(total?.best).toBe("8.5");
+    expect(rows.some((row) => row.market === "Spread")).toBe(false);
   });
 
-  it("tags MLB alternate run lines when no canonical line exists", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      jsonResponse([
-        {
-          id: "game-2",
-          sport_key: "baseball_mlb",
-          commence_time: "2026-07-01T23:00:00Z",
-          away_team: "New York Mets",
-          home_team: "Toronto Blue Jays",
-          bookmakers: [
-            {
-              key: "draftkings",
-              title: "DraftKings",
-              markets: [
-                {
-                  key: "spreads",
-                  outcomes: [
-                    { name: "New York Mets", point: 5.5, price: -110 },
-                    { name: "Toronto Blue Jays", point: -5.5, price: -110 },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ]),
-    );
-
-    const rows = await fetchEdgeBoard("mlb", "fake-key");
-    const spread = rows.find((row) => row.market === "Spread");
-
-    expect(spread?.open).toBe("ALT +5.5");
-    expect(spread?.best).toBe("ALT +5.5");
+  it("pickBestMoneylineEntry prefers higher away American", () => {
+    const best = pickBestMoneylineEntry([
+      {
+        book: "draftkings",
+        away: "-110",
+        home: "-110",
+        awayPrice: -110,
+        homePrice: -110,
+      },
+      {
+        book: "fanduel",
+        away: "+105",
+        home: "-125",
+        awayPrice: 105,
+        homePrice: -125,
+      },
+    ]);
+    expect(best?.book).toBe("fanduel");
   });
 
   it("keeps non-MLB spreads unchanged", async () => {

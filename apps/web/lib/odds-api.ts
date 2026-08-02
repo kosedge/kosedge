@@ -6,7 +6,13 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 
+import {
+  americanImpliedProb,
+  noVigHomeProb,
+} from "@/lib/american-odds";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+
+export { americanImpliedProb, noVigHomeProb };
 
 const ODDS_API_BASE = "https://api.the-odds-api.com/v4";
 
@@ -187,6 +193,14 @@ type TotalBookEntry = {
   juiceUnder?: string;
 };
 
+type MoneylineBookEntry = {
+  book: string;
+  away: string;
+  home: string;
+  awayPrice: number;
+  homePrice: number;
+};
+
 /** Best away spread number across books; juice breaks ties. */
 export function pickBestSpreadEntry(
   entries: SpreadBookEntry[],
@@ -224,6 +238,16 @@ export function pickBestTotalEntry(
   });
 }
 
+/** Best away moneyline = highest American price (better payout for away). */
+export function pickBestMoneylineEntry(
+  entries: MoneylineBookEntry[],
+): MoneylineBookEntry | null {
+  if (!entries.length) return null;
+  return entries.reduce((best, cur) =>
+    americanOddsBetter(cur.awayPrice, best.awayPrice) ? cur : best,
+  );
+}
+
 function orderBooksByPreference<T extends { book: string }>(
   entries: T[],
   preferred: string[],
@@ -246,8 +270,10 @@ export async function fetchEdgeBoard(
   if (!oddsSportKey) return [];
   const isMlb = normalizedSport === "mlb";
   const sportBooks = configuredBooksForSport(normalizedSport);
+  // MLB is a moneyline sport on the public board — request h2h, not run lines.
+  const markets = isMlb ? "h2h,totals" : "spreads,totals";
 
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=spreads,totals&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
+  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=us,us2&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(sportBooks.join(","))}&apiKey=${apiKey}`;
   const res = await upstreamFetch(url, {
     cache: "no-store",
     timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
@@ -277,61 +303,101 @@ export async function fetchEdgeBoard(
       return n > 0 ? `+${n}` : String(n);
     };
 
-    const spreadData = bookmakers.flatMap((b) => {
-      const m = b.markets?.find((x) => x.key === "spreads");
-      if (!m) return [];
-      const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
-      const homeOutcome = m.outcomes?.find((o) => o.name === ev.home_team);
-      if (!awayOutcome || awayOutcome.point == null) return [];
-      const pt = awayOutcome.point;
-      const canonical = !isMlb || isCanonicalMlbRunLine(pt);
-      const line = formatSpreadDisplay(pt, normalizedSport, {
-        markAlternate: isMlb && !canonical,
+    if (isMlb) {
+      const mlData = bookmakers.flatMap((b) => {
+        const m = b.markets?.find((x) => x.key === "h2h");
+        if (!m) return [];
+        const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
+        const homeOutcome = m.outcomes?.find((o) => o.name === ev.home_team);
+        if (awayOutcome?.price == null || homeOutcome?.price == null) return [];
+        const away = formatJuice(awayOutcome.price);
+        const home = formatJuice(homeOutcome.price);
+        if (!away || !home) return [];
+        return [
+          {
+            book: b.key,
+            away,
+            home,
+            awayPrice: awayOutcome.price,
+            homePrice: homeOutcome.price,
+          } satisfies MoneylineBookEntry,
+        ];
       });
-      return [
-        {
-          book: b.key,
-          line,
-          point: pt,
-          canonical,
-          juiceAway: formatJuice(awayOutcome.price),
-          juiceHome: formatJuice(homeOutcome?.price),
-        },
-      ];
-    });
-    const spreadPool = isMlb
-      ? spreadData.filter((entry) => entry.canonical)
-      : spreadData;
-    const selectedSpreadData = orderBooksByPreference(
-      spreadPool.length > 0 ? spreadPool : spreadData,
-      sportBooks,
-    );
-    // Open = preferred book order (DraftKings first), not API response order.
-    const openSpreadEntry = selectedSpreadData[0];
-    const openSpread = openSpreadEntry?.line;
-    // Best Line = best away number across all configured books (juice tiebreak).
-    const bestSpreadEntry = pickBestSpreadEntry(selectedSpreadData);
-    const bestSpread = bestSpreadEntry?.line ?? openSpread;
-    const bestSpreadBookKey = bestSpreadEntry?.book;
-    const bestSpreadBook = bestSpreadBookKey
-      ? bookDisplay(bestSpreadBookKey)
-      : undefined;
+      const selectedMl = orderBooksByPreference(mlData, sportBooks);
+      const openMlEntry = selectedMl[0];
+      const bestMlEntry = pickBestMoneylineEntry(selectedMl) ?? openMlEntry;
+      const bestMlBookKey = bestMlEntry?.book;
+      const bestMlBook = bestMlBookKey
+        ? bookDisplay(bestMlBookKey)
+        : undefined;
 
-    rows.push({
-      id: `${ev.id}-spread`,
-      game,
-      time: timeWithDate,
-      commenceTime: ev.commence_time,
-      market: "Spread",
-      open: openSpread,
-      best: bestSpread ?? openSpread,
-      book: bestSpreadBook,
-      bookKey: bestSpreadBookKey,
-      openJuice: openSpreadEntry?.juiceAway,
-      openJuiceHome: openSpreadEntry?.juiceHome,
-      bestJuice: bestSpreadEntry?.juiceAway ?? openSpreadEntry?.juiceAway,
-      bestJuiceHome: bestSpreadEntry?.juiceHome ?? openSpreadEntry?.juiceHome,
-    });
+      rows.push({
+        id: `${ev.id}-moneyline`,
+        game,
+        time: timeWithDate,
+        commenceTime: ev.commence_time,
+        market: "Moneyline",
+        // Away American in open/best; home American in *JuiceHome (no point flip).
+        open: openMlEntry?.away,
+        best: bestMlEntry?.away ?? openMlEntry?.away,
+        book: bestMlBook,
+        bookKey: bestMlBookKey,
+        openJuice: openMlEntry?.away,
+        openJuiceHome: openMlEntry?.home,
+        bestJuice: bestMlEntry?.away ?? openMlEntry?.away,
+        bestJuiceHome: bestMlEntry?.home ?? openMlEntry?.home,
+      });
+    } else {
+      const spreadData = bookmakers.flatMap((b) => {
+        const m = b.markets?.find((x) => x.key === "spreads");
+        if (!m) return [];
+        const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
+        const homeOutcome = m.outcomes?.find((o) => o.name === ev.home_team);
+        if (!awayOutcome || awayOutcome.point == null) return [];
+        const pt = awayOutcome.point;
+        const canonical = true;
+        const line = formatSpreadDisplay(pt, normalizedSport, {
+          markAlternate: false,
+        });
+        return [
+          {
+            book: b.key,
+            line,
+            point: pt,
+            canonical,
+            juiceAway: formatJuice(awayOutcome.price),
+            juiceHome: formatJuice(homeOutcome?.price),
+          },
+        ];
+      });
+      const selectedSpreadData = orderBooksByPreference(spreadData, sportBooks);
+      // Open = preferred book order (DraftKings first), not API response order.
+      const openSpreadEntry = selectedSpreadData[0];
+      const openSpread = openSpreadEntry?.line;
+      // Best Line = best away number across all configured books (juice tiebreak).
+      const bestSpreadEntry = pickBestSpreadEntry(selectedSpreadData);
+      const bestSpread = bestSpreadEntry?.line ?? openSpread;
+      const bestSpreadBookKey = bestSpreadEntry?.book;
+      const bestSpreadBook = bestSpreadBookKey
+        ? bookDisplay(bestSpreadBookKey)
+        : undefined;
+
+      rows.push({
+        id: `${ev.id}-spread`,
+        game,
+        time: timeWithDate,
+        commenceTime: ev.commence_time,
+        market: "Spread",
+        open: openSpread,
+        best: bestSpread ?? openSpread,
+        book: bestSpreadBook,
+        bookKey: bestSpreadBookKey,
+        openJuice: openSpreadEntry?.juiceAway,
+        openJuiceHome: openSpreadEntry?.juiceHome,
+        bestJuice: bestSpreadEntry?.juiceAway ?? openSpreadEntry?.juiceAway,
+        bestJuiceHome: bestSpreadEntry?.juiceHome ?? openSpreadEntry?.juiceHome,
+      });
+    }
 
     const totalsData = bookmakers.flatMap((b) => {
       const m = b.markets?.find((x) => x.key === "totals");
