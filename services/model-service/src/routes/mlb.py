@@ -15,6 +15,11 @@ from src.services.mlb_market_maker import (
     american_implied_prob as mm_american_implied_prob,
     synthetic_no_vig_from_books,
 )
+from src.services.mlb_model_handicap import (
+    annotate_projection_model_handicap,
+    extract_prior_model_markets,
+    fair_lines_payload_from_row,
+)
 from src.services.mlb_pitch_simulator import simulate_mlb_game_pitch_by_pitch
 from src.services.mlb_simulator import (
     DEFAULT_MODEL_VERSION,
@@ -308,7 +313,11 @@ def _fetch_game_row(session: Any, game_id: str) -> Optional[Dict[str, Any]]:
 
 
 def _store_projection(session: Any, projection: Dict[str, Any]) -> None:
+    # Live /simulate path is pure sim → model = handicap (identity).
+    annotate_projection_model_handicap(projection, line_role="model")
     markets = projection["markets"]
+    model_markets = projection.get("model_markets") or {}
+    handicap_markets = projection.get("handicap_markets") or markets
     diagnostics = projection.get("diagnostics") or {}
     session.execute(
         text(
@@ -331,14 +340,24 @@ def _store_projection(session: Any, projection: Dict[str, Any]) -> None:
             "model_version": projection["model_version"],
             "simulation_count": projection["simulation_count"],
             "f5_home_win_prob": markets["f5_home_win_prob"],
-            "fg_home_win_prob": markets["fg_home_win_prob"],
+            "fg_home_win_prob": handicap_markets.get(
+                "fg_home_win_prob", markets["fg_home_win_prob"]
+            ),
             "f5_total_mean": markets["f5_total_mean"],
-            "fg_total_mean": markets["fg_total_mean"],
+            "fg_total_mean": handicap_markets.get(
+                "fg_total_mean", markets["fg_total_mean"]
+            ),
             "fair_f5_home_ml": markets["fair_f5_home_ml"],
-            "fair_fg_home_ml": markets["fair_fg_home_ml"],
+            "fair_fg_home_ml": handicap_markets.get(
+                "fair_fg_home_ml", markets["fair_fg_home_ml"]
+            ),
             "fair_f5_total": markets["fair_f5_total"],
-            "fair_fg_total": markets["fair_fg_total"],
+            "fair_fg_total": handicap_markets.get(
+                "fair_fg_total", markets["fair_fg_total"]
+            ),
             "projection": __import__("json").dumps(projection),
+            # Kept for clarity / future column writes; JSON already stamped.
+            "model_fair_fg_home_ml": model_markets.get("fair_fg_home_ml"),
         },
     )
     session.execute(
@@ -2007,7 +2026,7 @@ def mlb_fair_lines(
     game_date: Optional[date] = Query(None, description="UTC date; defaults to today"),
     model_version: Optional[str] = Query(None),
 ) -> Dict[str, Any]:
-    """Desk fair-lines board: ML, total, and run-line/spread from latest projections."""
+    """Desk fair-lines: model_* (pure sim) + handicap_* (KEI); fair_fg_* = handicap."""
     session = SessionLocal()
     try:
         effective_model_version = model_version or _resolve_active_model_version(session)
@@ -2045,25 +2064,70 @@ def mlb_fair_lines(
         for r in rows:
             m = dict(r._mapping)
             proj = m.get("projection") or {}
-            markets = proj.get("markets") if isinstance(proj, dict) else {}
-            markets = markets if isinstance(markets, dict) else {}
-            lines.append(
-                {
-                    "game_id": m["game_id"],
-                    "game_date": m["game_date"],
-                    "start_time": m["start_time"],
-                    "home_team": m["home_team"],
-                    "away_team": m["away_team"],
-                    "fg_home_win_prob": _to_float(m["fg_home_win_prob"]),
-                    "fair_fg_home_ml": _to_int(m["fair_fg_home_ml"]),
-                    "fg_total_mean": _to_float(m["fg_total_mean"]),
-                    "fair_fg_total": _to_float(m["fair_fg_total"]),
-                    "fair_fg_spread_home": _to_float(markets.get("fair_fg_spread_home")),
-                    "fg_home_cover_prob_run_line": _to_float(markets.get("fg_home_cover_prob_run_line")),
-                    "fg_margin_mean": _to_float(markets.get("fg_margin_mean")),
-                    "projected_at": m["created_at"],
-                }
+            if not isinstance(proj, dict):
+                proj = {}
+            markets = proj.get("markets") if isinstance(proj.get("markets"), dict) else {}
+            model_markets = (
+                proj.get("model_markets")
+                if isinstance(proj.get("model_markets"), dict)
+                else None
             )
+            handicap_markets = (
+                proj.get("handicap_markets")
+                if isinstance(proj.get("handicap_markets"), dict)
+                else None
+            )
+            # Prefer model snapshot from JSON; fall back to treating published as model.
+            if model_markets is None:
+                model_markets = extract_prior_model_markets(m)
+            payload = fair_lines_payload_from_row(
+                game_id=m["game_id"],
+                game_date=m["game_date"],
+                start_time=m["start_time"],
+                home_team=m["home_team"],
+                away_team=m["away_team"],
+                fg_home_win_prob=_to_float(m["fg_home_win_prob"]),
+                fair_fg_home_ml=_to_int(m["fair_fg_home_ml"]),
+                fg_total_mean=_to_float(m["fg_total_mean"]),
+                fair_fg_total=_to_float(m["fair_fg_total"]),
+                fair_fg_spread_home=_to_float(
+                    (handicap_markets or markets).get("fair_fg_spread_home")
+                ),
+                fg_home_cover_prob_run_line=_to_float(
+                    markets.get("fg_home_cover_prob_run_line")
+                ),
+                fg_margin_mean=_to_float(markets.get("fg_margin_mean")),
+                projected_at=m["created_at"],
+                model_markets=model_markets,
+                handicap_markets=handicap_markets,
+            )
+            # Coerce numerics for JSON stability.
+            for key in (
+                "fg_home_win_prob",
+                "fg_total_mean",
+                "fair_fg_total",
+                "fair_fg_spread_home",
+                "fg_home_cover_prob_run_line",
+                "fg_margin_mean",
+                "handicap_fg_home_win_prob",
+                "handicap_fg_total_mean",
+                "handicap_fair_fg_total",
+                "handicap_fair_fg_spread_home",
+                "model_fg_home_win_prob",
+                "model_fg_total_mean",
+                "model_fair_fg_total",
+                "model_fair_fg_spread_home",
+            ):
+                if key in payload:
+                    payload[key] = _to_float(payload[key])
+            for key in (
+                "fair_fg_home_ml",
+                "handicap_fair_fg_home_ml",
+                "model_fair_fg_home_ml",
+            ):
+                if key in payload:
+                    payload[key] = _to_int(payload[key])
+            lines.append(payload)
         return {
             "game_date": target_date,
             "model_version": effective_model_version,

@@ -4,16 +4,37 @@ export type MlbFairLineRow = {
   startTime: string | null;
   homeTeam: string;
   awayTeam: string;
+  /** @deprecated Handicap home win prob — use handicapHomeWinProb. */
   homeWinProb: number | null;
+  /** @deprecated Handicap home ML — use handicapHomeMl. fair_fg_* alias. */
   fairHomeMl: number | null;
+  /** @deprecated Handicap away ML — use handicapAwayMl. */
   fairAwayMl: number | null;
   totalMean: number | null;
+  /** @deprecated Handicap total — use handicapTotal. */
   fairTotal: number | null;
+  /** @deprecated Handicap run line — use handicapSpreadHome. */
   fairSpreadHome: number | null;
   runLineCoverProbHome: number | null;
   marginMean: number | null;
   projectedAt: string | null;
   modelVersion: string;
+
+  // Handicap = KEI product line
+  handicapHomeWinProb?: number | null;
+  handicapHomeMl?: number | null;
+  handicapAwayMl?: number | null;
+  handicapTotal?: number | null;
+  handicapTotalMean?: number | null;
+  handicapSpreadHome?: number | null;
+
+  // Model = pure sim / research
+  modelHomeWinProb?: number | null;
+  modelHomeMl?: number | null;
+  modelAwayMl?: number | null;
+  modelTotal?: number | null;
+  modelTotalMean?: number | null;
+  modelSpreadHome?: number | null;
 };
 
 export function formatAmericanOdds(value: number | null): string {

@@ -49,27 +49,95 @@ function fairAwayFromHome(homeMl: number | null): number | null {
   return Math.abs(homeMl);
 }
 
+function firstNumber(
+  ...candidates: Array<unknown>
+): number | null {
+  for (const c of candidates) {
+    const n = toNumberOrNull(c);
+    if (n !== null) return n;
+  }
+  return null;
+}
+
 function normalizeFairLine(
   raw: Record<string, unknown>,
   modelVersion: string,
 ): MlbFairLineRow {
-  const fairHomeMl = toNumberOrNull(raw.fair_fg_home_ml);
+  // Handicap = KEI. fair_fg_* is handicap alias for one release.
+  const handicapHomeMl = firstNumber(
+    raw.handicap_fair_fg_home_ml,
+    raw.fair_fg_home_ml,
+  );
+  const handicapAwayMl =
+    firstNumber(raw.handicap_fair_fg_away_ml) ??
+    fairAwayFromHome(handicapHomeMl);
+  const handicapHomeWinProb = firstNumber(
+    raw.handicap_fg_home_win_prob,
+    raw.fg_home_win_prob,
+  );
+  const handicapTotal = firstNumber(
+    raw.handicap_fair_fg_total,
+    raw.fair_fg_total,
+  );
+  const handicapTotalMean = firstNumber(
+    raw.handicap_fg_total_mean,
+    raw.fg_total_mean,
+  );
+  const handicapSpreadHome = firstNumber(
+    raw.handicap_fair_fg_spread_home,
+    raw.fair_fg_spread_home,
+  );
+
+  // Model = pure sim; identity fallback to handicap when absent.
+  const modelHomeMl = firstNumber(
+    raw.model_fair_fg_home_ml,
+    handicapHomeMl,
+  );
+  const modelAwayMl =
+    firstNumber(raw.model_fair_fg_away_ml) ?? fairAwayFromHome(modelHomeMl);
+  const modelHomeWinProb = firstNumber(
+    raw.model_fg_home_win_prob,
+    handicapHomeWinProb,
+  );
+  const modelTotal = firstNumber(raw.model_fair_fg_total, handicapTotal);
+  const modelTotalMean = firstNumber(
+    raw.model_fg_total_mean,
+    handicapTotalMean,
+  );
+  const modelSpreadHome = firstNumber(
+    raw.model_fair_fg_spread_home,
+    handicapSpreadHome,
+  );
+
   return {
     gameId: String(raw.game_id ?? ""),
     gameDate: toIsoOrNull(raw.game_date),
     startTime: toIsoOrNull(raw.start_time),
     homeTeam: String(raw.home_team ?? "Home"),
     awayTeam: String(raw.away_team ?? "Away"),
-    homeWinProb: toNumberOrNull(raw.fg_home_win_prob),
-    fairHomeMl,
-    fairAwayMl: fairAwayFromHome(fairHomeMl),
-    totalMean: toNumberOrNull(raw.fg_total_mean),
-    fairTotal: toNumberOrNull(raw.fair_fg_total),
-    fairSpreadHome: toNumberOrNull(raw.fair_fg_spread_home),
+    // Legacy aliases = handicap
+    homeWinProb: handicapHomeWinProb,
+    fairHomeMl: handicapHomeMl,
+    fairAwayMl: handicapAwayMl,
+    totalMean: handicapTotalMean,
+    fairTotal: handicapTotal,
+    fairSpreadHome: handicapSpreadHome,
     runLineCoverProbHome: toNumberOrNull(raw.fg_home_cover_prob_run_line),
     marginMean: toNumberOrNull(raw.fg_margin_mean),
     projectedAt: toIsoOrNull(raw.projected_at),
     modelVersion,
+    handicapHomeWinProb,
+    handicapHomeMl,
+    handicapAwayMl,
+    handicapTotal,
+    handicapTotalMean,
+    handicapSpreadHome,
+    modelHomeWinProb,
+    modelHomeMl,
+    modelAwayMl,
+    modelTotal,
+    modelTotalMean,
+    modelSpreadHome,
   };
 }
 

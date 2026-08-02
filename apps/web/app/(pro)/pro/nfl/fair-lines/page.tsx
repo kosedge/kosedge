@@ -87,7 +87,7 @@ export default async function NflFairLinesPage({
               KEI Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Model fair spreads, totals, and moneylines beside the market when
+              KEI handicap spreads, totals, and moneylines beside the market when
               books join. Research baseline — not a picks feed. Kickoffs in ET.
             </p>
           </div>

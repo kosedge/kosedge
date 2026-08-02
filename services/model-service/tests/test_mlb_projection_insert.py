@@ -33,6 +33,7 @@ class _FakeSession:
 
 def test_insert_mlb_projection_persists_runline_and_shock_diagnostics(monkeypatch) -> None:
     monkeypatch.setattr(tasks, "_MLB_PROJECTION_HAS_RUNLINE_COLS", None)
+    monkeypatch.setattr(tasks, "_MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS", None)
     session = _FakeSession()
     projection = {
         "game_id": "game-1",
@@ -67,14 +68,72 @@ def test_insert_mlb_projection_persists_runline_and_shock_diagnostics(monkeypatc
         seed=42,
         created_at=datetime(2026, 7, 24, 12, 0, tzinfo=timezone.utc),
     )
-    assert len(session.statements) >= 2
-    insert_sql = session.statements[1]
+    insert_idx = next(
+        i for i, sql in enumerate(session.statements) if "INSERT INTO mlb_market_projections" in sql
+    )
+    insert_sql = session.statements[insert_idx]
     assert "fair_fg_spread_home" in insert_sql
     assert "fg_home_cover_prob_run_line" in insert_sql
-    insert_params = session.params[1]
+    assert "model_fair_fg_home_ml" in insert_sql
+    assert "handicap_fair_fg_home_ml" in insert_sql
+    insert_params = session.params[insert_idx]
     assert insert_params["fair_fg_spread_home"] == -1.5
     assert insert_params["fg_home_cover_prob_run_line"] == 0.48
-    audit_params = session.params[2]
+    assert insert_params["model_fair_fg_home_ml"] == -110
+    assert insert_params["handicap_fair_fg_home_ml"] == -110
+    # model_markets stamped into projection JSON
+    stamped = json.loads(insert_params["projection"])
+    assert stamped["model_markets"]["fair_fg_home_ml"] == -110
+    assert stamped["handicap_markets"]["fair_fg_home_ml"] == -110
+    audit_idx = next(
+        i for i, sql in enumerate(session.statements) if "INSERT INTO mlb_simulation_audit" in sql
+    )
+    audit_params = session.params[audit_idx]
     diag = json.loads(audit_params["diagnostics"])
     assert "lineup_shock" in diag
     assert diag["sp_change_shock"]["home"]["changed"] == 1.0
+
+
+def test_insert_preserves_prior_model_on_handicap_role(monkeypatch) -> None:
+    monkeypatch.setattr(tasks, "_MLB_PROJECTION_HAS_RUNLINE_COLS", True)
+    monkeypatch.setattr(tasks, "_MLB_PROJECTION_HAS_MODEL_HANDICAP_COLS", True)
+    session = _FakeSession()
+    projection = {
+        "game_id": "game-2",
+        "model_version": "mlb-v1-pa-sim",
+        "simulation_count": 100,
+        "markets": {
+            "f5_home_win_prob": 0.55,
+            "fg_home_win_prob": 0.60,
+            "f5_total_mean": 4.8,
+            "fg_total_mean": 9.2,
+            "fair_f5_home_ml": -120,
+            "fair_fg_home_ml": -140,
+            "fair_f5_total": 4.8,
+            "fair_fg_total": 9.0,
+            "fair_fg_spread_home": -1.5,
+        },
+        "inputs": {},
+        "run_rates": {},
+        "diagnostics": {},
+    }
+    tasks._insert_mlb_projection_and_audit(
+        session,
+        projection,
+        seed=7,
+        line_role="handicap",
+        prior_model_markets={
+            "fg_home_win_prob": 0.52,
+            "fair_fg_home_ml": -110,
+            "fg_total_mean": 8.6,
+            "fair_fg_total": 8.5,
+            "fair_fg_spread_home": -1.5,
+        },
+    )
+    insert_idx = next(
+        i for i, sql in enumerate(session.statements) if "INSERT INTO mlb_market_projections" in sql
+    )
+    params = session.params[insert_idx]
+    assert params["model_fair_fg_home_ml"] == -110
+    assert params["handicap_fair_fg_home_ml"] == -140
+    assert params["fair_fg_home_ml"] == -140
