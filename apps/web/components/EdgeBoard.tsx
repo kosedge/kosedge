@@ -278,6 +278,8 @@ type EdgeMarket = "line" | "total";
  * NFL: selective publish (see lib/nfl-publish-policy.ts + docs/NFL_ENTERPRISE_GATES.md).
  *   Spread: PASS default · PLAY ≥2.5 with ATS evidence · LEAN disabled
  *   Total:  PASS default · PLAY only in [2.5, 3.0) · ≥3.0 PASS (toxic)
+ * MLB moneyline: probability-point edge — LEAN ≥1.5pp · PLAY ≥3.0pp
+ * MLB totals: still run-point edge — legacy LEAN ≥1.0 · PLAY ≥2.5
  * Other sports keep the legacy 1.0 / 2.5 cut for both markets.
  */
 function edgeToTag(
@@ -288,7 +290,8 @@ function edgeToTag(
   serverPublishTag?: Tag | null,
 ): Tag | undefined {
   if (edgeNum == null && !serverPublishTag) return undefined;
-  const nfl = String(sportKey).toLowerCase() === "nfl";
+  const sport = String(sportKey).toLowerCase();
+  const nfl = sport === "nfl";
   if (nfl) {
     // Prefer model-service publish tags when present (includes PRE block).
     if (
@@ -308,6 +311,11 @@ function edgeToTag(
     return pub.tag;
   }
   if (edgeNum == null) return undefined;
+  if (sport === "mlb" && market === "line") {
+    if (edgeNum >= 3.0) return "PLAY";
+    if (edgeNum >= 1.5) return "LEAN";
+    return "PASS";
+  }
   if (edgeNum >= 2.5) return "PLAY";
   if (edgeNum >= 1.0) return "LEAN";
   return "PASS";
@@ -543,7 +551,7 @@ export function flatRowsToLegacy(
       ) {
         const signedProb = modelHomeProb - marketHome;
         signedLineEdge = signedProb;
-        // Display / tag thresholds use percentage points (aligns with ≥1 LEAN / ≥2.5 PLAY).
+        // Display / tag thresholds use percentage points (MLB: ≥1.5 LEAN / ≥3.0 PLAY).
         edgeLineNum = Math.abs(signedProb) * 100;
         leanHome =
           signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
@@ -690,7 +698,9 @@ export default function EdgeBoard({
   const data = hasRealData ? legacy : sampleRows;
   const isNfl = String(sportKey).toLowerCase() === "nfl";
   const isMlb = String(sportKey).toLowerCase() === "mlb";
-  const lineLabel = isMlb ? "ML" : "Line";
+  const lineLabel = isMlb ? "Moneyline" : "Line";
+  const modelLineHeader = isMlb ? "Our" : keiCode;
+  const modelOuHeader = isMlb ? "Our" : keiCode;
   const edgeLineLabel = isMlb ? "ML edge" : "Spread edge";
 
   if (variant === "home") {
@@ -710,7 +720,9 @@ export default function EdgeBoard({
                 <thead className="bg-white/5">
                   <tr className="text-left text-gray-300">
                     <th className="py-2.5 px-3">Game</th>
-                    <th className="py-2.5 px-3">Best Line</th>
+                    <th className="py-2.5 px-3">
+                      {isMlb ? "Best Moneyline" : "Best Line"}
+                    </th>
                     <th className="py-2.5 px-3">Best O/U</th>
                     <th className="py-2.5 px-3">Edge</th>
                     <th className="py-2.5 px-3">Tag</th>
@@ -928,10 +940,10 @@ export default function EdgeBoard({
                   <HeaderStack a="Best" b="O/U" />
                 </th>
                 <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
-                  <HeaderStack a={keiCode} b={lineLabel} />
+                  <HeaderStack a={modelLineHeader} b={lineLabel} />
                 </th>
                 <th className={`${TH_BASE} ${COL_MODEL} text-kos-gold`}>
-                  <HeaderStack a={keiCode} b="O/U" />
+                  <HeaderStack a={modelOuHeader} b="O/U" />
                 </th>
                 <th
                   className={`${TH_BASE} ${COL_DECISION} text-[14px] font-bold text-white normal-case tracking-normal`}
@@ -1099,7 +1111,7 @@ export default function EdgeBoard({
           {isNfl
             ? "NFL tags — PASS default. Spread PLAY ≥2.5 (LEAN off). Total PLAY only 2.5–3.0 (≥3 PASS). "
             : isMlb
-              ? "MLB tags — PASS / LEAN (≥1.0pp) / PLAY (≥2.5pp) on moneyline edge vs no-vig market. "
+              ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
               : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {isMlb
             ? "ML edge is model win-prob minus market no-vig (percentage points). "

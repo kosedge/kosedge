@@ -209,4 +209,41 @@ describe("edge board side + play action", () => {
     expect(row.tagLine).toBe("PLAY");
     expect(row.playLine).toBe("Cubs -140");
   });
+
+  it("MLB moneyline tags use 1.5pp LEAN / 3.0pp PLAY (totals stay run-point cuts)", () => {
+    const mk = (homeWinProb: number) =>
+      flatRowsToLegacy(
+        [
+          {
+            game: "New York Yankees @ Chicago Cubs",
+            market: "Moneyline",
+            best: "+120",
+            bestJuiceHome: "-140",
+            bookKey: "draftkings",
+            kei: "-150",
+            keiAway: "+130",
+            homeWinProb,
+          },
+          {
+            game: "New York Yankees @ Chicago Cubs",
+            market: "Total",
+            best: "8.5",
+            bookKey: "fanduel",
+            kei: "9.7", // 1.2 run pts → LEAN under legacy total cut
+          },
+        ],
+        "mlb",
+      )[0];
+
+    // Market no-vig home ≈ 0.562; 0.575 → ~1.3pp → PASS
+    expect(mk(0.575).tagLine).toBe("PASS");
+    // 0.58 → ~1.8pp → LEAN
+    expect(mk(0.58).tagLine).toBe("LEAN");
+    // 0.59 → ~2.8pp → still LEAN (<3.0)
+    expect(mk(0.59).tagLine).toBe("LEAN");
+    // 0.60 → ~3.8pp → PLAY
+    expect(mk(0.6).tagLine).toBe("PLAY");
+    // Totals remain run-point LEAN (≥1.0)
+    expect(mk(0.6).tagOU).toBe("LEAN");
+  });
 });
