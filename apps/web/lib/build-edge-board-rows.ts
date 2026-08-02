@@ -4,8 +4,11 @@
  * Live = current week slate, Full = all games with sportsbook odds.
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
  * NBA/WNBA: fair-lines → KEI handicap (model_* identity until pre_blend exists).
- * Other sports: Odds rows + KEI JSON merge, with shipped fallback snapshots.
- * Never invents sportsbook prices; empty offseason boards stay empty honestly.
+ * NCAAM: Odds + kei_lines_ncaam.json.
+ * NHL / CFB: **markets-only** until a KEI model ships — Odds/fallback only;
+ *   resolveKeiGames returns [] (do not invent KEI). UI banners via
+ *   sportIsMarketsOnlyEdgeBoard.
+ * Never invents sportsbook or KEI prices; empty offseason boards stay empty honestly.
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
