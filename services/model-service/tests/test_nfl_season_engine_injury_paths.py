@@ -22,11 +22,12 @@ def _det_gibbs_key(universe) -> str:
 
 
 def test_engine_version_surfaces_injury_shocks() -> None:
-    # Injury paths remain in v1.3+; version string now tags deeper usage.
+    # Injury paths remain in v1.2+; version string tags the latest capability.
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert (
         "injury-shocks" in DEFAULT_SEASON_ENGINE_VERSION
         or "deeper-usage" in DEFAULT_SEASON_ENGINE_VERSION
+        or "survivor" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

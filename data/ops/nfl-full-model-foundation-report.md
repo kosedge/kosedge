@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.3-deeper-usage` (calibrated base + injury paths + deeper Layer-3 usage; see `nfl-season-engine-calibration-20260803.md`, `nfl-season-engine-injury-shocks-20260803.md`, `nfl-season-engine-deeper-usage-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.4-survivor` (calibrated base + injury paths + deeper Layer-3 usage + survivor pool outputs; see `nfl-season-engine-calibration-20260803.md`, `nfl-season-engine-injury-shocks-20260803.md`, `nfl-season-engine-deeper-usage-20260803.md`, `nfl-season-engine-survivor-20260803.md`)  
 **Date:** 2026-08-03  
-**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`). **v1.3 deeper usage:** explicit role taxonomy (QB1/RB1/WR1…), script + personnel matrices, role-aware injury reallocation.
+**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`). **v1.3 deeper usage:** explicit role taxonomy (QB1/RB1/WR1…), script + personnel matrices, role-aware injury reallocation. **v1.4 survivor:** team W/L season paths → Week N rankings, already-used filters, inspectable save / pick-now scores.
 
 ## Goal (this pass)
 
@@ -28,6 +28,7 @@ Orchestration:
 
 - `season_sim.py` — N path-coherent full seasons
 - `game_query.py` — single future-game Monte Carlo boxes
+- `survivor.py` — team W/L season paths + survivor week / path-value scores
 - `loaders.py` — DB universe or offline demo universe
 
 ## Entry points
@@ -35,6 +36,9 @@ Orchestration:
 ```bash
 # Offline demo (no DB)
 python scripts/nfl/run_hierarchical_season_sim.py --demo --n-sims 50 --sample-game BUF@KC
+
+# Survivor Week N (already-used teams)
+python scripts/nfl/run_survivor_evaluate.py --demo --week 5 --already-used KC,BUF --n-sims 300
 
 # DB-backed (DATABASE_URL set)
 python scripts/nfl/run_hierarchical_season_sim.py --season 2026 --n-sims 100
@@ -46,6 +50,7 @@ HTTP (additive on model-service; does **not** touch Edge Board / Model-vs-KEI #7
 - `POST /nfl/season-engine/simulate?n_sims=25&season=2026` (optional JSON `injury_paths`)
 - `GET  /nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&n_replicates=400`
 - `POST /nfl/season-engine/game-boxes` (same query params + optional `injury_paths` body)
+- `POST /nfl/season-engine/survivor` (body: week, already_used, n_sims, optional injury_paths)
 
 Tests: `services/model-service/tests/test_nfl_season_engine*.py`
 
@@ -104,10 +109,12 @@ Game script summary:
 2. Historical walk-forward calibration of strength evolution + script tilts (beyond league priors)
 3. ~~Injury / availability shocks inside season paths~~ → **done in v1.2** (`injury_paths.py`; live-report ingest still caller-supplied)
 4. ~~Deeper player usage (roles / script / injury realloc)~~ → **done in v1.3** (`usage_roles.py`; slot detection / fitted script matrix still thin)
-5. Persist season-engine artifacts to a stable hub path (optional web surfacing)
-6. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
-7. Role-specific QB rush volume (Allen still light vs career)
-8. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
+5. ~~Survivor pool week / path-value outputs~~ → **done in v1.4** (`survivor.py`; heuristics, not full pool EV / opponent correlation)
+6. Persist season-engine artifacts to a stable hub path (optional web surfacing)
+7. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
+8. Role-specific QB rush volume (Allen still light vs career)
+9. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
+10. Survivor: multi-entry / field-aware EV, bye-week handling polish on real schedules
 
 ## Railway
 

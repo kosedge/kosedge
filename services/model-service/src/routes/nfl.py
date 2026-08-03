@@ -4440,8 +4440,22 @@ class SeasonEngineRequestBody(BaseModel):
     injury_paths: Optional[List[SeasonEngineInjuryPathBody]] = None
 
 
+class SeasonEngineSurvivorBody(BaseModel):
+    """Survivor-pool evaluate request (week N picks given already-used teams)."""
+
+    season: int = Field(2026, ge=2010, le=2100)
+    week: int = Field(..., ge=1, le=22)
+    n_sims: int = Field(300, ge=1, le=2000)
+    seed: int = 42
+    already_used: List[str] = Field(default_factory=list)
+    injury_paths: Optional[List[SeasonEngineInjuryPathBody]] = None
+    demo: bool = False
+    as_of_week: int = Field(1, ge=1, le=18)
+    top_n: int = Field(16, ge=1, le=32)
+
+
 def _season_engine_injury_paths(
-    body: Optional[SeasonEngineRequestBody],
+    body: Optional[SeasonEngineRequestBody | SeasonEngineSurvivorBody],
 ) -> list:
     from src.services.nfl_season_engine import parse_injury_paths
 
@@ -4455,6 +4469,7 @@ def nfl_season_engine_status() -> Dict[str, Any]:
     """Describe the hierarchical season engine and its four layers."""
     from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
     from src.services.nfl_season_engine.player_usage import usage_rules_documentation
+    from src.services.nfl_season_engine.survivor import FORMULA_NOTES
     from src.services.nfl_season_engine.usage_roles import USAGE_ROLE_LABELS
 
     return {
@@ -4465,22 +4480,42 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             {"id": 3, "name": "player_usage", "module": "src.services.nfl_season_engine.player_usage"},
             {"id": 4, "name": "production", "module": "src.services.nfl_season_engine.production"},
         ],
+        "capabilities": [
+            "simulate",
+            "game_boxes",
+            "injury_paths",
+            "usage_roles",
+            "survivor",
+        ],
         "usage_roles": {
             "module": "src.services.nfl_season_engine.usage_roles",
             "labels": list(USAGE_ROLE_LABELS),
             "rules": usage_rules_documentation(),
         },
+        "survivor": {
+            "module": "src.services.nfl_season_engine.survivor",
+            "endpoint": "POST /nfl/season-engine/survivor",
+            "formula": FORMULA_NOTES,
+            "default_n_sims": 300,
+            "mode": "team_wl_paths (Layers 1–2; skips player boxes)",
+        },
         "injury_paths": {
             "module": "src.services.nfl_season_engine.injury_paths",
             "statuses": ["out", "limited", "returning"],
             "optional_body_field": "injury_paths",
-            "applies_to": ["POST /nfl/season-engine/simulate", "POST /nfl/season-engine/game-boxes"],
+            "applies_to": [
+                "POST /nfl/season-engine/simulate",
+                "POST /nfl/season-engine/game-boxes",
+                "POST /nfl/season-engine/survivor",
+            ],
             "reallocation": "role-aware sinks (usage_roles.INJURY_REALLOC_RULES)",
         },
         "entry_points": {
             "simulate": "POST /nfl/season-engine/simulate",
             "game_boxes": "GET|POST /nfl/season-engine/game-boxes",
+            "survivor": "POST /nfl/season-engine/survivor",
             "cli": "scripts/nfl/run_hierarchical_season_sim.py",
+            "cli_survivor": "scripts/nfl/run_survivor_evaluate.py",
         },
         "additive": True,
         "does_not_modify": ["edge_board", "model_vs_kei_#70", "nfl_market_projections"],
@@ -4647,3 +4682,62 @@ def nfl_season_engine_game_boxes_post(
         demo=demo,
         injury_paths=_season_engine_injury_paths(body),
     )
+
+
+@router.post("/season-engine/survivor")
+def nfl_season_engine_survivor(
+    body: SeasonEngineSurvivorBody = Body(...),
+) -> Dict[str, Any]:
+    """Rank survivor picks for a target week given already-used teams.
+
+    Runs ``n_sims`` team W/L season paths (Layers 1–2; skips player boxes),
+    then returns week win rates, save_score / future_value, and pick_now_score.
+
+    Example body::
+
+        {
+          "season": 2026,
+          "week": 5,
+          "n_sims": 500,
+          "already_used": ["KC", "BUF"],
+          "injury_paths": [],
+          "seed": 42,
+          "demo": true
+        }
+    """
+    from src.services.nfl_season_engine import (
+        build_demo_universe,
+        evaluate_survivor,
+        load_universe_from_db,
+    )
+
+    injury_paths = _season_engine_injury_paths(body)
+    mode = "demo"
+    universe = None
+    if not body.demo:
+        session = SessionLocal()
+        try:
+            universe = load_universe_from_db(
+                session, season=body.season, as_of_week=body.as_of_week
+            )
+            mode = "db"
+        except Exception as exc:  # pragma: no cover - ops fallback
+            log.warning("season-engine DB universe failed: %s", exc)
+        finally:
+            session.close()
+    if universe is None:
+        universe = build_demo_universe(season=body.season)
+        mode = "demo"
+
+    result = evaluate_survivor(
+        universe,
+        week=body.week,
+        n_sims=body.n_sims,
+        seed=body.seed,
+        already_used=body.already_used,
+        injury_paths=injury_paths,
+        top_n=body.top_n,
+    )
+    payload = result.to_dict()
+    payload["mode"] = mode
+    return payload
