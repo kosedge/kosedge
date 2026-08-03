@@ -26,6 +26,19 @@ function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
     totalMean: 41.3,
     fairHomeMl: -160,
     fairAwayMl: 140,
+    handicapSpreadHome: -3.5,
+    handicapTotal: 41.3,
+    handicapHomeWinProb: 0.6,
+    handicapAwayWinProb: 0.4,
+    handicapHomeMl: -160,
+    handicapAwayMl: 140,
+    modelSpreadHome: -3.5,
+    modelTotal: 41.3,
+    modelHomeWinProb: 0.6,
+    modelAwayWinProb: 0.4,
+    modelHomeMl: -160,
+    modelAwayMl: 140,
+    modelEqualsKei: true,
     modelVersion: "test",
     simulationCount: 1000,
     projectionCreatedAt: null,
@@ -64,6 +77,27 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(spread.best).toBe("+3"); // falls back to consensus when no best-of-books
     expect(total.kei).toBe("41.3");
     expect(total.best).toBe("44.5");
+    expect((spread as { modelKei?: string }).modelKei).toBe("-3.5");
+  });
+
+  it("attaches modelKei from pre-blend model fields while kei stays handicap", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        spreadHome: -2.0,
+        handicapSpreadHome: -2.0,
+        modelSpreadHome: -4.2,
+        totalMean: 46.5,
+        handicapTotal: 46.5,
+        modelTotal: 43.1,
+        modelEqualsKei: false,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    const total = rows.find((r) => r.market === "Total")!;
+    expect(spread.kei).toBe("-2");
+    expect((spread as { modelKei?: string }).modelKei).toBe("-4.2");
+    expect(total.kei).toBe("46.5");
+    expect((total as { modelKei?: string }).modelKei).toBe("43.1");
   });
 
   it("uses best-of-books for Best Line / Best O/U instead of consensus", () => {

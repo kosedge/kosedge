@@ -16,10 +16,31 @@ export type NflFairLineRow = {
   awayAbbr: string;
   homeWinProb: number | null;
   awayWinProb: number | null;
+  /** KEI handicap (published product line). Alias of spreadHome. */
   spreadHome: number | null;
+  /** KEI handicap total. Alias of totalMean. */
   totalMean: number | null;
   fairHomeMl: number | null;
   fairAwayMl: number | null;
+  /** Explicit handicap namespace (same as published when API is current). */
+  handicapSpreadHome: number | null;
+  handicapTotal: number | null;
+  handicapHomeWinProb: number | null;
+  handicapAwayWinProb: number | null;
+  handicapHomeMl: number | null;
+  handicapAwayMl: number | null;
+  /**
+   * Research Model = pre-market-blend Monte Carlo fair when blend applied;
+   * otherwise identity with handicap. ML/win probs are identity today.
+   */
+  modelSpreadHome: number | null;
+  modelTotal: number | null;
+  modelHomeWinProb: number | null;
+  modelAwayWinProb: number | null;
+  modelHomeMl: number | null;
+  modelAwayMl: number | null;
+  /** True when Model spread/total match KEI (no blend divergence). */
+  modelEqualsKei: boolean | null;
   modelVersion: string;
   simulationCount: number | null;
   projectionCreatedAt: string | null;
@@ -122,6 +143,42 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     totalMean: toNumberOrNull(raw.total_mean),
     fairHomeMl: toNumberOrNull(raw.fair_home_ml),
     fairAwayMl: toNumberOrNull(raw.fair_away_ml),
+    handicapSpreadHome: toNumberOrNull(
+      raw.handicap_spread_home ?? raw.spread_home,
+    ),
+    handicapTotal: toNumberOrNull(raw.handicap_total_mean ?? raw.total_mean),
+    handicapHomeWinProb: toNumberOrNull(
+      raw.handicap_home_win_prob ?? raw.home_win_prob,
+    ),
+    handicapAwayWinProb: toNumberOrNull(
+      raw.handicap_away_win_prob ?? raw.away_win_prob,
+    ),
+    handicapHomeMl: toNumberOrNull(
+      raw.handicap_fair_home_ml ?? raw.fair_home_ml,
+    ),
+    handicapAwayMl: toNumberOrNull(
+      raw.handicap_fair_away_ml ?? raw.fair_away_ml,
+    ),
+    modelSpreadHome: toNumberOrNull(
+      raw.model_spread_home ?? raw.handicap_spread_home ?? raw.spread_home,
+    ),
+    modelTotal: toNumberOrNull(
+      raw.model_total_mean ?? raw.handicap_total_mean ?? raw.total_mean,
+    ),
+    modelHomeWinProb: toNumberOrNull(
+      raw.model_home_win_prob ?? raw.handicap_home_win_prob ?? raw.home_win_prob,
+    ),
+    modelAwayWinProb: toNumberOrNull(
+      raw.model_away_win_prob ?? raw.handicap_away_win_prob ?? raw.away_win_prob,
+    ),
+    modelHomeMl: toNumberOrNull(
+      raw.model_fair_home_ml ?? raw.handicap_fair_home_ml ?? raw.fair_home_ml,
+    ),
+    modelAwayMl: toNumberOrNull(
+      raw.model_fair_away_ml ?? raw.handicap_fair_away_ml ?? raw.fair_away_ml,
+    ),
+    modelEqualsKei:
+      typeof raw.model_equals_kei === "boolean" ? raw.model_equals_kei : null,
     modelVersion: String(raw.model_version ?? ""),
     simulationCount: toNumberOrNull(raw.simulation_count),
     projectionCreatedAt: toIsoOrNull(raw.projection_created_at),

@@ -108,11 +108,22 @@ export function fairLinesToEdgeBoardRows(
       line.gameId ||
       `${line.awayAbbr}-${line.homeAbbr}-${commenceTime ?? "tba"}`;
 
+    const handicapSpread = line.handicapSpreadHome ?? line.spreadHome;
+    const handicapTotal = line.handicapTotal ?? line.totalMean;
     const keiHome =
-      line.spreadHome != null ? formatSigned(line.spreadHome) : undefined;
+      handicapSpread != null ? formatSigned(handicapSpread) : undefined;
     const keiTotal =
-      line.totalMean != null
-        ? String(Math.round(line.totalMean * 10) / 10)
+      handicapTotal != null
+        ? String(Math.round(handicapTotal * 10) / 10)
+        : undefined;
+    // Research Model (pre-blend) — attached for honesty; Edge Board tags use kei.
+    const modelKeiHome =
+      line.modelSpreadHome != null
+        ? formatSigned(line.modelSpreadHome)
+        : undefined;
+    const modelKeiTotal =
+      line.modelTotal != null
+        ? String(Math.round(line.modelTotal * 10) / 10)
         : undefined;
     // Open = consensus average across books (when joined).
     const marketAwaySpread =
@@ -159,6 +170,7 @@ export function fairLinesToEdgeBoardRows(
       bestJuice: formatJuice(line.bestSpreadAwayJuice),
       bestJuiceHome: formatJuice(line.bestSpreadHomeJuice),
       kei: keiHome,
+      modelKei: modelKeiHome,
       week,
       seasonType,
       publishTag: publishTagSpread,
@@ -180,6 +192,7 @@ export function fairLinesToEdgeBoardRows(
       bestJuice: formatJuice(line.bestTotalOverJuice),
       bestJuiceHome: formatJuice(line.bestTotalUnderJuice),
       kei: keiTotal,
+      modelKei: modelKeiTotal,
       week,
       seasonType,
       publishTag: publishTagTotal,

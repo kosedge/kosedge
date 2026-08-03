@@ -41,6 +41,22 @@ function isInPastWindow(startTime: string | null, pastDays: number): boolean {
   return t >= cutoff && t <= now;
 }
 
+function keiSpread(row: NflFairLineRow): number | null {
+  return row.handicapSpreadHome ?? row.spreadHome;
+}
+
+function keiTotal(row: NflFairLineRow): number | null {
+  return row.handicapTotal ?? row.totalMean;
+}
+
+function modelSpread(row: NflFairLineRow): number | null {
+  return row.modelSpreadHome ?? keiSpread(row);
+}
+
+function modelTotal(row: NflFairLineRow): number | null {
+  return row.modelTotal ?? keiTotal(row);
+}
+
 export default async function NflFairLinesPage({
   searchParams,
 }: {
@@ -87,8 +103,9 @@ export default async function NflFairLinesPage({
               KEI Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              KEI handicap spreads, totals, and moneylines beside the market when
-              books join. Research baseline — not a picks feed. Kickoffs in ET.
+              Model = pre-market-blend research fair. KEI handicap = the product
+              line (post-blend + calibration) shown on the Edge Board — tags
+              compare KEI to market, not Model. Kickoffs in ET.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -105,10 +122,10 @@ export default async function NflFairLinesPage({
               Edges Desk →
             </Link>
             <Link
-              href="/pro/nfl/props"
+              href="/edge-board/nfl"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
-              Player Props Board →
+              Edge Board →
             </Link>
           </div>
         </div>
@@ -195,36 +212,100 @@ export default async function NflFairLinesPage({
         ) : null}
 
         {visibleLines.length > 0 ? (
-          <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="text-xs uppercase tracking-wide text-kos-text/55">
-                <tr className="border-b border-white/10">
-                  <th className="px-3 py-2 font-semibold">Matchup</th>
-                  <th className="px-3 py-2 font-semibold">Kickoff</th>
-                  <th className="px-3 py-2 font-semibold">Kos spread</th>
-                  <th className="px-3 py-2 font-semibold">Kos total</th>
-                  <th className="px-3 py-2 font-semibold">Fair ML</th>
-                  <th className="px-3 py-2 font-semibold">Win probs</th>
-                  <th className="px-3 py-2 font-semibold">Vegas ML</th>
-                  <th className="px-3 py-2 font-semibold">Vegas total</th>
-                  <th className="px-3 py-2 font-semibold">ML edge</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleLines.map((row) => (
-                  <FairLineRow key={row.gameId} row={row} />
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <div className="mt-4 grid gap-3 md:hidden">
+              {visibleLines.map((row) => (
+                <article
+                  key={row.gameId}
+                  className="rounded-xl border border-white/10 bg-black/35 p-4"
+                >
+                  <div className="text-sm font-semibold text-kos-text">
+                    {row.awayAbbr} @ {row.homeAbbr}
+                  </div>
+                  <p className="mt-1 text-xs text-kos-text/55">
+                    {formatKickoff(row.startTime)} · ET
+                  </p>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <div className="text-kos-text/50">Model spread</div>
+                      <div className="mt-0.5 text-kos-text/80">
+                        {formatSpread(modelSpread(row))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-kos-gold/70">KEI spread</div>
+                      <div className="mt-0.5 font-semibold text-kos-gold">
+                        {formatSpread(keiSpread(row))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-kos-text/50">Model total</div>
+                      <div className="mt-0.5 text-kos-text/80">
+                        {formatTotal(modelTotal(row))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-kos-gold/70">KEI total</div>
+                      <div className="mt-0.5 font-semibold text-kos-gold">
+                        {formatTotal(keiTotal(row))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-kos-text/50">Fair ML</div>
+                      <div className="mt-0.5 text-kos-text/80">
+                        H {formatAmericanOdds(row.fairHomeMl)} / A{" "}
+                        {formatAmericanOdds(row.fairAwayMl)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-kos-text/50">Win probs</div>
+                      <div className="mt-0.5 text-kos-text/80">
+                        {formatWinProb(row.homeWinProb)} /{" "}
+                        {formatWinProb(row.awayWinProb)}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="mt-4 hidden overflow-x-auto md:block">
+              <table className="min-w-full text-left text-sm">
+                <thead className="text-xs uppercase tracking-wide text-kos-text/55">
+                  <tr className="border-b border-white/10">
+                    <th className="px-3 py-2 font-semibold">Matchup</th>
+                    <th className="px-3 py-2 font-semibold">Kickoff</th>
+                    <th className="px-3 py-2 font-semibold">Model spread</th>
+                    <th className="px-3 py-2 font-semibold text-kos-gold/80">
+                      KEI spread
+                    </th>
+                    <th className="px-3 py-2 font-semibold">Model total</th>
+                    <th className="px-3 py-2 font-semibold text-kos-gold/80">
+                      KEI total
+                    </th>
+                    <th className="px-3 py-2 font-semibold">Fair ML</th>
+                    <th className="px-3 py-2 font-semibold">Win probs</th>
+                    <th className="px-3 py-2 font-semibold">Vegas ML</th>
+                    <th className="px-3 py-2 font-semibold">Vegas total</th>
+                    <th className="px-3 py-2 font-semibold">ML edge</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleLines.map((row) => (
+                    <FairLineRow key={row.gameId} row={row} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         ) : null}
       </section>
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
         <p>
-          KEI moneylines and spreads are simulation-backed reference prices —
-          not picks. Edges are only shown when a live market price joins the
-          same matchup.
+          Model is the pre-market-blend Monte Carlo fair when blend applied;
+          otherwise Model equals KEI. Fair ML / win probs are post-blend only
+          (no separate Model ML yet). Edges and PLAY/LEAN tags use KEI vs market
+          only.
         </p>
       </section>
     </main>
@@ -245,11 +326,17 @@ function FairLineRow({ row }: { row: NflFairLineRow }) {
       <td className="px-3 py-3 text-kos-text/80">
         {formatKickoff(row.startTime)}
       </td>
-      <td className="px-3 py-3 font-semibold text-kos-gold">
-        {formatSpread(row.spreadHome)}
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatSpread(modelSpread(row))}
       </td>
-      <td className="px-3 py-3 font-semibold text-kos-text">
-        {formatTotal(row.totalMean)}
+      <td className="px-3 py-3 font-semibold text-kos-gold">
+        {formatSpread(keiSpread(row))}
+      </td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatTotal(modelTotal(row))}
+      </td>
+      <td className="px-3 py-3 font-semibold text-kos-gold">
+        {formatTotal(keiTotal(row))}
       </td>
       <td className="px-3 py-3 text-kos-text/90">
         <div>

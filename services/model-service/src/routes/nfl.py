@@ -31,6 +31,11 @@ from src.services.nfl_handicapping_framework import (
     get_nfl_handicapping_config,
 )
 from src.services.nfl_totals_calibration import fetch_nfl_totals_calibration
+from src.services.nfl_model_handicap import (
+    annotate_projection_model_handicap,
+    fair_lines_model_handicap_fields,
+    resolve_model_and_handicap,
+)
 from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as nfl_publish_moneyline_tag
 from src.services.nfl_side_total_publish_policy import publish_tag as nfl_publish_tag
 
@@ -2953,7 +2958,8 @@ def nfl_fair_lines(
                   p.fair_away_ml,
                   p.model_version,
                   p.simulation_count,
-                  p.created_at AS projection_created_at
+                  p.created_at AS projection_created_at,
+                  p.projection
                 FROM nfl_dp_schedules sch
                 JOIN leagues l ON l.code = 'nfl'
                 JOIN seasons s ON s.league_id = l.id AND s.season_year = sch.season
@@ -3054,8 +3060,23 @@ def nfl_fair_lines(
         if has_market:
             market_joined_count += 1
 
+        # Published columns = KEI handicap. Model = pre-blend research when available.
         spread_home = _to_float(mapped.get("spread_home"))
         total_mean = _to_float(mapped.get("total_mean"))
+        model_markets, handicap_markets = resolve_model_and_handicap(
+            projection=mapped.get("projection"),
+            spread_home=spread_home,
+            total_mean=total_mean,
+            home_win_prob=home_win_prob,
+            away_win_prob=away_win_prob,
+            fair_home_ml=mapped.get("fair_home_ml"),
+            fair_away_ml=mapped.get("fair_away_ml"),
+        )
+        # Edges / publish tags always use handicap (KEI), never Model.
+        spread_home = _to_float(handicap_markets.get("spread_home", spread_home))
+        total_mean = _to_float(handicap_markets.get("total_mean", total_mean))
+        home_win_prob = _to_float(handicap_markets.get("home_win_prob", home_win_prob))
+        away_win_prob = _to_float(handicap_markets.get("away_win_prob", away_win_prob))
         ml_edge_prob = None
         total_edge = None
         spread_edge = None
@@ -3117,6 +3138,14 @@ def nfl_fair_lines(
         away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
 
         week_val = mapped.get("week")
+        mh = fair_lines_model_handicap_fields(
+            model=model_markets,
+            handicap=handicap_markets,
+        )
+        model_spread = _to_float(mh.get("model_spread_home"))
+        model_total = _to_float(mh.get("model_total_mean"))
+        model_home_wp = _to_float(mh.get("model_home_win_prob"))
+        model_away_wp = _to_float(mh.get("model_away_win_prob"))
         lines.append(
             {
                 "game_id": str(mapped.get("game_id")),
@@ -3129,12 +3158,34 @@ def nfl_fair_lines(
                 "away_team": away_display,
                 "home_abbr": home_abbr,
                 "away_abbr": away_abbr,
+                # Top-level published = KEI handicap
                 "home_win_prob": round(home_win_prob, 4) if home_win_prob is not None else None,
                 "away_win_prob": round(away_win_prob, 4) if away_win_prob is not None else None,
                 "spread_home": round(spread_home, 2) if spread_home is not None else None,
                 "total_mean": round(total_mean, 2) if total_mean is not None else None,
                 "fair_home_ml": _to_int(mapped.get("fair_home_ml")),
                 "fair_away_ml": _to_int(mapped.get("fair_away_ml")),
+                "handicap_spread_home": round(spread_home, 2) if spread_home is not None else None,
+                "handicap_total_mean": round(total_mean, 2) if total_mean is not None else None,
+                "handicap_home_win_prob": (
+                    round(home_win_prob, 4) if home_win_prob is not None else None
+                ),
+                "handicap_away_win_prob": (
+                    round(away_win_prob, 4) if away_win_prob is not None else None
+                ),
+                "handicap_fair_home_ml": _to_int(mh.get("handicap_fair_home_ml")),
+                "handicap_fair_away_ml": _to_int(mh.get("handicap_fair_away_ml")),
+                "model_spread_home": round(model_spread, 2) if model_spread is not None else None,
+                "model_total_mean": round(model_total, 2) if model_total is not None else None,
+                "model_home_win_prob": (
+                    round(model_home_wp, 4) if model_home_wp is not None else None
+                ),
+                "model_away_win_prob": (
+                    round(model_away_wp, 4) if model_away_wp is not None else None
+                ),
+                "model_fair_home_ml": _to_int(mh.get("model_fair_home_ml")),
+                "model_fair_away_ml": _to_int(mh.get("model_fair_away_ml")),
+                "model_equals_kei": bool(mh.get("model_equals_kei")),
                 "model_version": str(mapped.get("model_version") or effective_model_version),
                 "simulation_count": _to_int(mapped.get("simulation_count")),
                 "projection_created_at": mapped.get("projection_created_at"),
@@ -3323,6 +3374,7 @@ def run_nfl_simulation(
             model_version=model_version,
             totals_calibration=totals_calibration,
         )
+        annotate_projection_model_handicap(projection, line_role="model")
         markets = projection.get("markets") or {}
         session.execute(
             text(

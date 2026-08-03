@@ -121,6 +121,7 @@ from .services.nfl_handicapping_framework import (
 )
 from .services.nfl_decomposition_drift import summarize_decomposition_drift
 from .services.nfl_framework_tuning import TuningThresholds, build_tuning_candidates, evaluate_tuning_grid
+from .services.nfl_model_handicap import annotate_projection_model_handicap
 from .services.nfl_matchup_features import (
     fetch_latest_matchup_feature_pack,
     matchup_pack_to_sim_input_kwargs,
@@ -4046,6 +4047,12 @@ def run_nfl_market_simulations(
                     }
                     projection["diagnostics"] = diagnostics
             projection_for_storage = dict(projection)
+            # Stamp Model (pre-blend research) vs KEI handicap (published product)
+            # after final totals calibration so handicap matches denormalized columns.
+            annotate_projection_model_handicap(
+                projection_for_storage,
+                line_role="model",
+            )
             audit_block = projection_for_storage.get("audit")
             if not isinstance(audit_block, dict):
                 audit_block = {}
@@ -4081,7 +4088,7 @@ def run_nfl_market_simulations(
                 }
             )
             projection_for_storage["audit"] = audit_block
-            markets = projection.get("markets") or {}
+            markets = projection_for_storage.get("markets") or projection.get("markets") or {}
             session.execute(
                 text(
                     """
