@@ -15,6 +15,12 @@ from collections import defaultdict
 from typing import Any, Dict, List, Optional, Sequence
 
 from src.services.nfl_season_engine.calibration import ENGINE_VERSION
+from src.services.nfl_season_engine.depth_chart import (
+    apply_depth_chart_roster_book,
+    apply_weekly_role_volatility,
+    classify_team_depth,
+    depth_structure_diagnostics,
+)
 from src.services.nfl_season_engine.game_script import (
     build_game_script,
     summarize_script_distribution,
@@ -127,8 +133,25 @@ def project_game_player_boxes(
     )
     rng = random.Random(seed)
     paths = list(injury_paths or [])
+    # Depth-chart base splits for the two clubs, one week-volatility draw
+    # (seeded), then injury shocks — mirrors season-path Layer-3 ordering.
+    focus_book = {
+        game.home_team: list(universe.rosters.get(game.home_team, [])),
+        game.away_team: list(universe.rosters.get(game.away_team, [])),
+    }
+    base_rosters, base_structures = apply_depth_chart_roster_book(focus_book)
+    vol_rng = random.Random(seed ^ (game.week * 1_000_003))
+    vol_rosters, vol_transitions = apply_weekly_role_volatility(
+        base_rosters,
+        week=game.week,
+        rng=vol_rng,
+        structures=base_structures,
+    )
+    # Keep full book for injury lookup; overlay the two adjusted teams.
+    query_rosters = {t: list(r) for t, r in universe.rosters.items()}
+    query_rosters.update(vol_rosters)
     week_rosters, week_strengths, adjustments = apply_injury_paths_for_week(
-        universe.rosters,
+        query_rosters,
         universe.strengths,
         paths,
         week=game.week,
@@ -231,6 +254,10 @@ def project_game_player_boxes(
 
     diagnostics: Dict[str, Any] = {}
     if include_diagnostics:
+        focus = {
+            game.home_team: week_rosters.get(game.home_team, []),
+            game.away_team: week_rosters.get(game.away_team, []),
+        }
         diagnostics = {
             "usage_shares_home": usage_share_diagnostics(
                 home_roles, script="neutral", pass_rate=0.58
@@ -249,6 +276,19 @@ def project_game_player_boxes(
             "game_script_summary": summarize_script_distribution(scripts),
             "schedule_match": notes["schedule_match"],
             "seed": seed,
+            # Additive v1.5 depth-chart / committee / volatility fields.
+            "depth_structure": {
+                game.home_team: classify_team_depth(
+                    game.home_team, week_rosters.get(game.home_team, [])
+                ).to_dict(),
+                game.away_team: classify_team_depth(
+                    game.away_team, week_rosters.get(game.away_team, [])
+                ).to_dict(),
+            },
+            "depth_structure_detail": depth_structure_diagnostics(focus),
+            "role_transitions": [t.to_dict() for t in vol_transitions if t.team in focus][
+                :40
+            ],
         }
 
     return GameBoxProjection(

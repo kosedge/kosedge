@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.4.1: harden/validate pass — name matching, diagnostics flag, regression
-# guards. No new modeling features (survivor + injury + usage stack intact).
-ENGINE_VERSION = "nfl-season-engine-v1.4.1-hardened"
+# v1.5: depth-chart structure (feature vs committee RB, clear vs murky WR),
+# unequal committee splits, path/week role volatility + injury promotions.
+ENGINE_VERSION = "nfl-season-engine-v1.5-depth-volatility"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -281,6 +281,11 @@ def calibration_notes() -> Dict[str, str]:
         "harden": (
             "v1.4.1: dual-name injury matching, include_diagnostics explain "
             "payloads, thin-roster/NaN guards, contract docs."
+        ),
+        "depth_volatility": (
+            "v1.5: depth_chart feature/committee RB + clear/murky WR; "
+            "committee splits 55/45 or 45/35/20; weekly share drift + rare "
+            "role shuffle; injury promotions (see depth_chart.py)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

@@ -4493,6 +4493,8 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             "game_boxes",
             "injury_paths",
             "usage_roles",
+            "depth_chart",
+            "role_volatility",
             "survivor",
             "include_diagnostics",
         ],
@@ -4533,8 +4535,17 @@ def nfl_season_engine_status() -> Dict[str, Any]:
                 "POST /nfl/season-engine/game-boxes",
                 "POST /nfl/season-engine/survivor",
             ],
-            "reallocation": "role-aware sinks (usage_roles.INJURY_REALLOC_RULES)",
+            "reallocation": (
+                "role-aware sinks (usage_roles.INJURY_REALLOC_RULES) + "
+                "feature/committee depth_chart redistribution"
+            ),
             "name_matching": "player_key preferred; dual-form names (C.X ↔ First X)",
+        },
+        "depth_chart": {
+            "module": "src.services.nfl_season_engine.depth_chart",
+            "structures": ["feature", "committee", "clear", "murky"],
+            "diagnostics_fields": ["depth_structure", "role_transitions"],
+            "committee_splits": "55/45 (2-back) or 45/35/20 (3-back); not equal",
         },
         "entry_points": {
             "simulate": "POST /nfl/season-engine/simulate",

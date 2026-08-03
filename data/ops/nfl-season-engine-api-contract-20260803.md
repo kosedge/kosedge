@@ -1,6 +1,6 @@
 # NFL Season Engine — Public API Contract
 
-**Engine version:** `nfl-season-engine-v1.4.1-hardened`  
+**Engine version:** `nfl-season-engine-v1.5-depth-volatility`  
 **Date:** 2026-08-03  
 **Package:** `services/model-service/src/services/nfl_season_engine/`
 
@@ -34,8 +34,8 @@ CLI: `scripts/nfl/run_hierarchical_season_sim.py`, `run_survivor_evaluate.py`, `
 
 | Endpoint | Default | When true |
 | --- | --- | --- |
-| `game-boxes` | `false` | Usage shares, share integrity, injury adjustments, script summary |
-| `simulate` | `true` | Win-mean spread/stdev, injury path echo, finite checks |
+| `game-boxes` | `false` | Usage shares, share integrity, injury adjustments, script summary, **`depth_structure`**, **`role_transitions`** |
+| `simulate` | `true` | Win-mean spread/stdev, injury path echo, finite checks, **`depth_structure`**, **`role_transitions_sample`** |
 | `survivor` | `true` | Scoring knobs, bye teams, used exclusions |
 
 Query param and/or JSON body field. Default game-boxes responses stay lean; players always include `usage_role`, `personnel`, `point_estimate`, `distributions`.
@@ -61,7 +61,7 @@ Returns `engine_version`, layer modules, `capabilities`, usage-role labels/rules
   "season": 2026,
   "n_sims": 25,
   "games_per_season": 272,
-  "engine_version": "nfl-season-engine-v1.4.1-hardened",
+  "engine_version": "nfl-season-engine-v1.5-depth-volatility",
   "notes": {},
   "diagnostics": {
     "mean_wins_sum": 272.0,
@@ -70,7 +70,9 @@ Returns `engine_version`, layer modules, `capabilities`, usage-role labels/rules
     "win_mean_spread": 5.7,
     "win_mean_stdev": 1.3,
     "injury_path_count": 0,
-    "injury_paths": []
+    "injury_paths": [],
+    "depth_structure": {"DET": {"rb_structure": "committee", "wr_hierarchy": "clear"}},
+    "role_transitions_sample": []
   },
   "injury_paths": [],
   "top_teams_by_wins": [{"team": "KC", "mean": 11.1, "p10": 8, "p50": 11, "p90": 14}],
@@ -106,7 +108,7 @@ Position-primary stats:
 
 Volume counters (`pass_attempts` / `carries` / `targets`) always appear under `distributions`.
 
-**Diagnostics (when requested):** `usage_shares_home/away`, `share_integrity_*`, `injury_adjustments`, `injury_paths`, `game_script_summary`, `schedule_match` (`on_loaded_schedule` vs `synthetic_matchup`).
+**Diagnostics (when requested):** `usage_shares_home/away`, `share_integrity_*`, `injury_adjustments`, `injury_paths`, `game_script_summary`, `schedule_match` (`on_loaded_schedule` vs `synthetic_matchup`), **`depth_structure`**, **`depth_structure_detail`**, **`role_transitions`** (v1.5 additive).
 
 **Limitations:** Single-game marginal MC (strengths frozen; no in-path evolution). Matchups missing from the loaded schedule are synthesized. Demo skill cores are sparse — residual **other** absorbs unnamed volume (by design; prevents WR1/RB1 inflation).
 
@@ -184,6 +186,7 @@ Prefer these names in clients (do not invent aliases):
 - `point_estimate` + `distributions` (game boxes)
 - `ranked_picks` / `already_used` / `pick_now_score` / `save_score`
 - `usage_role` (not `role_label`)
+- `depth_structure` / `role_transitions` (diagnostics; v1.5 additive)
 - `n_sims` / `n_replicates` (season vs game MC)
 
 ---
