@@ -1,0 +1,50 @@
+{
+  "generated_at_utc": "2026-08-03T14:22:48.600568+00:00",
+  "engine_version": "nfl-season-engine-v1.2-injury-shocks",
+  "scenario": {
+    "player": "C.McCaffrey",
+    "team": "SF",
+    "status": "out",
+    "weeks": "4-8",
+    "matchup_sample": "SEA@SF week 6"
+  },
+  "game_week6": {
+    "healthy": {
+      "home_win_prob": 0.6282,
+      "expected_total": 44.59,
+      "cmc_rush_yards": 62.585,
+      "cmc_carries": 14.253,
+      "cmc_targets": 5.614,
+      "mason_rush_yards": 23.361,
+      "mason_carries": 5.906
+    },
+    "cmc_out": {
+      "home_win_prob": 0.5878,
+      "expected_total": 43.14,
+      "cmc_rush_yards": 2.337,
+      "cmc_carries": 0.528,
+      "cmc_targets": 0.0,
+      "mason_rush_yards": 70.298,
+      "mason_carries": 16.91
+    }
+  },
+  "week3_outside_range_cmc_rush": {
+    "with_path": 60.413,
+    "healthy": 60.413
+  },
+  "season_30paths": {
+    "healthy": {
+      "sf_wins": 10.933,
+      "cmc_rush": 1065.373,
+      "cmc_rec": 527.753,
+      "mason_rush": 411.524
+    },
+    "cmc_out_w4_8": {
+      "sf_wins": 9.633,
+      "cmc_rush": 769.004,
+      "cmc_rec": 391.422,
+      "mason_rush": 636.652
+    }
+  },
+  "report": "data/ops/nfl-season-engine-injury-shocks-20260803.md"
+}

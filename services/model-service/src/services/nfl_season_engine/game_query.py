@@ -19,6 +19,12 @@ from src.services.nfl_season_engine.game_script import (
     build_game_script,
     summarize_script_distribution,
 )
+from src.services.nfl_season_engine.injury_paths import (
+    InjuryPath,
+    apply_injury_paths_for_week,
+    injury_paths_to_dicts,
+    summarize_adjustments,
+)
 from src.services.nfl_season_engine.player_usage import allocate_game_usage
 from src.services.nfl_season_engine.production import (
     box_score_to_stat_dict,
@@ -96,6 +102,7 @@ def project_game_player_boxes(
     n_replicates: int = 500,
     seed: int = 7,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
+    injury_paths: Optional[Sequence[InjuryPath]] = None,
 ) -> GameBoxProjection:
     """Monte Carlo player box projections for one future game."""
     n_replicates = max(50, int(n_replicates))
@@ -107,20 +114,27 @@ def project_game_player_boxes(
         game_id=game_id,
     )
     rng = random.Random(seed)
+    paths = list(injury_paths or [])
+    week_rosters, week_strengths, adjustments = apply_injury_paths_for_week(
+        universe.rosters,
+        universe.strengths,
+        paths,
+        week=game.week,
+    )
 
     scripts = []
     accum: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
     meta: Dict[str, Dict[str, str]] = {}
 
     for _ in range(n_replicates):
-        script, _outcome = build_game_script(game, universe.strengths, rng=rng, realized=True)
+        script, _outcome = build_game_script(game, week_strengths, rng=rng, realized=True)
         scripts.append(script)
-        usage = allocate_game_usage(script, universe.rosters, rng=rng)
+        usage = allocate_game_usage(script, week_rosters, rng=rng)
         boxes = produce_box_scores(
             usage_rows=usage,
-            roles=universe.rosters,
+            roles=week_rosters,
             script=script,
-            strengths=universe.strengths,
+            strengths=week_strengths,
             rng=rng,
         )
         for box in boxes:
@@ -167,6 +181,18 @@ def project_game_player_boxes(
 
     players.sort(key=_sort_key, reverse=True)
 
+    notes = {
+        **dict(universe.notes),
+        "query_mode": "single_game_marginal_mc",
+        "layers": (
+            "1=injury-adjusted strength → 2=game_script → 3=player_usage → 4=production "
+            "(strengths frozen at query-time book + week injury shocks)"
+        ),
+    }
+    if paths:
+        notes["injury_paths"] = str(injury_paths_to_dicts(paths))
+        notes["injury_adjustments"] = str(summarize_adjustments(adjustments))
+
     return GameBoxProjection(
         season=universe.season,
         week=game.week,
@@ -177,9 +203,5 @@ def project_game_player_boxes(
         engine_version=engine_version,
         game_script_summary=summarize_script_distribution(scripts),
         players=players,
-        notes={
-            **dict(universe.notes),
-            "query_mode": "single_game_marginal_mc",
-            "layers": "2=game_script → 3=player_usage → 4=production (strengths frozen at query-time book)",
-        },
+        notes=notes,
     )

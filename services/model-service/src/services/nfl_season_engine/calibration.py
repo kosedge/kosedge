@@ -19,7 +19,8 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-ENGINE_VERSION = "nfl-season-engine-v1.1-calibrated"
+# v1.2 adds injury/availability path shocks (see injury_paths.py).
+ENGINE_VERSION = "nfl-season-engine-v1.2-injury-shocks"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)

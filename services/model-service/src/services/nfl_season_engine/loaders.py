@@ -54,6 +54,7 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
     "PHI": [
         {"name": "J.Hurts", "pos": "QB", "depth": 1, "snap": 0.97, "rush": 0.18, "tgt": 0.0, "ypa": 7.05, "ypc": 5.2, "int_rate": 0.016},
         {"name": "S.Barkley", "pos": "RB", "depth": 1, "snap": 0.70, "rush": 0.58, "tgt": 0.10, "ypc": 4.65},
+        {"name": "W.Shipley", "pos": "RB", "depth": 2, "snap": 0.22, "rush": 0.16, "tgt": 0.03, "ypc": 4.05},
         {"name": "A.Brown", "pos": "WR", "depth": 1, "snap": 0.88, "rush": 0.0, "tgt": 0.24, "ypr": 12.8},
         {"name": "D.Smith", "pos": "WR", "depth": 2, "snap": 0.80, "rush": 0.0, "tgt": 0.18, "ypr": 12.2},
         {"name": "D.Goedert", "pos": "TE", "depth": 1, "snap": 0.70, "rush": 0.0, "tgt": 0.12, "ypr": 10.8},
@@ -61,6 +62,7 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
     "SF": [
         {"name": "B.Purdy", "pos": "QB", "depth": 1, "snap": 0.96, "rush": 0.05, "tgt": 0.0, "ypa": 7.45, "int_rate": 0.016},
         {"name": "C.McCaffrey", "pos": "RB", "depth": 1, "snap": 0.72, "rush": 0.50, "tgt": 0.16, "ypc": 4.45},
+        {"name": "J.Mason", "pos": "RB", "depth": 2, "snap": 0.30, "rush": 0.22, "tgt": 0.04, "ypc": 4.20},
         {"name": "D.Samuel", "pos": "WR", "depth": 1, "snap": 0.78, "rush": 0.04, "tgt": 0.18, "ypr": 11.8},
         {"name": "B.Aiyuk", "pos": "WR", "depth": 2, "snap": 0.80, "rush": 0.0, "tgt": 0.17, "ypr": 13.0},
         {"name": "G.Kittle", "pos": "TE", "depth": 1, "snap": 0.80, "rush": 0.0, "tgt": 0.14, "ypr": 12.4},

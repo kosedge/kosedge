@@ -7,7 +7,8 @@ from typing import Any, Dict, List, Optional, Tuple, TypedDict
 
 import logging
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Body, HTTPException, Query
+from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError, ProgrammingError, SQLAlchemyError
 
@@ -4418,6 +4419,37 @@ def nfl_identity_quality_latest(
 # ---------------------------------------------------------------------------
 
 
+class SeasonEngineInjuryPathBody(BaseModel):
+    """Optional injury / availability path for season-engine queries."""
+
+    team: str = Field(..., min_length=2, max_length=4)
+    status: str = Field("out", description="out | limited | returning")
+    week_start: int = Field(..., ge=1, le=22)
+    week_end: int = Field(..., ge=1, le=22)
+    player_key: Optional[str] = None
+    player_name: Optional[str] = None
+    availability: Optional[float] = Field(
+        None, ge=0.0, le=1.0, description="limited fraction or returning ramp start"
+    )
+    severity: Optional[float] = Field(None, ge=0.0, le=1.0)
+
+
+class SeasonEngineRequestBody(BaseModel):
+    """Optional JSON body — existing query-only callers stay valid."""
+
+    injury_paths: Optional[List[SeasonEngineInjuryPathBody]] = None
+
+
+def _season_engine_injury_paths(
+    body: Optional[SeasonEngineRequestBody],
+) -> list:
+    from src.services.nfl_season_engine import parse_injury_paths
+
+    if body is None or not body.injury_paths:
+        return []
+    return parse_injury_paths([row.model_dump() for row in body.injury_paths])
+
+
 @router.get("/season-engine/status")
 def nfl_season_engine_status() -> Dict[str, Any]:
     """Describe the hierarchical season engine and its four layers."""
@@ -4431,9 +4463,15 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             {"id": 3, "name": "player_usage", "module": "src.services.nfl_season_engine.player_usage"},
             {"id": 4, "name": "production", "module": "src.services.nfl_season_engine.production"},
         ],
+        "injury_paths": {
+            "module": "src.services.nfl_season_engine.injury_paths",
+            "statuses": ["out", "limited", "returning"],
+            "optional_body_field": "injury_paths",
+            "applies_to": ["POST /nfl/season-engine/simulate", "POST /nfl/season-engine/game-boxes"],
+        },
         "entry_points": {
             "simulate": "POST /nfl/season-engine/simulate",
-            "game_boxes": "GET /nfl/season-engine/game-boxes",
+            "game_boxes": "GET|POST /nfl/season-engine/game-boxes",
             "cli": "scripts/nfl/run_hierarchical_season_sim.py",
         },
         "additive": True,
@@ -4448,11 +4486,17 @@ def nfl_season_engine_simulate(
     seed: int = Query(2026),
     demo: bool = Query(False, description="Force offline demo universe"),
     as_of_week: int = Query(1, ge=1, le=18),
+    body: Optional[SeasonEngineRequestBody] = Body(None),
 ) -> Dict[str, Any]:
     """Run N path-coherent full-season sims (~272 games each).
 
     Caps ``n_sims`` at 500 for the HTTP path (use the CLI for heavier runs).
     Prefers DB schedule/priors/depth when available; falls back to demo.
+
+    Optional JSON body::
+
+        {"injury_paths": [{"player_name": "C.McCaffrey", "team": "SF",
+                           "status": "out", "week_start": 4, "week_end": 8}]}
     """
     from src.services.nfl_season_engine import (
         build_demo_universe,
@@ -4460,6 +4504,7 @@ def nfl_season_engine_simulate(
         simulate_full_season,
     )
 
+    injury_paths = _season_engine_injury_paths(body)
     mode = "demo"
     universe = None
     if not demo:
@@ -4475,7 +4520,9 @@ def nfl_season_engine_simulate(
         universe = build_demo_universe(season=season)
         mode = "demo"
 
-    result = simulate_full_season(universe, n_sims=n_sims, seed=seed)
+    result = simulate_full_season(
+        universe, n_sims=n_sims, seed=seed, injury_paths=injury_paths
+    )
     top_teams = sorted(result.team_wins.items(), key=lambda kv: -kv[1]["mean"])[:8]
     return {
         "mode": mode,
@@ -4485,22 +4532,23 @@ def nfl_season_engine_simulate(
         "engine_version": result.engine_version,
         "notes": result.notes,
         "diagnostics": result.diagnostics,
+        "injury_paths": result.diagnostics.get("injury_paths") or [],
         "top_teams_by_wins": [{"team": t, **stats} for t, stats in top_teams],
         "top_players": result.player_season_totals[:25],
     }
 
 
-@router.get("/season-engine/game-boxes")
-def nfl_season_engine_game_boxes(
-    home_team: str = Query(..., min_length=2, max_length=4),
-    away_team: str = Query(..., min_length=2, max_length=4),
-    season: int = Query(2026, ge=2010, le=2100),
-    week: int = Query(1, ge=1, le=22),
-    n_replicates: int = Query(400, ge=50, le=5000),
-    seed: int = Query(7),
-    demo: bool = Query(False),
+def _run_season_engine_game_boxes(
+    *,
+    home_team: str,
+    away_team: str,
+    season: int,
+    week: int,
+    n_replicates: int,
+    seed: int,
+    demo: bool,
+    injury_paths: Optional[list] = None,
 ) -> Dict[str, Any]:
-    """Project skill-player box-score distributions for a future game."""
     from src.services.nfl_season_engine import (
         build_demo_universe,
         load_universe_from_db,
@@ -4529,6 +4577,7 @@ def nfl_season_engine_game_boxes(
         week=week,
         n_replicates=n_replicates,
         seed=seed,
+        injury_paths=injury_paths or [],
     )
     return {
         "mode": mode,
@@ -4543,3 +4592,50 @@ def nfl_season_engine_game_boxes(
         "notes": proj.notes,
         "players": proj.players,
     }
+
+
+@router.get("/season-engine/game-boxes")
+def nfl_season_engine_game_boxes(
+    home_team: str = Query(..., min_length=2, max_length=4),
+    away_team: str = Query(..., min_length=2, max_length=4),
+    season: int = Query(2026, ge=2010, le=2100),
+    week: int = Query(1, ge=1, le=22),
+    n_replicates: int = Query(400, ge=50, le=5000),
+    seed: int = Query(7),
+    demo: bool = Query(False),
+) -> Dict[str, Any]:
+    """Project skill-player box-score distributions for a future game."""
+    return _run_season_engine_game_boxes(
+        home_team=home_team,
+        away_team=away_team,
+        season=season,
+        week=week,
+        n_replicates=n_replicates,
+        seed=seed,
+        demo=demo,
+        injury_paths=None,
+    )
+
+
+@router.post("/season-engine/game-boxes")
+def nfl_season_engine_game_boxes_post(
+    home_team: str = Query(..., min_length=2, max_length=4),
+    away_team: str = Query(..., min_length=2, max_length=4),
+    season: int = Query(2026, ge=2010, le=2100),
+    week: int = Query(1, ge=1, le=22),
+    n_replicates: int = Query(400, ge=50, le=5000),
+    seed: int = Query(7),
+    demo: bool = Query(False),
+    body: Optional[SeasonEngineRequestBody] = Body(None),
+) -> Dict[str, Any]:
+    """Same as GET game-boxes, with optional ``injury_paths`` in the JSON body."""
+    return _run_season_engine_game_boxes(
+        home_team=home_team,
+        away_team=away_team,
+        season=season,
+        week=week,
+        n_replicates=n_replicates,
+        seed=seed,
+        demo=demo,
+        injury_paths=_season_engine_injury_paths(body),
+    )
