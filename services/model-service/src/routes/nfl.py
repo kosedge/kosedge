@@ -4411,3 +4411,135 @@ def nfl_identity_quality_latest(
         return {"snapshot": payload}
     finally:
         session.close()
+
+
+# ---------------------------------------------------------------------------
+# Hierarchical season engine (additive — does not touch Edge Board / #70)
+# ---------------------------------------------------------------------------
+
+
+@router.get("/season-engine/status")
+def nfl_season_engine_status() -> Dict[str, Any]:
+    """Describe the hierarchical season engine and its four layers."""
+    from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
+
+    return {
+        "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+        "layers": [
+            {"id": 1, "name": "team_strength", "module": "src.services.nfl_season_engine.team_strength"},
+            {"id": 2, "name": "game_script", "module": "src.services.nfl_season_engine.game_script"},
+            {"id": 3, "name": "player_usage", "module": "src.services.nfl_season_engine.player_usage"},
+            {"id": 4, "name": "production", "module": "src.services.nfl_season_engine.production"},
+        ],
+        "entry_points": {
+            "simulate": "POST /nfl/season-engine/simulate",
+            "game_boxes": "GET /nfl/season-engine/game-boxes",
+            "cli": "scripts/nfl/run_hierarchical_season_sim.py",
+        },
+        "additive": True,
+        "does_not_modify": ["edge_board", "model_vs_kei_#70", "nfl_market_projections"],
+    }
+
+
+@router.post("/season-engine/simulate")
+def nfl_season_engine_simulate(
+    season: int = Query(2026, ge=2010, le=2100),
+    n_sims: int = Query(25, ge=1, le=500),
+    seed: int = Query(2026),
+    demo: bool = Query(False, description="Force offline demo universe"),
+    as_of_week: int = Query(1, ge=1, le=18),
+) -> Dict[str, Any]:
+    """Run N path-coherent full-season sims (~272 games each).
+
+    Caps ``n_sims`` at 500 for the HTTP path (use the CLI for heavier runs).
+    Prefers DB schedule/priors/depth when available; falls back to demo.
+    """
+    from src.services.nfl_season_engine import (
+        build_demo_universe,
+        load_universe_from_db,
+        simulate_full_season,
+    )
+
+    mode = "demo"
+    universe = None
+    if not demo:
+        session = SessionLocal()
+        try:
+            universe = load_universe_from_db(session, season=season, as_of_week=as_of_week)
+            mode = "db"
+        except Exception as exc:  # pragma: no cover - ops fallback
+            log.warning("season-engine DB universe failed: %s", exc)
+        finally:
+            session.close()
+    if universe is None:
+        universe = build_demo_universe(season=season)
+        mode = "demo"
+
+    result = simulate_full_season(universe, n_sims=n_sims, seed=seed)
+    top_teams = sorted(result.team_wins.items(), key=lambda kv: -kv[1]["mean"])[:8]
+    return {
+        "mode": mode,
+        "season": result.season,
+        "n_sims": result.n_sims,
+        "games_per_season": result.games_per_season,
+        "engine_version": result.engine_version,
+        "notes": result.notes,
+        "diagnostics": result.diagnostics,
+        "top_teams_by_wins": [{"team": t, **stats} for t, stats in top_teams],
+        "top_players": result.player_season_totals[:25],
+    }
+
+
+@router.get("/season-engine/game-boxes")
+def nfl_season_engine_game_boxes(
+    home_team: str = Query(..., min_length=2, max_length=4),
+    away_team: str = Query(..., min_length=2, max_length=4),
+    season: int = Query(2026, ge=2010, le=2100),
+    week: int = Query(1, ge=1, le=22),
+    n_replicates: int = Query(400, ge=50, le=5000),
+    seed: int = Query(7),
+    demo: bool = Query(False),
+) -> Dict[str, Any]:
+    """Project skill-player box-score distributions for a future game."""
+    from src.services.nfl_season_engine import (
+        build_demo_universe,
+        load_universe_from_db,
+        project_game_player_boxes,
+    )
+
+    mode = "demo"
+    universe = None
+    if not demo:
+        session = SessionLocal()
+        try:
+            universe = load_universe_from_db(session, season=season, as_of_week=week)
+            mode = "db"
+        except Exception as exc:  # pragma: no cover
+            log.warning("season-engine DB universe failed: %s", exc)
+        finally:
+            session.close()
+    if universe is None:
+        universe = build_demo_universe(season=season)
+        mode = "demo"
+
+    proj = project_game_player_boxes(
+        universe,
+        home_team=home_team.upper(),
+        away_team=away_team.upper(),
+        week=week,
+        n_replicates=n_replicates,
+        seed=seed,
+    )
+    return {
+        "mode": mode,
+        "season": proj.season,
+        "week": proj.week,
+        "game_id": proj.game_id,
+        "home_team": proj.home_team,
+        "away_team": proj.away_team,
+        "n_replicates": proj.n_replicates,
+        "engine_version": proj.engine_version,
+        "game_script_summary": proj.game_script_summary,
+        "notes": proj.notes,
+        "players": proj.players,
+    }
