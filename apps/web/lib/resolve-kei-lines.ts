@@ -8,8 +8,10 @@
  *
  * Model vs KEI honesty (2026-08):
  * - MLB: real split — model_* = first daily PA sim snapshot; handicap_* = nowcast re-sim.
- * - NFL / NBA / WNBA: published fair lines map to handicap (KEI). model_* is identity
- *   until fair-lines APIs expose pre_blend_* / raw model. Do not invent a fake split.
+ * - NFL: real split when blend applied — model_* = pre-market-blend MC fair;
+ *   handicap_* = published post-blend (+ totals cal). ML/win = identity (no pre-blend ML).
+ *   Missing model_* → identity via applyHandicapIdentity. Never invent stub deltas.
+ * - NBA / WNBA: published fair lines → handicap; model_* identity until API exposes split.
  * - NCAAM: kei_lines_ncaam.json → handicap (identity).
  * - NHL / CFB: **markets-only** — no fair-lines / kei_lines source yet. resolveKeiGames
  *   returns []. UI must not invent KEI or show “Coming soon”; see sportIsMarketsOnlyEdgeBoard.
@@ -34,17 +36,26 @@ const NFL_KEI_SEASON = 2026;
 
 /**
  * Map NFL fair-lines → KEI games.
- * Published fair line (spread_home / total_mean) → handicap (KEI).
- * Honesty contract: no Model vs KEI split yet — leave model_* unset so
- * applyHandicapIdentity copies handicap → model (identity). Do not invent
- * a pure-model layer from untyped stubs.
+ * Handicap (KEI) = published spread_home / total_mean (post-blend product).
+ * Model = pre-blend research when API provides modelSpreadHome / modelTotal;
+ * otherwise leave unset → applyHandicapIdentity (identity). Edge Board tags
+ * use handicap only.
  */
 export function keiGamesFromNflFairLines(
   lines: NflFairLineRow[],
 ): KeiLineGame[] {
   return lines.map((line) => {
-    const handicapSpread = line.spreadHome;
-    const handicapTotal = line.totalMean;
+    const handicapSpread = line.handicapSpreadHome ?? line.spreadHome;
+    const handicapTotal = line.handicapTotal ?? line.totalMean;
+    const handicapHomeMl = line.handicapHomeMl ?? line.fairHomeMl;
+    const handicapAwayMl = line.handicapAwayMl ?? line.fairAwayMl;
+    const handicapWin = line.handicapHomeWinProb ?? line.homeWinProb;
+
+    // Only pass model_* when the API explicitly provided them (typed fields).
+    // normalizeFairLine identity-fills model from handicap when API omits them;
+    // that still means Model === KEI, which applyHandicapIdentity also yields.
+    const modelSpread = line.modelSpreadHome ?? undefined;
+    const modelTotal = line.modelTotal ?? undefined;
 
     return applyHandicapIdentity({
       id: line.gameId,
@@ -55,8 +66,19 @@ export function keiGamesFromNflFairLines(
       commenceTime: line.startTime ?? line.gameDate ?? undefined,
       handicapSpreadHome: handicapSpread,
       handicapTotal,
+      handicapHomeMl,
+      handicapAwayMl,
+      handicapHomeWinProb: handicapWin,
       projSpreadHome: handicapSpread,
       projTotal: handicapTotal,
+      projHomeMl: handicapHomeMl,
+      projAwayMl: handicapAwayMl,
+      homeWinProb: handicapWin,
+      modelSpreadHome: modelSpread,
+      modelTotal,
+      modelHomeMl: line.modelHomeMl ?? undefined,
+      modelAwayMl: line.modelAwayMl ?? undefined,
+      modelHomeWinProb: line.modelHomeWinProb ?? undefined,
     });
   });
 }
