@@ -1,0 +1,365 @@
+{
+  "engine_version": "nfl-season-engine-v1.3-deeper-usage",
+  "buf_at_kc_healthy": [
+    {
+      "player": "P.Mahomes",
+      "team": "KC",
+      "usage_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 239.594,
+        "pass_tds": 1.44,
+        "ints": 0.657,
+        "rush_yards": 9.005
+      },
+      "targets_mean": 0.0,
+      "carries_mean": 1.877,
+      "receptions_mean": null,
+      "rush_yards_mean": 9.005,
+      "rec_yards_mean": null,
+      "pass_yards_mean": 239.594
+    },
+    {
+      "player": "J.Cook",
+      "team": "BUF",
+      "usage_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 56.562,
+        "rush_tds": 0.33,
+        "rec_yards": 18.038,
+        "receptions": 2.681
+      },
+      "targets_mean": 3.727,
+      "carries_mean": 13.706,
+      "receptions_mean": 2.681,
+      "rush_yards_mean": 56.562,
+      "rec_yards_mean": 18.038,
+      "pass_yards_mean": null
+    },
+    {
+      "player": "R.Rice",
+      "team": "KC",
+      "usage_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 55.246,
+        "receptions": 5.24,
+        "rec_tds": 0.293
+      },
+      "targets_mean": 8.475,
+      "carries_mean": 0.0,
+      "receptions_mean": 5.24,
+      "rush_yards_mean": null,
+      "rec_yards_mean": 55.246,
+      "pass_yards_mean": null
+    },
+    {
+      "player": "X.Worthy",
+      "team": "KC",
+      "usage_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 38.617,
+        "receptions": 3.156,
+        "rec_tds": 0.12
+      },
+      "targets_mean": 5.165,
+      "carries_mean": 0.489,
+      "receptions_mean": 3.156,
+      "rush_yards_mean": null,
+      "rec_yards_mean": 38.617,
+      "pass_yards_mean": null
+    },
+    {
+      "player": "J.Watson",
+      "team": "KC",
+      "usage_role": "WR3",
+      "point_estimate": {
+        "rec_yards": 18.557,
+        "receptions": 1.61,
+        "rec_tds": 0.083
+      },
+      "targets_mean": 2.641,
+      "carries_mean": 0.0,
+      "receptions_mean": 1.61,
+      "rush_yards_mean": null,
+      "rec_yards_mean": 18.557,
+      "pass_yards_mean": null
+    },
+    {
+      "player": "T.Kelce",
+      "team": "KC",
+      "usage_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 43.392,
+        "receptions": 4.385,
+        "rec_tds": 0.22
+      },
+      "targets_mean": 6.478,
+      "carries_mean": 0.0,
+      "receptions_mean": 4.385,
+      "rush_yards_mean": null,
+      "rec_yards_mean": 43.392,
+      "pass_yards_mean": null
+    },
+    {
+      "player": "J.Allen",
+      "team": "BUF",
+      "usage_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 229.17,
+        "pass_tds": 1.493,
+        "ints": 0.59,
+        "rush_yards": 19.918
+      },
+      "targets_mean": 0.0,
+      "carries_mean": 4.077,
+      "receptions_mean": null,
+      "rush_yards_mean": 19.918,
+      "rec_yards_mean": null,
+      "pass_yards_mean": 229.17
+    },
+    {
+      "player": "I.Pacheco",
+      "team": "KC",
+      "usage_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 53.78,
+        "rush_tds": 0.313,
+        "rec_yards": 18.105,
+        "receptions": 2.548
+      },
+      "targets_mean": 3.565,
+      "carries_mean": 14.005,
+      "receptions_mean": 2.548,
+      "rush_yards_mean": 53.78,
+      "rec_yards_mean": 18.105,
+      "pass_yards_mean": null
+    },
+    {
+      "player": "K.Shakir",
+      "team": "BUF",
+      "usage_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 47.599,
+        "receptions": 4.694,
+        "rec_tds": 0.257
+      },
+      "targets_mean": 7.704,
+      "carries_mean": 0.0,
+      "receptions_mean": 4.694,
+      "rush_yards_mean": null,
+      "rec_yards_mean": 47.599,
+      "pass_yards_mean": null
+    }
+  ],
+  "phi_script_variants": {
+    "lead": {
+      "RB1_carries_mean": 20.326,
+      "WR1_targets_mean": 7.13,
+      "WR3_targets_mean": 1.797,
+      "pass_rate": 0.48
+    },
+    "neutral": {
+      "RB1_carries_mean": 15.336,
+      "WR1_targets_mean": 8.999,
+      "WR3_targets_mean": 2.927,
+      "pass_rate": 0.58
+    },
+    "trail": {
+      "RB1_carries_mean": 10.423,
+      "WR1_targets_mean": 11.918,
+      "WR3_targets_mean": 3.133,
+      "pass_rate": 0.66
+    }
+  },
+  "sf_cmc_injury": {
+    "healthy": {
+      "McCaffrey": {
+        "player": "C.McCaffrey",
+        "usage_role": "RB1",
+        "carries_mean": 14.448,
+        "rush_yards_mean": 60.459,
+        "targets_mean": 6.114
+      },
+      "Mason": {
+        "player": "J.Mason",
+        "usage_role": "RB2",
+        "carries_mean": 6.141,
+        "rush_yards_mean": 24.703,
+        "targets_mean": 1.42
+      },
+      "Samuel": {
+        "player": "D.Samuel",
+        "usage_role": "WR1",
+        "carries_mean": 1.213,
+        "rush_yards_mean": null,
+        "targets_mean": 6.864
+      },
+      "Aiyuk": {
+        "player": "B.Aiyuk",
+        "usage_role": "WR2",
+        "carries_mean": 0.0,
+        "rush_yards_mean": null,
+        "targets_mean": 5.986
+      },
+      "Pearsall": {
+        "player": "R.Pearsall",
+        "usage_role": "WR3",
+        "carries_mean": 0.0,
+        "rush_yards_mean": null,
+        "targets_mean": 2.944
+      }
+    },
+    "cmc_out": {
+      "McCaffrey": {
+        "player": "C.McCaffrey",
+        "usage_role": "RB1",
+        "carries_mean": 0.0,
+        "rush_yards_mean": 0.0,
+        "targets_mean": 0.0
+      },
+      "Mason": {
+        "player": "J.Mason",
+        "usage_role": "RB2",
+        "carries_mean": 17.751,
+        "rush_yards_mean": 72.86,
+        "targets_mean": 4.724
+      },
+      "Samuel": {
+        "player": "D.Samuel",
+        "usage_role": "WR1",
+        "carries_mean": 1.067,
+        "rush_yards_mean": null,
+        "targets_mean": 7.673
+      },
+      "Aiyuk": {
+        "player": "B.Aiyuk",
+        "usage_role": "WR2",
+        "carries_mean": 0.0,
+        "rush_yards_mean": null,
+        "targets_mean": 6.632
+      },
+      "Pearsall": {
+        "player": "R.Pearsall",
+        "usage_role": "WR3",
+        "carries_mean": 0.0,
+        "rush_yards_mean": null,
+        "targets_mean": 3.413
+      }
+    },
+    "home_wp_healthy": 0.6265,
+    "home_wp_injured": 0.5864
+  },
+  "kc_usage_roles_neutral": [
+    {
+      "player_key": "KC-QB1-P.Mahomes",
+      "player_name": "P.Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "depth_order": 1,
+      "usage_role": "QB1",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.98,
+      "rush_share": 0.07,
+      "target_share": 0.0,
+      "route_share": 0.0,
+      "base_rush_share": 0.07,
+      "base_target_share": 0.0
+    },
+    {
+      "player_key": "KC-RB1-I.Pacheco",
+      "player_name": "I.Pacheco",
+      "team": "KC",
+      "position": "RB",
+      "depth_order": 1,
+      "usage_role": "RB1",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.58,
+      "rush_share": 0.52,
+      "target_share": 0.09,
+      "route_share": 0.1035,
+      "base_rush_share": 0.52,
+      "base_target_share": 0.09
+    },
+    {
+      "player_key": "KC-WR1-R.Rice",
+      "player_name": "R.Rice",
+      "team": "KC",
+      "position": "WR",
+      "depth_order": 1,
+      "usage_role": "WR1",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.82,
+      "rush_share": 0.0,
+      "target_share": 0.22,
+      "route_share": 0.253,
+      "base_rush_share": 0.0,
+      "base_target_share": 0.22
+    },
+    {
+      "player_key": "KC-WR2-X.Worthy",
+      "player_name": "X.Worthy",
+      "team": "KC",
+      "position": "WR",
+      "depth_order": 2,
+      "usage_role": "WR2",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.7,
+      "rush_share": 0.02,
+      "target_share": 0.14,
+      "route_share": 0.161,
+      "base_rush_share": 0.02,
+      "base_target_share": 0.14
+    },
+    {
+      "player_key": "KC-WR3-J.Watson",
+      "player_name": "J.Watson",
+      "team": "KC",
+      "position": "WR",
+      "depth_order": 3,
+      "usage_role": "WR3",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.48,
+      "rush_share": 0.0,
+      "target_share": 0.08,
+      "route_share": 0.092,
+      "base_rush_share": 0.0,
+      "base_target_share": 0.08
+    },
+    {
+      "player_key": "KC-TE1-T.Kelce",
+      "player_name": "T.Kelce",
+      "team": "KC",
+      "position": "TE",
+      "depth_order": 1,
+      "usage_role": "TE1",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.72,
+      "rush_share": 0.0,
+      "target_share": 0.16,
+      "route_share": 0.184,
+      "base_rush_share": 0.0,
+      "base_target_share": 0.16
+    },
+    {
+      "player_key": "KC-TE2-N.Gray",
+      "player_name": "N.Gray",
+      "team": "KC",
+      "position": "TE",
+      "depth_order": 2,
+      "usage_role": "TE2",
+      "personnel": "balanced",
+      "script": "neutral",
+      "snap_share": 0.38,
+      "rush_share": 0.0,
+      "target_share": 0.06,
+      "route_share": 0.069,
+      "base_rush_share": 0.0,
+      "base_target_share": 0.06
+    }
+  ]
+}

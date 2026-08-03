@@ -19,8 +19,8 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.2 adds injury/availability path shocks (see injury_paths.py).
-ENGINE_VERSION = "nfl-season-engine-v1.2-injury-shocks"
+# v1.3 deepens Layer 3 usage (role taxonomy, script matrix, role-aware injury realloc).
+ENGINE_VERSION = "nfl-season-engine-v1.3-deeper-usage"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -270,7 +270,8 @@ def calibration_notes() -> Dict[str, str]:
         ),
         "usage": (
             "Absolute target/rush shares with residual 'other' bucket "
-            f"(floor={USAGE_OTHER_BUCKET_FLOOR}) — prevents sparse-roster inflation."
+            f"(floor={USAGE_OTHER_BUCKET_FLOOR}) — prevents sparse-roster inflation. "
+            "v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

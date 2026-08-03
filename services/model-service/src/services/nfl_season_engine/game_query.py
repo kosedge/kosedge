@@ -25,7 +25,10 @@ from src.services.nfl_season_engine.injury_paths import (
     injury_paths_to_dicts,
     summarize_adjustments,
 )
-from src.services.nfl_season_engine.player_usage import allocate_game_usage
+from src.services.nfl_season_engine.player_usage import (
+    allocate_game_usage,
+    usage_share_diagnostics,
+)
 from src.services.nfl_season_engine.production import (
     box_score_to_stat_dict,
     produce_box_scores,
@@ -36,6 +39,7 @@ from src.services.nfl_season_engine.types import (
     ScheduledGame,
     dist_block,
 )
+from src.services.nfl_season_engine.usage_roles import annotate_usage_roles
 
 DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
 
@@ -125,6 +129,13 @@ def project_game_player_boxes(
     scripts = []
     accum: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
     meta: Dict[str, Dict[str, str]] = {}
+    usage_role_by_key: Dict[str, str] = {}
+    personnel_by_key: Dict[str, str] = {}
+    # Neutral-script share dump for inspectability (pre-MC).
+    home_roles = annotate_usage_roles(week_rosters.get(game.home_team, []))
+    away_roles = annotate_usage_roles(week_rosters.get(game.away_team, []))
+    for role in list(home_roles) + list(away_roles):
+        usage_role_by_key[role.player_key] = role.usage_role
 
     for _ in range(n_replicates):
         script, _outcome = build_game_script(game, week_strengths, rng=rng, realized=True)
@@ -137,6 +148,11 @@ def project_game_player_boxes(
             strengths=week_strengths,
             rng=rng,
         )
+        for u in usage:
+            if u.usage_role:
+                usage_role_by_key[u.player_key] = u.usage_role
+            if u.personnel:
+                personnel_by_key[u.player_key] = u.personnel
         for box in boxes:
             meta[box.player_key] = {
                 "player_key": box.player_key,
@@ -165,6 +181,8 @@ def project_game_player_boxes(
         players.append(
             {
                 **info,
+                "usage_role": usage_role_by_key.get(key, ""),
+                "personnel": personnel_by_key.get(key, ""),
                 "point_estimate": point,
                 "distributions": distributions,
             }
@@ -187,6 +205,12 @@ def project_game_player_boxes(
         "layers": (
             "1=injury-adjusted strength → 2=game_script → 3=player_usage → 4=production "
             "(strengths frozen at query-time book + week injury shocks)"
+        ),
+        "usage_share_dump_home": str(
+            usage_share_diagnostics(home_roles, script="neutral", pass_rate=0.58)
+        ),
+        "usage_share_dump_away": str(
+            usage_share_diagnostics(away_roles, script="neutral", pass_rate=0.58)
         ),
     }
     if paths:

@@ -26,6 +26,7 @@ from src.services.nfl_season_engine.types import (
     PlayerRole,
     ScheduledGame,
 )
+from src.services.nfl_season_engine.usage_roles import annotate_roster_book
 
 NFL_TEAMS: List[str] = [
     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
@@ -42,13 +43,17 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
         {"name": "I.Pacheco", "pos": "RB", "depth": 1, "snap": 0.58, "rush": 0.52, "tgt": 0.09, "ypc": 4.25},
         {"name": "R.Rice", "pos": "WR", "depth": 1, "snap": 0.82, "rush": 0.0, "tgt": 0.22, "ypr": 11.6},
         {"name": "X.Worthy", "pos": "WR", "depth": 2, "snap": 0.70, "rush": 0.02, "tgt": 0.14, "ypr": 13.2},
+        {"name": "J.Watson", "pos": "WR", "depth": 3, "snap": 0.48, "rush": 0.0, "tgt": 0.08, "ypr": 12.5},
         {"name": "T.Kelce", "pos": "TE", "depth": 1, "snap": 0.72, "rush": 0.0, "tgt": 0.16, "ypr": 10.9},
+        {"name": "N.Gray", "pos": "TE", "depth": 2, "snap": 0.38, "rush": 0.0, "tgt": 0.06, "ypr": 9.8},
     ],
     "BUF": [
         {"name": "J.Allen", "pos": "QB", "depth": 1, "snap": 0.98, "rush": 0.16, "tgt": 0.0, "ypa": 7.25, "int_rate": ELITE_INT_RATE, "ypc": 5.4},
         {"name": "J.Cook", "pos": "RB", "depth": 1, "snap": 0.60, "rush": 0.52, "tgt": 0.10, "ypc": 4.55},
+        {"name": "T.Johnson", "pos": "RB", "depth": 2, "snap": 0.28, "rush": 0.22, "tgt": 0.04, "ypc": 4.10},
         {"name": "K.Shakir", "pos": "WR", "depth": 1, "snap": 0.80, "rush": 0.0, "tgt": 0.19, "ypr": 11.0},
         {"name": "K.Coleman", "pos": "WR", "depth": 2, "snap": 0.65, "rush": 0.0, "tgt": 0.13, "ypr": 12.0},
+        {"name": "K.Palmer", "pos": "WR", "depth": 3, "snap": 0.45, "rush": 0.0, "tgt": 0.08, "ypr": 11.5},
         {"name": "D.Kincaid", "pos": "TE", "depth": 1, "snap": 0.68, "rush": 0.0, "tgt": 0.14, "ypr": 10.5},
     ],
     "PHI": [
@@ -57,6 +62,7 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
         {"name": "W.Shipley", "pos": "RB", "depth": 2, "snap": 0.22, "rush": 0.16, "tgt": 0.03, "ypc": 4.05},
         {"name": "A.Brown", "pos": "WR", "depth": 1, "snap": 0.88, "rush": 0.0, "tgt": 0.24, "ypr": 12.8},
         {"name": "D.Smith", "pos": "WR", "depth": 2, "snap": 0.80, "rush": 0.0, "tgt": 0.18, "ypr": 12.2},
+        {"name": "J.Dotson", "pos": "WR", "depth": 3, "snap": 0.48, "rush": 0.0, "tgt": 0.08, "ypr": 11.2},
         {"name": "D.Goedert", "pos": "TE", "depth": 1, "snap": 0.70, "rush": 0.0, "tgt": 0.12, "ypr": 10.8},
     ],
     "SF": [
@@ -65,6 +71,7 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
         {"name": "J.Mason", "pos": "RB", "depth": 2, "snap": 0.30, "rush": 0.22, "tgt": 0.04, "ypc": 4.20},
         {"name": "D.Samuel", "pos": "WR", "depth": 1, "snap": 0.78, "rush": 0.04, "tgt": 0.18, "ypr": 11.8},
         {"name": "B.Aiyuk", "pos": "WR", "depth": 2, "snap": 0.80, "rush": 0.0, "tgt": 0.17, "ypr": 13.0},
+        {"name": "R.Pearsall", "pos": "WR", "depth": 3, "snap": 0.50, "rush": 0.0, "tgt": 0.09, "ypr": 11.5},
         {"name": "G.Kittle", "pos": "TE", "depth": 1, "snap": 0.80, "rush": 0.0, "tgt": 0.14, "ypr": 12.4},
     ],
     "DET": [
@@ -73,7 +80,9 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
         {"name": "D.Montgomery", "pos": "RB", "depth": 2, "snap": 0.38, "rush": 0.32, "tgt": 0.05, "ypc": 4.15},
         {"name": "A.St. Brown", "pos": "WR", "depth": 1, "snap": 0.88, "rush": 0.0, "tgt": 0.24, "ypr": 11.3},
         {"name": "J.Williams", "pos": "WR", "depth": 2, "snap": 0.75, "rush": 0.0, "tgt": 0.15, "ypr": 12.8},
+        {"name": "K.Raymond", "pos": "WR", "depth": 3, "snap": 0.48, "rush": 0.0, "tgt": 0.08, "ypr": 10.8},
         {"name": "S.LaPorta", "pos": "TE", "depth": 1, "snap": 0.78, "rush": 0.0, "tgt": 0.14, "ypr": 11.0},
+        {"name": "B.Wright", "pos": "TE", "depth": 2, "snap": 0.35, "rush": 0.0, "tgt": 0.05, "ypr": 9.5},
     ],
 }
 
@@ -226,10 +235,14 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
         rosters[team] = [_role_from_demo(team, r) for r in rows]
 
     schedule = _round_robin_schedule(season, NFL_TEAMS)
+    rosters = annotate_roster_book(rosters)
     notes = {
         "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
         "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
-        "rosters": "Mixed: named demo skill cores for 5 teams; generic depth for others. Absolute usage shares.",
+        "rosters": (
+            "Mixed: named demo skill cores for 5 teams; generic depth for others. "
+            "Absolute usage shares + usage_role taxonomy (QB1/RB1/WR1…)."
+        ),
         "calibration": CALIBRATION_TAG,
         **{f"cal_{k}": v for k, v in calibration_notes().items()},
     }
@@ -452,6 +465,7 @@ def load_universe_from_db(
         if not rosters[team]:
             rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
 
+    rosters = annotate_roster_book(rosters)
     strength_note = (
         f"REAL epa_prior for {epa_count}/32 teams; else placeholder_league_avg"
         if epa_count
@@ -466,7 +480,7 @@ def load_universe_from_db(
         notes={
             "schedule": schedule_note,
             "strengths": strength_note,
-            "rosters": roster_note,
+            "rosters": f"{roster_note}; usage_role taxonomy annotated",
             "calibration": CALIBRATION_TAG,
             **{f"cal_{k}": v for k, v in calibration_notes().items()},
         },

@@ -4454,6 +4454,8 @@ def _season_engine_injury_paths(
 def nfl_season_engine_status() -> Dict[str, Any]:
     """Describe the hierarchical season engine and its four layers."""
     from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
+    from src.services.nfl_season_engine.player_usage import usage_rules_documentation
+    from src.services.nfl_season_engine.usage_roles import USAGE_ROLE_LABELS
 
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
@@ -4463,11 +4465,17 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             {"id": 3, "name": "player_usage", "module": "src.services.nfl_season_engine.player_usage"},
             {"id": 4, "name": "production", "module": "src.services.nfl_season_engine.production"},
         ],
+        "usage_roles": {
+            "module": "src.services.nfl_season_engine.usage_roles",
+            "labels": list(USAGE_ROLE_LABELS),
+            "rules": usage_rules_documentation(),
+        },
         "injury_paths": {
             "module": "src.services.nfl_season_engine.injury_paths",
             "statuses": ["out", "limited", "returning"],
             "optional_body_field": "injury_paths",
             "applies_to": ["POST /nfl/season-engine/simulate", "POST /nfl/season-engine/game-boxes"],
+            "reallocation": "role-aware sinks (usage_roles.INJURY_REALLOC_RULES)",
         },
         "entry_points": {
             "simulate": "POST /nfl/season-engine/simulate",

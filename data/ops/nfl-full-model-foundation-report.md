@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.2-injury-shocks` (calibrated base + injury paths; see `nfl-season-engine-calibration-20260803.md` and `nfl-season-engine-injury-shocks-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.3-deeper-usage` (calibrated base + injury paths + deeper Layer-3 usage; see `nfl-season-engine-calibration-20260803.md`, `nfl-season-engine-injury-shocks-20260803.md`, `nfl-season-engine-deeper-usage-20260803.md`)  
 **Date:** 2026-08-03  
-**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`).
+**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`). **v1.3 deeper usage:** explicit role taxonomy (QB1/RB1/WR1…), script + personnel matrices, role-aware injury reallocation.
 
 ## Goal (this pass)
 
@@ -19,7 +19,7 @@ Hierarchical season simulation that can:
 | --- | --- | --- | --- |
 | 1 Team strength | `team_strength.py` | O/D indices; evolve across a sim path | **Real** when loaded via `_load_team_strength_priors` (EPA). **Placeholder** mean-reverting path evolution. |
 | 2 Game script | `game_script.py` | Pace, total, win prob, lead/trail/neutral | Analytic from Layer 1 (thin). Not a rewrite of `simulate_nfl_game`. |
-| 3 Player usage | `player_usage.py` | Targets, carries, routes, snap share \| script + role | **Real** identities from `nfl_dp_depth_chart_weekly` when DB available. Script tilts are thin priors. |
+| 3 Player usage | `player_usage.py` + `usage_roles.py` | Targets, carries, routes, snap share \| script + role taxonomy | **Real** identities from `nfl_dp_depth_chart_weekly` when DB available. v1.3: inspectable role labels, script/personnel matrices, role-aware injury sinks. |
 | 4 Production | `production.py` | Usage + matchup + script → yards/TDs/receptions/INTs | Efficiency priors from roles; INT rate is thin league-ish (projection engine has no INT mean yet). |
 
 Package root: `services/model-service/src/services/nfl_season_engine/`
@@ -103,10 +103,11 @@ Game script summary:
 1. Optional hook of Layer 2 into `simulate_nfl_game` replicate margins (documented v2 in box-score sim)
 2. Historical walk-forward calibration of strength evolution + script tilts (beyond league priors)
 3. ~~Injury / availability shocks inside season paths~~ → **done in v1.2** (`injury_paths.py`; live-report ingest still caller-supplied)
-4. Persist season-engine artifacts to a stable hub path (optional web surfacing)
-5. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
-6. Role-specific QB rush volume (Allen still light vs career)
-7. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
+4. ~~Deeper player usage (roles / script / injury realloc)~~ → **done in v1.3** (`usage_roles.py`; slot detection / fitted script matrix still thin)
+5. Persist season-engine artifacts to a stable hub path (optional web surfacing)
+6. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
+7. Role-specific QB rush volume (Allen still light vs career)
+8. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
 
 ## Railway
 

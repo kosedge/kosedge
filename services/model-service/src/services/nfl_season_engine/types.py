@@ -66,6 +66,9 @@ class PlayerRole:
     red_zone_share: float = 0.0
     role_confidence: float = 0.65
     experience_confidence: float = 1.0
+    # Inspectable usage taxonomy label (QB1, RB1, WR2, WR_SLOT, TE1, …).
+    # Assigned by ``usage_roles.annotate_usage_roles``; empty until annotated.
+    usage_role: str = ""
     # Per-unit efficiency priors (yards per attempt/carry/reception, TD rates).
     # Defaults match calibration.league priors; loaders overwrite via
     # apply_efficiency_priors / baseline-derived rates.
@@ -115,6 +118,8 @@ class PlayerUsage:
     carries: float
     pass_attempts: float
     script: ScriptState
+    usage_role: str = ""
+    personnel: str = ""
 
 
 @dataclass(frozen=True)
