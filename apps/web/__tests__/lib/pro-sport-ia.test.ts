@@ -51,6 +51,9 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
     "Props",
     "Execution Monitor",
     "Futures",
+    "Season Model",
+    "Game Boxes",
+    "Survivor Helper",
   ],
   "Props & Fantasy": [
     "Player Props Board",
