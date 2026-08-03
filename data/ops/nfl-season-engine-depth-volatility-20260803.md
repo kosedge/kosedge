@@ -143,7 +143,10 @@ Coverage: feature vs committee concentration; murky vs clear WR gap; seed-stable
 
 ## Railway
 
-Deploy model-service `kosedge` after merge so live HTTP serves `v1.5-depth-volatility`. Smoke:
+Merged PR #78 → `deploy-vercel`; Railway `model-service` (brave-art / `model-service-production-e253`) redeployed and smokes green:
+
+- `GET /nfl/season-engine/status` → `nfl-season-engine-v1.5-depth-volatility` + `depth_chart` / `role_volatility` capabilities
+- `GET .../game-boxes?...&include_diagnostics=true` → `diagnostics.depth_structure` + `role_transitions` present (BUF feature / KC clear on demo)
 
 ```bash
 curl -sS "$MODEL_SERVICE_URL/nfl/season-engine/status" | jq '.engine_version, .capabilities, .depth_chart'
