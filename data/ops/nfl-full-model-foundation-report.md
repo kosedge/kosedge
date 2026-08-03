@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.1-calibrated` (see `nfl-season-engine-calibration-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.2-injury-shocks` (calibrated base + injury paths; see `nfl-season-engine-calibration-20260803.md` and `nfl-season-engine-injury-shocks-20260803.md`)  
 **Date:** 2026-08-03  
-**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution).
+**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`).
 
 ## Goal (this pass)
 
@@ -43,10 +43,11 @@ python scripts/nfl/run_hierarchical_season_sim.py --season 2026 --n-sims 100
 HTTP (additive on model-service; does **not** touch Edge Board / Model-vs-KEI #70):
 
 - `GET  /nfl/season-engine/status`
-- `POST /nfl/season-engine/simulate?n_sims=25&season=2026`
+- `POST /nfl/season-engine/simulate?n_sims=25&season=2026` (optional JSON `injury_paths`)
 - `GET  /nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&n_replicates=400`
+- `POST /nfl/season-engine/game-boxes` (same query params + optional `injury_paths` body)
 
-Tests: `services/model-service/tests/test_nfl_season_engine.py`
+Tests: `services/model-service/tests/test_nfl_season_engine*.py`
 
 ## What works now
 
@@ -101,10 +102,11 @@ Game script summary:
 
 1. Optional hook of Layer 2 into `simulate_nfl_game` replicate margins (documented v2 in box-score sim)
 2. Historical walk-forward calibration of strength evolution + script tilts (beyond league priors)
-3. Injury / availability shocks inside season paths
+3. ~~Injury / availability shocks inside season paths~~ → **done in v1.2** (`injury_paths.py`; live-report ingest still caller-supplied)
 4. Persist season-engine artifacts to a stable hub path (optional web surfacing)
 5. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
 6. Role-specific QB rush volume (Allen still light vs career)
+7. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
 
 ## Railway
 

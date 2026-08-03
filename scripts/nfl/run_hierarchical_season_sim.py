@@ -6,6 +6,10 @@ Examples
 # Offline demo (no DB): 50 season paths + sample future-game boxes
 python scripts/nfl/run_hierarchical_season_sim.py --demo --n-sims 50 --sample-game BUF@KC
 
+# With injury path shocks (JSON array)
+python scripts/nfl/run_hierarchical_season_sim.py --demo --sample-game SEA@SF --week 6 \\
+  --injury-paths '[{"player_name":"C.McCaffrey","team":"SF","status":"out","week_start":4,"week_end":8}]'
+
 # DB-backed universe when DATABASE_URL is set
 python scripts/nfl/run_hierarchical_season_sim.py --season 2026 --n-sims 100
 """
@@ -18,7 +22,7 @@ import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "services" / "model-service"))
@@ -44,6 +48,24 @@ def _parse_matchup(raw: str) -> tuple[str, str]:
     return home, away
 
 
+def _load_injury_paths(raw: str) -> List[Any]:
+    from src.services.nfl_season_engine import parse_injury_paths
+
+    text = (raw or "").strip()
+    if not text:
+        return []
+    path = Path(text)
+    if path.exists():
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    else:
+        payload = json.loads(text)
+    if isinstance(payload, dict) and "injury_paths" in payload:
+        payload = payload["injury_paths"]
+    if not isinstance(payload, list):
+        raise SystemExit("--injury-paths must be a JSON array or {injury_paths: [...]}")
+    return parse_injury_paths(payload)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Hierarchical NFL season engine")
     parser.add_argument("--season", type=int, default=2026)
@@ -53,6 +75,11 @@ def main() -> None:
     parser.add_argument("--demo", action="store_true", help="Force offline demo universe")
     parser.add_argument("--sample-game", default="BUF@KC", help="away@home matchup for box sample")
     parser.add_argument("--week", type=int, default=1)
+    parser.add_argument(
+        "--injury-paths",
+        default="",
+        help="JSON array/file of injury paths (optional; see injury_paths.py)",
+    )
     parser.add_argument(
         "--out-dir",
         default="",
@@ -66,6 +93,8 @@ def main() -> None:
         project_game_player_boxes,
         simulate_full_season,
     )
+
+    injury_paths = _load_injury_paths(args.injury_paths)
 
     universe = None
     mode = "demo"
@@ -99,12 +128,21 @@ def main() -> None:
     for k, v in universe.notes.items():
         print(f"  note[{k}]: {v}")
 
+    if injury_paths:
+        print(f"Injury paths active: {len(injury_paths)}")
+        for p in injury_paths:
+            print(
+                f"  {p.team} {p.player_name or p.player_key} "
+                f"{p.status} W{p.week_start}-{p.week_end}"
+            )
+
     print(f"Running {args.n_sims} season paths...")
     season_result = simulate_full_season(
         universe,
         n_sims=args.n_sims,
         seed=args.seed,
         progress_every=max(1, args.n_sims // 5),
+        injury_paths=injury_paths,
     )
     print(
         f"Season sim done: games/path={season_result.games_per_season} "
@@ -120,6 +158,7 @@ def main() -> None:
         week=args.week,
         n_replicates=args.game_reps,
         seed=args.seed + 1,
+        injury_paths=injury_paths,
     )
 
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -139,6 +178,18 @@ def main() -> None:
         "engine_version": season_result.engine_version,
         "notes": season_result.notes,
         "diagnostics": season_result.diagnostics,
+        "injury_paths": [
+            {
+                "player_key": p.player_key,
+                "player_name": p.player_name,
+                "team": p.team,
+                "status": p.status,
+                "week_start": p.week_start,
+                "week_end": p.week_end,
+                "availability": p.availability,
+            }
+            for p in injury_paths
+        ],
         "sample_game": {
             "game_id": game_proj.game_id,
             "home_team": game_proj.home_team,

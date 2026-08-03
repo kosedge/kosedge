@@ -22,8 +22,10 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 
 def test_engine_version_is_calibrated() -> None:
-    assert "calibrated" in DEFAULT_SEASON_ENGINE_VERSION
+    # v1.1 was *-calibrated; v1.2+ keeps cal tag and bumps feature suffix.
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
+    assert "injury-shocks" in DEFAULT_SEASON_ENGINE_VERSION or "calibrated" in DEFAULT_SEASON_ENGINE_VERSION
 
 
 def test_residual_share_keeps_other_bucket() -> None:

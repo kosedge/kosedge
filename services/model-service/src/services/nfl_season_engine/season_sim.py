@@ -18,10 +18,15 @@ from __future__ import annotations
 import random
 import statistics
 from collections import defaultdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 from src.services.nfl_season_engine.calibration import ENGINE_VERSION
 from src.services.nfl_season_engine.game_script import build_game_script
+from src.services.nfl_season_engine.injury_paths import (
+    InjuryPath,
+    apply_injury_paths_for_week,
+    injury_paths_to_dicts,
+)
 from src.services.nfl_season_engine.player_usage import allocate_game_usage
 from src.services.nfl_season_engine.production import produce_box_scores
 from src.services.nfl_season_engine.team_strength import (
@@ -61,11 +66,13 @@ def simulate_one_season_path(
     universe: EngineUniverse,
     *,
     rng: random.Random,
+    injury_paths: Optional[Sequence[InjuryPath]] = None,
 ) -> Dict[str, Any]:
     """Simulate one full season path. Returns wins + player totals for the path."""
     strengths = copy_strength_book(universe.strengths)
     wins: Dict[str, int] = {t: 0 for t in universe.teams}
     player_totals: Dict[str, Dict[str, Any]] = {}
+    paths = list(injury_paths or [])
 
     # Seed player meta once from rosters.
     for team, roles in universe.rosters.items():
@@ -81,13 +88,19 @@ def simulate_one_season_path(
 
     schedule = sorted(universe.schedule, key=lambda g: (g.week, g.game_id))
     for game in schedule:
-        script, outcome = build_game_script(game, strengths, rng=rng, realized=True)
-        usage = allocate_game_usage(script, universe.rosters, rng=rng)
+        week_rosters, week_strengths, _adj = apply_injury_paths_for_week(
+            universe.rosters,
+            strengths,
+            paths,
+            week=game.week,
+        )
+        script, outcome = build_game_script(game, week_strengths, rng=rng, realized=True)
+        usage = allocate_game_usage(script, week_rosters, rng=rng)
         boxes = produce_box_scores(
             usage_rows=usage,
-            roles=universe.rosters,
+            roles=week_rosters,
             script=script,
-            strengths=strengths,
+            strengths=week_strengths,
             rng=rng,
         )
         for box in boxes:
@@ -110,6 +123,7 @@ def simulate_one_season_path(
         else:
             wins[game.away_team] += 1
 
+        # Evolve the path strength book (no temporary injury overlay).
         evolve_after_game(
             strengths,
             home_team=game.home_team,
@@ -130,10 +144,12 @@ def simulate_full_season(
     seed: int = 2026,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
     progress_every: Optional[int] = None,
+    injury_paths: Optional[List[InjuryPath]] = None,
 ) -> SeasonSimResult:
     """Run ``n_sims`` path-coherent season simulations."""
     n_sims = max(1, int(n_sims))
     rng = random.Random(seed)
+    paths = list(injury_paths or [])
 
     win_samples: Dict[str, List[int]] = {t: [] for t in universe.teams}
     player_samples: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
@@ -141,7 +157,7 @@ def simulate_full_season(
     sample_games = 0
 
     for i in range(n_sims):
-        path = simulate_one_season_path(universe, rng=rng)
+        path = simulate_one_season_path(universe, rng=rng, injury_paths=paths)
         sample_games = int(path["games"])
         for team, w in path["wins"].items():
             win_samples[team].append(int(w))
@@ -204,6 +220,11 @@ def simulate_full_season(
         round(statistics.pstdev(win_means), 3) if len(win_means) > 1 else 0.0
     )
 
+    notes = dict(universe.notes)
+    if paths:
+        notes["injury_paths"] = f"{len(paths)} path(s) applied week-by-week inside sim"
+        notes["injury_paths_detail"] = str(injury_paths_to_dicts(paths))
+
     return SeasonSimResult(
         season=universe.season,
         n_sims=n_sims,
@@ -212,7 +233,7 @@ def simulate_full_season(
         team_wins=team_wins,
         player_season_totals=player_rows,
         sample_path_game_count=sample_games,
-        notes=dict(universe.notes),
+        notes=notes,
         diagnostics={
             "teams": len(universe.teams),
             "rostered_players": len(player_rows),
@@ -222,5 +243,7 @@ def simulate_full_season(
             "win_mean_max": round(win_mean_sorted[-1], 3) if win_mean_sorted else 0.0,
             "win_mean_spread": win_spread,
             "win_mean_stdev": win_stdev,
+            "injury_path_count": len(paths),
+            "injury_paths": injury_paths_to_dicts(paths) if paths else [],
         },
     )
