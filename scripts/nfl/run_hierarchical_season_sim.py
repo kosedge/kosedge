@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""CLI entry point for the hierarchical NFL season engine.
+
+Examples
+--------
+# Offline demo (no DB): 50 season paths + sample future-game boxes
+python scripts/nfl/run_hierarchical_season_sim.py --demo --n-sims 50 --sample-game BUF@KC
+
+# DB-backed universe when DATABASE_URL is set
+python scripts/nfl/run_hierarchical_season_sim.py --season 2026 --n-sims 100
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "services" / "model-service"))
+
+
+def _sqlalchemy_database_url(raw: str) -> str:
+    url = (raw or "").strip().strip('"').strip("'")
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url[len("postgresql://") :]
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://") :]
+    return url
+
+
+def _parse_matchup(raw: str) -> tuple[str, str]:
+    text = (raw or "").strip().upper().replace(" ", "")
+    if "@" in text:
+        away, home = text.split("@", 1)
+    elif "V" in text and "VS" in text:
+        home, away = text.split("VS", 1)
+    else:
+        raise SystemExit(f"Expected MATCHUP like BUF@KC, got {raw!r}")
+    return home, away
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Hierarchical NFL season engine")
+    parser.add_argument("--season", type=int, default=2026)
+    parser.add_argument("--n-sims", type=int, default=50)
+    parser.add_argument("--game-reps", type=int, default=400)
+    parser.add_argument("--seed", type=int, default=2026)
+    parser.add_argument("--demo", action="store_true", help="Force offline demo universe")
+    parser.add_argument("--sample-game", default="BUF@KC", help="away@home matchup for box sample")
+    parser.add_argument("--week", type=int, default=1)
+    parser.add_argument(
+        "--out-dir",
+        default="",
+        help="Output directory (default data/ops/nfl-season-engine-<ts>)",
+    )
+    args = parser.parse_args()
+
+    from src.services.nfl_season_engine import (  # noqa: E402
+        build_demo_universe,
+        load_universe_from_db,
+        project_game_player_boxes,
+        simulate_full_season,
+    )
+
+    universe = None
+    mode = "demo"
+    if not args.demo and os.getenv("DATABASE_URL"):
+        try:
+            from sqlalchemy import create_engine
+            from sqlalchemy.orm import sessionmaker
+
+            os.environ["DATABASE_URL"] = _sqlalchemy_database_url(os.environ["DATABASE_URL"])
+            engine = create_engine(os.environ["DATABASE_URL"])
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            try:
+                universe = load_universe_from_db(session, season=args.season, as_of_week=args.week)
+                mode = "db"
+            finally:
+                session.close()
+        except Exception as exc:  # pragma: no cover - ops fallback
+            print(f"DB load failed ({exc}); falling back to demo universe")
+
+    if universe is None:
+        universe = build_demo_universe(season=args.season)
+        mode = "demo"
+
+    print(
+        f"Universe mode={mode} season={universe.season} "
+        f"games={len(universe.schedule)} teams={len(universe.teams)} "
+        f"players={sum(len(v) for v in universe.rosters.values())}"
+    )
+    for k, v in universe.notes.items():
+        print(f"  note[{k}]: {v}")
+
+    print(f"Running {args.n_sims} season paths...")
+    season_result = simulate_full_season(
+        universe,
+        n_sims=args.n_sims,
+        seed=args.seed,
+        progress_every=max(1, args.n_sims // 5),
+    )
+    print(
+        f"Season sim done: games/path={season_result.games_per_season} "
+        f"mean_wins_sum={season_result.diagnostics.get('mean_wins_sum')}"
+    )
+
+    home, away = _parse_matchup(args.sample_game)
+    print(f"Projecting sample game {away}@{home} ({args.game_reps} reps)...")
+    game_proj = project_game_player_boxes(
+        universe,
+        home_team=home,
+        away_team=away,
+        week=args.week,
+        n_replicates=args.game_reps,
+        seed=args.seed + 1,
+    )
+
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "ops" / f"nfl-season-engine-{ts}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    team_rows = [
+        {"team": team, **stats}
+        for team, stats in sorted(season_result.team_wins.items(), key=lambda kv: -kv[1]["mean"])
+    ]
+    _write_json(out_dir / "run_summary.json", {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "mode": mode,
+        "season": season_result.season,
+        "n_sims": season_result.n_sims,
+        "games_per_season": season_result.games_per_season,
+        "engine_version": season_result.engine_version,
+        "notes": season_result.notes,
+        "diagnostics": season_result.diagnostics,
+        "sample_game": {
+            "game_id": game_proj.game_id,
+            "home_team": game_proj.home_team,
+            "away_team": game_proj.away_team,
+            "week": game_proj.week,
+            "n_replicates": game_proj.n_replicates,
+            "game_script_summary": game_proj.game_script_summary,
+        },
+    })
+    _write_json(out_dir / "team_wins.json", team_rows)
+    _write_json(out_dir / "player_season_totals_top.json", season_result.player_season_totals[:40])
+    _write_json(
+        out_dir / "sample_game_player_boxes.json",
+        {
+            "game_id": game_proj.game_id,
+            "home_team": game_proj.home_team,
+            "away_team": game_proj.away_team,
+            "week": game_proj.week,
+            "n_replicates": game_proj.n_replicates,
+            "game_script_summary": game_proj.game_script_summary,
+            "notes": game_proj.notes,
+            "players": game_proj.players,
+        },
+    )
+
+    print(f"Wrote artifacts → {out_dir}")
+    print("Top projected players for sample game:")
+    for row in game_proj.players[:8]:
+        pe = row["point_estimate"]
+        print(f"  {row['team']:3} {row['position']:2} {row['player_name']:<16} {pe}")
+
+
+def _write_json(path: Path, payload: Any) -> None:
+    path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
