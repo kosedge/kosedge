@@ -1,0 +1,79 @@
+{
+  "all_ok": true,
+  "calibration": {
+    "calibration_tag": "nfl-season-engine-cal-v1",
+    "efficiency": "ypa=7.05, ypc=4.2, int_rate=0.018, pass_td_rate=0.041, rush_td_rate_rb=0.027",
+    "harden": "v1.4.1: dual-name injury matching, include_diagnostics explain payloads, thin-roster/NaN guards, contract docs.",
+    "league_env": "PPG=21.8, HFA=1.05, score_sd=9.8, plays=63.0, pass_rate=0.58",
+    "sources": "Recent NFL season shapes (2022\u20132024) + alignment with nfl_handicapping_framework HFA/stdev and box-score EFFICIENCY_CV\u22480.22. No fabricated player grades; DB baselines used when present.",
+    "survivor": "v1.4: team W/L season paths \u2192 week win rates + inspectable save_score / pick_now_score (see survivor.py FORMULA_NOTES).",
+    "usage": "Absolute target/rush shares with residual 'other' bucket (floor=0.08) \u2014 prevents sparse-roster inflation. v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix."
+  },
+  "checklist": {
+    "box_scores_buf_kc": {
+      "cook_rush": 54.095,
+      "mahomes_pass": 243.76,
+      "ok": true,
+      "rice_rec": 54.341,
+      "script": {
+        "away_pass_rate_mean": 0.5812,
+        "expected_total_mean": 45.64,
+        "home_lead_rate": 0.445,
+        "home_pass_rate_mean": 0.5962,
+        "home_trail_rate": 0.295,
+        "home_win_prob_mean": 0.5371,
+        "pace_plays_mean": 63.63
+      }
+    },
+    "cmc_out_boxes": {
+      "cmc_rush_out": 0.0,
+      "mason_rush_delta": 45.423,
+      "ok": true
+    },
+    "injury_multi_week": {
+      "mason_rush_delta": 0.45,
+      "matched_as": "C.McCaffrey",
+      "ok": true,
+      "outside_week_active": 0
+    },
+    "survivor": {
+      "already_used": [
+        "KC",
+        "BUF"
+      ],
+      "bye_count": 0,
+      "ok": true,
+      "top3": [
+        {
+          "pick_now_score": 0.7843,
+          "team": "DEN",
+          "win_rate": 1.0
+        },
+        {
+          "pick_now_score": 0.5976,
+          "team": "LV",
+          "win_rate": 0.72
+        },
+        {
+          "pick_now_score": 0.4322,
+          "team": "LA",
+          "win_rate": 0.64
+        }
+      ]
+    },
+    "win_distributions": {
+      "max": 10.85,
+      "min": 5.625,
+      "ok": true,
+      "spread": 5.225,
+      "stdev": 1.477,
+      "sum": 272.0
+    }
+  },
+  "engine_version": "nfl-season-engine-v1.4.1-hardened",
+  "game_reps": 200,
+  "generated_at": "2026-08-03T16:37:38.498227+00:00",
+  "mode": "demo",
+  "n_sims": 40,
+  "seed": 2026
+}

@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.4-survivor` (calibrated base + injury paths + deeper Layer-3 usage + survivor pool outputs; see `nfl-season-engine-calibration-20260803.md`, `nfl-season-engine-injury-shocks-20260803.md`, `nfl-season-engine-deeper-usage-20260803.md`, `nfl-season-engine-survivor-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.4.1-hardened` (calibrated base + injury paths + deeper Layer-3 usage + survivor pool outputs + harden/validate; see `nfl-season-engine-calibration-20260803.md`, `nfl-season-engine-injury-shocks-20260803.md`, `nfl-season-engine-deeper-usage-20260803.md`, `nfl-season-engine-survivor-20260803.md`, `nfl-season-engine-harden-validate-20260803.md`, `nfl-season-engine-api-contract-20260803.md`)  
 **Date:** 2026-08-03  
-**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`). **v1.3 deeper usage:** explicit role taxonomy (QB1/RB1/WR1…), script + personnel matrices, role-aware injury reallocation. **v1.4 survivor:** team W/L season paths → Week N rankings, already-used filters, inspectable save / pick-now scores.
+**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution). **Injury / availability path shocks** adjust Layers 1 + 3 for week ranges (`out` / `limited` / `returning`). **v1.3 deeper usage:** explicit role taxonomy (QB1/RB1/WR1…), script + personnel matrices, role-aware injury reallocation. **v1.4 survivor:** team W/L season paths → Week N rankings, already-used filters, inspectable save / pick-now scores. **v1.4.1 hardened:** dual-name injury matching, `include_diagnostics` explain payloads, thin-roster/NaN guards, stable API contract docs, regression + stress artifacts.
 
 ## Goal (this pass)
 
@@ -47,11 +47,13 @@ python scripts/nfl/run_hierarchical_season_sim.py --season 2026 --n-sims 100
 HTTP (additive on model-service; does **not** touch Edge Board / Model-vs-KEI #70):
 
 - `GET  /nfl/season-engine/status`
-- `POST /nfl/season-engine/simulate?n_sims=25&season=2026` (optional JSON `injury_paths`)
-- `GET  /nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&n_replicates=400`
-- `POST /nfl/season-engine/game-boxes` (same query params + optional `injury_paths` body)
+- `POST /nfl/season-engine/simulate?n_sims=25&season=2026` (optional JSON `injury_paths`, `include_diagnostics`)
+- `GET  /nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&n_replicates=400&include_diagnostics=false`
+- `POST /nfl/season-engine/game-boxes` (same query params + optional `injury_paths` / diagnostics body)
 - `POST /nfl/season-engine/survivor` (body: week, already_used, n_sims, optional injury_paths)
 
+Contract: `data/ops/nfl-season-engine-api-contract-20260803.md`  
+Harden report: `data/ops/nfl-season-engine-harden-validate-20260803.md`  
 Tests: `services/model-service/tests/test_nfl_season_engine*.py`
 
 ## What works now
@@ -110,11 +112,12 @@ Game script summary:
 3. ~~Injury / availability shocks inside season paths~~ → **done in v1.2** (`injury_paths.py`; live-report ingest still caller-supplied)
 4. ~~Deeper player usage (roles / script / injury realloc)~~ → **done in v1.3** (`usage_roles.py`; slot detection / fitted script matrix still thin)
 5. ~~Survivor pool week / path-value outputs~~ → **done in v1.4** (`survivor.py`; heuristics, not full pool EV / opponent correlation)
-6. Persist season-engine artifacts to a stable hub path (optional web surfacing)
-7. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
-8. Role-specific QB rush volume (Allen still light vs career)
-9. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
-10. Survivor: multi-entry / field-aware EV, bye-week handling polish on real schedules
+6. ~~Harden / validate before UI~~ → **done in v1.4.1** (name matching, diagnostics flag, contract docs, regression suite)
+7. Persist season-engine artifacts to a stable hub path (optional web surfacing)
+8. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
+9. Role-specific QB rush volume (Allen still light vs career)
+10. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
+11. Survivor: multi-entry / field-aware EV; real-schedule bye polish beyond documented handling
 
 ## Railway
 

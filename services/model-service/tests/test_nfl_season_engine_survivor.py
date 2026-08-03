@@ -23,9 +23,13 @@ from src.services.nfl_season_engine.types import (
 
 def test_engine_version_surfaces_survivor() -> None:
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.4")
-    assert "survivor" in DEFAULT_SEASON_ENGINE_VERSION
+    assert (
+        "survivor" in DEFAULT_SEASON_ENGINE_VERSION
+        or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
+    )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
+    assert "bye_handling" in FORMULA_NOTES
 
 
 def test_already_used_excluded_from_ranked_picks() -> None:
@@ -128,7 +132,10 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
     assert result.diagnostics["injury_path_count"] == 1
     assert len(result.ranked_picks) >= 1
     assert "DET" not in {r["team"] for r in result.ranked_picks}
-    assert "survivor" in result.engine_version
+    assert (
+        "survivor" in result.engine_version
+        or "hardened" in result.engine_version
+    )
 
 
 def test_mini_universe_survivor_runs() -> None:

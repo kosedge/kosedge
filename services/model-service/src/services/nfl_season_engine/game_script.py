@@ -41,6 +41,16 @@ def _script_from_margin(own_score: float, opp_score: float) -> ScriptState:
     return "neutral"
 
 
+def _strength_or_default(
+    strengths: Mapping[str, TeamStrengthState], team: str
+) -> TeamStrengthState:
+    """Return team strength or a league-average placeholder (no KeyError)."""
+    state = strengths.get(team)
+    if state is not None:
+        return state
+    return TeamStrengthState(team=team, source="missing_team_default")
+
+
 def build_game_script(
     game: ScheduledGame,
     strengths: Mapping[str, TeamStrengthState],
@@ -53,8 +63,8 @@ def build_game_script(
     Returns ``(script, {"home_score", "away_score", "home_won"})``.
     """
     rng = rng or random.Random()
-    home = strengths[game.home_team]
-    away = strengths[game.away_team]
+    home = _strength_or_default(strengths, game.home_team)
+    away = _strength_or_default(strengths, game.away_team)
 
     home_exp = expected_team_points(home, away, home=True)
     away_exp = expected_team_points(away, home, home=False)

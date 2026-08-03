@@ -31,6 +31,7 @@ def test_engine_version_surfaces_deeper_usage() -> None:
     assert (
         "deeper-usage" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor" in DEFAULT_SEASON_ENGINE_VERSION
+        or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -193,6 +194,7 @@ def test_buf_kc_calibration_sanity_preserved() -> None:
     assert (
         "deeper-usage" in proj.engine_version
         or "survivor" in proj.engine_version
+        or "hardened" in proj.engine_version
     )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])

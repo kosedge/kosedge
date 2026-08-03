@@ -82,6 +82,12 @@ FORMULA_NOTES = {
         "high this-week WP + low unique future value → pick now"
     ),
     "win_rate": "wins_in_week / n_sims (bye / missing game counts as non-win)",
+    "bye_handling": (
+        "Teams with no scheduled game in week W have plays_this_week=false, "
+        "win_rate=0, and are excluded from ranked_picks. Demo round-robin "
+        "schedules have no byes; DB schedules may. Future weeks on bye are "
+        "skipped when scoring save_score (not treated as losses)."
+    ),
 }
 
 
@@ -341,6 +347,7 @@ def evaluate_survivor(
     injury_paths: Optional[Sequence[InjuryPath]] = None,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
     top_n: int = 32,
+    include_diagnostics: bool = True,
 ) -> SurvivorEvalResult:
     """Run team W/L season paths and rank survivor picks for ``week``."""
     week = int(week)
@@ -358,6 +365,7 @@ def evaluate_survivor(
     week_games = by_week.get(week, {})
 
     all_rows: List[Dict[str, Any]] = []
+    bye_teams: List[str] = []
     for team in universe.teams:
         row = score_team_survivor(
             team=team,
@@ -369,6 +377,8 @@ def evaluate_survivor(
             already_used=used,
             game=week_games.get(team),
         )
+        if not row["plays_this_week"]:
+            bye_teams.append(team)
         all_rows.append(row)
 
     all_rows.sort(
@@ -399,20 +409,13 @@ def evaluate_survivor(
         "Layers 3–4 skipped for speed)"
     )
     notes["already_used"] = ",".join(used) if used else "(none)"
+    notes["bye_handling"] = FORMULA_NOTES["bye_handling"]
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"
 
-    return SurvivorEvalResult(
-        season=universe.season,
-        week=week,
-        n_sims=n_sims,
-        engine_version=engine_version,
-        already_used=used,
-        ranked_picks=ranked,
-        all_teams_week=all_rows,
-        formula=dict(FORMULA_NOTES),
-        notes=notes,
-        diagnostics={
+    diagnostics: Dict[str, Any] = {}
+    if include_diagnostics:
+        diagnostics = {
             "seed": seed,
             "teams": len(universe.teams),
             "max_week": max_week,
@@ -431,7 +434,21 @@ def evaluate_survivor(
             },
             "remaining_teams_playing": len(ranked),
             "used_excluded_from_ranked": used,
-        },
+            "bye_teams_this_week": sorted(bye_teams),
+            "bye_count": len(bye_teams),
+        }
+
+    return SurvivorEvalResult(
+        season=universe.season,
+        week=week,
+        n_sims=n_sims,
+        engine_version=engine_version,
+        already_used=used,
+        ranked_picks=ranked,
+        all_teams_week=all_rows,
+        formula=dict(FORMULA_NOTES),
+        notes=notes,
+        diagnostics=diagnostics,
     )
 
 

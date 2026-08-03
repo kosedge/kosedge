@@ -1,0 +1,195 @@
+{
+  "diagnostics_keys": [
+    "game_script_summary",
+    "injury_adjustments",
+    "injury_paths",
+    "schedule_match",
+    "seed",
+    "share_integrity_away",
+    "share_integrity_home",
+    "usage_shares_away",
+    "usage_shares_home"
+  ],
+  "engine_version": "nfl-season-engine-v1.4.1-hardened",
+  "game_script_summary": {
+    "away_pass_rate_mean": 0.5812,
+    "expected_total_mean": 45.64,
+    "home_lead_rate": 0.445,
+    "home_pass_rate_mean": 0.5962,
+    "home_trail_rate": 0.295,
+    "home_win_prob_mean": 0.5371,
+    "pace_plays_mean": 63.63
+  },
+  "players": [
+    {
+      "player_name": "P.Mahomes",
+      "point_estimate": {
+        "ints": 0.63,
+        "pass_tds": 1.415,
+        "pass_yards": 243.76,
+        "rush_yards": 9.154
+      },
+      "position": "QB",
+      "team": "KC",
+      "usage_role": "QB1"
+    },
+    {
+      "player_name": "J.Allen",
+      "point_estimate": {
+        "ints": 0.56,
+        "pass_tds": 1.425,
+        "pass_yards": 226.106,
+        "rush_yards": 19.801
+      },
+      "position": "QB",
+      "team": "BUF",
+      "usage_role": "QB1"
+    },
+    {
+      "player_name": "R.Rice",
+      "point_estimate": {
+        "rec_tds": 0.28,
+        "rec_yards": 54.341,
+        "receptions": 5.071
+      },
+      "position": "WR",
+      "team": "KC",
+      "usage_role": "WR1"
+    },
+    {
+      "player_name": "J.Cook",
+      "point_estimate": {
+        "rec_yards": 17.732,
+        "receptions": 2.679,
+        "rush_tds": 0.365,
+        "rush_yards": 54.095
+      },
+      "position": "RB",
+      "team": "BUF",
+      "usage_role": "RB1"
+    },
+    {
+      "player_name": "I.Pacheco",
+      "point_estimate": {
+        "rec_yards": 18.175,
+        "receptions": 2.556,
+        "rush_tds": 0.28,
+        "rush_yards": 53.68
+      },
+      "position": "RB",
+      "team": "KC",
+      "usage_role": "RB1"
+    },
+    {
+      "player_name": "K.Shakir",
+      "point_estimate": {
+        "rec_tds": 0.27,
+        "rec_yards": 46.9,
+        "receptions": 4.639
+      },
+      "position": "WR",
+      "team": "BUF",
+      "usage_role": "WR1"
+    },
+    {
+      "player_name": "T.Kelce",
+      "point_estimate": {
+        "rec_tds": 0.205,
+        "rec_yards": 43.338,
+        "receptions": 4.333
+      },
+      "position": "TE",
+      "team": "KC",
+      "usage_role": "TE1"
+    },
+    {
+      "player_name": "X.Worthy",
+      "point_estimate": {
+        "rec_tds": 0.135,
+        "rec_yards": 38.259,
+        "receptions": 3.105
+      },
+      "position": "WR",
+      "team": "KC",
+      "usage_role": "WR2"
+    },
+    {
+      "player_name": "D.Kincaid",
+      "point_estimate": {
+        "rec_tds": 0.205,
+        "rec_yards": 33.019,
+        "receptions": 3.528
+      },
+      "position": "TE",
+      "team": "BUF",
+      "usage_role": "TE1"
+    },
+    {
+      "player_name": "K.Coleman",
+      "point_estimate": {
+        "rec_tds": 0.16,
+        "rec_yards": 31.88,
+        "receptions": 3.056
+      },
+      "position": "WR",
+      "team": "BUF",
+      "usage_role": "WR2"
+    },
+    {
+      "player_name": "T.Johnson",
+      "point_estimate": {
+        "rec_yards": 7.646,
+        "receptions": 1.072,
+        "rush_tds": 0.135,
+        "rush_yards": 21.826
+      },
+      "position": "RB",
+      "team": "BUF",
+      "usage_role": "RB2"
+    },
+    {
+      "player_name": "J.Watson",
+      "point_estimate": {
+        "rec_tds": 0.09,
+        "rec_yards": 18.851,
+        "receptions": 1.62
+      },
+      "position": "WR",
+      "team": "KC",
+      "usage_role": "WR3"
+    },
+    {
+      "player_name": "K.Palmer",
+      "point_estimate": {
+        "rec_tds": 0.095,
+        "rec_yards": 17.205,
+        "receptions": 1.654
+      },
+      "position": "WR",
+      "team": "BUF",
+      "usage_role": "WR3"
+    },
+    {
+      "player_name": "N.Gray",
+      "point_estimate": {
+        "rec_tds": 0.105,
+        "rec_yards": 14.482,
+        "receptions": 1.637
+      },
+      "position": "TE",
+      "team": "KC",
+      "usage_role": "TE2"
+    }
+  ],
+  "share_integrity_home": {
+    "modeled_rush_plus_other": 1.0,
+    "modeled_target_plus_other": 1.0,
+    "named_rush_share_sum": 0.61,
+    "named_target_share_sum": 0.75,
+    "ok": true,
+    "pass_rate": 0.58,
+    "residual_other_rush": 0.39,
+    "residual_other_target": 0.25,
+    "script": "neutral"
+  }
+}

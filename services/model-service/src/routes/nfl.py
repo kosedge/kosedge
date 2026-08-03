@@ -4438,6 +4438,10 @@ class SeasonEngineRequestBody(BaseModel):
     """Optional JSON body — existing query-only callers stay valid."""
 
     injury_paths: Optional[List[SeasonEngineInjuryPathBody]] = None
+    include_diagnostics: bool = Field(
+        False,
+        description="When true, attach structured usage/script/injury explain payloads",
+    )
 
 
 class SeasonEngineSurvivorBody(BaseModel):
@@ -4452,6 +4456,10 @@ class SeasonEngineSurvivorBody(BaseModel):
     demo: bool = False
     as_of_week: int = Field(1, ge=1, le=18)
     top_n: int = Field(16, ge=1, le=32)
+    include_diagnostics: bool = Field(
+        True,
+        description="Include scoring knobs / bye / injury diagnostics (default on)",
+    )
 
 
 def _season_engine_injury_paths(
@@ -4486,7 +4494,24 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             "injury_paths",
             "usage_roles",
             "survivor",
+            "include_diagnostics",
         ],
+        "contract": {
+            "docs": "data/ops/nfl-season-engine-api-contract-20260803.md",
+            "stable_fields": [
+                "engine_version",
+                "point_estimate",
+                "distributions",
+                "ranked_picks",
+                "already_used",
+                "team_wins",
+                "usage_role",
+            ],
+            "include_diagnostics": (
+                "Query/body flag; game-boxes default false; simulate/survivor "
+                "default true for compact win/bye/injury summaries"
+            ),
+        },
         "usage_roles": {
             "module": "src.services.nfl_season_engine.usage_roles",
             "labels": list(USAGE_ROLE_LABELS),
@@ -4509,6 +4534,7 @@ def nfl_season_engine_status() -> Dict[str, Any]:
                 "POST /nfl/season-engine/survivor",
             ],
             "reallocation": "role-aware sinks (usage_roles.INJURY_REALLOC_RULES)",
+            "name_matching": "player_key preferred; dual-form names (C.X ↔ First X)",
         },
         "entry_points": {
             "simulate": "POST /nfl/season-engine/simulate",
@@ -4516,6 +4542,7 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             "survivor": "POST /nfl/season-engine/survivor",
             "cli": "scripts/nfl/run_hierarchical_season_sim.py",
             "cli_survivor": "scripts/nfl/run_survivor_evaluate.py",
+            "cli_harden": "scripts/nfl/harden_validate_season_engine.py",
         },
         "additive": True,
         "does_not_modify": ["edge_board", "model_vs_kei_#70", "nfl_market_projections"],
@@ -4529,6 +4556,9 @@ def nfl_season_engine_simulate(
     seed: int = Query(2026),
     demo: bool = Query(False, description="Force offline demo universe"),
     as_of_week: int = Query(1, ge=1, le=18),
+    include_diagnostics: bool = Query(
+        True, description="Attach win-distribution / injury diagnostics"
+    ),
     body: Optional[SeasonEngineRequestBody] = Body(None),
 ) -> Dict[str, Any]:
     """Run N path-coherent full-season sims (~272 games each).
@@ -4539,7 +4569,8 @@ def nfl_season_engine_simulate(
     Optional JSON body::
 
         {"injury_paths": [{"player_name": "C.McCaffrey", "team": "SF",
-                           "status": "out", "week_start": 4, "week_end": 8}]}
+                           "status": "out", "week_start": 4, "week_end": 8}],
+         "include_diagnostics": true}
     """
     from src.services.nfl_season_engine import (
         build_demo_universe,
@@ -4548,6 +4579,9 @@ def nfl_season_engine_simulate(
     )
 
     injury_paths = _season_engine_injury_paths(body)
+    diag = include_diagnostics
+    if body is not None and body.include_diagnostics:
+        diag = True
     mode = "demo"
     universe = None
     if not demo:
@@ -4564,7 +4598,11 @@ def nfl_season_engine_simulate(
         mode = "demo"
 
     result = simulate_full_season(
-        universe, n_sims=n_sims, seed=seed, injury_paths=injury_paths
+        universe,
+        n_sims=n_sims,
+        seed=seed,
+        injury_paths=injury_paths,
+        include_diagnostics=diag,
     )
     top_teams = sorted(result.team_wins.items(), key=lambda kv: -kv[1]["mean"])[:8]
     return {
@@ -4575,7 +4613,7 @@ def nfl_season_engine_simulate(
         "engine_version": result.engine_version,
         "notes": result.notes,
         "diagnostics": result.diagnostics,
-        "injury_paths": result.diagnostics.get("injury_paths") or [],
+        "injury_paths": (result.diagnostics or {}).get("injury_paths") or [],
         "top_teams_by_wins": [{"team": t, **stats} for t, stats in top_teams],
         "top_players": result.player_season_totals[:25],
     }
@@ -4591,6 +4629,7 @@ def _run_season_engine_game_boxes(
     seed: int,
     demo: bool,
     injury_paths: Optional[list] = None,
+    include_diagnostics: bool = False,
 ) -> Dict[str, Any]:
     from src.services.nfl_season_engine import (
         build_demo_universe,
@@ -4621,8 +4660,9 @@ def _run_season_engine_game_boxes(
         n_replicates=n_replicates,
         seed=seed,
         injury_paths=injury_paths or [],
+        include_diagnostics=include_diagnostics,
     )
-    return {
+    payload = {
         "mode": mode,
         "season": proj.season,
         "week": proj.week,
@@ -4635,6 +4675,9 @@ def _run_season_engine_game_boxes(
         "notes": proj.notes,
         "players": proj.players,
     }
+    if include_diagnostics:
+        payload["diagnostics"] = proj.diagnostics
+    return payload
 
 
 @router.get("/season-engine/game-boxes")
@@ -4646,6 +4689,9 @@ def nfl_season_engine_game_boxes(
     n_replicates: int = Query(400, ge=50, le=5000),
     seed: int = Query(7),
     demo: bool = Query(False),
+    include_diagnostics: bool = Query(
+        False, description="Attach usage shares / injury explain payload"
+    ),
 ) -> Dict[str, Any]:
     """Project skill-player box-score distributions for a future game."""
     return _run_season_engine_game_boxes(
@@ -4657,6 +4703,7 @@ def nfl_season_engine_game_boxes(
         seed=seed,
         demo=demo,
         injury_paths=None,
+        include_diagnostics=include_diagnostics,
     )
 
 
@@ -4669,9 +4716,11 @@ def nfl_season_engine_game_boxes_post(
     n_replicates: int = Query(400, ge=50, le=5000),
     seed: int = Query(7),
     demo: bool = Query(False),
+    include_diagnostics: bool = Query(False),
     body: Optional[SeasonEngineRequestBody] = Body(None),
 ) -> Dict[str, Any]:
     """Same as GET game-boxes, with optional ``injury_paths`` in the JSON body."""
+    diag = include_diagnostics or bool(body and body.include_diagnostics)
     return _run_season_engine_game_boxes(
         home_team=home_team,
         away_team=away_team,
@@ -4681,6 +4730,7 @@ def nfl_season_engine_game_boxes_post(
         seed=seed,
         demo=demo,
         injury_paths=_season_engine_injury_paths(body),
+        include_diagnostics=diag,
     )
 
 
@@ -4737,6 +4787,7 @@ def nfl_season_engine_survivor(
         already_used=body.already_used,
         injury_paths=injury_paths,
         top_n=body.top_n,
+        include_diagnostics=body.include_diagnostics,
     )
     payload = result.to_dict()
     payload["mode"] = mode

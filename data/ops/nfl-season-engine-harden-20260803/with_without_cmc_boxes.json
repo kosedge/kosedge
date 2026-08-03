@@ -1,0 +1,29 @@
+{
+  "engine_version": "nfl-season-engine-v1.4.1-hardened",
+  "healthy_mason_rush": 25.337,
+  "injured_cmc_rush": 0.0,
+  "injured_mason_rush": 70.76,
+  "injury_adjustments": {
+    "active_count": 1,
+    "by_team": {
+      "SF": [
+        {
+          "availability": 0.0,
+          "freed_rush_share": 0.5,
+          "freed_target_share": 0.16,
+          "offense_delta": -0.07167,
+          "player_key": "SF-RB1-C.McCaffrey",
+          "player_name": "C.McCaffrey",
+          "realloc_notes": "RB1_out\u2192RB2 primary rush sink; committee/RB3 residual; WR/TE catch spill; 10% residual\u2192other",
+          "status": "out"
+        }
+      ]
+    },
+    "rules": {
+      "limited_default": 0.5,
+      "reallocation": "Role-aware absorption via usage_roles.INJURY_REALLOC_RULES (RB1\u2192RB2 primary, WR1\u2192WR2>slot>WR3, TE1\u2192TE2+WR mix); 10% of freed volume stays in residual other bucket",
+      "returning_ramp": "linear from availability|default 0.4 \u2192 1.0",
+      "strength": "offense_index += \u2212player_offense_value \u00d7 (1 \u2212 availability); capped at \u00b10.22; defense unchanged"
+    }
+  }
+}
