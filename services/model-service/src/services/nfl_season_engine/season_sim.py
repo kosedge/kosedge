@@ -22,6 +22,11 @@ from collections import defaultdict
 from typing import Any, Dict, List, Optional, Sequence
 
 from src.services.nfl_season_engine.calibration import ENGINE_VERSION
+from src.services.nfl_season_engine.depth_chart import (
+    apply_weekly_role_volatility,
+    classify_roster_book,
+    classify_team_depth,
+)
 from src.services.nfl_season_engine.game_script import build_game_script
 from src.services.nfl_season_engine.injury_paths import (
     InjuryPath,
@@ -98,15 +103,30 @@ def simulate_one_season_path(
     *,
     rng: random.Random,
     injury_paths: Optional[Sequence[InjuryPath]] = None,
+    collect_role_transitions: bool = False,
 ) -> Dict[str, Any]:
-    """Simulate one full season path. Returns wins + player totals for the path."""
+    """Simulate one full season path. Returns wins + player totals for the path.
+
+    Path-coherent depth-chart volatility: base structure applied once, then
+    weekly share drift / rare role shuffle before injury shocks for that week.
+    """
     strengths = copy_strength_book(universe.strengths)
     wins: Dict[str, int] = {t: 0 for t in universe.teams}
     player_totals: Dict[str, Dict[str, Any]] = {}
     paths = list(injury_paths or [])
 
+    # Path roster book: loaders already applied depth splits; classify only.
+    path_rosters = {t: list(r) for t, r in universe.rosters.items()}
+    structures = classify_roster_book(path_rosters)
+    # Fork volatility RNG from current MT state without advancing ``rng``
+    # (so Layer-2 script draws stay independent of role-drift consumption).
+    _mt = rng.getstate()[1]
+    vol_rng = random.Random(int(_mt[0]) ^ 0xDE97C11A)
+    role_transitions: List[Dict[str, Any]] = []
+    current_week: Optional[int] = None
+
     # Seed player meta once from rosters.
-    for team, roles in universe.rosters.items():
+    for team, roles in path_rosters.items():
         for role in roles:
             player_totals[role.player_key] = _empty_player_accum(
                 {
@@ -118,9 +138,37 @@ def simulate_one_season_path(
             )
 
     schedule = sorted(universe.schedule, key=lambda g: (g.week, g.game_id))
+    teams_by_week: Dict[int, set] = defaultdict(set)
+    for g in schedule:
+        teams_by_week[g.week].add(g.home_team)
+        teams_by_week[g.week].add(g.away_team)
+
     for game in schedule:
+        if current_week != game.week:
+            # Only drift teams that play this week (keeps path cost bounded).
+            week_teams = teams_by_week.get(game.week) or set()
+            subset = {t: path_rosters[t] for t in week_teams if t in path_rosters}
+            subset_structs = {t: structures[t] for t in subset if t in structures}
+            drifted, week_trans = apply_weekly_role_volatility(
+                subset,
+                week=game.week,
+                rng=vol_rng,
+                structures=subset_structs,
+            )
+            path_rosters.update(drifted)
+            # Reclassify only teams that had a role shuffle this week.
+            shuffled_teams = {
+                t.team for t in week_trans if t.reason == "role_shuffle"
+            }
+            for team in shuffled_teams:
+                if team in drifted:
+                    structures[team] = classify_team_depth(team, drifted[team])
+            if collect_role_transitions:
+                role_transitions.extend(t.to_dict() for t in week_trans)
+            current_week = game.week
+
         week_rosters, week_strengths, _adj = apply_injury_paths_for_week(
-            universe.rosters,
+            path_rosters,
             strengths,
             paths,
             week=game.week,
@@ -165,7 +213,15 @@ def simulate_one_season_path(
             rng=rng,
         )
 
-    return {"wins": wins, "players": player_totals, "games": len(schedule)}
+    result: Dict[str, Any] = {
+        "wins": wins,
+        "players": player_totals,
+        "games": len(schedule),
+    }
+    if collect_role_transitions:
+        result["role_transitions"] = role_transitions
+        result["depth_structures"] = {t: s.to_dict() for t, s in structures.items()}
+    return result
 
 
 def simulate_full_season(
@@ -193,9 +249,20 @@ def simulate_full_season(
     player_meta: Dict[str, Dict[str, str]] = {}
     sample_games = 0
 
+    sample_depth_structures: Dict[str, Any] = {}
+    sample_role_transitions: List[Dict[str, Any]] = []
     for i in range(n_sims):
-        path = simulate_one_season_path(universe, rng=rng, injury_paths=paths)
+        path = simulate_one_season_path(
+            universe,
+            rng=rng,
+            injury_paths=paths,
+            collect_role_transitions=(include_diagnostics and i == 0),
+        )
         sample_games = int(path["games"])
+        if include_diagnostics and i == 0:
+            sample_depth_structures = path.get("depth_structures") or {}
+            # Cap transition log for payload size.
+            sample_role_transitions = list(path.get("role_transitions") or [])[:80]
         for team, w in path["wins"].items():
             win_samples[team].append(int(w))
         for key, row in path["players"].items():
@@ -265,6 +332,7 @@ def simulate_full_season(
 
     diagnostics: Dict[str, Any] = {}
     if include_diagnostics:
+        base_structures = classify_roster_book(universe.rosters)
         diagnostics = {
             "teams": len(universe.teams),
             "rostered_players": len(player_rows),
@@ -280,6 +348,14 @@ def simulate_full_season(
                 "win_means_finite": all(math.isfinite(v) for v in win_means),
                 "player_rows": len(player_rows),
             },
+            # Additive depth-chart / volatility explain fields (v1.5).
+            "depth_structure": {
+                t: s.to_dict()
+                for t, s in sorted(base_structures.items())
+                if s.rb_structure != "thin" or s.wr_hierarchy != "thin"
+            },
+            "role_transitions_sample": sample_role_transitions,
+            "path0_depth_structures_end": sample_depth_structures,
         }
 
     return SeasonSimResult(

@@ -27,7 +27,14 @@ def test_engine_version_is_calibrated() -> None:
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
     assert any(
         tag in DEFAULT_SEASON_ENGINE_VERSION
-        for tag in ("hardened", "survivor", "deeper-usage", "injury-shocks", "calibrated")
+        for tag in (
+            "depth-volatility",
+            "hardened",
+            "survivor",
+            "deeper-usage",
+            "injury-shocks",
+            "calibrated",
+        )
     )
 
 

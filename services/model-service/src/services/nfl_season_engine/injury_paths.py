@@ -52,6 +52,11 @@ from typing import (
 )
 
 from src.services.nfl_season_engine.calibration import USAGE_OTHER_BUCKET_FLOOR
+from src.services.nfl_season_engine.depth_chart import (
+    classify_team_depth,
+    committee_remaining_rush_weights,
+    promote_roles_after_injury,
+)
 from src.services.nfl_season_engine.types import PlayerRole, TeamStrengthState
 from src.services.nfl_season_engine.usage_roles import (
     INJURY_REALLOC_RULES,
@@ -391,16 +396,74 @@ def reallocate_role_shares(
     wrs = [r for r in others if r.position == "WR"]
     tes = [r for r in others if r.position == "TE"]
     qbs = [r for r in others if r.position == "QB"]
+    structure = classify_team_depth(injured.team, roles)
 
     if pos == "RB" and rules:
         rush_sinks = rules.get("rush_sinks") or {}
-        rush_boost = split_by_role_sinks(assign_rush, rbs, rush_sinks)
+        # Feature RB1 out → RB2 inherits feature-like lion's share.
+        # Committee out → redistribute across remaining with uneven weights.
+        if (
+            structure.rb_structure == "feature"
+            and label == "RB1"
+            and rbs
+        ):
+            # Prefer RB2 sink; give feature-like concentration (~68% of assignable).
+            rush_boost = split_by_role_sinks(
+                assign_rush,
+                rbs,
+                {"RB2": 0.68, "RB_COMMITTEE": 0.18, "OTHER_RB": 0.14, "RB1": 0.0},
+            )
+            notes.append(
+                "feature_RB1_out→RB2 inherits feature-like share; "
+                f"{keep_other:.0%} residual→other"
+            )
+        elif structure.rb_structure == "committee" or label == "RB_COMMITTEE":
+            weights = committee_remaining_rush_weights(len(rbs))
+            if rbs and assign_rush > 1e-12:
+                # Uneven depth-order weights (58/42 or 45/35/20), not equal.
+                wsum = sum(weights.get(int(r.depth_order or 1), 0.20) for r in rbs)
+                if wsum <= 1e-12:
+                    wsum = float(len(rbs))
+                    rush_boost = {
+                        r.player_key: assign_rush / wsum for r in rbs
+                    }
+                else:
+                    rush_boost = {
+                        r.player_key: assign_rush
+                        * (weights.get(int(r.depth_order or 1), 0.20) / wsum)
+                        for r in rbs
+                    }
+            notes.append(
+                f"committee_RB_out→uneven remaining split; {keep_other:.0%} residual→other"
+            )
+        else:
+            rush_boost = split_by_role_sinks(assign_rush, rbs, rush_sinks)
+            notes.append(f"{rules.get('note', 'RB_role_realloc')}; {keep_other:.0%} residual→other")
         split = rules.get("target_split") or {"same_pos": 0.65, "WR": 0.22, "TE": 0.13}
         same_sinks = rules.get("same_pos_tgt_sinks") or rush_sinks
-        _merge_boost(
-            tgt_boost,
-            split_by_role_sinks(assign_tgt * float(split.get("same_pos", 0.65)), rbs, same_sinks),
-        )
+        if structure.rb_structure == "committee" or label == "RB_COMMITTEE":
+            # Mirror rush unevenness for same-pos targets.
+            same_amt = assign_tgt * float(split.get("same_pos", 0.65))
+            weights = committee_remaining_rush_weights(len(rbs))
+            if rbs and same_amt > 1e-12:
+                wsum = sum(weights.get(int(r.depth_order or 1), 0.20) for r in rbs) or float(
+                    len(rbs)
+                )
+                _merge_boost(
+                    tgt_boost,
+                    {
+                        r.player_key: same_amt
+                        * (weights.get(int(r.depth_order or 1), 0.20) / wsum)
+                        for r in rbs
+                    },
+                )
+        else:
+            _merge_boost(
+                tgt_boost,
+                split_by_role_sinks(
+                    assign_tgt * float(split.get("same_pos", 0.65)), rbs, same_sinks
+                ),
+            )
         _merge_boost(
             tgt_boost,
             split_by_role_sinks(
@@ -417,8 +480,21 @@ def reallocate_role_shares(
                 {"TE1": 0.70, "TE2": 0.30},
             ),
         )
-        snap_boost = split_by_role_sinks(assign_snap, rbs or others, rush_sinks)
-        notes.append(f"{rules.get('note', 'RB_role_realloc')}; {keep_other:.0%} residual→other")
+        if structure.rb_structure == "committee" or label == "RB_COMMITTEE":
+            weights = committee_remaining_rush_weights(len(rbs))
+            if rbs and assign_snap > 1e-12:
+                wsum = sum(weights.get(int(r.depth_order or 1), 0.20) for r in rbs) or float(
+                    len(rbs)
+                )
+                snap_boost = {
+                    r.player_key: assign_snap
+                    * (weights.get(int(r.depth_order or 1), 0.20) / wsum)
+                    for r in rbs
+                }
+            else:
+                snap_boost = {}
+        else:
+            snap_boost = split_by_role_sinks(assign_snap, rbs or others, rush_sinks)
     elif pos == "WR" and rules:
         split = rules.get("target_split") or {"WR": 0.62, "TE": 0.22, "RB": 0.16}
         wr_sinks = rules.get("wr_sinks") or {}
@@ -609,6 +685,13 @@ def reallocate_role_shares(
                 ),
             )
         )
+    # Role promotions / committee reorder for inspectability (labels only).
+    if avail <= 1e-9:
+        new_roles, promo = promote_roles_after_injury(
+            new_roles, injured=injured, structure=structure
+        )
+        if promo:
+            notes.append(f"promotions={len(promo)}")
     return new_roles, "; ".join(notes)
 
 

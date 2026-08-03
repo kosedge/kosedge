@@ -26,6 +26,7 @@ from src.services.nfl_season_engine.types import (
     PlayerRole,
     ScheduledGame,
 )
+from src.services.nfl_season_engine.depth_chart import apply_depth_chart_roster_book
 from src.services.nfl_season_engine.usage_roles import annotate_roster_book
 
 NFL_TEAMS: List[str] = [
@@ -236,12 +237,23 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
 
     schedule = _round_robin_schedule(season, NFL_TEAMS)
     rosters = annotate_roster_book(rosters)
+    rosters, depth_structures = apply_depth_chart_roster_book(rosters)
+    committee_teams = sorted(
+        t for t, s in depth_structures.items() if s.rb_structure == "committee"
+    )
+    murky_wr_teams = sorted(
+        t for t, s in depth_structures.items() if s.wr_hierarchy == "murky"
+    )
     notes = {
         "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
         "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
         "rosters": (
             "Mixed: named demo skill cores for 5 teams; generic depth for others. "
-            "Absolute usage shares + usage_role taxonomy (QB1/RB1/WR1…)."
+            "Absolute usage shares + usage_role taxonomy (QB1/RB1/WR1…) + depth-chart structure."
+        ),
+        "depth_chart": (
+            f"committee_rb={','.join(committee_teams) or 'none'}; "
+            f"murky_wr={','.join(murky_wr_teams) or 'none'}"
         ),
         "calibration": CALIBRATION_TAG,
         **{f"cal_{k}": v for k, v in calibration_notes().items()},
@@ -466,6 +478,7 @@ def load_universe_from_db(
             rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
 
     rosters = annotate_roster_book(rosters)
+    rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
     strength_note = (
         f"REAL epa_prior for {epa_count}/32 teams; else placeholder_league_avg"
         if epa_count

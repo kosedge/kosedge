@@ -9,8 +9,9 @@ Four layers (each module is the single source of truth for its concern):
 
 Injury / availability path shocks (``injury_paths``) adjust Layers 1 and 3
 for specified week ranges before Layers 2–4 run. Layer 3 uses an explicit
-usage-role taxonomy (``usage_roles``) for base shares, script/personnel
-modifiers, and role-aware injury reallocation.
+usage-role taxonomy (``usage_roles``) plus depth-chart structure /
+committee splits / weekly role volatility (``depth_chart``) for base
+shares, script/personnel modifiers, and role-aware injury reallocation.
 
 Survivor pool outputs (``survivor``) run team W/L-only season paths and
 rank remaining picks for a target week with inspectable save / pick-now

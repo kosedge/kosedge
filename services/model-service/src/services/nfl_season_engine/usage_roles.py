@@ -8,6 +8,10 @@ TE1/TE2) drive:
 3. Light personnel / play-mix tilts (11 vs 12/21)
 4. Role-aware injury reallocation sinks (used by ``injury_paths``)
 
+Depth-chart structure (feature vs committee RB, clear vs murky WR) and
+weekly role volatility live in ``depth_chart.py`` and feed absolute
+shares before this module's script/personnel modifiers apply.
+
 All tables are absolute fractions of team volume where applicable; the
 calibration residual "other" bucket still absorbs unnamed volume.
 """
@@ -126,10 +130,14 @@ INJURY_REALLOC_RULES: Dict[str, Dict[str, Any]] = {
         "note": "RB2_out→RB1 + committee absorb; modest WR/TE target spill",
     },
     "RB_COMMITTEE": {
-        "rush_sinks": {"RB1": 0.40, "RB2": 0.40, "OTHER_RB": 0.20},
+        # Remaining committee members absorb with uneven weights (depth_chart
+        # committee_remaining_rush_weights); sink map below is a fallback when
+        # structure helpers are unavailable.
+        "rush_sinks": {"RB_COMMITTEE": 0.70, "RB1": 0.10, "RB2": 0.10, "OTHER_RB": 0.10},
         "target_split": {"same_pos": 0.68, "WR": 0.20, "TE": 0.12},
-        "same_pos_tgt_sinks": {"RB1": 0.40, "RB2": 0.40, "OTHER_RB": 0.20},
-        "note": "Committee out→remaining RBs split evenly-ish",
+        "same_pos_tgt_sinks": {"RB_COMMITTEE": 0.70, "RB1": 0.10, "RB2": 0.10, "OTHER_RB": 0.10},
+        "note": "Committee out→remaining committee uneven (≈58/42 or 45/35/20)",
+        "committee_aware": True,
     },
     "WR1": {
         "target_split": {"WR": 0.62, "TE": 0.22, "RB": 0.16},
@@ -330,6 +338,8 @@ def effective_usage_shares(
 
 def script_matrix_documentation() -> Dict[str, Any]:
     """Serialize matrices for diagnostics / ops dumps."""
+    from src.services.nfl_season_engine.depth_chart import depth_chart_documentation
+
     return {
         "base_usage_by_role": BASE_USAGE_BY_ROLE,
         "script_usage_matrix": SCRIPT_USAGE_MATRIX,
@@ -342,6 +352,7 @@ def script_matrix_documentation() -> Dict[str, Any]:
             "pass_heavy if trail or pass_rate>=0.62; "
             "rush_heavy if lead or pass_rate<=0.50; else balanced"
         ),
+        "depth_chart": depth_chart_documentation(),
     }
 
 

@@ -29,6 +29,7 @@ def test_engine_version_surfaces_injury_shocks() -> None:
         or "deeper-usage" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor" in DEFAULT_SEASON_ENGINE_VERSION
         or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
+        or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

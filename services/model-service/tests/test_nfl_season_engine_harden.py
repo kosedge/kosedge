@@ -35,7 +35,12 @@ from src.services.nfl_season_engine.types import (
 
 
 def test_engine_version_hardened_patch() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "nfl-season-engine-v1.4.1-hardened"
+    # v1.5 supersedes the v1.4.1 harden tag; harden guards remain in place.
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "hardened" in DEFAULT_SEASON_ENGINE_VERSION
+        or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_dual_name_injury_match_christian_vs_initial() -> None:

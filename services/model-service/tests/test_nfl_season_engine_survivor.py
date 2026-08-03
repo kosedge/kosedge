@@ -22,10 +22,11 @@ from src.services.nfl_season_engine.types import (
 
 
 def test_engine_version_surfaces_survivor() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.4")
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert (
         "survivor" in DEFAULT_SEASON_ENGINE_VERSION
         or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
+        or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -135,6 +136,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
     assert (
         "survivor" in result.engine_version
         or "hardened" in result.engine_version
+        or "depth-volatility" in result.engine_version
     )
 
 
