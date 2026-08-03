@@ -14,6 +14,7 @@ import statistics
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Sequence
 
+from src.services.nfl_season_engine.calibration import ENGINE_VERSION
 from src.services.nfl_season_engine.game_script import (
     build_game_script,
     summarize_script_distribution,
@@ -30,7 +31,7 @@ from src.services.nfl_season_engine.types import (
     dist_block,
 )
 
-DEFAULT_SEASON_ENGINE_VERSION = "nfl-season-engine-v1"
+DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
 
 _POSITION_STATS = {
     "QB": ("pass_yards", "pass_tds", "ints", "rush_yards"),

@@ -1,0 +1,40 @@
+{
+  "calibration_tag": "nfl-season-engine-cal-v1",
+  "engine_version_before": "nfl-season-engine-v1",
+  "engine_version_after": "nfl-season-engine-v1.1-calibrated",
+  "seed": 2026,
+  "n_sims": 40,
+  "game_reps": 300,
+  "matchup": "BUF@KC",
+  "before": {
+    "expected_total": 47.64,
+    "home_win_prob": 0.5501,
+    "win_mean_min": 4.5,
+    "win_mean_max": 11.375,
+    "win_mean_stdev": 2.02,
+    "players": {
+      "Mahomes": {"pass_yards": 266.5, "pass_tds": 1.713, "ints": 0.847, "rush_yards": 9.075},
+      "Allen": {"pass_yards": 243.19, "pass_tds": 1.523, "ints": 0.8, "rush_yards": 18.698},
+      "Cook": {"rush_yards": 102.381, "rush_tds": 0.827, "rec_yards": 49.96, "receptions": 4.491},
+      "Rice": {"rec_yards": 102.213, "receptions": 8.91, "rec_tds": 0.627}
+    }
+  },
+  "after": {
+    "expected_total": 46.56,
+    "home_win_prob": 0.5332,
+    "win_mean_min": 5.675,
+    "win_mean_max": 10.725,
+    "win_mean_stdev": 1.368,
+    "players": {
+      "Mahomes": {"pass_yards": 247.11, "pass_tds": 1.52, "ints": 0.57, "rush_yards": 7.698},
+      "Allen": {"pass_yards": 229.422, "pass_tds": 1.427, "ints": 0.61, "rush_yards": 21.023},
+      "Cook": {"rush_yards": 59.49, "rush_tds": 0.39, "rec_yards": 18.501, "receptions": 2.607},
+      "Rice": {"rec_yards": 56.379, "receptions": 5.348, "rec_tds": 0.317}
+    }
+  },
+  "artifacts": {
+    "baseline_dir": "data/ops/nfl-season-engine-calibration-baseline",
+    "after_dir": "data/ops/nfl-season-engine-calibration-after",
+    "report": "data/ops/nfl-season-engine-calibration-20260803.md"
+  }
+}

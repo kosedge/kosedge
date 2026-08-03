@@ -20,6 +20,7 @@ import statistics
 from collections import defaultdict
 from typing import Any, Dict, List, Optional
 
+from src.services.nfl_season_engine.calibration import ENGINE_VERSION
 from src.services.nfl_season_engine.game_script import build_game_script
 from src.services.nfl_season_engine.player_usage import allocate_game_usage
 from src.services.nfl_season_engine.production import produce_box_scores
@@ -29,7 +30,7 @@ from src.services.nfl_season_engine.team_strength import (
 )
 from src.services.nfl_season_engine.types import EngineUniverse, SeasonSimResult
 
-DEFAULT_SEASON_ENGINE_VERSION = "nfl-season-engine-v1"
+DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
 
 _STAT_KEYS = (
     "pass_yards",
@@ -194,6 +195,15 @@ def simulate_full_season(
 
     player_rows.sort(key=_primary_sort, reverse=True)
 
+    win_means = [v["mean"] for v in team_wins.values()]
+    win_mean_sorted = sorted(win_means)
+    win_spread = (
+        round(win_mean_sorted[-1] - win_mean_sorted[0], 3) if win_mean_sorted else 0.0
+    )
+    win_stdev = (
+        round(statistics.pstdev(win_means), 3) if len(win_means) > 1 else 0.0
+    )
+
     return SeasonSimResult(
         season=universe.season,
         n_sims=n_sims,
@@ -208,5 +218,9 @@ def simulate_full_season(
             "rostered_players": len(player_rows),
             "seed": seed,
             "mean_wins_sum": round(sum(v["mean"] for v in team_wins.values()), 3),
+            "win_mean_min": round(win_mean_sorted[0], 3) if win_mean_sorted else 0.0,
+            "win_mean_max": round(win_mean_sorted[-1], 3) if win_mean_sorted else 0.0,
+            "win_mean_spread": win_spread,
+            "win_mean_stdev": win_stdev,
         },
     )

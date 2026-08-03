@@ -4,8 +4,8 @@ Turns Layer 3 usage into yards / TDs / receptions / INTs using each
 player's efficiency priors from ``PlayerRole`` and a thin opponent
 matchup multiplier from Layer 1 defense indices.
 
-INT modeling is intentionally thin (league-ish attempt rate) — the
-existing ``nfl_player_projection_engine`` does not yet emit INT means.
+Efficiency CVs and default rates are centralized in ``calibration.py``.
+INT modeling remains thin when roles lack baseline-derived INT rates.
 """
 
 from __future__ import annotations
@@ -14,6 +14,12 @@ import math
 import random
 from typing import Dict, List, Mapping, Optional, Sequence
 
+from src.services.nfl_season_engine.calibration import (
+    CATCH_RATE_NOISE,
+    EFFICIENCY_CV_PASS,
+    EFFICIENCY_CV_REC,
+    EFFICIENCY_CV_RUSH,
+)
 from src.services.nfl_season_engine.types import (
     GameScript,
     PlayerBoxScore,
@@ -21,8 +27,6 @@ from src.services.nfl_season_engine.types import (
     PlayerUsage,
     TeamStrengthState,
 )
-
-EFFICIENCY_CV = 0.20
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -49,14 +53,14 @@ def _matchup_pass_mult(offense_team: str, defense_team: str, strengths: Mapping[
     if opp_def is None:
         return 1.0
     # Higher defense_index = better D → suppress opponent production.
-    return _clamp(1.0 / max(0.70, opp_def.defense_index), 0.80, 1.25)
+    return _clamp(1.0 / max(0.72, opp_def.defense_index), 0.84, 1.18)
 
 
 def _matchup_rush_mult(offense_team: str, defense_team: str, strengths: Mapping[str, TeamStrengthState]) -> float:
     opp_def = strengths.get(defense_team)
     if opp_def is None:
         return 1.0
-    return _clamp(1.0 / max(0.70, opp_def.defense_index) * 0.98, 0.82, 1.22)
+    return _clamp(1.0 / max(0.72, opp_def.defense_index) * 0.99, 0.86, 1.16)
 
 
 def _role_map(roles: Sequence[PlayerRole]) -> Dict[str, PlayerRole]:
@@ -95,13 +99,13 @@ def produce_box_scores(
             ypa *= 0.97
             ypr *= 0.98
         elif u.script == "lead":
-            ypc *= 1.03
+            ypc *= 1.025
 
         pass_yards = 0.0
         pass_tds = 0.0
         ints = 0.0
         if u.pass_attempts > 0.0:
-            ypa_i = max(3.5, rng.gauss(ypa, abs(ypa) * EFFICIENCY_CV))
+            ypa_i = max(3.5, rng.gauss(ypa, abs(ypa) * EFFICIENCY_CV_PASS))
             pass_yards = u.pass_attempts * ypa_i
             pass_tds = float(_poisson(rng, u.pass_attempts * role.pass_td_rate))
             ints = float(_poisson(rng, u.pass_attempts * role.int_rate))
@@ -109,7 +113,7 @@ def produce_box_scores(
         rush_yards = 0.0
         rush_tds = 0.0
         if u.carries > 0.0:
-            ypc_i = max(0.5, rng.gauss(ypc, abs(ypc) * EFFICIENCY_CV + 0.25))
+            ypc_i = max(0.5, rng.gauss(ypc, abs(ypc) * EFFICIENCY_CV_RUSH + 0.22))
             rush_yards = u.carries * ypc_i
             rush_tds = float(_poisson(rng, u.carries * role.rush_td_rate))
 
@@ -117,9 +121,9 @@ def produce_box_scores(
         rec_yards = 0.0
         rec_tds = 0.0
         if u.targets > 0.0:
-            catch = _clamp(rng.gauss(role.catch_rate, 0.06), 0.25, 0.95)
+            catch = _clamp(rng.gauss(role.catch_rate, CATCH_RATE_NOISE), 0.28, 0.92)
             receptions = u.targets * catch
-            ypr_i = max(2.0, rng.gauss(ypr, abs(ypr) * EFFICIENCY_CV))
+            ypr_i = max(2.0, rng.gauss(ypr, abs(ypr) * EFFICIENCY_CV_REC))
             rec_yards = receptions * ypr_i
             rec_tds = float(_poisson(rng, max(0.0, receptions) * role.rec_td_rate))
 

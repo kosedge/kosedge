@@ -67,14 +67,16 @@ class PlayerRole:
     role_confidence: float = 0.65
     experience_confidence: float = 1.0
     # Per-unit efficiency priors (yards per attempt/carry/reception, TD rates).
-    ypa: float = 7.0
+    # Defaults match calibration.league priors; loaders overwrite via
+    # apply_efficiency_priors / baseline-derived rates.
+    ypa: float = 7.05
     ypc: float = 4.2
-    ypr: float = 11.5
-    catch_rate: float = 0.62
-    pass_td_rate: float = 0.045
-    rush_td_rate: float = 0.035
-    rec_td_rate: float = 0.065
-    int_rate: float = 0.022
+    ypr: float = 11.8
+    catch_rate: float = 0.615
+    pass_td_rate: float = 0.041
+    rush_td_rate: float = 0.027
+    rec_td_rate: float = 0.055
+    int_rate: float = 0.018
     source: str = "placeholder"
 
 

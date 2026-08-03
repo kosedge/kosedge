@@ -10,6 +10,12 @@ from __future__ import annotations
 import random
 from typing import Dict, Mapping, Optional, Tuple
 
+from src.services.nfl_season_engine.calibration import (
+    LEAGUE_BASE_PASS_RATE,
+    LEAGUE_BASE_PLAYS,
+    PACE_PLAYS_CLAMP,
+    SCORE_NOISE_SD,
+)
 from src.services.nfl_season_engine.team_strength import (
     expected_team_points,
     win_prob_from_expected_scores,
@@ -20,10 +26,6 @@ from src.services.nfl_season_engine.types import (
     ScriptState,
     TeamStrengthState,
 )
-
-# Per-team offensive plays (NFL average ~62–66). Not combined.
-LEAGUE_BASE_PLAYS = 64.0
-LEAGUE_BASE_PASS_RATE = 0.575
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -61,14 +63,17 @@ def build_game_script(
 
     # pace_plays = per-team offensive snap/play expectation for this game.
     pace = LEAGUE_BASE_PLAYS * 0.5 * (home.pace_factor + away.pace_factor)
-    pace = _clamp(pace, 52.0, 78.0)
+    pace = _clamp(pace, *PACE_PLAYS_CLAMP)
 
     home_pass = _clamp(LEAGUE_BASE_PASS_RATE + home.pass_rate_bias, 0.38, 0.72)
     away_pass = _clamp(LEAGUE_BASE_PASS_RATE + away.pass_rate_bias, 0.38, 0.72)
 
     if realized:
-        home_score = max(3.0, rng.gauss(home_exp, 9.5))
-        away_score = max(3.0, rng.gauss(away_exp, 9.5))
+        home_score = max(0.0, rng.gauss(home_exp, SCORE_NOISE_SD))
+        away_score = max(0.0, rng.gauss(away_exp, SCORE_NOISE_SD))
+        # Avoid degenerate 0-0 ties dominating; nudge slightly if both tiny.
+        if home_score < 1.0 and away_score < 1.0:
+            home_score, away_score = 3.0, 0.0
     else:
         home_score = home_exp
         away_score = away_exp
@@ -77,8 +82,8 @@ def build_game_script(
     away_script = _script_from_margin(away_score, home_score)
 
     # Script feeds back into pass rate for usage layer.
-    home_pass = _clamp(home_pass + {"lead": -0.04, "trail": 0.06, "neutral": 0.0}[home_script], 0.35, 0.78)
-    away_pass = _clamp(away_pass + {"lead": -0.04, "trail": 0.06, "neutral": 0.0}[away_script], 0.35, 0.78)
+    home_pass = _clamp(home_pass + {"lead": -0.045, "trail": 0.055, "neutral": 0.0}[home_script], 0.35, 0.78)
+    away_pass = _clamp(away_pass + {"lead": -0.045, "trail": 0.055, "neutral": 0.0}[away_script], 0.35, 0.78)
 
     script = GameScript(
         game_id=game.game_id,
@@ -95,7 +100,7 @@ def build_game_script(
         away_script=away_script,
         home_implied_total=round(home_score if realized else home_exp, 2),
         away_implied_total=round(away_score if realized else away_exp, 2),
-        source="team_strength_analytic",
+        source="team_strength_analytic_cal_v1",
     )
     outcome = {
         "home_score": float(home_score),

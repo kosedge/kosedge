@@ -19,6 +19,7 @@ This package is **additive**. It does not replace
 
 from __future__ import annotations
 
+from src.services.nfl_season_engine.calibration import ENGINE_VERSION
 from src.services.nfl_season_engine.game_query import project_game_player_boxes
 from src.services.nfl_season_engine.loaders import (
     build_demo_universe,
@@ -31,7 +32,7 @@ from src.services.nfl_season_engine.types import (
     SeasonSimResult,
 )
 
-DEFAULT_SEASON_ENGINE_VERSION = "nfl-season-engine-v1"
+DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
 
 __all__ = [
     "DEFAULT_SEASON_ENGINE_VERSION",

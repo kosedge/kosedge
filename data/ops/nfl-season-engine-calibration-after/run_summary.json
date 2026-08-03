@@ -1,0 +1,45 @@
+{
+  "generated_at_utc": "2026-08-03T13:59:53.670166+00:00",
+  "mode": "demo",
+  "season": 2026,
+  "n_sims": 40,
+  "games_per_season": 272,
+  "engine_version": "nfl-season-engine-v1.1-calibrated",
+  "notes": {
+    "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
+    "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
+    "rosters": "Mixed: named demo skill cores for 5 teams; generic depth for others. Absolute usage shares.",
+    "calibration": "nfl-season-engine-cal-v1",
+    "cal_calibration_tag": "nfl-season-engine-cal-v1",
+    "cal_league_env": "PPG=21.8, HFA=1.05, score_sd=9.8, plays=63.0, pass_rate=0.58",
+    "cal_efficiency": "ypa=7.05, ypc=4.2, int_rate=0.018, pass_td_rate=0.041, rush_td_rate_rb=0.027",
+    "cal_usage": "Absolute target/rush shares with residual 'other' bucket (floor=0.08) \u2014 prevents sparse-roster inflation.",
+    "cal_sources": "Recent NFL season shapes (2022\u20132024) + alignment with nfl_handicapping_framework HFA/stdev and box-score EFFICIENCY_CV\u22480.22. No fabricated player grades; DB baselines used when present."
+  },
+  "diagnostics": {
+    "teams": 32,
+    "rostered_players": 215,
+    "seed": 2026,
+    "mean_wins_sum": 272.0,
+    "win_mean_min": 5.675,
+    "win_mean_max": 10.725,
+    "win_mean_spread": 5.05,
+    "win_mean_stdev": 1.368
+  },
+  "sample_game": {
+    "game_id": "2026-W01-BUF@KC",
+    "home_team": "KC",
+    "away_team": "BUF",
+    "week": 1,
+    "n_replicates": 300,
+    "game_script_summary": {
+      "home_win_prob_mean": 0.5332,
+      "expected_total_mean": 46.56,
+      "pace_plays_mean": 63.63,
+      "home_pass_rate_mean": 0.6004,
+      "away_pass_rate_mean": 0.5774,
+      "home_lead_rate": 0.42,
+      "home_trail_rate": 0.35
+    }
+  }
+}
