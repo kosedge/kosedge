@@ -93,7 +93,8 @@ def main() -> None:
     print(
         f"Universe mode={mode} season={universe.season} "
         f"games={len(universe.schedule)} teams={len(universe.teams)} "
-        f"players={sum(len(v) for v in universe.rosters.values())}"
+        f"players={sum(len(v) for v in universe.rosters.values())} "
+        f"calibration={universe.notes.get('calibration', 'n/a')}"
     )
     for k, v in universe.notes.items():
         print(f"  note[{k}]: {v}")

@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
-**Branch:** `nfl-full-model-foundation` → `deploy-vercel`  
-**Engine version:** `nfl-season-engine-v1`  
+**Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
+**Engine version:** `nfl-season-engine-v1.1-calibrated` (see `nfl-season-engine-calibration-20260803.md`)  
 **Date:** 2026-08-03  
-**Status:** Working structure + path-coherent season sim + future-game player boxes. Calibration intentionally thin.
+**Status:** Working structure + path-coherent season sim + future-game player boxes. **Calibration pass applied** (efficiency baselines, residual usage bucket, scoring/HFA alignment, softened strength evolution).
 
 ## Goal (this pass)
 
@@ -76,38 +76,35 @@ Tests: `services/model-service/tests/test_nfl_season_engine.py`
 | `nfl_player_box_score_simulator` | Per-game prop box MC from baselines — complementary; this engine owns season-path coherence |
 | `nfl_player_projection_engine` | Deterministic means for props — reused conceptually for efficiency shape |
 
-## Sample future-game projection (demo)
+## Sample future-game projection (demo) — post calibration
 
-Artifact: `data/ops/nfl-season-engine-20260803T122923Z/`  
-Matchup: **BUF @ KC**, week 1, 300 replicates (demo universe).
+Artifact: `data/ops/nfl-season-engine-calibration-after/`  
+Full write-up: `data/ops/nfl-season-engine-calibration-20260803.md`  
+Matchup: **BUF @ KC**, week 1, 300 replicates (demo universe, seed 2026).
 
 Game script summary:
 
-- home_win_prob ≈ 0.55
-- expected_total ≈ 47.6
-- pace_plays ≈ 62.5 / team
-- home lead/trail rates ≈ 0.44 / 0.28
+- home_win_prob ≈ 0.53
+- expected_total ≈ 46.6
+- pace_plays ≈ 63.6 / team
 
-| Team | Pos | Player | Point estimate |
+| Team | Pos | Player | Point estimate (calibrated) |
 | --- | --- | --- | --- |
-| KC | QB | P.Mahomes | pass 258 / TD 1.58 / INT 0.85 / rush 9 |
-| BUF | QB | J.Allen | pass 251 / TD 1.70 / INT 0.74 / rush 15 |
-| KC | WR | R.Rice | rec 93 / 8.4 / TD 0.67 |
-| KC | RB | I.Pacheco | rush 90 / TD 0.80 / rec 41 / 3.7 |
-| BUF | RB | J.Cook | rush 88 / TD 0.77 / rec 52 / 4.7 |
-| BUF | WR | K.Shakir | rec 81 / 7.8 / TD 0.54 |
-| KC | TE | T.Kelce | rec 73 / 6.9 / TD 0.50 |
-
-Mahomes pass yards distribution (300 reps): mean 258, std 54, p10 191, p50 258, p90 326.
+| KC | QB | P.Mahomes | pass 247 / TD 1.52 / INT 0.57 / rush 8 |
+| BUF | QB | J.Allen | pass 229 / TD 1.43 / INT 0.61 / rush 21 |
+| BUF | RB | J.Cook | rush 59 / TD 0.39 / rec 19 / 2.6 |
+| KC | WR | R.Rice | rec 56 / 5.3 / TD 0.32 |
+| KC | RB | I.Pacheco | rush 54 / TD 0.37 / rec 17 / 2.4 |
+| KC | TE | T.Kelce | rec 42 / 4.1 / TD 0.24 |
 
 ## Remaining gaps
 
-1. Wire role efficiency from `nfl_player_projection_baselines` / features (not just depth + defaults)
-2. Optional hook of Layer 2 into `simulate_nfl_game` replicate margins (documented v2 in box-score sim)
-3. Calibrate strength evolution + script tilts on historical seasons
-4. Injury / availability shocks inside season paths
-5. Persist season-engine artifacts to a stable hub path (optional web surfacing)
-6. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
+1. Optional hook of Layer 2 into `simulate_nfl_game` replicate margins (documented v2 in box-score sim)
+2. Historical walk-forward calibration of strength evolution + script tilts (beyond league priors)
+3. Injury / availability shocks inside season paths
+4. Persist season-engine artifacts to a stable hub path (optional web surfacing)
+5. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
+6. Role-specific QB rush volume (Allen still light vs career)
 
 ## Railway
 

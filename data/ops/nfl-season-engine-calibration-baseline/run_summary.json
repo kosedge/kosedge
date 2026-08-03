@@ -1,0 +1,36 @@
+{
+  "generated_at_utc": "2026-08-03T13:51:57.254571+00:00",
+  "mode": "demo",
+  "season": 2026,
+  "n_sims": 40,
+  "games_per_season": 272,
+  "engine_version": "nfl-season-engine-v1",
+  "notes": {
+    "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
+    "strengths": "PLACEHOLDER demo priors with mild talent bumps for KC/BUF/PHI/SF/DET.",
+    "rosters": "Mixed: named demo skill cores for 5 teams; generic depth for others.",
+    "calibration": "Thin by design \u2014 structure + path coherence first."
+  },
+  "diagnostics": {
+    "teams": 32,
+    "rostered_players": 215,
+    "seed": 2026,
+    "mean_wins_sum": 272.0
+  },
+  "sample_game": {
+    "game_id": "2026-W01-BUF@KC",
+    "home_team": "KC",
+    "away_team": "BUF",
+    "week": 1,
+    "n_replicates": 300,
+    "game_script_summary": {
+      "home_win_prob_mean": 0.5501,
+      "expected_total_mean": 47.64,
+      "pace_plays_mean": 65.15,
+      "home_pass_rate_mean": 0.6187,
+      "away_pass_rate_mean": 0.5654,
+      "home_lead_rate": 0.3867,
+      "home_trail_rate": 0.32
+    }
+  }
+}

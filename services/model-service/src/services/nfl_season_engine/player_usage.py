@@ -9,6 +9,12 @@ REAL vs PLACEHOLDER
 - PLACEHOLDER roles: demo depth charts in ``loaders.build_demo_universe``.
 - Script tilts (lead→rush, trail→pass) are thin structural priors, not a
   fitted tendency model (see ``nfl_tendency_pricing`` for the live board).
+
+Calibration note
+----------------
+Target / rush shares are treated as **absolute** fractions of team volume.
+A residual "other" bucket absorbs the remainder so sparse skill rosters do
+not renormalize WR1/RB1 into unrealistic volume (foundation bug).
 """
 
 from __future__ import annotations
@@ -16,6 +22,12 @@ from __future__ import annotations
 import random
 from typing import Dict, List, Mapping, Optional, Sequence
 
+from src.services.nfl_season_engine.calibration import (
+    DIRICHLET_RUSH_CONCENTRATION,
+    DIRICHLET_TARGET_CONCENTRATION,
+    USAGE_OTHER_BUCKET_FLOOR,
+    with_residual_share,
+)
 from src.services.nfl_season_engine.types import (
     GameScript,
     PlayerRole,
@@ -28,18 +40,21 @@ def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
 
 
-def _normalize(shares: Sequence[float]) -> List[float]:
-    total = sum(max(0.0, s) for s in shares)
-    if total <= 0.0:
-        n = len(shares)
-        return [1.0 / n] * n if n else []
-    return [max(0.0, s) / total for s in shares]
-
-
-def _dirichlet_noise(rng: random.Random, shares: Sequence[float], concentration: float = 28.0) -> List[float]:
-    alphas = [max(1e-3, s * concentration) for s in shares]
+def _dirichlet_with_other(
+    rng: random.Random,
+    absolute_shares: Sequence[float],
+    *,
+    concentration: float,
+) -> List[float]:
+    """Dirichlet allocation that preserves absolute means via an other bucket."""
+    clipped, other = with_residual_share(absolute_shares, floor=USAGE_OTHER_BUCKET_FLOOR)
+    alphas = [max(1e-3, s * concentration) for s in clipped] + [max(1e-3, other * concentration)]
     draws = [rng.gammavariate(a, 1.0) for a in alphas]
-    return _normalize(draws)
+    total = sum(draws)
+    if total <= 0.0:
+        return list(clipped)
+    # Drop the other bucket — volume allocated only to modeled players.
+    return [d / total for d in draws[:-1]]
 
 
 def allocate_team_usage(
@@ -60,7 +75,7 @@ def allocate_team_usage(
         team_script = script.away_script
 
     # script.pace_plays is already a per-team offensive-play expectation.
-    plays = _clamp(script.pace_plays + rng.gauss(0.0, 4.0), 48.0, 85.0)
+    plays = _clamp(script.pace_plays + rng.gauss(0.0, 3.5), 48.0, 82.0)
     pass_plays = plays * pass_rate
     rush_plays = plays * (1.0 - pass_rate)
 
@@ -82,7 +97,7 @@ def allocate_team_usage(
                 starter = role
                 break
         # Small residual for backup in blowouts / injuries (thin).
-        starter_share = 0.94 if starter.depth_order <= 1 else 0.88
+        starter_share = 0.955 if starter.depth_order <= 1 else 0.88
         qb_attempts[starter.player_key] = pass_plays * starter_share
         backups = [r for r in qbs if r.player_key != starter.player_key]
         if backups:
@@ -93,27 +108,32 @@ def allocate_team_usage(
 
     rush_base = [max(0.0, r.rush_share) for r in rushers]
     if not any(rush_base) and rushers:
-        # Depth-order fallback
-        rush_base = [1.0 / max(1, r.depth_order) for r in rushers]
-    rush_shares = _dirichlet_noise(rng, _normalize(rush_base), concentration=24.0)
-    rush_by_key = {r.player_key: rush_plays * s for r, s in zip(rushers, rush_shares)}
+        # Depth-order fallback as absolute-ish shares.
+        rush_base = [{1: 0.55, 2: 0.25, 3: 0.12}.get(r.depth_order, 0.05) if r.position == "RB" else 0.08 for r in rushers]
+    rush_fracs = _dirichlet_with_other(rng, rush_base, concentration=DIRICHLET_RUSH_CONCENTRATION)
+    rush_by_key = {r.player_key: rush_plays * s for r, s in zip(rushers, rush_fracs)}
 
     tgt_base = [max(0.0, r.target_share) for r in receivers]
     if not any(tgt_base) and receivers:
-        tgt_base = [1.0 / max(1, r.depth_order) for r in receivers]
-    tgt_shares = _dirichlet_noise(rng, _normalize(tgt_base), concentration=30.0)
-    tgt_by_key = {r.player_key: pass_plays * s for r, s in zip(receivers, tgt_shares)}
+        tgt_base = [
+            {1: 0.22, 2: 0.14, 3: 0.09}.get(r.depth_order, 0.05)
+            if r.position in ("WR", "TE")
+            else {1: 0.10, 2: 0.06}.get(r.depth_order, 0.03)
+            for r in receivers
+        ]
+    tgt_fracs = _dirichlet_with_other(rng, tgt_base, concentration=DIRICHLET_TARGET_CONCENTRATION)
+    tgt_by_key = {r.player_key: pass_plays * s for r, s in zip(receivers, tgt_fracs)}
 
     # Script nudge: trailing teams push a bit more volume to WR1; leading
     # teams feed the RB1 a few extra carries.
     if team_script == "trail":
         wr1 = next((r for r in receivers if r.position == "WR" and r.depth_order == 1), None)
         if wr1 is not None:
-            tgt_by_key[wr1.player_key] = tgt_by_key.get(wr1.player_key, 0.0) + 1.2
+            tgt_by_key[wr1.player_key] = tgt_by_key.get(wr1.player_key, 0.0) + 0.9
     elif team_script == "lead":
         rb1 = next((r for r in rushers if r.position == "RB" and r.depth_order == 1), None)
         if rb1 is not None:
-            rush_by_key[rb1.player_key] = rush_by_key.get(rb1.player_key, 0.0) + 1.5
+            rush_by_key[rb1.player_key] = rush_by_key.get(rb1.player_key, 0.0) + 1.2
 
     out: List[PlayerUsage] = []
     for role in roles:

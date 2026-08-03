@@ -1,0 +1,608 @@
+{
+  "game_id": "2026-W01-BUF@KC",
+  "home_team": "KC",
+  "away_team": "BUF",
+  "week": 1,
+  "n_replicates": 300,
+  "game_script_summary": {
+    "home_win_prob_mean": 0.5501,
+    "expected_total_mean": 47.64,
+    "pace_plays_mean": 65.15,
+    "home_pass_rate_mean": 0.6187,
+    "away_pass_rate_mean": 0.5654,
+    "home_lead_rate": 0.3867,
+    "home_trail_rate": 0.32
+  },
+  "notes": {
+    "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
+    "strengths": "PLACEHOLDER demo priors with mild talent bumps for KC/BUF/PHI/SF/DET.",
+    "rosters": "Mixed: named demo skill cores for 5 teams; generic depth for others.",
+    "calibration": "Thin by design \u2014 structure + path coherence first.",
+    "query_mode": "single_game_marginal_mc",
+    "layers": "2=game_script \u2192 3=player_usage \u2192 4=production (strengths frozen at query-time book)"
+  },
+  "players": [
+    {
+      "player_key": "KC-QB1-P.Mahomes",
+      "player_name": "P.Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "point_estimate": {
+        "pass_yards": 266.5,
+        "pass_tds": 1.713,
+        "ints": 0.847,
+        "rush_yards": 9.075
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 266.5,
+          "std": 58.027,
+          "p10": 194.52,
+          "p50": 263.67,
+          "p90": 342.8
+        },
+        "pass_tds": {
+          "mean": 1.713,
+          "std": 1.251,
+          "p10": 0.0,
+          "p50": 2.0,
+          "p90": 3.0
+        },
+        "ints": {
+          "mean": 0.847,
+          "std": 0.95,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 2.0
+        },
+        "rush_yards": {
+          "mean": 9.075,
+          "std": 6.841,
+          "p10": 2.66,
+          "p50": 7.51,
+          "p90": 18.28
+        },
+        "pass_attempts": {
+          "mean": 37.87,
+          "std": 3.652,
+          "p10": 33.49,
+          "p50": 37.56,
+          "p90": 42.88
+        },
+        "carries": {
+          "mean": 2.234,
+          "std": 1.453,
+          "p10": 0.69,
+          "p50": 1.95,
+          "p90": 4.09
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "BUF-QB1-J.Allen",
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "point_estimate": {
+        "pass_yards": 243.19,
+        "pass_tds": 1.523,
+        "ints": 0.8,
+        "rush_yards": 18.698
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 243.19,
+          "std": 53.285,
+          "p10": 177.55,
+          "p50": 243.83,
+          "p90": 304.1
+        },
+        "pass_tds": {
+          "mean": 1.523,
+          "std": 1.215,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 3.0
+        },
+        "ints": {
+          "mean": 0.8,
+          "std": 0.872,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 2.0
+        },
+        "rush_yards": {
+          "mean": 18.698,
+          "std": 9.703,
+          "p10": 7.4,
+          "p50": 17.3,
+          "p90": 30.96
+        },
+        "pass_attempts": {
+          "mean": 34.746,
+          "std": 3.272,
+          "p10": 30.29,
+          "p50": 34.65,
+          "p90": 39.21
+        },
+        "carries": {
+          "mean": 4.866,
+          "std": 2.15,
+          "p10": 2.27,
+          "p50": 4.55,
+          "p90": 7.77
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "BUF-RB1-J.Cook",
+      "player_name": "J.Cook",
+      "team": "BUF",
+      "position": "RB",
+      "point_estimate": {
+        "rush_yards": 102.381,
+        "rush_tds": 0.827,
+        "rec_yards": 49.96,
+        "receptions": 4.491
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 102.381,
+          "std": 33.364,
+          "p10": 64.79,
+          "p50": 99.44,
+          "p90": 143.27
+        },
+        "rush_tds": {
+          "mean": 0.827,
+          "std": 0.915,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 2.0
+        },
+        "rec_yards": {
+          "mean": 49.96,
+          "std": 24.46,
+          "p10": 23.18,
+          "p50": 45.7,
+          "p90": 80.65
+        },
+        "receptions": {
+          "mean": 4.491,
+          "std": 1.877,
+          "p10": 2.43,
+          "p50": 4.23,
+          "p90": 6.8
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 24.038,
+          "std": 3.996,
+          "p10": 18.93,
+          "p50": 23.79,
+          "p90": 29.81
+        },
+        "targets": {
+          "mean": 6.909,
+          "std": 2.762,
+          "p10": 3.8,
+          "p50": 6.54,
+          "p90": 10.2
+        }
+      }
+    },
+    {
+      "player_key": "KC-WR1-R.Rice",
+      "player_name": "R.Rice",
+      "team": "KC",
+      "position": "WR",
+      "point_estimate": {
+        "rec_yards": 102.213,
+        "receptions": 8.91,
+        "rec_tds": 0.627
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 102.213,
+          "std": 34.145,
+          "p10": 59.83,
+          "p50": 99.7,
+          "p90": 143.69
+        },
+        "receptions": {
+          "mean": 8.91,
+          "std": 2.466,
+          "p10": 6.03,
+          "p50": 8.73,
+          "p90": 12.37
+        },
+        "rec_tds": {
+          "mean": 0.627,
+          "std": 0.857,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 2.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 14.829,
+          "std": 3.784,
+          "p10": 10.48,
+          "p50": 14.46,
+          "p90": 20.26
+        }
+      }
+    },
+    {
+      "player_key": "KC-RB1-I.Pacheco",
+      "player_name": "I.Pacheco",
+      "team": "KC",
+      "position": "RB",
+      "point_estimate": {
+        "rush_yards": 91.696,
+        "rush_tds": 0.857,
+        "rec_yards": 42.809,
+        "receptions": 3.887
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 91.696,
+          "std": 28.771,
+          "p10": 56.47,
+          "p50": 89.82,
+          "p90": 130.54
+        },
+        "rush_tds": {
+          "mean": 0.857,
+          "std": 0.974,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 2.0
+        },
+        "rec_yards": {
+          "mean": 42.809,
+          "std": 22.509,
+          "p10": 18.76,
+          "p50": 37.89,
+          "p90": 77.14
+        },
+        "receptions": {
+          "mean": 3.887,
+          "std": 1.829,
+          "p10": 1.96,
+          "p50": 3.53,
+          "p90": 6.49
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 22.461,
+          "std": 3.593,
+          "p10": 17.63,
+          "p50": 22.54,
+          "p90": 27.15
+        },
+        "targets": {
+          "mean": 5.907,
+          "std": 2.669,
+          "p10": 2.97,
+          "p50": 5.44,
+          "p90": 9.5
+        }
+      }
+    },
+    {
+      "player_key": "KC-TE1-T.Kelce",
+      "player_name": "T.Kelce",
+      "team": "KC",
+      "position": "TE",
+      "point_estimate": {
+        "rec_yards": 76.801,
+        "receptions": 7.198,
+        "rec_tds": 0.497
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 76.801,
+          "std": 28.02,
+          "p10": 40.84,
+          "p50": 71.32,
+          "p90": 116.42
+        },
+        "receptions": {
+          "mean": 7.198,
+          "std": 2.276,
+          "p10": 4.41,
+          "p50": 6.89,
+          "p90": 10.25
+        },
+        "rec_tds": {
+          "mean": 0.497,
+          "std": 0.751,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 10.637,
+          "std": 3.301,
+          "p10": 6.59,
+          "p50": 10.27,
+          "p90": 15.15
+        }
+      }
+    },
+    {
+      "player_key": "BUF-WR1-K.Shakir",
+      "player_name": "K.Shakir",
+      "team": "BUF",
+      "position": "WR",
+      "point_estimate": {
+        "rec_yards": 76.174,
+        "receptions": 7.4,
+        "rec_tds": 0.543
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 76.174,
+          "std": 26.35,
+          "p10": 47.51,
+          "p50": 73.48,
+          "p90": 111.79
+        },
+        "receptions": {
+          "mean": 7.4,
+          "std": 2.045,
+          "p10": 5.04,
+          "p50": 7.19,
+          "p90": 10.0
+        },
+        "rec_tds": {
+          "mean": 0.543,
+          "std": 0.78,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 2.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 12.245,
+          "std": 3.099,
+          "p10": 8.43,
+          "p50": 12.24,
+          "p90": 15.91
+        }
+      }
+    },
+    {
+      "player_key": "KC-WR2-X.Worthy",
+      "player_name": "X.Worthy",
+      "team": "KC",
+      "position": "WR",
+      "point_estimate": {
+        "rec_yards": 71.995,
+        "receptions": 5.587,
+        "rec_tds": 0.443
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 71.995,
+          "std": 30.377,
+          "p10": 37.6,
+          "p50": 68.17,
+          "p90": 118.35
+        },
+        "receptions": {
+          "mean": 5.587,
+          "std": 1.917,
+          "p10": 3.35,
+          "p50": 5.3,
+          "p90": 8.17
+        },
+        "rec_tds": {
+          "mean": 0.443,
+          "std": 0.702,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.692,
+          "std": 0.75,
+          "p10": 0.03,
+          "p50": 0.46,
+          "p90": 1.67
+        },
+        "targets": {
+          "mean": 9.298,
+          "std": 3.056,
+          "p10": 5.74,
+          "p50": 8.92,
+          "p90": 13.53
+        }
+      }
+    },
+    {
+      "player_key": "BUF-TE1-D.Kincaid",
+      "player_name": "D.Kincaid",
+      "team": "BUF",
+      "position": "TE",
+      "point_estimate": {
+        "rec_yards": 67.197,
+        "receptions": 6.507,
+        "rec_tds": 0.487
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 67.197,
+          "std": 26.993,
+          "p10": 36.51,
+          "p50": 64.55,
+          "p90": 101.18
+        },
+        "receptions": {
+          "mean": 6.507,
+          "std": 2.134,
+          "p10": 3.81,
+          "p50": 6.43,
+          "p90": 9.32
+        },
+        "rec_tds": {
+          "mean": 0.487,
+          "std": 0.719,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 9.569,
+          "std": 3.157,
+          "p10": 5.6,
+          "p50": 9.29,
+          "p90": 13.34
+        }
+      }
+    },
+    {
+      "player_key": "BUF-WR2-K.Coleman",
+      "player_name": "K.Coleman",
+      "team": "BUF",
+      "position": "WR",
+      "point_estimate": {
+        "rec_yards": 60.673,
+        "receptions": 5.222,
+        "rec_tds": 0.403
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 60.673,
+          "std": 22.948,
+          "p10": 34.46,
+          "p50": 57.78,
+          "p90": 90.31
+        },
+        "receptions": {
+          "mean": 5.222,
+          "std": 1.719,
+          "p10": 3.1,
+          "p50": 5.08,
+          "p90": 7.49
+        },
+        "rec_tds": {
+          "mean": 0.403,
+          "std": 0.664,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 8.705,
+          "std": 2.747,
+          "p10": 5.42,
+          "p50": 8.58,
+          "p90": 12.05
+        }
+      }
+    }
+  ]
+}
