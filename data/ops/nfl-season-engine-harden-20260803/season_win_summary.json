@@ -1,0 +1,92 @@
+{
+  "diagnostics": {
+    "finite_check": {
+      "player_rows": 225,
+      "win_means_finite": true
+    },
+    "injury_path_count": 0,
+    "injury_paths": [],
+    "mean_wins_sum": 272.0,
+    "rostered_players": 225,
+    "seed": 2026,
+    "teams": 32,
+    "win_mean_max": 10.85,
+    "win_mean_min": 5.625,
+    "win_mean_spread": 5.225,
+    "win_mean_stdev": 1.477
+  },
+  "engine_version": "nfl-season-engine-v1.4.1-hardened",
+  "n_sims": 40,
+  "top_teams": [
+    {
+      "mean": 10.85,
+      "p10": 7.0,
+      "p50": 11.0,
+      "p90": 13.0,
+      "team": "PHI"
+    },
+    {
+      "mean": 10.825,
+      "p10": 8.0,
+      "p50": 11.0,
+      "p90": 13.0,
+      "team": "DET"
+    },
+    {
+      "mean": 10.45,
+      "p10": 7.0,
+      "p50": 11.0,
+      "p90": 13.0,
+      "team": "SF"
+    },
+    {
+      "mean": 10.375,
+      "p10": 7.0,
+      "p50": 11.0,
+      "p90": 13.0,
+      "team": "LAC"
+    },
+    {
+      "mean": 10.3,
+      "p10": 8.0,
+      "p50": 10.0,
+      "p90": 14.0,
+      "team": "BUF"
+    },
+    {
+      "mean": 10.1,
+      "p10": 8.0,
+      "p50": 10.0,
+      "p90": 13.0,
+      "team": "BAL"
+    },
+    {
+      "mean": 9.9,
+      "p10": 6.0,
+      "p50": 10.0,
+      "p90": 13.0,
+      "team": "KC"
+    },
+    {
+      "mean": 9.875,
+      "p10": 7.0,
+      "p50": 10.0,
+      "p90": 13.0,
+      "team": "HOU"
+    },
+    {
+      "mean": 9.775,
+      "p10": 7.0,
+      "p50": 10.0,
+      "p90": 13.0,
+      "team": "CIN"
+    },
+    {
+      "mean": 9.45,
+      "p10": 7.0,
+      "p50": 10.0,
+      "p90": 12.0,
+      "team": "DEN"
+    }
+  ]
+}

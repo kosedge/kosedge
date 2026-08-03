@@ -118,6 +118,9 @@ def evolve_after_game(
     win-total explosion.
     """
     rng = rng or random.Random()
+    if home_team not in strengths or away_team not in strengths:
+        # Missing clubs should not crash a path; skip evolution.
+        return
     home = strengths[home_team]
     away = strengths[away_team]
 

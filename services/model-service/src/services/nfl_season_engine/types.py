@@ -183,6 +183,8 @@ class GameBoxProjection:
     game_script_summary: Dict[str, Any]
     players: List[Dict[str, Any]]
     notes: Dict[str, str] = field(default_factory=dict)
+    # Populated when callers pass include_diagnostics=True.
+    diagnostics: Dict[str, Any] = field(default_factory=dict)
 
 
 def dist_block(mean: float, std: float, p10: float, p50: float, p90: float) -> Dict[str, float]:

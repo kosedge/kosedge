@@ -1,0 +1,22 @@
+{
+  "mason_rush_after": 0.67,
+  "mason_rush_before": 0.22,
+  "path": [
+    {
+      "player_name": "Christian McCaffrey",
+      "status": "out",
+      "team": "SF",
+      "week_end": 3,
+      "week_start": 1
+    }
+  ],
+  "week_2_adjustments": [
+    {
+      "availability": 0.0,
+      "freed_rush_share": 0.5,
+      "offense_delta": -0.07167,
+      "player_name": "C.McCaffrey",
+      "realloc_notes": "RB1_out\u2192RB2 primary rush sink; committee/RB3 residual; WR/TE catch spill; 10% residual\u2192other"
+    }
+  ]
+}

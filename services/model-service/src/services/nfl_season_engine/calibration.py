@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.4 adds survivor-pool week/path evaluation on team W/L season paths.
-# Cal base + injury paths + deeper Layer-3 usage remain intact.
-ENGINE_VERSION = "nfl-season-engine-v1.4-survivor"
+# v1.4.1: harden/validate pass — name matching, diagnostics flag, regression
+# guards. No new modeling features (survivor + injury + usage stack intact).
+ENGINE_VERSION = "nfl-season-engine-v1.4.1-hardened"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -277,6 +277,10 @@ def calibration_notes() -> Dict[str, str]:
         "survivor": (
             "v1.4: team W/L season paths → week win rates + inspectable "
             "save_score / pick_now_score (see survivor.py FORMULA_NOTES)."
+        ),
+        "harden": (
+            "v1.4.1: dual-name injury matching, include_diagnostics explain "
+            "payloads, thin-roster/NaN guards, contract docs."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

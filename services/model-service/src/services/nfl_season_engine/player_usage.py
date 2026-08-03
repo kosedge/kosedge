@@ -249,6 +249,48 @@ def usage_share_diagnostics(
     return rows
 
 
+def share_integrity_summary(
+    roles: Sequence[PlayerRole],
+    *,
+    script: ScriptState = "neutral",
+    pass_rate: float = 0.58,
+) -> Dict[str, Any]:
+    """Named absolute share totals + residual other (should stay ≤ ~1.0)."""
+    rows = usage_share_diagnostics(roles, script=script, pass_rate=pass_rate)
+    rush = sum(float(r["rush_share"]) for r in rows)
+    tgt = sum(float(r["target_share"]) for r in rows)
+    _, rush_other = with_residual_share(
+        [float(r["rush_share"]) for r in rows], floor=USAGE_OTHER_BUCKET_FLOOR
+    )
+    _, tgt_other = with_residual_share(
+        [float(r["target_share"]) for r in rows], floor=USAGE_OTHER_BUCKET_FLOOR
+    )
+    clipped_rush, _ = with_residual_share(
+        [float(r["rush_share"]) for r in rows], floor=USAGE_OTHER_BUCKET_FLOOR
+    )
+    clipped_tgt, _ = with_residual_share(
+        [float(r["target_share"]) for r in rows], floor=USAGE_OTHER_BUCKET_FLOOR
+    )
+    return {
+        "script": script,
+        "pass_rate": pass_rate,
+        "named_rush_share_sum": round(rush, 4),
+        "named_target_share_sum": round(tgt, 4),
+        "residual_other_rush": round(rush_other, 4),
+        "residual_other_target": round(tgt_other, 4),
+        "modeled_rush_plus_other": round(sum(clipped_rush) + rush_other, 4),
+        "modeled_target_plus_other": round(sum(clipped_tgt) + tgt_other, 4),
+        "ok": (
+            rush_other >= 0.0
+            and tgt_other >= 0.0
+            and rush >= 0.0
+            and tgt >= 0.0
+            and abs((sum(clipped_rush) + rush_other) - 1.0) < 1e-6
+            and abs((sum(clipped_tgt) + tgt_other) - 1.0) < 1e-6
+        ),
+    }
+
+
 def usage_rules_documentation() -> Dict[str, Any]:
     """Expose role / script / personnel tables for /status and ops dumps."""
     return script_matrix_documentation()

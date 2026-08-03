@@ -27,6 +27,7 @@ from src.services.nfl_season_engine.injury_paths import (
 )
 from src.services.nfl_season_engine.player_usage import (
     allocate_game_usage,
+    share_integrity_summary,
     usage_share_diagnostics,
 )
 from src.services.nfl_season_engine.production import (
@@ -107,8 +108,15 @@ def project_game_player_boxes(
     seed: int = 7,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
     injury_paths: Optional[Sequence[InjuryPath]] = None,
+    include_diagnostics: bool = False,
 ) -> GameBoxProjection:
-    """Monte Carlo player box projections for one future game."""
+    """Monte Carlo player box projections for one future game.
+
+    When ``include_diagnostics`` is True, attach structured usage shares,
+    script/personnel state, share-integrity checks, and injury availability
+    applied for the query week (kept off by default to avoid bloating
+    responses).
+    """
     n_replicates = max(50, int(n_replicates))
     game = _find_game(
         universe,
@@ -131,6 +139,7 @@ def project_game_player_boxes(
     meta: Dict[str, Dict[str, str]] = {}
     usage_role_by_key: Dict[str, str] = {}
     personnel_by_key: Dict[str, str] = {}
+    script_state_by_key: Dict[str, str] = {}
     # Neutral-script share dump for inspectability (pre-MC).
     home_roles = annotate_usage_roles(week_rosters.get(game.home_team, []))
     away_roles = annotate_usage_roles(week_rosters.get(game.away_team, []))
@@ -153,6 +162,7 @@ def project_game_player_boxes(
                 usage_role_by_key[u.player_key] = u.usage_role
             if u.personnel:
                 personnel_by_key[u.player_key] = u.personnel
+            script_state_by_key[u.player_key] = u.script
         for box in boxes:
             meta[box.player_key] = {
                 "player_key": box.player_key,
@@ -183,6 +193,7 @@ def project_game_player_boxes(
                 **info,
                 "usage_role": usage_role_by_key.get(key, ""),
                 "personnel": personnel_by_key.get(key, ""),
+                "script": script_state_by_key.get(key, ""),
                 "point_estimate": point,
                 "distributions": distributions,
             }
@@ -199,6 +210,12 @@ def project_game_player_boxes(
 
     players.sort(key=_sort_key, reverse=True)
 
+    on_schedule = any(
+        g.home_team == game.home_team
+        and g.away_team == game.away_team
+        and g.week == game.week
+        for g in universe.schedule
+    )
     notes = {
         **dict(universe.notes),
         "query_mode": "single_game_marginal_mc",
@@ -206,16 +223,33 @@ def project_game_player_boxes(
             "1=injury-adjusted strength → 2=game_script → 3=player_usage → 4=production "
             "(strengths frozen at query-time book + week injury shocks)"
         ),
-        "usage_share_dump_home": str(
-            usage_share_diagnostics(home_roles, script="neutral", pass_rate=0.58)
-        ),
-        "usage_share_dump_away": str(
-            usage_share_diagnostics(away_roles, script="neutral", pass_rate=0.58)
-        ),
+        "schedule_match": "on_loaded_schedule" if on_schedule else "synthetic_matchup",
     }
     if paths:
-        notes["injury_paths"] = str(injury_paths_to_dicts(paths))
-        notes["injury_adjustments"] = str(summarize_adjustments(adjustments))
+        notes["injury_path_count"] = str(len(paths))
+        notes["injury_active_adjustments"] = str(len(adjustments))
+
+    diagnostics: Dict[str, Any] = {}
+    if include_diagnostics:
+        diagnostics = {
+            "usage_shares_home": usage_share_diagnostics(
+                home_roles, script="neutral", pass_rate=0.58
+            ),
+            "usage_shares_away": usage_share_diagnostics(
+                away_roles, script="neutral", pass_rate=0.58
+            ),
+            "share_integrity_home": share_integrity_summary(
+                home_roles, script="neutral", pass_rate=0.58
+            ),
+            "share_integrity_away": share_integrity_summary(
+                away_roles, script="neutral", pass_rate=0.58
+            ),
+            "injury_paths": injury_paths_to_dicts(paths) if paths else [],
+            "injury_adjustments": summarize_adjustments(adjustments),
+            "game_script_summary": summarize_script_distribution(scripts),
+            "schedule_match": notes["schedule_match"],
+            "seed": seed,
+        }
 
     return GameBoxProjection(
         season=universe.season,
@@ -228,4 +262,5 @@ def project_game_player_boxes(
         game_script_summary=summarize_script_distribution(scripts),
         players=players,
         notes=notes,
+        diagnostics=diagnostics,
     )

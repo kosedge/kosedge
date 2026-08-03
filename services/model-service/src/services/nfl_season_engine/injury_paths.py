@@ -38,6 +38,7 @@ Paths outside the active week leave roles and strengths unchanged.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, replace
 from typing import (
     Any,
@@ -117,6 +118,58 @@ def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
 
 
+def normalize_team_code(team: str) -> str:
+    """Normalize common aliases (LAR→LA). Empty stays empty."""
+    t = str(team or "").strip().upper()
+    if t == "LAR":
+        return "LA"
+    return t
+
+
+def _name_tokens(name: str) -> Tuple[str, ...]:
+    """Tokenize player names for dual-form matching.
+
+    ``C.McCaffrey`` → ``("c", "mccaffrey")``;
+    ``Christian McCaffrey`` → ``("christian", "mccaffrey")``;
+    ``A.St. Brown`` → ``("a", "st", "brown")``.
+    """
+    cleaned = re.sub(r"[^a-z0-9\s.]", " ", (name or "").lower())
+    parts = [p for p in cleaned.replace(".", " ").split() if p]
+    return tuple(parts)
+
+
+def names_match(path_name: str, role_name: str) -> bool:
+    """True when path name and roster name refer to the same player.
+
+    Handles exact, substring, and initial.last ↔ First Last forms.
+    Last-name-only paths match when the last token equals the role last
+    token (callers should prefer unique-on-team disambiguation).
+    """
+    a = (path_name or "").strip().lower()
+    b = (role_name or "").strip().lower()
+    if not a or not b:
+        return False
+    if a == b or a in b or b in a:
+        return True
+    ta, tb = _name_tokens(a), _name_tokens(b)
+    if not ta or not tb:
+        return False
+    if ta[-1] != tb[-1]:
+        return False
+    # Last names match. Accept single-token last-name-only paths.
+    if len(ta) == 1 or len(tb) == 1:
+        return True
+    fa, fb = ta[0], tb[0]
+    if fa == fb:
+        return True
+    # Initial ↔ full first name (C ↔ Christian).
+    if len(fa) == 1 and fb.startswith(fa):
+        return True
+    if len(fb) == 1 and fa.startswith(fb):
+        return True
+    return False
+
+
 def parse_injury_paths(raw: Optional[Sequence[Mapping[str, Any]]]) -> List[InjuryPath]:
     """Parse API/CLI JSON dicts into ``InjuryPath`` rows. Empty/None → []."""
     if not raw:
@@ -132,7 +185,7 @@ def parse_injury_paths(raw: Optional[Sequence[Mapping[str, Any]]]) -> List[Injur
         severity = row.get("severity")
         out.append(
             InjuryPath(
-                team=str(row.get("team") or "").upper(),
+                team=normalize_team_code(str(row.get("team") or "")),
                 status=status,  # type: ignore[arg-type]
                 week_start=int(row["week_start"]),
                 week_end=int(row["week_end"]),
@@ -214,31 +267,50 @@ def player_offense_value(role: PlayerRole) -> float:
 
 
 def _matches_path(role: PlayerRole, path: InjuryPath) -> bool:
-    if path.team and role.team.upper() != path.team.upper():
+    path_team = normalize_team_code(path.team)
+    role_team = normalize_team_code(role.team)
+    if path_team and role_team != path_team:
         return False
     if path.player_key:
         return role.player_key == path.player_key
-    name = (path.player_name or "").strip().lower()
-    if not name:
+    if not (path.player_name or "").strip():
         return False
-    return role.player_name.strip().lower() == name or name in role.player_name.strip().lower()
+    return names_match(path.player_name, role.player_name)
 
 
 def _find_role(
     rosters: Mapping[str, Sequence[PlayerRole]],
     path: InjuryPath,
 ) -> Optional[PlayerRole]:
-    teams = [path.team] if path.team else list(rosters.keys())
+    path_team = normalize_team_code(path.team)
+    teams = [path_team] if path_team else list(rosters.keys())
+    # Prefer exact key, then dual-form name match on the declared team.
     for team in teams:
-        for role in rosters.get(team, []):
-            if _matches_path(role, path):
-                return role
+        team_roles = list(rosters.get(team, []))
+        if path.player_key:
+            for role in team_roles:
+                if role.player_key == path.player_key:
+                    return role
+        name_hits = [
+            role for role in team_roles if names_match(path.player_name, role.player_name)
+        ]
+        if len(name_hits) == 1:
+            return name_hits[0]
+        if len(name_hits) > 1 and path.player_name:
+            # Disambiguate: prefer deeper first-token agreement.
+            tokens = _name_tokens(path.player_name)
+            if tokens:
+                for role in name_hits:
+                    rt = _name_tokens(role.player_name)
+                    if rt and (rt[0] == tokens[0] or rt[0][:1] == tokens[0][:1]):
+                        return role
+            return name_hits[0]
     # Fallback: scan all teams by key/name when team omitted / mistyped.
     for roles in rosters.values():
         for role in roles:
             if path.player_key and role.player_key == path.player_key:
                 return role
-            if path.player_name and path.player_name.strip().lower() in role.player_name.strip().lower():
+            if path.player_name and names_match(path.player_name, role.player_name):
                 return role
     return None
 

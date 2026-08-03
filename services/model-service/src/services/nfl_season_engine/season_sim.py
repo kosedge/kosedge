@@ -15,6 +15,7 @@ that path's game boxes; strengths evolve and affect later weeks.
 
 from __future__ import annotations
 
+import math
 import random
 import statistics
 from collections import defaultdict
@@ -48,6 +49,36 @@ _STAT_KEYS = (
     "rec_tds",
     "games",
 )
+
+
+def _finite(values: Sequence[float]) -> List[float]:
+    """Drop NaN/Inf so season aggregates never explode."""
+    out: List[float] = []
+    for v in values:
+        try:
+            x = float(v)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(x):
+            out.append(x)
+    return out
+
+
+def _dist_stats(values: Sequence[float]) -> Dict[str, float]:
+    clean = _finite(values)
+    if not clean:
+        return {"mean": 0.0, "std": 0.0, "p10": 0.0, "p50": 0.0, "p90": 0.0}
+    ordered = sorted(clean)
+    n = len(ordered)
+    mean = statistics.fmean(clean)
+    std = statistics.pstdev(clean) if n > 1 else 0.0
+    return {
+        "mean": round(mean, 3),
+        "std": round(std, 3),
+        "p10": round(ordered[max(0, int(round((n - 1) * 0.10)))], 3),
+        "p50": round(ordered[max(0, int(round((n - 1) * 0.50)))], 3),
+        "p90": round(ordered[max(0, int(round((n - 1) * 0.90)))], 3),
+    }
 
 
 def _empty_player_accum(meta: Dict[str, str]) -> Dict[str, Any]:
@@ -145,8 +176,14 @@ def simulate_full_season(
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
     progress_every: Optional[int] = None,
     injury_paths: Optional[List[InjuryPath]] = None,
+    include_diagnostics: bool = True,
 ) -> SeasonSimResult:
-    """Run ``n_sims`` path-coherent season simulations."""
+    """Run ``n_sims`` path-coherent season simulations.
+
+    ``include_diagnostics`` (default True) attaches win-distribution / injury
+    summary fields. Set False for a leaner payload when embedding in larger
+    responses — core ``team_wins`` / ``player_season_totals`` are unchanged.
+    """
     n_sims = max(1, int(n_sims))
     rng = random.Random(seed)
     paths = list(injury_paths or [])
@@ -176,12 +213,12 @@ def simulate_full_season(
 
     team_wins: Dict[str, Dict[str, float]] = {}
     for team, samples in win_samples.items():
-        ordered = sorted(samples)
+        dist = _dist_stats([float(x) for x in samples])
         team_wins[team] = {
-            "mean": round(statistics.fmean(samples), 3),
-            "p10": float(ordered[max(0, int(round((len(ordered) - 1) * 0.10)))]),
-            "p50": float(ordered[max(0, int(round((len(ordered) - 1) * 0.50)))]),
-            "p90": float(ordered[max(0, int(round((len(ordered) - 1) * 0.90)))]),
+            "mean": dist["mean"],
+            "p10": dist["p10"],
+            "p50": dist["p50"],
+            "p90": dist["p90"],
         }
 
     player_rows: List[Dict[str, Any]] = []
@@ -189,15 +226,12 @@ def simulate_full_season(
         samples = player_samples[key]
         row: Dict[str, Any] = dict(meta)
         for stat in _STAT_KEYS:
-            vals = samples.get(stat) or [0.0]
-            ordered = sorted(vals)
-            mean = statistics.fmean(vals)
-            std = statistics.pstdev(vals) if len(vals) > 1 else 0.0
-            row[f"{stat}_mean"] = round(mean, 3)
-            row[f"{stat}_std"] = round(std, 3)
-            row[f"{stat}_p10"] = round(ordered[max(0, int(round((len(ordered) - 1) * 0.10)))], 3)
-            row[f"{stat}_p50"] = round(ordered[max(0, int(round((len(ordered) - 1) * 0.50)))], 3)
-            row[f"{stat}_p90"] = round(ordered[max(0, int(round((len(ordered) - 1) * 0.90)))], 3)
+            dist = _dist_stats(samples.get(stat) or [0.0])
+            row[f"{stat}_mean"] = dist["mean"]
+            row[f"{stat}_std"] = dist["std"]
+            row[f"{stat}_p10"] = dist["p10"]
+            row[f"{stat}_p50"] = dist["p50"]
+            row[f"{stat}_p90"] = dist["p90"]
         player_rows.append(row)
 
     # Rank skill leaders by position-primary volume for readability.
@@ -224,17 +258,14 @@ def simulate_full_season(
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied week-by-week inside sim"
         notes["injury_paths_detail"] = str(injury_paths_to_dicts(paths))
+    notes["schedule_note"] = notes.get(
+        "schedule_source",
+        universe.notes.get("schedule_source", "see universe.notes"),
+    )
 
-    return SeasonSimResult(
-        season=universe.season,
-        n_sims=n_sims,
-        games_per_season=sample_games,
-        engine_version=engine_version,
-        team_wins=team_wins,
-        player_season_totals=player_rows,
-        sample_path_game_count=sample_games,
-        notes=notes,
-        diagnostics={
+    diagnostics: Dict[str, Any] = {}
+    if include_diagnostics:
+        diagnostics = {
             "teams": len(universe.teams),
             "rostered_players": len(player_rows),
             "seed": seed,
@@ -245,5 +276,20 @@ def simulate_full_season(
             "win_mean_stdev": win_stdev,
             "injury_path_count": len(paths),
             "injury_paths": injury_paths_to_dicts(paths) if paths else [],
-        },
+            "finite_check": {
+                "win_means_finite": all(math.isfinite(v) for v in win_means),
+                "player_rows": len(player_rows),
+            },
+        }
+
+    return SeasonSimResult(
+        season=universe.season,
+        n_sims=n_sims,
+        games_per_season=sample_games,
+        engine_version=engine_version,
+        team_wins=team_wins,
+        player_season_totals=player_rows,
+        sample_path_game_count=sample_games,
+        notes=notes,
+        diagnostics=diagnostics,
     )
