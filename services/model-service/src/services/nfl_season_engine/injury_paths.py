@@ -562,6 +562,7 @@ def apply_injury_paths_for_week(
     paths: Sequence[InjuryPath],
     *,
     week: int,
+    strengths_only: bool = False,
 ) -> Tuple[
     Dict[str, List[PlayerRole]],
     Dict[str, TeamStrengthState],
@@ -572,11 +573,11 @@ def apply_injury_paths_for_week(
     Returns adjusted roster book, temporary strength book (copy + shocks),
     and inspectable adjustment records. Callers should use these for the
     game's Layers 2–4, then evolve the *unshocked* path strength book.
+
+    When ``strengths_only=True`` (survivor team W/L paths), skip roster
+    deep-copy + usage reallocation and only apply Layer-1 offense / pass
+    nudges. Rosters returned are shallow references to the input lists.
     """
-    # Deep-copy roles into mutable team lists.
-    adj_rosters: Dict[str, List[PlayerRole]] = {
-        team: list(roles) for team, roles in rosters.items()
-    }
     adj_strengths: Dict[str, TeamStrengthState] = {
         team: state.copy() for team, state in strengths.items()
     }
@@ -585,7 +586,71 @@ def apply_injury_paths_for_week(
     pass_nudges: Dict[str, float] = {t: 0.0 for t in adj_strengths}
 
     if not paths:
+        if strengths_only:
+            return {}, adj_strengths, adjustments
+        adj_rosters = {team: list(roles) for team, roles in rosters.items()}
         return adj_rosters, adj_strengths, adjustments
+
+    if strengths_only:
+        # Strength shocks only — no roster copy / usage reallocation.
+        for path in paths:
+            avail = availability_for_week(path, week)
+            if avail >= 1.0 - 1e-12:
+                continue
+            role = _find_role(rosters, path)
+            if role is None:
+                adjustments.append(
+                    AvailabilityAdjustment(
+                        player_key=path.player_key,
+                        player_name=path.player_name,
+                        team=path.team,
+                        week=week,
+                        status=path.status,
+                        availability=avail,
+                        offense_delta=0.0,
+                        freed_target_share=0.0,
+                        freed_rush_share=0.0,
+                        realloc_notes="player_not_found_on_roster",
+                    )
+                )
+                continue
+            team = role.team
+            missing = 1.0 - avail
+            offense_delta = -player_offense_value(role) * missing
+            offense_deltas[team] = offense_deltas.get(team, 0.0) + offense_delta
+            if role.position == "RB" and role.depth_order <= 2:
+                pass_nudges[team] = pass_nudges.get(team, 0.0) + 0.025 * missing
+            elif role.position == "WR" and role.depth_order == 1:
+                pass_nudges[team] = pass_nudges.get(team, 0.0) - 0.015 * missing
+            elif role.position == "QB" and role.depth_order == 1:
+                pass_nudges[team] = pass_nudges.get(team, 0.0) - 0.02 * missing
+            adjustments.append(
+                AvailabilityAdjustment(
+                    player_key=role.player_key,
+                    player_name=role.player_name,
+                    team=team,
+                    week=week,
+                    status=path.status,
+                    availability=round(avail, 4),
+                    offense_delta=round(offense_delta, 5),
+                    freed_target_share=round(max(0.0, role.target_share) * missing, 5),
+                    freed_rush_share=round(max(0.0, role.rush_share) * missing, 5),
+                    realloc_notes="strengths_only_skip_usage_realloc",
+                )
+            )
+        for team, delta in offense_deltas.items():
+            if abs(delta) < 1e-12 and abs(pass_nudges.get(team, 0.0)) < 1e-12:
+                continue
+            capped = _clamp(delta, -MAX_OFFENSE_SHOCK, MAX_OFFENSE_SHOCK)
+            adj_strengths[team] = apply_strength_shock(
+                adj_strengths[team],
+                offense_delta=capped,
+                pass_rate_nudge=pass_nudges.get(team, 0.0),
+            )
+        return {}, adj_strengths, adjustments
+
+    # Full path: deep-copy roles + usage reallocation (Layers 1 + 3).
+    adj_rosters = {team: list(roles) for team, roles in rosters.items()}
 
     for path in paths:
         avail = availability_for_week(path, week)

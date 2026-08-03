@@ -1,0 +1,3182 @@
+{
+  "season": 2026,
+  "week": 5,
+  "n_sims": 400,
+  "engine_version": "nfl-season-engine-v1.4-survivor",
+  "already_used": [
+    "KC",
+    "BUF"
+  ],
+  "ranked_picks": [
+    {
+      "team": "ARI",
+      "week": 5,
+      "win_rate": 0.645,
+      "win_prob": 0.645,
+      "wins_in_sims": 258,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4092,
+      "future_max_wp": 0.6275,
+      "premium_spots": 0,
+      "future_value": 0.4242,
+      "save_score": 0.4242,
+      "pick_now_score": 0.4777,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4275
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 8,
+          "win_rate": 0.48
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3825
+        },
+        {
+          "week": 10,
+          "win_rate": 0.3925
+        },
+        {
+          "week": 11,
+          "win_rate": 0.3525
+        },
+        {
+          "week": 12,
+          "win_rate": 0.3175
+        },
+        {
+          "week": 13,
+          "win_rate": 0.38
+        },
+        {
+          "week": 14,
+          "win_rate": 0.435
+        },
+        {
+          "week": 15,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 16,
+          "win_rate": 0.2525
+        },
+        {
+          "week": 17,
+          "win_rate": 0.45
+        }
+      ],
+      "opponent": "CAR",
+      "home_away": "home",
+      "game_id": "2026-W05-CAR@ARI-65",
+      "plays_this_week": true
+    },
+    {
+      "team": "DEN",
+      "week": 5,
+      "win_rate": 0.6825,
+      "win_prob": 0.6825,
+      "wins_in_sims": 273,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5275,
+      "future_max_wp": 0.715,
+      "premium_spots": 1,
+      "future_value": 0.564,
+      "save_score": 0.564,
+      "pick_now_score": 0.4442,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5225
+        },
+        {
+          "week": 7,
+          "win_rate": 0.41
+        },
+        {
+          "week": 8,
+          "win_rate": 0.535
+        },
+        {
+          "week": 9,
+          "win_rate": 0.595
+        },
+        {
+          "week": 10,
+          "win_rate": 0.6075
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4225
+        },
+        {
+          "week": 12,
+          "win_rate": 0.57
+        },
+        {
+          "week": 13,
+          "win_rate": 0.355
+        },
+        {
+          "week": 14,
+          "win_rate": 0.46
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4725
+        },
+        {
+          "week": 16,
+          "win_rate": 0.715
+        },
+        {
+          "week": 17,
+          "win_rate": 0.665
+        }
+      ],
+      "opponent": "TEN",
+      "home_away": "home",
+      "game_id": "2026-W05-TEN@DEN-70",
+      "plays_this_week": true
+    },
+    {
+      "team": "LV",
+      "week": 5,
+      "win_rate": 0.5575,
+      "win_prob": 0.5575,
+      "wins_in_sims": 223,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3998,
+      "future_max_wp": 0.5225,
+      "premium_spots": 0,
+      "future_value": 0.3828,
+      "save_score": 0.3828,
+      "pick_now_score": 0.401,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5225
+        },
+        {
+          "week": 7,
+          "win_rate": 0.355
+        },
+        {
+          "week": 8,
+          "win_rate": 0.3825
+        },
+        {
+          "week": 9,
+          "win_rate": 0.4525
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 11,
+          "win_rate": 0.34
+        },
+        {
+          "week": 12,
+          "win_rate": 0.495
+        },
+        {
+          "week": 13,
+          "win_rate": 0.36
+        },
+        {
+          "week": 14,
+          "win_rate": 0.32
+        },
+        {
+          "week": 15,
+          "win_rate": 0.345
+        },
+        {
+          "week": 16,
+          "win_rate": 0.29
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5225
+        }
+      ],
+      "opponent": "NE",
+      "home_away": "home",
+      "game_id": "2026-W05-NE@LV-79",
+      "plays_this_week": true
+    },
+    {
+      "team": "PIT",
+      "week": 5,
+      "win_rate": 0.6025,
+      "win_prob": 0.6025,
+      "wins_in_sims": 241,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5242,
+      "future_max_wp": 0.635,
+      "premium_spots": 0,
+      "future_value": 0.4843,
+      "save_score": 0.4843,
+      "pick_now_score": 0.3924,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4275
+        },
+        {
+          "week": 7,
+          "win_rate": 0.44
+        },
+        {
+          "week": 8,
+          "win_rate": 0.5625
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 10,
+          "win_rate": 0.615
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5
+        },
+        {
+          "week": 13,
+          "win_rate": 0.565
+        },
+        {
+          "week": 14,
+          "win_rate": 0.58
+        },
+        {
+          "week": 15,
+          "win_rate": 0.415
+        },
+        {
+          "week": 16,
+          "win_rate": 0.635
+        },
+        {
+          "week": 17,
+          "win_rate": 0.52
+        }
+      ],
+      "opponent": "IND",
+      "home_away": "away",
+      "game_id": "2026-W05-PIT@IND-74",
+      "plays_this_week": true
+    },
+    {
+      "team": "LAC",
+      "week": 5,
+      "win_rate": 0.6475,
+      "win_prob": 0.6475,
+      "wins_in_sims": 259,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5533,
+      "future_max_wp": 0.7625,
+      "premium_spots": 1,
+      "future_value": 0.5935,
+      "save_score": 0.5935,
+      "pick_now_score": 0.3898,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.555
+        },
+        {
+          "week": 7,
+          "win_rate": 0.56
+        },
+        {
+          "week": 8,
+          "win_rate": 0.36
+        },
+        {
+          "week": 9,
+          "win_rate": 0.7625
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5925
+        },
+        {
+          "week": 11,
+          "win_rate": 0.46
+        },
+        {
+          "week": 12,
+          "win_rate": 0.605
+        },
+        {
+          "week": 13,
+          "win_rate": 0.6725
+        },
+        {
+          "week": 14,
+          "win_rate": 0.54
+        },
+        {
+          "week": 15,
+          "win_rate": 0.545
+        },
+        {
+          "week": 16,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4
+        }
+      ],
+      "opponent": "NO",
+      "home_away": "home",
+      "game_id": "2026-W05-NO@LAC-78",
+      "plays_this_week": true
+    },
+    {
+      "team": "LA",
+      "week": 5,
+      "win_rate": 0.605,
+      "win_prob": 0.605,
+      "wins_in_sims": 242,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5058,
+      "future_max_wp": 0.7025,
+      "premium_spots": 1,
+      "future_value": 0.5488,
+      "save_score": 0.5488,
+      "pick_now_score": 0.368,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.3475
+        },
+        {
+          "week": 7,
+          "win_rate": 0.5375
+        },
+        {
+          "week": 8,
+          "win_rate": 0.47
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 10,
+          "win_rate": 0.375
+        },
+        {
+          "week": 11,
+          "win_rate": 0.7025
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4175
+        },
+        {
+          "week": 13,
+          "win_rate": 0.47
+        },
+        {
+          "week": 14,
+          "win_rate": 0.45
+        },
+        {
+          "week": 15,
+          "win_rate": 0.465
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6575
+        },
+        {
+          "week": 17,
+          "win_rate": 0.55
+        }
+      ],
+      "opponent": "NYG",
+      "home_away": "home",
+      "game_id": "2026-W05-NYG@LA-77",
+      "plays_this_week": true
+    },
+    {
+      "team": "PHI",
+      "week": 5,
+      "win_rate": 0.62,
+      "win_prob": 0.62,
+      "wins_in_sims": 248,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.6106,
+      "future_max_wp": 0.775,
+      "premium_spots": 1,
+      "future_value": 0.6266,
+      "save_score": 0.6266,
+      "pick_now_score": 0.339,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.6525
+        },
+        {
+          "week": 7,
+          "win_rate": 0.645
+        },
+        {
+          "week": 8,
+          "win_rate": 0.5775
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6475
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5975
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5975
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4425
+        },
+        {
+          "week": 13,
+          "win_rate": 0.775
+        },
+        {
+          "week": 14,
+          "win_rate": 0.6
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4825
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6575
+        },
+        {
+          "week": 17,
+          "win_rate": 0.6525
+        }
+      ],
+      "opponent": "JAX",
+      "home_away": "away",
+      "game_id": "2026-W05-PHI@JAX-75",
+      "plays_this_week": true
+    },
+    {
+      "team": "DET",
+      "week": 5,
+      "win_rate": 0.63,
+      "win_prob": 0.63,
+      "wins_in_sims": 252,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.6113,
+      "future_max_wp": 0.7075,
+      "premium_spots": 2,
+      "future_value": 0.6532,
+      "save_score": 0.6532,
+      "pick_now_score": 0.3379,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.6325
+        },
+        {
+          "week": 7,
+          "win_rate": 0.505
+        },
+        {
+          "week": 8,
+          "win_rate": 0.7075
+        },
+        {
+          "week": 9,
+          "win_rate": 0.605
+        },
+        {
+          "week": 10,
+          "win_rate": 0.515
+        },
+        {
+          "week": 11,
+          "win_rate": 0.6475
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5325
+        },
+        {
+          "week": 13,
+          "win_rate": 0.7
+        },
+        {
+          "week": 14,
+          "win_rate": 0.55
+        },
+        {
+          "week": 15,
+          "win_rate": 0.655
+        },
+        {
+          "week": 16,
+          "win_rate": 0.59
+        },
+        {
+          "week": 17,
+          "win_rate": 0.695
+        }
+      ],
+      "opponent": "TB",
+      "home_away": "home",
+      "game_id": "2026-W05-TB@DET-71",
+      "plays_this_week": true
+    },
+    {
+      "team": "ATL",
+      "week": 5,
+      "win_rate": 0.535,
+      "win_prob": 0.535,
+      "wins_in_sims": 214,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4788,
+      "future_max_wp": 0.64,
+      "premium_spots": 0,
+      "future_value": 0.4634,
+      "save_score": 0.4634,
+      "pick_now_score": 0.3321,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4775
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 8,
+          "win_rate": 0.6
+        },
+        {
+          "week": 9,
+          "win_rate": 0.33
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4075
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4325
+        },
+        {
+          "week": 12,
+          "win_rate": 0.64
+        },
+        {
+          "week": 13,
+          "win_rate": 0.585
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4675
+        },
+        {
+          "week": 16,
+          "win_rate": 0.505
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4975
+        }
+      ],
+      "opponent": "CLE",
+      "home_away": "away",
+      "game_id": "2026-W05-ATL@CLE-68",
+      "plays_this_week": true
+    },
+    {
+      "team": "MIA",
+      "week": 5,
+      "win_rate": 0.535,
+      "win_prob": 0.535,
+      "wins_in_sims": 214,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.529,
+      "future_max_wp": 0.665,
+      "premium_spots": 0,
+      "future_value": 0.4972,
+      "save_score": 0.4972,
+      "pick_now_score": 0.3119,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 7,
+          "win_rate": 0.575
+        },
+        {
+          "week": 8,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 9,
+          "win_rate": 0.44
+        },
+        {
+          "week": 10,
+          "win_rate": 0.665
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5675
+        },
+        {
+          "week": 12,
+          "win_rate": 0.3525
+        },
+        {
+          "week": 13,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 14,
+          "win_rate": 0.5425
+        },
+        {
+          "week": 15,
+          "win_rate": 0.5275
+        },
+        {
+          "week": 16,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 17,
+          "win_rate": 0.6275
+        }
+      ],
+      "opponent": "MIN",
+      "home_away": "home",
+      "game_id": "2026-W05-MIN@MIA-80",
+      "plays_this_week": true
+    },
+    {
+      "team": "DAL",
+      "week": 5,
+      "win_rate": 0.6025,
+      "win_prob": 0.6025,
+      "wins_in_sims": 241,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5715,
+      "future_max_wp": 0.735,
+      "premium_spots": 3,
+      "future_value": 0.693,
+      "save_score": 0.693,
+      "pick_now_score": 0.2938,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4
+        },
+        {
+          "week": 7,
+          "win_rate": 0.735
+        },
+        {
+          "week": 8,
+          "win_rate": 0.48
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6175
+        },
+        {
+          "week": 10,
+          "win_rate": 0.485
+        },
+        {
+          "week": 11,
+          "win_rate": 0.445
+        },
+        {
+          "week": 12,
+          "win_rate": 0.71
+        },
+        {
+          "week": 13,
+          "win_rate": 0.53
+        },
+        {
+          "week": 14,
+          "win_rate": 0.68
+        },
+        {
+          "week": 15,
+          "win_rate": 0.505
+        },
+        {
+          "week": 16,
+          "win_rate": 0.7325
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5375
+        }
+      ],
+      "opponent": "WAS",
+      "home_away": "home",
+      "game_id": "2026-W05-WAS@DAL-69",
+      "plays_this_week": true
+    },
+    {
+      "team": "NE",
+      "week": 5,
+      "win_rate": 0.4425,
+      "win_prob": 0.4425,
+      "wins_in_sims": 177,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3856,
+      "future_max_wp": 0.5575,
+      "premium_spots": 0,
+      "future_value": 0.3879,
+      "save_score": 0.3879,
+      "pick_now_score": 0.2736,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.39
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4875
+        },
+        {
+          "week": 8,
+          "win_rate": 0.3775
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3725
+        },
+        {
+          "week": 10,
+          "win_rate": 0.305
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5575
+        },
+        {
+          "week": 12,
+          "win_rate": 0.36
+        },
+        {
+          "week": 13,
+          "win_rate": 0.275
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 15,
+          "win_rate": 0.435
+        },
+        {
+          "week": 16,
+          "win_rate": 0.285
+        },
+        {
+          "week": 17,
+          "win_rate": 0.38
+        }
+      ],
+      "opponent": "LV",
+      "home_away": "away",
+      "game_id": "2026-W05-NE@LV-79",
+      "plays_this_week": true
+    }
+  ],
+  "all_teams_week": [
+    {
+      "team": "DEN",
+      "week": 5,
+      "win_rate": 0.6825,
+      "win_prob": 0.6825,
+      "wins_in_sims": 273,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5275,
+      "future_max_wp": 0.715,
+      "premium_spots": 1,
+      "future_value": 0.564,
+      "save_score": 0.564,
+      "pick_now_score": 0.4442,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5225
+        },
+        {
+          "week": 7,
+          "win_rate": 0.41
+        },
+        {
+          "week": 8,
+          "win_rate": 0.535
+        },
+        {
+          "week": 9,
+          "win_rate": 0.595
+        },
+        {
+          "week": 10,
+          "win_rate": 0.6075
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4225
+        },
+        {
+          "week": 12,
+          "win_rate": 0.57
+        },
+        {
+          "week": 13,
+          "win_rate": 0.355
+        },
+        {
+          "week": 14,
+          "win_rate": 0.46
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4725
+        },
+        {
+          "week": 16,
+          "win_rate": 0.715
+        },
+        {
+          "week": 17,
+          "win_rate": 0.665
+        }
+      ],
+      "opponent": "TEN",
+      "home_away": "home",
+      "game_id": "2026-W05-TEN@DEN-70",
+      "plays_this_week": true
+    },
+    {
+      "team": "KC",
+      "week": 5,
+      "win_rate": 0.6725,
+      "win_prob": 0.6725,
+      "wins_in_sims": 269,
+      "n_sims": 400,
+      "remaining": false,
+      "already_used": true,
+      "future_avg_wp": 0.6296,
+      "future_max_wp": 0.7475,
+      "premium_spots": 4,
+      "future_value": 0.7264,
+      "save_score": 0.7264,
+      "pick_now_score": 0.3499,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5725
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4925
+        },
+        {
+          "week": 8,
+          "win_rate": 0.7275
+        },
+        {
+          "week": 9,
+          "win_rate": 0.67
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4775
+        },
+        {
+          "week": 11,
+          "win_rate": 0.725
+        },
+        {
+          "week": 12,
+          "win_rate": 0.6475
+        },
+        {
+          "week": 13,
+          "win_rate": 0.645
+        },
+        {
+          "week": 14,
+          "win_rate": 0.5325
+        },
+        {
+          "week": 15,
+          "win_rate": 0.7175
+        },
+        {
+          "week": 16,
+          "win_rate": 0.7475
+        },
+        {
+          "week": 17,
+          "win_rate": 0.6
+        }
+      ],
+      "opponent": "NYJ",
+      "home_away": "home",
+      "game_id": "2026-W05-NYJ@KC-76",
+      "plays_this_week": true
+    },
+    {
+      "team": "LAC",
+      "week": 5,
+      "win_rate": 0.6475,
+      "win_prob": 0.6475,
+      "wins_in_sims": 259,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5533,
+      "future_max_wp": 0.7625,
+      "premium_spots": 1,
+      "future_value": 0.5935,
+      "save_score": 0.5935,
+      "pick_now_score": 0.3898,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.555
+        },
+        {
+          "week": 7,
+          "win_rate": 0.56
+        },
+        {
+          "week": 8,
+          "win_rate": 0.36
+        },
+        {
+          "week": 9,
+          "win_rate": 0.7625
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5925
+        },
+        {
+          "week": 11,
+          "win_rate": 0.46
+        },
+        {
+          "week": 12,
+          "win_rate": 0.605
+        },
+        {
+          "week": 13,
+          "win_rate": 0.6725
+        },
+        {
+          "week": 14,
+          "win_rate": 0.54
+        },
+        {
+          "week": 15,
+          "win_rate": 0.545
+        },
+        {
+          "week": 16,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4
+        }
+      ],
+      "opponent": "NO",
+      "home_away": "home",
+      "game_id": "2026-W05-NO@LAC-78",
+      "plays_this_week": true
+    },
+    {
+      "team": "ARI",
+      "week": 5,
+      "win_rate": 0.645,
+      "win_prob": 0.645,
+      "wins_in_sims": 258,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4092,
+      "future_max_wp": 0.6275,
+      "premium_spots": 0,
+      "future_value": 0.4242,
+      "save_score": 0.4242,
+      "pick_now_score": 0.4777,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4275
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 8,
+          "win_rate": 0.48
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3825
+        },
+        {
+          "week": 10,
+          "win_rate": 0.3925
+        },
+        {
+          "week": 11,
+          "win_rate": 0.3525
+        },
+        {
+          "week": 12,
+          "win_rate": 0.3175
+        },
+        {
+          "week": 13,
+          "win_rate": 0.38
+        },
+        {
+          "week": 14,
+          "win_rate": 0.435
+        },
+        {
+          "week": 15,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 16,
+          "win_rate": 0.2525
+        },
+        {
+          "week": 17,
+          "win_rate": 0.45
+        }
+      ],
+      "opponent": "CAR",
+      "home_away": "home",
+      "game_id": "2026-W05-CAR@ARI-65",
+      "plays_this_week": true
+    },
+    {
+      "team": "DET",
+      "week": 5,
+      "win_rate": 0.63,
+      "win_prob": 0.63,
+      "wins_in_sims": 252,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.6113,
+      "future_max_wp": 0.7075,
+      "premium_spots": 2,
+      "future_value": 0.6532,
+      "save_score": 0.6532,
+      "pick_now_score": 0.3379,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.6325
+        },
+        {
+          "week": 7,
+          "win_rate": 0.505
+        },
+        {
+          "week": 8,
+          "win_rate": 0.7075
+        },
+        {
+          "week": 9,
+          "win_rate": 0.605
+        },
+        {
+          "week": 10,
+          "win_rate": 0.515
+        },
+        {
+          "week": 11,
+          "win_rate": 0.6475
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5325
+        },
+        {
+          "week": 13,
+          "win_rate": 0.7
+        },
+        {
+          "week": 14,
+          "win_rate": 0.55
+        },
+        {
+          "week": 15,
+          "win_rate": 0.655
+        },
+        {
+          "week": 16,
+          "win_rate": 0.59
+        },
+        {
+          "week": 17,
+          "win_rate": 0.695
+        }
+      ],
+      "opponent": "TB",
+      "home_away": "home",
+      "game_id": "2026-W05-TB@DET-71",
+      "plays_this_week": true
+    },
+    {
+      "team": "PHI",
+      "week": 5,
+      "win_rate": 0.62,
+      "win_prob": 0.62,
+      "wins_in_sims": 248,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.6106,
+      "future_max_wp": 0.775,
+      "premium_spots": 1,
+      "future_value": 0.6266,
+      "save_score": 0.6266,
+      "pick_now_score": 0.339,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.6525
+        },
+        {
+          "week": 7,
+          "win_rate": 0.645
+        },
+        {
+          "week": 8,
+          "win_rate": 0.5775
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6475
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5975
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5975
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4425
+        },
+        {
+          "week": 13,
+          "win_rate": 0.775
+        },
+        {
+          "week": 14,
+          "win_rate": 0.6
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4825
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6575
+        },
+        {
+          "week": 17,
+          "win_rate": 0.6525
+        }
+      ],
+      "opponent": "JAX",
+      "home_away": "away",
+      "game_id": "2026-W05-PHI@JAX-75",
+      "plays_this_week": true
+    },
+    {
+      "team": "BUF",
+      "week": 5,
+      "win_rate": 0.61,
+      "win_prob": 0.61,
+      "wins_in_sims": 244,
+      "n_sims": 400,
+      "remaining": false,
+      "already_used": true,
+      "future_avg_wp": 0.6231,
+      "future_max_wp": 0.74,
+      "premium_spots": 2,
+      "future_value": 0.6706,
+      "save_score": 0.6706,
+      "pick_now_score": 0.3069,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.6925
+        },
+        {
+          "week": 7,
+          "win_rate": 0.59
+        },
+        {
+          "week": 8,
+          "win_rate": 0.6375
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6225
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5225
+        },
+        {
+          "week": 11,
+          "win_rate": 0.54
+        },
+        {
+          "week": 12,
+          "win_rate": 0.6475
+        },
+        {
+          "week": 13,
+          "win_rate": 0.725
+        },
+        {
+          "week": 14,
+          "win_rate": 0.74
+        },
+        {
+          "week": 15,
+          "win_rate": 0.5175
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6425
+        },
+        {
+          "week": 17,
+          "win_rate": 0.6
+        }
+      ],
+      "opponent": "CHI",
+      "home_away": "away",
+      "game_id": "2026-W05-BUF@CHI-66",
+      "plays_this_week": true
+    },
+    {
+      "team": "LA",
+      "week": 5,
+      "win_rate": 0.605,
+      "win_prob": 0.605,
+      "wins_in_sims": 242,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5058,
+      "future_max_wp": 0.7025,
+      "premium_spots": 1,
+      "future_value": 0.5488,
+      "save_score": 0.5488,
+      "pick_now_score": 0.368,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.3475
+        },
+        {
+          "week": 7,
+          "win_rate": 0.5375
+        },
+        {
+          "week": 8,
+          "win_rate": 0.47
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 10,
+          "win_rate": 0.375
+        },
+        {
+          "week": 11,
+          "win_rate": 0.7025
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4175
+        },
+        {
+          "week": 13,
+          "win_rate": 0.47
+        },
+        {
+          "week": 14,
+          "win_rate": 0.45
+        },
+        {
+          "week": 15,
+          "win_rate": 0.465
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6575
+        },
+        {
+          "week": 17,
+          "win_rate": 0.55
+        }
+      ],
+      "opponent": "NYG",
+      "home_away": "home",
+      "game_id": "2026-W05-NYG@LA-77",
+      "plays_this_week": true
+    },
+    {
+      "team": "PIT",
+      "week": 5,
+      "win_rate": 0.6025,
+      "win_prob": 0.6025,
+      "wins_in_sims": 241,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5242,
+      "future_max_wp": 0.635,
+      "premium_spots": 0,
+      "future_value": 0.4843,
+      "save_score": 0.4843,
+      "pick_now_score": 0.3924,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4275
+        },
+        {
+          "week": 7,
+          "win_rate": 0.44
+        },
+        {
+          "week": 8,
+          "win_rate": 0.5625
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 10,
+          "win_rate": 0.615
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5
+        },
+        {
+          "week": 13,
+          "win_rate": 0.565
+        },
+        {
+          "week": 14,
+          "win_rate": 0.58
+        },
+        {
+          "week": 15,
+          "win_rate": 0.415
+        },
+        {
+          "week": 16,
+          "win_rate": 0.635
+        },
+        {
+          "week": 17,
+          "win_rate": 0.52
+        }
+      ],
+      "opponent": "IND",
+      "home_away": "away",
+      "game_id": "2026-W05-PIT@IND-74",
+      "plays_this_week": true
+    },
+    {
+      "team": "DAL",
+      "week": 5,
+      "win_rate": 0.6025,
+      "win_prob": 0.6025,
+      "wins_in_sims": 241,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5715,
+      "future_max_wp": 0.735,
+      "premium_spots": 3,
+      "future_value": 0.693,
+      "save_score": 0.693,
+      "pick_now_score": 0.2938,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4
+        },
+        {
+          "week": 7,
+          "win_rate": 0.735
+        },
+        {
+          "week": 8,
+          "win_rate": 0.48
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6175
+        },
+        {
+          "week": 10,
+          "win_rate": 0.485
+        },
+        {
+          "week": 11,
+          "win_rate": 0.445
+        },
+        {
+          "week": 12,
+          "win_rate": 0.71
+        },
+        {
+          "week": 13,
+          "win_rate": 0.53
+        },
+        {
+          "week": 14,
+          "win_rate": 0.68
+        },
+        {
+          "week": 15,
+          "win_rate": 0.505
+        },
+        {
+          "week": 16,
+          "win_rate": 0.7325
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5375
+        }
+      ],
+      "opponent": "WAS",
+      "home_away": "home",
+      "game_id": "2026-W05-WAS@DAL-69",
+      "plays_this_week": true
+    },
+    {
+      "team": "HOU",
+      "week": 5,
+      "win_rate": 0.5875,
+      "win_prob": 0.5875,
+      "wins_in_sims": 235,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5777,
+      "future_max_wp": 0.7525,
+      "premium_spots": 3,
+      "future_value": 0.7022,
+      "save_score": 0.7022,
+      "pick_now_score": 0.2725,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4875
+        },
+        {
+          "week": 7,
+          "win_rate": 0.66
+        },
+        {
+          "week": 8,
+          "win_rate": 0.44
+        },
+        {
+          "week": 9,
+          "win_rate": 0.7375
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4675
+        },
+        {
+          "week": 11,
+          "win_rate": 0.555
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4675
+        },
+        {
+          "week": 13,
+          "win_rate": 0.62
+        },
+        {
+          "week": 14,
+          "win_rate": 0.7525
+        },
+        {
+          "week": 15,
+          "win_rate": 0.535
+        },
+        {
+          "week": 16,
+          "win_rate": 0.71
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5
+        }
+      ],
+      "opponent": "SEA",
+      "home_away": "home",
+      "game_id": "2026-W05-SEA@HOU-73",
+      "plays_this_week": true
+    },
+    {
+      "team": "SF",
+      "week": 5,
+      "win_rate": 0.5625,
+      "win_prob": 0.5625,
+      "wins_in_sims": 225,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.6144,
+      "future_max_wp": 0.8075,
+      "premium_spots": 2,
+      "future_value": 0.6898,
+      "save_score": 0.6898,
+      "pick_now_score": 0.2469,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.675
+        },
+        {
+          "week": 7,
+          "win_rate": 0.5075
+        },
+        {
+          "week": 8,
+          "win_rate": 0.64
+        },
+        {
+          "week": 9,
+          "win_rate": 0.56
+        },
+        {
+          "week": 10,
+          "win_rate": 0.695
+        },
+        {
+          "week": 11,
+          "win_rate": 0.715
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5575
+        },
+        {
+          "week": 13,
+          "win_rate": 0.5825
+        },
+        {
+          "week": 14,
+          "win_rate": 0.5625
+        },
+        {
+          "week": 15,
+          "win_rate": 0.6275
+        },
+        {
+          "week": 16,
+          "win_rate": 0.4425
+        },
+        {
+          "week": 17,
+          "win_rate": 0.8075
+        }
+      ],
+      "opponent": "GB",
+      "home_away": "away",
+      "game_id": "2026-W05-SF@GB-72",
+      "plays_this_week": true
+    },
+    {
+      "team": "LV",
+      "week": 5,
+      "win_rate": 0.5575,
+      "win_prob": 0.5575,
+      "wins_in_sims": 223,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3998,
+      "future_max_wp": 0.5225,
+      "premium_spots": 0,
+      "future_value": 0.3828,
+      "save_score": 0.3828,
+      "pick_now_score": 0.401,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5225
+        },
+        {
+          "week": 7,
+          "win_rate": 0.355
+        },
+        {
+          "week": 8,
+          "win_rate": 0.3825
+        },
+        {
+          "week": 9,
+          "win_rate": 0.4525
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 11,
+          "win_rate": 0.34
+        },
+        {
+          "week": 12,
+          "win_rate": 0.495
+        },
+        {
+          "week": 13,
+          "win_rate": 0.36
+        },
+        {
+          "week": 14,
+          "win_rate": 0.32
+        },
+        {
+          "week": 15,
+          "win_rate": 0.345
+        },
+        {
+          "week": 16,
+          "win_rate": 0.29
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5225
+        }
+      ],
+      "opponent": "NE",
+      "home_away": "home",
+      "game_id": "2026-W05-NE@LV-79",
+      "plays_this_week": true
+    },
+    {
+      "team": "BAL",
+      "week": 5,
+      "win_rate": 0.55,
+      "win_prob": 0.55,
+      "wins_in_sims": 220,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.6144,
+      "future_max_wp": 0.72,
+      "premium_spots": 1,
+      "future_value": 0.6092,
+      "save_score": 0.6092,
+      "pick_now_score": 0.2694,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.6
+        },
+        {
+          "week": 7,
+          "win_rate": 0.495
+        },
+        {
+          "week": 8,
+          "win_rate": 0.56
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6875
+        },
+        {
+          "week": 10,
+          "win_rate": 0.625
+        },
+        {
+          "week": 11,
+          "win_rate": 0.66
+        },
+        {
+          "week": 12,
+          "win_rate": 0.59
+        },
+        {
+          "week": 13,
+          "win_rate": 0.64
+        },
+        {
+          "week": 14,
+          "win_rate": 0.6525
+        },
+        {
+          "week": 15,
+          "win_rate": 0.585
+        },
+        {
+          "week": 16,
+          "win_rate": 0.5575
+        },
+        {
+          "week": 17,
+          "win_rate": 0.72
+        }
+      ],
+      "opponent": "CIN",
+      "home_away": "away",
+      "game_id": "2026-W05-BAL@CIN-67",
+      "plays_this_week": true
+    },
+    {
+      "team": "ATL",
+      "week": 5,
+      "win_rate": 0.535,
+      "win_prob": 0.535,
+      "wins_in_sims": 214,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4788,
+      "future_max_wp": 0.64,
+      "premium_spots": 0,
+      "future_value": 0.4634,
+      "save_score": 0.4634,
+      "pick_now_score": 0.3321,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4775
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 8,
+          "win_rate": 0.6
+        },
+        {
+          "week": 9,
+          "win_rate": 0.33
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4075
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4325
+        },
+        {
+          "week": 12,
+          "win_rate": 0.64
+        },
+        {
+          "week": 13,
+          "win_rate": 0.585
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4675
+        },
+        {
+          "week": 16,
+          "win_rate": 0.505
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4975
+        }
+      ],
+      "opponent": "CLE",
+      "home_away": "away",
+      "game_id": "2026-W05-ATL@CLE-68",
+      "plays_this_week": true
+    },
+    {
+      "team": "MIA",
+      "week": 5,
+      "win_rate": 0.535,
+      "win_prob": 0.535,
+      "wins_in_sims": 214,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.529,
+      "future_max_wp": 0.665,
+      "premium_spots": 0,
+      "future_value": 0.4972,
+      "save_score": 0.4972,
+      "pick_now_score": 0.3119,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 7,
+          "win_rate": 0.575
+        },
+        {
+          "week": 8,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 9,
+          "win_rate": 0.44
+        },
+        {
+          "week": 10,
+          "win_rate": 0.665
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5675
+        },
+        {
+          "week": 12,
+          "win_rate": 0.3525
+        },
+        {
+          "week": 13,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 14,
+          "win_rate": 0.5425
+        },
+        {
+          "week": 15,
+          "win_rate": 0.5275
+        },
+        {
+          "week": 16,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 17,
+          "win_rate": 0.6275
+        }
+      ],
+      "opponent": "MIN",
+      "home_away": "home",
+      "game_id": "2026-W05-MIN@MIA-80",
+      "plays_this_week": true
+    },
+    {
+      "team": "CLE",
+      "week": 5,
+      "win_rate": 0.465,
+      "win_prob": 0.465,
+      "wins_in_sims": 186,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4485,
+      "future_max_wp": 0.6325,
+      "premium_spots": 0,
+      "future_value": 0.4456,
+      "save_score": 0.4456,
+      "pick_now_score": 0.2661,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.3075
+        },
+        {
+          "week": 7,
+          "win_rate": 0.54
+        },
+        {
+          "week": 8,
+          "win_rate": 0.52
+        },
+        {
+          "week": 9,
+          "win_rate": 0.405
+        },
+        {
+          "week": 10,
+          "win_rate": 0.46
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4675
+        },
+        {
+          "week": 12,
+          "win_rate": 0.3525
+        },
+        {
+          "week": 13,
+          "win_rate": 0.3275
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4575
+        },
+        {
+          "week": 15,
+          "win_rate": 0.565
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6325
+        },
+        {
+          "week": 17,
+          "win_rate": 0.3475
+        }
+      ],
+      "opponent": "ATL",
+      "home_away": "home",
+      "game_id": "2026-W05-ATL@CLE-68",
+      "plays_this_week": true
+    },
+    {
+      "team": "MIN",
+      "week": 5,
+      "win_rate": 0.465,
+      "win_prob": 0.465,
+      "wins_in_sims": 186,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5348,
+      "future_max_wp": 0.7175,
+      "premium_spots": 2,
+      "future_value": 0.6185,
+      "save_score": 0.6185,
+      "pick_now_score": 0.1797,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.61
+        },
+        {
+          "week": 7,
+          "win_rate": 0.7
+        },
+        {
+          "week": 8,
+          "win_rate": 0.4225
+        },
+        {
+          "week": 9,
+          "win_rate": 0.5625
+        },
+        {
+          "week": 10,
+          "win_rate": 0.515
+        },
+        {
+          "week": 11,
+          "win_rate": 0.605
+        },
+        {
+          "week": 12,
+          "win_rate": 0.41
+        },
+        {
+          "week": 13,
+          "win_rate": 0.7175
+        },
+        {
+          "week": 14,
+          "win_rate": 0.47
+        },
+        {
+          "week": 15,
+          "win_rate": 0.495
+        },
+        {
+          "week": 16,
+          "win_rate": 0.41
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5
+        }
+      ],
+      "opponent": "MIA",
+      "home_away": "away",
+      "game_id": "2026-W05-MIN@MIA-80",
+      "plays_this_week": true
+    },
+    {
+      "team": "CIN",
+      "week": 5,
+      "win_rate": 0.45,
+      "win_prob": 0.45,
+      "wins_in_sims": 180,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5617,
+      "future_max_wp": 0.66,
+      "premium_spots": 0,
+      "future_value": 0.5118,
+      "save_score": 0.5118,
+      "pick_now_score": 0.2085,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.66
+        },
+        {
+          "week": 7,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 8,
+          "win_rate": 0.52
+        },
+        {
+          "week": 9,
+          "win_rate": 0.395
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5325
+        },
+        {
+          "week": 11,
+          "win_rate": 0.6425
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5825
+        },
+        {
+          "week": 13,
+          "win_rate": 0.64
+        },
+        {
+          "week": 14,
+          "win_rate": 0.53
+        },
+        {
+          "week": 15,
+          "win_rate": 0.59
+        },
+        {
+          "week": 16,
+          "win_rate": 0.58
+        },
+        {
+          "week": 17,
+          "win_rate": 0.48
+        }
+      ],
+      "opponent": "BAL",
+      "home_away": "home",
+      "game_id": "2026-W05-BAL@CIN-67",
+      "plays_this_week": true
+    },
+    {
+      "team": "NE",
+      "week": 5,
+      "win_rate": 0.4425,
+      "win_prob": 0.4425,
+      "wins_in_sims": 177,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3856,
+      "future_max_wp": 0.5575,
+      "premium_spots": 0,
+      "future_value": 0.3879,
+      "save_score": 0.3879,
+      "pick_now_score": 0.2736,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.39
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4875
+        },
+        {
+          "week": 8,
+          "win_rate": 0.3775
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3725
+        },
+        {
+          "week": 10,
+          "win_rate": 0.305
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5575
+        },
+        {
+          "week": 12,
+          "win_rate": 0.36
+        },
+        {
+          "week": 13,
+          "win_rate": 0.275
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 15,
+          "win_rate": 0.435
+        },
+        {
+          "week": 16,
+          "win_rate": 0.285
+        },
+        {
+          "week": 17,
+          "win_rate": 0.38
+        }
+      ],
+      "opponent": "LV",
+      "home_away": "away",
+      "game_id": "2026-W05-NE@LV-79",
+      "plays_this_week": true
+    },
+    {
+      "team": "GB",
+      "week": 5,
+      "win_rate": 0.4375,
+      "win_prob": 0.4375,
+      "wins_in_sims": 175,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5583,
+      "future_max_wp": 0.6825,
+      "premium_spots": 0,
+      "future_value": 0.518,
+      "save_score": 0.518,
+      "pick_now_score": 0.1923,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.65
+        },
+        {
+          "week": 7,
+          "win_rate": 0.5975
+        },
+        {
+          "week": 8,
+          "win_rate": 0.3625
+        },
+        {
+          "week": 9,
+          "win_rate": 0.6225
+        },
+        {
+          "week": 10,
+          "win_rate": 0.54
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5775
+        },
+        {
+          "week": 12,
+          "win_rate": 0.6825
+        },
+        {
+          "week": 13,
+          "win_rate": 0.5625
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4675
+        },
+        {
+          "week": 15,
+          "win_rate": 0.455
+        },
+        {
+          "week": 16,
+          "win_rate": 0.5625
+        },
+        {
+          "week": 17,
+          "win_rate": 0.62
+        }
+      ],
+      "opponent": "SF",
+      "home_away": "home",
+      "game_id": "2026-W05-SF@GB-72",
+      "plays_this_week": true
+    },
+    {
+      "team": "SEA",
+      "week": 5,
+      "win_rate": 0.4125,
+      "win_prob": 0.4125,
+      "wins_in_sims": 165,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5231,
+      "future_max_wp": 0.6875,
+      "premium_spots": 0,
+      "future_value": 0.5022,
+      "save_score": 0.5022,
+      "pick_now_score": 0.1755,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.615
+        },
+        {
+          "week": 7,
+          "win_rate": 0.4625
+        },
+        {
+          "week": 8,
+          "win_rate": 0.6175
+        },
+        {
+          "week": 9,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 10,
+          "win_rate": 0.6875
+        },
+        {
+          "week": 11,
+          "win_rate": 0.48
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5
+        },
+        {
+          "week": 13,
+          "win_rate": 0.4175
+        },
+        {
+          "week": 14,
+          "win_rate": 0.605
+        },
+        {
+          "week": 15,
+          "win_rate": 0.5325
+        },
+        {
+          "week": 16,
+          "win_rate": 0.3575
+        },
+        {
+          "week": 17,
+          "win_rate": 0.565
+        }
+      ],
+      "opponent": "HOU",
+      "home_away": "away",
+      "game_id": "2026-W05-SEA@HOU-73",
+      "plays_this_week": true
+    },
+    {
+      "team": "IND",
+      "week": 5,
+      "win_rate": 0.3975,
+      "win_prob": 0.3975,
+      "wins_in_sims": 159,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4335,
+      "future_max_wp": 0.6025,
+      "premium_spots": 0,
+      "future_value": 0.4276,
+      "save_score": 0.4276,
+      "pick_now_score": 0.2015,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.325
+        },
+        {
+          "week": 7,
+          "win_rate": 0.6025
+        },
+        {
+          "week": 8,
+          "win_rate": 0.4
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3775
+        },
+        {
+          "week": 10,
+          "win_rate": 0.465
+        },
+        {
+          "week": 11,
+          "win_rate": 0.5325
+        },
+        {
+          "week": 12,
+          "win_rate": 0.43
+        },
+        {
+          "week": 13,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 14,
+          "win_rate": 0.565
+        },
+        {
+          "week": 15,
+          "win_rate": 0.2825
+        },
+        {
+          "week": 16,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 17,
+          "win_rate": 0.3725
+        }
+      ],
+      "opponent": "PIT",
+      "home_away": "home",
+      "game_id": "2026-W05-PIT@IND-74",
+      "plays_this_week": true
+    },
+    {
+      "team": "WAS",
+      "week": 5,
+      "win_rate": 0.3975,
+      "win_prob": 0.3975,
+      "wins_in_sims": 159,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.479,
+      "future_max_wp": 0.6775,
+      "premium_spots": 0,
+      "future_value": 0.4766,
+      "save_score": 0.4766,
+      "pick_now_score": 0.1749,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.3675
+        },
+        {
+          "week": 7,
+          "win_rate": 0.34
+        },
+        {
+          "week": 8,
+          "win_rate": 0.5925
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3725
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5875
+        },
+        {
+          "week": 11,
+          "win_rate": 0.395
+        },
+        {
+          "week": 12,
+          "win_rate": 0.6125
+        },
+        {
+          "week": 13,
+          "win_rate": 0.5075
+        },
+        {
+          "week": 14,
+          "win_rate": 0.42
+        },
+        {
+          "week": 15,
+          "win_rate": 0.3725
+        },
+        {
+          "week": 16,
+          "win_rate": 0.6775
+        },
+        {
+          "week": 17,
+          "win_rate": 0.5025
+        }
+      ],
+      "opponent": "DAL",
+      "home_away": "away",
+      "game_id": "2026-W05-WAS@DAL-69",
+      "plays_this_week": true
+    },
+    {
+      "team": "NYG",
+      "week": 5,
+      "win_rate": 0.395,
+      "win_prob": 0.395,
+      "wins_in_sims": 158,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3965,
+      "future_max_wp": 0.5375,
+      "premium_spots": 0,
+      "future_value": 0.3864,
+      "save_score": 0.3864,
+      "pick_now_score": 0.221,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4775
+        },
+        {
+          "week": 7,
+          "win_rate": 0.3
+        },
+        {
+          "week": 8,
+          "win_rate": 0.4975
+        },
+        {
+          "week": 9,
+          "win_rate": 0.455
+        },
+        {
+          "week": 10,
+          "win_rate": 0.385
+        },
+        {
+          "week": 11,
+          "win_rate": 0.285
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5375
+        },
+        {
+          "week": 13,
+          "win_rate": 0.415
+        },
+        {
+          "week": 14,
+          "win_rate": 0.26
+        },
+        {
+          "week": 15,
+          "win_rate": 0.4425
+        },
+        {
+          "week": 16,
+          "win_rate": 0.3675
+        },
+        {
+          "week": 17,
+          "win_rate": 0.335
+        }
+      ],
+      "opponent": "LA",
+      "home_away": "away",
+      "game_id": "2026-W05-NYG@LA-77",
+      "plays_this_week": true
+    },
+    {
+      "team": "CHI",
+      "week": 5,
+      "win_rate": 0.39,
+      "win_prob": 0.39,
+      "wins_in_sims": 156,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4521,
+      "future_max_wp": 0.5975,
+      "premium_spots": 0,
+      "future_value": 0.4352,
+      "save_score": 0.4352,
+      "pick_now_score": 0.188,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5725
+        },
+        {
+          "week": 7,
+          "win_rate": 0.46
+        },
+        {
+          "week": 8,
+          "win_rate": 0.465
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3775
+        },
+        {
+          "week": 10,
+          "win_rate": 0.535
+        },
+        {
+          "week": 11,
+          "win_rate": 0.275
+        },
+        {
+          "week": 12,
+          "win_rate": 0.395
+        },
+        {
+          "week": 13,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 14,
+          "win_rate": 0.5975
+        },
+        {
+          "week": 15,
+          "win_rate": 0.5575
+        },
+        {
+          "week": 16,
+          "win_rate": 0.3425
+        },
+        {
+          "week": 17,
+          "win_rate": 0.435
+        }
+      ],
+      "opponent": "BUF",
+      "home_away": "home",
+      "game_id": "2026-W05-BUF@CHI-66",
+      "plays_this_week": true
+    },
+    {
+      "team": "JAX",
+      "week": 5,
+      "win_rate": 0.38,
+      "win_prob": 0.38,
+      "wins_in_sims": 152,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.366,
+      "future_max_wp": 0.5225,
+      "premium_spots": 0,
+      "future_value": 0.3659,
+      "save_score": 0.3659,
+      "pick_now_score": 0.2167,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.385
+        },
+        {
+          "week": 7,
+          "win_rate": 0.3775
+        },
+        {
+          "week": 8,
+          "win_rate": 0.4075
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3125
+        },
+        {
+          "week": 10,
+          "win_rate": 0.5225
+        },
+        {
+          "week": 11,
+          "win_rate": 0.3575
+        },
+        {
+          "week": 12,
+          "win_rate": 0.29
+        },
+        {
+          "week": 13,
+          "win_rate": 0.3
+        },
+        {
+          "week": 14,
+          "win_rate": 0.2475
+        },
+        {
+          "week": 15,
+          "win_rate": 0.3725
+        },
+        {
+          "week": 16,
+          "win_rate": 0.3425
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4775
+        }
+      ],
+      "opponent": "PHI",
+      "home_away": "home",
+      "game_id": "2026-W05-PHI@JAX-75",
+      "plays_this_week": true
+    },
+    {
+      "team": "TB",
+      "week": 5,
+      "win_rate": 0.37,
+      "win_prob": 0.37,
+      "wins_in_sims": 148,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.5204,
+      "future_max_wp": 0.6675,
+      "premium_spots": 0,
+      "future_value": 0.4938,
+      "save_score": 0.4938,
+      "pick_now_score": 0.1327,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.5125
+        },
+        {
+          "week": 7,
+          "win_rate": 0.6225
+        },
+        {
+          "week": 8,
+          "win_rate": 0.53
+        },
+        {
+          "week": 9,
+          "win_rate": 0.5475
+        },
+        {
+          "week": 10,
+          "win_rate": 0.485
+        },
+        {
+          "week": 11,
+          "win_rate": 0.575
+        },
+        {
+          "week": 12,
+          "win_rate": 0.5375
+        },
+        {
+          "week": 13,
+          "win_rate": 0.435
+        },
+        {
+          "week": 14,
+          "win_rate": 0.4375
+        },
+        {
+          "week": 15,
+          "win_rate": 0.6675
+        },
+        {
+          "week": 16,
+          "win_rate": 0.495
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4
+        }
+      ],
+      "opponent": "DET",
+      "home_away": "away",
+      "game_id": "2026-W05-TB@DET-71",
+      "plays_this_week": true
+    },
+    {
+      "team": "CAR",
+      "week": 5,
+      "win_rate": 0.355,
+      "win_prob": 0.355,
+      "wins_in_sims": 142,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3396,
+      "future_max_wp": 0.505,
+      "premium_spots": 0,
+      "future_value": 0.3465,
+      "save_score": 0.3465,
+      "pick_now_score": 0.2006,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.34
+        },
+        {
+          "week": 7,
+          "win_rate": 0.265
+        },
+        {
+          "week": 8,
+          "win_rate": 0.2925
+        },
+        {
+          "week": 9,
+          "win_rate": 0.2625
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4775
+        },
+        {
+          "week": 11,
+          "win_rate": 0.2975
+        },
+        {
+          "week": 12,
+          "win_rate": 0.505
+        },
+        {
+          "week": 13,
+          "win_rate": 0.2825
+        },
+        {
+          "week": 14,
+          "win_rate": 0.475
+        },
+        {
+          "week": 15,
+          "win_rate": 0.32
+        },
+        {
+          "week": 16,
+          "win_rate": 0.365
+        },
+        {
+          "week": 17,
+          "win_rate": 0.1925
+        }
+      ],
+      "opponent": "ARI",
+      "home_away": "away",
+      "game_id": "2026-W05-CAR@ARI-65",
+      "plays_this_week": true
+    },
+    {
+      "team": "NO",
+      "week": 5,
+      "win_rate": 0.3525,
+      "win_prob": 0.3525,
+      "wins_in_sims": 141,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3977,
+      "future_max_wp": 0.525,
+      "premium_spots": 0,
+      "future_value": 0.3826,
+      "save_score": 0.3826,
+      "pick_now_score": 0.1758,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.4125
+        },
+        {
+          "week": 7,
+          "win_rate": 0.5125
+        },
+        {
+          "week": 8,
+          "win_rate": 0.5025
+        },
+        {
+          "week": 9,
+          "win_rate": 0.3525
+        },
+        {
+          "week": 10,
+          "win_rate": 0.3125
+        },
+        {
+          "week": 11,
+          "win_rate": 0.425
+        },
+        {
+          "week": 12,
+          "win_rate": 0.3875
+        },
+        {
+          "week": 13,
+          "win_rate": 0.36
+        },
+        {
+          "week": 14,
+          "win_rate": 0.525
+        },
+        {
+          "week": 15,
+          "win_rate": 0.41
+        },
+        {
+          "week": 16,
+          "win_rate": 0.2675
+        },
+        {
+          "week": 17,
+          "win_rate": 0.305
+        }
+      ],
+      "opponent": "LAC",
+      "home_away": "away",
+      "game_id": "2026-W05-NO@LAC-78",
+      "plays_this_week": true
+    },
+    {
+      "team": "NYJ",
+      "week": 5,
+      "win_rate": 0.3275,
+      "win_prob": 0.3275,
+      "wins_in_sims": 131,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.4854,
+      "future_max_wp": 0.68,
+      "premium_spots": 0,
+      "future_value": 0.4807,
+      "save_score": 0.4807,
+      "pick_now_score": 0.0954,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.445
+        },
+        {
+          "week": 7,
+          "win_rate": 0.425
+        },
+        {
+          "week": 8,
+          "win_rate": 0.6225
+        },
+        {
+          "week": 9,
+          "win_rate": 0.545
+        },
+        {
+          "week": 10,
+          "win_rate": 0.4025
+        },
+        {
+          "week": 11,
+          "win_rate": 0.52
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4625
+        },
+        {
+          "week": 13,
+          "win_rate": 0.4925
+        },
+        {
+          "week": 14,
+          "win_rate": 0.3475
+        },
+        {
+          "week": 15,
+          "win_rate": 0.68
+        },
+        {
+          "week": 16,
+          "win_rate": 0.42
+        },
+        {
+          "week": 17,
+          "win_rate": 0.4625
+        }
+      ],
+      "opponent": "KC",
+      "home_away": "away",
+      "game_id": "2026-W05-NYJ@KC-76",
+      "plays_this_week": true
+    },
+    {
+      "team": "TEN",
+      "week": 5,
+      "win_rate": 0.3175,
+      "win_prob": 0.3175,
+      "wins_in_sims": 127,
+      "n_sims": 400,
+      "remaining": true,
+      "already_used": false,
+      "future_avg_wp": 0.3377,
+      "future_max_wp": 0.4625,
+      "premium_spots": 0,
+      "future_value": 0.3307,
+      "save_score": 0.3307,
+      "pick_now_score": 0.1667,
+      "future_weeks_scored": 12,
+      "future_week_win_rates": [
+        {
+          "week": 6,
+          "win_rate": 0.35
+        },
+        {
+          "week": 7,
+          "win_rate": 0.3975
+        },
+        {
+          "week": 8,
+          "win_rate": 0.2725
+        },
+        {
+          "week": 9,
+          "win_rate": 0.2375
+        },
+        {
+          "week": 10,
+          "win_rate": 0.335
+        },
+        {
+          "week": 11,
+          "win_rate": 0.4425
+        },
+        {
+          "week": 12,
+          "win_rate": 0.4625
+        },
+        {
+          "week": 13,
+          "win_rate": 0.225
+        },
+        {
+          "week": 14,
+          "win_rate": 0.395
+        },
+        {
+          "week": 15,
+          "win_rate": 0.3325
+        },
+        {
+          "week": 16,
+          "win_rate": 0.3225
+        },
+        {
+          "week": 17,
+          "win_rate": 0.28
+        }
+      ],
+      "opponent": "DEN",
+      "home_away": "away",
+      "game_id": "2026-W05-TEN@DEN-70",
+      "plays_this_week": true
+    }
+  ],
+  "formula": {
+    "save_score": "0.50*future_avg_wp + 0.35*future_max_wp + 0.15*min(1, premium_spots/3); premium = future week WP >= 0.70",
+    "pick_now_score": "this_week_wp - 0.45*save_score + 0.10*(this_week_wp - future_avg_wp); high this-week WP + low unique future value \u2192 pick now",
+    "win_rate": "wins_in_week / n_sims (bye / missing game counts as non-win)"
+  },
+  "notes": {
+    "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
+    "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
+    "rosters": "Mixed: named demo skill cores for 5 teams; generic depth for others. Absolute usage shares + usage_role taxonomy (QB1/RB1/WR1\u2026).",
+    "calibration": "nfl-season-engine-cal-v1",
+    "cal_calibration_tag": "nfl-season-engine-cal-v1",
+    "cal_league_env": "PPG=21.8, HFA=1.05, score_sd=9.8, plays=63.0, pass_rate=0.58",
+    "cal_efficiency": "ypa=7.05, ypc=4.2, int_rate=0.018, pass_td_rate=0.041, rush_td_rate_rb=0.027",
+    "cal_usage": "Absolute target/rush shares with residual 'other' bucket (floor=0.08) \u2014 prevents sparse-roster inflation. v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix.",
+    "cal_survivor": "v1.4: team W/L season paths \u2192 week win rates + inspectable save_score / pick_now_score (see survivor.py FORMULA_NOTES).",
+    "cal_sources": "Recent NFL season shapes (2022\u20132024) + alignment with nfl_handicapping_framework HFA/stdev and box-score EFFICIENCY_CV\u22480.22. No fabricated player grades; DB baselines used when present.",
+    "survivor_mode": "team_wl_paths (Layers 1\u20132 + injury strength shocks; Layers 3\u20134 skipped for speed)",
+    "already_used": "KC,BUF"
+  },
+  "diagnostics": {
+    "seed": 42,
+    "teams": 32,
+    "max_week": 17,
+    "injury_path_count": 0,
+    "injury_paths": [],
+    "scoring_knobs": {
+      "premium_wp": 0.7,
+      "save_penalty": 0.45,
+      "edge_bonus": 0.1,
+      "save_weights": {
+        "future_avg_wp": 0.5,
+        "future_max_wp": 0.35,
+        "premium_frac": 0.15
+      },
+      "premium_spot_cap": 3.0
+    },
+    "remaining_teams_playing": 12,
+    "used_excluded_from_ranked": [
+      "KC",
+      "BUF"
+    ]
+  },
+  "mode": "demo",
+  "generated_at_utc": "2026-08-03T15:44:01.154992+00:00"
+}

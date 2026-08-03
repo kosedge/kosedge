@@ -26,8 +26,12 @@ from src.services.nfl_season_engine.usage_roles import (
 
 
 def test_engine_version_surfaces_deeper_usage() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.3")
-    assert "deeper-usage" in DEFAULT_SEASON_ENGINE_VERSION
+    # Deeper usage remains a capability; version tag moved to survivor in v1.4.
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "deeper-usage" in DEFAULT_SEASON_ENGINE_VERSION
+        or "survivor" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_role_ranks_wr1_gt_wr2_gt_wr3_targets_healthy() -> None:
@@ -186,7 +190,10 @@ def test_buf_kc_calibration_sanity_preserved() -> None:
         n_replicates=200,
         seed=2026,
     )
-    assert "deeper-usage" in proj.engine_version
+    assert (
+        "deeper-usage" in proj.engine_version
+        or "survivor" in proj.engine_version
+    )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])
     # No return of Cook 100+ rush / Rice 9-catch nonsense.

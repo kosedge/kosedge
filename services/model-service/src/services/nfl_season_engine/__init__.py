@@ -12,10 +12,15 @@ for specified week ranges before Layers 2–4 run. Layer 3 uses an explicit
 usage-role taxonomy (``usage_roles``) for base shares, script/personnel
 modifiers, and role-aware injury reallocation.
 
+Survivor pool outputs (``survivor``) run team W/L-only season paths and
+rank remaining picks for a target week with inspectable save / pick-now
+scores.
+
 Public entry points
 -------------------
 - ``simulate_full_season`` – N path-coherent season sims (~272 games each)
 - ``project_game_player_boxes`` – future-game player box distributions
+- ``evaluate_survivor`` – survivor week rankings + path value
 - ``build_demo_universe`` / ``load_universe_from_db`` – input builders
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
 
@@ -36,6 +41,11 @@ from src.services.nfl_season_engine.loaders import (
     load_universe_from_db,
 )
 from src.services.nfl_season_engine.season_sim import simulate_full_season
+from src.services.nfl_season_engine.survivor import (
+    SurvivorEvalResult,
+    evaluate_survivor,
+    week_win_rate_for_team,
+)
 from src.services.nfl_season_engine.types import (
     EngineUniverse,
     GameBoxProjection,
@@ -50,9 +60,12 @@ __all__ = [
     "GameBoxProjection",
     "InjuryPath",
     "SeasonSimResult",
+    "SurvivorEvalResult",
     "build_demo_universe",
+    "evaluate_survivor",
     "load_universe_from_db",
     "parse_injury_paths",
     "project_game_player_boxes",
     "simulate_full_season",
+    "week_win_rate_for_team",
 ]

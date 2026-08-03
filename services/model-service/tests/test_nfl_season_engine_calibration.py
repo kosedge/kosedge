@@ -22,12 +22,12 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 
 def test_engine_version_is_calibrated() -> None:
-    # v1.1 *-calibrated; v1.2 injury-shocks; v1.3 deeper-usage — cal tag persists.
+    # v1.1 *-calibrated; v1.2 injury; v1.3 deeper-usage; v1.4 survivor — cal tag persists.
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
     assert any(
         tag in DEFAULT_SEASON_ENGINE_VERSION
-        for tag in ("deeper-usage", "injury-shocks", "calibrated")
+        for tag in ("survivor", "deeper-usage", "injury-shocks", "calibrated")
     )
 
 

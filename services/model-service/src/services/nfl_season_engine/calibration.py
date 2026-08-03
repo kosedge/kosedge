@@ -19,8 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.3 deepens Layer 3 usage (role taxonomy, script matrix, role-aware injury realloc).
-ENGINE_VERSION = "nfl-season-engine-v1.3-deeper-usage"
+# v1.4 adds survivor-pool week/path evaluation on team W/L season paths.
+# Cal base + injury paths + deeper Layer-3 usage remain intact.
+ENGINE_VERSION = "nfl-season-engine-v1.4-survivor"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -272,6 +273,10 @@ def calibration_notes() -> Dict[str, str]:
             "Absolute target/rush shares with residual 'other' bucket "
             f"(floor={USAGE_OTHER_BUCKET_FLOOR}) — prevents sparse-roster inflation. "
             "v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix."
+        ),
+        "survivor": (
+            "v1.4: team W/L season paths → week win rates + inspectable "
+            "save_score / pick_now_score (see survivor.py FORMULA_NOTES)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

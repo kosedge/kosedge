@@ -10,6 +10,10 @@ python scripts/nfl/run_hierarchical_season_sim.py --demo --n-sims 50 --sample-ga
 python scripts/nfl/run_hierarchical_season_sim.py --demo --sample-game SEA@SF --week 6 \\
   --injury-paths '[{"player_name":"C.McCaffrey","team":"SF","status":"out","week_start":4,"week_end":8}]'
 
+# Survivor-pool week evaluation (also: scripts/nfl/run_survivor_evaluate.py)
+python scripts/nfl/run_hierarchical_season_sim.py --demo --survivor-week 5 \\
+  --already-used KC,BUF --n-sims 300
+
 # DB-backed universe when DATABASE_URL is set
 python scripts/nfl/run_hierarchical_season_sim.py --season 2026 --n-sims 100
 """
@@ -81,6 +85,17 @@ def main() -> None:
         help="JSON array/file of injury paths (optional; see injury_paths.py)",
     )
     parser.add_argument(
+        "--survivor-week",
+        type=int,
+        default=0,
+        help="If set, run survivor evaluation for this week (skips full player season sim)",
+    )
+    parser.add_argument(
+        "--already-used",
+        default="",
+        help="Comma-separated already-picked teams for --survivor-week (e.g. KC,BUF)",
+    )
+    parser.add_argument(
         "--out-dir",
         default="",
         help="Output directory (default data/ops/nfl-season-engine-<ts>)",
@@ -89,12 +104,14 @@ def main() -> None:
 
     from src.services.nfl_season_engine import (  # noqa: E402
         build_demo_universe,
+        evaluate_survivor,
         load_universe_from_db,
         project_game_player_boxes,
         simulate_full_season,
     )
 
     injury_paths = _load_injury_paths(args.injury_paths)
+    already_used = [p.strip().upper() for p in (args.already_used or "").split(",") if p.strip()]
 
     universe = None
     mode = "demo"
@@ -136,6 +153,39 @@ def main() -> None:
                 f"{p.status} W{p.week_start}-{p.week_end}"
             )
 
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "ops" / f"nfl-season-engine-{ts}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.survivor_week:
+        print(
+            f"Running survivor eval week={args.survivor_week} "
+            f"n_sims={args.n_sims} already_used={already_used or '(none)'}..."
+        )
+        survivor = evaluate_survivor(
+            universe,
+            week=args.survivor_week,
+            n_sims=args.n_sims,
+            seed=args.seed,
+            already_used=already_used,
+            injury_paths=injury_paths,
+            top_n=16,
+        )
+        payload = survivor.to_dict()
+        payload["mode"] = mode
+        payload["generated_at_utc"] = datetime.now(timezone.utc).isoformat()
+        _write_json(out_dir / "survivor_evaluate.json", payload)
+        print(f"engine_version={survivor.engine_version}")
+        print("Top ranked remaining picks:")
+        for i, row in enumerate(survivor.ranked_picks[:12], 1):
+            print(
+                f"  {i:2}. {row['team']:3} vs {row.get('opponent') or '?':3} "
+                f"wp={row['win_rate']:.3f} save={row['save_score']:.3f} "
+                f"pick_now={row['pick_now_score']:.3f}"
+            )
+        print(f"Wrote artifacts → {out_dir}")
+        return
+
     print(f"Running {args.n_sims} season paths...")
     season_result = simulate_full_season(
         universe,
@@ -160,10 +210,6 @@ def main() -> None:
         seed=args.seed + 1,
         injury_paths=injury_paths,
     )
-
-    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "ops" / f"nfl-season-engine-{ts}"
-    out_dir.mkdir(parents=True, exist_ok=True)
 
     team_rows = [
         {"team": team, **stats}
