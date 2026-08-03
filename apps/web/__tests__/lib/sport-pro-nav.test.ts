@@ -26,6 +26,9 @@ describe("sport-pro-nav", () => {
     expect(nflTools).toContain("Wall Chart");
     expect(nflTools).toContain("Fantasy Draft");
     expect(nflTools).toContain("Awards");
+    expect(nflTools).toContain("Season Model");
+    expect(nflTools).toContain("Game Boxes");
+    expect(nflTools).toContain("Survivor");
 
     for (const sport of SPORTS.filter((s) => s.key !== "nfl")) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
@@ -33,6 +36,8 @@ describe("sport-pro-nav", () => {
       expect(tools).not.toContain("Fantasy Draft");
       expect(tools).not.toContain("Awards");
       expect(tools).not.toContain("DFS");
+      expect(tools).not.toContain("Season Model");
+      expect(tools).not.toContain("Survivor");
     }
   });
 

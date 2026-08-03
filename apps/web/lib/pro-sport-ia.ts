@@ -287,6 +287,27 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           premium: true,
           status: "active",
         },
+        {
+          href: "/pro/nfl/model",
+          label: "Season Model",
+          hint: "Full-season engine hub — game boxes and survivor helper.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/game-boxes",
+          label: "Game Boxes",
+          hint: "Projected player boxes for a future matchup with p10–p90 ranges.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/survivor",
+          label: "Survivor Helper",
+          hint: "Rank remaining survivor picks from path-coherent season sims.",
+          premium: true,
+          status: "active",
+        },
       ],
     },
     {
