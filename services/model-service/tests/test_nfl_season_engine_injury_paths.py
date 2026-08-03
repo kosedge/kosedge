@@ -22,8 +22,12 @@ def _det_gibbs_key(universe) -> str:
 
 
 def test_engine_version_surfaces_injury_shocks() -> None:
-    assert "injury-shocks" in DEFAULT_SEASON_ENGINE_VERSION
-    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.2")
+    # Injury paths remain in v1.3+; version string now tags deeper usage.
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "injury-shocks" in DEFAULT_SEASON_ENGINE_VERSION
+        or "deeper-usage" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_out_zeros_injured_usage_in_week_range() -> None:

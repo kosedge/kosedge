@@ -18,13 +18,14 @@ is derived from position + depth + absolute usage shares (see
 ``player_offense_value``). Defense index is untouched. Pass-rate bias
 nudges slightly when a primary RB or WR is unavailable.
 
-Usage reallocation (position-aware, residual-bucket aware)
-----------------------------------------------------------
+Usage reallocation (role-aware, residual-bucket aware)
+------------------------------------------------------
 Freed volume = role_share × (1 − availability). Of that freed volume:
 
-* Same-position teammates absorb the bulk, weighted by depth_order and
-  existing share (RB2/RB3 for an RB; WR corps for a WR; TE2 + WR1/2 for a TE).
-* Cross-position spill is small (RB targets → WR/TE; WR → TE/RB).
+* Role-taxonomy sinks (see ``usage_roles.INJURY_REALLOC_RULES``) — e.g.
+  RB1 out → RB2 gets the largest rush share (not equal committee split);
+  WR1 out → WR2 > WR_SLOT > WR3; TE1 out → TE2 + differentiated WR mix.
+* Cross-position spill remains explicit and small.
 * A residual fraction stays in the calibration "other" bucket so sparse
   skill rosters do not over-inflate named backups (same spirit as
   ``USAGE_OTHER_BUCKET_FLOOR``).
@@ -51,6 +52,11 @@ from typing import (
 
 from src.services.nfl_season_engine.calibration import USAGE_OTHER_BUCKET_FLOOR
 from src.services.nfl_season_engine.types import PlayerRole, TeamStrengthState
+from src.services.nfl_season_engine.usage_roles import (
+    INJURY_REALLOC_RULES,
+    annotate_usage_roles,
+    split_by_role_sinks,
+)
 
 InjuryStatus = Literal["out", "limited", "returning"]
 
@@ -255,6 +261,11 @@ def _allocate_freed(
     return {r.player_key: amount * (w / total) for r, w in zip(candidates, weights)}
 
 
+def _merge_boost(dst: Dict[str, float], src: Mapping[str, float]) -> None:
+    for k, v in src.items():
+        dst[k] = dst.get(k, 0.0) + v
+
+
 def reallocate_role_shares(
     roles: Sequence[PlayerRole],
     *,
@@ -263,12 +274,20 @@ def reallocate_role_shares(
 ) -> Tuple[List[PlayerRole], str]:
     """Scale injured role by availability and reallocate freed volume.
 
+    Uses ``usage_roles.INJURY_REALLOC_RULES`` when the injured player's
+    usage_role is known; falls back to position-aware depth weights.
+
     Returns (new_roles_same_order, human-readable rule note).
     """
     avail = _clamp(availability, 0.0, 1.0)
     missing = 1.0 - avail
     if missing <= 1e-12:
         return list(roles), "no_reallocation_full_availability"
+
+    # Ensure taxonomy labels exist before looking up sink rules.
+    roles = annotate_usage_roles(roles)
+    injured = next((r for r in roles if r.player_key == injured.player_key), injured)
+    injured = annotate_usage_roles([injured])[0] if not injured.usage_role else injured
 
     freed_tgt = max(0.0, injured.target_share) * missing
     freed_rush = max(0.0, injured.rush_share) * missing
@@ -287,52 +306,129 @@ def reallocate_role_shares(
 
     others = [r for r in roles if r.player_key != injured.player_key]
     pos = (injured.position or "").upper()
+    label = injured.usage_role or ""
+    rules = INJURY_REALLOC_RULES.get(label) or {}
 
     tgt_boost: Dict[str, float] = {}
     rush_boost: Dict[str, float] = {}
     snap_boost: Dict[str, float] = {}
     route_boost: Dict[str, float] = {}
-    rz_boost: Dict[str, float] = {}
     notes: List[str] = []
 
-    if pos == "RB":
-        rbs = [r for r in others if r.position == "RB"]
-        pass_catchers = [r for r in others if r.position in ("WR", "TE")]
-        # Rush: RB committee first; leftover stays other.
+    rbs = [r for r in others if r.position == "RB"]
+    wrs = [r for r in others if r.position == "WR"]
+    tes = [r for r in others if r.position == "TE"]
+    qbs = [r for r in others if r.position == "QB"]
+
+    if pos == "RB" and rules:
+        rush_sinks = rules.get("rush_sinks") or {}
+        rush_boost = split_by_role_sinks(assign_rush, rbs, rush_sinks)
+        split = rules.get("target_split") or {"same_pos": 0.65, "WR": 0.22, "TE": 0.13}
+        same_sinks = rules.get("same_pos_tgt_sinks") or rush_sinks
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("same_pos", 0.65)), rbs, same_sinks),
+        )
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(
+                assign_tgt * float(split.get("WR", 0.22)),
+                wrs,
+                {"WR1": 0.40, "WR2": 0.30, "WR_SLOT": 0.18, "WR3": 0.12},
+            ),
+        )
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(
+                assign_tgt * float(split.get("TE", 0.13)),
+                tes,
+                {"TE1": 0.70, "TE2": 0.30},
+            ),
+        )
+        snap_boost = split_by_role_sinks(assign_snap, rbs or others, rush_sinks)
+        notes.append(f"{rules.get('note', 'RB_role_realloc')}; {keep_other:.0%} residual→other")
+    elif pos == "WR" and rules:
+        split = rules.get("target_split") or {"WR": 0.62, "TE": 0.22, "RB": 0.16}
+        wr_sinks = rules.get("wr_sinks") or {}
+        te_sinks = rules.get("te_sinks") or {"TE1": 0.70, "TE2": 0.30}
+        rb_sinks = rules.get("rb_sinks") or {"RB1": 0.55, "RB2": 0.25, "RB_COMMITTEE": 0.20}
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("WR", 0.62)), wrs, wr_sinks),
+        )
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("TE", 0.22)), tes, te_sinks),
+        )
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("RB", 0.16)), rbs, rb_sinks),
+        )
+        snap_boost = split_by_role_sinks(assign_snap, wrs or others, wr_sinks)
+        route_boost = split_by_role_sinks(assign_route, wrs or others, wr_sinks)
+        notes.append(f"{rules.get('note', 'WR_role_realloc')}; {keep_other:.0%} residual→other")
+    elif pos == "TE" and rules:
+        split = rules.get("target_split") or {"TE": 0.38, "WR": 0.52, "RB": 0.10}
+        te_sinks = rules.get("te_sinks") or {"TE2": 0.85, "OTHER_TE": 0.15}
+        wr_sinks = rules.get("wr_sinks") or {
+            "WR1": 0.35,
+            "WR2": 0.28,
+            "WR_SLOT": 0.22,
+            "WR3": 0.15,
+        }
+        rb_sinks = rules.get("rb_sinks") or {"RB1": 0.60, "RB2": 0.25, "RB_COMMITTEE": 0.15}
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("TE", 0.38)), tes, te_sinks),
+        )
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("WR", 0.52)), wrs, wr_sinks),
+        )
+        _merge_boost(
+            tgt_boost,
+            split_by_role_sinks(assign_tgt * float(split.get("RB", 0.10)), rbs, rb_sinks),
+        )
+        snap_boost = split_by_role_sinks(
+            assign_snap, (tes + wrs[:2]) if (tes or wrs) else others, {**te_sinks, **wr_sinks}
+        )
+        notes.append(f"{rules.get('note', 'TE_role_realloc')}; {keep_other:.0%} residual→other")
+    elif pos == "QB" and rules:
+        snap_sinks = rules.get("snap_sinks") or {"QB2": 0.90, "OTHER_QB": 0.10}
+        snap_boost = split_by_role_sinks(assign_snap, qbs, snap_sinks)
+        rb_frac = float(rules.get("rush_to_rb_frac", 0.35))
+        rush_boost = split_by_role_sinks(
+            assign_rush * rb_frac,
+            rbs,
+            {"RB1": 0.55, "RB2": 0.25, "RB_COMMITTEE": 0.20},
+        )
+        notes.append(f"{rules.get('note', 'QB_role_realloc')}; {keep_other:.0%} residual→other")
+    elif pos == "RB":
+        # Fallback without label — depth-weighted (v1.2 behavior).
         rush_boost = _allocate_freed(
             amount=assign_rush,
             candidates=rbs,
             weight_fn=lambda r: _depth_weight(r) * (0.35 + max(0.0, r.rush_share)),
         )
-        # Targets: 70% other RBs, 30% WR/TE.
-        rb_tgt = assign_tgt * 0.70
-        skill_tgt = assign_tgt * 0.30
         for k, v in _allocate_freed(
-            amount=rb_tgt,
+            amount=assign_tgt * 0.70,
             candidates=rbs,
             weight_fn=lambda r: _depth_weight(r) * (0.25 + max(0.0, r.target_share)),
         ).items():
             tgt_boost[k] = tgt_boost.get(k, 0.0) + v
         for k, v in _allocate_freed(
-            amount=skill_tgt,
-            candidates=pass_catchers,
+            amount=assign_tgt * 0.30,
+            candidates=wrs + tes,
             weight_fn=lambda r: _depth_weight(r) * (0.20 + max(0.0, r.target_share)),
         ).items():
             tgt_boost[k] = tgt_boost.get(k, 0.0) + v
         snap_boost = _allocate_freed(
-            amount=assign_snap,
-            candidates=rbs or others,
-            weight_fn=lambda r: _depth_weight(r),
+            amount=assign_snap, candidates=rbs or others, weight_fn=_depth_weight
         )
         notes.append(
-            "RB_out→RB2/committee absorbs rush; RB+WR/TE split targets; "
-            f"{keep_other:.0%} residual→other"
+            f"RB_out→depth-weighted fallback; {keep_other:.0%} residual→other"
         )
     elif pos == "WR":
-        wrs = [r for r in others if r.position == "WR"]
-        tes = [r for r in others if r.position == "TE"]
-        rbs = [r for r in others if r.position == "RB"]
-        # WR corps 70%, TE 20%, RB 10%.
         for k, v in _allocate_freed(
             amount=assign_tgt * 0.70,
             candidates=wrs,
@@ -352,9 +448,7 @@ def reallocate_role_shares(
         ).items():
             tgt_boost[k] = tgt_boost.get(k, 0.0) + v
         snap_boost = _allocate_freed(
-            amount=assign_snap,
-            candidates=wrs or others,
-            weight_fn=lambda r: _depth_weight(r),
+            amount=assign_snap, candidates=wrs or others, weight_fn=_depth_weight
         )
         route_boost = _allocate_freed(
             amount=assign_route,
@@ -362,12 +456,9 @@ def reallocate_role_shares(
             weight_fn=lambda r: _depth_weight(r) * (0.2 + max(0.0, r.route_share)),
         )
         notes.append(
-            "WR_out→WR corps 70% / TE 20% / RB 10% targets; "
-            f"{keep_other:.0%} residual→other"
+            f"WR_out→depth-weighted fallback; {keep_other:.0%} residual→other"
         )
     elif pos == "TE":
-        tes = [r for r in others if r.position == "TE"]
-        wrs = [r for r in others if r.position == "WR"]
         for k, v in _allocate_freed(
             amount=assign_tgt * 0.35,
             candidates=tes,
@@ -383,45 +474,32 @@ def reallocate_role_shares(
         snap_boost = _allocate_freed(
             amount=assign_snap,
             candidates=tes + wrs[:2] if (tes or wrs) else others,
-            weight_fn=lambda r: _depth_weight(r),
+            weight_fn=_depth_weight,
         )
         notes.append(
-            "TE_out→TE2 35% / WR corps 65% targets; "
-            f"{keep_other:.0%} residual→other"
+            f"TE_out→depth-weighted fallback; {keep_other:.0%} residual→other"
         )
     elif pos == "QB":
-        qbs = [r for r in others if r.position == "QB"]
-        # Backup inherits snap; rush share mostly evaporates to other / design.
-        snap_boost = _allocate_freed(
-            amount=assign_snap,
-            candidates=qbs,
-            weight_fn=lambda r: _depth_weight(r),
-        )
-        # Small rush reallocation to RB1 if present.
-        rbs = [r for r in others if r.position == "RB"]
+        snap_boost = _allocate_freed(amount=assign_snap, candidates=qbs, weight_fn=_depth_weight)
         rush_boost = _allocate_freed(
             amount=assign_rush * 0.35,
             candidates=rbs,
             weight_fn=lambda r: _depth_weight(r) * (0.3 + max(0.0, r.rush_share)),
         )
         notes.append(
-            "QB_out→QB2 snap inheritance; most designed-rush value lost to other; "
-            f"{keep_other:.0%} residual→other"
+            f"QB_out→depth-weighted fallback; {keep_other:.0%} residual→other"
         )
     else:
-        # Generic: depth-weighted same-roster split.
         snap_boost = _allocate_freed(amount=assign_snap, candidates=others, weight_fn=_depth_weight)
         tgt_boost = _allocate_freed(amount=assign_tgt, candidates=others, weight_fn=_depth_weight)
         rush_boost = _allocate_freed(amount=assign_rush, candidates=others, weight_fn=_depth_weight)
         notes.append("generic_depth_weighted_reallocation")
 
-    rz_boost = {
-        **_allocate_freed(
-            amount=assign_rz,
-            candidates=[r for r in others if r.position == injured.position] or others,
-            weight_fn=lambda r: _depth_weight(r) * (0.2 + max(0.0, r.red_zone_share)),
-        )
-    }
+    rz_boost = _allocate_freed(
+        amount=assign_rz,
+        candidates=[r for r in others if r.position == injured.position] or others,
+        weight_fn=lambda r: _depth_weight(r) * (0.2 + max(0.0, r.red_zone_share)),
+    )
 
     new_roles: List[PlayerRole] = []
     for role in roles:
@@ -606,7 +684,8 @@ def summarize_adjustments(rows: Sequence[AvailabilityAdjustment]) -> Dict[str, A
                 f"capped at ±{MAX_OFFENSE_SHOCK}; defense unchanged"
             ),
             "reallocation": (
-                "Position-aware absorption of freed shares; "
+                "Role-aware absorption via usage_roles.INJURY_REALLOC_RULES "
+                "(RB1→RB2 primary, WR1→WR2>slot>WR3, TE1→TE2+WR mix); "
                 f"{REALLOC_OTHER_FRACTION:.0%} of freed volume stays in residual other bucket"
             ),
             "limited_default": DEFAULT_LIMITED_AVAILABILITY,

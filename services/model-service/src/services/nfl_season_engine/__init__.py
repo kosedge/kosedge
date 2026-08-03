@@ -8,7 +8,9 @@ Four layers (each module is the single source of truth for its concern):
 4. ``production``     – usage + matchup + script → yards / TDs / receptions / INTs
 
 Injury / availability path shocks (``injury_paths``) adjust Layers 1 and 3
-for specified week ranges before Layers 2–4 run.
+for specified week ranges before Layers 2–4 run. Layer 3 uses an explicit
+usage-role taxonomy (``usage_roles``) for base shares, script/personnel
+modifiers, and role-aware injury reallocation.
 
 Public entry points
 -------------------
