@@ -137,3 +137,21 @@ sanity bands (below).
 - `game_query.py`, `calibration.py`, `__init__.py`
 - `routes/nfl.py` (status capabilities / game_script block)
 - Tests + this ops note + foundation/api-contract updates
+
+## Railway
+
+Merged PR #80 → `deploy-vercel`; Railway `model-service` (`brave-art` /
+`model-service-production-e253`) redeployed and smokes green:
+
+- `GET /nfl/season-engine/status` → `nfl-season-engine-v1.6-game-script` +
+  `game_script_play_mix` capability + `game_script` block
+- `GET .../game-boxes?...&include_diagnostics=true` → `diagnostics.play_mix_home`
+  / `play_mix_away` / `play_mix_sample` with `pass_rate`, `early_down_pass_rate`,
+  `hurry_up`, `script_detail`, `script_intensity`
+
+```bash
+curl -sS "$MODEL_SERVICE_URL/nfl/season-engine/status" \
+  | jq '.engine_version, .capabilities, .game_script'
+curl -sS "$MODEL_SERVICE_URL/nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&demo=true&n_replicates=80&include_diagnostics=true" \
+  | jq '{engine_version, play_mix_home: .diagnostics.play_mix_home, play_mix_sample: .diagnostics.play_mix_sample.home}'
+```
