@@ -47,7 +47,7 @@ const STORAGE_KEY = "kosedge.nfl.survivor.planner.picks";
 const N_SIMS = 250;
 
 const selectClass =
-  "min-h-10 w-full rounded-lg border border-white/15 bg-black/40 px-2.5 py-1.5 text-sm text-kos-text outline-none focus:border-kos-gold/50";
+  "min-h-11 w-full rounded-lg border border-white/15 bg-black/40 px-2.5 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50";
 const labelClass =
   "mb-1 block text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/55";
 
@@ -134,6 +134,8 @@ export default function SeasonEngineSurvivorPlannerClient({
     const compact = compactPicksParam(picks);
     if (compact) params.set("picks", compact);
     else params.delete("picks");
+    // Keep mode=planner visible on shareable URLs.
+    if (!params.get("mode")) params.set("mode", "planner");
     const qs = params.toString();
     const next = qs
       ? `${window.location.pathname}?${qs}`
@@ -219,10 +221,10 @@ export default function SeasonEngineSurvivorPlannerClient({
         </p>
 
         <div
-          className={`rounded-xl border px-4 py-4 sm:px-5 ${strengthTone(band)}`}
+          className={`sticky top-[var(--kos-pro-header-h,7.5rem)] z-30 -mx-1 rounded-xl border px-4 py-4 sm:static sm:z-auto sm:mx-0 sm:px-5 ${strengthTone(band)}`}
         >
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
+            <div className="min-w-0 flex-1">
               <p className={labelClass}>Path survival</p>
               <p className="text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl">
                 {result
@@ -237,28 +239,28 @@ export default function SeasonEngineSurvivorPlannerClient({
                   : `${band} path · geo ${(result?.path_strength_geo ?? 0).toFixed(2)} · ${result?.locked_pick_count ?? 0} locked`}
               </p>
             </div>
-            <div className="text-right text-xs opacity-75">
+            <div className="shrink-0 text-left text-xs opacity-75 sm:text-right">
               <p>{result?.n_sims ?? N_SIMS} season sims</p>
-              <p className="mt-0.5">
+              <p className="mt-0.5 break-all">
                 {engineVersion || result?.engine_version || "season engine"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
             onClick={resetAll}
-            className="min-h-10 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold text-kos-text/80 transition hover:border-white/30"
+            className="min-h-11 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text/80 transition hover:border-white/30 sm:w-auto"
           >
             Reset plan
           </button>
-          <p className="text-xs text-kos-text/55">
+          <p className="text-xs text-kos-text/55 break-words">
             Used: {used.size ? [...used].sort().join(", ") : "none"}
           </p>
           {(depthSource || depthAsOf) && (
-            <p className="text-[11px] text-kos-text/45">
+            <p className="text-[11px] text-kos-text/45 break-words">
               Depth {depthSource || "—"}
               {depthAsOf ? ` · ${depthAsOf}` : ""}
             </p>
@@ -296,14 +298,15 @@ export default function SeasonEngineSurvivorPlannerClient({
           return (
             <div
               key={week}
-              className={`rounded-xl border px-3 py-3 sm:px-4 ${
+              id={`survivor-week-${week}`}
+              className={`scroll-mt-[calc(var(--kos-pro-header-h,7.5rem)+5.5rem)] rounded-xl border px-3 py-3 sm:scroll-mt-[var(--kos-pro-header-h,7.5rem)] sm:px-4 ${
                 locked
                   ? "border-kos-gold/35 bg-kos-gold/5"
                   : "border-white/10 bg-black/25"
               }`}
             >
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-[7rem]">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-kos-text">
                     Week {week}
                   </p>
@@ -313,13 +316,13 @@ export default function SeasonEngineSurvivorPlannerClient({
                   </p>
                 </div>
 
-                <div className="flex min-w-[10rem] flex-1 flex-wrap items-center gap-2">
+                <div className="flex w-full flex-col gap-2 sm:min-w-[12rem] sm:flex-1 sm:flex-row sm:flex-wrap sm:items-center">
                   <label className="sr-only" htmlFor={`plan-week-${week}`}>
                     Week {week} pick
                   </label>
                   <select
                     id={`plan-week-${week}`}
-                    className={`${selectClass} max-w-[12rem]`}
+                    className={`${selectClass} sm:max-w-[14rem]`}
                     value={lockedTeam}
                     onChange={(e) => {
                       const team = e.target.value;
@@ -338,7 +341,7 @@ export default function SeasonEngineSurvivorPlannerClient({
                     <button
                       type="button"
                       onClick={() => clearWeek(week)}
-                      className="min-h-10 rounded-lg border border-white/15 px-2.5 text-xs font-semibold text-kos-text/70 hover:border-white/30"
+                      className="min-h-11 w-full rounded-lg border border-white/15 px-3 text-sm font-semibold text-kos-text/70 hover:border-white/30 sm:w-auto"
                     >
                       Clear
                     </button>
@@ -357,25 +360,27 @@ export default function SeasonEngineSurvivorPlannerClient({
               ) : null}
 
               {!locked && ranked.length ? (
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                   {ranked.slice(0, 6).map((pick, idx) => (
                     <button
                       key={`${week}-${pick.team}`}
                       type="button"
                       onClick={() => lockWeek(week, pick.team)}
                       disabled={used.has(pick.team)}
-                      className={`min-h-9 rounded-lg border px-2.5 py-1.5 text-xs font-semibold tabular-nums transition ${
+                      className={`min-h-11 rounded-lg border px-2.5 py-2 text-left text-sm font-semibold tabular-nums transition sm:text-xs ${
                         idx === 0
                           ? "border-kos-gold/45 bg-kos-gold/15 text-kos-gold"
                           : "border-white/10 bg-white/5 text-kos-text/80 hover:border-white/25"
                       } disabled:cursor-not-allowed disabled:opacity-40`}
                     >
-                      {pick.team}{" "}
-                      <span className="opacity-70">
-                        {formatPct(pick.win_rate)}
+                      <span className="block sm:inline">
+                        {pick.team}{" "}
+                        <span className="opacity-70">
+                          {formatPct(pick.win_rate)}
+                        </span>
                       </span>
                       {pick.pick_now_score != null ? (
-                        <span className="ml-1 opacity-50">
+                        <span className="mt-0.5 block text-[11px] opacity-50 sm:ml-1 sm:mt-0 sm:inline">
                           · {formatStatNumber(pick.pick_now_score, 2)}
                         </span>
                       ) : null}

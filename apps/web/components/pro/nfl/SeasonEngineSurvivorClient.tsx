@@ -145,7 +145,7 @@ export default function SeasonEngineSurvivorClient({
                   key={team}
                   type="button"
                   onClick={() => toggleTeam(team)}
-                  className={`min-h-10 rounded-lg border px-2.5 py-1.5 text-xs font-semibold tabular-nums transition ${
+                  className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-3 py-2 text-sm font-semibold tabular-nums transition ${
                     active
                       ? "border-kos-gold/50 bg-kos-gold/20 text-kos-gold"
                       : "border-white/10 bg-white/5 text-kos-text/75 hover:border-white/25"

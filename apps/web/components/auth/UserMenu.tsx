@@ -62,10 +62,11 @@ export default function UserMenu() {
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-50"
             onClick={() => setIsOpen(false)}
+            aria-hidden
           />
-          <div className="absolute right-0 mt-2 w-48 bg-black/95 border border-white/12 rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="absolute right-0 z-[60] mt-2 w-48 overflow-hidden rounded-xl border border-white/12 bg-black/95 shadow-xl">
             <div className="p-3 border-b border-white/10">
               <p className="text-sm font-semibold text-gray-200">
                 {session.user.name || "User"}

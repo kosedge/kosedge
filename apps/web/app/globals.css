@@ -39,6 +39,11 @@ body {
   height: 100%;
 }
 
+html {
+  /* Keep in-page anchors / focus scrolls clear of sticky Pro header */
+  scroll-padding-top: var(--kos-pro-header-h, 7.5rem);
+}
+
 body {
   overflow-x: hidden;
   background-color: var(--color-kos-black);
@@ -46,6 +51,9 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Improves reliability of tap → click on iOS for custom controls */
+  -webkit-tap-highlight-color: rgba(245, 185, 66, 0.18);
+  touch-action: manipulation;
 }
 
 /* Selection */
