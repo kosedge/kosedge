@@ -21,6 +21,10 @@ type SurvivorPick = {
 
 type SurvivorPayload = {
   mode?: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  roster_source?: string;
+  roster_as_of?: string;
   week?: number;
   n_sims?: number;
   engine_version?: string;

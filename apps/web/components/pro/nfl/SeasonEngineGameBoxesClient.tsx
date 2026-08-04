@@ -28,6 +28,10 @@ type PlayerRow = {
 
 type BoxesPayload = {
   mode?: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  roster_source?: string;
+  roster_as_of?: string;
   season?: number;
   week?: number;
   home_team?: string;

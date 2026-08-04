@@ -501,10 +501,11 @@ export async function loadSeasonEngineMatchups(params?: {
   }
 
   try {
-    const chart = (
-      await import("@/lib/nfl-wall-chart-2026.schedule.json")
-    ).default as Record<string, Record<string, string>>;
-    const matchups = matchupsFromWallChart(chart, { season, maxWeek: 18 });
+    const { getWallChartSchedule } = await import("@/lib/nfl-wall-chart-2026");
+    const matchups = matchupsFromWallChart(getWallChartSchedule(), {
+      season,
+      maxWeek: 18,
+    });
     return {
       matchups,
       currentWeek: matchups[0]?.week ?? 1,
