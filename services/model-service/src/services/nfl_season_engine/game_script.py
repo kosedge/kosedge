@@ -14,6 +14,13 @@ Score differential + a representative remaining-clock snapshot map to:
 - Intensity in [0, 1] (margin size × late-game pressure)
 - Explicit play mix: pass_rate, run_rate, early_down_pass_rate, hurry_up
 
+v1.8 coaching tendencies
+------------------------
+Team coaching profiles (``coaching_tendencies``) apply modest overlays:
+baseline pass bias, script-aggression scaling, early-down bias, and
+two-minute / hurry-up aggression. Usage still reacts only through the
+existing script → usage matrix.
+
 This is still a **game-level** analytic (not drive-by-drive). The clock
 snapshot is a deterministic-given-seed representative phase for usage /
 play-mix — not a full temporal sim.
@@ -29,6 +36,11 @@ from src.services.nfl_season_engine.calibration import (
     LEAGUE_BASE_PLAYS,
     PACE_PLAYS_CLAMP,
     SCORE_NOISE_SD,
+)
+from src.services.nfl_season_engine.coaching_tendencies import (
+    CoachingProfile,
+    baseline_pass_rate,
+    profile_for_team,
 )
 from src.services.nfl_season_engine.team_strength import (
     expected_team_points,
@@ -140,15 +152,25 @@ def play_mix_from_script(
     detail: ScriptDetail,
     intensity: float,
     time_bucket: TimeBucket,
+    coaching: Optional[CoachingProfile] = None,
+    team: Optional[str] = None,
 ) -> Dict[str, float]:
     """Translate script detail + clock into pass/run/early-down/hurry-up.
 
     Returns keys: pass_rate, run_rate, early_down_pass_rate, hurry_up.
-    No coaching-tendency or red-zone overlays — pure score/time response.
+    When ``coaching`` / ``team`` is provided, applies modest v1.8 tendency
+    overlays (script aggression, early-down bias, two-minute aggression).
+    ``base_pass_rate`` should already include coaching ``pass_rate_bias``
+    when callers use ``baseline_pass_rate``.
     """
+    profile = coaching or (profile_for_team(team) if team else None)
+    aggression = float(profile.script_aggression) if profile is not None else 1.0
+    early_bias = float(profile.early_down_pass_bias) if profile is not None else 0.0
+    two_min = float(profile.two_minute_aggression) if profile is not None else 1.0
+
     lf = _late_factor(time_bucket)
     inten = _clamp(float(intensity), 0.0, 1.0)
-    # Base deltas at full late intensity; scaled by lf × inten.
+    # Base deltas at full late intensity; scaled by lf × inten × aggression.
     detail_delta = {
         "large_lead": -0.11,
         "small_lead": -0.055,
@@ -156,18 +178,28 @@ def play_mix_from_script(
         "small_deficit": 0.065,
         "large_deficit": 0.12,
     }[detail]
-    pass_delta = detail_delta * (0.35 + 0.65 * lf * max(inten, 0.25 if detail != "neutral" else 0.0))
+    unscaled_pass_delta = detail_delta * (
+        0.35 + 0.65 * lf * max(inten, 0.25 if detail != "neutral" else 0.0)
+    )
+    pass_delta = unscaled_pass_delta * aggression
     # Mild win-probability-independent noise is intentionally omitted (seeded
     # elsewhere via score realization). Keep play-mix deterministic given inputs.
     pass_rate = _clamp(base_pass_rate + pass_delta, 0.32, 0.82)
     # Early downs move in the same direction but less extremely (2nd/3rd long
     # still pass; clock-kill early downs drive the lead-late run tilt).
-    early_down_pass = _clamp(base_pass_rate + pass_delta * 0.78, 0.30, 0.80)
+    early_down_pass = _clamp(
+        base_pass_rate + pass_delta * 0.78 + early_bias, 0.30, 0.80
+    )
     hurry = 0.0
     if detail in ("small_deficit", "large_deficit") and time_bucket == "late":
-        hurry = _clamp(0.25 + 0.65 * inten * (1.15 if detail == "large_deficit" else 1.0), 0.0, 1.0)
+        hurry = _clamp(
+            0.25 + 0.65 * inten * (1.15 if detail == "large_deficit" else 1.0),
+            0.0,
+            1.0,
+        )
     elif detail == "large_deficit" and time_bucket == "mid":
         hurry = _clamp(0.10 + 0.25 * inten, 0.0, 0.55)
+    hurry = _clamp(hurry * two_min, 0.0, 1.0)
     # Leading late → almost no hurry-up; slight pace-down is implicit via run rate.
     if detail in ("small_lead", "large_lead") and time_bucket == "late":
         hurry = 0.0
@@ -176,6 +208,9 @@ def play_mix_from_script(
         "run_rate": round(1.0 - pass_rate, 4),
         "early_down_pass_rate": round(early_down_pass, 4),
         "hurry_up": round(hurry, 4),
+        # Inspectable (ignored by consumers that only read the four mix keys).
+        "unscaled_pass_delta": round(unscaled_pass_delta, 4),
+        "script_aggression": round(aggression, 4),
     }
 
 
@@ -247,8 +282,18 @@ def build_game_script(
     pace = LEAGUE_BASE_PLAYS * 0.5 * (home.pace_factor + away.pace_factor)
     pace = _clamp(pace, *PACE_PLAYS_CLAMP)
 
-    home_base_pass = _clamp(LEAGUE_BASE_PASS_RATE + home.pass_rate_bias, 0.38, 0.72)
-    away_base_pass = _clamp(LEAGUE_BASE_PASS_RATE + away.pass_rate_bias, 0.38, 0.72)
+    home_coach = profile_for_team(game.home_team)
+    away_coach = profile_for_team(game.away_team)
+    home_base_pass = baseline_pass_rate(
+        league_base=LEAGUE_BASE_PASS_RATE,
+        strength_pass_bias=home.pass_rate_bias,
+        coaching=home_coach,
+    )
+    away_base_pass = baseline_pass_rate(
+        league_base=LEAGUE_BASE_PASS_RATE,
+        strength_pass_bias=away.pass_rate_bias,
+        coaching=away_coach,
+    )
 
     if force_home_score is not None and force_away_score is not None:
         home_score = max(0.0, float(force_home_score))
@@ -294,12 +339,14 @@ def build_game_script(
         detail=home_detail,
         intensity=home_inten,
         time_bucket=bucket,
+        coaching=home_coach,
     )
     away_mix = play_mix_from_script(
         base_pass_rate=away_base_pass,
         detail=away_detail,
         intensity=away_inten,
         time_bucket=bucket,
+        coaching=away_coach,
     )
 
     # Mild hurry-up pace bump (shared clock): trailing late teams nudge total plays.
@@ -321,7 +368,7 @@ def build_game_script(
         away_script=coarse_script(away_detail),
         home_implied_total=round(home_score if realized or force_home_score is not None else home_exp, 2),
         away_implied_total=round(away_score if realized or force_away_score is not None else away_exp, 2),
-        source="team_strength_analytic_cal_v1.6_game_script",
+        source="team_strength_analytic_cal_v1.8_coaching",
         minutes_remaining=round(minutes, 2),
         time_bucket=bucket,
         home_script_detail=home_detail,

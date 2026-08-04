@@ -42,6 +42,7 @@ def test_engine_version_hardened_patch() -> None:
         or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
         or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
         or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
+        or "coaching" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

@@ -25,6 +25,10 @@ import random
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from src.services.nfl_season_engine.calibration import USAGE_OTHER_BUCKET_FLOOR, with_residual_share
+from src.services.nfl_season_engine.coaching_tendencies import (
+    CoachingProfile,
+    profile_for_team,
+)
 from src.services.nfl_season_engine.types import (
     GameScript,
     PlayerRole,
@@ -200,13 +204,18 @@ def rz_pass_rate_from_script(
     detail: ScriptDetail,
     intensity: float,
     time_bucket: TimeBucket,
+    coaching: Optional[CoachingProfile] = None,
+    team: Optional[str] = None,
 ) -> float:
     """Script-conditioned red-zone pass rate (inspectable).
 
     Leading → more RZ run / RB GL carries; trailing → more RZ pass / WR·TE.
     Starts from a RZ-specific base blended with team pass rate, then applies
     score/time deltas (stronger near the goal line than overall play-mix).
+    v1.8: optional coaching ``rz_pass_bias`` overlay (modest ±0.04).
     """
+    profile = coaching or (profile_for_team(team) if team else None)
+    rz_bias = float(profile.rz_pass_bias) if profile is not None else 0.0
     blend = 0.55 * RZ_BASE_PASS_RATE + 0.45 * _clamp(base_team_pass_rate, 0.32, 0.82)
     late = {"early": 0.45, "mid": 0.80, "late": 1.0}[time_bucket]
     inten = _clamp(float(intensity), 0.0, 1.0)
@@ -214,7 +223,7 @@ def rz_pass_rate_from_script(
     scale = (0.40 + 1.10 * inten) * late
     if detail == "neutral":
         scale = 0.0
-    pass_rate = blend + delta * _clamp(scale, 0.0, 1.85)
+    pass_rate = blend + delta * _clamp(scale, 0.0, 1.85) + rz_bias
     return round(_clamp(pass_rate, 0.28, 0.78), 4)
 
 
@@ -303,11 +312,13 @@ def allocate_team_red_zone(
     # Team offensive plays ≈ pace_plays (per-team expectation in this engine).
     team_plays = _clamp(float(script.pace_plays) + rng.gauss(0.0, 2.5), 48.0, 82.0)
     vol = estimate_team_rz_volume(team_plays=team_plays, rng=rng)
+    coach = profile_for_team(team)
     rz_pass = rz_pass_rate_from_script(
         base_team_pass_rate=pass_rate,
         detail=detail,
         intensity=intensity,
         time_bucket=time_bucket,
+        coaching=coach,
     )
     rz_run = 1.0 - rz_pass
 
@@ -489,6 +500,11 @@ def allocate_team_red_zone(
         "rz_rush_plays": round(rz_rush_plays, 3),
         "i10_pass_plays": round(i10_pass, 3),
         "i10_rush_plays": round(i10_rush, 3),
+        "coaching_profile": coach.to_dict(),
+        "tendency_effects": {
+            "rz_pass_bias_applied": coach.rz_pass_bias,
+            "rz_pass_rate_after": rz_pass,
+        },
         "players": player_diag,
     }
     return out, team_diag
@@ -551,7 +567,8 @@ def red_zone_share_tables() -> Dict[str, Any]:
         "script_interaction": (
             "Leading → lower RZ pass rate / more RB I10 carries; "
             "trailing → higher RZ pass rate / more WR1·TE1 I10 targets. "
-            "Intensity × time-bucket scaling mirrors v1.6 usage matrix."
+            "Intensity × time-bucket scaling mirrors v1.6 usage matrix. "
+            "v1.8: coaching rz_pass_bias overlays the scripted RZ pass rate."
         ),
         "td_path": (
             "Layer 4 TD means = RZ opportunities × finish rates "
@@ -573,14 +590,17 @@ def scoring_usage_diagnostics(
     script_intensity: float = 0.55,
     time_bucket: TimeBucket = "mid",
     pass_rate: float = 0.58,
+    team: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Static (no MC) inspectable RZ share dump for a roster."""
     roles = annotate_usage_roles(roles)
+    team_key = team or (roles[0].team if roles else None)
     rz_pass = rz_pass_rate_from_script(
         base_team_pass_rate=pass_rate,
         detail=script_detail,
         intensity=script_intensity,
         time_bucket=time_bucket,
+        team=team_key,
     )
     rows = []
     for role in roles:

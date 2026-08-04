@@ -1,0 +1,275 @@
+{
+  "engine_version": "nfl-season-engine-v1.8-coaching",
+  "documentation": {
+    "module": "src.services.nfl_season_engine.coaching_tendencies",
+    "engine_layer": "Overlays Layer 2 play-mix + RZ pass rate; usage reacts via existing script\u2192usage matrix (no opaque usage multipliers).",
+    "fields": {
+      "pass_rate_bias": "Baseline pass-rate shift (clamped \u00b10.035)",
+      "script_aggression": "Scales script pass deltas (0.80\u20131.20)",
+      "rz_pass_bias": "Additive RZ pass preference (clamped \u00b10.040)",
+      "early_down_pass_bias": "Additive early-down pass tilt (\u00b10.025)",
+      "two_minute_aggression": "Scales hurry-up when chasing (0.80\u20131.20)"
+    },
+    "clamps": {
+      "pass_rate_bias": [
+        -0.035,
+        0.035
+      ],
+      "script_aggression": [
+        0.8,
+        1.2
+      ],
+      "rz_pass_bias": [
+        -0.04,
+        0.04
+      ],
+      "early_down_pass_bias": [
+        -0.025,
+        0.025
+      ],
+      "two_minute_aggression": [
+        0.8,
+        1.2
+      ]
+    },
+    "curated_teams": [
+      "BAL",
+      "BUF",
+      "CHI",
+      "CIN",
+      "CLE",
+      "DAL",
+      "DET",
+      "GB",
+      "KC",
+      "LA",
+      "LAC",
+      "MIA",
+      "MIN",
+      "NE",
+      "PHI",
+      "PIT",
+      "SF",
+      "TEN"
+    ],
+    "examples": {
+      "KC": {
+        "team": "KC",
+        "pass_rate_bias": 0.028,
+        "script_aggression": 1.12,
+        "rz_pass_bias": 0.03,
+        "early_down_pass_bias": 0.018,
+        "two_minute_aggression": 1.12,
+        "label": "pass_aggressive",
+        "source": "curated_prior"
+      },
+      "BUF": {
+        "team": "BUF",
+        "pass_rate_bias": 0.018,
+        "script_aggression": 1.1,
+        "rz_pass_bias": 0.015,
+        "early_down_pass_bias": 0.01,
+        "two_minute_aggression": 1.1,
+        "label": "pass_aggressive",
+        "source": "curated_prior"
+      },
+      "SF": {
+        "team": "SF",
+        "pass_rate_bias": -0.022,
+        "script_aggression": 0.9,
+        "rz_pass_bias": -0.028,
+        "early_down_pass_bias": -0.02,
+        "two_minute_aggression": 0.95,
+        "label": "run_scheme",
+        "source": "curated_prior"
+      },
+      "PHI": {
+        "team": "PHI",
+        "pass_rate_bias": -0.025,
+        "script_aggression": 0.92,
+        "rz_pass_bias": -0.022,
+        "early_down_pass_bias": -0.018,
+        "two_minute_aggression": 0.95,
+        "label": "run_protect",
+        "source": "curated_prior"
+      },
+      "BAL": {
+        "team": "BAL",
+        "pass_rate_bias": -0.03,
+        "script_aggression": 0.88,
+        "rz_pass_bias": -0.03,
+        "early_down_pass_bias": -0.022,
+        "two_minute_aggression": 0.92,
+        "label": "run_scheme",
+        "source": "curated_prior"
+      },
+      "NE": {
+        "team": "NE",
+        "pass_rate_bias": -0.01,
+        "script_aggression": 0.85,
+        "rz_pass_bias": -0.01,
+        "early_down_pass_bias": -0.012,
+        "two_minute_aggression": 0.88,
+        "label": "conservative",
+        "source": "curated_prior"
+      },
+      "DET": {
+        "team": "DET",
+        "pass_rate_bias": 0.008,
+        "script_aggression": 1.14,
+        "rz_pass_bias": 0.005,
+        "early_down_pass_bias": 0.005,
+        "two_minute_aggression": 1.15,
+        "label": "script_aggressive",
+        "source": "curated_prior"
+      },
+      "MIA": {
+        "team": "MIA",
+        "pass_rate_bias": 0.03,
+        "script_aggression": 1.06,
+        "rz_pass_bias": 0.018,
+        "early_down_pass_bias": 0.02,
+        "two_minute_aggression": 1.05,
+        "label": "pass_pace",
+        "source": "curated_prior"
+      }
+    },
+    "seed_policy": "Explicit curated priors for distinctive clubs; league-average defaults for remaining franchises. No fitted coach-year regressions."
+  },
+  "team_count": 32,
+  "examples": {
+    "KC": {
+      "profile": {
+        "team": "KC",
+        "pass_rate_bias": 0.028,
+        "script_aggression": 1.12,
+        "rz_pass_bias": 0.03,
+        "early_down_pass_bias": 0.018,
+        "two_minute_aggression": 1.12,
+        "label": "pass_aggressive",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.608,
+      "trailing_late_pass_rate": 0.7337,
+      "trailing_late_hurry_up": 1.0,
+      "rz_pass_rate_neutral": 0.5896
+    },
+    "BUF": {
+      "profile": {
+        "team": "BUF",
+        "pass_rate_bias": 0.018,
+        "script_aggression": 1.1,
+        "rz_pass_bias": 0.015,
+        "early_down_pass_bias": 0.01,
+        "two_minute_aggression": 1.1,
+        "label": "pass_aggressive",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.598,
+      "trailing_late_pass_rate": 0.7214,
+      "trailing_late_hurry_up": 1.0,
+      "rz_pass_rate_neutral": 0.5701
+    },
+    "SF": {
+      "profile": {
+        "team": "SF",
+        "pass_rate_bias": -0.022,
+        "script_aggression": 0.9,
+        "rz_pass_bias": -0.028,
+        "early_down_pass_bias": -0.02,
+        "two_minute_aggression": 0.95,
+        "label": "run_scheme",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.558,
+      "trailing_late_pass_rate": 0.659,
+      "trailing_late_hurry_up": 0.8766,
+      "rz_pass_rate_neutral": 0.5091
+    },
+    "PHI": {
+      "profile": {
+        "team": "PHI",
+        "pass_rate_bias": -0.025,
+        "script_aggression": 0.92,
+        "rz_pass_bias": -0.022,
+        "early_down_pass_bias": -0.018,
+        "two_minute_aggression": 0.95,
+        "label": "run_protect",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.555,
+      "trailing_late_pass_rate": 0.6582,
+      "trailing_late_hurry_up": 0.8766,
+      "rz_pass_rate_neutral": 0.5137
+    },
+    "BAL": {
+      "profile": {
+        "team": "BAL",
+        "pass_rate_bias": -0.03,
+        "script_aggression": 0.88,
+        "rz_pass_bias": -0.03,
+        "early_down_pass_bias": -0.022,
+        "two_minute_aggression": 0.92,
+        "label": "run_scheme",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.55,
+      "trailing_late_pass_rate": 0.6487,
+      "trailing_late_hurry_up": 0.8489,
+      "rz_pass_rate_neutral": 0.5035
+    },
+    "NE": {
+      "profile": {
+        "team": "NE",
+        "pass_rate_bias": -0.01,
+        "script_aggression": 0.85,
+        "rz_pass_bias": -0.01,
+        "early_down_pass_bias": -0.012,
+        "two_minute_aggression": 0.88,
+        "label": "conservative",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.57,
+      "trailing_late_pass_rate": 0.6654,
+      "trailing_late_hurry_up": 0.812,
+      "rz_pass_rate_neutral": 0.5325
+    },
+    "DET": {
+      "profile": {
+        "team": "DET",
+        "pass_rate_bias": 0.008,
+        "script_aggression": 1.14,
+        "rz_pass_bias": 0.005,
+        "early_down_pass_bias": 0.005,
+        "two_minute_aggression": 1.15,
+        "label": "script_aggressive",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.588,
+      "trailing_late_pass_rate": 0.7159,
+      "trailing_late_hurry_up": 1.0,
+      "rz_pass_rate_neutral": 0.5556
+    },
+    "MIA": {
+      "profile": {
+        "team": "MIA",
+        "pass_rate_bias": 0.03,
+        "script_aggression": 1.06,
+        "rz_pass_bias": 0.018,
+        "early_down_pass_bias": 0.02,
+        "two_minute_aggression": 1.05,
+        "label": "pass_pace",
+        "source": "curated_prior"
+      },
+      "neutral_pass_rate": 0.61,
+      "trailing_late_pass_rate": 0.7289,
+      "trailing_late_hurry_up": 0.9689,
+      "rz_pass_rate_neutral": 0.5785
+    }
+  },
+  "comparisons": {
+    "kc_vs_sf_neutral_pass_delta": 0.05,
+    "det_vs_ne_trailing_pass_delta": 0.0505,
+    "kc_vs_sf_rz_pass_delta": 0.0805
+  }
+}
