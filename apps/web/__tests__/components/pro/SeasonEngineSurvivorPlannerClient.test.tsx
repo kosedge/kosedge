@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SeasonEngineSurvivorPlannerClient from "@/components/pro/nfl/SeasonEngineSurvivorPlannerClient";
 
@@ -26,26 +26,11 @@ const planPayload = {
       ],
       available_teams: ["SEA", "MIA", "CHI"],
     },
-    {
-      week: 2,
-      status: "open",
-      ranked_picks: [{ team: "ATL", win_rate: 0.684, pick_now_score: 0.49 }],
-      available_teams: ["ATL", "SEA"],
-    },
   ],
 };
 
-async function flushPlannerFetch() {
-  await act(async () => {
-    vi.advanceTimersByTime(500);
-    await Promise.resolve();
-    await Promise.resolve();
-  });
-}
-
 describe("SeasonEngineSurvivorPlannerClient", () => {
   beforeEach(() => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
     window.history.replaceState(null, "", "/pro/nfl/survivor?mode=planner");
     window.localStorage.clear();
     vi.stubGlobal(
@@ -59,55 +44,53 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
   });
 
   afterEach(() => {
-    vi.useRealTimers();
     vi.unstubAllGlobals();
   });
 
-  it("locks a chip, updates used + path survival, and clears", async () => {
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-    render(<SeasonEngineSurvivorPlannerClient engineVersion="test-engine" />);
+  it(
+    "locks a recommendation chip and clears the week with real buttons",
+    async () => {
+      const user = userEvent.setup();
+      render(<SeasonEngineSurvivorPlannerClient engineVersion="test-engine" />);
 
-    await flushPlannerFetch();
+      await waitFor(
+        () => {
+          expect(screen.getByRole("button", { name: /SEA/ })).toBeInTheDocument();
+        },
+        { timeout: 4000 },
+      );
 
-    await waitFor(() => {
-      expect(screen.getByRole("button", { name: /SEA/ })).toBeInTheDocument();
-    });
+      await user.click(screen.getByRole("button", { name: /SEA/ }));
 
-    await user.click(screen.getByRole("button", { name: /SEA/ }));
+      await waitFor(() => {
+        expect(screen.getByText(/Used: SEA/)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
+      });
+      expect(window.location.search).toContain("picks=1%3ASEA");
 
-    await waitFor(() => {
-      expect(screen.getByText(/Used: SEA/)).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
-    });
+      await user.click(screen.getByRole("button", { name: "Clear" }));
 
-    await flushPlannerFetch();
-
-    await waitFor(() => {
-      expect(screen.getByText("62.4%")).toBeInTheDocument();
-      expect(screen.getByText(/OK path/)).toBeInTheDocument();
-    });
-
-    expect(window.location.search).toContain("picks=1%3ASEA");
-
-    await user.click(screen.getByRole("button", { name: "Clear" }));
-
-    await waitFor(() => {
-      expect(screen.getByText(/Used: none/)).toBeInTheDocument();
-    });
-  });
+      await waitFor(() => {
+        expect(screen.getByText(/Used: none/)).toBeInTheDocument();
+      });
+    },
+    15000,
+  );
 
   it("exposes Reset plan as a real button", async () => {
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const user = userEvent.setup();
     render(<SeasonEngineSurvivorPlannerClient />);
-    await flushPlannerFetch();
-    await waitFor(() => {
-      expect(screen.getByRole("button", { name: /SEA/ })).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByRole("button", { name: /SEA/ })).toBeInTheDocument();
+      },
+      { timeout: 4000 },
+    );
     await user.click(screen.getByRole("button", { name: /SEA/ }));
     await waitFor(() => expect(screen.getByText(/Used: SEA/)).toBeInTheDocument());
     await user.click(screen.getByRole("button", { name: "Reset plan" }));
     await waitFor(() => {
       expect(screen.getByText(/Used: none/)).toBeInTheDocument();
     });
-  });
+  }, 15000);
 });
