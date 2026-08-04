@@ -19,17 +19,19 @@ shares, script/personnel modifiers, and role-aware injury reallocation.
 Survivor pool outputs (``survivor``) run team W/L-only season paths and
 rank remaining picks for a target week with inspectable save / pick-now
 scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
-same path matrix for joint path survival + per-week recommendations.
+same path matrix for slate metrics + per-week recommendations.
+``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.11 cal-v2 adds early-season uncertainty (weeks 1–4) and measured
-league/role/RZ knobs — see ``calibration.early_season_uncertainty``.
+v1.12 keeps cal-v2 knobs from v1.11 and adds planner UX metrics +
+suggested paths (capability ``survivor_planner_ux``).
 
 Public entry points
 -------------------
 - ``simulate_full_season`` – N path-coherent season sims (~272 games each)
 - ``project_game_player_boxes`` – future-game player box distributions
 - ``evaluate_survivor`` – survivor week rankings + path value
-- ``evaluate_survivor_plan`` – multi-week planner + path_survival
+- ``evaluate_survivor_plan`` – multi-week planner + slate metrics
+- ``suggest_survivor_paths`` – heuristic full-season path suggestions
 - ``resolve_season_universe`` / ``build_demo_universe`` /
   ``load_universe_from_db`` / ``build_packaged_real_universe`` – input builders
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
@@ -59,8 +61,10 @@ from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
     SurvivorEvalResult,
     SurvivorPlanResult,
+    SurvivorSuggestedPathsResult,
     evaluate_survivor,
     evaluate_survivor_plan,
+    suggest_survivor_paths,
     week_win_rate_for_team,
 )
 from src.services.nfl_season_engine.types import (
@@ -79,6 +83,7 @@ __all__ = [
     "SeasonSimResult",
     "SurvivorEvalResult",
     "SurvivorPlanResult",
+    "SurvivorSuggestedPathsResult",
     "build_demo_universe",
     "build_packaged_real_universe",
     "evaluate_survivor",
@@ -90,6 +95,7 @@ __all__ = [
     "project_game_player_boxes",
     "resolve_season_universe",
     "simulate_full_season",
+    "suggest_survivor_paths",
     "universe_schedule_meta",
     "week_win_rate_for_team",
 ]

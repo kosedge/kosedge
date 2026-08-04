@@ -95,18 +95,57 @@ FORMULA_NOTES = {
 PATH_STRENGTH_STRONG_GEO = 0.68
 PATH_STRENGTH_OK_GEO = 0.55
 
+# Hero slate metrics (non-collapsing; joint survival demoted to advanced).
+DANGER_WP_THRESHOLD = 0.55
+SLATE_GRADE_A = 0.70
+SLATE_GRADE_B = 0.62
+SLATE_GRADE_C = 0.55
+SLATE_GRADE_D = 0.48
+# Contrarian-save: require a floor WP before preferring low future value.
+CONTRARIAN_MIN_WP = 0.55
+
 PATH_FORMULA_NOTES = {
     **FORMULA_NOTES,
     "path_survival": (
-        "Fraction of season sims where every locked (week, team) pick wins "
-        "its game that week. Empty slate → 1.0 (vacuous). Same team W/L "
-        "path matrix as single-week survivor (Layers 1–2)."
+        "ADVANCED / secondary. Fraction of season sims where every locked "
+        "(week, team) pick wins its game that week. Empty slate → 1.0 "
+        "(vacuous). Collapses toward ~0 on long parlays — not the hero metric."
     ),
     "path_strength": (
         f"Band from geometric mean of locked marginal week WPs "
         f"(or path_survival^(1/n) when n>0): "
         f"Strong ≥{PATH_STRENGTH_STRONG_GEO:.2f}, "
         f"OK ≥{PATH_STRENGTH_OK_GEO:.2f}, else Fragile. Empty when no locks."
+    ),
+    "avg_locked_wp": (
+        "Hero metric. Mean of each locked pick's marginal week win rate "
+        "(wins_in_week / n_sims). Stays in a readable band even on a full "
+        "17-pick slate — unlike joint path survival."
+    ),
+    "danger_weeks": (
+        f"Count of locked picks with marginal week WP < {DANGER_WP_THRESHOLD:.0%}. "
+        "Honest stress signal without multiplying probabilities."
+    ),
+    "best_remaining_equity": (
+        "Max this-week WP among unused teams that still play in any open "
+        "week (chalk left on the board). Null when the slate is full."
+    ),
+    "slate_grade": (
+        f"Letter from avg_locked_wp: A≥{SLATE_GRADE_A:.0%}, B≥{SLATE_GRADE_B:.0%}, "
+        f"C≥{SLATE_GRADE_C:.0%}, D≥{SLATE_GRADE_D:.0%}, else F. Downgrade one "
+        "letter for every two danger weeks (floor F). Empty when no locks."
+    ),
+    "slate_score": (
+        "0–100 display score = round(100 * avg_locked_wp) minus 4 per danger "
+        "week (floored at 0). Encouraging but honest; does not collapse to 0 "
+        "on a full chalky slate."
+    ),
+    "suggested_paths": (
+        "Heuristic full-season paths from the same week×team WP matrix "
+        "(not an LLM): chalk = greedy max WP/week; balanced = greedy "
+        "pick_now_score/week; contrarian_save = among WP≥"
+        f"{CONTRARIAN_MIN_WP:.0%} candidates prefer lowest save_score "
+        "(bank premium future spots)."
     ),
     "planner_exclusion": (
         "A team locked in any week is removed from ranked_picks for every "
@@ -504,6 +543,27 @@ class SurvivorPlanResult:
     path_strength: str
     path_strength_geo: Optional[float]
     locked_pick_count: int
+    avg_locked_wp: Optional[float] = None
+    danger_weeks: int = 0
+    best_remaining_equity: Optional[float] = None
+    slate_grade: str = "Empty"
+    slate_score: Optional[int] = None
+    formula: Dict[str, str] = field(default_factory=dict)
+    notes: Dict[str, str] = field(default_factory=dict)
+    diagnostics: Dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class SurvivorSuggestedPathsResult:
+    """Heuristic AI suggested full-season survivor paths."""
+
+    season: int
+    n_sims: int
+    engine_version: str
+    paths: List[Dict[str, Any]]
     formula: Dict[str, str] = field(default_factory=dict)
     notes: Dict[str, str] = field(default_factory=dict)
     diagnostics: Dict[str, Any] = field(default_factory=dict)
@@ -603,31 +663,160 @@ def path_strength_band(
     return "Fragile", round(geo, 4)
 
 
-def evaluate_survivor_plan(
+def _letter_from_avg_wp(avg_wp: float) -> str:
+    if avg_wp >= SLATE_GRADE_A:
+        return "A"
+    if avg_wp >= SLATE_GRADE_B:
+        return "B"
+    if avg_wp >= SLATE_GRADE_C:
+        return "C"
+    if avg_wp >= SLATE_GRADE_D:
+        return "D"
+    return "F"
+
+
+def _downgrade_letter(letter: str, steps: int) -> str:
+    order = ["A", "B", "C", "D", "F"]
+    try:
+        idx = order.index(letter)
+    except ValueError:
+        return "F"
+    return order[min(len(order) - 1, idx + max(0, int(steps)))]
+
+
+def compute_slate_metrics(
+    *,
+    locked_marginal_wps: Sequence[float],
+    best_remaining_equity: Optional[float],
+) -> Dict[str, Any]:
+    """Hero planner metrics that stay readable on long locked slates."""
+    locked_count = len(locked_marginal_wps)
+    if locked_count <= 0:
+        return {
+            "avg_locked_wp": None,
+            "danger_weeks": 0,
+            "best_remaining_equity": (
+                None
+                if best_remaining_equity is None
+                else round(float(best_remaining_equity), 4)
+            ),
+            "slate_grade": "Empty",
+            "slate_score": None,
+        }
+    avg_wp = sum(float(wp) for wp in locked_marginal_wps) / locked_count
+    danger = sum(
+        1 for wp in locked_marginal_wps if float(wp) < DANGER_WP_THRESHOLD
+    )
+    letter = _downgrade_letter(_letter_from_avg_wp(avg_wp), danger // 2)
+    score = max(0, int(round(100.0 * avg_wp)) - 4 * danger)
+    return {
+        "avg_locked_wp": round(avg_wp, 4),
+        "danger_weeks": int(danger),
+        "best_remaining_equity": (
+            None
+            if best_remaining_equity is None
+            else round(float(best_remaining_equity), 4)
+        ),
+        "slate_grade": letter,
+        "slate_score": score,
+    }
+
+
+def _enrich_pick_row(row: Dict[str, Any]) -> Dict[str, Any]:
+    """Add matchup label + favorite flag for planner UI (additive)."""
+    out = dict(row)
+    team = str(out.get("team") or "")
+    opponent = out.get("opponent")
+    home_away = out.get("home_away")
+    wp = float(out.get("win_rate") or out.get("win_prob") or 0.0)
+    if opponent:
+        if home_away == "away":
+            out["matchup_label"] = f"{team} @ {opponent}"
+        else:
+            out["matchup_label"] = f"{team} vs {opponent}"
+    else:
+        out["matchup_label"] = team or None
+    out["this_week_wp"] = round(wp, 4)
+    out["is_favorite"] = wp >= 0.5
+    out["favorite_team"] = team if wp >= 0.5 else (opponent or team)
+    out["favorite_wp"] = round(wp if wp >= 0.5 else max(0.0, 1.0 - wp), 4)
+    return out
+
+
+def _week_candidate_rows(
+    *,
+    week: int,
+    week_games: Mapping[str, ScheduledGame],
+    n_sims: int,
+    wins_out: Mapping[str, Mapping[int, int]],
+    sched_out: Mapping[str, Mapping[int, int]],
+    max_week: int,
+    used_teams: Sequence[str],
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for team in sorted(week_games.keys()):
+        row = score_team_survivor(
+            team=team,
+            week=week,
+            n_sims=n_sims,
+            win_counts=wins_out,
+            games_scheduled=sched_out,
+            max_week=max_week,
+            already_used=used_teams,
+            game=week_games.get(team),
+        )
+        if row["remaining"] and row["plays_this_week"]:
+            rows.append(_enrich_pick_row(row))
+    return rows
+
+
+def _pick_strategy_team(
+    candidates: Sequence[Dict[str, Any]],
+    strategy: str,
+) -> Optional[Dict[str, Any]]:
+    if not candidates:
+        return None
+    if strategy == "chalk":
+        return max(
+            candidates,
+            key=lambda r: (float(r["win_rate"]), float(r["pick_now_score"]), r["team"]),
+        )
+    if strategy == "balanced":
+        return max(
+            candidates,
+            key=lambda r: (float(r["pick_now_score"]), float(r["win_rate"]), r["team"]),
+        )
+    if strategy == "contrarian_save":
+        floor = [
+            r for r in candidates if float(r["win_rate"]) >= CONTRARIAN_MIN_WP
+        ]
+        pool = floor or list(candidates)
+        return min(
+            pool,
+            key=lambda r: (
+                float(r.get("save_score") or 0.0),
+                -float(r["win_rate"]),
+                r["team"],
+            ),
+        )
+    raise ValueError(f"Unknown suggest-paths strategy {strategy!r}")
+
+
+def _build_win_matrix(
     universe: EngineUniverse,
     *,
-    picks: Optional[Mapping[Any, Any]] = None,
-    n_sims: int = 300,
-    seed: int = 42,
-    injury_paths: Optional[Sequence[InjuryPath]] = None,
-    engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
-    top_n: int = 8,
-    include_diagnostics: bool = True,
-) -> SurvivorPlanResult:
-    """One multi-week planner pass: path survival + per-week recommendations.
-
-    Runs ``n_sims`` team W/L season paths once. For each unlocked week,
-    ranks remaining teams (excluding all locked picks) with the same
-    inspectable pick-now / save scores as ``evaluate_survivor``.
-    """
-    n_sims = max(1, int(n_sims))
-    top_n = max(1, int(top_n))
-    locked = normalize_plan_picks(picks)
-    validate_plan_picks(universe, locked)
-    used_teams = list(locked.values())
-    used_set = set(used_teams)
-    paths = list(injury_paths or [])
-
+    n_sims: int,
+    seed: int,
+    injury_paths: Sequence[InjuryPath],
+    locked_items: Sequence[Tuple[int, str]],
+) -> Tuple[
+    Dict[str, Dict[int, int]],
+    Dict[str, Dict[int, int]],
+    Dict[int, Dict[str, ScheduledGame]],
+    int,
+    int,
+]:
+    """Shared season W/L matrix for planner + suggest-paths."""
     by_week = schedule_index(universe.schedule)
     schedule_weeks = sorted(by_week.keys())
     max_week = max(schedule_weeks) if schedule_weeks else 1
@@ -635,7 +824,6 @@ def evaluate_survivor_plan(
     win_counts: Dict[str, Dict[int, int]] = {
         t: defaultdict(int) for t in universe.teams
     }
-    # Ensure schedule teams appear even if missing from strengths book.
     for week_map in by_week.values():
         for team in week_map:
             win_counts.setdefault(team, defaultdict(int))
@@ -651,8 +839,7 @@ def evaluate_survivor_plan(
 
     rng = random.Random(seed)
     path_ok = 0
-    locked_items = list(locked.items())
-
+    paths = list(injury_paths)
     for _ in range(n_sims):
         week_winners = simulate_team_wl_path(
             universe, rng=rng, injury_paths=paths
@@ -677,6 +864,42 @@ def evaluate_survivor_plan(
         t: {int(w): int(c) for w, c in weeks.items()}
         for t, weeks in games_scheduled.items()
     }
+    return wins_out, sched_out, by_week, max_week, path_ok
+
+
+def evaluate_survivor_plan(
+    universe: EngineUniverse,
+    *,
+    picks: Optional[Mapping[Any, Any]] = None,
+    n_sims: int = 300,
+    seed: int = 42,
+    injury_paths: Optional[Sequence[InjuryPath]] = None,
+    engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
+    top_n: int = 8,
+    include_diagnostics: bool = True,
+) -> SurvivorPlanResult:
+    """One multi-week planner pass: path survival + per-week recommendations.
+
+    Runs ``n_sims`` team W/L season paths once. For each unlocked week,
+    ranks remaining teams (excluding all locked picks) with the same
+    inspectable pick-now / save scores as ``evaluate_survivor``.
+    """
+    n_sims = max(1, int(n_sims))
+    top_n = max(1, int(top_n))
+    locked = normalize_plan_picks(picks)
+    validate_plan_picks(universe, locked)
+    used_teams = list(locked.values())
+    paths = list(injury_paths or [])
+    locked_items = list(locked.items())
+
+    wins_out, sched_out, by_week, max_week, path_ok = _build_win_matrix(
+        universe,
+        n_sims=n_sims,
+        seed=seed,
+        injury_paths=paths,
+        locked_items=locked_items,
+    )
+    schedule_weeks = sorted(by_week.keys())
 
     path_survival = path_ok / n_sims
     locked_marginal: List[float] = []
@@ -690,20 +913,23 @@ def evaluate_survivor_plan(
     )
 
     weeks_out: List[Dict[str, Any]] = []
+    best_remaining: Optional[float] = None
     for week in schedule_weeks:
         week_games = by_week.get(week, {})
         if week in locked:
             team = locked[week]
             game = week_games.get(team)
-            row = score_team_survivor(
-                team=team,
-                week=week,
-                n_sims=n_sims,
-                win_counts=wins_out,
-                games_scheduled=sched_out,
-                max_week=max_week,
-                already_used=[],
-                game=game,
+            row = _enrich_pick_row(
+                score_team_survivor(
+                    team=team,
+                    week=week,
+                    n_sims=n_sims,
+                    win_counts=wins_out,
+                    games_scheduled=sched_out,
+                    max_week=max_week,
+                    already_used=[],
+                    game=game,
+                )
             )
             weeks_out.append(
                 {
@@ -716,25 +942,15 @@ def evaluate_survivor_plan(
             )
             continue
 
-        all_rows: List[Dict[str, Any]] = []
-        for team in sorted(week_games.keys()):
-            all_rows.append(
-                score_team_survivor(
-                    team=team,
-                    week=week,
-                    n_sims=n_sims,
-                    win_counts=wins_out,
-                    games_scheduled=sched_out,
-                    max_week=max_week,
-                    already_used=used_teams,
-                    game=week_games.get(team),
-                )
-            )
-        ranked = [
-            r
-            for r in all_rows
-            if r["remaining"] and r["plays_this_week"]
-        ]
+        ranked = _week_candidate_rows(
+            week=week,
+            week_games=week_games,
+            n_sims=n_sims,
+            wins_out=wins_out,
+            sched_out=sched_out,
+            max_week=max_week,
+            used_teams=used_teams,
+        )
         ranked.sort(
             key=lambda r: (
                 -float(r["pick_now_score"]),
@@ -742,10 +958,11 @@ def evaluate_survivor_plan(
                 str(r["team"]),
             )
         )
-        available = [
-            str(r["team"])
-            for r in ranked  # already remaining + playing
-        ]
+        if ranked:
+            chalk_wp = max(float(r["win_rate"]) for r in ranked)
+            if best_remaining is None or chalk_wp > best_remaining:
+                best_remaining = chalk_wp
+        available = [str(r["team"]) for r in ranked]
         weeks_out.append(
             {
                 "week": week,
@@ -757,6 +974,11 @@ def evaluate_survivor_plan(
             }
         )
 
+    slate = compute_slate_metrics(
+        locked_marginal_wps=locked_marginal,
+        best_remaining_equity=best_remaining,
+    )
+
     notes = dict(universe.notes)
     notes["survivor_mode"] = (
         "planner team_wl_paths (Layers 1–2 + injury strength shocks; "
@@ -764,6 +986,9 @@ def evaluate_survivor_plan(
     )
     notes["path_survival"] = PATH_FORMULA_NOTES["path_survival"]
     notes["path_strength"] = PATH_FORMULA_NOTES["path_strength"]
+    notes["avg_locked_wp"] = PATH_FORMULA_NOTES["avg_locked_wp"]
+    notes["danger_weeks"] = PATH_FORMULA_NOTES["danger_weeks"]
+    notes["slate_grade"] = PATH_FORMULA_NOTES["slate_grade"]
     notes["used_teams"] = ",".join(used_teams) if used_teams else "(none)"
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"
@@ -788,9 +1013,11 @@ def evaluate_survivor_plan(
                 "edge_bonus": EDGE_BONUS,
                 "path_strength_strong_geo": PATH_STRENGTH_STRONG_GEO,
                 "path_strength_ok_geo": PATH_STRENGTH_OK_GEO,
+                "danger_wp_threshold": DANGER_WP_THRESHOLD,
             },
             "top_n": top_n,
             "used_excluded_from_ranked": used_teams,
+            "hero_metrics": slate,
         }
 
     locked_str_keys = {str(w): t for w, t in locked.items()}
@@ -806,7 +1033,177 @@ def evaluate_survivor_plan(
         path_strength=strength,
         path_strength_geo=geo,
         locked_pick_count=len(locked_items),
+        avg_locked_wp=slate["avg_locked_wp"],
+        danger_weeks=int(slate["danger_weeks"]),
+        best_remaining_equity=slate["best_remaining_equity"],
+        slate_grade=str(slate["slate_grade"]),
+        slate_score=slate["slate_score"],
         formula=dict(PATH_FORMULA_NOTES),
+        notes=notes,
+        diagnostics=diagnostics,
+    )
+
+
+def suggest_survivor_paths(
+    universe: EngineUniverse,
+    *,
+    n_sims: int = 300,
+    seed: int = 42,
+    injury_paths: Optional[Sequence[InjuryPath]] = None,
+    engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
+    already_locked: Optional[Mapping[Any, Any]] = None,
+    include_diagnostics: bool = True,
+) -> SurvivorSuggestedPathsResult:
+    """Generate 2–3 transparent heuristic full-season survivor paths.
+
+    Uses the same week×team WP matrix as the planner (not an LLM).
+    Strategies: chalk, balanced (pick_now), contrarian_save.
+    """
+    n_sims = max(1, int(n_sims))
+    locked = normalize_plan_picks(already_locked)
+    validate_plan_picks(universe, locked)
+    paths = list(injury_paths or [])
+    locked_items = list(locked.items())
+
+    wins_out, sched_out, by_week, max_week, _path_ok = _build_win_matrix(
+        universe,
+        n_sims=n_sims,
+        seed=seed,
+        injury_paths=paths,
+        locked_items=locked_items,
+    )
+    schedule_weeks = sorted(by_week.keys())
+
+    strategy_specs = [
+        ("chalk", "Chalk", "Highest weekly win % among unused teams."),
+        (
+            "balanced",
+            "Balanced",
+            "Greedy pick_now_score — chalk tempered by future-save value.",
+        ),
+        (
+            "contrarian_save",
+            "Contrarian save",
+            f"Among WP≥{CONTRARIAN_MIN_WP:.0%} options, burn lowest save_score first.",
+        ),
+    ]
+
+    suggested: List[Dict[str, Any]] = []
+    for strategy_id, label, blurb in strategy_specs:
+        used = set(locked.values())
+        picks: Dict[int, str] = dict(locked)
+        week_detail: List[Dict[str, Any]] = []
+        for week in schedule_weeks:
+            if week in picks:
+                team = picks[week]
+                game = by_week.get(week, {}).get(team)
+                row = _enrich_pick_row(
+                    score_team_survivor(
+                        team=team,
+                        week=week,
+                        n_sims=n_sims,
+                        win_counts=wins_out,
+                        games_scheduled=sched_out,
+                        max_week=max_week,
+                        already_used=[],
+                        game=game,
+                    )
+                )
+                week_detail.append(
+                    {
+                        "week": week,
+                        "team": team,
+                        "source": "locked",
+                        "win_rate": row["win_rate"],
+                        "matchup_label": row.get("matchup_label"),
+                        "opponent": row.get("opponent"),
+                        "home_away": row.get("home_away"),
+                    }
+                )
+                continue
+            candidates = _week_candidate_rows(
+                week=week,
+                week_games=by_week.get(week, {}),
+                n_sims=n_sims,
+                wins_out=wins_out,
+                sched_out=sched_out,
+                max_week=max_week,
+                used_teams=list(used),
+            )
+            choice = _pick_strategy_team(candidates, strategy_id)
+            if choice is None:
+                continue
+            team = str(choice["team"])
+            picks[week] = team
+            used.add(team)
+            week_detail.append(
+                {
+                    "week": week,
+                    "team": team,
+                    "source": "suggested",
+                    "win_rate": choice["win_rate"],
+                    "matchup_label": choice.get("matchup_label"),
+                    "opponent": choice.get("opponent"),
+                    "home_away": choice.get("home_away"),
+                    "pick_now_score": choice.get("pick_now_score"),
+                    "save_score": choice.get("save_score"),
+                }
+            )
+
+        marginal = [
+            float(wins_out.get(team, {}).get(week, 0)) / n_sims
+            for week, team in sorted(picks.items())
+        ]
+        # Remaining equity after this full path → always null / slate full.
+        slate = compute_slate_metrics(
+            locked_marginal_wps=marginal,
+            best_remaining_equity=None,
+        )
+        suggested.append(
+            {
+                "id": strategy_id,
+                "label": label,
+                "blurb": blurb,
+                "picks": {str(w): t for w, t in sorted(picks.items())},
+                "pick_count": len(picks),
+                "weeks": week_detail,
+                "avg_locked_wp": slate["avg_locked_wp"],
+                "danger_weeks": slate["danger_weeks"],
+                "slate_grade": slate["slate_grade"],
+                "slate_score": slate["slate_score"],
+            }
+        )
+
+    notes = dict(universe.notes)
+    notes["suggested_paths"] = PATH_FORMULA_NOTES["suggested_paths"]
+    if paths:
+        notes["injury_paths"] = f"{len(paths)} path(s) applied"
+
+    diagnostics: Dict[str, Any] = {}
+    if include_diagnostics:
+        diagnostics = {
+            "seed": seed,
+            "schedule_weeks": schedule_weeks,
+            "already_locked": {str(w): t for w, t in locked.items()},
+            "strategies": [s[0] for s in strategy_specs],
+        }
+
+    return SurvivorSuggestedPathsResult(
+        season=universe.season,
+        n_sims=n_sims,
+        engine_version=engine_version,
+        paths=suggested,
+        formula={
+            k: PATH_FORMULA_NOTES[k]
+            for k in (
+                "suggested_paths",
+                "avg_locked_wp",
+                "danger_weeks",
+                "slate_grade",
+                "pick_now_score",
+                "save_score",
+            )
+        },
         notes=notes,
         diagnostics=diagnostics,
     )

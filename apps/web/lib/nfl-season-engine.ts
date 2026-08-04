@@ -72,8 +72,13 @@ export type SeasonEngineSurvivorPick = {
   week: number;
   win_rate: number;
   win_prob?: number;
+  this_week_wp?: number;
   opponent?: string | null;
   home_away?: string | null;
+  matchup_label?: string | null;
+  is_favorite?: boolean;
+  favorite_team?: string | null;
+  favorite_wp?: number;
   save_score: number;
   pick_now_score: number;
   future_value?: number;
@@ -126,6 +131,46 @@ export type SeasonEngineSurvivorPlanResponse = {
   path_strength: string;
   path_strength_geo?: number | null;
   locked_pick_count: number;
+  avg_locked_wp?: number | null;
+  danger_weeks?: number;
+  best_remaining_equity?: number | null;
+  slate_grade?: string;
+  slate_score?: number | null;
+  formula?: Record<string, string>;
+  notes?: Record<string, string>;
+  diagnostics?: Record<string, unknown>;
+  error?: string;
+};
+
+export type SeasonEngineSuggestedPath = {
+  id: string;
+  label: string;
+  blurb: string;
+  picks: Record<string, string>;
+  pick_count: number;
+  avg_locked_wp?: number | null;
+  danger_weeks?: number;
+  slate_grade?: string;
+  slate_score?: number | null;
+  weeks?: Array<{
+    week: number;
+    team: string;
+    win_rate?: number;
+    matchup_label?: string | null;
+    opponent?: string | null;
+    home_away?: string | null;
+    source?: string;
+  }>;
+};
+
+export type SeasonEngineSurvivorSuggestPathsResponse = {
+  mode: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  season: number;
+  n_sims: number;
+  engine_version: string;
+  paths: SeasonEngineSuggestedPath[];
   formula?: Record<string, string>;
   notes?: Record<string, string>;
   diagnostics?: Record<string, unknown>;
@@ -575,7 +620,7 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
     const res = await upstreamFetch(`${base}/nfl/season-engine/survivor/plan`, {
       method: "POST",
       headers: modelHeaders(),
-      timeoutMs: 45_000,
+      timeoutMs: 120_000,
       cache: "no-store",
       body: JSON.stringify(body),
     });
@@ -637,6 +682,17 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
       locked_pick_count: Number(
         payload.locked_pick_count ?? Object.keys(body.picks).length,
       ),
+      avg_locked_wp:
+        typeof payload.avg_locked_wp === "number" ? payload.avg_locked_wp : null,
+      danger_weeks:
+        typeof payload.danger_weeks === "number" ? payload.danger_weeks : 0,
+      best_remaining_equity:
+        typeof payload.best_remaining_equity === "number"
+          ? payload.best_remaining_equity
+          : null,
+      slate_grade: String(payload.slate_grade ?? "Empty"),
+      slate_score:
+        typeof payload.slate_score === "number" ? payload.slate_score : null,
       formula:
         payload.formula && typeof payload.formula === "object"
           ? (payload.formula as Record<string, string>)
@@ -664,6 +720,106 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
       path_strength: "Empty",
       locked_pick_count: Object.keys(body.picks).length,
       error: err instanceof Error ? err.message : "Survivor plan unreachable",
+    };
+  }
+}
+
+export async function fetchSeasonEngineSurvivorSuggestPaths(input: {
+  picks?: Record<string, string> | Record<number, string>;
+  nSims?: number;
+  season?: number;
+  seed?: number;
+  demo?: boolean;
+  injuryPaths?: InjuryPathInput[];
+  includeDiagnostics?: boolean;
+}): Promise<SeasonEngineSurvivorSuggestPathsResponse> {
+  const base = baseUrl();
+  if (!base) {
+    return {
+      mode: "",
+      season: 2026,
+      n_sims: 0,
+      engine_version: "",
+      paths: [],
+      error: "MODEL_SERVICE_URL is not configured.",
+    };
+  }
+
+  const body = buildSurvivorPlanBody({
+    ...input,
+    topN: 6,
+  });
+  try {
+    const res = await upstreamFetch(
+      `${base}/nfl/season-engine/survivor/suggest-paths`,
+      {
+        method: "POST",
+        headers: modelHeaders(),
+        timeoutMs: 120_000,
+        cache: "no-store",
+        body: JSON.stringify({
+          season: body.season,
+          n_sims: body.n_sims,
+          seed: body.seed,
+          picks: body.picks,
+          demo: body.demo,
+          injury_paths: body.injury_paths,
+          include_diagnostics: body.include_diagnostics,
+        }),
+      },
+    );
+    const payload = await readJson(res);
+    if (!res.ok) {
+      return {
+        mode: "",
+        season: body.season,
+        n_sims: body.n_sims,
+        engine_version: "",
+        paths: [],
+        error: detailError(
+          payload,
+          `Survivor suggest-paths failed (${res.status})`,
+        ),
+      };
+    }
+    return {
+      mode: String(payload.mode ?? ""),
+      schedule_source:
+        typeof payload.schedule_source === "string"
+          ? payload.schedule_source
+          : undefined,
+      schedule_game_count:
+        typeof payload.schedule_game_count === "number"
+          ? payload.schedule_game_count
+          : undefined,
+      season: Number(payload.season ?? body.season),
+      n_sims: Number(payload.n_sims ?? body.n_sims),
+      engine_version: String(payload.engine_version ?? ""),
+      paths: Array.isArray(payload.paths)
+        ? (payload.paths as SeasonEngineSuggestedPath[])
+        : [],
+      formula:
+        payload.formula && typeof payload.formula === "object"
+          ? (payload.formula as Record<string, string>)
+          : undefined,
+      notes:
+        payload.notes && typeof payload.notes === "object"
+          ? (payload.notes as Record<string, string>)
+          : undefined,
+      diagnostics:
+        payload.diagnostics && typeof payload.diagnostics === "object"
+          ? (payload.diagnostics as Record<string, unknown>)
+          : undefined,
+    };
+  } catch (err) {
+    return {
+      mode: "",
+      season: body.season,
+      n_sims: body.n_sims,
+      engine_version: "",
+      paths: [],
+      error:
+        err instanceof Error ? err.message : "Survivor suggest-paths unreachable",
     };
   }
 }
