@@ -1,0 +1,70 @@
+{
+  "engine_version": "nfl-season-engine-v1.9.1-real-depth",
+  "mode": "real",
+  "schedule_source": "packaged_wall_chart_2026",
+  "schedule_game_count": 272,
+  "schedule_as_of": "2026-08-03",
+  "roster_source": "packaged_nflverse_depth_2026",
+  "roster_as_of": "2026-08-03",
+  "depth_source": "packaged_nflverse_depth_2026",
+  "depth_as_of": "2026-08-03",
+  "depth_team_count": 32,
+  "depth_named_skill_teams": 32,
+  "depth_full_skill_starter_teams": 32,
+  "depth_player_rows": 383,
+  "layers": [
+    {
+      "id": 1,
+      "name": "team_strength",
+      "module": "src.services.nfl_season_engine.team_strength"
+    },
+    {
+      "id": 2,
+      "name": "game_script",
+      "module": "src.services.nfl_season_engine.game_script"
+    },
+    {
+      "id": 3,
+      "name": "player_usage",
+      "module": "src.services.nfl_season_engine.player_usage"
+    },
+    {
+      "id": 4,
+      "name": "production",
+      "module": "src.services.nfl_season_engine.production"
+    }
+  ],
+  "capabilities": [
+    "simulate",
+    "game_boxes",
+    "injury_paths",
+    "usage_roles",
+    "depth_chart",
+    "role_volatility",
+    "game_script_play_mix",
+    "red_zone_scoring_usage",
+    "coaching_tendencies",
+    "survivor",
+    "include_diagnostics",
+    "real_2026_schedule",
+    "real_2026_depth"
+  ],
+  "contract": {
+    "docs": "data/ops/nfl-season-engine-api-contract-20260803.md",
+    "stable_fields": [
+      "engine_version",
+      "mode",
+      "schedule_source",
+      "schedule_game_count",
+      "roster_source",
+      "depth_source",
+      "point_estimate",
+      "distributions",
+      "ranked_picks",
+      "already_used",
+      "team_wins",
+      "usage_role"
+    ],
+    "include_diagnostics": "Query/body flag; game-boxes default false; simulate/survivor default true for compact win/bye/injury summaries"
+  }
+}

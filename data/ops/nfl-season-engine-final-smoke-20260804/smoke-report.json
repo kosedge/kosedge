@@ -1,0 +1,729 @@
+{
+  "as_of": "2026-08-04",
+  "base": "https://www.kosedge.com",
+  "checks": [
+    {
+      "level": "pass",
+      "check": "status",
+      "http": 200,
+      "elapsed_s": 0.6,
+      "detail": {
+        "engine_version": "nfl-season-engine-v1.9.1-real-depth",
+        "mode": "real",
+        "schedule_source": "packaged_wall_chart_2026",
+        "schedule_game_count": 272,
+        "depth_source": "packaged_nflverse_depth_2026",
+        "depth_as_of": "2026-08-03",
+        "depth_named_skill_teams": 32,
+        "error": null
+      }
+    },
+    {
+      "level": "pass",
+      "check": "game_boxes:SF@LA_W1",
+      "http": 200,
+      "elapsed_s": 0.36,
+      "roles": [
+        {
+          "level": "pass",
+          "player": "Christian McCaffrey",
+          "team": "SF",
+          "position": "RB",
+          "usage_role": "RB1",
+          "rush_yds": 55.351,
+          "rec": 2.206,
+          "pass_yds": null
+        },
+        {
+          "level": "pass",
+          "player": "Brock Purdy",
+          "team": "SF",
+          "position": "QB",
+          "usage_role": "QB1",
+          "rush_yds": 8.254,
+          "rec": null,
+          "pass_yds": 188.067
+        },
+        {
+          "level": "pass",
+          "player": "Puka Nacua",
+          "team": "LA",
+          "position": "WR",
+          "usage_role": "WR1",
+          "rush_yds": null,
+          "rec": 5.325,
+          "pass_yds": null
+        },
+        {
+          "level": "pass",
+          "player": "Matthew Stafford",
+          "team": "LA",
+          "position": "QB",
+          "usage_role": "QB1",
+          "rush_yds": 7.989,
+          "rec": null,
+          "pass_yds": 191.533
+        },
+        {
+          "level": "pass",
+          "player": "Kyren Williams",
+          "team": "LA",
+          "position": "RB",
+          "usage_role": "RB1",
+          "rush_yds": 39.514,
+          "rec": 2.083,
+          "pass_yds": null
+        }
+      ],
+      "sanity": [
+        {
+          "level": "pass",
+          "check": "SF@LA_W1:LA:qb_pass_yds",
+          "detail": {
+            "player": "Matthew Stafford",
+            "pass_yards": 191.533,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "SF@LA_W1:SF:qb_pass_yds",
+          "detail": {
+            "player": "Brock Purdy",
+            "pass_yards": 188.067,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "SF@LA_W1:LA:rb1_rush",
+          "detail": {
+            "player": "Kyren Williams",
+            "role": "RB1",
+            "rush_yards": 39.514
+          }
+        },
+        {
+          "level": "pass",
+          "check": "SF@LA_W1:SF:rb1_rush",
+          "detail": {
+            "player": "Christian McCaffrey",
+            "role": "RB1",
+            "rush_yards": 55.351
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "game_boxes:DET@BUF_W2",
+      "http": 200,
+      "elapsed_s": 0.43,
+      "roles": [
+        {
+          "level": "pass",
+          "player": "Josh Allen",
+          "team": "BUF",
+          "position": "QB",
+          "usage_role": "QB1",
+          "rush_yds": 7.838,
+          "rec": null,
+          "pass_yds": 205.944
+        },
+        {
+          "level": "pass",
+          "player": "James Cook III",
+          "team": "BUF",
+          "position": "RB",
+          "usage_role": "RB1",
+          "rush_yds": 51.749,
+          "rec": 2.074,
+          "pass_yds": null
+        },
+        {
+          "level": "pass",
+          "player": "Jahmyr Gibbs",
+          "team": "DET",
+          "position": "RB",
+          "usage_role": "RB1",
+          "rush_yds": 50.223,
+          "rec": 2.304,
+          "pass_yds": null
+        }
+      ],
+      "sanity": [
+        {
+          "level": "pass",
+          "check": "DET@BUF_W2:BUF:qb_pass_yds",
+          "detail": {
+            "player": "Josh Allen",
+            "pass_yards": 205.944,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "DET@BUF_W2:DET:qb_pass_yds",
+          "detail": {
+            "player": "Jared Goff",
+            "pass_yards": 188.698,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "DET@BUF_W2:BUF:rb1_rush",
+          "detail": {
+            "player": "James Cook III",
+            "role": "RB1",
+            "rush_yards": 51.749
+          }
+        },
+        {
+          "level": "pass",
+          "check": "DET@BUF_W2:DET:rb1_rush",
+          "detail": {
+            "player": "Jahmyr Gibbs",
+            "role": "RB1",
+            "rush_yards": 50.223
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "game_boxes:KC@MIA_W3",
+      "http": 200,
+      "elapsed_s": 0.38,
+      "roles": [
+        {
+          "level": "pass",
+          "player": "Patrick Mahomes",
+          "team": "KC",
+          "position": "QB",
+          "usage_role": "QB1",
+          "rush_yds": 7.281,
+          "rec": null,
+          "pass_yds": 209.731
+        },
+        {
+          "level": "pass",
+          "player": "Travis Kelce",
+          "team": "KC",
+          "position": "TE",
+          "usage_role": "TE1",
+          "rush_yds": null,
+          "rec": 5.27,
+          "pass_yds": null
+        }
+      ],
+      "sanity": [
+        {
+          "level": "pass",
+          "check": "KC@MIA_W3:MIA:qb_pass_yds",
+          "detail": {
+            "player": "Malik Willis",
+            "pass_yards": 222.121,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "KC@MIA_W3:KC:qb_pass_yds",
+          "detail": {
+            "player": "Patrick Mahomes",
+            "pass_yards": 209.731,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "KC@MIA_W3:MIA:rb1_rush",
+          "detail": {
+            "player": "De'Von Achane",
+            "role": "RB1",
+            "rush_yards": 36.004
+          }
+        },
+        {
+          "level": "pass",
+          "check": "KC@MIA_W3:KC:rb1_rush",
+          "detail": {
+            "player": "Kenneth Walker III",
+            "role": "RB1",
+            "rush_yards": 53.249
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "game_boxes:LAC@SEA_W4",
+      "http": 200,
+      "elapsed_s": 0.34,
+      "roles": [
+        {
+          "level": "pass",
+          "player": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "position": "WR",
+          "usage_role": "WR1",
+          "rush_yds": null,
+          "rec": 5.474,
+          "pass_yds": null
+        },
+        {
+          "level": "pass",
+          "player": "Sam Darnold",
+          "team": "SEA",
+          "position": "QB",
+          "usage_role": "QB1",
+          "rush_yds": 8.478,
+          "rec": null,
+          "pass_yds": 215.835
+        }
+      ],
+      "sanity": [
+        {
+          "level": "pass",
+          "check": "LAC@SEA_W4:SEA:qb_pass_yds",
+          "detail": {
+            "player": "Sam Darnold",
+            "pass_yards": 215.835,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "LAC@SEA_W4:LAC:qb_pass_yds",
+          "detail": {
+            "player": "Justin Herbert",
+            "pass_yards": 220.036,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "LAC@SEA_W4:SEA:rb1_rush",
+          "detail": {
+            "player": "Zach Charbonnet",
+            "role": "RB1",
+            "rush_yards": 46.656
+          }
+        },
+        {
+          "level": "pass",
+          "check": "LAC@SEA_W4:LAC:rb1_rush",
+          "detail": {
+            "player": "Omarion Hampton",
+            "role": "RB1",
+            "rush_yards": 49.783
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "game_boxes:ARI@DAL_W8",
+      "http": 200,
+      "elapsed_s": 0.47,
+      "roles": [
+        {
+          "level": "pass",
+          "player": "Dak Prescott",
+          "team": "DAL",
+          "position": "QB",
+          "usage_role": "QB1",
+          "rush_yds": 6.671,
+          "rec": null,
+          "pass_yds": 216.895
+        }
+      ],
+      "sanity": [
+        {
+          "level": "pass",
+          "check": "ARI@DAL_W8:DAL:qb_pass_yds",
+          "detail": {
+            "player": "Dak Prescott",
+            "pass_yards": 216.895,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "ARI@DAL_W8:ARI:qb_pass_yds",
+          "detail": {
+            "player": "Jacoby Brissett",
+            "pass_yards": 183.146,
+            "pass_td": null,
+            "int": null
+          }
+        },
+        {
+          "level": "pass",
+          "check": "ARI@DAL_W8:DAL:rb1_rush",
+          "detail": {
+            "player": "Javonte Williams",
+            "role": "RB1",
+            "rush_yards": 55.316
+          }
+        },
+        {
+          "level": "pass",
+          "check": "ARI@DAL_W8:ARI:rb1_rush",
+          "detail": {
+            "player": "Jeremiyah Love",
+            "role": "RB1",
+            "rush_yards": 49.137
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "injury:CMC_W1-4",
+      "http": [
+        200,
+        200
+      ],
+      "elapsed_s": [
+        0.42,
+        0.36
+      ],
+      "detail": {
+        "cmc_rush_baseline": 56.518,
+        "cmc_rush_injured": 0.0,
+        "rb2_name": "Jordan James",
+        "rb2_rush_baseline": 24.601,
+        "rb2_rush_injured": 60.649,
+        "rb2_role_injured": "RB1"
+      }
+    },
+    {
+      "level": "pass",
+      "check": "injury:CMC_outside_W1-4",
+      "http": 200,
+      "elapsed_s": 0.34,
+      "detail": {
+        "matchup": "SF@SEA W5",
+        "cmc_rush": 57.134,
+        "note": "CMC should recover usage outside injury window"
+      }
+    },
+    {
+      "level": "pass",
+      "check": "injury:WR1_Evans_W1-3",
+      "http": [
+        200,
+        200
+      ],
+      "elapsed_s": [
+        0.32,
+        0.33
+      ],
+      "detail": {
+        "evans_rec_baseline": 4.197,
+        "evans_rec_injured": 0.0,
+        "other_wr_rec_sum_top3_baseline": 3.659,
+        "other_wr_rec_sum_top3_injured": 6.373,
+        "other_wrs_injured": [
+          [
+            "Deebo Samuel",
+            4.208,
+            0.0,
+            "WR1"
+          ],
+          [
+            "Christian Kirk",
+            2.165,
+            0.0,
+            "WR2"
+          ]
+        ]
+      }
+    },
+    {
+      "level": "pass",
+      "check": "survivor:W1_clean",
+      "http": 200,
+      "elapsed_s": 1.22,
+      "mode": "real",
+      "findings": [
+        {
+          "level": "pass",
+          "detail": "20 ranked picks"
+        },
+        {
+          "level": "pass",
+          "detail": {
+            "top3": [
+              {
+                "team": "LAC",
+                "opp": "ARI",
+                "ha": "home",
+                "win_rate": 0.6583,
+                "pick_now": 0.4493
+              },
+              {
+                "team": "SEA",
+                "opp": "NE",
+                "ha": "home",
+                "win_rate": 0.65,
+                "pick_now": 0.4208
+              },
+              {
+                "team": "MIA",
+                "opp": "LV",
+                "ha": "away",
+                "win_rate": 0.6167,
+                "pick_now": 0.4105
+              },
+              {
+                "team": "DET",
+                "opp": "NO",
+                "ha": "home",
+                "win_rate": 0.725,
+                "pick_now": 0.3976
+              },
+              {
+                "team": "DAL",
+                "opp": "NYG",
+                "ha": "away",
+                "win_rate": 0.65,
+                "pick_now": 0.3802
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "survivor:W1_used_BUF_KC",
+      "http": 200,
+      "elapsed_s": 1.23,
+      "mode": "real",
+      "findings": [
+        {
+          "level": "pass",
+          "detail": "20 ranked picks"
+        },
+        {
+          "level": "pass",
+          "detail": "BUF excluded from pickable"
+        },
+        {
+          "level": "pass",
+          "detail": "KC excluded from pickable"
+        },
+        {
+          "level": "pass",
+          "detail": {
+            "top3": [
+              {
+                "team": "LAC",
+                "opp": "ARI",
+                "ha": "home",
+                "win_rate": 0.6583,
+                "pick_now": 0.4493
+              },
+              {
+                "team": "SEA",
+                "opp": "NE",
+                "ha": "home",
+                "win_rate": 0.65,
+                "pick_now": 0.4208
+              },
+              {
+                "team": "MIA",
+                "opp": "LV",
+                "ha": "away",
+                "win_rate": 0.6167,
+                "pick_now": 0.4105
+              },
+              {
+                "team": "DET",
+                "opp": "NO",
+                "ha": "home",
+                "win_rate": 0.725,
+                "pick_now": 0.3976
+              },
+              {
+                "team": "DAL",
+                "opp": "NYG",
+                "ha": "away",
+                "win_rate": 0.65,
+                "pick_now": 0.3802
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "survivor:W5_byes_CAR_KC",
+      "http": 200,
+      "elapsed_s": 1.25,
+      "mode": "real",
+      "findings": [
+        {
+          "level": "pass",
+          "detail": "20 ranked picks"
+        },
+        {
+          "level": "pass",
+          "detail": "bye team CAR flagged",
+          "row": {
+            "plays_this_week": false,
+            "opponent": null,
+            "win_rate": 0
+          }
+        },
+        {
+          "level": "pass",
+          "detail": "bye team KC flagged",
+          "row": {
+            "plays_this_week": false,
+            "opponent": null,
+            "win_rate": 0
+          }
+        },
+        {
+          "level": "pass",
+          "detail": {
+            "top3": [
+              {
+                "team": "GB",
+                "opp": "CHI",
+                "ha": "home",
+                "win_rate": 0.725,
+                "pick_now": 0.4689
+              },
+              {
+                "team": "NE",
+                "opp": "LV",
+                "ha": "home",
+                "win_rate": 0.575,
+                "pick_now": 0.4539
+              },
+              {
+                "team": "LAC",
+                "opp": "DEN",
+                "ha": "home",
+                "win_rate": 0.6167,
+                "pick_now": 0.4067
+              },
+              {
+                "team": "PIT",
+                "opp": "IND",
+                "ha": "home",
+                "win_rate": 0.6167,
+                "pick_now": 0.3962
+              },
+              {
+                "team": "HOU",
+                "opp": "TEN",
+                "ha": "away",
+                "win_rate": 0.6167,
+                "pick_now": 0.3944
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "pass",
+      "check": "survivor:W2_clean",
+      "http": 200,
+      "elapsed_s": 1.18,
+      "mode": "real",
+      "findings": [
+        {
+          "level": "pass",
+          "detail": "20 ranked picks"
+        },
+        {
+          "level": "pass",
+          "detail": "DET excluded from pickable"
+        },
+        {
+          "level": "pass",
+          "detail": {
+            "top3": [
+              {
+                "team": "ATL",
+                "opp": "CAR",
+                "ha": "home",
+                "win_rate": 0.7167,
+                "pick_now": 0.5423
+              },
+              {
+                "team": "LA",
+                "opp": "NYG",
+                "ha": "home",
+                "win_rate": 0.6333,
+                "pick_now": 0.4504
+              },
+              {
+                "team": "LAC",
+                "opp": "LV",
+                "ha": "home",
+                "win_rate": 0.6417,
+                "pick_now": 0.4339
+              },
+              {
+                "team": "PIT",
+                "opp": "NE",
+                "ha": "away",
+                "win_rate": 0.6417,
+                "pick_now": 0.4243
+              },
+              {
+                "team": "TB",
+                "opp": "CLE",
+                "ha": "home",
+                "win_rate": 0.625,
+                "pick_now": 0.4069
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "weak",
+      "check": "edge:both_bye_matchup",
+      "http": 200,
+      "elapsed_s": 0.39,
+      "detail": "Returned players for KC vs CAR in W5 when both are on bye \u2014 UI should not offer this matchup"
+    }
+  ],
+  "artifacts": [
+    "status.json",
+    "game-boxes-SF@LA_W1.json",
+    "game-boxes-DET@BUF_W2.json",
+    "game-boxes-KC@MIA_W3.json",
+    "game-boxes-LAC@SEA_W4.json",
+    "game-boxes-ARI@DAL_W8.json",
+    "survivor-W1_clean.json",
+    "survivor-W1_used_BUF_KC.json",
+    "survivor-W5_byes_CAR_KC.json",
+    "survivor-W2_clean.json"
+  ],
+  "summary": {
+    "pass": 13,
+    "weak": 1,
+    "fail": 0
+  }
+}

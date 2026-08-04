@@ -1,0 +1,3728 @@
+{
+  "mode": "real",
+  "schedule_source": "packaged_wall_chart_2026",
+  "schedule_game_count": 272,
+  "roster_source": "packaged_nflverse_depth_2026",
+  "roster_as_of": "2026-08-03",
+  "season": 2026,
+  "week": 1,
+  "game_id": "2026-W01-SF@LA",
+  "home_team": "LA",
+  "away_team": "SF",
+  "n_replicates": 50,
+  "engine_version": "nfl-season-engine-v1.9.1-real-depth",
+  "game_script_summary": {
+    "home_win_prob_mean": 0.4659,
+    "expected_total_mean": 43.93,
+    "pace_plays_mean": 63.01,
+    "home_pass_rate_mean": 0.6066,
+    "away_pass_rate_mean": 0.5485,
+    "home_lead_rate": 0.3,
+    "home_trail_rate": 0.4,
+    "home_early_down_pass_rate_mean": 0.6229,
+    "away_early_down_pass_rate_mean": 0.5273,
+    "home_hurry_up_mean": 0.109,
+    "away_hurry_up_mean": 0.1469,
+    "home_script_intensity_mean": 0.398,
+    "away_script_intensity_mean": 0.398,
+    "minutes_remaining_mean": 27.13,
+    "time_bucket_late_rate": 0.34,
+    "home_large_lead_rate": 0.16,
+    "home_large_deficit_rate": 0.08
+  },
+  "notes": {
+    "mode": "real",
+    "schedule_source": "packaged_wall_chart_2026",
+    "schedule_as_of": "2026-08-03",
+    "roster_source": "packaged_nflverse_depth_2026",
+    "roster_as_of": "2026-08-03",
+    "depth_source": "packaged_nflverse_depth_2026",
+    "depth_as_of": "2026-08-03",
+    "schedule": "REAL packaged 2026 REG schedule (272 games, byes). DB unavailable \u2014 using packaged offline artifacts.",
+    "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
+    "rosters": "REAL packaged nflverse depth (32/32 named skill teams); DB weekly preferred when populated.",
+    "depth_chart": "committee_rb=DET; murky_wr=SF",
+    "calibration": "nfl-season-engine-cal-v1",
+    "depth_team_count": 32,
+    "depth_named_skill_teams": 32,
+    "depth_full_skill_starter_teams": 32,
+    "depth_player_rows": 383,
+    "cal_calibration_tag": "nfl-season-engine-cal-v1",
+    "cal_league_env": "PPG=21.8, HFA=1.05, score_sd=9.8, plays=63.0, pass_rate=0.58",
+    "cal_efficiency": "ypa=7.05, ypc=4.2, int_rate=0.018, pass_td_rate=0.041, rush_td_rate_rb=0.027",
+    "cal_usage": "Absolute target/rush shares with residual 'other' bucket (floor=0.08) \u2014 prevents sparse-roster inflation. v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix.",
+    "cal_survivor": "v1.4: team W/L season paths \u2192 week win rates + inspectable save_score / pick_now_score (see survivor.py FORMULA_NOTES).",
+    "cal_harden": "v1.4.1: dual-name injury matching, include_diagnostics explain payloads, thin-roster/NaN guards, contract docs.",
+    "cal_depth_volatility": "v1.5: depth_chart feature/committee RB + clear/murky WR; committee splits 55/45 or 45/35/20; weekly share drift + rare role shuffle; injury promotions (see depth_chart.py).",
+    "cal_game_script": "v1.6: score diff + remaining-clock snapshot \u2192 script_detail (large/small lead|deficit), time_bucket, intensity; explicit pass_rate / early_down_pass_rate / hurry_up; usage matrix intensity-scaled (see game_script.py + usage_roles.py).",
+    "cal_coaching_tendencies": "v1.8: team coaching profiles (pass_rate_bias, script_aggression, rz_pass_bias, early_down_pass_bias, two_minute_aggression) overlay Layer-2 play-mix + RZ pass rate; diagnostics expose coaching_profile + tendency_effects (see coaching_tendencies.py).",
+    "cal_real_schedule": "v1.9: default universe uses real 2026 REG schedule (272 games, weeks 1\u201318 with byes) from nfl_dp_schedules when present, else packaged wall-chart JSON. demo=true keeps round-robin for tests.",
+    "cal_sources": "Recent NFL season shapes (2022\u20132024) + alignment with nfl_handicapping_framework HFA/stdev and box-score EFFICIENCY_CV\u22480.22. No fabricated player grades; DB baselines used when present.",
+    "query_mode": "single_game_marginal_mc",
+    "layers": "1=injury-adjusted strength \u2192 2=game_script \u2192 3=player_usage \u2192 4=production (strengths frozen at query-time book + week injury shocks)",
+    "schedule_match": "on_loaded_schedule",
+    "injury_path_count": "1",
+    "injury_active_adjustments": "1"
+  },
+  "players": [
+    {
+      "player_key": "SF-QB1-BrockPurdy",
+      "player_name": "Brock Purdy",
+      "team": "SF",
+      "position": "QB",
+      "usage_role": "QB1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 175.591,
+        "pass_tds": 0.78,
+        "ints": 0.4,
+        "rush_yards": 8.088
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 175.591,
+          "std": 101.43,
+          "p10": 12.68,
+          "p50": 190.45,
+          "p90": 288.15
+        },
+        "pass_tds": {
+          "mean": 0.78,
+          "std": 1.064,
+          "p10": 0,
+          "p50": 0,
+          "p90": 2
+        },
+        "ints": {
+          "mean": 0.4,
+          "std": 0.693,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rush_yards": {
+          "mean": 8.088,
+          "std": 5.806,
+          "p10": 1.84,
+          "p50": 6.77,
+          "p90": 15.81
+        },
+        "pass_attempts": {
+          "mean": 25.901,
+          "std": 13.163,
+          "p10": 2.07,
+          "p50": 30.39,
+          "p90": 37.87
+        },
+        "carries": {
+          "mean": 1.695,
+          "std": 1.163,
+          "p10": 0.5,
+          "p50": 1.25,
+          "p90": 3.09
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "LA-QB1-MatthewStafford",
+      "player_name": "Matthew Stafford",
+      "team": "LA",
+      "position": "QB",
+      "usage_role": "QB1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 168.55,
+        "pass_tds": 1.02,
+        "ints": 0.44,
+        "rush_yards": 6.344
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 168.55,
+          "std": 108.597,
+          "p10": 13.77,
+          "p50": 197.14,
+          "p90": 294.65
+        },
+        "pass_tds": {
+          "mean": 1.02,
+          "std": 1.241,
+          "p10": 0,
+          "p50": 1,
+          "p90": 2
+        },
+        "ints": {
+          "mean": 0.44,
+          "std": 0.753,
+          "p10": 0,
+          "p50": 0,
+          "p90": 2
+        },
+        "rush_yards": {
+          "mean": 6.344,
+          "std": 4.714,
+          "p10": 1.76,
+          "p50": 5.98,
+          "p90": 10.39
+        },
+        "pass_attempts": {
+          "mean": 26.65,
+          "std": 15.634,
+          "p10": 2.24,
+          "p50": 33.91,
+          "p90": 40.33
+        },
+        "carries": {
+          "mean": 1.437,
+          "std": 0.978,
+          "p10": 0.5,
+          "p50": 1.22,
+          "p90": 2.47
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "LA-QB2-TySimpson",
+      "player_name": "Ty Simpson",
+      "team": "LA",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 53.972,
+        "pass_tds": 0.42,
+        "ints": 0.28,
+        "rush_yards": 1.546
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 53.972,
+          "std": 88.155,
+          "p10": 4.85,
+          "p50": 6.66,
+          "p90": 190.38
+        },
+        "pass_tds": {
+          "mean": 0.42,
+          "std": 1.079,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "ints": {
+          "mean": 0.28,
+          "std": 0.722,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rush_yards": {
+          "mean": 1.546,
+          "std": 1.938,
+          "p10": 0.06,
+          "p50": 0.78,
+          "p90": 3.42
+        },
+        "pass_attempts": {
+          "mean": 8.855,
+          "std": 13.919,
+          "p10": 0.83,
+          "p50": 1.04,
+          "p90": 34.55
+        },
+        "carries": {
+          "mean": 0.327,
+          "std": 0.403,
+          "p10": 0.02,
+          "p50": 0.2,
+          "p90": 0.69
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "SF-RB1-ChristianMcCaffrey",
+      "player_name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "usage_role": "RB1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 52.369,
+        "rush_tds": 0.5,
+        "rec_yards": 17.808,
+        "receptions": 2.456
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 52.369,
+          "std": 24.029,
+          "p10": 24.54,
+          "p50": 47.16,
+          "p90": 85.86
+        },
+        "rush_tds": {
+          "mean": 0.5,
+          "std": 0.64,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 17.808,
+          "std": 10.565,
+          "p10": 5.44,
+          "p50": 15.87,
+          "p90": 29.72
+        },
+        "receptions": {
+          "mean": 2.456,
+          "std": 1.269,
+          "p10": 0.93,
+          "p50": 2.18,
+          "p90": 3.99
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 13.152,
+          "std": 4.303,
+          "p10": 7.12,
+          "p50": 14.37,
+          "p90": 18.49
+        },
+        "targets": {
+          "mean": 3.404,
+          "std": 1.871,
+          "p10": 1.45,
+          "p50": 2.85,
+          "p90": 5.58
+        }
+      }
+    },
+    {
+      "player_key": "SF-TE1-GeorgeKittle",
+      "player_name": "George Kittle",
+      "team": "SF",
+      "position": "TE",
+      "usage_role": "TE1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 50.758,
+        "receptions": 5.061,
+        "rec_tds": 0.2
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 50.758,
+          "std": 22.346,
+          "p10": 28.63,
+          "p50": 44.82,
+          "p90": 76.35
+        },
+        "receptions": {
+          "mean": 5.061,
+          "std": 1.804,
+          "p10": 3.11,
+          "p50": 4.67,
+          "p90": 7.59
+        },
+        "rec_tds": {
+          "mean": 0.2,
+          "std": 0.447,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 7.577,
+          "std": 2.619,
+          "p10": 4.63,
+          "p50": 6.92,
+          "p90": 10.91
+        }
+      }
+    },
+    {
+      "player_key": "LA-TE1-ColbyParkinson",
+      "player_name": "Colby Parkinson",
+      "team": "LA",
+      "position": "TE",
+      "usage_role": "TE1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 49.602,
+        "receptions": 5.094,
+        "rec_tds": 0.34
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 49.602,
+          "std": 18.581,
+          "p10": 26.35,
+          "p50": 49.67,
+          "p90": 71.87
+        },
+        "receptions": {
+          "mean": 5.094,
+          "std": 1.503,
+          "p10": 3.28,
+          "p50": 4.89,
+          "p90": 7.07
+        },
+        "rec_tds": {
+          "mean": 0.34,
+          "std": 0.552,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 7.548,
+          "std": 2.121,
+          "p10": 5,
+          "p50": 7.35,
+          "p90": 10.49
+        }
+      }
+    },
+    {
+      "player_key": "LA-WR1-PukaNacua",
+      "player_name": "Puka Nacua",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 47.394,
+        "receptions": 4.579,
+        "rec_tds": 0.38
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 47.394,
+          "std": 24.413,
+          "p10": 25.87,
+          "p50": 42.91,
+          "p90": 77.05
+        },
+        "receptions": {
+          "mean": 4.579,
+          "std": 1.955,
+          "p10": 2.56,
+          "p50": 4.4,
+          "p90": 6.93
+        },
+        "rec_tds": {
+          "mean": 0.38,
+          "std": 0.525,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 7.471,
+          "std": 2.963,
+          "p10": 4.47,
+          "p50": 7.1,
+          "p90": 11.2
+        }
+      }
+    },
+    {
+      "player_key": "SF-WR2-DeeboSamuel",
+      "player_name": "Deebo Samuel",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 46.114,
+        "receptions": 4.208,
+        "rec_tds": 0.42
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 46.114,
+          "std": 20.883,
+          "p10": 24.57,
+          "p50": 40.79,
+          "p90": 76.99
+        },
+        "receptions": {
+          "mean": 4.208,
+          "std": 1.531,
+          "p10": 2.48,
+          "p50": 3.89,
+          "p90": 6.65
+        },
+        "rec_tds": {
+          "mean": 0.42,
+          "std": 0.635,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 6.828,
+          "std": 2.61,
+          "p10": 3.95,
+          "p50": 6.97,
+          "p90": 10.35
+        }
+      }
+    },
+    {
+      "player_key": "LA-RB1-KyrenWilliams",
+      "player_name": "Kyren Williams",
+      "team": "LA",
+      "position": "RB",
+      "usage_role": "RB1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 44.477,
+        "rush_tds": 0.54,
+        "rec_yards": 19.311,
+        "receptions": 2.719
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 44.477,
+          "std": 22.928,
+          "p10": 19.72,
+          "p50": 39.89,
+          "p90": 76.43
+        },
+        "rush_tds": {
+          "mean": 0.54,
+          "std": 0.805,
+          "p10": 0,
+          "p50": 0,
+          "p90": 2
+        },
+        "rec_yards": {
+          "mean": 19.311,
+          "std": 14.047,
+          "p10": 4.58,
+          "p50": 14.74,
+          "p90": 38.06
+        },
+        "receptions": {
+          "mean": 2.719,
+          "std": 1.637,
+          "p10": 0.96,
+          "p50": 2.39,
+          "p90": 5.32
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 11.54,
+          "std": 3.879,
+          "p10": 7.73,
+          "p50": 10.28,
+          "p90": 18.01
+        },
+        "targets": {
+          "mean": 3.762,
+          "std": 2.228,
+          "p10": 1.28,
+          "p50": 3.19,
+          "p90": 7.17
+        }
+      }
+    },
+    {
+      "player_key": "SF-QB2-MacJones",
+      "player_name": "Mac Jones",
+      "team": "SF",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 34.773,
+        "pass_tds": 0.16,
+        "ints": 0.14,
+        "rush_yards": 2.681
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 34.773,
+          "std": 64.612,
+          "p10": 4.25,
+          "p50": 7.21,
+          "p90": 170.22
+        },
+        "pass_tds": {
+          "mean": 0.16,
+          "std": 0.543,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "ints": {
+          "mean": 0.14,
+          "std": 0.448,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 2.681,
+          "std": 4.97,
+          "p10": 0.09,
+          "p50": 0.98,
+          "p90": 5.21
+        },
+        "pass_attempts": {
+          "mean": 5.699,
+          "std": 10.697,
+          "p10": 0.76,
+          "p50": 1.04,
+          "p90": 28.3
+        },
+        "carries": {
+          "mean": 0.469,
+          "std": 0.732,
+          "p10": 0.03,
+          "p50": 0.2,
+          "p90": 1.07
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "LA-TE2-TylerHigbee",
+      "player_name": "Tyler Higbee",
+      "team": "LA",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 31.145,
+        "receptions": 3.226,
+        "rec_tds": 0.18
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 31.145,
+          "std": 16.13,
+          "p10": 12.63,
+          "p50": 28.77,
+          "p90": 51.91
+        },
+        "receptions": {
+          "mean": 3.226,
+          "std": 1.482,
+          "p10": 1.59,
+          "p50": 3.21,
+          "p90": 5.68
+        },
+        "rec_tds": {
+          "mean": 0.18,
+          "std": 0.384,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.895,
+          "std": 2.385,
+          "p10": 2.29,
+          "p50": 4.9,
+          "p90": 7.94
+        }
+      }
+    },
+    {
+      "player_key": "SF-TE2-JakeTonges",
+      "player_name": "Jake Tonges",
+      "team": "SF",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 30.31,
+        "receptions": 2.985,
+        "rec_tds": 0.1
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 30.31,
+          "std": 13.655,
+          "p10": 15.37,
+          "p50": 28.04,
+          "p90": 49.06
+        },
+        "receptions": {
+          "mean": 2.985,
+          "std": 1.312,
+          "p10": 1.49,
+          "p50": 2.58,
+          "p90": 4.59
+        },
+        "rec_tds": {
+          "mean": 0.1,
+          "std": 0.361,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.524,
+          "std": 2.051,
+          "p10": 2.14,
+          "p50": 4.12,
+          "p90": 7.56
+        }
+      }
+    },
+    {
+      "player_key": "LA-WR2-DavanteAdams",
+      "player_name": "Davante Adams",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 30.27,
+        "receptions": 2.904,
+        "rec_tds": 0.14
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 30.27,
+          "std": 16.255,
+          "p10": 12.17,
+          "p50": 27.48,
+          "p90": 49.34
+        },
+        "receptions": {
+          "mean": 2.904,
+          "std": 1.235,
+          "p10": 1.51,
+          "p50": 2.75,
+          "p90": 4.55
+        },
+        "rec_tds": {
+          "mean": 0.14,
+          "std": 0.347,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.651,
+          "std": 1.895,
+          "p10": 2.38,
+          "p50": 4.49,
+          "p90": 6.99
+        }
+      }
+    },
+    {
+      "player_key": "SF-RB2-JordanJames",
+      "player_name": "Jordan James",
+      "team": "SF",
+      "position": "RB",
+      "usage_role": "RB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 25.189,
+        "rush_tds": 0.3,
+        "rec_yards": 9.84,
+        "receptions": 1.312
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 25.189,
+          "std": 10.325,
+          "p10": 14.01,
+          "p50": 22.32,
+          "p90": 40.48
+        },
+        "rush_tds": {
+          "mean": 0.3,
+          "std": 0.5,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 9.84,
+          "std": 8.377,
+          "p10": 2.27,
+          "p50": 7.07,
+          "p90": 19.57
+        },
+        "receptions": {
+          "mean": 1.312,
+          "std": 1.007,
+          "p10": 0.34,
+          "p50": 1.04,
+          "p90": 2.96
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 6.875,
+          "std": 2.001,
+          "p10": 4.36,
+          "p50": 6.88,
+          "p90": 9.23
+        },
+        "targets": {
+          "mean": 1.859,
+          "std": 1.478,
+          "p10": 0.55,
+          "p50": 1.49,
+          "p90": 3.83
+        }
+      }
+    },
+    {
+      "player_key": "SF-WR3-ChristianKirk",
+      "player_name": "Christian Kirk",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 22.394,
+        "receptions": 2.165,
+        "rec_tds": 0.2
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 22.394,
+          "std": 12.099,
+          "p10": 10.47,
+          "p50": 19.8,
+          "p90": 40.42
+        },
+        "receptions": {
+          "mean": 2.165,
+          "std": 1.231,
+          "p10": 0.97,
+          "p50": 1.9,
+          "p90": 3.84
+        },
+        "rec_tds": {
+          "mean": 0.2,
+          "std": 0.447,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 3.494,
+          "std": 1.995,
+          "p10": 1.48,
+          "p50": 3.06,
+          "p90": 6.09
+        }
+      }
+    },
+    {
+      "player_key": "LA-RB2-BlakeCorum",
+      "player_name": "Blake Corum",
+      "team": "LA",
+      "position": "RB",
+      "usage_role": "RB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 19.51,
+        "rush_tds": 0.14,
+        "rec_yards": 7.207,
+        "receptions": 1.136
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 19.51,
+          "std": 7.853,
+          "p10": 10.24,
+          "p50": 17.93,
+          "p90": 31.23
+        },
+        "rush_tds": {
+          "mean": 0.14,
+          "std": 0.4,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 7.207,
+          "std": 6.169,
+          "p10": 1.35,
+          "p50": 4.92,
+          "p90": 16.8
+        },
+        "receptions": {
+          "mean": 1.136,
+          "std": 1.032,
+          "p10": 0.19,
+          "p50": 0.81,
+          "p90": 2.52
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 5.315,
+          "std": 1.649,
+          "p10": 3.26,
+          "p50": 5.58,
+          "p90": 7.36
+        },
+        "targets": {
+          "mean": 1.605,
+          "std": 1.469,
+          "p10": 0.28,
+          "p50": 1.16,
+          "p90": 3.94
+        }
+      }
+    },
+    {
+      "player_key": "SF-TE3-LukeFarrell",
+      "player_name": "Luke Farrell",
+      "team": "SF",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 19.446,
+        "receptions": 2.099,
+        "rec_tds": 0.1
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 19.446,
+          "std": 11.843,
+          "p10": 8.22,
+          "p50": 15.81,
+          "p90": 36.55
+        },
+        "receptions": {
+          "mean": 2.099,
+          "std": 1.187,
+          "p10": 0.75,
+          "p50": 1.82,
+          "p90": 4.13
+        },
+        "rec_tds": {
+          "mean": 0.1,
+          "std": 0.361,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 3.146,
+          "std": 1.758,
+          "p10": 1,
+          "p50": 2.77,
+          "p90": 5.55
+        }
+      }
+    },
+    {
+      "player_key": "SF-QB3-KurtisRourke",
+      "player_name": "Kurtis Rourke",
+      "team": "SF",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 19.23,
+        "pass_tds": 0.1,
+        "ints": 0.02,
+        "rush_yards": 2.289
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 19.23,
+          "std": 49.384,
+          "p10": 4.17,
+          "p50": 6.38,
+          "p90": 11.5
+        },
+        "pass_tds": {
+          "mean": 0.1,
+          "std": 0.3,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "ints": {
+          "mean": 0.02,
+          "std": 0.14,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 2.289,
+          "std": 2.968,
+          "p10": 0.06,
+          "p50": 0.97,
+          "p90": 6.78
+        },
+        "pass_attempts": {
+          "mean": 3.026,
+          "std": 7.423,
+          "p10": 0.76,
+          "p50": 1.04,
+          "p90": 2.07
+        },
+        "carries": {
+          "mean": 0.488,
+          "std": 0.583,
+          "p10": 0.01,
+          "p50": 0.21,
+          "p90": 1.45
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "LA-TE3-TerranceFerguson",
+      "player_name": "Terrance Ferguson",
+      "team": "LA",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 15.334,
+        "receptions": 1.747,
+        "rec_tds": 0.04
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 15.334,
+          "std": 10.37,
+          "p10": 6.11,
+          "p50": 11.11,
+          "p90": 27.45
+        },
+        "receptions": {
+          "mean": 1.747,
+          "std": 1.127,
+          "p10": 0.79,
+          "p50": 1.35,
+          "p90": 3.12
+        },
+        "rec_tds": {
+          "mean": 0.04,
+          "std": 0.196,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 2.609,
+          "std": 1.679,
+          "p10": 1.14,
+          "p50": 2.07,
+          "p90": 4.7
+        }
+      }
+    },
+    {
+      "player_key": "LA-WR3-JordanWhittington",
+      "player_name": "Jordan Whittington",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR3",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "WR3",
+      "point_estimate": {
+        "rec_yards": 13.29,
+        "receptions": 1.366,
+        "rec_tds": 0.1
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 13.29,
+          "std": 9.249,
+          "p10": 3.1,
+          "p50": 9.59,
+          "p90": 23.32
+        },
+        "receptions": {
+          "mean": 1.366,
+          "std": 0.995,
+          "p10": 0.3,
+          "p50": 1.1,
+          "p90": 2.86
+        },
+        "rec_tds": {
+          "mean": 0.1,
+          "std": 0.3,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 2.163,
+          "std": 1.504,
+          "p10": 0.48,
+          "p50": 1.79,
+          "p90": 4.47
+        }
+      }
+    },
+    {
+      "player_key": "LA-QB3-StetsonBennettIV",
+      "player_name": "Stetson Bennett IV",
+      "team": "LA",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 12.36,
+        "pass_tds": 0.1,
+        "ints": 0.08,
+        "rush_yards": 2.153
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 12.36,
+          "std": 22.716,
+          "p10": 4.69,
+          "p50": 6.33,
+          "p90": 14.93
+        },
+        "pass_tds": {
+          "mean": 0.1,
+          "std": 0.412,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "ints": {
+          "mean": 0.08,
+          "std": 0.337,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 2.153,
+          "std": 2.99,
+          "p10": 0.06,
+          "p50": 1.05,
+          "p90": 4.81
+        },
+        "pass_attempts": {
+          "mean": 2.671,
+          "std": 6.6,
+          "p10": 0.83,
+          "p50": 1.04,
+          "p90": 2.46
+        },
+        "carries": {
+          "mean": 0.458,
+          "std": 0.574,
+          "p10": 0.01,
+          "p50": 0.26,
+          "p90": 1.16
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "LA-RB3-RonnieRivers",
+      "player_name": "Ronnie Rivers",
+      "team": "LA",
+      "position": "RB",
+      "usage_role": "OTHER",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "large_lead",
+      "scoring_role": "OTHER",
+      "point_estimate": {
+        "rush_yards": 9.351,
+        "rush_tds": 0.04,
+        "rec_yards": 3.696,
+        "receptions": 0.528
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 9.351,
+          "std": 5.882,
+          "p10": 4.12,
+          "p50": 7.58,
+          "p90": 17.11
+        },
+        "rush_tds": {
+          "mean": 0.04,
+          "std": 0.196,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rec_yards": {
+          "mean": 3.696,
+          "std": 4.712,
+          "p10": 0.31,
+          "p50": 1.94,
+          "p90": 9.11
+        },
+        "receptions": {
+          "mean": 0.528,
+          "std": 0.68,
+          "p10": 0.05,
+          "p50": 0.24,
+          "p90": 1.4
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 2.667,
+          "std": 1.435,
+          "p10": 1.33,
+          "p50": 2.34,
+          "p90": 4.35
+        },
+        "targets": {
+          "mean": 0.749,
+          "std": 0.979,
+          "p10": 0.07,
+          "p50": 0.34,
+          "p90": 2.02
+        }
+      }
+    },
+    {
+      "player_key": "SF-RB3-KaelonBlack",
+      "player_name": "Kaelon Black",
+      "team": "SF",
+      "position": "RB",
+      "usage_role": "OTHER",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "OTHER",
+      "point_estimate": {
+        "rush_yards": 8.346,
+        "rush_tds": 0.04,
+        "rec_yards": 4.156,
+        "receptions": 0.556
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 8.346,
+          "std": 4.65,
+          "p10": 2.92,
+          "p50": 7.45,
+          "p90": 15.04
+        },
+        "rush_tds": {
+          "mean": 0.04,
+          "std": 0.196,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rec_yards": {
+          "mean": 4.156,
+          "std": 3.775,
+          "p10": 0.32,
+          "p50": 2.65,
+          "p90": 9.72
+        },
+        "receptions": {
+          "mean": 0.556,
+          "std": 0.504,
+          "p10": 0.03,
+          "p50": 0.41,
+          "p90": 1.14
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 2.558,
+          "std": 1.302,
+          "p10": 1.17,
+          "p50": 2.26,
+          "p90": 4.25
+        },
+        "targets": {
+          "mean": 0.748,
+          "std": 0.653,
+          "p10": 0.04,
+          "p50": 0.51,
+          "p90": 1.64
+        }
+      }
+    },
+    {
+      "player_key": "SF-WR1-MikeEvans",
+      "player_name": "Mike Evans",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "large_deficit",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 0,
+        "receptions": 0,
+        "rec_tds": 0
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "receptions": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rec_tds": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    }
+  ],
+  "diagnostics": {
+    "usage_shares_home": [
+      {
+        "player_key": "LA-QB1-MatthewStafford",
+        "player_name": "Matthew Stafford",
+        "team": "LA",
+        "position": "QB",
+        "depth_order": 1,
+        "usage_role": "QB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.9,
+        "rush_share": 0.07,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.07,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "LA-QB2-TySimpson",
+        "player_name": "Ty Simpson",
+        "team": "LA",
+        "position": "QB",
+        "depth_order": 2,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.45,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "LA-QB3-StetsonBennettIV",
+        "player_name": "Stetson Bennett IV",
+        "team": "LA",
+        "position": "QB",
+        "depth_order": 3,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.2,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "LA-RB1-KyrenWilliams",
+        "player_name": "Kyren Williams",
+        "team": "LA",
+        "position": "RB",
+        "depth_order": 1,
+        "usage_role": "RB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0.52,
+        "target_share": 0.1,
+        "route_share": 0.2,
+        "base_rush_share": 0.52,
+        "base_target_share": 0.1
+      },
+      {
+        "player_key": "LA-RB2-BlakeCorum",
+        "player_name": "Blake Corum",
+        "team": "LA",
+        "position": "RB",
+        "depth_order": 2,
+        "usage_role": "RB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0.26,
+        "target_share": 0.05,
+        "route_share": 0.2,
+        "base_rush_share": 0.26,
+        "base_target_share": 0.05
+      },
+      {
+        "player_key": "LA-RB3-RonnieRivers",
+        "player_name": "Ronnie Rivers",
+        "team": "LA",
+        "position": "RB",
+        "depth_order": 3,
+        "usage_role": "OTHER",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0.12,
+        "target_share": 0.03,
+        "route_share": 0.2,
+        "base_rush_share": 0.12,
+        "base_target_share": 0.03
+      },
+      {
+        "player_key": "LA-TE1-ColbyParkinson",
+        "player_name": "Colby Parkinson",
+        "team": "LA",
+        "position": "TE",
+        "depth_order": 1,
+        "usage_role": "TE1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.22,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.22
+      },
+      {
+        "player_key": "LA-TE2-TylerHigbee",
+        "player_name": "Tyler Higbee",
+        "team": "LA",
+        "position": "TE",
+        "depth_order": 2,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.14,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.14
+      },
+      {
+        "player_key": "LA-TE3-TerranceFerguson",
+        "player_name": "Terrance Ferguson",
+        "team": "LA",
+        "position": "TE",
+        "depth_order": 3,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.08,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.08
+      },
+      {
+        "player_key": "LA-WR1-PukaNacua",
+        "player_name": "Puka Nacua",
+        "team": "LA",
+        "position": "WR",
+        "depth_order": 1,
+        "usage_role": "WR1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.22,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.22
+      },
+      {
+        "player_key": "LA-WR2-DavanteAdams",
+        "player_name": "Davante Adams",
+        "team": "LA",
+        "position": "WR",
+        "depth_order": 2,
+        "usage_role": "WR2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.14,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.14
+      },
+      {
+        "player_key": "LA-WR3-JordanWhittington",
+        "player_name": "Jordan Whittington",
+        "team": "LA",
+        "position": "WR",
+        "depth_order": 3,
+        "usage_role": "WR3",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.08,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.08
+      }
+    ],
+    "usage_shares_away": [
+      {
+        "player_key": "SF-QB1-BrockPurdy",
+        "player_name": "Brock Purdy",
+        "team": "SF",
+        "position": "QB",
+        "depth_order": 1,
+        "usage_role": "QB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.9,
+        "rush_share": 0.07,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.07,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "SF-QB2-MacJones",
+        "player_name": "Mac Jones",
+        "team": "SF",
+        "position": "QB",
+        "depth_order": 2,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.45,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "SF-QB3-KurtisRourke",
+        "player_name": "Kurtis Rourke",
+        "team": "SF",
+        "position": "QB",
+        "depth_order": 3,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.2,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "SF-RB1-ChristianMcCaffrey",
+        "player_name": "Christian McCaffrey",
+        "team": "SF",
+        "position": "RB",
+        "depth_order": 1,
+        "usage_role": "RB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0.52,
+        "target_share": 0.1218,
+        "route_share": 0.2,
+        "base_rush_share": 0.52,
+        "base_target_share": 0.1218
+      },
+      {
+        "player_key": "SF-RB2-JordanJames",
+        "player_name": "Jordan James",
+        "team": "SF",
+        "position": "RB",
+        "depth_order": 2,
+        "usage_role": "RB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0.26,
+        "target_share": 0.0599,
+        "route_share": 0.2,
+        "base_rush_share": 0.26,
+        "base_target_share": 0.0599
+      },
+      {
+        "player_key": "SF-RB3-KaelonBlack",
+        "player_name": "Kaelon Black",
+        "team": "SF",
+        "position": "RB",
+        "depth_order": 3,
+        "usage_role": "OTHER",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0.12,
+        "target_share": 0.03,
+        "route_share": 0.2,
+        "base_rush_share": 0.12,
+        "base_target_share": 0.03
+      },
+      {
+        "player_key": "SF-TE1-GeorgeKittle",
+        "player_name": "George Kittle",
+        "team": "SF",
+        "position": "TE",
+        "depth_order": 1,
+        "usage_role": "TE1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.2435,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.2435
+      },
+      {
+        "player_key": "SF-TE2-JakeTonges",
+        "player_name": "Jake Tonges",
+        "team": "SF",
+        "position": "TE",
+        "depth_order": 2,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.15,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.15
+      },
+      {
+        "player_key": "SF-TE3-LukeFarrell",
+        "player_name": "Luke Farrell",
+        "team": "SF",
+        "position": "TE",
+        "depth_order": 3,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.0901,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.0901
+      },
+      {
+        "player_key": "SF-WR1-MikeEvans",
+        "player_name": "Mike Evans",
+        "team": "SF",
+        "position": "WR",
+        "depth_order": 1,
+        "usage_role": "WR1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.88,
+        "rush_share": 0,
+        "target_share": 0,
+        "route_share": 0.92,
+        "base_rush_share": 0,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "SF-WR2-DeeboSamuel",
+        "player_name": "Deebo Samuel",
+        "team": "SF",
+        "position": "WR",
+        "depth_order": 1,
+        "usage_role": "WR1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.7895,
+        "rush_share": 0,
+        "target_share": 0.2259,
+        "route_share": 1.1855,
+        "base_rush_share": 0,
+        "base_target_share": 0.2259
+      },
+      {
+        "player_key": "SF-WR3-ChristianKirk",
+        "player_name": "Christian Kirk",
+        "team": "SF",
+        "position": "WR",
+        "depth_order": 2,
+        "usage_role": "WR2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.3555,
+        "rush_share": 0,
+        "target_share": 0.1168,
+        "route_share": 0.6295,
+        "base_rush_share": 0,
+        "base_target_share": 0.1168
+      }
+    ],
+    "share_integrity_home": {
+      "script": "neutral",
+      "script_detail": "",
+      "script_intensity": 0.55,
+      "time_bucket": "mid",
+      "pass_rate": 0.58,
+      "named_rush_share_sum": 1.01,
+      "named_target_share_sum": 1.06,
+      "residual_other_rush": 0.08,
+      "residual_other_target": 0.08,
+      "modeled_rush_plus_other": 1,
+      "modeled_target_plus_other": 1,
+      "ok": true
+    },
+    "share_integrity_away": {
+      "script": "neutral",
+      "script_detail": "",
+      "script_intensity": 0.55,
+      "time_bucket": "mid",
+      "pass_rate": 0.58,
+      "named_rush_share_sum": 1.01,
+      "named_target_share_sum": 1.038,
+      "residual_other_rush": 0.08,
+      "residual_other_target": 0.08,
+      "modeled_rush_plus_other": 1,
+      "modeled_target_plus_other": 1,
+      "ok": true
+    },
+    "injury_paths": [
+      {
+        "player_key": "",
+        "player_name": "Mike Evans",
+        "team": "SF",
+        "status": "out",
+        "week_start": 1,
+        "week_end": 3,
+        "availability": null,
+        "severity": null
+      }
+    ],
+    "injury_adjustments": {
+      "active_count": 1,
+      "by_team": {
+        "SF": [
+          {
+            "player_key": "SF-WR1-MikeEvans",
+            "player_name": "Mike Evans",
+            "status": "out",
+            "availability": 0,
+            "offense_delta": -0.046,
+            "freed_target_share": 0.22,
+            "freed_rush_share": 0,
+            "realloc_notes": "WR1_out\u2192WR2 largest; slot > WR3; TE1 + RB1 catch spill; 10% residual\u2192other; promotions=2"
+          }
+        ]
+      },
+      "rules": {
+        "strength": "offense_index += \u2212player_offense_value \u00d7 (1 \u2212 availability); capped at \u00b10.22; defense unchanged",
+        "reallocation": "Role-aware absorption via usage_roles.INJURY_REALLOC_RULES (RB1\u2192RB2 primary, WR1\u2192WR2>slot>WR3, TE1\u2192TE2+WR mix); 10% of freed volume stays in residual other bucket",
+        "limited_default": 0.5,
+        "returning_ramp": "linear from availability|default 0.4 \u2192 1.0"
+      }
+    },
+    "game_script_summary": {
+      "home_win_prob_mean": 0.4659,
+      "expected_total_mean": 43.93,
+      "pace_plays_mean": 63.01,
+      "home_pass_rate_mean": 0.6066,
+      "away_pass_rate_mean": 0.5485,
+      "home_lead_rate": 0.3,
+      "home_trail_rate": 0.4,
+      "home_early_down_pass_rate_mean": 0.6229,
+      "away_early_down_pass_rate_mean": 0.5273,
+      "home_hurry_up_mean": 0.109,
+      "away_hurry_up_mean": 0.1469,
+      "home_script_intensity_mean": 0.398,
+      "away_script_intensity_mean": 0.398,
+      "minutes_remaining_mean": 27.13,
+      "time_bucket_late_rate": 0.34,
+      "home_large_lead_rate": 0.16,
+      "home_large_deficit_rate": 0.08
+    },
+    "schedule_match": "on_loaded_schedule",
+    "seed": 11,
+    "depth_structure": {
+      "LA": {
+        "team": "LA",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy"
+      },
+      "SF": {
+        "team": "SF",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy"
+      }
+    },
+    "depth_structure_detail": [
+      {
+        "team": "LA",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy",
+        "herfindahl_rush": 0.4351,
+        "top1_rush_share": 0.52,
+        "wr1_wr3_target_gap": 0.14
+      },
+      {
+        "team": "SF",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy",
+        "herfindahl_rush": 0.4351,
+        "top1_rush_share": 0.52,
+        "wr1_wr3_target_gap": 0.1091
+      }
+    ],
+    "role_transitions": [],
+    "play_mix_home": {
+      "pass_rate_mean": 0.6066,
+      "run_rate_mean": 0.3934,
+      "early_down_pass_rate_mean": 0.6229,
+      "hurry_up_mean": 0.109,
+      "script_intensity_mean": 0.398,
+      "script_state_mode": "trail",
+      "script_detail_mode": "small_deficit",
+      "time_bucket_mode": "mid",
+      "minutes_remaining_mean": 27.13
+    },
+    "play_mix_away": {
+      "pass_rate_mean": 0.5485,
+      "run_rate_mean": 0.4515,
+      "early_down_pass_rate_mean": 0.5273,
+      "hurry_up_mean": 0.1469,
+      "script_intensity_mean": 0.398,
+      "script_state_mode": "lead",
+      "script_detail_mode": "small_lead",
+      "time_bucket_mode": "mid",
+      "minutes_remaining_mean": 27.13
+    },
+    "play_mix_sample": {
+      "home": {
+        "script_state": "trail",
+        "script_detail": "large_deficit",
+        "script_intensity": 0.7048,
+        "time_bucket": "mid",
+        "minutes_remaining": 20.64,
+        "pass_rate": 0.6954,
+        "run_rate": 0.3046,
+        "early_down_pass_rate": 0.6922,
+        "hurry_up": 0.2872
+      },
+      "away": {
+        "script_state": "lead",
+        "script_detail": "large_lead",
+        "script_intensity": 0.7048,
+        "time_bucket": "mid",
+        "minutes_remaining": 20.64,
+        "pass_rate": 0.4743,
+        "run_rate": 0.5257,
+        "early_down_pass_rate": 0.4694,
+        "hurry_up": 0
+      }
+    },
+    "red_zone": {
+      "home": {
+        "rz_pass_rate_mean": 0.5614,
+        "rz_run_rate_mean": 0.4386
+      },
+      "away": {
+        "rz_pass_rate_mean": 0.5172,
+        "rz_run_rate_mean": 0.4828
+      },
+      "players": [
+        {
+          "player_key": "LA-QB1-MatthewStafford",
+          "player_name": "Matthew Stafford",
+          "team": "LA",
+          "position": "QB",
+          "usage_role": "QB1",
+          "scoring_role": "QB1",
+          "rz_carries_i20": {
+            "mean": 0.356,
+            "std": 0.187,
+            "p10": 0.197,
+            "p50": 0.328,
+            "p90": 0.533
+          },
+          "rz_carries_i10": {
+            "mean": 0.147,
+            "std": 0.096,
+            "p10": 0.042,
+            "p50": 0.113,
+            "p90": 0.281
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.049,
+            "std": 0.022,
+            "p10": 0.025,
+            "p50": 0.045,
+            "p90": 0.079
+          }
+        },
+        {
+          "player_key": "LA-QB2-TySimpson",
+          "player_name": "Ty Simpson",
+          "team": "LA",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.08,
+            "std": 0.075,
+            "p10": 0.013,
+            "p50": 0.058,
+            "p90": 0.189
+          },
+          "rz_carries_i10": {
+            "mean": 0.034,
+            "std": 0.046,
+            "p10": 0.002,
+            "p50": 0.012,
+            "p90": 0.097
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.011,
+            "std": 0.011,
+            "p10": 0.002,
+            "p50": 0.006,
+            "p90": 0.029
+          }
+        },
+        {
+          "player_key": "LA-QB3-StetsonBennettIV",
+          "player_name": "Stetson Bennett IV",
+          "team": "LA",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.085,
+            "std": 0.095,
+            "p10": 0.01,
+            "p50": 0.061,
+            "p90": 0.194
+          },
+          "rz_carries_i10": {
+            "mean": 0.027,
+            "std": 0.037,
+            "p10": 0.001,
+            "p50": 0.009,
+            "p90": 0.068
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.011,
+            "std": 0.011,
+            "p10": 0.001,
+            "p50": 0.007,
+            "p90": 0.029
+          }
+        },
+        {
+          "player_key": "LA-RB1-KyrenWilliams",
+          "player_name": "Kyren Williams",
+          "team": "LA",
+          "position": "RB",
+          "usage_role": "RB1",
+          "scoring_role": "RB1",
+          "rz_carries_i20": {
+            "mean": 2.013,
+            "std": 0.813,
+            "p10": 1.281,
+            "p50": 1.72,
+            "p90": 3.279
+          },
+          "rz_carries_i10": {
+            "mean": 0.783,
+            "std": 0.319,
+            "p10": 0.48,
+            "p50": 0.676,
+            "p90": 1.301
+          },
+          "rz_targets_i20": {
+            "mean": 0.477,
+            "std": 0.216,
+            "p10": 0.235,
+            "p50": 0.455,
+            "p90": 0.69
+          },
+          "rz_targets_i10": {
+            "mean": 0.175,
+            "std": 0.1,
+            "p10": 0.05,
+            "p50": 0.157,
+            "p90": 0.292
+          },
+          "td_opportunity_share": {
+            "mean": 0.326,
+            "std": 0.081,
+            "p10": 0.23,
+            "p50": 0.296,
+            "p90": 0.456
+          }
+        },
+        {
+          "player_key": "LA-RB2-BlakeCorum",
+          "player_name": "Blake Corum",
+          "team": "LA",
+          "position": "RB",
+          "usage_role": "RB2",
+          "scoring_role": "RB2",
+          "rz_carries_i20": {
+            "mean": 0.701,
+            "std": 0.258,
+            "p10": 0.386,
+            "p50": 0.641,
+            "p90": 1.099
+          },
+          "rz_carries_i10": {
+            "mean": 0.191,
+            "std": 0.125,
+            "p10": 0.06,
+            "p50": 0.165,
+            "p90": 0.321
+          },
+          "rz_targets_i20": {
+            "mean": 0.238,
+            "std": 0.157,
+            "p10": 0.088,
+            "p50": 0.214,
+            "p90": 0.39
+          },
+          "rz_targets_i10": {
+            "mean": 0.085,
+            "std": 0.079,
+            "p10": 0.011,
+            "p50": 0.071,
+            "p90": 0.159
+          },
+          "td_opportunity_share": {
+            "mean": 0.112,
+            "std": 0.03,
+            "p10": 0.075,
+            "p50": 0.107,
+            "p90": 0.141
+          }
+        },
+        {
+          "player_key": "LA-RB3-RonnieRivers",
+          "player_name": "Ronnie Rivers",
+          "team": "LA",
+          "position": "RB",
+          "usage_role": "OTHER",
+          "scoring_role": "OTHER",
+          "rz_carries_i20": {
+            "mean": 0.159,
+            "std": 0.119,
+            "p10": 0.05,
+            "p50": 0.12,
+            "p90": 0.315
+          },
+          "rz_carries_i10": {
+            "mean": 0.048,
+            "std": 0.049,
+            "p10": 0.006,
+            "p50": 0.029,
+            "p90": 0.1
+          },
+          "rz_targets_i20": {
+            "mean": 0.228,
+            "std": 0.124,
+            "p10": 0.085,
+            "p50": 0.203,
+            "p90": 0.387
+          },
+          "rz_targets_i10": {
+            "mean": 0.075,
+            "std": 0.059,
+            "p10": 0.02,
+            "p50": 0.056,
+            "p90": 0.146
+          },
+          "td_opportunity_share": {
+            "mean": 0.046,
+            "std": 0.015,
+            "p10": 0.029,
+            "p50": 0.045,
+            "p90": 0.067
+          }
+        },
+        {
+          "player_key": "LA-TE1-ColbyParkinson",
+          "player_name": "Colby Parkinson",
+          "team": "LA",
+          "position": "TE",
+          "usage_role": "TE1",
+          "scoring_role": "TE1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.972,
+            "std": 0.448,
+            "p10": 0.444,
+            "p50": 0.946,
+            "p90": 1.392
+          },
+          "rz_targets_i10": {
+            "mean": 0.416,
+            "std": 0.212,
+            "p10": 0.209,
+            "p50": 0.363,
+            "p90": 0.723
+          },
+          "td_opportunity_share": {
+            "mean": 0.125,
+            "std": 0.056,
+            "p10": 0.055,
+            "p50": 0.116,
+            "p90": 0.197
+          }
+        },
+        {
+          "player_key": "LA-TE2-TylerHigbee",
+          "player_name": "Tyler Higbee",
+          "team": "LA",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.355,
+            "std": 0.191,
+            "p10": 0.15,
+            "p50": 0.319,
+            "p90": 0.546
+          },
+          "rz_targets_i10": {
+            "mean": 0.112,
+            "std": 0.093,
+            "p10": 0.027,
+            "p50": 0.075,
+            "p90": 0.268
+          },
+          "td_opportunity_share": {
+            "mean": 0.041,
+            "std": 0.021,
+            "p10": 0.016,
+            "p50": 0.037,
+            "p90": 0.072
+          }
+        },
+        {
+          "player_key": "LA-TE3-TerranceFerguson",
+          "player_name": "Terrance Ferguson",
+          "team": "LA",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.306,
+            "std": 0.155,
+            "p10": 0.151,
+            "p50": 0.264,
+            "p90": 0.479
+          },
+          "rz_targets_i10": {
+            "mean": 0.114,
+            "std": 0.082,
+            "p10": 0.027,
+            "p50": 0.083,
+            "p90": 0.22
+          },
+          "td_opportunity_share": {
+            "mean": 0.038,
+            "std": 0.019,
+            "p10": 0.018,
+            "p50": 0.033,
+            "p90": 0.067
+          }
+        },
+        {
+          "player_key": "LA-WR1-PukaNacua",
+          "player_name": "Puka Nacua",
+          "team": "LA",
+          "position": "WR",
+          "usage_role": "WR1",
+          "scoring_role": "WR1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 1.115,
+            "std": 0.359,
+            "p10": 0.684,
+            "p50": 1.047,
+            "p90": 1.563
+          },
+          "rz_targets_i10": {
+            "mean": 0.389,
+            "std": 0.161,
+            "p10": 0.228,
+            "p50": 0.353,
+            "p90": 0.612
+          },
+          "td_opportunity_share": {
+            "mean": 0.133,
+            "std": 0.042,
+            "p10": 0.083,
+            "p50": 0.124,
+            "p90": 0.197
+          }
+        },
+        {
+          "player_key": "LA-WR2-DavanteAdams",
+          "player_name": "Davante Adams",
+          "team": "LA",
+          "position": "WR",
+          "usage_role": "WR2",
+          "scoring_role": "WR2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.629,
+            "std": 0.299,
+            "p10": 0.326,
+            "p50": 0.559,
+            "p90": 1.008
+          },
+          "rz_targets_i10": {
+            "mean": 0.201,
+            "std": 0.108,
+            "p10": 0.101,
+            "p50": 0.175,
+            "p90": 0.37
+          },
+          "td_opportunity_share": {
+            "mean": 0.073,
+            "std": 0.03,
+            "p10": 0.037,
+            "p50": 0.068,
+            "p90": 0.116
+          }
+        },
+        {
+          "player_key": "LA-WR3-JordanWhittington",
+          "player_name": "Jordan Whittington",
+          "team": "LA",
+          "position": "WR",
+          "usage_role": "WR3",
+          "scoring_role": "WR3",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.331,
+            "std": 0.182,
+            "p10": 0.156,
+            "p50": 0.312,
+            "p90": 0.51
+          },
+          "rz_targets_i10": {
+            "mean": 0.092,
+            "std": 0.066,
+            "p10": 0.014,
+            "p50": 0.075,
+            "p90": 0.189
+          },
+          "td_opportunity_share": {
+            "mean": 0.037,
+            "std": 0.018,
+            "p10": 0.017,
+            "p50": 0.034,
+            "p90": 0.062
+          }
+        },
+        {
+          "player_key": "SF-QB1-BrockPurdy",
+          "player_name": "Brock Purdy",
+          "team": "SF",
+          "position": "QB",
+          "usage_role": "QB1",
+          "scoring_role": "QB1",
+          "rz_carries_i20": {
+            "mean": 0.462,
+            "std": 0.208,
+            "p10": 0.246,
+            "p50": 0.421,
+            "p90": 0.792
+          },
+          "rz_carries_i10": {
+            "mean": 0.174,
+            "std": 0.099,
+            "p10": 0.062,
+            "p50": 0.159,
+            "p90": 0.287
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.061,
+            "std": 0.025,
+            "p10": 0.032,
+            "p50": 0.057,
+            "p90": 0.1
+          }
+        },
+        {
+          "player_key": "SF-QB2-MacJones",
+          "player_name": "Mac Jones",
+          "team": "SF",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.061,
+            "std": 0.058,
+            "p10": 0.007,
+            "p50": 0.046,
+            "p90": 0.12
+          },
+          "rz_carries_i10": {
+            "mean": 0.021,
+            "std": 0.023,
+            "p10": 0,
+            "p50": 0.012,
+            "p90": 0.054
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.008,
+            "std": 0.007,
+            "p10": 0.001,
+            "p50": 0.006,
+            "p90": 0.015
+          }
+        },
+        {
+          "player_key": "SF-QB3-KurtisRourke",
+          "player_name": "Kurtis Rourke",
+          "team": "SF",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.091,
+            "std": 0.081,
+            "p10": 0.015,
+            "p50": 0.061,
+            "p90": 0.232
+          },
+          "rz_carries_i10": {
+            "mean": 0.031,
+            "std": 0.039,
+            "p10": 0.002,
+            "p50": 0.018,
+            "p90": 0.066
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.012,
+            "std": 0.011,
+            "p10": 0.003,
+            "p50": 0.009,
+            "p90": 0.028
+          }
+        },
+        {
+          "player_key": "SF-RB1-ChristianMcCaffrey",
+          "player_name": "Christian McCaffrey",
+          "team": "SF",
+          "position": "RB",
+          "usage_role": "RB1",
+          "scoring_role": "RB1",
+          "rz_carries_i20": {
+            "mean": 2.168,
+            "std": 0.709,
+            "p10": 1.163,
+            "p50": 2.149,
+            "p90": 2.999
+          },
+          "rz_carries_i10": {
+            "mean": 0.854,
+            "std": 0.294,
+            "p10": 0.424,
+            "p50": 0.88,
+            "p90": 1.246
+          },
+          "rz_targets_i20": {
+            "mean": 0.52,
+            "std": 0.272,
+            "p10": 0.22,
+            "p50": 0.501,
+            "p90": 0.881
+          },
+          "rz_targets_i10": {
+            "mean": 0.187,
+            "std": 0.105,
+            "p10": 0.071,
+            "p50": 0.173,
+            "p90": 0.324
+          },
+          "td_opportunity_share": {
+            "mean": 0.354,
+            "std": 0.089,
+            "p10": 0.217,
+            "p50": 0.358,
+            "p90": 0.449
+          }
+        },
+        {
+          "player_key": "SF-RB2-JordanJames",
+          "player_name": "Jordan James",
+          "team": "SF",
+          "position": "RB",
+          "usage_role": "RB2",
+          "scoring_role": "RB2",
+          "rz_carries_i20": {
+            "mean": 0.716,
+            "std": 0.312,
+            "p10": 0.382,
+            "p50": 0.691,
+            "p90": 1.019
+          },
+          "rz_carries_i10": {
+            "mean": 0.207,
+            "std": 0.097,
+            "p10": 0.093,
+            "p50": 0.193,
+            "p90": 0.329
+          },
+          "rz_targets_i20": {
+            "mean": 0.281,
+            "std": 0.199,
+            "p10": 0.094,
+            "p50": 0.229,
+            "p90": 0.556
+          },
+          "rz_targets_i10": {
+            "mean": 0.093,
+            "std": 0.094,
+            "p10": 0.011,
+            "p50": 0.068,
+            "p90": 0.198
+          },
+          "td_opportunity_share": {
+            "mean": 0.12,
+            "std": 0.032,
+            "p10": 0.088,
+            "p50": 0.113,
+            "p90": 0.159
+          }
+        },
+        {
+          "player_key": "SF-RB3-KaelonBlack",
+          "player_name": "Kaelon Black",
+          "team": "SF",
+          "position": "RB",
+          "usage_role": "OTHER",
+          "scoring_role": "OTHER",
+          "rz_carries_i20": {
+            "mean": 0.193,
+            "std": 0.107,
+            "p10": 0.066,
+            "p50": 0.179,
+            "p90": 0.309
+          },
+          "rz_carries_i10": {
+            "mean": 0.068,
+            "std": 0.064,
+            "p10": 0.012,
+            "p50": 0.04,
+            "p90": 0.157
+          },
+          "rz_targets_i20": {
+            "mean": 0.246,
+            "std": 0.148,
+            "p10": 0.1,
+            "p50": 0.211,
+            "p90": 0.42
+          },
+          "rz_targets_i10": {
+            "mean": 0.09,
+            "std": 0.069,
+            "p10": 0.021,
+            "p50": 0.067,
+            "p90": 0.15
+          },
+          "td_opportunity_share": {
+            "mean": 0.055,
+            "std": 0.023,
+            "p10": 0.031,
+            "p50": 0.05,
+            "p90": 0.089
+          }
+        },
+        {
+          "player_key": "SF-TE1-GeorgeKittle",
+          "player_name": "George Kittle",
+          "team": "SF",
+          "position": "TE",
+          "usage_role": "TE1",
+          "scoring_role": "TE1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.922,
+            "std": 0.441,
+            "p10": 0.482,
+            "p50": 0.833,
+            "p90": 1.468
+          },
+          "rz_targets_i10": {
+            "mean": 0.366,
+            "std": 0.153,
+            "p10": 0.188,
+            "p50": 0.35,
+            "p90": 0.528
+          },
+          "td_opportunity_share": {
+            "mean": 0.114,
+            "std": 0.049,
+            "p10": 0.064,
+            "p50": 0.104,
+            "p90": 0.173
+          }
+        },
+        {
+          "player_key": "SF-TE2-JakeTonges",
+          "player_name": "Jake Tonges",
+          "team": "SF",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.338,
+            "std": 0.143,
+            "p10": 0.162,
+            "p50": 0.333,
+            "p90": 0.499
+          },
+          "rz_targets_i10": {
+            "mean": 0.104,
+            "std": 0.083,
+            "p10": 0.029,
+            "p50": 0.08,
+            "p90": 0.2
+          },
+          "td_opportunity_share": {
+            "mean": 0.038,
+            "std": 0.017,
+            "p10": 0.021,
+            "p50": 0.035,
+            "p90": 0.062
+          }
+        },
+        {
+          "player_key": "SF-TE3-LukeFarrell",
+          "player_name": "Luke Farrell",
+          "team": "SF",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.277,
+            "std": 0.171,
+            "p10": 0.103,
+            "p50": 0.213,
+            "p90": 0.478
+          },
+          "rz_targets_i10": {
+            "mean": 0.088,
+            "std": 0.082,
+            "p10": 0.009,
+            "p50": 0.056,
+            "p90": 0.183
+          },
+          "td_opportunity_share": {
+            "mean": 0.032,
+            "std": 0.019,
+            "p10": 0.012,
+            "p50": 0.026,
+            "p90": 0.054
+          }
+        },
+        {
+          "player_key": "SF-WR1-MikeEvans",
+          "player_name": "Mike Evans",
+          "team": "SF",
+          "position": "WR",
+          "usage_role": "WR1",
+          "scoring_role": "WR1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          }
+        },
+        {
+          "player_key": "SF-WR2-DeeboSamuel",
+          "player_name": "Deebo Samuel",
+          "team": "SF",
+          "position": "WR",
+          "usage_role": "WR1",
+          "scoring_role": "WR1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 1.073,
+            "std": 0.425,
+            "p10": 0.639,
+            "p50": 1.023,
+            "p90": 1.593
+          },
+          "rz_targets_i10": {
+            "mean": 0.412,
+            "std": 0.181,
+            "p10": 0.215,
+            "p50": 0.363,
+            "p90": 0.643
+          },
+          "td_opportunity_share": {
+            "mean": 0.131,
+            "std": 0.048,
+            "p10": 0.081,
+            "p50": 0.118,
+            "p90": 0.204
+          }
+        },
+        {
+          "player_key": "SF-WR3-ChristianKirk",
+          "player_name": "Christian Kirk",
+          "team": "SF",
+          "position": "WR",
+          "usage_role": "WR2",
+          "scoring_role": "WR2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.659,
+            "std": 0.266,
+            "p10": 0.328,
+            "p50": 0.665,
+            "p90": 1.053
+          },
+          "rz_targets_i10": {
+            "mean": 0.203,
+            "std": 0.096,
+            "p10": 0.098,
+            "p50": 0.179,
+            "p90": 0.353
+          },
+          "td_opportunity_share": {
+            "mean": 0.075,
+            "std": 0.027,
+            "p10": 0.044,
+            "p50": 0.073,
+            "p90": 0.112
+          }
+        }
+      ]
+    },
+    "scoring_usage": {
+      "home": {
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "rz_pass_rate": 0.559,
+        "rz_run_rate": 0.441,
+        "players": [
+          {
+            "player_key": "LA-QB1-MatthewStafford",
+            "player_name": "Matthew Stafford",
+            "team": "LA",
+            "position": "QB",
+            "usage_role": "QB1",
+            "scoring_role": "QB1",
+            "rz_carry_share_i20": 0.1,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "LA-QB2-TySimpson",
+            "player_name": "Ty Simpson",
+            "team": "LA",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "LA-QB3-StetsonBennettIV",
+            "player_name": "Stetson Bennett IV",
+            "team": "LA",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "LA-RB1-KyrenWilliams",
+            "player_name": "Kyren Williams",
+            "team": "LA",
+            "position": "RB",
+            "usage_role": "RB1",
+            "scoring_role": "RB1",
+            "rz_carry_share_i20": 0.56,
+            "rz_carry_share_i10": 0.66,
+            "rz_target_share_i20": 0.09,
+            "rz_target_share_i10": 0.08,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "LA-RB2-BlakeCorum",
+            "player_name": "Blake Corum",
+            "team": "LA",
+            "position": "RB",
+            "usage_role": "RB2",
+            "scoring_role": "RB2",
+            "rz_carry_share_i20": 0.22,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.04,
+            "rz_target_share_i10": 0.03,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "LA-RB3-RonnieRivers",
+            "player_name": "Ronnie Rivers",
+            "team": "LA",
+            "position": "RB",
+            "usage_role": "OTHER",
+            "scoring_role": "OTHER",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "LA-TE1-ColbyParkinson",
+            "player_name": "Colby Parkinson",
+            "team": "LA",
+            "position": "TE",
+            "usage_role": "TE1",
+            "scoring_role": "TE1",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.18,
+            "rz_target_share_i10": 0.24,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "LA-TE2-TylerHigbee",
+            "player_name": "Tyler Higbee",
+            "team": "LA",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "LA-TE3-TerranceFerguson",
+            "player_name": "Terrance Ferguson",
+            "team": "LA",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "LA-WR1-PukaNacua",
+            "player_name": "Puka Nacua",
+            "team": "LA",
+            "position": "WR",
+            "usage_role": "WR1",
+            "scoring_role": "WR1",
+            "rz_carry_share_i20": 0.02,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.24,
+            "rz_target_share_i10": 0.26,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "LA-WR2-DavanteAdams",
+            "player_name": "Davante Adams",
+            "team": "LA",
+            "position": "WR",
+            "usage_role": "WR2",
+            "scoring_role": "WR2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.15,
+            "rz_target_share_i10": 0.13,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "LA-WR3-JordanWhittington",
+            "player_name": "Jordan Whittington",
+            "team": "LA",
+            "position": "WR",
+            "usage_role": "WR3",
+            "scoring_role": "WR3",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.08,
+            "rz_target_share_i10": 0.05,
+            "loaded_red_zone_share": 0.07
+          }
+        ]
+      },
+      "away": {
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "rz_pass_rate": 0.519,
+        "rz_run_rate": 0.481,
+        "players": [
+          {
+            "player_key": "SF-QB1-BrockPurdy",
+            "player_name": "Brock Purdy",
+            "team": "SF",
+            "position": "QB",
+            "usage_role": "QB1",
+            "scoring_role": "QB1",
+            "rz_carry_share_i20": 0.1,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "SF-QB2-MacJones",
+            "player_name": "Mac Jones",
+            "team": "SF",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "SF-QB3-KurtisRourke",
+            "player_name": "Kurtis Rourke",
+            "team": "SF",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "SF-RB1-ChristianMcCaffrey",
+            "player_name": "Christian McCaffrey",
+            "team": "SF",
+            "position": "RB",
+            "usage_role": "RB1",
+            "scoring_role": "RB1",
+            "rz_carry_share_i20": 0.56,
+            "rz_carry_share_i10": 0.66,
+            "rz_target_share_i20": 0.09,
+            "rz_target_share_i10": 0.08,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "SF-RB2-JordanJames",
+            "player_name": "Jordan James",
+            "team": "SF",
+            "position": "RB",
+            "usage_role": "RB2",
+            "scoring_role": "RB2",
+            "rz_carry_share_i20": 0.22,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.04,
+            "rz_target_share_i10": 0.03,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "SF-RB3-KaelonBlack",
+            "player_name": "Kaelon Black",
+            "team": "SF",
+            "position": "RB",
+            "usage_role": "OTHER",
+            "scoring_role": "OTHER",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "SF-TE1-GeorgeKittle",
+            "player_name": "George Kittle",
+            "team": "SF",
+            "position": "TE",
+            "usage_role": "TE1",
+            "scoring_role": "TE1",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.18,
+            "rz_target_share_i10": 0.24,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "SF-TE2-JakeTonges",
+            "player_name": "Jake Tonges",
+            "team": "SF",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "SF-TE3-LukeFarrell",
+            "player_name": "Luke Farrell",
+            "team": "SF",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "SF-WR1-MikeEvans",
+            "player_name": "Mike Evans",
+            "team": "SF",
+            "position": "WR",
+            "usage_role": "WR1",
+            "scoring_role": "WR1",
+            "rz_carry_share_i20": 0.02,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.24,
+            "rz_target_share_i10": 0.26,
+            "loaded_red_zone_share": 0
+          },
+          {
+            "player_key": "SF-WR2-DeeboSamuel",
+            "player_name": "Deebo Samuel",
+            "team": "SF",
+            "position": "WR",
+            "usage_role": "WR1",
+            "scoring_role": "WR1",
+            "rz_carry_share_i20": 0.02,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.24,
+            "rz_target_share_i10": 0.26,
+            "loaded_red_zone_share": 0.2484
+          },
+          {
+            "player_key": "SF-WR3-ChristianKirk",
+            "player_name": "Christian Kirk",
+            "team": "SF",
+            "position": "WR",
+            "usage_role": "WR2",
+            "scoring_role": "WR2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.15,
+            "rz_target_share_i10": 0.13,
+            "loaded_red_zone_share": 0.1396
+          }
+        ]
+      }
+    },
+    "coaching_profile": {
+      "home": {
+        "team": "LA",
+        "pass_rate_bias": 0.018,
+        "script_aggression": 1.05,
+        "rz_pass_bias": 0.012,
+        "early_down_pass_bias": 0.016,
+        "two_minute_aggression": 1.04,
+        "label": "pass_tilt",
+        "source": "curated_prior"
+      },
+      "away": {
+        "team": "SF",
+        "pass_rate_bias": -0.022,
+        "script_aggression": 0.9,
+        "rz_pass_bias": -0.028,
+        "early_down_pass_bias": -0.02,
+        "two_minute_aggression": 0.95,
+        "label": "run_scheme",
+        "source": "curated_prior"
+      }
+    },
+    "tendency_effects": {
+      "home": {
+        "pass_rate_mean": 0.6066,
+        "early_down_pass_rate_mean": 0.6229,
+        "hurry_up_mean": 0.109,
+        "rz_pass_rate_mean": 0.5614,
+        "pass_rate_bias_applied": 0.018,
+        "script_aggression": 1.05,
+        "rz_pass_bias_applied": 0.012,
+        "base_pass_rate_before_coaching_bias": 0.59
+      },
+      "away": {
+        "pass_rate_mean": 0.5485,
+        "early_down_pass_rate_mean": 0.5273,
+        "hurry_up_mean": 0.1469,
+        "rz_pass_rate_mean": 0.5172,
+        "pass_rate_bias_applied": -0.022,
+        "script_aggression": 0.9,
+        "rz_pass_bias_applied": -0.028,
+        "base_pass_rate_before_coaching_bias": 0.565
+      },
+      "sample": {
+        "home": {
+          "coaching_profile": {
+            "team": "LA",
+            "pass_rate_bias": 0.018,
+            "script_aggression": 1.05,
+            "rz_pass_bias": 0.012,
+            "early_down_pass_bias": 0.016,
+            "two_minute_aggression": 1.04,
+            "label": "pass_tilt",
+            "source": "curated_prior"
+          },
+          "tendency_effects": {
+            "pass_rate_bias_applied": 0.018,
+            "script_aggression": 1.05,
+            "early_down_pass_bias_applied": 0.016,
+            "two_minute_aggression": 1.04,
+            "rz_pass_bias": 0.012,
+            "pass_rate_after": 0.6954,
+            "early_down_pass_rate_after": 0.6922,
+            "hurry_up_after": 0.2872,
+            "base_pass_rate_before_coaching_bias": 0.59,
+            "script_detail": "large_deficit",
+            "script_intensity": 0.7048,
+            "time_bucket": "mid",
+            "rz_pass_rate_after": 0.7614,
+            "rz_pass_bias_applied": 0.012
+          }
+        },
+        "away": {
+          "coaching_profile": {
+            "team": "SF",
+            "pass_rate_bias": -0.022,
+            "script_aggression": 0.9,
+            "rz_pass_bias": -0.028,
+            "early_down_pass_bias": -0.02,
+            "two_minute_aggression": 0.95,
+            "label": "run_scheme",
+            "source": "curated_prior"
+          },
+          "tendency_effects": {
+            "pass_rate_bias_applied": -0.022,
+            "script_aggression": 0.9,
+            "early_down_pass_bias_applied": -0.02,
+            "two_minute_aggression": 0.95,
+            "rz_pass_bias": -0.028,
+            "pass_rate_after": 0.4743,
+            "early_down_pass_rate_after": 0.4694,
+            "hurry_up_after": 0,
+            "base_pass_rate_before_coaching_bias": 0.565,
+            "script_detail": "large_lead",
+            "script_intensity": 0.7048,
+            "time_bucket": "mid",
+            "rz_pass_rate_after": 0.321,
+            "rz_pass_bias_applied": -0.028
+          }
+        }
+      }
+    }
+  }
+}

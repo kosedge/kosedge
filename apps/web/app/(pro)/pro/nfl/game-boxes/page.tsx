@@ -20,7 +20,7 @@ export default async function NflGameBoxesPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Future Game Boxes"
-      summary="Select a future matchup and read projected player box scores from the season engine — yards, TDs, receptions, INTs with p50 and p10–p90 ranges."
+      summary="Projected skill-player boxes for a future matchup — yards, TDs, receptions, INTs as median with p10–p90 bands. Optional star-out scenario."
       badge="Season engine · game boxes"
       primaryHref="/pro/nfl/survivor"
       primaryLabel="Survivor Helper"
@@ -42,14 +42,34 @@ export default async function NflGameBoxesPage() {
         </Link>
       </div>
 
+      {!status.error ? (
+        <p className="mb-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/65">
+          {status.mode || "—"} · {status.schedule_source || "schedule"}
+          {status.schedule_game_count != null
+            ? ` · ${status.schedule_game_count} REG`
+            : ""}
+          {status.depth_source || status.roster_source
+            ? ` · depth ${status.depth_source || status.roster_source}`
+            : ""}
+          {status.depth_as_of || status.roster_as_of
+            ? ` (as of ${status.depth_as_of || status.roster_as_of})`
+            : ""}
+        </p>
+      ) : (
+        <p className="mb-4 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+          Engine status unavailable: {status.error}
+        </p>
+      )}
+
       {slate.error ? (
         <p className="mb-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/65">
           Fair-lines slate unavailable ({slate.error}). Use team dropdowns
-          below.
+          below — wall-chart weeks still work.
         </p>
       ) : slate.matchups.length === 0 ? (
         <p className="mb-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/65">
-          No upcoming fair-lines matchups in window — pick teams manually.
+          No upcoming fair-lines matchups in window — pick teams and week
+          manually.
         </p>
       ) : null}
 
@@ -57,6 +77,8 @@ export default async function NflGameBoxesPage() {
         matchups={slate.matchups}
         defaultWeek={slate.currentWeek ?? 1}
         engineVersion={status.engine_version || undefined}
+        depthSource={status.depth_source || status.roster_source}
+        depthAsOf={status.depth_as_of || status.roster_as_of}
       />
     </SportHubShell>
   );

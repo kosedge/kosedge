@@ -1,0 +1,3702 @@
+{
+  "mode": "real",
+  "schedule_source": "packaged_wall_chart_2026",
+  "schedule_game_count": 272,
+  "roster_source": "packaged_nflverse_depth_2026",
+  "roster_as_of": "2026-08-03",
+  "season": 2026,
+  "week": 8,
+  "game_id": "2026-W08-ARI@DAL",
+  "home_team": "DAL",
+  "away_team": "ARI",
+  "n_replicates": 50,
+  "engine_version": "nfl-season-engine-v1.9.1-real-depth",
+  "game_script_summary": {
+    "home_win_prob_mean": 0.6235,
+    "expected_total_mean": 46.17,
+    "pace_plays_mean": 64.32,
+    "home_pass_rate_mean": 0.5861,
+    "away_pass_rate_mean": 0.6144,
+    "home_lead_rate": 0.6,
+    "home_trail_rate": 0.32,
+    "home_early_down_pass_rate_mean": 0.6003,
+    "away_early_down_pass_rate_mean": 0.609,
+    "home_hurry_up_mean": 0.1308,
+    "away_hurry_up_mean": 0.2659,
+    "home_script_intensity_mean": 0.4966,
+    "away_script_intensity_mean": 0.4966,
+    "minutes_remaining_mean": 22.06,
+    "time_bucket_late_rate": 0.5,
+    "home_large_lead_rate": 0.28,
+    "home_large_deficit_rate": 0.1
+  },
+  "notes": {
+    "mode": "real",
+    "schedule_source": "packaged_wall_chart_2026",
+    "schedule_as_of": "2026-08-03",
+    "roster_source": "packaged_nflverse_depth_2026",
+    "roster_as_of": "2026-08-03",
+    "depth_source": "packaged_nflverse_depth_2026",
+    "depth_as_of": "2026-08-03",
+    "schedule": "REAL packaged 2026 REG schedule (272 games, byes). DB unavailable \u2014 using packaged offline artifacts.",
+    "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
+    "rosters": "REAL packaged nflverse depth (32/32 named skill teams); DB weekly preferred when populated.",
+    "depth_chart": "committee_rb=DET; murky_wr=SF",
+    "calibration": "nfl-season-engine-cal-v1",
+    "depth_team_count": 32,
+    "depth_named_skill_teams": 32,
+    "depth_full_skill_starter_teams": 32,
+    "depth_player_rows": 383,
+    "cal_calibration_tag": "nfl-season-engine-cal-v1",
+    "cal_league_env": "PPG=21.8, HFA=1.05, score_sd=9.8, plays=63.0, pass_rate=0.58",
+    "cal_efficiency": "ypa=7.05, ypc=4.2, int_rate=0.018, pass_td_rate=0.041, rush_td_rate_rb=0.027",
+    "cal_usage": "Absolute target/rush shares with residual 'other' bucket (floor=0.08) \u2014 prevents sparse-roster inflation. v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix.",
+    "cal_survivor": "v1.4: team W/L season paths \u2192 week win rates + inspectable save_score / pick_now_score (see survivor.py FORMULA_NOTES).",
+    "cal_harden": "v1.4.1: dual-name injury matching, include_diagnostics explain payloads, thin-roster/NaN guards, contract docs.",
+    "cal_depth_volatility": "v1.5: depth_chart feature/committee RB + clear/murky WR; committee splits 55/45 or 45/35/20; weekly share drift + rare role shuffle; injury promotions (see depth_chart.py).",
+    "cal_game_script": "v1.6: score diff + remaining-clock snapshot \u2192 script_detail (large/small lead|deficit), time_bucket, intensity; explicit pass_rate / early_down_pass_rate / hurry_up; usage matrix intensity-scaled (see game_script.py + usage_roles.py).",
+    "cal_coaching_tendencies": "v1.8: team coaching profiles (pass_rate_bias, script_aggression, rz_pass_bias, early_down_pass_bias, two_minute_aggression) overlay Layer-2 play-mix + RZ pass rate; diagnostics expose coaching_profile + tendency_effects (see coaching_tendencies.py).",
+    "cal_real_schedule": "v1.9: default universe uses real 2026 REG schedule (272 games, weeks 1\u201318 with byes) from nfl_dp_schedules when present, else packaged wall-chart JSON. demo=true keeps round-robin for tests.",
+    "cal_sources": "Recent NFL season shapes (2022\u20132024) + alignment with nfl_handicapping_framework HFA/stdev and box-score EFFICIENCY_CV\u22480.22. No fabricated player grades; DB baselines used when present.",
+    "query_mode": "single_game_marginal_mc",
+    "layers": "1=injury-adjusted strength \u2192 2=game_script \u2192 3=player_usage \u2192 4=production (strengths frozen at query-time book + week injury shocks)",
+    "schedule_match": "on_loaded_schedule"
+  },
+  "players": [
+    {
+      "player_key": "DAL-QB1-DakPrescott",
+      "player_name": "Dak Prescott",
+      "team": "DAL",
+      "position": "QB",
+      "usage_role": "QB1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 216.895,
+        "pass_tds": 0.86,
+        "ints": 0.64,
+        "rush_yards": 6.671
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 216.895,
+          "std": 114.679,
+          "p10": 18.31,
+          "p50": 231.4,
+          "p90": 327.75
+        },
+        "pass_tds": {
+          "mean": 0.86,
+          "std": 1.114,
+          "p10": 0,
+          "p50": 1,
+          "p90": 2
+        },
+        "ints": {
+          "mean": 0.64,
+          "std": 1.035,
+          "p10": 0,
+          "p50": 0,
+          "p90": 2
+        },
+        "rush_yards": {
+          "mean": 6.671,
+          "std": 6.306,
+          "p10": 1.48,
+          "p50": 4.29,
+          "p90": 13.53
+        },
+        "pass_attempts": {
+          "mean": 29.106,
+          "std": 13.193,
+          "p10": 2.35,
+          "p50": 33.66,
+          "p90": 38.98
+        },
+        "carries": {
+          "mean": 1.212,
+          "std": 0.987,
+          "p10": 0.27,
+          "p50": 0.91,
+          "p90": 2.31
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "ARI-QB1-JacobyBrissett",
+      "player_name": "Jacoby Brissett",
+      "team": "ARI",
+      "position": "QB",
+      "usage_role": "QB1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 183.146,
+        "pass_tds": 1.22,
+        "ints": 0.72,
+        "rush_yards": 6.851
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 183.146,
+          "std": 115.453,
+          "p10": 16.29,
+          "p50": 193.71,
+          "p90": 306.72
+        },
+        "pass_tds": {
+          "mean": 1.22,
+          "std": 1.474,
+          "p10": 0,
+          "p50": 1,
+          "p90": 3
+        },
+        "ints": {
+          "mean": 0.72,
+          "std": 0.895,
+          "p10": 0,
+          "p50": 0,
+          "p90": 2
+        },
+        "rush_yards": {
+          "mean": 6.851,
+          "std": 4.733,
+          "p10": 1.47,
+          "p50": 5.85,
+          "p90": 13.04
+        },
+        "pass_attempts": {
+          "mean": 28.225,
+          "std": 15.884,
+          "p10": 2.24,
+          "p50": 34.38,
+          "p90": 42.41
+        },
+        "carries": {
+          "mean": 1.453,
+          "std": 0.972,
+          "p10": 0.31,
+          "p50": 1.29,
+          "p90": 2.59
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "DAL-TE1-JakeFerguson",
+      "player_name": "Jake Ferguson",
+      "team": "DAL",
+      "position": "TE",
+      "usage_role": "TE1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 64.831,
+        "receptions": 5.236,
+        "rec_tds": 0.16
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 64.831,
+          "std": 35.468,
+          "p10": 30.15,
+          "p50": 57.86,
+          "p90": 104.44
+        },
+        "receptions": {
+          "mean": 5.236,
+          "std": 2.103,
+          "p10": 2.64,
+          "p50": 4.87,
+          "p90": 7.78
+        },
+        "rec_tds": {
+          "mean": 0.16,
+          "std": 0.418,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 7.577,
+          "std": 2.859,
+          "p10": 4.1,
+          "p50": 7.21,
+          "p90": 11
+        }
+      }
+    },
+    {
+      "player_key": "DAL-WR1-CeeDeeLamb",
+      "player_name": "CeeDee Lamb",
+      "team": "DAL",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 59.033,
+        "receptions": 4.737,
+        "rec_tds": 0.28
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 59.033,
+          "std": 26.533,
+          "p10": 31.46,
+          "p50": 55.96,
+          "p90": 91.11
+        },
+        "receptions": {
+          "mean": 4.737,
+          "std": 1.691,
+          "p10": 2.6,
+          "p50": 4.63,
+          "p90": 6.7
+        },
+        "rec_tds": {
+          "mean": 0.28,
+          "std": 0.531,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 7.8,
+          "std": 2.82,
+          "p10": 4.4,
+          "p50": 7.46,
+          "p90": 11.3
+        }
+      }
+    },
+    {
+      "player_key": "ARI-QB2-GardnerMinshewII",
+      "player_name": "Gardner Minshew II",
+      "team": "ARI",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 58.916,
+        "pass_tds": 0.22,
+        "ints": 0.18,
+        "rush_yards": 3.135
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 58.916,
+          "std": 101.505,
+          "p10": 4.83,
+          "p50": 7.1,
+          "p90": 238.61
+        },
+        "pass_tds": {
+          "mean": 0.22,
+          "std": 0.61,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "ints": {
+          "mean": 0.18,
+          "std": 0.59,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 3.135,
+          "std": 4.641,
+          "p10": 0.12,
+          "p50": 1.17,
+          "p90": 6.82
+        },
+        "pass_attempts": {
+          "mean": 8.503,
+          "std": 14.047,
+          "p10": 0.83,
+          "p50": 1.12,
+          "p90": 32.91
+        },
+        "carries": {
+          "mean": 0.612,
+          "std": 0.777,
+          "p10": 0.02,
+          "p50": 0.29,
+          "p90": 1.4
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "DAL-RB1-JavonteWilliams",
+      "player_name": "Javonte Williams",
+      "team": "DAL",
+      "position": "RB",
+      "usage_role": "RB1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 55.316,
+        "rush_tds": 0.52,
+        "rec_yards": 15.919,
+        "receptions": 2.018
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 55.316,
+          "std": 25.323,
+          "p10": 22.17,
+          "p50": 53.01,
+          "p90": 89.98
+        },
+        "rush_tds": {
+          "mean": 0.52,
+          "std": 0.671,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 15.919,
+          "std": 9.501,
+          "p10": 6.18,
+          "p50": 12.83,
+          "p90": 31.71
+        },
+        "receptions": {
+          "mean": 2.018,
+          "std": 1.154,
+          "p10": 0.92,
+          "p50": 1.86,
+          "p90": 3.91
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 12.835,
+          "std": 4.4,
+          "p10": 6.33,
+          "p50": 12.96,
+          "p90": 18.07
+        },
+        "targets": {
+          "mean": 2.787,
+          "std": 1.588,
+          "p10": 1.27,
+          "p50": 2.52,
+          "p90": 5.03
+        }
+      }
+    },
+    {
+      "player_key": "ARI-TE1-TreyMcBride",
+      "player_name": "Trey McBride",
+      "team": "ARI",
+      "position": "TE",
+      "usage_role": "TE1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 52.504,
+        "receptions": 5.218,
+        "rec_tds": 0.44
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 52.504,
+          "std": 28.851,
+          "p10": 23.18,
+          "p50": 46.42,
+          "p90": 87.36
+        },
+        "receptions": {
+          "mean": 5.218,
+          "std": 2.386,
+          "p10": 2.81,
+          "p50": 4.78,
+          "p90": 7.84
+        },
+        "rec_tds": {
+          "mean": 0.44,
+          "std": 0.605,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 7.709,
+          "std": 3.381,
+          "p10": 4.32,
+          "p50": 6.84,
+          "p90": 12.99
+        }
+      }
+    },
+    {
+      "player_key": "ARI-WR1-MarvinHarrisonJr.",
+      "player_name": "Marvin Harrison Jr.",
+      "team": "ARI",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 52.304,
+        "receptions": 4.957,
+        "rec_tds": 0.3
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 52.304,
+          "std": 25.798,
+          "p10": 22.4,
+          "p50": 46,
+          "p90": 82.8
+        },
+        "receptions": {
+          "mean": 4.957,
+          "std": 1.847,
+          "p10": 2.79,
+          "p50": 4.54,
+          "p90": 7.45
+        },
+        "rec_tds": {
+          "mean": 0.3,
+          "std": 0.574,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 8.013,
+          "std": 2.944,
+          "p10": 4.7,
+          "p50": 7.35,
+          "p90": 11.85
+        }
+      }
+    },
+    {
+      "player_key": "ARI-RB1-JeremiyahLove",
+      "player_name": "Jeremiyah Love",
+      "team": "ARI",
+      "position": "RB",
+      "usage_role": "RB1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 49.137,
+        "rush_tds": 0.42,
+        "rec_yards": 19.109,
+        "receptions": 2.602
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 49.137,
+          "std": 26.611,
+          "p10": 19.31,
+          "p50": 45.04,
+          "p90": 84.27
+        },
+        "rush_tds": {
+          "mean": 0.42,
+          "std": 0.569,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 19.109,
+          "std": 10.6,
+          "p10": 7.68,
+          "p50": 16.97,
+          "p90": 33.43
+        },
+        "receptions": {
+          "mean": 2.602,
+          "std": 1.413,
+          "p10": 1.13,
+          "p50": 2.32,
+          "p90": 4.03
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 11.103,
+          "std": 5.031,
+          "p10": 4.65,
+          "p50": 10.82,
+          "p90": 17.71
+        },
+        "targets": {
+          "mean": 3.626,
+          "std": 1.993,
+          "p10": 1.56,
+          "p50": 3.24,
+          "p90": 5.74
+        }
+      }
+    },
+    {
+      "player_key": "DAL-QB2-JoeMiltonIII",
+      "player_name": "Joe Milton III",
+      "team": "DAL",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 37.255,
+        "pass_tds": 0.24,
+        "ints": 0.08,
+        "rush_yards": 2.444
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 37.255,
+          "std": 72.811,
+          "p10": 5.44,
+          "p50": 9.84,
+          "p90": 172.33
+        },
+        "pass_tds": {
+          "mean": 0.24,
+          "std": 0.789,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "ints": {
+          "mean": 0.08,
+          "std": 0.271,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 2.444,
+          "std": 2.95,
+          "p10": 0.08,
+          "p50": 1.29,
+          "p90": 7.05
+        },
+        "pass_attempts": {
+          "mean": 5.8,
+          "std": 11.248,
+          "p10": 0.9,
+          "p50": 1.34,
+          "p90": 30.64
+        },
+        "carries": {
+          "mean": 0.474,
+          "std": 0.552,
+          "p10": 0.01,
+          "p50": 0.22,
+          "p90": 1.29
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "DAL-WR2-GeorgePickens",
+      "player_name": "George Pickens",
+      "team": "DAL",
+      "position": "WR",
+      "usage_role": "WR2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 35.437,
+        "receptions": 2.888,
+        "rec_tds": 0.14
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 35.437,
+          "std": 17.009,
+          "p10": 14.44,
+          "p50": 33.55,
+          "p90": 56.2
+        },
+        "receptions": {
+          "mean": 2.888,
+          "std": 1.143,
+          "p10": 1.46,
+          "p50": 2.73,
+          "p90": 4.2
+        },
+        "rec_tds": {
+          "mean": 0.14,
+          "std": 0.4,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.6,
+          "std": 1.816,
+          "p10": 2.15,
+          "p50": 4.42,
+          "p90": 6.86
+        }
+      }
+    },
+    {
+      "player_key": "DAL-TE2-BrevynSpann-Ford",
+      "player_name": "Brevyn Spann-Ford",
+      "team": "DAL",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 31.737,
+        "receptions": 3.024,
+        "rec_tds": 0.14
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 31.737,
+          "std": 15.483,
+          "p10": 15.3,
+          "p50": 27.94,
+          "p90": 54.07
+        },
+        "receptions": {
+          "mean": 3.024,
+          "std": 1.276,
+          "p10": 1.42,
+          "p50": 2.87,
+          "p90": 4.52
+        },
+        "rec_tds": {
+          "mean": 0.14,
+          "std": 0.4,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.492,
+          "std": 1.886,
+          "p10": 2.13,
+          "p50": 4.29,
+          "p90": 6.67
+        }
+      }
+    },
+    {
+      "player_key": "ARI-WR2-MichaelWilson",
+      "player_name": "Michael Wilson",
+      "team": "ARI",
+      "position": "WR",
+      "usage_role": "WR2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 29.113,
+        "receptions": 2.777,
+        "rec_tds": 0.24
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 29.113,
+          "std": 15.222,
+          "p10": 13.4,
+          "p50": 25.44,
+          "p90": 53.49
+        },
+        "receptions": {
+          "mean": 2.777,
+          "std": 1.437,
+          "p10": 1.29,
+          "p50": 2.36,
+          "p90": 4.68
+        },
+        "rec_tds": {
+          "mean": 0.24,
+          "std": 0.55,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.649,
+          "std": 2.299,
+          "p10": 2.03,
+          "p50": 4.01,
+          "p90": 7.94
+        }
+      }
+    },
+    {
+      "player_key": "DAL-RB2-JaydonBlue",
+      "player_name": "Jaydon Blue",
+      "team": "DAL",
+      "position": "RB",
+      "usage_role": "RB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 28.906,
+        "rush_tds": 0.14,
+        "rec_yards": 9.004,
+        "receptions": 1.106
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 28.906,
+          "std": 13.178,
+          "p10": 13.18,
+          "p50": 25.36,
+          "p90": 46.16
+        },
+        "rush_tds": {
+          "mean": 0.14,
+          "std": 0.347,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 9.004,
+          "std": 7.615,
+          "p10": 1.91,
+          "p50": 7.45,
+          "p90": 18.31
+        },
+        "receptions": {
+          "mean": 1.106,
+          "std": 0.818,
+          "p10": 0.26,
+          "p50": 0.81,
+          "p90": 2.14
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 6.778,
+          "std": 2.614,
+          "p10": 3.79,
+          "p50": 6.61,
+          "p90": 10.3
+        },
+        "targets": {
+          "mean": 1.542,
+          "std": 1.141,
+          "p10": 0.36,
+          "p50": 1.17,
+          "p90": 3.1
+        }
+      }
+    },
+    {
+      "player_key": "ARI-TE2-TipReiman",
+      "player_name": "Tip Reiman",
+      "team": "ARI",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 27.383,
+        "receptions": 2.938,
+        "rec_tds": 0.2
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 27.383,
+          "std": 15.205,
+          "p10": 8.35,
+          "p50": 25.39,
+          "p90": 48.1
+        },
+        "receptions": {
+          "mean": 2.938,
+          "std": 1.458,
+          "p10": 1.27,
+          "p50": 2.71,
+          "p90": 4.76
+        },
+        "rec_tds": {
+          "mean": 0.2,
+          "std": 0.49,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 4.364,
+          "std": 2.081,
+          "p10": 1.74,
+          "p50": 4.39,
+          "p90": 7.09
+        }
+      }
+    },
+    {
+      "player_key": "ARI-QB3-CarsonBeck",
+      "player_name": "Carson Beck",
+      "team": "ARI",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 21.585,
+        "pass_tds": 0.16,
+        "ints": 0.08,
+        "rush_yards": 1.79
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 21.585,
+          "std": 64.171,
+          "p10": 4.27,
+          "p50": 7.45,
+          "p90": 15.76
+        },
+        "pass_tds": {
+          "mean": 0.16,
+          "std": 0.612,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "ints": {
+          "mean": 0.08,
+          "std": 0.44,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 1.79,
+          "std": 1.758,
+          "p10": 0.13,
+          "p50": 1.28,
+          "p90": 4.47
+        },
+        "pass_attempts": {
+          "mean": 2.991,
+          "std": 8.098,
+          "p10": 0.83,
+          "p50": 1.12,
+          "p90": 2.44
+        },
+        "carries": {
+          "mean": 0.379,
+          "std": 0.356,
+          "p10": 0.03,
+          "p50": 0.21,
+          "p90": 0.88
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "DAL-TE3-LukeSchoonmaker",
+      "player_name": "Luke Schoonmaker",
+      "team": "DAL",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 19.893,
+        "receptions": 1.935,
+        "rec_tds": 0.04
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 19.893,
+          "std": 13.664,
+          "p10": 6.44,
+          "p50": 16.52,
+          "p90": 36.45
+        },
+        "receptions": {
+          "mean": 1.935,
+          "std": 1.125,
+          "p10": 0.75,
+          "p50": 1.76,
+          "p90": 3.26
+        },
+        "rec_tds": {
+          "mean": 0.04,
+          "std": 0.196,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 2.839,
+          "std": 1.561,
+          "p10": 1.1,
+          "p50": 2.63,
+          "p90": 4.46
+        }
+      }
+    },
+    {
+      "player_key": "ARI-RB2-TylerAllgeier",
+      "player_name": "Tyler Allgeier",
+      "team": "ARI",
+      "position": "RB",
+      "usage_role": "RB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 19.817,
+        "rush_tds": 0.12,
+        "rec_yards": 8.403,
+        "receptions": 1.242
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 19.817,
+          "std": 8.209,
+          "p10": 8.89,
+          "p50": 19.38,
+          "p90": 30.84
+        },
+        "rush_tds": {
+          "mean": 0.12,
+          "std": 0.325,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "rec_yards": {
+          "mean": 8.403,
+          "std": 4.953,
+          "p10": 2.8,
+          "p50": 7.05,
+          "p90": 14.77
+        },
+        "receptions": {
+          "mean": 1.242,
+          "std": 0.718,
+          "p10": 0.35,
+          "p50": 1.23,
+          "p90": 2.28
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 5.369,
+          "std": 1.904,
+          "p10": 3.05,
+          "p50": 5.31,
+          "p90": 7.4
+        },
+        "targets": {
+          "mean": 1.733,
+          "std": 0.968,
+          "p10": 0.5,
+          "p50": 1.6,
+          "p90": 3.25
+        }
+      }
+    },
+    {
+      "player_key": "DAL-QB3-SamHowell",
+      "player_name": "Sam Howell",
+      "team": "DAL",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 18.884,
+        "pass_tds": 0.08,
+        "ints": 0.04,
+        "rush_yards": 1.969
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 18.884,
+          "std": 45.702,
+          "p10": 5.44,
+          "p50": 8.73,
+          "p90": 17.42
+        },
+        "pass_tds": {
+          "mean": 0.08,
+          "std": 0.271,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "ints": {
+          "mean": 0.04,
+          "std": 0.196,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rush_yards": {
+          "mean": 1.969,
+          "std": 2.233,
+          "p10": 0.05,
+          "p50": 0.95,
+          "p90": 5.12
+        },
+        "pass_attempts": {
+          "mean": 2.709,
+          "std": 6.571,
+          "p10": 0.9,
+          "p50": 1.34,
+          "p90": 2.34
+        },
+        "carries": {
+          "mean": 0.375,
+          "std": 0.424,
+          "p10": 0.02,
+          "p50": 0.2,
+          "p90": 0.96
+        },
+        "targets": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        }
+      }
+    },
+    {
+      "player_key": "ARI-TE3-ElijahHiggins",
+      "player_name": "Elijah Higgins",
+      "team": "ARI",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 17.627,
+        "receptions": 1.821,
+        "rec_tds": 0.12
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 17.627,
+          "std": 12.537,
+          "p10": 6,
+          "p50": 14.26,
+          "p90": 38.21
+        },
+        "receptions": {
+          "mean": 1.821,
+          "std": 1.09,
+          "p10": 0.74,
+          "p50": 1.58,
+          "p90": 3.45
+        },
+        "rec_tds": {
+          "mean": 0.12,
+          "std": 0.325,
+          "p10": 0,
+          "p50": 0,
+          "p90": 1
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 2.683,
+          "std": 1.509,
+          "p10": 1.17,
+          "p50": 2.32,
+          "p90": 4.76
+        }
+      }
+    },
+    {
+      "player_key": "ARI-WR3-KendrickBourne",
+      "player_name": "Kendrick Bourne",
+      "team": "ARI",
+      "position": "WR",
+      "usage_role": "WR3",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "WR3",
+      "point_estimate": {
+        "rec_yards": 17.57,
+        "receptions": 1.559,
+        "rec_tds": 0.04
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 17.57,
+          "std": 15.708,
+          "p10": 4.51,
+          "p50": 12.39,
+          "p90": 32.03
+        },
+        "receptions": {
+          "mean": 1.559,
+          "std": 1.168,
+          "p10": 0.45,
+          "p50": 1.24,
+          "p90": 2.87
+        },
+        "rec_tds": {
+          "mean": 0.04,
+          "std": 0.196,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 2.48,
+          "std": 1.731,
+          "p10": 0.8,
+          "p50": 2,
+          "p90": 4.42
+        }
+      }
+    },
+    {
+      "player_key": "DAL-WR3-RyanFlournoy",
+      "player_name": "Ryan Flournoy",
+      "team": "DAL",
+      "position": "WR",
+      "usage_role": "WR3",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "WR3",
+      "point_estimate": {
+        "rec_yards": 12.237,
+        "receptions": 1.011,
+        "rec_tds": 0.14
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 12.237,
+          "std": 8.939,
+          "p10": 1.74,
+          "p50": 10.87,
+          "p90": 24.29
+        },
+        "receptions": {
+          "mean": 1.011,
+          "std": 0.72,
+          "p10": 0.18,
+          "p50": 0.89,
+          "p90": 1.92
+        },
+        "rec_tds": {
+          "mean": 0.14,
+          "std": 0.448,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "targets": {
+          "mean": 1.661,
+          "std": 1.193,
+          "p10": 0.32,
+          "p50": 1.4,
+          "p90": 3.35
+        }
+      }
+    },
+    {
+      "player_key": "DAL-RB3-MalikDavis",
+      "player_name": "Malik Davis",
+      "team": "DAL",
+      "position": "RB",
+      "usage_role": "OTHER",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "OTHER",
+      "point_estimate": {
+        "rush_yards": 10.866,
+        "rush_tds": 0.02,
+        "rec_yards": 5.831,
+        "receptions": 0.777
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 10.866,
+          "std": 6.321,
+          "p10": 3.61,
+          "p50": 9.95,
+          "p90": 17.33
+        },
+        "rush_tds": {
+          "mean": 0.02,
+          "std": 0.14,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rec_yards": {
+          "mean": 5.831,
+          "std": 4.797,
+          "p10": 0.87,
+          "p50": 5.41,
+          "p90": 11.9
+        },
+        "receptions": {
+          "mean": 0.777,
+          "std": 0.713,
+          "p10": 0.12,
+          "p50": 0.59,
+          "p90": 1.88
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 2.63,
+          "std": 1.414,
+          "p10": 1.03,
+          "p50": 2.45,
+          "p90": 4.19
+        },
+        "targets": {
+          "mean": 1.046,
+          "std": 0.943,
+          "p10": 0.17,
+          "p50": 0.77,
+          "p90": 2.54
+        }
+      }
+    },
+    {
+      "player_key": "ARI-RB3-JamesConner",
+      "player_name": "James Conner",
+      "team": "ARI",
+      "position": "RB",
+      "usage_role": "OTHER",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "OTHER",
+      "point_estimate": {
+        "rush_yards": 9.326,
+        "rush_tds": 0.02,
+        "rec_yards": 5.815,
+        "receptions": 0.811
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 9.326,
+          "std": 4.479,
+          "p10": 4.21,
+          "p50": 9.5,
+          "p90": 14.81
+        },
+        "rush_tds": {
+          "mean": 0.02,
+          "std": 0.14,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "rec_yards": {
+          "mean": 5.815,
+          "std": 5.834,
+          "p10": 0.58,
+          "p50": 4.23,
+          "p90": 8.69
+        },
+        "receptions": {
+          "mean": 0.811,
+          "std": 0.798,
+          "p10": 0.08,
+          "p50": 0.61,
+          "p90": 1.62
+        },
+        "pass_attempts": {
+          "mean": 0,
+          "std": 0,
+          "p10": 0,
+          "p50": 0,
+          "p90": 0
+        },
+        "carries": {
+          "mean": 2.62,
+          "std": 1.025,
+          "p10": 1.47,
+          "p50": 2.5,
+          "p90": 4.03
+        },
+        "targets": {
+          "mean": 1.11,
+          "std": 1.081,
+          "p10": 0.11,
+          "p50": 0.88,
+          "p90": 2.31
+        }
+      }
+    }
+  ],
+  "diagnostics": {
+    "usage_shares_home": [
+      {
+        "player_key": "DAL-QB1-DakPrescott",
+        "player_name": "Dak Prescott",
+        "team": "DAL",
+        "position": "QB",
+        "depth_order": 1,
+        "usage_role": "QB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.9,
+        "rush_share": 0.07,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.07,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "DAL-QB2-JoeMiltonIII",
+        "player_name": "Joe Milton III",
+        "team": "DAL",
+        "position": "QB",
+        "depth_order": 2,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.45,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "DAL-QB3-SamHowell",
+        "player_name": "Sam Howell",
+        "team": "DAL",
+        "position": "QB",
+        "depth_order": 3,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.2,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "DAL-RB1-JavonteWilliams",
+        "player_name": "Javonte Williams",
+        "team": "DAL",
+        "position": "RB",
+        "depth_order": 1,
+        "usage_role": "RB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0.52,
+        "target_share": 0.1,
+        "route_share": 0.2,
+        "base_rush_share": 0.52,
+        "base_target_share": 0.1
+      },
+      {
+        "player_key": "DAL-RB2-JaydonBlue",
+        "player_name": "Jaydon Blue",
+        "team": "DAL",
+        "position": "RB",
+        "depth_order": 2,
+        "usage_role": "RB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0.26,
+        "target_share": 0.05,
+        "route_share": 0.2,
+        "base_rush_share": 0.26,
+        "base_target_share": 0.05
+      },
+      {
+        "player_key": "DAL-RB3-MalikDavis",
+        "player_name": "Malik Davis",
+        "team": "DAL",
+        "position": "RB",
+        "depth_order": 3,
+        "usage_role": "OTHER",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0.12,
+        "target_share": 0.03,
+        "route_share": 0.2,
+        "base_rush_share": 0.12,
+        "base_target_share": 0.03
+      },
+      {
+        "player_key": "DAL-TE1-JakeFerguson",
+        "player_name": "Jake Ferguson",
+        "team": "DAL",
+        "position": "TE",
+        "depth_order": 1,
+        "usage_role": "TE1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.22,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.22
+      },
+      {
+        "player_key": "DAL-TE2-BrevynSpann-Ford",
+        "player_name": "Brevyn Spann-Ford",
+        "team": "DAL",
+        "position": "TE",
+        "depth_order": 2,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.14,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.14
+      },
+      {
+        "player_key": "DAL-TE3-LukeSchoonmaker",
+        "player_name": "Luke Schoonmaker",
+        "team": "DAL",
+        "position": "TE",
+        "depth_order": 3,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.08,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.08
+      },
+      {
+        "player_key": "DAL-WR1-CeeDeeLamb",
+        "player_name": "CeeDee Lamb",
+        "team": "DAL",
+        "position": "WR",
+        "depth_order": 1,
+        "usage_role": "WR1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.22,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.22
+      },
+      {
+        "player_key": "DAL-WR2-GeorgePickens",
+        "player_name": "George Pickens",
+        "team": "DAL",
+        "position": "WR",
+        "depth_order": 2,
+        "usage_role": "WR2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.14,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.14
+      },
+      {
+        "player_key": "DAL-WR3-RyanFlournoy",
+        "player_name": "Ryan Flournoy",
+        "team": "DAL",
+        "position": "WR",
+        "depth_order": 3,
+        "usage_role": "WR3",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.08,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.08
+      }
+    ],
+    "usage_shares_away": [
+      {
+        "player_key": "ARI-QB1-JacobyBrissett",
+        "player_name": "Jacoby Brissett",
+        "team": "ARI",
+        "position": "QB",
+        "depth_order": 1,
+        "usage_role": "QB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.9,
+        "rush_share": 0.07,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.07,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "ARI-QB2-GardnerMinshewII",
+        "player_name": "Gardner Minshew II",
+        "team": "ARI",
+        "position": "QB",
+        "depth_order": 2,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.45,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "ARI-QB3-CarsonBeck",
+        "player_name": "Carson Beck",
+        "team": "ARI",
+        "position": "QB",
+        "depth_order": 3,
+        "usage_role": "QB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.2,
+        "rush_share": 0.02,
+        "target_share": 0,
+        "route_share": 0.2,
+        "base_rush_share": 0.02,
+        "base_target_share": 0
+      },
+      {
+        "player_key": "ARI-RB1-JeremiyahLove",
+        "player_name": "Jeremiyah Love",
+        "team": "ARI",
+        "position": "RB",
+        "depth_order": 1,
+        "usage_role": "RB1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0.52,
+        "target_share": 0.1,
+        "route_share": 0.2,
+        "base_rush_share": 0.52,
+        "base_target_share": 0.1
+      },
+      {
+        "player_key": "ARI-RB2-TylerAllgeier",
+        "player_name": "Tyler Allgeier",
+        "team": "ARI",
+        "position": "RB",
+        "depth_order": 2,
+        "usage_role": "RB2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0.26,
+        "target_share": 0.05,
+        "route_share": 0.2,
+        "base_rush_share": 0.26,
+        "base_target_share": 0.05
+      },
+      {
+        "player_key": "ARI-RB3-JamesConner",
+        "player_name": "James Conner",
+        "team": "ARI",
+        "position": "RB",
+        "depth_order": 3,
+        "usage_role": "OTHER",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0.12,
+        "target_share": 0.03,
+        "route_share": 0.2,
+        "base_rush_share": 0.12,
+        "base_target_share": 0.03
+      },
+      {
+        "player_key": "ARI-TE1-TreyMcBride",
+        "player_name": "Trey McBride",
+        "team": "ARI",
+        "position": "TE",
+        "depth_order": 1,
+        "usage_role": "TE1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.22,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.22
+      },
+      {
+        "player_key": "ARI-TE2-TipReiman",
+        "player_name": "Tip Reiman",
+        "team": "ARI",
+        "position": "TE",
+        "depth_order": 2,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.14,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.14
+      },
+      {
+        "player_key": "ARI-TE3-ElijahHiggins",
+        "player_name": "Elijah Higgins",
+        "team": "ARI",
+        "position": "TE",
+        "depth_order": 3,
+        "usage_role": "TE2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.08,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.08
+      },
+      {
+        "player_key": "ARI-WR1-MarvinHarrisonJr.",
+        "player_name": "Marvin Harrison Jr.",
+        "team": "ARI",
+        "position": "WR",
+        "depth_order": 1,
+        "usage_role": "WR1",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.65,
+        "rush_share": 0,
+        "target_share": 0.22,
+        "route_share": 0.85,
+        "base_rush_share": 0,
+        "base_target_share": 0.22
+      },
+      {
+        "player_key": "ARI-WR2-MichaelWilson",
+        "player_name": "Michael Wilson",
+        "team": "ARI",
+        "position": "WR",
+        "depth_order": 2,
+        "usage_role": "WR2",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.38,
+        "rush_share": 0,
+        "target_share": 0.14,
+        "route_share": 0.65,
+        "base_rush_share": 0,
+        "base_target_share": 0.14
+      },
+      {
+        "player_key": "ARI-WR3-KendrickBourne",
+        "player_name": "Kendrick Bourne",
+        "team": "ARI",
+        "position": "WR",
+        "depth_order": 3,
+        "usage_role": "WR3",
+        "personnel": "balanced",
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "snap_share": 0.18,
+        "rush_share": 0,
+        "target_share": 0.08,
+        "route_share": 0.4,
+        "base_rush_share": 0,
+        "base_target_share": 0.08
+      }
+    ],
+    "share_integrity_home": {
+      "script": "neutral",
+      "script_detail": "",
+      "script_intensity": 0.55,
+      "time_bucket": "mid",
+      "pass_rate": 0.58,
+      "named_rush_share_sum": 1.01,
+      "named_target_share_sum": 1.06,
+      "residual_other_rush": 0.08,
+      "residual_other_target": 0.08,
+      "modeled_rush_plus_other": 1,
+      "modeled_target_plus_other": 1,
+      "ok": true
+    },
+    "share_integrity_away": {
+      "script": "neutral",
+      "script_detail": "",
+      "script_intensity": 0.55,
+      "time_bucket": "mid",
+      "pass_rate": 0.58,
+      "named_rush_share_sum": 1.01,
+      "named_target_share_sum": 1.06,
+      "residual_other_rush": 0.08,
+      "residual_other_target": 0.08,
+      "modeled_rush_plus_other": 1,
+      "modeled_target_plus_other": 1,
+      "ok": true
+    },
+    "injury_paths": [],
+    "injury_adjustments": {
+      "active_count": 0,
+      "by_team": {},
+      "rules": {
+        "strength": "offense_index += \u2212player_offense_value \u00d7 (1 \u2212 availability); capped at \u00b10.22; defense unchanged",
+        "reallocation": "Role-aware absorption via usage_roles.INJURY_REALLOC_RULES (RB1\u2192RB2 primary, WR1\u2192WR2>slot>WR3, TE1\u2192TE2+WR mix); 10% of freed volume stays in residual other bucket",
+        "limited_default": 0.5,
+        "returning_ramp": "linear from availability|default 0.4 \u2192 1.0"
+      }
+    },
+    "game_script_summary": {
+      "home_win_prob_mean": 0.6235,
+      "expected_total_mean": 46.17,
+      "pace_plays_mean": 64.32,
+      "home_pass_rate_mean": 0.5861,
+      "away_pass_rate_mean": 0.6144,
+      "home_lead_rate": 0.6,
+      "home_trail_rate": 0.32,
+      "home_early_down_pass_rate_mean": 0.6003,
+      "away_early_down_pass_rate_mean": 0.609,
+      "home_hurry_up_mean": 0.1308,
+      "away_hurry_up_mean": 0.2659,
+      "home_script_intensity_mean": 0.4966,
+      "away_script_intensity_mean": 0.4966,
+      "minutes_remaining_mean": 22.06,
+      "time_bucket_late_rate": 0.5,
+      "home_large_lead_rate": 0.28,
+      "home_large_deficit_rate": 0.1
+    },
+    "schedule_match": "on_loaded_schedule",
+    "seed": 42,
+    "depth_structure": {
+      "DAL": {
+        "team": "DAL",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy"
+      },
+      "ARI": {
+        "team": "ARI",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy"
+      }
+    },
+    "depth_structure_detail": [
+      {
+        "team": "ARI",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy",
+        "herfindahl_rush": 0.4351,
+        "top1_rush_share": 0.52,
+        "wr1_wr3_target_gap": 0.14
+      },
+      {
+        "team": "DAL",
+        "rb_structure": "feature",
+        "wr_hierarchy": "clear",
+        "rb_count": 3,
+        "wr_count": 3,
+        "committee_split": "60/26/14",
+        "wr_split": "48/33/19",
+        "notes": "feature RB1/RB2; clear WR hierarchy",
+        "herfindahl_rush": 0.4351,
+        "top1_rush_share": 0.52,
+        "wr1_wr3_target_gap": 0.14
+      }
+    ],
+    "role_transitions": [],
+    "play_mix_home": {
+      "pass_rate_mean": 0.5861,
+      "run_rate_mean": 0.4139,
+      "early_down_pass_rate_mean": 0.6003,
+      "hurry_up_mean": 0.1308,
+      "script_intensity_mean": 0.4966,
+      "script_state_mode": "lead",
+      "script_detail_mode": "small_lead",
+      "time_bucket_mode": "late",
+      "minutes_remaining_mean": 22.06
+    },
+    "play_mix_away": {
+      "pass_rate_mean": 0.6144,
+      "run_rate_mean": 0.3856,
+      "early_down_pass_rate_mean": 0.609,
+      "hurry_up_mean": 0.2659,
+      "script_intensity_mean": 0.4966,
+      "script_state_mode": "trail",
+      "script_detail_mode": "small_deficit",
+      "time_bucket_mode": "late",
+      "minutes_remaining_mean": 22.06
+    },
+    "play_mix_sample": {
+      "home": {
+        "script_state": "lead",
+        "script_detail": "small_lead",
+        "script_intensity": 0.1951,
+        "time_bucket": "late",
+        "minutes_remaining": 19.15,
+        "pass_rate": 0.5757,
+        "run_rate": 0.4243,
+        "early_down_pass_rate": 0.5921,
+        "hurry_up": 0
+      },
+      "away": {
+        "script_state": "trail",
+        "script_detail": "small_deficit",
+        "script_intensity": 0.1951,
+        "time_bucket": "late",
+        "minutes_remaining": 19.15,
+        "pass_rate": 0.6233,
+        "run_rate": 0.3767,
+        "early_down_pass_rate": 0.616,
+        "hurry_up": 0.3768
+      }
+    },
+    "red_zone": {
+      "home": {
+        "rz_pass_rate_mean": 0.5167,
+        "rz_run_rate_mean": 0.4833
+      },
+      "away": {
+        "rz_pass_rate_mean": 0.5973,
+        "rz_run_rate_mean": 0.4027
+      },
+      "players": [
+        {
+          "player_key": "DAL-QB1-DakPrescott",
+          "player_name": "Dak Prescott",
+          "team": "DAL",
+          "position": "QB",
+          "usage_role": "QB1",
+          "scoring_role": "QB1",
+          "rz_carries_i20": {
+            "mean": 0.394,
+            "std": 0.174,
+            "p10": 0.181,
+            "p50": 0.366,
+            "p90": 0.626
+          },
+          "rz_carries_i10": {
+            "mean": 0.178,
+            "std": 0.122,
+            "p10": 0.055,
+            "p50": 0.131,
+            "p90": 0.371
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.056,
+            "std": 0.027,
+            "p10": 0.027,
+            "p50": 0.05,
+            "p90": 0.095
+          }
+        },
+        {
+          "player_key": "DAL-QB2-JoeMiltonIII",
+          "player_name": "Joe Milton III",
+          "team": "DAL",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.079,
+            "std": 0.08,
+            "p10": 0.011,
+            "p50": 0.056,
+            "p90": 0.171
+          },
+          "rz_carries_i10": {
+            "mean": 0.023,
+            "std": 0.032,
+            "p10": 0.002,
+            "p50": 0.011,
+            "p90": 0.057
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.01,
+            "std": 0.009,
+            "p10": 0.002,
+            "p50": 0.006,
+            "p90": 0.02
+          }
+        },
+        {
+          "player_key": "DAL-QB3-SamHowell",
+          "player_name": "Sam Howell",
+          "team": "DAL",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.099,
+            "std": 0.092,
+            "p10": 0.012,
+            "p50": 0.076,
+            "p90": 0.205
+          },
+          "rz_carries_i10": {
+            "mean": 0.041,
+            "std": 0.05,
+            "p10": 0.001,
+            "p50": 0.023,
+            "p90": 0.094
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.013,
+            "std": 0.012,
+            "p10": 0.002,
+            "p50": 0.011,
+            "p90": 0.025
+          }
+        },
+        {
+          "player_key": "DAL-RB1-JavonteWilliams",
+          "player_name": "Javonte Williams",
+          "team": "DAL",
+          "position": "RB",
+          "usage_role": "RB1",
+          "scoring_role": "RB1",
+          "rz_carries_i20": {
+            "mean": 2.198,
+            "std": 0.833,
+            "p10": 1.079,
+            "p50": 2.192,
+            "p90": 3.495
+          },
+          "rz_carries_i10": {
+            "mean": 0.826,
+            "std": 0.32,
+            "p10": 0.46,
+            "p50": 0.792,
+            "p90": 1.325
+          },
+          "rz_targets_i20": {
+            "mean": 0.495,
+            "std": 0.283,
+            "p10": 0.194,
+            "p50": 0.441,
+            "p90": 0.854
+          },
+          "rz_targets_i10": {
+            "mean": 0.175,
+            "std": 0.122,
+            "p10": 0.041,
+            "p50": 0.153,
+            "p90": 0.321
+          },
+          "td_opportunity_share": {
+            "mean": 0.352,
+            "std": 0.081,
+            "p10": 0.258,
+            "p50": 0.341,
+            "p90": 0.463
+          }
+        },
+        {
+          "player_key": "DAL-RB2-JaydonBlue",
+          "player_name": "Jaydon Blue",
+          "team": "DAL",
+          "position": "RB",
+          "usage_role": "RB2",
+          "scoring_role": "RB2",
+          "rz_carries_i20": {
+            "mean": 0.776,
+            "std": 0.396,
+            "p10": 0.33,
+            "p50": 0.675,
+            "p90": 1.484
+          },
+          "rz_carries_i10": {
+            "mean": 0.216,
+            "std": 0.13,
+            "p10": 0.072,
+            "p50": 0.186,
+            "p90": 0.388
+          },
+          "rz_targets_i20": {
+            "mean": 0.229,
+            "std": 0.154,
+            "p10": 0.078,
+            "p50": 0.19,
+            "p90": 0.431
+          },
+          "rz_targets_i10": {
+            "mean": 0.075,
+            "std": 0.061,
+            "p10": 0.019,
+            "p50": 0.058,
+            "p90": 0.138
+          },
+          "td_opportunity_share": {
+            "mean": 0.12,
+            "std": 0.042,
+            "p10": 0.075,
+            "p50": 0.114,
+            "p90": 0.184
+          }
+        },
+        {
+          "player_key": "DAL-RB3-MalikDavis",
+          "player_name": "Malik Davis",
+          "team": "DAL",
+          "position": "RB",
+          "usage_role": "OTHER",
+          "scoring_role": "OTHER",
+          "rz_carries_i20": {
+            "mean": 0.197,
+            "std": 0.154,
+            "p10": 0.047,
+            "p50": 0.141,
+            "p90": 0.441
+          },
+          "rz_carries_i10": {
+            "mean": 0.062,
+            "std": 0.055,
+            "p10": 0.008,
+            "p50": 0.047,
+            "p90": 0.127
+          },
+          "rz_targets_i20": {
+            "mean": 0.228,
+            "std": 0.152,
+            "p10": 0.073,
+            "p50": 0.197,
+            "p90": 0.399
+          },
+          "rz_targets_i10": {
+            "mean": 0.065,
+            "std": 0.059,
+            "p10": 0.011,
+            "p50": 0.049,
+            "p90": 0.135
+          },
+          "td_opportunity_share": {
+            "mean": 0.05,
+            "std": 0.018,
+            "p10": 0.028,
+            "p50": 0.048,
+            "p90": 0.08
+          }
+        },
+        {
+          "player_key": "DAL-TE1-JakeFerguson",
+          "player_name": "Jake Ferguson",
+          "team": "DAL",
+          "position": "TE",
+          "usage_role": "TE1",
+          "scoring_role": "TE1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.794,
+            "std": 0.342,
+            "p10": 0.444,
+            "p50": 0.7,
+            "p90": 1.362
+          },
+          "rz_targets_i10": {
+            "mean": 0.343,
+            "std": 0.157,
+            "p10": 0.151,
+            "p50": 0.319,
+            "p90": 0.554
+          },
+          "td_opportunity_share": {
+            "mean": 0.104,
+            "std": 0.043,
+            "p10": 0.052,
+            "p50": 0.098,
+            "p90": 0.173
+          }
+        },
+        {
+          "player_key": "DAL-TE2-BrevynSpann-Ford",
+          "player_name": "Brevyn Spann-Ford",
+          "team": "DAL",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.283,
+            "std": 0.183,
+            "p10": 0.116,
+            "p50": 0.255,
+            "p90": 0.442
+          },
+          "rz_targets_i10": {
+            "mean": 0.119,
+            "std": 0.088,
+            "p10": 0.022,
+            "p50": 0.103,
+            "p90": 0.221
+          },
+          "td_opportunity_share": {
+            "mean": 0.037,
+            "std": 0.021,
+            "p10": 0.013,
+            "p50": 0.034,
+            "p90": 0.061
+          }
+        },
+        {
+          "player_key": "DAL-TE3-LukeSchoonmaker",
+          "player_name": "Luke Schoonmaker",
+          "team": "DAL",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.269,
+            "std": 0.133,
+            "p10": 0.101,
+            "p50": 0.262,
+            "p90": 0.456
+          },
+          "rz_targets_i10": {
+            "mean": 0.097,
+            "std": 0.072,
+            "p10": 0.026,
+            "p50": 0.082,
+            "p90": 0.182
+          },
+          "td_opportunity_share": {
+            "mean": 0.033,
+            "std": 0.015,
+            "p10": 0.014,
+            "p50": 0.033,
+            "p90": 0.051
+          }
+        },
+        {
+          "player_key": "DAL-WR1-CeeDeeLamb",
+          "player_name": "CeeDee Lamb",
+          "team": "DAL",
+          "position": "WR",
+          "usage_role": "WR1",
+          "scoring_role": "WR1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 1.017,
+            "std": 0.38,
+            "p10": 0.477,
+            "p50": 1.04,
+            "p90": 1.49
+          },
+          "rz_targets_i10": {
+            "mean": 0.36,
+            "std": 0.154,
+            "p10": 0.177,
+            "p50": 0.359,
+            "p90": 0.569
+          },
+          "td_opportunity_share": {
+            "mean": 0.123,
+            "std": 0.044,
+            "p10": 0.065,
+            "p50": 0.126,
+            "p90": 0.185
+          }
+        },
+        {
+          "player_key": "DAL-WR2-GeorgePickens",
+          "player_name": "George Pickens",
+          "team": "DAL",
+          "position": "WR",
+          "usage_role": "WR2",
+          "scoring_role": "WR2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.586,
+            "std": 0.336,
+            "p10": 0.254,
+            "p50": 0.537,
+            "p90": 1.049
+          },
+          "rz_targets_i10": {
+            "mean": 0.189,
+            "std": 0.148,
+            "p10": 0.061,
+            "p50": 0.156,
+            "p90": 0.35
+          },
+          "td_opportunity_share": {
+            "mean": 0.069,
+            "std": 0.04,
+            "p10": 0.028,
+            "p50": 0.061,
+            "p90": 0.112
+          }
+        },
+        {
+          "player_key": "DAL-WR3-RyanFlournoy",
+          "player_name": "Ryan Flournoy",
+          "team": "DAL",
+          "position": "WR",
+          "usage_role": "WR3",
+          "scoring_role": "WR3",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.299,
+            "std": 0.185,
+            "p10": 0.099,
+            "p50": 0.244,
+            "p90": 0.599
+          },
+          "rz_targets_i10": {
+            "mean": 0.08,
+            "std": 0.066,
+            "p10": 0.01,
+            "p50": 0.06,
+            "p90": 0.178
+          },
+          "td_opportunity_share": {
+            "mean": 0.033,
+            "std": 0.02,
+            "p10": 0.01,
+            "p50": 0.03,
+            "p90": 0.058
+          }
+        },
+        {
+          "player_key": "ARI-QB1-JacobyBrissett",
+          "player_name": "Jacoby Brissett",
+          "team": "ARI",
+          "position": "QB",
+          "usage_role": "QB1",
+          "scoring_role": "QB1",
+          "rz_carries_i20": {
+            "mean": 0.38,
+            "std": 0.194,
+            "p10": 0.196,
+            "p50": 0.342,
+            "p90": 0.601
+          },
+          "rz_carries_i10": {
+            "mean": 0.166,
+            "std": 0.115,
+            "p10": 0.062,
+            "p50": 0.124,
+            "p90": 0.365
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.051,
+            "std": 0.026,
+            "p10": 0.025,
+            "p50": 0.043,
+            "p90": 0.087
+          }
+        },
+        {
+          "player_key": "ARI-QB2-GardnerMinshewII",
+          "player_name": "Gardner Minshew II",
+          "team": "ARI",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.081,
+            "std": 0.071,
+            "p10": 0.013,
+            "p50": 0.061,
+            "p90": 0.193
+          },
+          "rz_carries_i10": {
+            "mean": 0.032,
+            "std": 0.038,
+            "p10": 0.002,
+            "p50": 0.013,
+            "p90": 0.071
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.011,
+            "std": 0.01,
+            "p10": 0.002,
+            "p50": 0.008,
+            "p90": 0.019
+          }
+        },
+        {
+          "player_key": "ARI-QB3-CarsonBeck",
+          "player_name": "Carson Beck",
+          "team": "ARI",
+          "position": "QB",
+          "usage_role": "QB2",
+          "scoring_role": "QB2",
+          "rz_carries_i20": {
+            "mean": 0.078,
+            "std": 0.084,
+            "p10": 0.007,
+            "p50": 0.049,
+            "p90": 0.145
+          },
+          "rz_carries_i10": {
+            "mean": 0.023,
+            "std": 0.03,
+            "p10": 0.001,
+            "p50": 0.013,
+            "p90": 0.065
+          },
+          "rz_targets_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "td_opportunity_share": {
+            "mean": 0.009,
+            "std": 0.009,
+            "p10": 0.001,
+            "p50": 0.006,
+            "p90": 0.021
+          }
+        },
+        {
+          "player_key": "ARI-RB1-JeremiyahLove",
+          "player_name": "Jeremiyah Love",
+          "team": "ARI",
+          "position": "RB",
+          "usage_role": "RB1",
+          "scoring_role": "RB1",
+          "rz_carries_i20": {
+            "mean": 1.825,
+            "std": 0.797,
+            "p10": 0.904,
+            "p50": 1.671,
+            "p90": 2.891
+          },
+          "rz_carries_i10": {
+            "mean": 0.716,
+            "std": 0.309,
+            "p10": 0.382,
+            "p50": 0.667,
+            "p90": 1.075
+          },
+          "rz_targets_i20": {
+            "mean": 0.589,
+            "std": 0.35,
+            "p10": 0.264,
+            "p50": 0.515,
+            "p90": 1.042
+          },
+          "rz_targets_i10": {
+            "mean": 0.199,
+            "std": 0.113,
+            "p10": 0.098,
+            "p50": 0.171,
+            "p90": 0.318
+          },
+          "td_opportunity_share": {
+            "mean": 0.303,
+            "std": 0.084,
+            "p10": 0.206,
+            "p50": 0.292,
+            "p90": 0.439
+          }
+        },
+        {
+          "player_key": "ARI-RB2-TylerAllgeier",
+          "player_name": "Tyler Allgeier",
+          "team": "ARI",
+          "position": "RB",
+          "usage_role": "RB2",
+          "scoring_role": "RB2",
+          "rz_carries_i20": {
+            "mean": 0.635,
+            "std": 0.285,
+            "p10": 0.349,
+            "p50": 0.575,
+            "p90": 0.964
+          },
+          "rz_carries_i10": {
+            "mean": 0.177,
+            "std": 0.116,
+            "p10": 0.054,
+            "p50": 0.142,
+            "p90": 0.36
+          },
+          "rz_targets_i20": {
+            "mean": 0.24,
+            "std": 0.134,
+            "p10": 0.11,
+            "p50": 0.203,
+            "p90": 0.425
+          },
+          "rz_targets_i10": {
+            "mean": 0.074,
+            "std": 0.056,
+            "p10": 0.018,
+            "p50": 0.05,
+            "p90": 0.151
+          },
+          "td_opportunity_share": {
+            "mean": 0.101,
+            "std": 0.034,
+            "p10": 0.059,
+            "p50": 0.097,
+            "p90": 0.151
+          }
+        },
+        {
+          "player_key": "ARI-RB3-JamesConner",
+          "player_name": "James Conner",
+          "team": "ARI",
+          "position": "RB",
+          "usage_role": "OTHER",
+          "scoring_role": "OTHER",
+          "rz_carries_i20": {
+            "mean": 0.172,
+            "std": 0.135,
+            "p10": 0.035,
+            "p50": 0.131,
+            "p90": 0.385
+          },
+          "rz_carries_i10": {
+            "mean": 0.047,
+            "std": 0.04,
+            "p10": 0.007,
+            "p50": 0.03,
+            "p90": 0.1
+          },
+          "rz_targets_i20": {
+            "mean": 0.287,
+            "std": 0.2,
+            "p10": 0.081,
+            "p50": 0.203,
+            "p90": 0.58
+          },
+          "rz_targets_i10": {
+            "mean": 0.097,
+            "std": 0.084,
+            "p10": 0.025,
+            "p50": 0.071,
+            "p90": 0.186
+          },
+          "td_opportunity_share": {
+            "mean": 0.052,
+            "std": 0.025,
+            "p10": 0.025,
+            "p50": 0.05,
+            "p90": 0.081
+          }
+        },
+        {
+          "player_key": "ARI-TE1-TreyMcBride",
+          "player_name": "Trey McBride",
+          "team": "ARI",
+          "position": "TE",
+          "usage_role": "TE1",
+          "scoring_role": "TE1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 1.066,
+            "std": 0.424,
+            "p10": 0.518,
+            "p50": 1.092,
+            "p90": 1.64
+          },
+          "rz_targets_i10": {
+            "mean": 0.428,
+            "std": 0.209,
+            "p10": 0.158,
+            "p50": 0.389,
+            "p90": 0.704
+          },
+          "td_opportunity_share": {
+            "mean": 0.128,
+            "std": 0.049,
+            "p10": 0.066,
+            "p50": 0.129,
+            "p90": 0.186
+          }
+        },
+        {
+          "player_key": "ARI-TE2-TipReiman",
+          "player_name": "Tip Reiman",
+          "team": "ARI",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.359,
+            "std": 0.176,
+            "p10": 0.138,
+            "p50": 0.336,
+            "p90": 0.578
+          },
+          "rz_targets_i10": {
+            "mean": 0.13,
+            "std": 0.091,
+            "p10": 0.029,
+            "p50": 0.113,
+            "p90": 0.254
+          },
+          "td_opportunity_share": {
+            "mean": 0.042,
+            "std": 0.02,
+            "p10": 0.013,
+            "p50": 0.043,
+            "p90": 0.063
+          }
+        },
+        {
+          "player_key": "ARI-TE3-ElijahHiggins",
+          "player_name": "Elijah Higgins",
+          "team": "ARI",
+          "position": "TE",
+          "usage_role": "TE2",
+          "scoring_role": "TE2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.313,
+            "std": 0.194,
+            "p10": 0.091,
+            "p50": 0.241,
+            "p90": 0.62
+          },
+          "rz_targets_i10": {
+            "mean": 0.12,
+            "std": 0.095,
+            "p10": 0.033,
+            "p50": 0.089,
+            "p90": 0.281
+          },
+          "td_opportunity_share": {
+            "mean": 0.037,
+            "std": 0.023,
+            "p10": 0.012,
+            "p50": 0.033,
+            "p90": 0.075
+          }
+        },
+        {
+          "player_key": "ARI-WR1-MarvinHarrisonJr.",
+          "player_name": "Marvin Harrison Jr.",
+          "team": "ARI",
+          "position": "WR",
+          "usage_role": "WR1",
+          "scoring_role": "WR1",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 1.296,
+            "std": 0.499,
+            "p10": 0.728,
+            "p50": 1.205,
+            "p90": 1.945
+          },
+          "rz_targets_i10": {
+            "mean": 0.485,
+            "std": 0.257,
+            "p10": 0.184,
+            "p50": 0.42,
+            "p90": 0.883
+          },
+          "td_opportunity_share": {
+            "mean": 0.151,
+            "std": 0.058,
+            "p10": 0.084,
+            "p50": 0.148,
+            "p90": 0.233
+          }
+        },
+        {
+          "player_key": "ARI-WR2-MichaelWilson",
+          "player_name": "Michael Wilson",
+          "team": "ARI",
+          "position": "WR",
+          "usage_role": "WR2",
+          "scoring_role": "WR2",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.65,
+            "std": 0.274,
+            "p10": 0.338,
+            "p50": 0.591,
+            "p90": 1.105
+          },
+          "rz_targets_i10": {
+            "mean": 0.229,
+            "std": 0.158,
+            "p10": 0.068,
+            "p50": 0.187,
+            "p90": 0.387
+          },
+          "td_opportunity_share": {
+            "mean": 0.075,
+            "std": 0.035,
+            "p10": 0.035,
+            "p50": 0.065,
+            "p90": 0.12
+          }
+        },
+        {
+          "player_key": "ARI-WR3-KendrickBourne",
+          "player_name": "Kendrick Bourne",
+          "team": "ARI",
+          "position": "WR",
+          "usage_role": "WR3",
+          "scoring_role": "WR3",
+          "rz_carries_i20": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_carries_i10": {
+            "mean": 0,
+            "std": 0,
+            "p10": 0,
+            "p50": 0,
+            "p90": 0
+          },
+          "rz_targets_i20": {
+            "mean": 0.363,
+            "std": 0.247,
+            "p10": 0.124,
+            "p50": 0.28,
+            "p90": 0.723
+          },
+          "rz_targets_i10": {
+            "mean": 0.106,
+            "std": 0.076,
+            "p10": 0.02,
+            "p50": 0.079,
+            "p90": 0.207
+          },
+          "td_opportunity_share": {
+            "mean": 0.039,
+            "std": 0.023,
+            "p10": 0.012,
+            "p50": 0.036,
+            "p90": 0.072
+          }
+        }
+      ]
+    },
+    "scoring_usage": {
+      "home": {
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "rz_pass_rate": 0.559,
+        "rz_run_rate": 0.441,
+        "players": [
+          {
+            "player_key": "DAL-QB1-DakPrescott",
+            "player_name": "Dak Prescott",
+            "team": "DAL",
+            "position": "QB",
+            "usage_role": "QB1",
+            "scoring_role": "QB1",
+            "rz_carry_share_i20": 0.1,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "DAL-QB2-JoeMiltonIII",
+            "player_name": "Joe Milton III",
+            "team": "DAL",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "DAL-QB3-SamHowell",
+            "player_name": "Sam Howell",
+            "team": "DAL",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "DAL-RB1-JavonteWilliams",
+            "player_name": "Javonte Williams",
+            "team": "DAL",
+            "position": "RB",
+            "usage_role": "RB1",
+            "scoring_role": "RB1",
+            "rz_carry_share_i20": 0.56,
+            "rz_carry_share_i10": 0.66,
+            "rz_target_share_i20": 0.09,
+            "rz_target_share_i10": 0.08,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "DAL-RB2-JaydonBlue",
+            "player_name": "Jaydon Blue",
+            "team": "DAL",
+            "position": "RB",
+            "usage_role": "RB2",
+            "scoring_role": "RB2",
+            "rz_carry_share_i20": 0.22,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.04,
+            "rz_target_share_i10": 0.03,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "DAL-RB3-MalikDavis",
+            "player_name": "Malik Davis",
+            "team": "DAL",
+            "position": "RB",
+            "usage_role": "OTHER",
+            "scoring_role": "OTHER",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "DAL-TE1-JakeFerguson",
+            "player_name": "Jake Ferguson",
+            "team": "DAL",
+            "position": "TE",
+            "usage_role": "TE1",
+            "scoring_role": "TE1",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.18,
+            "rz_target_share_i10": 0.24,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "DAL-TE2-BrevynSpann-Ford",
+            "player_name": "Brevyn Spann-Ford",
+            "team": "DAL",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "DAL-TE3-LukeSchoonmaker",
+            "player_name": "Luke Schoonmaker",
+            "team": "DAL",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "DAL-WR1-CeeDeeLamb",
+            "player_name": "CeeDee Lamb",
+            "team": "DAL",
+            "position": "WR",
+            "usage_role": "WR1",
+            "scoring_role": "WR1",
+            "rz_carry_share_i20": 0.02,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.24,
+            "rz_target_share_i10": 0.26,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "DAL-WR2-GeorgePickens",
+            "player_name": "George Pickens",
+            "team": "DAL",
+            "position": "WR",
+            "usage_role": "WR2",
+            "scoring_role": "WR2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.15,
+            "rz_target_share_i10": 0.13,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "DAL-WR3-RyanFlournoy",
+            "player_name": "Ryan Flournoy",
+            "team": "DAL",
+            "position": "WR",
+            "usage_role": "WR3",
+            "scoring_role": "WR3",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.08,
+            "rz_target_share_i10": 0.05,
+            "loaded_red_zone_share": 0.07
+          }
+        ]
+      },
+      "away": {
+        "script": "neutral",
+        "script_detail": "neutral",
+        "script_intensity": 0.55,
+        "time_bucket": "mid",
+        "rz_pass_rate": 0.547,
+        "rz_run_rate": 0.453,
+        "players": [
+          {
+            "player_key": "ARI-QB1-JacobyBrissett",
+            "player_name": "Jacoby Brissett",
+            "team": "ARI",
+            "position": "QB",
+            "usage_role": "QB1",
+            "scoring_role": "QB1",
+            "rz_carry_share_i20": 0.1,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "ARI-QB2-GardnerMinshewII",
+            "player_name": "Gardner Minshew II",
+            "team": "ARI",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "ARI-QB3-CarsonBeck",
+            "player_name": "Carson Beck",
+            "team": "ARI",
+            "position": "QB",
+            "usage_role": "QB2",
+            "scoring_role": "QB2",
+            "rz_carry_share_i20": 0.01,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.05
+          },
+          {
+            "player_key": "ARI-RB1-JeremiyahLove",
+            "player_name": "Jeremiyah Love",
+            "team": "ARI",
+            "position": "RB",
+            "usage_role": "RB1",
+            "scoring_role": "RB1",
+            "rz_carry_share_i20": 0.56,
+            "rz_carry_share_i10": 0.66,
+            "rz_target_share_i20": 0.09,
+            "rz_target_share_i10": 0.08,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "ARI-RB2-TylerAllgeier",
+            "player_name": "Tyler Allgeier",
+            "team": "ARI",
+            "position": "RB",
+            "usage_role": "RB2",
+            "scoring_role": "RB2",
+            "rz_carry_share_i20": 0.22,
+            "rz_carry_share_i10": 0.14,
+            "rz_target_share_i20": 0.04,
+            "rz_target_share_i10": 0.03,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "ARI-RB3-JamesConner",
+            "player_name": "James Conner",
+            "team": "ARI",
+            "position": "RB",
+            "usage_role": "OTHER",
+            "scoring_role": "OTHER",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.05,
+            "rz_target_share_i10": 0.04,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "ARI-TE1-TreyMcBride",
+            "player_name": "Trey McBride",
+            "team": "ARI",
+            "position": "TE",
+            "usage_role": "TE1",
+            "scoring_role": "TE1",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.18,
+            "rz_target_share_i10": 0.24,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "ARI-TE2-TipReiman",
+            "player_name": "Tip Reiman",
+            "team": "ARI",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "ARI-TE3-ElijahHiggins",
+            "player_name": "Elijah Higgins",
+            "team": "ARI",
+            "position": "TE",
+            "usage_role": "TE2",
+            "scoring_role": "TE2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.07,
+            "rz_target_share_i10": 0.06,
+            "loaded_red_zone_share": 0.07
+          },
+          {
+            "player_key": "ARI-WR1-MarvinHarrisonJr.",
+            "player_name": "Marvin Harrison Jr.",
+            "team": "ARI",
+            "position": "WR",
+            "usage_role": "WR1",
+            "scoring_role": "WR1",
+            "rz_carry_share_i20": 0.02,
+            "rz_carry_share_i10": 0.01,
+            "rz_target_share_i20": 0.24,
+            "rz_target_share_i10": 0.26,
+            "loaded_red_zone_share": 0.22
+          },
+          {
+            "player_key": "ARI-WR2-MichaelWilson",
+            "player_name": "Michael Wilson",
+            "team": "ARI",
+            "position": "WR",
+            "usage_role": "WR2",
+            "scoring_role": "WR2",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.15,
+            "rz_target_share_i10": 0.13,
+            "loaded_red_zone_share": 0.12
+          },
+          {
+            "player_key": "ARI-WR3-KendrickBourne",
+            "player_name": "Kendrick Bourne",
+            "team": "ARI",
+            "position": "WR",
+            "usage_role": "WR3",
+            "scoring_role": "WR3",
+            "rz_carry_share_i20": 0.04,
+            "rz_carry_share_i10": 0.03,
+            "rz_target_share_i20": 0.08,
+            "rz_target_share_i10": 0.05,
+            "loaded_red_zone_share": 0.07
+          }
+        ]
+      }
+    },
+    "coaching_profile": {
+      "home": {
+        "team": "DAL",
+        "pass_rate_bias": 0.015,
+        "script_aggression": 1.04,
+        "rz_pass_bias": 0.012,
+        "early_down_pass_bias": 0.01,
+        "two_minute_aggression": 1.04,
+        "label": "pass_tilt",
+        "source": "curated_prior"
+      },
+      "away": {
+        "team": "ARI",
+        "pass_rate_bias": 0,
+        "script_aggression": 1,
+        "rz_pass_bias": 0,
+        "early_down_pass_bias": 0,
+        "two_minute_aggression": 1,
+        "label": "league_average",
+        "source": "league_default"
+      }
+    },
+    "tendency_effects": {
+      "home": {
+        "pass_rate_mean": 0.5861,
+        "early_down_pass_rate_mean": 0.6003,
+        "hurry_up_mean": 0.1308,
+        "rz_pass_rate_mean": 0.5167,
+        "pass_rate_bias_applied": 0.015,
+        "script_aggression": 1.04,
+        "rz_pass_bias_applied": 0.012,
+        "base_pass_rate_before_coaching_bias": 0.59
+      },
+      "away": {
+        "pass_rate_mean": 0.6144,
+        "early_down_pass_rate_mean": 0.609,
+        "hurry_up_mean": 0.2659,
+        "rz_pass_rate_mean": 0.5973,
+        "pass_rate_bias_applied": 0,
+        "script_aggression": 1,
+        "rz_pass_bias_applied": 0,
+        "base_pass_rate_before_coaching_bias": 0.59
+      },
+      "sample": {
+        "home": {
+          "coaching_profile": {
+            "team": "DAL",
+            "pass_rate_bias": 0.015,
+            "script_aggression": 1.04,
+            "rz_pass_bias": 0.012,
+            "early_down_pass_bias": 0.01,
+            "two_minute_aggression": 1.04,
+            "label": "pass_tilt",
+            "source": "curated_prior"
+          },
+          "tendency_effects": {
+            "pass_rate_bias_applied": 0.015,
+            "script_aggression": 1.04,
+            "early_down_pass_bias_applied": 0.01,
+            "two_minute_aggression": 1.04,
+            "rz_pass_bias": 0.012,
+            "pass_rate_after": 0.5757,
+            "early_down_pass_rate_after": 0.5921,
+            "hurry_up_after": 0,
+            "base_pass_rate_before_coaching_bias": 0.59,
+            "script_detail": "small_lead",
+            "script_intensity": 0.1951,
+            "time_bucket": "late",
+            "rz_pass_rate_after": 0.5079,
+            "rz_pass_bias_applied": 0.012
+          }
+        },
+        "away": {
+          "coaching_profile": {
+            "team": "ARI",
+            "pass_rate_bias": 0,
+            "script_aggression": 1,
+            "rz_pass_bias": 0,
+            "early_down_pass_bias": 0,
+            "two_minute_aggression": 1,
+            "label": "league_average",
+            "source": "league_default"
+          },
+          "tendency_effects": {
+            "pass_rate_bias_applied": 0,
+            "script_aggression": 1,
+            "early_down_pass_bias_applied": 0,
+            "two_minute_aggression": 1,
+            "rz_pass_bias": 0,
+            "pass_rate_after": 0.6233,
+            "early_down_pass_rate_after": 0.616,
+            "hurry_up_after": 0.3768,
+            "base_pass_rate_before_coaching_bias": 0.59,
+            "script_detail": "small_deficit",
+            "script_intensity": 0.1951,
+            "time_bucket": "late",
+            "rz_pass_rate_after": 0.6218,
+            "rz_pass_bias_applied": 0
+          }
+        }
+      }
+    }
+  }
+}

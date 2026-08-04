@@ -53,10 +53,14 @@ export default function SeasonEngineGameBoxesClient({
   matchups,
   defaultWeek = 1,
   engineVersion,
+  depthSource,
+  depthAsOf,
 }: {
   matchups: SeasonEngineMatchupOption[];
   defaultWeek?: number;
   engineVersion?: string;
+  depthSource?: string;
+  depthAsOf?: string;
 }) {
   const [matchupId, setMatchupId] = useState(matchups[0]?.id ?? "manual");
   const [homeTeam, setHomeTeam] = useState(matchups[0]?.homeTeam ?? "KC");
@@ -67,6 +71,7 @@ export default function SeasonEngineGameBoxesClient({
   const [error, setError] = useState<string | null>(null);
   const [baseline, setBaseline] = useState<BoxesPayload | null>(null);
   const [injured, setInjured] = useState<BoxesPayload | null>(null);
+  const [hasRun, setHasRun] = useState(false);
 
   const starOptions = useMemo(
     () => starOutOptionsForMatchup(homeTeam, awayTeam),
@@ -89,6 +94,7 @@ export default function SeasonEngineGameBoxesClient({
       setError(null);
       setBaseline(null);
       setInjured(null);
+      setHasRun(true);
 
       const injuryPath =
         starOutKey &&
@@ -143,14 +149,25 @@ export default function SeasonEngineGameBoxesClient({
 
   const active = injured ?? baseline;
   const modeNote = active?.mode === "demo" || baseline?.mode === "demo";
+  const byeWarning =
+    active?.notes?.bye_warning || baseline?.notes?.bye_warning;
+  const synthetic =
+    (active?.notes?.schedule_match || baseline?.notes?.schedule_match) ===
+    "synthetic_matchup";
 
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+        <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
+          Pick a 2026 matchup (or custom teams), then project skill-player boxes
+          from the season engine. Optional star-out applies an{" "}
+          <span className="text-kos-text/85">out</span> injury path for that week
+          only and shows side-by-side vs baseline.
+        </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-2">
             <label className={labelClass} htmlFor="matchup">
-              Upcoming matchup
+              Matchup
             </label>
             <select
               id="matchup"
@@ -159,7 +176,7 @@ export default function SeasonEngineGameBoxesClient({
               onChange={(e) => applyMatchup(e.target.value)}
             >
               {matchups.length === 0 ? (
-                <option value="manual">No schedule slate — use teams</option>
+                <option value="manual">No slate loaded — use teams below</option>
               ) : null}
               {matchups.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -230,7 +247,7 @@ export default function SeasonEngineGameBoxesClient({
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass} htmlFor="injury">
-              Injury scenario (optional)
+              Star out (optional)
             </label>
             <select
               id="injury"
@@ -250,8 +267,8 @@ export default function SeasonEngineGameBoxesClient({
             </select>
             {starOptions.length === 0 ? (
               <p className="mt-1.5 text-xs text-kos-text/50">
-                Star injury toggles available for KC, BUF, PHI, SF, DET
-                matchups (real depth names when loaded).
+                Quick toggles for KC, BUF, PHI, SF, DET when those teams are in
+                the matchup.
               </p>
             ) : null}
           </div>
@@ -270,18 +287,43 @@ export default function SeasonEngineGameBoxesClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · 50 replicates · p50 with p10–p90 range
+            · 50 replicates · median (p50) with p10–p90 band
           </p>
         </div>
+        {(depthSource || depthAsOf) && (
+          <p className="mt-3 text-[11px] text-kos-text/50">
+            Depth: {depthSource || "—"}
+            {depthAsOf ? ` · as of ${depthAsOf}` : ""}
+          </p>
+        )}
       </section>
 
       {error ? (
         <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-          {error}
+          <p className="font-semibold text-red-100">Could not project boxes</p>
+          <p className="mt-1 text-red-200/90">{error}</p>
+          <p className="mt-2 text-xs text-red-200/70">
+            Check teams/week, then retry. If this persists, the model-service may
+            be unreachable.
+          </p>
         </div>
       ) : null}
 
-      {active ? (
+      {pending ? (
+        <div className="rounded-xl border border-white/10 bg-black/25 px-4 py-8 text-center text-sm text-kos-text/65">
+          Running Monte Carlo replicates…
+        </div>
+      ) : null}
+
+      {!pending && !active && !error ? (
+        <div className="rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-8 text-center text-sm text-kos-text/60">
+          {hasRun
+            ? "No box scores returned."
+            : "Choose a matchup and press Project box scores."}
+        </div>
+      ) : null}
+
+      {active && !pending ? (
         <section className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -290,44 +332,54 @@ export default function SeasonEngineGameBoxesClient({
                 {active.week != null ? ` · Week ${active.week}` : ""}
               </h2>
               <p className="mt-1 text-xs text-kos-text/60">
-                Mode: {active.mode || "—"}
-                {active.engine_version
-                  ? ` · ${active.engine_version}`
-                  : ""}
-                {injured ? " · injured view vs baseline available below" : ""}
+                {active.engine_version || engineVersion || "season engine"}
+                {injured ? " · injury scenario vs baseline below" : ""}
               </p>
             </div>
             {active.game_script_summary ? (
-              <p className="text-xs tabular-nums text-kos-text/65">
-                Home WP{" "}
-                {(
-                  (active.game_script_summary.home_win_prob_mean ?? 0) * 100
-                ).toFixed(1)}
-                % · Total{" "}
-                {(active.game_script_summary.expected_total_mean ?? 0).toFixed(
-                  1,
-                )}
-              </p>
+              <div className="text-right">
+                <p className="text-lg font-semibold tabular-nums text-kos-gold">
+                  {(
+                    (active.game_script_summary.home_win_prob_mean ?? 0) * 100
+                  ).toFixed(1)}
+                  %
+                </p>
+                <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
+                  Home win · total{" "}
+                  {(active.game_script_summary.expected_total_mean ?? 0).toFixed(
+                    1,
+                  )}
+                </p>
+              </div>
             ) : null}
           </div>
 
           {modeNote ? (
             <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
-              Demo schedule mode — round-robin placeholder (explicit demo=true),
-              not the locked 2026 NFL schedule. Player cores are sparse outside
-              named skill teams.
+              Explicit demo schedule (demo=true) — round-robin placeholder, not
+              the locked 2026 NFL schedule.
             </p>
-          ) : active ? (
+          ) : (
             <p className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/70">
               Real 2026 schedule
               {active.schedule_source ? ` · ${active.schedule_source}` : ""}
               {active.schedule_game_count
                 ? ` · ${active.schedule_game_count} REG games`
                 : ""}
-              {active.roster_source
-                ? ` · depth ${active.roster_source}`
+              {active.roster_source || depthSource
+                ? ` · depth ${active.roster_source || depthSource}`
                 : ""}
-              {active.roster_as_of ? ` (as of ${active.roster_as_of})` : ""}
+              {active.roster_as_of || depthAsOf
+                ? ` (as of ${active.roster_as_of || depthAsOf})`
+                : ""}
+            </p>
+          )}
+
+          {byeWarning || synthetic ? (
+            <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
+              {byeWarning ||
+                active?.notes?.schedule_match_detail ||
+                "This home/away/week is not on the loaded schedule — hypothetical what-if boxes."}
             </p>
           ) : null}
 
@@ -385,10 +437,21 @@ function TeamBoxTable({
 
   const byTeam = [alsoTeam, team];
 
+  if (!ordered.length) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-black/25 px-4 py-6 text-sm text-kos-text/60">
+        No skill-player rows for this matchup.
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-2xl border border-white/10 bg-black/25 overflow-hidden">
       <div className="border-b border-white/10 px-4 py-3">
         <h3 className="text-sm font-semibold text-kos-text">{title}</h3>
+        <p className="mt-0.5 text-[11px] text-kos-text/45">
+          Bold number = median (p50). Band = p10–p90.
+        </p>
       </div>
       <div className="overflow-x-auto">
         {byTeam.map((t) => {
@@ -404,9 +467,9 @@ function TeamBoxTable({
                   <tr className="text-[11px] uppercase tracking-wide text-kos-text/45">
                     <th className="px-4 py-2 font-medium">Player</th>
                     <th className="px-3 py-2 font-medium">Pos</th>
-                    <th className="px-3 py-2 font-medium">Primary</th>
-                    <th className="px-3 py-2 font-medium">p50</th>
-                    <th className="px-3 py-2 font-medium">p10–p90</th>
+                    <th className="px-3 py-2 font-medium">Stat</th>
+                    <th className="px-3 py-2 font-medium">Median</th>
+                    <th className="px-3 py-2 font-medium">Range</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -426,6 +489,11 @@ function TeamBoxTable({
                         <td className="px-4 py-2.5">
                           <div className="font-medium text-kos-text">
                             {p.player_name}
+                            {out ? (
+                              <span className="ml-2 text-[10px] font-semibold uppercase tracking-wide text-red-300">
+                                out
+                              </span>
+                            ) : null}
                           </div>
                           {p.usage_role ? (
                             <div className="text-[11px] text-kos-text/45">
@@ -443,7 +511,7 @@ function TeamBoxTable({
                             ))}
                           </div>
                         </td>
-                        <td className="px-3 py-2.5 tabular-nums text-kos-gold">
+                        <td className="px-3 py-2.5 tabular-nums text-base font-semibold text-kos-gold">
                           <div className="space-y-1">
                             {stats.map((stat) => {
                               const dist = p.distributions?.[stat];

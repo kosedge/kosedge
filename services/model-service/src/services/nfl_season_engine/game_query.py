@@ -399,6 +399,17 @@ def project_game_player_boxes(
         and g.week == game.week
         for g in universe.schedule
     )
+    teams_playing_week = {
+        t
+        for g in universe.schedule
+        if g.week == game.week
+        for t in (g.home_team, g.away_team)
+    }
+    bye_in_query = [
+        t
+        for t in (game.home_team, game.away_team)
+        if universe.schedule and t not in teams_playing_week
+    ]
     notes = {
         **dict(universe.notes),
         "query_mode": "single_game_marginal_mc",
@@ -408,6 +419,17 @@ def project_game_player_boxes(
         ),
         "schedule_match": "on_loaded_schedule" if on_schedule else "synthetic_matchup",
     }
+    if not on_schedule:
+        notes["schedule_match_detail"] = (
+            "Requested home/away/week is not on the loaded schedule; "
+            "boxes are a hypothetical matchup (useful for what-ifs, not wall-chart fidelity)."
+        )
+    if bye_in_query:
+        notes["bye_teams_in_query"] = ",".join(bye_in_query)
+        notes["bye_warning"] = (
+            f"{', '.join(bye_in_query)} on bye in week {game.week} on the loaded schedule "
+            "— treat this projection as hypothetical."
+        )
     if paths:
         notes["injury_path_count"] = str(len(paths))
         notes["injury_active_adjustments"] = str(len(adjustments))

@@ -37,6 +37,7 @@ def test_engine_version_game_script() -> None:
         or "coaching" in DEFAULT_SEASON_ENGINE_VERSION
         or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
+        or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -283,6 +284,7 @@ def test_buf_kc_realism_bounds_and_diagnostics_play_mix() -> None:
         or "game-script" in proj.engine_version
         or "real-2026" in proj.engine_version
         or "real-depth" in proj.engine_version
+        or "smoke-polish" in proj.engine_version
     )
     by_name = {p["player_name"]: p for p in proj.players}
 
