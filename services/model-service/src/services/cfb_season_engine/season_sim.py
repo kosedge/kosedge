@@ -1,22 +1,109 @@
-"""Season simulation skeleton — path-coherent team W/L paths.
+"""Season simulation — path-coherent team W/L paths with week samples.
 
-Foundation pass: team-level only (no full player box path yet). Structure
-mirrors NFL season_sim so later passes can deepen without rewiring.
+Uses Layers 1–4 (roster / QB / position groups / team projection) via the
+composed strength book. Schedule is densified approximate (not official FBS).
 """
 
 from __future__ import annotations
 
 import random
+import statistics
 from collections import defaultdict
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 from src.services.cfb_season_engine import priors as P
+from src.services.cfb_season_engine.conferences import conference_for
 from src.services.cfb_season_engine.team_projection import (
     copy_strength_book,
     evolve_after_game,
     realize_game_scores,
 )
-from src.services.cfb_season_engine.types import EngineUniverse, SeasonSimResult
+from src.services.cfb_season_engine.types import EngineUniverse, SeasonSimResult, dist_block
+
+
+def _dist_from_values(values: Sequence[float]) -> Dict[str, float]:
+    clean = [float(v) for v in values]
+    if not clean:
+        return dist_block(0.0, 0.0, 0.0, 0.0, 0.0)
+    ordered = sorted(clean)
+    n = len(ordered)
+    mean = statistics.fmean(clean)
+    std = statistics.pstdev(clean) if n > 1 else 0.0
+
+    def _pct(p: float) -> float:
+        return ordered[max(0, min(n - 1, int(round((n - 1) * p))))]
+
+    return dist_block(mean, std, _pct(0.10), _pct(0.50), _pct(0.90))
+
+
+def _simulate_one_path(
+    universe: EngineUniverse,
+    *,
+    rng: random.Random,
+    collect_week_sample: bool = False,
+) -> Dict[str, Any]:
+    strengths = copy_strength_book(universe.teams)
+    path_wins: Dict[str, float] = defaultdict(float)
+    conf_wins: Dict[str, float] = defaultdict(float)
+    conf_games: Dict[str, float] = defaultdict(float)
+    week_rows: List[Dict[str, Any]] = []
+    schedule = sorted(universe.schedule, key=lambda g: (g.week, g.game_id))
+
+    for game in schedule:
+        if game.home_team not in strengths or game.away_team not in strengths:
+            continue
+        outcome = realize_game_scores(game, strengths, rng=rng)
+        home_won = bool(outcome["home_won"])
+        if home_won:
+            path_wins[game.home_team] += 1.0
+            winner, loser = game.home_team, game.away_team
+        else:
+            path_wins[game.away_team] += 1.0
+            winner, loser = game.away_team, game.home_team
+
+        home_conf = conference_for(game.home_team, universe.conferences)
+        away_conf = conference_for(game.away_team, universe.conferences)
+        if home_conf == away_conf and home_conf != "Independent":
+            conf_games[game.home_team] += 1.0
+            conf_games[game.away_team] += 1.0
+            if home_won:
+                conf_wins[game.home_team] += 1.0
+            else:
+                conf_wins[game.away_team] += 1.0
+
+        if collect_week_sample:
+            week_rows.append(
+                {
+                    "week": game.week,
+                    "game_id": game.game_id,
+                    "home_team": game.home_team,
+                    "away_team": game.away_team,
+                    "home_score": round(float(outcome["home_score"]), 1),
+                    "away_score": round(float(outcome["away_score"]), 1),
+                    "winner": winner,
+                    "loser": loser,
+                    "neutral_site": game.neutral_site,
+                    "early_season": 1 <= game.week <= P.EARLY_SEASON_LAST_WEEK,
+                }
+            )
+
+        evolve_after_game(
+            strengths,
+            home_team=game.home_team,
+            away_team=game.away_team,
+            home_won=home_won,
+            home_score=float(outcome["home_score"]),
+            away_score=float(outcome["away_score"]),
+            week=game.week,
+            rng=rng,
+        )
+
+    return {
+        "wins": dict(path_wins),
+        "conf_wins": dict(conf_wins),
+        "conf_games": dict(conf_games),
+        "week_rows": week_rows,
+    }
 
 
 def simulate_full_season(
@@ -27,11 +114,7 @@ def simulate_full_season(
     engine_version: str = P.ENGINE_VERSION,
     progress_every: Optional[int] = None,
 ) -> SeasonSimResult:
-    """Run N path-coherent season sims (team W/L + strength evolution).
-
-    Skeleton: does not yet emit conference standings, playoff brackets, or
-    player season totals. Wins are tallied per team across paths.
-    """
+    """Run N path-coherent season sims (team W/L + mild strength evolution)."""
     if n_sims < 1:
         raise ValueError("n_sims must be >= 1")
     rng = random.Random(seed)
@@ -39,51 +122,75 @@ def simulate_full_season(
     if not schedule:
         raise ValueError("Universe has empty schedule")
 
-    win_sums: Dict[str, float] = defaultdict(float)
-    win_sq: Dict[str, float] = defaultdict(float)
+    win_paths: Dict[str, List[float]] = {t: [] for t in universe.team_codes}
+    conf_win_sums: Dict[str, float] = defaultdict(float)
+    conf_game_sums: Dict[str, float] = defaultdict(float)
+    week_sample: List[Dict[str, Any]] = []
 
     for i in range(n_sims):
-        strengths = copy_strength_book(universe.teams)
-        path_wins: Dict[str, float] = defaultdict(float)
-        for game in schedule:
-            if game.home_team not in strengths or game.away_team not in strengths:
-                continue
-            outcome = realize_game_scores(game, strengths, rng=rng)
-            home_won = bool(outcome["home_won"])
-            if home_won:
-                path_wins[game.home_team] += 1.0
-            else:
-                path_wins[game.away_team] += 1.0
-            evolve_after_game(
-                strengths,
-                home_team=game.home_team,
-                away_team=game.away_team,
-                home_won=home_won,
-                home_score=float(outcome["home_score"]),
-                away_score=float(outcome["away_score"]),
-                rng=rng,
-            )
-        for team, w in path_wins.items():
-            win_sums[team] += w
-            win_sq[team] += w * w
+        collect = i == 0
+        path = _simulate_one_path(universe, rng=rng, collect_week_sample=collect)
+        if collect:
+            week_sample = path["week_rows"]
+        for team in universe.team_codes:
+            win_paths[team].append(float(path["wins"].get(team, 0.0)))
+        for team, w in path["conf_wins"].items():
+            conf_win_sums[team] += w
+        for team, g in path["conf_games"].items():
+            conf_game_sums[team] += g
         if progress_every and (i + 1) % progress_every == 0:
             print(f"  cfb-season-engine: {i + 1}/{n_sims} paths")
 
     team_wins: Dict[str, Dict[str, float]] = {}
+    for team, values in win_paths.items():
+        dist = _dist_from_values(values)
+        team_wins[team] = dist
+
+    ranking = sorted(
+        (
+            {
+                "team": team,
+                "conference": conference_for(team, universe.conferences),
+                **stats,
+            }
+            for team, stats in team_wins.items()
+        ),
+        key=lambda row: (-row["mean"], -row["p50"], row["team"]),
+    )
+    top_for_rank = []
+    for idx, row in enumerate(ranking, start=1):
+        item = dict(row)
+        item["rank"] = idx
+        top_for_rank.append(item)
+
+    # Optional conference standings (mean conf wins) — cheap from path aggregates.
+    by_conf: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     n = float(n_sims)
     for team in universe.team_codes:
-        mean = win_sums[team] / n
-        var = max(0.0, win_sq[team] / n - mean * mean)
-        team_wins[team] = {
-            "mean": round(mean, 3),
-            "std": round(var ** 0.5, 3),
-            "wins_sum_check": round(win_sums[team], 3),
-        }
+        conf = conference_for(team, universe.conferences)
+        if conf == "Independent":
+            continue
+        cg = conf_game_sums[team] / n
+        if cg < 0.5:
+            continue
+        by_conf[conf].append(
+            {
+                "team": team,
+                "conf_wins_mean": round(conf_win_sums[team] / n, 3),
+                "conf_games_mean": round(cg, 3),
+                "wins_mean": team_wins[team]["mean"],
+            }
+        )
+    conference_standings: Dict[str, List[Dict[str, Any]]] = {}
+    for conf, rows in by_conf.items():
+        conference_standings[conf] = sorted(
+            rows, key=lambda r: (-r["conf_wins_mean"], -r["wins_mean"], r["team"])
+        )
 
     mean_wins_sum = sum(v["mean"] for v in team_wins.values())
-    early = {
-        str(w): P.early_season_uncertainty(w) for w in range(1, 5)
-    }
+    teams_with_wins = sum(1 for v in team_wins.values() if v["mean"] > 0.05)
+    early = {str(w): P.early_season_uncertainty(w) for w in range(1, 5)}
+
     return SeasonSimResult(
         season=universe.season,
         n_sims=n_sims,
@@ -91,29 +198,51 @@ def simulate_full_season(
         engine_version=engine_version,
         team_wins=team_wins,
         sample_path_game_count=len(schedule),
+        week_by_week_sample=week_sample,
+        ranking=top_for_rank,
+        conference_standings=conference_standings,
         notes={
             **universe.notes,
-            "skeleton": "team W/L paths only; player boxes / CFP bracket deferred",
+            "season_sim": (
+                "path-coherent team W/L with mild strength evolution + early noise; "
+                "player boxes / CFP bracket deferred"
+            ),
             "fidelity": "approximate",
+            "schedule_fidelity": universe.notes.get("schedule_fidelity", "approximate"),
         },
         diagnostics={
             "mean_wins_sum": round(mean_wins_sum, 4),
             "expected_wins_sum": float(len(schedule)),
+            "teams_with_positive_mean_wins": teams_with_wins,
+            "team_count": len(universe.team_codes),
             "early_season_uncertainty": early,
+            "early_season_narrowing": P.early_season_narrowing_schedule(),
             "week_5_plus": P.early_season_uncertainty(5),
+            "week_sample_path_index": 0,
+            "conference_count": len(conference_standings),
+            "strength_evolution": "mild + week-indexed early noise",
         },
     )
 
 
 def season_sim_to_dict(result: SeasonSimResult) -> Dict[str, Any]:
-    top = sorted(result.team_wins.items(), key=lambda kv: -kv[1]["mean"])[:15]
+    top = result.ranking[:25] if result.ranking else []
+    # Week-by-week: group sample path by week for readability.
+    by_week: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for row in result.week_by_week_sample:
+        by_week[str(row["week"])].append(row)
+
     return {
         "season": result.season,
         "n_sims": result.n_sims,
         "games_per_season": result.games_per_season,
         "engine_version": result.engine_version,
-        "top_teams_by_wins": [{"team": t, **stats} for t, stats in top],
+        "top_teams_by_wins": top,
+        "ranking": result.ranking,
         "team_wins": result.team_wins,
+        "week_by_week_sample": result.week_by_week_sample,
+        "week_by_week_grouped": dict(sorted(by_week.items(), key=lambda kv: int(kv[0]))),
+        "conference_standings": result.conference_standings,
         "sample_path_game_count": result.sample_path_game_count,
         "notes": result.notes,
         "diagnostics": result.diagnostics,
@@ -125,13 +254,21 @@ def documentation() -> Dict[str, Any]:
         "layer": "orchestration",
         "name": "season_sim",
         "module": "src.services.cfb_season_engine.season_sim",
-        "status": "skeleton",
+        "status": "season_paths",
         "real_vs_approximate": (
-            "Path coherence structure is REAL. Win totals / strength evolution "
-            "are APPROXIMATE placeholders pending schedule densify + calibration."
+            "Path coherence structure is REAL. Densified schedule, win totals, "
+            "strength evolution, and conference standings are APPROXIMATE — not "
+            "an official FBS slate or calibrated ranking."
         ),
+        "outputs": [
+            "per-team wins distribution (mean/std/p10/p50/p90)",
+            "ranking-ish standings by mean wins",
+            "week-by-week results sample (path 0)",
+            "optional conference standings (approximate affiliations)",
+            "early-season uncertainty narrowing schedule",
+        ],
         "deferred": [
-            "conference standings",
+            "official full FBS schedule feed",
             "CFP / playoff bracket",
             "player season totals",
             "injury / portal mid-season shocks",

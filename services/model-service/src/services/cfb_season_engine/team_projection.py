@@ -269,16 +269,50 @@ def project_game_formula_doc() -> Dict[str, Any]:
             "compose offense/defense indices from roster + QB + position groups",
             "expected_points = league_ppg * (off/def)^response * ol/skill_boost "
             "* opponent_(f7+secondary)_dampen * pace + HFA",
+            "optional thin ST nudge split evenly across both scores",
             "margin = home_exp - away_exp",
             "spread_home = away_exp - home_exp  (neg = home favorite)",
-            "total = home_exp + away_exp (+ thin ST nudge)",
+            "total = home_exp + away_exp  (coherent with scores)",
             "home_wp = Φ(margin / margin_sd)",
         ],
         "weights": P.documentation()["composition_weights"],
         "early_season": (
             "W1–W4: inflate margin_sd, soften matchup response, flag "
-            "roster/QB identity uncertainty"
+            "roster/QB identity uncertainty; narrows on week-indexed schedule"
         ),
+        "coherence": {
+            "spread_home": "away_score - home_score",
+            "expected_total": "home_score + away_score",
+            "win_probs": "home_wp + away_wp == 1",
+        },
+    }
+
+
+def _layer_drivers(state: TeamProjectionState) -> Dict[str, Any]:
+    """Inspectable layer contributions for project-game diagnostics."""
+    roster = state.roster
+    qb = state.qb
+    groups = state.groups
+    return {
+        "roster_strength": round(float(roster.roster_strength), 2) if roster else None,
+        "roster_fidelity": roster.fidelity if roster else None,
+        "qb_situation_index": round(float(qb.qb_situation_index), 4) if qb else None,
+        "qb_situation_score": round(float(qb.qb_situation_score), 2) if qb else None,
+        "qb_class": qb.qb_class if qb else None,
+        "qb_uncertainty": round(float(qb.uncertainty), 4) if qb else None,
+        "unit_grades": {
+            "ol": round(float(groups.ol), 2) if groups else None,
+            "skill": round(float(groups.skill), 2) if groups else None,
+            "front_seven": round(float(groups.front_seven), 2) if groups else None,
+            "secondary": round(float(groups.secondary), 2) if groups else None,
+            "special_teams": round(float(groups.special_teams), 2) if groups else None,
+            "fidelity": groups.fidelity if groups else None,
+        },
+        "offense_index": state.offense_index,
+        "defense_index": state.defense_index,
+        "pace_factor": state.pace_factor,
+        "early_season_uncertainty": state.early_season_uncertainty,
+        "compose_notes": dict(state.notes),
     }
 
 
@@ -316,20 +350,61 @@ def project_game(
         away, home, home=False, neutral_site=neutral_site, week=week
     )
 
-    # Thin special-teams nudge on total only (not a real ST model).
+    # Thin special-teams nudge — split evenly so scores/total/spread stay coherent.
     st_home = home.groups.special_teams if home.groups else 50.0
     st_away = away.groups.special_teams if away.groups else 50.0
     st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
-    total = home_exp + away_exp + st_nudge
-    # Keep individual scores consistent with nudged total (split evenly).
-    home_exp_adj = home_exp + 0.5 * st_nudge
-    away_exp_adj = away_exp + 0.5 * st_nudge
-
+    home_exp_adj = round(home_exp + 0.5 * st_nudge, 2)
+    away_exp_adj = round(away_exp + 0.5 * st_nudge, 2)
+    total = round(home_exp_adj + away_exp_adj, 2)
+    spread = round(away_exp_adj - home_exp_adj, 2)  # home spread (neg = favorite)
     margin = home_exp_adj - away_exp_adj
     home_wp = win_prob_from_expected_scores(
         home_exp_adj, away_exp_adj, margin_sd=margin_sd
     )
-    spread = round(away_exp_adj - home_exp_adj, 2)  # home spread (neg = favorite)
+    away_wp = round(1.0 - home_wp, 4)
+    home_wp = round(home_wp, 4)
+
+    home_drivers = _layer_drivers(home)
+    away_drivers = _layer_drivers(away)
+    drivers = {
+        "home": home_drivers,
+        "away": away_drivers,
+        "matchup": {
+            "home_points_diag": home_diag,
+            "away_points_diag": away_diag,
+            "st_total_nudge": round(st_nudge, 3),
+            "margin": round(margin, 2),
+            "spread_home": spread,
+            "expected_total": total,
+            "margin_sd": round(margin_sd, 3),
+            "team_identity_uncertainty_blend": round(team_u, 4),
+        },
+        "primary_signals": {
+            "home_roster_strength": home_drivers.get("roster_strength"),
+            "away_roster_strength": away_drivers.get("roster_strength"),
+            "home_qb_situation_index": home_drivers.get("qb_situation_index"),
+            "away_qb_situation_index": away_drivers.get("qb_situation_index"),
+            "home_unit_grades": home_drivers.get("unit_grades"),
+            "away_unit_grades": away_drivers.get("unit_grades"),
+        },
+        "note": (
+            "Drivers are inspectable layer inputs/indices — not calibrated "
+            "market attribution weights."
+        ),
+    }
+    uncertainty = {
+        **early,
+        "team_identity_uncertainty_blend": round(team_u, 4),
+        "home_team_early_uncertainty": home.early_season_uncertainty,
+        "away_team_early_uncertainty": away.early_season_uncertainty,
+        "effective_margin_sd": round(margin_sd, 3),
+        "narrowing_schedule": P.early_season_narrowing_schedule(),
+        "honesty": (
+            "Wide W1–W4 priors; week-indexed narrowing. Not a claim of "
+            "known early-season identity."
+        ),
+    }
 
     game_id = f"{season or universe.season}_w{week}_{away_team}@{home_team}"
     notes = {
@@ -337,11 +412,10 @@ def project_game(
         "method": "strength→margin→spread/total/WP (unit-aware matchup)",
         "formula": (
             "pts = league_ppg*(off/def)^resp*ol_skill_boost*opp_def_dampen*pace+HFA; "
-            "spread_home=away-home; wp=Φ(margin/margin_sd)"
+            "spread_home=away-home; total=home+away; wp=Φ(margin/margin_sd)"
         ),
+        "coherence": "spread=away-home; total=home+away; wp_home+wp_away=1",
         "does_not_touch": "edge_board_markets_only_cfb",
-        "home_matchup": str(home_diag),
-        "away_matchup": str(away_diag),
         "margin": f"{margin:.2f}",
         "st_total_nudge": f"{st_nudge:.3f}",
         **{f"universe_{k}": v for k, v in list(universe.notes.items())[:6]},
@@ -353,17 +427,19 @@ def project_game(
         home_team=home_team,
         away_team=away_team,
         engine_version=engine_version,
-        home_win_prob=round(home_wp, 4),
-        away_win_prob=round(1.0 - home_wp, 4),
-        expected_home_score=round(home_exp_adj, 2),
-        expected_away_score=round(away_exp_adj, 2),
-        expected_total=round(total, 2),
+        home_win_prob=home_wp,
+        away_win_prob=away_wp,
+        expected_home_score=home_exp_adj,
+        expected_away_score=away_exp_adj,
+        expected_total=total,
         spread_home=spread,
         margin_sd=round(margin_sd, 3),
         early_season_uncertainty=early,
         home_layers=layers_snapshot(home),
         away_layers=layers_snapshot(away),
         player_hooks=list(player_hook_summaries or []),
+        drivers=drivers,
+        uncertainty=uncertainty,
         notes=notes,
         fidelity="approximate",
     )
@@ -385,6 +461,8 @@ def project_game_to_dict(proj: GameProjection) -> Dict[str, Any]:
         "spread_home": proj.spread_home,
         "margin_sd": proj.margin_sd,
         "early_season_uncertainty": proj.early_season_uncertainty,
+        "uncertainty": proj.uncertainty,
+        "drivers": proj.drivers,
         "home_layers": proj.home_layers,
         "away_layers": proj.away_layers,
         "player_hooks": proj.player_hooks,
@@ -402,18 +480,20 @@ def evolve_after_game(
     home_won: bool,
     home_score: float,
     away_score: float,
+    week: int = 5,
     rng: Optional[random.Random] = None,
 ) -> None:
-    """PLACEHOLDER in-path strength evolution (not calibrated)."""
+    """Mild in-path strength evolution (not calibrated); extra early-season noise."""
     rng = rng or random.Random()
     home = teams[home_team]
     away = teams[away_team]
     home_margin = float(home_score) - float(away_score)
     surprise = _clamp((home_margin - 2.5) / 16.0, -1.5, 1.5)
+    noise_sd = P.strength_noise_sd_for_week(week)
 
     def _bump(state: TeamProjectionState, direction: float) -> None:
-        noise_o = rng.gauss(0.0, P.STRENGTH_NOISE)
-        noise_d = rng.gauss(0.0, P.STRENGTH_NOISE)
+        noise_o = rng.gauss(0.0, noise_sd)
+        noise_d = rng.gauss(0.0, noise_sd)
         state.offense_index = _clamp(
             state.offense_index
             + P.STRENGTH_UPDATE_RATE * direction
@@ -427,6 +507,10 @@ def evolve_after_game(
             + P.STRENGTH_MEAN_REVERT * (1.0 - state.defense_index)
             + noise_d,
             *P.STRENGTH_CLAMP,
+        )
+        # Identity uncertainty shrinks slowly as games accumulate.
+        state.early_season_uncertainty = _clamp(
+            state.early_season_uncertainty * 0.92, 0.05, 0.85
         )
         state.games_played += 1
 

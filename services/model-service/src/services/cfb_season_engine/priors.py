@@ -7,9 +7,10 @@ College football 2026 reality drives these knobs:
 - Position groups (OL / skill / front seven / secondary) are real projection drivers
 - Early-season uncertainty is *wider* than NFL W1–W4
 
-v0.3 deepens position-group grades and tightens team projection so unit
-grades visibly move project-game outputs, while roster_strength +
-qb_situation_index remain material primary drivers.
+v0.4 strengthens season simulation (densified schedule paths, win
+distributions, week sample, optional conference standings), makes
+early-season uncertainty week-indexed and inspectable, and surfaces
+layer drivers on project-game.
 """
 
 from __future__ import annotations
@@ -17,8 +18,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.3-position-projection"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.3-position-projection"
+ENGINE_VERSION = "cfb-season-engine-v0.4-season-sim"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.4-season-sim"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -35,11 +36,17 @@ EXPECTED_POINTS_CLAMP = (7.0, 55.0)
 PACE_PLAYS_CLAMP = (55.0, 90.0)
 MATCHUP_RESPONSE = 1.05
 
-# Path evolution (placeholder — not backtested).
-STRENGTH_UPDATE_RATE = 0.035
-STRENGTH_MEAN_REVERT = 0.012
-STRENGTH_NOISE = 0.018
+# Path evolution (mild; not backtested). Early weeks add extra noise.
+STRENGTH_UPDATE_RATE = 0.028
+STRENGTH_MEAN_REVERT = 0.010
+STRENGTH_NOISE = 0.014
 STRENGTH_CLAMP = (0.55, 1.55)
+EARLY_STRENGTH_NOISE_MULT: Dict[int, float] = {
+    1: 1.55,
+    2: 1.40,
+    3: 1.25,
+    4: 1.12,
+}
 
 # ---------------------------------------------------------------------------
 # Layer 1 — roster strength components (transparent weights)
@@ -212,6 +219,38 @@ def matchup_response_for_week(week: int) -> float:
     return MATCHUP_RESPONSE * early_season_factor(week, EARLY_SEASON_SEPARATION_SOFTEN)
 
 
+def strength_noise_sd_for_week(week: int) -> float:
+    """In-path strength evolution noise SD (wider W1–W4, then base)."""
+    return STRENGTH_NOISE * early_season_factor(week, EARLY_STRENGTH_NOISE_MULT)
+
+
+def early_season_narrowing_schedule() -> Dict[str, Any]:
+    """Week-indexed uncertainty narrowing for status / ops honesty."""
+    weeks = {}
+    for w in range(1, 9):
+        u = early_season_uncertainty(w)
+        weeks[str(w)] = {
+            "active": u["active"],
+            "margin_sd_mult": u["margin_sd_mult"],
+            "score_noise_mult": u["score_noise_mult"],
+            "separation_soften": u["separation_soften"],
+            "roster_identity_uncertainty": u["roster_identity_uncertainty"],
+            "strength_noise_mult": round(
+                early_season_factor(w, EARLY_STRENGTH_NOISE_MULT), 4
+            ),
+        }
+    return {
+        "last_early_week": EARLY_SEASON_LAST_WEEK,
+        "weeks": weeks,
+        "note": (
+            "W1–W4: wide priors (inflate margin/score SD, soften separation, "
+            "extra strength-path noise). Week 5+: base priors — uncertainty "
+            "narrows on the schedule, not by pretending identity is known."
+        ),
+        "fidelity": "approximate",
+    }
+
+
 def documentation() -> Dict[str, Any]:
     return {
         "engine_version": ENGINE_VERSION,
@@ -228,6 +267,7 @@ def documentation() -> Dict[str, Any]:
             "Packaged priors are approximate stand-ins until portal/recruiting "
             "feeds are wired; do not treat unit grades as calibrated SP+.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
+            "Season sim uses densified approximate schedule paths (not official FBS slate).",
             "FBS focus; FCS opponents treated as external when scheduled.",
         ],
         "league_env": {
@@ -236,6 +276,7 @@ def documentation() -> Dict[str, Any]:
             "score_noise_sd": SCORE_NOISE_SD,
             "win_prob_margin_sd": WIN_PROB_MARGIN_SD,
         },
+        "early_season_narrowing": early_season_narrowing_schedule(),
         "roster_strength_weights": {
             "returning_production": ROSTER_STRENGTH_RETURNING,
             "portal_net": ROSTER_STRENGTH_PORTAL_NET,

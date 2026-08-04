@@ -164,6 +164,8 @@ class GameProjection:
     home_layers: Dict[str, Any]
     away_layers: Dict[str, Any]
     player_hooks: List[Dict[str, Any]] = field(default_factory=list)
+    drivers: Dict[str, Any] = field(default_factory=dict)
+    uncertainty: Dict[str, Any] = field(default_factory=dict)
     notes: Dict[str, str] = field(default_factory=dict)
     fidelity: DataFidelity = "approximate"
 
@@ -176,6 +178,7 @@ class EngineUniverse:
     schedule: List[ScheduledGame]
     teams: Dict[str, TeamProjectionState]
     player_hooks: Dict[str, List[PlayerHook]] = field(default_factory=dict)
+    conferences: Dict[str, str] = field(default_factory=dict)
     notes: Dict[str, str] = field(default_factory=dict)
 
     @property
@@ -191,6 +194,9 @@ class SeasonSimResult:
     engine_version: str
     team_wins: Dict[str, Dict[str, float]]
     sample_path_game_count: int
+    week_by_week_sample: List[Dict[str, Any]] = field(default_factory=list)
+    ranking: List[Dict[str, Any]] = field(default_factory=list)
+    conference_standings: Dict[str, List[Dict[str, Any]]] = field(default_factory=dict)
     notes: Dict[str, str] = field(default_factory=dict)
     diagnostics: Dict[str, Any] = field(default_factory=dict)
 

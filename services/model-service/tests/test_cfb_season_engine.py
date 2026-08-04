@@ -1,4 +1,4 @@
-"""Tests for the hierarchical CFB season engine (position groups + projection)."""
+"""Tests for the hierarchical CFB season engine (season sim + early uncertainty)."""
 
 from __future__ import annotations
 
@@ -13,6 +13,8 @@ from src.services.cfb_season_engine import (
     build_packaged_universe,
     engine_status_payload,
     project_game_preview,
+    project_game_to_dict,
+    season_sim_to_dict,
     simulate_full_season,
 )
 from src.services.cfb_season_engine.qb_situation import (
@@ -35,12 +37,15 @@ from src.services.cfb_season_engine.position_groups import (
     compose_unit_grade,
     groups_to_dict,
 )
-from src.services.cfb_season_engine.priors import early_season_uncertainty
+from src.services.cfb_season_engine.priors import (
+    early_season_uncertainty,
+    win_prob_margin_sd_for_week,
+)
 from src.services.cfb_season_engine.types import EngineUniverse
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.3-position-projection"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.4-season-sim"
 
 
 def test_qb_situation_classification() -> None:
@@ -606,6 +611,8 @@ def test_early_season_uncertainty_wider_in_w1() -> None:
     assert w1["active"] is True
     assert w5["active"] is False
     assert w1["win_prob_margin_sd"] > w5["win_prob_margin_sd"]
+    assert win_prob_margin_sd_for_week(1) > win_prob_margin_sd_for_week(4)
+    assert win_prob_margin_sd_for_week(4) > win_prob_margin_sd_for_week(5)
 
     universe = build_packaged_universe(2026)
     p1 = project_game_preview(
@@ -617,15 +624,72 @@ def test_early_season_uncertainty_wider_in_w1() -> None:
     assert p1.early_season_uncertainty["active"] is True
     assert p5.early_season_uncertainty["active"] is False
     assert p1.margin_sd > p5.margin_sd
+    assert p1.uncertainty["effective_margin_sd"] == p1.margin_sd
+    assert "narrowing_schedule" in p1.uncertainty
 
 
-def test_season_sim_skeleton_path_coherence() -> None:
+def test_project_game_drivers_and_score_coherence() -> None:
     universe = build_packaged_universe(2026)
-    result = simulate_full_season(universe, n_sims=5, seed=7)
-    assert result.n_sims == 5
+    proj = project_game_preview(
+        universe, home_team="ALA", away_team="UGA", week=1, neutral_site=True
+    )
+    payload = project_game_to_dict(proj)
+    assert "drivers" in payload
+    assert payload["drivers"]["primary_signals"]["home_roster_strength"] is not None
+    assert payload["drivers"]["home"]["qb_situation_index"] is not None
+    assert payload["drivers"]["home"]["unit_grades"]["ol"] is not None
+    assert "uncertainty" in payload
+    assert payload["uncertainty"]["active"] is True
+    # Score / spread / total coherence (no floating invent).
+    assert abs(
+        payload["expected_total"]
+        - (payload["expected_home_score"] + payload["expected_away_score"])
+    ) < 1e-9
+    assert abs(
+        payload["spread_home"]
+        - (payload["expected_away_score"] - payload["expected_home_score"])
+    ) < 1e-9
+    assert abs(payload["home_win_prob"] + payload["away_win_prob"] - 1.0) < 1e-9
+
+
+def test_densified_schedule_covers_many_teams() -> None:
+    universe = build_packaged_universe(2026)
+    assert universe.notes.get("official_schedule") == "false"
+    assert "densified" in universe.notes.get("schedule_source", "")
+    assert len(universe.schedule) >= 200
+    from collections import Counter
+
+    counts = Counter()
+    for g in universe.schedule:
+        counts[g.home_team] += 1
+        counts[g.away_team] += 1
+    # Most packaged FBS teams should have a usable season path.
+    assert sum(1 for t in universe.team_codes if counts[t] >= 8) >= 100
+
+
+def test_season_sim_wins_for_many_teams() -> None:
+    universe = build_packaged_universe(2026)
+    result = simulate_full_season(universe, n_sims=4, seed=7)
+    assert result.n_sims == 4
     assert result.games_per_season == len(universe.schedule)
-    assert abs(result.diagnostics["mean_wins_sum"] - len(universe.schedule)) < 0.01
+    assert abs(result.diagnostics["mean_wins_sum"] - len(universe.schedule)) < 0.05
     assert result.engine_version == DEFAULT_SEASON_ENGINE_VERSION
+    assert result.diagnostics["teams_with_positive_mean_wins"] >= 80
+    # Distribution fields present.
+    sample_team = next(iter(result.team_wins.values()))
+    for key in ("mean", "std", "p10", "p50", "p90"):
+        assert key in sample_team
+    assert len(result.week_by_week_sample) == len(universe.schedule)
+    assert result.ranking[0]["rank"] == 1
+    assert result.ranking[0]["mean"] >= result.ranking[10]["mean"]
+    # Alias collapse — do not triple-count A&M / Ole Miss codes.
+    assert "TXAM" not in result.team_wins
+    assert "TA&M" not in result.team_wins
+    assert "OLE" not in result.team_wins
+    payload = season_sim_to_dict(result)
+    assert "conference_standings" in payload
+    assert "week_by_week_grouped" in payload
+    assert len(payload["top_teams_by_wins"]) >= 10
 
 
 def test_status_contract() -> None:
@@ -640,6 +704,8 @@ def test_status_contract() -> None:
         payload["solid_vs_approximate"]["solid"]
     )
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
+    assert "cfb-season-sim" in payload["entry_points"]["ops"]
+    assert "early_season_narrowing" in payload
     assert "examples" in payload
     assert "position_groups" in payload["examples"].get("UGA", {})
     assert "project_game_formula" in payload
@@ -686,16 +752,23 @@ def test_status_and_project_game_http() -> None:
     assert "position_groups" in data["home_layers"]
     assert "components" in data["home_layers"]["position_groups"]
     assert "projection_formula" in data
+    assert "drivers" in data
+    assert data["drivers"]["home"]["roster_strength"] is not None
+    assert "uncertainty" in data
+    assert data["uncertainty"]["week"] == 1
 
     sim = client.post(
         "/cfb/season-engine/simulate",
-        json={"n_sims": 3, "seed": 1, "demo": True},
+        json={"n_sims": 2, "seed": 1, "demo": True},
     )
     assert sim.status_code == 200
     sim_body = sim.json()
     assert sim_body["ok"] is True
-    assert sim_body["skeleton"] is True
-    assert sim_body["n_sims"] == 3
+    assert sim_body["season_paths"] is True
+    assert sim_body["skeleton"] is False
+    assert sim_body["n_sims"] == 2
+    assert len(sim_body["top_teams_by_wins"]) >= 10
+    assert "week_by_week_sample" in sim_body
 
 
 def test_compute_qb_situation_index_class_gap() -> None:
