@@ -4,10 +4,12 @@ College football 2026 reality drives these knobs:
 - Extreme roster turnover (portal + NIL + draft + freshmen)
 - Weak YoY team identity → historical team ratings alone are NOT enough
 - QB situation is a first-class lever
+- Position groups (OL / skill / front seven / secondary) are real projection drivers
 - Early-season uncertainty is *wider* than NFL W1–W4
 
-v0.2 deepens roster_strength + qb_situation_index as the primary drivers
-of team projection. Calibration remains intentionally thin.
+v0.3 deepens position-group grades and tightens team projection so unit
+grades visibly move project-game outputs, while roster_strength +
+qb_situation_index remain material primary drivers.
 """
 
 from __future__ import annotations
@@ -15,8 +17,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.2-roster-qb"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.2-roster-qb"
+ENGINE_VERSION = "cfb-season-engine-v0.3-position-projection"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.3-position-projection"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -78,13 +80,23 @@ QB_CAST_WEAPONS_WEIGHT = 0.45
 QB_CAST_INDEX_SCALE = 0.14  # ±14% index from cast extremes
 
 # ---------------------------------------------------------------------------
-# Layer 4 — composition: roster_strength + qb_situation dominate
-# Historical team strength is deliberately *not* a dominant term.
+# Layer 3 — position group unit components
+# unit_grade = talent*w_t + experience*w_e + portal_impact*w_p
 # ---------------------------------------------------------------------------
-WEIGHT_ROSTER_STRENGTH = 0.40
-WEIGHT_QB_SITUATION = 0.36
-WEIGHT_SKILL_GROUP = 0.14
-WEIGHT_OL_GROUP = 0.10
+UNIT_TALENT_WEIGHT = 0.50
+UNIT_EXPERIENCE_WEIGHT = 0.30
+UNIT_PORTAL_WEIGHT = 0.20
+
+# ---------------------------------------------------------------------------
+# Layer 4 — composition: roster + QB + position groups
+# Historical team strength is deliberately *not* a dominant term.
+# Unit grades are material (testable ablation deltas) while roster/QB
+# contrasts (UGA > FSU > COLO) remain intact.
+# ---------------------------------------------------------------------------
+WEIGHT_ROSTER_STRENGTH = 0.34
+WEIGHT_QB_SITUATION = 0.30
+WEIGHT_SKILL_GROUP = 0.18
+WEIGHT_OL_GROUP = 0.18
 
 # Legacy aliases retained for status docs / older call sites.
 WEIGHT_RETURNING_PROD = ROSTER_STRENGTH_RETURNING
@@ -93,15 +105,28 @@ WEIGHT_RECRUITING = ROSTER_STRENGTH_RECRUITING
 WEIGHT_EXPERIENCE = ROSTER_STRENGTH_EXPERIENCE
 WEIGHT_QB = WEIGHT_QB_SITUATION
 
-WEIGHT_DEF_ROSTER_STRENGTH = 0.28
-WEIGHT_DEF_FRONT_SEVEN = 0.32
-WEIGHT_DEF_SECONDARY = 0.26
-WEIGHT_DEF_EXPERIENCE = 0.14
+WEIGHT_DEF_ROSTER_STRENGTH = 0.20
+WEIGHT_DEF_FRONT_SEVEN = 0.38
+WEIGHT_DEF_SECONDARY = 0.32
+WEIGHT_DEF_EXPERIENCE = 0.10
 WEIGHT_DEF_RECRUITING = 0.0  # folded into roster_strength
 
-# Direct index blend: keep qb_situation_index as a hard lever after compose.
-QB_INDEX_BLEND = 0.42  # offense_index = (1-b)*base + b*(base*qb_index/1.0) effectively
-# Applied as: offense_index *= (1 - QB_INDEX_BLEND) + QB_INDEX_BLEND * qb_situation_index
+# Direct index blends after compose (hard levers, like QB).
+QB_INDEX_BLEND = 0.40
+OL_INDEX_BLEND = 0.16
+SKILL_INDEX_BLEND = 0.12
+# Defense unit blend toward front_seven/secondary indices.
+DEF_UNIT_BLEND = 0.22
+
+# Game-level unit matchup multipliers (applied in expected_team_points).
+# Offense boost from OL + skill; defense dampens opponent scoring via F7 + secondary.
+UNIT_OFFENSE_BOOST_SCALE = 0.10  # ±10% at unit grade extremes (0/100)
+UNIT_DEFENSE_DAMPEN_SCALE = 0.12  # ±12% opponent scoring dampen
+UNIT_FRONT_SEVEN_SHARE = 0.55  # of defense dampen from front seven
+UNIT_SECONDARY_SHARE = 0.45
+UNIT_OL_SHARE = 0.55  # of offense boost from OL
+UNIT_SKILL_SHARE = 0.45
+SPECIAL_TEAMS_TOTAL_SCALE = 0.015  # thin ST nudge on total only
 
 # ---------------------------------------------------------------------------
 # Early-season uncertainty (weeks 1–4) — wider than NFL analog
@@ -194,8 +219,10 @@ def documentation() -> Dict[str, Any]:
         "fidelity": "approximate",
         "assumptions": [
             "Historical team ratings alone are insufficient for CFB 2026.",
-            "roster_strength + qb_situation_index are the primary drivers of "
-            "offense/defense indices (v0.2).",
+            "roster_strength + qb_situation_index remain material primary drivers.",
+            "Position groups (OL/skill/front_seven/secondary) are real projection "
+            "drivers with inspectable talent/experience/portal_impact components.",
+            "Defense unit grades dampen opponent scoring at project-game time.",
             "Returning production is snap/start weighted, not starter-count only.",
             "QB class multipliers are intentional and sharp (true_freshman << incumbent).",
             "Packaged priors are approximate stand-ins until portal/recruiting "
@@ -217,6 +244,11 @@ def documentation() -> Dict[str, Any]:
             "snap_weight": ROSTER_SNAP_WEIGHT,
             "start_weight": ROSTER_START_WEIGHT,
         },
+        "unit_grade_weights": {
+            "talent": UNIT_TALENT_WEIGHT,
+            "experience": UNIT_EXPERIENCE_WEIGHT,
+            "portal_impact": UNIT_PORTAL_WEIGHT,
+        },
         "qb_class_offense_mult": dict(QB_CLASS_OFFENSE_MULT),
         "composition_weights": {
             "offense": {
@@ -225,12 +257,23 @@ def documentation() -> Dict[str, Any]:
                 "skill_group": WEIGHT_SKILL_GROUP,
                 "ol_group": WEIGHT_OL_GROUP,
                 "qb_index_blend": QB_INDEX_BLEND,
+                "ol_index_blend": OL_INDEX_BLEND,
+                "skill_index_blend": SKILL_INDEX_BLEND,
             },
             "defense": {
                 "roster_strength": WEIGHT_DEF_ROSTER_STRENGTH,
                 "front_seven": WEIGHT_DEF_FRONT_SEVEN,
                 "secondary": WEIGHT_DEF_SECONDARY,
                 "experience": WEIGHT_DEF_EXPERIENCE,
+                "def_unit_blend": DEF_UNIT_BLEND,
+            },
+            "game_matchup": {
+                "unit_offense_boost_scale": UNIT_OFFENSE_BOOST_SCALE,
+                "unit_defense_dampen_scale": UNIT_DEFENSE_DAMPEN_SCALE,
+                "front_seven_share": UNIT_FRONT_SEVEN_SHARE,
+                "secondary_share": UNIT_SECONDARY_SHARE,
+                "ol_share": UNIT_OL_SHARE,
+                "skill_share": UNIT_SKILL_SHARE,
             },
         },
     }

@@ -62,7 +62,12 @@ class QbSituation:
 
 @dataclass(frozen=True)
 class PositionGroupGrades:
-    """Layer 3 — unit grades that feed team projection."""
+    """Layer 3 — unit grades that feed team projection.
+
+    Headline grades (ol / skill / front_seven / secondary / special_teams) are
+    0–100 composites. ``components`` holds inspectable talent / experience /
+    portal_impact breakdowns per unit when available.
+    """
 
     team: str
     ol: float = 50.0
@@ -70,6 +75,8 @@ class PositionGroupGrades:
     front_seven: float = 50.0
     secondary: float = 50.0
     special_teams: float = 50.0
+    # {"ol": {"talent":..,"experience":..,"portal_impact":..,"grade":..}, ...}
+    components: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     source: str = "packaged_prior"
     fidelity: DataFidelity = "approximate"
     notes: str = ""
