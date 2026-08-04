@@ -1,8 +1,9 @@
 # NFL Season Engine — Public API Contract
 
-**Engine version:** `nfl-season-engine-v1.8-coaching`  
+**Engine version:** `nfl-season-engine-v1.9-real-2026`  
 **Date:** 2026-08-03  
-**Package:** `services/model-service/src/services/nfl_season_engine/`
+**Package:** `services/model-service/src/services/nfl_season_engine/`  
+**Cutover note:** v1.9 defaults to the real 2026 REG schedule (272 games + byes). Modeling layers unchanged from v1.8 coaching. See `data/ops/nfl-season-engine-real-2026-20260803.md`.
 
 Additive HTTP surface on model-service. Does **not** modify Edge Board, Model-vs-KEI (#70), or `nfl_market_projections`.
 
@@ -10,7 +11,7 @@ Additive HTTP surface on model-service. Does **not** modify Edge Board, Model-vs
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `GET` | `/nfl/season-engine/status` | Version, layers, capabilities, formula docs |
+| `GET` | `/nfl/season-engine/status` | Version, mode, schedule_source, game count, layers, capabilities |
 | `POST` | `/nfl/season-engine/simulate` | N path-coherent full-season sims |
 | `GET` | `/nfl/season-engine/game-boxes` | Future-game player box distributions |
 | `POST` | `/nfl/season-engine/game-boxes` | Same + optional `injury_paths` / diagnostics |
@@ -25,7 +26,10 @@ CLI: `scripts/nfl/run_hierarchical_season_sim.py`, `run_survivor_evaluate.py`, `
 | Field | Meaning |
 | --- | --- |
 | `engine_version` | Semver-ish tag from `calibration.ENGINE_VERSION` |
-| `mode` | `demo` (offline round-robin + skill cores) or `db` |
+| `mode` | `real` (default) or `demo` (explicit `demo=true` round-robin) |
+| `schedule_source` | `nfl_dp_schedules` \| `packaged_wall_chart_2026` \| `demo_round_robin` |
+| `schedule_game_count` | REG games loaded (expect 272 for 2026 real) |
+| `roster_source` / `roster_as_of` | Depth identity source + freshness tag |
 | `notes` | Short string map (sources, schedule_match, bye_handling, …) |
 | `diagnostics` | Structured explain payload (see flag below) |
 | `injury_paths` | Echo of applied path dicts when present |
@@ -57,11 +61,13 @@ Returns `engine_version`, layer modules, `capabilities`, usage-role labels/rules
 
 ```json
 {
-  "mode": "demo|db",
+  "mode": "real|demo",
+  "schedule_source": "packaged_wall_chart_2026",
+  "schedule_game_count": 272,
   "season": 2026,
   "n_sims": 25,
   "games_per_season": 272,
-  "engine_version": "nfl-season-engine-v1.8-coaching",
+  "engine_version": "nfl-season-engine-v1.9-real-2026",
   "notes": {},
   "diagnostics": {
     "mean_wins_sum": 272.0,

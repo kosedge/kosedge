@@ -25,7 +25,11 @@ from src.services.nfl_season_engine.usage_roles import annotate_usage_roles
 
 def test_engine_version_red_zone() -> None:
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
-    assert "coaching" in DEFAULT_SEASON_ENGINE_VERSION or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
+    assert (
+        "coaching" in DEFAULT_SEASON_ENGINE_VERSION
+        or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
+        or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_rb1_higher_i10_carry_share_than_wr_in_feature() -> None:
@@ -299,7 +303,11 @@ def test_buf_kc_td_sanity_and_rz_diagnostics() -> None:
         seed=2026,
         include_diagnostics=True,
     )
-    assert "coaching" in proj.engine_version or proj.engine_version == "nfl-season-engine-v1.7-red-zone"
+    assert (
+        "coaching" in proj.engine_version
+        or "real-2026" in proj.engine_version
+        or proj.engine_version == "nfl-season-engine-v1.7-red-zone"
+    )
     by_name = {p["player_name"]: p for p in proj.players}
 
     mahomes = by_name["P.Mahomes"]

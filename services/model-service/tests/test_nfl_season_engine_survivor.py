@@ -30,6 +30,7 @@ def test_engine_version_surfaces_survivor() -> None:
         or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
         or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
         or "coaching" in DEFAULT_SEASON_ENGINE_VERSION
+        or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -143,6 +144,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
         or "game-script" in result.engine_version
         or "red-zone" in result.engine_version
         or "coaching" in result.engine_version
+        or "real-2026" in result.engine_version
     )
 
 

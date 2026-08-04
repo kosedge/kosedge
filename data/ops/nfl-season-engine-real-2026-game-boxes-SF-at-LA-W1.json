@@ -1,0 +1,213 @@
+{
+  "engine_version": "nfl-season-engine-v1.9-real-2026",
+  "mode": "real",
+  "schedule_source": "packaged_wall_chart_2026",
+  "schedule_game_count": 272,
+  "roster_source": "demo_depth_chart",
+  "roster_as_of": "2025_offseason_approx",
+  "matchup": {
+    "season": 2026,
+    "week": 1,
+    "away_team": "SF",
+    "home_team": "LA",
+    "game_id": "2026-W01-SF@LA",
+    "schedule_match": "on_loaded_schedule"
+  },
+  "game_script_summary": {
+    "home_win_prob_mean": 0.4365,
+    "expected_total_mean": 43.92,
+    "pace_plays_mean": 63.27,
+    "home_pass_rate_mean": 0.6183,
+    "away_pass_rate_mean": 0.5542,
+    "home_lead_rate": 0.325,
+    "home_trail_rate": 0.4875,
+    "home_early_down_pass_rate_mean": 0.632,
+    "away_early_down_pass_rate_mean": 0.5351,
+    "home_hurry_up_mean": 0.219,
+    "away_hurry_up_mean": 0.1403,
+    "home_script_intensity_mean": 0.4676,
+    "away_script_intensity_mean": 0.4676,
+    "minutes_remaining_mean": 22.45,
+    "time_bucket_late_rate": 0.475,
+    "home_large_lead_rate": 0.175,
+    "home_large_deficit_rate": 0.1875
+  },
+  "players_sample": [
+    {
+      "player_name": "LA QB1",
+      "team": "LA",
+      "position": "QB",
+      "usage_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 226.026,
+        "pass_tds": 1.488,
+        "ints": 0.613,
+        "rush_yards": 7.339
+      }
+    },
+    {
+      "player_name": "B.Purdy",
+      "team": "SF",
+      "position": "QB",
+      "usage_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 223.502,
+        "pass_tds": 1.225,
+        "ints": 0.575,
+        "rush_yards": 6.101
+      }
+    },
+    {
+      "player_name": "LA WR1",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 63.016,
+        "receptions": 5.846,
+        "rec_tds": 0.362
+      }
+    },
+    {
+      "player_name": "C.McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "usage_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 61.785,
+        "rush_tds": 0.6,
+        "rec_yards": 25.906,
+        "receptions": 3.6
+      }
+    },
+    {
+      "player_name": "B.Aiyuk",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 44.956,
+        "receptions": 3.503,
+        "rec_tds": 0.163
+      }
+    },
+    {
+      "player_name": "LA RB1",
+      "team": "LA",
+      "position": "RB",
+      "usage_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 43.661,
+        "rush_tds": 0.375,
+        "rec_yards": 18.92,
+        "receptions": 2.739
+      }
+    },
+    {
+      "player_name": "D.Samuel",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 41.077,
+        "receptions": 3.739,
+        "rec_tds": 0.212
+      }
+    },
+    {
+      "player_name": "G.Kittle",
+      "team": "SF",
+      "position": "TE",
+      "usage_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 41.034,
+        "receptions": 3.406,
+        "rec_tds": 0.2
+      }
+    },
+    {
+      "player_name": "LA WR2",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 37.639,
+        "receptions": 3.751,
+        "rec_tds": 0.338
+      }
+    },
+    {
+      "player_name": "LA TE1",
+      "team": "LA",
+      "position": "TE",
+      "usage_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 31.541,
+        "receptions": 3.403,
+        "rec_tds": 0.275
+      }
+    },
+    {
+      "player_name": "J.Mason",
+      "team": "SF",
+      "position": "RB",
+      "usage_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 26.431,
+        "rush_tds": 0.087,
+        "rec_yards": 8.184,
+        "receptions": 1.123
+      }
+    },
+    {
+      "player_name": "LA RB2",
+      "team": "LA",
+      "position": "RB",
+      "usage_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 19.716,
+        "rush_tds": 0.188,
+        "rec_yards": 9.945,
+        "receptions": 1.426
+      }
+    }
+  ],
+  "survivor_week5": {
+    "bye_teams_this_week": [
+      "CAR",
+      "KC"
+    ],
+    "top_picks": [
+      {
+        "team": "WAS",
+        "opponent": "NYG",
+        "win_rate": 0.7,
+        "pick_now_score": 0.5126
+      },
+      {
+        "team": "NYJ",
+        "opponent": "CLE",
+        "win_rate": 0.625,
+        "pick_now_score": 0.4367
+      },
+      {
+        "team": "NO",
+        "opponent": "MIN",
+        "win_rate": 0.55,
+        "pick_now_score": 0.3557
+      },
+      {
+        "team": "NE",
+        "opponent": "LV",
+        "win_rate": 0.5,
+        "pick_now_score": 0.3533
+      },
+      {
+        "team": "BAL",
+        "opponent": "ATL",
+        "win_rate": 0.675,
+        "pick_now_score": 0.3365
+      }
+    ]
+  }
+}

@@ -19,9 +19,10 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.8: team coaching / tendency profiles overlay Layer-2 play-mix + RZ pass
-# preference (modest, inspectable; usage reacts via existing script matrix).
-ENGINE_VERSION = "nfl-season-engine-v1.8-coaching"
+# v1.9: real 2026 regular-season schedule cutover (272 REG games + byes).
+# Modeling layers unchanged from v1.8 coaching; data/schedule default flips
+# from demo round-robin to packaged wall-chart / nfl_dp_schedules.
+ENGINE_VERSION = "nfl-season-engine-v1.9-real-2026"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -298,6 +299,11 @@ def calibration_notes() -> Dict[str, str]:
             "rz_pass_bias, early_down_pass_bias, two_minute_aggression) overlay "
             "Layer-2 play-mix + RZ pass rate; diagnostics expose coaching_profile "
             "+ tendency_effects (see coaching_tendencies.py)."
+        ),
+        "real_schedule": (
+            "v1.9: default universe uses real 2026 REG schedule (272 games, "
+            "weeks 1–18 with byes) from nfl_dp_schedules when present, else "
+            "packaged wall-chart JSON. demo=true keeps round-robin for tests."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

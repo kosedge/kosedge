@@ -155,7 +155,7 @@ export default function SeasonEngineGameBoxesClient({
               onChange={(e) => applyMatchup(e.target.value)}
             >
               {matchups.length === 0 ? (
-                <option value="manual">No fair-lines slate — use teams</option>
+                <option value="manual">No schedule slate — use teams</option>
               ) : null}
               {matchups.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -308,8 +308,19 @@ export default function SeasonEngineGameBoxesClient({
 
           {modeNote ? (
             <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
-              Demo schedule mode — round-robin placeholder, not the locked 2026
-              NFL schedule. Player cores are sparse outside named skill teams.
+              Demo schedule mode — round-robin placeholder (explicit demo=true),
+              not the locked 2026 NFL schedule. Player cores are sparse outside
+              named skill teams.
+            </p>
+          ) : active ? (
+            <p className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/70">
+              Real 2026 schedule
+              {active.schedule_source ? ` · ${active.schedule_source}` : ""}
+              {active.schedule_game_count
+                ? ` · ${active.schedule_game_count} REG games`
+                : ""}
+              {active.roster_source ? ` · roster ${active.roster_source}` : ""}
+              {active.roster_as_of ? ` (as of ${active.roster_as_of})` : ""}
             </p>
           ) : null}
 

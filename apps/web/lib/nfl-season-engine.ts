@@ -12,6 +12,12 @@ export type { SeasonEngineMatchupOption };
 
 export type SeasonEngineStatus = {
   engine_version: string;
+  mode?: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  schedule_as_of?: string;
+  roster_source?: string;
+  roster_as_of?: string;
   layers?: unknown[];
   capabilities?: string[];
   contract?: Record<string, unknown>;
@@ -35,6 +41,10 @@ export type SeasonEnginePlayerRow = {
 
 export type SeasonEngineGameBoxesResponse = {
   mode: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  roster_source?: string;
+  roster_as_of?: string;
   season: number;
   week: number;
   game_id?: string;
@@ -67,6 +77,10 @@ export type SeasonEngineSurvivorPick = {
 
 export type SeasonEngineSurvivorResponse = {
   mode: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  roster_source?: string;
+  roster_as_of?: string;
   season: number;
   week: number;
   n_sims: number;
@@ -143,6 +157,27 @@ export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {
     }
     return {
       engine_version: String(payload.engine_version ?? ""),
+      mode: typeof payload.mode === "string" ? payload.mode : undefined,
+      schedule_source:
+        typeof payload.schedule_source === "string"
+          ? payload.schedule_source
+          : undefined,
+      schedule_game_count:
+        typeof payload.schedule_game_count === "number"
+          ? payload.schedule_game_count
+          : undefined,
+      schedule_as_of:
+        typeof payload.schedule_as_of === "string"
+          ? payload.schedule_as_of
+          : undefined,
+      roster_source:
+        typeof payload.roster_source === "string"
+          ? payload.roster_source
+          : undefined,
+      roster_as_of:
+        typeof payload.roster_as_of === "string"
+          ? payload.roster_as_of
+          : undefined,
       layers: Array.isArray(payload.layers) ? payload.layers : undefined,
       capabilities: Array.isArray(payload.capabilities)
         ? (payload.capabilities as string[])
@@ -245,6 +280,22 @@ export async function fetchSeasonEngineGameBoxes(input: {
     }
     return {
       mode: String(payload.mode ?? ""),
+      schedule_source:
+        typeof payload.schedule_source === "string"
+          ? payload.schedule_source
+          : undefined,
+      schedule_game_count:
+        typeof payload.schedule_game_count === "number"
+          ? payload.schedule_game_count
+          : undefined,
+      roster_source:
+        typeof payload.roster_source === "string"
+          ? payload.roster_source
+          : undefined,
+      roster_as_of:
+        typeof payload.roster_as_of === "string"
+          ? payload.roster_as_of
+          : undefined,
       season: Number(payload.season ?? query.season),
       week: Number(payload.week ?? query.week),
       game_id:
@@ -337,6 +388,22 @@ export async function fetchSeasonEngineSurvivor(input: {
     }
     return {
       mode: String(payload.mode ?? ""),
+      schedule_source:
+        typeof payload.schedule_source === "string"
+          ? payload.schedule_source
+          : undefined,
+      schedule_game_count:
+        typeof payload.schedule_game_count === "number"
+          ? payload.schedule_game_count
+          : undefined,
+      roster_source:
+        typeof payload.roster_source === "string"
+          ? payload.roster_source
+          : undefined,
+      roster_as_of:
+        typeof payload.roster_as_of === "string"
+          ? payload.roster_as_of
+          : undefined,
       season: Number(payload.season ?? body.season),
       week: Number(payload.week ?? body.week),
       n_sims: Number(payload.n_sims ?? body.n_sims),
@@ -377,46 +444,80 @@ export async function fetchSeasonEngineSurvivor(input: {
   }
 }
 
-/** Upcoming NFL matchups from fair-lines when available. */
+/** Upcoming NFL matchups — fair-lines when live, else 2026 wall-chart slate. */
 export async function loadSeasonEngineMatchups(params?: {
   season?: number;
   daysAhead?: number;
 }): Promise<{
   matchups: SeasonEngineMatchupOption[];
   currentWeek: number | null;
+  source?: "fair-lines" | "wall-chart";
   error?: string;
 }> {
-  const { fetchNflFairLines } = await import("@/lib/nfl-fair-lines");
+  const { matchupsFromWallChart } = await import(
+    "@/lib/nfl-season-engine-format"
+  );
   const season = params?.season ?? 2026;
-  const result = await fetchNflFairLines({
-    season,
-    daysAhead: params?.daysAhead ?? 21,
-    includePastDays: 0,
-  });
-  if (result.error) {
-    return { matchups: [], currentWeek: null, error: result.error };
+
+  try {
+    const { fetchNflFairLines } = await import("@/lib/nfl-fair-lines");
+    const result = await fetchNflFairLines({
+      season,
+      daysAhead: params?.daysAhead ?? 21,
+      includePastDays: 0,
+    });
+    if (!result.error) {
+      const now = Date.now();
+      const matchups: SeasonEngineMatchupOption[] = result.lines
+        .filter((row) => {
+          if (!row.homeAbbr || !row.awayAbbr) return false;
+          if (!row.startTime) return true;
+          const ts = Date.parse(row.startTime);
+          return Number.isFinite(ts) ? ts >= now - 3 * 60 * 60 * 1000 : true;
+        })
+        .map((row) => ({
+          id:
+            row.gameId ||
+            `${row.awayAbbr}@${row.homeAbbr}-W${row.week ?? "?"}`,
+          label: `${row.awayAbbr} @ ${row.homeAbbr}${
+            row.week != null ? ` · W${row.week}` : ""
+          }`,
+          homeTeam: row.homeAbbr,
+          awayTeam: row.awayAbbr,
+          week: row.week,
+          startTime: row.startTime,
+          source: "fair-lines" as const,
+        }));
+      if (matchups.length > 0) {
+        return {
+          matchups,
+          currentWeek: result.currentWeek || null,
+          source: "fair-lines",
+        };
+      }
+    }
+  } catch {
+    // Fall through to packaged wall-chart.
   }
-  const now = Date.now();
-  const matchups: SeasonEngineMatchupOption[] = result.lines
-    .filter((row) => {
-      if (!row.homeAbbr || !row.awayAbbr) return false;
-      if (!row.startTime) return true;
-      const ts = Date.parse(row.startTime);
-      return Number.isFinite(ts) ? ts >= now - 3 * 60 * 60 * 1000 : true;
-    })
-    .map((row) => ({
-      id: row.gameId || `${row.awayAbbr}@${row.homeAbbr}-W${row.week ?? "?"}`,
-      label: `${row.awayAbbr} @ ${row.homeAbbr}${
-        row.week != null ? ` · W${row.week}` : ""
-      }`,
-      homeTeam: row.homeAbbr,
-      awayTeam: row.awayAbbr,
-      week: row.week,
-      startTime: row.startTime,
-      source: "fair-lines" as const,
-    }));
-  return {
-    matchups,
-    currentWeek: result.currentWeek || null,
-  };
+
+  try {
+    const chart = (
+      await import("@/lib/nfl-wall-chart-2026.schedule.json")
+    ).default as Record<string, Record<string, string>>;
+    const matchups = matchupsFromWallChart(chart, { season, maxWeek: 18 });
+    return {
+      matchups,
+      currentWeek: matchups[0]?.week ?? 1,
+      source: "wall-chart",
+    };
+  } catch (err) {
+    return {
+      matchups: [],
+      currentWeek: null,
+      error:
+        err instanceof Error
+          ? err.message
+          : "No fair-lines or wall-chart matchups available",
+    };
+  }
 }

@@ -84,9 +84,10 @@ FORMULA_NOTES = {
     "win_rate": "wins_in_week / n_sims (bye / missing game counts as non-win)",
     "bye_handling": (
         "Teams with no scheduled game in week W have plays_this_week=false, "
-        "win_rate=0, and are excluded from ranked_picks. Demo round-robin "
-        "schedules have no byes; DB schedules may. Future weeks on bye are "
-        "skipped when scoring save_score (not treated as losses)."
+        "win_rate=0, and are excluded from ranked_picks. Real 2026 schedules "
+        "(DB or packaged wall-chart) include bye weeks; demo round-robin "
+        "(demo=true) has no byes. Future weeks on bye are skipped when "
+        "scoring save_score (not treated as losses)."
     ),
 }
 

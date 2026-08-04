@@ -43,6 +43,7 @@ def test_engine_version_hardened_patch() -> None:
         or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
         or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
         or "coaching" in DEFAULT_SEASON_ENGINE_VERSION
+        or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
