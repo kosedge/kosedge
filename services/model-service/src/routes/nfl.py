@@ -4520,6 +4520,19 @@ def nfl_season_engine_status(
         "schedule_as_of": schedule_meta.get("schedule_as_of") or "",
         "roster_source": schedule_meta.get("roster_source") or "",
         "roster_as_of": schedule_meta.get("roster_as_of") or "",
+        "depth_source": schedule_meta.get("depth_source")
+        or schedule_meta.get("roster_source")
+        or "",
+        "depth_as_of": schedule_meta.get("depth_as_of")
+        or schedule_meta.get("roster_as_of")
+        or "",
+        "depth_team_count": schedule_meta.get("depth_team_count") or 0,
+        "depth_named_skill_teams": schedule_meta.get("depth_named_skill_teams") or 0,
+        "depth_full_skill_starter_teams": schedule_meta.get(
+            "depth_full_skill_starter_teams"
+        )
+        or 0,
+        "depth_player_rows": schedule_meta.get("depth_player_rows") or 0,
         "layers": [
             {"id": 1, "name": "team_strength", "module": "src.services.nfl_season_engine.team_strength"},
             {"id": 2, "name": "game_script", "module": "src.services.nfl_season_engine.game_script"},
@@ -4539,6 +4552,7 @@ def nfl_season_engine_status(
             "survivor",
             "include_diagnostics",
             "real_2026_schedule",
+            "real_2026_depth",
         ],
         "contract": {
             "docs": "data/ops/nfl-season-engine-api-contract-20260803.md",
@@ -4547,6 +4561,8 @@ def nfl_season_engine_status(
                 "mode",
                 "schedule_source",
                 "schedule_game_count",
+                "roster_source",
+                "depth_source",
                 "point_estimate",
                 "distributions",
                 "ranked_picks",
@@ -4695,6 +4711,11 @@ def nfl_season_engine_simulate(
         "schedule_game_count": schedule_meta.get("schedule_game_count"),
         "roster_source": schedule_meta.get("roster_source"),
         "roster_as_of": schedule_meta.get("roster_as_of"),
+        "depth_source": schedule_meta.get("depth_source")
+        or schedule_meta.get("roster_source"),
+        "depth_as_of": schedule_meta.get("depth_as_of")
+        or schedule_meta.get("roster_as_of"),
+        "depth_named_skill_teams": schedule_meta.get("depth_named_skill_teams"),
         "season": result.season,
         "n_sims": result.n_sims,
         "games_per_season": result.games_per_season,
@@ -4759,6 +4780,11 @@ def _run_season_engine_game_boxes(
         "schedule_game_count": schedule_meta.get("schedule_game_count"),
         "roster_source": schedule_meta.get("roster_source"),
         "roster_as_of": schedule_meta.get("roster_as_of"),
+        "depth_source": schedule_meta.get("depth_source")
+        or schedule_meta.get("roster_source"),
+        "depth_as_of": schedule_meta.get("depth_as_of")
+        or schedule_meta.get("roster_as_of"),
+        "depth_named_skill_teams": schedule_meta.get("depth_named_skill_teams"),
         "season": proj.season,
         "week": proj.week,
         "game_id": proj.game_id,
@@ -4881,4 +4907,11 @@ def nfl_season_engine_survivor(
     payload["schedule_game_count"] = schedule_meta.get("schedule_game_count")
     payload["roster_source"] = schedule_meta.get("roster_source")
     payload["roster_as_of"] = schedule_meta.get("roster_as_of")
+    payload["depth_source"] = schedule_meta.get("depth_source") or schedule_meta.get(
+        "roster_source"
+    )
+    payload["depth_as_of"] = schedule_meta.get("depth_as_of") or schedule_meta.get(
+        "roster_as_of"
+    )
+    payload["depth_named_skill_teams"] = schedule_meta.get("depth_named_skill_teams")
     return payload

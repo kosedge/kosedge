@@ -2,12 +2,18 @@
 
 Default (``demo=False``): real 2026 regular-season schedule — prefer
 ``nfl_dp_schedules`` when a DB session has rows; otherwise the packaged
-wall-chart JSON (272 REG games with byes). Rosters/depth prefer
-``nfl_dp_depth_chart_weekly`` + baselines when available.
+wall-chart JSON (272 REG games with byes).
+
+Depth / roster fallback (fantasy-usable identities):
+
+1. ``nfl_dp_depth_chart_weekly`` (preferred when populated)
+2. ``nfl_dp_official_depth_charts`` (nflverse official snapshots)
+3. Packaged ``nfl_depth_chart_2026_w1.json`` (checked-in nflverse slice)
+4. ``demo_depth_chart`` (last resort / explicit ``demo=True``)
 
 ``demo=True``: explicit opt-in round-robin + sparse demo skill cores for
-offline unit tests. Never silently stay on demo when a real schedule is
-available.
+offline unit tests. Never silently stay on demo schedule/depth when a real
+artifact is available.
 
 Efficiency rates are always passed through ``calibration.apply_efficiency_priors``
 (or baseline-derived overrides) so Layer 4 is never left on uncalibrated
@@ -40,6 +46,9 @@ _PACKAGE_DATA_DIR = Path(__file__).resolve().parent / "data"
 _PACKAGED_SCHEDULE_FILES = {
     2026: _PACKAGE_DATA_DIR / "nfl_regular_schedule_2026.json",
 }
+_PACKAGED_DEPTH_FILES = {
+    2026: _PACKAGE_DATA_DIR / "nfl_depth_chart_2026_w1.json",
+}
 
 NFL_TEAMS: List[str] = [
     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
@@ -51,6 +60,13 @@ NFL_TEAMS: List[str] = [
 SCHEDULE_SOURCE_DEMO = "demo_round_robin"
 SCHEDULE_SOURCE_DB = "nfl_dp_schedules"
 SCHEDULE_SOURCE_PACKAGED = "packaged_wall_chart_2026"
+
+ROSTER_SOURCE_DEMO = "demo_depth_chart"
+ROSTER_SOURCE_WEEKLY = "nfl_dp_depth_chart_weekly"
+ROSTER_SOURCE_OFFICIAL = "nfl_dp_official_depth_charts"
+ROSTER_SOURCE_PACKAGED = "packaged_nflverse_depth_2026"
+
+_SKILL_POSITIONS = ("QB", "RB", "WR", "TE")
 
 
 def normalize_team_abbr(raw: str) -> str:
@@ -103,11 +119,230 @@ def load_packaged_regular_schedule(season: int) -> Tuple[List[ScheduledGame], Di
     return games, meta
 
 
+def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Load packaged nflverse skill-depth snapshot for ``season``.
+
+    Returns ``(rows, meta)`` where each row has team/position/depth_order/
+    player_name (+ optional player_id). Raises when the artifact is missing
+    or empty — callers fall through to demo depth.
+    """
+    path = _PACKAGED_DEPTH_FILES.get(int(season))
+    if path is None or not path.is_file():
+        raise FileNotFoundError(
+            f"No packaged depth chart for season={season} "
+            f"(expected under {_PACKAGE_DATA_DIR})"
+        )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows_raw = payload.get("rows") or []
+    rows: List[Dict[str, Any]] = []
+    for r in rows_raw:
+        team = normalize_team_abbr(str(r.get("team") or ""))
+        pos = str(r.get("position") or "").strip().upper()
+        try:
+            depth = int(r.get("depth_order") or 0)
+        except (TypeError, ValueError):
+            continue
+        name = str(r.get("player_name") or "").strip()
+        if team not in NFL_TEAMS or pos not in _SKILL_POSITIONS or depth < 1 or not name:
+            continue
+        if depth > 3:
+            continue
+        rows.append(
+            {
+                "team": team,
+                "position": pos,
+                "depth_order": depth,
+                "player_name": name,
+                "player_id": str(r.get("player_id") or ""),
+                "role_confidence": float(r.get("role_confidence") or (0.85 if depth == 1 else 0.6)),
+            }
+        )
+    if not rows:
+        raise ValueError(f"Packaged depth chart empty: {path}")
+    meta = {
+        "roster_source": str(payload.get("source") or ROSTER_SOURCE_PACKAGED),
+        "roster_as_of": str(payload.get("as_of") or payload.get("as_of_timestamp") or ""),
+        "depth_path": str(path.name),
+        "depth_row_count": len(rows),
+        "depth_upstream": str(payload.get("upstream") or "nflverse"),
+        "depth_week": int(payload.get("week") or 1),
+    }
+    return rows, meta
+
+
+def _role_from_depth_row(
+    *,
+    team: str,
+    pos: str,
+    depth: int,
+    name: str,
+    source: str,
+    role_confidence: Optional[float] = None,
+    baseline_eff: Optional[Mapping[str, Dict[str, float]]] = None,
+) -> Tuple[PlayerRole, bool]:
+    """Build a PlayerRole from a depth-chart identity + share priors."""
+    conf = (
+        float(role_confidence)
+        if role_confidence is not None
+        else (0.7 if depth == 1 else 0.5)
+    )
+    role = PlayerRole(
+        player_key=f"{team}-{pos}{depth}-{name}".replace(" ", ""),
+        player_name=name,
+        team=team,
+        position=pos,
+        depth_order=depth,
+        snap_share=(
+            {1: 0.9, 2: 0.45, 3: 0.2}.get(depth, 0.1)
+            if pos == "QB"
+            else {1: 0.65, 2: 0.38, 3: 0.18}.get(depth, 0.1)
+        ),
+        target_share=(
+            {1: 0.22, 2: 0.14, 3: 0.08}.get(depth, 0.05)
+            if pos in ("WR", "TE")
+            else ({1: 0.10, 2: 0.05}.get(depth, 0.03) if pos == "RB" else 0.0)
+        ),
+        rush_share=(
+            {1: 0.52, 2: 0.26, 3: 0.12}.get(depth, 0.05)
+            if pos == "RB"
+            else ({1: 0.07}.get(depth, 0.02) if pos == "QB" else 0.0)
+        ),
+        route_share={1: 0.85, 2: 0.65, 3: 0.4}.get(depth, 0.2) if pos in ("WR", "TE") else 0.2,
+        red_zone_share=(
+            {1: 0.22, 2: 0.12, 3: 0.07}.get(depth, 0.04)
+            if pos in ("WR", "TE", "RB")
+            else 0.05
+        ),
+        role_confidence=conf,
+        source=source,
+    )
+    hit = False
+    key = f"{team}|{pos}|{name}".upper()
+    overrides = (baseline_eff or {}).get(key)
+    if overrides:
+        hit = True
+        role = apply_efficiency_priors(role, overrides=overrides, source_suffix="baseline_efficiency")
+    else:
+        role = apply_efficiency_priors(role, source_suffix="league_efficiency_v1")
+    return role, hit
+
+
+def _rosters_from_depth_rows(
+    depth_rows: Sequence[Mapping[str, Any]],
+    *,
+    source: str,
+    baseline_eff: Optional[Mapping[str, Dict[str, float]]] = None,
+) -> Tuple[Dict[str, List[PlayerRole]], int, Dict[str, Any]]:
+    """Map depth rows → per-team skill roles + coverage stats."""
+    rosters: Dict[str, List[PlayerRole]] = {t: [] for t in NFL_TEAMS}
+    baseline_hits = 0
+    seen: set[Tuple[str, str, int]] = set()
+    for r in depth_rows:
+        team = normalize_team_abbr(str(r.get("team") or getattr(r, "team", "") or ""))
+        if team not in rosters:
+            continue
+        pos = str(r.get("position") or getattr(r, "position", "") or "").strip().upper()
+        try:
+            depth = int(r.get("depth_order") or getattr(r, "depth_order", 1) or 1)
+        except (TypeError, ValueError):
+            continue
+        if pos not in _SKILL_POSITIONS or depth < 1 or depth > 3:
+            continue
+        key = (team, pos, depth)
+        if key in seen:
+            continue
+        seen.add(key)
+        name = str(
+            r.get("player_name") or getattr(r, "player_name", None) or f"{team} {pos}{depth}"
+        ).strip()
+        conf_raw = r.get("role_confidence")
+        if conf_raw is None:
+            conf_raw = getattr(r, "role_confidence", None)
+        role, hit = _role_from_depth_row(
+            team=team,
+            pos=pos,
+            depth=depth,
+            name=name,
+            source=source,
+            role_confidence=float(conf_raw) if conf_raw is not None else None,
+            baseline_eff=baseline_eff,
+        )
+        if hit:
+            baseline_hits += 1
+        rosters[team].append(role)
+
+    named_skill_teams = 0
+    teams_with_qb1_rb1_wr1_te1 = 0
+    for team in NFL_TEAMS:
+        roles = rosters[team]
+        if not roles:
+            continue
+        generic_prefix = f"{team} "
+        if any(not role.player_name.startswith(generic_prefix) for role in roles):
+            named_skill_teams += 1
+        starters = {
+            (role.position, role.depth_order)
+            for role in roles
+            if role.depth_order == 1 and role.position in _SKILL_POSITIONS
+        }
+        if all((p, 1) in starters for p in _SKILL_POSITIONS):
+            teams_with_qb1_rb1_wr1_te1 += 1
+
+    coverage = {
+        "depth_team_count": sum(1 for t in NFL_TEAMS if rosters[t]),
+        "depth_named_skill_teams": named_skill_teams,
+        "depth_full_skill_starter_teams": teams_with_qb1_rb1_wr1_te1,
+        "depth_player_rows": sum(len(rosters[t]) for t in NFL_TEAMS),
+    }
+    return rosters, baseline_hits, coverage
+
+
+def depth_coverage_from_rosters(rosters: Mapping[str, Sequence[PlayerRole]]) -> Dict[str, Any]:
+    """Compute depth coverage counters for status / notes."""
+    named_skill_teams = 0
+    teams_with_qb1_rb1_wr1_te1 = 0
+    team_count = 0
+    player_rows = 0
+    for team in NFL_TEAMS:
+        roles = list(rosters.get(team) or [])
+        if not roles:
+            continue
+        team_count += 1
+        player_rows += len(roles)
+        generic_prefix = f"{team} "
+        if any(not role.player_name.startswith(generic_prefix) for role in roles):
+            named_skill_teams += 1
+        starters = {
+            (role.position, role.depth_order)
+            for role in roles
+            if role.depth_order == 1 and role.position in _SKILL_POSITIONS
+        }
+        if all((p, 1) in starters for p in _SKILL_POSITIONS):
+            teams_with_qb1_rb1_wr1_te1 += 1
+    return {
+        "depth_team_count": team_count,
+        "depth_named_skill_teams": named_skill_teams,
+        "depth_full_skill_starter_teams": teams_with_qb1_rb1_wr1_te1,
+        "depth_player_rows": player_rows,
+    }
+
+
 def universe_schedule_meta(universe: EngineUniverse) -> Dict[str, Any]:
-    """Extract mode / schedule_source / counts from universe notes."""
+    """Extract mode / schedule_source / depth coverage from universe notes."""
     notes = universe.notes or {}
     source = str(notes.get("schedule_source") or "")
     mode = str(notes.get("mode") or ("demo" if source == SCHEDULE_SOURCE_DEMO else "real"))
+    roster_source = str(notes.get("roster_source") or "")
+    roster_as_of = str(notes.get("roster_as_of") or "")
+    coverage = {
+        "depth_team_count": notes.get("depth_team_count"),
+        "depth_named_skill_teams": notes.get("depth_named_skill_teams"),
+        "depth_full_skill_starter_teams": notes.get("depth_full_skill_starter_teams"),
+        "depth_player_rows": notes.get("depth_player_rows"),
+    }
+    # Prefer notes; else derive from live roster book.
+    if coverage["depth_team_count"] in (None, ""):
+        coverage = depth_coverage_from_rosters(universe.rosters or {})
     return {
         "mode": mode,
         "schedule_source": source or (
@@ -115,8 +350,17 @@ def universe_schedule_meta(universe: EngineUniverse) -> Dict[str, Any]:
         ),
         "schedule_game_count": len(universe.schedule),
         "schedule_as_of": notes.get("schedule_as_of") or "",
-        "roster_source": notes.get("roster_source") or "",
-        "roster_as_of": notes.get("roster_as_of") or "",
+        "roster_source": roster_source,
+        "roster_as_of": roster_as_of,
+        # Aliases requested by ops/status consumers.
+        "depth_source": roster_source,
+        "depth_as_of": roster_as_of,
+        "depth_team_count": int(coverage.get("depth_team_count") or 0),
+        "depth_named_skill_teams": int(coverage.get("depth_named_skill_teams") or 0),
+        "depth_full_skill_starter_teams": int(
+            coverage.get("depth_full_skill_starter_teams") or 0
+        ),
+        "depth_player_rows": int(coverage.get("depth_player_rows") or 0),
         "schedule_note": notes.get("schedule") or "",
         "roster_note": notes.get("rosters") or "",
     }
@@ -329,12 +573,15 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
     murky_wr_teams = sorted(
         t for t, s in depth_structures.items() if s.wr_hierarchy == "murky"
     )
+    coverage = depth_coverage_from_rosters(rosters)
     notes = {
         "mode": "demo",
         "schedule_source": SCHEDULE_SOURCE_DEMO,
         "schedule_as_of": "",
-        "roster_source": "demo_depth_chart",
+        "roster_source": ROSTER_SOURCE_DEMO,
         "roster_as_of": "2025_offseason_approx",
+        "depth_source": ROSTER_SOURCE_DEMO,
+        "depth_as_of": "2025_offseason_approx",
         "schedule": (
             "PLACEHOLDER round-robin (272 games, no byes). Explicit demo=true only; "
             "default prefers real 2026 schedule."
@@ -349,6 +596,7 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
             f"murky_wr={','.join(murky_wr_teams) or 'none'}"
         ),
         "calibration": CALIBRATION_TAG,
+        **coverage,
         **{f"cal_{k}": v for k, v in calibration_notes().items()},
     }
     return EngineUniverse(
@@ -503,11 +751,13 @@ def load_universe_from_db(
                 "source": "placeholder_league_avg",
             }
 
-    depth_rows = session.execute(
+    baseline_eff = _load_baseline_efficiency_map(session, season=season, as_of_week=as_of_week)
+
+    weekly_rows = session.execute(
         text(
             """
             SELECT DISTINCT ON (team, position, depth_order)
-              team, player_name, position, depth_order
+              team, player_name, position, depth_order, role_confidence
             FROM nfl_dp_depth_chart_weekly
             WHERE season = :season
               AND week <= :week
@@ -518,44 +768,48 @@ def load_universe_from_db(
         {"season": int(season), "week": int(as_of_week)},
     ).fetchall()
 
-    baseline_eff = _load_baseline_efficiency_map(session, season=season, as_of_week=as_of_week)
+    official_rows: List[Any] = []
+    if not weekly_rows:
+        try:
+            official_rows = session.execute(
+                text(
+                    """
+                    SELECT DISTINCT ON (team, position, depth_order)
+                      team, player_name, position, depth_order
+                    FROM (
+                      SELECT
+                        team,
+                        player_name,
+                        position,
+                        depth_team AS depth_order,
+                        week
+                      FROM nfl_dp_official_depth_charts
+                      WHERE season = :season
+                        AND week <= :week
+                        AND position IN ('QB', 'RB', 'WR', 'TE')
+                        AND depth_team BETWEEN 1 AND 3
+                    ) official
+                    ORDER BY team, position, depth_order, week DESC
+                    """
+                ),
+                {"season": int(season), "week": int(as_of_week)},
+            ).fetchall()
+        except Exception:
+            official_rows = []
+
+    rosters: Dict[str, List[PlayerRole]]
+    roster_source = ROSTER_SOURCE_DEMO
+    roster_as_of = f"season={season};as_of_week<={as_of_week}"
+    coverage: Dict[str, Any] = {}
     baseline_hits = 0
 
-    rosters: Dict[str, List[PlayerRole]] = {t: [] for t in NFL_TEAMS}
-    roster_source = "demo_depth_chart"
-    roster_as_of = f"season={season};as_of_week<={as_of_week}"
-    if depth_rows:
-        for r in depth_rows:
-            team = normalize_team_abbr(r.team)
-            if team not in rosters:
-                continue
-            pos = str(r.position)
-            depth = int(r.depth_order or 1)
-            if depth > 3:
-                continue
-            name = str(r.player_name or f"{team} {pos}{depth}")
-            role = PlayerRole(
-                player_key=f"{team}-{pos}{depth}-{name}".replace(" ", ""),
-                player_name=name,
-                team=team,
-                position=pos,
-                depth_order=depth,
-                snap_share={1: 0.9, 2: 0.45, 3: 0.2}.get(depth, 0.1) if pos == "QB" else {1: 0.65, 2: 0.38, 3: 0.18}.get(depth, 0.1),
-                target_share={1: 0.22, 2: 0.14, 3: 0.08}.get(depth, 0.05) if pos in ("WR", "TE") else ({1: 0.10, 2: 0.05}.get(depth, 0.03) if pos == "RB" else 0.0),
-                rush_share={1: 0.52, 2: 0.26, 3: 0.12}.get(depth, 0.05) if pos == "RB" else ({1: 0.07}.get(depth, 0.02) if pos == "QB" else 0.0),
-                route_share={1: 0.85, 2: 0.65, 3: 0.4}.get(depth, 0.2) if pos in ("WR", "TE") else 0.2,
-                role_confidence=0.7 if depth == 1 else 0.5,
-                source="depth_chart_weekly",
-            )
-            key = f"{team}|{pos}|{name}".upper()
-            overrides = baseline_eff.get(key)
-            if overrides:
-                baseline_hits += 1
-                role = apply_efficiency_priors(role, overrides=overrides, source_suffix="baseline_efficiency")
-            else:
-                role = apply_efficiency_priors(role, source_suffix="league_efficiency_v1")
-            rosters[team].append(role)
-        roster_source = "nfl_dp_depth_chart_weekly"
+    if weekly_rows:
+        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+            [dict(r._mapping) for r in weekly_rows],  # type: ignore[attr-defined]
+            source="depth_chart_weekly",
+            baseline_eff=baseline_eff,
+        )
+        roster_source = ROSTER_SOURCE_WEEKLY
         if baseline_hits:
             roster_note = (
                 f"REAL depth chart identities; efficiency from baselines "
@@ -566,20 +820,50 @@ def load_universe_from_db(
                 "REAL depth chart identities; PLACEHOLDER league efficiency priors "
                 "(nfl_player_projection_baselines unavailable or empty for as_of_week)"
             )
+    elif official_rows:
+        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+            [dict(r._mapping) for r in official_rows],  # type: ignore[attr-defined]
+            source="official_depth_charts",
+            baseline_eff=baseline_eff,
+        )
+        roster_source = ROSTER_SOURCE_OFFICIAL
+        roster_as_of = f"season={season};official_as_of_week<={as_of_week}"
+        roster_note = (
+            "REAL nflverse official depth identities "
+            "(weekly inferred table empty; bridged from nfl_dp_official_depth_charts)"
+        )
     else:
-        for team in NFL_TEAMS:
-            rows = _DEMO_SKILL.get(team) or _generic_skill(team)
-            rosters[team] = [_role_from_demo(team, r) for r in rows]
-        roster_source = "demo_depth_chart"
-        roster_as_of = "2025_offseason_approx"
-        roster_note = "PLACEHOLDER demo rosters (depth chart empty)"
+        try:
+            packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
+            rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+                packaged_rows,
+                source=ROSTER_SOURCE_PACKAGED,
+                baseline_eff=baseline_eff,
+            )
+            roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
+            roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
+            roster_note = (
+                "REAL packaged nflverse depth snapshot "
+                "(DB weekly + official empty for season)"
+            )
+        except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
+            rosters = {}
+            for team in NFL_TEAMS:
+                rows = _DEMO_SKILL.get(team) or _generic_skill(team)
+                rosters[team] = [_role_from_demo(team, r) for r in rows]
+            roster_source = ROSTER_SOURCE_DEMO
+            roster_as_of = "2025_offseason_approx"
+            roster_note = "PLACEHOLDER demo rosters (all real depth sources empty)"
+            coverage = depth_coverage_from_rosters(rosters)
 
     for team in NFL_TEAMS:
-        if not rosters[team]:
+        if not rosters.get(team):
             rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
 
     rosters = annotate_roster_book(rosters)
     rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
+    if not coverage:
+        coverage = depth_coverage_from_rosters(rosters)
     strength_note = (
         f"REAL epa_prior for {epa_count}/32 teams; else placeholder_league_avg"
         if epa_count
@@ -598,46 +882,80 @@ def load_universe_from_db(
             "schedule_as_of": schedule_as_of,
             "roster_source": roster_source,
             "roster_as_of": roster_as_of,
+            "depth_source": roster_source,
+            "depth_as_of": roster_as_of,
             "schedule": schedule_note,
             "strengths": strength_note,
             "rosters": f"{roster_note}; usage_role taxonomy annotated",
             "calibration": CALIBRATION_TAG,
+            **coverage,
             **{f"cal_{k}": v for k, v in calibration_notes().items()},
         },
     )
 
 
 def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
-    """Real packaged schedule + offline demo skill cores (no DB required).
+    """Real packaged schedule + packaged nflverse depth (no DB required).
 
     Used when DB is unreachable or empty so the engine still projects against
-    the actual 2026 slate (with byes) instead of inventing round-robin.
+    the actual 2026 slate (with byes) and real skill identities instead of
+    inventing round-robin / demo generics.
     """
     schedule, pkg_meta = load_packaged_regular_schedule(season)
     demo = build_demo_universe(season=season)
+
+    roster_source = ROSTER_SOURCE_DEMO
+    roster_as_of = "2025_offseason_approx"
+    roster_note = (
+        "Offline demo skill cores (packaged depth missing); "
+        "prefer nfl_dp_depth_chart_weekly when DB is up."
+    )
+    rosters = demo.rosters
+    coverage: Dict[str, Any] = {}
+    try:
+        packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
+        rosters, _hits, coverage = _rosters_from_depth_rows(
+            packaged_rows,
+            source=ROSTER_SOURCE_PACKAGED,
+            baseline_eff=None,
+        )
+        for team in NFL_TEAMS:
+            if not rosters.get(team):
+                rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
+        rosters = annotate_roster_book(rosters)
+        rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
+        roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
+        roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
+        roster_note = (
+            f"REAL packaged nflverse depth ({coverage.get('depth_named_skill_teams', 0)}/32 "
+            "named skill teams); DB weekly preferred when populated."
+        )
+    except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
+        coverage = depth_coverage_from_rosters(rosters)
+
     notes = dict(demo.notes)
     notes.update(
         {
             "mode": "real",
             "schedule_source": str(pkg_meta.get("schedule_source") or SCHEDULE_SOURCE_PACKAGED),
             "schedule_as_of": str(pkg_meta.get("schedule_as_of") or ""),
-            "roster_source": "demo_depth_chart",
-            "roster_as_of": "2025_offseason_approx",
+            "roster_source": roster_source,
+            "roster_as_of": roster_as_of,
+            "depth_source": roster_source,
+            "depth_as_of": roster_as_of,
             "schedule": (
                 f"REAL packaged 2026 REG schedule ({len(schedule)} games, byes). "
-                "DB unavailable — depth/strength still offline demo priors."
+                "DB unavailable — using packaged offline artifacts."
             ),
-            "rosters": (
-                "Offline demo skill cores (5 named teams + generics) on real schedule; "
-                "prefer nfl_dp_depth_chart_weekly when DB is up."
-            ),
+            "rosters": roster_note,
+            **coverage,
         }
     )
     return EngineUniverse(
         season=season,
         schedule=schedule,
         strengths=demo.strengths,
-        rosters=demo.rosters,
+        rosters=rosters,
         notes=notes,
     )
 

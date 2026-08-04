@@ -63,7 +63,7 @@ describe("nfl-season-engine-format", () => {
     expect(
       buildStarOutInjuryPath({
         team: "SF",
-        playerName: "C.McCaffrey",
+        playerName: "Christian McCaffrey",
         week: 4,
       }),
     ).toEqual({
@@ -71,10 +71,10 @@ describe("nfl-season-engine-format", () => {
       status: "out",
       week_start: 4,
       week_end: 4,
-      player_name: "C.McCaffrey",
+      player_name: "Christian McCaffrey",
     });
     expect(starOutOptionsForMatchup("SF", "KC").map((s) => s.playerName)).toEqual(
-      expect.arrayContaining(["C.McCaffrey", "P.Mahomes"]),
+      expect.arrayContaining(["Christian McCaffrey", "Patrick Mahomes"]),
     );
   });
 

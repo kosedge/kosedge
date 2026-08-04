@@ -19,10 +19,10 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.9: real 2026 regular-season schedule cutover (272 REG games + byes).
-# Modeling layers unchanged from v1.8 coaching; data/schedule default flips
-# from demo round-robin to packaged wall-chart / nfl_dp_schedules.
-ENGINE_VERSION = "nfl-season-engine-v1.9-real-2026"
+# v1.9.1: real 2026 depth-chart cutover (nflverse / DB weekly / packaged).
+# Modeling layers unchanged from v1.9; roster default leaves demo_depth_chart
+# when real depth is present (DB weekly → official → packaged → demo).
+ENGINE_VERSION = "nfl-season-engine-v1.9.1-real-depth"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
