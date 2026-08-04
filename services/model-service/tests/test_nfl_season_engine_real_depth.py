@@ -26,6 +26,7 @@ def test_engine_version_real_depth() -> None:
     assert (
         "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
+        or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

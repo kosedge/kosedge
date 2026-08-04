@@ -1,6 +1,6 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
-import SeasonEngineSurvivorClient from "@/components/pro/nfl/SeasonEngineSurvivorClient";
+import SeasonEngineSurvivorShell from "@/components/pro/nfl/SeasonEngineSurvivorShell";
 import {
   fetchSeasonEngineStatus,
   loadSeasonEngineMatchups,
@@ -19,8 +19,8 @@ export default async function NflSurvivorPage() {
       sportKey="nfl"
       sportName="NFL"
       base="/pro/nfl"
-      title="Survivor Helper"
-      summary="Mark used teams, choose a future week, and rank remaining picks from path-coherent season sims. Byes are excluded; scores are inspectable heuristics."
+      title="Survivor Planner"
+      summary="Plan the full slate week-by-week, or rank a single week. Locked teams stay used; path survival scores the joint slate from season sims."
       badge="Season engine · survivor"
       primaryHref="/pro/nfl/game-boxes"
       primaryLabel="Game Boxes"
@@ -54,6 +54,10 @@ export default async function NflSurvivorPage() {
           {status.depth_as_of || status.roster_as_of
             ? ` (as of ${status.depth_as_of || status.roster_as_of})`
             : ""}
+          {Array.isArray(status.capabilities) &&
+          status.capabilities.includes("survivor_planner")
+            ? " · planner ready"
+            : ""}
         </p>
       ) : (
         <p className="mb-4 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-xs text-red-200">
@@ -61,11 +65,14 @@ export default async function NflSurvivorPage() {
         </p>
       )}
 
-      <SeasonEngineSurvivorClient
-        defaultWeek={slate.currentWeek && slate.currentWeek >= 1 ? slate.currentWeek : 1}
+      <SeasonEngineSurvivorShell
+        defaultWeek={
+          slate.currentWeek && slate.currentWeek >= 1 ? slate.currentWeek : 1
+        }
         engineVersion={status.engine_version || undefined}
         depthSource={status.depth_source || status.roster_source}
         depthAsOf={status.depth_as_of || status.roster_as_of}
+        defaultMode="planner"
       />
     </SportHubShell>
   );

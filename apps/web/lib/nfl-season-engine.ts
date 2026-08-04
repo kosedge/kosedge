@@ -4,6 +4,7 @@ import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import {
   buildGameBoxesQuery,
   buildSurvivorBody,
+  buildSurvivorPlanBody,
   type InjuryPathInput,
   type SeasonEngineMatchupOption,
 } from "@/lib/nfl-season-engine-format";
@@ -94,6 +95,37 @@ export type SeasonEngineSurvivorResponse = {
   already_used: string[];
   ranked_picks: SeasonEngineSurvivorPick[];
   all_teams_week?: SeasonEngineSurvivorPick[];
+  formula?: Record<string, string>;
+  notes?: Record<string, string>;
+  diagnostics?: Record<string, unknown>;
+  error?: string;
+};
+
+export type SeasonEngineSurvivorPlanWeek = {
+  week: number;
+  status: "locked" | "open" | string;
+  locked_team?: string | null;
+  locked_pick?: SeasonEngineSurvivorPick | null;
+  ranked_picks: SeasonEngineSurvivorPick[];
+};
+
+export type SeasonEngineSurvivorPlanResponse = {
+  mode: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  roster_source?: string;
+  roster_as_of?: string;
+  season: number;
+  n_sims: number;
+  engine_version: string;
+  locked_picks: Record<string, string>;
+  used_teams: string[];
+  weeks: SeasonEngineSurvivorPlanWeek[];
+  path_survival: number;
+  path_survival_pct: number;
+  path_strength: string;
+  path_strength_geo?: number | null;
+  locked_pick_count: number;
   formula?: Record<string, string>;
   notes?: Record<string, string>;
   diagnostics?: Record<string, unknown>;
@@ -474,6 +506,132 @@ export async function fetchSeasonEngineSurvivor(input: {
       already_used: body.already_used,
       ranked_picks: [],
       error: err instanceof Error ? err.message : "Survivor unreachable",
+    };
+  }
+}
+
+export async function fetchSeasonEngineSurvivorPlan(input: {
+  picks?: Record<string, string> | Record<number, string>;
+  nSims?: number;
+  season?: number;
+  seed?: number;
+  demo?: boolean;
+  topN?: number;
+  injuryPaths?: InjuryPathInput[];
+  includeDiagnostics?: boolean;
+}): Promise<SeasonEngineSurvivorPlanResponse> {
+  const base = baseUrl();
+  if (!base) {
+    return {
+      mode: "",
+      season: 2026,
+      n_sims: 0,
+      engine_version: "",
+      locked_picks: {},
+      used_teams: [],
+      weeks: [],
+      path_survival: 0,
+      path_survival_pct: 0,
+      path_strength: "Empty",
+      locked_pick_count: 0,
+      error: "MODEL_SERVICE_URL is not configured.",
+    };
+  }
+
+  const body = buildSurvivorPlanBody(input);
+  try {
+    const res = await upstreamFetch(`${base}/nfl/season-engine/survivor/plan`, {
+      method: "POST",
+      headers: modelHeaders(),
+      timeoutMs: 45_000,
+      cache: "no-store",
+      body: JSON.stringify(body),
+    });
+    const payload = await readJson(res);
+    if (!res.ok) {
+      return {
+        mode: "",
+        season: body.season,
+        n_sims: body.n_sims,
+        engine_version: "",
+        locked_picks: body.picks,
+        used_teams: Object.values(body.picks),
+        weeks: [],
+        path_survival: 0,
+        path_survival_pct: 0,
+        path_strength: "Empty",
+        locked_pick_count: Object.keys(body.picks).length,
+        error: detailError(payload, `Survivor plan failed (${res.status})`),
+      };
+    }
+    return {
+      mode: String(payload.mode ?? ""),
+      schedule_source:
+        typeof payload.schedule_source === "string"
+          ? payload.schedule_source
+          : undefined,
+      schedule_game_count:
+        typeof payload.schedule_game_count === "number"
+          ? payload.schedule_game_count
+          : undefined,
+      roster_source:
+        typeof payload.roster_source === "string"
+          ? payload.roster_source
+          : undefined,
+      roster_as_of:
+        typeof payload.roster_as_of === "string"
+          ? payload.roster_as_of
+          : undefined,
+      season: Number(payload.season ?? body.season),
+      n_sims: Number(payload.n_sims ?? body.n_sims),
+      engine_version: String(payload.engine_version ?? ""),
+      locked_picks:
+        payload.locked_picks && typeof payload.locked_picks === "object"
+          ? (payload.locked_picks as Record<string, string>)
+          : body.picks,
+      used_teams: Array.isArray(payload.used_teams)
+        ? (payload.used_teams as string[])
+        : Object.values(body.picks),
+      weeks: Array.isArray(payload.weeks)
+        ? (payload.weeks as SeasonEngineSurvivorPlanWeek[])
+        : [],
+      path_survival: Number(payload.path_survival ?? 0),
+      path_survival_pct: Number(payload.path_survival_pct ?? 0),
+      path_strength: String(payload.path_strength ?? "Empty"),
+      path_strength_geo:
+        typeof payload.path_strength_geo === "number"
+          ? payload.path_strength_geo
+          : null,
+      locked_pick_count: Number(
+        payload.locked_pick_count ?? Object.keys(body.picks).length,
+      ),
+      formula:
+        payload.formula && typeof payload.formula === "object"
+          ? (payload.formula as Record<string, string>)
+          : undefined,
+      notes:
+        payload.notes && typeof payload.notes === "object"
+          ? (payload.notes as Record<string, string>)
+          : undefined,
+      diagnostics:
+        payload.diagnostics && typeof payload.diagnostics === "object"
+          ? (payload.diagnostics as Record<string, unknown>)
+          : undefined,
+    };
+  } catch (err) {
+    return {
+      mode: "",
+      season: body.season,
+      n_sims: body.n_sims,
+      engine_version: "",
+      locked_picks: body.picks,
+      used_teams: Object.values(body.picks),
+      weeks: [],
+      path_survival: 0,
+      path_survival_pct: 0,
+      path_strength: "Empty",
+      locked_pick_count: Object.keys(body.picks).length,
+      error: err instanceof Error ? err.message : "Survivor plan unreachable",
     };
   }
 }

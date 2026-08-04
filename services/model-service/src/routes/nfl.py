@@ -4462,8 +4462,32 @@ class SeasonEngineSurvivorBody(BaseModel):
     )
 
 
+class SeasonEngineSurvivorPlanBody(BaseModel):
+    """Multi-week survivor planner request (locked picks + open-week ranks)."""
+
+    season: int = Field(2026, ge=2010, le=2100)
+    n_sims: int = Field(300, ge=1, le=2000)
+    seed: int = 42
+    picks: Dict[str, str] = Field(
+        default_factory=dict,
+        description='Locked picks as {"1": "KC", "2": "BUF", ...}',
+    )
+    injury_paths: Optional[List[SeasonEngineInjuryPathBody]] = None
+    demo: bool = False
+    as_of_week: int = Field(1, ge=1, le=18)
+    top_n: int = Field(8, ge=1, le=32)
+    include_diagnostics: bool = Field(
+        True,
+        description="Include path / bye / injury diagnostics (default on)",
+    )
+
+
 def _season_engine_injury_paths(
-    body: Optional[SeasonEngineRequestBody | SeasonEngineSurvivorBody],
+    body: Optional[
+        SeasonEngineRequestBody
+        | SeasonEngineSurvivorBody
+        | SeasonEngineSurvivorPlanBody
+    ],
 ) -> list:
     from src.services.nfl_season_engine import parse_injury_paths
 
@@ -4485,7 +4509,10 @@ def nfl_season_engine_status(
     )
     from src.services.nfl_season_engine.loaders import resolve_season_universe
     from src.services.nfl_season_engine.player_usage import usage_rules_documentation
-    from src.services.nfl_season_engine.survivor import FORMULA_NOTES
+    from src.services.nfl_season_engine.survivor import (
+        FORMULA_NOTES,
+        PATH_FORMULA_NOTES,
+    )
     from src.services.nfl_season_engine.usage_roles import USAGE_ROLE_LABELS
 
     schedule_meta: Dict[str, Any] = {}
@@ -4550,6 +4577,7 @@ def nfl_season_engine_status(
             "red_zone_scoring_usage",
             "coaching_tendencies",
             "survivor",
+            "survivor_planner",
             "include_diagnostics",
             "real_2026_schedule",
             "real_2026_depth",
@@ -4567,6 +4595,9 @@ def nfl_season_engine_status(
                 "distributions",
                 "ranked_picks",
                 "already_used",
+                "locked_picks",
+                "path_survival",
+                "path_strength",
                 "team_wins",
                 "usage_role",
             ],
@@ -4586,6 +4617,8 @@ def nfl_season_engine_status(
             "formula": FORMULA_NOTES,
             "default_n_sims": 300,
             "mode": "team_wl_paths (Layers 1–2; skips player boxes)",
+            "planner_endpoint": "POST /nfl/season-engine/survivor/plan",
+            "planner_formula": PATH_FORMULA_NOTES,
         },
         "injury_paths": {
             "module": "src.services.nfl_season_engine.injury_paths",
@@ -4595,6 +4628,7 @@ def nfl_season_engine_status(
                 "POST /nfl/season-engine/simulate",
                 "POST /nfl/season-engine/game-boxes",
                 "POST /nfl/season-engine/survivor",
+                "POST /nfl/season-engine/survivor/plan",
             ],
             "reallocation": (
                 "role-aware sinks (usage_roles.INJURY_REALLOC_RULES) + "
@@ -4646,6 +4680,7 @@ def nfl_season_engine_status(
             "simulate": "POST /nfl/season-engine/simulate",
             "game_boxes": "GET|POST /nfl/season-engine/game-boxes",
             "survivor": "POST /nfl/season-engine/survivor",
+            "survivor_plan": "POST /nfl/season-engine/survivor/plan",
             "cli": "scripts/nfl/run_hierarchical_season_sim.py",
             "cli_survivor": "scripts/nfl/run_survivor_evaluate.py",
             "cli_harden": "scripts/nfl/harden_validate_season_engine.py",
@@ -4901,6 +4936,73 @@ def nfl_season_engine_survivor(
         top_n=body.top_n,
         include_diagnostics=body.include_diagnostics,
     )
+    payload = result.to_dict()
+    payload["mode"] = schedule_meta.get("mode") or ("demo" if body.demo else "real")
+    payload["schedule_source"] = schedule_meta.get("schedule_source")
+    payload["schedule_game_count"] = schedule_meta.get("schedule_game_count")
+    payload["roster_source"] = schedule_meta.get("roster_source")
+    payload["roster_as_of"] = schedule_meta.get("roster_as_of")
+    payload["depth_source"] = schedule_meta.get("depth_source") or schedule_meta.get(
+        "roster_source"
+    )
+    payload["depth_as_of"] = schedule_meta.get("depth_as_of") or schedule_meta.get(
+        "roster_as_of"
+    )
+    payload["depth_named_skill_teams"] = schedule_meta.get("depth_named_skill_teams")
+    return payload
+
+
+@router.post("/season-engine/survivor/plan")
+def nfl_season_engine_survivor_plan(
+    body: SeasonEngineSurvivorPlanBody = Body(...),
+) -> Dict[str, Any]:
+    """Multi-week survivor planner: path survival + open-week recommendations.
+
+    One season-sim pass ranks every unlocked week (respecting used teams) and
+    reports joint ``path_survival`` for the locked slate.
+
+    Example body::
+
+        {
+          "season": 2026,
+          "n_sims": 300,
+          "picks": {"1": "KC", "2": "BUF"},
+          "seed": 42,
+          "demo": false,
+          "top_n": 8
+        }
+    """
+    from src.services.nfl_season_engine import (
+        evaluate_survivor_plan,
+        resolve_season_universe,
+    )
+
+    injury_paths = _season_engine_injury_paths(body)
+    session = None if body.demo else SessionLocal()
+    try:
+        universe, schedule_meta = resolve_season_universe(
+            season=body.season,
+            as_of_week=body.as_of_week,
+            demo=body.demo,
+            session=session,
+        )
+    finally:
+        if session is not None:
+            session.close()
+
+    try:
+        result = evaluate_survivor_plan(
+            universe,
+            picks=body.picks,
+            n_sims=body.n_sims,
+            seed=body.seed,
+            injury_paths=injury_paths,
+            top_n=body.top_n,
+            include_diagnostics=body.include_diagnostics,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
     payload = result.to_dict()
     payload["mode"] = schedule_meta.get("mode") or ("demo" if body.demo else "real")
     payload["schedule_source"] = schedule_meta.get("schedule_source")

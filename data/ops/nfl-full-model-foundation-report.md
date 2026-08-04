@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.9.2-smoke-polish` (real 2026 schedule + real nflverse depth identities; calibrated base + injury paths + deeper Layer-3 usage + survivor + harden/validate + depth-chart committees/volatility + stronger game-script/play-calling + red-zone/scoring usage + coaching tendencies; see `nfl-season-engine-real-2026-20260803.md`, `nfl-season-engine-real-depth-20260804.md`, `nfl-season-engine-final-smoke-20260804.md`, `nfl-season-engine-api-contract-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.10-survivor-planner` (real 2026 schedule + real nflverse depth + multi-week survivor planner; see `nfl-survivor-planner-20260804.md`, `nfl-season-engine-real-2026-20260803.md`, `nfl-season-engine-real-depth-20260804.md`, `nfl-season-engine-final-smoke-20260804.md`, `nfl-season-engine-api-contract-20260803.md`)  
 **Date:** 2026-08-04  
-**Status:** **Ready for Pro use** (v1.9.2 smoke/trust + light UI polish). Working structure + path-coherent season sim + future-game player boxes. **v1.9** real 2026 REG schedule (272 + byes). **v1.9.1** real depth: DB weekly → official nflverse → packaged skill snapshot → demo last resort; status exposes `depth_source` / coverage. **v1.9.2** final smoke passed (injuries, survivor byes, box sanity); synthetic/bye matchups labeled in notes + UI. Modeling layers unchanged from v1.8 coaching — remaining caveats: camp depth churn, league efficiency priors, survivor heuristics (not pool EV).
+**Status:** **Ready for Pro use** (v1.10 survivor planner). Working structure + path-coherent season sim + future-game player boxes. **v1.9** real 2026 REG schedule (272 + byes). **v1.9.1** real depth. **v1.9.2** final smoke. **v1.10** multi-week planner: one sim pass → per-week ranks (used-team exclusion) + joint `path_survival` for locked picks; UI at `/pro/nfl/survivor` planner tab. Modeling layers unchanged from v1.9.2 — caveats: camp depth churn, league efficiency priors, survivor heuristics (not pool EV).
 
 ## Goal (this pass)
 
@@ -28,7 +28,7 @@ Orchestration:
 
 - `season_sim.py` — N path-coherent full seasons
 - `game_query.py` — single future-game Monte Carlo boxes
-- `survivor.py` — team W/L season paths + survivor week / path-value scores
+- `survivor.py` — team W/L season paths + survivor week / path-value scores + multi-week planner (`evaluate_survivor_plan`)
 - `loaders.py` — DB universe or offline demo universe
 
 ## Entry points
@@ -51,6 +51,7 @@ HTTP (additive on model-service; does **not** touch Edge Board / Model-vs-KEI #7
 - `GET  /nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&n_replicates=400&include_diagnostics=false`
 - `POST /nfl/season-engine/game-boxes` (same query params + optional `injury_paths` / diagnostics body)
 - `POST /nfl/season-engine/survivor` (body: week, already_used, n_sims, optional injury_paths)
+- `POST /nfl/season-engine/survivor/plan` (body: picks `{week: team}`, n_sims → path_survival + per-week ranks)
 
 Contract: `data/ops/nfl-season-engine-api-contract-20260803.md`  
 Harden report: `data/ops/nfl-season-engine-harden-validate-20260803.md`  
@@ -111,7 +112,7 @@ Game script summary:
 2. Historical walk-forward calibration of strength evolution + script tilts (beyond league priors)
 3. ~~Injury / availability shocks inside season paths~~ → **done in v1.2** (`injury_paths.py`; live-report ingest still caller-supplied)
 4. ~~Deeper player usage (roles / script / injury realloc)~~ → **done in v1.3** (`usage_roles.py`; slot detection / fitted script matrix still thin)
-5. ~~Survivor pool week / path-value outputs~~ → **done in v1.4** (`survivor.py`; heuristics, not full pool EV / opponent correlation)
+5. ~~Survivor pool week / path-value outputs~~ → **done in v1.4** (`survivor.py`; heuristics, not full pool EV / opponent correlation); ~~17-week planner + joint path survival~~ → **done in v1.10** (`evaluate_survivor_plan` + `/pro/nfl/survivor` planner tab; see `nfl-survivor-planner-20260804.md`)
 6. ~~Harden / validate before UI~~ → **done in v1.4.1** (name matching, diagnostics flag, contract docs, regression suite)
 6b. ~~Depth-chart committees + role volatility~~ → **done in v1.5** (`depth_chart.py`; coaching tendencies still out of scope)
 6c. ~~Red-zone / scoring-specific usage~~ → **done in v1.7** (`red_zone.py`; drive-by-drive RZ rebuild still out of scope)
@@ -119,7 +120,7 @@ Game script summary:
 8. Heavier production runs (1k–10k season paths) via CLI / worker, not HTTP
 9. Role-specific QB rush volume (Allen still light vs career)
 10. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
-11. Survivor: multi-entry / field-aware EV; real-schedule bye polish beyond documented handling
+11. Survivor: multi-entry / field-aware EV; planner strength band is marginal-geo (joint % still the headline number)
 12. Final smoke / trust (2026-08-04): **passed** — see `nfl-season-engine-final-smoke-20260804.md`. Soft follow-ups: re-package depth after cuts, wire 2026 baselines, clearer OUT role labels, optional hard-block for both-on-bye game boxes.
 
 ## Railway

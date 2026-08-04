@@ -91,6 +91,29 @@ FORMULA_NOTES = {
     ),
 }
 
+# Multi-week planner path-survival (joint across locked picks).
+PATH_STRENGTH_STRONG_GEO = 0.68
+PATH_STRENGTH_OK_GEO = 0.55
+
+PATH_FORMULA_NOTES = {
+    **FORMULA_NOTES,
+    "path_survival": (
+        "Fraction of season sims where every locked (week, team) pick wins "
+        "its game that week. Empty slate → 1.0 (vacuous). Same team W/L "
+        "path matrix as single-week survivor (Layers 1–2)."
+    ),
+    "path_strength": (
+        f"Band from geometric mean of locked marginal week WPs "
+        f"(or path_survival^(1/n) when n>0): "
+        f"Strong ≥{PATH_STRENGTH_STRONG_GEO:.2f}, "
+        f"OK ≥{PATH_STRENGTH_OK_GEO:.2f}, else Fragile. Empty when no locks."
+    ),
+    "planner_exclusion": (
+        "A team locked in any week is removed from ranked_picks for every "
+        "other week. Duplicate team locks across weeks are rejected."
+    ),
+}
+
 
 @dataclass
 class SurvivorEvalResult:
@@ -464,3 +487,326 @@ def week_win_rate_for_team(
         if row["team"] == t:
             return float(row["win_rate"])
     return None
+
+
+@dataclass
+class SurvivorPlanResult:
+    """Multi-week survivor planner payload (one sim pass)."""
+
+    season: int
+    n_sims: int
+    engine_version: str
+    locked_picks: Dict[str, str]
+    used_teams: List[str]
+    weeks: List[Dict[str, Any]]
+    path_survival: float
+    path_survival_pct: float
+    path_strength: str
+    path_strength_geo: Optional[float]
+    locked_pick_count: int
+    formula: Dict[str, str] = field(default_factory=dict)
+    notes: Dict[str, str] = field(default_factory=dict)
+    diagnostics: Dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+def _normalize_team_code(raw: Any) -> str:
+    t = str(raw or "").strip().upper()
+    if t == "LAR":
+        return "LA"
+    if t == "WSH":
+        return "WAS"
+    return t
+
+
+def normalize_plan_picks(
+    picks: Optional[Mapping[Any, Any]],
+) -> Dict[int, str]:
+    """Normalize ``{week: team}`` picks; reject bad keys / duplicate teams."""
+    if picks is None:
+        return {}
+    out: Dict[int, str] = {}
+    seen_teams: Set[str] = set()
+    for raw_week, raw_team in picks.items():
+        try:
+            week = int(raw_week)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Invalid planner week key {raw_week!r}; expected integer week"
+            ) from exc
+        if week < 1 or week > 22:
+            raise ValueError(f"Planner week {week} out of range (1–22)")
+        team = _normalize_team_code(raw_team)
+        if not team:
+            raise ValueError(f"Empty team for week {week}")
+        if week in out:
+            raise ValueError(f"Duplicate pick for week {week}")
+        if team in seen_teams:
+            raise ValueError(
+                f"Team {team} locked in multiple weeks; survivor allows one use"
+            )
+        seen_teams.add(team)
+        out[week] = team
+    return dict(sorted(out.items()))
+
+
+def validate_plan_picks(
+    universe: EngineUniverse,
+    picks: Mapping[int, str],
+) -> None:
+    """Reject unknown teams, bye-week locks, and weeks with no slate."""
+    by_week = schedule_index(universe.schedule)
+    team_set = {str(t).upper() for t in universe.teams}
+    if "LAR" in team_set:
+        team_set.add("LA")
+    for week, team in picks.items():
+        if team not in team_set and team not in universe.teams:
+            # Allow any team that appears on the schedule even if not in strengths.
+            on_schedule = any(
+                team in week_map for week_map in by_week.values()
+            )
+            if not on_schedule:
+                raise ValueError(f"Unknown team {team} for week {week}")
+        week_games = by_week.get(week)
+        if not week_games:
+            raise ValueError(
+                f"Week {week} has no scheduled games on this universe"
+            )
+        if team not in week_games:
+            raise ValueError(
+                f"Team {team} is on bye or not scheduled in week {week}"
+            )
+
+
+def path_strength_band(
+    *,
+    locked_count: int,
+    path_survival: float,
+    locked_marginal_wps: Sequence[float],
+) -> Tuple[str, Optional[float]]:
+    """Return ``(band, geo_mean)`` for the locked slate."""
+    if locked_count <= 0:
+        return "Empty", None
+    if locked_marginal_wps:
+        product = 1.0
+        for wp in locked_marginal_wps:
+            product *= max(0.0, float(wp))
+        geo = product ** (1.0 / locked_count)
+    else:
+        geo = float(path_survival) ** (1.0 / locked_count)
+    if geo >= PATH_STRENGTH_STRONG_GEO:
+        return "Strong", round(geo, 4)
+    if geo >= PATH_STRENGTH_OK_GEO:
+        return "OK", round(geo, 4)
+    return "Fragile", round(geo, 4)
+
+
+def evaluate_survivor_plan(
+    universe: EngineUniverse,
+    *,
+    picks: Optional[Mapping[Any, Any]] = None,
+    n_sims: int = 300,
+    seed: int = 42,
+    injury_paths: Optional[Sequence[InjuryPath]] = None,
+    engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
+    top_n: int = 8,
+    include_diagnostics: bool = True,
+) -> SurvivorPlanResult:
+    """One multi-week planner pass: path survival + per-week recommendations.
+
+    Runs ``n_sims`` team W/L season paths once. For each unlocked week,
+    ranks remaining teams (excluding all locked picks) with the same
+    inspectable pick-now / save scores as ``evaluate_survivor``.
+    """
+    n_sims = max(1, int(n_sims))
+    top_n = max(1, int(top_n))
+    locked = normalize_plan_picks(picks)
+    validate_plan_picks(universe, locked)
+    used_teams = list(locked.values())
+    used_set = set(used_teams)
+    paths = list(injury_paths or [])
+
+    by_week = schedule_index(universe.schedule)
+    schedule_weeks = sorted(by_week.keys())
+    max_week = max(schedule_weeks) if schedule_weeks else 1
+
+    win_counts: Dict[str, Dict[int, int]] = {
+        t: defaultdict(int) for t in universe.teams
+    }
+    # Ensure schedule teams appear even if missing from strengths book.
+    for week_map in by_week.values():
+        for team in week_map:
+            win_counts.setdefault(team, defaultdict(int))
+
+    games_scheduled: Dict[str, Dict[int, int]] = {
+        t: defaultdict(int) for t in win_counts
+    }
+    for game in universe.schedule:
+        games_scheduled.setdefault(game.home_team, defaultdict(int))
+        games_scheduled.setdefault(game.away_team, defaultdict(int))
+        games_scheduled[game.home_team][game.week] = 1
+        games_scheduled[game.away_team][game.week] = 1
+
+    rng = random.Random(seed)
+    path_ok = 0
+    locked_items = list(locked.items())
+
+    for _ in range(n_sims):
+        week_winners = simulate_team_wl_path(
+            universe, rng=rng, injury_paths=paths
+        )
+        for week, winners in week_winners.items():
+            for team in winners:
+                if team in win_counts:
+                    win_counts[team][week] += 1
+        if locked_items and all(
+            team in week_winners.get(week, set())
+            for week, team in locked_items
+        ):
+            path_ok += 1
+        elif not locked_items:
+            path_ok += 1
+
+    wins_out = {
+        t: {int(w): int(c) for w, c in weeks.items()}
+        for t, weeks in win_counts.items()
+    }
+    sched_out = {
+        t: {int(w): int(c) for w, c in weeks.items()}
+        for t, weeks in games_scheduled.items()
+    }
+
+    path_survival = path_ok / n_sims
+    locked_marginal: List[float] = []
+    for week, team in locked_items:
+        locked_marginal.append(int(wins_out.get(team, {}).get(week, 0)) / n_sims)
+
+    strength, geo = path_strength_band(
+        locked_count=len(locked_items),
+        path_survival=path_survival,
+        locked_marginal_wps=locked_marginal,
+    )
+
+    weeks_out: List[Dict[str, Any]] = []
+    for week in schedule_weeks:
+        week_games = by_week.get(week, {})
+        if week in locked:
+            team = locked[week]
+            game = week_games.get(team)
+            row = score_team_survivor(
+                team=team,
+                week=week,
+                n_sims=n_sims,
+                win_counts=wins_out,
+                games_scheduled=sched_out,
+                max_week=max_week,
+                already_used=[],
+                game=game,
+            )
+            weeks_out.append(
+                {
+                    "week": week,
+                    "status": "locked",
+                    "locked_team": team,
+                    "locked_pick": row,
+                    "ranked_picks": [],
+                }
+            )
+            continue
+
+        all_rows: List[Dict[str, Any]] = []
+        for team in sorted(week_games.keys()):
+            all_rows.append(
+                score_team_survivor(
+                    team=team,
+                    week=week,
+                    n_sims=n_sims,
+                    win_counts=wins_out,
+                    games_scheduled=sched_out,
+                    max_week=max_week,
+                    already_used=used_teams,
+                    game=week_games.get(team),
+                )
+            )
+        ranked = [
+            r
+            for r in all_rows
+            if r["remaining"] and r["plays_this_week"]
+        ]
+        ranked.sort(
+            key=lambda r: (
+                -float(r["pick_now_score"]),
+                -float(r["win_rate"]),
+                str(r["team"]),
+            )
+        )
+        available = [
+            str(r["team"])
+            for r in ranked  # already remaining + playing
+        ]
+        weeks_out.append(
+            {
+                "week": week,
+                "status": "open",
+                "locked_team": None,
+                "locked_pick": None,
+                "ranked_picks": ranked[:top_n],
+                "available_teams": available,
+            }
+        )
+
+    notes = dict(universe.notes)
+    notes["survivor_mode"] = (
+        "planner team_wl_paths (Layers 1–2 + injury strength shocks; "
+        "Layers 3–4 skipped for speed)"
+    )
+    notes["path_survival"] = PATH_FORMULA_NOTES["path_survival"]
+    notes["path_strength"] = PATH_FORMULA_NOTES["path_strength"]
+    notes["used_teams"] = ",".join(used_teams) if used_teams else "(none)"
+    if paths:
+        notes["injury_paths"] = f"{len(paths)} path(s) applied"
+
+    diagnostics: Dict[str, Any] = {}
+    if include_diagnostics:
+        diagnostics = {
+            "seed": seed,
+            "teams": len(universe.teams),
+            "schedule_weeks": schedule_weeks,
+            "max_week": max_week,
+            "injury_path_count": len(paths),
+            "injury_paths": injury_paths_to_dicts(paths) if paths else [],
+            "locked_marginal_win_rates": [
+                {"week": w, "team": t, "win_rate": round(wp, 4)}
+                for (w, t), wp in zip(locked_items, locked_marginal)
+            ],
+            "path_ok_sims": path_ok,
+            "scoring_knobs": {
+                "premium_wp": PREMIUM_WP,
+                "save_penalty": SAVE_PENALTY,
+                "edge_bonus": EDGE_BONUS,
+                "path_strength_strong_geo": PATH_STRENGTH_STRONG_GEO,
+                "path_strength_ok_geo": PATH_STRENGTH_OK_GEO,
+            },
+            "top_n": top_n,
+            "used_excluded_from_ranked": used_teams,
+        }
+
+    locked_str_keys = {str(w): t for w, t in locked.items()}
+    return SurvivorPlanResult(
+        season=universe.season,
+        n_sims=n_sims,
+        engine_version=engine_version,
+        locked_picks=locked_str_keys,
+        used_teams=used_teams,
+        weeks=weeks_out,
+        path_survival=round(path_survival, 6),
+        path_survival_pct=round(path_survival * 100.0, 2),
+        path_strength=strength,
+        path_strength_geo=geo,
+        locked_pick_count=len(locked_items),
+        formula=dict(PATH_FORMULA_NOTES),
+        notes=notes,
+        diagnostics=diagnostics,
+    )

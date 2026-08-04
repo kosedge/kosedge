@@ -18,13 +18,15 @@ shares, script/personnel modifiers, and role-aware injury reallocation.
 
 Survivor pool outputs (``survivor``) run team W/L-only season paths and
 rank remaining picks for a target week with inspectable save / pick-now
-scores.
+scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
+same path matrix for joint path survival + per-week recommendations.
 
 Public entry points
 -------------------
 - ``simulate_full_season`` – N path-coherent season sims (~272 games each)
 - ``project_game_player_boxes`` – future-game player box distributions
 - ``evaluate_survivor`` – survivor week rankings + path value
+- ``evaluate_survivor_plan`` – multi-week planner + path_survival
 - ``resolve_season_universe`` / ``build_demo_universe`` /
   ``load_universe_from_db`` / ``build_packaged_real_universe`` – input builders
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
@@ -53,7 +55,9 @@ from src.services.nfl_season_engine.loaders import (
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
     SurvivorEvalResult,
+    SurvivorPlanResult,
     evaluate_survivor,
+    evaluate_survivor_plan,
     week_win_rate_for_team,
 )
 from src.services.nfl_season_engine.types import (
@@ -71,9 +75,11 @@ __all__ = [
     "InjuryPath",
     "SeasonSimResult",
     "SurvivorEvalResult",
+    "SurvivorPlanResult",
     "build_demo_universe",
     "build_packaged_real_universe",
     "evaluate_survivor",
+    "evaluate_survivor_plan",
     "load_packaged_depth_chart",
     "load_packaged_regular_schedule",
     "load_universe_from_db",
