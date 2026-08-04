@@ -23,6 +23,7 @@ from src.services.nfl_season_engine.depth_chart import (
 )
 from src.services.nfl_season_engine.game_script import (
     build_game_script,
+    play_mix_for_side,
     summarize_script_distribution,
 )
 from src.services.nfl_season_engine.injury_paths import (
@@ -103,6 +104,46 @@ def _summarize(values: Sequence[float]) -> Dict[str, float]:
     )
 
 
+def _aggregate_play_mix(scripts: Sequence[Any], side: str) -> Dict[str, Any]:
+    """Mean play-mix + modal script detail / time bucket across MC scripts."""
+    if not scripts:
+        return {}
+    n = len(scripts)
+    if side == "home":
+        pass_rates = [s.home_pass_rate for s in scripts]
+        early = [s.home_early_down_pass_rate for s in scripts]
+        hurry = [s.home_hurry_up for s in scripts]
+        inten = [s.home_script_intensity for s in scripts]
+        details = [s.home_script_detail for s in scripts]
+        states = [s.home_script for s in scripts]
+    else:
+        pass_rates = [s.away_pass_rate for s in scripts]
+        early = [s.away_early_down_pass_rate for s in scripts]
+        hurry = [s.away_hurry_up for s in scripts]
+        inten = [s.away_script_intensity for s in scripts]
+        details = [s.away_script_detail for s in scripts]
+        states = [s.away_script for s in scripts]
+    buckets = [s.time_bucket for s in scripts]
+
+    def _mode(vals: Sequence[str]) -> str:
+        counts: Dict[str, int] = defaultdict(int)
+        for v in vals:
+            counts[str(v)] += 1
+        return max(counts.items(), key=lambda kv: kv[1])[0]
+
+    return {
+        "pass_rate_mean": round(sum(pass_rates) / n, 4),
+        "run_rate_mean": round(1.0 - (sum(pass_rates) / n), 4),
+        "early_down_pass_rate_mean": round(sum(early) / n, 4),
+        "hurry_up_mean": round(sum(hurry) / n, 4),
+        "script_intensity_mean": round(sum(inten) / n, 4),
+        "script_state_mode": _mode(states),
+        "script_detail_mode": _mode(details),
+        "time_bucket_mode": _mode(buckets),
+        "minutes_remaining_mean": round(sum(s.minutes_remaining for s in scripts) / n, 2),
+    }
+
+
 def project_game_player_boxes(
     universe: EngineUniverse,
     *,
@@ -163,6 +204,7 @@ def project_game_player_boxes(
     usage_role_by_key: Dict[str, str] = {}
     personnel_by_key: Dict[str, str] = {}
     script_state_by_key: Dict[str, str] = {}
+    script_detail_by_key: Dict[str, str] = {}
     # Neutral-script share dump for inspectability (pre-MC).
     home_roles = annotate_usage_roles(week_rosters.get(game.home_team, []))
     away_roles = annotate_usage_roles(week_rosters.get(game.away_team, []))
@@ -186,6 +228,8 @@ def project_game_player_boxes(
             if u.personnel:
                 personnel_by_key[u.player_key] = u.personnel
             script_state_by_key[u.player_key] = u.script
+            if u.script_detail:
+                script_detail_by_key[u.player_key] = u.script_detail
         for box in boxes:
             meta[box.player_key] = {
                 "player_key": box.player_key,
@@ -217,6 +261,7 @@ def project_game_player_boxes(
                 "usage_role": usage_role_by_key.get(key, ""),
                 "personnel": personnel_by_key.get(key, ""),
                 "script": script_state_by_key.get(key, ""),
+                "script_detail": script_detail_by_key.get(key, ""),
                 "point_estimate": point,
                 "distributions": distributions,
             }
@@ -289,6 +334,13 @@ def project_game_player_boxes(
             "role_transitions": [t.to_dict() for t in vol_transitions if t.team in focus][
                 :40
             ],
+            # Additive v1.6 play-calling / script detail fields.
+            "play_mix_home": _aggregate_play_mix(scripts, "home"),
+            "play_mix_away": _aggregate_play_mix(scripts, "away"),
+            "play_mix_sample": {
+                "home": play_mix_for_side(scripts[0], "home") if scripts else {},
+                "away": play_mix_for_side(scripts[0], "away") if scripts else {},
+            },
         }
 
     return GameBoxProjection(

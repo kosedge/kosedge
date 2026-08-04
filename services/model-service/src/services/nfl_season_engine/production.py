@@ -90,16 +90,20 @@ def produce_box_scores(
         pass_m = _matchup_pass_mult(u.team, opp, strengths)
         rush_m = _matchup_rush_mult(u.team, opp, strengths)
 
-        # Script efficiency: trailing offenses throw a bit shorter; leading
-        # rush attacks get slightly better YPC (clock-kill lanes).
+        # Thin script efficiency only — volume shifts already come from Layer 2/3
+        # play-mix + SCRIPT_USAGE_MATRIX. Keep these mild and intensity-scaled
+        # so we do not double-count script with opaque multipliers.
         ypa = role.ypa * pass_m
         ypc = role.ypc * rush_m
         ypr = role.ypr * pass_m
+        inten = _clamp(float(getattr(u, "script_intensity", 0.55) or 0.55), 0.0, 1.0)
+        late_boost = 1.15 if getattr(u, "time_bucket", "") == "late" else 1.0
+        eff_scale = 0.55 + 0.45 * inten * late_boost
         if u.script == "trail":
-            ypa *= 0.97
-            ypr *= 0.98
+            ypa *= 1.0 - 0.03 * eff_scale
+            ypr *= 1.0 - 0.02 * eff_scale
         elif u.script == "lead":
-            ypc *= 1.025
+            ypc *= 1.0 + 0.025 * eff_scale
 
         pass_yards = 0.0
         pass_tds = 0.0

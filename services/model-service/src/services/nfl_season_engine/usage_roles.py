@@ -4,13 +4,17 @@ Inspectable labels (QB1/QB2, RB1/RB2/RB_COMMITTEE, WR1/WR2/WR3/WR_SLOT,
 TE1/TE2) drive:
 
 1. Base absolute usage tables (targets / carries / routes / snaps)
-2. Game-script modifier matrix (lead / trail / neutral)
+2. Game-script modifier matrix (lead / trail / neutral), intensity-scaled
 3. Light personnel / play-mix tilts (11 vs 12/21)
 4. Role-aware injury reallocation sinks (used by ``injury_paths``)
 
 Depth-chart structure (feature vs committee RB, clear vs murky WR) and
 weekly role volatility live in ``depth_chart.py`` and feed absolute
 shares before this module's script/personnel modifiers apply.
+
+v1.6 sharpens SCRIPT_USAGE_MATRIX and scales deltas by script intensity ×
+time bucket (from Layer 2). No parallel opaque usage system — same matrix,
+stronger late-game reactions.
 
 All tables are absolute fractions of team volume where applicable; the
 calibration residual "other" bucket still absorbs unnamed volume.
@@ -21,7 +25,12 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from src.services.nfl_season_engine.types import PlayerRole, ScriptState
+from src.services.nfl_season_engine.types import (
+    PlayerRole,
+    ScriptDetail,
+    ScriptState,
+    TimeBucket,
+)
 
 # Canonical role labels — keep short and stable for diagnostics / dumps.
 USAGE_ROLE_LABELS = (
@@ -59,34 +68,61 @@ BASE_USAGE_BY_ROLE: Dict[str, Dict[str, float]] = {
 # Game-script modifiers applied to absolute shares before Dirichlet draw.
 # Mults are relative to neutral; deltas are additive on snap after mults.
 # Documented in ops markdown — keep explicit, not opaque stacks of magic.
+#
+# v1.6: sharpened vs v1.3/v1.5 so trailing late feeds WR1/TE and fades RB
+# carries more clearly; leading late boosts RB and fades WR3. Intensity ×
+# time-bucket scaling in ``effective_usage_shares`` amplifies these further
+# for large_lead / large_deficit late without a parallel system.
+#
+# | Script | RB1 rush | WR1 tgt | TE1 tgt | WR3 tgt | Intent |
+# | trail  | ×0.80    | ×1.20   | ×1.16   | ×0.90   | chase  |
+# | lead   | ×1.24    | ×0.94   | ×0.96   | ×0.78   | protect|
+# | neutral| ×1.0     | ×1.0    | ×1.0    | ×1.0    | baseline|
 SCRIPT_USAGE_MATRIX: Dict[ScriptState, Dict[str, Dict[str, float]]] = {
     "neutral": {},
     "trail": {
-        # Pass-heavy: feed WR1/TE1, slight RB1 carry fade, WR3 mild fade.
-        "WR1": {"target_mult": 1.12, "route_mult": 1.08, "snap_delta": 0.03},
-        "WR2": {"target_mult": 1.06, "route_mult": 1.04, "snap_delta": 0.02},
-        "WR_SLOT": {"target_mult": 1.08, "route_mult": 1.06, "snap_delta": 0.025},
-        "WR3": {"target_mult": 0.94, "route_mult": 0.96, "snap_delta": 0.0},
-        "TE1": {"target_mult": 1.10, "route_mult": 1.07, "snap_delta": 0.03},
-        "TE2": {"target_mult": 1.04, "route_mult": 1.02, "snap_delta": 0.01},
-        "RB1": {"rush_mult": 0.88, "target_mult": 1.06, "snap_delta": -0.03},
-        "RB2": {"rush_mult": 0.90, "target_mult": 1.04, "snap_delta": -0.02},
-        "RB_COMMITTEE": {"rush_mult": 0.90, "target_mult": 1.05, "snap_delta": -0.02},
-        "QB1": {"rush_mult": 1.05},
+        # Pass-heavy chase: feed WR1/TE1, RB carry fade, WR3 mild fade.
+        "WR1": {"target_mult": 1.20, "route_mult": 1.12, "snap_delta": 0.04},
+        "WR2": {"target_mult": 1.09, "route_mult": 1.06, "snap_delta": 0.025},
+        "WR_SLOT": {"target_mult": 1.12, "route_mult": 1.09, "snap_delta": 0.03},
+        "WR3": {"target_mult": 0.90, "route_mult": 0.94, "snap_delta": -0.01},
+        "TE1": {"target_mult": 1.16, "route_mult": 1.10, "snap_delta": 0.04},
+        "TE2": {"target_mult": 1.06, "route_mult": 1.03, "snap_delta": 0.015},
+        "RB1": {"rush_mult": 0.80, "target_mult": 1.10, "snap_delta": -0.05},
+        "RB2": {"rush_mult": 0.84, "target_mult": 1.07, "snap_delta": -0.03},
+        "RB_COMMITTEE": {"rush_mult": 0.84, "target_mult": 1.08, "snap_delta": -0.03},
+        "QB1": {"rush_mult": 1.08},
     },
     "lead": {
-        # Rush-heavy: RB volume up; WR3 / deep-threat volume down.
-        "RB1": {"rush_mult": 1.16, "target_mult": 0.92, "snap_delta": 0.05},
-        "RB2": {"rush_mult": 1.10, "target_mult": 0.94, "snap_delta": 0.03},
-        "RB_COMMITTEE": {"rush_mult": 1.12, "target_mult": 0.94, "snap_delta": 0.04},
-        "WR1": {"target_mult": 0.96, "route_mult": 0.97, "snap_delta": -0.01},
-        "WR2": {"target_mult": 0.94, "route_mult": 0.95, "snap_delta": -0.015},
-        "WR3": {"target_mult": 0.86, "route_mult": 0.88, "snap_delta": -0.04},
-        "WR_SLOT": {"target_mult": 0.95, "route_mult": 0.96, "snap_delta": -0.01},
-        "TE1": {"target_mult": 0.97, "route_mult": 0.98, "snap_delta": 0.02},
-        "TE2": {"target_mult": 1.02, "route_mult": 1.0, "snap_delta": 0.02},
-        "QB1": {"rush_mult": 0.92},
+        # Protect lead: RB volume up; WR3 / deep-threat volume down.
+        "RB1": {"rush_mult": 1.24, "target_mult": 0.88, "snap_delta": 0.07},
+        "RB2": {"rush_mult": 1.14, "target_mult": 0.90, "snap_delta": 0.04},
+        "RB_COMMITTEE": {"rush_mult": 1.16, "target_mult": 0.90, "snap_delta": 0.05},
+        "WR1": {"target_mult": 0.94, "route_mult": 0.95, "snap_delta": -0.015},
+        "WR2": {"target_mult": 0.90, "route_mult": 0.92, "snap_delta": -0.025},
+        "WR3": {"target_mult": 0.78, "route_mult": 0.82, "snap_delta": -0.06},
+        "WR_SLOT": {"target_mult": 0.92, "route_mult": 0.94, "snap_delta": -0.02},
+        "TE1": {"target_mult": 0.96, "route_mult": 0.97, "snap_delta": 0.025},
+        "TE2": {"target_mult": 1.04, "route_mult": 1.0, "snap_delta": 0.03},
+        "QB1": {"rush_mult": 0.88},
     },
+}
+
+# Extra mult boosts when fine detail is large_* (applied after intensity scale).
+# Kept tiny/transparent — detail already drives pass_rate in Layer 2.
+SCRIPT_DETAIL_EXTRA: Dict[ScriptDetail, Dict[str, Dict[str, float]]] = {
+    "large_deficit": {
+        "WR1": {"target_mult": 1.04},
+        "TE1": {"target_mult": 1.03},
+        "RB1": {"rush_mult": 0.95},
+    },
+    "large_lead": {
+        "RB1": {"rush_mult": 1.05},
+        "WR3": {"target_mult": 0.94},
+    },
+    "small_deficit": {},
+    "small_lead": {},
+    "neutral": {},
 }
 
 # Personnel / play-mix tilts keyed by inferred package.
@@ -198,13 +234,39 @@ def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
 
 
-def infer_personnel_package(pass_rate: float, script: ScriptState) -> str:
-    """Map pass rate + script to a coarse personnel package label."""
+def infer_personnel_package(
+    pass_rate: float,
+    script: ScriptState,
+    *,
+    script_intensity: float = 0.55,
+    time_bucket: TimeBucket = "mid",
+) -> str:
+    """Map pass rate + script (+ intensity/clock) to a personnel package."""
+    late_hot = time_bucket == "late" and script_intensity >= 0.55
     if script == "trail" or pass_rate >= 0.62:
+        return "pass_heavy"
+    if late_hot and script != "lead" and pass_rate >= 0.56:
         return "pass_heavy"
     if script == "lead" or pass_rate <= 0.50:
         return "rush_heavy"
+    if late_hot and script == "lead" and pass_rate <= 0.56:
+        return "rush_heavy"
     return "balanced"
+
+
+def _intensity_scale(
+    script_intensity: float,
+    time_bucket: TimeBucket,
+    *,
+    script: ScriptState,
+) -> float:
+    """How hard to apply SCRIPT_USAGE_MATRIX deltas (1.0 ≈ historical mid)."""
+    if script == "neutral":
+        return 0.0
+    late = {"early": 0.55, "mid": 0.90, "late": 1.30}[time_bucket]
+    # Typical mid-game lead/trail ≈ 0.55 intensity → scale ≈ 1.0
+    raw = (0.40 + 1.10 * _clamp(script_intensity, 0.0, 1.0)) * late
+    return _clamp(raw, 0.30, 1.85)
 
 
 def assign_usage_role_label(role: PlayerRole, teammates: Sequence[PlayerRole]) -> str:
@@ -282,12 +344,20 @@ def effective_usage_shares(
     script: ScriptState,
     pass_rate: float,
     prefer_role_priors: bool = True,
+    script_intensity: float = 0.55,
+    time_bucket: TimeBucket = "mid",
+    script_detail: Optional[ScriptDetail] = None,
 ) -> Dict[str, Any]:
     """Combine loaded role shares with script + personnel modifiers.
 
     When ``prefer_role_priors`` is True (default), start from the player's
     loaded absolute shares (depth/demo/DB) and only fill zeros from the
     role table. Script/personnel mults always apply.
+
+    v1.6: matrix deltas are scaled by ``script_intensity`` × time bucket so
+    trailing late reacts more sharply than an early small deficit. Optional
+    ``script_detail`` applies a tiny ``SCRIPT_DETAIL_EXTRA`` overlay for
+    large_lead / large_deficit only.
     """
     label = role.usage_role or assign_usage_role_label(role, [role])
     table = base_usage_for_role(label)
@@ -312,16 +382,37 @@ def effective_usage_shares(
         route = table["route_share"]
 
     script_mods = SCRIPT_USAGE_MATRIX.get(script, {}).get(label, {})
-    personnel = infer_personnel_package(pass_rate, script)
+    detail: ScriptDetail = script_detail or (
+        "neutral"
+        if script == "neutral"
+        else ("small_lead" if script == "lead" else "small_deficit")
+    )
+    detail_mods = SCRIPT_DETAIL_EXTRA.get(detail, {}).get(label, {})
+    scale = _intensity_scale(script_intensity, time_bucket, script=script)
+    personnel = infer_personnel_package(
+        pass_rate,
+        script,
+        script_intensity=script_intensity,
+        time_bucket=time_bucket,
+    )
     pers_mods = PERSONNEL_MIX_TABLE.get(personnel, {}).get(label, {})
 
+    def _scaled_mult(table_mult: float) -> float:
+        # 1 + (m - 1) * scale  → scale=1 preserves table; scale=0 → identity.
+        return 1.0 + (float(table_mult) - 1.0) * scale
+
     def _apply(base: float, key_mult: str) -> float:
-        mult = float(script_mods.get(key_mult, 1.0)) * float(pers_mods.get(key_mult, 1.0))
-        return max(0.0, base * mult)
+        script_m = _scaled_mult(float(script_mods.get(key_mult, 1.0)))
+        detail_m = float(detail_mods.get(key_mult, 1.0))
+        # Detail extras are small and already "full strength" for large_* only.
+        if detail_m != 1.0:
+            detail_m = 1.0 + (detail_m - 1.0) * _clamp(0.5 + 0.5 * scale, 0.5, 1.25)
+        pers_m = float(pers_mods.get(key_mult, 1.0))
+        return max(0.0, base * script_m * detail_m * pers_m)
 
     snap = _clamp(
         snap
-        + float(script_mods.get("snap_delta", 0.0))
+        + float(script_mods.get("snap_delta", 0.0)) * scale
         + float(pers_mods.get("snap_delta", 0.0)),
         0.0,
         1.0,
@@ -329,6 +420,11 @@ def effective_usage_shares(
     return {
         "usage_role": label,
         "personnel": personnel,
+        "script": script,
+        "script_detail": detail,
+        "script_intensity": round(float(script_intensity), 4),
+        "time_bucket": time_bucket,
+        "intensity_scale": round(scale, 4),
         "snap_share": snap,
         "rush_share": _apply(rush, "rush_mult"),
         "target_share": _apply(tgt, "target_mult"),
@@ -343,14 +439,20 @@ def script_matrix_documentation() -> Dict[str, Any]:
     return {
         "base_usage_by_role": BASE_USAGE_BY_ROLE,
         "script_usage_matrix": SCRIPT_USAGE_MATRIX,
+        "script_detail_extra": SCRIPT_DETAIL_EXTRA,
         "personnel_mix_table": PERSONNEL_MIX_TABLE,
         "injury_realloc_rules": {
             k: {rk: rv for rk, rv in v.items() if rk == "note" or isinstance(rv, (dict, float, int, str))}
             for k, v in INJURY_REALLOC_RULES.items()
         },
         "personnel_inference": (
-            "pass_heavy if trail or pass_rate>=0.62; "
-            "rush_heavy if lead or pass_rate<=0.50; else balanced"
+            "pass_heavy if trail or pass_rate>=0.62 (or late high-intensity trail "
+            "with pass_rate>=0.56); rush_heavy if lead or pass_rate<=0.50 "
+            "(or late high-intensity lead with pass_rate<=0.56); else balanced"
+        ),
+        "intensity_scaling": (
+            "matrix deltas scaled by (0.40 + 1.10*intensity) * "
+            "{early:0.55, mid:0.90, late:1.30}; clamped [0.30, 1.85]"
         ),
         "depth_chart": depth_chart_documentation(),
     }

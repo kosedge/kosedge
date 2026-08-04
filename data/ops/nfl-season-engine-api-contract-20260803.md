@@ -1,6 +1,6 @@
 # NFL Season Engine — Public API Contract
 
-**Engine version:** `nfl-season-engine-v1.5-depth-volatility`  
+**Engine version:** `nfl-season-engine-v1.6-game-script`  
 **Date:** 2026-08-03  
 **Package:** `services/model-service/src/services/nfl_season_engine/`
 
@@ -34,7 +34,7 @@ CLI: `scripts/nfl/run_hierarchical_season_sim.py`, `run_survivor_evaluate.py`, `
 
 | Endpoint | Default | When true |
 | --- | --- | --- |
-| `game-boxes` | `false` | Usage shares, share integrity, injury adjustments, script summary, **`depth_structure`**, **`role_transitions`** |
+| `game-boxes` | `false` | Usage shares, share integrity, injury adjustments, script summary, **`depth_structure`**, **`role_transitions`**, **`play_mix_home` / `play_mix_away` / `play_mix_sample`** (v1.6) |
 | `simulate` | `true` | Win-mean spread/stdev, injury path echo, finite checks, **`depth_structure`**, **`role_transitions_sample`** |
 | `survivor` | `true` | Scoring knobs, bye teams, used exclusions |
 
@@ -61,7 +61,7 @@ Returns `engine_version`, layer modules, `capabilities`, usage-role labels/rules
   "season": 2026,
   "n_sims": 25,
   "games_per_season": 272,
-  "engine_version": "nfl-season-engine-v1.5-depth-volatility",
+  "engine_version": "nfl-season-engine-v1.6-game-script",
   "notes": {},
   "diagnostics": {
     "mean_wins_sum": 272.0,
@@ -96,7 +96,8 @@ Returns `engine_version`, layer modules, `capabilities`, usage-role labels/rules
 | `player_key` / `player_name` / `team` / `position` | Identity |
 | `usage_role` | Taxonomy label (QB1, RB1, WR2, …) |
 | `personnel` | Inferred package (`pass_heavy` / `balanced` / `rush_heavy`) |
-| `script` | Modal script state observed in MC (`lead`/`trail`/`neutral`) |
+| `script` | Modal coarse script state observed in MC (`lead`/`trail`/`neutral`) |
+| `script_detail` | Fine script detail when present (`large_lead` / `small_lead` / `neutral` / `small_deficit` / `large_deficit`) — v1.6 additive |
 | `point_estimate` | Mean of position-primary stats |
 | `distributions` | `{stat: {mean, std, p10, p50, p90}}` |
 
@@ -108,7 +109,7 @@ Position-primary stats:
 
 Volume counters (`pass_attempts` / `carries` / `targets`) always appear under `distributions`.
 
-**Diagnostics (when requested):** `usage_shares_home/away`, `share_integrity_*`, `injury_adjustments`, `injury_paths`, `game_script_summary`, `schedule_match` (`on_loaded_schedule` vs `synthetic_matchup`), **`depth_structure`**, **`depth_structure_detail`**, **`role_transitions`** (v1.5 additive).
+**Diagnostics (when requested):** `usage_shares_home/away`, `share_integrity_*`, `injury_adjustments`, `injury_paths`, `game_script_summary`, `schedule_match` (`on_loaded_schedule` vs `synthetic_matchup`), **`depth_structure`**, **`depth_structure_detail`**, **`role_transitions`** (v1.5), **`play_mix_home`**, **`play_mix_away`**, **`play_mix_sample`** (v1.6 — `pass_rate`, `early_down_pass_rate`, `hurry_up`, `script_detail`, `script_intensity`, `time_bucket`).
 
 **Limitations:** Single-game marginal MC (strengths frozen; no in-path evolution). Matchups missing from the loaded schedule are synthesized. Demo skill cores are sparse — residual **other** absorbs unnamed volume (by design; prevents WR1/RB1 inflation).
 

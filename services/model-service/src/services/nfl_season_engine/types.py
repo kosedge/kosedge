@@ -5,7 +5,17 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Literal, Optional
 
+# Coarse script (backward-compatible Layer 3/4 consumers).
 ScriptState = Literal["lead", "trail", "neutral"]
+# Fine-grained script detail (v1.6+); maps to ScriptState via coarse_script().
+ScriptDetail = Literal[
+    "large_lead",
+    "small_lead",
+    "neutral",
+    "small_deficit",
+    "large_deficit",
+]
+TimeBucket = Literal["early", "mid", "late"]
 
 
 @dataclass
@@ -85,7 +95,14 @@ class PlayerRole:
 
 @dataclass(frozen=True)
 class GameScript:
-    """Layer 2 output for one game inside one replicate."""
+    """Layer 2 output for one game inside one replicate.
+
+    Coarse ``home_script`` / ``away_script`` remain lead/trail/neutral for
+    existing Layer 3/4 consumers. v1.6 adds inspectable play-calling fields:
+    script detail, intensity, shared clock bucket, early-down pass rate, and
+    a hurry-up proxy. Production should follow usage/play-mix — avoid stacking
+    opaque efficiency multipliers on top of these.
+    """
 
     game_id: str
     home_team: str
@@ -102,6 +119,19 @@ class GameScript:
     home_implied_total: float
     away_implied_total: float
     source: str = "team_strength_analytic"
+    # --- v1.6 game-script / play-calling (additive) ---
+    minutes_remaining: float = 30.0
+    time_bucket: TimeBucket = "mid"
+    home_script_detail: ScriptDetail = "neutral"
+    away_script_detail: ScriptDetail = "neutral"
+    home_script_intensity: float = 0.0
+    away_script_intensity: float = 0.0
+    home_early_down_pass_rate: float = 0.58
+    away_early_down_pass_rate: float = 0.58
+    home_hurry_up: float = 0.0
+    away_hurry_up: float = 0.0
+    home_run_rate: float = 0.42
+    away_run_rate: float = 0.42
 
 
 @dataclass(frozen=True)
@@ -120,6 +150,10 @@ class PlayerUsage:
     script: ScriptState
     usage_role: str = ""
     personnel: str = ""
+    # v1.6 additive play-calling context (mirrors GameScript side fields).
+    script_detail: str = ""
+    script_intensity: float = 0.0
+    time_bucket: str = ""
 
 
 @dataclass(frozen=True)

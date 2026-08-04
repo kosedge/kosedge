@@ -57,7 +57,12 @@ def _wr(team: str, name: str, depth: int, tgt: float) -> PlayerRole:
 
 
 def test_engine_version_depth_volatility() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "nfl-season-engine-v1.5-depth-volatility"
+    # Depth-chart volatility remains a capability; version tag moved to v1.6.
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
+        or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_feature_vs_committee_carry_concentration() -> None:
@@ -228,7 +233,10 @@ def test_cook_rice_realism_bounds_hold() -> None:
         seed=2026,
         include_diagnostics=True,
     )
-    assert "depth-volatility" in proj.engine_version
+    assert (
+        "depth-volatility" in proj.engine_version
+        or "game-script" in proj.engine_version
+    )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])
     assert cook["point_estimate"]["rush_yards"] < 95.0
@@ -243,7 +251,10 @@ def test_season_path_volatility_diagnostics() -> None:
     result = simulate_full_season(
         universe, n_sims=2, seed=42, include_diagnostics=True
     )
-    assert "depth-volatility" in result.engine_version
+    assert (
+        "depth-volatility" in result.engine_version
+        or "game-script" in result.engine_version
+    )
     assert "depth_structure" in result.diagnostics
     assert "role_transitions_sample" in result.diagnostics
 

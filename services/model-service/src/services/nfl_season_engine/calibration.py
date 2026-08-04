@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.5: depth-chart structure (feature vs committee RB, clear vs murky WR),
-# unequal committee splits, path/week role volatility + injury promotions.
-ENGINE_VERSION = "nfl-season-engine-v1.5-depth-volatility"
+# v1.6: richer game-script / play-calling (detail + time bucket + intensity →
+# pass/run/early-down/hurry-up) and sharper SCRIPT_USAGE_MATRIX reactions.
+ENGINE_VERSION = "nfl-season-engine-v1.6-game-script"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -286,6 +286,12 @@ def calibration_notes() -> Dict[str, str]:
             "v1.5: depth_chart feature/committee RB + clear/murky WR; "
             "committee splits 55/45 or 45/35/20; weekly share drift + rare "
             "role shuffle; injury promotions (see depth_chart.py)."
+        ),
+        "game_script": (
+            "v1.6: score diff + remaining-clock snapshot → script_detail "
+            "(large/small lead|deficit), time_bucket, intensity; explicit "
+            "pass_rate / early_down_pass_rate / hurry_up; usage matrix "
+            "intensity-scaled (see game_script.py + usage_roles.py)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

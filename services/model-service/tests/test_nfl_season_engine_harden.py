@@ -35,11 +35,12 @@ from src.services.nfl_season_engine.types import (
 
 
 def test_engine_version_hardened_patch() -> None:
-    # v1.5 supersedes the v1.4.1 harden tag; harden guards remain in place.
+    # Later tags supersede the v1.4.1 harden tag; harden guards remain in place.
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert (
         "hardened" in DEFAULT_SEASON_ENGINE_VERSION
         or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
+        or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
