@@ -114,3 +114,13 @@ curl -sS -X POST "$MODEL_SERVICE_URL/nfl/season-engine/game-boxes?home_team=KC&a
 
 Expect `engine_version = nfl-season-engine-v1.8-coaching` and non-empty
 `coaching_profile` / `tendency_effects` on the game-boxes response.
+
+## Railway smoke (2026-08-04)
+
+Live on `https://model-service-production-e253.up.railway.app` after PR #84 merge:
+
+- `GET /nfl/season-engine/status` → `nfl-season-engine-v1.8-coaching` +
+  capability `coaching_tendencies` (KC example `pass_aggressive`, bias +0.028)
+- `GET …/game-boxes?…&include_diagnostics=true` →
+  `diagnostics.coaching_profile` (KC/BUF) + `tendency_effects.home`
+  (`pass_rate_bias_applied`, `script_aggression`, `rz_pass_bias_applied`)
