@@ -10,5 +10,12 @@ if DATABASE_URL.startswith("postgresql://"):
 else:
     SQLALCHEMY_URL = DATABASE_URL
 
-engine = create_engine(SQLALCHEMY_URL, pool_pre_ping=True)
+# Fail fast when Postgres is unreachable (default TCP hang can exceed BFF budgets).
+_CONNECT_TIMEOUT_S = int(os.getenv("DB_CONNECT_TIMEOUT_S", "5"))
+
+engine = create_engine(
+    SQLALCHEMY_URL,
+    pool_pre_ping=True,
+    connect_args={"connect_timeout": _CONNECT_TIMEOUT_S},
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
