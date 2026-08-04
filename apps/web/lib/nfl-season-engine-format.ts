@@ -41,17 +41,17 @@ export const NFL_SEASON_ENGINE_TEAMS = [
 export type NflSeasonEngineTeam =
   (typeof NFL_SEASON_ENGINE_TEAMS)[number];
 
-/** Named demo skill stars useful for injury scenario toggles. */
+/** Named skill stars useful for injury scenario toggles (real 2026 depth). */
 export const NFL_SEASON_ENGINE_STAR_OUTS: ReadonlyArray<{
   team: NflSeasonEngineTeam;
   playerName: string;
   label: string;
 }> = [
-  { team: "KC", playerName: "P.Mahomes", label: "P. Mahomes out" },
-  { team: "BUF", playerName: "J.Allen", label: "J. Allen out" },
-  { team: "PHI", playerName: "S.Barkley", label: "S. Barkley out" },
-  { team: "SF", playerName: "C.McCaffrey", label: "C. McCaffrey out" },
-  { team: "DET", playerName: "A.St. Brown", label: "A. St. Brown out" },
+  { team: "KC", playerName: "Patrick Mahomes", label: "P. Mahomes out" },
+  { team: "BUF", playerName: "Josh Allen", label: "J. Allen out" },
+  { team: "PHI", playerName: "Saquon Barkley", label: "S. Barkley out" },
+  { team: "SF", playerName: "Christian McCaffrey", label: "C. McCaffrey out" },
+  { team: "DET", playerName: "Amon-Ra St. Brown", label: "A. St. Brown out" },
 ];
 
 export type StatDist = {

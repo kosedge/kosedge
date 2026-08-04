@@ -249,6 +249,14 @@ def main() -> None:
         help="Ingest latest nflverse official depth charts",
     )
     parser.add_argument(
+        "--materialize-weekly-from-official-depth",
+        action="store_true",
+        help=(
+            "Bridge nfl_dp_official_depth_charts → nfl_dp_depth_chart_weekly "
+            "(preseason / empty usage path for season engine)"
+        ),
+    )
+    parser.add_argument(
         "--print-source-matrix",
         action="store_true",
         help="Print the executable source fallback matrix JSON",
@@ -352,6 +360,16 @@ def main() -> None:
         from .snap_depth_ingest import ingest_official_depth_charts
 
         result = ingest_official_depth_charts(seasons=seasons)
+    elif args.materialize_weekly_from_official_depth:
+        from .snap_depth_ingest import materialize_weekly_from_official_depth
+
+        result = materialize_weekly_from_official_depth(
+            seasons=seasons,
+            week=args.week,
+            replace_existing=bool(
+                getattr(args, "replace_depth_chart_weekly", False)
+            ),
+        )
     elif args.run_preseason_bootstrap:
         from .preseason_hydration import run_preseason_bootstrap
 

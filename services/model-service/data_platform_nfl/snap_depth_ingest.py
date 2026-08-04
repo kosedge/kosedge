@@ -371,3 +371,186 @@ def ingest_official_depth_charts(*, seasons: List[int]) -> Dict[str, Any]:
         raise
     finally:
         session.close()
+
+def materialize_weekly_from_official_depth(
+    *,
+    seasons: List[int],
+    week: Optional[int] = None,
+    replace_existing: bool = False,
+) -> Dict[str, Any]:
+    """Bridge ``nfl_dp_official_depth_charts`` → ``nfl_dp_depth_chart_weekly``.
+
+    Preseason path: inferred weekly materialization needs usage rows; until
+    those exist, copy official nflverse skill depth into the weekly table the
+    season engine already prefers.
+    """
+    session = SessionLocal()
+    metrics: Dict[str, Any] = {
+        "seasons": seasons,
+        "week": week,
+        "replace_existing": replace_existing,
+        "rows": 0,
+        "teams": 0,
+    }
+    run_id = None
+    skill_positions = ("QB", "RB", "WR", "TE")
+    try:
+        run_id = session.execute(
+            text(
+                """
+                INSERT INTO nfl_dp_ingestion_runs (source, pipeline, started_at, status, metrics)
+                VALUES ('nflverse', 'depth_weekly_from_official', :started_at, 'running', CAST(:metrics AS jsonb))
+                RETURNING id
+                """
+            ),
+            {"started_at": _now(), "metrics": json.dumps(metrics)},
+        ).scalar_one()
+        session.commit()
+
+        insert_sql = text(
+            """
+            INSERT INTO nfl_dp_depth_chart_weekly (
+              season, week, team, position, depth_order, depth_slot,
+              player_uid, player_id, player_name, role_confidence,
+              inferred_source, updated_at
+            ) VALUES (
+              :season, :week, :team, :position, :depth_order, :depth_slot,
+              NULL, :player_id, :player_name, :role_confidence,
+              :inferred_source, :updated_at
+            )
+            ON CONFLICT (season, week, team, position, depth_order) DO UPDATE SET
+              depth_slot = EXCLUDED.depth_slot,
+              player_id = EXCLUDED.player_id,
+              player_name = EXCLUDED.player_name,
+              role_confidence = EXCLUDED.role_confidence,
+              inferred_source = EXCLUDED.inferred_source,
+              updated_at = EXCLUDED.updated_at
+            """
+        )
+        now = _now()
+        teams_seen: set[str] = set()
+        for season in seasons:
+            target_week = week
+            if target_week is None:
+                row = session.execute(
+                    text(
+                        """
+                        SELECT week
+                        FROM nfl_dp_official_depth_charts
+                        WHERE season = :season
+                        ORDER BY week DESC
+                        LIMIT 1
+                        """
+                    ),
+                    {"season": int(season)},
+                ).fetchone()
+                target_week = int(row.week) if row is not None else 1
+
+            if replace_existing:
+                session.execute(
+                    text(
+                        """
+                        DELETE FROM nfl_dp_depth_chart_weekly
+                        WHERE season = :season
+                          AND week = :week
+                          AND inferred_source = 'official_nflverse_bridge'
+                        """
+                    ),
+                    {"season": int(season), "week": int(target_week)},
+                )
+
+            official = session.execute(
+                text(
+                    """
+                    SELECT DISTINCT ON (team, position, depth_team)
+                      team, position, depth_team, player_id, player_name
+                    FROM nfl_dp_official_depth_charts
+                    WHERE season = :season
+                      AND week = :week
+                      AND position IN ('QB', 'RB', 'WR', 'TE')
+                      AND depth_team BETWEEN 1 AND 3
+                    ORDER BY team, position, depth_team, player_id
+                    """
+                ),
+                {"season": int(season), "week": int(target_week)},
+            ).fetchall()
+
+            for r in official:
+                team = str(r.team or "").strip().upper()
+                if team == "LAR":
+                    team = "LA"
+                pos = str(r.position or "").strip().upper()
+                depth_order = int(r.depth_team or 0)
+                player_id = str(r.player_id or "").strip()
+                player_name = str(r.player_name or "").strip()
+                if (
+                    not team
+                    or pos not in skill_positions
+                    or depth_order < 1
+                    or not player_id
+                    or not player_name
+                ):
+                    continue
+                depth_slot = {1: "starter", 2: "backup", 3: "rotation"}.get(
+                    depth_order, "depth"
+                )
+                session.execute(
+                    insert_sql,
+                    {
+                        "season": int(season),
+                        "week": int(target_week),
+                        "team": team,
+                        "position": pos,
+                        "depth_order": depth_order,
+                        "depth_slot": depth_slot,
+                        "player_id": player_id,
+                        "player_name": player_name,
+                        "role_confidence": 0.85 if depth_order == 1 else 0.65,
+                        "inferred_source": "official_nflverse_bridge",
+                        "updated_at": now,
+                    },
+                )
+                metrics["rows"] += 1
+                teams_seen.add(team)
+
+        metrics["teams"] = len(teams_seen)
+        session.commit()
+        session.execute(
+            text(
+                """
+                UPDATE nfl_dp_ingestion_runs
+                SET finished_at = :finished_at, status = 'success', metrics = CAST(:metrics AS jsonb)
+                WHERE id = :id
+                """
+            ),
+            {"finished_at": _now(), "metrics": json.dumps(metrics), "id": run_id},
+        )
+        session.commit()
+        return {"status": "success", "metrics": metrics}
+    except Exception as exc:
+        session.rollback()
+        if run_id is not None:
+            try:
+                session.execute(
+                    text(
+                        """
+                        UPDATE nfl_dp_ingestion_runs
+                        SET finished_at = :finished_at, status = 'failed',
+                            error_message = :error_message, metrics = CAST(:metrics AS jsonb)
+                        WHERE id = :id
+                        """
+                    ),
+                    {
+                        "finished_at": _now(),
+                        "error_message": str(exc)[:2000],
+                        "metrics": json.dumps(metrics),
+                        "id": run_id,
+                    },
+                )
+                session.commit()
+            except Exception:
+                session.rollback()
+        raise
+    finally:
+        session.close()
+

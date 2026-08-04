@@ -1,0 +1,149 @@
+{
+  "engine_version": "nfl-season-engine-v1.9.1-real-depth",
+  "mode": "real",
+  "schedule_source": "packaged_wall_chart_2026",
+  "schedule_game_count": 272,
+  "depth_source": "packaged_nflverse_depth_2026",
+  "depth_as_of": "2026-08-03",
+  "depth_named_skill_teams": 32,
+  "depth_full_skill_starter_teams": 32,
+  "matchup": "SF@LA week 1",
+  "sample_roles": [
+    {
+      "player_name": "Matthew Stafford",
+      "team": "LA",
+      "position": "QB",
+      "usage_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 183.44,
+        "pass_tds": 1.26,
+        "ints": 0.7,
+        "rush_yards": 6.54
+      }
+    },
+    {
+      "player_name": "Brock Purdy",
+      "team": "SF",
+      "position": "QB",
+      "usage_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 159.21,
+        "pass_tds": 0.84,
+        "ints": 0.5,
+        "rush_yards": 6.75
+      }
+    },
+    {
+      "player_name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "usage_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 61.12,
+        "rush_tds": 0.76,
+        "rec_yards": 15.16,
+        "receptions": 2.02
+      }
+    },
+    {
+      "player_name": "Puka Nacua",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 52.81,
+        "receptions": 5.15,
+        "rec_tds": 0.24
+      }
+    },
+    {
+      "player_name": "George Kittle",
+      "team": "SF",
+      "position": "TE",
+      "usage_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 47.31,
+        "receptions": 4.57,
+        "rec_tds": 0.24
+      }
+    },
+    {
+      "player_name": "Mike Evans",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 47.06,
+        "receptions": 4.2,
+        "rec_tds": 0.18
+      }
+    },
+    {
+      "player_name": "Colby Parkinson",
+      "team": "LA",
+      "position": "TE",
+      "usage_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 44.96,
+        "receptions": 4.92,
+        "rec_tds": 0.26
+      }
+    },
+    {
+      "player_name": "Kyren Williams",
+      "team": "LA",
+      "position": "RB",
+      "usage_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 40.58,
+        "rush_tds": 0.34,
+        "rec_yards": 17.6,
+        "receptions": 2.57
+      }
+    },
+    {
+      "player_name": "Davante Adams",
+      "team": "LA",
+      "position": "WR",
+      "usage_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 29.75,
+        "receptions": 3.15,
+        "rec_tds": 0.36
+      }
+    },
+    {
+      "player_name": "Deebo Samuel",
+      "team": "SF",
+      "position": "WR",
+      "usage_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 27.14,
+        "receptions": 2.48,
+        "rec_tds": 0.24
+      }
+    }
+  ],
+  "depth_structure": {
+    "LA": {
+      "team": "LA",
+      "rb_structure": "feature",
+      "wr_hierarchy": "clear",
+      "rb_count": 3,
+      "wr_count": 3,
+      "committee_split": "60/26/14",
+      "wr_split": "48/33/19",
+      "notes": "feature RB1/RB2; clear WR hierarchy"
+    },
+    "SF": {
+      "team": "SF",
+      "rb_structure": "feature",
+      "wr_hierarchy": "clear",
+      "rb_count": 3,
+      "wr_count": 3,
+      "committee_split": "60/26/14",
+      "wr_split": "48/33/19",
+      "notes": "feature RB1/RB2; clear WR hierarchy"
+    }
+  }
+}

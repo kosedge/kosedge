@@ -250,7 +250,8 @@ export default function SeasonEngineGameBoxesClient({
             </select>
             {starOptions.length === 0 ? (
               <p className="mt-1.5 text-xs text-kos-text/50">
-                Named demo stars available for KC, BUF, PHI, SF, DET matchups.
+                Star injury toggles available for KC, BUF, PHI, SF, DET
+                matchups (real depth names when loaded).
               </p>
             ) : null}
           </div>
@@ -323,7 +324,9 @@ export default function SeasonEngineGameBoxesClient({
               {active.schedule_game_count
                 ? ` · ${active.schedule_game_count} REG games`
                 : ""}
-              {active.roster_source ? ` · roster ${active.roster_source}` : ""}
+              {active.roster_source
+                ? ` · depth ${active.roster_source}`
+                : ""}
               {active.roster_as_of ? ` (as of ${active.roster_as_of})` : ""}
             </p>
           ) : null}

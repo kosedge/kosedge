@@ -32,6 +32,7 @@ def test_engine_version_coaching() -> None:
     assert (
         "coaching" in DEFAULT_SEASON_ENGINE_VERSION
         or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
+        or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -234,6 +235,7 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
     assert (
         "coaching" in proj.engine_version
         or "real-2026" in proj.engine_version
+        or "real-depth" in proj.engine_version
     )
     assert "coaching_profile" in proj.diagnostics
     assert "tendency_effects" in proj.diagnostics
@@ -260,6 +262,7 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
     assert (
         "coaching" in surv.engine_version
         or "real-2026" in surv.engine_version
+        or "real-depth" in surv.engine_version
     )
 
 

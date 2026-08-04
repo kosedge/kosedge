@@ -1,9 +1,9 @@
 # NFL Season Engine — Public API Contract
 
-**Engine version:** `nfl-season-engine-v1.9-real-2026`  
-**Date:** 2026-08-03  
+**Engine version:** `nfl-season-engine-v1.9.1-real-depth`  
+**Date:** 2026-08-04  
 **Package:** `services/model-service/src/services/nfl_season_engine/`  
-**Cutover note:** v1.9 defaults to the real 2026 REG schedule (272 games + byes). Modeling layers unchanged from v1.8 coaching. See `data/ops/nfl-season-engine-real-2026-20260803.md`.
+**Cutover note:** v1.9.1 adds real 2026 depth identities (nflverse / DB weekly / packaged). Schedule cutover from v1.9 unchanged. See `data/ops/nfl-season-engine-real-depth-20260804.md`.
 
 Additive HTTP surface on model-service. Does **not** modify Edge Board, Model-vs-KEI (#70), or `nfl_market_projections`.
 
@@ -30,6 +30,9 @@ CLI: `scripts/nfl/run_hierarchical_season_sim.py`, `run_survivor_evaluate.py`, `
 | `schedule_source` | `nfl_dp_schedules` \| `packaged_wall_chart_2026` \| `demo_round_robin` |
 | `schedule_game_count` | REG games loaded (expect 272 for 2026 real) |
 | `roster_source` / `roster_as_of` | Depth identity source + freshness tag |
+| `depth_source` / `depth_as_of` | Aliases of roster_* (preferred status fields) |
+| `depth_named_skill_teams` / `depth_team_count` | Coverage counters (expect 32 when real depth loaded) |
+| Depth fallback | `nfl_dp_depth_chart_weekly` → `nfl_dp_official_depth_charts` → `packaged_nflverse_depth_2026` → `demo_depth_chart` |
 | `notes` | Short string map (sources, schedule_match, bye_handling, …) |
 | `diagnostics` | Structured explain payload (see flag below) |
 | `injury_paths` | Echo of applied path dicts when present |
@@ -67,7 +70,7 @@ Returns `engine_version`, layer modules, `capabilities`, usage-role labels/rules
   "season": 2026,
   "n_sims": 25,
   "games_per_season": 272,
-  "engine_version": "nfl-season-engine-v1.9-real-2026",
+  "engine_version": "nfl-season-engine-v1.9.1-real-depth",
   "notes": {},
   "diagnostics": {
     "mean_wins_sum": 272.0,

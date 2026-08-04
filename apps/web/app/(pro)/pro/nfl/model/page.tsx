@@ -65,8 +65,15 @@ export default async function NflSeasonModelHubPage() {
             {status.schedule_game_count != null
               ? ` · ${status.schedule_game_count} REG games`
               : ""}
-            {status.roster_source ? ` · roster ${status.roster_source}` : ""}
-            {status.roster_as_of ? ` (as of ${status.roster_as_of})` : ""}
+            {status.roster_source || status.depth_source
+              ? ` · depth ${status.depth_source || status.roster_source}`
+              : ""}
+            {status.roster_as_of || status.depth_as_of
+              ? ` (as of ${status.depth_as_of || status.roster_as_of})`
+              : ""}
+            {status.depth_named_skill_teams != null
+              ? ` · ${status.depth_named_skill_teams}/32 named skill teams`
+              : ""}
           </p>
         ) : null}
         <p className="mt-2 text-xs text-kos-text/50">

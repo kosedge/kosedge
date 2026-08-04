@@ -313,7 +313,11 @@ def run_launch_hardening_cycle(
             ),
         }
     )
-    from .snap_depth_ingest import ingest_official_depth_charts, ingest_snap_counts
+    from .snap_depth_ingest import (
+        ingest_official_depth_charts,
+        ingest_snap_counts,
+        materialize_weekly_from_official_depth,
+    )
 
     stages.append(
         {
@@ -325,6 +329,16 @@ def run_launch_hardening_cycle(
         {
             "stage": "ingest_official_depth_charts",
             "result": ingest_official_depth_charts(seasons=seasons),
+        }
+    )
+    stages.append(
+        {
+            "stage": "materialize_weekly_from_official_depth",
+            "result": materialize_weekly_from_official_depth(
+                seasons=seasons,
+                week=week,
+                replace_existing=False,
+            ),
         }
     )
     backup = export_data_ownership_snapshot(

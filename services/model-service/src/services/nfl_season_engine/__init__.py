@@ -44,6 +44,7 @@ from src.services.nfl_season_engine.injury_paths import (
 from src.services.nfl_season_engine.loaders import (
     build_demo_universe,
     build_packaged_real_universe,
+    load_packaged_depth_chart,
     load_packaged_regular_schedule,
     load_universe_from_db,
     resolve_season_universe,
@@ -73,6 +74,7 @@ __all__ = [
     "build_demo_universe",
     "build_packaged_real_universe",
     "evaluate_survivor",
+    "load_packaged_depth_chart",
     "load_packaged_regular_schedule",
     "load_universe_from_db",
     "parse_injury_paths",

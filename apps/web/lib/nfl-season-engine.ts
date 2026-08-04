@@ -18,6 +18,12 @@ export type SeasonEngineStatus = {
   schedule_as_of?: string;
   roster_source?: string;
   roster_as_of?: string;
+  depth_source?: string;
+  depth_as_of?: string;
+  depth_team_count?: number;
+  depth_named_skill_teams?: number;
+  depth_full_skill_starter_teams?: number;
+  depth_player_rows?: number;
   layers?: unknown[];
   capabilities?: string[];
   contract?: Record<string, unknown>;
@@ -177,6 +183,34 @@ export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {
       roster_as_of:
         typeof payload.roster_as_of === "string"
           ? payload.roster_as_of
+          : undefined,
+      depth_source:
+        typeof payload.depth_source === "string"
+          ? payload.depth_source
+          : typeof payload.roster_source === "string"
+            ? payload.roster_source
+            : undefined,
+      depth_as_of:
+        typeof payload.depth_as_of === "string"
+          ? payload.depth_as_of
+          : typeof payload.roster_as_of === "string"
+            ? payload.roster_as_of
+            : undefined,
+      depth_team_count:
+        typeof payload.depth_team_count === "number"
+          ? payload.depth_team_count
+          : undefined,
+      depth_named_skill_teams:
+        typeof payload.depth_named_skill_teams === "number"
+          ? payload.depth_named_skill_teams
+          : undefined,
+      depth_full_skill_starter_teams:
+        typeof payload.depth_full_skill_starter_teams === "number"
+          ? payload.depth_full_skill_starter_teams
+          : undefined,
+      depth_player_rows:
+        typeof payload.depth_player_rows === "number"
+          ? payload.depth_player_rows
           : undefined,
       layers: Array.isArray(payload.layers) ? payload.layers : undefined,
       capabilities: Array.isArray(payload.capabilities)
