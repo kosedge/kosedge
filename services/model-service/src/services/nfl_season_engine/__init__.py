@@ -4,6 +4,7 @@ Four layers (each module is the single source of truth for its concern):
 
 1. ``team_strength``  – offense/defense ratings that can evolve within a sim path
 2. ``game_script``    – pace, total, win prob, script detail / play-calling mix
+   (+ ``coaching_tendencies`` modest team identity overlays on play-mix / RZ)
 3. ``player_usage``   – targets, carries, routes, snap share | script + role
    (+ ``red_zone`` scoring-usage opportunities between usage and TDs)
 4. ``production``     – usage + matchup + script → yards / TDs / receptions / INTs

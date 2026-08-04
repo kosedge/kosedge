@@ -4476,6 +4476,9 @@ def _season_engine_injury_paths(
 def nfl_season_engine_status() -> Dict[str, Any]:
     """Describe the hierarchical season engine and its four layers."""
     from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
+    from src.services.nfl_season_engine.coaching_tendencies import (
+        coaching_tendencies_documentation,
+    )
     from src.services.nfl_season_engine.player_usage import usage_rules_documentation
     from src.services.nfl_season_engine.survivor import FORMULA_NOTES
     from src.services.nfl_season_engine.usage_roles import USAGE_ROLE_LABELS
@@ -4497,6 +4500,7 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             "role_volatility",
             "game_script_play_mix",
             "red_zone_scoring_usage",
+            "coaching_tendencies",
             "survivor",
             "include_diagnostics",
         ],
@@ -4582,6 +4586,7 @@ def nfl_season_engine_status() -> Dict[str, Any]:
                 "force_away_detail",
             ],
         },
+        "coaching_tendencies": coaching_tendencies_documentation(),
         "entry_points": {
             "simulate": "POST /nfl/season-engine/simulate",
             "game_boxes": "GET|POST /nfl/season-engine/game-boxes",

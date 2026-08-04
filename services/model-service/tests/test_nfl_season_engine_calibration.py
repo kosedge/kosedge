@@ -28,6 +28,7 @@ def test_engine_version_is_calibrated() -> None:
     assert any(
         tag in DEFAULT_SEASON_ENGINE_VERSION
         for tag in (
+            "coaching",
             "red-zone",
             "game-script",
             "depth-volatility",

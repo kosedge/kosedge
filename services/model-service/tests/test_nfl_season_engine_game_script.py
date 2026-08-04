@@ -34,6 +34,7 @@ def test_engine_version_game_script() -> None:
     assert (
         "game-script" in DEFAULT_SEASON_ENGINE_VERSION
         or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
+        or "coaching" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -274,7 +275,7 @@ def test_buf_kc_realism_bounds_and_diagnostics_play_mix() -> None:
         seed=2026,
         include_diagnostics=True,
     )
-    assert "red-zone" in proj.engine_version or "game-script" in proj.engine_version
+    assert "coaching" in proj.engine_version or "red-zone" in proj.engine_version or "game-script" in proj.engine_version
     by_name = {p["player_name"]: p for p in proj.players}
 
     mahomes = by_name["P.Mahomes"]

@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.7: explicit red-zone / scoring-usage layer (I20/I10 carries·targets·routes)
-# between Layer 3 usage and Layer 4 TD production; script-conditioned RZ pass rate.
-ENGINE_VERSION = "nfl-season-engine-v1.7-red-zone"
+# v1.8: team coaching / tendency profiles overlay Layer-2 play-mix + RZ pass
+# preference (modest, inspectable; usage reacts via existing script matrix).
+ENGINE_VERSION = "nfl-season-engine-v1.8-coaching"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -292,6 +292,12 @@ def calibration_notes() -> Dict[str, str]:
             "(large/small lead|deficit), time_bucket, intensity; explicit "
             "pass_rate / early_down_pass_rate / hurry_up; usage matrix "
             "intensity-scaled (see game_script.py + usage_roles.py)."
+        ),
+        "coaching_tendencies": (
+            "v1.8: team coaching profiles (pass_rate_bias, script_aggression, "
+            "rz_pass_bias, early_down_pass_bias, two_minute_aggression) overlay "
+            "Layer-2 play-mix + RZ pass rate; diagnostics expose coaching_profile "
+            "+ tendency_effects (see coaching_tendencies.py)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

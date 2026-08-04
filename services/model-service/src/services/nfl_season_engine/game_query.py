@@ -12,9 +12,13 @@ from __future__ import annotations
 import random
 import statistics
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
-from src.services.nfl_season_engine.calibration import ENGINE_VERSION
+from src.services.nfl_season_engine.calibration import ENGINE_VERSION, LEAGUE_BASE_PASS_RATE
+from src.services.nfl_season_engine.coaching_tendencies import (
+    explain_tendency_effects,
+    profile_for_team,
+)
 from src.services.nfl_season_engine.depth_chart import (
     apply_depth_chart_roster_book,
     apply_weekly_role_volatility,
@@ -106,6 +110,81 @@ def _summarize(values: Sequence[float]) -> Dict[str, float]:
         ordered[max(0, int(round((n - 1) * 0.50)))],
         ordered[max(0, int(round((n - 1) * 0.90)))],
     )
+
+
+def _coaching_tendency_diagnostics(
+    *,
+    game: ScheduledGame,
+    scripts: Sequence[Any],
+    week_strengths: Mapping[str, Any],
+    rz_pass_home: Sequence[float],
+    rz_pass_away: Sequence[float],
+) -> Dict[str, Any]:
+    """Mean tendency deltas + sample explain blocks for include_diagnostics."""
+    home_str = week_strengths.get(game.home_team)
+    away_str = week_strengths.get(game.away_team)
+    home_strength_bias = float(getattr(home_str, "pass_rate_bias", 0.0) or 0.0)
+    away_strength_bias = float(getattr(away_str, "pass_rate_bias", 0.0) or 0.0)
+    home_before = LEAGUE_BASE_PASS_RATE + home_strength_bias
+    away_before = LEAGUE_BASE_PASS_RATE + away_strength_bias
+    n = max(1, len(scripts))
+    home_pass = sum(s.home_pass_rate for s in scripts) / n
+    away_pass = sum(s.away_pass_rate for s in scripts) / n
+    home_early = sum(s.home_early_down_pass_rate for s in scripts) / n
+    away_early = sum(s.away_early_down_pass_rate for s in scripts) / n
+    home_hurry = sum(s.home_hurry_up for s in scripts) / n
+    away_hurry = sum(s.away_hurry_up for s in scripts) / n
+    home_rz = sum(rz_pass_home) / max(1, len(rz_pass_home))
+    away_rz = sum(rz_pass_away) / max(1, len(rz_pass_away))
+    sample = scripts[0] if scripts else None
+    out: Dict[str, Any] = {
+        "home": {
+            "pass_rate_mean": round(home_pass, 4),
+            "early_down_pass_rate_mean": round(home_early, 4),
+            "hurry_up_mean": round(home_hurry, 4),
+            "rz_pass_rate_mean": round(home_rz, 4),
+            "pass_rate_bias_applied": profile_for_team(game.home_team).pass_rate_bias,
+            "script_aggression": profile_for_team(game.home_team).script_aggression,
+            "rz_pass_bias_applied": profile_for_team(game.home_team).rz_pass_bias,
+            "base_pass_rate_before_coaching_bias": round(home_before, 4),
+        },
+        "away": {
+            "pass_rate_mean": round(away_pass, 4),
+            "early_down_pass_rate_mean": round(away_early, 4),
+            "hurry_up_mean": round(away_hurry, 4),
+            "rz_pass_rate_mean": round(away_rz, 4),
+            "pass_rate_bias_applied": profile_for_team(game.away_team).pass_rate_bias,
+            "script_aggression": profile_for_team(game.away_team).script_aggression,
+            "rz_pass_bias_applied": profile_for_team(game.away_team).rz_pass_bias,
+            "base_pass_rate_before_coaching_bias": round(away_before, 4),
+        },
+    }
+    if sample is not None:
+        out["sample"] = {
+            "home": explain_tendency_effects(
+                game.home_team,
+                base_pass_rate_before_coaching=home_before,
+                detail=sample.home_script_detail,
+                intensity=sample.home_script_intensity,
+                time_bucket=sample.time_bucket,
+                pass_rate=sample.home_pass_rate,
+                early_down_pass_rate=sample.home_early_down_pass_rate,
+                hurry_up=sample.home_hurry_up,
+                rz_pass_rate=rz_pass_home[0] if rz_pass_home else None,
+            ),
+            "away": explain_tendency_effects(
+                game.away_team,
+                base_pass_rate_before_coaching=away_before,
+                detail=sample.away_script_detail,
+                intensity=sample.away_script_intensity,
+                time_bucket=sample.time_bucket,
+                pass_rate=sample.away_pass_rate,
+                early_down_pass_rate=sample.away_early_down_pass_rate,
+                hurry_up=sample.away_hurry_up,
+                rz_pass_rate=rz_pass_away[0] if rz_pass_away else None,
+            ),
+        }
+    return out
 
 
 def _aggregate_play_mix(scripts: Sequence[Any], side: str) -> Dict[str, Any]:
@@ -236,6 +315,7 @@ def project_game_player_boxes(
                 detail=script.home_script_detail,  # type: ignore[arg-type]
                 intensity=script.home_script_intensity,
                 time_bucket=script.time_bucket,  # type: ignore[arg-type]
+                team=script.home_team,
             )
         )
         rz_pass_away.append(
@@ -244,6 +324,7 @@ def project_game_player_boxes(
                 detail=script.away_script_detail,  # type: ignore[arg-type]
                 intensity=script.away_script_intensity,
                 time_bucket=script.time_bucket,  # type: ignore[arg-type]
+                team=script.away_team,
             )
         )
         for u in usage:
@@ -409,9 +490,25 @@ def project_game_player_boxes(
                 ],
             },
             "scoring_usage": {
-                "home": scoring_usage_diagnostics(home_roles),
-                "away": scoring_usage_diagnostics(away_roles),
+                "home": scoring_usage_diagnostics(
+                    home_roles, team=game.home_team
+                ),
+                "away": scoring_usage_diagnostics(
+                    away_roles, team=game.away_team
+                ),
             },
+            # Additive v1.8 coaching / tendency fields.
+            "coaching_profile": {
+                "home": profile_for_team(game.home_team).to_dict(),
+                "away": profile_for_team(game.away_team).to_dict(),
+            },
+            "tendency_effects": _coaching_tendency_diagnostics(
+                game=game,
+                scripts=scripts,
+                week_strengths=week_strengths,
+                rz_pass_home=rz_pass_home,
+                rz_pass_away=rz_pass_away,
+            ),
         }
 
     return GameBoxProjection(
