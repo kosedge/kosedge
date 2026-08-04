@@ -1,9 +1,9 @@
-# Full CFB Model: Foundation → HFA + Coaching (v0.5)
+# Full CFB Model: Foundation → UI Exposure (v0.5.1)
 
-**Branch:** `feat/cfb-hfa-coaching` → `deploy-vercel`  
-**Engine version:** `cfb-season-engine-v0.5-hfa-coaching`  
+**Branch:** `feat/cfb-projection-ui` → `deploy-vercel`  
+**Engine version:** `cfb-season-engine-v0.5.1-ui`  
 **Date:** 2026-08-04  
-**Status:** Hierarchical foundation through season simulation, plus two bettor-facing layers: **variable home-field advantage** and **coaching continuity/change**. Layers 1–3 (roster / QB / position groups) intact. Calibration intentionally thin. Additive vs NFL engine and CFB markets-only Edge Board.
+**Status:** Hierarchical foundation through season simulation, HFA + coaching continuity, plus **first Pro UI** (`/pro/cfb/model`, `/pro/cfb/project-game`) and measured project-game coherence tweaks. Layers 1–3 (roster / QB / position groups) intact. Calibration intentionally thin. Additive vs NFL engine and CFB markets-only Edge Board.
 
 ## Goal
 
@@ -22,7 +22,8 @@ Design constraints (2026 reality):
 **v0.2 focus:** roster construction + QB situation as primary drivers.  
 **v0.3 focus:** position groups + stronger team projection.  
 **v0.4 focus:** season simulation + early-season uncertainty + project-game drivers.  
-**v0.5 focus:** variable HFA + coaching continuity. See `data/ops/cfb-hfa-coaching-20260804.md`.
+**v0.5 focus:** variable HFA + coaching continuity. See `data/ops/cfb-hfa-coaching-20260804.md`.  
+**v0.5.1 focus:** first UI surface + measured projection tightening. See `data/ops/cfb-ui-exposure-20260804.md`.
 
 ## Architecture (layers + feed order)
 
@@ -78,12 +79,17 @@ python scripts/cfb/run_hierarchical_season_sim.py --demo --n-sims 25 --sample-ga
 
 HTTP (model-service; additive):
 
-- `GET  /cfb/season-engine/status`
+- `GET  /cfb/season-engine/status` (includes `team_codes` + `power_style_ladder`)
 - `POST /cfb/season-engine/project-game` (alias: `game-preview`; supports `night_game`)
 - `POST /cfb/season-engine/simulate` (season paths; default n_sims=15)
 
+Web (Vercel BFF; secrets server-side):
+
+- `/pro/cfb/model` · `/pro/cfb/project-game`
+- `/api/cfb/season-engine/{status,project-game,simulate}`
+
 Tests: `services/model-service/tests/test_cfb_season_engine.py`  
-Ops detail: `data/ops/cfb-hfa-coaching-20260804.md` (also `cfb-season-sim-20260804.md`, `cfb-position-projection-20260804.md`, `cfb-roster-qb-20260804.md`)
+Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260804.md`, `cfb-season-sim-20260804.md`, `cfb-position-projection-20260804.md`, `cfb-roster-qb-20260804.md`)
 
 ## What is solid vs approximate
 
@@ -150,13 +156,15 @@ Ops detail: `data/ops/cfb-hfa-coaching-20260804.md` (also `cfb-season-sim-202608
 6. Deepen player hooks → usage/production path (skill + QB)
 7. CFP bracket skeleton on season_sim
 8. Calibration pass against 2022–2025 FBS results
-9. Optional Pro hub stub / Edge Board KEI only after calibrated fair lines exist
+9. Edge Board KEI only after calibrated fair lines exist (keep markets-only until then)
+10. Richer Pro desks (season-path explorer, conference standings UI) beyond project-game
 
 ## Railway / deploy
 
 Pushing model-service paths to `deploy-vercel` triggers `.github/workflows/deploy-railway.yml`.  
 Live check after deploy:
 
-- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.5-hfa-coaching`
-- `POST /cfb/season-engine/project-game` with `drivers.matchup.hfa` + coaching adj
+- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.5.1-ui`
+- `POST /cfb/season-engine/project-game` with `drivers.matchup.hfa` + coaching adj + ratio clamp diag
 - `POST /cfb/season-engine/simulate` with `diagnostics.variable_hfa` / `coaching_continuity`
+- Web: `https://www.kosedge.com/pro/cfb/model` + `/pro/cfb/project-game`

@@ -114,7 +114,11 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     slateLabel: "Weekly Slate",
     primary: corePrimary("cfb", {
       slateLabel: "Weekly Slate",
-      deskExtras: [{ href: "/pro/cfb/tempo", label: "Tempo" }],
+      deskExtras: [
+        { href: "/pro/cfb/tempo", label: "Tempo" },
+        { href: "/pro/cfb/model", label: "Season Model" },
+        { href: "/pro/cfb/project-game", label: "Project Game" },
+      ],
     }),
     tools: [
       ...sharedTools("cfb"),

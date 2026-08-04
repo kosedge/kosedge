@@ -38,7 +38,7 @@ describe("sport-pro-nav", () => {
     expect(nflTools).not.toContain("Game Boxes");
     expect(nflTools).not.toContain("Survivor");
 
-    for (const sport of SPORTS.filter((s) => s.key !== "nfl")) {
+    for (const sport of SPORTS.filter((s) => s.key !== "nfl" && s.key !== "cfb")) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
       const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
       expect(tools).not.toContain("Wall Chart");
@@ -51,11 +51,24 @@ describe("sport-pro-nav", () => {
       expect(primary).not.toContain("Game Boxes");
       expect(primary).not.toContain("Season Model");
     }
+
+    // CFB season model desks are primary (not tools overflow).
+    const cfbTools = getSportToolNav("cfb").map((i) => i.label);
+    const cfbPrimary = getSportPrimaryNav("cfb").map((i) => i.label);
+    expect(cfbTools).not.toContain("Season Model");
+    expect(cfbTools).not.toContain("Project Game");
+    expect(cfbPrimary).toContain("Season Model");
+    expect(cfbPrimary).toContain("Project Game");
+    expect(cfbPrimary).not.toContain("Survivor");
+    expect(cfbPrimary).not.toContain("Game Boxes");
   });
 
   it("uses Tempo for college and Goalie Desk for NHL", () => {
     expect(getSportPrimaryNav("ncaam").map((i) => i.label)).toContain("Tempo");
     expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain("Tempo");
+    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain(
+      "Season Model",
+    );
     expect(getSportPrimaryNav("nhl").map((i) => i.label)).toContain(
       "Goalie Desk",
     );

@@ -1,4 +1,4 @@
-"""Hierarchical CFB season engine (HFA + coaching continuity).
+"""Hierarchical CFB season engine (projection UI + HFA / coaching).
 
 College football 2026 reality (design constraints):
 - Extreme roster turnover (portal + NIL + draft + freshmen)
@@ -176,6 +176,37 @@ def engine_status_payload(
         {"team": code, "roster_strength": round(score, 2)} for code, score in ranked[-8:]
     ]
 
+    power_ranked = sorted(
+        (
+            (
+                code,
+                0.5 * (t.offense_index + t.defense_index),
+                t.offense_index,
+                t.defense_index,
+                t.roster.roster_strength if t.roster else 0.0,
+                t.early_season_uncertainty,
+            )
+            for code, t in universe.teams.items()
+        ),
+        key=lambda row: row[1],
+        reverse=True,
+    )
+    power_style_ladder = [
+        {
+            "rank": i + 1,
+            "team": code,
+            "power_index": round(power, 3),
+            "offense_index": round(off, 3),
+            "defense_index": round(deff, 3),
+            "roster_strength": round(roster_s, 2),
+            "early_season_uncertainty": round(early_u, 3),
+            "conference": universe.conferences.get(code, "Independent"),
+        }
+        for i, (code, power, off, deff, roster_s, early_u) in enumerate(
+            power_ranked[:40]
+        )
+    ]
+
     hfa_buckets: Dict[str, int] = {}
     coaching_flags = {"new_hc": 0, "new_oc": 0, "new_dc": 0, "all_returning": 0}
     for state in universe.teams.values():
@@ -196,11 +227,12 @@ def engine_status_payload(
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
         "sport": "cfb",
-        "scope": "FBS season sim + variable HFA + coaching continuity 2026",
+        "scope": "FBS season sim + projection UI + variable HFA + coaching 2026",
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
         "team_count": meta.get("team_count"),
+        "team_codes": sorted(universe.teams.keys()),
         "team_fidelity_counts": {
             "approximate_curated": curated,
             "placeholder_fbs": placeholder,
@@ -230,6 +262,14 @@ def engine_status_payload(
                 "Packaged approximate ranks — blue-blood recruiting/returning "
                 "profiles should outrank placeholder mid-majors."
             ),
+        },
+        "power_style_ladder": {
+            "top": power_style_ladder,
+            "note": (
+                "Thin power-style ranks from 0.5*(offense_index+defense_index). "
+                "Approximate packaged priors — not market-grade power ratings."
+            ),
+            "fidelity": "approximate",
         },
         "data_sources": {
             "packaged_team_priors": loaders.documentation()["packaged_teams"],
@@ -291,7 +331,9 @@ def engine_status_payload(
             "project_game": "POST /cfb/season-engine/project-game",
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
-            "ops": "data/ops/cfb-hfa-coaching-20260804.md",
+            "ops": "data/ops/cfb-ui-exposure-20260804.md",
+            "web_hub": "/pro/cfb/model",
+            "web_project_game": "/pro/cfb/project-game",
         },
         "additive": True,
         "does_not_modify": [
