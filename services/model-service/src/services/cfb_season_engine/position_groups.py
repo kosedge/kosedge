@@ -35,15 +35,27 @@ def build_position_groups(
     if skill is None:
         skill = (qb.weapons_support if qb else 50.0)
         if roster:
-            skill = 0.55 * float(skill) + 0.25 * roster.recruiting_capital + 0.20 * roster.portal_in_score
+            skill = (
+                0.55 * float(skill)
+                + 0.25 * roster.recruiting_class_score
+                + 0.20 * roster.portal_in_value
+            )
     if front is None:
         front = 50.0
         if roster:
-            front = 0.4 * roster.recruiting_capital + 0.35 * roster.returning_production + 0.25 * roster.experience_index
+            front = (
+                0.4 * roster.recruiting_class_score
+                + 0.35 * roster.returning_production
+                + 0.25 * roster.experience_index
+            )
     if secondary is None:
         secondary = 50.0
         if roster:
-            secondary = 0.35 * roster.recruiting_capital + 0.35 * roster.returning_production + 0.30 * roster.portal_in_score
+            secondary = (
+                0.35 * roster.recruiting_class_score
+                + 0.35 * roster.returning_production
+                + 0.30 * roster.portal_in_value
+            )
 
     fidelity = str(p.get("fidelity", "approximate"))
     if fidelity not in ("real", "approximate", "placeholder"):

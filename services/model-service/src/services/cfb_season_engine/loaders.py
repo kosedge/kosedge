@@ -79,10 +79,17 @@ def _build_round_robin_schedule(season: int, teams: List[str]) -> List[Scheduled
 
 def _team_state_from_payload(team: str, payload: Mapping[str, Any]) -> Tuple[TeamProjectionState, List[PlayerHook]]:
     roster = build_roster_construction(team, payload.get("roster"))
-    qb = build_qb_situation(team, payload.get("qb"))
+    groups_payload = payload.get("position_groups") or {}
+    # Wire OL/skill grades into QB supporting cast when packaged.
+    qb = build_qb_situation(
+        team,
+        payload.get("qb"),
+        ol_grade=groups_payload.get("ol"),
+        skill_grade=groups_payload.get("skill"),
+    )
     groups = build_position_groups(
         team,
-        payload.get("position_groups"),
+        groups_payload,
         roster=roster,
         qb=qb,
     )
@@ -121,8 +128,9 @@ def build_packaged_universe(season: int = 2026) -> EngineUniverse:
         "team_count": str(len(teams)),
         "schedule_source": "packaged_sample" if PACKAGED_SCHEDULE.exists() else "round_robin_fallback",
         "gap_portal_feed": "No live portal/returning-production DB feed wired yet",
-        "gap_recruiting_feed": "Recruiting capital is packaged approximate composite",
-        "scope": "FBS focus for 2026 foundation",
+        "gap_recruiting_feed": "Recruiting class score is packaged approximate composite",
+        "primary_drivers": "roster_strength + qb_situation_index",
+        "scope": "FBS focus for 2026; v0.2 deepens roster + QB layers",
     }
     return EngineUniverse(
         season=season,

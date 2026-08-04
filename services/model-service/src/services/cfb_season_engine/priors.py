@@ -6,7 +6,8 @@ College football 2026 reality drives these knobs:
 - QB situation is a first-class lever
 - Early-season uncertainty is *wider* than NFL W1–W4
 
-Calibration is intentionally thin — foundation structure first.
+v0.2 deepens roster_strength + qb_situation_index as the primary drivers
+of team projection. Calibration remains intentionally thin.
 """
 
 from __future__ import annotations
@@ -14,8 +15,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.1-foundation"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0"
+ENGINE_VERSION = "cfb-season-engine-v0.2-roster-qb"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.2-roster-qb"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -38,21 +39,22 @@ STRENGTH_MEAN_REVERT = 0.012
 STRENGTH_NOISE = 0.018
 STRENGTH_CLAMP = (0.55, 1.55)
 
-# Composition weights: roster + QB + groups → offense/defense indices.
-# Historical team strength is deliberately *not* a dominant term.
-WEIGHT_RETURNING_PROD = 0.22
-WEIGHT_PORTAL_NET = 0.18
-WEIGHT_RECRUITING = 0.12
-WEIGHT_EXPERIENCE = 0.10
-WEIGHT_QB = 0.28
-WEIGHT_SKILL_GROUP = 0.10
+# ---------------------------------------------------------------------------
+# Layer 1 — roster strength components (transparent weights)
+# ---------------------------------------------------------------------------
+ROSTER_SNAP_WEIGHT = 0.65
+ROSTER_START_WEIGHT = 0.35
+ROSTER_PORTAL_OUT_WEIGHT = 0.70
+ROSTER_PORTAL_NET_OFFSET = 35.0
 
-WEIGHT_DEF_FRONT_SEVEN = 0.38
-WEIGHT_DEF_SECONDARY = 0.32
-WEIGHT_DEF_EXPERIENCE = 0.15
-WEIGHT_DEF_RECRUITING = 0.15
+ROSTER_STRENGTH_RETURNING = 0.32
+ROSTER_STRENGTH_PORTAL_NET = 0.26
+ROSTER_STRENGTH_RECRUITING = 0.26
+ROSTER_STRENGTH_EXPERIENCE = 0.16
 
-# QB class uncertainty priors (0–1).
+# ---------------------------------------------------------------------------
+# Layer 2 — QB situation (first-class lever)
+# ---------------------------------------------------------------------------
 QB_CLASS_UNCERTAINTY: Dict[str, float] = {
     "incumbent": 0.18,
     "portal": 0.42,
@@ -61,8 +63,45 @@ QB_CLASS_UNCERTAINTY: Dict[str, float] = {
     "unknown": 0.50,
 }
 
-# QB talent → offense index contribution scale.
-QB_TALENT_TO_OFFENSE = 0.0045  # per talent point above/below 50
+# Class → offense multiplier. Intentionally sharp so true_freshman vs
+# incumbent is visible in project-game / season-sim, not a 1% nudge.
+QB_CLASS_OFFENSE_MULT: Dict[str, float] = {
+    "incumbent": 1.10,
+    "portal": 0.96,
+    "open_competition": 0.88,
+    "true_freshman": 0.80,
+    "unknown": 0.93,
+}
+
+QB_CAST_OL_WEIGHT = 0.55
+QB_CAST_WEAPONS_WEIGHT = 0.45
+QB_CAST_INDEX_SCALE = 0.14  # ±14% index from cast extremes
+
+# ---------------------------------------------------------------------------
+# Layer 4 — composition: roster_strength + qb_situation dominate
+# Historical team strength is deliberately *not* a dominant term.
+# ---------------------------------------------------------------------------
+WEIGHT_ROSTER_STRENGTH = 0.40
+WEIGHT_QB_SITUATION = 0.36
+WEIGHT_SKILL_GROUP = 0.14
+WEIGHT_OL_GROUP = 0.10
+
+# Legacy aliases retained for status docs / older call sites.
+WEIGHT_RETURNING_PROD = ROSTER_STRENGTH_RETURNING
+WEIGHT_PORTAL_NET = ROSTER_STRENGTH_PORTAL_NET
+WEIGHT_RECRUITING = ROSTER_STRENGTH_RECRUITING
+WEIGHT_EXPERIENCE = ROSTER_STRENGTH_EXPERIENCE
+WEIGHT_QB = WEIGHT_QB_SITUATION
+
+WEIGHT_DEF_ROSTER_STRENGTH = 0.28
+WEIGHT_DEF_FRONT_SEVEN = 0.32
+WEIGHT_DEF_SECONDARY = 0.26
+WEIGHT_DEF_EXPERIENCE = 0.14
+WEIGHT_DEF_RECRUITING = 0.0  # folded into roster_strength
+
+# Direct index blend: keep qb_situation_index as a hard lever after compose.
+QB_INDEX_BLEND = 0.42  # offense_index = (1-b)*base + b*(base*qb_index/1.0) effectively
+# Applied as: offense_index *= (1 - QB_INDEX_BLEND) + QB_INDEX_BLEND * qb_situation_index
 
 # ---------------------------------------------------------------------------
 # Early-season uncertainty (weeks 1–4) — wider than NFL analog
@@ -155,7 +194,10 @@ def documentation() -> Dict[str, Any]:
         "fidelity": "approximate",
         "assumptions": [
             "Historical team ratings alone are insufficient for CFB 2026.",
-            "Roster construction + QB situation dominate early-season identity.",
+            "roster_strength + qb_situation_index are the primary drivers of "
+            "offense/defense indices (v0.2).",
+            "Returning production is snap/start weighted, not starter-count only.",
+            "QB class multipliers are intentional and sharp (true_freshman << incumbent).",
             "Packaged priors are approximate stand-ins until portal/recruiting "
             "feeds are wired; do not treat unit grades as calibrated SP+.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
@@ -167,20 +209,28 @@ def documentation() -> Dict[str, Any]:
             "score_noise_sd": SCORE_NOISE_SD,
             "win_prob_margin_sd": WIN_PROB_MARGIN_SD,
         },
+        "roster_strength_weights": {
+            "returning_production": ROSTER_STRENGTH_RETURNING,
+            "portal_net": ROSTER_STRENGTH_PORTAL_NET,
+            "recruiting_class_score": ROSTER_STRENGTH_RECRUITING,
+            "experience_index": ROSTER_STRENGTH_EXPERIENCE,
+            "snap_weight": ROSTER_SNAP_WEIGHT,
+            "start_weight": ROSTER_START_WEIGHT,
+        },
+        "qb_class_offense_mult": dict(QB_CLASS_OFFENSE_MULT),
         "composition_weights": {
             "offense": {
-                "returning_production": WEIGHT_RETURNING_PROD,
-                "portal_net": WEIGHT_PORTAL_NET,
-                "recruiting": WEIGHT_RECRUITING,
-                "experience": WEIGHT_EXPERIENCE,
-                "qb": WEIGHT_QB,
+                "roster_strength": WEIGHT_ROSTER_STRENGTH,
+                "qb_situation": WEIGHT_QB_SITUATION,
                 "skill_group": WEIGHT_SKILL_GROUP,
+                "ol_group": WEIGHT_OL_GROUP,
+                "qb_index_blend": QB_INDEX_BLEND,
             },
             "defense": {
+                "roster_strength": WEIGHT_DEF_ROSTER_STRENGTH,
                 "front_seven": WEIGHT_DEF_FRONT_SEVEN,
                 "secondary": WEIGHT_DEF_SECONDARY,
                 "experience": WEIGHT_DEF_EXPERIENCE,
-                "recruiting": WEIGHT_DEF_RECRUITING,
             },
         },
     }
