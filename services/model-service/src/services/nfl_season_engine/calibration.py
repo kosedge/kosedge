@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.9.2: final smoke / trust check + light UI polish. Modeling unchanged from
-# v1.9.1 real-depth; game-box notes call out synthetic / bye-week matchups.
-ENGINE_VERSION = "nfl-season-engine-v1.9.2-smoke-polish"
+# v1.10: multi-week survivor planner (joint path_survival + per-week ranks).
+# Modeling layers unchanged from v1.9.2 smoke-polish.
+ENGINE_VERSION = "nfl-season-engine-v1.10-survivor-planner"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -307,6 +307,11 @@ def calibration_notes() -> Dict[str, str]:
         "smoke_polish": (
             "v1.9.2: final smoke/trust check + light UI polish; game-box notes "
             "flag synthetic matchups and bye-week teams in the query."
+        ),
+        "survivor_planner": (
+            "v1.10: multi-week survivor planner — one season-sim pass ranks "
+            "each unlocked week (used-team exclusion) and reports joint "
+            "path_survival for locked picks (see survivor.py PATH_FORMULA_NOTES)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

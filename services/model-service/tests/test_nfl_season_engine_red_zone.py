@@ -31,6 +31,7 @@ def test_engine_version_red_zone() -> None:
         or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
+        or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -310,6 +311,7 @@ def test_buf_kc_td_sanity_and_rz_diagnostics() -> None:
         or "real-2026" in proj.engine_version
         or "real-depth" in proj.engine_version
         or "smoke-polish" in proj.engine_version
+        or "survivor-planner" in proj.engine_version
         or proj.engine_version == "nfl-season-engine-v1.7-red-zone"
     )
     by_name = {p["player_name"]: p for p in proj.players}

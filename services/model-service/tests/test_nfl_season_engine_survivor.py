@@ -1,16 +1,21 @@
-"""Tests for survivor-pool outputs (season-engine v1.4)."""
+"""Tests for survivor-pool outputs (season-engine v1.4 / v1.10 planner)."""
 
 from __future__ import annotations
+
+import pytest
 
 from src.services.nfl_season_engine import (
     DEFAULT_SEASON_ENGINE_VERSION,
     InjuryPath,
     build_demo_universe,
+    build_packaged_real_universe,
     evaluate_survivor,
+    evaluate_survivor_plan,
     week_win_rate_for_team,
 )
 from src.services.nfl_season_engine.survivor import (
     FORMULA_NOTES,
+    PATH_FORMULA_NOTES,
     score_team_survivor,
 )
 from src.services.nfl_season_engine.team_strength import initialize_strengths
@@ -33,6 +38,7 @@ def test_engine_version_surfaces_survivor() -> None:
         or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
+        or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -149,6 +155,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
         or "real-2026" in result.engine_version
         or "real-depth" in result.engine_version
         or "smoke-polish" in result.engine_version
+        or "survivor-planner" in result.engine_version
     )
 
 
@@ -197,3 +204,92 @@ def test_mini_universe_survivor_runs() -> None:
     assert "AAA" in ranked or "BBB" in ranked or "DDD" in ranked
     assert week_win_rate_for_team(result, "AAA") is not None
     assert week_win_rate_for_team(result, "AAA") >= week_win_rate_for_team(result, "DDD")
+
+
+def test_planner_excludes_used_teams_across_weeks() -> None:
+    universe = build_demo_universe(2026)
+    plan = evaluate_survivor_plan(
+        universe,
+        picks={"1": "KC", "3": "BUF"},
+        n_sims=40,
+        seed=11,
+        top_n=16,
+    )
+    assert plan.locked_picks == {"1": "KC", "3": "BUF"}
+    assert set(plan.used_teams) == {"KC", "BUF"}
+    assert "survivor-planner" in plan.engine_version or "survivor" in PATH_FORMULA_NOTES
+    assert "path_survival" in PATH_FORMULA_NOTES
+    open_weeks = [w for w in plan.weeks if w["status"] == "open"]
+    assert open_weeks
+    for week in open_weeks:
+        ranked_teams = {r["team"] for r in week["ranked_picks"]}
+        assert "KC" not in ranked_teams
+        assert "BUF" not in ranked_teams
+
+
+def test_planner_rejects_bye_pick_on_real_schedule() -> None:
+    universe = build_packaged_real_universe(2026)
+    # KC bye week 5 on 2026 wall-chart.
+    with pytest.raises(ValueError, match="bye|not scheduled"):
+        evaluate_survivor_plan(
+            universe,
+            picks={"5": "KC"},
+            n_sims=10,
+            seed=1,
+            top_n=4,
+        )
+
+
+def test_planner_rejects_duplicate_team() -> None:
+    universe = build_demo_universe(2026)
+    with pytest.raises(ValueError, match="multiple weeks"):
+        evaluate_survivor_plan(
+            universe,
+            picks={"1": "KC", "2": "KC"},
+            n_sims=10,
+            seed=1,
+        )
+
+
+def test_path_survival_monotonic_when_adding_chalk() -> None:
+    """Adding a strong week-1 lock should not raise path survival vs empty."""
+    universe = build_demo_universe(2026)
+    empty = evaluate_survivor_plan(
+        universe, picks={}, n_sims=80, seed=7, top_n=4
+    )
+    assert empty.path_survival == 1.0
+    assert empty.path_strength == "Empty"
+
+    # Lock a chalky team in week 1 (highest strength side typically wins often).
+    chalk = evaluate_survivor_plan(
+        universe, picks={"1": "KC"}, n_sims=80, seed=7, top_n=4
+    )
+    assert 0.0 < chalk.path_survival <= 1.0
+    assert chalk.path_survival <= empty.path_survival
+
+    fragile = evaluate_survivor_plan(
+        universe,
+        picks={"1": "KC", "2": "BUF", "3": "PHI", "4": "DET"},
+        n_sims=80,
+        seed=7,
+        top_n=4,
+    )
+    assert fragile.path_survival <= chalk.path_survival
+    assert fragile.locked_pick_count == 4
+    assert fragile.path_strength in {"Strong", "OK", "Fragile"}
+
+
+def test_planner_open_week_recommendations_present() -> None:
+    universe = build_demo_universe(2026)
+    plan = evaluate_survivor_plan(
+        universe, picks={"2": "DET"}, n_sims=30, seed=3, top_n=5
+    )
+    week1 = next(w for w in plan.weeks if w["week"] == 1)
+    assert week1["status"] == "open"
+    assert 1 <= len(week1["ranked_picks"]) <= 5
+    assert week1["ranked_picks"][0]["pick_now_score"] >= week1["ranked_picks"][-1][
+        "pick_now_score"
+    ]
+    locked = next(w for w in plan.weeks if w["week"] == 2)
+    assert locked["status"] == "locked"
+    assert locked["locked_team"] == "DET"

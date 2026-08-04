@@ -200,6 +200,65 @@ export function buildSurvivorBody(input: {
   };
 }
 
+/** Normalize planner picks ``{ week: team }``; drops invalid / duplicate teams. */
+export function normalizeSurvivorPlanPicks(
+  picks: Record<string, string> | Record<number, string> | null | undefined,
+): Record<string, string> {
+  if (!picks || typeof picks !== "object") return {};
+  const out: Record<string, string> = {};
+  const seen = new Set<string>();
+  const weeks = Object.keys(picks)
+    .map((k) => Number(k))
+    .filter((w) => Number.isFinite(w) && w >= 1 && w <= 22)
+    .sort((a, b) => a - b);
+  for (const week of weeks) {
+    const raw = (picks as Record<string | number, string>)[week] ??
+      (picks as Record<string, string>)[String(week)];
+    const team = normalizeNflTeamCode(String(raw ?? ""));
+    if (!team || seen.has(team)) continue;
+    seen.add(team);
+    out[String(week)] = team;
+  }
+  return out;
+}
+
+export function buildSurvivorPlanBody(input: {
+  picks?: Record<string, string> | Record<number, string>;
+  nSims?: number;
+  season?: number;
+  seed?: number;
+  demo?: boolean;
+  topN?: number;
+  injuryPaths?: InjuryPathInput[];
+  includeDiagnostics?: boolean;
+}): {
+  season: number;
+  n_sims: number;
+  picks: Record<string, string>;
+  top_n: number;
+  seed?: number;
+  demo?: boolean;
+  injury_paths?: InjuryPathInput[];
+  include_diagnostics?: boolean;
+} {
+  return {
+    season: clampInt(input.season, 2026, 2020, 2030),
+    n_sims: clampInt(input.nSims, 250, 50, 500),
+    picks: normalizeSurvivorPlanPicks(input.picks),
+    top_n: clampInt(input.topN, 6, 1, 32),
+    ...(input.seed !== undefined
+      ? { seed: clampInt(input.seed, 42, 0, 2_147_483_647) }
+      : {}),
+    ...(input.demo !== undefined ? { demo: Boolean(input.demo) } : {}),
+    ...(input.injuryPaths?.length
+      ? { injury_paths: input.injuryPaths }
+      : {}),
+    ...(input.includeDiagnostics === false
+      ? { include_diagnostics: false }
+      : { include_diagnostics: true }),
+  };
+}
+
 export function buildStarOutInjuryPath(input: {
   team: string;
   playerName: string;

@@ -1,9 +1,9 @@
 # NFL Season Engine — Public API Contract
 
-**Engine version:** `nfl-season-engine-v1.9.1-real-depth`  
+**Engine version:** `nfl-season-engine-v1.10-survivor-planner`  
 **Date:** 2026-08-04  
 **Package:** `services/model-service/src/services/nfl_season_engine/`  
-**Cutover note:** v1.9.1 adds real 2026 depth identities (nflverse / DB weekly / packaged). Schedule cutover from v1.9 unchanged. See `data/ops/nfl-season-engine-real-depth-20260804.md`.
+**Cutover note:** v1.10 adds multi-week survivor planner (`POST …/survivor/plan`). Depth/schedule cutover from v1.9.x unchanged. See `data/ops/nfl-survivor-planner-20260804.md`.
 
 Additive HTTP surface on model-service. Does **not** modify Edge Board, Model-vs-KEI (#70), or `nfl_market_projections`.
 
@@ -16,6 +16,7 @@ Additive HTTP surface on model-service. Does **not** modify Edge Board, Model-vs
 | `GET` | `/nfl/season-engine/game-boxes` | Future-game player box distributions |
 | `POST` | `/nfl/season-engine/game-boxes` | Same + optional `injury_paths` / diagnostics |
 | `POST` | `/nfl/season-engine/survivor` | Survivor week rankings + path-value scores |
+| `POST` | `/nfl/season-engine/survivor/plan` | Multi-week planner: locked picks → path_survival + open-week ranks |
 
 CLI: `scripts/nfl/run_hierarchical_season_sim.py`, `run_survivor_evaluate.py`, `harden_validate_season_engine.py`.
 
@@ -162,6 +163,43 @@ Volume counters (`pass_attempts` / `carries` / `targets`) always appear under `d
 
 ---
 
+## `POST /nfl/season-engine/survivor/plan`
+
+**Body:**
+
+```json
+{
+  "season": 2026,
+  "n_sims": 300,
+  "seed": 42,
+  "picks": {"1": "CHI", "2": "ATL"},
+  "injury_paths": [],
+  "demo": false,
+  "as_of_week": 1,
+  "top_n": 8,
+  "include_diagnostics": true
+}
+```
+
+**Response (stable):**
+
+| Field | Meaning |
+| --- | --- |
+| `locked_picks` | Normalized `{ "week": "TEAM" }` |
+| `used_teams` | Teams locked anywhere on the slate |
+| `weeks[]` | Per schedule week: `status` `locked`\|`open`, `ranked_picks` (open), `available_teams`, `locked_pick` |
+| `path_survival` / `path_survival_pct` | Fraction of sims where **all** locked picks win |
+| `path_strength` | `Empty` \| `Strong` \| `OK` \| `Fragile` (geo of locked marginal WPs) |
+| `formula` | Includes `path_survival` / `path_strength` / planner exclusion notes |
+
+**Errors (400):** bye / unscheduled lock, duplicate team across weeks, unknown team.
+
+**Efficiency:** One multi-week sim pass (not N separate survivor calls).
+
+**Limitations:** Same team-W/L caveats as `/survivor`; not pool EV. See `nfl-survivor-planner-20260804.md`.
+
+---
+
 ## Injury path body schema
 
 ```json
@@ -196,6 +234,7 @@ Prefer these names in clients (do not invent aliases):
 - `engine_version` (not `version`)
 - `point_estimate` + `distributions` (game boxes)
 - `ranked_picks` / `already_used` / `pick_now_score` / `save_score`
+- `locked_picks` / `path_survival` / `path_strength` (planner)
 - `usage_role` (not `role_label`)
 - `depth_structure` / `role_transitions` (diagnostics; v1.5 additive)
 - `red_zone` / `scoring_usage` (diagnostics; v1.7 additive)
