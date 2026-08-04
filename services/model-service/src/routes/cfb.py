@@ -19,6 +19,7 @@ class ProjectGameBody(BaseModel):
     season: int = Field(2026, ge=2010, le=2100)
     week: int = Field(1, ge=1, le=20)
     neutral_site: bool = False
+    night_game: bool = False
     demo: bool = True
 
 
@@ -68,6 +69,7 @@ def cfb_season_engine_project_game(
             week=body.week,
             season=body.season,
             neutral_site=body.neutral_site,
+            night_game=body.night_game,
         )
     except KeyError as exc:
         return {

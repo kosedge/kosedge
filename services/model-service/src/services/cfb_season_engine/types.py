@@ -7,6 +7,49 @@ from typing import Any, Dict, List, Literal, Optional
 
 QbClass = Literal["incumbent", "portal", "open_competition", "true_freshman", "unknown"]
 DataFidelity = Literal["real", "approximate", "placeholder"]
+HfaBucket = Literal["elite", "strong", "average", "weak", "poor"]
+
+
+@dataclass(frozen=True)
+class HomeFieldProfile:
+    """Variable home-field advantage profile (not flat 3 pts)."""
+
+    team: str
+    env_score: float = 50.0  # 0–100 recent-home / venue proxy
+    bucket: HfaBucket = "average"
+    hfa_points: float = 2.0  # bucket points (pre night bump)
+    baseline_points: float = 2.0
+    bucket_delta: float = 0.0  # hfa_points - baseline
+    major_environment: bool = False
+    venue: str = ""
+    night_game_default: bool = False
+    source: str = "packaged_prior"
+    fidelity: DataFidelity = "approximate"
+    notes: str = ""
+
+
+@dataclass(frozen=True)
+class CoachingContinuity:
+    """Staff continuity / change flags + inspectable early penalties."""
+
+    team: str
+    new_hc: bool = False
+    new_oc: bool = False
+    new_dc: bool = False
+    returning_hc: bool = True
+    returning_oc: bool = True
+    returning_dc: bool = True
+    hc_name: str = ""
+    continuity_score: float = 100.0  # 0–100; 100 = all returning
+    offense_penalty_w1: float = 0.0
+    defense_penalty_w1: float = 0.0
+    offense_index_mult: float = 1.0
+    defense_index_mult: float = 1.0
+    uncertainty_boost: float = 0.0
+    continuity_bonus_w1: float = 0.0
+    source: str = "packaged_prior"
+    fidelity: DataFidelity = "approximate"
+    notes: str = ""
 
 
 @dataclass(frozen=True)
@@ -95,6 +138,8 @@ class TeamProjectionState:
     roster: Optional[RosterConstruction] = None
     qb: Optional[QbSituation] = None
     groups: Optional[PositionGroupGrades] = None
+    home_field: Optional[HomeFieldProfile] = None
+    coaching: Optional[CoachingContinuity] = None
     source: str = "hierarchical_compose"
     fidelity: DataFidelity = "approximate"
     games_played: int = 0
@@ -111,6 +156,8 @@ class TeamProjectionState:
             roster=self.roster,
             qb=self.qb,
             groups=self.groups,
+            home_field=self.home_field,
+            coaching=self.coaching,
             source=self.source,
             fidelity=self.fidelity,
             games_played=self.games_played,
@@ -126,6 +173,7 @@ class ScheduledGame:
     home_team: str
     away_team: str
     neutral_site: bool = False
+    night_game: bool = False
 
 
 @dataclass(frozen=True)

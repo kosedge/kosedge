@@ -221,6 +221,16 @@ def simulate_full_season(
             "week_sample_path_index": 0,
             "conference_count": len(conference_standings),
             "strength_evolution": "mild + week-indexed early noise",
+            "variable_hfa": True,
+            "coaching_continuity": True,
+            "hfa_baseline_points": P.HFA_BASELINE_POINTS,
+            "layers_in_path": [
+                "roster",
+                "qb",
+                "position_groups",
+                "variable_hfa",
+                "coaching_continuity",
+            ],
         },
     )
 

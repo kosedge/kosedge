@@ -10,7 +10,10 @@
     "EXTRA codes are explicit placeholder league-average rows so the universe is FBS-shaped.",
     "Portal/recruiting/returning production live feeds remain gaps.",
     "Named QBs are illustrative 2026 situation labels and may lag real depth charts.",
-    "v0.3: position_groups enriched with talent/experience/portal_impact components; placeholder flat unit rows given distinct roster-derived grades."
+    "v0.3: position_groups enriched with talent/experience/portal_impact components; placeholder flat unit rows given distinct roster-derived grades.",
+    "v0.5: home_field (variable HFA buckets) and coaching (HC/OC/DC continuity) blocks added.",
+    "HFA env_scores are curated venue / recent-home proxies or roster-derived \u2014 not live ATS splits.",
+    "Coaching change flags are curated approximate for notable 2026 regimes; others default returning."
   ],
   "teams": {
     "UGA": {
@@ -81,7 +84,30 @@
           "usage_share": 0.22,
           "talent": 82
         }
-      ]
+      ],
+      "home_field": {
+        "env_score": 81.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Sanford Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "Kirby Smart",
+        "continuity_score": 100.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: returning staff"
+      }
     },
     "ALA": {
       "roster": {
@@ -145,7 +171,30 @@
           "usage_share": 0.94,
           "talent": 80
         }
-      ]
+      ],
+      "home_field": {
+        "env_score": 77.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": true,
+        "venue": "Bryant-Denny",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=strong pts=2.75 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "Kalen DeBoer",
+        "continuity_score": 100.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: returning HC (year-2 continuity)"
+      }
     },
     "OSU": {
       "roster": {
@@ -215,7 +264,30 @@
           "usage_share": 0.24,
           "talent": 88
         }
-      ]
+      ],
+      "home_field": {
+        "env_score": 80.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Ohio Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
+      }
     },
     "MICH": {
       "roster": {
@@ -271,6 +343,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 76.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": true,
+        "venue": "Michigan Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=strong pts=2.75 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": true,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": false,
+        "hc_name": "Sherrone Moore",
+        "continuity_score": 70.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: returning HC/OC, new DC"
       }
     },
     "TEX": {
@@ -335,7 +430,30 @@
           "usage_share": 0.96,
           "talent": 90
         }
-      ]
+      ],
+      "home_field": {
+        "env_score": 74.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "DKR",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
+      }
     },
     "OU": {
       "roster": {
@@ -391,6 +509,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 83.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Gaylord Family",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ORE": {
@@ -447,6 +588,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 90.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Autzen Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "Dan Lanning",
+        "continuity_score": 100.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: returning staff"
       }
     },
     "PSU": {
@@ -503,6 +667,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 88.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Beaver Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": true,
+        "new_oc": true,
+        "new_dc": true,
+        "returning_hc": false,
+        "returning_oc": false,
+        "returning_dc": false,
+        "hc_name": "new_hc_2026",
+        "continuity_score": 10.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: new HC regime (largest early penalty)"
       }
     },
     "LSU": {
@@ -559,6 +746,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 92.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Tiger Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ND": {
@@ -615,6 +825,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 78.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": true,
+        "venue": "Notre Dame Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=strong pts=2.75 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CLEM": {
@@ -671,6 +904,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 87.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Memorial Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MIA": {
@@ -727,6 +983,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 58.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "Hard Rock",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "FSU": {
@@ -784,6 +1063,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 70.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "Doak Campbell",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": true,
+        "new_dc": true,
+        "returning_hc": true,
+        "returning_oc": false,
+        "returning_dc": false,
+        "hc_name": "Mike Norvell",
+        "continuity_score": 50.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: returning HC, new OC+DC"
       }
     },
     "TENN": {
@@ -840,6 +1142,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 85.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Neyland Stadium",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "USC": {
@@ -896,6 +1221,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "LA Coliseum",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WASH": {
@@ -952,6 +1300,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 67.1,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TA&M": {
@@ -1008,6 +1379,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 74.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "OLE": {
@@ -1065,6 +1459,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 68.3,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UF": {
@@ -1121,6 +1538,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 86.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Ben Hill Griffin",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "AUB": {
@@ -1177,6 +1617,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 82.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Jordan-Hare",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UK": {
@@ -1234,6 +1697,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 65.55,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MSST": {
@@ -1290,6 +1776,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.2,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ARK": {
@@ -1346,6 +1855,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 64.9,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SCAR": {
@@ -1402,6 +1934,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 65.5,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "VAN": {
@@ -1458,6 +2013,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 64.6,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "IU": {
@@ -1514,6 +2092,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 65.2,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ILL": {
@@ -1570,6 +2171,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.6,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "IOWA": {
@@ -1626,6 +2250,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 66.7,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WIS": {
@@ -1683,6 +2330,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 84.0,
+        "bucket": "elite",
+        "hfa_points": 3.4,
+        "major_environment": true,
+        "venue": "Camp Randall",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=elite pts=3.40 (baseline=2.00); major_environment"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MINN": {
@@ -1739,6 +2409,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "NEB": {
@@ -1795,6 +2488,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 66.4,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": true,
+        "new_oc": true,
+        "new_dc": true,
+        "returning_hc": false,
+        "returning_oc": false,
+        "returning_dc": false,
+        "hc_name": "new_hc_2026",
+        "continuity_score": 10.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: full staff reset"
       }
     },
     "NW": {
@@ -1851,6 +2567,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 57.1,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "PUR": {
@@ -1908,6 +2647,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 56.8,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "RUT": {
@@ -1964,6 +2726,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.5,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MD": {
@@ -2020,6 +2805,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.1,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MSU": {
@@ -2077,6 +2885,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.7,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UCLA": {
@@ -2134,6 +2965,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.9,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": true,
+        "new_oc": true,
+        "new_dc": false,
+        "returning_hc": false,
+        "returning_oc": false,
+        "returning_dc": true,
+        "hc_name": "new_hc_2026",
+        "continuity_score": 40.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: new HC + OC"
       }
     },
     "CAL": {
@@ -2190,6 +3044,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 60.4,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "STAN": {
@@ -2246,6 +3123,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 61.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ASU": {
@@ -2302,6 +3202,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 65.3,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ARI": {
@@ -2359,6 +3282,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.2,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UTAH": {
@@ -2415,6 +3361,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 66.4,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "COLO": {
@@ -2471,6 +3440,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 68.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "Folsom Field",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": true,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": false,
+        "returning_dc": true,
+        "hc_name": "Deion Sanders",
+        "continuity_score": 80.0,
+        "source": "curated_staff_proxy",
+        "fidelity": "approximate",
+        "notes": "curated: returning HC, new OC"
       }
     },
     "BYU": {
@@ -2527,6 +3519,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 65.1,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TTU": {
@@ -2583,6 +3598,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 64.3,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "KU": {
@@ -2639,6 +3677,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 61.5,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "KSU": {
@@ -2695,6 +3756,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.6,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ISU": {
@@ -2751,6 +3835,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TCU": {
@@ -2807,6 +3914,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.2,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "BAY": {
@@ -2863,6 +3993,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.6,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CIN": {
@@ -2920,6 +4073,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 61.6,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UCF": {
@@ -2976,6 +4152,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.2,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "HOU": {
@@ -3032,6 +4231,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 61.5,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WVU": {
@@ -3089,6 +4311,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 60.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "LOU": {
@@ -3145,6 +4390,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 67.5,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "GT": {
@@ -3201,6 +4469,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 66.8,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "VT": {
@@ -3257,6 +4548,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.7,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "PITT": {
@@ -3313,6 +4627,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.1,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UNC": {
@@ -3370,6 +4707,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.4,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "NCSU": {
@@ -3426,6 +4786,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.2,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "DUKE": {
@@ -3483,6 +4866,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 61.6,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WAKE": {
@@ -3539,6 +4945,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 40.0,
+        "bucket": "weak",
+        "hfa_points": 1.25,
+        "major_environment": false,
+        "venue": "",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=weak pts=1.25 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UVA": {
@@ -3595,6 +5024,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 63.0,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SYR": {
@@ -3651,6 +5103,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.1,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "BC": {
@@ -3707,6 +5182,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 60.9,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SMU": {
@@ -3763,6 +5261,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 64.8,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "BOISE": {
@@ -3819,6 +5340,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 62.5,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MEM": {
@@ -3875,6 +5419,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 60.9,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TULN": {
@@ -3931,6 +5498,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 59.3,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "JMU": {
@@ -3987,6 +5577,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 59.7,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UNLV": {
@@ -4044,6 +5657,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 58.8,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TAMU": {
@@ -4100,6 +5736,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 74.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MISS": {
@@ -4157,6 +5816,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 68.3,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ACU": {
@@ -4211,6 +5893,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "AFA": {
@@ -4265,6 +5970,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "AKR": {
@@ -4319,6 +6047,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "APP": {
@@ -4373,6 +6124,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ARMY": {
@@ -4427,6 +6201,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "BALL": {
@@ -4481,6 +6278,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 28.0,
+        "bucket": "poor",
+        "hfa_points": 0.7,
+        "major_environment": false,
+        "venue": "",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=poor pts=0.70 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "BGSU": {
@@ -4535,6 +6355,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "BUFF": {
@@ -4589,6 +6432,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CCU": {
@@ -4643,6 +6509,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CHAR": {
@@ -4697,6 +6586,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CHAT": {
@@ -4751,6 +6663,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CMU": {
@@ -4805,6 +6740,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "CONN": {
@@ -4859,6 +6817,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "EMU": {
@@ -4913,6 +6894,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 26.0,
+        "bucket": "poor",
+        "hfa_points": 0.7,
+        "major_environment": false,
+        "venue": "",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=poor pts=0.70 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "FAU": {
@@ -4967,6 +6971,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "FIU": {
@@ -5021,6 +7048,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "FRES": {
@@ -5075,6 +7125,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "GASO": {
@@ -5129,6 +7202,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "GAST": {
@@ -5183,6 +7279,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "HAW": {
@@ -5237,6 +7356,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "IDHO": {
@@ -5291,6 +7433,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "KENT": {
@@ -5345,6 +7510,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "LIB": {
@@ -5399,6 +7587,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "LT": {
@@ -5453,6 +7664,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MASS": {
@@ -5507,6 +7741,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "M-OH": {
@@ -5561,6 +7818,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MRSH": {
@@ -5615,6 +7895,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MTSU": {
@@ -5669,6 +7972,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "NAVY": {
@@ -5723,6 +8049,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "NIU": {
@@ -5777,6 +8126,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "NMSU": {
@@ -5831,6 +8203,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 32.0,
+        "bucket": "weak",
+        "hfa_points": 1.25,
+        "major_environment": false,
+        "venue": "",
+        "source": "curated_venue_proxy",
+        "fidelity": "approximate",
+        "notes": "curated venue / recent-home proxy; bucket=weak pts=1.25 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "OHIO": {
@@ -5885,6 +8280,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "OREST": {
@@ -5939,6 +8357,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "RICE": {
@@ -5993,6 +8434,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SJSU": {
@@ -6047,6 +8511,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SDSU": {
@@ -6101,6 +8588,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "FAU2": {
@@ -6155,6 +8665,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "FAY": {
@@ -6209,6 +8742,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SHSU": {
@@ -6263,6 +8819,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "SOUTH": {
@@ -6317,6 +8896,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TEM": {
@@ -6371,6 +8973,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TLSA": {
@@ -6425,6 +9050,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TROY": {
@@ -6479,6 +9127,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TXST": {
@@ -6533,6 +9204,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UL": {
@@ -6587,6 +9281,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ULL": {
@@ -6641,6 +9358,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ULM": {
@@ -6695,6 +9435,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "USA": {
@@ -6749,6 +9512,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "USF": {
@@ -6803,6 +9589,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "USM": {
@@ -6857,6 +9666,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UTAHST": {
@@ -6911,6 +9743,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UTEP": {
@@ -6965,6 +9820,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "UTSA": {
@@ -7019,6 +9897,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WYO": {
@@ -7073,6 +9974,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WMU": {
@@ -7127,6 +10051,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WKU": {
@@ -7181,6 +10128,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "MOST": {
@@ -7235,6 +10205,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "DEL": {
@@ -7289,6 +10282,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "KENNESAW": {
@@ -7343,6 +10359,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "ORST": {
@@ -7397,6 +10436,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "WSU": {
@@ -7451,6 +10513,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "OKST": {
@@ -7505,6 +10590,29 @@
           }
         },
         "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
+      },
+      "home_field": {
+        "env_score": 52.75,
+        "bucket": "average",
+        "hfa_points": 2.0,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     },
     "TXAM": {
@@ -7561,6 +10669,29 @@
           }
         },
         "notes": "headline talent composite; components inspectable"
+      },
+      "home_field": {
+        "env_score": 74.0,
+        "bucket": "strong",
+        "hfa_points": 2.75,
+        "major_environment": false,
+        "venue": "",
+        "source": "roster_proxy",
+        "fidelity": "approximate",
+        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
+      },
+      "coaching": {
+        "new_hc": false,
+        "new_oc": false,
+        "new_dc": false,
+        "returning_hc": true,
+        "returning_oc": true,
+        "returning_dc": true,
+        "hc_name": "",
+        "continuity_score": 100.0,
+        "source": "default_returning",
+        "fidelity": "placeholder",
+        "notes": "default returning staff (no curated change flag)"
       }
     }
   },

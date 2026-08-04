@@ -6,11 +6,10 @@ College football 2026 reality drives these knobs:
 - QB situation is a first-class lever
 - Position groups (OL / skill / front seven / secondary) are real projection drivers
 - Early-season uncertainty is *wider* than NFL W1–W4
+- Home-field advantage is *variable* (not a flat 3-pt blanket)
+- Coaching continuity / staff change is a first-class early-season lever
 
-v0.4 strengthens season simulation (densified schedule paths, win
-distributions, week sample, optional conference standings), makes
-early-season uncertainty week-indexed and inspectable, and surfaces
-layer drivers on project-game.
+v0.5 adds variable HFA buckets + coaching continuity/change with week decay.
 """
 
 from __future__ import annotations
@@ -18,15 +17,18 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.4-season-sim"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.4-season-sim"
+ENGINE_VERSION = "cfb-season-engine-v0.5-hfa-coaching"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.5-hfa-coaching"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
 # Approximate recent FBS averages — not a calibrated scoring model.
 # ---------------------------------------------------------------------------
 LEAGUE_TEAM_PPG = 27.5
-HOME_FIELD_POINTS = 2.5  # CFB HFA typically larger / more variable than NFL
+# Variable HFA baseline (~2 pts). Bucket deltas live in home_field.py.
+# HOME_FIELD_POINTS kept as fallback / back-compat alias for baseline.
+HFA_BASELINE_POINTS = 2.0
+HOME_FIELD_POINTS = HFA_BASELINE_POINTS
 NEUTRAL_SITE_HFA = 0.0
 SCORE_NOISE_SD = 12.5
 WIN_PROB_MARGIN_SD = 16.5
@@ -267,11 +269,14 @@ def documentation() -> Dict[str, Any]:
             "Packaged priors are approximate stand-ins until portal/recruiting "
             "feeds are wired; do not treat unit grades as calibrated SP+.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
+            "HFA is variable by bucket (baseline ~2 pts); not a flat 3-pt blanket.",
+            "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
             "Season sim uses densified approximate schedule paths (not official FBS slate).",
             "FBS focus; FCS opponents treated as external when scheduled.",
         ],
         "league_env": {
             "league_team_ppg": LEAGUE_TEAM_PPG,
+            "hfa_baseline_points": HFA_BASELINE_POINTS,
             "home_field_points": HOME_FIELD_POINTS,
             "score_noise_sd": SCORE_NOISE_SD,
             "win_prob_margin_sd": WIN_PROB_MARGIN_SD,
