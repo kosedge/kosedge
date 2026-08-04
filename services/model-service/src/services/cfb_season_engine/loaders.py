@@ -11,7 +11,9 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from src.services.cfb_season_engine.coaching_continuity import build_coaching_continuity
 from src.services.cfb_season_engine.conferences import load_conference_map
+from src.services.cfb_season_engine.home_field import build_home_field_profile
 from src.services.cfb_season_engine.player_hooks import build_player_hooks
 from src.services.cfb_season_engine.position_groups import build_position_groups
 from src.services.cfb_season_engine.qb_situation import build_qb_situation
@@ -78,6 +80,7 @@ def load_packaged_schedule(season: int = 2026) -> List[ScheduledGame]:
                 home_team=home,
                 away_team=away,
                 neutral_site=bool(row.get("neutral_site", False)),
+                night_game=bool(row.get("night_game", False)),
             )
         )
     return games
@@ -118,7 +121,20 @@ def _team_state_from_payload(team: str, payload: Mapping[str, Any]) -> Tuple[Tea
         roster=roster,
         qb=qb,
     )
-    state = compose_team_projection(team, roster, qb, groups)
+    home_field = build_home_field_profile(
+        team,
+        payload.get("home_field"),
+        team_payload=payload,
+    )
+    coaching = build_coaching_continuity(team, payload.get("coaching"))
+    state = compose_team_projection(
+        team,
+        roster,
+        qb,
+        groups,
+        home_field=home_field,
+        coaching=coaching,
+    )
     # Optional pace / pass overrides from packaged strength hints.
     if "pace_factor" in payload:
         state.pace_factor = float(payload["pace_factor"])
@@ -183,9 +199,14 @@ def build_packaged_universe(season: int = 2026) -> EngineUniverse:
         "gap_portal_feed": "No live portal/returning-production DB feed wired yet",
         "gap_recruiting_feed": "Recruiting class score is packaged approximate composite",
         "gap_official_schedule": "No official full 2026 FBS schedule in-repo; densified sample used",
-        "primary_drivers": "roster_strength + qb_situation_index + position_groups",
-        "scope": "FBS focus for 2026; v0.4 strengthens season sim + early uncertainty",
+        "primary_drivers": (
+            "roster_strength + qb_situation_index + position_groups + "
+            "variable_hfa + coaching_continuity"
+        ),
+        "scope": "FBS focus for 2026; v0.5 variable HFA + coaching continuity",
         "schedule_note": str(sched_meta.get("note", "")),
+        "gap_home_splits_feed": "No live home ATS / scoring-margin feed; venue proxies",
+        "gap_coaching_feed": "No live coaching-change feed; curated/approximate flags",
     }
     universe = EngineUniverse(
         season=season,

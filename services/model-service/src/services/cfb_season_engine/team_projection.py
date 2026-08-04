@@ -17,12 +17,20 @@ import random
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Tuple
 
 from src.services.cfb_season_engine import priors as P
+from src.services.cfb_season_engine.coaching_continuity import (
+    coaching_to_dict,
+    coaching_week_adjustment,
+    team_game_point_adjustment,
+)
+from src.services.cfb_season_engine.home_field import profile_to_dict, resolve_hfa_points
 from src.services.cfb_season_engine.position_groups import groups_to_dict
 from src.services.cfb_season_engine.qb_situation import qb_to_dict
 from src.services.cfb_season_engine.roster_construction import roster_to_dict
 from src.services.cfb_season_engine.types import (
+    CoachingContinuity,
     EngineUniverse,
     GameProjection,
+    HomeFieldProfile,
     PositionGroupGrades,
     QbSituation,
     RosterConstruction,
@@ -49,12 +57,16 @@ def compose_team_projection(
     roster: RosterConstruction,
     qb: QbSituation,
     groups: PositionGroupGrades,
+    *,
+    home_field: Optional[HomeFieldProfile] = None,
+    coaching: Optional[CoachingContinuity] = None,
 ) -> TeamProjectionState:
-    """Compose Layers 1–3 into team O/D indices.
+    """Compose Layers 1–3 (+ HFA/coaching profiles) into team O/D indices.
 
     Offense: roster_strength + qb_situation + OL + skill (all material).
     Defense: roster_strength + front_seven + secondary + experience.
     Post-compose unit blends keep OL / skill / F7 / secondary as hard levers.
+    Coaching continuity applies mild index multipliers + uncertainty boost.
     """
     roster_s = float(roster.roster_strength)
     qb_score = float(qb.qb_situation_score)
@@ -89,6 +101,9 @@ def compose_team_projection(
     offense_index = (1.0 - P.SKILL_INDEX_BLEND) * offense_index + P.SKILL_INDEX_BLEND * (
         offense_index * skill_idx
     )
+    # Coaching continuity — mild permanent index drag for new staff.
+    if coaching is not None:
+        offense_index *= float(coaching.offense_index_mult)
     offense_index = _clamp(offense_index, *P.STRENGTH_CLAMP)
 
     defense_index = _score_to_index(defense_score)
@@ -98,6 +113,8 @@ def compose_team_projection(
     defense_index = (1.0 - P.DEF_UNIT_BLEND) * defense_index + P.DEF_UNIT_BLEND * (
         defense_index * def_unit
     )
+    if coaching is not None:
+        defense_index *= float(coaching.defense_index_mult)
     defense_index = _clamp(defense_index, *P.STRENGTH_CLAMP)
 
     pace = _clamp(1.0 + (groups.skill - groups.front_seven) / 200.0, 0.85, 1.20)
@@ -111,18 +128,63 @@ def compose_team_projection(
     )
 
     # Early uncertainty: QB situation dominates; roster continuity tempers;
-    # thin/placeholder units add a little identity noise.
+    # thin/placeholder units add a little identity noise; coaching change boosts.
     unit_noise = 0.0
     if groups.fidelity == "placeholder":
         unit_noise = 0.08
     elif groups.fidelity == "approximate":
         unit_noise = 0.03
+    coach_u = float(coaching.uncertainty_boost) if coaching is not None else 0.0
     early_u = (
-        0.55 * qb.uncertainty
-        + 0.35 * (1.0 - roster.continuity_score / 100.0)
+        0.50 * qb.uncertainty
+        + 0.30 * (1.0 - roster.continuity_score / 100.0)
+        + 0.20 * coach_u
         + unit_noise
     )
     early_u = _clamp(early_u, 0.05, 0.85)
+
+    notes: Dict[str, str] = {
+        "compose": (
+            "roster_strength+qb_situation+position_groups+coaching; "
+            "historical rating not primary; HFA applied at game time"
+        ),
+        "offense_score": f"{offense_score:.1f}",
+        "defense_score": f"{defense_score:.1f}",
+        "roster_strength": f"{roster_s:.1f}",
+        "qb_situation_index": f"{qb_index:.4f}",
+        "qb_situation_score": f"{qb_score:.1f}",
+        "qb_class": qb.qb_class,
+        "ol": f"{groups.ol:.1f}",
+        "skill": f"{groups.skill:.1f}",
+        "front_seven": f"{groups.front_seven:.1f}",
+        "secondary": f"{groups.secondary:.1f}",
+        "weights_offense": (
+            f"roster={P.WEIGHT_ROSTER_STRENGTH},"
+            f"qb={P.WEIGHT_QB_SITUATION},"
+            f"skill={P.WEIGHT_SKILL_GROUP},"
+            f"ol={P.WEIGHT_OL_GROUP},"
+            f"qb_blend={P.QB_INDEX_BLEND},"
+            f"ol_blend={P.OL_INDEX_BLEND},"
+            f"skill_blend={P.SKILL_INDEX_BLEND}"
+        ),
+        "weights_defense": (
+            f"roster={P.WEIGHT_DEF_ROSTER_STRENGTH},"
+            f"front_seven={P.WEIGHT_DEF_FRONT_SEVEN},"
+            f"secondary={P.WEIGHT_DEF_SECONDARY},"
+            f"experience={P.WEIGHT_DEF_EXPERIENCE},"
+            f"def_unit_blend={P.DEF_UNIT_BLEND}"
+        ),
+    }
+    if coaching is not None:
+        notes["coaching_new_hc"] = str(coaching.new_hc)
+        notes["coaching_new_oc"] = str(coaching.new_oc)
+        notes["coaching_new_dc"] = str(coaching.new_dc)
+        notes["coaching_continuity_score"] = f"{coaching.continuity_score:.1f}"
+        notes["coaching_off_mult"] = f"{coaching.offense_index_mult:.4f}"
+        notes["coaching_def_mult"] = f"{coaching.defense_index_mult:.4f}"
+    if home_field is not None:
+        notes["hfa_bucket"] = home_field.bucket
+        notes["hfa_points"] = f"{home_field.hfa_points:.2f}"
 
     return TeamProjectionState(
         team=str(team),
@@ -134,40 +196,11 @@ def compose_team_projection(
         roster=roster,
         qb=qb,
         groups=groups,
+        home_field=home_field,
+        coaching=coaching,
         source="hierarchical_compose",
         fidelity="approximate",
-        notes={
-            "compose": (
-                "roster_strength+qb_situation+position_groups; "
-                "historical rating not primary"
-            ),
-            "offense_score": f"{offense_score:.1f}",
-            "defense_score": f"{defense_score:.1f}",
-            "roster_strength": f"{roster_s:.1f}",
-            "qb_situation_index": f"{qb_index:.4f}",
-            "qb_situation_score": f"{qb_score:.1f}",
-            "qb_class": qb.qb_class,
-            "ol": f"{groups.ol:.1f}",
-            "skill": f"{groups.skill:.1f}",
-            "front_seven": f"{groups.front_seven:.1f}",
-            "secondary": f"{groups.secondary:.1f}",
-            "weights_offense": (
-                f"roster={P.WEIGHT_ROSTER_STRENGTH},"
-                f"qb={P.WEIGHT_QB_SITUATION},"
-                f"skill={P.WEIGHT_SKILL_GROUP},"
-                f"ol={P.WEIGHT_OL_GROUP},"
-                f"qb_blend={P.QB_INDEX_BLEND},"
-                f"ol_blend={P.OL_INDEX_BLEND},"
-                f"skill_blend={P.SKILL_INDEX_BLEND}"
-            ),
-            "weights_defense": (
-                f"roster={P.WEIGHT_DEF_ROSTER_STRENGTH},"
-                f"front_seven={P.WEIGHT_DEF_FRONT_SEVEN},"
-                f"secondary={P.WEIGHT_DEF_SECONDARY},"
-                f"experience={P.WEIGHT_DEF_EXPERIENCE},"
-                f"def_unit_blend={P.DEF_UNIT_BLEND}"
-            ),
-        },
+        notes=notes,
     )
 
 
@@ -208,8 +241,10 @@ def expected_team_points(
     home: bool,
     neutral_site: bool = False,
     week: int = 5,
-) -> Tuple[float, Dict[str, float]]:
-    """Expected points with unit-aware matchup.
+    night_game: bool = False,
+    home_hfa_profile: Optional[HomeFieldProfile] = None,
+) -> Tuple[float, Dict[str, Any]]:
+    """Expected points with unit-aware matchup + variable HFA + coaching.
 
     Returns (points, diagnostics).
     """
@@ -220,17 +255,39 @@ def expected_team_points(
     def_dampen = unit_defense_dampen(opponent_defense.groups)
     pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
     base = P.LEAGUE_TEAM_PPG * matchup * off_boost * def_dampen * pace
-    if neutral_site:
-        base += P.NEUTRAL_SITE_HFA
-    elif home:
-        base += P.HOME_FIELD_POINTS
+
+    # Variable HFA — only the designated home side, never on neutral.
+    hfa_profile = home_hfa_profile
+    if hfa_profile is None and home:
+        hfa_profile = offense.home_field
+    hfa = resolve_hfa_points(
+        hfa_profile,
+        home=home,
+        neutral_site=neutral_site,
+        night_game=night_game,
+    )
+    base += float(hfa["hfa_points"])
+
+    # Coaching: own offense penalty (week-decayed) + opponent new-DC boost.
+    own_coach = coaching_week_adjustment(offense.coaching, week=week, side="offense")
+    opp_def_pen = coaching_week_adjustment(
+        opponent_defense.coaching, week=week, side="defense"
+    )
+    # Opponent defense penalty → they allow more → boost our scoring.
+    coach_adj = float(own_coach["points"]) + abs(float(opp_def_pen["points"]))
+    base += coach_adj
+
     points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
-    diag = {
+    diag: Dict[str, Any] = {
         "matchup_ratio": round(ratio, 4),
         "matchup_response": round(response, 4),
         "offense_boost": round(off_boost, 4),
         "defense_dampen": round(def_dampen, 4),
         "pace": round(pace, 4),
+        "hfa": hfa,
+        "coaching_own_scoring_adj": own_coach,
+        "coaching_opp_defense_penalty": opp_def_pen,
+        "coaching_net_adj": round(coach_adj, 3),
         "pre_clamp": round(base, 3),
     }
     return points, diag
@@ -260,15 +317,23 @@ def layers_snapshot(state: TeamProjectionState) -> Dict[str, Any]:
         "roster": roster_to_dict(state.roster) if state.roster else None,
         "qb": qb_to_dict(state.qb) if state.qb else None,
         "position_groups": groups_to_dict(state.groups) if state.groups else None,
+        "home_field": profile_to_dict(state.home_field),
+        "coaching": coaching_to_dict(state.coaching),
     }
 
 
 def project_game_formula_doc() -> Dict[str, Any]:
     return {
         "steps": [
-            "compose offense/defense indices from roster + QB + position groups",
+            "compose offense/defense indices from roster + QB + position groups "
+            "+ coaching index multipliers",
             "expected_points = league_ppg * (off/def)^response * ol/skill_boost "
-            "* opponent_(f7+secondary)_dampen * pace + HFA",
+            "* opponent_(f7+secondary)_dampen * pace + variable_HFA "
+            "+ coaching_week_adj",
+            "variable_HFA = bucket_points(+ night_bump) when home & not neutral "
+            f"(baseline={P.HFA_BASELINE_POINTS})",
+            "coaching_week_adj = week-decayed new HC/OC/DC penalties "
+            "(strongest W1–W4)",
             "optional thin ST nudge split evenly across both scores",
             "margin = home_exp - away_exp",
             "spread_home = away_exp - home_exp  (neg = home favorite)",
@@ -278,7 +343,8 @@ def project_game_formula_doc() -> Dict[str, Any]:
         "weights": P.documentation()["composition_weights"],
         "early_season": (
             "W1–W4: inflate margin_sd, soften matchup response, flag "
-            "roster/QB identity uncertainty; narrows on week-indexed schedule"
+            "roster/QB/coaching identity uncertainty; narrows on week-indexed "
+            "schedule. Coaching penalties also decay on the same early window."
         ),
         "coherence": {
             "spread_home": "away_score - home_score",
@@ -308,6 +374,8 @@ def _layer_drivers(state: TeamProjectionState) -> Dict[str, Any]:
             "special_teams": round(float(groups.special_teams), 2) if groups else None,
             "fidelity": groups.fidelity if groups else None,
         },
+        "home_field": profile_to_dict(state.home_field),
+        "coaching": coaching_to_dict(state.coaching),
         "offense_index": state.offense_index,
         "defense_index": state.defense_index,
         "pace_factor": state.pace_factor,
@@ -324,6 +392,7 @@ def project_game(
     week: int = 1,
     season: Optional[int] = None,
     neutral_site: bool = False,
+    night_game: bool = False,
     engine_version: str = P.ENGINE_VERSION,
     player_hook_summaries: Optional[List[Dict[str, Any]]] = None,
 ) -> GameProjection:
@@ -344,10 +413,22 @@ def project_game(
     margin_sd *= 1.0 + 0.25 * team_u
 
     home_exp, home_diag = expected_team_points(
-        home, away, home=True, neutral_site=neutral_site, week=week
+        home,
+        away,
+        home=True,
+        neutral_site=neutral_site,
+        week=week,
+        night_game=night_game,
+        home_hfa_profile=home.home_field,
     )
     away_exp, away_diag = expected_team_points(
-        away, home, home=False, neutral_site=neutral_site, week=week
+        away,
+        home,
+        home=False,
+        neutral_site=neutral_site,
+        week=week,
+        night_game=False,
+        home_hfa_profile=home.home_field,
     )
 
     # Thin special-teams nudge — split evenly so scores/total/spread stay coherent.
@@ -367,18 +448,25 @@ def project_game(
 
     home_drivers = _layer_drivers(home)
     away_drivers = _layer_drivers(away)
+    home_coach_adj = team_game_point_adjustment(home.coaching, week=week)
+    away_coach_adj = team_game_point_adjustment(away.coaching, week=week)
     drivers = {
         "home": home_drivers,
         "away": away_drivers,
         "matchup": {
             "home_points_diag": home_diag,
             "away_points_diag": away_diag,
+            "hfa": home_diag.get("hfa"),
+            "home_coaching_adj": home_coach_adj,
+            "away_coaching_adj": away_coach_adj,
             "st_total_nudge": round(st_nudge, 3),
             "margin": round(margin, 2),
             "spread_home": spread,
             "expected_total": total,
             "margin_sd": round(margin_sd, 3),
             "team_identity_uncertainty_blend": round(team_u, 4),
+            "night_game": bool(night_game),
+            "neutral_site": bool(neutral_site),
         },
         "primary_signals": {
             "home_roster_strength": home_drivers.get("roster_strength"),
@@ -387,6 +475,18 @@ def project_game(
             "away_qb_situation_index": away_drivers.get("qb_situation_index"),
             "home_unit_grades": home_drivers.get("unit_grades"),
             "away_unit_grades": away_drivers.get("unit_grades"),
+            "home_hfa_bucket": (home.home_field.bucket if home.home_field else None),
+            "home_hfa_points": (home.home_field.hfa_points if home.home_field else None),
+            "home_coaching_flags": {
+                "new_hc": bool(home.coaching.new_hc) if home.coaching else False,
+                "new_oc": bool(home.coaching.new_oc) if home.coaching else False,
+                "new_dc": bool(home.coaching.new_dc) if home.coaching else False,
+            },
+            "away_coaching_flags": {
+                "new_hc": bool(away.coaching.new_hc) if away.coaching else False,
+                "new_oc": bool(away.coaching.new_oc) if away.coaching else False,
+                "new_dc": bool(away.coaching.new_dc) if away.coaching else False,
+            },
         },
         "note": (
             "Drivers are inspectable layer inputs/indices — not calibrated "
@@ -398,10 +498,17 @@ def project_game(
         "team_identity_uncertainty_blend": round(team_u, 4),
         "home_team_early_uncertainty": home.early_season_uncertainty,
         "away_team_early_uncertainty": away.early_season_uncertainty,
+        "home_coaching_uncertainty_boost": (
+            home.coaching.uncertainty_boost if home.coaching else 0.0
+        ),
+        "away_coaching_uncertainty_boost": (
+            away.coaching.uncertainty_boost if away.coaching else 0.0
+        ),
         "effective_margin_sd": round(margin_sd, 3),
         "narrowing_schedule": P.early_season_narrowing_schedule(),
         "honesty": (
-            "Wide W1–W4 priors; week-indexed narrowing. Not a claim of "
+            "Wide W1–W4 priors; week-indexed narrowing. Coaching change "
+            "penalties decay on the same early window. Not a claim of "
             "known early-season identity."
         ),
     }
@@ -409,15 +516,17 @@ def project_game(
     game_id = f"{season or universe.season}_w{week}_{away_team}@{home_team}"
     notes = {
         "fidelity": "approximate",
-        "method": "strength→margin→spread/total/WP (unit-aware matchup)",
+        "method": "strength→margin→spread/total/WP (unit-aware + HFA + coaching)",
         "formula": (
-            "pts = league_ppg*(off/def)^resp*ol_skill_boost*opp_def_dampen*pace+HFA; "
+            "pts = league_ppg*(off/def)^resp*ol_skill_boost*opp_def_dampen*pace"
+            "+variable_HFA+coaching_adj; "
             "spread_home=away-home; total=home+away; wp=Φ(margin/margin_sd)"
         ),
         "coherence": "spread=away-home; total=home+away; wp_home+wp_away=1",
         "does_not_touch": "edge_board_markets_only_cfb",
         "margin": f"{margin:.2f}",
         "st_total_nudge": f"{st_nudge:.3f}",
+        "hfa_bucket": home.home_field.bucket if home.home_field else "n/a",
         **{f"universe_{k}": v for k, v in list(universe.notes.items())[:6]},
     }
     return GameProjection(
@@ -526,11 +635,24 @@ def realize_game_scores(
 ) -> Dict[str, float]:
     home = teams[game.home_team]
     away = teams[game.away_team]
+    night = bool(getattr(game, "night_game", False))
     home_exp, _ = expected_team_points(
-        home, away, home=True, neutral_site=game.neutral_site, week=game.week
+        home,
+        away,
+        home=True,
+        neutral_site=game.neutral_site,
+        week=game.week,
+        night_game=night,
+        home_hfa_profile=home.home_field,
     )
     away_exp, _ = expected_team_points(
-        away, home, home=False, neutral_site=game.neutral_site, week=game.week
+        away,
+        home,
+        home=False,
+        neutral_site=game.neutral_site,
+        week=game.week,
+        night_game=False,
+        home_hfa_profile=home.home_field,
     )
     sd = P.score_noise_sd_for_week(game.week)
     home_score = max(0.0, rng.gauss(home_exp, sd))
@@ -549,7 +671,8 @@ def documentation() -> Dict[str, Any]:
         "module": "src.services.cfb_season_engine.team_projection",
         "real_vs_approximate": (
             "Composition structure is REAL (inspectable weights; roster_strength "
-            "+ qb_situation_index + position groups are drivers). Numeric indices "
+            "+ qb_situation_index + position groups + coaching multipliers are "
+            "drivers; variable HFA is applied at game time). Numeric indices "
             "and game probabilities are APPROXIMATE — not calibrated market-grade "
             "fair lines."
         ),
@@ -557,11 +680,25 @@ def documentation() -> Dict[str, Any]:
             "roster_construction.roster_strength",
             "qb_situation.qb_situation_index",
             "position_groups.ol/skill/front_seven/secondary",
+            "home_field.variable_hfa",
+            "coaching_continuity.week_decayed_penalties",
             "priors.early_season_uncertainty",
         ],
         "primary_drivers": {
-            "offense": ["roster_strength", "qb_situation_index", "ol", "skill"],
-            "defense": ["front_seven", "secondary", "roster_strength"],
+            "offense": [
+                "roster_strength",
+                "qb_situation_index",
+                "ol",
+                "skill",
+                "coaching_continuity",
+            ],
+            "defense": [
+                "front_seven",
+                "secondary",
+                "roster_strength",
+                "coaching_continuity",
+            ],
+            "game_env": ["variable_hfa", "night_game_note"],
         },
         "project_game_formula": project_game_formula_doc(),
     }

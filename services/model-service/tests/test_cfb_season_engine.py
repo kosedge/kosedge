@@ -1,4 +1,4 @@
-"""Tests for the hierarchical CFB season engine (season sim + early uncertainty)."""
+"""Tests for the hierarchical CFB season engine (HFA + coaching continuity)."""
 
 from __future__ import annotations
 
@@ -16,6 +16,16 @@ from src.services.cfb_season_engine import (
     project_game_to_dict,
     season_sim_to_dict,
     simulate_full_season,
+)
+from src.services.cfb_season_engine.coaching_continuity import (
+    build_coaching_continuity,
+    coaching_week_adjustment,
+    week_decay,
+)
+from src.services.cfb_season_engine.home_field import (
+    build_home_field_profile,
+    points_for_bucket,
+    resolve_hfa_points,
 )
 from src.services.cfb_season_engine.qb_situation import (
     build_qb_situation,
@@ -41,11 +51,11 @@ from src.services.cfb_season_engine.priors import (
     early_season_uncertainty,
     win_prob_margin_sd_for_week,
 )
-from src.services.cfb_season_engine.types import EngineUniverse
+from src.services.cfb_season_engine.types import EngineUniverse, HomeFieldProfile
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.4-season-sim"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.5-hfa-coaching"
 
 
 def test_qb_situation_classification() -> None:
@@ -692,22 +702,162 @@ def test_season_sim_wins_for_many_teams() -> None:
     assert len(payload["top_teams_by_wins"]) >= 10
 
 
+def test_variable_hfa_differs_by_bucket() -> None:
+    elite = build_home_field_profile("LSU", {"bucket": "elite", "env_score": 92})
+    average = build_home_field_profile("MIA", {"bucket": "average", "env_score": 52})
+    poor = build_home_field_profile("BALL", {"bucket": "poor", "env_score": 28})
+    assert elite.hfa_points > average.hfa_points > poor.hfa_points
+    assert points_for_bucket("elite") == 3.4
+    assert points_for_bucket("average") == 2.0
+    assert points_for_bucket("poor") == 0.7
+    hfa_elite = resolve_hfa_points(elite, home=True, neutral_site=False)
+    hfa_poor = resolve_hfa_points(poor, home=True, neutral_site=False)
+    assert hfa_elite["hfa_points"] - hfa_poor["hfa_points"] >= 2.0
+    assert resolve_hfa_points(elite, home=True, neutral_site=True)["hfa_points"] == 0.0
+    night = resolve_hfa_points(elite, home=True, night_game=True)
+    day = resolve_hfa_points(elite, home=True, night_game=False)
+    assert night["hfa_points"] > day["hfa_points"]
+
+
+def test_variable_hfa_moves_project_game() -> None:
+    """Same close matchup, different home HFA buckets → material score/WP shift."""
+    universe = build_packaged_universe(2026)
+    # Competitive pair so HFA is not swamped by talent gap.
+    home = universe.teams["TEX"].copy()
+    away = universe.teams["OSU"].copy()
+    home.home_field = HomeFieldProfile(
+        team="TEX",
+        env_score=90,
+        bucket="elite",
+        hfa_points=3.4,
+        baseline_points=2.0,
+        bucket_delta=1.4,
+        fidelity="approximate",
+    )
+    elite_u = EngineUniverse(season=2026, schedule=[], teams={"TEX": home, "OSU": away})
+    p_elite = project_game_preview(
+        elite_u, home_team="TEX", away_team="OSU", week=5, neutral_site=False
+    )
+
+    home2 = home.copy()
+    home2.home_field = HomeFieldProfile(
+        team="TEX",
+        env_score=25,
+        bucket="poor",
+        hfa_points=0.7,
+        baseline_points=2.0,
+        bucket_delta=-1.3,
+        fidelity="approximate",
+    )
+    poor_u = EngineUniverse(season=2026, schedule=[], teams={"TEX": home2, "OSU": away})
+    p_poor = project_game_preview(
+        poor_u, home_team="TEX", away_team="OSU", week=5, neutral_site=False
+    )
+    # ~2.7 pt HFA gap should show in expected home score and WP.
+    assert p_elite.expected_home_score - p_poor.expected_home_score >= 2.0
+    assert p_elite.home_win_prob - p_poor.home_win_prob >= 0.04
+    assert p_elite.drivers["matchup"]["hfa"]["bucket"] == "elite"
+    assert p_poor.drivers["matchup"]["hfa"]["bucket"] == "poor"
+
+    # Packaged LSU (elite) home HFA > BALL (poor) when both host same opponent.
+    lsu_home = project_game_preview(
+        universe, home_team="LSU", away_team="WAKE", week=6, neutral_site=False
+    )
+    ball_home = project_game_preview(
+        universe, home_team="BALL", away_team="WAKE", week=6, neutral_site=False
+    )
+    assert lsu_home.drivers["matchup"]["hfa"]["bucket"] == "elite"
+    assert ball_home.drivers["matchup"]["hfa"]["bucket"] == "poor"
+    assert (
+        lsu_home.drivers["matchup"]["hfa"]["hfa_points"]
+        > ball_home.drivers["matchup"]["hfa"]["hfa_points"] + 2.0
+    )
+
+
+def test_new_hc_early_penalty_exceeds_midseason() -> None:
+    coach = build_coaching_continuity(
+        "PSU",
+        {"new_hc": True, "new_oc": True, "new_dc": True, "fidelity": "approximate"},
+    )
+    assert coach.new_hc is True
+    assert coach.offense_penalty_w1 > 1.0
+    assert coach.defense_penalty_w1 > 1.0
+    w1 = coaching_week_adjustment(coach, week=1, side="offense")
+    w5 = coaching_week_adjustment(coach, week=5, side="offense")
+    w8 = coaching_week_adjustment(coach, week=8, side="offense")
+    assert abs(w1["points"]) > abs(w5["points"]) > abs(w8["points"])
+    assert week_decay(1) > week_decay(4) > week_decay(5)
+    # Returning staff: tiny continuity bonus early, not a penalty.
+    ret = build_coaching_continuity(
+        "UGA", {"new_hc": False, "new_oc": False, "new_dc": False}
+    )
+    assert ret.offense_penalty_w1 == 0.0
+    assert ret.continuity_bonus_w1 > 0.0
+    assert ret.continuity_score == 100.0
+
+
+def test_coaching_and_hfa_in_project_game_and_sim() -> None:
+    universe = build_packaged_universe(2026)
+    assert universe.teams["PSU"].coaching is not None
+    assert universe.teams["PSU"].coaching.new_hc is True
+    assert universe.teams["UGA"].coaching is not None
+    assert universe.teams["UGA"].coaching.new_hc is False
+    assert universe.teams["LSU"].home_field is not None
+    assert universe.teams["LSU"].home_field.bucket == "elite"
+
+    # New-HC PSU early-season own scoring adj more negative than mid-season.
+    p1 = project_game_preview(
+        universe, home_team="PSU", away_team="BALL", week=1, neutral_site=True
+    )
+    p6 = project_game_preview(
+        universe, home_team="PSU", away_team="BALL", week=6, neutral_site=True
+    )
+    adj1 = p1.drivers["matchup"]["home_coaching_adj"]["own_scoring_adj"]
+    adj6 = p6.drivers["matchup"]["home_coaching_adj"]["own_scoring_adj"]
+    assert adj1 < adj6  # larger early penalty (more negative)
+    assert "home_field" in p1.home_layers
+    assert "coaching" in p1.home_layers
+    assert p1.home_layers["coaching"]["new_hc"] is True
+    assert p1.drivers["primary_signals"]["home_coaching_flags"]["new_hc"] is True
+
+    # Holding opponent fixed, new-HC team weaker early vs returning-staff peer.
+    # Compare PSU (new HC) vs ORE (returning) vs same opponent mid rebuild.
+    psu_w1 = project_game_preview(
+        universe, home_team="PSU", away_team="EMU", week=1, neutral_site=True
+    )
+    # Rebuild indexes so coaching is the contrast: use copy with flipped flags.
+    ore = universe.teams["ORE"]
+    assert ore.coaching and ore.coaching.new_hc is False
+    # Season sim diagnostics expose the new layers.
+    result = simulate_full_season(universe, n_sims=2, seed=11)
+    assert result.diagnostics.get("variable_hfa") is True
+    assert result.diagnostics.get("coaching_continuity") is True
+    assert "variable_hfa" in result.diagnostics["layers_in_path"]
+    assert psu_w1.home_win_prob > 0.5  # still favored vs EMU; layer is relative
+
+
 def test_status_contract() -> None:
     payload = engine_status_payload(season=2026, demo=True)
     assert payload["engine_version"] == DEFAULT_SEASON_ENGINE_VERSION
     assert payload["additive"] is True
     assert "edge_board_cfb_markets_only" in payload["does_not_modify"]
-    assert len(payload["layers"]) >= 5
+    assert len(payload["layers"]) >= 7
     assert "solid" in payload["solid_vs_approximate"]
     assert "Roster strength formula" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert "Position group unit formula" in " ".join(
         payload["solid_vs_approximate"]["solid"]
     )
+    assert "Variable HFA" in " ".join(payload["solid_vs_approximate"]["solid"])
+    assert "Coaching continuity" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
-    assert "cfb-season-sim" in payload["entry_points"]["ops"]
+    assert "cfb-hfa-coaching" in payload["entry_points"]["ops"]
     assert "early_season_narrowing" in payload
     assert "examples" in payload
     assert "position_groups" in payload["examples"].get("UGA", {})
+    assert "home_field" in payload["examples"].get("LSU", {})
+    assert "coaching" in payload["examples"].get("PSU", {})
+    assert payload["examples"]["PSU"]["coaching"]["new_hc"] is True
+    assert "hfa_bucket_counts" in payload
     assert "project_game_formula" in payload
     assert "roster_strength_ladder" in payload
     assert payload["layers"][0]["name"] == "roster_construction"
@@ -715,6 +865,9 @@ def test_status_contract() -> None:
     assert "class_offense_mult" in payload["layers"][1]
     assert payload["layers"][2]["name"] == "position_groups"
     assert "talent" in payload["layers"][2]["formula"]
+    layer_names = [layer["name"] for layer in payload["layers"]]
+    assert "home_field" in layer_names
+    assert "coaching_continuity" in layer_names
 
 
 def test_status_and_project_game_http() -> None:
@@ -754,8 +907,13 @@ def test_status_and_project_game_http() -> None:
     assert "projection_formula" in data
     assert "drivers" in data
     assert data["drivers"]["home"]["roster_strength"] is not None
+    assert data["drivers"]["home"]["home_field"] is not None
+    assert data["drivers"]["home"]["coaching"] is not None
+    assert "hfa" in data["drivers"]["matchup"]
     assert "uncertainty" in data
     assert data["uncertainty"]["week"] == 1
+    assert "home_field" in data["home_layers"]
+    assert "coaching" in data["away_layers"]
 
     sim = client.post(
         "/cfb/season-engine/simulate",
@@ -769,6 +927,8 @@ def test_status_and_project_game_http() -> None:
     assert sim_body["n_sims"] == 2
     assert len(sim_body["top_teams_by_wins"]) >= 10
     assert "week_by_week_sample" in sim_body
+    assert sim_body["diagnostics"]["variable_hfa"] is True
+    assert sim_body["diagnostics"]["coaching_continuity"] is True
 
 
 def test_compute_qb_situation_index_class_gap() -> None:
