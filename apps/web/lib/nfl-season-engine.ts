@@ -172,6 +172,37 @@ function detailError(payload: Record<string, unknown>, fallback: string): string
   return fallback;
 }
 
+/** Ready when status is real + full schedule/depth — packaged sources count. */
+export function isSeasonEngineReady(
+  status: Pick<
+    SeasonEngineStatus,
+    "error" | "mode" | "schedule_game_count" | "depth_named_skill_teams"
+  >,
+): boolean {
+  return (
+    !status.error &&
+    status.mode === "real" &&
+    (status.schedule_game_count ?? 0) >= 272 &&
+    (status.depth_named_skill_teams ?? 0) >= 32
+  );
+}
+
+/** Informational — packaged fallback is healthy, not "degraded". */
+export function seasonEnginePackagedNotice(
+  status: Pick<
+    SeasonEngineStatus,
+    "schedule_source" | "depth_source" | "roster_source"
+  >,
+): string | null {
+  const sources = [
+    status.schedule_source,
+    status.depth_source,
+    status.roster_source,
+  ].filter((s): s is string => typeof s === "string" && s.length > 0);
+  if (!sources.some((s) => s.startsWith("packaged"))) return null;
+  return "Using packaged 2026 schedule/depth";
+}
+
 export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {
   const base = baseUrl();
   if (!base) {
@@ -181,9 +212,10 @@ export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {
     };
   }
   try {
+    // Status legitimately takes ~2–3s with packaged fallback; keep board budget.
     const res = await upstreamFetch(`${base}/nfl/season-engine/status`, {
       headers: modelHeaders(),
-      timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
       cache: "no-store",
     });
     const payload = await readJson(res);

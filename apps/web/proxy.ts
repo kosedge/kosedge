@@ -13,7 +13,14 @@ export async function proxy(request: NextRequest) {
     return rateLimitResponse;
   }
 
-  const response = NextResponse.next();
+  // Expose pathname to Server Components (e.g. skip owned-data freshness on
+  // season-engine desks that use packaged schedule/depth).
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+
+  const response = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
   addSecurityHeaders(response);
   return response;
 }

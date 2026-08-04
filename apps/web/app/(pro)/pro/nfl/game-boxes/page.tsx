@@ -4,6 +4,7 @@ import SeasonEngineGameBoxesClient from "@/components/pro/nfl/SeasonEngineGameBo
 import {
   fetchSeasonEngineStatus,
   loadSeasonEngineMatchups,
+  seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +14,7 @@ export default async function NflGameBoxesPage() {
     fetchSeasonEngineStatus(),
     loadSeasonEngineMatchups({ season: 2026, daysAhead: 28 }),
   ]);
+  const packagedNotice = seasonEnginePackagedNotice(status);
 
   return (
     <SportHubShell
@@ -44,6 +46,7 @@ export default async function NflGameBoxesPage() {
 
       {!status.error ? (
         <p className="mb-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/65">
+          {packagedNotice ? `${packagedNotice} · ` : ""}
           {status.mode || "—"} · {status.schedule_source || "schedule"}
           {status.schedule_game_count != null
             ? ` · ${status.schedule_game_count} REG`

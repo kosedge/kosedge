@@ -1,8 +1,19 @@
-import { fetchNflDataFreshness } from "@/lib/nfl-data-freshness";
+import { headers } from "next/headers";
+import {
+  fetchNflDataFreshness,
+  isNflSeasonEngineDeskPath,
+  shouldShowNflDataFreshnessBanner,
+} from "@/lib/nfl-data-freshness";
 
 export async function NflDataFreshnessBanner() {
+  const pathname = (await headers()).get("x-pathname");
+  // Season-engine desks key readiness off /nfl/season-engine/status (packaged OK).
+  if (isNflSeasonEngineDeskPath(pathname)) {
+    return null;
+  }
+
   const freshness = await fetchNflDataFreshness();
-  if (freshness.status === "ok") {
+  if (!shouldShowNflDataFreshnessBanner(freshness)) {
     return null;
   }
 

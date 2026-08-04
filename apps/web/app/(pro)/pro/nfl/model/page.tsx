@@ -1,6 +1,10 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
-import { fetchSeasonEngineStatus } from "@/lib/nfl-season-engine";
+import {
+  fetchSeasonEngineStatus,
+  isSeasonEngineReady,
+  seasonEnginePackagedNotice,
+} from "@/lib/nfl-season-engine";
 
 export const dynamic = "force-dynamic";
 
@@ -19,11 +23,8 @@ const TOOLS = [
 
 export default async function NflSeasonModelHubPage() {
   const status = await fetchSeasonEngineStatus();
-  const ready =
-    !status.error &&
-    status.mode === "real" &&
-    (status.schedule_game_count ?? 0) >= 272 &&
-    (status.depth_named_skill_teams ?? 0) >= 32;
+  const ready = isSeasonEngineReady(status);
+  const packagedNotice = seasonEnginePackagedNotice(status);
 
   return (
     <SportHubShell
@@ -74,6 +75,11 @@ export default async function NflSeasonModelHubPage() {
               Check status details
             </span>
           )}
+          {packagedNotice && !status.error ? (
+            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-kos-text/70">
+              {packagedNotice}
+            </span>
+          ) : null}
         </div>
         {!status.error ? (
           <dl className="mt-3 grid gap-2 text-xs text-kos-text/65 sm:grid-cols-2">
