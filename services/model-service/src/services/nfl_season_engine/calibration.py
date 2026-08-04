@@ -19,10 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.9.1: real 2026 depth-chart cutover (nflverse / DB weekly / packaged).
-# Modeling layers unchanged from v1.9; roster default leaves demo_depth_chart
-# when real depth is present (DB weekly → official → packaged → demo).
-ENGINE_VERSION = "nfl-season-engine-v1.9.1-real-depth"
+# v1.9.2: final smoke / trust check + light UI polish. Modeling unchanged from
+# v1.9.1 real-depth; game-box notes call out synthetic / bye-week matchups.
+ENGINE_VERSION = "nfl-season-engine-v1.9.2-smoke-polish"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -304,6 +303,10 @@ def calibration_notes() -> Dict[str, str]:
             "v1.9: default universe uses real 2026 REG schedule (272 games, "
             "weeks 1–18 with byes) from nfl_dp_schedules when present, else "
             "packaged wall-chart JSON. demo=true keeps round-robin for tests."
+        ),
+        "smoke_polish": (
+            "v1.9.2: final smoke/trust check + light UI polish; game-box notes "
+            "flag synthetic matchups and bye-week teams in the query."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

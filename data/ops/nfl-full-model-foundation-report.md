@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.9.1-real-depth` (real 2026 schedule + real nflverse depth identities; calibrated base + injury paths + deeper Layer-3 usage + survivor + harden/validate + depth-chart committees/volatility + stronger game-script/play-calling + red-zone/scoring usage + coaching tendencies; see `nfl-season-engine-real-2026-20260803.md`, `nfl-season-engine-real-depth-20260804.md`, `nfl-season-engine-api-contract-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.9.2-smoke-polish` (real 2026 schedule + real nflverse depth identities; calibrated base + injury paths + deeper Layer-3 usage + survivor + harden/validate + depth-chart committees/volatility + stronger game-script/play-calling + red-zone/scoring usage + coaching tendencies; see `nfl-season-engine-real-2026-20260803.md`, `nfl-season-engine-real-depth-20260804.md`, `nfl-season-engine-final-smoke-20260804.md`, `nfl-season-engine-api-contract-20260803.md`)  
 **Date:** 2026-08-04  
-**Status:** Working structure + path-coherent season sim + future-game player boxes. **v1.9** real 2026 REG schedule (272 + byes). **v1.9.1** real depth: DB weekly → official nflverse → packaged skill snapshot → demo last resort; status exposes `depth_source` / coverage. Modeling layers unchanged from v1.8 coaching.
+**Status:** **Ready for Pro use** (v1.9.2 smoke/trust + light UI polish). Working structure + path-coherent season sim + future-game player boxes. **v1.9** real 2026 REG schedule (272 + byes). **v1.9.1** real depth: DB weekly → official nflverse → packaged skill snapshot → demo last resort; status exposes `depth_source` / coverage. **v1.9.2** final smoke passed (injuries, survivor byes, box sanity); synthetic/bye matchups labeled in notes + UI. Modeling layers unchanged from v1.8 coaching — remaining caveats: camp depth churn, league efficiency priors, survivor heuristics (not pool EV).
 
 ## Goal (this pass)
 
@@ -120,7 +120,8 @@ Game script summary:
 9. Role-specific QB rush volume (Allen still light vs career)
 10. Auto-wire official injury reports into `InjuryPath` rows; defense/ST injuries
 11. Survivor: multi-entry / field-aware EV; real-schedule bye polish beyond documented handling
+12. Final smoke / trust (2026-08-04): **passed** — see `nfl-season-engine-final-smoke-20260804.md`. Soft follow-ups: re-package depth after cuts, wire 2026 baselines, clearer OUT role labels, optional hard-block for both-on-bye game boxes.
 
 ## Railway
 
-New routes live on model-service. Deploy the `kosedge` Railway service from this branch (or after merge to the Railway tracking branch) if live HTTP queries are required. Local/CLI demo works without Railway.
+New routes live on model-service. Deploy the `kosedge` Railway service from this branch (or after merge to the Railway tracking branch) if live HTTP queries are required. Local/CLI demo works without Railway. Live Pro UI: `https://www.kosedge.com/pro/nfl/{model,game-boxes,survivor}` via BFF `/api/nfl/season-engine/*`.

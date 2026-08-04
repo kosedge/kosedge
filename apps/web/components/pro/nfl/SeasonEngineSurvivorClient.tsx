@@ -43,15 +43,20 @@ const labelClass =
 export default function SeasonEngineSurvivorClient({
   defaultWeek = 1,
   engineVersion,
+  depthSource,
+  depthAsOf,
 }: {
   defaultWeek?: number;
   engineVersion?: string;
+  depthSource?: string;
+  depthAsOf?: string;
 }) {
   const [week, setWeek] = useState(defaultWeek);
   const [used, setUsed] = useState<string[]>([]);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<SurvivorPayload | null>(null);
+  const [hasRun, setHasRun] = useState(false);
 
   const ranked = useMemo(
     () => rankSurvivorPicks(result?.ranked_picks ?? []),
@@ -68,6 +73,7 @@ export default function SeasonEngineSurvivorClient({
     startTransition(async () => {
       setError(null);
       setResult(null);
+      setHasRun(true);
       try {
         const res = await fetch("/api/nfl/season-engine/survivor", {
           method: "POST",
@@ -97,10 +103,16 @@ export default function SeasonEngineSurvivorClient({
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+        <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
+          Mark teams you already used, choose a future week, and rank remaining
+          picks from path-coherent season sims. Bye weeks are excluded.
+          Scores blend this-week win rate with future save value — not full
+          multi-entry pool EV.
+        </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelClass} htmlFor="survivor-week">
-              Future week
+              Target week
             </label>
             <select
               id="survivor-week"
@@ -118,7 +130,7 @@ export default function SeasonEngineSurvivorClient({
           <div>
             <p className={labelClass}>Already used ({used.length})</p>
             <p className="min-h-11 rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-kos-text/80">
-              {used.length ? used.join(", ") : "None selected"}
+              {used.length ? used.join(", ") : "None — all 32 available"}
             </p>
           </div>
         </div>
@@ -166,35 +178,70 @@ export default function SeasonEngineSurvivorClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · 200 path sims · heuristic scores
+            · 200 path sims
           </p>
         </div>
+        {(depthSource || depthAsOf) && (
+          <p className="mt-3 text-[11px] text-kos-text/50">
+            Depth: {depthSource || "—"}
+            {depthAsOf ? ` · as of ${depthAsOf}` : ""}
+          </p>
+        )}
       </section>
 
       {error ? (
         <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-          {error}
+          <p className="font-semibold text-red-100">Could not rank picks</p>
+          <p className="mt-1 text-red-200/90">{error}</p>
+          <p className="mt-2 text-xs text-red-200/70">
+            Retry in a moment. If this persists, the model-service may be
+            unreachable.
+          </p>
         </div>
       ) : null}
 
-      {result ? (
+      {pending ? (
+        <div className="rounded-xl border border-white/10 bg-black/25 px-4 py-8 text-center text-sm text-kos-text/65">
+          Simulating season paths and ranking week {week}…
+        </div>
+      ) : null}
+
+      {!pending && !result && !error ? (
+        <div className="rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-8 text-center text-sm text-kos-text/60">
+          {hasRun
+            ? "No ranking returned."
+            : "Select used teams (optional), then press Rank survivor picks."}
+        </div>
+      ) : null}
+
+      {result && !pending ? (
         <section className="space-y-3">
-          <div>
-            <h2 className="text-lg font-semibold text-kos-text">
-              Week {result.week} ranked picks
-            </h2>
-            <p className="mt-1 text-xs text-kos-text/60">
-              Mode: {result.mode || "—"}
-              {result.engine_version ? ` · ${result.engine_version}` : ""}
-              {result.n_sims ? ` · ${result.n_sims} sims` : ""}
-            </p>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-kos-text">
+                Week {result.week} ranked picks
+              </h2>
+              <p className="mt-1 text-xs text-kos-text/60">
+                {result.engine_version || engineVersion || "season engine"}
+                {result.n_sims ? ` · ${result.n_sims} sims` : ""}
+              </p>
+            </div>
+            {ranked[0] ? (
+              <div className="text-right">
+                <p className="text-lg font-semibold text-kos-gold">
+                  {ranked[0].team}
+                </p>
+                <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
+                  Top pick · {formatPct(ranked[0].win_rate)} this week
+                </p>
+              </div>
+            ) : null}
           </div>
 
           {result.mode === "demo" ? (
             <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
-              Demo schedule mode — round-robin placeholder (no byes; explicit
-              demo=true). Scores are inspectable heuristics (this-week win rate
-              vs future save value), not full multi-entry pool EV.
+              Explicit demo schedule (demo=true) — round-robin placeholder with
+              no byes. Not the locked 2026 NFL schedule.
             </p>
           ) : (
             <p className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/70">
@@ -203,11 +250,13 @@ export default function SeasonEngineSurvivorClient({
               {result.schedule_game_count
                 ? ` · ${result.schedule_game_count} REG games`
                 : ""}
-              {result.roster_as_of
-                ? ` · roster as of ${result.roster_as_of}`
+              {result.roster_source || depthSource
+                ? ` · depth ${result.roster_source || depthSource}`
                 : ""}
-              . Scores are inspectable heuristics (this-week win rate vs future
-              save value), not full multi-entry pool EV. Bye weeks are respected.
+              {result.roster_as_of || depthAsOf
+                ? ` (as of ${result.roster_as_of || depthAsOf})`
+                : ""}
+              . Bye weeks respected.
             </p>
           )}
 
@@ -215,24 +264,26 @@ export default function SeasonEngineSurvivorClient({
             <table className="min-w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-[11px] uppercase tracking-wide text-kos-text/45">
-                  <th className="px-4 py-3 font-medium">Rank</th>
+                  <th className="px-4 py-3 font-medium">#</th>
                   <th className="px-3 py-3 font-medium">Team</th>
                   <th className="px-3 py-3 font-medium">Opponent</th>
-                  <th className="px-3 py-3 font-medium">This week WP</th>
+                  <th className="px-3 py-3 font-medium">Win%</th>
                   <th className="px-3 py-3 font-medium">Save</th>
                   <th className="px-3 py-3 font-medium">Pick now</th>
                 </tr>
               </thead>
               <tbody>
-                {ranked.map((pick) => (
+                {ranked.map((pick, idx) => (
                   <tr
                     key={`${pick.rank}-${pick.team}`}
-                    className="border-t border-white/5"
+                    className={`border-t border-white/5 ${
+                      idx === 0 ? "bg-kos-gold/5" : ""
+                    }`}
                   >
                     <td className="px-4 py-2.5 tabular-nums text-kos-text/60">
                       {pick.rank}
                     </td>
-                    <td className="px-3 py-2.5 font-semibold text-kos-gold">
+                    <td className="px-3 py-2.5 text-base font-semibold text-kos-gold">
                       {pick.team}
                     </td>
                     <td className="px-3 py-2.5 text-kos-text/75">
@@ -240,13 +291,13 @@ export default function SeasonEngineSurvivorClient({
                         ? `${pick.home_away === "home" ? "vs" : "@"} ${pick.opponent}`
                         : "—"}
                     </td>
-                    <td className="px-3 py-2.5 tabular-nums text-kos-text">
+                    <td className="px-3 py-2.5 tabular-nums font-semibold text-kos-text">
                       {formatPct(pick.win_rate)}
                     </td>
                     <td className="px-3 py-2.5 tabular-nums text-kos-text/70">
                       {formatStatNumber(pick.save_score, 3)}
                     </td>
-                    <td className="px-3 py-2.5 tabular-nums font-semibold text-kos-text">
+                    <td className="px-3 py-2.5 tabular-nums text-base font-semibold text-kos-gold">
                       {formatStatNumber(pick.pick_now_score, 3)}
                     </td>
                   </tr>
@@ -257,7 +308,8 @@ export default function SeasonEngineSurvivorClient({
                       colSpan={6}
                       className="px-4 py-6 text-sm text-kos-text/60"
                     >
-                      No remaining teams play this week after exclusions.
+                      No remaining teams play this week after exclusions (check
+                      byes and already-used).
                     </td>
                   </tr>
                 ) : null}

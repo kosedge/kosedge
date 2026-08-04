@@ -22,7 +22,11 @@ from src.services.nfl_season_engine.loaders import (
 
 
 def test_engine_version_real_depth() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "nfl-season-engine-v1.9.1-real-depth"
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.9.")
+    assert (
+        "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
+        or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_packaged_depth_covers_32_named_skill_teams() -> None:
@@ -109,6 +113,23 @@ def test_weekly_rows_map_to_weekly_source_tag() -> None:
         and str(r.source).startswith("depth_chart_weekly")
         for r in rosters["SF"]
     )
+
+
+def test_synthetic_bye_matchup_notes() -> None:
+    """Hypothetical bye-week matchups still return boxes but must be labeled."""
+    universe = build_packaged_real_universe(2026)
+    proj = project_game_player_boxes(
+        universe,
+        home_team="KC",
+        away_team="CAR",
+        week=5,
+        n_replicates=40,
+        seed=3,
+    )
+    assert proj.notes.get("schedule_match") == "synthetic_matchup"
+    assert "KC" in (proj.notes.get("bye_teams_in_query") or "")
+    assert "CAR" in (proj.notes.get("bye_teams_in_query") or "")
+    assert proj.notes.get("bye_warning")
 
 
 def test_real_depth_game_boxes_roles_and_injury() -> None:
