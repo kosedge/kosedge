@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from decimal import Decimal
 from datetime import date, datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple, TypedDict
@@ -4496,6 +4497,72 @@ def _season_engine_injury_paths(
     return parse_injury_paths([row.model_dump() for row in body.injury_paths])
 
 
+# Status/BFF budgets are tight; other season-engine routes share the same guard so
+# a hung Postgres never wedges the request thread indefinitely.
+_SEASON_ENGINE_DB_TIMEOUT_S = float(os.getenv("SEASON_ENGINE_DB_TIMEOUT_S", "3"))
+
+
+def _resolve_season_engine_universe(
+    *,
+    season: int,
+    as_of_week: int,
+    demo: bool = False,
+    db_timeout_s: Optional[float] = None,
+) -> Tuple[Any, Dict[str, Any]]:
+    """Resolve season-engine inputs without indefinite DB waits.
+
+    Tries DB when ``demo`` is false, but always falls back to packaged real
+    schedule/depth within ``db_timeout_s`` (default 3s).
+    """
+    from src.services.nfl_season_engine.loaders import resolve_season_universe
+
+    if demo:
+        return resolve_season_universe(
+            season=season, as_of_week=as_of_week, demo=True, session=None
+        )
+
+    timeout_s = (
+        float(db_timeout_s)
+        if db_timeout_s is not None
+        else _SEASON_ENGINE_DB_TIMEOUT_S
+    )
+
+    def _load_with_db() -> Tuple[Any, Dict[str, Any]]:
+        session = SessionLocal()
+        try:
+            return resolve_season_universe(
+                season=season,
+                as_of_week=as_of_week,
+                demo=False,
+                session=session,
+            )
+        finally:
+            session.close()
+
+    pool = ThreadPoolExecutor(max_workers=1)
+    try:
+        fut = pool.submit(_load_with_db)
+        return fut.result(timeout=max(0.5, timeout_s))
+    except FuturesTimeoutError:
+        log.warning(
+            "season-engine DB universe resolve timed out after %.1fs; using packaged",
+            timeout_s,
+        )
+    except Exception as exc:  # pragma: no cover - ops fallback
+        log.warning(
+            "season-engine DB universe resolve failed (%s); using packaged", exc
+        )
+    finally:
+        try:
+            pool.shutdown(wait=False, cancel_futures=True)
+        except TypeError:  # pragma: no cover - older Python
+            pool.shutdown(wait=False)
+
+    return resolve_season_universe(
+        season=season, as_of_week=as_of_week, demo=False, session=None
+    )
+
+
 @router.get("/season-engine/status")
 def nfl_season_engine_status(
     season: int = Query(2026, ge=2010, le=2100),
@@ -4507,7 +4574,6 @@ def nfl_season_engine_status(
     from src.services.nfl_season_engine.coaching_tendencies import (
         coaching_tendencies_documentation,
     )
-    from src.services.nfl_season_engine.loaders import resolve_season_universe
     from src.services.nfl_season_engine.player_usage import usage_rules_documentation
     from src.services.nfl_season_engine.survivor import (
         FORMULA_NOTES,
@@ -4515,28 +4581,13 @@ def nfl_season_engine_status(
     )
     from src.services.nfl_season_engine.usage_roles import USAGE_ROLE_LABELS
 
-    schedule_meta: Dict[str, Any] = {}
-    universe = None
-    if not demo:
-        session = SessionLocal()
-        try:
-            universe, schedule_meta = resolve_season_universe(
-                season=season, as_of_week=as_of_week, demo=False, session=session
-            )
-        except Exception as exc:  # pragma: no cover - ops fallback
-            log.warning("season-engine status universe probe failed: %s", exc)
-            try:
-                universe, schedule_meta = resolve_season_universe(
-                    season=season, as_of_week=as_of_week, demo=False, session=None
-                )
-            except Exception as exc2:  # pragma: no cover
-                log.warning("season-engine packaged schedule probe failed: %s", exc2)
-        finally:
-            session.close()
-    else:
-        universe, schedule_meta = resolve_season_universe(
-            season=season, as_of_week=as_of_week, demo=True, session=None
-        )
+    # Lightweight probe: never block the BFF on a hung DB connection.
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=season,
+        as_of_week=as_of_week,
+        demo=demo,
+        db_timeout_s=min(2.0, _SEASON_ENGINE_DB_TIMEOUT_S),
+    )
 
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
@@ -4714,23 +4765,17 @@ def nfl_season_engine_simulate(
                            "status": "out", "week_start": 4, "week_end": 8}],
          "include_diagnostics": true}
     """
-    from src.services.nfl_season_engine import resolve_season_universe, simulate_full_season
+    from src.services.nfl_season_engine import simulate_full_season
 
     injury_paths = _season_engine_injury_paths(body)
     diag = include_diagnostics
     if body is not None and body.include_diagnostics:
         diag = True
-    session = None if demo else SessionLocal()
-    try:
-        universe, schedule_meta = resolve_season_universe(
-            season=season,
-            as_of_week=as_of_week,
-            demo=demo,
-            session=session,
-        )
-    finally:
-        if session is not None:
-            session.close()
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=season,
+        as_of_week=as_of_week,
+        demo=demo,
+    )
 
     result = simulate_full_season(
         universe,
@@ -4775,22 +4820,13 @@ def _run_season_engine_game_boxes(
     injury_paths: Optional[list] = None,
     include_diagnostics: bool = False,
 ) -> Dict[str, Any]:
-    from src.services.nfl_season_engine import (
-        project_game_player_boxes,
-        resolve_season_universe,
-    )
+    from src.services.nfl_season_engine import project_game_player_boxes
 
-    session = None if demo else SessionLocal()
-    try:
-        universe, schedule_meta = resolve_season_universe(
-            season=season,
-            as_of_week=week,
-            demo=demo,
-            session=session,
-        )
-    finally:
-        if session is not None:
-            session.close()
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=season,
+        as_of_week=week,
+        demo=demo,
+    )
 
     home = home_team.upper()
     away = away_team.upper()
@@ -4911,20 +4947,14 @@ def nfl_season_engine_survivor(
           "demo": false
         }
     """
-    from src.services.nfl_season_engine import evaluate_survivor, resolve_season_universe
+    from src.services.nfl_season_engine import evaluate_survivor
 
     injury_paths = _season_engine_injury_paths(body)
-    session = None if body.demo else SessionLocal()
-    try:
-        universe, schedule_meta = resolve_season_universe(
-            season=body.season,
-            as_of_week=body.as_of_week,
-            demo=body.demo,
-            session=session,
-        )
-    finally:
-        if session is not None:
-            session.close()
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=body.season,
+        as_of_week=body.as_of_week,
+        demo=body.demo,
+    )
 
     result = evaluate_survivor(
         universe,
@@ -4972,23 +5002,14 @@ def nfl_season_engine_survivor_plan(
           "top_n": 8
         }
     """
-    from src.services.nfl_season_engine import (
-        evaluate_survivor_plan,
-        resolve_season_universe,
-    )
+    from src.services.nfl_season_engine import evaluate_survivor_plan
 
     injury_paths = _season_engine_injury_paths(body)
-    session = None if body.demo else SessionLocal()
-    try:
-        universe, schedule_meta = resolve_season_universe(
-            season=body.season,
-            as_of_week=body.as_of_week,
-            demo=body.demo,
-            session=session,
-        )
-    finally:
-        if session is not None:
-            session.close()
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=body.season,
+        as_of_week=body.as_of_week,
+        demo=body.demo,
+    )
 
     try:
         result = evaluate_survivor_plan(
