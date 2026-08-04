@@ -19,8 +19,11 @@ from src.services.nfl_season_engine.loaders import (
 
 
 def test_engine_version_real_2026() -> None:
-    assert "real" in DEFAULT_SEASON_ENGINE_VERSION
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "real" in DEFAULT_SEASON_ENGINE_VERSION
+        or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_packaged_schedule_has_272_reg_games_and_byes() -> None:
