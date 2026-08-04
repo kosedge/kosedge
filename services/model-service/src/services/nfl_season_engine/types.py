@@ -136,7 +136,12 @@ class GameScript:
 
 @dataclass(frozen=True)
 class PlayerUsage:
-    """Layer 3 output: volume allocation for one player in one replicate."""
+    """Layer 3 output: volume allocation for one player in one replicate.
+
+    v1.7 adds inspectable red-zone / scoring-usage opportunity counts
+    (inside-20 / inside-10 carries, targets, routes) plus TD opportunity
+    share. Yards still come from general usage; TDs primarily from RZ.
+    """
 
     player_key: str
     player_name: str
@@ -154,6 +159,15 @@ class PlayerUsage:
     script_detail: str = ""
     script_intensity: float = 0.0
     time_bucket: str = ""
+    # --- v1.7 red-zone / scoring usage (additive) ---
+    rz_carries_i20: float = 0.0
+    rz_carries_i10: float = 0.0
+    rz_targets_i20: float = 0.0
+    rz_targets_i10: float = 0.0
+    rz_routes_i20: float = 0.0
+    rz_routes_i10: float = 0.0
+    td_opportunity_share: float = 0.0
+    scoring_role: str = ""
 
 
 @dataclass(frozen=True)

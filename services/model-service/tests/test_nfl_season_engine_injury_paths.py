@@ -31,6 +31,7 @@ def test_engine_version_surfaces_injury_shocks() -> None:
         or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
         or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
         or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
+        or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.6: richer game-script / play-calling (detail + time bucket + intensity →
-# pass/run/early-down/hurry-up) and sharper SCRIPT_USAGE_MATRIX reactions.
-ENGINE_VERSION = "nfl-season-engine-v1.6-game-script"
+# v1.7: explicit red-zone / scoring-usage layer (I20/I10 carries·targets·routes)
+# between Layer 3 usage and Layer 4 TD production; script-conditioned RZ pass rate.
+ENGINE_VERSION = "nfl-season-engine-v1.7-red-zone"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)

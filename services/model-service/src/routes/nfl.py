@@ -4496,6 +4496,7 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             "depth_chart",
             "role_volatility",
             "game_script_play_mix",
+            "red_zone_scoring_usage",
             "survivor",
             "include_diagnostics",
         ],
