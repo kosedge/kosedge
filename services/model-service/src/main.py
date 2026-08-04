@@ -13,7 +13,14 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from src.celery_app import celery_app, celery_healthcheck
 from src.db import engine
-from src.routes import edge_board_router, mlb_router, nba_router, nfl_router, wnba_router
+from src.routes import (
+    cfb_router,
+    edge_board_router,
+    mlb_router,
+    nba_router,
+    nfl_router,
+    wnba_router,
+)
 from src.services.nba_possession_simulator import DEFAULT_NBA_MODEL_VERSION
 from src.services.nfl_simulator import DEFAULT_NFL_MODEL_VERSION
 from src.services.wnba_possession_simulator import DEFAULT_WNBA_MODEL_VERSION
@@ -281,6 +288,7 @@ app = FastAPI(
 
 # Routers
 app.include_router(edge_board_router)
+app.include_router(cfb_router)
 app.include_router(mlb_router)
 app.include_router(nba_router)
 app.include_router(nfl_router)

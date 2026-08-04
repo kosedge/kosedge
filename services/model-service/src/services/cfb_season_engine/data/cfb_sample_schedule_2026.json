@@ -1,0 +1,243 @@
+{
+  "as_of": "2026-08-04",
+  "season": 2026,
+  "fidelity": "placeholder",
+  "notes": [
+    "Sample / illustrative 2026 slate for foundation sims \u2014 NOT the official full FBS schedule.",
+    "Next pass: wire real schedule feed (CFBD / packaged full slate)."
+  ],
+  "games": [
+    {
+      "week": 1,
+      "home": "UGA",
+      "away": "CLEM",
+      "neutral_site": true
+    },
+    {
+      "week": 1,
+      "home": "TEX",
+      "away": "OSU",
+      "neutral_site": true
+    },
+    {
+      "week": 1,
+      "home": "ALA",
+      "away": "FSU"
+    },
+    {
+      "week": 1,
+      "home": "ORE",
+      "away": "BOISE"
+    },
+    {
+      "week": 1,
+      "home": "ND",
+      "away": "MIA"
+    },
+    {
+      "week": 2,
+      "home": "OSU",
+      "away": "TEX"
+    },
+    {
+      "week": 2,
+      "home": "MICH",
+      "away": "OU"
+    },
+    {
+      "week": 2,
+      "home": "LSU",
+      "away": "CLEM"
+    },
+    {
+      "week": 2,
+      "home": "PSU",
+      "away": "IU"
+    },
+    {
+      "week": 3,
+      "home": "UGA",
+      "away": "TENN"
+    },
+    {
+      "week": 3,
+      "home": "ALA",
+      "away": "WIS"
+    },
+    {
+      "week": 3,
+      "home": "USC",
+      "away": "ND"
+    },
+    {
+      "week": 3,
+      "home": "ORE",
+      "away": "ASU"
+    },
+    {
+      "week": 4,
+      "home": "TEX",
+      "away": "MSST"
+    },
+    {
+      "week": 4,
+      "home": "OSU",
+      "away": "WASH"
+    },
+    {
+      "week": 4,
+      "home": "MICH",
+      "away": "NEB"
+    },
+    {
+      "week": 4,
+      "home": "CLEM",
+      "away": "NCSU"
+    },
+    {
+      "week": 5,
+      "home": "ALA",
+      "away": "UGA"
+    },
+    {
+      "week": 5,
+      "home": "OSU",
+      "away": "MICH"
+    },
+    {
+      "week": 5,
+      "home": "TEX",
+      "away": "OU"
+    },
+    {
+      "week": 6,
+      "home": "LSU",
+      "away": "OLE"
+    },
+    {
+      "week": 6,
+      "home": "ORE",
+      "away": "USC"
+    },
+    {
+      "week": 6,
+      "home": "PSU",
+      "away": "IOWA"
+    },
+    {
+      "week": 7,
+      "home": "UGA",
+      "away": "UF"
+    },
+    {
+      "week": 7,
+      "home": "ND",
+      "away": "USC"
+    },
+    {
+      "week": 7,
+      "home": "MIA",
+      "away": "GT"
+    },
+    {
+      "week": 8,
+      "home": "TEX",
+      "away": "TAMU"
+    },
+    {
+      "week": 8,
+      "home": "OSU",
+      "away": "ILL"
+    },
+    {
+      "week": 8,
+      "home": "CLEM",
+      "away": "SMU"
+    },
+    {
+      "week": 9,
+      "home": "ALA",
+      "away": "LSU"
+    },
+    {
+      "week": 9,
+      "home": "MICH",
+      "away": "MSU"
+    },
+    {
+      "week": 9,
+      "home": "ORE",
+      "away": "WASH"
+    },
+    {
+      "week": 10,
+      "home": "UGA",
+      "away": "MISS"
+    },
+    {
+      "week": 10,
+      "home": "PSU",
+      "away": "OSU"
+    },
+    {
+      "week": 10,
+      "home": "ND",
+      "away": "BOISE"
+    },
+    {
+      "week": 11,
+      "home": "TEX",
+      "away": "UGA"
+    },
+    {
+      "week": 11,
+      "home": "ALA",
+      "away": "OU"
+    },
+    {
+      "week": 11,
+      "home": "MIA",
+      "away": "LOU"
+    },
+    {
+      "week": 12,
+      "home": "OSU",
+      "away": "MICH"
+    },
+    {
+      "week": 12,
+      "home": "UGA",
+      "away": "GT"
+    },
+    {
+      "week": 12,
+      "home": "CLEM",
+      "away": "SCAR"
+    },
+    {
+      "week": 13,
+      "home": "ALA",
+      "away": "AUB"
+    },
+    {
+      "week": 13,
+      "home": "UF",
+      "away": "FSU"
+    },
+    {
+      "week": 13,
+      "home": "USC",
+      "away": "UCLA"
+    },
+    {
+      "week": 14,
+      "home": "TEX",
+      "away": "TAMU"
+    },
+    {
+      "week": 14,
+      "home": "ORE",
+      "away": "WASH"
+    }
+  ]
+}
