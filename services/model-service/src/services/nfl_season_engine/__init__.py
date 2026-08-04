@@ -21,6 +21,9 @@ rank remaining picks for a target week with inspectable save / pick-now
 scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for joint path survival + per-week recommendations.
 
+v1.11 cal-v2 adds early-season uncertainty (weeks 1–4) and measured
+league/role/RZ knobs — see ``calibration.early_season_uncertainty``.
+
 Public entry points
 -------------------
 - ``simulate_full_season`` – N path-coherent season sims (~272 games each)

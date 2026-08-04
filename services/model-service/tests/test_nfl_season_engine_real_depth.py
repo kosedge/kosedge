@@ -22,11 +22,12 @@ from src.services.nfl_season_engine.loaders import (
 
 
 def test_engine_version_real_depth() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.9.")
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert (
         "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

@@ -37,6 +37,7 @@ def test_engine_version_surfaces_injury_shocks() -> None:
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

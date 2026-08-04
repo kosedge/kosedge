@@ -18,10 +18,10 @@ from typing import Any, Dict, Mapping, Optional, Sequence, Tuple
 from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
-CALIBRATION_TAG = "nfl-season-engine-cal-v1"
-# v1.10: multi-week survivor planner (joint path_survival + per-week ranks).
-# Modeling layers unchanged from v1.9.2 smoke-polish.
-ENGINE_VERSION = "nfl-season-engine-v1.10-survivor-planner"
+CALIBRATION_TAG = "nfl-season-engine-cal-v2"
+# v1.11: deeper season/player calibration + early-season uncertainty (W1–W4).
+# Architecture + Survivor Planner unchanged from v1.10.
+ENGINE_VERSION = "nfl-season-engine-v1.11-calibration"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -32,23 +32,68 @@ ENGINE_VERSION = "nfl-season-engine-v1.10-survivor-planner"
 LEAGUE_TEAM_PPG = 21.8
 HOME_FIELD_POINTS = 1.05
 SCORE_NOISE_SD = 9.8
-WIN_PROB_MARGIN_SD = 13.8
-LEAGUE_BASE_PLAYS = 63.0
+# Slightly sharper mid-season margin SD vs cal-v1 (13.8) to reduce win-mean
+# compression; early weeks inflate via EARLY_SEASON_MARGIN_SD_MULT.
+WIN_PROB_MARGIN_SD = 12.6
+LEAGUE_BASE_PLAYS = 63.5
 LEAGUE_BASE_PASS_RATE = 0.58
 EXPECTED_POINTS_CLAMP = (9.0, 38.0)
 PACE_PLAYS_CLAMP = (50.0, 76.0)
+# Concave matchup response on offense/defense ratio (1.0 = linear).
+# Raised from 0.96 (cal-v1) so favorites/dogs separate more over a season.
+MATCHUP_RESPONSE = 1.12
 
-# Strength path evolution — softened vs foundation so win totals do not
-# explode/compress mid-season from over-reactive updates.
-STRENGTH_UPDATE_RATE = 0.025
-STRENGTH_MEAN_REVERT = 0.016
-STRENGTH_NOISE = 0.010
-STRENGTH_CLAMP = (0.70, 1.35)
+# Strength path evolution — a touch more path noise / less mean-reversion
+# than cal-v1 so season win totals are less compressed, without exploding.
+STRENGTH_UPDATE_RATE = 0.028
+STRENGTH_MEAN_REVERT = 0.011
+STRENGTH_NOISE = 0.014
+STRENGTH_CLAMP = (0.68, 1.38)
+
+# ---------------------------------------------------------------------------
+# Early-season uncertainty (weeks 1–4)
+# Inflate outcome noise, soften strength separation, widen usage share
+# volatility while depth/roles settle. Diagnostics key: early_season_uncertainty.
+# ---------------------------------------------------------------------------
+EARLY_SEASON_LAST_WEEK = 4
+# Multipliers keyed by week; weeks outside 1–4 use 1.0 / inactive.
+EARLY_SEASON_SCORE_NOISE_MULT: Dict[int, float] = {
+    1: 1.18,
+    2: 1.14,
+    3: 1.10,
+    4: 1.06,
+}
+EARLY_SEASON_MARGIN_SD_MULT: Dict[int, float] = {
+    1: 1.24,
+    2: 1.16,
+    3: 1.10,
+    4: 1.05,
+}
+# Scales MATCHUP_RESPONSE (lower → softer favorite separation).
+EARLY_SEASON_SEPARATION_SOFTEN: Dict[int, float] = {
+    1: 0.78,
+    2: 0.84,
+    3: 0.90,
+    4: 0.95,
+}
+EARLY_SEASON_SHARE_VOL_MULT: Dict[int, float] = {
+    1: 1.75,
+    2: 1.55,
+    3: 1.35,
+    4: 1.18,
+}
+# Scales Dirichlet concentration (lower → more share draw volatility).
+EARLY_SEASON_DIRICHLET_SCALE: Dict[int, float] = {
+    1: 0.72,
+    2: 0.80,
+    3: 0.88,
+    4: 0.94,
+}
 
 # ---------------------------------------------------------------------------
 # Production efficiency (per attempt / carry / reception)
 # League-ish rates; elite demo names get mild talent bumps in loaders.
-# INT% ~1.8% of attempts (recent NFL starter band); pass TD% ~4.1%;
+# INT% ~1.8% of attempts (recent NFL starter band); pass TD% ~4.3%;
 # rush TD% ~2.7%/carry for primary RBs; rec TD% ~5.5%/reception WR/TE.
 # ---------------------------------------------------------------------------
 EFFICIENCY_CV_PASS = 0.22
@@ -56,21 +101,22 @@ EFFICIENCY_CV_RUSH = 0.24
 EFFICIENCY_CV_REC = 0.23
 CATCH_RATE_NOISE = 0.055
 
-DEFAULT_YPA = 7.05
+DEFAULT_YPA = 7.15
 DEFAULT_YPC = 4.20
 DEFAULT_YPR_WR = 11.8
-DEFAULT_YPR_TE = 10.6
+DEFAULT_YPR_TE = 10.3
 DEFAULT_YPR_RB = 7.8
 
 DEFAULT_CATCH_WR = 0.615
-DEFAULT_CATCH_TE = 0.675
+DEFAULT_CATCH_TE = 0.670
 DEFAULT_CATCH_RB = 0.72
 
-DEFAULT_PASS_TD_RATE = 0.041
+DEFAULT_PASS_TD_RATE = 0.043
 DEFAULT_RUSH_TD_RATE_RB = 0.027
 DEFAULT_RUSH_TD_RATE_QB = 0.045
 DEFAULT_REC_TD_RATE = 0.055
 DEFAULT_REC_TD_RATE_RB = 0.035
+DEFAULT_REC_TD_RATE_TE = 0.062
 DEFAULT_INT_RATE = 0.018
 ELITE_INT_RATE = 0.015
 
@@ -80,6 +126,12 @@ ELITE_INT_RATE = 0.015
 USAGE_OTHER_BUCKET_FLOOR = 0.08
 DIRICHLET_RUSH_CONCENTRATION = 32.0
 DIRICHLET_TARGET_CONCENTRATION = 36.0
+# Real depth charts often list QB2/QB3 with non-trivial snap priors for
+# emergency packages. Without a sharp starter prior, the categorical draw
+# over-starts backups and tanks QB1 attempts/yards. Healthy QB1 start rate
+# matches recent NFL (~96–98% of team pass attempts to the Week-1 starter
+# when available; residual is intentional backup mop-up).
+QB1_START_RATE = 0.965
 
 # Sanity bounds used by tests / diagnostics (game-level means).
 GAME_SANITY = {
@@ -96,6 +148,7 @@ GAME_SANITY = {
 # Season-total sanity (17-game primary starters, no injury model).
 SEASON_SANITY = {
     "qb_pass_yards": (2800.0, 5200.0),
+    "qb_pass_tds": (14.0, 42.0),
     "qb_ints": (5.0, 18.0),
     "rb1_rush_yards": (600.0, 1600.0),
     "wr1_rec_yards": (500.0, 1400.0),
@@ -105,6 +158,75 @@ SEASON_SANITY = {
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
+
+
+def early_season_factor(
+    week: int,
+    table: Mapping[int, float],
+    *,
+    default: float = 1.0,
+) -> float:
+    """Lookup early-season multiplier; identity outside weeks 1–4."""
+    w = int(week or 0)
+    if w < 1 or w > EARLY_SEASON_LAST_WEEK:
+        return float(default)
+    return float(table.get(w, default))
+
+
+def early_season_uncertainty(week: int) -> Dict[str, Any]:
+    """Inspectable early-season uncertainty posture for diagnostics."""
+    w = int(week or 0)
+    active = 1 <= w <= EARLY_SEASON_LAST_WEEK
+    score_mult = early_season_factor(w, EARLY_SEASON_SCORE_NOISE_MULT)
+    margin_mult = early_season_factor(w, EARLY_SEASON_MARGIN_SD_MULT)
+    soften = early_season_factor(w, EARLY_SEASON_SEPARATION_SOFTEN)
+    share_vol = early_season_factor(w, EARLY_SEASON_SHARE_VOL_MULT)
+    dirichlet = early_season_factor(w, EARLY_SEASON_DIRICHLET_SCALE)
+    return {
+        "week": w,
+        "active": active,
+        "last_week": EARLY_SEASON_LAST_WEEK,
+        "score_noise_mult": round(score_mult, 4),
+        "score_noise_sd": round(SCORE_NOISE_SD * score_mult, 4),
+        "margin_sd_mult": round(margin_mult, 4),
+        "win_prob_margin_sd": round(WIN_PROB_MARGIN_SD * margin_mult, 4),
+        "separation_soften": round(soften, 4),
+        "matchup_response_effective": round(MATCHUP_RESPONSE * soften, 4),
+        "share_vol_mult": round(share_vol, 4),
+        "dirichlet_scale": round(dirichlet, 4),
+        "note": (
+            "W1–W4: inflate outcome SD, soften strength separation, "
+            "widen player-share volatility while roles settle."
+            if active
+            else "Mid/late season: base calibration (no early-season inflate)."
+        ),
+    }
+
+
+def score_noise_sd_for_week(week: int) -> float:
+    return SCORE_NOISE_SD * early_season_factor(week, EARLY_SEASON_SCORE_NOISE_MULT)
+
+
+def win_prob_margin_sd_for_week(week: int) -> float:
+    return WIN_PROB_MARGIN_SD * early_season_factor(week, EARLY_SEASON_MARGIN_SD_MULT)
+
+
+def matchup_response_for_week(week: int) -> float:
+    return MATCHUP_RESPONSE * early_season_factor(week, EARLY_SEASON_SEPARATION_SOFTEN)
+
+
+def share_vol_mult_for_week(week: int) -> float:
+    return early_season_factor(week, EARLY_SEASON_SHARE_VOL_MULT)
+
+
+def dirichlet_concentration_for_week(
+    week: int,
+    *,
+    base_rush: float = DIRICHLET_RUSH_CONCENTRATION,
+    base_target: float = DIRICHLET_TARGET_CONCENTRATION,
+) -> Tuple[float, float]:
+    scale = early_season_factor(week, EARLY_SEASON_DIRICHLET_SCALE)
+    return base_rush * scale, base_target * scale
 
 
 def position_efficiency_defaults(position: str, *, depth_order: int = 1) -> Dict[str, float]:
@@ -141,7 +263,7 @@ def position_efficiency_defaults(position: str, *, depth_order: int = 1) -> Dict
             "catch_rate": DEFAULT_CATCH_TE,
             "pass_td_rate": 0.0,
             "rush_td_rate": 0.01,
-            "rec_td_rate": DEFAULT_REC_TD_RATE,
+            "rec_td_rate": DEFAULT_REC_TD_RATE_TE,
             "int_rate": 0.0,
         }
     # WR default
@@ -161,7 +283,7 @@ def apply_efficiency_priors(
     role: PlayerRole,
     *,
     overrides: Optional[Mapping[str, float]] = None,
-    source_suffix: str = "league_efficiency_v1",
+    source_suffix: str = "league_efficiency_v2",
 ) -> PlayerRole:
     """Fill / overwrite efficiency fields from league priors (+ optional overrides)."""
     base = position_efficiency_defaults(role.position, depth_order=role.depth_order)
@@ -263,16 +385,23 @@ def calibration_notes() -> Dict[str, str]:
         "calibration_tag": CALIBRATION_TAG,
         "league_env": (
             f"PPG={LEAGUE_TEAM_PPG}, HFA={HOME_FIELD_POINTS}, score_sd={SCORE_NOISE_SD}, "
-            f"plays={LEAGUE_BASE_PLAYS}, pass_rate={LEAGUE_BASE_PASS_RATE}"
+            f"plays={LEAGUE_BASE_PLAYS}, pass_rate={LEAGUE_BASE_PASS_RATE}, "
+            f"matchup_response={MATCHUP_RESPONSE}, margin_sd={WIN_PROB_MARGIN_SD}"
         ),
         "efficiency": (
-            f"ypa={DEFAULT_YPA}, ypc={DEFAULT_YPC}, int_rate={DEFAULT_INT_RATE}, "
-            f"pass_td_rate={DEFAULT_PASS_TD_RATE}, rush_td_rate_rb={DEFAULT_RUSH_TD_RATE_RB}"
+            f"ypa={DEFAULT_YPA}, ypc={DEFAULT_YPC}, ypr_te={DEFAULT_YPR_TE}, "
+            f"int_rate={DEFAULT_INT_RATE}, pass_td_rate={DEFAULT_PASS_TD_RATE}, "
+            f"rush_td_rate_rb={DEFAULT_RUSH_TD_RATE_RB}"
         ),
         "usage": (
             "Absolute target/rush shares with residual 'other' bucket "
             f"(floor={USAGE_OTHER_BUCKET_FLOOR}) — prevents sparse-roster inflation. "
             "v1.3: usage_roles taxonomy + SCRIPT_USAGE_MATRIX + personnel mix."
+        ),
+        "early_season": (
+            "v1.11: weeks 1–4 inflate score/margin SD, soften matchup separation, "
+            "widen share volatility + lower Dirichlet concentration "
+            "(diagnostics.early_season_uncertainty)."
         ),
         "survivor": (
             "v1.4: team W/L season paths → week win rates + inspectable "
@@ -312,6 +441,10 @@ def calibration_notes() -> Dict[str, str]:
             "v1.10: multi-week survivor planner — one season-sim pass ranks "
             "each unlocked week (used-team exclusion) and reports joint "
             "path_survival for locked picks (see survivor.py PATH_FORMULA_NOTES)."
+        ),
+        "deeper_calibration": (
+            "v1.11: cal-v2 — wider win-total separation, role/RZ TD tune, "
+            "early-season uncertainty (W1–W4). No new major features."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

@@ -1,0 +1,1321 @@
+{
+  "game_id": "2026-W01-BUF@KC",
+  "week": 1,
+  "home": "KC",
+  "away": "BUF",
+  "game_script_summary": {
+    "home_win_prob_mean": 0.5426,
+    "expected_total_mean": 45.97,
+    "pace_plays_mean": 65.24,
+    "home_pass_rate_mean": 0.6206,
+    "away_pass_rate_mean": 0.6017,
+    "home_lead_rate": 0.475,
+    "home_trail_rate": 0.35,
+    "home_early_down_pass_rate_mean": 0.6402,
+    "away_early_down_pass_rate_mean": 0.6087,
+    "home_hurry_up_mean": 0.1794,
+    "away_hurry_up_mean": 0.249,
+    "home_script_intensity_mean": 0.4891,
+    "away_script_intensity_mean": 0.4891,
+    "minutes_remaining_mean": 22.4,
+    "time_bucket_late_rate": 0.525,
+    "home_large_lead_rate": 0.225,
+    "home_large_deficit_rate": 0.1562
+  },
+  "diagnostics_early_season": {
+    "week": 1,
+    "active": true,
+    "last_week": 4,
+    "score_noise_mult": 1.18,
+    "score_noise_sd": 11.564,
+    "margin_sd_mult": 1.24,
+    "win_prob_margin_sd": 15.624,
+    "separation_soften": 0.78,
+    "matchup_response_effective": 0.8736,
+    "share_vol_mult": 1.75,
+    "dirichlet_scale": 0.72,
+    "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+  },
+  "players": [
+    {
+      "player_key": "BUF-QB1-JoshAllen",
+      "player_name": "Josh Allen",
+      "team": "BUF",
+      "position": "QB",
+      "usage_role": "QB1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 193.196,
+        "pass_tds": 1.044,
+        "ints": 0.6,
+        "rush_yards": 7.032
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 193.196,
+          "std": 108.817,
+          "p10": 15.45,
+          "p50": 212.17,
+          "p90": 318.73
+        },
+        "pass_tds": {
+          "mean": 1.044,
+          "std": 1.196,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 3.0
+        },
+        "ints": {
+          "mean": 0.6,
+          "std": 0.808,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 2.0
+        },
+        "rush_yards": {
+          "mean": 7.032,
+          "std": 6.236,
+          "p10": 1.07,
+          "p50": 5.6,
+          "p90": 14.15
+        },
+        "pass_attempts": {
+          "mean": 29.379,
+          "std": 15.286,
+          "p10": 2.29,
+          "p50": 35.27,
+          "p90": 43.64
+        },
+        "carries": {
+          "mean": 1.55,
+          "std": 1.318,
+          "p10": 0.25,
+          "p50": 1.17,
+          "p90": 3.21
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "KC-QB1-PatrickMahomes",
+      "player_name": "Patrick Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "usage_role": "QB1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 179.528,
+        "pass_tds": 1.056,
+        "ints": 0.487,
+        "rush_yards": 6.46
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 179.528,
+          "std": 110.969,
+          "p10": 13.97,
+          "p50": 207.51,
+          "p90": 312.06
+        },
+        "pass_tds": {
+          "mean": 1.056,
+          "std": 1.251,
+          "p10": 0.0,
+          "p50": 1.0,
+          "p90": 3.0
+        },
+        "ints": {
+          "mean": 0.487,
+          "std": 0.707,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "rush_yards": {
+          "mean": 6.46,
+          "std": 4.982,
+          "p10": 0.96,
+          "p50": 5.16,
+          "p90": 12.81
+        },
+        "pass_attempts": {
+          "mean": 28.265,
+          "std": 16.407,
+          "p10": 2.29,
+          "p50": 34.9,
+          "p90": 44.75
+        },
+        "carries": {
+          "mean": 1.396,
+          "std": 1.0,
+          "p10": 0.22,
+          "p50": 1.2,
+          "p90": 2.67
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "KC-QB2-JustinFields",
+      "player_name": "Justin Fields",
+      "team": "KC",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 56.462,
+        "pass_tds": 0.294,
+        "ints": 0.206,
+        "rush_yards": 1.942
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 56.462,
+          "std": 92.107,
+          "p10": 5.38,
+          "p50": 8.13,
+          "p90": 220.68
+        },
+        "pass_tds": {
+          "mean": 0.294,
+          "std": 0.695,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "ints": {
+          "mean": 0.206,
+          "std": 0.549,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "rush_yards": {
+          "mean": 1.942,
+          "std": 3.504,
+          "p10": 0.0,
+          "p50": 0.43,
+          "p90": 5.77
+        },
+        "pass_attempts": {
+          "mean": 9.37,
+          "std": 14.688,
+          "p10": 0.92,
+          "p50": 1.38,
+          "p90": 35.81
+        },
+        "carries": {
+          "mean": 0.379,
+          "std": 0.624,
+          "p10": 0.0,
+          "p50": 0.1,
+          "p90": 1.18
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "BUF-WR1-DJMoore",
+      "player_name": "DJ Moore",
+      "team": "BUF",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 52.592,
+        "receptions": 4.991,
+        "rec_tds": 0.281
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 52.592,
+          "std": 25.246,
+          "p10": 22.64,
+          "p50": 49.48,
+          "p90": 84.88
+        },
+        "receptions": {
+          "mean": 4.991,
+          "std": 2.029,
+          "p10": 2.53,
+          "p50": 4.82,
+          "p90": 7.52
+        },
+        "rec_tds": {
+          "mean": 0.281,
+          "std": 0.514,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 8.168,
+          "std": 3.118,
+          "p10": 4.25,
+          "p50": 7.63,
+          "p90": 11.92
+        }
+      }
+    },
+    {
+      "player_key": "KC-WR1-RasheeRice",
+      "player_name": "Rashee Rice",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 50.635,
+        "receptions": 4.724,
+        "rec_tds": 0.325
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 50.635,
+          "std": 25.809,
+          "p10": 23.78,
+          "p50": 45.01,
+          "p90": 81.82
+        },
+        "receptions": {
+          "mean": 4.724,
+          "std": 2.126,
+          "p10": 2.34,
+          "p50": 4.43,
+          "p90": 7.09
+        },
+        "rec_tds": {
+          "mean": 0.325,
+          "std": 0.597,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 7.661,
+          "std": 3.237,
+          "p10": 4.09,
+          "p50": 7.37,
+          "p90": 11.39
+        }
+      }
+    },
+    {
+      "player_key": "BUF-TE1-DaltonKincaid",
+      "player_name": "Dalton Kincaid",
+      "team": "BUF",
+      "position": "TE",
+      "usage_role": "TE1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 49.517,
+        "receptions": 5.205,
+        "rec_tds": 0.25
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 49.517,
+          "std": 23.614,
+          "p10": 26.42,
+          "p50": 43.71,
+          "p90": 82.15
+        },
+        "receptions": {
+          "mean": 5.205,
+          "std": 2.054,
+          "p10": 2.95,
+          "p50": 4.9,
+          "p90": 8.24
+        },
+        "rec_tds": {
+          "mean": 0.25,
+          "std": 0.5,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 7.724,
+          "std": 2.87,
+          "p10": 4.37,
+          "p50": 7.12,
+          "p90": 11.87
+        }
+      }
+    },
+    {
+      "player_key": "BUF-RB1-JamesCookIII",
+      "player_name": "James Cook III",
+      "team": "BUF",
+      "position": "RB",
+      "usage_role": "RB1",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 48.077,
+        "rush_tds": 0.512,
+        "rec_yards": 16.091,
+        "receptions": 2.288
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 48.077,
+          "std": 25.738,
+          "p10": 17.62,
+          "p50": 44.04,
+          "p90": 83.32
+        },
+        "rush_tds": {
+          "mean": 0.512,
+          "std": 0.716,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "rec_yards": {
+          "mean": 16.091,
+          "std": 11.547,
+          "p10": 5.01,
+          "p50": 13.35,
+          "p90": 29.59
+        },
+        "receptions": {
+          "mean": 2.288,
+          "std": 1.518,
+          "p10": 0.77,
+          "p50": 1.96,
+          "p90": 4.4
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 11.9,
+          "std": 5.163,
+          "p10": 5.0,
+          "p50": 11.73,
+          "p90": 19.38
+        },
+        "targets": {
+          "mean": 3.22,
+          "std": 2.16,
+          "p10": 1.1,
+          "p50": 2.7,
+          "p90": 6.12
+        }
+      }
+    },
+    {
+      "player_key": "KC-TE1-TravisKelce",
+      "player_name": "Travis Kelce",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 48.055,
+        "receptions": 5.371,
+        "rec_tds": 0.25
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 48.055,
+          "std": 25.58,
+          "p10": 22.04,
+          "p50": 43.26,
+          "p90": 85.38
+        },
+        "receptions": {
+          "mean": 5.371,
+          "std": 2.599,
+          "p10": 2.95,
+          "p50": 4.79,
+          "p90": 9.12
+        },
+        "rec_tds": {
+          "mean": 0.25,
+          "std": 0.581,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 8.017,
+          "std": 3.793,
+          "p10": 4.38,
+          "p50": 7.32,
+          "p90": 13.09
+        }
+      }
+    },
+    {
+      "player_key": "KC-RB1-KennethWalkerIII",
+      "player_name": "Kenneth Walker III",
+      "team": "KC",
+      "position": "RB",
+      "usage_role": "RB1",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 45.19,
+        "rush_tds": 0.487,
+        "rec_yards": 17.379,
+        "receptions": 2.376
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 45.19,
+          "std": 22.607,
+          "p10": 17.84,
+          "p50": 42.97,
+          "p90": 76.95
+        },
+        "rush_tds": {
+          "mean": 0.487,
+          "std": 0.707,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "rec_yards": {
+          "mean": 17.379,
+          "std": 13.333,
+          "p10": 4.18,
+          "p50": 12.86,
+          "p90": 34.04
+        },
+        "receptions": {
+          "mean": 2.376,
+          "std": 1.67,
+          "p10": 0.61,
+          "p50": 1.85,
+          "p90": 4.63
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 11.699,
+          "std": 4.798,
+          "p10": 5.62,
+          "p50": 11.53,
+          "p90": 18.84
+        },
+        "targets": {
+          "mean": 3.321,
+          "std": 2.299,
+          "p10": 0.87,
+          "p50": 2.7,
+          "p90": 6.47
+        }
+      }
+    },
+    {
+      "player_key": "BUF-QB2-KyleAllen",
+      "player_name": "Kyle Allen",
+      "team": "BUF",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 38.026,
+        "pass_tds": 0.225,
+        "ints": 0.113,
+        "rush_yards": 2.129
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 38.026,
+          "std": 70.575,
+          "p10": 4.78,
+          "p50": 7.2,
+          "p90": 170.47
+        },
+        "pass_tds": {
+          "mean": 0.225,
+          "std": 0.67,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "ints": {
+          "mean": 0.113,
+          "std": 0.371,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "rush_yards": {
+          "mean": 2.129,
+          "std": 3.557,
+          "p10": 0.01,
+          "p50": 0.62,
+          "p90": 5.97
+        },
+        "pass_attempts": {
+          "mean": 6.519,
+          "std": 11.996,
+          "p10": 0.85,
+          "p50": 1.14,
+          "p90": 31.7
+        },
+        "carries": {
+          "mean": 0.467,
+          "std": 0.78,
+          "p10": 0.0,
+          "p50": 0.16,
+          "p90": 1.14
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "KC-WR2-XavierWorthy",
+      "player_name": "Xavier Worthy",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 32.403,
+        "receptions": 3.215,
+        "rec_tds": 0.169
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 32.403,
+          "std": 18.397,
+          "p10": 13.38,
+          "p50": 27.99,
+          "p90": 59.48
+        },
+        "receptions": {
+          "mean": 3.215,
+          "std": 1.693,
+          "p10": 1.37,
+          "p50": 3.02,
+          "p90": 5.23
+        },
+        "rec_tds": {
+          "mean": 0.169,
+          "std": 0.407,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 5.201,
+          "std": 2.671,
+          "p10": 2.23,
+          "p50": 4.81,
+          "p90": 8.43
+        }
+      }
+    },
+    {
+      "player_key": "KC-TE2-NoahGray",
+      "player_name": "Noah Gray",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 31.947,
+        "receptions": 3.45,
+        "rec_tds": 0.156
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 31.947,
+          "std": 19.136,
+          "p10": 12.82,
+          "p50": 27.24,
+          "p90": 59.33
+        },
+        "receptions": {
+          "mean": 3.45,
+          "std": 1.785,
+          "p10": 1.41,
+          "p50": 3.09,
+          "p90": 6.05
+        },
+        "rec_tds": {
+          "mean": 0.156,
+          "std": 0.38,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 5.172,
+          "std": 2.692,
+          "p10": 2.21,
+          "p50": 4.61,
+          "p90": 9.24
+        }
+      }
+    },
+    {
+      "player_key": "BUF-WR2-KhalilShakir",
+      "player_name": "Khalil Shakir",
+      "team": "BUF",
+      "position": "WR",
+      "usage_role": "WR2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 30.556,
+        "receptions": 2.996,
+        "rec_tds": 0.194
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 30.556,
+          "std": 19.155,
+          "p10": 11.43,
+          "p50": 26.18,
+          "p90": 52.87
+        },
+        "receptions": {
+          "mean": 2.996,
+          "std": 1.64,
+          "p10": 1.23,
+          "p50": 2.63,
+          "p90": 5.23
+        },
+        "rec_tds": {
+          "mean": 0.194,
+          "std": 0.411,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 4.871,
+          "std": 2.593,
+          "p10": 1.94,
+          "p50": 4.31,
+          "p90": 8.39
+        }
+      }
+    },
+    {
+      "player_key": "BUF-TE2-DawsonKnox",
+      "player_name": "Dawson Knox",
+      "team": "BUF",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 29.545,
+        "receptions": 3.292,
+        "rec_tds": 0.087
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 29.545,
+          "std": 17.786,
+          "p10": 10.63,
+          "p50": 25.14,
+          "p90": 54.84
+        },
+        "receptions": {
+          "mean": 3.292,
+          "std": 1.889,
+          "p10": 1.19,
+          "p50": 2.89,
+          "p90": 5.75
+        },
+        "rec_tds": {
+          "mean": 0.087,
+          "std": 0.283,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 4.821,
+          "std": 2.704,
+          "p10": 1.79,
+          "p50": 4.29,
+          "p90": 8.1
+        }
+      }
+    },
+    {
+      "player_key": "BUF-RB2-RayDavis",
+      "player_name": "Ray Davis",
+      "team": "BUF",
+      "position": "RB",
+      "usage_role": "RB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 21.137,
+        "rush_tds": 0.131,
+        "rec_yards": 8.597,
+        "receptions": 1.2
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 21.137,
+          "std": 12.051,
+          "p10": 8.23,
+          "p50": 18.67,
+          "p90": 36.81
+        },
+        "rush_tds": {
+          "mean": 0.131,
+          "std": 0.373,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "rec_yards": {
+          "mean": 8.597,
+          "std": 9.018,
+          "p10": 1.19,
+          "p50": 5.54,
+          "p90": 17.71
+        },
+        "receptions": {
+          "mean": 1.2,
+          "std": 1.201,
+          "p10": 0.16,
+          "p50": 0.8,
+          "p90": 2.65
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 5.817,
+          "std": 2.694,
+          "p10": 2.78,
+          "p50": 5.63,
+          "p90": 9.1
+        },
+        "targets": {
+          "mean": 1.673,
+          "std": 1.687,
+          "p10": 0.23,
+          "p50": 1.12,
+          "p90": 3.64
+        }
+      }
+    },
+    {
+      "player_key": "BUF-QB3-ShaneBuechele",
+      "player_name": "Shane Buechele",
+      "team": "BUF",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 20.603,
+        "pass_tds": 0.188,
+        "ints": 0.044,
+        "rush_yards": 2.048
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 20.603,
+          "std": 54.352,
+          "p10": 4.35,
+          "p50": 6.83,
+          "p90": 16.71
+        },
+        "pass_tds": {
+          "mean": 0.188,
+          "std": 0.752,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "ints": {
+          "mean": 0.044,
+          "std": 0.205,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "rush_yards": {
+          "mean": 2.048,
+          "std": 3.053,
+          "p10": 0.02,
+          "p50": 0.6,
+          "p90": 5.98
+        },
+        "pass_attempts": {
+          "mean": 3.366,
+          "std": 8.616,
+          "p10": 0.85,
+          "p50": 1.14,
+          "p90": 2.42
+        },
+        "carries": {
+          "mean": 0.446,
+          "std": 0.658,
+          "p10": 0.0,
+          "p50": 0.11,
+          "p90": 1.29
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    {
+      "player_key": "KC-RB2-EmmettJohnson",
+      "player_name": "Emmett Johnson",
+      "team": "KC",
+      "position": "RB",
+      "usage_role": "RB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 19.206,
+        "rush_tds": 0.138,
+        "rec_yards": 8.249,
+        "receptions": 1.136
+      },
+      "distributions": {
+        "rush_yards": {
+          "mean": 19.206,
+          "std": 10.869,
+          "p10": 8.23,
+          "p50": 16.51,
+          "p90": 34.58
+        },
+        "rush_tds": {
+          "mean": 0.138,
+          "std": 0.344,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "rec_yards": {
+          "mean": 8.249,
+          "std": 8.459,
+          "p10": 0.82,
+          "p50": 5.33,
+          "p90": 19.72
+        },
+        "receptions": {
+          "mean": 1.136,
+          "std": 1.111,
+          "p10": 0.12,
+          "p50": 0.78,
+          "p90": 2.88
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 5.294,
+          "std": 2.279,
+          "p10": 2.66,
+          "p50": 5.03,
+          "p90": 8.28
+        },
+        "targets": {
+          "mean": 1.568,
+          "std": 1.508,
+          "p10": 0.15,
+          "p50": 1.08,
+          "p90": 3.9
+        }
+      }
+    },
+    {
+      "player_key": "BUF-TE3-JacksonHawes",
+      "player_name": "Jackson Hawes",
+      "team": "BUF",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "rush_heavy",
+      "script": "lead",
+      "script_detail": "small_lead",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 16.715,
+        "receptions": 1.844,
+        "rec_tds": 0.125
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 16.715,
+          "std": 11.954,
+          "p10": 3.16,
+          "p50": 13.46,
+          "p90": 33.6
+        },
+        "receptions": {
+          "mean": 1.844,
+          "std": 1.203,
+          "p10": 0.41,
+          "p50": 1.76,
+          "p90": 3.47
+        },
+        "rec_tds": {
+          "mean": 0.125,
+          "std": 0.349,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 1.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 2.799,
+          "std": 1.87,
+          "p10": 0.58,
+          "p50": 2.74,
+          "p90": 5.19
+        }
+      }
+    },
+    {
+      "player_key": "KC-TE3-JaredWiley",
+      "player_name": "Jared Wiley",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 16.281,
+        "receptions": 1.917,
+        "rec_tds": 0.119
+      },
+      "distributions": {
+        "rec_yards": {
+          "mean": 16.281,
+          "std": 12.537,
+          "p10": 3.07,
+          "p50": 13.48,
+          "p90": 32.23
+        },
+        "receptions": {
+          "mean": 1.917,
+          "std": 1.338,
+          "p10": 0.41,
+          "p50": 1.67,
+          "p90": 3.71
+        },
+        "rec_tds": {
+          "mean": 0.119,
+          "std": 0.377,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "pass_attempts": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "carries": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "targets": {
+          "mean": 2.894,
+          "std": 2.016,
+          "p10": 0.57,
+          "p50": 2.44,
+          "p90": 5.67
+        }
+      }
+    },
+    {
+      "player_key": "KC-QB3-GarrettNussmeier",
+      "player_name": "Garrett Nussmeier",
+      "team": "KC",
+      "position": "QB",
+      "usage_role": "QB2",
+      "personnel": "pass_heavy",
+      "script": "trail",
+      "script_detail": "small_deficit",
+      "scoring_role": "QB2",
+      "point_estimate": {
+        "pass_yards": 15.738,
+        "pass_tds": 0.156,
+        "ints": 0.013,
+        "rush_yards": 2.147
+      },
+      "distributions": {
+        "pass_yards": {
+          "mean": 15.738,
+          "std": 38.822,
+          "p10": 4.39,
+          "p50": 8.27,
+          "p90": 16.26
+        },
+        "pass_tds": {
+          "mean": 0.156,
+          "std": 0.587,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "ints": {
+          "mean": 0.013,
+          "std": 0.111,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        },
+        "rush_yards": {
+          "mean": 2.147,
+          "std": 3.902,
+          "p10": 0.03,
+          "p50": 0.64,
+          "p90": 5.07
+        },
+        "pass_attempts": {
+          "mean": 2.611,
+          "std": 6.355,
+          "p10": 0.92,
+          "p50": 1.38,
+          "p90": 2.52
+        },
+        "carries": {
+          "mean": 0.466,
+          "std": 0.886,
+          "p10": 0.01,
+          "p50": 0.15,
+          "p90": 1.06
+        },
+        "targets": {
+          "mean": 0.0,
+          "std": 0.0,
+          "p10": 0.0,
+          "p50": 0.0,
+          "p90": 0.0
+        }
+      }
+    }
+  ]
+}

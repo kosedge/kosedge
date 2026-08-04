@@ -39,6 +39,7 @@ def test_engine_version_game_script() -> None:
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -287,6 +288,7 @@ def test_buf_kc_realism_bounds_and_diagnostics_play_mix() -> None:
         or "real-depth" in proj.engine_version
         or "smoke-polish" in proj.engine_version
         or "survivor-planner" in proj.engine_version
+        or "calibration" in proj.engine_version
     )
     by_name = {p["player_name"]: p for p in proj.players}
 

@@ -1,0 +1,149 @@
+{
+  "engine_version": "nfl-season-engine-v1.10-survivor-planner",
+  "calibration_tag": "nfl-season-engine-cal-v1",
+  "mode": "packaged_real",
+  "n_sims": 8,
+  "seed": 2026,
+  "game_reps": 120,
+  "wins": {
+    "win_mean_min": 5.25,
+    "win_mean_max": 11.625,
+    "win_mean_stdev": 1.557,
+    "win_mean_spread": 6.375,
+    "top": [
+      [
+        "DET",
+        11.625
+      ],
+      [
+        "DEN",
+        11.25
+      ],
+      [
+        "BAL",
+        10.25
+      ],
+      [
+        "SEA",
+        10.0
+      ],
+      [
+        "DAL",
+        9.875
+      ],
+      [
+        "GB",
+        9.875
+      ]
+    ],
+    "bot": [
+      [
+        "LV",
+        6.625
+      ],
+      [
+        "ARI",
+        6.5
+      ],
+      [
+        "NO",
+        6.375
+      ],
+      [
+        "CAR",
+        6.25
+      ],
+      [
+        "TEN",
+        6.0
+      ],
+      [
+        "NYG",
+        5.25
+      ]
+    ]
+  },
+  "buf_kc_week1": {
+    "expected_total_mean": 46.1,
+    "home_win_prob_mean": 0.533,
+    "Mahomes": {
+      "pass_yards": 253.05,
+      "pass_tds": 1.417,
+      "ints": 0.533,
+      "rush_yards": 7.804
+    },
+    "Allen": {
+      "pass_yards": 233.468,
+      "pass_tds": 1.492,
+      "ints": 0.492,
+      "rush_yards": 17.971
+    },
+    "Cook": {
+      "rush_yards": 51.384,
+      "rush_tds": 0.492,
+      "rec_yards": 18.689,
+      "receptions": 2.802
+    },
+    "Rice": {
+      "rec_yards": 67.389,
+      "receptions": 6.149,
+      "rec_tds": 0.383
+    },
+    "Kelce": {
+      "rec_yards": 46.076,
+      "receptions": 4.45,
+      "rec_tds": 0.25
+    }
+  },
+  "season_totals": {
+    "Mahomes": {
+      "pass_yards_mean": 4515.195,
+      "pass_tds_mean": 22.375,
+      "ints_mean": 10.75
+    },
+    "Allen": {
+      "pass_yards_mean": 4301.264,
+      "pass_tds_mean": 19.625,
+      "ints_mean": 9.375,
+      "rush_yards_mean": 324.224
+    },
+    "Cook": {
+      "rush_yards_mean": 1100.524,
+      "rush_tds_mean": 7.5,
+      "receptions_mean": 40.398
+    },
+    "Rice": {
+      "rec_yards_mean": 1098.328,
+      "receptions_mean": 99.043,
+      "rec_tds_mean": 6.75
+    },
+    "Kelce": {
+      "rec_yards_mean": 790.814,
+      "receptions_mean": 73.485,
+      "rec_tds_mean": 4.125
+    }
+  },
+  "role_means_real_depth_buf_kc": {
+    "QB1": {
+      "pass_yards": 201.99,
+      "pass_tds": 1.31,
+      "ints": 0.61
+    },
+    "RB1": {
+      "rush_yards": 42.87,
+      "rush_tds": 0.41,
+      "receptions": 2.53
+    },
+    "WR1": {
+      "rec_yards": 49.81,
+      "receptions": 4.67,
+      "rec_tds": 0.38
+    },
+    "TE1": {
+      "rec_yards": 50.36,
+      "receptions": 5.1,
+      "rec_tds": 0.25
+    }
+  },
+  "note": "Captured from v1.10 before cal-v2 edits (same seeds/universe)."
+}

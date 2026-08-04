@@ -82,11 +82,11 @@ class PlayerRole:
     # Per-unit efficiency priors (yards per attempt/carry/reception, TD rates).
     # Defaults match calibration.league priors; loaders overwrite via
     # apply_efficiency_priors / baseline-derived rates.
-    ypa: float = 7.05
+    ypa: float = 7.15
     ypc: float = 4.2
     ypr: float = 11.8
     catch_rate: float = 0.615
-    pass_td_rate: float = 0.041
+    pass_td_rate: float = 0.043
     rush_td_rate: float = 0.027
     rec_td_rate: float = 0.055
     int_rate: float = 0.018
@@ -132,6 +132,9 @@ class GameScript:
     away_hurry_up: float = 0.0
     home_run_rate: float = 0.42
     away_run_rate: float = 0.42
+    # v1.11 early-season uncertainty (week + inspectable posture dict).
+    week: int = 0
+    early_season_uncertainty: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

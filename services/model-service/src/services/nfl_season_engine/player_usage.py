@@ -26,7 +26,9 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 from src.services.nfl_season_engine.calibration import (
     DIRICHLET_RUSH_CONCENTRATION,
     DIRICHLET_TARGET_CONCENTRATION,
+    QB1_START_RATE,
     USAGE_OTHER_BUCKET_FLOOR,
+    dirichlet_concentration_for_week,
     with_residual_share,
 )
 from src.services.nfl_season_engine.types import (
@@ -132,26 +134,35 @@ def allocate_team_usage(
     if not receivers:
         receivers = [r for r in roles if r.position in ("WR", "TE", "RB")]
 
-    # QB starter draw (categorical) — same spirit as box-score simulator.
+    # QB starter draw — prefer healthy QB1 heavily. Real depth charts list
+    # QB2/QB3 with emergency snap priors; a flat categorical over-starts them.
     qb_attempts: Dict[str, float] = {r.player_key: 0.0 for r in qbs}
     if qbs:
-        weights = [
-            max(
-                0.01,
-                (1.0 / max(1, r.depth_order))
-                * max(0.05, eff_by_key[r.player_key]["snap_share"] or 0.2),
+        qb1_pool = [r for r in qbs if int(r.depth_order or 99) <= 1]
+        if qb1_pool and rng.random() < QB1_START_RATE:
+            # Highest snap among depth-1 rows (usually one).
+            starter = max(
+                qb1_pool,
+                key=lambda r: float(eff_by_key[r.player_key]["snap_share"] or 0.0),
             )
-            for r in qbs
-        ]
-        weight_sum = sum(weights)
-        pick = rng.random() * weight_sum
-        running = 0.0
-        starter = qbs[0]
-        for role, w in zip(qbs, weights):
-            running += w
-            if pick <= running:
-                starter = role
-                break
+        else:
+            weights = [
+                max(
+                    0.01,
+                    (1.0 / max(1, r.depth_order))
+                    * max(0.05, eff_by_key[r.player_key]["snap_share"] or 0.2),
+                )
+                for r in qbs
+            ]
+            weight_sum = sum(weights)
+            pick = rng.random() * weight_sum
+            running = 0.0
+            starter = qbs[0]
+            for role, w in zip(qbs, weights):
+                running += w
+                if pick <= running:
+                    starter = role
+                    break
         # Small residual for backup in blowouts / injuries (thin).
         starter_share = 0.955 if starter.depth_order <= 1 else 0.88
         if team_script == "lead" and (
@@ -169,13 +180,20 @@ def allocate_team_usage(
             for b in backups:
                 qb_attempts[b.player_key] = each
 
+    week = int(getattr(script, "week", 0) or 0)
+    rush_conc, target_conc = dirichlet_concentration_for_week(
+        week,
+        base_rush=DIRICHLET_RUSH_CONCENTRATION,
+        base_target=DIRICHLET_TARGET_CONCENTRATION,
+    )
+
     rush_base = [max(0.0, float(eff_by_key[r.player_key]["rush_share"])) for r in rushers]
     if not any(rush_base) and rushers:
         rush_base = [
             {"RB1": 0.55, "RB2": 0.25, "RB_COMMITTEE": 0.36}.get(r.usage_role, 0.08)
             for r in rushers
         ]
-    rush_fracs = _dirichlet_with_other(rng, rush_base, concentration=DIRICHLET_RUSH_CONCENTRATION)
+    rush_fracs = _dirichlet_with_other(rng, rush_base, concentration=rush_conc)
     rush_by_key = {r.player_key: rush_plays * s for r, s in zip(rushers, rush_fracs)}
 
     tgt_base = [max(0.0, float(eff_by_key[r.player_key]["target_share"])) for r in receivers]
@@ -194,7 +212,7 @@ def allocate_team_usage(
             }.get(r.usage_role, 0.05)
             for r in receivers
         ]
-    tgt_fracs = _dirichlet_with_other(rng, tgt_base, concentration=DIRICHLET_TARGET_CONCENTRATION)
+    tgt_fracs = _dirichlet_with_other(rng, tgt_base, concentration=target_conc)
     tgt_by_key = {r.player_key: pass_plays * s for r, s in zip(receivers, tgt_fracs)}
 
     out: List[PlayerUsage] = []

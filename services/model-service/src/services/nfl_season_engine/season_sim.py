@@ -21,7 +21,11 @@ import statistics
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Sequence
 
-from src.services.nfl_season_engine.calibration import ENGINE_VERSION
+from src.services.nfl_season_engine.calibration import (
+    ENGINE_VERSION,
+    EARLY_SEASON_LAST_WEEK,
+    early_season_uncertainty,
+)
 from src.services.nfl_season_engine.depth_chart import (
     apply_weekly_role_volatility,
     classify_roster_book,
@@ -356,6 +360,15 @@ def simulate_full_season(
             },
             "role_transitions_sample": sample_role_transitions,
             "path0_depth_structures_end": sample_depth_structures,
+            # v1.11 early-season uncertainty posture (W1–W4).
+            "early_season_uncertainty": {
+                "last_week": EARLY_SEASON_LAST_WEEK,
+                "by_week": {
+                    str(w): early_season_uncertainty(w)
+                    for w in range(1, EARLY_SEASON_LAST_WEEK + 1)
+                },
+                "week_5_plus": early_season_uncertainty(5),
+            },
         }
 
     return SeasonSimResult(
