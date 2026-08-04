@@ -148,6 +148,14 @@ Diagnostics (`include_diagnostics=true`) expose:
 
 ## Smoke
 
+Merged PR #82 → `deploy-vercel`; Railway `model-service`
+(`brave-art` / `model-service-production-e253`) redeployed and smokes green:
+
+- `GET /nfl/season-engine/status` → `nfl-season-engine-v1.7-red-zone` +
+  `red_zone_scoring_usage` capability
+- `GET .../game-boxes?...&include_diagnostics=true` → `diagnostics.red_zone` /
+  `scoring_usage` with RZ pass rate + per-player I20/I10 opportunities
+
 ```bash
 curl -sS "$MODEL_SERVICE_URL/nfl/season-engine/status" | jq '{engine_version, capabilities}'
 curl -sS "$MODEL_SERVICE_URL/nfl/season-engine/game-boxes?home_team=KC&away_team=BUF&week=1&demo=true&n_replicates=80&include_diagnostics=true" \
