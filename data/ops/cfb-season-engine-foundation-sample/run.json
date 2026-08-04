@@ -1,0 +1,1052 @@
+{
+  "engine_version": "cfb-season-engine-v0.1-foundation",
+  "universe_notes": {
+    "mode": "packaged",
+    "priors_as_of": "2026-08-04",
+    "priors_fidelity": "approximate",
+    "team_count": "136",
+    "schedule_source": "packaged_sample",
+    "gap_portal_feed": "No live portal/returning-production DB feed wired yet",
+    "gap_recruiting_feed": "Recruiting capital is packaged approximate composite",
+    "scope": "FBS focus for 2026 foundation"
+  },
+  "season_sim": {
+    "season": 2026,
+    "n_sims": 20,
+    "games_per_season": 46,
+    "engine_version": "cfb-season-engine-v0.1-foundation",
+    "top_teams_by_wins": [
+      {
+        "team": "OSU",
+        "mean": 4.25,
+        "std": 1.609,
+        "wins_sum_check": 85.0
+      },
+      {
+        "team": "UGA",
+        "mean": 4.2,
+        "std": 1.4,
+        "wins_sum_check": 84.0
+      },
+      {
+        "team": "TEX",
+        "mean": 4.1,
+        "std": 1.64,
+        "wins_sum_check": 82.0
+      },
+      {
+        "team": "ALA",
+        "mean": 3.6,
+        "std": 1.158,
+        "wins_sum_check": 72.0
+      },
+      {
+        "team": "CLEM",
+        "mean": 3.4,
+        "std": 0.97,
+        "wins_sum_check": 68.0
+      },
+      {
+        "team": "ORE",
+        "mean": 2.6,
+        "std": 1.068,
+        "wins_sum_check": 52.0
+      },
+      {
+        "team": "ND",
+        "mean": 2.2,
+        "std": 0.872,
+        "wins_sum_check": 44.0
+      },
+      {
+        "team": "USC",
+        "mean": 2.05,
+        "std": 1.117,
+        "wins_sum_check": 41.0
+      },
+      {
+        "team": "MICH",
+        "mean": 2.0,
+        "std": 0.949,
+        "wins_sum_check": 40.0
+      },
+      {
+        "team": "MIA",
+        "mean": 1.8,
+        "std": 1.03,
+        "wins_sum_check": 36.0
+      },
+      {
+        "team": "OU",
+        "mean": 1.55,
+        "std": 0.865,
+        "wins_sum_check": 31.0
+      },
+      {
+        "team": "LSU",
+        "mean": 1.45,
+        "std": 0.805,
+        "wins_sum_check": 29.0
+      },
+      {
+        "team": "PSU",
+        "mean": 1.4,
+        "std": 0.8,
+        "wins_sum_check": 28.0
+      },
+      {
+        "team": "WASH",
+        "mean": 1.35,
+        "std": 0.792,
+        "wins_sum_check": 27.0
+      },
+      {
+        "team": "UF",
+        "mean": 0.95,
+        "std": 0.74,
+        "wins_sum_check": 19.0
+      }
+    ],
+    "team_wins": {
+      "ACU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "AFA": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "AKR": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ALA": {
+        "mean": 3.6,
+        "std": 1.158,
+        "wins_sum_check": 72.0
+      },
+      "APP": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ARI": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ARK": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ARMY": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ASU": {
+        "mean": 0.35,
+        "std": 0.477,
+        "wins_sum_check": 7.0
+      },
+      "AUB": {
+        "mean": 0.4,
+        "std": 0.49,
+        "wins_sum_check": 8.0
+      },
+      "BALL": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "BAY": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "BC": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "BGSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "BOISE": {
+        "mean": 0.9,
+        "std": 0.889,
+        "wins_sum_check": 18.0
+      },
+      "BUFF": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "BYU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CAL": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CCU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CHAR": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CHAT": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CIN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CLEM": {
+        "mean": 3.4,
+        "std": 0.97,
+        "wins_sum_check": 68.0
+      },
+      "CMU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "COLO": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "CONN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "DEL": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "DUKE": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "EMU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "FAU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "FAU2": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "FAY": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "FIU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "FRES": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "FSU": {
+        "mean": 0.9,
+        "std": 0.889,
+        "wins_sum_check": 18.0
+      },
+      "GASO": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "GAST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "GT": {
+        "mean": 0.55,
+        "std": 0.589,
+        "wins_sum_check": 11.0
+      },
+      "HAW": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "HOU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "IDHO": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ILL": {
+        "mean": 0.3,
+        "std": 0.458,
+        "wins_sum_check": 6.0
+      },
+      "IOWA": {
+        "mean": 0.35,
+        "std": 0.477,
+        "wins_sum_check": 7.0
+      },
+      "ISU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "IU": {
+        "mean": 0.6,
+        "std": 0.49,
+        "wins_sum_check": 12.0
+      },
+      "JMU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "KENNESAW": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "KENT": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "KSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "KU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "LIB": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "LOU": {
+        "mean": 0.35,
+        "std": 0.477,
+        "wins_sum_check": 7.0
+      },
+      "LSU": {
+        "mean": 1.45,
+        "std": 0.805,
+        "wins_sum_check": 29.0
+      },
+      "LT": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "M-OH": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MASS": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MD": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MEM": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MIA": {
+        "mean": 1.8,
+        "std": 1.03,
+        "wins_sum_check": 36.0
+      },
+      "MICH": {
+        "mean": 2.0,
+        "std": 0.949,
+        "wins_sum_check": 40.0
+      },
+      "MINN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MISS": {
+        "mean": 0.1,
+        "std": 0.3,
+        "wins_sum_check": 2.0
+      },
+      "MOST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MRSH": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "MSST": {
+        "mean": 0.3,
+        "std": 0.458,
+        "wins_sum_check": 6.0
+      },
+      "MSU": {
+        "mean": 0.5,
+        "std": 0.5,
+        "wins_sum_check": 10.0
+      },
+      "MTSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "NAVY": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "NCSU": {
+        "mean": 0.25,
+        "std": 0.433,
+        "wins_sum_check": 5.0
+      },
+      "ND": {
+        "mean": 2.2,
+        "std": 0.872,
+        "wins_sum_check": 44.0
+      },
+      "NEB": {
+        "mean": 0.5,
+        "std": 0.5,
+        "wins_sum_check": 10.0
+      },
+      "NIU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "NMSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "NW": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "OHIO": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "OKST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "OLE": {
+        "mean": 0.3,
+        "std": 0.458,
+        "wins_sum_check": 6.0
+      },
+      "ORE": {
+        "mean": 2.6,
+        "std": 1.068,
+        "wins_sum_check": 52.0
+      },
+      "OREST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ORST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "OSU": {
+        "mean": 4.25,
+        "std": 1.609,
+        "wins_sum_check": 85.0
+      },
+      "OU": {
+        "mean": 1.55,
+        "std": 0.865,
+        "wins_sum_check": 31.0
+      },
+      "PITT": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "PSU": {
+        "mean": 1.4,
+        "std": 0.8,
+        "wins_sum_check": 28.0
+      },
+      "PUR": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "RICE": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "RUT": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "SCAR": {
+        "mean": 0.25,
+        "std": 0.433,
+        "wins_sum_check": 5.0
+      },
+      "SDSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "SHSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "SJSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "SMU": {
+        "mean": 0.35,
+        "std": 0.477,
+        "wins_sum_check": 7.0
+      },
+      "SOUTH": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "STAN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "SYR": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TA&M": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TAMU": {
+        "mean": 0.8,
+        "std": 0.678,
+        "wins_sum_check": 16.0
+      },
+      "TCU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TEM": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TENN": {
+        "mean": 0.3,
+        "std": 0.458,
+        "wins_sum_check": 6.0
+      },
+      "TEX": {
+        "mean": 4.1,
+        "std": 1.64,
+        "wins_sum_check": 82.0
+      },
+      "TLSA": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TROY": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TTU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TULN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TXAM": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "TXST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UCF": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UCLA": {
+        "mean": 0.45,
+        "std": 0.497,
+        "wins_sum_check": 9.0
+      },
+      "UF": {
+        "mean": 0.95,
+        "std": 0.74,
+        "wins_sum_check": 19.0
+      },
+      "UGA": {
+        "mean": 4.2,
+        "std": 1.4,
+        "wins_sum_check": 84.0
+      },
+      "UK": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UL": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ULL": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "ULM": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UNC": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UNLV": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "USA": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "USC": {
+        "mean": 2.05,
+        "std": 1.117,
+        "wins_sum_check": 41.0
+      },
+      "USF": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "USM": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UTAH": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UTAHST": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UTEP": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UTSA": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "UVA": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "VAN": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "VT": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "WAKE": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "WASH": {
+        "mean": 1.35,
+        "std": 0.792,
+        "wins_sum_check": 27.0
+      },
+      "WIS": {
+        "mean": 0.3,
+        "std": 0.458,
+        "wins_sum_check": 6.0
+      },
+      "WKU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "WMU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "WSU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "WVU": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      },
+      "WYO": {
+        "mean": 0.0,
+        "std": 0.0,
+        "wins_sum_check": 0.0
+      }
+    },
+    "sample_path_game_count": 46,
+    "notes": {
+      "mode": "packaged",
+      "priors_as_of": "2026-08-04",
+      "priors_fidelity": "approximate",
+      "team_count": "136",
+      "schedule_source": "packaged_sample",
+      "gap_portal_feed": "No live portal/returning-production DB feed wired yet",
+      "gap_recruiting_feed": "Recruiting capital is packaged approximate composite",
+      "scope": "FBS focus for 2026 foundation",
+      "skeleton": "team W/L paths only; player boxes / CFP bracket deferred",
+      "fidelity": "approximate"
+    },
+    "diagnostics": {
+      "mean_wins_sum": 46.0,
+      "expected_wins_sum": 46.0,
+      "early_season_uncertainty": {
+        "1": {
+          "week": 1,
+          "active": true,
+          "last_week": 4,
+          "score_noise_mult": 1.32,
+          "score_noise_sd": 16.5,
+          "margin_sd_mult": 1.38,
+          "win_prob_margin_sd": 22.77,
+          "separation_soften": 0.68,
+          "matchup_response_effective": 0.714,
+          "roster_identity_uncertainty": 0.55,
+          "note": "W1\u2013W4 CFB: inflate outcome SD more than NFL, soften separation, and flag high roster/QB identity uncertainty (portal + NIL churn).",
+          "fidelity": "approximate"
+        },
+        "2": {
+          "week": 2,
+          "active": true,
+          "last_week": 4,
+          "score_noise_mult": 1.24,
+          "score_noise_sd": 15.5,
+          "margin_sd_mult": 1.26,
+          "win_prob_margin_sd": 20.79,
+          "separation_soften": 0.76,
+          "matchup_response_effective": 0.798,
+          "roster_identity_uncertainty": 0.45,
+          "note": "W1\u2013W4 CFB: inflate outcome SD more than NFL, soften separation, and flag high roster/QB identity uncertainty (portal + NIL churn).",
+          "fidelity": "approximate"
+        },
+        "3": {
+          "week": 3,
+          "active": true,
+          "last_week": 4,
+          "score_noise_mult": 1.16,
+          "score_noise_sd": 14.5,
+          "margin_sd_mult": 1.16,
+          "win_prob_margin_sd": 19.14,
+          "separation_soften": 0.85,
+          "matchup_response_effective": 0.8925,
+          "roster_identity_uncertainty": 0.35,
+          "note": "W1\u2013W4 CFB: inflate outcome SD more than NFL, soften separation, and flag high roster/QB identity uncertainty (portal + NIL churn).",
+          "fidelity": "approximate"
+        },
+        "4": {
+          "week": 4,
+          "active": true,
+          "last_week": 4,
+          "score_noise_mult": 1.08,
+          "score_noise_sd": 13.5,
+          "margin_sd_mult": 1.08,
+          "win_prob_margin_sd": 17.82,
+          "separation_soften": 0.93,
+          "matchup_response_effective": 0.9765,
+          "roster_identity_uncertainty": 0.25,
+          "note": "W1\u2013W4 CFB: inflate outcome SD more than NFL, soften separation, and flag high roster/QB identity uncertainty (portal + NIL churn).",
+          "fidelity": "approximate"
+        }
+      },
+      "week_5_plus": {
+        "week": 5,
+        "active": false,
+        "last_week": 4,
+        "score_noise_mult": 1.0,
+        "score_noise_sd": 12.5,
+        "margin_sd_mult": 1.0,
+        "win_prob_margin_sd": 16.5,
+        "separation_soften": 1.0,
+        "matchup_response_effective": 1.05,
+        "roster_identity_uncertainty": 0.12,
+        "note": "Mid/late season: base priors (no early-season inflate).",
+        "fidelity": "approximate"
+      }
+    }
+  },
+  "game_projection": {
+    "season": 2026,
+    "week": 1,
+    "game_id": "2026_w1_UGA@ALA",
+    "home_team": "ALA",
+    "away_team": "UGA",
+    "engine_version": "cfb-season-engine-v0.1-foundation",
+    "home_win_prob": 0.4985,
+    "away_win_prob": 0.5015,
+    "expected_home_score": 28.55,
+    "expected_away_score": 28.64,
+    "expected_total": 57.2,
+    "spread_home": 0.09,
+    "margin_sd": 23.864,
+    "early_season_uncertainty": {
+      "week": 1,
+      "active": true,
+      "last_week": 4,
+      "score_noise_mult": 1.32,
+      "score_noise_sd": 16.5,
+      "margin_sd_mult": 1.38,
+      "win_prob_margin_sd": 22.77,
+      "separation_soften": 0.68,
+      "matchup_response_effective": 0.714,
+      "roster_identity_uncertainty": 0.55,
+      "note": "W1\u2013W4 CFB: inflate outcome SD more than NFL, soften separation, and flag high roster/QB identity uncertainty (portal + NIL churn).",
+      "fidelity": "approximate"
+    },
+    "home_layers": {
+      "offense_index": 1.5283,
+      "defense_index": 1.4355,
+      "pace_factor": 0.995,
+      "pass_rate_bias": 0.14,
+      "early_season_uncertainty": 0.2087,
+      "fidelity": "approximate",
+      "source": "hierarchical_compose",
+      "roster": {
+        "team": "ALA",
+        "returning_production": 52.0,
+        "portal_in_score": 78.0,
+        "portal_out_score": 55.0,
+        "recruiting_capital": 97.0,
+        "experience_index": 55.0,
+        "continuity_score": 68.62,
+        "source": "packaged_prior",
+        "fidelity": "approximate",
+        "notes": ""
+      },
+      "qb": {
+        "team": "ALA",
+        "qb_class": "incumbent",
+        "starter_name": "Ty Simpson",
+        "starter_key": "ty_simpson",
+        "experience_starts": 8,
+        "qb_talent": 80.0,
+        "ol_support": 84.0,
+        "weapons_support": 88.0,
+        "supporting_cast": 85.8,
+        "uncertainty": 0.123,
+        "source": "packaged_prior",
+        "fidelity": "approximate",
+        "notes": ""
+      },
+      "position_groups": {
+        "team": "ALA",
+        "ol": 86.0,
+        "skill": 89.0,
+        "front_seven": 90.0,
+        "secondary": 87.0,
+        "special_teams": 50.0,
+        "source": "packaged_prior",
+        "fidelity": "approximate",
+        "notes": ""
+      }
+    },
+    "away_layers": {
+      "offense_index": 1.5199,
+      "defense_index": 1.45,
+      "pace_factor": 0.995,
+      "pass_rate_bias": 0.14,
+      "early_season_uncertainty": 0.1756,
+      "fidelity": "approximate",
+      "source": "hierarchical_compose",
+      "roster": {
+        "team": "UGA",
+        "returning_production": 58.0,
+        "portal_in_score": 62.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 96.0,
+        "experience_index": 62.0,
+        "continuity_score": 75.37,
+        "source": "packaged_prior",
+        "fidelity": "approximate",
+        "notes": ""
+      },
+      "qb": {
+        "team": "UGA",
+        "qb_class": "incumbent",
+        "starter_name": "Gunner Stockton",
+        "starter_key": "gunner_stockton",
+        "experience_starts": 10,
+        "qb_talent": 78.0,
+        "ol_support": 88.0,
+        "weapons_support": 90.0,
+        "supporting_cast": 88.9,
+        "uncertainty": 0.118,
+        "source": "packaged_prior",
+        "fidelity": "approximate",
+        "notes": ""
+      },
+      "position_groups": {
+        "team": "UGA",
+        "ol": 90.0,
+        "skill": 91.0,
+        "front_seven": 92.0,
+        "secondary": 88.0,
+        "special_teams": 50.0,
+        "source": "packaged_prior",
+        "fidelity": "approximate",
+        "notes": ""
+      }
+    },
+    "player_hooks": [
+      {
+        "player_key": "ty_simpson",
+        "player_name": "Ty Simpson",
+        "team": "ALA",
+        "position": "QB",
+        "depth_order": 1,
+        "usage_share": 0.94,
+        "talent": 80.0,
+        "source": "packaged_prior",
+        "fidelity": "approximate"
+      },
+      {
+        "player_key": "gunner_stockton",
+        "player_name": "Gunner Stockton",
+        "team": "UGA",
+        "position": "QB",
+        "depth_order": 1,
+        "usage_share": 0.95,
+        "talent": 78.0,
+        "source": "packaged_prior",
+        "fidelity": "approximate"
+      },
+      {
+        "player_key": "noah_thomas",
+        "player_name": "Noah Thomas",
+        "team": "UGA",
+        "position": "WR",
+        "depth_order": 1,
+        "usage_share": 0.22,
+        "talent": 82.0,
+        "source": "packaged_prior",
+        "fidelity": "approximate"
+      }
+    ],
+    "notes": {
+      "fidelity": "approximate",
+      "method": "hierarchical_compose + analytic matchup",
+      "does_not_touch": "edge_board_markets_only_cfb",
+      "universe_mode": "packaged",
+      "universe_priors_as_of": "2026-08-04",
+      "universe_priors_fidelity": "approximate",
+      "universe_team_count": "136",
+      "universe_schedule_source": "packaged_sample",
+      "universe_gap_portal_feed": "No live portal/returning-production DB feed wired yet"
+    },
+    "fidelity": "approximate"
+  }
+}

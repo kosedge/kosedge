@@ -1,0 +1,3559 @@
+{
+  "as_of": "2026-08-04",
+  "season": 2026,
+  "fidelity": "approximate",
+  "scope": "FBS foundation priors",
+  "notes": [
+    "Curated Power/Group rows are approximate composites for architecture \u2014 not calibrated SP+/FPI.",
+    "EXTRA codes are explicit placeholder league-average rows so the universe is FBS-shaped.",
+    "Portal/recruiting/returning production live feeds are gaps for the next pass.",
+    "Named QBs are illustrative 2026 situation labels and may lag real depth charts."
+  ],
+  "teams": {
+    "UGA": {
+      "roster": {
+        "returning_production": 58,
+        "portal_in_score": 62,
+        "portal_out_score": 48,
+        "recruiting_capital": 96,
+        "experience_index": 62,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Gunner Stockton",
+        "experience_starts": 10,
+        "qb_talent": 78,
+        "ol_support": 88,
+        "weapons_support": 90,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 90,
+        "skill": 91,
+        "front_seven": 92,
+        "secondary": 88,
+        "fidelity": "approximate"
+      },
+      "players": [
+        {
+          "player_name": "Gunner Stockton",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 78
+        },
+        {
+          "player_name": "Noah Thomas",
+          "position": "WR",
+          "usage_share": 0.22,
+          "talent": 82
+        }
+      ]
+    },
+    "ALA": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 78,
+        "portal_out_score": 55,
+        "recruiting_capital": 97,
+        "experience_index": 55,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Ty Simpson",
+        "experience_starts": 8,
+        "qb_talent": 80,
+        "ol_support": 84,
+        "weapons_support": 88,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 86,
+        "skill": 89,
+        "front_seven": 90,
+        "secondary": 87,
+        "fidelity": "approximate"
+      },
+      "players": [
+        {
+          "player_name": "Ty Simpson",
+          "position": "QB",
+          "usage_share": 0.94,
+          "talent": 80
+        }
+      ]
+    },
+    "OSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 70,
+        "portal_out_score": 60,
+        "recruiting_capital": 95,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Julian Sayin",
+        "experience_starts": 6,
+        "qb_talent": 82,
+        "ol_support": 85,
+        "weapons_support": 93,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 84,
+        "skill": 94,
+        "front_seven": 86,
+        "secondary": 85,
+        "fidelity": "approximate"
+      },
+      "players": [
+        {
+          "player_name": "Julian Sayin",
+          "position": "QB",
+          "usage_share": 0.94,
+          "talent": 82
+        },
+        {
+          "player_name": "Carnell Tate",
+          "position": "WR",
+          "usage_share": 0.24,
+          "talent": 88
+        }
+      ]
+    },
+    "MICH": {
+      "roster": {
+        "returning_production": 45,
+        "portal_in_score": 68,
+        "portal_out_score": 58,
+        "recruiting_capital": 86,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 68,
+        "ol_support": 80,
+        "weapons_support": 76,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 82,
+        "skill": 78,
+        "front_seven": 84,
+        "secondary": 80,
+        "fidelity": "approximate"
+      }
+    },
+    "TEX": {
+      "roster": {
+        "returning_production": 55,
+        "portal_in_score": 72,
+        "portal_out_score": 50,
+        "recruiting_capital": 93,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Arch Manning",
+        "experience_starts": 12,
+        "qb_talent": 90,
+        "ol_support": 86,
+        "weapons_support": 88,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 87,
+        "skill": 88,
+        "front_seven": 85,
+        "secondary": 84,
+        "fidelity": "approximate"
+      },
+      "players": [
+        {
+          "player_name": "Arch Manning",
+          "position": "QB",
+          "usage_share": 0.96,
+          "talent": 90
+        }
+      ]
+    },
+    "OU": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 74,
+        "portal_out_score": 52,
+        "recruiting_capital": 88,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "John Mateer",
+        "experience_starts": 14,
+        "qb_talent": 84,
+        "ol_support": 78,
+        "weapons_support": 82,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 79,
+        "skill": 84,
+        "front_seven": 80,
+        "secondary": 78,
+        "fidelity": "approximate"
+      }
+    },
+    "ORE": {
+      "roster": {
+        "returning_production": 42,
+        "portal_in_score": 80,
+        "portal_out_score": 62,
+        "recruiting_capital": 90,
+        "experience_index": 46,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Dante Moore",
+        "experience_starts": 5,
+        "qb_talent": 79,
+        "ol_support": 83,
+        "weapons_support": 86,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 84,
+        "skill": 87,
+        "front_seven": 82,
+        "secondary": 81,
+        "fidelity": "approximate"
+      }
+    },
+    "PSU": {
+      "roster": {
+        "returning_production": 40,
+        "portal_in_score": 66,
+        "portal_out_score": 70,
+        "recruiting_capital": 87,
+        "experience_index": 44,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 70,
+        "ol_support": 82,
+        "weapons_support": 80,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 83,
+        "skill": 81,
+        "front_seven": 86,
+        "secondary": 82,
+        "fidelity": "approximate"
+      }
+    },
+    "LSU": {
+      "roster": {
+        "returning_production": 54,
+        "portal_in_score": 70,
+        "portal_out_score": 48,
+        "recruiting_capital": 91,
+        "experience_index": 56,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Garrett Nussmeier",
+        "experience_starts": 16,
+        "qb_talent": 85,
+        "ol_support": 80,
+        "weapons_support": 89,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 81,
+        "skill": 90,
+        "front_seven": 84,
+        "secondary": 80,
+        "fidelity": "approximate"
+      }
+    },
+    "ND": {
+      "roster": {
+        "returning_production": 60,
+        "portal_in_score": 58,
+        "portal_out_score": 45,
+        "recruiting_capital": 89,
+        "experience_index": 64,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "CJ Carr",
+        "experience_starts": 4,
+        "qb_talent": 76,
+        "ol_support": 85,
+        "weapons_support": 82,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 86,
+        "skill": 83,
+        "front_seven": 85,
+        "secondary": 84,
+        "fidelity": "approximate"
+      }
+    },
+    "CLEM": {
+      "roster": {
+        "returning_production": 57,
+        "portal_in_score": 55,
+        "portal_out_score": 46,
+        "recruiting_capital": 88,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Cade Klubnik",
+        "experience_starts": 28,
+        "qb_talent": 83,
+        "ol_support": 84,
+        "weapons_support": 85,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 85,
+        "skill": 86,
+        "front_seven": 87,
+        "secondary": 86,
+        "fidelity": "approximate"
+      }
+    },
+    "MIA": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 76,
+        "portal_out_score": 54,
+        "recruiting_capital": 90,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Carson Beck",
+        "experience_starts": 26,
+        "qb_talent": 84,
+        "ol_support": 82,
+        "weapons_support": 87,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 83,
+        "skill": 88,
+        "front_seven": 83,
+        "secondary": 81,
+        "fidelity": "approximate"
+      }
+    },
+    "FSU": {
+      "roster": {
+        "returning_production": 38,
+        "portal_in_score": 72,
+        "portal_out_score": 68,
+        "recruiting_capital": 84,
+        "experience_index": 40,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Tommy Castellanos",
+        "experience_starts": 18,
+        "qb_talent": 74,
+        "ol_support": 72,
+        "weapons_support": 76,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 74,
+        "skill": 78,
+        "front_seven": 76,
+        "secondary": 75,
+        "fidelity": "approximate"
+      }
+    },
+    "TENN": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 68,
+        "portal_out_score": 55,
+        "recruiting_capital": 88,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 72,
+        "ol_support": 80,
+        "weapons_support": 84,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 81,
+        "skill": 85,
+        "front_seven": 80,
+        "secondary": 78,
+        "fidelity": "approximate"
+      }
+    },
+    "USC": {
+      "roster": {
+        "returning_production": 44,
+        "portal_in_score": 75,
+        "portal_out_score": 60,
+        "recruiting_capital": 89,
+        "experience_index": 46,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Jayden Maiava",
+        "experience_starts": 10,
+        "qb_talent": 77,
+        "ol_support": 78,
+        "weapons_support": 86,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 79,
+        "skill": 87,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "WASH": {
+      "roster": {
+        "returning_production": 46,
+        "portal_in_score": 64,
+        "portal_out_score": 58,
+        "recruiting_capital": 82,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Demond Williams Jr.",
+        "experience_starts": 8,
+        "qb_talent": 78,
+        "ol_support": 76,
+        "weapons_support": 80,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 81,
+        "front_seven": 78,
+        "secondary": 77,
+        "fidelity": "approximate"
+      }
+    },
+    "TA&M": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 66,
+        "portal_out_score": 48,
+        "recruiting_capital": 90,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Marcel Reed",
+        "experience_starts": 12,
+        "qb_talent": 79,
+        "ol_support": 84,
+        "weapons_support": 83,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 85,
+        "skill": 84,
+        "front_seven": 86,
+        "secondary": 82,
+        "fidelity": "approximate"
+      }
+    },
+    "OLE": {
+      "roster": {
+        "returning_production": 42,
+        "portal_in_score": 82,
+        "portal_out_score": 65,
+        "recruiting_capital": 86,
+        "experience_index": 44,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Trinidad Chambliss",
+        "experience_starts": 12,
+        "qb_talent": 81,
+        "ol_support": 80,
+        "weapons_support": 85,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 81,
+        "skill": 86,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "UF": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 70,
+        "portal_out_score": 52,
+        "recruiting_capital": 87,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "DJ Lagway",
+        "experience_starts": 10,
+        "qb_talent": 86,
+        "ol_support": 78,
+        "weapons_support": 84,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 79,
+        "skill": 85,
+        "front_seven": 80,
+        "secondary": 78,
+        "fidelity": "approximate"
+      }
+    },
+    "AUB": {
+      "roster": {
+        "returning_production": 47,
+        "portal_in_score": 68,
+        "portal_out_score": 55,
+        "recruiting_capital": 84,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 70,
+        "ol_support": 76,
+        "weapons_support": 78,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 79,
+        "front_seven": 81,
+        "secondary": 78,
+        "fidelity": "approximate"
+      }
+    },
+    "UK": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 60,
+        "portal_out_score": 50,
+        "recruiting_capital": 76,
+        "experience_index": 55,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Cutter Boley",
+        "experience_starts": 2,
+        "qb_talent": 68,
+        "ol_support": 74,
+        "weapons_support": 72,
+        "is_portal": false,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 73,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "MSST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 64,
+        "portal_out_score": 54,
+        "recruiting_capital": 74,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Blake Shapen",
+        "experience_starts": 20,
+        "qb_talent": 72,
+        "ol_support": 72,
+        "weapons_support": 74,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 75,
+        "front_seven": 74,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "ARK": {
+      "roster": {
+        "returning_production": 46,
+        "portal_in_score": 66,
+        "portal_out_score": 56,
+        "recruiting_capital": 78,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Taylen Green",
+        "experience_starts": 14,
+        "qb_talent": 75,
+        "ol_support": 74,
+        "weapons_support": 76,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 77,
+        "front_seven": 74,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "SCAR": {
+      "roster": {
+        "returning_production": 44,
+        "portal_in_score": 70,
+        "portal_out_score": 58,
+        "recruiting_capital": 80,
+        "experience_index": 46,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 69,
+        "ol_support": 75,
+        "weapons_support": 78,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 76,
+        "skill": 79,
+        "front_seven": 77,
+        "secondary": 75,
+        "fidelity": "approximate"
+      }
+    },
+    "VAN": {
+      "roster": {
+        "returning_production": 58,
+        "portal_in_score": 62,
+        "portal_out_score": 42,
+        "recruiting_capital": 72,
+        "experience_index": 60,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Diego Pavia",
+        "experience_starts": 24,
+        "qb_talent": 80,
+        "ol_support": 74,
+        "weapons_support": 76,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 78,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "IU": {
+      "roster": {
+        "returning_production": 55,
+        "portal_in_score": 60,
+        "portal_out_score": 48,
+        "recruiting_capital": 74,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Fernando Mendoza",
+        "experience_starts": 14,
+        "qb_talent": 81,
+        "ol_support": 76,
+        "weapons_support": 80,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 81,
+        "front_seven": 76,
+        "secondary": 75,
+        "fidelity": "approximate"
+      }
+    },
+    "ILL": {
+      "roster": {
+        "returning_production": 54,
+        "portal_in_score": 58,
+        "portal_out_score": 46,
+        "recruiting_capital": 72,
+        "experience_index": 56,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Luke Altmyer",
+        "experience_starts": 22,
+        "qb_talent": 76,
+        "ol_support": 75,
+        "weapons_support": 74,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 76,
+        "skill": 75,
+        "front_seven": 77,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "IOWA": {
+      "roster": {
+        "returning_production": 60,
+        "portal_in_score": 50,
+        "portal_out_score": 42,
+        "recruiting_capital": 74,
+        "experience_index": 64,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 66,
+        "ol_support": 82,
+        "weapons_support": 68,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 83,
+        "skill": 70,
+        "front_seven": 84,
+        "secondary": 82,
+        "fidelity": "approximate"
+      }
+    },
+    "WIS": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 64,
+        "portal_out_score": 55,
+        "recruiting_capital": 74,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Hunter Simmons",
+        "experience_starts": 4,
+        "qb_talent": 70,
+        "ol_support": 78,
+        "weapons_support": 72,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 79,
+        "skill": 73,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "MINN": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 55,
+        "portal_out_score": 45,
+        "recruiting_capital": 70,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Drake Lindsey",
+        "experience_starts": 8,
+        "qb_talent": 72,
+        "ol_support": 76,
+        "weapons_support": 74,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 75,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "NEB": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 62,
+        "portal_out_score": 50,
+        "recruiting_capital": 78,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Dylan Raiola",
+        "experience_starts": 12,
+        "qb_talent": 82,
+        "ol_support": 80,
+        "weapons_support": 78,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 81,
+        "skill": 79,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "NW": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 52,
+        "portal_out_score": 48,
+        "recruiting_capital": 62,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Preston Stone",
+        "experience_starts": 16,
+        "qb_talent": 70,
+        "ol_support": 70,
+        "weapons_support": 68,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 71,
+        "skill": 69,
+        "front_seven": 72,
+        "secondary": 70,
+        "fidelity": "approximate"
+      }
+    },
+    "PUR": {
+      "roster": {
+        "returning_production": 40,
+        "portal_in_score": 68,
+        "portal_out_score": 60,
+        "recruiting_capital": 66,
+        "experience_index": 42,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Ryan Browne",
+        "experience_starts": 6,
+        "qb_talent": 68,
+        "ol_support": 68,
+        "weapons_support": 70,
+        "is_portal": false,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 69,
+        "skill": 71,
+        "front_seven": 70,
+        "secondary": 68,
+        "fidelity": "approximate"
+      }
+    },
+    "RUT": {
+      "roster": {
+        "returning_production": 54,
+        "portal_in_score": 56,
+        "portal_out_score": 46,
+        "recruiting_capital": 70,
+        "experience_index": 56,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Athan Kaliakmanis",
+        "experience_starts": 20,
+        "qb_talent": 71,
+        "ol_support": 74,
+        "weapons_support": 72,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 73,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "MD": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 60,
+        "portal_out_score": 54,
+        "recruiting_capital": 72,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 67,
+        "ol_support": 72,
+        "weapons_support": 74,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 75,
+        "front_seven": 74,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "MSU": {
+      "roster": {
+        "returning_production": 46,
+        "portal_in_score": 64,
+        "portal_out_score": 56,
+        "recruiting_capital": 74,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Alessio Milivojevic",
+        "experience_starts": 2,
+        "qb_talent": 69,
+        "ol_support": 72,
+        "weapons_support": 73,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 74,
+        "front_seven": 75,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "UCLA": {
+      "roster": {
+        "returning_production": 42,
+        "portal_in_score": 70,
+        "portal_out_score": 60,
+        "recruiting_capital": 78,
+        "experience_index": 44,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Nico Iamaleava",
+        "experience_starts": 14,
+        "qb_talent": 83,
+        "ol_support": 74,
+        "weapons_support": 80,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 81,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "CAL": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 58,
+        "portal_out_score": 50,
+        "recruiting_capital": 68,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Jaron-Kareem Casey",
+        "experience_starts": 4,
+        "qb_talent": 68,
+        "ol_support": 70,
+        "weapons_support": 72,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 71,
+        "skill": 73,
+        "front_seven": 72,
+        "secondary": 71,
+        "fidelity": "approximate"
+      }
+    },
+    "STAN": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 55,
+        "portal_out_score": 52,
+        "recruiting_capital": 70,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 65,
+        "ol_support": 72,
+        "weapons_support": 68,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 69,
+        "front_seven": 72,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "ASU": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 62,
+        "portal_out_score": 50,
+        "recruiting_capital": 76,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Sam Leavitt",
+        "experience_starts": 14,
+        "qb_talent": 78,
+        "ol_support": 76,
+        "weapons_support": 77,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 78,
+        "front_seven": 76,
+        "secondary": 75,
+        "fidelity": "approximate"
+      }
+    },
+    "ARI": {
+      "roster": {
+        "returning_production": 44,
+        "portal_in_score": 66,
+        "portal_out_score": 58,
+        "recruiting_capital": 74,
+        "experience_index": 46,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Noah Fifita",
+        "experience_starts": 22,
+        "qb_talent": 79,
+        "ol_support": 74,
+        "weapons_support": 78,
+        "is_portal": false,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 79,
+        "front_seven": 73,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "UTAH": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 60,
+        "portal_out_score": 52,
+        "recruiting_capital": 78,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 70,
+        "ol_support": 80,
+        "weapons_support": 74,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 81,
+        "skill": 75,
+        "front_seven": 82,
+        "secondary": 80,
+        "fidelity": "approximate"
+      }
+    },
+    "COLO": {
+      "roster": {
+        "returning_production": 40,
+        "portal_in_score": 78,
+        "portal_out_score": 65,
+        "recruiting_capital": 80,
+        "experience_index": 42,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "true_freshman",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 72,
+        "ol_support": 74,
+        "weapons_support": 80,
+        "is_true_freshman": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 82,
+        "front_seven": 72,
+        "secondary": 70,
+        "fidelity": "approximate"
+      }
+    },
+    "BYU": {
+      "roster": {
+        "returning_production": 58,
+        "portal_in_score": 54,
+        "portal_out_score": 44,
+        "recruiting_capital": 72,
+        "experience_index": 62,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Bear Bachmeier",
+        "experience_starts": 8,
+        "qb_talent": 74,
+        "ol_support": 76,
+        "weapons_support": 75,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 76,
+        "front_seven": 78,
+        "secondary": 77,
+        "fidelity": "approximate"
+      }
+    },
+    "TTU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 68,
+        "portal_out_score": 54,
+        "recruiting_capital": 76,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Behren Morton",
+        "experience_starts": 20,
+        "qb_talent": 77,
+        "ol_support": 75,
+        "weapons_support": 80,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 76,
+        "skill": 81,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "KU": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 60,
+        "portal_out_score": 50,
+        "recruiting_capital": 70,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Jalon Daniels",
+        "experience_starts": 30,
+        "qb_talent": 78,
+        "ol_support": 74,
+        "weapons_support": 76,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 77,
+        "front_seven": 73,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "KSU": {
+      "roster": {
+        "returning_production": 54,
+        "portal_in_score": 58,
+        "portal_out_score": 48,
+        "recruiting_capital": 72,
+        "experience_index": 56,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Avery Johnson",
+        "experience_starts": 14,
+        "qb_talent": 76,
+        "ol_support": 76,
+        "weapons_support": 75,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 76,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "ISU": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 55,
+        "portal_out_score": 46,
+        "recruiting_capital": 70,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Rocco Becht",
+        "experience_starts": 22,
+        "qb_talent": 75,
+        "ol_support": 74,
+        "weapons_support": 74,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 75,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "TCU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 64,
+        "portal_out_score": 54,
+        "recruiting_capital": 74,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 70,
+        "ol_support": 74,
+        "weapons_support": 76,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 77,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "BAY": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 60,
+        "portal_out_score": 52,
+        "recruiting_capital": 72,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Sawyer Robertson",
+        "experience_starts": 12,
+        "qb_talent": 74,
+        "ol_support": 73,
+        "weapons_support": 75,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 74,
+        "skill": 76,
+        "front_seven": 73,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "CIN": {
+      "roster": {
+        "returning_production": 46,
+        "portal_in_score": 62,
+        "portal_out_score": 56,
+        "recruiting_capital": 72,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Brendan Sorsby",
+        "experience_starts": 14,
+        "qb_talent": 73,
+        "ol_support": 72,
+        "weapons_support": 74,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 75,
+        "front_seven": 74,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "UCF": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 64,
+        "portal_out_score": 54,
+        "recruiting_capital": 74,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Tayven Jackson",
+        "experience_starts": 6,
+        "qb_talent": 72,
+        "ol_support": 74,
+        "weapons_support": 76,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 77,
+        "front_seven": 73,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "HOU": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 58,
+        "portal_out_score": 50,
+        "recruiting_capital": 70,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Conner Weigman",
+        "experience_starts": 10,
+        "qb_talent": 75,
+        "ol_support": 74,
+        "weapons_support": 74,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 75,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "WVU": {
+      "roster": {
+        "returning_production": 44,
+        "portal_in_score": 66,
+        "portal_out_score": 58,
+        "recruiting_capital": 70,
+        "experience_index": 46,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Khalil Wilkins",
+        "experience_starts": 0,
+        "qb_talent": 68,
+        "ol_support": 72,
+        "weapons_support": 72,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 73,
+        "front_seven": 74,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "LOU": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 64,
+        "portal_out_score": 50,
+        "recruiting_capital": 80,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Miller Moss",
+        "experience_starts": 14,
+        "qb_talent": 76,
+        "ol_support": 78,
+        "weapons_support": 80,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 79,
+        "skill": 81,
+        "front_seven": 78,
+        "secondary": 77,
+        "fidelity": "approximate"
+      }
+    },
+    "GT": {
+      "roster": {
+        "returning_production": 58,
+        "portal_in_score": 55,
+        "portal_out_score": 44,
+        "recruiting_capital": 76,
+        "experience_index": 60,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Haynes King",
+        "experience_starts": 22,
+        "qb_talent": 77,
+        "ol_support": 78,
+        "weapons_support": 76,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 79,
+        "skill": 77,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "VT": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 60,
+        "portal_out_score": 52,
+        "recruiting_capital": 74,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Kyron Drones",
+        "experience_starts": 24,
+        "qb_talent": 74,
+        "ol_support": 75,
+        "weapons_support": 74,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 76,
+        "skill": 75,
+        "front_seven": 77,
+        "secondary": 75,
+        "fidelity": "approximate"
+      }
+    },
+    "PITT": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 58,
+        "portal_out_score": 48,
+        "recruiting_capital": 72,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Eli Holstein",
+        "experience_starts": 12,
+        "qb_talent": 75,
+        "ol_support": 74,
+        "weapons_support": 75,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 76,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "UNC": {
+      "roster": {
+        "returning_production": 40,
+        "portal_in_score": 72,
+        "portal_out_score": 64,
+        "recruiting_capital": 78,
+        "experience_index": 42,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Max Johnson",
+        "experience_starts": 20,
+        "qb_talent": 72,
+        "ol_support": 74,
+        "weapons_support": 78,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 79,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "NCSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 60,
+        "portal_out_score": 54,
+        "recruiting_capital": 74,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 68,
+        "ol_support": 74,
+        "weapons_support": 74,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 75,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "DUKE": {
+      "roster": {
+        "returning_production": 46,
+        "portal_in_score": 62,
+        "portal_out_score": 56,
+        "recruiting_capital": 72,
+        "experience_index": 48,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Darian Mensah",
+        "experience_starts": 12,
+        "qb_talent": 76,
+        "ol_support": 73,
+        "weapons_support": 75,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 74,
+        "skill": 76,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "WAKE": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 55,
+        "portal_out_score": 50,
+        "recruiting_capital": 68,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Robby Ashford",
+        "experience_starts": 16,
+        "qb_talent": 70,
+        "ol_support": 70,
+        "weapons_support": 72,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 71,
+        "skill": 73,
+        "front_seven": 70,
+        "secondary": 69,
+        "fidelity": "approximate"
+      }
+    },
+    "UVA": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 54,
+        "portal_out_score": 44,
+        "recruiting_capital": 70,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Anthony Colandrea",
+        "experience_starts": 10,
+        "qb_talent": 72,
+        "ol_support": 72,
+        "weapons_support": 73,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 74,
+        "front_seven": 75,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "SYR": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 64,
+        "portal_out_score": 54,
+        "recruiting_capital": 72,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Steve Angeli",
+        "experience_starts": 6,
+        "qb_talent": 73,
+        "ol_support": 72,
+        "weapons_support": 76,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 77,
+        "front_seven": 72,
+        "secondary": 71,
+        "fidelity": "approximate"
+      }
+    },
+    "BC": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 56,
+        "portal_out_score": 48,
+        "recruiting_capital": 68,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Grayson James",
+        "experience_starts": 8,
+        "qb_talent": 70,
+        "ol_support": 74,
+        "weapons_support": 70,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 71,
+        "front_seven": 76,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "SMU": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 66,
+        "portal_out_score": 52,
+        "recruiting_capital": 76,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Kevin Jennings",
+        "experience_starts": 14,
+        "qb_talent": 76,
+        "ol_support": 75,
+        "weapons_support": 78,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 76,
+        "skill": 79,
+        "front_seven": 75,
+        "secondary": 74,
+        "fidelity": "approximate"
+      }
+    },
+    "BOISE": {
+      "roster": {
+        "returning_production": 54,
+        "portal_in_score": 58,
+        "portal_out_score": 48,
+        "recruiting_capital": 70,
+        "experience_index": 56,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Maddux Madsen",
+        "experience_starts": 12,
+        "qb_talent": 74,
+        "ol_support": 76,
+        "weapons_support": 75,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 77,
+        "skill": 76,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "MEM": {
+      "roster": {
+        "returning_production": 52,
+        "portal_in_score": 60,
+        "portal_out_score": 50,
+        "recruiting_capital": 68,
+        "experience_index": 54,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Brendon Lewis",
+        "experience_starts": 18,
+        "qb_talent": 73,
+        "ol_support": 74,
+        "weapons_support": 75,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 75,
+        "skill": 76,
+        "front_seven": 74,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "TULN": {
+      "roster": {
+        "returning_production": 50,
+        "portal_in_score": 58,
+        "portal_out_score": 50,
+        "recruiting_capital": 66,
+        "experience_index": 52,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "",
+        "experience_starts": 0,
+        "qb_talent": 68,
+        "ol_support": 72,
+        "weapons_support": 72,
+        "open_competition": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 73,
+        "front_seven": 74,
+        "secondary": 72,
+        "fidelity": "approximate"
+      }
+    },
+    "JMU": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 55,
+        "portal_out_score": 45,
+        "recruiting_capital": 64,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Alonza Barnett III",
+        "experience_starts": 20,
+        "qb_talent": 72,
+        "ol_support": 72,
+        "weapons_support": 73,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 73,
+        "skill": 74,
+        "front_seven": 75,
+        "secondary": 73,
+        "fidelity": "approximate"
+      }
+    },
+    "UNLV": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 62,
+        "portal_out_score": 54,
+        "recruiting_capital": 66,
+        "experience_index": 50,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Anthony Colandrea",
+        "experience_starts": 10,
+        "qb_talent": 71,
+        "ol_support": 70,
+        "weapons_support": 74,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 71,
+        "skill": 75,
+        "front_seven": 72,
+        "secondary": 70,
+        "fidelity": "approximate"
+      }
+    },
+    "TAMU": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 66,
+        "portal_out_score": 48,
+        "recruiting_capital": 90,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Marcel Reed",
+        "experience_starts": 12,
+        "qb_talent": 79,
+        "ol_support": 84,
+        "weapons_support": 83,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 85,
+        "skill": 84,
+        "front_seven": 86,
+        "secondary": 82,
+        "fidelity": "approximate"
+      }
+    },
+    "MISS": {
+      "roster": {
+        "returning_production": 42,
+        "portal_in_score": 82,
+        "portal_out_score": 65,
+        "recruiting_capital": 86,
+        "experience_index": 44,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Trinidad Chambliss",
+        "experience_starts": 12,
+        "qb_talent": 81,
+        "ol_support": 80,
+        "weapons_support": 85,
+        "is_portal": true,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 81,
+        "skill": 86,
+        "front_seven": 78,
+        "secondary": 76,
+        "fidelity": "approximate"
+      }
+    },
+    "ACU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "AFA": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "AKR": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "APP": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "ARMY": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "BALL": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "BGSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "BUFF": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "CCU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "CHAR": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "CHAT": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "CMU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "CONN": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "EMU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "FAU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "FIU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "FRES": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "GASO": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "GAST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "HAW": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "IDHO": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "KENT": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "LIB": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "LT": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "MASS": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "M-OH": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "MRSH": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "MTSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "NAVY": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "NIU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "NMSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "OHIO": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "OREST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "RICE": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "SJSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "SDSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "FAU2": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "FAY": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "SHSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "SOUTH": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "TEM": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "TLSA": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "TROY": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "TXST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "UL": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "ULL": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "ULM": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "USA": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "USF": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "USM": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "UTAHST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "UTEP": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "UTSA": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "WYO": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "WMU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "WKU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "MOST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "DEL": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "KENNESAW": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "ORST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "WSU": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "OKST": {
+      "roster": {
+        "returning_production": 48,
+        "portal_in_score": 52,
+        "portal_out_score": 52,
+        "recruiting_capital": 55,
+        "experience_index": 50,
+        "fidelity": "placeholder",
+        "notes": "League-average placeholder FBS prior"
+      },
+      "qb": {
+        "qb_class": "unknown",
+        "qb_talent": 50,
+        "ol_support": 50,
+        "weapons_support": 50,
+        "fidelity": "placeholder"
+      },
+      "position_groups": {
+        "ol": 50,
+        "skill": 50,
+        "front_seven": 50,
+        "secondary": 50,
+        "fidelity": "placeholder"
+      }
+    },
+    "TXAM": {
+      "roster": {
+        "returning_production": 56,
+        "portal_in_score": 66,
+        "portal_out_score": 48,
+        "recruiting_capital": 90,
+        "experience_index": 58,
+        "fidelity": "approximate"
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Marcel Reed",
+        "experience_starts": 12,
+        "qb_talent": 79,
+        "ol_support": 84,
+        "weapons_support": 83,
+        "fidelity": "approximate"
+      },
+      "position_groups": {
+        "ol": 85,
+        "skill": 84,
+        "front_seven": 86,
+        "secondary": 82,
+        "fidelity": "approximate"
+      }
+    }
+  }
+}
