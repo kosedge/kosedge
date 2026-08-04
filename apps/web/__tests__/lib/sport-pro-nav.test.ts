@@ -21,23 +21,35 @@ describe("sport-pro-nav", () => {
     }
   });
 
+  it("surfaces Survivor / Game Boxes / Season Model on NFL primary nav", () => {
+    const nflPrimary = getSportPrimaryNav("nfl").map((i) => i.label);
+    expect(nflPrimary).toContain("Survivor");
+    expect(nflPrimary).toContain("Game Boxes");
+    expect(nflPrimary).toContain("Season Model");
+  });
+
   it("keeps Wall Chart / Fantasy / Awards as NFL-only tools", () => {
     const nflTools = getSportToolNav("nfl").map((i) => i.label);
     expect(nflTools).toContain("Wall Chart");
     expect(nflTools).toContain("Fantasy Draft");
     expect(nflTools).toContain("Awards");
-    expect(nflTools).toContain("Season Model");
-    expect(nflTools).toContain("Game Boxes");
-    expect(nflTools).toContain("Survivor");
+    // Season engine desks live on primary; keep them out of the overflow tools list.
+    expect(nflTools).not.toContain("Season Model");
+    expect(nflTools).not.toContain("Game Boxes");
+    expect(nflTools).not.toContain("Survivor");
 
     for (const sport of SPORTS.filter((s) => s.key !== "nfl")) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
+      const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
       expect(tools).not.toContain("Wall Chart");
       expect(tools).not.toContain("Fantasy Draft");
       expect(tools).not.toContain("Awards");
       expect(tools).not.toContain("DFS");
       expect(tools).not.toContain("Season Model");
       expect(tools).not.toContain("Survivor");
+      expect(primary).not.toContain("Survivor");
+      expect(primary).not.toContain("Game Boxes");
+      expect(primary).not.toContain("Season Model");
     }
   });
 

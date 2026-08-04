@@ -27,10 +27,13 @@ export default function SportProHeader({
     activeSport.toUpperCase();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-kos-border/80 bg-kos-black/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-kos-border/80 bg-kos-black/90 backdrop-blur-xl [--kos-pro-header-h:6.75rem] sm:[--kos-pro-header-h:7.5rem]">
       <div className="mx-auto flex max-w-7xl flex-col gap-0 px-4 sm:px-6">
-        <div className="flex items-center justify-between gap-4 py-3">
-          <Link href="/" className="flex shrink-0 items-center gap-2.5">
+        <div className="flex items-center justify-between gap-3 py-2 sm:gap-4 sm:py-3">
+          <Link
+            href="/"
+            className="flex min-h-11 shrink-0 items-center gap-2.5"
+          >
             <Image
               src="/brand/kosedge-logo.png"
               alt="Kos Edge Analytics"
@@ -51,7 +54,7 @@ export default function SportProHeader({
 
           {showSportsNav ? (
             <nav
-              className="flex max-w-[58%] flex-wrap items-center justify-end gap-1 sm:max-w-none sm:gap-1.5"
+              className="-mx-1 flex max-w-[62%] items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-none sm:flex-wrap sm:justify-end sm:gap-1.5 sm:overflow-visible"
               aria-label="Sport hubs"
             >
               {SPORTS.map((s) => {
@@ -63,8 +66,8 @@ export default function SportProHeader({
                     aria-current={active ? "page" : undefined}
                     className={
                       active
-                        ? "rounded-md border border-kos-gold/45 bg-kos-gold/15 px-2 py-1 text-xs font-semibold text-kos-gold sm:px-2.5 sm:text-sm"
-                        : "rounded-md border border-transparent px-2 py-1 text-xs text-kos-text/75 hover:border-kos-border hover:bg-kos-surface/40 hover:text-kos-text sm:px-2.5 sm:text-sm"
+                        ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/45 bg-kos-gold/15 px-2.5 text-sm font-semibold text-kos-gold sm:min-h-0 sm:px-2.5 sm:py-1 sm:text-sm"
+                        : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-transparent px-2.5 text-sm text-kos-text/75 hover:border-kos-border hover:bg-kos-surface/40 hover:text-kos-text sm:min-h-0 sm:px-2.5 sm:py-1 sm:text-sm"
                     }
                   >
                     {s.label}
@@ -76,7 +79,7 @@ export default function SportProHeader({
         </div>
 
         <nav
-          className="-mx-1 flex gap-1 overflow-x-auto pb-3 pt-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="-mx-1 flex gap-1 overflow-x-auto pb-2 pt-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:pb-3"
           aria-label={`${sportLabel} research desk`}
         >
           {primaryNav.map((item) => {
@@ -88,8 +91,8 @@ export default function SportProHeader({
                 aria-current={active ? "page" : undefined}
                 className={
                   active
-                    ? "shrink-0 rounded-md border border-kos-gold/40 bg-kos-gold/12 px-2.5 py-1.5 text-xs font-semibold text-kos-gold whitespace-nowrap"
-                    : "shrink-0 rounded-md border border-transparent px-2.5 py-1.5 text-xs font-medium text-kos-text/70 whitespace-nowrap hover:border-white/10 hover:bg-white/5 hover:text-kos-text"
+                    ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/40 bg-kos-gold/12 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
+                    : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-transparent px-3 text-sm font-medium text-kos-text/70 whitespace-nowrap hover:border-white/10 hover:bg-white/5 hover:text-kos-text sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
                 }
               >
                 {item.label}
@@ -98,7 +101,7 @@ export default function SportProHeader({
           })}
           <Link
             href={`/pro/${activeSport}/overview#tools`}
-            className="shrink-0 rounded-md border border-transparent px-2.5 py-1.5 text-xs font-medium text-kos-text/50 whitespace-nowrap hover:text-kos-text/80"
+            className="inline-flex min-h-11 shrink-0 items-center rounded-md border border-transparent px-3 text-sm font-medium text-kos-text/50 whitespace-nowrap hover:text-kos-text/80 sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
           >
             More tools
           </Link>

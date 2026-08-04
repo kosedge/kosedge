@@ -18,7 +18,7 @@ export function InstantFilterBar({
     <div
       className={
         className ??
-        "sticky top-[7.5rem] z-20 rounded-2xl border border-white/10 bg-black/75 p-4 shadow-xl backdrop-blur-xl"
+        "sticky top-[var(--kos-pro-header-h,7.5rem)] z-20 rounded-2xl border border-white/10 bg-black/75 p-4 shadow-xl backdrop-blur-xl"
       }
     >
       {children}

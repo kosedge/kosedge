@@ -43,7 +43,7 @@ export default async function NflSeasonModelHubPage() {
           <Link
             key={tool.href}
             href={tool.href}
-            className="rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50"
+            className="min-h-11 rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50 active:border-kos-gold/50"
           >
             <h2 className="text-sm font-semibold text-kos-gold">{tool.title}</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">

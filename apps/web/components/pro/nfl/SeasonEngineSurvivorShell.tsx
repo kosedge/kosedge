@@ -32,6 +32,7 @@ export default function SeasonEngineSurvivorShell({
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     params.set("mode", next);
+    // Preserve planner picks when switching modes.
     const qs = params.toString();
     window.history.replaceState(
       null,
@@ -43,7 +44,7 @@ export default function SeasonEngineSurvivorShell({
   return (
     <div className="space-y-5">
       <div
-        className="inline-flex rounded-xl border border-white/10 bg-black/30 p-1"
+        className="flex w-full rounded-xl border border-white/10 bg-black/30 p-1 sm:inline-flex sm:w-auto"
         role="tablist"
         aria-label="Survivor mode"
       >
@@ -52,7 +53,7 @@ export default function SeasonEngineSurvivorShell({
           role="tab"
           aria-selected={mode === "planner"}
           onClick={() => selectMode("planner")}
-          className={`min-h-10 rounded-lg px-3.5 text-sm font-semibold transition ${
+          className={`min-h-11 flex-1 rounded-lg px-3.5 text-sm font-semibold transition sm:flex-none ${
             mode === "planner"
               ? "bg-kos-gold/20 text-kos-gold"
               : "text-kos-text/65 hover:text-kos-text"
@@ -65,7 +66,7 @@ export default function SeasonEngineSurvivorShell({
           role="tab"
           aria-selected={mode === "helper"}
           onClick={() => selectMode("helper")}
-          className={`min-h-10 rounded-lg px-3.5 text-sm font-semibold transition ${
+          className={`min-h-11 flex-1 rounded-lg px-3.5 text-sm font-semibold transition sm:flex-none ${
             mode === "helper"
               ? "bg-kos-gold/20 text-kos-gold"
               : "text-kos-text/65 hover:text-kos-text"
