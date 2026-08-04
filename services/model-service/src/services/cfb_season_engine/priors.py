@@ -11,6 +11,7 @@ College football 2026 reality drives these knobs:
 
 v0.5 adds variable HFA buckets + coaching continuity/change with week decay.
 v0.5.1 tightens project-game coherence for first UI exposure (measured knobs).
+v0.6 overlays real ESPN 2026 roster / depth / portal-history signals.
 """
 
 from __future__ import annotations
@@ -18,8 +19,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.5.1-ui"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.5.1-ui"
+ENGINE_VERSION = "cfb-season-engine-v0.6-real-roster"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.6-real-roster"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -272,8 +273,9 @@ def documentation() -> Dict[str, Any]:
             "Defense unit grades dampen opponent scoring at project-game time.",
             "Returning production is snap/start weighted, not starter-count only.",
             "QB class multipliers are intentional and sharp (true_freshman << incumbent).",
-            "Packaged priors are approximate stand-ins until portal/recruiting "
-            "feeds are wired; do not treat unit grades as calibrated SP+.",
+            "v0.6: ESPN 2026 roster snapshot feeds identities/QB class/portal-in; "
+            "returning snap% and portal-out remain approximate proxies. "
+            "Do not treat unit grades as calibrated SP+.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~2 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",

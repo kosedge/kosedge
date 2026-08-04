@@ -1,4 +1,4 @@
-"""Hierarchical CFB season engine (projection UI + HFA / coaching).
+"""Hierarchical CFB season engine (projection UI + real 2026 roster overlay).
 
 College football 2026 reality (design constraints):
 - Extreme roster turnover (portal + NIL + draft + freshmen)
@@ -23,6 +23,10 @@ Layers (each module is the source of truth for its concern):
 7. ``season_sim`` — path-coherent full-season sims (wins dist, week sample)
 8. ``player_hooks`` — thin QB/skill identity hooks where data allows
 
+v0.6 feeds Layers 1–3 from a packaged ESPN 2026 real-roster snapshot
+(DB → snapshot → legacy priors). Returning snap% / portal-out stay approximate
+unless a CFBD overlay was applied at package time.
+
 Public entry points
 -------------------
 - ``project_game`` / ``project_game_preview`` — team-level matchup projection
@@ -43,6 +47,10 @@ from src.services.cfb_season_engine.loaders import (
     build_packaged_universe,
     load_universe_from_db,
     resolve_season_universe,
+)
+from src.services.cfb_season_engine.real_roster import (
+    load_real_roster_snapshot,
+    snapshot_meta,
 )
 from src.services.cfb_season_engine.player_hooks import hooks_to_summaries
 from src.services.cfb_season_engine.position_groups import (
@@ -136,6 +144,26 @@ def engine_status_payload(
         for t in universe.teams.values()
         if t.roster and t.roster.fidelity == "placeholder"
     )
+    real_identity = sum(
+        1
+        for t in universe.teams.values()
+        if t.qb and t.qb.starter_name and "espn" in (t.qb.source or "").lower()
+    )
+    snap_meta = snapshot_meta(load_real_roster_snapshot())
+    if not snap_meta.get("present"):
+        # Priors may already carry the merged overlay without a separate file read hit.
+        snap_meta = {
+            "present": meta.get("roster_source", "").startswith("packaged_espn"),
+            "roster_source": meta.get("roster_source"),
+            "depth_source": meta.get("depth_source"),
+            "portal_source": meta.get("portal_source"),
+            "returning_source": meta.get("returning_source"),
+            "as_of": meta.get("roster_as_of") or universe.notes.get("priors_as_of", ""),
+            "coverage": {
+                "team_count": meta.get("team_count"),
+                "teams_with_named_qb": real_identity,
+            },
+        }
     # Example team diagnostics — power continuity vs new-HC / weak HFA.
     example_codes = ["UGA", "PSU", "FSU", "LSU", "BALL"]
     examples: Dict[str, Any] = {}
@@ -227,15 +255,27 @@ def engine_status_payload(
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
         "sport": "cfb",
-        "scope": "FBS season sim + projection UI + variable HFA + coaching 2026",
+        "scope": (
+            "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
+            "variable HFA + coaching"
+        ),
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
         "team_count": meta.get("team_count"),
+        "roster_source": meta.get("roster_source") or snap_meta.get("roster_source"),
+        "depth_source": meta.get("depth_source") or snap_meta.get("depth_source"),
+        "portal_source": meta.get("portal_source") or snap_meta.get("portal_source"),
+        "returning_source": meta.get("returning_source")
+        or snap_meta.get("returning_source"),
+        "roster_as_of": meta.get("roster_as_of") or snap_meta.get("as_of"),
+        "as_of": meta.get("roster_as_of") or snap_meta.get("as_of"),
+        "roster_coverage": snap_meta.get("coverage") or {},
         "team_codes": sorted(universe.teams.keys()),
         "team_fidelity_counts": {
             "approximate_curated": curated,
             "placeholder_fbs": placeholder,
+            "espn_named_qb": real_identity,
         },
         "layers": [
             roster_construction.documentation(),
@@ -259,31 +299,42 @@ def engine_status_payload(
             "top": roster_strength_top,
             "bottom": roster_strength_bottom,
             "note": (
-                "Packaged approximate ranks — blue-blood recruiting/returning "
-                "profiles should outrank placeholder mid-majors."
+                "Ranks from ESPN 2026 roster-derived returning/portal/experience "
+                "plus retained recruiting priors — not market-grade."
             ),
         },
         "power_style_ladder": {
             "top": power_style_ladder,
             "note": (
                 "Thin power-style ranks from 0.5*(offense_index+defense_index). "
-                "Approximate packaged priors — not market-grade power ratings."
+                "Roster/QB drivers use real ESPN 2026 identities where available; "
+                "not market-grade power ratings."
             ),
             "fidelity": "approximate",
         },
         "data_sources": {
             "packaged_team_priors": loaders.documentation()["packaged_teams"],
+            "packaged_real_roster_snapshot": loaders.documentation().get(
+                "packaged_real_roster"
+            ),
             "packaged_sample_schedule": loaders.documentation()["packaged_schedule"],
             "schedule_policy": loaders.documentation()["schedule_policy"],
-            "db_portal_recruiting": "not_wired",
+            "roster_source": meta.get("roster_source") or snap_meta.get("roster_source"),
+            "depth_source": meta.get("depth_source") or snap_meta.get("depth_source"),
+            "portal_source": meta.get("portal_source") or snap_meta.get("portal_source"),
+            "returning_source": meta.get("returning_source")
+            or snap_meta.get("returning_source"),
+            "as_of": meta.get("roster_as_of") or snap_meta.get("as_of"),
+            "db_portal_recruiting": "optional_unpopulated (packaged snapshot preferred)",
             "db_home_splits": "not_wired",
             "db_coaching_changes": "not_wired",
             "edge_board_cfb": "markets_only (unchanged)",
             "field_provenance": (
-                "returning_snap/start shares, portal values, unit talent, "
-                "HFA env_scores, and coaching change flags are curated/estimated "
-                "in packaged JSON or derived in-layer; densified schedule is "
-                "synthetic approximate paths"
+                "QB names/classes and depth order from ESPN 2026 rosters + "
+                "athlete teamHistory/career splits; returning snap/start shares "
+                "are class-year proxies; portal-out incomplete; recruiting often "
+                "retained from curated priors; HFA/coaching still curated; "
+                "densified schedule is synthetic approximate paths"
             ),
         },
         "solid_vs_approximate": {
@@ -293,6 +344,7 @@ def engine_status_payload(
                 "QB situation classification rules + class offense multipliers",
                 "Position group unit formula (talent/experience/portal_impact)",
                 "roster_strength + qb_situation_index + unit grades as projection drivers",
+                "Packaged ESPN 2026 roster snapshot wiring (DB → snapshot → priors)",
                 "Variable HFA bucket structure (baseline ~2 pts, elite→poor)",
                 "Coaching continuity flags + week-decay schedule (HC/DC > OC)",
                 "project-game formula (strength → margin → spread/total/WP) + drivers block",
@@ -302,9 +354,11 @@ def engine_status_payload(
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
             "approximate": [
-                "Packaged roster snap/start / portal / recruiting numeric priors",
-                "Named QB talent scores and depth identities",
-                "Position group talent composites and unit component fills",
+                "Returning snap/start shares (class-year proxies, not measured SNAP%)",
+                "Portal-out values without a full departure feed",
+                "QB talent scores derived from 2025 attempt/yard splits",
+                "Position group talent composites from roster composition",
+                "Recruiting capital when retained from curated priors",
                 "HFA env_scores / venue labels (not live home ATS splits)",
                 "Coaching staff change flags for 2026 (curated proxies)",
                 "Densified schedule paths (not official FBS slate)",
@@ -315,7 +369,8 @@ def engine_status_payload(
             ],
             "placeholder_or_deferred": [
                 "Full official 2026 FBS schedule feed",
-                "Live portal / returning production DB feeds",
+                "Live DB portal / returning production tables (optional; snapshot ships in-image)",
+                "Official preseason depth charts when ESPN publishes them",
                 "Live home scoring-margin / ATS feed",
                 "Live coaching-change feed",
                 "Calibrated unit grades (SP+ / PFF-class)",
@@ -331,7 +386,8 @@ def engine_status_payload(
             "project_game": "POST /cfb/season-engine/project-game",
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
-            "ops": "data/ops/cfb-ui-exposure-20260804.md",
+            "package_roster": "scripts/cfb/package_real_roster_2026.py",
+            "ops": "data/ops/cfb-real-roster-20260804.md",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
         },

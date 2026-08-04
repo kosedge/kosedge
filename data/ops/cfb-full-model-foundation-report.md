@@ -1,9 +1,9 @@
-# Full CFB Model: Foundation → UI Exposure (v0.5.1)
+# Full CFB Model: Foundation → UI Exposure (v0.6)
 
-**Branch:** `feat/cfb-projection-ui` → `deploy-vercel`  
-**Engine version:** `cfb-season-engine-v0.5.1-ui`  
+**Branch:** `feat/cfb-real-roster` → `deploy-vercel`  
+**Engine version:** `cfb-season-engine-v0.6-real-roster`  
 **Date:** 2026-08-04  
-**Status:** Hierarchical foundation through season simulation, HFA + coaching continuity, plus **first Pro UI** (`/pro/cfb/model`, `/pro/cfb/project-game`) and measured project-game coherence tweaks. Layers 1–3 (roster / QB / position groups) intact. Calibration intentionally thin. Additive vs NFL engine and CFB markets-only Edge Board.
+**Status:** Hierarchical foundation through season simulation, HFA + coaching continuity, Pro UI, plus **v0.6 ESPN 2026 real-roster overlay** for Layers 1–3. Calibration intentionally thin. Additive vs NFL engine and CFB markets-only Edge Board.
 
 ## Goal
 
@@ -24,6 +24,7 @@ Design constraints (2026 reality):
 **v0.4 focus:** season simulation + early-season uncertainty + project-game drivers.  
 **v0.5 focus:** variable HFA + coaching continuity. See `data/ops/cfb-hfa-coaching-20260804.md`.  
 **v0.5.1 focus:** first UI surface + measured projection tightening. See `data/ops/cfb-ui-exposure-20260804.md`.
+**v0.6 focus:** ESPN 2026 real-roster / depth / portal-history overlay. See `data/ops/cfb-real-roster-20260804.md`.
 
 ## Architecture (layers + feed order)
 
@@ -58,12 +59,13 @@ Package root: `services/model-service/src/services/cfb_season_engine/`
 
 | Source | Role | Fidelity |
 | --- | --- | --- |
-| `data/cfb_fbs_team_priors_2026.json` | Packaged FBS team priors; roster/QB/unit + **home_field** + **coaching** | Approximate / placeholder curated-estimated |
+| `data/cfb_fbs_team_priors_2026.json` | Packaged FBS team priors; roster/QB/unit + **home_field** + **coaching** | Roster/QB/units overlaid from ESPN snapshot; HFA/coaching curated approximate |
+| `data/cfb_real_roster_snapshot_2026.json` | ESPN 2026 roster / depth / portal-history snapshot | Real identities; derived numerics approximate |
 | `data/cfb_sample_schedule_2026.json` | Seed slate for densify (+ optional `night_game`) | Approximate seed — not official |
 | Densified schedule (runtime) | Usable season paths (~12 gpt) | Approximate synthetic — `packaged_sample_densified` |
 | `data/cfb_fbs_conferences_2026.json` | Affiliation map for pairing + standings | Approximate |
 | CFB Edge Board (`apps/web` markets-only) | Unchanged; no KEI invent | Markets-only |
-| Live portal / recruiting / returning-production DB | **Not wired** | Gap |
+| Live portal / recruiting / returning-production DB | Optional; packaged ESPN snapshot ships in-image | Snapshot solid; DB optional |
 | Live home splits / coaching-change feeds | **Not wired** | Gap |
 | Official full 2026 FBS schedule | **Not in-repo** | Gap |
 
@@ -149,7 +151,7 @@ Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260
 ## Remaining gaps / next passes
 
 1. Wire real 2026 FBS schedule (CFBD or packaged full slate)
-2. Ingest portal + returning production + recruiting capital feeds (replace packaged numerics)
+2. ~~Ingest portal + returning production + recruiting capital feeds~~ **v0.6 done (ESPN snapshot; CFBD optional)** — deepen measured SNAP%/full portal-out next
 3. Live home-split feed to replace venue proxies
 4. Live coaching-change feed to replace curated flags
 5. Calibrated / external unit grades (SP+ style) replacing approximate talent composites
@@ -164,7 +166,7 @@ Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260
 Pushing model-service paths to `deploy-vercel` triggers `.github/workflows/deploy-railway.yml`.  
 Live check after deploy:
 
-- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.5.1-ui`
+- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.6-real-roster`
 - `POST /cfb/season-engine/project-game` with `drivers.matchup.hfa` + coaching adj + ratio clamp diag
 - `POST /cfb/season-engine/simulate` with `diagnostics.variable_hfa` / `coaching_continuity`
 - Web: `https://www.kosedge.com/pro/cfb/model` + `/pro/cfb/project-game`

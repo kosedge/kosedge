@@ -240,11 +240,11 @@ def documentation() -> Dict[str, Any]:
         "name": "roster_construction",
         "module": "src.services.cfb_season_engine.roster_construction",
         "real_vs_approximate": (
-            "Packaged 2026 FBS priors are APPROXIMATE curated/estimated "
-            "composites — not measured SNAP% returning from a live feed. "
-            "Formula structure (snap/start weighting, portal net, roster "
-            "strength weights) is REAL and inspectable. Live portal/"
-            "returning-production DB feeds remain a gap."
+            "When source=packaged_espn_roster_2026, athlete/roster inputs are "
+            "from ESPN 2026 rosters. Returning snap/start shares remain "
+            "APPROXIMATE class-year proxies (not measured SNAP%) unless a CFBD "
+            "returning overlay was packaged. Formula structure is REAL and "
+            "inspectable. Portal-out is incomplete without a departure feed."
         ),
         "formula": {
             "returning_production": (

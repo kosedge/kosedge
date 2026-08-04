@@ -15,6 +15,13 @@ export type CfbSeasonEngineStatus = {
   schedule_source?: string;
   schedule_game_count?: number;
   team_count?: number;
+  roster_source?: string;
+  depth_source?: string;
+  portal_source?: string;
+  returning_source?: string;
+  roster_as_of?: string;
+  as_of?: string;
+  roster_coverage?: Record<string, unknown>;
   team_codes?: string[];
   team_fidelity_counts?: Record<string, number>;
   layers?: unknown[];
