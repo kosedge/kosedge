@@ -24,6 +24,7 @@ def test_engine_version_real_2026() -> None:
         "real" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

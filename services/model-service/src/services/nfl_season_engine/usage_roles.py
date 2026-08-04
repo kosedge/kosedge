@@ -63,7 +63,8 @@ BASE_USAGE_BY_ROLE: Dict[str, Dict[str, float]] = {
     "WR2": {"snap_share": 0.76, "rush_share": 0.0, "target_share": 0.16, "route_share": 0.80},
     "WR3": {"snap_share": 0.52, "rush_share": 0.0, "target_share": 0.09, "route_share": 0.55},
     "WR_SLOT": {"snap_share": 0.68, "rush_share": 0.0, "target_share": 0.13, "route_share": 0.74},
-    "TE1": {"snap_share": 0.72, "rush_share": 0.0, "target_share": 0.14, "route_share": 0.68},
+    # cal-v2: TE1 target slightly lower (was matching WR1 yards on real depth).
+    "TE1": {"snap_share": 0.70, "rush_share": 0.0, "target_share": 0.125, "route_share": 0.66},
     "TE2": {"snap_share": 0.40, "rush_share": 0.0, "target_share": 0.07, "route_share": 0.38},
     "OTHER": {"snap_share": 0.15, "rush_share": 0.05, "target_share": 0.04, "route_share": 0.15},
 }

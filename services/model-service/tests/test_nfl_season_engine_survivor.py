@@ -39,6 +39,7 @@ def test_engine_version_surfaces_survivor() -> None:
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -156,6 +157,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
         or "real-depth" in result.engine_version
         or "smoke-polish" in result.engine_version
         or "survivor-planner" in result.engine_version
+        or "calibration" in result.engine_version
     )
 
 
@@ -217,7 +219,11 @@ def test_planner_excludes_used_teams_across_weeks() -> None:
     )
     assert plan.locked_picks == {"1": "KC", "3": "BUF"}
     assert set(plan.used_teams) == {"KC", "BUF"}
-    assert "survivor-planner" in plan.engine_version or "survivor" in PATH_FORMULA_NOTES
+    assert (
+        "survivor-planner" in plan.engine_version
+        or "calibration" in plan.engine_version
+        or "path_survival" in PATH_FORMULA_NOTES
+    )
     assert "path_survival" in PATH_FORMULA_NOTES
     open_weeks = [w for w in plan.weeks if w["status"] == "open"]
     assert open_weeks

@@ -1,9 +1,9 @@
 # Full NFL Model: Foundation + Player Box Scores
 
 **Branch:** `nfl-full-model-foundation` → `deploy-vercel` (merged #71)  
-**Engine version:** `nfl-season-engine-v1.10-survivor-planner` (real 2026 schedule + real nflverse depth + multi-week survivor planner; see `nfl-survivor-planner-20260804.md`, `nfl-season-engine-real-2026-20260803.md`, `nfl-season-engine-real-depth-20260804.md`, `nfl-season-engine-final-smoke-20260804.md`, `nfl-season-engine-api-contract-20260803.md`)  
+**Engine version:** `nfl-season-engine-v1.11-calibration` (real 2026 schedule + real nflverse depth + multi-week survivor planner + cal-v2 deeper calibration / early-season uncertainty; see `nfl-season-engine-deeper-calibration-20260804.md`, `nfl-survivor-planner-20260804.md`, `nfl-season-engine-real-2026-20260803.md`, `nfl-season-engine-real-depth-20260804.md`, `nfl-season-engine-final-smoke-20260804.md`, `nfl-season-engine-api-contract-20260803.md`)  
 **Date:** 2026-08-04  
-**Status:** **Ready for Pro use** (v1.10 survivor planner). Working structure + path-coherent season sim + future-game player boxes. **v1.9** real 2026 REG schedule (272 + byes). **v1.9.1** real depth. **v1.9.2** final smoke. **v1.10** multi-week planner: one sim pass → per-week ranks (used-team exclusion) + joint `path_survival` for locked picks; UI at `/pro/nfl/survivor` planner tab. Modeling layers unchanged from v1.9.2 — caveats: camp depth churn, league efficiency priors, survivor heuristics (not pool EV).
+**Status:** **Ready for Pro use** (v1.11 calibration). Working structure + path-coherent season sim + future-game player boxes. **v1.9** real 2026 REG schedule (272 + byes). **v1.9.1** real depth. **v1.9.2** final smoke. **v1.10** multi-week planner: one sim pass → per-week ranks (used-team exclusion) + joint `path_survival` for locked picks; UI at `/pro/nfl/survivor` planner tab. **v1.11** cal-v2: wider win separation, role/RZ TD tune, W1–W4 `early_season_uncertainty`, QB1 start-rate fix for real depth — caveats: win tails still short of Vegas extremes, camp depth churn, survivor heuristics (not pool EV).
 
 ## Goal (this pass)
 

@@ -82,7 +82,7 @@ RZ_TARGET_SHARE_I20: Dict[str, float] = {
     "WR2": 0.15,
     "WR3": 0.08,
     "WR_SLOT": 0.13,
-    "TE1": 0.18,
+    "TE1": 0.16,
     "TE2": 0.07,
     "RB1": 0.09,
     "RB2": 0.04,
@@ -97,7 +97,7 @@ RZ_TARGET_SHARE_I10: Dict[str, float] = {
     "WR2": 0.13,
     "WR3": 0.05,
     "WR_SLOT": 0.11,
-    "TE1": 0.24,
+    "TE1": 0.22,
     "TE2": 0.06,
     "RB1": 0.08,
     "RB2": 0.03,
@@ -136,16 +136,17 @@ RZ_ROUTE_SHARE_I10: Dict[str, float] = {
 }
 
 # Finish rates: P(TD | opportunity). Primary TD path in production.
-# Tuned so demo BUF@KC means stay in GAME_SANITY bands (≈1.2–1.7 QB pass TD).
+# cal-v2: slight pass-TD lift (elite QB season TDs were light); mild rec-i10
+# fade so TE1/WR1 RZ TDs stay in recent positional bands.
 RZ_FINISH_RUSH_I20 = 0.12  # carry inside 20 but outside 10
-RZ_FINISH_RUSH_I10 = 0.36
-RZ_FINISH_REC_I20 = 0.20  # per RZ target (catch embedded)
-RZ_FINISH_REC_I10 = 0.34
-RZ_FINISH_PASS_I20 = 0.18  # QB pass TD per RZ pass attempt (team-level cross-check)
-RZ_FINISH_PASS_I10 = 0.32
+RZ_FINISH_RUSH_I10 = 0.37
+RZ_FINISH_REC_I20 = 0.19  # per RZ target (catch embedded)
+RZ_FINISH_REC_I10 = 0.32
+RZ_FINISH_PASS_I20 = 0.20  # QB pass TD per RZ pass attempt (team-level cross-check)
+RZ_FINISH_PASS_I10 = 0.35
 
 # Small non-RZ residual so explosive TDs are not zeroed (fraction of old rate).
-NON_RZ_TD_RESIDUAL = 0.18
+NON_RZ_TD_RESIDUAL = 0.17
 
 # Script deltas on RZ pass rate (stronger than overall play-mix near GL).
 _RZ_PASS_DETAIL_DELTA: Dict[ScriptDetail, float] = {

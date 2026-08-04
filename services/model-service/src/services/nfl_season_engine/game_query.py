@@ -436,11 +436,14 @@ def project_game_player_boxes(
 
     diagnostics: Dict[str, Any] = {}
     if include_diagnostics:
+        from src.services.nfl_season_engine.calibration import early_season_uncertainty
+
         focus = {
             game.home_team: week_rosters.get(game.home_team, []),
             game.away_team: week_rosters.get(game.away_team, []),
         }
         diagnostics = {
+            "early_season_uncertainty": early_season_uncertainty(game.week),
             "usage_shares_home": usage_share_diagnostics(
                 home_roles, script="neutral", pass_rate=0.58
             ),

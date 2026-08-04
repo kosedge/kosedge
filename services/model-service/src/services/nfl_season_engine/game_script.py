@@ -35,7 +35,8 @@ from src.services.nfl_season_engine.calibration import (
     LEAGUE_BASE_PASS_RATE,
     LEAGUE_BASE_PLAYS,
     PACE_PLAYS_CLAMP,
-    SCORE_NOISE_SD,
+    early_season_uncertainty,
+    score_noise_sd_for_week,
 )
 from src.services.nfl_season_engine.coaching_tendencies import (
     CoachingProfile,
@@ -272,10 +273,12 @@ def build_game_script(
     rng = rng or random.Random()
     home = _strength_or_default(strengths, game.home_team)
     away = _strength_or_default(strengths, game.away_team)
+    week = int(getattr(game, "week", 0) or 0)
+    score_sd = score_noise_sd_for_week(week)
 
-    home_exp = expected_team_points(home, away, home=True)
-    away_exp = expected_team_points(away, home, home=False)
-    home_wp = win_prob_from_expected_scores(home_exp, away_exp)
+    home_exp = expected_team_points(home, away, home=True, week=week)
+    away_exp = expected_team_points(away, home, home=False, week=week)
+    home_wp = win_prob_from_expected_scores(home_exp, away_exp, week=week)
     expected_total = home_exp + away_exp
 
     # pace_plays = per-team offensive snap/play expectation for this game.
@@ -299,8 +302,8 @@ def build_game_script(
         home_score = max(0.0, float(force_home_score))
         away_score = max(0.0, float(force_away_score))
     elif realized:
-        home_score = max(0.0, rng.gauss(home_exp, SCORE_NOISE_SD))
-        away_score = max(0.0, rng.gauss(away_exp, SCORE_NOISE_SD))
+        home_score = max(0.0, rng.gauss(home_exp, score_sd))
+        away_score = max(0.0, rng.gauss(away_exp, score_sd))
         # Avoid degenerate 0-0 ties dominating; nudge slightly if both tiny.
         if home_score < 1.0 and away_score < 1.0:
             home_score, away_score = 3.0, 0.0
@@ -368,7 +371,7 @@ def build_game_script(
         away_script=coarse_script(away_detail),
         home_implied_total=round(home_score if realized or force_home_score is not None else home_exp, 2),
         away_implied_total=round(away_score if realized or force_away_score is not None else away_exp, 2),
-        source="team_strength_analytic_cal_v1.8_coaching",
+        source="team_strength_analytic_cal_v2",
         minutes_remaining=round(minutes, 2),
         time_bucket=bucket,
         home_script_detail=home_detail,
@@ -381,6 +384,8 @@ def build_game_script(
         away_hurry_up=away_mix["hurry_up"],
         home_run_rate=home_mix["run_rate"],
         away_run_rate=away_mix["run_rate"],
+        week=week,
+        early_season_uncertainty=early_season_uncertainty(week),
     )
     outcome = {
         "home_score": float(home_score),

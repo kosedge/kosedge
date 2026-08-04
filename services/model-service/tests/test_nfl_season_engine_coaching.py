@@ -35,6 +35,7 @@ def test_engine_version_coaching() -> None:
         or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -240,6 +241,7 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
         or "real-depth" in proj.engine_version
         or "smoke-polish" in proj.engine_version
         or "survivor-planner" in proj.engine_version
+        or "calibration" in proj.engine_version
     )
     assert "coaching_profile" in proj.diagnostics
     assert "tendency_effects" in proj.diagnostics
@@ -269,6 +271,7 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
         or "real-depth" in surv.engine_version
         or "smoke-polish" in surv.engine_version
         or "survivor-planner" in surv.engine_version
+        or "calibration" in surv.engine_version
     )
 
 

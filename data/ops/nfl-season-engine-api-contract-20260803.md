@@ -1,9 +1,9 @@
 # NFL Season Engine — Public API Contract
 
-**Engine version:** `nfl-season-engine-v1.10-survivor-planner`  
+**Engine version:** `nfl-season-engine-v1.11-calibration`  
 **Date:** 2026-08-04  
 **Package:** `services/model-service/src/services/nfl_season_engine/`  
-**Cutover note:** v1.10 adds multi-week survivor planner (`POST …/survivor/plan`). Depth/schedule cutover from v1.9.x unchanged. See `data/ops/nfl-survivor-planner-20260804.md`.
+**Cutover note:** v1.11 cal-v2 deeper calibration + early-season uncertainty (W1–W4). v1.10 multi-week survivor planner (`POST …/survivor/plan`) unchanged. Depth/schedule cutover from v1.9.x unchanged. See `data/ops/nfl-season-engine-deeper-calibration-20260804.md`, `data/ops/nfl-survivor-planner-20260804.md`.
 
 Additive HTTP surface on model-service. Does **not** modify Edge Board, Model-vs-KEI (#70), or `nfl_market_projections`.
 
@@ -42,8 +42,8 @@ CLI: `scripts/nfl/run_hierarchical_season_sim.py`, `run_survivor_evaluate.py`, `
 
 | Endpoint | Default | When true |
 | --- | --- | --- |
-| `game-boxes` | `false` | Usage shares, share integrity, injury adjustments, script summary, **`depth_structure`**, **`role_transitions`**, **`play_mix_home` / `play_mix_away` / `play_mix_sample`** (v1.6), **`red_zone` / `scoring_usage`** (v1.7), **`coaching_profile` / `tendency_effects`** (v1.8) |
-| `simulate` | `true` | Win-mean spread/stdev, injury path echo, finite checks, **`depth_structure`**, **`role_transitions_sample`** |
+| `game-boxes` | `false` | Usage shares, share integrity, injury adjustments, script summary, **`early_season_uncertainty`** (v1.11), **`depth_structure`**, **`role_transitions`**, **`play_mix_home` / `play_mix_away` / `play_mix_sample`** (v1.6), **`red_zone` / `scoring_usage`** (v1.7), **`coaching_profile` / `tendency_effects`** (v1.8) |
+| `simulate` | `true` | Win-mean spread/stdev, injury path echo, finite checks, **`early_season_uncertainty`** (v1.11), **`depth_structure`**, **`role_transitions_sample`** |
 | `survivor` | `true` | Scoring knobs, bye teams, used exclusions |
 
 Query param and/or JSON body field. Default game-boxes responses stay lean; players always include `usage_role`, `personnel`, `point_estimate`, `distributions`.

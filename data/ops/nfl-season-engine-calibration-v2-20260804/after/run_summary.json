@@ -1,0 +1,370 @@
+{
+  "engine_version": "nfl-season-engine-v1.11-calibration",
+  "calibration_tag": "nfl-season-engine-cal-v2",
+  "mode": "packaged_real",
+  "n_sims": 12,
+  "seed": 2026,
+  "game_reps": 160,
+  "elapsed_s": 261.4,
+  "wins": {
+    "win_mean_min": 3.75,
+    "win_mean_max": 12.167,
+    "win_mean_stdev": 2.023,
+    "win_mean_spread": 8.417,
+    "top": [
+      [
+        "KC",
+        12.167
+      ],
+      [
+        "DET",
+        12.083
+      ],
+      [
+        "PHI",
+        11.083
+      ],
+      [
+        "SF",
+        10.5
+      ],
+      [
+        "BAL",
+        10.083
+      ],
+      [
+        "DAL",
+        9.917
+      ]
+    ],
+    "bot": [
+      [
+        "IND",
+        6.5
+      ],
+      [
+        "LV",
+        5.5
+      ],
+      [
+        "TEN",
+        5.167
+      ],
+      [
+        "NE",
+        5.0
+      ],
+      [
+        "CAR",
+        4.917
+      ],
+      [
+        "NYG",
+        3.75
+      ]
+    ]
+  },
+  "buf_kc_week1": {
+    "expected_total_mean": 45.55,
+    "home_win_prob_mean": 0.5357,
+    "early_season_uncertainty": {
+      "week": 1,
+      "active": true,
+      "last_week": 4,
+      "score_noise_mult": 1.18,
+      "score_noise_sd": 11.564,
+      "margin_sd_mult": 1.24,
+      "win_prob_margin_sd": 15.624,
+      "separation_soften": 0.78,
+      "matchup_response_effective": 0.8736,
+      "share_vol_mult": 1.75,
+      "dirichlet_scale": 0.72,
+      "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+    },
+    "Mahomes": {
+      "pass_yards": 244.18,
+      "pass_tds": 1.506,
+      "ints": 0.606,
+      "rush_yards": 6.762
+    },
+    "Allen": {
+      "pass_yards": 240.162,
+      "pass_tds": 1.575,
+      "ints": 0.65,
+      "rush_yards": 7.243
+    },
+    "Cook": {
+      "rush_yards": 42.176,
+      "rush_tds": 0.456,
+      "rec_yards": 17.953,
+      "receptions": 2.57
+    },
+    "Rice": {
+      "rec_yards": 55.037,
+      "receptions": 5.103,
+      "rec_tds": 0.312
+    },
+    "Kelce": {
+      "rec_yards": 49.593,
+      "receptions": 5.289,
+      "rec_tds": 0.256
+    },
+    "Mahomes_attempts_mean": 37.811
+  },
+  "buf_kc_week10_contrast": {
+    "expected_total_mean": 45.8,
+    "home_win_prob_mean": 0.5473,
+    "early_season_uncertainty": {
+      "week": 10,
+      "active": false,
+      "last_week": 4,
+      "score_noise_mult": 1.0,
+      "score_noise_sd": 9.8,
+      "margin_sd_mult": 1.0,
+      "win_prob_margin_sd": 12.6,
+      "separation_soften": 1.0,
+      "matchup_response_effective": 1.12,
+      "share_vol_mult": 1.0,
+      "dirichlet_scale": 1.0,
+      "note": "Mid/late season: base calibration (no early-season inflate)."
+    }
+  },
+  "sf_la_week1": {
+    "expected_total_mean": 44.21,
+    "home_win_prob_mean": 0.4636
+  },
+  "season_totals": {
+    "Mahomes": {
+      "pass_yards_mean": 4205.265,
+      "pass_tds_mean": 22.667,
+      "ints_mean": 8.833,
+      "rush_yards_mean": 101.795,
+      "rush_tds_mean": 1.917,
+      "rec_yards_mean": 0.0,
+      "receptions_mean": 0.0,
+      "rec_tds_mean": 0.0
+    },
+    "Allen": {
+      "pass_yards_mean": 4264.097,
+      "pass_tds_mean": 24.417,
+      "ints_mean": 9.583,
+      "rush_yards_mean": 126.603,
+      "rush_tds_mean": 1.667,
+      "rec_yards_mean": 0.0,
+      "receptions_mean": 0.0,
+      "rec_tds_mean": 0.0
+    },
+    "Cook": {
+      "pass_yards_mean": 0.0,
+      "pass_tds_mean": 0.0,
+      "ints_mean": 0.0,
+      "rush_yards_mean": 880.695,
+      "rush_tds_mean": 8.0,
+      "rec_yards_mean": 278.944,
+      "receptions_mean": 37.344,
+      "rec_tds_mean": 2.167
+    },
+    "Rice": {
+      "pass_yards_mean": 0.0,
+      "pass_tds_mean": 0.0,
+      "ints_mean": 0.0,
+      "rush_yards_mean": 0.0,
+      "rush_tds_mean": 0.0,
+      "rec_yards_mean": 897.818,
+      "receptions_mean": 77.478,
+      "rec_tds_mean": 4.083
+    },
+    "Kelce": {
+      "pass_yards_mean": 0.0,
+      "pass_tds_mean": 0.0,
+      "ints_mean": 0.0,
+      "rush_yards_mean": 0.0,
+      "rush_tds_mean": 0.0,
+      "rec_yards_mean": 831.602,
+      "receptions_mean": 83.174,
+      "rec_tds_mean": 4.583
+    }
+  },
+  "role_means_real_depth_buf_kc": {
+    "QB1": {
+      "pass_tds": 1.54,
+      "rush_yards": 7.002,
+      "ints": 0.628,
+      "pass_yards": 242.171
+    },
+    "RB1": {
+      "rush_yards": 42.943,
+      "rec_yards": 17.575,
+      "rush_tds": 0.509,
+      "receptions": 2.501
+    },
+    "WR1": {
+      "rec_tds": 0.341,
+      "rec_yards": 54.237,
+      "receptions": 5.06
+    },
+    "TE1": {
+      "rec_tds": 0.3,
+      "rec_yards": 48.52,
+      "receptions": 5.252
+    },
+    "RB2": {
+      "rush_yards": 21.956,
+      "rec_yards": 8.416,
+      "rush_tds": 0.166,
+      "receptions": 1.18
+    },
+    "WR2": {
+      "rec_tds": 0.166,
+      "rec_yards": 29.211,
+      "receptions": 2.836
+    }
+  },
+  "early_season_tables": {
+    "1": {
+      "week": 1,
+      "active": true,
+      "last_week": 4,
+      "score_noise_mult": 1.18,
+      "score_noise_sd": 11.564,
+      "margin_sd_mult": 1.24,
+      "win_prob_margin_sd": 15.624,
+      "separation_soften": 0.78,
+      "matchup_response_effective": 0.8736,
+      "share_vol_mult": 1.75,
+      "dirichlet_scale": 0.72,
+      "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+    },
+    "2": {
+      "week": 2,
+      "active": true,
+      "last_week": 4,
+      "score_noise_mult": 1.14,
+      "score_noise_sd": 11.172,
+      "margin_sd_mult": 1.16,
+      "win_prob_margin_sd": 14.616,
+      "separation_soften": 0.84,
+      "matchup_response_effective": 0.9408,
+      "share_vol_mult": 1.55,
+      "dirichlet_scale": 0.8,
+      "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+    },
+    "3": {
+      "week": 3,
+      "active": true,
+      "last_week": 4,
+      "score_noise_mult": 1.1,
+      "score_noise_sd": 10.78,
+      "margin_sd_mult": 1.1,
+      "win_prob_margin_sd": 13.86,
+      "separation_soften": 0.9,
+      "matchup_response_effective": 1.008,
+      "share_vol_mult": 1.35,
+      "dirichlet_scale": 0.88,
+      "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+    },
+    "4": {
+      "week": 4,
+      "active": true,
+      "last_week": 4,
+      "score_noise_mult": 1.06,
+      "score_noise_sd": 10.388,
+      "margin_sd_mult": 1.05,
+      "win_prob_margin_sd": 13.23,
+      "separation_soften": 0.95,
+      "matchup_response_effective": 1.064,
+      "share_vol_mult": 1.18,
+      "dirichlet_scale": 0.94,
+      "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+    },
+    "5": {
+      "week": 5,
+      "active": false,
+      "last_week": 4,
+      "score_noise_mult": 1.0,
+      "score_noise_sd": 9.8,
+      "margin_sd_mult": 1.0,
+      "win_prob_margin_sd": 12.6,
+      "separation_soften": 1.0,
+      "matchup_response_effective": 1.12,
+      "share_vol_mult": 1.0,
+      "dirichlet_scale": 1.0,
+      "note": "Mid/late season: base calibration (no early-season inflate)."
+    }
+  },
+  "season_diagnostics_early": {
+    "last_week": 4,
+    "by_week": {
+      "1": {
+        "week": 1,
+        "active": true,
+        "last_week": 4,
+        "score_noise_mult": 1.18,
+        "score_noise_sd": 11.564,
+        "margin_sd_mult": 1.24,
+        "win_prob_margin_sd": 15.624,
+        "separation_soften": 0.78,
+        "matchup_response_effective": 0.8736,
+        "share_vol_mult": 1.75,
+        "dirichlet_scale": 0.72,
+        "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+      },
+      "2": {
+        "week": 2,
+        "active": true,
+        "last_week": 4,
+        "score_noise_mult": 1.14,
+        "score_noise_sd": 11.172,
+        "margin_sd_mult": 1.16,
+        "win_prob_margin_sd": 14.616,
+        "separation_soften": 0.84,
+        "matchup_response_effective": 0.9408,
+        "share_vol_mult": 1.55,
+        "dirichlet_scale": 0.8,
+        "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+      },
+      "3": {
+        "week": 3,
+        "active": true,
+        "last_week": 4,
+        "score_noise_mult": 1.1,
+        "score_noise_sd": 10.78,
+        "margin_sd_mult": 1.1,
+        "win_prob_margin_sd": 13.86,
+        "separation_soften": 0.9,
+        "matchup_response_effective": 1.008,
+        "share_vol_mult": 1.35,
+        "dirichlet_scale": 0.88,
+        "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+      },
+      "4": {
+        "week": 4,
+        "active": true,
+        "last_week": 4,
+        "score_noise_mult": 1.06,
+        "score_noise_sd": 10.388,
+        "margin_sd_mult": 1.05,
+        "win_prob_margin_sd": 13.23,
+        "separation_soften": 0.95,
+        "matchup_response_effective": 1.064,
+        "share_vol_mult": 1.18,
+        "dirichlet_scale": 0.94,
+        "note": "W1\u2013W4: inflate outcome SD, soften strength separation, widen player-share volatility while roles settle."
+      }
+    },
+    "week_5_plus": {
+      "week": 5,
+      "active": false,
+      "last_week": 4,
+      "score_noise_mult": 1.0,
+      "score_noise_sd": 9.8,
+      "margin_sd_mult": 1.0,
+      "win_prob_margin_sd": 12.6,
+      "separation_soften": 1.0,
+      "matchup_response_effective": 1.12,
+      "share_vol_mult": 1.0,
+      "dirichlet_scale": 1.0,
+      "note": "Mid/late season: base calibration (no early-season inflate)."
+    }
+  }
+}

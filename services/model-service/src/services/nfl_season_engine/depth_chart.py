@@ -40,6 +40,7 @@ import random
 from dataclasses import dataclass, field, replace
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from src.services.nfl_season_engine.calibration import share_vol_mult_for_week
 from src.services.nfl_season_engine.types import PlayerRole
 from src.services.nfl_season_engine.usage_roles import annotate_usage_roles
 
@@ -457,8 +458,12 @@ def apply_weekly_role_volatility(
         )
         by_key = {r.player_key: r for r in annotated}
 
-        rush_sd = VOL_RUSH_DRIFT_SD * 1.35
-        tgt_sd = VOL_TARGET_DRIFT_SD * 1.35
+        early_vol = share_vol_mult_for_week(week)
+        rush_sd = VOL_RUSH_DRIFT_SD * 1.35 * early_vol
+        tgt_sd = VOL_TARGET_DRIFT_SD * 1.35 * early_vol
+        snap_sd = VOL_SNAP_DRIFT_SD * early_vol
+        drift_clamp = VOL_DRIFT_CLAMP * min(1.35, 0.85 + 0.15 * early_vol)
+        shuffle_p = min(0.22, VOL_SHUFFLE_PROB * early_vol)
 
         for role in list(by_key.values()):
             pos = (role.position or "").upper()
@@ -470,10 +475,10 @@ def apply_weekly_role_volatility(
                 continue
             rush_d = rng.gauss(0.0, rush_sd) if pos == "RB" else 0.0
             tgt_d = rng.gauss(0.0, tgt_sd) if pos in ("WR", "TE", "RB") else 0.0
-            snap_d = rng.gauss(0.0, VOL_SNAP_DRIFT_SD)
-            rush_d = _clamp(rush_d, -VOL_DRIFT_CLAMP, VOL_DRIFT_CLAMP)
-            tgt_d = _clamp(tgt_d, -VOL_DRIFT_CLAMP, VOL_DRIFT_CLAMP)
-            snap_d = _clamp(snap_d, -VOL_DRIFT_CLAMP, VOL_DRIFT_CLAMP)
+            snap_d = rng.gauss(0.0, snap_sd)
+            rush_d = _clamp(rush_d, -drift_clamp, drift_clamp)
+            tgt_d = _clamp(tgt_d, -drift_clamp, drift_clamp)
+            snap_d = _clamp(snap_d, -drift_clamp, drift_clamp)
             if abs(rush_d) < 1e-6 and abs(tgt_d) < 1e-6 and abs(snap_d) < 1e-6:
                 continue
             new_role = replace(
@@ -505,9 +510,9 @@ def apply_weekly_role_volatility(
         # Adjacent shuffle among committee RBs or murky WRs.
         did_shuffle = False
         shuffle_pool_pos = None
-        if struct.rb_structure == "committee" and rng.random() < VOL_SHUFFLE_PROB:
+        if struct.rb_structure == "committee" and rng.random() < shuffle_p:
             shuffle_pool_pos = "RB"
-        elif struct.wr_hierarchy == "murky" and rng.random() < VOL_SHUFFLE_PROB:
+        elif struct.wr_hierarchy == "murky" and rng.random() < shuffle_p:
             shuffle_pool_pos = "WR"
 
         if shuffle_pool_pos:
