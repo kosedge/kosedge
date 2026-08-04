@@ -1,0 +1,91 @@
+{
+  "engine_version": "nfl-season-engine-v1.6-game-script",
+  "trailing_late": {
+    "detail": "large_deficit",
+    "pass_rate": 0.7083,
+    "early_down_pass": 0.6845,
+    "hurry_up": 0.8854,
+    "intensity": 0.85,
+    "time_bucket": "late",
+    "rb1_carries": 5.9,
+    "wr1_targets": 14.46,
+    "te1_targets": 9.39,
+    "mahomes_pass_yds": 287.8,
+    "rb_rush_yds": 22.8,
+    "rice_rec_yds": 93.0
+  },
+  "protecting_lead_late": {
+    "detail": "large_lead",
+    "pass_rate": 0.5007,
+    "early_down_pass": 0.5226,
+    "hurry_up": 0.0,
+    "intensity": 0.85,
+    "time_bucket": "late",
+    "rb1_carries": 26.93,
+    "wr1_targets": 6.82,
+    "te1_targets": 4.86,
+    "mahomes_pass_yds": 200.6,
+    "rb_rush_yds": 106.0,
+    "rice_rec_yds": 45.3
+  },
+  "buf_kc_marginal": {
+    "script_summary": {
+      "home_win_prob_mean": 0.531,
+      "expected_total_mean": 46.33,
+      "pace_plays_mean": 64.44,
+      "home_pass_rate_mean": 0.5955,
+      "away_pass_rate_mean": 0.5797,
+      "home_lead_rate": 0.39,
+      "home_trail_rate": 0.375,
+      "home_early_down_pass_rate_mean": 0.5965,
+      "away_early_down_pass_rate_mean": 0.5776,
+      "home_hurry_up_mean": 0.1293,
+      "away_hurry_up_mean": 0.1878,
+      "home_script_intensity_mean": 0.4235,
+      "away_script_intensity_mean": 0.4235,
+      "minutes_remaining_mean": 23.21,
+      "time_bucket_late_rate": 0.43,
+      "home_large_lead_rate": 0.21,
+      "home_large_deficit_rate": 0.11
+    },
+    "play_mix_home": {
+      "pass_rate_mean": 0.5955,
+      "run_rate_mean": 0.4045,
+      "early_down_pass_rate_mean": 0.5965,
+      "hurry_up_mean": 0.1293,
+      "script_intensity_mean": 0.4235,
+      "script_state_mode": "lead",
+      "script_detail_mode": "small_deficit",
+      "time_bucket_mode": "mid",
+      "minutes_remaining_mean": 23.21
+    },
+    "play_mix_away": {
+      "pass_rate_mean": 0.5797,
+      "run_rate_mean": 0.4203,
+      "early_down_pass_rate_mean": 0.5776,
+      "hurry_up_mean": 0.1878,
+      "script_intensity_mean": 0.4235,
+      "script_state_mode": "trail",
+      "script_detail_mode": "small_lead",
+      "time_bucket_mode": "mid",
+      "minutes_remaining_mean": 23.21
+    },
+    "Mahomes_pass": {
+      "pass_yards": 242.463,
+      "pass_tds": 1.69,
+      "ints": 0.525,
+      "rush_yards": 8.144
+    },
+    "Cook_rush": {
+      "rush_yards": 53.8,
+      "rush_tds": 0.35,
+      "rec_yards": 18.651,
+      "receptions": 2.698
+    },
+    "Rice_rec": {
+      "rec_yards": 60.427,
+      "receptions": 5.509,
+      "rec_tds": 0.3
+    }
+  }
+}

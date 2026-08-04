@@ -77,18 +77,33 @@ def allocate_team_usage(
     if side == "home":
         pass_rate = script.home_pass_rate
         team_script: ScriptState = script.home_script
+        team_detail = script.home_script_detail
+        team_intensity = script.home_script_intensity
     else:
         pass_rate = script.away_pass_rate
         team_script = script.away_script
+        team_detail = script.away_script_detail
+        team_intensity = script.away_script_intensity
+    time_bucket = script.time_bucket
 
     roles = annotate_usage_roles(roles)
-    personnel = infer_personnel_package(pass_rate, team_script)
+    personnel = infer_personnel_package(
+        pass_rate,
+        team_script,
+        script_intensity=team_intensity,
+        time_bucket=time_bucket,
+    )
 
     # Pre-compute effective absolute shares (role table + script + personnel).
     eff_by_key: Dict[str, Dict[str, Any]] = {}
     for role in roles:
         eff_by_key[role.player_key] = effective_usage_shares(
-            role, script=team_script, pass_rate=pass_rate
+            role,
+            script=team_script,
+            pass_rate=pass_rate,
+            script_intensity=team_intensity,
+            time_bucket=time_bucket,
+            script_detail=team_detail,
         )
 
     # script.pace_plays is already a per-team offensive-play expectation.
@@ -133,8 +148,12 @@ def allocate_team_usage(
                 break
         # Small residual for backup in blowouts / injuries (thin).
         starter_share = 0.955 if starter.depth_order <= 1 else 0.88
-        if team_script == "lead":
-            # Blowout → slightly more backup looks.
+        if team_script == "lead" and (
+            team_detail == "large_lead" or (time_bucket == "late" and team_intensity >= 0.6)
+        ):
+            # Large / late lead → slightly more backup looks.
+            starter_share = min(starter_share, 0.91) if starter.depth_order <= 1 else starter_share
+        elif team_script == "lead":
             starter_share = min(starter_share, 0.93) if starter.depth_order <= 1 else starter_share
         qb_attempts[starter.player_key] = pass_plays * starter_share
         backups = [r for r in qbs if r.player_key != starter.player_key]
@@ -197,6 +216,9 @@ def allocate_team_usage(
                 script=team_script,
                 usage_role=str(eff["usage_role"]),
                 personnel=personnel,
+                script_detail=str(team_detail),
+                script_intensity=float(team_intensity),
+                time_bucket=str(time_bucket),
             )
         )
     return out
@@ -222,12 +244,22 @@ def usage_share_diagnostics(
     *,
     script: ScriptState = "neutral",
     pass_rate: float = 0.58,
+    script_intensity: float = 0.55,
+    time_bucket: str = "mid",
+    script_detail: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """Inspectable dump of role labels + effective absolute shares."""
     annotated = annotate_usage_roles(roles)
     rows: List[Dict[str, Any]] = []
     for role in annotated:
-        eff = effective_usage_shares(role, script=script, pass_rate=pass_rate)
+        eff = effective_usage_shares(
+            role,
+            script=script,
+            pass_rate=pass_rate,
+            script_intensity=script_intensity,
+            time_bucket=time_bucket,  # type: ignore[arg-type]
+            script_detail=script_detail,  # type: ignore[arg-type]
+        )
         rows.append(
             {
                 "player_key": role.player_key,
@@ -238,6 +270,9 @@ def usage_share_diagnostics(
                 "usage_role": eff["usage_role"],
                 "personnel": eff["personnel"],
                 "script": script,
+                "script_detail": eff.get("script_detail", script_detail or ""),
+                "script_intensity": eff.get("script_intensity", script_intensity),
+                "time_bucket": eff.get("time_bucket", time_bucket),
                 "snap_share": round(float(eff["snap_share"]), 4),
                 "rush_share": round(float(eff["rush_share"]), 4),
                 "target_share": round(float(eff["target_share"]), 4),
@@ -254,9 +289,19 @@ def share_integrity_summary(
     *,
     script: ScriptState = "neutral",
     pass_rate: float = 0.58,
+    script_intensity: float = 0.55,
+    time_bucket: str = "mid",
+    script_detail: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Named absolute share totals + residual other (should stay ≤ ~1.0)."""
-    rows = usage_share_diagnostics(roles, script=script, pass_rate=pass_rate)
+    rows = usage_share_diagnostics(
+        roles,
+        script=script,
+        pass_rate=pass_rate,
+        script_intensity=script_intensity,
+        time_bucket=time_bucket,
+        script_detail=script_detail,
+    )
     rush = sum(float(r["rush_share"]) for r in rows)
     tgt = sum(float(r["target_share"]) for r in rows)
     _, rush_other = with_residual_share(
@@ -273,6 +318,9 @@ def share_integrity_summary(
     )
     return {
         "script": script,
+        "script_detail": script_detail or "",
+        "script_intensity": script_intensity,
+        "time_bucket": time_bucket,
         "pass_rate": pass_rate,
         "named_rush_share_sum": round(rush, 4),
         "named_target_share_sum": round(tgt, 4),

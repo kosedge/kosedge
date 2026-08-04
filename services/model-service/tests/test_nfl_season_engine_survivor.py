@@ -27,6 +27,7 @@ def test_engine_version_surfaces_survivor() -> None:
         "survivor" in DEFAULT_SEASON_ENGINE_VERSION
         or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
         or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
+        or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -137,6 +138,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
         "survivor" in result.engine_version
         or "hardened" in result.engine_version
         or "depth-volatility" in result.engine_version
+        or "game-script" in result.engine_version
     )
 
 
