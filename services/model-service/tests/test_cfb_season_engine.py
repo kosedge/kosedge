@@ -1,4 +1,4 @@
-"""Tests for the hierarchical CFB season engine (roster + QB deepened)."""
+"""Tests for the hierarchical CFB season engine (position groups + projection)."""
 
 from __future__ import annotations
 
@@ -24,14 +24,23 @@ from src.services.cfb_season_engine.roster_construction import (
     build_roster_construction,
     compute_roster_strength,
 )
-from src.services.cfb_season_engine.team_projection import compose_team_projection
-from src.services.cfb_season_engine.position_groups import build_position_groups
+from src.services.cfb_season_engine.team_projection import (
+    compose_team_projection,
+    expected_team_points,
+    unit_defense_dampen,
+    unit_offense_boost,
+)
+from src.services.cfb_season_engine.position_groups import (
+    build_position_groups,
+    compose_unit_grade,
+    groups_to_dict,
+)
 from src.services.cfb_season_engine.priors import early_season_uncertainty
-from src.services.cfb_season_engine.types import EngineUniverse, TeamProjectionState
+from src.services.cfb_season_engine.types import EngineUniverse
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.2-roster-qb"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.3-position-projection"
 
 
 def test_qb_situation_classification() -> None:
@@ -91,6 +100,48 @@ def test_roster_strength_ranks_blue_bloods_above_mid_rebuilds() -> None:
     assert blue_mean > mid_mean + 8.0
     assert strengths["UGA"] > strengths["BALL"]
     assert strengths["TEX"] > strengths["EMU"]
+
+
+def test_unit_grade_components_inspectable() -> None:
+    grade, breakdown = compose_unit_grade(
+        talent=90.0, experience=70.0, portal_impact=60.0
+    )
+    assert abs(grade - (0.50 * 90 + 0.30 * 70 + 0.20 * 60)) < 0.01
+    assert breakdown["talent"] == 90.0
+    assert "weights" in breakdown
+
+    groups = build_position_groups(
+        "UGA",
+        {
+            "ol": 90,
+            "skill": 91,
+            "front_seven": 92,
+            "secondary": 88,
+            "components": {
+                "ol": {"talent": 92, "experience": 80, "portal_impact": 55},
+                "skill": {"talent": 93, "experience": 75, "portal_impact": 70},
+                "front_seven": {"talent": 94, "experience": 82, "portal_impact": 60},
+                "secondary": {"talent": 88, "experience": 78, "portal_impact": 65},
+            },
+            "fidelity": "approximate",
+        },
+    )
+    assert groups.ol == 90.0  # headline authoritative
+    assert "ol" in groups.components
+    assert groups.components["ol"]["talent"] == 92.0
+    d = groups_to_dict(groups)
+    assert "components" in d
+    assert d["components"]["front_seven"]["portal_impact"] == 60.0
+
+
+def test_position_groups_distinct_for_curated_teams() -> None:
+    universe = build_packaged_universe(2026)
+    uga = universe.teams["UGA"].groups
+    fsu = universe.teams["FSU"].groups
+    assert uga and fsu
+    assert uga.ol > fsu.ol
+    assert uga.front_seven > fsu.front_seven
+    assert uga.components and "talent" in uga.components["ol"]
 
 
 def test_qb_class_materially_moves_offense_index() -> None:
@@ -241,6 +292,198 @@ def test_qb_class_moves_win_prob_vs_fixed_opponent() -> None:
     assert wp_inc - wp_tf >= 0.06
 
 
+def _fixed_roster_qb():
+    roster = build_roster_construction(
+        "HOME",
+        {
+            "returning_production": 55,
+            "portal_in_value": 55,
+            "portal_out_value": 50,
+            "recruiting_class_score": 70,
+            "experience_index": 55,
+        },
+    )
+    qb = build_qb_situation(
+        "HOME",
+        {
+            "qb_class": "incumbent",
+            "qb_talent": 75,
+            "ol_support": 70,
+            "weapons_support": 72,
+            "experience_starts": 10,
+        },
+    )
+    return roster, qb
+
+
+def test_ablation_raise_ol_moves_offense_and_projection() -> None:
+    """Holding roster/QB fixed, higher OL → material offense + WP change."""
+    # Mid-tier roster/QB so offense_index is below STRENGTH_CLAMP and OL can move it.
+    roster = build_roster_construction(
+        "HOME",
+        {
+            "returning_production": 48,
+            "portal_in_value": 50,
+            "portal_out_value": 52,
+            "recruiting_class_score": 58,
+            "experience_index": 50,
+        },
+    )
+    qb = build_qb_situation(
+        "HOME",
+        {
+            "qb_class": "portal",
+            "qb_talent": 62,
+            "ol_support": 55,
+            "weapons_support": 58,
+            "experience_starts": 2,
+        },
+    )
+    base_groups = build_position_groups(
+        "HOME",
+        {"ol": 45, "skill": 55, "front_seven": 55, "secondary": 55, "fidelity": "approximate"},
+        roster=roster,
+        qb=qb,
+    )
+    boosted = build_position_groups(
+        "HOME",
+        {"ol": 88, "skill": 55, "front_seven": 55, "secondary": 55, "fidelity": "approximate"},
+        roster=roster,
+        qb=qb,
+    )
+    base = compose_team_projection("HOME", roster, qb, base_groups)
+    high = compose_team_projection("HOME", roster, qb, boosted)
+    assert high.offense_index < 1.55  # not clamp-capped
+    assert high.offense_index - base.offense_index >= 0.04
+    assert unit_offense_boost(boosted) > unit_offense_boost(base_groups) + 0.03
+
+    opp_roster = build_roster_construction(
+        "OPP",
+        {
+            "returning_production": 50,
+            "portal_in_value": 50,
+            "portal_out_value": 50,
+            "recruiting_class_score": 55,
+            "experience_index": 50,
+        },
+    )
+    opp_qb = build_qb_situation(
+        "OPP",
+        {"qb_class": "incumbent", "qb_talent": 60, "ol_support": 55, "weapons_support": 55},
+    )
+    opp_groups = build_position_groups(
+        "OPP",
+        {"ol": 55, "skill": 55, "front_seven": 58, "secondary": 58, "fidelity": "approximate"},
+        roster=opp_roster,
+        qb=opp_qb,
+    )
+    opp = compose_team_projection("OPP", opp_roster, opp_qb, opp_groups)
+
+    def _wp(state):
+        return project_game_preview(
+            EngineUniverse(season=2026, schedule=[], teams={"HOME": state, "OPP": opp}),
+            home_team="HOME",
+            away_team="OPP",
+            week=5,
+            neutral_site=True,
+        ).home_win_prob
+
+    assert _wp(high) - _wp(base) >= 0.03
+
+
+def test_ablation_raise_secondary_moves_defense() -> None:
+    roster, qb = _fixed_roster_qb()
+    base_groups = build_position_groups(
+        "HOME",
+        {"ol": 65, "skill": 65, "front_seven": 60, "secondary": 50, "fidelity": "approximate"},
+        roster=roster,
+        qb=qb,
+    )
+    boosted = build_position_groups(
+        "HOME",
+        {"ol": 65, "skill": 65, "front_seven": 60, "secondary": 90, "fidelity": "approximate"},
+        roster=roster,
+        qb=qb,
+    )
+    base = compose_team_projection("HOME", roster, qb, base_groups)
+    high = compose_team_projection("HOME", roster, qb, boosted)
+    assert high.defense_index - base.defense_index >= 0.05
+
+
+def test_ablation_raise_front_seven_lowers_opponent_scoring() -> None:
+    """Stronger front seven dampens opponent expected points / shifts WP."""
+    roster, qb = _fixed_roster_qb()
+    weak_f7 = build_position_groups(
+        "HOME",
+        {"ol": 65, "skill": 65, "front_seven": 45, "secondary": 55, "fidelity": "approximate"},
+        roster=roster,
+        qb=qb,
+    )
+    strong_f7 = build_position_groups(
+        "HOME",
+        {"ol": 65, "skill": 65, "front_seven": 92, "secondary": 55, "fidelity": "approximate"},
+        roster=roster,
+        qb=qb,
+    )
+    assert unit_defense_dampen(strong_f7) < unit_defense_dampen(weak_f7) - 0.04
+
+    home_weak = compose_team_projection("HOME", roster, qb, weak_f7)
+    home_strong = compose_team_projection("HOME", roster, qb, strong_f7)
+
+    opp_roster = build_roster_construction(
+        "OPP",
+        {
+            "returning_production": 60,
+            "portal_in_value": 60,
+            "portal_out_value": 45,
+            "recruiting_class_score": 75,
+            "experience_index": 58,
+        },
+    )
+    opp_qb = build_qb_situation(
+        "OPP",
+        {
+            "qb_class": "incumbent",
+            "qb_talent": 78,
+            "ol_support": 70,
+            "weapons_support": 75,
+            "experience_starts": 12,
+        },
+    )
+    opp_groups = build_position_groups(
+        "OPP",
+        {"ol": 72, "skill": 78, "front_seven": 60, "secondary": 60, "fidelity": "approximate"},
+        roster=opp_roster,
+        qb=opp_qb,
+    )
+    opp = compose_team_projection("OPP", opp_roster, opp_qb, opp_groups)
+
+    # Opponent scoring against HOME defense.
+    pts_vs_weak, _ = expected_team_points(
+        opp, home_weak, home=False, neutral_site=True, week=5
+    )
+    pts_vs_strong, _ = expected_team_points(
+        opp, home_strong, home=False, neutral_site=True, week=5
+    )
+    assert pts_vs_weak - pts_vs_strong >= 2.0
+
+    wp_weak = project_game_preview(
+        EngineUniverse(season=2026, schedule=[], teams={"HOME": home_weak, "OPP": opp}),
+        home_team="HOME",
+        away_team="OPP",
+        week=5,
+        neutral_site=True,
+    ).home_win_prob
+    wp_strong = project_game_preview(
+        EngineUniverse(season=2026, schedule=[], teams={"HOME": home_strong, "OPP": opp}),
+        home_team="HOME",
+        away_team="OPP",
+        week=5,
+        neutral_site=True,
+    ).home_win_prob
+    assert wp_strong - wp_weak >= 0.04
+
+
 def test_layer_wiring_compose() -> None:
     roster = build_roster_construction(
         "UGA",
@@ -276,6 +519,7 @@ def test_layer_wiring_compose() -> None:
     assert state.qb is not None and state.qb.qb_class == "incumbent"
     assert state.qb.qb_situation_index > 1.0
     assert "roster_strength" in state.notes
+    assert "ol" in state.notes
     assert state.groups is not None
 
 
@@ -291,6 +535,8 @@ def test_packaged_universe_and_sample_projection() -> None:
     assert uga.roster.roster_strength > 50
     assert uga.qb is not None
     assert uga.qb.qb_situation_index > 0.9
+    assert uga.groups is not None
+    assert uga.groups.components
 
     proj = project_game_preview(
         universe, home_team="ALA", away_team="UGA", week=1, neutral_site=True
@@ -301,10 +547,14 @@ def test_packaged_universe_and_sample_projection() -> None:
     assert 0.02 <= proj.home_win_prob <= 0.98
     assert proj.expected_total > 30
     assert proj.early_season_uncertainty["active"] is True
+    assert proj.margin_sd > 16.5  # W1 inflated
     assert "roster" in proj.home_layers
     assert "qb" in proj.away_layers
+    assert "position_groups" in proj.home_layers
+    assert "components" in proj.home_layers["position_groups"]
     assert "roster_strength" in proj.home_layers["roster"]
     assert "qb_situation_index" in proj.away_layers["qb"]
+    assert "strength→margin" in proj.notes.get("method", "")
     assert proj.fidelity == "approximate"
 
 
@@ -313,13 +563,16 @@ def test_contrasting_team_profiles_project_differently() -> None:
     universe = build_packaged_universe(2026)
     uga = universe.teams["UGA"]
     fsu = universe.teams["FSU"]
-    assert uga.roster and fsu.roster and uga.qb and fsu.qb
+    colo = universe.teams["COLO"]
+    assert uga.roster and fsu.roster and colo.roster
+    assert uga.qb and fsu.qb and colo.qb
     assert uga.roster.roster_strength > fsu.roster.roster_strength
     assert uga.qb.qb_class == "incumbent"
     assert fsu.qb.qb_class == "portal"
-    assert uga.offense_index > fsu.offense_index
+    assert colo.qb.qb_class == "true_freshman"
+    assert uga.offense_index > fsu.offense_index > colo.offense_index
 
-    # Same opponent (BALL) — UGA should be a clearer favorite than FSU.
+    # Same opponent (BALL) — UGA clearer favorite than FSU than COLO.
     ball = universe.teams["BALL"]
     u_vs = project_game_preview(
         EngineUniverse(season=2026, schedule=[], teams={"UGA": uga, "BALL": ball}),
@@ -335,7 +588,16 @@ def test_contrasting_team_profiles_project_differently() -> None:
         week=5,
         neutral_site=True,
     )
-    assert u_vs.home_win_prob > f_vs.home_win_prob + 0.05
+    c_vs = project_game_preview(
+        EngineUniverse(season=2026, schedule=[], teams={"COLO": colo, "BALL": ball}),
+        home_team="COLO",
+        away_team="BALL",
+        week=5,
+        neutral_site=True,
+    )
+    assert u_vs.home_win_prob > f_vs.home_win_prob + 0.03
+    assert f_vs.home_win_prob > c_vs.home_win_prob + 0.03
+    assert u_vs.home_win_prob > c_vs.home_win_prob + 0.08
 
 
 def test_early_season_uncertainty_wider_in_w1() -> None:
@@ -344,6 +606,17 @@ def test_early_season_uncertainty_wider_in_w1() -> None:
     assert w1["active"] is True
     assert w5["active"] is False
     assert w1["win_prob_margin_sd"] > w5["win_prob_margin_sd"]
+
+    universe = build_packaged_universe(2026)
+    p1 = project_game_preview(
+        universe, home_team="TEX", away_team="OSU", week=1, neutral_site=True
+    )
+    p5 = project_game_preview(
+        universe, home_team="TEX", away_team="OSU", week=5, neutral_site=True
+    )
+    assert p1.early_season_uncertainty["active"] is True
+    assert p5.early_season_uncertainty["active"] is False
+    assert p1.margin_sd > p5.margin_sd
 
 
 def test_season_sim_skeleton_path_coherence() -> None:
@@ -363,13 +636,19 @@ def test_status_contract() -> None:
     assert len(payload["layers"]) >= 5
     assert "solid" in payload["solid_vs_approximate"]
     assert "Roster strength formula" in " ".join(payload["solid_vs_approximate"]["solid"])
-    assert "qb_situation_index" in " ".join(payload["solid_vs_approximate"]["solid"])
+    assert "Position group unit formula" in " ".join(
+        payload["solid_vs_approximate"]["solid"]
+    )
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
     assert "examples" in payload
+    assert "position_groups" in payload["examples"].get("UGA", {})
+    assert "project_game_formula" in payload
     assert "roster_strength_ladder" in payload
     assert payload["layers"][0]["name"] == "roster_construction"
     assert "formula" in payload["layers"][0]
     assert "class_offense_mult" in payload["layers"][1]
+    assert payload["layers"][2]["name"] == "position_groups"
+    assert "talent" in payload["layers"][2]["formula"]
 
 
 def test_status_and_project_game_http() -> None:
@@ -382,6 +661,7 @@ def test_status_and_project_game_http() -> None:
     assert body["engine_version"] == DEFAULT_SEASON_ENGINE_VERSION
     assert body["additive"] is True
     assert "examples" in body
+    assert "position_groups" in body["examples"]["UGA"]
 
     proj = client.post(
         "/cfb/season-engine/project-game",
@@ -403,6 +683,9 @@ def test_status_and_project_game_http() -> None:
     assert data["early_season_uncertainty"]["week"] == 1
     assert "roster_strength" in data["home_layers"]["roster"]
     assert "qb_situation_index" in data["away_layers"]["qb"]
+    assert "position_groups" in data["home_layers"]
+    assert "components" in data["home_layers"]["position_groups"]
+    assert "projection_formula" in data
 
     sim = client.post(
         "/cfb/season-engine/simulate",

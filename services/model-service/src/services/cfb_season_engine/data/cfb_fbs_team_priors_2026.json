@@ -9,7 +9,8 @@
     "portal_in_value / portal_out_value mirror portal scores; recruiting_class_score mirrors recruiting_capital.",
     "EXTRA codes are explicit placeholder league-average rows so the universe is FBS-shaped.",
     "Portal/recruiting/returning production live feeds remain gaps.",
-    "Named QBs are illustrative 2026 situation labels and may lag real depth charts."
+    "Named QBs are illustrative 2026 situation labels and may lag real depth charts.",
+    "v0.3: position_groups enriched with talent/experience/portal_impact components; placeholder flat unit rows given distinct roster-derived grades."
   ],
   "teams": {
     "UGA": {
@@ -42,7 +43,30 @@
         "skill": 91,
         "front_seven": 92,
         "secondary": 88,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 90.0,
+            "experience": 71.8,
+            "portal_impact": 74.6
+          },
+          "skill": {
+            "talent": 91.0,
+            "experience": 72.2,
+            "portal_impact": 75.1
+          },
+          "front_seven": {
+            "talent": 92.0,
+            "experience": 72.5,
+            "portal_impact": 75.5
+          },
+          "secondary": {
+            "talent": 88.0,
+            "experience": 71.1,
+            "portal_impact": 73.7
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       },
       "players": [
         {
@@ -89,7 +113,30 @@
         "skill": 89,
         "front_seven": 90,
         "secondary": 87,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 86.0,
+            "experience": 65.8,
+            "portal_impact": 81.6
+          },
+          "skill": {
+            "talent": 89.0,
+            "experience": 66.9,
+            "portal_impact": 83.0
+          },
+          "front_seven": {
+            "talent": 90.0,
+            "experience": 67.2,
+            "portal_impact": 83.4
+          },
+          "secondary": {
+            "talent": 87.0,
+            "experience": 66.2,
+            "portal_impact": 82.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       },
       "players": [
         {
@@ -130,7 +177,30 @@
         "skill": 94,
         "front_seven": 86,
         "secondary": 85,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 84.0,
+            "experience": 61.9,
+            "portal_impact": 76.3
+          },
+          "skill": {
+            "talent": 94.0,
+            "experience": 65.4,
+            "portal_impact": 80.8
+          },
+          "front_seven": {
+            "talent": 86.0,
+            "experience": 62.6,
+            "portal_impact": 77.2
+          },
+          "secondary": {
+            "talent": 85.0,
+            "experience": 62.2,
+            "portal_impact": 76.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       },
       "players": [
         {
@@ -177,7 +247,30 @@
         "skill": 78,
         "front_seven": 84,
         "secondary": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 82.0,
+            "experience": 59.9,
+            "portal_impact": 74.3
+          },
+          "skill": {
+            "talent": 78.0,
+            "experience": 58.5,
+            "portal_impact": 72.5
+          },
+          "front_seven": {
+            "talent": 84.0,
+            "experience": 60.6,
+            "portal_impact": 75.2
+          },
+          "secondary": {
+            "talent": 80.0,
+            "experience": 59.2,
+            "portal_impact": 73.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TEX": {
@@ -210,7 +303,30 @@
         "skill": 88,
         "front_seven": 85,
         "secondary": 84,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 87.0,
+            "experience": 68.2,
+            "portal_impact": 78.8
+          },
+          "skill": {
+            "talent": 88.0,
+            "experience": 68.5,
+            "portal_impact": 79.2
+          },
+          "front_seven": {
+            "talent": 85.0,
+            "experience": 67.5,
+            "portal_impact": 77.8
+          },
+          "secondary": {
+            "talent": 84.0,
+            "experience": 67.1,
+            "portal_impact": 77.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       },
       "players": [
         {
@@ -251,7 +367,30 @@
         "skill": 84,
         "front_seven": 80,
         "secondary": 78,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 79.0,
+            "experience": 61.5,
+            "portal_impact": 76.2
+          },
+          "skill": {
+            "talent": 84.0,
+            "experience": 63.2,
+            "portal_impact": 78.5
+          },
+          "front_seven": {
+            "talent": 80.0,
+            "experience": 61.8,
+            "portal_impact": 76.7
+          },
+          "secondary": {
+            "talent": 78.0,
+            "experience": 61.1,
+            "portal_impact": 75.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ORE": {
@@ -284,7 +423,30 @@
         "skill": 87,
         "front_seven": 82,
         "secondary": 81,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 84.0,
+            "experience": 59.3,
+            "portal_impact": 81.8
+          },
+          "skill": {
+            "talent": 87.0,
+            "experience": 60.4,
+            "portal_impact": 83.2
+          },
+          "front_seven": {
+            "talent": 82.0,
+            "experience": 58.6,
+            "portal_impact": 80.9
+          },
+          "secondary": {
+            "talent": 81.0,
+            "experience": 58.2,
+            "portal_impact": 80.5
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "PSU": {
@@ -317,7 +479,30 @@
         "skill": 81,
         "front_seven": 86,
         "secondary": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 83.0,
+            "experience": 57.6,
+            "portal_impact": 73.7
+          },
+          "skill": {
+            "talent": 81.0,
+            "experience": 57.0,
+            "portal_impact": 72.8
+          },
+          "front_seven": {
+            "talent": 86.0,
+            "experience": 58.7,
+            "portal_impact": 75.0
+          },
+          "secondary": {
+            "talent": 82.0,
+            "experience": 57.3,
+            "portal_impact": 73.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "LSU": {
@@ -350,7 +535,30 @@
         "skill": 90,
         "front_seven": 84,
         "secondary": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 81.0,
+            "experience": 64.8,
+            "portal_impact": 75.0
+          },
+          "skill": {
+            "talent": 90.0,
+            "experience": 67.9,
+            "portal_impact": 79.0
+          },
+          "front_seven": {
+            "talent": 84.0,
+            "experience": 65.8,
+            "portal_impact": 76.3
+          },
+          "secondary": {
+            "talent": 80.0,
+            "experience": 64.4,
+            "portal_impact": 74.5
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ND": {
@@ -383,7 +591,30 @@
         "skill": 83,
         "front_seven": 85,
         "secondary": 84,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 86.0,
+            "experience": 71.7,
+            "portal_impact": 70.6
+          },
+          "skill": {
+            "talent": 83.0,
+            "experience": 70.7,
+            "portal_impact": 69.2
+          },
+          "front_seven": {
+            "talent": 85.0,
+            "experience": 71.3,
+            "portal_impact": 70.2
+          },
+          "secondary": {
+            "talent": 84.0,
+            "experience": 71.0,
+            "portal_impact": 69.7
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "CLEM": {
@@ -416,7 +647,30 @@
         "skill": 86,
         "front_seven": 87,
         "secondary": 86,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 85.0,
+            "experience": 67.5,
+            "portal_impact": 68.5
+          },
+          "skill": {
+            "talent": 86.0,
+            "experience": 67.8,
+            "portal_impact": 69.0
+          },
+          "front_seven": {
+            "talent": 87.0,
+            "experience": 68.2,
+            "portal_impact": 69.4
+          },
+          "secondary": {
+            "talent": 86.0,
+            "experience": 67.8,
+            "portal_impact": 69.0
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MIA": {
@@ -449,7 +703,30 @@
         "skill": 88,
         "front_seven": 83,
         "secondary": 81,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 83.0,
+            "experience": 62.9,
+            "portal_impact": 79.2
+          },
+          "skill": {
+            "talent": 88.0,
+            "experience": 64.6,
+            "portal_impact": 81.4
+          },
+          "front_seven": {
+            "talent": 83.0,
+            "experience": 62.9,
+            "portal_impact": 79.2
+          },
+          "secondary": {
+            "talent": 81.0,
+            "experience": 62.2,
+            "portal_impact": 78.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "FSU": {
@@ -483,7 +760,30 @@
         "skill": 78,
         "front_seven": 76,
         "secondary": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 74.0,
+            "experience": 51.9,
+            "portal_impact": 72.9
+          },
+          "skill": {
+            "talent": 78.0,
+            "experience": 53.3,
+            "portal_impact": 74.7
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 52.6,
+            "portal_impact": 73.8
+          },
+          "secondary": {
+            "talent": 75.0,
+            "experience": 52.2,
+            "portal_impact": 73.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TENN": {
@@ -516,7 +816,30 @@
         "skill": 85,
         "front_seven": 80,
         "secondary": 78,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 81.0,
+            "experience": 60.8,
+            "portal_impact": 73.9
+          },
+          "skill": {
+            "talent": 85.0,
+            "experience": 62.2,
+            "portal_impact": 75.7
+          },
+          "front_seven": {
+            "talent": 80.0,
+            "experience": 60.5,
+            "portal_impact": 73.4
+          },
+          "secondary": {
+            "talent": 78.0,
+            "experience": 59.8,
+            "portal_impact": 72.5
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "USC": {
@@ -549,7 +872,30 @@
         "skill": 87,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 79.0,
+            "experience": 57.5,
+            "portal_impact": 76.8
+          },
+          "skill": {
+            "talent": 87.0,
+            "experience": 60.4,
+            "portal_impact": 80.4
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 56.5,
+            "portal_impact": 75.5
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 55.8,
+            "portal_impact": 74.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "WASH": {
@@ -582,7 +928,30 @@
         "skill": 81,
         "front_seven": 78,
         "secondary": 77,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 58.2,
+            "portal_impact": 69.8
+          },
+          "skill": {
+            "talent": 81.0,
+            "experience": 59.5,
+            "portal_impact": 71.7
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 58.5,
+            "portal_impact": 70.3
+          },
+          "secondary": {
+            "talent": 77.0,
+            "experience": 58.2,
+            "portal_impact": 69.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TA&M": {
@@ -615,7 +984,30 @@
         "skill": 84,
         "front_seven": 86,
         "secondary": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 85.0,
+            "experience": 67.5,
+            "portal_impact": 74.6
+          },
+          "skill": {
+            "talent": 84.0,
+            "experience": 67.1,
+            "portal_impact": 74.1
+          },
+          "front_seven": {
+            "talent": 86.0,
+            "experience": 67.8,
+            "portal_impact": 75.0
+          },
+          "secondary": {
+            "talent": 82.0,
+            "experience": 66.4,
+            "portal_impact": 73.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "OLE": {
@@ -649,7 +1041,30 @@
         "skill": 86,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 81.0,
+            "experience": 57.0,
+            "portal_impact": 81.6
+          },
+          "skill": {
+            "talent": 86.0,
+            "experience": 58.7,
+            "portal_impact": 83.8
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 55.9,
+            "portal_impact": 80.2
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 55.2,
+            "portal_impact": 79.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UF": {
@@ -682,7 +1097,30 @@
         "skill": 85,
         "front_seven": 80,
         "secondary": 78,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 79.0,
+            "experience": 61.5,
+            "portal_impact": 74.1
+          },
+          "skill": {
+            "talent": 85.0,
+            "experience": 63.5,
+            "portal_impact": 76.8
+          },
+          "front_seven": {
+            "talent": 80.0,
+            "experience": 61.8,
+            "portal_impact": 74.5
+          },
+          "secondary": {
+            "talent": 78.0,
+            "experience": 61.1,
+            "portal_impact": 73.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "AUB": {
@@ -715,7 +1153,30 @@
         "skill": 79,
         "front_seven": 81,
         "secondary": 78,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 58.2,
+            "portal_impact": 72.1
+          },
+          "skill": {
+            "talent": 79.0,
+            "experience": 58.9,
+            "portal_impact": 73.0
+          },
+          "front_seven": {
+            "talent": 81.0,
+            "experience": 59.5,
+            "portal_impact": 73.9
+          },
+          "secondary": {
+            "talent": 78.0,
+            "experience": 58.5,
+            "portal_impact": 72.5
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UK": {
@@ -749,7 +1210,30 @@
         "skill": 73,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 62.0,
+            "portal_impact": 66.8
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 61.3,
+            "portal_impact": 65.8
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 62.3,
+            "portal_impact": 67.2
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 61.6,
+            "portal_impact": 66.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MSST": {
@@ -782,7 +1266,30 @@
         "skill": 75,
         "front_seven": 74,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 68.1
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 69.0
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 58.4,
+            "portal_impact": 68.5
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 57.7,
+            "portal_impact": 67.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ARK": {
@@ -815,7 +1322,30 @@
         "skill": 77,
         "front_seven": 74,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 57.5,
+            "portal_impact": 70.1
+          },
+          "skill": {
+            "talent": 77.0,
+            "experience": 58.2,
+            "portal_impact": 71.0
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 57.1,
+            "portal_impact": 69.6
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 56.4,
+            "portal_impact": 68.7
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "SCAR": {
@@ -848,7 +1378,30 @@
         "skill": 79,
         "front_seven": 77,
         "secondary": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 76.0,
+            "experience": 56.5,
+            "portal_impact": 72.7
+          },
+          "skill": {
+            "talent": 79.0,
+            "experience": 57.5,
+            "portal_impact": 74.1
+          },
+          "front_seven": {
+            "talent": 77.0,
+            "experience": 56.9,
+            "portal_impact": 73.2
+          },
+          "secondary": {
+            "talent": 75.0,
+            "experience": 56.2,
+            "portal_impact": 72.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "VAN": {
@@ -881,7 +1434,30 @@
         "skill": 78,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 65.2,
+            "portal_impact": 67.8
+          },
+          "skill": {
+            "talent": 78.0,
+            "experience": 66.3,
+            "portal_impact": 69.2
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 64.9,
+            "portal_impact": 67.4
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 64.5,
+            "portal_impact": 67.0
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "IU": {
@@ -914,7 +1490,30 @@
         "skill": 81,
         "front_seven": 76,
         "secondary": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 64.7,
+            "portal_impact": 67.7
+          },
+          "skill": {
+            "talent": 81.0,
+            "experience": 66.0,
+            "portal_impact": 69.5
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 64.3,
+            "portal_impact": 67.2
+          },
+          "secondary": {
+            "talent": 75.0,
+            "experience": 64.0,
+            "portal_impact": 66.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ILL": {
@@ -947,7 +1546,30 @@
         "skill": 75,
         "front_seven": 77,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 76.0,
+            "experience": 63.0,
+            "portal_impact": 66.1
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 62.6,
+            "portal_impact": 65.7
+          },
+          "front_seven": {
+            "talent": 77.0,
+            "experience": 63.3,
+            "portal_impact": 66.5
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 62.3,
+            "portal_impact": 65.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "IOWA": {
@@ -980,7 +1602,30 @@
         "skill": 70,
         "front_seven": 84,
         "secondary": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 83.0,
+            "experience": 70.7,
+            "portal_impact": 64.9
+          },
+          "skill": {
+            "talent": 70.0,
+            "experience": 66.1,
+            "portal_impact": 59.0
+          },
+          "front_seven": {
+            "talent": 84.0,
+            "experience": 71.0,
+            "portal_impact": 65.3
+          },
+          "secondary": {
+            "talent": 82.0,
+            "experience": 70.3,
+            "portal_impact": 64.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "WIS": {
@@ -1014,7 +1659,30 @@
         "skill": 73,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 79.0,
+            "experience": 60.1,
+            "portal_impact": 70.8
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 68.1
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 59.8,
+            "portal_impact": 70.3
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 59.1,
+            "portal_impact": 69.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MINN": {
@@ -1047,7 +1715,30 @@
         "skill": 75,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 64.7,
+            "portal_impact": 64.9
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 64.0,
+            "portal_impact": 64.0
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 64.3,
+            "portal_impact": 64.5
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 63.6,
+            "portal_impact": 63.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "NEB": {
@@ -1080,7 +1771,30 @@
         "skill": 79,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 81.0,
+            "experience": 63.5,
+            "portal_impact": 70.6
+          },
+          "skill": {
+            "talent": 79.0,
+            "experience": 62.8,
+            "portal_impact": 69.7
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 62.4,
+            "portal_impact": 69.2
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 61.7,
+            "portal_impact": 68.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "NW": {
@@ -1113,7 +1827,30 @@
         "skill": 69,
         "front_seven": 72,
         "secondary": 70,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 71.0,
+            "experience": 58.7,
+            "portal_impact": 60.5
+          },
+          "skill": {
+            "talent": 69.0,
+            "experience": 58.0,
+            "portal_impact": 59.7
+          },
+          "front_seven": {
+            "talent": 72.0,
+            "experience": 59.0,
+            "portal_impact": 61.0
+          },
+          "secondary": {
+            "talent": 70.0,
+            "experience": 58.3,
+            "portal_impact": 60.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "PUR": {
@@ -1147,7 +1884,30 @@
         "skill": 71,
         "front_seven": 70,
         "secondary": 68,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 69.0,
+            "experience": 51.5,
+            "portal_impact": 68.5
+          },
+          "skill": {
+            "talent": 71.0,
+            "experience": 52.1,
+            "portal_impact": 69.4
+          },
+          "front_seven": {
+            "talent": 70.0,
+            "experience": 51.8,
+            "portal_impact": 68.9
+          },
+          "secondary": {
+            "talent": 68.0,
+            "experience": 51.1,
+            "portal_impact": 68.0
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "RUT": {
@@ -1180,7 +1940,30 @@
         "skill": 73,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 62.6,
+            "portal_impact": 64.6
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 61.9,
+            "portal_impact": 63.7
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 63.0,
+            "portal_impact": 65.0
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 62.3,
+            "portal_impact": 64.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MD": {
@@ -1213,7 +1996,30 @@
         "skill": 75,
         "front_seven": 74,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 65.8
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 66.8
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 58.4,
+            "portal_impact": 66.3
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 57.7,
+            "portal_impact": 65.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MSU": {
@@ -1247,7 +2053,30 @@
         "skill": 74,
         "front_seven": 75,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 56.8,
+            "portal_impact": 68.1
+          },
+          "skill": {
+            "talent": 74.0,
+            "experience": 57.1,
+            "portal_impact": 68.5
+          },
+          "front_seven": {
+            "talent": 75.0,
+            "experience": 57.5,
+            "portal_impact": 69.0
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 56.8,
+            "portal_impact": 68.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UCLA": {
@@ -1281,7 +2110,30 @@
         "skill": 81,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 54.9,
+            "portal_impact": 72.2
+          },
+          "skill": {
+            "talent": 81.0,
+            "experience": 57.0,
+            "portal_impact": 75.0
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 54.5,
+            "portal_impact": 71.8
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 54.1,
+            "portal_impact": 71.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "CAL": {
@@ -1314,7 +2166,30 @@
         "skill": 73,
         "front_seven": 72,
         "secondary": 71,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 71.0,
+            "experience": 58.7,
+            "portal_impact": 63.9
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 64.8
+          },
+          "front_seven": {
+            "talent": 72.0,
+            "experience": 59.0,
+            "portal_impact": 64.3
+          },
+          "secondary": {
+            "talent": 71.0,
+            "experience": 58.7,
+            "portal_impact": 63.9
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "STAN": {
@@ -1347,7 +2222,30 @@
         "skill": 69,
         "front_seven": 72,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 63.1
+          },
+          "skill": {
+            "talent": 69.0,
+            "experience": 56.6,
+            "portal_impact": 61.3
+          },
+          "front_seven": {
+            "talent": 72.0,
+            "experience": 57.7,
+            "portal_impact": 62.7
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 58.4,
+            "portal_impact": 63.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ASU": {
@@ -1380,7 +2278,30 @@
         "skill": 78,
         "front_seven": 76,
         "secondary": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 62.0,
+            "portal_impact": 68.8
+          },
+          "skill": {
+            "talent": 78.0,
+            "experience": 62.4,
+            "portal_impact": 69.2
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 61.7,
+            "portal_impact": 68.3
+          },
+          "secondary": {
+            "talent": 75.0,
+            "experience": 61.4,
+            "portal_impact": 67.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ARI": {
@@ -1414,7 +2335,30 @@
         "skill": 79,
         "front_seven": 73,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 56.2,
+            "portal_impact": 70.1
+          },
+          "skill": {
+            "talent": 79.0,
+            "experience": 57.5,
+            "portal_impact": 71.9
+          },
+          "front_seven": {
+            "talent": 73.0,
+            "experience": 55.5,
+            "portal_impact": 69.2
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 55.1,
+            "portal_impact": 68.7
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UTAH": {
@@ -1447,7 +2391,30 @@
         "skill": 75,
         "front_seven": 82,
         "secondary": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 81.0,
+            "experience": 63.5,
+            "portal_impact": 69.5
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 61.4,
+            "portal_impact": 66.8
+          },
+          "front_seven": {
+            "talent": 82.0,
+            "experience": 63.8,
+            "portal_impact": 69.9
+          },
+          "secondary": {
+            "talent": 80.0,
+            "experience": 63.1,
+            "portal_impact": 69.0
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "COLO": {
@@ -1480,7 +2447,30 @@
         "skill": 82,
         "front_seven": 72,
         "secondary": 70,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 53.5,
+            "portal_impact": 76.7
+          },
+          "skill": {
+            "talent": 82.0,
+            "experience": 56.0,
+            "portal_impact": 79.8
+          },
+          "front_seven": {
+            "talent": 72.0,
+            "experience": 52.5,
+            "portal_impact": 75.3
+          },
+          "secondary": {
+            "talent": 70.0,
+            "experience": 51.8,
+            "portal_impact": 74.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "BYU": {
@@ -1513,7 +2503,30 @@
         "skill": 76,
         "front_seven": 78,
         "secondary": 77,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 67.2,
+            "portal_impact": 64.3
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 66.9,
+            "portal_impact": 63.9
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 67.6,
+            "portal_impact": 64.8
+          },
+          "secondary": {
+            "talent": 77.0,
+            "experience": 67.2,
+            "portal_impact": 64.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TTU": {
@@ -1546,7 +2559,30 @@
         "skill": 81,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 76.0,
+            "experience": 59.1,
+            "portal_impact": 71.6
+          },
+          "skill": {
+            "talent": 81.0,
+            "experience": 60.8,
+            "portal_impact": 73.9
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 58.4,
+            "portal_impact": 70.7
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 70.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "KU": {
@@ -1579,7 +2615,30 @@
         "skill": 77,
         "front_seven": 73,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 60.1,
+            "portal_impact": 66.8
+          },
+          "skill": {
+            "talent": 77.0,
+            "experience": 60.8,
+            "portal_impact": 67.7
+          },
+          "front_seven": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 65.8
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 59.0,
+            "portal_impact": 65.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "KSU": {
@@ -1612,7 +2671,30 @@
         "skill": 76,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 63.3,
+            "portal_impact": 66.5
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 63.0,
+            "portal_impact": 66.1
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 63.7,
+            "portal_impact": 67.0
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 63.0,
+            "portal_impact": 66.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ISU": {
@@ -1645,7 +2727,30 @@
         "skill": 75,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 64.0,
+            "portal_impact": 64.0
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 64.0,
+            "portal_impact": 64.0
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 64.3,
+            "portal_impact": 64.5
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 63.6,
+            "portal_impact": 63.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TCU": {
@@ -1678,7 +2783,30 @@
         "skill": 77,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 69.0
+          },
+          "skill": {
+            "talent": 77.0,
+            "experience": 59.5,
+            "portal_impact": 69.8
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 58.4,
+            "portal_impact": 68.5
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 68.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "BAY": {
@@ -1711,7 +2839,30 @@
         "skill": 76,
         "front_seven": 73,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 74.0,
+            "experience": 59.7,
+            "portal_impact": 66.3
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 60.4,
+            "portal_impact": 67.2
+          },
+          "front_seven": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 65.8
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 59.0,
+            "portal_impact": 65.4
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "CIN": {
@@ -1745,7 +2896,30 @@
         "skill": 75,
         "front_seven": 74,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 56.8,
+            "portal_impact": 67.0
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 57.5,
+            "portal_impact": 67.8
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 57.1,
+            "portal_impact": 67.4
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 56.4,
+            "portal_impact": 66.5
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UCF": {
@@ -1778,7 +2952,30 @@
         "skill": 77,
         "front_seven": 73,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 69.0
+          },
+          "skill": {
+            "talent": 77.0,
+            "experience": 59.5,
+            "portal_impact": 69.8
+          },
+          "front_seven": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 68.1
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 57.7,
+            "portal_impact": 67.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "HOU": {
@@ -1811,7 +3008,30 @@
         "skill": 75,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 60.1,
+            "portal_impact": 65.7
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 60.1,
+            "portal_impact": 65.7
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 59.7,
+            "portal_impact": 65.2
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 64.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "WVU": {
@@ -1845,7 +3065,30 @@
         "skill": 73,
         "front_seven": 74,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 55.5,
+            "portal_impact": 69.2
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 55.5,
+            "portal_impact": 69.2
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 55.8,
+            "portal_impact": 69.6
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 55.1,
+            "portal_impact": 68.7
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "LOU": {
@@ -1878,7 +3121,30 @@
         "skill": 81,
         "front_seven": 78,
         "secondary": 77,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 79.0,
+            "experience": 62.8,
+            "portal_impact": 70.8
+          },
+          "skill": {
+            "talent": 81.0,
+            "experience": 63.5,
+            "portal_impact": 71.7
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 62.4,
+            "portal_impact": 70.3
+          },
+          "secondary": {
+            "talent": 77.0,
+            "experience": 62.0,
+            "portal_impact": 69.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "GT": {
@@ -1911,7 +3177,30 @@
         "skill": 77,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 79.0,
+            "experience": 66.7,
+            "portal_impact": 65.8
+          },
+          "skill": {
+            "talent": 77.0,
+            "experience": 66.0,
+            "portal_impact": 64.9
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 65.6,
+            "portal_impact": 64.5
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 64.9,
+            "portal_impact": 63.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "VT": {
@@ -1944,7 +3233,30 @@
         "skill": 75,
         "front_seven": 77,
         "secondary": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 76.0,
+            "experience": 60.4,
+            "portal_impact": 67.2
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 60.1,
+            "portal_impact": 66.8
+          },
+          "front_seven": {
+            "talent": 77.0,
+            "experience": 60.8,
+            "portal_impact": 67.7
+          },
+          "secondary": {
+            "talent": 75.0,
+            "experience": 60.1,
+            "portal_impact": 66.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "PITT": {
@@ -1977,7 +3289,30 @@
         "skill": 76,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 61.4,
+            "portal_impact": 65.7
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 61.7,
+            "portal_impact": 66.1
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 62.4,
+            "portal_impact": 67.0
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 61.7,
+            "portal_impact": 66.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UNC": {
@@ -2011,7 +3346,30 @@
         "skill": 79,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 53.5,
+            "portal_impact": 73.3
+          },
+          "skill": {
+            "talent": 79.0,
+            "experience": 55.0,
+            "portal_impact": 75.2
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 53.2,
+            "portal_impact": 72.9
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 52.8,
+            "portal_impact": 72.5
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "NCSU": {
@@ -2044,7 +3402,30 @@
         "skill": 75,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 66.8
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 66.8
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 59.1,
+            "portal_impact": 67.2
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 58.4,
+            "portal_impact": 66.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "DUKE": {
@@ -2078,7 +3459,30 @@
         "skill": 76,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 74.0,
+            "experience": 57.1,
+            "portal_impact": 67.4
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 57.8,
+            "portal_impact": 68.3
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 57.1,
+            "portal_impact": 67.4
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 56.8,
+            "portal_impact": 67.0
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "WAKE": {
@@ -2111,7 +3515,30 @@
         "skill": 73,
         "front_seven": 70,
         "secondary": 69,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 71.0,
+            "experience": 58.7,
+            "portal_impact": 62.2
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 63.1
+          },
+          "front_seven": {
+            "talent": 70.0,
+            "experience": 58.3,
+            "portal_impact": 61.8
+          },
+          "secondary": {
+            "talent": 69.0,
+            "experience": 58.0,
+            "portal_impact": 61.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UVA": {
@@ -2144,7 +3571,30 @@
         "skill": 74,
         "front_seven": 75,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 63.2,
+            "portal_impact": 62.6
+          },
+          "skill": {
+            "talent": 74.0,
+            "experience": 63.6,
+            "portal_impact": 63.0
+          },
+          "front_seven": {
+            "talent": 75.0,
+            "experience": 64.0,
+            "portal_impact": 63.5
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 63.6,
+            "portal_impact": 63.0
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "SYR": {
@@ -2177,7 +3627,30 @@
         "skill": 77,
         "front_seven": 72,
         "secondary": 71,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 58.0,
+            "portal_impact": 68.1
+          },
+          "skill": {
+            "talent": 77.0,
+            "experience": 59.5,
+            "portal_impact": 69.8
+          },
+          "front_seven": {
+            "talent": 72.0,
+            "experience": 57.7,
+            "portal_impact": 67.6
+          },
+          "secondary": {
+            "talent": 71.0,
+            "experience": 57.3,
+            "portal_impact": 67.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "BC": {
@@ -2210,7 +3683,30 @@
         "skill": 71,
         "front_seven": 76,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 61.4,
+            "portal_impact": 64.6
+          },
+          "skill": {
+            "talent": 71.0,
+            "experience": 60.0,
+            "portal_impact": 62.8
+          },
+          "front_seven": {
+            "talent": 76.0,
+            "experience": 61.7,
+            "portal_impact": 65.0
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 61.0,
+            "portal_impact": 64.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "SMU": {
@@ -2243,7 +3739,30 @@
         "skill": 79,
         "front_seven": 75,
         "secondary": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 76.0,
+            "experience": 60.4,
+            "portal_impact": 70.5
+          },
+          "skill": {
+            "talent": 79.0,
+            "experience": 61.5,
+            "portal_impact": 71.9
+          },
+          "front_seven": {
+            "talent": 75.0,
+            "experience": 60.1,
+            "portal_impact": 70.1
+          },
+          "secondary": {
+            "talent": 74.0,
+            "experience": 59.7,
+            "portal_impact": 69.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "BOISE": {
@@ -2276,7 +3795,30 @@
         "skill": 76,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 77.0,
+            "experience": 63.3,
+            "portal_impact": 66.5
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 63.0,
+            "portal_impact": 66.1
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 63.7,
+            "portal_impact": 67.0
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 63.0,
+            "portal_impact": 66.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MEM": {
@@ -2309,7 +3851,30 @@
         "skill": 76,
         "front_seven": 74,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 75.0,
+            "experience": 61.4,
+            "portal_impact": 66.8
+          },
+          "skill": {
+            "talent": 76.0,
+            "experience": 61.7,
+            "portal_impact": 67.2
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 61.0,
+            "portal_impact": 66.3
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 60.6,
+            "portal_impact": 65.8
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TULN": {
@@ -2342,7 +3907,30 @@
         "skill": 73,
         "front_seven": 74,
         "secondary": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 64.8
+          },
+          "skill": {
+            "talent": 73.0,
+            "experience": 59.4,
+            "portal_impact": 64.8
+          },
+          "front_seven": {
+            "talent": 74.0,
+            "experience": 59.7,
+            "portal_impact": 65.2
+          },
+          "secondary": {
+            "talent": 72.0,
+            "experience": 59.0,
+            "portal_impact": 64.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "JMU": {
@@ -2375,7 +3963,30 @@
         "skill": 74,
         "front_seven": 75,
         "secondary": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 73.0,
+            "experience": 63.2,
+            "portal_impact": 63.1
+          },
+          "skill": {
+            "talent": 74.0,
+            "experience": 63.6,
+            "portal_impact": 63.6
+          },
+          "front_seven": {
+            "talent": 75.0,
+            "experience": 64.0,
+            "portal_impact": 64.0
+          },
+          "secondary": {
+            "talent": 73.0,
+            "experience": 63.2,
+            "portal_impact": 63.1
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "UNLV": {
@@ -2409,7 +4020,30 @@
         "skill": 75,
         "front_seven": 72,
         "secondary": 70,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 71.0,
+            "experience": 57.3,
+            "portal_impact": 66.0
+          },
+          "skill": {
+            "talent": 75.0,
+            "experience": 58.8,
+            "portal_impact": 67.8
+          },
+          "front_seven": {
+            "talent": 72.0,
+            "experience": 57.7,
+            "portal_impact": 66.5
+          },
+          "secondary": {
+            "talent": 70.0,
+            "experience": 57.0,
+            "portal_impact": 65.6
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "TAMU": {
@@ -2442,7 +4076,30 @@
         "skill": 84,
         "front_seven": 86,
         "secondary": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 85.0,
+            "experience": 67.5,
+            "portal_impact": 74.6
+          },
+          "skill": {
+            "talent": 84.0,
+            "experience": 67.1,
+            "portal_impact": 74.1
+          },
+          "front_seven": {
+            "talent": 86.0,
+            "experience": 67.8,
+            "portal_impact": 75.0
+          },
+          "secondary": {
+            "talent": 82.0,
+            "experience": 66.4,
+            "portal_impact": 73.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "MISS": {
@@ -2476,7 +4133,30 @@
         "skill": 86,
         "front_seven": 78,
         "secondary": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 81.0,
+            "experience": 57.0,
+            "portal_impact": 81.6
+          },
+          "skill": {
+            "talent": 86.0,
+            "experience": 58.7,
+            "portal_impact": 83.8
+          },
+          "front_seven": {
+            "talent": 78.0,
+            "experience": 55.9,
+            "portal_impact": 80.2
+          },
+          "secondary": {
+            "talent": 76.0,
+            "experience": 55.2,
+            "portal_impact": 79.3
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     },
     "ACU": {
@@ -2503,11 +4183,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "AFA": {
@@ -2534,11 +4237,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "AKR": {
@@ -2565,11 +4291,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "APP": {
@@ -2596,11 +4345,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "ARMY": {
@@ -2627,11 +4399,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "BALL": {
@@ -2658,11 +4453,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "BGSU": {
@@ -2689,11 +4507,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "BUFF": {
@@ -2720,11 +4561,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "CCU": {
@@ -2751,11 +4615,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "CHAR": {
@@ -2782,11 +4669,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "CHAT": {
@@ -2813,11 +4723,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "CMU": {
@@ -2844,11 +4777,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "CONN": {
@@ -2875,11 +4831,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "EMU": {
@@ -2906,11 +4885,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "FAU": {
@@ -2937,11 +4939,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "FIU": {
@@ -2968,11 +4993,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "FRES": {
@@ -2999,11 +5047,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "GASO": {
@@ -3030,11 +5101,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "GAST": {
@@ -3061,11 +5155,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "HAW": {
@@ -3092,11 +5209,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "IDHO": {
@@ -3123,11 +5263,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "KENT": {
@@ -3154,11 +5317,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "LIB": {
@@ -3185,11 +5371,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "LT": {
@@ -3216,11 +5425,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "MASS": {
@@ -3247,11 +5479,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "M-OH": {
@@ -3278,11 +5533,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "MRSH": {
@@ -3309,11 +5587,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "MTSU": {
@@ -3340,11 +5641,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "NAVY": {
@@ -3371,11 +5695,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "NIU": {
@@ -3402,11 +5749,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "NMSU": {
@@ -3433,11 +5803,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "OHIO": {
@@ -3464,11 +5857,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "OREST": {
@@ -3495,11 +5911,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "RICE": {
@@ -3526,11 +5965,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "SJSU": {
@@ -3557,11 +6019,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "SDSU": {
@@ -3588,11 +6073,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "FAU2": {
@@ -3619,11 +6127,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "FAY": {
@@ -3650,11 +6181,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "SHSU": {
@@ -3681,11 +6235,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "SOUTH": {
@@ -3712,11 +6289,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "TEM": {
@@ -3743,11 +6343,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "TLSA": {
@@ -3774,11 +6397,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "TROY": {
@@ -3805,11 +6451,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "TXST": {
@@ -3836,11 +6505,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "UL": {
@@ -3867,11 +6559,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "ULL": {
@@ -3898,11 +6613,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "ULM": {
@@ -3929,11 +6667,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "USA": {
@@ -3960,11 +6721,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "USF": {
@@ -3991,11 +6775,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "USM": {
@@ -4022,11 +6829,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "UTAHST": {
@@ -4053,11 +6883,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "UTEP": {
@@ -4084,11 +6937,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "UTSA": {
@@ -4115,11 +6991,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "WYO": {
@@ -4146,11 +7045,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "WMU": {
@@ -4177,11 +7099,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "WKU": {
@@ -4208,11 +7153,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "MOST": {
@@ -4239,11 +7207,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "DEL": {
@@ -4270,11 +7261,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "KENNESAW": {
@@ -4301,11 +7315,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "ORST": {
@@ -4332,11 +7369,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "WSU": {
@@ -4363,11 +7423,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "OKST": {
@@ -4394,11 +7477,34 @@
         "fidelity": "placeholder"
       },
       "position_groups": {
-        "ol": 50,
-        "skill": 50,
-        "front_seven": 50,
-        "secondary": 50,
-        "fidelity": "placeholder"
+        "ol": 50.7,
+        "skill": 51.3,
+        "front_seven": 51.9,
+        "secondary": 51.6,
+        "fidelity": "placeholder",
+        "components": {
+          "ol": {
+            "talent": 49.2,
+            "experience": 57.6,
+            "portal_impact": 49.6
+          },
+          "skill": {
+            "talent": 50.5,
+            "experience": 48.9,
+            "portal_impact": 53.4
+          },
+          "front_seven": {
+            "talent": 52.1,
+            "experience": 49.2,
+            "portal_impact": 53.5
+          },
+          "secondary": {
+            "talent": 53.2,
+            "experience": 49.0,
+            "portal_impact": 53.2
+          }
+        },
+        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
       }
     },
     "TXAM": {
@@ -4431,9 +7537,32 @@
         "skill": 84,
         "front_seven": 86,
         "secondary": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "components": {
+          "ol": {
+            "talent": 85.0,
+            "experience": 67.5,
+            "portal_impact": 74.6
+          },
+          "skill": {
+            "talent": 84.0,
+            "experience": 67.1,
+            "portal_impact": 74.1
+          },
+          "front_seven": {
+            "talent": 86.0,
+            "experience": 67.8,
+            "portal_impact": 75.0
+          },
+          "secondary": {
+            "talent": 82.0,
+            "experience": 66.4,
+            "portal_impact": 73.2
+          }
+        },
+        "notes": "headline talent composite; components inspectable"
       }
     }
   },
-  "engine_target": "cfb-season-engine-v0.2-roster-qb"
+  "engine_target": "cfb-season-engine-v0.3-position-projection"
 }

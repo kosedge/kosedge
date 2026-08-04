@@ -129,8 +129,8 @@ def build_packaged_universe(season: int = 2026) -> EngineUniverse:
         "schedule_source": "packaged_sample" if PACKAGED_SCHEDULE.exists() else "round_robin_fallback",
         "gap_portal_feed": "No live portal/returning-production DB feed wired yet",
         "gap_recruiting_feed": "Recruiting class score is packaged approximate composite",
-        "primary_drivers": "roster_strength + qb_situation_index",
-        "scope": "FBS focus for 2026; v0.2 deepens roster + QB layers",
+        "primary_drivers": "roster_strength + qb_situation_index + position_groups",
+        "scope": "FBS focus for 2026; v0.3 deepens position groups + team projection",
     }
     return EngineUniverse(
         season=season,
