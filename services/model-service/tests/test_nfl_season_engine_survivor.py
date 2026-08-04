@@ -11,6 +11,7 @@ from src.services.nfl_season_engine import (
     build_packaged_real_universe,
     evaluate_survivor,
     evaluate_survivor_plan,
+    suggest_survivor_paths,
     week_win_rate_for_team,
 )
 from src.services.nfl_season_engine.survivor import (
@@ -222,9 +223,12 @@ def test_planner_excludes_used_teams_across_weeks() -> None:
     assert (
         "survivor-planner" in plan.engine_version
         or "calibration" in plan.engine_version
+        or "survivor-planner-ux" in plan.engine_version
         or "path_survival" in PATH_FORMULA_NOTES
     )
     assert "path_survival" in PATH_FORMULA_NOTES
+    assert "avg_locked_wp" in PATH_FORMULA_NOTES
+    assert "slate_grade" in PATH_FORMULA_NOTES
     open_weeks = [w for w in plan.weeks if w["status"] == "open"]
     assert open_weeks
     for week in open_weeks:
@@ -299,3 +303,46 @@ def test_planner_open_week_recommendations_present() -> None:
     locked = next(w for w in plan.weeks if w["week"] == 2)
     assert locked["status"] == "locked"
     assert locked["locked_team"] == "DET"
+
+
+def test_slate_metrics_do_not_collapse_on_full_chalky_slate() -> None:
+    """Hero metrics stay readable; joint survival may still be tiny."""
+    universe = build_demo_universe(2026)
+    # Lock a long slate of strong early-week picks from greedy chalk.
+    suggested = suggest_survivor_paths(universe, n_sims=12, seed=9)
+    chalk = next(p for p in suggested.paths if p["id"] == "chalk")
+    plan = evaluate_survivor_plan(
+        universe, picks=chalk["picks"], n_sims=12, seed=9, top_n=4
+    )
+    assert plan.locked_pick_count >= 8
+    assert plan.avg_locked_wp is not None
+    assert plan.avg_locked_wp >= 0.45
+    assert plan.slate_grade in {"A", "B", "C", "D", "F"}
+    assert plan.slate_score is not None and plan.slate_score > 0
+    # Joint survival can be near-zero; that is why it is demoted.
+    assert 0.0 <= plan.path_survival <= 1.0
+    assert "opponent" in (plan.weeks[0].get("locked_pick") or plan.weeks[0]["ranked_picks"][0])
+    row = plan.weeks[0].get("locked_pick") or plan.weeks[0]["ranked_picks"][0]
+    assert row.get("matchup_label")
+    assert "this_week_wp" in row
+
+
+def test_suggest_survivor_paths_returns_three_valid() -> None:
+    universe = build_demo_universe(2026)
+    result = suggest_survivor_paths(universe, n_sims=12, seed=5)
+    assert len(result.paths) == 3
+    ids = {p["id"] for p in result.paths}
+    assert ids == {"chalk", "balanced", "contrarian_save"}
+    for path in result.paths:
+        picks = path["picks"]
+        assert len(picks) >= 8
+        # One team per week, no duplicate teams.
+        assert len(set(picks.values())) == len(picks)
+        weeks = [int(w) for w in picks]
+        assert len(weeks) == len(set(weeks))
+        assert path["avg_locked_wp"] is not None
+        assert path["slate_grade"] in {"A", "B", "C", "D", "F"}
+    # Strategies should not all be identical on demo slate.
+    pick_maps = [tuple(sorted(p["picks"].items())) for p in result.paths]
+    assert len(set(pick_maps)) >= 2
+

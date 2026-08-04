@@ -22,7 +22,7 @@ export default async function NflSurvivorPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Survivor Planner"
-      summary="Plan the full slate week-by-week, or rank a single week. Locked teams stay used; path survival scores the joint slate from season sims."
+      summary="Plan the full slate week-by-week with live matchups, slate grade, and AI suggested paths. Locked teams stay burned; joint survival stays advanced-only."
       badge="Season engine · survivor"
       primaryHref="/pro/nfl/game-boxes"
       primaryLabel="Game Boxes"

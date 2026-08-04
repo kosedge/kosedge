@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v2"
-# v1.11: deeper season/player calibration + early-season uncertainty (W1–W4).
-# Architecture + Survivor Planner unchanged from v1.10.
-ENGINE_VERSION = "nfl-season-engine-v1.11-calibration"
+# v1.12: Survivor Planner UX — slate metrics + suggested paths (additive).
+# Underlying Layers 1–4 / cal-v2 knobs unchanged from v1.11.
+ENGINE_VERSION = "nfl-season-engine-v1.12-survivor-planner-ux"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -445,6 +445,12 @@ def calibration_notes() -> Dict[str, str]:
         "deeper_calibration": (
             "v1.11: cal-v2 — wider win-total separation, role/RZ TD tune, "
             "early-season uncertainty (W1–W4). No new major features."
+        ),
+        "survivor_planner_ux": (
+            "v1.12: planner hero slate metrics (avg weekly WP, danger weeks, "
+            "best remaining equity, letter grade) + suggest-paths heuristics "
+            "(chalk / balanced / contrarian-save). Joint path_survival kept "
+            "as advanced secondary. See PATH_FORMULA_NOTES / suggest_survivor_paths."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "
