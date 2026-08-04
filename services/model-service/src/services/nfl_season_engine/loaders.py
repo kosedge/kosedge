@@ -1,8 +1,13 @@
 """Universe loaders for the hierarchical season engine.
 
-Prefer real DB sources (schedule, EPA priors, depth charts, projection
-baselines) when a session is available; otherwise fall back to a
-self-contained demo universe so the engine can be exercised offline.
+Default (``demo=False``): real 2026 regular-season schedule — prefer
+``nfl_dp_schedules`` when a DB session has rows; otherwise the packaged
+wall-chart JSON (272 REG games with byes). Rosters/depth prefer
+``nfl_dp_depth_chart_weekly`` + baselines when available.
+
+``demo=True``: explicit opt-in round-robin + sparse demo skill cores for
+offline unit tests. Never silently stay on demo when a real schedule is
+available.
 
 Efficiency rates are always passed through ``calibration.apply_efficiency_priors``
 (or baseline-derived overrides) so Layer 4 is never left on uncalibrated
@@ -11,7 +16,9 @@ dataclass defaults alone.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+import json
+from pathlib import Path
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from src.services.nfl_season_engine.calibration import (
     CALIBRATION_TAG,
@@ -29,12 +36,90 @@ from src.services.nfl_season_engine.types import (
 from src.services.nfl_season_engine.depth_chart import apply_depth_chart_roster_book
 from src.services.nfl_season_engine.usage_roles import annotate_roster_book
 
+_PACKAGE_DATA_DIR = Path(__file__).resolve().parent / "data"
+_PACKAGED_SCHEDULE_FILES = {
+    2026: _PACKAGE_DATA_DIR / "nfl_regular_schedule_2026.json",
+}
+
 NFL_TEAMS: List[str] = [
     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
     "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC",
     "LA", "LAC", "LV", "MIA", "MIN", "NE", "NO", "NYG",
     "NYJ", "PHI", "PIT", "SEA", "SF", "TB", "TEN", "WAS",
 ]
+
+SCHEDULE_SOURCE_DEMO = "demo_round_robin"
+SCHEDULE_SOURCE_DB = "nfl_dp_schedules"
+SCHEDULE_SOURCE_PACKAGED = "packaged_wall_chart_2026"
+
+
+def normalize_team_abbr(raw: str) -> str:
+    """Normalize common NFL team abbreviations (LAR → LA)."""
+    token = str(raw or "").strip().upper()
+    if token == "LAR":
+        return "LA"
+    return token
+
+
+def load_packaged_regular_schedule(season: int) -> Tuple[List[ScheduledGame], Dict[str, Any]]:
+    """Load the packaged real REG schedule artifact for ``season``.
+
+    Returns ``(games, meta)``. Raises ``FileNotFoundError`` / ``ValueError``
+    when the artifact is missing or malformed — callers should not silently
+    invent a demo slate.
+    """
+    path = _PACKAGED_SCHEDULE_FILES.get(int(season))
+    if path is None or not path.is_file():
+        raise FileNotFoundError(
+            f"No packaged regular-season schedule for season={season} "
+            f"(expected under {_PACKAGE_DATA_DIR})"
+        )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows = payload.get("games") or []
+    games: List[ScheduledGame] = []
+    for r in rows:
+        home = normalize_team_abbr(r["home_team"])
+        away = normalize_team_abbr(r["away_team"])
+        week = int(r["week"])
+        gid = str(r.get("game_id") or f"{season}-W{week:02d}-{away}@{home}")
+        games.append(
+            ScheduledGame(
+                season=int(r.get("season") or season),
+                week=week,
+                game_id=gid,
+                home_team=home,
+                away_team=away,
+            )
+        )
+    if not games:
+        raise ValueError(f"Packaged schedule empty: {path}")
+    meta = {
+        "schedule_source": str(payload.get("source") or SCHEDULE_SOURCE_PACKAGED),
+        "schedule_as_of": str(payload.get("as_of") or ""),
+        "schedule_game_count": len(games),
+        "schedule_path": str(path.name),
+        "bye_teams_by_week": payload.get("bye_teams_by_week") or {},
+    }
+    return games, meta
+
+
+def universe_schedule_meta(universe: EngineUniverse) -> Dict[str, Any]:
+    """Extract mode / schedule_source / counts from universe notes."""
+    notes = universe.notes or {}
+    source = str(notes.get("schedule_source") or "")
+    mode = str(notes.get("mode") or ("demo" if source == SCHEDULE_SOURCE_DEMO else "real"))
+    return {
+        "mode": mode,
+        "schedule_source": source or (
+            SCHEDULE_SOURCE_DEMO if mode == "demo" else SCHEDULE_SOURCE_PACKAGED
+        ),
+        "schedule_game_count": len(universe.schedule),
+        "schedule_as_of": notes.get("schedule_as_of") or "",
+        "roster_source": notes.get("roster_source") or "",
+        "roster_as_of": notes.get("roster_as_of") or "",
+        "schedule_note": notes.get("schedule") or "",
+        "roster_note": notes.get("rosters") or "",
+    }
 
 # Approximate 2025/26 style skill cores for demo / offline runs.
 # Shares are absolute fractions of team volume (residual "other" absorbs rest).
@@ -245,7 +330,15 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
         t for t, s in depth_structures.items() if s.wr_hierarchy == "murky"
     )
     notes = {
-        "schedule": "PLACEHOLDER round-robin (272 games). Prefer nfl_dp_schedules in DB mode.",
+        "mode": "demo",
+        "schedule_source": SCHEDULE_SOURCE_DEMO,
+        "schedule_as_of": "",
+        "roster_source": "demo_depth_chart",
+        "roster_as_of": "2025_offseason_approx",
+        "schedule": (
+            "PLACEHOLDER round-robin (272 games, no byes). Explicit demo=true only; "
+            "default prefers real 2026 schedule."
+        ),
         "strengths": "Calibrated demo EPA-style priors with contender-tier bumps (KC/BUF/PHI/SF/DET/BAL...).",
         "rosters": (
             "Mixed: named demo skill cores for 5 teams; generic depth for others. "
@@ -361,14 +454,12 @@ def load_universe_from_db(
     ).fetchall()
 
     schedule: List[ScheduledGame] = []
+    schedule_source = SCHEDULE_SOURCE_PACKAGED
+    schedule_as_of = ""
     if schedule_rows:
         for r in schedule_rows:
-            home = str(r.home_team)
-            away = str(r.away_team)
-            if home == "LAR":
-                home = "LA"
-            if away == "LAR":
-                away = "LA"
+            home = normalize_team_abbr(r.home_team)
+            away = normalize_team_abbr(r.away_team)
             gid = str(getattr(r, "game_id", None) or f"{season}-W{int(r.week):02d}-{away}@{home}")
             schedule.append(
                 ScheduledGame(
@@ -379,10 +470,17 @@ def load_universe_from_db(
                     away_team=away,
                 )
             )
-        schedule_note = "REAL nfl_dp_schedules"
+        schedule_source = SCHEDULE_SOURCE_DB
+        schedule_note = f"REAL nfl_dp_schedules ({len(schedule)} games)"
     else:
-        schedule = _round_robin_schedule(season, NFL_TEAMS)
-        schedule_note = "PLACEHOLDER round-robin (nfl_dp_schedules empty)"
+        # Do NOT silently invent round-robin when DB schedule is empty.
+        schedule, pkg_meta = load_packaged_regular_schedule(season)
+        schedule_source = str(pkg_meta.get("schedule_source") or SCHEDULE_SOURCE_PACKAGED)
+        schedule_as_of = str(pkg_meta.get("schedule_as_of") or "")
+        schedule_note = (
+            f"REAL packaged schedule ({len(schedule)} games); "
+            "nfl_dp_schedules empty for season"
+        )
 
     priors = _load_team_strength_priors(session, season_year=int(season), as_of_week=int(as_of_week))
     strength_inputs: Dict[str, Dict[str, float | str]] = {}
@@ -424,11 +522,11 @@ def load_universe_from_db(
     baseline_hits = 0
 
     rosters: Dict[str, List[PlayerRole]] = {t: [] for t in NFL_TEAMS}
+    roster_source = "demo_depth_chart"
+    roster_as_of = f"season={season};as_of_week<={as_of_week}"
     if depth_rows:
         for r in depth_rows:
-            team = str(r.team)
-            if team == "LAR":
-                team = "LA"
+            team = normalize_team_abbr(r.team)
             if team not in rosters:
                 continue
             pos = str(r.position)
@@ -457,6 +555,7 @@ def load_universe_from_db(
             else:
                 role = apply_efficiency_priors(role, source_suffix="league_efficiency_v1")
             rosters[team].append(role)
+        roster_source = "nfl_dp_depth_chart_weekly"
         if baseline_hits:
             roster_note = (
                 f"REAL depth chart identities; efficiency from baselines "
@@ -471,6 +570,8 @@ def load_universe_from_db(
         for team in NFL_TEAMS:
             rows = _DEMO_SKILL.get(team) or _generic_skill(team)
             rosters[team] = [_role_from_demo(team, r) for r in rows]
+        roster_source = "demo_depth_chart"
+        roster_as_of = "2025_offseason_approx"
         roster_note = "PLACEHOLDER demo rosters (depth chart empty)"
 
     for team in NFL_TEAMS:
@@ -485,12 +586,18 @@ def load_universe_from_db(
         else "PLACEHOLDER league-average strengths (EPA priors empty)"
     )
 
+    final_schedule = schedule[:272] if len(schedule) >= 272 else schedule
     return EngineUniverse(
         season=season,
-        schedule=schedule[:272] if len(schedule) >= 272 else schedule,
+        schedule=final_schedule,
         strengths=initialize_strengths(strength_inputs),
         rosters=rosters,
         notes={
+            "mode": "real",
+            "schedule_source": schedule_source,
+            "schedule_as_of": schedule_as_of,
+            "roster_source": roster_source,
+            "roster_as_of": roster_as_of,
             "schedule": schedule_note,
             "strengths": strength_note,
             "rosters": f"{roster_note}; usage_role taxonomy annotated",
@@ -498,3 +605,73 @@ def load_universe_from_db(
             **{f"cal_{k}": v for k, v in calibration_notes().items()},
         },
     )
+
+
+def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
+    """Real packaged schedule + offline demo skill cores (no DB required).
+
+    Used when DB is unreachable or empty so the engine still projects against
+    the actual 2026 slate (with byes) instead of inventing round-robin.
+    """
+    schedule, pkg_meta = load_packaged_regular_schedule(season)
+    demo = build_demo_universe(season=season)
+    notes = dict(demo.notes)
+    notes.update(
+        {
+            "mode": "real",
+            "schedule_source": str(pkg_meta.get("schedule_source") or SCHEDULE_SOURCE_PACKAGED),
+            "schedule_as_of": str(pkg_meta.get("schedule_as_of") or ""),
+            "roster_source": "demo_depth_chart",
+            "roster_as_of": "2025_offseason_approx",
+            "schedule": (
+                f"REAL packaged 2026 REG schedule ({len(schedule)} games, byes). "
+                "DB unavailable — depth/strength still offline demo priors."
+            ),
+            "rosters": (
+                "Offline demo skill cores (5 named teams + generics) on real schedule; "
+                "prefer nfl_dp_depth_chart_weekly when DB is up."
+            ),
+        }
+    )
+    return EngineUniverse(
+        season=season,
+        schedule=schedule,
+        strengths=demo.strengths,
+        rosters=demo.rosters,
+        notes=notes,
+    )
+
+
+def resolve_season_universe(
+    *,
+    season: int = 2026,
+    as_of_week: int = 1,
+    demo: bool = False,
+    session: Any = None,
+) -> Tuple[EngineUniverse, Dict[str, Any]]:
+    """Resolve the engine universe for HTTP/CLI callers.
+
+    * ``demo=True`` → explicit round-robin demo (tests).
+    * else try DB session when provided; on failure / empty → packaged real.
+    * Never silently returns demo schedule unless ``demo=True``.
+    """
+    if demo:
+        universe = build_demo_universe(season=season)
+        return universe, universe_schedule_meta(universe)
+
+    if session is not None:
+        try:
+            universe = load_universe_from_db(
+                session, season=season, as_of_week=as_of_week
+            )
+            meta = universe_schedule_meta(universe)
+            # Guard: if somehow still on demo schedule, upgrade to packaged.
+            if meta.get("schedule_source") == SCHEDULE_SOURCE_DEMO:
+                universe = build_packaged_real_universe(season=season)
+                meta = universe_schedule_meta(universe)
+            return universe, meta
+        except Exception:
+            pass
+
+    universe = build_packaged_real_universe(season=season)
+    return universe, universe_schedule_meta(universe)

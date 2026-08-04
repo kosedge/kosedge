@@ -58,6 +58,17 @@ export default async function NflSeasonModelHubPage() {
             <span className="text-red-300"> — {status.error}</span>
           ) : null}
         </p>
+        {!status.error ? (
+          <p className="mt-2 text-xs text-kos-text/60">
+            Mode: {status.mode || "—"}
+            {status.schedule_source ? ` · ${status.schedule_source}` : ""}
+            {status.schedule_game_count != null
+              ? ` · ${status.schedule_game_count} REG games`
+              : ""}
+            {status.roster_source ? ` · roster ${status.roster_source}` : ""}
+            {status.roster_as_of ? ` (as of ${status.roster_as_of})` : ""}
+          </p>
+        ) : null}
         <p className="mt-2 text-xs text-kos-text/50">
           Proxied through Next.js BFF routes — browser never calls Railway with
           secrets. Full-season simulate and raw diagnostics remain API/CLI only

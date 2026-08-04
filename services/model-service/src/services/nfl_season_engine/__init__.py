@@ -25,7 +25,8 @@ Public entry points
 - ``simulate_full_season`` – N path-coherent season sims (~272 games each)
 - ``project_game_player_boxes`` – future-game player box distributions
 - ``evaluate_survivor`` – survivor week rankings + path value
-- ``build_demo_universe`` / ``load_universe_from_db`` – input builders
+- ``resolve_season_universe`` / ``build_demo_universe`` /
+  ``load_universe_from_db`` / ``build_packaged_real_universe`` – input builders
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
 
 This package is **additive**. It does not replace
@@ -42,7 +43,11 @@ from src.services.nfl_season_engine.injury_paths import (
 )
 from src.services.nfl_season_engine.loaders import (
     build_demo_universe,
+    build_packaged_real_universe,
+    load_packaged_regular_schedule,
     load_universe_from_db,
+    resolve_season_universe,
+    universe_schedule_meta,
 )
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
@@ -66,10 +71,14 @@ __all__ = [
     "SeasonSimResult",
     "SurvivorEvalResult",
     "build_demo_universe",
+    "build_packaged_real_universe",
     "evaluate_survivor",
+    "load_packaged_regular_schedule",
     "load_universe_from_db",
     "parse_injury_paths",
     "project_game_player_boxes",
+    "resolve_season_universe",
     "simulate_full_season",
+    "universe_schedule_meta",
     "week_win_rate_for_team",
 ]

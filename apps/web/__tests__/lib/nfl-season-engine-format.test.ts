@@ -5,12 +5,14 @@ import {
   buildSurvivorBody,
   formatPct,
   formatRange,
+  matchupsFromWallChart,
   normalizeNflTeamCode,
   parseAlreadyUsedTeams,
   primaryStatsForPosition,
   rankSurvivorPicks,
   starOutOptionsForMatchup,
 } from "@/lib/nfl-season-engine-format";
+import wallChart2026 from "@/lib/nfl-wall-chart-2026.schedule.json";
 
 describe("nfl-season-engine-format", () => {
   it("normalizes team aliases and parses used lists", () => {
@@ -74,6 +76,27 @@ describe("nfl-season-engine-format", () => {
     expect(starOutOptionsForMatchup("SF", "KC").map((s) => s.playerName)).toEqual(
       expect.arrayContaining(["C.McCaffrey", "P.Mahomes"]),
     );
+  });
+
+  it("expands 2026 wall-chart into 272 unique matchups with byes", () => {
+    const matchups = matchupsFromWallChart(
+      wallChart2026 as Record<string, Record<string, string>>,
+      { season: 2026 },
+    );
+    expect(matchups).toHaveLength(272);
+    expect(matchups.some((m) => m.awayTeam === "ARI" && m.homeTeam === "LAC" && m.week === 1)).toBe(
+      true,
+    );
+    expect(matchups.some((m) => m.awayTeam === "SF" && m.homeTeam === "LA" && m.week === 1)).toBe(
+      true,
+    );
+    const week5Teams = new Set(
+      matchups
+        .filter((m) => m.week === 5)
+        .flatMap((m) => [m.homeTeam, m.awayTeam]),
+    );
+    expect(week5Teams.has("KC")).toBe(false);
+    expect(week5Teams.has("CAR")).toBe(false);
   });
 
   it("ranks picks and formats display helpers", () => {

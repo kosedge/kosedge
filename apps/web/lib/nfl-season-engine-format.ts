@@ -298,5 +298,53 @@ export type SeasonEngineMatchupOption = {
   awayTeam: string;
   week: number | null;
   startTime: string | null;
-  source: "fair-lines" | "manual";
+  source: "fair-lines" | "wall-chart" | "manual";
 };
+
+/** Expand wall-chart week map (`@ LAC` / `vs SEA`) into unique matchups. */
+export function matchupsFromWallChart(
+  chart: Record<string, Record<string, string>>,
+  opts?: { season?: number; maxWeek?: number },
+): SeasonEngineMatchupOption[] {
+  const season = opts?.season ?? 2026;
+  const maxWeek = opts?.maxWeek ?? 18;
+  const seen = new Set<string>();
+  const out: SeasonEngineMatchupOption[] = [];
+  for (const [teamRaw, weeks] of Object.entries(chart)) {
+    const team = normalizeNflTeamCode(teamRaw);
+    if (!team || !weeks) continue;
+    for (const [weekRaw, matchupRaw] of Object.entries(weeks)) {
+      const week = Number(weekRaw);
+      if (!Number.isFinite(week) || week < 1 || week > maxWeek) continue;
+      const m = String(matchupRaw || "").trim();
+      let home: string | null = null;
+      let away: string | null = null;
+      if (m.startsWith("@ ")) {
+        away = team;
+        home = normalizeNflTeamCode(m.slice(2));
+      } else if (m.startsWith("vs ")) {
+        home = team;
+        away = normalizeNflTeamCode(m.slice(3));
+      }
+      if (!home || !away) continue;
+      const key = `${week}|${away}@${home}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        id: `${season}-W${String(week).padStart(2, "0")}-${away}@${home}`,
+        label: `${away} @ ${home} · W${week}`,
+        homeTeam: home,
+        awayTeam: away,
+        week,
+        startTime: null,
+        source: "wall-chart",
+      });
+    }
+  }
+  return out.sort(
+    (a, b) =>
+      (a.week ?? 99) - (b.week ?? 99) ||
+      a.awayTeam.localeCompare(b.awayTeam) ||
+      a.homeTeam.localeCompare(b.homeTeam),
+  );
+}

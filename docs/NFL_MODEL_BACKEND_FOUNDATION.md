@@ -375,6 +375,14 @@ Default weight intent (all env-overridable; tune with walk-forward only):
 - `materialize_nfl_fantasy_projections` transforms stat projections to `standard`, `half_ppr`, and `ppr`, including expected/floor/median/ceiling plus position/overall ranks and tiers.
 - `nfl_projection_audit_runs` stores layer-level source coverage, freshness, calibration flags, and readiness state for player baseline/props/fantasy pipelines.
 
+## Hierarchical season engine (additive)
+
+- Package: `services/model-service/src/services/nfl_season_engine/`
+- Version: `nfl-season-engine-v1.9-real-2026` — defaults to the real 2026 REG schedule (272 games + byes) via `nfl_dp_schedules` or packaged wall-chart JSON; `demo=true` keeps round-robin for tests.
+- Layers (unchanged modeling stack): team strength → game script (+ coaching tendencies) → player usage (+ depth/injury) → production (+ red zone); survivor ranks week W/L paths.
+- HTTP: `/nfl/season-engine/{status,simulate,game-boxes,survivor}`; status exposes `mode`, `schedule_source`, `schedule_game_count`, roster as-of.
+- Cutover ops note: `data/ops/nfl-season-engine-real-2026-20260803.md`.
+
 ## Weekly quality metrics
 
 `run_nfl_quality_grading` writes a `weekly_quality` payload to `nfl_model_quality_snapshots` with:

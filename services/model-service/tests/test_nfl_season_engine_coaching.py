@@ -28,7 +28,11 @@ from src.services.nfl_season_engine.types import ScheduledGame
 
 
 def test_engine_version_coaching() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "nfl-season-engine-v1.8-coaching"
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "coaching" in DEFAULT_SEASON_ENGINE_VERSION
+        or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_all_32_teams_have_stable_profiles() -> None:
@@ -227,7 +231,10 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
         injury_paths=[path],
         include_diagnostics=True,
     )
-    assert proj.engine_version == "nfl-season-engine-v1.8-coaching"
+    assert (
+        "coaching" in proj.engine_version
+        or "real-2026" in proj.engine_version
+    )
     assert "coaching_profile" in proj.diagnostics
     assert "tendency_effects" in proj.diagnostics
     assert "red_zone" in proj.diagnostics
@@ -250,7 +257,10 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
         include_diagnostics=True,
     )
     assert surv.ranked_picks
-    assert surv.engine_version == "nfl-season-engine-v1.8-coaching"
+    assert (
+        "coaching" in surv.engine_version
+        or "real-2026" in surv.engine_version
+    )
 
 
 def test_early_down_bias_and_two_minute_aggression() -> None:

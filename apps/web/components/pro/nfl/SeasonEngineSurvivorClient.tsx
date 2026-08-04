@@ -21,6 +21,10 @@ type SurvivorPick = {
 
 type SurvivorPayload = {
   mode?: string;
+  schedule_source?: string;
+  schedule_game_count?: number;
+  roster_source?: string;
+  roster_as_of?: string;
   week?: number;
   n_sims?: number;
   engine_version?: string;
@@ -188,14 +192,22 @@ export default function SeasonEngineSurvivorClient({
 
           {result.mode === "demo" ? (
             <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
-              Demo schedule mode — round-robin placeholder (no byes). Scores are
-              inspectable heuristics (this-week win rate vs future save value),
-              not full multi-entry pool EV.
+              Demo schedule mode — round-robin placeholder (no byes; explicit
+              demo=true). Scores are inspectable heuristics (this-week win rate
+              vs future save value), not full multi-entry pool EV.
             </p>
           ) : (
             <p className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/70">
-              Scores are inspectable heuristics (this-week win rate vs future
-              save value), not full multi-entry pool EV.
+              Real 2026 schedule
+              {result.schedule_source ? ` · ${result.schedule_source}` : ""}
+              {result.schedule_game_count
+                ? ` · ${result.schedule_game_count} REG games`
+                : ""}
+              {result.roster_as_of
+                ? ` · roster as of ${result.roster_as_of}`
+                : ""}
+              . Scores are inspectable heuristics (this-week win rate vs future
+              save value), not full multi-entry pool EV. Bye weeks are respected.
             </p>
           )}
 

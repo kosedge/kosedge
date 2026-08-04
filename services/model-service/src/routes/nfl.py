@@ -4473,18 +4473,53 @@ def _season_engine_injury_paths(
 
 
 @router.get("/season-engine/status")
-def nfl_season_engine_status() -> Dict[str, Any]:
+def nfl_season_engine_status(
+    season: int = Query(2026, ge=2010, le=2100),
+    as_of_week: int = Query(1, ge=1, le=18),
+    demo: bool = Query(False, description="Probe demo universe instead of real"),
+) -> Dict[str, Any]:
     """Describe the hierarchical season engine and its four layers."""
     from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
     from src.services.nfl_season_engine.coaching_tendencies import (
         coaching_tendencies_documentation,
     )
+    from src.services.nfl_season_engine.loaders import resolve_season_universe
     from src.services.nfl_season_engine.player_usage import usage_rules_documentation
     from src.services.nfl_season_engine.survivor import FORMULA_NOTES
     from src.services.nfl_season_engine.usage_roles import USAGE_ROLE_LABELS
 
+    schedule_meta: Dict[str, Any] = {}
+    universe = None
+    if not demo:
+        session = SessionLocal()
+        try:
+            universe, schedule_meta = resolve_season_universe(
+                season=season, as_of_week=as_of_week, demo=False, session=session
+            )
+        except Exception as exc:  # pragma: no cover - ops fallback
+            log.warning("season-engine status universe probe failed: %s", exc)
+            try:
+                universe, schedule_meta = resolve_season_universe(
+                    season=season, as_of_week=as_of_week, demo=False, session=None
+                )
+            except Exception as exc2:  # pragma: no cover
+                log.warning("season-engine packaged schedule probe failed: %s", exc2)
+        finally:
+            session.close()
+    else:
+        universe, schedule_meta = resolve_season_universe(
+            season=season, as_of_week=as_of_week, demo=True, session=None
+        )
+
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+        "mode": schedule_meta.get("mode") or ("demo" if demo else "real"),
+        "schedule_source": schedule_meta.get("schedule_source") or "",
+        "schedule_game_count": schedule_meta.get("schedule_game_count")
+        or (len(universe.schedule) if universe else 0),
+        "schedule_as_of": schedule_meta.get("schedule_as_of") or "",
+        "roster_source": schedule_meta.get("roster_source") or "",
+        "roster_as_of": schedule_meta.get("roster_as_of") or "",
         "layers": [
             {"id": 1, "name": "team_strength", "module": "src.services.nfl_season_engine.team_strength"},
             {"id": 2, "name": "game_script", "module": "src.services.nfl_season_engine.game_script"},
@@ -4503,11 +4538,15 @@ def nfl_season_engine_status() -> Dict[str, Any]:
             "coaching_tendencies",
             "survivor",
             "include_diagnostics",
+            "real_2026_schedule",
         ],
         "contract": {
             "docs": "data/ops/nfl-season-engine-api-contract-20260803.md",
             "stable_fields": [
                 "engine_version",
+                "mode",
+                "schedule_source",
+                "schedule_game_count",
                 "point_estimate",
                 "distributions",
                 "ranked_picks",
@@ -4615,7 +4654,8 @@ def nfl_season_engine_simulate(
     """Run N path-coherent full-season sims (~272 games each).
 
     Caps ``n_sims`` at 500 for the HTTP path (use the CLI for heavier runs).
-    Prefers DB schedule/priors/depth when available; falls back to demo.
+    Prefers DB schedule/priors/depth when available; otherwise packaged
+    real 2026 schedule. ``demo=true`` is an explicit opt-in for tests.
 
     Optional JSON body::
 
@@ -4623,30 +4663,23 @@ def nfl_season_engine_simulate(
                            "status": "out", "week_start": 4, "week_end": 8}],
          "include_diagnostics": true}
     """
-    from src.services.nfl_season_engine import (
-        build_demo_universe,
-        load_universe_from_db,
-        simulate_full_season,
-    )
+    from src.services.nfl_season_engine import resolve_season_universe, simulate_full_season
 
     injury_paths = _season_engine_injury_paths(body)
     diag = include_diagnostics
     if body is not None and body.include_diagnostics:
         diag = True
-    mode = "demo"
-    universe = None
-    if not demo:
-        session = SessionLocal()
-        try:
-            universe = load_universe_from_db(session, season=season, as_of_week=as_of_week)
-            mode = "db"
-        except Exception as exc:  # pragma: no cover - ops fallback
-            log.warning("season-engine DB universe failed: %s", exc)
-        finally:
+    session = None if demo else SessionLocal()
+    try:
+        universe, schedule_meta = resolve_season_universe(
+            season=season,
+            as_of_week=as_of_week,
+            demo=demo,
+            session=session,
+        )
+    finally:
+        if session is not None:
             session.close()
-    if universe is None:
-        universe = build_demo_universe(season=season)
-        mode = "demo"
 
     result = simulate_full_season(
         universe,
@@ -4657,7 +4690,11 @@ def nfl_season_engine_simulate(
     )
     top_teams = sorted(result.team_wins.items(), key=lambda kv: -kv[1]["mean"])[:8]
     return {
-        "mode": mode,
+        "mode": schedule_meta.get("mode") or ("demo" if demo else "real"),
+        "schedule_source": schedule_meta.get("schedule_source"),
+        "schedule_game_count": schedule_meta.get("schedule_game_count"),
+        "roster_source": schedule_meta.get("roster_source"),
+        "roster_as_of": schedule_meta.get("roster_as_of"),
         "season": result.season,
         "n_sims": result.n_sims,
         "games_per_season": result.games_per_season,
@@ -4683,30 +4720,33 @@ def _run_season_engine_game_boxes(
     include_diagnostics: bool = False,
 ) -> Dict[str, Any]:
     from src.services.nfl_season_engine import (
-        build_demo_universe,
-        load_universe_from_db,
         project_game_player_boxes,
+        resolve_season_universe,
     )
 
-    mode = "demo"
-    universe = None
-    if not demo:
-        session = SessionLocal()
-        try:
-            universe = load_universe_from_db(session, season=season, as_of_week=week)
-            mode = "db"
-        except Exception as exc:  # pragma: no cover
-            log.warning("season-engine DB universe failed: %s", exc)
-        finally:
+    session = None if demo else SessionLocal()
+    try:
+        universe, schedule_meta = resolve_season_universe(
+            season=season,
+            as_of_week=week,
+            demo=demo,
+            session=session,
+        )
+    finally:
+        if session is not None:
             session.close()
-    if universe is None:
-        universe = build_demo_universe(season=season)
-        mode = "demo"
+
+    home = home_team.upper()
+    away = away_team.upper()
+    if home == "LAR":
+        home = "LA"
+    if away == "LAR":
+        away = "LA"
 
     proj = project_game_player_boxes(
         universe,
-        home_team=home_team.upper(),
-        away_team=away_team.upper(),
+        home_team=home,
+        away_team=away,
         week=week,
         n_replicates=n_replicates,
         seed=seed,
@@ -4714,7 +4754,11 @@ def _run_season_engine_game_boxes(
         include_diagnostics=include_diagnostics,
     )
     payload = {
-        "mode": mode,
+        "mode": schedule_meta.get("mode") or ("demo" if demo else "real"),
+        "schedule_source": schedule_meta.get("schedule_source"),
+        "schedule_game_count": schedule_meta.get("schedule_game_count"),
+        "roster_source": schedule_meta.get("roster_source"),
+        "roster_as_of": schedule_meta.get("roster_as_of"),
         "season": proj.season,
         "week": proj.week,
         "game_id": proj.game_id,
@@ -4803,32 +4847,23 @@ def nfl_season_engine_survivor(
           "already_used": ["KC", "BUF"],
           "injury_paths": [],
           "seed": 42,
-          "demo": true
+          "demo": false
         }
     """
-    from src.services.nfl_season_engine import (
-        build_demo_universe,
-        evaluate_survivor,
-        load_universe_from_db,
-    )
+    from src.services.nfl_season_engine import evaluate_survivor, resolve_season_universe
 
     injury_paths = _season_engine_injury_paths(body)
-    mode = "demo"
-    universe = None
-    if not body.demo:
-        session = SessionLocal()
-        try:
-            universe = load_universe_from_db(
-                session, season=body.season, as_of_week=body.as_of_week
-            )
-            mode = "db"
-        except Exception as exc:  # pragma: no cover - ops fallback
-            log.warning("season-engine DB universe failed: %s", exc)
-        finally:
+    session = None if body.demo else SessionLocal()
+    try:
+        universe, schedule_meta = resolve_season_universe(
+            season=body.season,
+            as_of_week=body.as_of_week,
+            demo=body.demo,
+            session=session,
+        )
+    finally:
+        if session is not None:
             session.close()
-    if universe is None:
-        universe = build_demo_universe(season=body.season)
-        mode = "demo"
 
     result = evaluate_survivor(
         universe,
@@ -4841,5 +4876,9 @@ def nfl_season_engine_survivor(
         include_diagnostics=body.include_diagnostics,
     )
     payload = result.to_dict()
-    payload["mode"] = mode
+    payload["mode"] = schedule_meta.get("mode") or ("demo" if body.demo else "real")
+    payload["schedule_source"] = schedule_meta.get("schedule_source")
+    payload["schedule_game_count"] = schedule_meta.get("schedule_game_count")
+    payload["roster_source"] = schedule_meta.get("roster_source")
+    payload["roster_as_of"] = schedule_meta.get("roster_as_of")
     return payload
