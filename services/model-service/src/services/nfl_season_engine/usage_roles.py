@@ -39,6 +39,7 @@ USAGE_ROLE_LABELS = (
     "RB1",
     "RB2",
     "RB_COMMITTEE",
+    "RB_GL",  # optional goal-line specialist (v1.7 scoring-usage)
     "WR1",
     "WR2",
     "WR3",
@@ -56,6 +57,8 @@ BASE_USAGE_BY_ROLE: Dict[str, Dict[str, float]] = {
     "RB1": {"snap_share": 0.62, "rush_share": 0.55, "target_share": 0.10, "route_share": 0.30},
     "RB2": {"snap_share": 0.32, "rush_share": 0.26, "target_share": 0.05, "route_share": 0.18},
     "RB_COMMITTEE": {"snap_share": 0.45, "rush_share": 0.36, "target_share": 0.07, "route_share": 0.24},
+    # Goal-line specialist: low general rush, elevated scoring usage (see red_zone.py).
+    "RB_GL": {"snap_share": 0.18, "rush_share": 0.12, "target_share": 0.02, "route_share": 0.08},
     "WR1": {"snap_share": 0.88, "rush_share": 0.01, "target_share": 0.23, "route_share": 0.92},
     "WR2": {"snap_share": 0.76, "rush_share": 0.0, "target_share": 0.16, "route_share": 0.80},
     "WR3": {"snap_share": 0.52, "rush_share": 0.0, "target_share": 0.09, "route_share": 0.55},
@@ -435,6 +438,7 @@ def effective_usage_shares(
 def script_matrix_documentation() -> Dict[str, Any]:
     """Serialize matrices for diagnostics / ops dumps."""
     from src.services.nfl_season_engine.depth_chart import depth_chart_documentation
+    from src.services.nfl_season_engine.red_zone import red_zone_share_tables
 
     return {
         "base_usage_by_role": BASE_USAGE_BY_ROLE,
@@ -455,6 +459,7 @@ def script_matrix_documentation() -> Dict[str, Any]:
             "{early:0.55, mid:0.90, late:1.30}; clamped [0.30, 1.85]"
         ),
         "depth_chart": depth_chart_documentation(),
+        "red_zone": red_zone_share_tables(),
     }
 
 

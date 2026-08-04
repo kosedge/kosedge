@@ -35,6 +35,7 @@ from src.services.nfl_season_engine.types import (
     PlayerUsage,
     ScriptState,
 )
+from src.services.nfl_season_engine.red_zone import allocate_team_red_zone
 from src.services.nfl_season_engine.usage_roles import (
     annotate_usage_roles,
     effective_usage_shares,
@@ -71,8 +72,13 @@ def allocate_team_usage(
     script: GameScript,
     side: str,
     rng: Optional[random.Random] = None,
+    include_red_zone: bool = True,
 ) -> List[PlayerUsage]:
-    """Allocate one-team usage for a single game replicate."""
+    """Allocate one-team usage for a single game replicate.
+
+    When ``include_red_zone`` is True (default), attach v1.7 RZ / scoring
+    opportunity counts after general volume allocation.
+    """
     rng = rng or random.Random()
     if side == "home":
         pass_rate = script.home_pass_rate
@@ -221,6 +227,15 @@ def allocate_team_usage(
                 time_bucket=str(time_bucket),
             )
         )
+    if include_red_zone:
+        out, _rz_diag = allocate_team_red_zone(
+            team=team,
+            roles=roles,
+            usage_rows=out,
+            script=script,
+            side=side,
+            rng=rng,
+        )
     return out
 
 
@@ -229,13 +244,32 @@ def allocate_game_usage(
     rosters: Mapping[str, Sequence[PlayerRole]],
     *,
     rng: Optional[random.Random] = None,
+    include_red_zone: bool = True,
 ) -> List[PlayerUsage]:
-    """Allocate usage for both teams in one game."""
+    """Allocate usage for both teams in one game.
+
+    RZ / scoring opportunities are attached inside each team's
+    ``allocate_team_usage`` call when ``include_red_zone`` is True.
+    """
     rng = rng or random.Random()
     home_roles = list(rosters.get(script.home_team, []))
     away_roles = list(rosters.get(script.away_team, []))
-    home = allocate_team_usage(team=script.home_team, roles=home_roles, script=script, side="home", rng=rng)
-    away = allocate_team_usage(team=script.away_team, roles=away_roles, script=script, side="away", rng=rng)
+    home = allocate_team_usage(
+        team=script.home_team,
+        roles=home_roles,
+        script=script,
+        side="home",
+        rng=rng,
+        include_red_zone=include_red_zone,
+    )
+    away = allocate_team_usage(
+        team=script.away_team,
+        roles=away_roles,
+        script=script,
+        side="away",
+        rng=rng,
+        include_red_zone=include_red_zone,
+    )
     return home + away
 
 

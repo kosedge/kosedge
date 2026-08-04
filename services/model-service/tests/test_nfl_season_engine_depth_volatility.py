@@ -62,6 +62,7 @@ def test_engine_version_depth_volatility() -> None:
     assert (
         "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
         or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
+        or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -236,6 +237,7 @@ def test_cook_rice_realism_bounds_hold() -> None:
     assert (
         "depth-volatility" in proj.engine_version
         or "game-script" in proj.engine_version
+        or "red-zone" in proj.engine_version
     )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])
@@ -254,6 +256,7 @@ def test_season_path_volatility_diagnostics() -> None:
     assert (
         "depth-volatility" in result.engine_version
         or "game-script" in result.engine_version
+        or "red-zone" in result.engine_version
     )
     assert "depth_structure" in result.diagnostics
     assert "role_transitions_sample" in result.diagnostics

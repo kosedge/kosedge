@@ -29,7 +29,12 @@ from src.services.nfl_season_engine.usage_roles import (
 
 
 def test_engine_version_game_script() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "nfl-season-engine-v1.6-game-script"
+    # v1.7 supersedes v1.6; play-calling tests remain valid under red-zone.
+    assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert (
+        "game-script" in DEFAULT_SEASON_ENGINE_VERSION
+        or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_script_detail_and_time_buckets() -> None:
@@ -269,7 +274,7 @@ def test_buf_kc_realism_bounds_and_diagnostics_play_mix() -> None:
         seed=2026,
         include_diagnostics=True,
     )
-    assert proj.engine_version == "nfl-season-engine-v1.6-game-script"
+    assert "red-zone" in proj.engine_version or "game-script" in proj.engine_version
     by_name = {p["player_name"]: p for p in proj.players}
 
     mahomes = by_name["P.Mahomes"]

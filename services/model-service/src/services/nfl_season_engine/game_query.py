@@ -41,6 +41,10 @@ from src.services.nfl_season_engine.production import (
     box_score_to_stat_dict,
     produce_box_scores,
 )
+from src.services.nfl_season_engine.red_zone import (
+    rz_pass_rate_from_script,
+    scoring_usage_diagnostics,
+)
 from src.services.nfl_season_engine.types import (
     EngineUniverse,
     GameBoxProjection,
@@ -205,6 +209,10 @@ def project_game_player_boxes(
     personnel_by_key: Dict[str, str] = {}
     script_state_by_key: Dict[str, str] = {}
     script_detail_by_key: Dict[str, str] = {}
+    scoring_role_by_key: Dict[str, str] = {}
+    rz_accum: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
+    rz_pass_home: List[float] = []
+    rz_pass_away: List[float] = []
     # Neutral-script share dump for inspectability (pre-MC).
     home_roles = annotate_usage_roles(week_rosters.get(game.home_team, []))
     away_roles = annotate_usage_roles(week_rosters.get(game.away_team, []))
@@ -222,6 +230,22 @@ def project_game_player_boxes(
             strengths=week_strengths,
             rng=rng,
         )
+        rz_pass_home.append(
+            rz_pass_rate_from_script(
+                base_team_pass_rate=script.home_pass_rate,
+                detail=script.home_script_detail,  # type: ignore[arg-type]
+                intensity=script.home_script_intensity,
+                time_bucket=script.time_bucket,  # type: ignore[arg-type]
+            )
+        )
+        rz_pass_away.append(
+            rz_pass_rate_from_script(
+                base_team_pass_rate=script.away_pass_rate,
+                detail=script.away_script_detail,  # type: ignore[arg-type]
+                intensity=script.away_script_intensity,
+                time_bucket=script.time_bucket,  # type: ignore[arg-type]
+            )
+        )
         for u in usage:
             if u.usage_role:
                 usage_role_by_key[u.player_key] = u.usage_role
@@ -230,6 +254,15 @@ def project_game_player_boxes(
             script_state_by_key[u.player_key] = u.script
             if u.script_detail:
                 script_detail_by_key[u.player_key] = u.script_detail
+            if u.scoring_role:
+                scoring_role_by_key[u.player_key] = u.scoring_role
+            rz_accum[u.player_key]["rz_carries_i20"].append(float(u.rz_carries_i20))
+            rz_accum[u.player_key]["rz_carries_i10"].append(float(u.rz_carries_i10))
+            rz_accum[u.player_key]["rz_targets_i20"].append(float(u.rz_targets_i20))
+            rz_accum[u.player_key]["rz_targets_i10"].append(float(u.rz_targets_i10))
+            rz_accum[u.player_key]["td_opportunity_share"].append(
+                float(u.td_opportunity_share)
+            )
         for box in boxes:
             meta[box.player_key] = {
                 "player_key": box.player_key,
@@ -262,6 +295,7 @@ def project_game_player_boxes(
                 "personnel": personnel_by_key.get(key, ""),
                 "script": script_state_by_key.get(key, ""),
                 "script_detail": script_detail_by_key.get(key, ""),
+                "scoring_role": scoring_role_by_key.get(key, ""),
                 "point_estimate": point,
                 "distributions": distributions,
             }
@@ -340,6 +374,43 @@ def project_game_player_boxes(
             "play_mix_sample": {
                 "home": play_mix_for_side(scripts[0], "home") if scripts else {},
                 "away": play_mix_for_side(scripts[0], "away") if scripts else {},
+            },
+            # Additive v1.7 red-zone / scoring-usage fields.
+            "red_zone": {
+                "home": {
+                    "rz_pass_rate_mean": round(sum(rz_pass_home) / max(1, len(rz_pass_home)), 4),
+                    "rz_run_rate_mean": round(
+                        1.0 - (sum(rz_pass_home) / max(1, len(rz_pass_home))), 4
+                    ),
+                },
+                "away": {
+                    "rz_pass_rate_mean": round(sum(rz_pass_away) / max(1, len(rz_pass_away)), 4),
+                    "rz_run_rate_mean": round(
+                        1.0 - (sum(rz_pass_away) / max(1, len(rz_pass_away))), 4
+                    ),
+                },
+                "players": [
+                    {
+                        "player_key": key,
+                        "player_name": meta[key]["player_name"],
+                        "team": meta[key]["team"],
+                        "position": meta[key]["position"],
+                        "usage_role": usage_role_by_key.get(key, ""),
+                        "scoring_role": scoring_role_by_key.get(key, ""),
+                        "rz_carries_i20": _summarize(rz_accum[key].get("rz_carries_i20", [])),
+                        "rz_carries_i10": _summarize(rz_accum[key].get("rz_carries_i10", [])),
+                        "rz_targets_i20": _summarize(rz_accum[key].get("rz_targets_i20", [])),
+                        "rz_targets_i10": _summarize(rz_accum[key].get("rz_targets_i10", [])),
+                        "td_opportunity_share": _summarize(
+                            rz_accum[key].get("td_opportunity_share", [])
+                        ),
+                    }
+                    for key in meta
+                ],
+            },
+            "scoring_usage": {
+                "home": scoring_usage_diagnostics(home_roles),
+                "away": scoring_usage_diagnostics(away_roles),
             },
         }
 

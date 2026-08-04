@@ -1,0 +1,743 @@
+{
+  "engine_version": "nfl-season-engine-v1.7-red-zone",
+  "matchup": "BUF@KC",
+  "week": 1,
+  "n_replicates": 250,
+  "seed": 2026,
+  "game_script_summary": {
+    "home_win_prob_mean": 0.5478,
+    "expected_total_mean": 45.87,
+    "pace_plays_mean": 64.47,
+    "home_pass_rate_mean": 0.5956,
+    "away_pass_rate_mean": 0.5797,
+    "home_lead_rate": 0.44,
+    "home_trail_rate": 0.336,
+    "home_early_down_pass_rate_mean": 0.5966,
+    "away_early_down_pass_rate_mean": 0.5776,
+    "home_hurry_up_mean": 0.1487,
+    "away_hurry_up_mean": 0.1801,
+    "home_script_intensity_mean": 0.4336,
+    "away_script_intensity_mean": 0.4336,
+    "minutes_remaining_mean": 23.26,
+    "time_bucket_late_rate": 0.436,
+    "home_large_lead_rate": 0.196,
+    "home_large_deficit_rate": 0.136
+  },
+  "red_zone_diagnostics": {
+    "home": {
+      "rz_pass_rate_mean": 0.5374,
+      "rz_run_rate_mean": 0.4626
+    },
+    "away": {
+      "rz_pass_rate_mean": 0.5588,
+      "rz_run_rate_mean": 0.4412
+    }
+  },
+  "script_rz_pass_forced": {
+    "large_lead_late": 0.3246,
+    "large_deficit_late": 0.7694
+  },
+  "tables": {
+    "rz_play_fraction_of_team_plays": 0.145,
+    "i10_fraction_of_rz_plays": 0.36,
+    "rz_base_pass_rate": 0.52,
+    "carry_share_i20": {
+      "RB1": 0.56,
+      "RB2": 0.22,
+      "RB_COMMITTEE": 0.36,
+      "RB_GL": 0.42,
+      "QB1": 0.1,
+      "QB2": 0.01,
+      "WR1": 0.02,
+      "OTHER": 0.04
+    },
+    "carry_share_i10": {
+      "RB1": 0.66,
+      "RB2": 0.14,
+      "RB_COMMITTEE": 0.32,
+      "RB_GL": 0.52,
+      "QB1": 0.14,
+      "QB2": 0.01,
+      "WR1": 0.01,
+      "OTHER": 0.03
+    },
+    "target_share_i20": {
+      "WR1": 0.24,
+      "WR2": 0.15,
+      "WR3": 0.08,
+      "WR_SLOT": 0.13,
+      "TE1": 0.18,
+      "TE2": 0.07,
+      "RB1": 0.09,
+      "RB2": 0.04,
+      "RB_COMMITTEE": 0.06,
+      "RB_GL": 0.03,
+      "OTHER": 0.05
+    },
+    "target_share_i10": {
+      "WR1": 0.26,
+      "WR2": 0.13,
+      "WR3": 0.05,
+      "WR_SLOT": 0.11,
+      "TE1": 0.24,
+      "TE2": 0.06,
+      "RB1": 0.08,
+      "RB2": 0.03,
+      "RB_COMMITTEE": 0.05,
+      "RB_GL": 0.04,
+      "OTHER": 0.04
+    },
+    "route_share_i20": {
+      "WR1": 0.92,
+      "WR2": 0.8,
+      "WR3": 0.48,
+      "WR_SLOT": 0.74,
+      "TE1": 0.78,
+      "TE2": 0.42,
+      "RB1": 0.28,
+      "RB2": 0.16,
+      "RB_COMMITTEE": 0.22,
+      "RB_GL": 0.12,
+      "OTHER": 0.15
+    },
+    "route_share_i10": {
+      "WR1": 0.9,
+      "WR2": 0.72,
+      "WR3": 0.38,
+      "WR_SLOT": 0.68,
+      "TE1": 0.86,
+      "TE2": 0.4,
+      "RB1": 0.22,
+      "RB2": 0.12,
+      "RB_COMMITTEE": 0.16,
+      "RB_GL": 0.1,
+      "OTHER": 0.12
+    },
+    "finish_rates": {
+      "rush_i20": 0.12,
+      "rush_i10": 0.36,
+      "rec_i20": 0.2,
+      "rec_i10": 0.34,
+      "pass_i20": 0.18,
+      "pass_i10": 0.32
+    },
+    "non_rz_td_residual": 0.18,
+    "rz_pass_detail_delta": {
+      "large_lead": -0.16,
+      "small_lead": -0.08,
+      "neutral": 0.0,
+      "small_deficit": 0.09,
+      "large_deficit": 0.16
+    },
+    "script_interaction": "Leading \u2192 lower RZ pass rate / more RB I10 carries; trailing \u2192 higher RZ pass rate / more WR1\u00b7TE1 I10 targets. Intensity \u00d7 time-bucket scaling mirrors v1.6 usage matrix.",
+    "td_path": "Layer 4 TD means = RZ opportunities \u00d7 finish rates + 18% residual of legacy usage\u00d7rate (yards still from general usage; no double-count of RZ volume into yards).",
+    "rb_gl": "Optional RB_GL when depth\u22652 RB has red_zone_share \u226b rush_share; feature RB1 keeps RB1 label with elevated I10 table shares."
+  },
+  "players": [
+    {
+      "player_name": "P.Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "usage_role": "QB1",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 240.134,
+        "pass_tds": 1.248,
+        "ints": 0.504,
+        "rush_yards": 7.589
+      }
+    },
+    {
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "usage_role": "QB1",
+      "scoring_role": "QB1",
+      "point_estimate": {
+        "pass_yards": 228.942,
+        "pass_tds": 1.336,
+        "ints": 0.564,
+        "rush_yards": 19.517
+      }
+    },
+    {
+      "player_name": "R.Rice",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR1",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 60.848,
+        "receptions": 5.782,
+        "rec_tds": 0.304
+      }
+    },
+    {
+      "player_name": "I.Pacheco",
+      "team": "KC",
+      "position": "RB",
+      "usage_role": "RB1",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 60.061,
+        "rush_tds": 0.432,
+        "rec_yards": 17.691,
+        "receptions": 2.544
+      }
+    },
+    {
+      "player_name": "J.Cook",
+      "team": "BUF",
+      "position": "RB",
+      "usage_role": "RB1",
+      "scoring_role": "RB1",
+      "point_estimate": {
+        "rush_yards": 54.319,
+        "rush_tds": 0.452,
+        "rec_yards": 18.397,
+        "receptions": 2.662
+      }
+    },
+    {
+      "player_name": "K.Shakir",
+      "team": "BUF",
+      "position": "WR",
+      "usage_role": "WR1",
+      "scoring_role": "WR1",
+      "point_estimate": {
+        "rec_yards": 49.986,
+        "receptions": 5.062,
+        "rec_tds": 0.316
+      }
+    },
+    {
+      "player_name": "T.Kelce",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE1",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 41.125,
+        "receptions": 4.121,
+        "rec_tds": 0.252
+      }
+    },
+    {
+      "player_name": "D.Kincaid",
+      "team": "BUF",
+      "position": "TE",
+      "usage_role": "TE1",
+      "scoring_role": "TE1",
+      "point_estimate": {
+        "rec_yards": 38.586,
+        "receptions": 4.11,
+        "rec_tds": 0.248
+      }
+    },
+    {
+      "player_name": "X.Worthy",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR2",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 38.537,
+        "receptions": 3.23,
+        "rec_tds": 0.212
+      }
+    },
+    {
+      "player_name": "K.Coleman",
+      "team": "BUF",
+      "position": "WR",
+      "usage_role": "WR2",
+      "scoring_role": "WR2",
+      "point_estimate": {
+        "rec_yards": 33.552,
+        "receptions": 3.058,
+        "rec_tds": 0.196
+      }
+    },
+    {
+      "player_name": "T.Johnson",
+      "team": "BUF",
+      "position": "RB",
+      "usage_role": "RB2",
+      "scoring_role": "RB2",
+      "point_estimate": {
+        "rush_yards": 22.052,
+        "rush_tds": 0.1,
+        "rec_yards": 6.924,
+        "receptions": 1.005
+      }
+    },
+    {
+      "player_name": "J.Watson",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR3",
+      "scoring_role": "WR3",
+      "point_estimate": {
+        "rec_yards": 17.816,
+        "receptions": 1.545,
+        "rec_tds": 0.108
+      }
+    },
+    {
+      "player_name": "K.Palmer",
+      "team": "BUF",
+      "position": "WR",
+      "usage_role": "WR3",
+      "scoring_role": "WR3",
+      "point_estimate": {
+        "rec_yards": 16.023,
+        "receptions": 1.6,
+        "rec_tds": 0.088
+      }
+    },
+    {
+      "player_name": "N.Gray",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE2",
+      "scoring_role": "TE2",
+      "point_estimate": {
+        "rec_yards": 15.033,
+        "receptions": 1.675,
+        "rec_tds": 0.096
+      }
+    }
+  ],
+  "red_zone_players_sample": [
+    {
+      "player_key": "KC-QB1-P.Mahomes",
+      "player_name": "P.Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "usage_role": "QB1",
+      "scoring_role": "QB1",
+      "rz_carries_i20": {
+        "mean": 0.475,
+        "std": 0.241,
+        "p10": 0.198,
+        "p50": 0.441,
+        "p90": 0.79
+      },
+      "rz_carries_i10": {
+        "mean": 0.214,
+        "std": 0.13,
+        "p10": 0.074,
+        "p50": 0.186,
+        "p90": 0.375
+      },
+      "rz_targets_i20": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_targets_i10": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "td_opportunity_share": {
+        "mean": 0.082,
+        "std": 0.04,
+        "p10": 0.037,
+        "p50": 0.074,
+        "p90": 0.136
+      }
+    },
+    {
+      "player_key": "KC-RB1-I.Pacheco",
+      "player_name": "I.Pacheco",
+      "team": "KC",
+      "position": "RB",
+      "usage_role": "RB1",
+      "scoring_role": "RB1",
+      "rz_carries_i20": {
+        "mean": 1.935,
+        "std": 0.687,
+        "p10": 1.005,
+        "p50": 1.884,
+        "p90": 2.847
+      },
+      "rz_carries_i10": {
+        "mean": 0.742,
+        "std": 0.289,
+        "p10": 0.374,
+        "p50": 0.723,
+        "p90": 1.163
+      },
+      "rz_targets_i20": {
+        "mean": 0.435,
+        "std": 0.228,
+        "p10": 0.166,
+        "p50": 0.398,
+        "p90": 0.736
+      },
+      "rz_targets_i10": {
+        "mean": 0.14,
+        "std": 0.104,
+        "p10": 0.042,
+        "p50": 0.114,
+        "p90": 0.281
+      },
+      "td_opportunity_share": {
+        "mean": 0.373,
+        "std": 0.097,
+        "p10": 0.236,
+        "p50": 0.371,
+        "p90": 0.5
+      }
+    },
+    {
+      "player_key": "KC-WR1-R.Rice",
+      "player_name": "R.Rice",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR1",
+      "scoring_role": "WR1",
+      "rz_carries_i20": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_carries_i10": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_targets_i20": {
+        "mean": 1.187,
+        "std": 0.454,
+        "p10": 0.639,
+        "p50": 1.124,
+        "p90": 1.804
+      },
+      "rz_targets_i10": {
+        "mean": 0.439,
+        "std": 0.193,
+        "p10": 0.219,
+        "p50": 0.416,
+        "p90": 0.709
+      },
+      "td_opportunity_share": {
+        "mean": 0.173,
+        "std": 0.061,
+        "p10": 0.096,
+        "p50": 0.17,
+        "p90": 0.252
+      }
+    },
+    {
+      "player_key": "KC-WR2-X.Worthy",
+      "player_name": "X.Worthy",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR2",
+      "scoring_role": "WR2",
+      "rz_carries_i20": {
+        "mean": 0.263,
+        "std": 0.185,
+        "p10": 0.078,
+        "p50": 0.213,
+        "p90": 0.517
+      },
+      "rz_carries_i10": {
+        "mean": 0.086,
+        "std": 0.068,
+        "p10": 0.019,
+        "p50": 0.067,
+        "p90": 0.186
+      },
+      "rz_targets_i20": {
+        "mean": 0.696,
+        "std": 0.303,
+        "p10": 0.349,
+        "p50": 0.651,
+        "p90": 1.125
+      },
+      "rz_targets_i10": {
+        "mean": 0.243,
+        "std": 0.143,
+        "p10": 0.096,
+        "p50": 0.215,
+        "p90": 0.465
+      },
+      "td_opportunity_share": {
+        "mean": 0.14,
+        "std": 0.041,
+        "p10": 0.091,
+        "p50": 0.137,
+        "p90": 0.194
+      }
+    },
+    {
+      "player_key": "KC-WR3-J.Watson",
+      "player_name": "J.Watson",
+      "team": "KC",
+      "position": "WR",
+      "usage_role": "WR3",
+      "scoring_role": "WR3",
+      "rz_carries_i20": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_carries_i10": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_targets_i20": {
+        "mean": 0.365,
+        "std": 0.215,
+        "p10": 0.132,
+        "p50": 0.316,
+        "p90": 0.678
+      },
+      "rz_targets_i10": {
+        "mean": 0.093,
+        "std": 0.072,
+        "p10": 0.024,
+        "p50": 0.074,
+        "p90": 0.191
+      },
+      "td_opportunity_share": {
+        "mean": 0.047,
+        "std": 0.025,
+        "p10": 0.019,
+        "p50": 0.044,
+        "p90": 0.084
+      }
+    },
+    {
+      "player_key": "KC-TE1-T.Kelce",
+      "player_name": "T.Kelce",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE1",
+      "scoring_role": "TE1",
+      "rz_carries_i20": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_carries_i10": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_targets_i20": {
+        "mean": 0.942,
+        "std": 0.371,
+        "p10": 0.551,
+        "p50": 0.877,
+        "p90": 1.442
+      },
+      "rz_targets_i10": {
+        "mean": 0.398,
+        "std": 0.189,
+        "p10": 0.175,
+        "p50": 0.362,
+        "p90": 0.67
+      },
+      "td_opportunity_share": {
+        "mean": 0.145,
+        "std": 0.053,
+        "p10": 0.078,
+        "p50": 0.137,
+        "p90": 0.222
+      }
+    },
+    {
+      "player_key": "KC-TE2-N.Gray",
+      "player_name": "N.Gray",
+      "team": "KC",
+      "position": "TE",
+      "usage_role": "TE2",
+      "scoring_role": "TE2",
+      "rz_carries_i20": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_carries_i10": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_targets_i20": {
+        "mean": 0.281,
+        "std": 0.187,
+        "p10": 0.105,
+        "p50": 0.233,
+        "p90": 0.52
+      },
+      "rz_targets_i10": {
+        "mean": 0.095,
+        "std": 0.085,
+        "p10": 0.017,
+        "p50": 0.071,
+        "p90": 0.194
+      },
+      "td_opportunity_share": {
+        "mean": 0.04,
+        "std": 0.025,
+        "p10": 0.014,
+        "p50": 0.034,
+        "p90": 0.074
+      }
+    },
+    {
+      "player_key": "BUF-QB1-J.Allen",
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "usage_role": "QB1",
+      "scoring_role": "QB1",
+      "rz_carries_i20": {
+        "mean": 0.462,
+        "std": 0.22,
+        "p10": 0.212,
+        "p50": 0.428,
+        "p90": 0.768
+      },
+      "rz_carries_i10": {
+        "mean": 0.202,
+        "std": 0.116,
+        "p10": 0.075,
+        "p50": 0.175,
+        "p90": 0.366
+      },
+      "rz_targets_i20": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "rz_targets_i10": {
+        "mean": 0.0,
+        "std": 0.0,
+        "p10": 0.0,
+        "p50": 0.0,
+        "p90": 0.0
+      },
+      "td_opportunity_share": {
+        "mean": 0.077,
+        "std": 0.036,
+        "p10": 0.035,
+        "p50": 0.071,
+        "p90": 0.123
+      }
+    },
+    {
+      "player_key": "BUF-RB1-J.Cook",
+      "player_name": "J.Cook",
+      "team": "BUF",
+      "position": "RB",
+      "usage_role": "RB1",
+      "scoring_role": "RB1",
+      "rz_carries_i20": {
+        "mean": 1.83,
+        "std": 0.673,
+        "p10": 1.013,
+        "p50": 1.736,
+        "p90": 2.739
+      },
+      "rz_carries_i10": {
+        "mean": 0.7,
+        "std": 0.267,
+        "p10": 0.382,
+        "p50": 0.681,
+        "p90": 1.05
+      },
+      "rz_targets_i20": {
+        "mean": 0.454,
+        "std": 0.257,
+        "p10": 0.184,
+        "p50": 0.404,
+        "p90": 0.768
+      },
+      "rz_targets_i10": {
+        "mean": 0.156,
+        "std": 0.106,
+        "p10": 0.046,
+        "p50": 0.13,
+        "p90": 0.292
+      },
+      "td_opportunity_share": {
+        "mean": 0.351,
+        "std": 0.087,
+        "p10": 0.236,
+        "p50": 0.346,
+        "p90": 0.471
+      }
+    },
+    {
+      "player_key": "BUF-RB2-T.Johnson",
+      "player_name": "T.Johnson",
+      "team": "BUF",
+      "position": "RB",
+      "usage_role": "RB2",
+      "scoring_role": "RB2",
+      "rz_carries_i20": {
+        "mean": 0.618,
+        "std": 0.284,
+        "p10": 0.302,
+        "p50": 0.562,
+        "p90": 1.013
+      },
+      "rz_carries_i10": {
+        "mean": 0.168,
+        "std": 0.114,
+        "p10": 0.051,
+        "p50": 0.137,
+        "p90": 0.325
+      },
+      "rz_targets_i20": {
+        "mean": 0.187,
+        "std": 0.132,
+        "p10": 0.056,
+        "p50": 0.159,
+        "p90": 0.375
+      },
+      "rz_targets_i10": {
+        "mean": 0.059,
+        "std": 0.066,
+        "p10": 0.005,
+        "p50": 0.037,
+        "p90": 0.154
+      },
+      "td_opportunity_share": {
+        "mean": 0.113,
+        "std": 0.041,
+        "p10": 0.064,
+        "p50": 0.107,
+        "p90": 0.167
+      }
+    }
+  ]
+}
