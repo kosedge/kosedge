@@ -55,7 +55,7 @@ from src.services.cfb_season_engine.types import EngineUniverse, HomeFieldProfil
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.5-hfa-coaching"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.5.1-ui"
 
 
 def test_qb_situation_classification() -> None:
@@ -610,9 +610,13 @@ def test_contrasting_team_profiles_project_differently() -> None:
         week=5,
         neutral_site=True,
     )
-    assert u_vs.home_win_prob > f_vs.home_win_prob + 0.03
-    assert f_vs.home_win_prob > c_vs.home_win_prob + 0.03
-    assert u_vs.home_win_prob > c_vs.home_win_prob + 0.08
+    # Soft ratio clamp compresses extreme WPs vs placeholders; spreads/WP
+    # ordering must still reflect UGA > FSU > COLO.
+    assert u_vs.spread_home < f_vs.spread_home - 1.0
+    assert f_vs.spread_home < c_vs.spread_home - 1.0
+    assert u_vs.home_win_prob > f_vs.home_win_prob
+    assert f_vs.home_win_prob > c_vs.home_win_prob
+    assert u_vs.home_win_prob > c_vs.home_win_prob + 0.05
 
 
 def test_early_season_uncertainty_wider_in_w1() -> None:
@@ -660,6 +664,24 @@ def test_project_game_drivers_and_score_coherence() -> None:
         - (payload["expected_away_score"] - payload["expected_home_score"])
     ) < 1e-9
     assert abs(payload["home_win_prob"] + payload["away_win_prob"] - 1.0) < 1e-9
+
+
+def test_matchup_ratio_clamp_limits_placeholder_blowouts() -> None:
+    """Soft-cap extreme O/D ratios so UGA vs placeholder isn't a 45-pt invent."""
+    universe = build_packaged_universe(2026)
+    proj = project_game_preview(
+        universe, home_team="UGA", away_team="BALL", week=5, neutral_site=False
+    )
+    payload = project_game_to_dict(proj)
+    # Favorite still clear, but not an absurd mid-40s home spread.
+    assert payload["spread_home"] < -12.0
+    assert payload["spread_home"] > -34.0
+    home_diag = payload["drivers"]["matchup"]["home_points_diag"]
+    assert home_diag["matchup_ratio"] < home_diag["matchup_ratio_raw"]
+    assert home_diag["matchup_ratio_clamped"] is True
+    # Mid-season WP should track the spread more tightly than v0.5.
+    assert payload["home_win_prob"] >= 0.88
+    assert payload["uncertainty"]["active"] is False
 
 
 def test_densified_schedule_covers_many_teams() -> None:
@@ -850,7 +872,8 @@ def test_status_contract() -> None:
     assert "Variable HFA" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert "Coaching continuity" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
-    assert "cfb-hfa-coaching" in payload["entry_points"]["ops"]
+    assert "cfb-ui-exposure" in payload["entry_points"]["ops"]
+    assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert "early_season_narrowing" in payload
     assert "examples" in payload
     assert "position_groups" in payload["examples"].get("UGA", {})
@@ -860,6 +883,9 @@ def test_status_contract() -> None:
     assert "hfa_bucket_counts" in payload
     assert "project_game_formula" in payload
     assert "roster_strength_ladder" in payload
+    assert "power_style_ladder" in payload
+    assert len(payload["power_style_ladder"]["top"]) >= 10
+    assert len(payload["team_codes"]) >= 100
     assert payload["layers"][0]["name"] == "roster_construction"
     assert "formula" in payload["layers"][0]
     assert "class_offense_mult" in payload["layers"][1]

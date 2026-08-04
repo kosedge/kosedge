@@ -10,6 +10,7 @@ College football 2026 reality drives these knobs:
 - Coaching continuity / staff change is a first-class early-season lever
 
 v0.5 adds variable HFA buckets + coaching continuity/change with week decay.
+v0.5.1 tightens project-game coherence for first UI exposure (measured knobs).
 """
 
 from __future__ import annotations
@@ -17,8 +18,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.5-hfa-coaching"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.5-hfa-coaching"
+ENGINE_VERSION = "cfb-season-engine-v0.5.1-ui"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.5.1-ui"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -31,12 +32,17 @@ HFA_BASELINE_POINTS = 2.0
 HOME_FIELD_POINTS = HFA_BASELINE_POINTS
 NEUTRAL_SITE_HFA = 0.0
 SCORE_NOISE_SD = 12.5
-WIN_PROB_MARGIN_SD = 16.5
+# Mid-season WP↔spread alignment: ~14.5 pts → -7 favorite ≈ 68% (was muted).
+WIN_PROB_MARGIN_SD = 14.5
 LEAGUE_BASE_PLAYS = 70.0
 LEAGUE_BASE_PASS_RATE = 0.55
 EXPECTED_POINTS_CLAMP = (7.0, 55.0)
 PACE_PLAYS_CLAMP = (55.0, 90.0)
-MATCHUP_RESPONSE = 1.05
+MATCHUP_RESPONSE = 1.08
+# Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
+# Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
+MATCHUP_RATIO_CLAMP = (0.60, 1.32)
+MATCHUP_RATIO_EXCESS_RETAIN = 0.40
 
 # Path evolution (mild; not backtested). Early weeks add extra noise.
 STRENGTH_UPDATE_RATE = 0.028
@@ -154,10 +160,10 @@ EARLY_SEASON_MARGIN_SD_MULT: Dict[int, float] = {
     4: 1.08,
 }
 EARLY_SEASON_SEPARATION_SOFTEN: Dict[int, float] = {
-    1: 0.68,
-    2: 0.76,
-    3: 0.85,
-    4: 0.93,
+    1: 0.74,
+    2: 0.80,
+    3: 0.88,
+    4: 0.95,
 }
 # Extra CFB-specific: roster/QB identity still forming.
 EARLY_SEASON_ROSTER_IDENTITY_UNCERTAINTY: Dict[int, float] = {
@@ -280,6 +286,9 @@ def documentation() -> Dict[str, Any]:
             "home_field_points": HOME_FIELD_POINTS,
             "score_noise_sd": SCORE_NOISE_SD,
             "win_prob_margin_sd": WIN_PROB_MARGIN_SD,
+            "matchup_response": MATCHUP_RESPONSE,
+            "matchup_ratio_clamp": list(MATCHUP_RATIO_CLAMP),
+            "matchup_ratio_excess_retain": MATCHUP_RATIO_EXCESS_RETAIN,
         },
         "early_season_narrowing": early_season_narrowing_schedule(),
         "roster_strength_weights": {

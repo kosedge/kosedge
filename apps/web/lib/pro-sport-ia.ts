@@ -69,7 +69,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   cfb: {
     heroBadge: "Pro CFB intelligence hub",
     heroSummary:
-      "College football workflow for tempo and havoc context, market edge translation, and disciplined execution windows.",
+      "College football workflow for the hierarchical season model, tempo/havoc context, market edge translation, and disciplined execution windows.",
     slateCta: "Open weekly slate",
     articleToneBadge: "CFB analyst desk",
     sectionTitles: {
@@ -577,12 +577,36 @@ function marketLinksForSport({
     status: card.status,
   }));
 
+  const modelLinks: OverviewSectionLink[] =
+    sportKey === "cfb"
+      ? [
+          {
+            href: "/pro/cfb/model",
+            label: "Season Model",
+            hint: "Hierarchical engine hub — fidelity, power-style ladder, what it can/can't do.",
+            premium: true,
+            status: "active",
+          },
+          {
+            href: "/pro/cfb/project-game",
+            label: "Project Game",
+            hint: "Team-level spread/total/WP with roster, QB, unit, HFA, coaching drivers.",
+            premium: true,
+            status: "active",
+          },
+        ]
+      : [];
+
   return [
+    ...modelLinks,
     ...deskLinks,
     {
       href: edgeBoardHref,
       label: "Public edge board",
-      hint: "Open vs best prices, KEI, and directional edge tags.",
+      hint:
+        sportKey === "cfb"
+          ? "Markets-only CFB board — no invented KEI fair lines."
+          : "Open vs best prices, KEI, and directional edge tags.",
       premium: true,
       status: "active",
     },

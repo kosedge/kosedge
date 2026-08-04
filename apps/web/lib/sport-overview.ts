@@ -42,9 +42,14 @@ const GLANCE: Record<string, GlanceItem[]> = {
   ],
   cfb: [
     {
-      href: "/pro/cfb/fair-lines",
-      title: "Model vs Market",
-      body: "Fair lines with key-number awareness for weekly spreads.",
+      href: "/pro/cfb/model",
+      title: "Season Model",
+      body: "Hierarchical engine hub — power-style ranks and fidelity honesty.",
+    },
+    {
+      href: "/pro/cfb/project-game",
+      title: "Project Game",
+      body: "Matchup projections with roster, QB, unit, HFA, and coaching drivers.",
     },
     {
       href: "/pro/cfb/tempo",
@@ -55,11 +60,6 @@ const GLANCE: Record<string, GlanceItem[]> = {
       href: "/pro/cfb/teams",
       title: "Conference Lens",
       body: "Team research with conference and scheme context.",
-    },
-    {
-      href: "/pro/power-ratings/cfb",
-      title: "Power Ratings",
-      body: "Strength tiers for weekly slate framing.",
     },
   ],
   nba: [

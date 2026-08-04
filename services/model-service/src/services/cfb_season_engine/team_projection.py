@@ -43,6 +43,22 @@ def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, float(value)))
 
 
+def _soft_clamp_ratio(raw: float, low: float, high: float, retain: float) -> float:
+    """Clamp extreme O/D ratios while retaining a fraction of the excess.
+
+    Hard clamps collapse peer favorites against weak placeholders to the same
+    ratio; retaining some excess keeps ordering without inventing 45-pt spreads.
+    """
+    r = float(raw)
+    lo, hi = float(low), float(high)
+    keep = _clamp(float(retain), 0.0, 1.0)
+    if r > hi:
+        return hi + keep * (r - hi)
+    if r < lo:
+        return lo + keep * (r - lo)
+    return r
+
+
 def _score_to_index(score_0_100: float) -> float:
     """Map 0–100 unit score to ~0.7–1.35 strength index (1.0 at 50)."""
     return _clamp(1.0 + (float(score_0_100) - 50.0) / 80.0, 0.65, 1.45)
@@ -249,7 +265,11 @@ def expected_team_points(
     Returns (points, diagnostics).
     """
     response = P.matchup_response_for_week(week)
-    ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
+    raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
+    ratio_lo, ratio_hi = P.MATCHUP_RATIO_CLAMP
+    ratio = _soft_clamp_ratio(
+        raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
+    )
     matchup = ratio ** response
     off_boost = unit_offense_boost(offense.groups)
     def_dampen = unit_defense_dampen(opponent_defense.groups)
@@ -279,7 +299,9 @@ def expected_team_points(
 
     points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
     diag: Dict[str, Any] = {
+        "matchup_ratio_raw": round(raw_ratio, 4),
         "matchup_ratio": round(ratio, 4),
+        "matchup_ratio_clamped": abs(raw_ratio - ratio) > 1e-9,
         "matchup_response": round(response, 4),
         "offense_boost": round(off_boost, 4),
         "defense_dampen": round(def_dampen, 4),
