@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI entry point for the hierarchical CFB season engine (v0.3 position projection).
+"""CLI entry point for the hierarchical CFB season engine (v0.4 season sim).
 
 Examples
 --------
@@ -81,7 +81,7 @@ def main() -> None:
     }
 
     if not args.skip_sim:
-        print(f"Running {args.n_sims} season paths (skeleton)...")
+        print(f"Running {args.n_sims} season paths...")
         season_result = simulate_full_season(
             universe,
             n_sims=args.n_sims,
@@ -91,11 +91,15 @@ def main() -> None:
         artifacts["season_sim"] = season_sim_to_dict(season_result)
         print(
             f"Season sim done: games/path={season_result.games_per_season} "
-            f"mean_wins_sum={season_result.diagnostics.get('mean_wins_sum')}"
+            f"mean_wins_sum={season_result.diagnostics.get('mean_wins_sum')} "
+            f"teams_with_wins={season_result.diagnostics.get('teams_with_positive_mean_wins')}"
         )
         top = artifacts["season_sim"]["top_teams_by_wins"][:8]
         for row in top:
-            print(f"  {row['team']}: wins_mean={row['mean']}")
+            print(
+                f"  #{row.get('rank', '?')} {row['team']}: "
+                f"wins_mean={row['mean']} p50={row.get('p50')}"
+            )
 
     home, away = _parse_matchup(args.sample_game)
     print(f"Projecting sample game {away}@{home} week={args.week}...")
@@ -117,6 +121,14 @@ def main() -> None:
         f"  early_season active={proj.early_season_uncertainty.get('active')} "
         f"margin_sd={proj.margin_sd:.2f}"
     )
+    if proj.drivers:
+        hs = proj.drivers.get("primary_signals", {})
+        print(
+            f"  drivers home roster={hs.get('home_roster_strength')} "
+            f"qb_idx={hs.get('home_qb_situation_index')} "
+            f"| away roster={hs.get('away_roster_strength')} "
+            f"qb_idx={hs.get('away_qb_situation_index')}"
+        )
 
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out_dir = Path(args.out_dir) if args.out_dir else ROOT / "data" / "ops" / f"cfb-season-engine-{ts}"

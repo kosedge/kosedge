@@ -1,4 +1,4 @@
-"""Hierarchical CFB season engine (position groups + team projection).
+"""Hierarchical CFB season engine (season sim + early uncertainty).
 
 College football 2026 reality (design constraints):
 - Extreme roster turnover (portal + NIL + draft + freshmen)
@@ -16,13 +16,13 @@ Layers (each module is the source of truth for its concern):
 3. ``position_groups`` — OL, skill, front seven, secondary with inspectable
    talent / experience / portal_impact components
 4. ``team_projection`` — compose → O/D indices + unit-aware game projection
-5. ``season_sim`` — path-coherent season skeleton (team W/L)
+5. ``season_sim`` — path-coherent full-season sims (wins dist, week sample)
 6. ``player_hooks`` — thin QB/skill identity hooks where data allows
 
 Public entry points
 -------------------
 - ``project_game`` / ``project_game_preview`` — team-level matchup projection
-- ``simulate_full_season`` — N path-coherent season sims (skeleton)
+- ``simulate_full_season`` — N path-coherent season sims
 - ``build_packaged_universe`` / ``resolve_season_universe`` — input builders
 - ``engine_status_payload`` — honesty contract for API / ops
 
@@ -45,7 +45,11 @@ from src.services.cfb_season_engine.position_groups import (
     groups_to_dict,
     unit_grade_breakdown,
 )
-from src.services.cfb_season_engine.priors import ENGINE_VERSION, documentation as priors_documentation
+from src.services.cfb_season_engine.priors import (
+    ENGINE_VERSION,
+    documentation as priors_documentation,
+    early_season_narrowing_schedule,
+)
 from src.services.cfb_season_engine.qb_situation import qb_situation_breakdown, qb_to_dict
 from src.services.cfb_season_engine.roster_construction import (
     roster_strength_breakdown,
@@ -63,11 +67,13 @@ from src.services.cfb_season_engine.types import (
     SeasonSimResult,
 )
 from src.services.cfb_season_engine import (
+    conferences,
     loaders,
     player_hooks,
     position_groups,
     qb_situation,
     roster_construction,
+    schedule,
     season_sim,
     team_projection,
 )
@@ -131,6 +137,7 @@ def engine_status_payload(
             "offense_index": state.offense_index,
             "defense_index": state.defense_index,
             "early_season_uncertainty": state.early_season_uncertainty,
+            "conference": universe.conferences.get(code, "Independent"),
             "roster": roster_to_dict(state.roster),
             "roster_breakdown": roster_strength_breakdown(state.roster),
             "qb": qb_to_dict(state.qb),
@@ -160,7 +167,7 @@ def engine_status_payload(
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
         "sport": "cfb",
-        "scope": "FBS position-groups + team projection 2026",
+        "scope": "FBS season sim + early uncertainty 2026",
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
@@ -178,6 +185,9 @@ def engine_status_payload(
             player_hooks.documentation(),
         ],
         "priors": priors_documentation(),
+        "early_season_narrowing": early_season_narrowing_schedule(),
+        "schedule": schedule.documentation(),
+        "conferences": conferences.documentation(),
         "project_game_formula": project_game_formula_doc(),
         "examples": examples,
         "roster_strength_ladder": {
@@ -191,12 +201,13 @@ def engine_status_payload(
         "data_sources": {
             "packaged_team_priors": loaders.documentation()["packaged_teams"],
             "packaged_sample_schedule": loaders.documentation()["packaged_schedule"],
+            "schedule_policy": loaders.documentation()["schedule_policy"],
             "db_portal_recruiting": "not_wired",
             "edge_board_cfb": "markets_only (unchanged)",
             "field_provenance": (
                 "returning_snap/start shares, portal values, and unit talent "
                 "composites are curated/estimated in packaged JSON or derived "
-                "in-layer; not live SNAP% / SP+"
+                "in-layer; densified schedule is synthetic approximate paths"
             ),
         },
         "solid_vs_approximate": {
@@ -206,8 +217,9 @@ def engine_status_payload(
                 "QB situation classification rules + class offense multipliers",
                 "Position group unit formula (talent/experience/portal_impact)",
                 "roster_strength + qb_situation_index + unit grades as projection drivers",
-                "project-game formula (strength → margin → spread/total/WP)",
-                "Early-season uncertainty posture (inspectable)",
+                "project-game formula (strength → margin → spread/total/WP) + drivers block",
+                "Early-season uncertainty posture (week-indexed narrowing, inspectable)",
+                "Season-sim path coherence (wins dist, week sample, ranking)",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
@@ -215,16 +227,19 @@ def engine_status_payload(
                 "Packaged roster snap/start / portal / recruiting numeric priors",
                 "Named QB talent scores and depth identities",
                 "Position group talent composites and unit component fills",
+                "Densified schedule paths (not official FBS slate)",
+                "Conference affiliations for standings",
                 "Game win probs / spreads / totals",
                 "In-path strength evolution",
+                "Season win totals / ranking-ish standings",
             ],
             "placeholder_or_deferred": [
-                "Full official 2026 FBS schedule",
+                "Full official 2026 FBS schedule feed",
                 "Live portal / returning production DB feeds",
                 "Calibrated unit grades (SP+ / PFF-class)",
                 "Special teams model (thin nudge only)",
                 "Player box production path",
-                "CFP bracket / conference standings",
+                "CFP bracket",
                 "Market-grade calibration / KEI fair lines",
             ],
         },
@@ -233,7 +248,7 @@ def engine_status_payload(
             "project_game": "POST /cfb/season-engine/project-game",
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
-            "ops": "data/ops/cfb-position-projection-20260804.md",
+            "ops": "data/ops/cfb-season-sim-20260804.md",
         },
         "additive": True,
         "does_not_modify": [

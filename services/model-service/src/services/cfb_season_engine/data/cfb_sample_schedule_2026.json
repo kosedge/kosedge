@@ -1,10 +1,12 @@
 {
   "as_of": "2026-08-04",
   "season": 2026,
-  "fidelity": "placeholder",
+  "fidelity": "approximate",
+  "role": "seed_slate",
   "notes": [
-    "Sample / illustrative 2026 slate for foundation sims \u2014 NOT the official full FBS schedule.",
-    "Next pass: wire real schedule feed (CFBD / packaged full slate)."
+    "Curated sample 2026 matchups used as SEED for densify_schedule — NOT the official full FBS schedule.",
+    "Loaders densify toward ~12 games/team across weeks 1–14 and label schedule_source=packaged_sample_densified.",
+    "Do not treat seed or densified paths as official; wire CFBD / packaged full slate when available."
   ],
   "games": [
     {

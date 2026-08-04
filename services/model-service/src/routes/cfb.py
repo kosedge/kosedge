@@ -24,7 +24,8 @@ class ProjectGameBody(BaseModel):
 
 class SimulateBody(BaseModel):
     season: int = Field(2026, ge=2010, le=2100)
-    n_sims: int = Field(25, ge=1, le=500)
+    # Densified full-FBS paths are heavier than the old skeleton sample slate.
+    n_sims: int = Field(15, ge=1, le=200)
     seed: int = 2026
     demo: bool = True
     as_of_week: int = Field(1, ge=1, le=20)
@@ -93,12 +94,12 @@ def cfb_season_engine_game_preview(
 def cfb_season_engine_simulate(
     body: Optional[SimulateBody] = Body(None),
     season: int = Query(2026, ge=2010, le=2100),
-    n_sims: int = Query(25, ge=1, le=500),
+    n_sims: int = Query(15, ge=1, le=200),
     seed: int = Query(2026),
     demo: bool = Query(True),
     as_of_week: int = Query(1, ge=1, le=20),
 ) -> Dict[str, Any]:
-    """Skeleton path-coherent season sim (team W/L). Prefer CLI for heavy runs."""
+    """Path-coherent season sim (wins dist, week sample, ranking). Prefer CLI for heavy runs."""
     from src.services.cfb_season_engine import (
         resolve_season_universe,
         season_sim_to_dict,
@@ -120,5 +121,6 @@ def cfb_season_engine_simulate(
     payload = season_sim_to_dict(result)
     payload["ok"] = True
     payload["mode"] = meta.get("mode")
-    payload["skeleton"] = True
+    payload["skeleton"] = False
+    payload["season_paths"] = True
     return payload
