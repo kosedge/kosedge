@@ -73,3 +73,16 @@ curl -sS -X POST "$MODEL_SERVICE_URL/nfl/season-engine/survivor" \
 ```
 
 BFF: `https://www.kosedge.com/api/nfl/season-engine/status` — UI should show real schedule banner (not amber demo).
+
+## Railway + www smoke (2026-08-04 post-merge #86)
+
+Live on `https://model-service-production-e253.up.railway.app` and BFF:
+
+| Check | Result |
+| --- | --- |
+| Status | `nfl-season-engine-v1.9-real-2026`, `mode=real`, `schedule_source=packaged_wall_chart_2026`, `schedule_game_count=272` |
+| Game-boxes | `SF @ LA` W1 → `game_id=2026-W01-SF@LA`, 14 players, total≈45.1 |
+| Survivor W5 | byes `CAR`,`KC`; ranked picks exclude bye teams |
+| www BFF status | same real mode / 272 games |
+
+Roster still `demo_depth_chart` / `2025_offseason_approx` until Railway DB depth rows populate for 2026.
