@@ -5,19 +5,27 @@
   "scope": "FBS foundation priors",
   "notes": [
     "Curated Power/Group rows are approximate composites for architecture \u2014 not calibrated SP+/FPI.",
+    "returning_snap_share / returning_start_share are curated/estimated (0\u20131); not live measured SNAP%.",
+    "portal_in_value / portal_out_value mirror portal scores; recruiting_class_score mirrors recruiting_capital.",
     "EXTRA codes are explicit placeholder league-average rows so the universe is FBS-shaped.",
-    "Portal/recruiting/returning production live feeds are gaps for the next pass.",
+    "Portal/recruiting/returning production live feeds remain gaps.",
     "Named QBs are illustrative 2026 situation labels and may lag real depth charts."
   ],
   "teams": {
     "UGA": {
       "roster": {
-        "returning_production": 58,
-        "portal_in_score": 62,
-        "portal_out_score": 48,
-        "recruiting_capital": 96,
+        "returning_production": 57.4,
+        "portal_in_score": 62.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 96.0,
         "experience_index": 62,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.6,
+        "portal_in_value": 62.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 96.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -26,7 +34,8 @@
         "qb_talent": 78,
         "ol_support": 88,
         "weapons_support": 90,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Gunner Stockton"
       },
       "position_groups": {
         "ol": 90,
@@ -52,12 +61,18 @@
     },
     "ALA": {
       "roster": {
-        "returning_production": 52,
-        "portal_in_score": 78,
-        "portal_out_score": 55,
-        "recruiting_capital": 97,
+        "returning_production": 51.4,
+        "portal_in_score": 78.0,
+        "portal_out_score": 55.0,
+        "recruiting_capital": 97.0,
         "experience_index": 55,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.54,
+        "portal_in_value": 78.0,
+        "portal_out_value": 55.0,
+        "recruiting_class_score": 97.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -66,7 +81,8 @@
         "qb_talent": 80,
         "ol_support": 84,
         "weapons_support": 88,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Ty Simpson"
       },
       "position_groups": {
         "ol": 86,
@@ -86,12 +102,18 @@
     },
     "OSU": {
       "roster": {
-        "returning_production": 48,
-        "portal_in_score": 70,
-        "portal_out_score": 60,
-        "recruiting_capital": 95,
+        "returning_production": 47.4,
+        "portal_in_score": 70.0,
+        "portal_out_score": 60.0,
+        "recruiting_capital": 95.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.46,
+        "returning_start_share": 0.5,
+        "portal_in_value": 70.0,
+        "portal_out_value": 60.0,
+        "recruiting_class_score": 95.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -100,7 +122,8 @@
         "qb_talent": 82,
         "ol_support": 85,
         "weapons_support": 93,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Julian Sayin"
       },
       "position_groups": {
         "ol": 84,
@@ -126,12 +149,18 @@
     },
     "MICH": {
       "roster": {
-        "returning_production": 45,
-        "portal_in_score": 68,
-        "portal_out_score": 58,
-        "recruiting_capital": 86,
+        "returning_production": 43.4,
+        "portal_in_score": 68.0,
+        "portal_out_score": 58.0,
+        "recruiting_capital": 86.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.42,
+        "returning_start_share": 0.46,
+        "portal_in_value": 68.0,
+        "portal_out_value": 58.0,
+        "recruiting_class_score": 86.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -153,12 +182,18 @@
     },
     "TEX": {
       "roster": {
-        "returning_production": 55,
-        "portal_in_score": 72,
-        "portal_out_score": 50,
-        "recruiting_capital": 93,
+        "returning_production": 54.4,
+        "portal_in_score": 72.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 93.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.53,
+        "returning_start_share": 0.57,
+        "portal_in_value": 72.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 93.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -167,7 +202,8 @@
         "qb_talent": 90,
         "ol_support": 86,
         "weapons_support": 88,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Arch Manning"
       },
       "position_groups": {
         "ol": 87,
@@ -188,11 +224,17 @@
     "OU": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 74,
-        "portal_out_score": 52,
-        "recruiting_capital": 88,
+        "portal_in_score": 74.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 88.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 74.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 88.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -201,7 +243,8 @@
         "qb_talent": 84,
         "ol_support": 78,
         "weapons_support": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "John Mateer"
       },
       "position_groups": {
         "ol": 79,
@@ -213,12 +256,18 @@
     },
     "ORE": {
       "roster": {
-        "returning_production": 42,
-        "portal_in_score": 80,
-        "portal_out_score": 62,
-        "recruiting_capital": 90,
+        "returning_production": 41.4,
+        "portal_in_score": 80.0,
+        "portal_out_score": 62.0,
+        "recruiting_capital": 90.0,
         "experience_index": 46,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.4,
+        "returning_start_share": 0.44,
+        "portal_in_value": 80.0,
+        "portal_out_value": 62.0,
+        "recruiting_class_score": 90.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -227,7 +276,8 @@
         "qb_talent": 79,
         "ol_support": 83,
         "weapons_support": 86,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Dante Moore"
       },
       "position_groups": {
         "ol": 84,
@@ -239,12 +289,18 @@
     },
     "PSU": {
       "roster": {
-        "returning_production": 40,
-        "portal_in_score": 66,
-        "portal_out_score": 70,
-        "recruiting_capital": 87,
+        "returning_production": 39.4,
+        "portal_in_score": 66.0,
+        "portal_out_score": 70.0,
+        "recruiting_capital": 87.0,
         "experience_index": 44,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.38,
+        "returning_start_share": 0.42,
+        "portal_in_value": 66.0,
+        "portal_out_value": 70.0,
+        "recruiting_class_score": 87.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -266,12 +322,18 @@
     },
     "LSU": {
       "roster": {
-        "returning_production": 54,
-        "portal_in_score": 70,
-        "portal_out_score": 48,
-        "recruiting_capital": 91,
+        "returning_production": 53.0,
+        "portal_in_score": 70.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 91.0,
         "experience_index": 56,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 70.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 91.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -280,7 +342,8 @@
         "qb_talent": 85,
         "ol_support": 80,
         "weapons_support": 89,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Garrett Nussmeier"
       },
       "position_groups": {
         "ol": 81,
@@ -292,12 +355,18 @@
     },
     "ND": {
       "roster": {
-        "returning_production": 60,
-        "portal_in_score": 58,
-        "portal_out_score": 45,
-        "recruiting_capital": 89,
+        "returning_production": 59.4,
+        "portal_in_score": 58.0,
+        "portal_out_score": 45.0,
+        "recruiting_capital": 89.0,
         "experience_index": 64,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.58,
+        "returning_start_share": 0.62,
+        "portal_in_value": 58.0,
+        "portal_out_value": 45.0,
+        "recruiting_class_score": 89.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -306,7 +375,8 @@
         "qb_talent": 76,
         "ol_support": 85,
         "weapons_support": 82,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "CJ Carr"
       },
       "position_groups": {
         "ol": 86,
@@ -319,11 +389,17 @@
     "CLEM": {
       "roster": {
         "returning_production": 57,
-        "portal_in_score": 55,
-        "portal_out_score": 46,
-        "recruiting_capital": 88,
+        "portal_in_score": 55.0,
+        "portal_out_score": 46.0,
+        "recruiting_capital": 88.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.57,
+        "returning_start_share": 0.6,
+        "portal_in_value": 55.0,
+        "portal_out_value": 46.0,
+        "recruiting_class_score": 88.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -332,7 +408,8 @@
         "qb_talent": 83,
         "ol_support": 84,
         "weapons_support": 85,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Cade Klubnik"
       },
       "position_groups": {
         "ol": 85,
@@ -345,11 +422,17 @@
     "MIA": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 76,
-        "portal_out_score": 54,
-        "recruiting_capital": 90,
+        "portal_in_score": 76.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 90.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 76.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 90.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -358,7 +441,8 @@
         "qb_talent": 84,
         "ol_support": 82,
         "weapons_support": 87,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Carson Beck"
       },
       "position_groups": {
         "ol": 83,
@@ -370,12 +454,18 @@
     },
     "FSU": {
       "roster": {
-        "returning_production": 38,
-        "portal_in_score": 72,
-        "portal_out_score": 68,
-        "recruiting_capital": 84,
+        "returning_production": 35.4,
+        "portal_in_score": 72.0,
+        "portal_out_score": 68.0,
+        "recruiting_capital": 84.0,
         "experience_index": 40,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.34,
+        "returning_start_share": 0.38,
+        "portal_in_value": 72.0,
+        "portal_out_value": 68.0,
+        "recruiting_class_score": 84.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -385,7 +475,8 @@
         "ol_support": 72,
         "weapons_support": 76,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Tommy Castellanos"
       },
       "position_groups": {
         "ol": 74,
@@ -398,11 +489,17 @@
     "TENN": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 68,
-        "portal_out_score": 55,
-        "recruiting_capital": 88,
+        "portal_in_score": 68.0,
+        "portal_out_score": 55.0,
+        "recruiting_capital": 88.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 68.0,
+        "portal_out_value": 55.0,
+        "recruiting_class_score": 88.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -424,12 +521,18 @@
     },
     "USC": {
       "roster": {
-        "returning_production": 44,
-        "portal_in_score": 75,
-        "portal_out_score": 60,
-        "recruiting_capital": 89,
+        "returning_production": 43.0,
+        "portal_in_score": 75.0,
+        "portal_out_score": 60.0,
+        "recruiting_capital": 89.0,
         "experience_index": 46,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.42,
+        "returning_start_share": 0.45,
+        "portal_in_value": 75.0,
+        "portal_out_value": 60.0,
+        "recruiting_class_score": 89.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -438,7 +541,8 @@
         "qb_talent": 77,
         "ol_support": 78,
         "weapons_support": 86,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Jayden Maiava"
       },
       "position_groups": {
         "ol": 79,
@@ -451,11 +555,17 @@
     "WASH": {
       "roster": {
         "returning_production": 46,
-        "portal_in_score": 64,
-        "portal_out_score": 58,
-        "recruiting_capital": 82,
+        "portal_in_score": 64.0,
+        "portal_out_score": 58.0,
+        "recruiting_capital": 82.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.46,
+        "returning_start_share": 0.49,
+        "portal_in_value": 64.0,
+        "portal_out_value": 58.0,
+        "recruiting_class_score": 82.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -464,7 +574,8 @@
         "qb_talent": 78,
         "ol_support": 76,
         "weapons_support": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Demond Williams Jr."
       },
       "position_groups": {
         "ol": 77,
@@ -477,11 +588,17 @@
     "TA&M": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 66,
-        "portal_out_score": 48,
-        "recruiting_capital": 90,
+        "portal_in_score": 66.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 90.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 66.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 90.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -490,7 +607,8 @@
         "qb_talent": 79,
         "ol_support": 84,
         "weapons_support": 83,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Marcel Reed"
       },
       "position_groups": {
         "ol": 85,
@@ -503,11 +621,17 @@
     "OLE": {
       "roster": {
         "returning_production": 42,
-        "portal_in_score": 82,
-        "portal_out_score": 65,
-        "recruiting_capital": 86,
+        "portal_in_score": 82.0,
+        "portal_out_score": 65.0,
+        "recruiting_capital": 86.0,
         "experience_index": 44,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.42,
+        "returning_start_share": 0.45,
+        "portal_in_value": 82.0,
+        "portal_out_value": 65.0,
+        "recruiting_class_score": 86.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -517,7 +641,8 @@
         "ol_support": 80,
         "weapons_support": 85,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Trinidad Chambliss"
       },
       "position_groups": {
         "ol": 81,
@@ -530,11 +655,17 @@
     "UF": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 70,
-        "portal_out_score": 52,
-        "recruiting_capital": 87,
+        "portal_in_score": 70.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 87.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 70.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 87.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -543,7 +674,8 @@
         "qb_talent": 86,
         "ol_support": 78,
         "weapons_support": 84,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "DJ Lagway"
       },
       "position_groups": {
         "ol": 79,
@@ -556,11 +688,17 @@
     "AUB": {
       "roster": {
         "returning_production": 47,
-        "portal_in_score": 68,
-        "portal_out_score": 55,
-        "recruiting_capital": 84,
+        "portal_in_score": 68.0,
+        "portal_out_score": 55.0,
+        "recruiting_capital": 84.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.47,
+        "returning_start_share": 0.5,
+        "portal_in_value": 68.0,
+        "portal_out_value": 55.0,
+        "recruiting_class_score": 84.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -583,11 +721,17 @@
     "UK": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 60,
-        "portal_out_score": 50,
-        "recruiting_capital": 76,
+        "portal_in_score": 60.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 76.0,
         "experience_index": 55,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 60.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 76.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -597,7 +741,8 @@
         "ol_support": 74,
         "weapons_support": 72,
         "is_portal": false,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Cutter Boley"
       },
       "position_groups": {
         "ol": 75,
@@ -610,11 +755,17 @@
     "MSST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 64,
-        "portal_out_score": 54,
-        "recruiting_capital": 74,
+        "portal_in_score": 64.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 74.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 64.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -623,7 +774,8 @@
         "qb_talent": 72,
         "ol_support": 72,
         "weapons_support": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Blake Shapen"
       },
       "position_groups": {
         "ol": 73,
@@ -636,11 +788,17 @@
     "ARK": {
       "roster": {
         "returning_production": 46,
-        "portal_in_score": 66,
-        "portal_out_score": 56,
-        "recruiting_capital": 78,
+        "portal_in_score": 66.0,
+        "portal_out_score": 56.0,
+        "recruiting_capital": 78.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.46,
+        "returning_start_share": 0.49,
+        "portal_in_value": 66.0,
+        "portal_out_value": 56.0,
+        "recruiting_class_score": 78.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -649,7 +807,8 @@
         "qb_talent": 75,
         "ol_support": 74,
         "weapons_support": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Taylen Green"
       },
       "position_groups": {
         "ol": 75,
@@ -662,11 +821,17 @@
     "SCAR": {
       "roster": {
         "returning_production": 44,
-        "portal_in_score": 70,
-        "portal_out_score": 58,
-        "recruiting_capital": 80,
+        "portal_in_score": 70.0,
+        "portal_out_score": 58.0,
+        "recruiting_capital": 80.0,
         "experience_index": 46,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.44,
+        "returning_start_share": 0.47,
+        "portal_in_value": 70.0,
+        "portal_out_value": 58.0,
+        "recruiting_class_score": 80.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -689,11 +854,17 @@
     "VAN": {
       "roster": {
         "returning_production": 58,
-        "portal_in_score": 62,
-        "portal_out_score": 42,
-        "recruiting_capital": 72,
+        "portal_in_score": 62.0,
+        "portal_out_score": 42.0,
+        "recruiting_capital": 72.0,
         "experience_index": 60,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.58,
+        "returning_start_share": 0.61,
+        "portal_in_value": 62.0,
+        "portal_out_value": 42.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -702,7 +873,8 @@
         "qb_talent": 80,
         "ol_support": 74,
         "weapons_support": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Diego Pavia"
       },
       "position_groups": {
         "ol": 75,
@@ -715,11 +887,17 @@
     "IU": {
       "roster": {
         "returning_production": 55,
-        "portal_in_score": 60,
-        "portal_out_score": 48,
-        "recruiting_capital": 74,
+        "portal_in_score": 60.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 74.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.55,
+        "returning_start_share": 0.58,
+        "portal_in_value": 60.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -728,7 +906,8 @@
         "qb_talent": 81,
         "ol_support": 76,
         "weapons_support": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Fernando Mendoza"
       },
       "position_groups": {
         "ol": 77,
@@ -741,11 +920,17 @@
     "ILL": {
       "roster": {
         "returning_production": 54,
-        "portal_in_score": 58,
-        "portal_out_score": 46,
-        "recruiting_capital": 72,
+        "portal_in_score": 58.0,
+        "portal_out_score": 46.0,
+        "recruiting_capital": 72.0,
         "experience_index": 56,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.54,
+        "returning_start_share": 0.57,
+        "portal_in_value": 58.0,
+        "portal_out_value": 46.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -754,7 +939,8 @@
         "qb_talent": 76,
         "ol_support": 75,
         "weapons_support": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Luke Altmyer"
       },
       "position_groups": {
         "ol": 76,
@@ -767,11 +953,17 @@
     "IOWA": {
       "roster": {
         "returning_production": 60,
-        "portal_in_score": 50,
-        "portal_out_score": 42,
-        "recruiting_capital": 74,
+        "portal_in_score": 50.0,
+        "portal_out_score": 42.0,
+        "recruiting_capital": 74.0,
         "experience_index": 64,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.6,
+        "returning_start_share": 0.63,
+        "portal_in_value": 50.0,
+        "portal_out_value": 42.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -794,11 +986,17 @@
     "WIS": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 64,
-        "portal_out_score": 55,
-        "recruiting_capital": 74,
+        "portal_in_score": 64.0,
+        "portal_out_score": 55.0,
+        "recruiting_capital": 74.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 64.0,
+        "portal_out_value": 55.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -808,7 +1006,8 @@
         "ol_support": 78,
         "weapons_support": 72,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Hunter Simmons"
       },
       "position_groups": {
         "ol": 79,
@@ -821,11 +1020,17 @@
     "MINN": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 55,
-        "portal_out_score": 45,
-        "recruiting_capital": 70,
+        "portal_in_score": 55.0,
+        "portal_out_score": 45.0,
+        "recruiting_capital": 70.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 55.0,
+        "portal_out_value": 45.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -834,7 +1039,8 @@
         "qb_talent": 72,
         "ol_support": 76,
         "weapons_support": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Drake Lindsey"
       },
       "position_groups": {
         "ol": 77,
@@ -847,11 +1053,17 @@
     "NEB": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 62,
-        "portal_out_score": 50,
-        "recruiting_capital": 78,
+        "portal_in_score": 62.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 78.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 62.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 78.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -860,7 +1072,8 @@
         "qb_talent": 82,
         "ol_support": 80,
         "weapons_support": 78,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Dylan Raiola"
       },
       "position_groups": {
         "ol": 81,
@@ -873,11 +1086,17 @@
     "NW": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 52,
-        "portal_out_score": 48,
-        "recruiting_capital": 62,
+        "portal_in_score": 52.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 62.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 52.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 62.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -886,7 +1105,8 @@
         "qb_talent": 70,
         "ol_support": 70,
         "weapons_support": 68,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Preston Stone"
       },
       "position_groups": {
         "ol": 71,
@@ -899,11 +1119,17 @@
     "PUR": {
       "roster": {
         "returning_production": 40,
-        "portal_in_score": 68,
-        "portal_out_score": 60,
-        "recruiting_capital": 66,
+        "portal_in_score": 68.0,
+        "portal_out_score": 60.0,
+        "recruiting_capital": 66.0,
         "experience_index": 42,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.4,
+        "returning_start_share": 0.43,
+        "portal_in_value": 68.0,
+        "portal_out_value": 60.0,
+        "recruiting_class_score": 66.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -913,7 +1139,8 @@
         "ol_support": 68,
         "weapons_support": 70,
         "is_portal": false,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Ryan Browne"
       },
       "position_groups": {
         "ol": 69,
@@ -926,11 +1153,17 @@
     "RUT": {
       "roster": {
         "returning_production": 54,
-        "portal_in_score": 56,
-        "portal_out_score": 46,
-        "recruiting_capital": 70,
+        "portal_in_score": 56.0,
+        "portal_out_score": 46.0,
+        "recruiting_capital": 70.0,
         "experience_index": 56,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.54,
+        "returning_start_share": 0.57,
+        "portal_in_value": 56.0,
+        "portal_out_value": 46.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -939,7 +1172,8 @@
         "qb_talent": 71,
         "ol_support": 74,
         "weapons_support": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Athan Kaliakmanis"
       },
       "position_groups": {
         "ol": 75,
@@ -952,11 +1186,17 @@
     "MD": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 60,
-        "portal_out_score": 54,
-        "recruiting_capital": 72,
+        "portal_in_score": 60.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 72.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 60.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -979,11 +1219,17 @@
     "MSU": {
       "roster": {
         "returning_production": 46,
-        "portal_in_score": 64,
-        "portal_out_score": 56,
-        "recruiting_capital": 74,
+        "portal_in_score": 64.0,
+        "portal_out_score": 56.0,
+        "recruiting_capital": 74.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.46,
+        "returning_start_share": 0.49,
+        "portal_in_value": 64.0,
+        "portal_out_value": 56.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -993,7 +1239,8 @@
         "ol_support": 72,
         "weapons_support": 73,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Alessio Milivojevic"
       },
       "position_groups": {
         "ol": 73,
@@ -1006,11 +1253,17 @@
     "UCLA": {
       "roster": {
         "returning_production": 42,
-        "portal_in_score": 70,
-        "portal_out_score": 60,
-        "recruiting_capital": 78,
+        "portal_in_score": 70.0,
+        "portal_out_score": 60.0,
+        "recruiting_capital": 78.0,
         "experience_index": 44,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.42,
+        "returning_start_share": 0.45,
+        "portal_in_value": 70.0,
+        "portal_out_value": 60.0,
+        "recruiting_class_score": 78.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1020,7 +1273,8 @@
         "ol_support": 74,
         "weapons_support": 80,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Nico Iamaleava"
       },
       "position_groups": {
         "ol": 75,
@@ -1033,11 +1287,17 @@
     "CAL": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 58,
-        "portal_out_score": 50,
-        "recruiting_capital": 68,
+        "portal_in_score": 58.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 68.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 58.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 68.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1046,7 +1306,8 @@
         "qb_talent": 68,
         "ol_support": 70,
         "weapons_support": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Jaron-Kareem Casey"
       },
       "position_groups": {
         "ol": 71,
@@ -1059,11 +1320,17 @@
     "STAN": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 55,
-        "portal_out_score": 52,
-        "recruiting_capital": 70,
+        "portal_in_score": 55.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 70.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 55.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -1086,11 +1353,17 @@
     "ASU": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 62,
-        "portal_out_score": 50,
-        "recruiting_capital": 76,
+        "portal_in_score": 62.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 76.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 62.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 76.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1099,7 +1372,8 @@
         "qb_talent": 78,
         "ol_support": 76,
         "weapons_support": 77,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Sam Leavitt"
       },
       "position_groups": {
         "ol": 77,
@@ -1112,11 +1386,17 @@
     "ARI": {
       "roster": {
         "returning_production": 44,
-        "portal_in_score": 66,
-        "portal_out_score": 58,
-        "recruiting_capital": 74,
+        "portal_in_score": 66.0,
+        "portal_out_score": 58.0,
+        "recruiting_capital": 74.0,
         "experience_index": 46,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.44,
+        "returning_start_share": 0.47,
+        "portal_in_value": 66.0,
+        "portal_out_value": 58.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1126,7 +1406,8 @@
         "ol_support": 74,
         "weapons_support": 78,
         "is_portal": false,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Noah Fifita"
       },
       "position_groups": {
         "ol": 75,
@@ -1139,11 +1420,17 @@
     "UTAH": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 60,
-        "portal_out_score": 52,
-        "recruiting_capital": 78,
+        "portal_in_score": 60.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 78.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 60.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 78.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -1165,12 +1452,18 @@
     },
     "COLO": {
       "roster": {
-        "returning_production": 40,
-        "portal_in_score": 78,
-        "portal_out_score": 65,
-        "recruiting_capital": 80,
+        "returning_production": 37.4,
+        "portal_in_score": 78.0,
+        "portal_out_score": 65.0,
+        "recruiting_capital": 80.0,
         "experience_index": 42,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.36,
+        "returning_start_share": 0.4,
+        "portal_in_value": 78.0,
+        "portal_out_value": 65.0,
+        "recruiting_class_score": 80.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "true_freshman",
@@ -1193,11 +1486,17 @@
     "BYU": {
       "roster": {
         "returning_production": 58,
-        "portal_in_score": 54,
-        "portal_out_score": 44,
-        "recruiting_capital": 72,
+        "portal_in_score": 54.0,
+        "portal_out_score": 44.0,
+        "recruiting_capital": 72.0,
         "experience_index": 62,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.58,
+        "returning_start_share": 0.61,
+        "portal_in_value": 54.0,
+        "portal_out_value": 44.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1206,7 +1505,8 @@
         "qb_talent": 74,
         "ol_support": 76,
         "weapons_support": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Bear Bachmeier"
       },
       "position_groups": {
         "ol": 77,
@@ -1219,11 +1519,17 @@
     "TTU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 68,
-        "portal_out_score": 54,
-        "recruiting_capital": 76,
+        "portal_in_score": 68.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 76.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 68.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 76.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1232,7 +1538,8 @@
         "qb_talent": 77,
         "ol_support": 75,
         "weapons_support": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Behren Morton"
       },
       "position_groups": {
         "ol": 76,
@@ -1245,11 +1552,17 @@
     "KU": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 60,
-        "portal_out_score": 50,
-        "recruiting_capital": 70,
+        "portal_in_score": 60.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 70.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 60.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1258,7 +1571,8 @@
         "qb_talent": 78,
         "ol_support": 74,
         "weapons_support": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Jalon Daniels"
       },
       "position_groups": {
         "ol": 75,
@@ -1271,11 +1585,17 @@
     "KSU": {
       "roster": {
         "returning_production": 54,
-        "portal_in_score": 58,
-        "portal_out_score": 48,
-        "recruiting_capital": 72,
+        "portal_in_score": 58.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 72.0,
         "experience_index": 56,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.54,
+        "returning_start_share": 0.57,
+        "portal_in_value": 58.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1284,7 +1604,8 @@
         "qb_talent": 76,
         "ol_support": 76,
         "weapons_support": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Avery Johnson"
       },
       "position_groups": {
         "ol": 77,
@@ -1297,11 +1618,17 @@
     "ISU": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 55,
-        "portal_out_score": 46,
-        "recruiting_capital": 70,
+        "portal_in_score": 55.0,
+        "portal_out_score": 46.0,
+        "recruiting_capital": 70.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 55.0,
+        "portal_out_value": 46.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1310,7 +1637,8 @@
         "qb_talent": 75,
         "ol_support": 74,
         "weapons_support": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Rocco Becht"
       },
       "position_groups": {
         "ol": 75,
@@ -1323,11 +1651,17 @@
     "TCU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 64,
-        "portal_out_score": 54,
-        "recruiting_capital": 74,
+        "portal_in_score": 64.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 74.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 64.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -1350,11 +1684,17 @@
     "BAY": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 60,
-        "portal_out_score": 52,
-        "recruiting_capital": 72,
+        "portal_in_score": 60.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 72.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 60.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1363,7 +1703,8 @@
         "qb_talent": 74,
         "ol_support": 73,
         "weapons_support": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Sawyer Robertson"
       },
       "position_groups": {
         "ol": 74,
@@ -1376,11 +1717,17 @@
     "CIN": {
       "roster": {
         "returning_production": 46,
-        "portal_in_score": 62,
-        "portal_out_score": 56,
-        "recruiting_capital": 72,
+        "portal_in_score": 62.0,
+        "portal_out_score": 56.0,
+        "recruiting_capital": 72.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.46,
+        "returning_start_share": 0.49,
+        "portal_in_value": 62.0,
+        "portal_out_value": 56.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1390,7 +1737,8 @@
         "ol_support": 72,
         "weapons_support": 74,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Brendan Sorsby"
       },
       "position_groups": {
         "ol": 73,
@@ -1403,11 +1751,17 @@
     "UCF": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 64,
-        "portal_out_score": 54,
-        "recruiting_capital": 74,
+        "portal_in_score": 64.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 74.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 64.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1416,7 +1770,8 @@
         "qb_talent": 72,
         "ol_support": 74,
         "weapons_support": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Tayven Jackson"
       },
       "position_groups": {
         "ol": 75,
@@ -1429,11 +1784,17 @@
     "HOU": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 58,
-        "portal_out_score": 50,
-        "recruiting_capital": 70,
+        "portal_in_score": 58.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 70.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 58.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1442,7 +1803,8 @@
         "qb_talent": 75,
         "ol_support": 74,
         "weapons_support": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Conner Weigman"
       },
       "position_groups": {
         "ol": 75,
@@ -1455,11 +1817,17 @@
     "WVU": {
       "roster": {
         "returning_production": 44,
-        "portal_in_score": 66,
-        "portal_out_score": 58,
-        "recruiting_capital": 70,
+        "portal_in_score": 66.0,
+        "portal_out_score": 58.0,
+        "recruiting_capital": 70.0,
         "experience_index": 46,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.44,
+        "returning_start_share": 0.47,
+        "portal_in_value": 66.0,
+        "portal_out_value": 58.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1469,7 +1837,8 @@
         "ol_support": 72,
         "weapons_support": 72,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Khalil Wilkins"
       },
       "position_groups": {
         "ol": 73,
@@ -1482,11 +1851,17 @@
     "LOU": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 64,
-        "portal_out_score": 50,
-        "recruiting_capital": 80,
+        "portal_in_score": 64.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 80.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 64.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 80.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1495,7 +1870,8 @@
         "qb_talent": 76,
         "ol_support": 78,
         "weapons_support": 80,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Miller Moss"
       },
       "position_groups": {
         "ol": 79,
@@ -1508,11 +1884,17 @@
     "GT": {
       "roster": {
         "returning_production": 58,
-        "portal_in_score": 55,
-        "portal_out_score": 44,
-        "recruiting_capital": 76,
+        "portal_in_score": 55.0,
+        "portal_out_score": 44.0,
+        "recruiting_capital": 76.0,
         "experience_index": 60,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.58,
+        "returning_start_share": 0.61,
+        "portal_in_value": 55.0,
+        "portal_out_value": 44.0,
+        "recruiting_class_score": 76.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1521,7 +1903,8 @@
         "qb_talent": 77,
         "ol_support": 78,
         "weapons_support": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Haynes King"
       },
       "position_groups": {
         "ol": 79,
@@ -1534,11 +1917,17 @@
     "VT": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 60,
-        "portal_out_score": 52,
-        "recruiting_capital": 74,
+        "portal_in_score": 60.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 74.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 60.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1547,7 +1936,8 @@
         "qb_talent": 74,
         "ol_support": 75,
         "weapons_support": 74,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Kyron Drones"
       },
       "position_groups": {
         "ol": 76,
@@ -1560,11 +1950,17 @@
     "PITT": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 58,
-        "portal_out_score": 48,
-        "recruiting_capital": 72,
+        "portal_in_score": 58.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 72.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 58.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1573,7 +1969,8 @@
         "qb_talent": 75,
         "ol_support": 74,
         "weapons_support": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Eli Holstein"
       },
       "position_groups": {
         "ol": 75,
@@ -1586,11 +1983,17 @@
     "UNC": {
       "roster": {
         "returning_production": 40,
-        "portal_in_score": 72,
-        "portal_out_score": 64,
-        "recruiting_capital": 78,
+        "portal_in_score": 72.0,
+        "portal_out_score": 64.0,
+        "recruiting_capital": 78.0,
         "experience_index": 42,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.4,
+        "returning_start_share": 0.43,
+        "portal_in_value": 72.0,
+        "portal_out_value": 64.0,
+        "recruiting_class_score": 78.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1600,7 +2003,8 @@
         "ol_support": 74,
         "weapons_support": 78,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Max Johnson"
       },
       "position_groups": {
         "ol": 75,
@@ -1613,11 +2017,17 @@
     "NCSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 60,
-        "portal_out_score": 54,
-        "recruiting_capital": 74,
+        "portal_in_score": 60.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 74.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 60.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 74.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -1640,11 +2050,17 @@
     "DUKE": {
       "roster": {
         "returning_production": 46,
-        "portal_in_score": 62,
-        "portal_out_score": 56,
-        "recruiting_capital": 72,
+        "portal_in_score": 62.0,
+        "portal_out_score": 56.0,
+        "recruiting_capital": 72.0,
         "experience_index": 48,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.46,
+        "returning_start_share": 0.49,
+        "portal_in_value": 62.0,
+        "portal_out_value": 56.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1654,7 +2070,8 @@
         "ol_support": 73,
         "weapons_support": 75,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Darian Mensah"
       },
       "position_groups": {
         "ol": 74,
@@ -1667,11 +2084,17 @@
     "WAKE": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 55,
-        "portal_out_score": 50,
-        "recruiting_capital": 68,
+        "portal_in_score": 55.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 68.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 55.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 68.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1680,7 +2103,8 @@
         "qb_talent": 70,
         "ol_support": 70,
         "weapons_support": 72,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Robby Ashford"
       },
       "position_groups": {
         "ol": 71,
@@ -1693,11 +2117,17 @@
     "UVA": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 54,
-        "portal_out_score": 44,
-        "recruiting_capital": 70,
+        "portal_in_score": 54.0,
+        "portal_out_score": 44.0,
+        "recruiting_capital": 70.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 54.0,
+        "portal_out_value": 44.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1706,7 +2136,8 @@
         "qb_talent": 72,
         "ol_support": 72,
         "weapons_support": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Anthony Colandrea"
       },
       "position_groups": {
         "ol": 73,
@@ -1719,11 +2150,17 @@
     "SYR": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 64,
-        "portal_out_score": 54,
-        "recruiting_capital": 72,
+        "portal_in_score": 64.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 72.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 64.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 72.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1732,7 +2169,8 @@
         "qb_talent": 73,
         "ol_support": 72,
         "weapons_support": 76,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Steve Angeli"
       },
       "position_groups": {
         "ol": 73,
@@ -1745,11 +2183,17 @@
     "BC": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 56,
-        "portal_out_score": 48,
-        "recruiting_capital": 68,
+        "portal_in_score": 56.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 68.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 56.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 68.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1758,7 +2202,8 @@
         "qb_talent": 70,
         "ol_support": 74,
         "weapons_support": 70,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Grayson James"
       },
       "position_groups": {
         "ol": 75,
@@ -1771,11 +2216,17 @@
     "SMU": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 66,
-        "portal_out_score": 52,
-        "recruiting_capital": 76,
+        "portal_in_score": 66.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 76.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 66.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 76.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1784,7 +2235,8 @@
         "qb_talent": 76,
         "ol_support": 75,
         "weapons_support": 78,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Kevin Jennings"
       },
       "position_groups": {
         "ol": 76,
@@ -1797,11 +2249,17 @@
     "BOISE": {
       "roster": {
         "returning_production": 54,
-        "portal_in_score": 58,
-        "portal_out_score": 48,
-        "recruiting_capital": 70,
+        "portal_in_score": 58.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 70.0,
         "experience_index": 56,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.54,
+        "returning_start_share": 0.57,
+        "portal_in_value": 58.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 70.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1810,7 +2268,8 @@
         "qb_talent": 74,
         "ol_support": 76,
         "weapons_support": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Maddux Madsen"
       },
       "position_groups": {
         "ol": 77,
@@ -1823,11 +2282,17 @@
     "MEM": {
       "roster": {
         "returning_production": 52,
-        "portal_in_score": 60,
-        "portal_out_score": 50,
-        "recruiting_capital": 68,
+        "portal_in_score": 60.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 68.0,
         "experience_index": 54,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.52,
+        "returning_start_share": 0.55,
+        "portal_in_value": 60.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 68.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1836,7 +2301,8 @@
         "qb_talent": 73,
         "ol_support": 74,
         "weapons_support": 75,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Brendon Lewis"
       },
       "position_groups": {
         "ol": 75,
@@ -1849,11 +2315,17 @@
     "TULN": {
       "roster": {
         "returning_production": 50,
-        "portal_in_score": 58,
-        "portal_out_score": 50,
-        "recruiting_capital": 66,
+        "portal_in_score": 58.0,
+        "portal_out_score": 50.0,
+        "recruiting_capital": 66.0,
         "experience_index": 52,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.5,
+        "returning_start_share": 0.53,
+        "portal_in_value": 58.0,
+        "portal_out_value": 50.0,
+        "recruiting_class_score": 66.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "open_competition",
@@ -1876,11 +2348,17 @@
     "JMU": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 55,
-        "portal_out_score": 45,
-        "recruiting_capital": 64,
+        "portal_in_score": 55.0,
+        "portal_out_score": 45.0,
+        "recruiting_capital": 64.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 55.0,
+        "portal_out_value": 45.0,
+        "recruiting_class_score": 64.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1889,7 +2367,8 @@
         "qb_talent": 72,
         "ol_support": 72,
         "weapons_support": 73,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Alonza Barnett III"
       },
       "position_groups": {
         "ol": 73,
@@ -1902,11 +2381,17 @@
     "UNLV": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 62,
-        "portal_out_score": 54,
-        "recruiting_capital": 66,
+        "portal_in_score": 62.0,
+        "portal_out_score": 54.0,
+        "recruiting_capital": 66.0,
         "experience_index": 50,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 62.0,
+        "portal_out_value": 54.0,
+        "recruiting_class_score": 66.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1916,7 +2401,8 @@
         "ol_support": 70,
         "weapons_support": 74,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Anthony Colandrea"
       },
       "position_groups": {
         "ol": 71,
@@ -1929,11 +2415,17 @@
     "TAMU": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 66,
-        "portal_out_score": 48,
-        "recruiting_capital": 90,
+        "portal_in_score": 66.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 90.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 66.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 90.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -1942,7 +2434,8 @@
         "qb_talent": 79,
         "ol_support": 84,
         "weapons_support": 83,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Marcel Reed"
       },
       "position_groups": {
         "ol": 85,
@@ -1955,11 +2448,17 @@
     "MISS": {
       "roster": {
         "returning_production": 42,
-        "portal_in_score": 82,
-        "portal_out_score": 65,
-        "recruiting_capital": 86,
+        "portal_in_score": 82.0,
+        "portal_out_score": 65.0,
+        "recruiting_capital": 86.0,
         "experience_index": 44,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.42,
+        "returning_start_share": 0.45,
+        "portal_in_value": 82.0,
+        "portal_out_value": 65.0,
+        "recruiting_class_score": 86.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "portal",
@@ -1969,7 +2468,8 @@
         "ol_support": 80,
         "weapons_support": 85,
         "is_portal": true,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Trinidad Chambliss"
       },
       "position_groups": {
         "ol": 81,
@@ -1982,12 +2482,18 @@
     "ACU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2007,12 +2513,18 @@
     "AFA": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2032,12 +2544,18 @@
     "AKR": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2057,12 +2575,18 @@
     "APP": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2082,12 +2606,18 @@
     "ARMY": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2107,12 +2637,18 @@
     "BALL": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2132,12 +2668,18 @@
     "BGSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2157,12 +2699,18 @@
     "BUFF": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2182,12 +2730,18 @@
     "CCU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2207,12 +2761,18 @@
     "CHAR": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2232,12 +2792,18 @@
     "CHAT": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2257,12 +2823,18 @@
     "CMU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2282,12 +2854,18 @@
     "CONN": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2307,12 +2885,18 @@
     "EMU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2332,12 +2916,18 @@
     "FAU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2357,12 +2947,18 @@
     "FIU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2382,12 +2978,18 @@
     "FRES": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2407,12 +3009,18 @@
     "GASO": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2432,12 +3040,18 @@
     "GAST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2457,12 +3071,18 @@
     "HAW": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2482,12 +3102,18 @@
     "IDHO": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2507,12 +3133,18 @@
     "KENT": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2532,12 +3164,18 @@
     "LIB": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2557,12 +3195,18 @@
     "LT": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2582,12 +3226,18 @@
     "MASS": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2607,12 +3257,18 @@
     "M-OH": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2632,12 +3288,18 @@
     "MRSH": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2657,12 +3319,18 @@
     "MTSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2682,12 +3350,18 @@
     "NAVY": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2707,12 +3381,18 @@
     "NIU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2732,12 +3412,18 @@
     "NMSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2757,12 +3443,18 @@
     "OHIO": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2782,12 +3474,18 @@
     "OREST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2807,12 +3505,18 @@
     "RICE": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2832,12 +3536,18 @@
     "SJSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2857,12 +3567,18 @@
     "SDSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2882,12 +3598,18 @@
     "FAU2": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2907,12 +3629,18 @@
     "FAY": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2932,12 +3660,18 @@
     "SHSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2957,12 +3691,18 @@
     "SOUTH": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -2982,12 +3722,18 @@
     "TEM": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3007,12 +3753,18 @@
     "TLSA": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3032,12 +3784,18 @@
     "TROY": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3057,12 +3815,18 @@
     "TXST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3082,12 +3846,18 @@
     "UL": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3107,12 +3877,18 @@
     "ULL": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3132,12 +3908,18 @@
     "ULM": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3157,12 +3939,18 @@
     "USA": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3182,12 +3970,18 @@
     "USF": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3207,12 +4001,18 @@
     "USM": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3232,12 +4032,18 @@
     "UTAHST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3257,12 +4063,18 @@
     "UTEP": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3282,12 +4094,18 @@
     "UTSA": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3307,12 +4125,18 @@
     "WYO": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3332,12 +4156,18 @@
     "WMU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3357,12 +4187,18 @@
     "WKU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3382,12 +4218,18 @@
     "MOST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3407,12 +4249,18 @@
     "DEL": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3432,12 +4280,18 @@
     "KENNESAW": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3457,12 +4311,18 @@
     "ORST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3482,12 +4342,18 @@
     "WSU": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3507,12 +4373,18 @@
     "OKST": {
       "roster": {
         "returning_production": 48,
-        "portal_in_score": 52,
-        "portal_out_score": 52,
-        "recruiting_capital": 55,
+        "portal_in_score": 52.0,
+        "portal_out_score": 52.0,
+        "recruiting_capital": 55.0,
         "experience_index": 50,
         "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior"
+        "notes": "League-average placeholder FBS prior",
+        "returning_snap_share": 0.48,
+        "returning_start_share": 0.51,
+        "portal_in_value": 52.0,
+        "portal_out_value": 52.0,
+        "recruiting_class_score": 55.0,
+        "field_provenance": "placeholder_league_average"
       },
       "qb": {
         "qb_class": "unknown",
@@ -3532,11 +4404,17 @@
     "TXAM": {
       "roster": {
         "returning_production": 56,
-        "portal_in_score": 66,
-        "portal_out_score": 48,
-        "recruiting_capital": 90,
+        "portal_in_score": 66.0,
+        "portal_out_score": 48.0,
+        "recruiting_capital": 90.0,
         "experience_index": 58,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "returning_snap_share": 0.56,
+        "returning_start_share": 0.59,
+        "portal_in_value": 66.0,
+        "portal_out_value": 48.0,
+        "recruiting_class_score": 90.0,
+        "field_provenance": "curated_estimated"
       },
       "qb": {
         "qb_class": "incumbent",
@@ -3545,7 +4423,8 @@
         "qb_talent": 79,
         "ol_support": 84,
         "weapons_support": 83,
-        "fidelity": "approximate"
+        "fidelity": "approximate",
+        "qb_name": "Marcel Reed"
       },
       "position_groups": {
         "ol": 85,
@@ -3555,5 +4434,6 @@
         "fidelity": "approximate"
       }
     }
-  }
+  },
+  "engine_target": "cfb-season-engine-v0.2-roster-qb"
 }

@@ -2,7 +2,8 @@
 
 Composes roster construction + QB situation + position groups into
 offense/defense indices, then projects a single game. Historical team
-ratings are *not* the primary driver.
+ratings are *not* the primary driver — ``roster_strength`` and
+``qb_situation_index`` are.
 """
 
 from __future__ import annotations
@@ -18,7 +19,6 @@ from src.services.cfb_season_engine.roster_construction import roster_to_dict
 from src.services.cfb_season_engine.types import (
     EngineUniverse,
     GameProjection,
-    PlayerHook,
     PositionGroupGrades,
     QbSituation,
     RosterConstruction,
@@ -42,39 +42,50 @@ def compose_team_projection(
     qb: QbSituation,
     groups: PositionGroupGrades,
 ) -> TeamProjectionState:
-    """Compose Layers 1–3 into team O/D indices."""
-    portal_net = roster.portal_in_score - 0.65 * roster.portal_out_score + 32.5
-    portal_net = _clamp(portal_net, 0.0, 100.0)
+    """Compose Layers 1–3 into team O/D indices.
+
+    Offense is driven primarily by ``roster_strength`` + ``qb_situation``;
+    position groups supply the remaining unit context. QB class/cast also
+    re-blend the offense index so true_freshman vs incumbent is material.
+    """
+    roster_s = float(roster.roster_strength)
+    qb_score = float(qb.qb_situation_score)
+    qb_index = float(qb.qb_situation_index)
 
     offense_score = (
-        P.WEIGHT_RETURNING_PROD * roster.returning_production
-        + P.WEIGHT_PORTAL_NET * portal_net
-        + P.WEIGHT_RECRUITING * roster.recruiting_capital
-        + P.WEIGHT_EXPERIENCE * roster.experience_index
-        + P.WEIGHT_QB * qb.qb_talent
+        P.WEIGHT_ROSTER_STRENGTH * roster_s
+        + P.WEIGHT_QB_SITUATION * qb_score
         + P.WEIGHT_SKILL_GROUP * groups.skill
+        + P.WEIGHT_OL_GROUP * groups.ol
     )
-    # OL support lifts offense beyond raw skill talent.
-    offense_score = 0.88 * offense_score + 0.12 * groups.ol
-    # Supporting cast modulates QB contribution.
-    offense_score += (qb.supporting_cast - 50.0) * 0.08
 
     defense_score = (
-        P.WEIGHT_DEF_FRONT_SEVEN * groups.front_seven
+        P.WEIGHT_DEF_ROSTER_STRENGTH * roster_s
+        + P.WEIGHT_DEF_FRONT_SEVEN * groups.front_seven
         + P.WEIGHT_DEF_SECONDARY * groups.secondary
         + P.WEIGHT_DEF_EXPERIENCE * roster.experience_index
-        + P.WEIGHT_DEF_RECRUITING * roster.recruiting_capital
     )
 
     offense_index = _score_to_index(offense_score)
-    defense_index = _score_to_index(defense_score)
-    # QB talent bump/penalty on top of composite (first-class lever).
-    offense_index *= 1.0 + P.QB_TALENT_TO_OFFENSE * (qb.qb_talent - 50.0)
+    # Hard QB lever: blend base index toward base*qb_situation_index.
+    blend = P.QB_INDEX_BLEND
+    offense_index = (1.0 - blend) * offense_index + blend * (offense_index * qb_index)
     offense_index = _clamp(offense_index, *P.STRENGTH_CLAMP)
+
+    defense_index = _score_to_index(defense_score)
     defense_index = _clamp(defense_index, *P.STRENGTH_CLAMP)
 
     pace = _clamp(1.0 + (groups.skill - groups.front_seven) / 200.0, 0.85, 1.20)
-    pass_bias = _clamp((qb.qb_talent - 50.0) / 200.0 + (groups.skill - 50.0) / 250.0, -0.12, 0.14)
+    pass_bias = _clamp(
+        (qb.qb_talent - 50.0) / 200.0
+        + (groups.skill - 50.0) / 250.0
+        + (qb_index - 1.0) * 0.08,
+        -0.14,
+        0.16,
+    )
+
+    # Early uncertainty: QB situation dominates; roster continuity tempers.
+    early_u = 0.60 * qb.uncertainty + 0.40 * (1.0 - roster.continuity_score / 100.0)
 
     return TeamProjectionState(
         team=str(team),
@@ -82,19 +93,27 @@ def compose_team_projection(
         defense_index=round(defense_index, 4),
         pace_factor=round(pace, 4),
         pass_rate_bias=round(pass_bias, 4),
-        early_season_uncertainty=round(
-            0.55 * qb.uncertainty + 0.45 * (1.0 - roster.continuity_score / 100.0),
-            4,
-        ),
+        early_season_uncertainty=round(early_u, 4),
         roster=roster,
         qb=qb,
         groups=groups,
         source="hierarchical_compose",
         fidelity="approximate",
         notes={
-            "compose": "roster+qb+groups; historical team rating not primary",
+            "compose": "roster_strength+qb_situation primary; historical rating not primary",
             "offense_score": f"{offense_score:.1f}",
             "defense_score": f"{defense_score:.1f}",
+            "roster_strength": f"{roster_s:.1f}",
+            "qb_situation_index": f"{qb_index:.4f}",
+            "qb_situation_score": f"{qb_score:.1f}",
+            "qb_class": qb.qb_class,
+            "weights_offense": (
+                f"roster={P.WEIGHT_ROSTER_STRENGTH},"
+                f"qb={P.WEIGHT_QB_SITUATION},"
+                f"skill={P.WEIGHT_SKILL_GROUP},"
+                f"ol={P.WEIGHT_OL_GROUP},"
+                f"qb_blend={P.QB_INDEX_BLEND}"
+            ),
         },
     )
 
@@ -145,6 +164,7 @@ def layers_snapshot(state: TeamProjectionState) -> Dict[str, Any]:
         "early_season_uncertainty": state.early_season_uncertainty,
         "fidelity": state.fidelity,
         "source": state.source,
+        "compose_notes": dict(state.notes),
         "roster": roster_to_dict(state.roster) if state.roster else None,
         "qb": qb_to_dict(state.qb) if state.qb else None,
         "position_groups": groups_to_dict(state.groups) if state.groups else None,
@@ -190,7 +210,7 @@ def project_game(
     game_id = f"{season or universe.season}_w{week}_{away_team}@{home_team}"
     notes = {
         "fidelity": "approximate",
-        "method": "hierarchical_compose + analytic matchup",
+        "method": "roster_strength+qb_situation compose + analytic matchup",
         "does_not_touch": "edge_board_markets_only_cfb",
         **{f"universe_{k}": v for k, v in list(universe.notes.items())[:6]},
     }
@@ -311,14 +331,18 @@ def documentation() -> Dict[str, Any]:
         "name": "team_projection",
         "module": "src.services.cfb_season_engine.team_projection",
         "real_vs_approximate": (
-            "Composition structure is REAL (inspectable weights). Numeric "
-            "indices and game probabilities are APPROXIMATE — not calibrated "
-            "market-grade fair lines."
+            "Composition structure is REAL (inspectable weights; roster_strength "
+            "+ qb_situation_index are primary drivers). Numeric indices and game "
+            "probabilities are APPROXIMATE — not calibrated market-grade fair lines."
         ),
         "feeds": [
-            "roster_construction",
-            "qb_situation",
+            "roster_construction.roster_strength",
+            "qb_situation.qb_situation_index",
             "position_groups",
             "priors.early_season_uncertainty",
         ],
+        "primary_drivers": {
+            "offense": ["roster_strength", "qb_situation_index"],
+            "defense": ["roster_strength", "front_seven", "secondary"],
+        },
     }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI entry point for the hierarchical CFB season engine (foundation).
+"""CLI entry point for the hierarchical CFB season engine (roster+QB v0.2).
 
 Examples
 --------

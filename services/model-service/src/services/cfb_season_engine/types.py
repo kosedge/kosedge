@@ -13,17 +13,26 @@ DataFidelity = Literal["real", "approximate", "placeholder"]
 class RosterConstruction:
     """Layer 1 — how the 2026 roster was built (not last-year team strength).
 
-    All scores are roughly 0–100 unless noted. ``source`` / ``fidelity`` make
-    honesty about packaged priors vs live feeds explicit.
+    Scores are roughly 0–100 unless noted. Shares are 0–1. ``source`` /
+    ``fidelity`` make honesty about packaged priors vs live feeds explicit.
     """
 
     team: str
-    returning_production: float = 50.0  # % of prior-year production returning
-    portal_in_score: float = 50.0  # quality/quantity of portal additions
-    portal_out_score: float = 50.0  # higher = more production lost via portal
-    recruiting_capital: float = 50.0  # class / transfer capital (composite)
+    # Snap-/start-weighted returning production (0–100 composite).
+    returning_production: float = 50.0
+    returning_snap_share: float = 0.50  # 0–1 prior-year snap share returning
+    returning_start_share: float = 0.50  # 0–1 prior-year start share returning
+    portal_in_value: float = 50.0  # quality/quantity of portal additions
+    portal_out_value: float = 50.0  # higher = more production lost via portal
+    portal_net: float = 50.0  # inspectable in − out residual (0–100)
+    recruiting_class_score: float = 50.0  # HS class / transfer capital composite
     experience_index: float = 50.0  # upperclassmen / starts distribution
     continuity_score: float = 50.0  # derived continuity after portal churn
+    roster_strength: float = 50.0  # inspectable Layer-1 signal (0–100)
+    # Back-compat aliases used by older priors / callers.
+    portal_in_score: float = 50.0
+    portal_out_score: float = 50.0
+    recruiting_capital: float = 50.0
     source: str = "packaged_prior"
     fidelity: DataFidelity = "approximate"
     notes: str = ""
@@ -43,6 +52,9 @@ class QbSituation:
     weapons_support: float = 50.0
     supporting_cast: float = 50.0  # blend of OL + weapons
     uncertainty: float = 0.35  # 0–1; higher early / open competition
+    # First-class lever (~0.55–1.55). Materially drives offense index.
+    qb_situation_index: float = 1.0
+    qb_situation_score: float = 50.0  # 0–100 mirror of index for weighted compose
     source: str = "packaged_prior"
     fidelity: DataFidelity = "approximate"
     notes: str = ""

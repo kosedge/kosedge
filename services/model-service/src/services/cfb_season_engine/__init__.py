@@ -1,4 +1,4 @@
-"""Hierarchical CFB season engine (foundation).
+"""Hierarchical CFB season engine (roster + QB deepened).
 
 College football 2026 reality (design constraints):
 - Extreme roster turnover (portal + NIL + draft + freshmen)
@@ -8,8 +8,10 @@ College football 2026 reality (design constraints):
 
 Layers (each module is the source of truth for its concern):
 
-1. ``roster_construction`` — returning production, portal, recruiting, experience
+1. ``roster_construction`` — snap/start-weighted returning production, portal
+   net, recruiting capital, experience → inspectable ``roster_strength``
 2. ``qb_situation`` — incumbent / portal / open competition / true freshman
+   + supporting cast → ``qb_situation_index`` (material offense lever)
 3. ``position_groups`` — OL, skill, front seven, secondary
 4. ``team_projection`` — compose → O/D indices + game projection
 5. ``season_sim`` — path-coherent season skeleton (team W/L)
@@ -38,6 +40,11 @@ from src.services.cfb_season_engine.loaders import (
 )
 from src.services.cfb_season_engine.player_hooks import hooks_to_summaries
 from src.services.cfb_season_engine.priors import ENGINE_VERSION, documentation as priors_documentation
+from src.services.cfb_season_engine.qb_situation import qb_situation_breakdown, qb_to_dict
+from src.services.cfb_season_engine.roster_construction import (
+    roster_strength_breakdown,
+    roster_to_dict,
+)
 from src.services.cfb_season_engine.season_sim import season_sim_to_dict, simulate_full_season
 from src.services.cfb_season_engine.team_projection import (
     project_game,
@@ -106,10 +113,43 @@ def engine_status_payload(
         for t in universe.teams.values()
         if t.roster and t.roster.fidelity == "placeholder"
     )
+    # Example team diagnostics — stable power (incumbent) vs rebuild/open QB.
+    example_codes = ["UGA", "FSU", "COLO", "BALL"]
+    examples: Dict[str, Any] = {}
+    for code in example_codes:
+        state = universe.teams.get(code)
+        if not state or not state.roster or not state.qb:
+            continue
+        examples[code] = {
+            "offense_index": state.offense_index,
+            "defense_index": state.defense_index,
+            "early_season_uncertainty": state.early_season_uncertainty,
+            "roster": roster_to_dict(state.roster),
+            "roster_breakdown": roster_strength_breakdown(state.roster),
+            "qb": qb_to_dict(state.qb),
+            "qb_breakdown": qb_situation_breakdown(state.qb),
+            "compose_notes": dict(state.notes),
+        }
+
+    ranked = sorted(
+        (
+            (code, t.roster.roster_strength if t.roster else 0.0)
+            for code, t in universe.teams.items()
+        ),
+        key=lambda row: row[1],
+        reverse=True,
+    )
+    roster_strength_top = [
+        {"team": code, "roster_strength": round(score, 2)} for code, score in ranked[:8]
+    ]
+    roster_strength_bottom = [
+        {"team": code, "roster_strength": round(score, 2)} for code, score in ranked[-8:]
+    ]
+
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
         "sport": "cfb",
-        "scope": "FBS foundation 2026",
+        "scope": "FBS roster+QB deepened 2026",
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
@@ -127,24 +167,39 @@ def engine_status_payload(
             player_hooks.documentation(),
         ],
         "priors": priors_documentation(),
+        "examples": examples,
+        "roster_strength_ladder": {
+            "top": roster_strength_top,
+            "bottom": roster_strength_bottom,
+            "note": (
+                "Packaged approximate ranks — blue-blood recruiting/returning "
+                "profiles should outrank placeholder mid-majors."
+            ),
+        },
         "data_sources": {
             "packaged_team_priors": loaders.documentation()["packaged_teams"],
             "packaged_sample_schedule": loaders.documentation()["packaged_schedule"],
             "db_portal_recruiting": "not_wired",
             "edge_board_cfb": "markets_only (unchanged)",
+            "field_provenance": (
+                "returning_snap/start shares and portal values are curated/"
+                "estimated in packaged JSON or derived in-layer; not live SNAP%"
+            ),
         },
         "solid_vs_approximate": {
             "solid": [
                 "Layer module boundaries + composition feed order",
-                "QB situation classification rules",
+                "Roster strength formula (snap/start + portal net + recruiting + experience)",
+                "QB situation classification rules + class offense multipliers",
+                "qb_situation_index / roster_strength as primary projection drivers",
                 "Early-season uncertainty posture (inspectable)",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
             "approximate": [
-                "Packaged roster / portal / recruiting numeric priors",
+                "Packaged roster snap/start / portal / recruiting numeric priors",
                 "Named QB talent scores and depth identities",
-                "Position group grades",
+                "Position group grades / OL + weapons supporting cast",
                 "Game win probs / spreads / totals",
                 "In-path strength evolution",
             ],
@@ -161,7 +216,7 @@ def engine_status_payload(
             "project_game": "POST /cfb/season-engine/project-game",
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
-            "ops": "data/ops/cfb-full-model-foundation-report.md",
+            "ops": "data/ops/cfb-roster-qb-20260804.md",
         },
         "additive": True,
         "does_not_modify": [
