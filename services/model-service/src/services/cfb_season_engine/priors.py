@@ -23,6 +23,10 @@ avoid double-counting the same variance.
 v0.8.1 historical closing-line calibration (SportsDataverse ESPN lines +
 prior-year cfb_ratings efficiency proxy). Measured knobs only — architecture
 intact. See data/ops/cfb-historical-calibration-20260805.md.
+
+v0.8.2 adds live performance tracking + CLV logging (projection → close →
+result → summary). Projection knobs unchanged from v0.8.1; capability bump
+for the tracking schema + endpoints.
 """
 
 from __future__ import annotations
@@ -30,7 +34,7 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.8.1-hist-cal"
+ENGINE_VERSION = "cfb-season-engine-v0.8.2-tracking"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
 
 # ---------------------------------------------------------------------------

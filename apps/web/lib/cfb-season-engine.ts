@@ -78,6 +78,29 @@ export type CfbSimulateResponse = {
   error?: string;
 };
 
+export type CfbPerformanceSummary = {
+  ok?: boolean;
+  current_engine_version?: string;
+  n_logged?: number;
+  n_with_close?: number;
+  n_with_result?: number;
+  ats?: { record?: string; win_pct?: number | null; n?: number };
+  ou?: { record?: string; win_pct?: number | null; n?: number };
+  su?: { record?: string; win_pct?: number | null; n?: number };
+  clv?: {
+    n_spread?: number;
+    avg_spread_clv?: number | null;
+    spread_clv_positive_rate?: number | null;
+    definition?: string;
+  };
+  error_metrics?: {
+    avg_abs_margin_error?: number | null;
+    avg_abs_total_error?: number | null;
+  };
+  recent?: Array<Record<string, unknown>>;
+  error?: string;
+};
+
 function modelHeaders(): HeadersInit {
   return {
     Accept: "application/json",
@@ -282,6 +305,80 @@ export async function fetchCfbProjectGame(input: {
   } catch (err) {
     return {
       error: err instanceof Error ? err.message : "Project-game unreachable",
+    };
+  }
+}
+
+export async function fetchCfbPerformance(input?: {
+  limit?: number;
+  engineVersion?: string;
+}): Promise<CfbPerformanceSummary> {
+  const base = baseUrl();
+  if (!base) {
+    return { error: "MODEL_SERVICE_URL is not configured." };
+  }
+  const url = new URL(`${base}/cfb/season-engine/performance`);
+  url.searchParams.set("limit", String(input?.limit ?? 200));
+  if (input?.engineVersion) {
+    url.searchParams.set("engine_version", input.engineVersion);
+  }
+  try {
+    const res = await upstreamFetch(url.toString(), {
+      headers: modelHeaders(),
+      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
+      cache: "no-store",
+    });
+    const payload = await readJson(res);
+    if (!res.ok) {
+      return {
+        error: detailError(payload, `Performance failed (${res.status})`),
+      };
+    }
+    const avgError = payload.avg_error;
+    const errorMetrics =
+      avgError && typeof avgError === "object"
+        ? (avgError as CfbPerformanceSummary["error_metrics"])
+        : undefined;
+    return {
+      ok: payload.ok === true,
+      current_engine_version:
+        typeof payload.current_engine_version === "string"
+          ? payload.current_engine_version
+          : undefined,
+      n_logged:
+        typeof payload.n_logged === "number" ? payload.n_logged : undefined,
+      n_with_close:
+        typeof payload.n_with_close === "number"
+          ? payload.n_with_close
+          : undefined,
+      n_with_result:
+        typeof payload.n_with_result === "number"
+          ? payload.n_with_result
+          : undefined,
+      ats:
+        payload.ats && typeof payload.ats === "object"
+          ? (payload.ats as CfbPerformanceSummary["ats"])
+          : undefined,
+      ou:
+        payload.ou && typeof payload.ou === "object"
+          ? (payload.ou as CfbPerformanceSummary["ou"])
+          : undefined,
+      su:
+        payload.su && typeof payload.su === "object"
+          ? (payload.su as CfbPerformanceSummary["su"])
+          : undefined,
+      clv:
+        payload.clv && typeof payload.clv === "object"
+          ? (payload.clv as CfbPerformanceSummary["clv"])
+          : undefined,
+      error_metrics: errorMetrics,
+      recent: Array.isArray(payload.recent)
+        ? (payload.recent as Array<Record<string, unknown>>)
+        : undefined,
+    };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Performance unreachable",
     };
   }
 }

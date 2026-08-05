@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, Body, Query
+from fastapi import APIRouter, Body, Path, Query
 from pydantic import BaseModel, Field
 
 log = logging.getLogger("kosedge.cfb")
@@ -21,6 +21,8 @@ class ProjectGameBody(BaseModel):
     neutral_site: bool = False
     night_game: bool = False
     demo: bool = True
+    # Explicit opt-in log for this request (also: CFB_AUTO_LOG_PROJECTIONS=1).
+    log_projection: bool = False
 
 
 class SimulateBody(BaseModel):
@@ -30,6 +32,42 @@ class SimulateBody(BaseModel):
     seed: int = 2026
     demo: bool = True
     as_of_week: int = Field(1, ge=1, le=20)
+
+
+class LogProjectionBody(BaseModel):
+    """Manual projection log (or pass-through of a project-game payload)."""
+
+    home_team: str = Field(..., min_length=2, max_length=8)
+    away_team: str = Field(..., min_length=2, max_length=8)
+    season: int = Field(2026, ge=2010, le=2100)
+    week: int = Field(1, ge=1, le=20)
+    engine_version: Optional[str] = None
+    spread_home: Optional[float] = None
+    model_spread_home: Optional[float] = None
+    expected_total: Optional[float] = None
+    model_total: Optional[float] = None
+    home_win_prob: Optional[float] = None
+    away_win_prob: Optional[float] = None
+    expected_home_score: Optional[float] = None
+    expected_away_score: Optional[float] = None
+    drivers: Optional[Dict[str, Any]] = None
+    game_id: Optional[str] = None
+    fidelity: Optional[str] = None
+    mode: Optional[str] = None
+    notes: Optional[Dict[str, Any]] = None
+    projected_at: Optional[str] = None
+
+
+class CloseBody(BaseModel):
+    close_spread_home: Optional[float] = None
+    close_total: Optional[float] = None
+    source: str = Field("manual", max_length=64)
+
+
+class ResultBody(BaseModel):
+    home_score: int = Field(..., ge=0, le=200)
+    away_score: int = Field(..., ge=0, le=200)
+    source: str = Field("manual", max_length=64)
 
 
 @router.get("/season-engine/status")
@@ -81,6 +119,27 @@ def cfb_season_engine_project_game(
     payload = project_game_to_dict(proj)
     payload["ok"] = True
     payload["mode"] = meta.get("mode")
+    # Best-effort tracking — never slows / fails the projection path.
+    try:
+        from src.services.cfb_season_engine.performance_tracking import (
+            auto_log_enabled,
+            log_projection,
+            maybe_auto_log_projection,
+        )
+
+        if body.log_projection:
+            try:
+                logged = log_projection(payload)
+                payload["projection_log_id"] = logged.id
+                payload["projection_logged"] = True
+            except Exception as exc:  # pragma: no cover
+                log.warning("explicit projection log failed: %s", exc)
+                payload["projection_logged"] = False
+        elif auto_log_enabled():
+            maybe_auto_log_projection(payload)
+            payload["projection_logged"] = "async"
+    except Exception as exc:  # pragma: no cover
+        log.debug("projection tracking skipped: %s", exc)
     return payload
 
 
@@ -90,6 +149,76 @@ def cfb_season_engine_game_preview(
 ) -> Dict[str, Any]:
     """Alias for project-game (NFL-style naming convenience)."""
     return cfb_season_engine_project_game(body)
+
+
+@router.post("/season-engine/projections/log")
+def cfb_log_projection(
+    body: LogProjectionBody = Body(...),
+) -> Dict[str, Any]:
+    """Persist a projection for later close/result grading (JSONL + optional DB)."""
+    from src.services.cfb_season_engine.performance_tracking import log_projection
+
+    record = log_projection(body.model_dump(exclude_none=True))
+    return {"ok": True, "projection": record.to_dict()}
+
+
+@router.post("/season-engine/projections/{projection_id}/close")
+def cfb_projection_close(
+    projection_id: str = Path(..., min_length=8, max_length=64),
+    body: CloseBody = Body(...),
+) -> Dict[str, Any]:
+    """Record closing spread/total and compute CLV."""
+    from src.services.cfb_season_engine.performance_tracking import record_close
+
+    if body.close_spread_home is None and body.close_total is None:
+        return {
+            "ok": False,
+            "error": "Provide close_spread_home and/or close_total",
+        }
+    record = record_close(
+        projection_id,
+        close_spread_home=body.close_spread_home,
+        close_total=body.close_total,
+        source=body.source,
+    )
+    if record is None:
+        return {"ok": False, "error": "projection not found", "id": projection_id}
+    return {"ok": True, "projection": record.to_dict()}
+
+
+@router.post("/season-engine/projections/{projection_id}/result")
+def cfb_projection_result(
+    projection_id: str = Path(..., min_length=8, max_length=64),
+    body: ResultBody = Body(...),
+) -> Dict[str, Any]:
+    """Record final score and grade ATS / O/U / SU."""
+    from src.services.cfb_season_engine.performance_tracking import record_result
+
+    record = record_result(
+        projection_id,
+        home_score=body.home_score,
+        away_score=body.away_score,
+        source=body.source,
+    )
+    if record is None:
+        return {"ok": False, "error": "projection not found", "id": projection_id}
+    return {"ok": True, "projection": record.to_dict()}
+
+
+@router.get("/season-engine/performance")
+def cfb_performance_summary(
+    limit: int = Query(200, ge=1, le=500),
+    engine_version: Optional[str] = Query(None),
+) -> Dict[str, Any]:
+    """Recent performance summary: record, avg error, CLV."""
+    from src.services.cfb_season_engine.performance_tracking import (
+        documentation,
+        performance_summary,
+    )
+
+    payload = performance_summary(limit=limit, engine_version=engine_version)
+    payload["tracking"] = documentation()
+    return payload
 
 
 @router.post("/season-engine/simulate")
