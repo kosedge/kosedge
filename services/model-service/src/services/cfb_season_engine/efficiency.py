@@ -77,10 +77,13 @@ def build_efficiency_profile(
     payload: Optional[Mapping[str, Any]] = None,
     *,
     default_source: str = "packaged_sp_plus_final_2025",
+    apply_inseason: bool = True,
 ) -> EfficiencyProfile:
     """Build inspectable efficiency profile for one team.
 
     Preference: explicit payload → packaged snapshot → league-average placeholder.
+    When ``apply_inseason`` is True (default), cumulative in-season deltas from
+    ``in_season_update`` are layered on top of the preseason baseline.
     """
     team = str(team).upper()
     row: Dict[str, Any] = {}
@@ -91,7 +94,7 @@ def build_efficiency_profile(
         row = dict((snap.get("teams") or {}).get(team) or {})
 
     if not row:
-        return EfficiencyProfile(
+        profile = EfficiencyProfile(
             team=team,
             off_eff=50.0,
             def_eff=50.0,
@@ -108,38 +111,49 @@ def build_efficiency_profile(
                 "Not opponent-adjusted for this code."
             ),
         )
+    else:
+        fidelity = str(row.get("fidelity") or "approximate")
+        if fidelity not in ("real", "approximate", "placeholder"):
+            fidelity = "approximate"
 
-    fidelity = str(row.get("fidelity") or "approximate")
-    if fidelity not in ("real", "approximate", "placeholder"):
-        fidelity = "approximate"
+        profile = EfficiencyProfile(
+            team=team,
+            off_eff=_clamp(row.get("off_eff", 50.0)),
+            def_eff=_clamp(row.get("def_eff", 50.0)),
+            success_off=_clamp(row.get("success_off", row.get("off_eff", 50.0))),
+            success_def=_clamp(row.get("success_def", row.get("def_eff", 50.0))),
+            explosiveness=_clamp(row.get("explosiveness", 50.0)),
+            sp_plus=float(row.get("sp_plus", 0.0) or 0.0),
+            sp_offense=float(row.get("sp_offense", 0.0) or 0.0)
+            if row.get("sp_offense") is not None
+            else None,
+            sp_defense=float(row.get("sp_defense", 0.0) or 0.0)
+            if row.get("sp_defense") is not None
+            else None,
+            sp_rank=int(row["sp_rank"]) if row.get("sp_rank") is not None else None,
+            prior_year=int(row.get("prior_year") or 2025),
+            carry_to_season=int(row.get("carry_to_season") or 2026),
+            source=str(row.get("source") or default_source),
+            fidelity=fidelity,  # type: ignore[arg-type]
+            notes=str(
+                row.get("notes")
+                or (
+                    "Prior-year opponent-adjusted efficiency carry "
+                    "(SP+); success/explosiveness are proxies."
+                )
+            ),
+        )
 
-    return EfficiencyProfile(
-        team=team,
-        off_eff=_clamp(row.get("off_eff", 50.0)),
-        def_eff=_clamp(row.get("def_eff", 50.0)),
-        success_off=_clamp(row.get("success_off", row.get("off_eff", 50.0))),
-        success_def=_clamp(row.get("success_def", row.get("def_eff", 50.0))),
-        explosiveness=_clamp(row.get("explosiveness", 50.0)),
-        sp_plus=float(row.get("sp_plus", 0.0) or 0.0),
-        sp_offense=float(row.get("sp_offense", 0.0) or 0.0)
-        if row.get("sp_offense") is not None
-        else None,
-        sp_defense=float(row.get("sp_defense", 0.0) or 0.0)
-        if row.get("sp_defense") is not None
-        else None,
-        sp_rank=int(row["sp_rank"]) if row.get("sp_rank") is not None else None,
-        prior_year=int(row.get("prior_year") or 2025),
-        carry_to_season=int(row.get("carry_to_season") or 2026),
-        source=str(row.get("source") or default_source),
-        fidelity=fidelity,  # type: ignore[arg-type]
-        notes=str(
-            row.get("notes")
-            or (
-                "Prior-year opponent-adjusted efficiency carry "
-                "(SP+); success/explosiveness are proxies."
+    if apply_inseason:
+        try:
+            from src.services.cfb_season_engine.in_season_update import (
+                apply_efficiency_deltas,
             )
-        ),
-    )
+
+            profile = apply_efficiency_deltas(profile)
+        except Exception:
+            pass
+    return profile
 
 
 def efficiency_to_dict(profile: Optional[EfficiencyProfile]) -> Optional[Dict[str, Any]]:

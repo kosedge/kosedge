@@ -1,9 +1,9 @@
-# Full CFB Model: Foundation → UI Exposure (v0.8.1)
+# Full CFB Model: Foundation → UI Exposure (v0.9)
 
-**Branch:** `feat/cfb-historical-calibration` → `deploy-vercel`  
-**Engine version:** `cfb-season-engine-v0.8.1-hist-cal`  
+**Branch:** `feat/cfb-inseason-foundation` → `deploy-vercel`  
+**Engine version:** `cfb-season-engine-v0.9-inseason`  
 **Date:** 2026-08-05  
-**Status:** Hierarchical foundation through season simulation, HFA + coaching, Pro UI, ESPN 2026 real-roster, calibration, player hooks, v0.8 efficiency backbone, plus **v0.8.1 historical closing-line calibration**. Still approximate (not market-grade KEI). Additive vs NFL engine and CFB markets-only Edge Board.
+**Status:** Hierarchical foundation through season simulation, HFA + coaching, Pro UI, ESPN 2026 real-roster, calibration, player hooks, efficiency backbone, historical calibration, tracking, player coherence, plus **v0.9 in-season updating foundation**. Still approximate (not market-grade KEI). Additive vs NFL engine and CFB markets-only Edge Board.
 
 ## Goal
 
@@ -28,7 +28,10 @@ Design constraints (2026 reality):
 **v0.6.1 focus:** measured projection calibration (team indices, spreads/totals sanity, win-dist width). See `data/ops/cfb-projection-calibration-20260804.md`.  
 **v0.7 focus:** QB + skill player hooks allocated from team totals. See `data/ops/cfb-player-hooks-20260804.md`.  
 **v0.8 focus:** opponent-adjusted efficiency backbone (2025 SP+ carry). See `data/ops/cfb-efficiency-backbone-20260804.md`.  
-**v0.8.1 focus:** historical closing-line calibration (SportsDataverse ESPN lines + prior-year ratings proxy). See `data/ops/cfb-historical-calibration-20260805.md`.
+**v0.8.1 focus:** historical closing-line calibration (SportsDataverse ESPN lines + prior-year ratings proxy). See `data/ops/cfb-historical-calibration-20260805.md`.  
+**v0.8.2 focus:** live performance tracking + CLV logging. See tracking ops notes.  
+**v0.8.3 focus:** player↔team coherence + game-script allocation. See `data/ops/cfb-player-coherence-20260805.md`.  
+**v0.9 focus:** in-season updating foundation (shrinkaged efficiency deltas from results). See `data/ops/cfb-inseason-update-20260805.md`.
 
 ## Architecture (layers + feed order)
 
@@ -92,6 +95,7 @@ HTTP (model-service; additive):
 - `GET  /cfb/season-engine/status` (includes `team_codes` + `power_style_ladder`)
 - `POST /cfb/season-engine/project-game` (alias: `game-preview`; supports `night_game`)
 - `POST /cfb/season-engine/simulate` (season paths; default n_sims=15)
+- `POST /cfb/season-engine/in-season/ingest-result` · `GET .../in-season/state` · `GET .../in-season/team/{team}`
 
 Web (Vercel BFF; secrets server-side):
 

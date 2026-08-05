@@ -134,7 +134,9 @@ export default async function CfbSeasonModelHubPage() {
               (tracking unreachable: {performance.error})
             </span>
           ) : null}
-          .
+          . In-season efficiency updates (v0.9 foundation) ingest via{" "}
+          <code className="text-kos-text/60">/cfb/season-engine/in-season/*</code>
+          {" "}— preseason baseline preserved; early weeks move more than late.
         </p>
         {status.schedule_source ? (
           <p className="mt-2 text-xs text-kos-text/50">

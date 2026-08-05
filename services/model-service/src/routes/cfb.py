@@ -68,6 +68,27 @@ class ResultBody(BaseModel):
     home_score: int = Field(..., ge=0, le=200)
     away_score: int = Field(..., ge=0, le=200)
     source: str = Field("manual", max_length=64)
+    apply_inseason: bool = False
+
+
+class InSeasonIngestBody(BaseModel):
+    home_team: str = Field(..., min_length=2, max_length=8)
+    away_team: str = Field(..., min_length=2, max_length=8)
+    home_score: int = Field(..., ge=0, le=200)
+    away_score: int = Field(..., ge=0, le=200)
+    week: int = Field(1, ge=1, le=20)
+    season: int = Field(2026, ge=2010, le=2100)
+    model_spread_home: Optional[float] = None
+    expected_home_score: Optional[float] = None
+    expected_away_score: Optional[float] = None
+    game_id: Optional[str] = None
+    projection_id: Optional[str] = None
+    source: str = Field("manual", max_length=64)
+
+
+class InSeasonResetBody(BaseModel):
+    season: int = Field(2026, ge=2010, le=2100)
+    confirm: bool = False
 
 
 @router.get("/season-engine/status")
@@ -191,7 +212,10 @@ def cfb_projection_result(
     projection_id: str = Path(..., min_length=8, max_length=64),
     body: ResultBody = Body(...),
 ) -> Dict[str, Any]:
-    """Record final score and grade ATS / O/U / SU."""
+    """Record final score and grade ATS / O/U / SU.
+
+    Set ``apply_inseason=true`` to also feed the in-season rating foundation.
+    """
     from src.services.cfb_season_engine.performance_tracking import record_result
 
     record = record_result(
@@ -199,10 +223,75 @@ def cfb_projection_result(
         home_score=body.home_score,
         away_score=body.away_score,
         source=body.source,
+        apply_inseason=bool(body.apply_inseason),
     )
     if record is None:
         return {"ok": False, "error": "projection not found", "id": projection_id}
-    return {"ok": True, "projection": record.to_dict()}
+    out: Dict[str, Any] = {"ok": True, "projection": record.to_dict()}
+    if body.apply_inseason:
+        try:
+            from src.services.cfb_season_engine.in_season_update import state_summary
+
+            out["in_season"] = {
+                "home": state_summary(team=record.home_team),
+                "away": state_summary(team=record.away_team),
+            }
+        except Exception as exc:  # pragma: no cover
+            out["in_season_error"] = str(exc)
+    return out
+
+
+@router.post("/season-engine/in-season/ingest-result")
+def cfb_inseason_ingest(
+    body: InSeasonIngestBody = Body(...),
+) -> Dict[str, Any]:
+    """Apply one completed game to the in-season rating foundation."""
+    from src.services.cfb_season_engine.in_season_update import ingest_result
+
+    return ingest_result(
+        home_team=body.home_team,
+        away_team=body.away_team,
+        home_score=body.home_score,
+        away_score=body.away_score,
+        week=body.week,
+        season=body.season,
+        model_spread_home=body.model_spread_home,
+        expected_home_score=body.expected_home_score,
+        expected_away_score=body.expected_away_score,
+        game_id=body.game_id or "",
+        projection_id=body.projection_id or "",
+        source=body.source,
+    )
+
+
+@router.get("/season-engine/in-season/state")
+def cfb_inseason_state() -> Dict[str, Any]:
+    """Inspect preseason baseline vs current in-season deltas."""
+    from src.services.cfb_season_engine.in_season_update import state_summary
+
+    return state_summary()
+
+
+@router.get("/season-engine/in-season/team/{team}")
+def cfb_inseason_team(
+    team: str = Path(..., min_length=2, max_length=8),
+) -> Dict[str, Any]:
+    from src.services.cfb_season_engine.in_season_update import state_summary
+
+    return state_summary(team=team)
+
+
+@router.post("/season-engine/in-season/reset")
+def cfb_inseason_reset(
+    body: InSeasonResetBody = Body(...),
+) -> Dict[str, Any]:
+    """Clear in-season deltas (back to preseason priors). Requires confirm=true."""
+    if not body.confirm:
+        return {"ok": False, "error": "Pass confirm=true to reset in-season state"}
+    from src.services.cfb_season_engine.in_season_update import reset_state
+
+    st = reset_state(season=body.season)
+    return {"ok": True, "state": st.to_dict()}
 
 
 @router.get("/season-engine/performance")
