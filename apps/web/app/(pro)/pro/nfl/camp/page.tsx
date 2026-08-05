@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildNflCampDesk } from "@/lib/nfl-camp-desk";
+import { getAllNflNewsUpdates } from "@/lib/nfl-news-updates";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ function formatPublished(value: string | null): string {
 
 export default async function NflCampDeskPage() {
   const desk = await buildNflCampDesk();
+  const kosEdgeNews = getAllNflNewsUpdates();
   const beatsByDivision = new Map<string, typeof desk.beats>();
   for (const beat of desk.beats) {
     const list = beatsByDivision.get(beat.division) ?? [];
@@ -79,6 +81,48 @@ export default async function NflCampDeskPage() {
           </Link>
         </div>
       </div>
+
+      {kosEdgeNews.length > 0 ? (
+        <section className="mt-8">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-semibold text-kos-text">
+                KosEdge news breaks
+              </h2>
+              <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
+                Sourced camp updates in the news template — fast scan, bottom
+                line up front, Pass when the edge is thin.
+              </p>
+            </div>
+            <Link
+              href="/pro/nfl/news"
+              className="text-sm text-kos-gold hover:text-kos-gold/90"
+            >
+              All updates →
+            </Link>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {kosEdgeNews.slice(0, 4).map((item) => (
+              <Link
+                key={item.slug}
+                href={item.href}
+                className="rounded-2xl border border-kos-gold/20 bg-kos-gold/5 p-4 transition hover:border-kos-gold/40"
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-gold/80">
+                  {item.publishedAt}
+                  {item.team ? ` · ${item.team}` : ""}
+                </p>
+                <h3 className="mt-1 text-base font-semibold leading-snug text-kos-text">
+                  {item.title}
+                </h3>
+                <p className="mt-2 line-clamp-3 text-sm text-kos-text/75">
+                  {item.excerpt}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {desk.writerIntel.length > 0 ? (
         <section className="mt-8">

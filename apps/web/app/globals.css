@@ -73,3 +73,26 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* KosEdge long-form article prose helpers */
+.kos-article-prose {
+  --kos-article-measure: 42rem;
+  max-width: var(--kos-article-measure);
+}
+
+.kos-article-prose > :first-child {
+  margin-top: 0;
+}
+
+.kos-article-prose > :last-child {
+  margin-bottom: 0;
+}
+
+.kos-article-prose p + p {
+  margin-top: 1.125rem;
+}
+
+.kos-article-prose h2 + p,
+.kos-article-prose h3 + p {
+  margin-top: 0.75rem;
+}
