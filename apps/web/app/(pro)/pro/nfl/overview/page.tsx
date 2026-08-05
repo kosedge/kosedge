@@ -124,14 +124,14 @@ export default async function NflOverviewPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-              Primary writer home
+              Primary desk home
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-tight text-kos-text">
               Weekly Slate
             </h2>
             <p className="mt-2 text-sm text-kos-text/75">
-              Matchup briefs, slate snapshot, and game cards — the desk home for
-              weekly writer research before you jump to Edge Board.
+              Matchup briefs, slate snapshot, and game cards — the weekly desk
+              home before you jump to Edge Board.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

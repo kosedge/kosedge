@@ -41,11 +41,9 @@ export default function TeamPreviewSlot({
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-right">
             <p className="text-[10px] uppercase tracking-wide text-kos-gold/80">
-              Preview by
+              KosEdge
             </p>
-            <p className="text-sm font-semibold text-kos-gold">
-              {preview.author}
-            </p>
+            <p className="text-sm font-semibold text-kos-gold">2026</p>
           </div>
         </div>
 
@@ -103,18 +101,17 @@ export default function TeamPreviewSlot({
         </div>
         <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-right">
           <p className="text-[10px] uppercase tracking-wide text-kos-gold/80">
-            Preview by
+            KosEdge
           </p>
-          <p className="text-sm font-semibold text-kos-gold">{writer.name}</p>
+          <p className="text-sm font-semibold text-kos-gold">Pending</p>
         </div>
       </div>
 
       <div className="mt-4 rounded-xl border border-dashed border-white/20 bg-black/25 px-4 py-6 text-center">
         <p className="text-sm font-semibold text-kos-text">Preview pending</p>
         <p className="mx-auto mt-2 max-w-xl text-sm text-kos-text/70">
-          Writer ownership is reserved for {writer.shortName}. Season preview
-          copy publishes here after research delivery — no placeholder article
-          text is invented.
+          Season preview publishes here after research delivery — no placeholder
+          article text is invented.
         </p>
       </div>
 

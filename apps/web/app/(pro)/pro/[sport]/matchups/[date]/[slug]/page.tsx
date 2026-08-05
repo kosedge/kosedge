@@ -110,7 +110,7 @@ export default async function MatchupPage({
         <section className="mt-6 rounded-2xl border border-kos-gold/25 bg-linear-to-r from-kos-gold/10 via-black/40 to-black/60 p-5">
           <h2 className="text-lg font-semibold text-kos-text">Writer preview</h2>
           <p className="mt-2 text-sm text-kos-text/75">
-            Featured matchup brief lands here from the Weekly Slate writer desk.
+            Featured matchup brief lands here from the Weekly Slate desk.
             Until the brief is attached, use Team Previews and Edge Board for
             research context.
           </p>

@@ -152,9 +152,7 @@ export default async function NflTeamsIndexPage({
                   {directoryEntry ? (
                     <p className="mt-1 text-xs text-kos-text/55">
                       {directoryEntry.conference} {directoryEntry.division}
-                      {previewAssignment
-                        ? ` · Preview by ${previewAssignment.writer.shortName}`
-                        : ""}
+                      {previewAssignment ? " · KosEdge preview" : ""}
                     </p>
                   ) : null}
                 </div>

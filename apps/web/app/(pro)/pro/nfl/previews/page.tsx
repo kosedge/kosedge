@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "NFL 2026 Season Previews",
   description:
-    "All 32 NFL team season previews from the Kos Edge writer desk — angles, win-total betting guides, and handicapper notes.",
+    "All 32 NFL team season previews from KosEdge — angles, win-total betting guides, and handicapper notes.",
 };
 
 export default function NflSeasonPreviewsIndexPage() {

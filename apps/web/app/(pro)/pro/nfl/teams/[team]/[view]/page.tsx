@@ -335,9 +335,7 @@ export default async function NflTeamIntelViewPage({
         {directoryEntry ? (
           <p className="mt-3 text-xs text-kos-text/60">
             {directoryEntry.conference} {directoryEntry.division}
-            {previewAssignment
-              ? ` · Preview by ${previewAssignment.writer.name}`
-              : ""}
+            {previewAssignment ? " · KosEdge preview" : ""}
           </p>
         ) : null}
       </section>
@@ -480,7 +478,7 @@ export default async function NflTeamIntelViewPage({
               </div>
               <p className="mt-4 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-kos-text/70">
                 Coaching profile data pending — HC / OC / DC notes ship with the
-                writer desk research pass.
+                KosEdge research pass.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
