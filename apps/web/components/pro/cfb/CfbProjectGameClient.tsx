@@ -2,7 +2,12 @@
 
 import { useState, useTransition } from "react";
 import {
+  americanOddsFromWinProb,
+  formatAmericanOdds,
+  formatFavoriteSpread,
   formatIndex,
+  formatProjectedScoreLine,
+  formatQbClassLabel,
   formatScore,
   formatSpread,
   formatWinProb,
@@ -26,7 +31,10 @@ type ProjectPayload = {
   margin_sd?: number;
   fidelity?: string;
   uncertainty?: Record<string, unknown>;
+  early_season_uncertainty?: Record<string, unknown>;
   drivers?: Record<string, unknown>;
+  home_layers?: Record<string, unknown>;
+  away_layers?: Record<string, unknown>;
   notes?: Record<string, string>;
   error?: string;
   hint?: string;
@@ -45,102 +53,124 @@ function str(v: unknown): string | null {
   return typeof v === "string" && v.length > 0 ? v : null;
 }
 
-function DriverCard({
-  side,
-  drivers,
-}: {
-  side: "home" | "away";
-  drivers: Record<string, unknown> | undefined;
-}) {
-  if (!drivers) return null;
-  const unit = (drivers.unit_grades as Record<string, unknown> | undefined) ?? {};
-  const coaching = (drivers.coaching as Record<string, unknown> | undefined) ?? {};
-  const hfa = (drivers.home_field as Record<string, unknown> | undefined) ?? {};
+function Chip({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-white/10 bg-black/35 px-2 py-1 text-[11px] text-kos-text/80">
+      <span className="uppercase tracking-[0.1em] text-kos-text/45">
+        {label}
+      </span>
+      <span className="font-medium tabular-nums text-kos-text">{value}</span>
+    </span>
+  );
+}
+
+function coachingLabel(
+  coaching: Record<string, unknown> | undefined,
+  adj: number | null,
+): string {
+  if (!coaching) return adj != null ? `${adj >= 0 ? "+" : ""}${adj.toFixed(1)} pts` : "—";
   const flags = [
     coaching.new_hc ? "new HC" : null,
     coaching.new_oc ? "new OC" : null,
     coaching.new_dc ? "new DC" : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  ].filter(Boolean);
+  const base = flags.length ? flags.join(" · ") : "returning";
+  if (adj == null || Math.abs(adj) < 0.05) return base;
+  const pts = `${adj >= 0 ? "+" : ""}${adj.toFixed(1)}`;
+  return `${base} (${pts})`;
+}
+
+function DriverStrip({
+  side,
+  team,
+  drivers,
+  layers,
+  coachingAdj,
+  showHfa,
+}: {
+  side: "home" | "away";
+  team: string;
+  drivers: Record<string, unknown> | undefined;
+  layers: Record<string, unknown> | undefined;
+  coachingAdj: number | null;
+  showHfa: boolean;
+}) {
+  if (!drivers) return null;
+  const unit = (drivers.unit_grades as Record<string, unknown> | undefined) ?? {};
+  const coaching =
+    (drivers.coaching as Record<string, unknown> | undefined) ??
+    (layers?.coaching as Record<string, unknown> | undefined);
+  const hfa =
+    (drivers.home_field as Record<string, unknown> | undefined) ?? {};
+  const qbLayer = (layers?.qb as Record<string, unknown> | undefined) ?? {};
+  const qbName = str(qbLayer.starter_name);
+  const qbClass = formatQbClassLabel(str(drivers.qb_class));
+  const qbValue = qbName
+    ? `${qbName}${qbClass !== "—" ? ` · ${qbClass}` : ""}`
+    : qbClass;
 
   return (
     <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold/80">
-        {side} drivers
-      </p>
-      <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-kos-text/75">
-        <div>
-          <dt className="text-kos-text/45">Roster</dt>
-          <dd className="font-medium text-kos-text">
-            {formatIndex(num(drivers.roster_strength), 1)}
-            {str(drivers.roster_fidelity) ? (
-              <span className="ml-1 text-[10px] text-kos-text/40">
-                {String(drivers.roster_fidelity)}
-              </span>
-            ) : null}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-kos-text/45">QB index</dt>
-          <dd className="font-medium text-kos-text">
-            {formatIndex(num(drivers.qb_situation_index), 2)}
-            {str(drivers.qb_class) ? (
-              <span className="ml-1 text-[10px] text-kos-text/40">
-                {String(drivers.qb_class)}
-              </span>
-            ) : null}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-kos-text/45">OL / Skill</dt>
-          <dd className="font-medium text-kos-text">
-            {formatIndex(num(unit.ol), 0)} / {formatIndex(num(unit.skill), 0)}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-kos-text/45">F7 / Sec</dt>
-          <dd className="font-medium text-kos-text">
-            {formatIndex(num(unit.front_seven), 0)} /{" "}
-            {formatIndex(num(unit.secondary), 0)}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-kos-text/45">O / D index</dt>
-          <dd className="font-medium text-kos-text">
-            {formatIndex(num(drivers.offense_index), 2)} /{" "}
-            {formatIndex(num(drivers.defense_index), 2)}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-kos-text/45">Early U</dt>
-          <dd className="font-medium text-kos-text">
-            {formatIndex(num(drivers.early_season_uncertainty), 2)}
-          </dd>
-        </div>
-        {side === "home" ? (
-          <div className="col-span-2">
-            <dt className="text-kos-text/45">HFA</dt>
-            <dd className="font-medium text-kos-text">
-              {str(hfa.bucket) ?? "—"} · {formatIndex(num(hfa.hfa_points), 1)} pts
-            </dd>
-          </div>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold/85">
+          {team} · {side}
+        </p>
+        {str(drivers.roster_fidelity) ? (
+          <span className="text-[10px] uppercase tracking-[0.1em] text-kos-text/40">
+            {String(drivers.roster_fidelity)}
+          </span>
         ) : null}
-        <div className="col-span-2">
-          <dt className="text-kos-text/45">Coaching</dt>
-          <dd className="font-medium text-kos-text">
-            {flags || "returning staff"}
-          </dd>
-        </div>
-      </dl>
+      </div>
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        <Chip
+          label="Roster"
+          value={formatIndex(num(drivers.roster_strength), 1)}
+        />
+        <Chip label="QB" value={qbValue} />
+        <Chip label="OL" value={formatIndex(num(unit.ol), 0)} />
+        <Chip label="Skill" value={formatIndex(num(unit.skill), 0)} />
+        <Chip label="F7" value={formatIndex(num(unit.front_seven), 0)} />
+        <Chip label="Sec" value={formatIndex(num(unit.secondary), 0)} />
+        {showHfa ? (
+          <Chip
+            label="HFA"
+            value={`${str(hfa.bucket) ?? "—"} ${formatIndex(num(hfa.hfa_points), 1)}`}
+          />
+        ) : null}
+        <Chip label="Coach" value={coachingLabel(coaching, coachingAdj)} />
+      </div>
+    </div>
+  );
+}
+
+function MarketCell({
+  label,
+  primary,
+  secondary,
+}: {
+  label: string;
+  primary: string;
+  secondary?: string;
+}) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/30 px-3 py-3 sm:px-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/45">
+        {label}
+      </p>
+      <p className="mt-1.5 text-xl font-semibold tabular-nums text-kos-gold sm:text-2xl">
+        {primary}
+      </p>
+      {secondary ? (
+        <p className="mt-1 text-xs tabular-nums text-kos-text/60">{secondary}</p>
+      ) : null}
     </div>
   );
 }
 
 export default function CfbProjectGameClient({
   teams,
-  defaultHome = "UGA",
-  defaultAway = "CLEM",
+  defaultHome = "OSU",
+  defaultAway = "MICH",
   defaultWeek = 1,
   engineVersion,
 }: {
@@ -158,11 +188,13 @@ export default function CfbProjectGameClient({
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ProjectPayload | null>(null);
+  const [hasRun, setHasRun] = useState(false);
 
   function run() {
     startTransition(async () => {
       setError(null);
       setResult(null);
+      setHasRun(true);
       try {
         const res = await fetch("/api/cfb/season-engine/project-game", {
           method: "POST",
@@ -178,9 +210,7 @@ export default function CfbProjectGameClient({
         const json = (await res.json()) as ProjectPayload;
         if (!res.ok || json.error) {
           setError(
-            json.error ||
-              json.hint ||
-              `Request failed (${res.status})`,
+            json.error || json.hint || `Request failed (${res.status})`,
           );
           return;
         }
@@ -191,15 +221,63 @@ export default function CfbProjectGameClient({
     });
   }
 
-  const uncertainty = result?.uncertainty ?? {};
+  const uncertainty = result?.uncertainty ?? result?.early_season_uncertainty ?? {};
   const earlyActive = uncertainty.active === true;
   const drivers = result?.drivers as
-    | { home?: Record<string, unknown>; away?: Record<string, unknown> }
+    | {
+        home?: Record<string, unknown>;
+        away?: Record<string, unknown>;
+        matchup?: Record<string, unknown>;
+      }
     | undefined;
+  const matchup = drivers?.matchup ?? {};
+  const homeAdj = (() => {
+    const raw = matchup.home_coaching_adj;
+    if (typeof raw === "number") return raw;
+    if (raw && typeof raw === "object") {
+      const own = (raw as Record<string, unknown>).own_scoring_adj;
+      return typeof own === "number" ? own : null;
+    }
+    return null;
+  })();
+  const awayAdj = (() => {
+    const raw = matchup.away_coaching_adj;
+    if (typeof raw === "number") return raw;
+    if (raw && typeof raw === "object") {
+      const own = (raw as Record<string, unknown>).own_scoring_adj;
+      return typeof own === "number" ? own : null;
+    }
+    return null;
+  })();
+
+  const home = result?.home_team ?? homeTeam;
+  const away = result?.away_team ?? awayTeam;
+  const homeMl = formatAmericanOdds(
+    americanOddsFromWinProb(result?.home_win_prob),
+  );
+  const awayMl = formatAmericanOdds(
+    americanOddsFromWinProb(result?.away_win_prob),
+  );
+  const favoriteSpread = formatFavoriteSpread(
+    result?.spread_home,
+    home,
+    away,
+  );
+  const scoreLine = formatProjectedScoreLine(
+    result?.expected_away_score,
+    result?.expected_home_score,
+  );
+  const marginSd =
+    num(uncertainty.effective_margin_sd) ?? result?.margin_sd ?? null;
 
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+        <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
+          Pick two FBS teams and project a market-style line — spread, total,
+          win probability with American moneyline — plus the roster / QB /
+          unit / HFA / coaching drivers behind it.
+        </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <label className={labelClass} htmlFor="cfb-away">
@@ -275,12 +353,12 @@ export default function CfbProjectGameClient({
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
             onClick={run}
-            disabled={pending}
-            className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-5 py-2.5 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25 disabled:opacity-50"
+            disabled={pending || homeTeam === awayTeam}
+            className="min-h-11 w-full rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-5 py-2.5 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {pending ? "Projecting…" : "Project game"}
           </button>
@@ -288,66 +366,91 @@ export default function CfbProjectGameClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · calibration approximate · Edge Board markets-only unchanged
+            · approximate calibration · Edge Board markets-only unchanged
           </p>
         </div>
       </section>
 
       {error ? (
-        <p className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
-          {error}
-        </p>
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <p className="font-semibold text-red-100">Could not project game</p>
+          <p className="mt-1 text-red-200/90">{error}</p>
+        </div>
       ) : null}
 
-      {result ? (
+      {pending ? (
+        <div className="rounded-xl border border-white/10 bg-black/25 px-4 py-8 text-center text-sm text-kos-text/65">
+          Building strength → score → market lines…
+        </div>
+      ) : null}
+
+      {!pending && !result && !error ? (
+        <div className="rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-8 text-center text-sm text-kos-text/60">
+          {hasRun
+            ? "No projection returned."
+            : "Choose a matchup and press Project game."}
+        </div>
+      ) : null}
+
+      {result && !pending ? (
         <section className="space-y-4">
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-lg font-semibold text-kos-text">
-                {result.away_team} @ {result.home_team}
-                <span className="ml-2 text-sm font-normal text-kos-text/50">
-                  W{result.week}
-                </span>
-              </h2>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight text-kos-text sm:text-2xl">
+                  {away} @ {home}
+                  <span className="ml-2 text-sm font-normal text-kos-text/50">
+                    Week {result.week}
+                  </span>
+                </h2>
+                <p className="mt-1 text-xs text-kos-text/55">
+                  {result.engine_version || engineVersion || "season engine"}
+                  {result.mode ? ` · ${result.mode}` : ""}
+                </p>
+              </div>
               <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-text/55">
                 {result.fidelity ?? "approximate"}
               </span>
             </div>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
-                <p className="text-[11px] uppercase tracking-[0.12em] text-kos-text/45">
-                  Spread (home)
+            <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/45">
+                  Projected score
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-kos-gold">
-                  {formatSpread(result.spread_home)}
+                <p className="mt-1 text-3xl font-semibold tabular-nums text-kos-text sm:text-4xl">
+                  {scoreLine}
                 </p>
-              </div>
-              <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
-                <p className="text-[11px] uppercase tracking-[0.12em] text-kos-text/45">
-                  Total
-                </p>
-                <p className="mt-1 text-2xl font-semibold text-kos-text">
-                  {formatScore(result.expected_total)}
+                <p className="mt-1 text-xs text-kos-text/50">
+                  Away – Home · coherent with spread & total
                 </p>
               </div>
-              <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
+              <div className="text-right">
                 <p className="text-[11px] uppercase tracking-[0.12em] text-kos-text/45">
                   Home WP
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-kos-text">
+                <p className="mt-0.5 text-2xl font-semibold tabular-nums text-kos-gold">
                   {formatWinProb(result.home_win_prob)}
                 </p>
               </div>
-              <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
-                <p className="text-[11px] uppercase tracking-[0.12em] text-kos-text/45">
-                  Projected score
-                </p>
-                <p className="mt-1 text-2xl font-semibold text-kos-text">
-                  {formatScore(result.expected_home_score)}–
-                  {formatScore(result.expected_away_score)}
-                </p>
-              </div>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <MarketCell
+                label="Spread"
+                primary={favoriteSpread}
+                secondary={`Home line ${formatSpread(result.spread_home)}`}
+              />
+              <MarketCell
+                label="Total"
+                primary={formatScore(result.expected_total)}
+                secondary={`${formatScore(result.expected_away_score)} + ${formatScore(result.expected_home_score)}`}
+              />
+              <MarketCell
+                label="Moneyline"
+                primary={`${home} ${homeMl}`}
+                secondary={`${away} ${awayMl} · from WP (no vig)`}
+              />
             </div>
 
             <div
@@ -362,28 +465,37 @@ export default function CfbProjectGameClient({
                   ? "Early-season uncertainty (W1–W4)"
                   : "Mid/late-season priors"}
               </p>
-              <p className="mt-1">
-                Effective margin SD{" "}
-                <span className="font-medium text-kos-text">
-                  {formatIndex(
-                    num(uncertainty.effective_margin_sd) ?? result.margin_sd,
-                    1,
-                  )}
+              <p className="mt-1.5">
+                Margin SD{" "}
+                <span className="font-semibold tabular-nums text-kos-text">
+                  {formatIndex(marginSd, 1)}
                 </span>
-                {num(uncertainty.roster_identity_uncertainty) != null ? (
-                  <>
+                {earlyActive ? (
+                  <span className="text-amber-100/75">
                     {" "}
-                    · roster/QB identity U{" "}
-                    <span className="font-medium text-kos-text">
-                      {formatIndex(
-                        num(uncertainty.roster_identity_uncertainty),
-                        2,
-                      )}
-                    </span>
-                  </>
-                ) : null}
+                    — wider than mid-season; lines are directional, not precise
+                  </span>
+                ) : (
+                  <span className="text-kos-text/55">
+                    {" "}
+                    — identity priors have narrowed
+                  </span>
+                )}
               </p>
-              <p className="mt-1 text-kos-text/55">
+              {num(uncertainty.roster_identity_uncertainty) != null ||
+              num(uncertainty.team_identity_uncertainty_blend) != null ? (
+                <p className="mt-1 text-kos-text/55">
+                  Roster/QB identity U{" "}
+                  <span className="font-medium tabular-nums text-kos-text">
+                    {formatIndex(
+                      num(uncertainty.roster_identity_uncertainty) ??
+                        num(uncertainty.team_identity_uncertainty_blend),
+                      2,
+                    )}
+                  </span>
+                </p>
+              ) : null}
+              <p className="mt-1 text-kos-text/50">
                 {str(uncertainty.honesty) ??
                   str(uncertainty.note) ??
                   "Wide early priors; not a claim of known identity."}
@@ -391,14 +503,35 @@ export default function CfbProjectGameClient({
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <DriverCard side="away" drivers={drivers?.away} />
-            <DriverCard side="home" drivers={drivers?.home} />
+          <div>
+            <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-text/50">
+              Key drivers
+            </h3>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <DriverStrip
+                side="away"
+                team={away}
+                drivers={drivers?.away}
+                layers={result.away_layers}
+                coachingAdj={awayAdj}
+                showHfa={false}
+              />
+              <DriverStrip
+                side="home"
+                team={home}
+                drivers={drivers?.home}
+                layers={result.home_layers}
+                coachingAdj={homeAdj}
+                showHfa={!neutralSite}
+              />
+            </div>
           </div>
 
-          <p className="text-[11px] text-kos-text/45">
+          <p className="text-[11px] leading-relaxed text-kos-text/45">
             Drivers are inspectable layer inputs — not calibrated market
-            attribution. Mode: {result.mode ?? "packaged"}.
+            attribution. ML is converted from model win probability (no vig).
+            Fidelity: {result.fidelity ?? "approximate"}. Edge Board CFB stays
+            markets-only.
           </p>
         </section>
       ) : null}

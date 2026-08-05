@@ -102,6 +102,55 @@ export function formatSpread(spreadHome: number | null | undefined): string {
   return v > 0 ? `+${v.toFixed(1)}` : v.toFixed(1);
 }
 
+/**
+ * Market-style favorite wording from home-centric spread
+ * (neg = home favorite): e.g. "OSU -5.1" or "MICH -3.0".
+ */
+export function formatFavoriteSpread(
+  spreadHome: number | null | undefined,
+  homeTeam: string,
+  awayTeam: string,
+): string {
+  if (spreadHome == null || !Number.isFinite(spreadHome)) return "—";
+  const v = Number(spreadHome);
+  if (Math.abs(v) < 0.05) return "Pick'em";
+  if (v < 0) {
+    return `${normalizeTeamCode(homeTeam)} ${v.toFixed(1)}`;
+  }
+  return `${normalizeTeamCode(awayTeam)} ${(-v).toFixed(1)}`;
+}
+
+/** Convert win probability (0–1) to American moneyline odds. */
+export function americanOddsFromWinProb(
+  p: number | null | undefined,
+): number | null {
+  if (p == null || !Number.isFinite(p)) return null;
+  const prob = Math.min(0.999, Math.max(0.001, Number(p)));
+  if (prob >= 0.5) {
+    return Math.round(-(100 * prob) / (1 - prob));
+  }
+  return Math.round((100 * (1 - prob)) / prob);
+}
+
+export function formatAmericanOdds(
+  value: number | null | undefined,
+): string {
+  if (value == null || !Number.isFinite(value)) return "—";
+  const rounded = Math.round(value);
+  if (rounded === 0) return "EVEN";
+  return rounded > 0 ? `+${rounded}` : String(rounded);
+}
+
+/** Win% plus American ML derived from WP (no vig). */
+export function formatWinProbWithMl(
+  p: number | null | undefined,
+): string {
+  const wp = formatWinProb(p);
+  const ml = formatAmericanOdds(americanOddsFromWinProb(p));
+  if (wp === "—" && ml === "—") return "—";
+  return `${wp} (${ml})`;
+}
+
 export function formatWinProb(p: number | null | undefined): string {
   if (p == null || !Number.isFinite(p)) return "—";
   return `${(Number(p) * 100).toFixed(1)}%`;
@@ -112,9 +161,32 @@ export function formatScore(n: number | null | undefined): string {
   return Number(n).toFixed(1);
 }
 
+/** Away–home projected score line, market-style. */
+export function formatProjectedScoreLine(
+  awayScore: number | null | undefined,
+  homeScore: number | null | undefined,
+): string {
+  if (
+    awayScore == null ||
+    homeScore == null ||
+    !Number.isFinite(awayScore) ||
+    !Number.isFinite(homeScore)
+  ) {
+    return "—";
+  }
+  return `${formatScore(awayScore)} – ${formatScore(homeScore)}`;
+}
+
 export function formatIndex(n: number | null | undefined, digits = 2): string {
   if (n == null || !Number.isFinite(n)) return "—";
   return Number(n).toFixed(digits);
+}
+
+export function formatQbClassLabel(raw: string | null | undefined): string {
+  if (!raw) return "—";
+  return String(raw)
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export function teamOptionsFromCodes(

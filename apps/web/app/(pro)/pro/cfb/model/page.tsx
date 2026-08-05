@@ -9,7 +9,7 @@ const TOOLS = [
   {
     href: "/pro/cfb/project-game",
     title: "Project Game",
-    body: "Pick two FBS teams, set week / neutral / night, and read spread, total, win probs, plus roster / QB / unit / HFA / coaching drivers.",
+    body: "Pick two FBS teams and read a clean market card — spread, total, WP→ML — with scannable roster / QB / unit / HFA / coaching drivers.",
   },
 ] as const;
 
