@@ -143,6 +143,14 @@ function DriverStrip({
       </div>
       <div className="mt-2.5 flex flex-wrap gap-1.5">
         <Chip
+          label="Off Eff"
+          value={formatIndex(num(drivers.off_eff), 0)}
+        />
+        <Chip
+          label="Def Eff"
+          value={formatIndex(num(drivers.def_eff), 0)}
+        />
+        <Chip
           label="Roster"
           value={formatIndex(num(drivers.roster_strength), 1)}
         />

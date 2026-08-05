@@ -1,13 +1,14 @@
 """Layer 4 — Team projection + game-level matchup.
 
-Composes roster construction + QB situation + position groups into
+Composes opponent-adjusted efficiency + roster + QB + position groups into
 offense/defense indices, then projects a single game:
 
     strength indices → expected points (unit matchup) → margin
       → spread / total / win probability
 
-Historical team ratings are *not* the primary driver — ``roster_strength``,
-``qb_situation_index``, and position-group unit grades are.
+v0.8: efficiency (2025 SP+ carry) is a primary complementary driver alongside
+``roster_strength`` / ``qb_situation_index``. Unit grades remain material but
+are down-weighted to avoid double-counting SP+-embedded unit quality.
 """
 
 from __future__ import annotations
@@ -22,12 +23,17 @@ from src.services.cfb_season_engine.coaching_continuity import (
     coaching_week_adjustment,
     team_game_point_adjustment,
 )
+from src.services.cfb_season_engine.efficiency import (
+    efficiency_index,
+    efficiency_to_dict,
+)
 from src.services.cfb_season_engine.home_field import profile_to_dict, resolve_hfa_points
 from src.services.cfb_season_engine.position_groups import groups_to_dict
 from src.services.cfb_season_engine.qb_situation import qb_to_dict
 from src.services.cfb_season_engine.roster_construction import roster_to_dict
 from src.services.cfb_season_engine.types import (
     CoachingContinuity,
+    EfficiencyProfile,
     EngineUniverse,
     GameProjection,
     HomeFieldProfile,
@@ -82,29 +88,33 @@ def compose_team_projection(
     qb: QbSituation,
     groups: PositionGroupGrades,
     *,
+    efficiency: Optional[EfficiencyProfile] = None,
     home_field: Optional[HomeFieldProfile] = None,
     coaching: Optional[CoachingContinuity] = None,
 ) -> TeamProjectionState:
-    """Compose Layers 1–3 (+ HFA/coaching profiles) into team O/D indices.
+    """Compose efficiency + Layers 1–3 (+ HFA/coaching) into team O/D indices.
 
-    Offense: roster_strength + qb_situation + OL + skill (all material).
-    Defense: roster_strength + front_seven + secondary + experience.
-    Post-compose unit blends keep OL / skill / F7 / secondary as hard levers.
-    Coaching continuity applies mild index multipliers + uncertainty boost.
+    Offense: off_eff + roster_strength + qb_situation + OL + skill.
+    Defense: def_eff + roster_strength + front_seven + secondary + experience.
+    Post-compose: mild QB / unit / efficiency index blends; coaching mults.
     """
     roster_s = float(roster.roster_strength)
     qb_score = float(qb.qb_situation_score)
     qb_index = float(qb.qb_situation_index)
+    off_eff = float(efficiency.off_eff) if efficiency is not None else 50.0
+    def_eff = float(efficiency.def_eff) if efficiency is not None else 50.0
 
     offense_score = (
-        P.WEIGHT_ROSTER_STRENGTH * roster_s
+        P.WEIGHT_OFF_EFF * off_eff
+        + P.WEIGHT_ROSTER_STRENGTH * roster_s
         + P.WEIGHT_QB_SITUATION * qb_score
         + P.WEIGHT_SKILL_GROUP * groups.skill
         + P.WEIGHT_OL_GROUP * groups.ol
     )
 
     defense_score = (
-        P.WEIGHT_DEF_ROSTER_STRENGTH * roster_s
+        P.WEIGHT_DEF_EFF * def_eff
+        + P.WEIGHT_DEF_ROSTER_STRENGTH * roster_s
         + P.WEIGHT_DEF_FRONT_SEVEN * groups.front_seven
         + P.WEIGHT_DEF_SECONDARY * groups.secondary
         + P.WEIGHT_DEF_EXPERIENCE * roster.experience_index
@@ -116,7 +126,7 @@ def compose_team_projection(
     offense_index = (1.0 - blend_qb) * offense_index + blend_qb * (
         offense_index * qb_index
     )
-    # Hard OL / skill levers (position groups as real drivers).
+    # Softened OL / skill levers (efficiency already embeds unit quality).
     ol_idx = _unit_index(groups.ol)
     skill_idx = _unit_index(groups.skill)
     offense_index = (1.0 - P.OL_INDEX_BLEND) * offense_index + P.OL_INDEX_BLEND * (
@@ -124,6 +134,11 @@ def compose_team_projection(
     )
     offense_index = (1.0 - P.SKILL_INDEX_BLEND) * offense_index + P.SKILL_INDEX_BLEND * (
         offense_index * skill_idx
+    )
+    # Mild pull toward efficiency index (transparent complementary lever).
+    off_eff_idx = efficiency_index(off_eff)
+    offense_index = (1.0 - P.EFF_OFF_INDEX_BLEND) * offense_index + P.EFF_OFF_INDEX_BLEND * (
+        offense_index * off_eff_idx
     )
     # Coaching continuity — mild permanent index drag for new staff.
     if coaching is not None:
@@ -137,11 +152,18 @@ def compose_team_projection(
     defense_index = (1.0 - P.DEF_UNIT_BLEND) * defense_index + P.DEF_UNIT_BLEND * (
         defense_index * def_unit
     )
+    def_eff_idx = efficiency_index(def_eff)
+    defense_index = (1.0 - P.EFF_DEF_INDEX_BLEND) * defense_index + P.EFF_DEF_INDEX_BLEND * (
+        defense_index * def_eff_idx
+    )
     if coaching is not None:
         defense_index *= float(coaching.defense_index_mult)
     defense_index = _clamp(defense_index, *P.STRENGTH_CLAMP)
 
     pace = _clamp(1.0 + (groups.skill - groups.front_seven) / 200.0, 0.85, 1.20)
+    if efficiency is not None:
+        # Explosiveness proxy nudges pace slightly (labeled approximate).
+        pace = _clamp(pace + (efficiency.explosiveness - 50.0) / 400.0, 0.85, 1.20)
     pass_bias = _clamp(
         (qb.qb_talent - 50.0) / 200.0
         + (groups.skill - 50.0) / 250.0
@@ -152,28 +174,38 @@ def compose_team_projection(
     )
 
     # Early uncertainty: QB situation dominates; roster continuity tempers;
-    # thin/placeholder units add a little identity noise; coaching change boosts.
+    # prior-year efficiency carry + thin units + coaching change boost.
     unit_noise = 0.0
     if groups.fidelity == "placeholder":
         unit_noise = 0.08
     elif groups.fidelity == "approximate":
         unit_noise = 0.03
+    eff_noise = 0.0
+    if efficiency is None or efficiency.fidelity == "placeholder":
+        eff_noise = 0.06
+    elif efficiency.prior_year < efficiency.carry_to_season:
+        # Preseason carry — prior-year adj efficiency is informative but stale.
+        eff_noise = 0.04
     coach_u = float(coaching.uncertainty_boost) if coaching is not None else 0.0
     early_u = (
-        0.50 * qb.uncertainty
-        + 0.30 * (1.0 - roster.continuity_score / 100.0)
-        + 0.20 * coach_u
+        0.42 * qb.uncertainty
+        + 0.26 * (1.0 - roster.continuity_score / 100.0)
+        + 0.16 * coach_u
+        + 0.10 * eff_noise / 0.06
         + unit_noise
     )
     early_u = _clamp(early_u, 0.05, 0.85)
 
     notes: Dict[str, str] = {
         "compose": (
-            "roster_strength+qb_situation+position_groups+coaching; "
-            "historical rating not primary; HFA applied at game time"
+            "off_eff/def_eff+roster_strength+qb_situation+position_groups+coaching; "
+            "prior-year SP+ efficiency complementary (not sole driver); "
+            "HFA applied at game time"
         ),
         "offense_score": f"{offense_score:.1f}",
         "defense_score": f"{defense_score:.1f}",
+        "off_eff": f"{off_eff:.1f}",
+        "def_eff": f"{def_eff:.1f}",
         "roster_strength": f"{roster_s:.1f}",
         "qb_situation_index": f"{qb_index:.4f}",
         "qb_situation_score": f"{qb_score:.1f}",
@@ -183,22 +215,37 @@ def compose_team_projection(
         "front_seven": f"{groups.front_seven:.1f}",
         "secondary": f"{groups.secondary:.1f}",
         "weights_offense": (
+            f"eff={P.WEIGHT_OFF_EFF},"
             f"roster={P.WEIGHT_ROSTER_STRENGTH},"
             f"qb={P.WEIGHT_QB_SITUATION},"
             f"skill={P.WEIGHT_SKILL_GROUP},"
             f"ol={P.WEIGHT_OL_GROUP},"
             f"qb_blend={P.QB_INDEX_BLEND},"
             f"ol_blend={P.OL_INDEX_BLEND},"
-            f"skill_blend={P.SKILL_INDEX_BLEND}"
+            f"skill_blend={P.SKILL_INDEX_BLEND},"
+            f"eff_blend={P.EFF_OFF_INDEX_BLEND}"
         ),
         "weights_defense": (
+            f"eff={P.WEIGHT_DEF_EFF},"
             f"roster={P.WEIGHT_DEF_ROSTER_STRENGTH},"
             f"front_seven={P.WEIGHT_DEF_FRONT_SEVEN},"
             f"secondary={P.WEIGHT_DEF_SECONDARY},"
             f"experience={P.WEIGHT_DEF_EXPERIENCE},"
-            f"def_unit_blend={P.DEF_UNIT_BLEND}"
+            f"def_unit_blend={P.DEF_UNIT_BLEND},"
+            f"eff_blend={P.EFF_DEF_INDEX_BLEND}"
+        ),
+        "anti_double_count": (
+            "unit weights/blends + game unit matchup scales reduced vs v0.7"
         ),
     }
+    if efficiency is not None:
+        notes["efficiency_source"] = efficiency.source
+        notes["efficiency_fidelity"] = efficiency.fidelity
+        notes["sp_plus"] = f"{efficiency.sp_plus:.1f}"
+        notes["sp_rank"] = str(efficiency.sp_rank) if efficiency.sp_rank is not None else ""
+        notes["success_off"] = f"{efficiency.success_off:.1f}"
+        notes["success_def"] = f"{efficiency.success_def:.1f}"
+        notes["explosiveness"] = f"{efficiency.explosiveness:.1f}"
     if coaching is not None:
         notes["coaching_new_hc"] = str(coaching.new_hc)
         notes["coaching_new_oc"] = str(coaching.new_oc)
@@ -220,6 +267,7 @@ def compose_team_projection(
         roster=roster,
         qb=qb,
         groups=groups,
+        efficiency=efficiency,
         home_field=home_field,
         coaching=coaching,
         source="hierarchical_compose",
@@ -347,6 +395,7 @@ def layers_snapshot(state: TeamProjectionState) -> Dict[str, Any]:
         "roster": roster_to_dict(state.roster) if state.roster else None,
         "qb": qb_to_dict(state.qb) if state.qb else None,
         "position_groups": groups_to_dict(state.groups) if state.groups else None,
+        "efficiency": efficiency_to_dict(state.efficiency),
         "home_field": profile_to_dict(state.home_field),
         "coaching": coaching_to_dict(state.coaching),
     }
@@ -355,8 +404,8 @@ def layers_snapshot(state: TeamProjectionState) -> Dict[str, Any]:
 def project_game_formula_doc() -> Dict[str, Any]:
     return {
         "steps": [
-            "compose offense/defense indices from roster + QB + position groups "
-            "+ coaching index multipliers",
+            "compose offense/defense indices from off_eff/def_eff + roster + QB "
+            "+ position groups + coaching index multipliers",
             "expected_points = league_ppg * (off/def)^response * ol/skill_boost "
             "* opponent_(f7+secondary)_dampen * pace + variable_HFA "
             "+ coaching_week_adj",
@@ -371,10 +420,16 @@ def project_game_formula_doc() -> Dict[str, Any]:
             "home_wp = Φ(margin / margin_sd)",
         ],
         "weights": P.documentation()["composition_weights"],
+        "efficiency": (
+            "Prior-year opponent-adjusted efficiency (final-2025 SP+ carry) "
+            "blended with roster/QB/units. success/explosiveness are proxies "
+            "(no full PBP). Unit weights reduced to avoid double-counting."
+        ),
         "early_season": (
             "W1–W4: inflate margin_sd, soften matchup response, flag "
-            "roster/QB/coaching identity uncertainty; narrows on week-indexed "
-            "schedule. Coaching penalties also decay on the same early window."
+            "roster/QB/coaching/prior-year-efficiency carry uncertainty; "
+            "narrows on week-indexed schedule. Coaching penalties also decay "
+            "on the same early window."
         ),
         "coherence": {
             "spread_home": "away_score - home_score",
@@ -389,6 +444,7 @@ def _layer_drivers(state: TeamProjectionState) -> Dict[str, Any]:
     roster = state.roster
     qb = state.qb
     groups = state.groups
+    eff = state.efficiency
     return {
         "roster_strength": round(float(roster.roster_strength), 2) if roster else None,
         "roster_fidelity": roster.fidelity if roster else None,
@@ -396,6 +452,14 @@ def _layer_drivers(state: TeamProjectionState) -> Dict[str, Any]:
         "qb_situation_score": round(float(qb.qb_situation_score), 2) if qb else None,
         "qb_class": qb.qb_class if qb else None,
         "qb_uncertainty": round(float(qb.uncertainty), 4) if qb else None,
+        "efficiency": efficiency_to_dict(eff),
+        "off_eff": round(float(eff.off_eff), 2) if eff else None,
+        "def_eff": round(float(eff.def_eff), 2) if eff else None,
+        "success_off": round(float(eff.success_off), 2) if eff else None,
+        "success_def": round(float(eff.success_def), 2) if eff else None,
+        "explosiveness": round(float(eff.explosiveness), 2) if eff else None,
+        "sp_plus": round(float(eff.sp_plus), 2) if eff else None,
+        "sp_rank": eff.sp_rank if eff else None,
         "unit_grades": {
             "ol": round(float(groups.ol), 2) if groups else None,
             "skill": round(float(groups.skill), 2) if groups else None,
@@ -403,6 +467,22 @@ def _layer_drivers(state: TeamProjectionState) -> Dict[str, Any]:
             "secondary": round(float(groups.secondary), 2) if groups else None,
             "special_teams": round(float(groups.special_teams), 2) if groups else None,
             "fidelity": groups.fidelity if groups else None,
+        },
+        "blend_weights": {
+            "offense": {
+                "efficiency": P.WEIGHT_OFF_EFF,
+                "roster": P.WEIGHT_ROSTER_STRENGTH,
+                "qb": P.WEIGHT_QB_SITUATION,
+                "skill": P.WEIGHT_SKILL_GROUP,
+                "ol": P.WEIGHT_OL_GROUP,
+            },
+            "defense": {
+                "efficiency": P.WEIGHT_DEF_EFF,
+                "roster": P.WEIGHT_DEF_ROSTER_STRENGTH,
+                "front_seven": P.WEIGHT_DEF_FRONT_SEVEN,
+                "secondary": P.WEIGHT_DEF_SECONDARY,
+                "experience": P.WEIGHT_DEF_EXPERIENCE,
+            },
         },
         "home_field": profile_to_dict(state.home_field),
         "coaching": coaching_to_dict(state.coaching),
@@ -499,6 +579,12 @@ def project_game(
             "neutral_site": bool(neutral_site),
         },
         "primary_signals": {
+            "home_off_eff": home_drivers.get("off_eff"),
+            "away_off_eff": away_drivers.get("off_eff"),
+            "home_def_eff": home_drivers.get("def_eff"),
+            "away_def_eff": away_drivers.get("def_eff"),
+            "home_sp_plus": home_drivers.get("sp_plus"),
+            "away_sp_plus": away_drivers.get("sp_plus"),
             "home_roster_strength": home_drivers.get("roster_strength"),
             "away_roster_strength": away_drivers.get("roster_strength"),
             "home_qb_situation_index": home_drivers.get("qb_situation_index"),
@@ -517,10 +603,11 @@ def project_game(
                 "new_oc": bool(away.coaching.new_oc) if away.coaching else False,
                 "new_dc": bool(away.coaching.new_dc) if away.coaching else False,
             },
+            "blend_weights": home_drivers.get("blend_weights"),
         },
         "note": (
             "Drivers are inspectable layer inputs/indices — not calibrated "
-            "market attribution weights."
+            "market attribution weights. Efficiency is prior-year SP+ carry."
         ),
     }
     uncertainty = {
@@ -703,13 +790,14 @@ def documentation() -> Dict[str, Any]:
         "name": "team_projection",
         "module": "src.services.cfb_season_engine.team_projection",
         "real_vs_approximate": (
-            "Composition structure is REAL (inspectable weights; roster_strength "
-            "+ qb_situation_index + position groups + coaching multipliers are "
-            "drivers; variable HFA is applied at game time). Numeric indices "
-            "and game probabilities are APPROXIMATE — not calibrated market-grade "
-            "fair lines."
+            "Composition structure is REAL (inspectable weights; off_eff/def_eff "
+            "+ roster_strength + qb_situation_index + position groups + coaching "
+            "multipliers are drivers; variable HFA is applied at game time). "
+            "Numeric indices and game probabilities are APPROXIMATE — not "
+            "calibrated market-grade fair lines. Efficiency is prior-year SP+ carry."
         ),
         "feeds": [
+            "efficiency.off_eff/def_eff",
             "roster_construction.roster_strength",
             "qb_situation.qb_situation_index",
             "position_groups.ol/skill/front_seven/secondary",
@@ -719,6 +807,7 @@ def documentation() -> Dict[str, Any]:
         ],
         "primary_drivers": {
             "offense": [
+                "off_eff",
                 "roster_strength",
                 "qb_situation_index",
                 "ol",
@@ -726,6 +815,7 @@ def documentation() -> Dict[str, Any]:
                 "coaching_continuity",
             ],
             "defense": [
+                "def_eff",
                 "front_seven",
                 "secondary",
                 "roster_strength",

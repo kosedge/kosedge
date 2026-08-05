@@ -36,6 +36,10 @@ from src.services.cfb_season_engine.roster_construction import (
     build_roster_construction,
     compute_roster_strength,
 )
+from src.services.cfb_season_engine.efficiency import (
+    build_efficiency_profile,
+    load_efficiency_snapshot,
+)
 from src.services.cfb_season_engine.team_projection import (
     compose_team_projection,
     expected_team_points,
@@ -51,11 +55,15 @@ from src.services.cfb_season_engine.priors import (
     early_season_uncertainty,
     win_prob_margin_sd_for_week,
 )
-from src.services.cfb_season_engine.types import EngineUniverse, HomeFieldProfile
+from src.services.cfb_season_engine.types import (
+    EfficiencyProfile,
+    EngineUniverse,
+    HomeFieldProfile,
+)
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.7-player-hooks"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.8-efficiency"
 
 
 def test_qb_situation_classification() -> None:
@@ -644,8 +652,12 @@ def test_project_game_drivers_and_score_coherence() -> None:
     payload = project_game_to_dict(proj)
     assert "drivers" in payload
     assert payload["drivers"]["primary_signals"]["home_roster_strength"] is not None
+    assert payload["drivers"]["primary_signals"]["home_off_eff"] is not None
+    assert payload["drivers"]["primary_signals"]["home_def_eff"] is not None
     assert payload["drivers"]["home"]["qb_situation_index"] is not None
     assert payload["drivers"]["home"]["unit_grades"]["ol"] is not None
+    assert payload["drivers"]["home"]["efficiency"]["off_eff"] is not None
+    assert "blend_weights" in payload["drivers"]["home"]
     assert "uncertainty" in payload
     assert payload["uncertainty"]["active"] is True
     # Score / spread / total coherence (no floating invent).
@@ -743,8 +755,9 @@ def test_matchup_ratio_clamp_limits_placeholder_blowouts() -> None:
     )
     payload = project_game_to_dict(proj)
     # Favorite still clear, but not an absurd mid-40s home spread.
+    # Efficiency backbone widens SP+-strong vs thin mid-major vs identity-only.
     assert payload["spread_home"] < -8.0
-    assert payload["spread_home"] > -34.0
+    assert payload["spread_home"] > -40.0
     home_diag = payload["drivers"]["matchup"]["home_points_diag"]
     # Clamp may or may not fire depending on real-roster strength gap; if raw
     # exceeds the band, soft-cap must reduce it.
@@ -939,7 +952,7 @@ def test_status_contract() -> None:
     assert "Variable HFA" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert "Coaching continuity" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
-    assert "cfb-player-hooks" in payload["entry_points"]["ops"]
+    assert "cfb-efficiency-backbone" in payload["entry_points"]["ops"]
     assert payload.get("calibration_tag")
     assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert payload.get("roster_source")
@@ -947,6 +960,8 @@ def test_status_contract() -> None:
     assert "early_season_narrowing" in payload
     assert "examples" in payload
     assert "position_groups" in payload["examples"].get("UGA", {})
+    assert "efficiency" in payload["examples"].get("UGA", {})
+    assert payload["examples"]["UGA"]["efficiency"]["off_eff"] is not None
     assert "home_field" in payload["examples"].get("LSU", {})
     assert "coaching" in payload["examples"].get("PSU", {})
     assert payload["examples"]["PSU"]["coaching"]["new_hc"] is True
@@ -955,6 +970,10 @@ def test_status_contract() -> None:
     assert "roster_strength_ladder" in payload
     assert "power_style_ladder" in payload
     assert len(payload["power_style_ladder"]["top"]) >= 10
+    assert payload.get("efficiency", {}).get("present") is True
+    assert "Efficiency blend weights" in " ".join(
+        payload["solid_vs_approximate"]["solid"]
+    )
     assert len(payload["team_codes"]) >= 100
     assert payload["layers"][0]["name"] == "roster_construction"
     assert "formula" in payload["layers"][0]
@@ -1070,7 +1089,8 @@ def test_calibration_blue_blood_vs_g5_ordering() -> None:
             universe, home_team=code, away_team="BALL", week=5, neutral_site=False
         )
         assert proj.spread_home < -10.0
-        assert proj.spread_home > -36.0
+        # Efficiency widens SP+-strong vs thin G5; still soft-capped under ~45.
+        assert proj.spread_home > -42.0
         assert proj.home_win_prob >= 0.72
         assert 45.0 <= proj.expected_total <= 85.0
 
@@ -1115,3 +1135,161 @@ def test_calibration_hfa_and_new_hc_still_material() -> None:
     w1_adj = psu_w1.drivers["matchup"]["home_coaching_adj"]["own_scoring_adj"]
     w6_adj = psu_w6.drivers["matchup"]["home_coaching_adj"]["own_scoring_adj"]
     assert w1_adj < w6_adj  # more negative early
+
+
+def test_efficiency_snapshot_loads_and_ranks_sp_plus_ish() -> None:
+    snap = load_efficiency_snapshot()
+    assert snap.get("teams")
+    assert snap.get("metric_family") == "sp_plus_opponent_adjusted_efficiency"
+    iu = build_efficiency_profile("IU")
+    ball = build_efficiency_profile("BALL")
+    osu = build_efficiency_profile("OSU")
+    assert iu.off_eff > ball.off_eff + 20
+    assert iu.def_eff > ball.def_eff + 20
+    assert osu.def_eff >= 85.0  # SP+ #1 defense territory
+    assert iu.sp_rank == 1
+    assert iu.fidelity == "approximate"
+    assert "proxy" in iu.notes.lower() or "SP+" in iu.notes
+
+
+def test_efficiency_moves_projection_when_roster_fixed() -> None:
+    """Holding roster/QB/units fixed, raising off_eff moves offense + project-game."""
+    roster = build_roster_construction(
+        "HOME",
+        {
+            "returning_snap_share": 0.55,
+            "returning_start_share": 0.55,
+            "portal_in_value": 55,
+            "portal_out_value": 50,
+            "recruiting_class_score": 70,
+            "experience_index": 55,
+        },
+    )
+    qb = build_qb_situation(
+        "HOME",
+        {
+            "qb_class": "incumbent",
+            "qb_talent": 70,
+            "ol_support": 65,
+            "weapons_support": 65,
+        },
+    )
+    groups = build_position_groups(
+        "HOME",
+        {"ol": 65, "skill": 65, "front_seven": 60, "secondary": 60},
+        roster=roster,
+        qb=qb,
+    )
+    opp_roster = build_roster_construction(
+        "OPP",
+        {
+            "returning_snap_share": 0.50,
+            "returning_start_share": 0.50,
+            "portal_in_value": 50,
+            "portal_out_value": 50,
+            "recruiting_class_score": 50,
+            "experience_index": 50,
+        },
+    )
+    opp_qb = build_qb_situation("OPP", {"qb_class": "incumbent", "qb_talent": 50})
+    opp_groups = build_position_groups(
+        "OPP",
+        {"ol": 50, "skill": 50, "front_seven": 50, "secondary": 50},
+        roster=opp_roster,
+        qb=opp_qb,
+    )
+    weak_eff = EfficiencyProfile(
+        team="HOME", off_eff=35.0, def_eff=50.0, fidelity="approximate"
+    )
+    strong_eff = EfficiencyProfile(
+        team="HOME", off_eff=85.0, def_eff=50.0, fidelity="approximate"
+    )
+    opp_eff = EfficiencyProfile(
+        team="OPP", off_eff=50.0, def_eff=50.0, fidelity="approximate"
+    )
+    weak = compose_team_projection(
+        "HOME", roster, qb, groups, efficiency=weak_eff
+    )
+    strong = compose_team_projection(
+        "HOME", roster, qb, groups, efficiency=strong_eff
+    )
+    assert strong.offense_index > weak.offense_index + 0.08
+    # Defense held fixed via same def_eff.
+    assert abs(strong.defense_index - weak.defense_index) < 0.03
+
+    opp = compose_team_projection(
+        "OPP", opp_roster, opp_qb, opp_groups, efficiency=opp_eff
+    )
+    universe_weak = EngineUniverse(
+        season=2026,
+        schedule=[],
+        teams={"HOME": weak, "OPP": opp},
+        player_hooks={},
+        conferences={"HOME": "SEC", "OPP": "SEC"},
+        notes={},
+    )
+    universe_strong = EngineUniverse(
+        season=2026,
+        schedule=[],
+        teams={"HOME": strong, "OPP": opp},
+        player_hooks={},
+        conferences={"HOME": "SEC", "OPP": "SEC"},
+        notes={},
+    )
+    p_weak = project_game_preview(
+        universe_weak, home_team="HOME", away_team="OPP", week=5, neutral_site=True
+    )
+    p_strong = project_game_preview(
+        universe_strong, home_team="HOME", away_team="OPP", week=5, neutral_site=True
+    )
+    assert p_strong.expected_home_score > p_weak.expected_home_score + 1.5
+    assert p_strong.spread_home < p_weak.spread_home - 1.0
+
+
+def test_efficiency_top_sp_plus_teams_rank_high_in_power() -> None:
+    universe = build_packaged_universe(2026)
+    ranked = sorted(
+        universe.teams.items(),
+        key=lambda kv: 0.5 * (kv[1].offense_index + kv[1].defense_index),
+        reverse=True,
+    )
+    top20 = {code for code, _ in ranked[:20]}
+    # Final-2025 SP+ leaders should surface near the top with efficiency backbone.
+    assert "IU" in top20 or "OSU" in top20
+    assert "OSU" in {code for code, _ in ranked[:15]}
+    assert "UGA" in {code for code, _ in ranked[:25]}
+    assert ranked[-1][0] in {"BALL", "MASS", "KENT", "CHAR", "SHSU", "ACU", "FAY"}
+
+
+def test_efficiency_early_season_uncertainty_still_widens() -> None:
+    universe = build_packaged_universe(2026)
+    # Prior-year carry still participates in early uncertainty.
+    assert universe.teams["OSU"].early_season_uncertainty >= 0.05
+    p1 = project_game_preview(
+        universe, home_team="OSU", away_team="MICH", week=1, neutral_site=False
+    )
+    p5 = project_game_preview(
+        universe, home_team="OSU", away_team="MICH", week=5, neutral_site=False
+    )
+    assert p1.margin_sd > p5.margin_sd
+    assert p1.drivers["home"]["off_eff"] is not None
+    assert p1.home_layers["efficiency"]["prior_year"] == 2025
+
+
+def test_player_hooks_still_allocate_from_team_totals_with_efficiency() -> None:
+    """v0.7 player hooks remain allocation-only after efficiency backbone."""
+    from src.services.cfb_season_engine.team_projection import project_game
+
+    universe = build_packaged_universe(2026)
+    baseline = project_game(
+        universe, home_team="OSU", away_team="MICH", week=1, neutral_site=False
+    )
+    proj = project_game_preview(
+        universe, home_team="OSU", away_team="MICH", week=1, neutral_site=False
+    )
+    assert proj.expected_home_score == baseline.expected_home_score
+    assert proj.spread_home == baseline.spread_home
+    payload = project_game_to_dict(proj)
+    rows = payload.get("player_projections") or payload.get("players") or []
+    assert any(row.get("team") == "OSU" for row in rows)
+    assert any(row.get("position") == "QB" for row in rows)

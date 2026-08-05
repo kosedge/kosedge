@@ -9,7 +9,7 @@ const TOOLS = [
   {
     href: "/pro/cfb/project-game",
     title: "Project Game",
-    body: "Pick two FBS teams and read a clean market card — spread, total, WP→ML — with scannable roster / QB / unit / HFA / coaching drivers.",
+    body: "Pick two FBS teams and read a clean market card — spread, total, WP→ML — with scannable Off/Def Eff + roster / QB / unit / HFA / coaching drivers.",
   },
 ] as const;
 
@@ -28,8 +28,8 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="Hierarchical CFB season engine with ESPN 2026 real-roster overlay and v0.6.1 projection calibration — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
-      badge="CFB calibrated"
+      summary="Hierarchical CFB season engine with opponent-adjusted efficiency (2025 SP+ carry), ESPN 2026 real-roster overlay, and projection calibration — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
+      badge="CFB efficiency"
       primaryHref="/pro/cfb/project-game"
       primaryLabel="Open Project Game"
       secondaryHref="/edge-board/cfb"
@@ -51,10 +51,10 @@ export default async function CfbSeasonModelHubPage() {
         <div className="rounded-xl border border-white/10 bg-black/35 px-4 py-4">
           <h2 className="text-sm font-semibold text-kos-gold">Fidelity</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
-            ESPN 2026 roster snapshot drives roster / QB / units; densified
-            schedule stays approximate. Named ESPN QBs:{" "}
-            {fidelity?.espn_named_qb ?? "—"} · approximate teams:{" "}
-            {fidelity?.approximate_curated ?? "—"} · placeholder FBS:{" "}
+            Final-2025 SP+ efficiency carry drives Off/Def Eff alongside ESPN
+            2026 roster / QB / units; densified schedule stays approximate.
+            Named ESPN QBs: {fidelity?.espn_named_qb ?? "—"} · approximate
+            teams: {fidelity?.approximate_curated ?? "—"} · placeholder FBS:{" "}
             {fidelity?.placeholder_fbs ?? "—"}. Returning snap% and portal-out
             still proxies; coaching / HFA curated.
           </p>

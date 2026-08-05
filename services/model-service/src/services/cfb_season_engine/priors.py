@@ -16,6 +16,9 @@ v0.6.1 measured projection calibration — decompress top O indices, temper
 inflated QB proxies, widen blue-blood vs G5 spreads without inventing 45-pt lines.
 v0.7 adds QB + skill player role-share hooks allocated from team totals
 (does not mutate team scores/spreads).
+v0.8 adds opponent-adjusted efficiency backbone (2025 SP+ carry) as a
+primary complementary driver beside roster/QB; unit weights reduced to
+avoid double-counting the same variance.
 """
 
 from __future__ import annotations
@@ -23,7 +26,7 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.7-player-hooks"
+ENGINE_VERSION = "cfb-season-engine-v0.8-efficiency"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.6.1-calibration"
 
 # ---------------------------------------------------------------------------
@@ -64,8 +67,9 @@ PLAYER_RB_FEATURE_RATIO = 1.35
 MATCHUP_RESPONSE = 1.22
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
-MATCHUP_RATIO_CLAMP = (0.55, 1.42)
-MATCHUP_RATIO_EXCESS_RETAIN = 0.50
+# Slightly tighter vs v0.7 — efficiency backbone already widens SP+ gaps.
+MATCHUP_RATIO_CLAMP = (0.55, 1.38)
+MATCHUP_RATIO_EXCESS_RETAIN = 0.40
 
 # Path evolution (mild; not backtested). Early weeks add extra noise.
 STRENGTH_UPDATE_RATE = 0.028
@@ -129,15 +133,17 @@ UNIT_EXPERIENCE_WEIGHT = 0.30
 UNIT_PORTAL_WEIGHT = 0.20
 
 # ---------------------------------------------------------------------------
-# Layer 4 — composition: roster + QB + position groups
-# Historical team strength is deliberately *not* a dominant term.
-# Unit grades are material (testable ablation deltas) while roster/QB
-# contrasts (UGA > FSU > COLO) remain intact.
+# Layer 4 — composition: efficiency + roster + QB + position groups
+# Opponent-adjusted efficiency (2025 SP+ carry) is a primary complementary
+# driver. Unit grades stay material but are down-weighted vs v0.7 so talent
+# composites and SP+ do not both fully drive the same variance.
+# Roster/QB remain first-class for 2026 portal/NIL identity.
 # ---------------------------------------------------------------------------
-WEIGHT_ROSTER_STRENGTH = 0.34
-WEIGHT_QB_SITUATION = 0.30
-WEIGHT_SKILL_GROUP = 0.18
-WEIGHT_OL_GROUP = 0.18
+WEIGHT_OFF_EFF = 0.28
+WEIGHT_ROSTER_STRENGTH = 0.24
+WEIGHT_QB_SITUATION = 0.26
+WEIGHT_SKILL_GROUP = 0.11
+WEIGHT_OL_GROUP = 0.11
 
 # Legacy aliases retained for status docs / older call sites.
 WEIGHT_RETURNING_PROD = ROSTER_STRENGTH_RETURNING
@@ -146,24 +152,28 @@ WEIGHT_RECRUITING = ROSTER_STRENGTH_RECRUITING
 WEIGHT_EXPERIENCE = ROSTER_STRENGTH_EXPERIENCE
 WEIGHT_QB = WEIGHT_QB_SITUATION
 
-WEIGHT_DEF_ROSTER_STRENGTH = 0.20
-WEIGHT_DEF_FRONT_SEVEN = 0.38
-WEIGHT_DEF_SECONDARY = 0.32
-WEIGHT_DEF_EXPERIENCE = 0.10
+WEIGHT_DEF_EFF = 0.30
+WEIGHT_DEF_ROSTER_STRENGTH = 0.14
+WEIGHT_DEF_FRONT_SEVEN = 0.26
+WEIGHT_DEF_SECONDARY = 0.22
+WEIGHT_DEF_EXPERIENCE = 0.08
 WEIGHT_DEF_RECRUITING = 0.0  # folded into roster_strength
 
 # Direct index blends after compose (hard levers, like QB).
-# Slightly less QB blend so roster/units reassert vs inflated QB proxies.
-QB_INDEX_BLEND = 0.32
-OL_INDEX_BLEND = 0.17
-SKILL_INDEX_BLEND = 0.13
+# Unit blends softened vs v0.7 — efficiency already embeds unit quality.
+QB_INDEX_BLEND = 0.28
+OL_INDEX_BLEND = 0.10
+SKILL_INDEX_BLEND = 0.08
 # Defense unit blend toward front_seven/secondary indices.
-DEF_UNIT_BLEND = 0.28
+DEF_UNIT_BLEND = 0.16
+# Mild post-compose pull toward efficiency indices (transparent, capped).
+EFF_OFF_INDEX_BLEND = 0.08
+EFF_DEF_INDEX_BLEND = 0.08
 
 # Game-level unit matchup multipliers (applied in expected_team_points).
-# Offense boost from OL + skill; defense dampens opponent scoring via F7 + secondary.
-UNIT_OFFENSE_BOOST_SCALE = 0.11  # ±11% at unit grade extremes (0/100)
-UNIT_DEFENSE_DAMPEN_SCALE = 0.14  # ±14% opponent scoring dampen
+# Softened vs v0.7 so unit matchup + efficiency index don't double-count.
+UNIT_OFFENSE_BOOST_SCALE = 0.07  # ±7% at unit grade extremes (0/100)
+UNIT_DEFENSE_DAMPEN_SCALE = 0.09  # ±9% opponent scoring dampen
 UNIT_FRONT_SEVEN_SHARE = 0.55  # of defense dampen from front seven
 UNIT_SECONDARY_SHARE = 0.45
 UNIT_OL_SHARE = 0.55  # of offense boost from OL
@@ -313,6 +323,10 @@ def documentation() -> Dict[str, Any]:
             "matchup response; still approximate (not market-grade KEI).",
             "v0.7: QB + skill player hooks allocate team pass/rush/TD pools "
             "via depth-order role shares; team scores/spreads unchanged.",
+            "v0.8: opponent-adjusted efficiency (final-2025 SP+ carry) is a "
+            "primary complementary O/D driver; unit weights/blends reduced to "
+            "avoid double-counting. success/explosiveness are SP+ proxies "
+            "(no full PBP). Preseason 2026 = prior-year eff + roster/QB update.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~2 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
@@ -353,6 +367,7 @@ def documentation() -> Dict[str, Any]:
         "qb_class_offense_mult": dict(QB_CLASS_OFFENSE_MULT),
         "composition_weights": {
             "offense": {
+                "efficiency": WEIGHT_OFF_EFF,
                 "roster_strength": WEIGHT_ROSTER_STRENGTH,
                 "qb_situation": WEIGHT_QB_SITUATION,
                 "skill_group": WEIGHT_SKILL_GROUP,
@@ -360,14 +375,22 @@ def documentation() -> Dict[str, Any]:
                 "qb_index_blend": QB_INDEX_BLEND,
                 "ol_index_blend": OL_INDEX_BLEND,
                 "skill_index_blend": SKILL_INDEX_BLEND,
+                "eff_index_blend": EFF_OFF_INDEX_BLEND,
             },
             "defense": {
+                "efficiency": WEIGHT_DEF_EFF,
                 "roster_strength": WEIGHT_DEF_ROSTER_STRENGTH,
                 "front_seven": WEIGHT_DEF_FRONT_SEVEN,
                 "secondary": WEIGHT_DEF_SECONDARY,
                 "experience": WEIGHT_DEF_EXPERIENCE,
                 "def_unit_blend": DEF_UNIT_BLEND,
+                "eff_index_blend": EFF_DEF_INDEX_BLEND,
             },
+            "anti_double_count": (
+                "Efficiency + reduced unit weights/blends + softer game-level "
+                "unit matchup scales — units remain ablation-testable but do "
+                "not fully re-drive SP+-embedded variance."
+            ),
             "game_matchup": {
                 "unit_offense_boost_scale": UNIT_OFFENSE_BOOST_SCALE,
                 "unit_defense_dampen_scale": UNIT_DEFENSE_DAMPEN_SCALE,
