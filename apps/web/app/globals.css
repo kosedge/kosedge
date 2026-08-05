@@ -96,3 +96,48 @@ a {
 .kos-article-prose h3 + p {
   margin-top: 0.75rem;
 }
+
+/* Fantasy Draft Desk — restrained presence motion */
+@keyframes fantasy-desk-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fantasy-card-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 185, 66, 0);
+  }
+  50% {
+    box-shadow: 0 0 28px 0 rgba(245, 185, 66, 0.12);
+  }
+}
+
+.fantasy-desk > section {
+  animation: fantasy-desk-in 420ms ease-out both;
+}
+
+.fantasy-desk > section:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.fantasy-desk > section:nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.fantasy-player-card {
+  animation: fantasy-desk-in 380ms ease-out both, fantasy-card-glow 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fantasy-desk > section,
+  .fantasy-player-card {
+    animation: none;
+  }
+}

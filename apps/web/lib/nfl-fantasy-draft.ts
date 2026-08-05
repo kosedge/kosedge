@@ -50,6 +50,10 @@ export type NflFantasyDraftRankingRow = {
   defensiveTdsTotal: number | null;
   safetiesTotal: number | null;
   totalPoints: number;
+  /** Season fantasy-point floor when materializer supplies quantiles. */
+  floorPoints: number | null;
+  medianPoints: number | null;
+  ceilingPoints: number | null;
   replacementPoints: number;
   valueOverReplacement: number;
   rankOverall: number;
@@ -82,9 +86,31 @@ function toNumber(value: unknown, fallback = 0): number {
   return toNumberOrNull(value) ?? fallback;
 }
 
+function quantilesFromPayload(raw: Record<string, unknown>): {
+  floorPoints: number | null;
+  medianPoints: number | null;
+  ceilingPoints: number | null;
+} {
+  const payload =
+    raw.projection_payload && typeof raw.projection_payload === "object"
+      ? (raw.projection_payload as Record<string, unknown>)
+      : {};
+  return {
+    floorPoints:
+      toNumberOrNull(raw.floor_points) ?? toNumberOrNull(payload.floor_points),
+    medianPoints:
+      toNumberOrNull(raw.median_points) ??
+      toNumberOrNull(payload.median_points),
+    ceilingPoints:
+      toNumberOrNull(raw.ceiling_points) ??
+      toNumberOrNull(payload.ceiling_points),
+  };
+}
+
 function normalizeDraftRow(
   raw: Record<string, unknown>,
 ): NflFantasyDraftRankingRow {
+  const quantiles = quantilesFromPayload(raw);
   return {
     season: toNumber(raw.season),
     scoringProfile:
@@ -113,6 +139,9 @@ function normalizeDraftRow(
     defensiveTdsTotal: toNumberOrNull(raw.defensive_tds_total),
     safetiesTotal: toNumberOrNull(raw.safeties_total),
     totalPoints: toNumber(raw.total_points),
+    floorPoints: quantiles.floorPoints,
+    medianPoints: quantiles.medianPoints,
+    ceilingPoints: quantiles.ceilingPoints,
     replacementPoints: toNumber(raw.replacement_points),
     valueOverReplacement: toNumber(raw.value_over_replacement),
     rankOverall: toNumber(raw.rank_overall),

@@ -15845,6 +15845,14 @@ def _fetch_season_player_totals(
               SUM(COALESCE(b.pass_tds_mean, 0.0)) AS pass_tds_total,
               SUM(COALESCE(b.rush_tds_mean, 0.0)) AS rush_tds_total,
               SUM(COALESCE(b.rec_tds_mean, 0.0)) AS rec_tds_total,
+              SUM(COALESCE((b.floor_outcome->>'pass_yards')::numeric, b.pass_yards_mean * 0.75, 0.0)) AS pass_yards_floor,
+              SUM(COALESCE((b.floor_outcome->>'rush_yards')::numeric, b.rush_yards_mean * 0.70, 0.0)) AS rush_yards_floor,
+              SUM(COALESCE((b.floor_outcome->>'receiving_yards')::numeric, b.receiving_yards_mean * 0.70, 0.0)) AS receiving_yards_floor,
+              SUM(COALESCE((b.floor_outcome->>'receptions')::numeric, b.receptions_mean * 0.70, 0.0)) AS receptions_floor,
+              SUM(COALESCE((b.ceiling_outcome->>'pass_yards')::numeric, b.pass_yards_mean * 1.25, 0.0)) AS pass_yards_ceiling,
+              SUM(COALESCE((b.ceiling_outcome->>'rush_yards')::numeric, b.rush_yards_mean * 1.30, 0.0)) AS rush_yards_ceiling,
+              SUM(COALESCE((b.ceiling_outcome->>'receiving_yards')::numeric, b.receiving_yards_mean * 1.30, 0.0)) AS receiving_yards_ceiling,
+              SUM(COALESCE((b.ceiling_outcome->>'receptions')::numeric, b.receptions_mean * 1.30, 0.0)) AS receptions_ceiling,
               MAX(r.rookie_year) AS rookie_year,
               MAX(r.draft_number) AS draft_number
             FROM nfl_player_projection_baselines b
@@ -15879,6 +15887,15 @@ def _fetch_season_player_totals(
                 "pass_tds_total": float(row["pass_tds_total"] or 0.0),
                 "rush_tds_total": float(row["rush_tds_total"] or 0.0),
                 "rec_tds_total": float(row["rec_tds_total"] or 0.0),
+                # Season-aggregate outcome bands for fantasy floor/ceiling.
+                "pass_yards_floor": float(row["pass_yards_floor"] or 0.0),
+                "rush_yards_floor": float(row["rush_yards_floor"] or 0.0),
+                "receiving_yards_floor": float(row["receiving_yards_floor"] or 0.0),
+                "receptions_floor": float(row["receptions_floor"] or 0.0),
+                "pass_yards_ceiling": float(row["pass_yards_ceiling"] or 0.0),
+                "rush_yards_ceiling": float(row["rush_yards_ceiling"] or 0.0),
+                "receiving_yards_ceiling": float(row["receiving_yards_ceiling"] or 0.0),
+                "receptions_ceiling": float(row["receptions_ceiling"] or 0.0),
                 "rookie_year": int(rookie_year) if rookie_year is not None else None,
                 "draft_number": int(row["draft_number"]) if row["draft_number"] is not None else None,
                 "is_rookie": bool(rookie_year is not None and int(rookie_year) == int(season)),
@@ -16511,12 +16528,54 @@ def materialize_nfl_fantasy_season_draft_rankings(
                     receptions=player["receptions_total"],
                     rec_tds=player["rec_tds_total"],
                 )
-                profile_players.append({**player, "total_points": total_points})
+                # Season floor/ceiling mirror weekly fantasy: use outcome-band
+                # yards/receptions + scaled TD means (0.60 / 1.35).
+                floor_points = fantasy_points_from_projection(
+                    scoring_profile=profile,
+                    pass_yards=float(player.get("pass_yards_floor") or 0.0),
+                    pass_tds=float(player["pass_tds_total"]) * 0.60,
+                    rush_yards=float(player.get("rush_yards_floor") or 0.0),
+                    rush_tds=float(player["rush_tds_total"]) * 0.60,
+                    receiving_yards=float(player.get("receiving_yards_floor") or 0.0),
+                    receptions=float(player.get("receptions_floor") or 0.0),
+                    rec_tds=float(player["rec_tds_total"]) * 0.60,
+                )
+                ceiling_points = fantasy_points_from_projection(
+                    scoring_profile=profile,
+                    pass_yards=float(player.get("pass_yards_ceiling") or player["pass_yards_total"]),
+                    pass_tds=float(player["pass_tds_total"]) * 1.35,
+                    rush_yards=float(player.get("rush_yards_ceiling") or player["rush_yards_total"]),
+                    rush_tds=float(player["rush_tds_total"]) * 1.35,
+                    receiving_yards=float(
+                        player.get("receiving_yards_ceiling") or player["receiving_yards_total"]
+                    ),
+                    receptions=float(player.get("receptions_ceiling") or player["receptions_total"]),
+                    rec_tds=float(player["rec_tds_total"]) * 1.35,
+                )
+                profile_players.append(
+                    {
+                        **player,
+                        "total_points": total_points,
+                        "floor_points": floor_points,
+                        "median_points": total_points,
+                        "ceiling_points": ceiling_points,
+                    }
+                )
             # K/DST `total_points` is already profile-independent (computed
             # once in _fetch_kicker_season_players/_fetch_dst_season_players)
             # -- reused as-is for every profile rather than re-derived here.
-            profile_players.extend(kicker_players)
-            profile_players.extend(dst_players)
+            # Approximate K/DST bands with a thin positional spread until
+            # dedicated outcome quantiles exist for those positions.
+            for special in (*kicker_players, *dst_players):
+                pts = float(special.get("total_points") or 0.0)
+                profile_players.append(
+                    {
+                        **special,
+                        "floor_points": round(pts * 0.85, 4),
+                        "median_points": pts,
+                        "ceiling_points": round(pts * 1.15, 4),
+                    }
+                )
 
             ranked = rank_season_fantasy_players(profile_players)
             for player in ranked:
@@ -16524,6 +16583,12 @@ def materialize_nfl_fantasy_season_draft_rankings(
                 projection_payload.setdefault("aggregation", "season_total")
                 projection_payload.setdefault("profile", profile)
                 projection_payload.setdefault("derived_from", "nfl_player_projection_baselines")
+                projection_payload["floor_points"] = float(player.get("floor_points") or player["total_points"])
+                projection_payload["median_points"] = float(player.get("median_points") or player["total_points"])
+                projection_payload["ceiling_points"] = float(
+                    player.get("ceiling_points") or player["total_points"]
+                )
+                projection_payload["uncertainty_source"] = "baseline_floor_ceiling_outcomes"
                 session.execute(
                     text(
                         """
