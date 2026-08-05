@@ -288,7 +288,7 @@ export default function CfbProjectGameClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · fidelity approximate · Edge Board markets-only unchanged
+            · calibration approximate · Edge Board markets-only unchanged
           </p>
         </div>
       </section>

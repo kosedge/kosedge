@@ -9,6 +9,10 @@ from __future__ import annotations
 from src.services.cfb_season_engine.priors import (  # noqa: F401
     CALIBRATION_TAG,
     ENGINE_VERSION,
+    MATCHUP_RATIO_CLAMP,
+    MATCHUP_RESPONSE,
+    QB_SITUATION_INDEX_CLAMP,
+    STRENGTH_CLAMP,
     documentation,
     early_season_factor,
     early_season_uncertainty,
@@ -20,6 +24,10 @@ from src.services.cfb_season_engine.priors import (  # noqa: F401
 __all__ = [
     "CALIBRATION_TAG",
     "ENGINE_VERSION",
+    "MATCHUP_RATIO_CLAMP",
+    "MATCHUP_RESPONSE",
+    "QB_SITUATION_INDEX_CLAMP",
+    "STRENGTH_CLAMP",
     "documentation",
     "early_season_factor",
     "early_season_uncertainty",

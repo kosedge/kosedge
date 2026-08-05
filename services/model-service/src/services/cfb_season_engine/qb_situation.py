@@ -65,9 +65,10 @@ def compute_qb_situation_index(
 ) -> Tuple[float, float, Dict[str, Any]]:
     """First-class QB lever → (index, 0–100 score, inspectable breakdown).
 
-    Index ≈ 0.55–1.55 (1.0 ≈ FBS-average situation). Class multiplier and
+    Index ≈ 0.62–1.38 (1.0 ≈ FBS-average situation). Class multiplier and
     supporting cast are applied *after* talent so true_freshman vs incumbent
-    separates sharply even at equal talent.
+    separates sharply even at equal talent. Clamped separately from team
+    STRENGTH_CLAMP so a hot talent proxy cannot invent P4 offense alone.
     """
     talent = _clamp(qb_talent)
     cast = _clamp(supporting_cast)
@@ -75,7 +76,8 @@ def compute_qb_situation_index(
     class_mult = float(P.QB_CLASS_OFFENSE_MULT.get(qb_class, 0.94))
     cast_mult = 1.0 + P.QB_CAST_INDEX_SCALE * (cast - 50.0) / 50.0
     raw = talent_index * class_mult * cast_mult
-    index = max(P.STRENGTH_CLAMP[0], min(P.STRENGTH_CLAMP[1], raw))
+    lo, hi = P.QB_SITUATION_INDEX_CLAMP
+    index = max(lo, min(hi, raw))
     score = _clamp(50.0 + (index - 1.0) * 80.0)
     breakdown = {
         "qb_talent": round(talent, 2),
@@ -149,7 +151,8 @@ def build_qb_situation(
             supporting_cast=float(cast),
         )
     else:
-        index = max(P.STRENGTH_CLAMP[0], min(P.STRENGTH_CLAMP[1], float(index_override)))
+        lo, hi = P.QB_SITUATION_INDEX_CLAMP
+        index = max(lo, min(hi, float(index_override)))
         score = _clamp(p.get("qb_situation_score", 50.0 + (index - 1.0) * 80.0))
 
     fidelity = str(p.get("fidelity", "approximate"))

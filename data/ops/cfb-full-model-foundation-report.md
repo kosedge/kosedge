@@ -1,9 +1,9 @@
-# Full CFB Model: Foundation → UI Exposure (v0.6)
+# Full CFB Model: Foundation → UI Exposure (v0.6.1)
 
-**Branch:** `feat/cfb-real-roster` → `deploy-vercel`  
-**Engine version:** `cfb-season-engine-v0.6-real-roster`  
+**Branch:** `feat/cfb-projection-calibration` → `deploy-vercel`  
+**Engine version:** `cfb-season-engine-v0.6.1-calibration`  
 **Date:** 2026-08-04  
-**Status:** Hierarchical foundation through season simulation, HFA + coaching continuity, Pro UI, plus **v0.6 ESPN 2026 real-roster overlay** for Layers 1–3. Calibration intentionally thin. Additive vs NFL engine and CFB markets-only Edge Board.
+**Status:** Hierarchical foundation through season simulation, HFA + coaching continuity, Pro UI, **v0.6 ESPN 2026 real-roster overlay**, plus **v0.6.1 measured projection calibration**. Still approximate (not market-grade KEI). Additive vs NFL engine and CFB markets-only Edge Board.
 
 ## Goal
 
@@ -24,7 +24,8 @@ Design constraints (2026 reality):
 **v0.4 focus:** season simulation + early-season uncertainty + project-game drivers.  
 **v0.5 focus:** variable HFA + coaching continuity. See `data/ops/cfb-hfa-coaching-20260804.md`.  
 **v0.5.1 focus:** first UI surface + measured projection tightening. See `data/ops/cfb-ui-exposure-20260804.md`.
-**v0.6 focus:** ESPN 2026 real-roster / depth / portal-history overlay. See `data/ops/cfb-real-roster-20260804.md`.
+**v0.6 focus:** ESPN 2026 real-roster / depth / portal-history overlay. See `data/ops/cfb-real-roster-20260804.md`.  
+**v0.6.1 focus:** measured projection calibration (team indices, spreads/totals sanity, win-dist width). See `data/ops/cfb-projection-calibration-20260804.md`.
 
 ## Architecture (layers + feed order)
 
@@ -51,7 +52,7 @@ schedule.densify_schedule ──► usable season paths (labeled approximate)
 | Season sim | `season_sim.py` | Path-coherent season wins dist, week sample, ranking, optional conf standings | Structure solid; densified schedule + evolution **approximate**. |
 | Schedule | `schedule.py` | Seed sample + densify toward ~12 games/team | Artifact real; paths **approximate / not official**. |
 | Player hooks | `player_hooks.py` | Thin QB/skill identity attach | Wiring solid; identities thin. |
-| Priors | `priors.py` / `calibration.py` | League env + early-season uncertainty (CFB-wider than NFL) | Explicitly approximate. |
+| Priors | `priors.py` / `calibration.py` | League env + early-season uncertainty + v0.6.1 calibration knobs | Explicitly approximate (sanity-calibrated, not CLV). |
 
 Package root: `services/model-service/src/services/cfb_season_engine/`
 
@@ -90,8 +91,8 @@ Web (Vercel BFF; secrets server-side):
 - `/pro/cfb/model` · `/pro/cfb/project-game`
 - `/api/cfb/season-engine/{status,project-game,simulate}`
 
-Tests: `services/model-service/tests/test_cfb_season_engine.py`  
-Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260804.md`, `cfb-season-sim-20260804.md`, `cfb-position-projection-20260804.md`, `cfb-roster-qb-20260804.md`)
+Tests: `services/model-service/tests/test_cfb_season_engine.py`, `test_cfb_real_roster.py`  
+Ops detail: `data/ops/cfb-projection-calibration-20260804.md` (also `cfb-real-roster-20260804.md`, `cfb-ui-exposure-20260804.md`, `cfb-hfa-coaching-20260804.md`, `cfb-season-sim-20260804.md`)
 
 ## What is solid vs approximate
 
@@ -119,9 +120,9 @@ Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260
 - Coaching staff change flags for 2026 (curated proxies)
 - Densified schedule paths (not official FBS slate)
 - Conference affiliations / standings
-- Game win probabilities / spreads / totals
+- Game win probabilities / spreads / totals (v0.6.1 sanity-calibrated; not CLV)
 - In-path strength evolution
-- Season win totals / ranking-ish order (SOS-sensitive under densify)
+- Season win totals / ranking-ish order (SOS-sensitive under densify; G5 paths still soft)
 
 **Placeholder / deferred**
 
@@ -157,7 +158,7 @@ Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260
 5. Calibrated / external unit grades (SP+ style) replacing approximate talent composites
 6. Deepen player hooks → usage/production path (skill + QB)
 7. CFP bracket skeleton on season_sim
-8. Calibration pass against 2022–2025 FBS results
+8. ~~Projection sanity calibration (decompress indices, bettable mismatch spreads)~~ **v0.6.1 done** — deepen with 2022–2025 graded backtest next
 9. Edge Board KEI only after calibrated fair lines exist (keep markets-only until then)
 10. Richer Pro desks (season-path explorer, conference standings UI) beyond project-game
 
@@ -166,7 +167,7 @@ Ops detail: `data/ops/cfb-ui-exposure-20260804.md` (also `cfb-hfa-coaching-20260
 Pushing model-service paths to `deploy-vercel` triggers `.github/workflows/deploy-railway.yml`.  
 Live check after deploy:
 
-- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.6-real-roster`
+- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.6.1-calibration`
 - `POST /cfb/season-engine/project-game` with `drivers.matchup.hfa` + coaching adj + ratio clamp diag
 - `POST /cfb/season-engine/simulate` with `diagnostics.variable_hfa` / `coaching_continuity`
-- Web: `https://www.kosedge.com/pro/cfb/model` + `/pro/cfb/project-game`
+- Web: `https://www.kosedge.com/pro/cfb/model` + `/pro/cfb/project-game` (shows calibration version)
