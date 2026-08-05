@@ -1,6 +1,10 @@
 import "server-only";
 
-import { ADP_PROXY_LABEL, enrichDraftRows } from "@/lib/fantasy/enrich";
+import {
+  ADP_PROXY_LABEL,
+  enrichDraftRows,
+  type EnrichableDraftRow,
+} from "@/lib/fantasy/enrich";
 import { loadNfl2026DepthRows, loadNfl2026ScheduleGames } from "@/lib/fantasy/load-schedule";
 import { fantasyPointsFromBox } from "@/lib/fantasy/scoring";
 import {
@@ -30,7 +34,7 @@ function apiRowToEnrichable(row: NflFantasyDraftRankingRow & {
   floorPoints?: number | null;
   medianPoints?: number | null;
   ceilingPoints?: number | null;
-}) {
+}): EnrichableDraftRow {
   return {
     season: row.season,
     scoringProfile: row.scoringProfile,
@@ -72,7 +76,7 @@ function buildFallbackBoard(input: {
   rookiesOnly?: boolean;
   limit: number;
 }): {
-  rows: ReturnType<typeof apiRowToEnrichable>[];
+  rows: EnrichableDraftRow[];
   limitations: string[];
 } | null {
   const bundle = loadLatestNflPreseasonBundle2026();
@@ -192,14 +196,8 @@ export async function loadFantasyDraftDesk(params: {
     })),
   );
 
-  let enrichable = api.rows.map((row) =>
-    apiRowToEnrichable(
-      row as NflFantasyDraftRankingRow & {
-        floorPoints?: number | null;
-        medianPoints?: number | null;
-        ceilingPoints?: number | null;
-      },
-    ),
+  let enrichable: EnrichableDraftRow[] = api.rows.map((row) =>
+    apiRowToEnrichable(row),
   );
   let source: FantasyDeskBoard["source"] = "model-service";
   let limitations = [...LIMITATIONS_BASE];

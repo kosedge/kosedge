@@ -4,13 +4,11 @@ import { buildRiskFlags, type DepthRow } from "@/lib/fantasy/risk-signals";
 import {
   floorMedianCeilingFromMean,
 } from "@/lib/fantasy/scoring";
-import {
-  NEUTRAL_SCHEDULE,
-  type ScheduleWindowNote,
-} from "@/lib/fantasy/schedule-context";
+import { NEUTRAL_SCHEDULE } from "@/lib/fantasy/schedule-context";
 import type {
   FantasyDeskRow,
   FantasyScoringProfile,
+  ScheduleWindowNote,
 } from "@/lib/fantasy/types";
 
 export type EnrichableDraftRow = {
