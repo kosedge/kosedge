@@ -41,8 +41,9 @@ from src.services.cfb_season_engine import priors as P
 
 log = logging.getLogger("kosedge.cfb.performance_tracking")
 
-_REPO_ROOT = Path(__file__).resolve().parents[5]
-_DEFAULT_LAKE = _REPO_ROOT / "data" / "ops" / "cfb_projection_logs"
+# model-service root (works with Railway --path-as-root and monorepo checkout).
+_SERVICE_ROOT = Path(__file__).resolve().parents[3]
+_DEFAULT_LAKE = _SERVICE_ROOT / "data" / "ops" / "cfb_projection_logs"
 LAKE_DIR = Path(os.getenv("CFB_PROJECTION_LOG_DIR") or _DEFAULT_LAKE)
 JSONL_NAME = "projections.jsonl"
 
@@ -279,10 +280,32 @@ def _opt_str(v: Any) -> Optional[str]:
     return s or None
 
 
+def _resolve_lake(lake_dir: Optional[Path] = None) -> Path:
+    """Prefer configured lake; fall back to /tmp if the default is not writable."""
+    candidates: List[Path] = []
+    if lake_dir is not None:
+        candidates.append(Path(lake_dir))
+    else:
+        candidates.append(LAKE_DIR)
+        candidates.append(Path("/tmp/kosedge_cfb_projection_logs"))
+    for d in candidates:
+        try:
+            d.mkdir(parents=True, exist_ok=True)
+            probe = d / ".write_probe"
+            probe.write_text("ok", encoding="utf-8")
+            try:
+                probe.unlink()
+            except OSError:
+                pass
+            return d
+        except OSError as exc:
+            log.warning("cfb projection lake not writable (%s): %s", d, exc)
+            continue
+    return Path("/tmp/kosedge_cfb_projection_logs")
+
+
 def _jsonl_path(lake_dir: Optional[Path] = None) -> Path:
-    d = Path(lake_dir) if lake_dir is not None else LAKE_DIR
-    d.mkdir(parents=True, exist_ok=True)
-    return d / JSONL_NAME
+    return _resolve_lake(lake_dir) / JSONL_NAME
 
 
 def _read_jsonl(lake_dir: Optional[Path] = None) -> List[ProjectionLog]:
@@ -290,15 +313,19 @@ def _read_jsonl(lake_dir: Optional[Path] = None) -> List[ProjectionLog]:
     if not path.exists():
         return []
     out: List[ProjectionLog] = []
-    with path.open("r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                out.append(ProjectionLog.from_dict(json.loads(line)))
-            except (json.JSONDecodeError, TypeError, ValueError) as exc:
-                log.warning("skip bad projection log line: %s", exc)
+    try:
+        with path.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    out.append(ProjectionLog.from_dict(json.loads(line)))
+                except (json.JSONDecodeError, TypeError, ValueError) as exc:
+                    log.warning("skip bad projection log line: %s", exc)
+    except OSError as exc:
+        log.warning("cfb projection lake read failed: %s", exc)
+        return []
     return out
 
 
