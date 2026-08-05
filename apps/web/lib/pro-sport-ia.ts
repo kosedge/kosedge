@@ -324,8 +324,8 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         },
         {
           href: "/pro/nfl/fantasy",
-          label: "Fantasy Draft Board",
-          hint: "VOR-ranked draft board across QB/RB/WR/TE/K/DST with tiers.",
+          label: "Fantasy Draft Desk",
+          hint: "Model ranks vs ADP, floor/median/ceiling, schedule notes, team builder.",
           premium: true,
           status: "active",
         },

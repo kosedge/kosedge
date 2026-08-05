@@ -172,10 +172,10 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       },
       {
         href: "/pro/nfl/fantasy",
-        title: "Fantasy Draft Board",
+        title: "Fantasy Draft Desk",
         description:
-          "VOR-ranked draft board across QB/RB/WR/TE/K/DST with scoring toggles.",
-        cta: "Open draft board →",
+          "Model vs ADP, floor/median/ceiling, schedule context, and team builder.",
+        cta: "Open draft desk →",
         accent: "gold",
       },
       {

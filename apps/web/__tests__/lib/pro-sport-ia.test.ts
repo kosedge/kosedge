@@ -57,7 +57,7 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
   ],
   "Props & Fantasy": [
     "Player Props Board",
-    "Fantasy Draft Board",
+    "Fantasy Draft Desk",
     "Weekly Fantasy Projections",
     "DFS Board",
   ],
@@ -136,7 +136,7 @@ describe("pro sport IA", () => {
     expect(byLabel["Execution Monitor"]).toBe("/pro/nfl/execution");
     expect(byLabel.Futures).toBe("/pro/nfl/projections");
     expect(byLabel["Player Props Board"]).toBe("/pro/nfl/props");
-    expect(byLabel["Fantasy Draft Board"]).toBe("/pro/nfl/fantasy");
+    expect(byLabel["Fantasy Draft Desk"]).toBe("/pro/nfl/fantasy");
     expect(byLabel["Weekly Fantasy Projections"]).toBe(
       "/pro/nfl/weekly-fantasy",
     );

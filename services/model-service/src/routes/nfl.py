@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from decimal import Decimal
@@ -3819,7 +3820,11 @@ def nfl_fantasy_draft_rankings(
     which is a single week's start/sit ranking) -- one row per player summed
     across the whole real projected season, with overall rank, position
     rank, draft tier, and a rookie flag. See
-    `nfl_fantasy_season_draft_rankings` / `materialize_nfl_fantasy_season_draft_rankings`."""
+    `nfl_fantasy_season_draft_rankings` / `materialize_nfl_fantasy_season_draft_rankings`.
+
+    Phase 1 Draft Desk also surfaces floor/median/ceiling fantasy points
+    lifted from `projection_payload` (populated by the materializer from
+    baseline floor/ceiling outcomes)."""
     session = SessionLocal()
     try:
         rows = session.execute(
@@ -3833,7 +3838,8 @@ def nfl_fantasy_draft_rankings(
                   points_allowed_total, sacks_total, def_interceptions_total, fumble_recoveries_total,
                   defensive_tds_total, safeties_total,
                   total_points, replacement_points, value_over_replacement,
-                  rank_overall, rank_position, tier, is_rookie, rookie_year, draft_number, updated_at
+                  rank_overall, rank_position, tier, is_rookie, rookie_year, draft_number,
+                  projection_payload, updated_at
                 FROM nfl_fantasy_season_draft_rankings
                 WHERE season = :season
                   AND scoring_profile = :scoring_profile
@@ -3855,7 +3861,22 @@ def nfl_fantasy_draft_rankings(
                 "limit": limit,
             },
         ).fetchall()
-        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+        out_rows: List[Dict[str, Any]] = []
+        for row in rows:
+            payload = dict(row._mapping)
+            proj = payload.get("projection_payload") or {}
+            if isinstance(proj, str):
+                try:
+                    proj = json.loads(proj)
+                except Exception:  # noqa: BLE001
+                    proj = {}
+            if not isinstance(proj, dict):
+                proj = {}
+            payload["floor_points"] = proj.get("floor_points")
+            payload["median_points"] = proj.get("median_points", payload.get("total_points"))
+            payload["ceiling_points"] = proj.get("ceiling_points")
+            out_rows.append(payload)
+        return {"count": len(out_rows), "rows": out_rows}
     finally:
         session.close()
 

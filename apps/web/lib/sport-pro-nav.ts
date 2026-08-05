@@ -99,7 +99,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/standings", label: "Standings" },
       { href: "/pro/nfl/depth-charts", label: "Depth Charts" },
       { href: "/pro/nfl/injuries", label: "Injuries & News" },
-      { href: "/pro/nfl/fantasy", label: "Fantasy Draft" },
+      { href: "/pro/nfl/fantasy", label: "Draft Desk" },
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
       { href: "/pro/nfl/dfs", label: "DFS" },
       { href: "/pro/nfl/player-previews", label: "Player Previews" },
