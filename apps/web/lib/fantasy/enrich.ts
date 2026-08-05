@@ -101,7 +101,20 @@ export function enrichDraftRows(input: {
     const schedule =
       input.scheduleByTeam.get(row.team.toUpperCase()) ?? NEUTRAL_SCHEDULE;
     const riskFlags = committeeProbe;
-    const drivers = buildDrivers(row);
+    const drivers = buildDrivers({
+      position: row.position,
+      team: row.team,
+      passYardsTotal: row.passYardsTotal,
+      rushYardsTotal: row.rushYardsTotal,
+      receivingYardsTotal: row.receivingYardsTotal,
+      receptionsTotal: row.receptionsTotal,
+      passTdsTotal: row.passTdsTotal,
+      rushTdsTotal: row.rushTdsTotal,
+      recTdsTotal: row.recTdsTotal,
+      valueOverReplacement: row.valueOverReplacement,
+      tier: row.tier,
+      gamesProjected: row.gamesProjected,
+    });
     const expertBlurb = buildExpertBlurb({
       playerName: row.playerName,
       team: row.team,
@@ -112,6 +125,7 @@ export function enrichDraftRows(input: {
       valueDelta: delta,
       tier: row.tier,
       floorPoints: band.floorPoints,
+      medianPoints: band.medianPoints,
       ceilingPoints: band.ceilingPoints,
       schedule,
       riskFlags,
