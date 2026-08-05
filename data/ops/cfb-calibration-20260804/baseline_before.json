@@ -1,0 +1,354 @@
+{
+  "engine_version": "cfb-season-engine-v0.6-real-roster",
+  "roster_strength": {
+    "min": 50.36,
+    "max": 73.14,
+    "mean": 60.592461538461535,
+    "stdev": 5.664325754096485,
+    "top10": [
+      [
+        "ALA",
+        73.14
+      ],
+      [
+        "MICH",
+        73.07
+      ],
+      [
+        "MISS",
+        73.01
+      ],
+      [
+        "LSU",
+        71.91
+      ],
+      [
+        "TEX",
+        71.58
+      ],
+      [
+        "MIA",
+        71.36
+      ],
+      [
+        "CLEM",
+        71.03
+      ],
+      [
+        "OSU",
+        70.57
+      ],
+      [
+        "AUB",
+        70.35
+      ],
+      [
+        "COLO",
+        69.97
+      ]
+    ],
+    "bottom10": [
+      [
+        "CONN",
+        52.19
+      ],
+      [
+        "NIU",
+        52.06
+      ],
+      [
+        "FRES",
+        52.01
+      ],
+      [
+        "LT",
+        52.0
+      ],
+      [
+        "UL",
+        51.76
+      ],
+      [
+        "IDHO",
+        51.32
+      ],
+      [
+        "KENT",
+        51.3
+      ],
+      [
+        "FAY",
+        50.82
+      ],
+      [
+        "SOUTH",
+        50.82
+      ],
+      [
+        "ARMY",
+        50.36
+      ]
+    ],
+    "spread": 22.78
+  },
+  "power": {
+    "min": 0.96285,
+    "max": 1.47595,
+    "mean": 1.2453473076923076,
+    "stdev": 0.13523187242538115,
+    "top10": [
+      [
+        "ALA",
+        1.47595,
+        1.5359,
+        1.416
+      ],
+      [
+        "TEX",
+        1.4555,
+        1.55,
+        1.361
+      ],
+      [
+        "CLEM",
+        1.4517,
+        1.5154,
+        1.388
+      ],
+      [
+        "OSU",
+        1.4473500000000001,
+        1.55,
+        1.3447
+      ],
+      [
+        "MISS",
+        1.44565,
+        1.55,
+        1.3413
+      ],
+      [
+        "LSU",
+        1.44555,
+        1.55,
+        1.3411
+      ],
+      [
+        "MIA",
+        1.4428,
+        1.55,
+        1.3356
+      ],
+      [
+        "MICH",
+        1.43865,
+        1.55,
+        1.3273
+      ],
+      [
+        "AUB",
+        1.4337,
+        1.55,
+        1.3174
+      ],
+      [
+        "OU",
+        1.4325,
+        1.55,
+        1.315
+      ]
+    ],
+    "bottom10": [
+      [
+        "CMU",
+        1.01755,
+        0.9883,
+        1.0468
+      ],
+      [
+        "BALL",
+        1.0009,
+        0.9548,
+        1.047
+      ],
+      [
+        "APP",
+        0.99895,
+        0.9224,
+        1.0755
+      ],
+      [
+        "FRES",
+        0.9934000000000001,
+        0.9505,
+        1.0363
+      ],
+      [
+        "FAY",
+        0.9924999999999999,
+        0.9626,
+        1.0224
+      ],
+      [
+        "SOUTH",
+        0.9924999999999999,
+        0.9626,
+        1.0224
+      ],
+      [
+        "IDHO",
+        0.98375,
+        0.95,
+        1.0175
+      ],
+      [
+        "CONN",
+        0.9726,
+        0.9216,
+        1.0236
+      ],
+      [
+        "UL",
+        0.9718,
+        0.9085,
+        1.0351
+      ],
+      [
+        "RICE",
+        0.96285,
+        0.8887,
+        1.037
+      ]
+    ],
+    "spread": 0.5131000000000001,
+    "off_range": [
+      0.8887,
+      1.55,
+      0.20157516506652706
+    ],
+    "def_range": [
+      1.0162,
+      1.416,
+      0.09380606868055912
+    ]
+  },
+  "project_games": [
+    {
+      "label": "SEC blue vs G5",
+      "matchup": "BALL@UGA",
+      "week": 1,
+      "spread": -19.2,
+      "total": 60.0,
+      "home_score": 39.6,
+      "away_score": 20.4,
+      "home_wp": 0.8151,
+      "margin_sd": 21.411
+    },
+    {
+      "label": "B1G blue vs G5",
+      "matchup": "EMU@OSU",
+      "week": 1,
+      "spread": -12.63,
+      "total": 66.59,
+      "home_score": 39.61,
+      "away_score": 26.98,
+      "home_wp": 0.7244,
+      "margin_sd": 21.189
+    },
+    {
+      "label": "midseason blue vs G5",
+      "matchup": "NMSU@TEX",
+      "week": 5,
+      "spread": -11.42,
+      "total": 71.98,
+      "home_score": 41.7,
+      "away_score": 30.28,
+      "home_wp": 0.775,
+      "margin_sd": 15.114
+    },
+    {
+      "label": "SEC bluebloods mid",
+      "matchup": "ALA@UGA",
+      "week": 5,
+      "spread": 1.72,
+      "total": 63.08,
+      "home_score": 30.68,
+      "away_score": 32.4,
+      "home_wp": 0.4546,
+      "margin_sd": 15.078
+    },
+    {
+      "label": "rivalry mid",
+      "matchup": "MICH@OSU",
+      "week": 5,
+      "spread": -4.12,
+      "total": 67.92,
+      "home_score": 36.02,
+      "away_score": 31.9,
+      "home_wp": 0.6073,
+      "margin_sd": 15.128
+    },
+    {
+      "label": "portal-era peers W1",
+      "matchup": "COLO@FSU",
+      "week": 1,
+      "spread": -1.87,
+      "total": 64.41,
+      "home_score": 33.14,
+      "away_score": 31.27,
+      "home_wp": 0.535,
+      "margin_sd": 21.302
+    },
+    {
+      "label": "new HC elite vs G5 W1",
+      "matchup": "BALL@PSU",
+      "week": 1,
+      "spread": -14.05,
+      "total": 62.33,
+      "home_score": 38.19,
+      "away_score": 24.14,
+      "home_wp": 0.7423,
+      "margin_sd": 21.601
+    },
+    {
+      "label": "G5 vs G5",
+      "matchup": "EMU@BALL",
+      "week": 5,
+      "spread": 13.17,
+      "total": 60.81,
+      "home_score": 23.82,
+      "away_score": 36.99,
+      "home_wp": 0.2016,
+      "margin_sd": 15.755
+    },
+    {
+      "label": "ND@USC mid",
+      "matchup": "USC@ND",
+      "week": 5,
+      "spread": -1.68,
+      "total": 70.36,
+      "home_score": 36.02,
+      "away_score": 34.34,
+      "home_wp": 0.5435,
+      "margin_sd": 15.366
+    },
+    {
+      "label": "elite HFA night",
+      "matchup": "AUB@LSU",
+      "week": 1,
+      "spread": -4.38,
+      "total": 65.9,
+      "home_score": 35.14,
+      "away_score": 30.76,
+      "home_wp": 0.5834,
+      "margin_sd": 20.804
+    }
+  ],
+  "season_wins": {
+    "min": null,
+    "max": null,
+    "stdev": null,
+    "top8": [],
+    "bot8": []
+  }
+}

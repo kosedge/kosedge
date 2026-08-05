@@ -55,7 +55,7 @@ from src.services.cfb_season_engine.types import EngineUniverse, HomeFieldProfil
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.6-real-roster"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.6.1-calibration"
 
 
 def test_qb_situation_classification() -> None:
@@ -370,7 +370,7 @@ def test_ablation_raise_ol_moves_offense_and_projection() -> None:
     )
     base = compose_team_projection("HOME", roster, qb, base_groups)
     high = compose_team_projection("HOME", roster, qb, boosted)
-    assert high.offense_index < 1.55  # not clamp-capped
+    assert high.offense_index < 1.68  # not team STRENGTH_CLAMP-capped
     assert high.offense_index - base.offense_index >= 0.04
     assert unit_offense_boost(boosted) > unit_offense_boost(base_groups) + 0.03
 
@@ -864,7 +864,8 @@ def test_status_contract() -> None:
     assert "Variable HFA" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert "Coaching continuity" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
-    assert "cfb-real-roster" in payload["entry_points"]["ops"]
+    assert "cfb-projection-calibration" in payload["entry_points"]["ops"]
+    assert payload.get("calibration_tag")
     assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert payload.get("roster_source")
     assert "espn" in str(payload.get("roster_source", "")).lower()
@@ -960,3 +961,82 @@ def test_compute_qb_situation_index_class_gap() -> None:
     )
     assert inc > tf + 0.20
     assert bd_inc["class_mult"] > bd_tf["class_mult"]
+
+
+def test_calibration_blue_blood_vs_g5_ordering() -> None:
+    """UGA/TEX/OSU remain clear favorites vs BALL; spreads bettable, not absurd."""
+    from src.services.cfb_season_engine.priors import (
+        QB_SITUATION_INDEX_CLAMP,
+        STRENGTH_CLAMP,
+    )
+
+    universe = build_packaged_universe(2026)
+    favorites = ["UGA", "TEX", "OSU"]
+    ball = universe.teams["BALL"]
+    # Top offense not piled at a single ceiling the way v0.6 was.
+    off_vals = sorted({round(t.offense_index, 3) for t in universe.teams.values()}, reverse=True)
+    assert off_vals[0] <= STRENGTH_CLAMP[1] + 1e-9
+    at_ceiling = sum(
+        1 for t in universe.teams.values() if abs(t.offense_index - STRENGTH_CLAMP[1]) < 1e-6
+    )
+    assert at_ceiling <= 12  # was ~33 at the old 1.55 cap
+
+    for code in favorites:
+        state = universe.teams[code]
+        assert state.offense_index > ball.offense_index + 0.12
+        assert state.defense_index > ball.defense_index + 0.05
+        # QB proxies stay inside dedicated clamp (not team STRENGTH_CLAMP).
+        assert (
+            QB_SITUATION_INDEX_CLAMP[0]
+            <= state.qb.qb_situation_index
+            <= QB_SITUATION_INDEX_CLAMP[1]
+        )
+        proj = project_game_preview(
+            universe, home_team=code, away_team="BALL", week=5, neutral_site=False
+        )
+        assert proj.spread_home < -10.0
+        assert proj.spread_home > -36.0
+        assert proj.home_win_prob >= 0.72
+        assert 45.0 <= proj.expected_total <= 85.0
+
+
+def test_calibration_win_distribution_width_bounds() -> None:
+    """Season win means not absurdly tight; within-team std stays visible."""
+    universe = build_packaged_universe(2026)
+    result = simulate_full_season(universe, n_sims=40, seed=11)
+    means = [float(block["mean"]) for block in result.team_wins.values()]
+    stds = [float(block["std"]) for block in result.team_wins.values()]
+    assert max(means) - min(means) >= 3.0  # not collapsed to ~same win total
+    assert max(means) - min(means) <= 9.5  # densified SOS still compresses extremes
+    mean_std = sum(stds) / len(stds)
+    assert 1.4 <= mean_std <= 3.2
+    # Early-season uncertainty still widens margin_sd vs midseason.
+    p1 = project_game_preview(
+        universe, home_team="TEX", away_team="OSU", week=1, neutral_site=True
+    )
+    p5 = project_game_preview(
+        universe, home_team="TEX", away_team="OSU", week=5, neutral_site=True
+    )
+    assert p1.margin_sd > p5.margin_sd * 1.12
+
+
+def test_calibration_hfa_and_new_hc_still_material() -> None:
+    """Driver effects preserved: HFA buckets differ; new HC early penalty decays."""
+    universe = build_packaged_universe(2026)
+    lsu = project_game_preview(
+        universe, home_team="LSU", away_team="WAKE", week=6, neutral_site=False
+    )
+    ball_home = project_game_preview(
+        universe, home_team="BALL", away_team="WAKE", week=6, neutral_site=False
+    )
+    assert lsu.spread_home < ball_home.spread_home - 1.5
+
+    psu_w1 = project_game_preview(
+        universe, home_team="PSU", away_team="BALL", week=1, neutral_site=True
+    )
+    psu_w6 = project_game_preview(
+        universe, home_team="PSU", away_team="BALL", week=6, neutral_site=True
+    )
+    w1_adj = psu_w1.drivers["matchup"]["home_coaching_adj"]["own_scoring_adj"]
+    w6_adj = psu_w6.drivers["matchup"]["home_coaching_adj"]["own_scoring_adj"]
+    assert w1_adj < w6_adj  # more negative early

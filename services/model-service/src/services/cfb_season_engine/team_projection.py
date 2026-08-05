@@ -60,8 +60,16 @@ def _soft_clamp_ratio(raw: float, low: float, high: float, retain: float) -> flo
 
 
 def _score_to_index(score_0_100: float) -> float:
-    """Map 0–100 unit score to ~0.7–1.35 strength index (1.0 at 50)."""
-    return _clamp(1.0 + (float(score_0_100) - 50.0) / 80.0, 0.65, 1.45)
+    """Map 0–100 unit score to strength index (1.0 at 50).
+
+    Slope / clamp come from priors (v0.6.1 steepens vs /80 to reduce compression).
+    """
+    lo, hi = P.SCORE_TO_INDEX_CLAMP
+    return _clamp(
+        1.0 + (float(score_0_100) - 50.0) / P.SCORE_TO_INDEX_DIVISOR,
+        lo,
+        hi,
+    )
 
 
 def _unit_index(grade_0_100: float) -> float:

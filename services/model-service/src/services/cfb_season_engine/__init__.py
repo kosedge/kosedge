@@ -27,6 +27,9 @@ v0.6 feeds Layers 1–3 from a packaged ESPN 2026 real-roster snapshot
 (DB → snapshot → legacy priors). Returning snap% / portal-out stay approximate
 unless a CFBD overlay was applied at package time.
 
+v0.6.1 measured projection calibration (priors / matchup / index clamps) —
+real-roster overlay kept intact; fidelity remains approximate (no Edge Board KEI).
+
 Public entry points
 -------------------
 - ``project_game`` / ``project_game_preview`` — team-level matchup projection
@@ -165,7 +168,7 @@ def engine_status_payload(
             },
         }
     # Example team diagnostics — power continuity vs new-HC / weak HFA.
-    example_codes = ["UGA", "TEX", "OSU", "FSU", "PSU", "COLO", "BALL"]
+    example_codes = ["UGA", "TEX", "OSU", "LSU", "FSU", "PSU", "COLO", "BALL"]
     examples: Dict[str, Any] = {}
     for code in example_codes:
         state = universe.teams.get(code)
@@ -257,8 +260,9 @@ def engine_status_payload(
         "sport": "cfb",
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
-            "variable HFA + coaching"
+            "variable HFA + coaching + v0.6.1 projection calibration"
         ),
+        "calibration_tag": priors_documentation().get("calibration_tag"),
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
@@ -350,6 +354,7 @@ def engine_status_payload(
                 "project-game formula (strength → margin → spread/total/WP) + drivers block",
                 "Early-season uncertainty posture (week-indexed narrowing, inspectable)",
                 "Season-sim path coherence (wins dist, week sample, ranking)",
+                "v0.6.1 calibration knobs (inspectable priors; measured, not market-grade)",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
@@ -363,9 +368,9 @@ def engine_status_payload(
                 "Coaching staff change flags for 2026 (curated proxies)",
                 "Densified schedule paths (not official FBS slate)",
                 "Conference affiliations for standings",
-                "Game win probs / spreads / totals",
+                "Game win probs / spreads / totals (calibrated toward sanity, not CLV)",
                 "In-path strength evolution",
-                "Season win totals / ranking-ish standings",
+                "Season win totals / ranking-ish standings (SOS-sensitive under densify)",
             ],
             "placeholder_or_deferred": [
                 "Full official 2026 FBS schedule feed",
@@ -387,7 +392,7 @@ def engine_status_payload(
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
             "package_roster": "scripts/cfb/package_real_roster_2026.py",
-            "ops": "data/ops/cfb-real-roster-20260804.md",
+            "ops": "data/ops/cfb-projection-calibration-20260804.md",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
         },

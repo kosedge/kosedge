@@ -12,6 +12,8 @@ College football 2026 reality drives these knobs:
 v0.5 adds variable HFA buckets + coaching continuity/change with week decay.
 v0.5.1 tightens project-game coherence for first UI exposure (measured knobs).
 v0.6 overlays real ESPN 2026 roster / depth / portal-history signals.
+v0.6.1 measured projection calibration — decompress top O indices, temper
+inflated QB proxies, widen blue-blood vs G5 spreads without inventing 45-pt lines.
 """
 
 from __future__ import annotations
@@ -19,8 +21,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.6-real-roster"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.6-real-roster"
+ENGINE_VERSION = "cfb-season-engine-v0.6.1-calibration"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.6.1-calibration"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -39,17 +41,21 @@ LEAGUE_BASE_PLAYS = 70.0
 LEAGUE_BASE_PASS_RATE = 0.55
 EXPECTED_POINTS_CLAMP = (7.0, 55.0)
 PACE_PLAYS_CLAMP = (55.0, 90.0)
-MATCHUP_RESPONSE = 1.08
+# Stronger matchup response so O/D gaps become bettable spreads (still soft-capped).
+MATCHUP_RESPONSE = 1.22
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
-MATCHUP_RATIO_CLAMP = (0.60, 1.32)
-MATCHUP_RATIO_EXCESS_RETAIN = 0.40
+MATCHUP_RATIO_CLAMP = (0.55, 1.42)
+MATCHUP_RATIO_EXCESS_RETAIN = 0.50
 
 # Path evolution (mild; not backtested). Early weeks add extra noise.
 STRENGTH_UPDATE_RATE = 0.028
 STRENGTH_MEAN_REVERT = 0.010
 STRENGTH_NOISE = 0.014
-STRENGTH_CLAMP = (0.55, 1.55)
+# Wider team-index band — v0.6 piled ~33 teams at the old 1.55 offense ceiling.
+STRENGTH_CLAMP = (0.52, 1.68)
+# QB situation alone must not invent power-conference offense from MAC talent proxies.
+QB_SITUATION_INDEX_CLAMP = (0.62, 1.38)
 EARLY_STRENGTH_NOISE_MULT: Dict[int, float] = {
     1: 1.55,
     2: 1.40,
@@ -81,19 +87,19 @@ QB_CLASS_UNCERTAINTY: Dict[str, float] = {
     "unknown": 0.50,
 }
 
-# Class → offense multiplier. Intentionally sharp so true_freshman vs
-# incumbent is visible in project-game / season-sim, not a 1% nudge.
+# Class → offense multiplier. Still sharp (true_freshman << incumbent) but
+# tempered so ESPN talent proxies + incumbent don't ceiling every P4 offense.
 QB_CLASS_OFFENSE_MULT: Dict[str, float] = {
-    "incumbent": 1.10,
-    "portal": 0.96,
-    "open_competition": 0.88,
-    "true_freshman": 0.80,
-    "unknown": 0.93,
+    "incumbent": 1.06,
+    "portal": 0.95,
+    "open_competition": 0.87,
+    "true_freshman": 0.79,
+    "unknown": 0.92,
 }
 
 QB_CAST_OL_WEIGHT = 0.55
 QB_CAST_WEAPONS_WEIGHT = 0.45
-QB_CAST_INDEX_SCALE = 0.14  # ±14% index from cast extremes
+QB_CAST_INDEX_SCALE = 0.11  # ±11% index from cast extremes
 
 # ---------------------------------------------------------------------------
 # Layer 3 — position group unit components
@@ -128,21 +134,26 @@ WEIGHT_DEF_EXPERIENCE = 0.10
 WEIGHT_DEF_RECRUITING = 0.0  # folded into roster_strength
 
 # Direct index blends after compose (hard levers, like QB).
-QB_INDEX_BLEND = 0.40
-OL_INDEX_BLEND = 0.16
-SKILL_INDEX_BLEND = 0.12
+# Slightly less QB blend so roster/units reassert vs inflated QB proxies.
+QB_INDEX_BLEND = 0.32
+OL_INDEX_BLEND = 0.17
+SKILL_INDEX_BLEND = 0.13
 # Defense unit blend toward front_seven/secondary indices.
-DEF_UNIT_BLEND = 0.22
+DEF_UNIT_BLEND = 0.28
 
 # Game-level unit matchup multipliers (applied in expected_team_points).
 # Offense boost from OL + skill; defense dampens opponent scoring via F7 + secondary.
-UNIT_OFFENSE_BOOST_SCALE = 0.10  # ±10% at unit grade extremes (0/100)
-UNIT_DEFENSE_DAMPEN_SCALE = 0.12  # ±12% opponent scoring dampen
+UNIT_OFFENSE_BOOST_SCALE = 0.11  # ±11% at unit grade extremes (0/100)
+UNIT_DEFENSE_DAMPEN_SCALE = 0.14  # ±14% opponent scoring dampen
 UNIT_FRONT_SEVEN_SHARE = 0.55  # of defense dampen from front seven
 UNIT_SECONDARY_SHARE = 0.45
 UNIT_OL_SHARE = 0.55  # of offense boost from OL
 UNIT_SKILL_SHARE = 0.45
 SPECIAL_TEAMS_TOTAL_SCALE = 0.015  # thin ST nudge on total only
+
+# Score (0–100) → strength index slope. Steeper than /80 reduces mid-pack compression.
+SCORE_TO_INDEX_DIVISOR = 68.0
+SCORE_TO_INDEX_CLAMP = (0.58, 1.58)
 
 # ---------------------------------------------------------------------------
 # Early-season uncertainty (weeks 1–4) — wider than NFL analog
@@ -160,11 +171,13 @@ EARLY_SEASON_MARGIN_SD_MULT: Dict[int, float] = {
     3: 1.16,
     4: 1.08,
 }
+# Soften less aggressively — W1 cupcakes still look like favorites; uncertainty
+# stays in margin_sd / score noise, not by collapsing separation to mush.
 EARLY_SEASON_SEPARATION_SOFTEN: Dict[int, float] = {
-    1: 0.74,
-    2: 0.80,
-    3: 0.88,
-    4: 0.95,
+    1: 0.82,
+    2: 0.86,
+    3: 0.91,
+    4: 0.96,
 }
 # Extra CFB-specific: roster/QB identity still forming.
 EARLY_SEASON_ROSTER_IDENTITY_UNCERTAINTY: Dict[int, float] = {
@@ -276,6 +289,9 @@ def documentation() -> Dict[str, Any]:
             "v0.6: ESPN 2026 roster snapshot feeds identities/QB class/portal-in; "
             "returning snap% and portal-out remain approximate proxies. "
             "Do not treat unit grades as calibrated SP+.",
+            "v0.6.1: measured projection calibration — wider STRENGTH_CLAMP, "
+            "separate QB_SITUATION_INDEX_CLAMP, steeper score→index, stronger "
+            "matchup response; still approximate (not market-grade KEI).",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~2 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
@@ -291,6 +307,9 @@ def documentation() -> Dict[str, Any]:
             "matchup_response": MATCHUP_RESPONSE,
             "matchup_ratio_clamp": list(MATCHUP_RATIO_CLAMP),
             "matchup_ratio_excess_retain": MATCHUP_RATIO_EXCESS_RETAIN,
+            "strength_clamp": list(STRENGTH_CLAMP),
+            "qb_situation_index_clamp": list(QB_SITUATION_INDEX_CLAMP),
+            "score_to_index_divisor": SCORE_TO_INDEX_DIVISOR,
         },
         "early_season_narrowing": early_season_narrowing_schedule(),
         "roster_strength_weights": {

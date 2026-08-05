@@ -1,0 +1,374 @@
+{
+  "engine_version": "cfb-season-engine-v0.6.1-calibration",
+  "roster_strength": {
+    "min": 50.36,
+    "max": 73.14,
+    "stdev": 5.664325754096485,
+    "spread": 22.78,
+    "top10": [
+      [
+        "ALA",
+        73.14
+      ],
+      [
+        "MICH",
+        73.07
+      ],
+      [
+        "MISS",
+        73.01
+      ],
+      [
+        "LSU",
+        71.91
+      ],
+      [
+        "TEX",
+        71.58
+      ],
+      [
+        "MIA",
+        71.36
+      ],
+      [
+        "CLEM",
+        71.03
+      ],
+      [
+        "OSU",
+        70.57
+      ],
+      [
+        "AUB",
+        70.35
+      ],
+      [
+        "COLO",
+        69.97
+      ]
+    ],
+    "bottom10": [
+      [
+        "CONN",
+        52.19
+      ],
+      [
+        "NIU",
+        52.06
+      ],
+      [
+        "FRES",
+        52.01
+      ],
+      [
+        "LT",
+        52.0
+      ],
+      [
+        "UL",
+        51.76
+      ],
+      [
+        "IDHO",
+        51.32
+      ],
+      [
+        "KENT",
+        51.3
+      ],
+      [
+        "FAY",
+        50.82
+      ],
+      [
+        "SOUTH",
+        50.82
+      ],
+      [
+        "ARMY",
+        50.36
+      ]
+    ]
+  },
+  "power": {
+    "min": 0.96965,
+    "max": 1.56815,
+    "stdev": 0.1517626416310104,
+    "spread": 0.5984999999999999,
+    "off_clamp_hits": 5,
+    "top10": [
+      [
+        "TEX",
+        1.56815,
+        1.68,
+        1.4563
+      ],
+      [
+        "OSU",
+        1.55785,
+        1.68,
+        1.4357
+      ],
+      [
+        "LSU",
+        1.5553,
+        1.68,
+        1.4306
+      ],
+      [
+        "MISS",
+        1.5552,
+        1.68,
+        1.4304
+      ],
+      [
+        "MICH",
+        1.5497999999999998,
+        1.68,
+        1.4196
+      ],
+      [
+        "MIA",
+        1.54935,
+        1.6752,
+        1.4235
+      ],
+      [
+        "ALA",
+        1.5399,
+        1.5524,
+        1.5274
+      ],
+      [
+        "AUB",
+        1.5248,
+        1.6497,
+        1.3999
+      ],
+      [
+        "OU",
+        1.51085,
+        1.6245,
+        1.3972
+      ],
+      [
+        "CLEM",
+        1.5083,
+        1.5257,
+        1.4909
+      ]
+    ]
+  },
+  "project_games": [
+    {
+      "label": "SEC blue vs G5",
+      "matchup": "BALL@UGA",
+      "week": 1,
+      "spread": -24.52,
+      "total": 60.24,
+      "home_wp": 0.8739,
+      "margin_sd": 21.411,
+      "home_score": 42.38,
+      "away_score": 17.86
+    },
+    {
+      "label": "B1G blue vs G5",
+      "matchup": "EMU@OSU",
+      "week": 1,
+      "spread": -19.62,
+      "total": 69.7,
+      "home_wp": 0.8228,
+      "margin_sd": 21.189,
+      "home_score": 44.66,
+      "away_score": 25.04
+    },
+    {
+      "label": "midseason blue vs G5",
+      "matchup": "NMSU@TEX",
+      "week": 5,
+      "spread": -21.3,
+      "total": 72.3,
+      "home_wp": 0.9206,
+      "margin_sd": 15.114,
+      "home_score": 46.8,
+      "away_score": 25.5
+    },
+    {
+      "label": "SEC bluebloods mid",
+      "matchup": "ALA@UGA",
+      "week": 5,
+      "spread": 2.59,
+      "total": 59.21,
+      "home_wp": 0.4318,
+      "margin_sd": 15.078,
+      "home_score": 28.31,
+      "away_score": 30.9
+    },
+    {
+      "label": "rivalry mid",
+      "matchup": "MICH@OSU",
+      "week": 5,
+      "spread": -4.12,
+      "total": 70.04,
+      "home_wp": 0.6073,
+      "margin_sd": 15.128,
+      "home_score": 37.08,
+      "away_score": 32.96
+    },
+    {
+      "label": "portal-era peers W1",
+      "matchup": "COLO@FSU",
+      "week": 1,
+      "spread": -1.31,
+      "total": 63.35,
+      "home_wp": 0.5245,
+      "margin_sd": 21.302,
+      "home_score": 32.33,
+      "away_score": 31.02
+    },
+    {
+      "label": "new HC elite vs G5 W1",
+      "matchup": "BALL@PSU",
+      "week": 1,
+      "spread": -20.39,
+      "total": 64.09,
+      "home_wp": 0.8274,
+      "margin_sd": 21.601,
+      "home_score": 42.24,
+      "away_score": 21.85
+    },
+    {
+      "label": "G5 vs G5",
+      "matchup": "EMU@BALL",
+      "week": 5,
+      "spread": 14.98,
+      "total": 60.4,
+      "home_wp": 0.1709,
+      "margin_sd": 15.755,
+      "home_score": 22.71,
+      "away_score": 37.69
+    },
+    {
+      "label": "ND@USC mid",
+      "matchup": "USC@ND",
+      "week": 5,
+      "spread": -0.48,
+      "total": 70.28,
+      "home_wp": 0.5125,
+      "margin_sd": 15.366,
+      "home_score": 35.38,
+      "away_score": 34.9
+    },
+    {
+      "label": "elite HFA night",
+      "matchup": "AUB@LSU",
+      "week": 1,
+      "spread": -5.26,
+      "total": 68.08,
+      "home_wp": 0.5998,
+      "margin_sd": 20.804,
+      "home_score": 36.67,
+      "away_score": 31.41
+    }
+  ],
+  "season_wins": {
+    "min": 3.263,
+    "max": 8.7,
+    "stdev": 1.3130955557237785,
+    "within_std_mean": 2.087630769230769,
+    "top10": [
+      [
+        "ALA",
+        8.7,
+        1.623
+      ],
+      [
+        "NIU",
+        8.5,
+        2.098
+      ],
+      [
+        "MISS",
+        8.238,
+        1.63
+      ],
+      [
+        "ULM",
+        8.225,
+        2.073
+      ],
+      [
+        "LSU",
+        8.137,
+        1.78
+      ],
+      [
+        "ND",
+        8.088,
+        1.976
+      ],
+      [
+        "KENT",
+        8.0,
+        2.133
+      ],
+      [
+        "DEL",
+        7.9,
+        2.256
+      ],
+      [
+        "LOU",
+        7.9,
+        1.908
+      ],
+      [
+        "ORE",
+        7.9,
+        1.758
+      ]
+    ],
+    "bot8": [
+      [
+        "CONN",
+        3.962,
+        2.076
+      ],
+      [
+        "BC",
+        3.837,
+        1.984
+      ],
+      [
+        "UF",
+        3.8,
+        2.17
+      ],
+      [
+        "BALL",
+        3.65,
+        1.817
+      ],
+      [
+        "FRES",
+        3.612,
+        2.071
+      ],
+      [
+        "IDHO",
+        3.475,
+        1.703
+      ],
+      [
+        "APP",
+        3.388,
+        1.887
+      ],
+      [
+        "OKST",
+        3.263,
+        1.869
+      ]
+    ]
+  }
+}
