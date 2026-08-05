@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
+  americanOddsFromWinProb,
   buildProjectGameBody,
   buildSimulateBody,
+  formatAmericanOdds,
+  formatFavoriteSpread,
+  formatProjectedScoreLine,
   formatSpread,
   formatWinProb,
+  formatWinProbWithMl,
   parsePowerLadder,
   teamOptionsFromCodes,
 } from "@/lib/cfb-season-engine-format";
@@ -56,5 +61,25 @@ describe("cfb-season-engine-format", () => {
       "ALA",
       "UGA",
     ]);
+  });
+
+  it("formats favorite spread wording from home-centric line", () => {
+    expect(formatFavoriteSpread(-5.1, "OSU", "MICH")).toBe("OSU -5.1");
+    expect(formatFavoriteSpread(3.0, "UGA", "CLEM")).toBe("CLEM -3.0");
+    expect(formatFavoriteSpread(0.02, "ALA", "LSU")).toBe("Pick'em");
+    expect(formatFavoriteSpread(null, "ALA", "LSU")).toBe("—");
+  });
+
+  it("converts win probability to American moneyline", () => {
+    expect(americanOddsFromWinProb(0.5)).toBe(-100);
+    expect(americanOddsFromWinProb(0.596)).toBe(-148);
+    expect(americanOddsFromWinProb(0.404)).toBe(148);
+    expect(americanOddsFromWinProb(0.75)).toBe(-300);
+    expect(americanOddsFromWinProb(0.25)).toBe(300);
+    expect(americanOddsFromWinProb(null)).toBeNull();
+    expect(formatAmericanOdds(-148)).toBe("-148");
+    expect(formatAmericanOdds(148)).toBe("+148");
+    expect(formatWinProbWithMl(0.596)).toBe("59.6% (-148)");
+    expect(formatProjectedScoreLine(31.9, 36.9)).toBe("31.9 – 36.9");
   });
 });

@@ -16,7 +16,7 @@ export default async function CfbProjectGamePage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Project Game"
-      summary="Team-level hierarchical projection — strength → score → spread / total / win probability with inspectable roster, QB, position-group, HFA, and coaching drivers."
+      summary="Market-style team projection — projected score, favorite spread, total, and win% with American moneyline, plus scannable roster / QB / unit / HFA / coaching drivers and early-season uncertainty."
       badge="Season engine · project game"
       primaryHref="/pro/cfb/model"
       primaryLabel="Season Model hub"
