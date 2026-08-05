@@ -165,7 +165,7 @@ def engine_status_payload(
             },
         }
     # Example team diagnostics — power continuity vs new-HC / weak HFA.
-    example_codes = ["UGA", "PSU", "FSU", "LSU", "BALL"]
+    example_codes = ["UGA", "TEX", "OSU", "FSU", "PSU", "COLO", "BALL"]
     examples: Dict[str, Any] = {}
     for code in example_codes:
         state = universe.teams.get(code)
