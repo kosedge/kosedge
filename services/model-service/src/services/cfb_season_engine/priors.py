@@ -27,6 +27,10 @@ intact. See data/ops/cfb-historical-calibration-20260805.md.
 v0.8.2 adds live performance tracking + CLV logging (projection → close →
 result → summary). Projection knobs unchanged from v0.8.1; capability bump
 for the tracking schema + endpoints.
+
+v0.8.3 player↔team coherence: game-script-aware role shares + soft-caps so
+named player aggregates stay reconciled with team pools. Team scores /
+spreads / totals still unchanged by the player layer.
 """
 
 from __future__ import annotations
@@ -34,7 +38,7 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.8.2-tracking"
+ENGINE_VERSION = "cfb-season-engine-v0.8.3-player-coherence"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
 
 # ---------------------------------------------------------------------------
@@ -72,6 +76,25 @@ PLAYER_REC_RESIDUAL = 0.16
 PLAYER_RUSH_TD_RESIDUAL = 0.08
 # RB1/RB2 usage ratio above this ⇒ "feature"; else "committee".
 PLAYER_RB_FEATURE_RATIO = 1.35
+# ---------------------------------------------------------------------------
+# Player coherence / game script (v0.8.3) — allocation-only knobs
+# ---------------------------------------------------------------------------
+# Projected-margin thresholds (own − opp expected points).
+PLAYER_SCRIPT_LARGE_MARGIN = 14.0
+PLAYER_SCRIPT_SMALL_MARGIN = 4.0
+# Pass-rate delta applied to the *allocation pool* only (not team scores).
+PLAYER_SCRIPT_PASS_DELTA_LEAD = -0.055
+PLAYER_SCRIPT_PASS_DELTA_TRAIL = 0.065
+# Within-position share multipliers at full script intensity.
+PLAYER_SCRIPT_RB1_LEAD_MULT = 1.16
+PLAYER_SCRIPT_RB_DEPTH_LEAD_MULT = 1.10  # RB2+ garbage-time / committee
+PLAYER_SCRIPT_WR1_TRAIL_MULT = 1.14
+PLAYER_SCRIPT_WR_DEPTH_LEAD_MULT = 1.12  # blowout → more WR depth targets
+PLAYER_SCRIPT_RB_REC_TRAIL_MULT = 1.10  # checkdowns when trailing
+# Soft-caps so one star cannot imply a larger team pool than the model.
+PLAYER_STAR_PASS_SHARE_CAP = 0.92  # of named pass pool (post residual)
+PLAYER_STAR_RUSH_SHARE_CAP = 0.48  # of team rush yards
+PLAYER_STAR_REC_SHARE_CAP = 0.30  # of team pass yards (receiving)
 # Hist-cal: spreads compressed vs close (home-fav bias +7 / dog −9) → decompress.
 MATCHUP_RESPONSE = 1.40
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
@@ -342,6 +365,10 @@ def documentation() -> Dict[str, Any]:
             "league-avg roster/QB reconstruction). Measured: lower PPG, trim HFA, "
             "raise efficiency/matchup response, less early separation soften. "
             "Still approximate — not market-grade KEI / CLV.",
+            "v0.8.3: player↔team coherence — projected margin/WP drives script "
+            "detail (lead/trail/neutral); allocation pass/rush split + RB/WR "
+            "shares respond; star soft-caps + residual reconcile keep named "
+            "aggregates ≤ team pools. Team scores/spreads unchanged.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~1.7 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",

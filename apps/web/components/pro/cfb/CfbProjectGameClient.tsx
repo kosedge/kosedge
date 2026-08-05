@@ -203,18 +203,32 @@ function fmtStat(v: number | null | undefined, digits = 0): string {
 function PlayerHooksTable({
   team,
   rows,
+  scriptDetail,
+  coherenceApplied,
 }: {
   team: string;
   rows: PlayerProjectionRow[];
+  scriptDetail?: string | null;
+  coherenceApplied?: boolean;
 }) {
   if (!rows.length) return null;
   const qbs = rows.filter((r) => r.position === "QB");
   const skill = rows.filter((r) => r.position !== "QB");
+  const scriptLabel = scriptDetail
+    ? scriptDetail.replace(/_/g, " ")
+    : null;
   return (
     <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold/85">
         {team} · player hooks
       </p>
+      {scriptLabel || coherenceApplied ? (
+        <p className="mt-1 text-[10px] text-kos-text/50">
+          {scriptLabel ? <>script {scriptLabel}</> : null}
+          {scriptLabel && coherenceApplied ? " · " : null}
+          {coherenceApplied ? "coherence caps applied" : null}
+        </p>
+      ) : null}
       <div className="mt-2 -mx-1 overflow-x-auto">
         <table className="min-w-[520px] w-full border-collapse text-left text-[11px] sm:text-xs">
           <thead>
@@ -337,6 +351,17 @@ export default function CfbProjectGameClient({
         home?: Record<string, unknown>;
         away?: Record<string, unknown>;
         matchup?: Record<string, unknown>;
+        player_projections?: {
+          by_team?: Record<
+            string,
+            {
+              game_script?: { script_detail?: string };
+              coherence?: { applied?: boolean };
+            }
+          >;
+          coherence_adjustments_applied?: boolean;
+          script_aware?: boolean;
+        };
       }
     | undefined;
   const matchup = drivers?.matchup ?? {};
@@ -618,20 +643,40 @@ export default function CfbProjectGameClient({
             if (!playerRows.length) return null;
             const awayRows = playerRows.filter((r) => r.team === away);
             const homeRows = playerRows.filter((r) => r.team === home);
+            const ppDrivers = drivers?.player_projections ?? {};
+            const awayMeta = ppDrivers.by_team?.[away];
+            const homeMeta = ppDrivers.by_team?.[home];
             return (
               <div>
                 <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-text/50">
                   Player hooks (approximate)
                 </h3>
                 <div className="grid gap-3 lg:grid-cols-2">
-                  <PlayerHooksTable team={away} rows={awayRows} />
-                  <PlayerHooksTable team={home} rows={homeRows} />
+                  <PlayerHooksTable
+                    team={away}
+                    rows={awayRows}
+                    scriptDetail={awayMeta?.game_script?.script_detail}
+                    coherenceApplied={awayMeta?.coherence?.applied}
+                  />
+                  <PlayerHooksTable
+                    team={home}
+                    rows={homeRows}
+                    scriptDetail={homeMeta?.game_script?.script_detail}
+                    coherenceApplied={homeMeta?.coherence?.applied}
+                  />
                 </div>
                 <p className="mt-2 text-[11px] leading-relaxed text-kos-text/45">
                   Role-share allocation of team pass/rush/TD pools from
-                  expected points — ESPN roster names, residual &quot;other&quot;
-                  allowed. Not a full box-score engine; does not change team
-                  scores or spreads.
+                  expected points, script-aware (lead/trail) with residual
+                  &quot;other&quot; and coherence soft-caps. ESPN roster names.
+                  Not a full box-score engine; does not change team scores or
+                  spreads.
+                  {ppDrivers.script_aware
+                    ? " Game-script adjustments active."
+                    : ""}
+                  {ppDrivers.coherence_adjustments_applied
+                    ? " Coherence caps applied (see drivers.player_projections)."
+                    : ""}
                 </p>
               </div>
             );
