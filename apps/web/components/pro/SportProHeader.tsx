@@ -37,16 +37,16 @@ export default function SportProHeader({
             <Image
               src="/brand/kosedge-logo.png"
               alt="Kos Edge Analytics"
-              width={140}
-              height={42}
+              width={160}
+              height={48}
               priority
-              className="h-8 w-auto sm:h-9"
+              className="h-10 w-auto sm:h-11"
             />
             <div className="leading-tight">
-              <div className="text-base font-extrabold tracking-wide uppercase text-kos-text sm:text-lg">
-                Kos Edge
+              <div className="text-base font-extrabold tracking-wide text-kos-text sm:text-lg">
+                KosEdge
               </div>
-              <div className="hidden text-[10px] tracking-[0.18em] uppercase text-kos-text/55 sm:block">
+              <div className="hidden text-[10px] tracking-[0.14em] uppercase text-kos-text/60 sm:block">
                 {tagline}
               </div>
             </div>
@@ -84,16 +84,19 @@ export default function SportProHeader({
         >
           {primaryNav.map((item) => {
             const active = isSportNavActive(pathname, item.href, activeSport);
+            const edgeBoard = item.emphasis === "gold";
+            const inactiveClass = edgeBoard
+              ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/35 bg-kos-gold/8 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap shadow-[0_0_14px_rgba(245,185,66,0.12)] hover:border-kos-gold/50 hover:bg-kos-gold/14 hover:shadow-[0_0_18px_rgba(245,185,66,0.2)] sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
+              : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-transparent px-3 text-sm font-medium text-kos-text/70 whitespace-nowrap hover:border-white/10 hover:bg-white/5 hover:text-kos-text sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs";
+            const activeClass = edgeBoard
+              ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/55 bg-kos-gold/18 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap shadow-[0_0_20px_rgba(245,185,66,0.22)] sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
+              : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/40 bg-kos-gold/12 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs";
             return (
               <Link
                 key={`${item.label}-${item.href}`}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={
-                  active
-                    ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/40 bg-kos-gold/12 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
-                    : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-transparent px-3 text-sm font-medium text-kos-text/70 whitespace-nowrap hover:border-white/10 hover:bg-white/5 hover:text-kos-text sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
-                }
+                className={active ? activeClass : inactiveClass}
               >
                 {item.label}
               </Link>

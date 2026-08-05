@@ -10,6 +10,10 @@ import {
   type FantasyScoringProfile,
   type NflFantasyDraftRankingRow,
 } from "@/lib/nfl-fantasy-draft";
+import {
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
 
 const DEFAULT_SEASON = 2026;
 const POSITION_TABS = ["ALL", ...FANTASY_DRAFT_POSITIONS] as const;
@@ -113,12 +117,16 @@ export default async function NflFantasyDraftBoardPage({
         </div>
       </section>
 
-      {board.error ? (
+      {shouldShowModelUnreachableBanner({
+        error: board.error,
+        hasContent: board.rows.length > 0,
+      }) ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {board.error} The draft board will populate once the model service is
-          reachable.
+          {modelUnreachableCopy(board.error)}
         </section>
-      ) : (
+      ) : null}
+
+      {board.rows.length > 0 ? (
         <>
           <section className="mt-6 grid gap-4 md:grid-cols-3">
             <StatCard
@@ -305,7 +313,7 @@ export default async function NflFantasyDraftBoardPage({
             )}
           </section>
         </>
-      )}
+      ) : null}
     </main>
   );
 }

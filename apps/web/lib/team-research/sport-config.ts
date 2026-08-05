@@ -390,7 +390,7 @@ function nflResearchSections(): TeamResearchSectionConfig[] {
       description: "Head coach, OC, and DC profiles for scheme context.",
       status: "pending",
       emptyCopy:
-        "Coaching profile data pending — scheme notes ship with writer desk.",
+        "Coaching profile data pending — scheme notes ship with KosEdge desk.",
     }),
     section({
       key: "stats",

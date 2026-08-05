@@ -66,7 +66,7 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
     "Standings",
     "League Stats",
     "Depth Charts",
-    "Injuries",
+    "Injuries & News",
   ],
   "Model Governance & Health": [
     "Model Transparency",
@@ -145,7 +145,7 @@ describe("pro sport IA", () => {
     expect(byLabel.Standings).toBe("/pro/nfl/standings");
     expect(byLabel["League Stats"]).toBe("/pro/nfl/stats");
     expect(byLabel["Depth Charts"]).toBe("/pro/nfl/depth-charts");
-    expect(byLabel.Injuries).toBe("/pro/nfl/injuries");
+    expect(byLabel["Injuries & News"]).toBe("/pro/nfl/injuries");
     expect(byLabel["Model Transparency"]).toBe("/pro/model-transparency");
     expect(byLabel["Sport Tracking"]).toBe("/pro/nfl/tracking");
     expect(byLabel["Global CLV Tracker"]).toBe("/pro/clv-tracker");

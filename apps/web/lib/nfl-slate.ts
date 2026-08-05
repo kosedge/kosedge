@@ -307,7 +307,7 @@ export async function buildNflWeeklySlate(
     currentWeek,
     generatedAt: new Date().toISOString(),
     modelVersion: fairLines.modelVersion,
-    error: fairLines.error,
+    error: sections.length === 0 ? fairLines.error : undefined,
     sections,
     diagnostics: {
       fairLineCount: fairLines.count,

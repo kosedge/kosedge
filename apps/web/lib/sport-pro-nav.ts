@@ -1,6 +1,6 @@
 /**
  * Shared multi-sport Pro navigation — research desk IA.
- * Positioning: "I give the info, you make the picks."
+ * Tagline: Built on Data, Driven by Edge.
  *
  * NFL keeps its expanded tool set (Wall Chart, Fantasy, DFS, Awards, etc.).
  * Other sports get the shared foundation plus sport-specific desks only.
@@ -13,11 +13,12 @@ export type SportNavItem = {
   href: string;
   label: string;
   primary?: boolean;
+  /** Restrained gold emphasis — Edge Board primary CTA in subnav. */
+  emphasis?: "gold";
 };
 
-export const SPORT_TAGLINE = "I give the info, you make the picks.";
-export const SPORT_DESK_SUBTITLE =
-  "Research desk • Model lines, context & tools";
+export const SPORT_TAGLINE = "Built on Data, Driven by Edge";
+export const SPORT_DESK_SUBTITLE = "Pro research desk";
 
 type SportNavConfig = {
   primary: SportNavItem[];
@@ -46,7 +47,12 @@ function corePrimary(
 ): SportNavItem[] {
   return [
     { href: `/pro/${sport}/overview`, label: "Overview", primary: true },
-    { href: `/edge-board/${sport}`, label: "Edge Board", primary: true },
+    {
+      href: `/edge-board/${sport}`,
+      label: "Edge Board",
+      primary: true,
+      emphasis: "gold",
+    },
     {
       href: `/pro/${sport}/slate/today`,
       label: opts.slateLabel,
@@ -68,7 +74,12 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     slateLabel: "Weekly Slate",
     primary: [
       { href: "/pro/nfl/overview", label: "Overview", primary: true },
-      { href: "/edge-board/nfl", label: "Edge Board", primary: true },
+      {
+        href: "/edge-board/nfl",
+        label: "Edge Board",
+        primary: true,
+        emphasis: "gold",
+      },
       { href: "/pro/nfl/slate/today", label: "Weekly Slate", primary: true },
       { href: "/pro/nfl/fair-lines", label: "KEI Lines" },
       { href: "/pro/nfl/edges", label: "Edges" },
@@ -87,7 +98,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/projections", label: "Futures" },
       { href: "/pro/nfl/standings", label: "Standings" },
       { href: "/pro/nfl/depth-charts", label: "Depth Charts" },
-      { href: "/pro/nfl/injuries", label: "Injuries" },
+      { href: "/pro/nfl/injuries", label: "Injuries & News" },
       { href: "/pro/nfl/fantasy", label: "Fantasy Draft" },
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
       { href: "/pro/nfl/dfs", label: "DFS" },
@@ -134,7 +145,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     }),
     tools: [
       ...sharedTools("nba"),
-      { href: "/pro/nba/injuries", label: "Injuries" },
+      { href: "/pro/nba/injuries", label: "Injuries & News" },
       { href: "/pro/nba/standings", label: "Standings" },
       { href: "/pro/nba/stats", label: "Pace / Efficiency" },
     ],
@@ -150,7 +161,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     }),
     tools: [
       ...sharedTools("mlb"),
-      { href: "/pro/mlb/injuries", label: "Injuries" },
+      { href: "/pro/mlb/injuries", label: "Injuries & News" },
       { href: "/pro/mlb/standings", label: "Standings" },
     ],
   },
@@ -162,7 +173,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     }),
     tools: [
       ...sharedTools("nhl"),
-      { href: "/pro/nhl/injuries", label: "Injuries" },
+      { href: "/pro/nhl/injuries", label: "Injuries & News" },
       { href: "/pro/nhl/standings", label: "Standings" },
       { href: "/pro/nhl/props", label: "Limited Props" },
     ],
@@ -175,7 +186,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     }),
     tools: [
       ...sharedTools("wnba"),
-      { href: "/pro/wnba/injuries", label: "Injuries" },
+      { href: "/pro/wnba/injuries", label: "Injuries & News" },
       { href: "/pro/wnba/standings", label: "Standings" },
       { href: "/pro/wnba/stats", label: "Pace / Usage" },
     ],

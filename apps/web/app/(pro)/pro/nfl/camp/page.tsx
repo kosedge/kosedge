@@ -45,7 +45,7 @@ export default async function NflCampDeskPage() {
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
             Daily cadence surface for July–September: public camp news, ESPN
-            team hubs, and Kos Edge writer ownership. Thin edges stay Pass.
+            team hubs, and KosEdge beat coverage. Thin edges stay Pass.
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
             {desk.diagnostics.newsCount} camp headlines ·{" "}
@@ -88,36 +88,14 @@ export default async function NflCampDeskPage() {
         </div>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-5 backdrop-blur-xl">
-        <h2 className="text-lg font-semibold text-kos-text">Desk notes</h2>
-        <ul className="mt-3 space-y-2 text-sm text-kos-text/75">
-          {desk.notes.map((note) => (
-            <li key={note} className="flex gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-kos-gold/70" />
-              <span>{note}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {desk.writers.map((writer) => (
-            <span
-              key={writer.name}
-              className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-kos-text/80"
-            >
-              {writer.name} · {writer.coverage}
-            </span>
-          ))}
-        </div>
-      </section>
-
       {desk.writerIntel.length > 0 ? (
         <section className="mt-8">
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-kos-text">
-              Writer camp intel
+              Camp intel
             </h2>
             <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-              Desk-owned camp / market references from published 2026 season
+              KosEdge camp / market references from published 2026 season
               previews — the live substitute for full news-break posts until
               dedicated breaks clear research standards.
             </p>
@@ -137,8 +115,8 @@ export default async function NflCampDeskPage() {
                       {item.teamName}
                     </h3>
                   </div>
-                  <span className="rounded-md border border-kos-gold/25 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
-                    {item.author}
+                  <span className="rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-text/60">
+                    KosEdge
                   </span>
                 </div>
                 {item.angle ? (
@@ -274,8 +252,8 @@ export default async function NflCampDeskPage() {
             Beat map · all 32
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-            Primary beat + Kos Edge writer owner. Jump to the season preview or
-            public camp hub for each club.
+            Primary beat reporters for each club. Jump to the season preview or
+            public camp hub.
           </p>
         </div>
         <div className="space-y-6">
@@ -302,7 +280,7 @@ export default async function NflCampDeskPage() {
                           </h4>
                         </div>
                         <span className="rounded-md border border-kos-gold/25 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
-                          {beat.kosEdgeWriter}
+                          KosEdge
                         </span>
                       </div>
                       <p className="mt-2 text-sm text-kos-text/70">

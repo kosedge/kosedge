@@ -92,7 +92,7 @@ export default function TeamDirectoryIndex({
                       </span>
                     </div>
                     <p className="mt-3 text-xs text-kos-text/60">
-                      Preview by {assignment.writer.name}
+                      KosEdge · 2026
                       {assignment.provisional ? " · provisional" : ""}
                     </p>
                     <p className="mt-1 text-xs text-kos-text/50">

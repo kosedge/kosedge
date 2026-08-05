@@ -380,7 +380,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         },
         {
           href: "/pro/nfl/injuries",
-          label: "Injuries",
+          label: "Injuries & News",
           hint: "Latest available report week (may be prior-season until 2026 camp reports land).",
           premium: true,
           status: "active",
@@ -542,7 +542,7 @@ function genericIntelLinks(
       status: "placeholder",
     },
     {
-      label: "Injuries / availability",
+      label: "Injuries & News",
       hint: "Availability tracker pending sport-level health feed.",
       premium: true,
       status: "placeholder",

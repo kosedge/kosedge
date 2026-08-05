@@ -73,7 +73,7 @@ export default function ProPricing({
       <div className="text-center">
         <div className="text-sm text-gray-400">Kos Edge Pro</div>
         <h2 className="mt-2 text-4xl sm:text-5xl font-bebas tracking-tight text-kos-gold">
-          Build on Data, Driven by Edge
+          Built on Data, Driven by Edge
         </h2>
         <p className="mt-3 text-sm sm:text-base text-gray-200/80 max-w-3xl mx-auto">
           Pro unlocks:

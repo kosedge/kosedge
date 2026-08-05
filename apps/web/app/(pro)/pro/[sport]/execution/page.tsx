@@ -8,6 +8,10 @@ import {
   formatTotal,
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
+import {
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -182,9 +186,12 @@ export default async function ExecutionPage({
           </div>
         </section>
 
-        {fairLines.error ? (
+        {shouldShowModelUnreachableBanner({
+          error: fairLines.error,
+          hasContent: rows.length > 0,
+        }) ? (
           <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-            Model service unreachable for this diagnostic window.
+            {modelUnreachableCopy(fairLines.error)}
           </div>
         ) : null}
 

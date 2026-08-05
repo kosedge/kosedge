@@ -9,6 +9,10 @@ import {
   formatWinProb,
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
+import {
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
 
 const DEFAULT_SEASON = 2026;
 /** Wide fetch window; UI slate tabs decide what to show. */
@@ -131,9 +135,12 @@ export default async function NflFairLinesPage({
         </div>
       </section>
 
-      {board.error ? (
+      {shouldShowModelUnreachableBanner({
+        error: board.error,
+        hasContent: visibleLines.length > 0,
+      }) ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          KEI Lines will populate once the model service is reachable.
+          {modelUnreachableCopy(board.error)}
         </section>
       ) : null}
 

@@ -30,7 +30,7 @@ export async function generateMetadata({
     title: article.title,
     description:
       article.angle ??
-      `${article.teamName} 2026 season preview by ${article.author}.`,
+      `${article.teamName} 2026 season preview from KosEdge.`,
     openGraph: {
       title: article.title,
       description: article.angle ?? article.excerpt,
@@ -70,8 +70,7 @@ export default async function NflSeasonPreviewArticlePage({
           {article.title}
         </h1>
         <p className="mt-3 text-sm text-kos-text/75">
-          By <span className="text-kos-text">{article.author}</span>
-          {" · "}
+          KosEdge · 2026 season preview ·{" "}
           {article.wordCount.toLocaleString()} words
         </p>
         {article.angle ? (
