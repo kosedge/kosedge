@@ -162,6 +162,31 @@ export async function fetchCfbSeasonEngineStatus(input?: {
           : undefined,
       team_count:
         typeof payload.team_count === "number" ? payload.team_count : undefined,
+      roster_source:
+        typeof payload.roster_source === "string"
+          ? payload.roster_source
+          : undefined,
+      depth_source:
+        typeof payload.depth_source === "string"
+          ? payload.depth_source
+          : undefined,
+      portal_source:
+        typeof payload.portal_source === "string"
+          ? payload.portal_source
+          : undefined,
+      returning_source:
+        typeof payload.returning_source === "string"
+          ? payload.returning_source
+          : undefined,
+      roster_as_of:
+        typeof payload.roster_as_of === "string"
+          ? payload.roster_as_of
+          : undefined,
+      as_of: typeof payload.as_of === "string" ? payload.as_of : undefined,
+      roster_coverage:
+        payload.roster_coverage && typeof payload.roster_coverage === "object"
+          ? (payload.roster_coverage as Record<string, unknown>)
+          : undefined,
       team_codes: Array.isArray(payload.team_codes)
         ? (payload.team_codes as string[])
         : undefined,
