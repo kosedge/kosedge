@@ -1,0 +1,38 @@
+{
+  "note": "Apples-to-apples holdout used for knob decisions. After n grew via team-map expansion.",
+  "seasons": [2023, 2024],
+  "before": {
+    "engine_version": "cfb-season-engine-v0.8-efficiency",
+    "n": 1322,
+    "spread_vs_close_mae": 8.4323,
+    "spread_vs_close_bias": 1.0875,
+    "total_vs_close_bias": 3.2284,
+    "total_vs_close_mae": 6.2012,
+    "margin_vs_actual_mae": 14.7317,
+    "ats_hit_rate": 0.5151,
+    "ou_hit_rate": 0.526,
+    "ml_hit_rate": 0.6384,
+    "brier_home_wp": 0.2185,
+    "home_favorite_spread_bias": 7.3038,
+    "home_dog_spread_bias": -8.8097,
+    "early_spread_mae": 9.6054,
+    "late_spread_mae": 7.9216
+  },
+  "after": {
+    "engine_version": "cfb-season-engine-v0.8.1-hist-cal",
+    "n": 1572,
+    "spread_vs_close_mae": 8.2736,
+    "spread_vs_close_bias": 1.2609,
+    "total_vs_close_bias": -0.4785,
+    "total_vs_close_mae": 6.205,
+    "margin_vs_actual_mae": 14.4476,
+    "ats_hit_rate": 0.5202,
+    "ou_hit_rate": 0.5067,
+    "ml_hit_rate": 0.6342,
+    "brier_home_wp": 0.22,
+    "home_favorite_spread_bias": 6.816,
+    "home_dog_spread_bias": -7.6182,
+    "early_spread_mae": 9.1842,
+    "late_spread_mae": 7.877
+  }
+}

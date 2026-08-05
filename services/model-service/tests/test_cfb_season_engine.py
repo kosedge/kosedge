@@ -63,7 +63,7 @@ from src.services.cfb_season_engine.types import (
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.8-efficiency"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.8.1-hist-cal"
 
 
 def test_qb_situation_classification() -> None:
@@ -757,7 +757,8 @@ def test_matchup_ratio_clamp_limits_placeholder_blowouts() -> None:
     # Favorite still clear, but not an absurd mid-40s home spread.
     # Efficiency backbone widens SP+-strong vs thin mid-major vs identity-only.
     assert payload["spread_home"] < -8.0
-    assert payload["spread_home"] > -40.0
+    # v0.8.1 hist-cal widens matchup response; still soft-capped under mid-40s.
+    assert payload["spread_home"] > -45.0
     home_diag = payload["drivers"]["matchup"]["home_points_diag"]
     # Clamp may or may not fire depending on real-roster strength gap; if raw
     # exceeds the band, soft-cap must reduce it.
@@ -812,9 +813,9 @@ def test_variable_hfa_differs_by_bucket() -> None:
     average = build_home_field_profile("MIA", {"bucket": "average", "env_score": 52})
     poor = build_home_field_profile("BALL", {"bucket": "poor", "env_score": 28})
     assert elite.hfa_points > average.hfa_points > poor.hfa_points
-    assert points_for_bucket("elite") == 3.4
-    assert points_for_bucket("average") == 2.0
-    assert points_for_bucket("poor") == 0.7
+    assert points_for_bucket("elite") == 3.1
+    assert points_for_bucket("average") == 1.7
+    assert points_for_bucket("poor") == 0.55
     hfa_elite = resolve_hfa_points(elite, home=True, neutral_site=False)
     hfa_poor = resolve_hfa_points(poor, home=True, neutral_site=False)
     assert hfa_elite["hfa_points"] - hfa_poor["hfa_points"] >= 2.0
@@ -952,8 +953,10 @@ def test_status_contract() -> None:
     assert "Variable HFA" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert "Coaching continuity" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
-    assert "cfb-efficiency-backbone" in payload["entry_points"]["ops"]
+    assert "cfb-historical-calibration" in payload["entry_points"]["ops"]
+    assert payload.get("historical_calibration", {}).get("ops")
     assert payload.get("calibration_tag")
+    assert "hist-cal" in str(payload.get("calibration_tag"))
     assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert payload.get("roster_source")
     assert "espn" in str(payload.get("roster_source", "")).lower()
@@ -1089,8 +1092,8 @@ def test_calibration_blue_blood_vs_g5_ordering() -> None:
             universe, home_team=code, away_team="BALL", week=5, neutral_site=False
         )
         assert proj.spread_home < -10.0
-        # Efficiency widens SP+-strong vs thin G5; still soft-capped under ~45.
-        assert proj.spread_home > -42.0
+        # Efficiency + hist-cal matchup response widens vs G5; soft-capped.
+        assert proj.spread_home > -48.0
         assert proj.home_win_prob >= 0.72
         assert 45.0 <= proj.expected_total <= 85.0
 
@@ -1293,3 +1296,70 @@ def test_player_hooks_still_allocate_from_team_totals_with_efficiency() -> None:
     rows = payload.get("player_projections") or payload.get("players") or []
     assert any(row.get("team") == "OSU" for row in rows)
     assert any(row.get("position") == "QB" for row in rows)
+
+
+def test_hist_cal_priors_bounds() -> None:
+    """v0.8.1 hist-cal knobs stay inside documented calibration bounds."""
+    from src.services.cfb_season_engine import priors as P
+
+    assert P.ENGINE_VERSION == "cfb-season-engine-v0.8.1-hist-cal"
+    assert 24.5 <= P.LEAGUE_TEAM_PPG <= 27.0
+    assert 1.4 <= P.HFA_BASELINE_POINTS <= 2.2
+    assert 1.20 <= P.MATCHUP_RESPONSE <= 1.55
+    assert 0.30 <= P.WEIGHT_OFF_EFF <= 0.40
+    assert 0.30 <= P.WEIGHT_DEF_EFF <= 0.42
+    # Roster/QB remain first-class (not efficiency-only).
+    assert P.WEIGHT_ROSTER_STRENGTH >= 0.18
+    assert P.WEIGHT_QB_SITUATION >= 0.20
+    assert abs(
+        P.WEIGHT_OFF_EFF
+        + P.WEIGHT_ROSTER_STRENGTH
+        + P.WEIGHT_QB_SITUATION
+        + P.WEIGHT_SKILL_GROUP
+        + P.WEIGHT_OL_GROUP
+        - 1.0
+    ) < 1e-9
+    assert P.EARLY_SEASON_SEPARATION_SOFTEN[1] >= 0.85
+    assert points_for_bucket("average") == P.HFA_BASELINE_POINTS
+
+
+def test_hist_cal_proxy_reconstruction_keeps_drivers() -> None:
+    """Historical proxy uses efficiency + HFA; league-avg identity still composes."""
+    from src.services.cfb_season_engine.efficiency import build_efficiency_profile
+    from src.services.cfb_season_engine.historical_calibration import (
+        build_historical_proxy_state,
+        summarize_rows,
+    )
+
+    eff = build_efficiency_profile("OSU")
+    weak = build_efficiency_profile("BALL")
+    # Force a wide efficiency gap if packaged rows exist.
+    assert eff.off_eff > weak.off_eff
+    home = build_historical_proxy_state("OSU", eff)
+    away = build_historical_proxy_state("BALL", weak)
+    assert home.offense_index > away.offense_index
+    assert home.home_field is not None
+    # Metrics summarizer handles empty / tiny samples without crashing.
+    empty = summarize_rows([])
+    assert empty["overall"]["n"] == 0
+    tiny = summarize_rows(
+        [
+            {
+                "season": 2024,
+                "week": 5,
+                "err_spread_vs_close": 1.0,
+                "err_margin_vs_actual": -2.0,
+                "err_total_vs_close": 0.5,
+                "err_total_vs_actual": 1.0,
+                "ats_hit": True,
+                "ou_hit": False,
+                "ml_hit": True,
+                "brier": 0.2,
+                "favorite_home": True,
+                "slice_conf": "P4",
+                "early_season": False,
+            }
+        ]
+    )
+    assert tiny["overall"]["n"] == 1
+    assert tiny["overall"]["ats_hit_rate"] == 1.0

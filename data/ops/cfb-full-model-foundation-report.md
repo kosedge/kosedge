@@ -1,9 +1,9 @@
-# Full CFB Model: Foundation → UI Exposure (v0.8)
+# Full CFB Model: Foundation → UI Exposure (v0.8.1)
 
-**Branch:** `feat/cfb-efficiency-backbone` → `deploy-vercel`  
-**Engine version:** `cfb-season-engine-v0.8-efficiency`  
-**Date:** 2026-08-04  
-**Status:** Hierarchical foundation through season simulation, HFA + coaching, Pro UI, ESPN 2026 real-roster, calibration, player hooks, plus **v0.8 opponent-adjusted efficiency backbone** (final-2025 SP+ carry). Still approximate (not market-grade KEI). Additive vs NFL engine and CFB markets-only Edge Board.
+**Branch:** `feat/cfb-historical-calibration` → `deploy-vercel`  
+**Engine version:** `cfb-season-engine-v0.8.1-hist-cal`  
+**Date:** 2026-08-05  
+**Status:** Hierarchical foundation through season simulation, HFA + coaching, Pro UI, ESPN 2026 real-roster, calibration, player hooks, v0.8 efficiency backbone, plus **v0.8.1 historical closing-line calibration**. Still approximate (not market-grade KEI). Additive vs NFL engine and CFB markets-only Edge Board.
 
 ## Goal
 
@@ -27,7 +27,8 @@ Design constraints (2026 reality):
 **v0.6 focus:** ESPN 2026 real-roster / depth / portal-history overlay. See `data/ops/cfb-real-roster-20260804.md`.  
 **v0.6.1 focus:** measured projection calibration (team indices, spreads/totals sanity, win-dist width). See `data/ops/cfb-projection-calibration-20260804.md`.  
 **v0.7 focus:** QB + skill player hooks allocated from team totals. See `data/ops/cfb-player-hooks-20260804.md`.  
-**v0.8 focus:** opponent-adjusted efficiency backbone (2025 SP+ carry). See `data/ops/cfb-efficiency-backbone-20260804.md`.
+**v0.8 focus:** opponent-adjusted efficiency backbone (2025 SP+ carry). See `data/ops/cfb-efficiency-backbone-20260804.md`.  
+**v0.8.1 focus:** historical closing-line calibration (SportsDataverse ESPN lines + prior-year ratings proxy). See `data/ops/cfb-historical-calibration-20260805.md`.
 
 ## Architecture (layers + feed order)
 
@@ -169,16 +170,17 @@ Ops detail: `data/ops/cfb-projection-calibration-20260804.md` (also `cfb-real-ro
 5. ~~Opponent-adjusted efficiency backbone (SP+ carry)~~ **v0.8 done** — live weekly SP+ / true PBP success+explosiveness next
 6. Deepen player hooks → usage/production path (skill + QB)
 7. CFP bracket skeleton on season_sim
-8. ~~Projection sanity calibration (decompress indices, bettable mismatch spreads)~~ **v0.6.1 done** — deepen with 2022–2025 graded backtest next
-9. Edge Board KEI only after calibrated fair lines exist (keep markets-only until then)
-10. Richer Pro desks (season-path explorer, conference standings UI) beyond project-game
+8. ~~Projection sanity calibration (decompress indices, bettable mismatch spreads)~~ **v0.6.1 done**
+9. ~~Historical closing-line backtest + measured prior knobs~~ **v0.8.1 done** — next: season-Y roster/QB reconstruction + true SP+ hist series; favorite compression still open
+10. Edge Board KEI only after calibrated fair lines exist (keep markets-only until then)
+11. Richer Pro desks (season-path explorer, conference standings UI) beyond project-game
 
 ## Railway / deploy
 
 Pushing model-service paths to `deploy-vercel` triggers `.github/workflows/deploy-railway.yml`.  
 Live check after deploy:
 
-- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.8-efficiency`
+- `GET /cfb/season-engine/status` → `engine_version: cfb-season-engine-v0.8.1-hist-cal` + `historical_calibration` pointer
 - `POST /cfb/season-engine/project-game` with `drivers.home.off_eff` / `def_eff` + blend_weights + HFA/coaching
 - `POST /cfb/season-engine/simulate` with efficiency-aware strength book
 - Web: `https://www.kosedge.com/pro/cfb/model` + `/pro/cfb/project-game` (Off/Def Eff chips)

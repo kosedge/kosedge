@@ -19,6 +19,10 @@ v0.7 adds QB + skill player role-share hooks allocated from team totals
 v0.8 adds opponent-adjusted efficiency backbone (2025 SP+ carry) as a
 primary complementary driver beside roster/QB; unit weights reduced to
 avoid double-counting the same variance.
+
+v0.8.1 historical closing-line calibration (SportsDataverse ESPN lines +
+prior-year cfb_ratings efficiency proxy). Measured knobs only — architecture
+intact. See data/ops/cfb-historical-calibration-20260805.md.
 """
 
 from __future__ import annotations
@@ -26,22 +30,23 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.8-efficiency"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.6.1-calibration"
+ENGINE_VERSION = "cfb-season-engine-v0.8.1-hist-cal"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
-# Approximate recent FBS averages — not a calibrated scoring model.
+# Approximate recent FBS averages — hist-cal vs 2023–24 closes trims PPG.
 # ---------------------------------------------------------------------------
-LEAGUE_TEAM_PPG = 27.5
-# Variable HFA baseline (~2 pts). Bucket deltas live in home_field.py.
-# HOME_FIELD_POINTS kept as fallback / back-compat alias for baseline.
-HFA_BASELINE_POINTS = 2.0
+# Before hist-cal: 27.5 → totals ~+3.2 vs close. Target ~52–53 season mean.
+LEAGUE_TEAM_PPG = 25.9
+# Variable HFA baseline. Bucket deltas live in home_field.py.
+# Hist-cal: home dogs were overrated vs close → trim baseline ~0.3.
+HFA_BASELINE_POINTS = 1.7
 HOME_FIELD_POINTS = HFA_BASELINE_POINTS
 NEUTRAL_SITE_HFA = 0.0
 SCORE_NOISE_SD = 12.5
-# Mid-season WP↔spread alignment: ~14.5 pts → -7 favorite ≈ 68% (was muted).
-WIN_PROB_MARGIN_SD = 14.5
+# Mid-season WP↔spread alignment: slightly wider SD after spread decompress.
+WIN_PROB_MARGIN_SD = 15.2
 LEAGUE_BASE_PLAYS = 70.0
 LEAGUE_BASE_PASS_RATE = 0.55
 EXPECTED_POINTS_CLAMP = (7.0, 55.0)
@@ -63,13 +68,12 @@ PLAYER_REC_RESIDUAL = 0.16
 PLAYER_RUSH_TD_RESIDUAL = 0.08
 # RB1/RB2 usage ratio above this ⇒ "feature"; else "committee".
 PLAYER_RB_FEATURE_RATIO = 1.35
-# Stronger matchup response so O/D gaps become bettable spreads (still soft-capped).
-MATCHUP_RESPONSE = 1.22
+# Hist-cal: spreads compressed vs close (home-fav bias +7 / dog −9) → decompress.
+MATCHUP_RESPONSE = 1.40
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
-# Slightly tighter vs v0.7 — efficiency backbone already widens SP+ gaps.
-MATCHUP_RATIO_CLAMP = (0.55, 1.38)
-MATCHUP_RATIO_EXCESS_RETAIN = 0.40
+MATCHUP_RATIO_CLAMP = (0.52, 1.45)
+MATCHUP_RATIO_EXCESS_RETAIN = 0.42
 
 # Path evolution (mild; not backtested). Early weeks add extra noise.
 STRENGTH_UPDATE_RATE = 0.028
@@ -139,11 +143,13 @@ UNIT_PORTAL_WEIGHT = 0.20
 # composites and SP+ do not both fully drive the same variance.
 # Roster/QB remain first-class for 2026 portal/NIL identity.
 # ---------------------------------------------------------------------------
-WEIGHT_OFF_EFF = 0.28
-WEIGHT_ROSTER_STRENGTH = 0.24
-WEIGHT_QB_SITUATION = 0.26
-WEIGHT_SKILL_GROUP = 0.11
-WEIGHT_OL_GROUP = 0.11
+# Hist-cal: raise efficiency share so prior-year adj strength drives spreads
+# when roster/QB are noisy; roster/QB remain first-class (still ≥0.20 each).
+WEIGHT_OFF_EFF = 0.34
+WEIGHT_ROSTER_STRENGTH = 0.22
+WEIGHT_QB_SITUATION = 0.24
+WEIGHT_SKILL_GROUP = 0.10
+WEIGHT_OL_GROUP = 0.10
 
 # Legacy aliases retained for status docs / older call sites.
 WEIGHT_RETURNING_PROD = ROSTER_STRENGTH_RETURNING
@@ -152,23 +158,23 @@ WEIGHT_RECRUITING = ROSTER_STRENGTH_RECRUITING
 WEIGHT_EXPERIENCE = ROSTER_STRENGTH_EXPERIENCE
 WEIGHT_QB = WEIGHT_QB_SITUATION
 
-WEIGHT_DEF_EFF = 0.30
-WEIGHT_DEF_ROSTER_STRENGTH = 0.14
-WEIGHT_DEF_FRONT_SEVEN = 0.26
-WEIGHT_DEF_SECONDARY = 0.22
+WEIGHT_DEF_EFF = 0.36
+WEIGHT_DEF_ROSTER_STRENGTH = 0.12
+WEIGHT_DEF_FRONT_SEVEN = 0.24
+WEIGHT_DEF_SECONDARY = 0.20
 WEIGHT_DEF_EXPERIENCE = 0.08
 WEIGHT_DEF_RECRUITING = 0.0  # folded into roster_strength
 
 # Direct index blends after compose (hard levers, like QB).
 # Unit blends softened vs v0.7 — efficiency already embeds unit quality.
-QB_INDEX_BLEND = 0.28
-OL_INDEX_BLEND = 0.10
-SKILL_INDEX_BLEND = 0.08
+QB_INDEX_BLEND = 0.26
+OL_INDEX_BLEND = 0.09
+SKILL_INDEX_BLEND = 0.07
 # Defense unit blend toward front_seven/secondary indices.
-DEF_UNIT_BLEND = 0.16
+DEF_UNIT_BLEND = 0.14
 # Mild post-compose pull toward efficiency indices (transparent, capped).
-EFF_OFF_INDEX_BLEND = 0.08
-EFF_DEF_INDEX_BLEND = 0.08
+EFF_OFF_INDEX_BLEND = 0.12
+EFF_DEF_INDEX_BLEND = 0.12
 
 # Game-level unit matchup multipliers (applied in expected_team_points).
 # Softened vs v0.7 so unit matchup + efficiency index don't double-count.
@@ -200,13 +206,13 @@ EARLY_SEASON_MARGIN_SD_MULT: Dict[int, float] = {
     3: 1.16,
     4: 1.08,
 }
-# Soften less aggressively — W1 cupcakes still look like favorites; uncertainty
-# stays in margin_sd / score noise, not by collapsing separation to mush.
+# Hist-cal: early W1–W4 under-rated favorites vs close (bias +2.3) — soften less.
+# Uncertainty stays in margin_sd / score noise, not by collapsing separation.
 EARLY_SEASON_SEPARATION_SOFTEN: Dict[int, float] = {
-    1: 0.82,
-    2: 0.86,
-    3: 0.91,
-    4: 0.96,
+    1: 0.90,
+    2: 0.93,
+    3: 0.96,
+    4: 0.98,
 }
 # Extra CFB-specific: roster/QB identity still forming.
 EARLY_SEASON_ROSTER_IDENTITY_UNCERTAINTY: Dict[int, float] = {
@@ -327,8 +333,13 @@ def documentation() -> Dict[str, Any]:
             "primary complementary O/D driver; unit weights/blends reduced to "
             "avoid double-counting. success/explosiveness are SP+ proxies "
             "(no full PBP). Preseason 2026 = prior-year eff + roster/QB update.",
+            "v0.8.1: historical closing-line calibration (SportsDataverse ESPN "
+            "spreads/totals + scores; prior-year cfb_ratings efficiency proxy; "
+            "league-avg roster/QB reconstruction). Measured: lower PPG, trim HFA, "
+            "raise efficiency/matchup response, less early separation soften. "
+            "Still approximate — not market-grade KEI / CLV.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
-            "HFA is variable by bucket (baseline ~2 pts); not a flat 3-pt blanket.",
+            "HFA is variable by bucket (baseline ~1.7 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
             "Season sim uses densified approximate schedule paths (not official FBS slate).",
             "FBS focus; FCS opponents treated as external when scheduled.",
