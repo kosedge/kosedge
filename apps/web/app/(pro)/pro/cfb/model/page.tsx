@@ -28,8 +28,8 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="First UI exposure of the hierarchical CFB season engine — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
-      badge="CFB season engine"
+      summary="Hierarchical CFB season engine with ESPN 2026 real-roster overlay — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
+      badge="CFB real roster"
       primaryHref="/pro/cfb/project-game"
       primaryLabel="Open Project Game"
       secondaryHref="/edge-board/cfb"
@@ -51,10 +51,12 @@ export default async function CfbSeasonModelHubPage() {
         <div className="rounded-xl border border-white/10 bg-black/35 px-4 py-4">
           <h2 className="text-sm font-semibold text-kos-gold">Fidelity</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
-            Packaged priors + densified schedule. Curated approximate teams:{" "}
+            ESPN 2026 roster snapshot drives roster / QB / units; densified
+            schedule stays approximate. Named ESPN QBs:{" "}
+            {fidelity?.espn_named_qb ?? "—"} · approximate teams:{" "}
             {fidelity?.approximate_curated ?? "—"} · placeholder FBS:{" "}
-            {fidelity?.placeholder_fbs ?? "—"}. Live portal / coaching feeds
-            not wired.
+            {fidelity?.placeholder_fbs ?? "—"}. Returning snap% and portal-out
+            still proxies; coaching / HFA curated.
           </p>
         </div>
       </section>
@@ -84,6 +86,16 @@ export default async function CfbSeasonModelHubPage() {
               ? ` (${status.schedule_game_count} games)`
               : ""}
             {status.team_count != null ? ` · ${status.team_count} teams` : ""}
+          </p>
+        ) : null}
+        {status.roster_source ? (
+          <p className="mt-1 text-xs text-kos-text/50">
+            Roster: {status.roster_source}
+            {status.depth_source ? ` · depth {status.depth_source}` : ""}
+            {status.portal_source ? ` · portal {status.portal_source}` : ""}
+            {status.as_of || status.roster_as_of
+              ? ` · as_of ${status.as_of || status.roster_as_of}`
+              : ""}
           </p>
         ) : null}
       </section>

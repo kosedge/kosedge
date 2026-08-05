@@ -225,9 +225,10 @@ def documentation() -> Dict[str, Any]:
         "classes": sorted(VALID_QB_CLASSES),
         "real_vs_approximate": (
             "Classification rules and class→offense multipliers are REAL "
-            "(deterministic, inspectable). Named starters and talent scores "
-            "in packaged priors are APPROXIMATE until depth-chart feeds land. "
-            "Supporting cast blends OL + weapons (packaged grades approximate)."
+            "(deterministic, inspectable). With the ESPN 2026 snapshot, starter "
+            "identities and class inputs (portal via teamHistory, 2025 attempts) "
+            "are REAL; talent scores remain APPROXIMATE derived composites. "
+            "Supporting cast blends OL + weapons (approximate unit grades)."
         ),
         "formula": {
             "supporting_cast": (

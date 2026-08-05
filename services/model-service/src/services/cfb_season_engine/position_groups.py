@@ -325,7 +325,8 @@ def documentation() -> Dict[str, Any]:
         "component_keys": ["talent", "experience", "portal_impact"],
         "real_vs_approximate": (
             "Unit grade *structure* and component weights are REAL/inspectable. "
-            "Packaged talent composites are APPROXIMATE. Soft fills from roster/QB "
-            "when unit rows are missing are PLACEHOLDER bridges. Special teams are thin."
+            "With the ESPN 2026 snapshot, unit components derive from real roster "
+            "class/portal composition plus recruiting priors — still APPROXIMATE "
+            "(not SP+/PFF). Soft fills remain PLACEHOLDER bridges. Special teams thin."
         ),
     }
