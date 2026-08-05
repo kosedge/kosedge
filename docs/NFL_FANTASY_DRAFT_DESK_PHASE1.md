@@ -9,6 +9,7 @@ player projection stack. **Not** a disconnected consensus board.
 | --- | --- |
 | `/pro/nfl/fantasy` | Rankings desk — format toggle, position filters, value board, player card |
 | `/pro/nfl/fantasy/builder` | Manual team builder (add/remove, needs, grade, suggestions) |
+| `/pro/nfl/fantasy/mock` | Phase 2 snake mock draft room (10/12, CPU, post-draft grade) |
 | `/pro/nfl/fantasy/player/[playerId]` | Player detail — drivers, expert blurb, schedule/risk |
 
 ## Data flow
@@ -60,12 +61,16 @@ board end (real ADP convention).
 - Team builder is **manual** — no 12-team CPU mock room yet (Phase 2).  
 - Preseason fallback omits K/DST.
 
-## Phase 2 hooks
+## Phase 2
 
-- Multi-team mock draft room  
+Mock draft room: see `docs/NFL_FANTASY_DRAFT_DESK_PHASE2_MOCK.md`.
+
+Further hooks:
+
 - Richer schedule SOS from season-engine opponent defense indices  
 - Live injury / availability overlay  
-- Optional second ADP source merge (Sleeper/Yahoo) if needed
+- Optional second ADP source merge (Sleeper/Yahoo) if needed  
+- Live league sync / auction / Superflex (explicitly later)
 
 ## Key files
 

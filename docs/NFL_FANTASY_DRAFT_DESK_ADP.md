@@ -122,8 +122,9 @@ without polluting the value board.
 - `apps/web/data/fantasy/adp-fantasypros-2026-*.json` — offline snapshots
 - `scripts/nfl/refresh-fantasypros-adp.mjs` — snapshot refresh
 
-## Out of scope
+## Out of scope (ADP pass)
 
 - Switching ADP providers
-- Phase 2 mock draft room
 - Major UI redesign / new columns
+
+Mock drafts are covered in `docs/NFL_FANTASY_DRAFT_DESK_PHASE2_MOCK.md`.

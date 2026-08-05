@@ -167,19 +167,19 @@ export function FantasyDraftDeskClient({
             </p>
           </div>
           <div className="grid min-w-44 gap-2">
+            <Link
+              href={`/pro/nfl/fantasy/mock?scoring=${board.scoringProfile}`}
+              className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25"
+            >
+              Start Mock Draft
+            </Link>
             <button
               type="button"
               onClick={() => setTab("builder")}
-              className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25"
+              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
             >
               Open Team Builder
             </button>
-            <Link
-              href="/pro/nfl/overview"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
-            >
-              NFL Overview
-            </Link>
           </div>
         </div>
       </section>
