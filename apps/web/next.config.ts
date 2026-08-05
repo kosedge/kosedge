@@ -41,6 +41,7 @@ const nextConfig: NextConfig = {
       "../../data/writers/**/*",
       "../../data/ops/**/*",
       "../../content/writers/season-previews-2026/**/*",
+      "../../content/writers/news-breaks-2026/**/*",
     ],
     "/pro/nfl/injuries": [
       "../../data/writers/**/*",
@@ -53,6 +54,8 @@ const nextConfig: NextConfig = {
     "/pro/power-ratings/[sport]": ["../../data/ops/**/*"],
     "/pro/clv-tracker": ["../../data/ops/**/*"],
     "/pro/model-transparency": ["../../data/ops/**/*"],
+    "/pro/nfl/news": ["../../content/writers/news-breaks-2026/**/*"],
+    "/pro/nfl/news/[slug]": ["../../content/writers/news-breaks-2026/**/*"],
   },
 
   async redirects() {
