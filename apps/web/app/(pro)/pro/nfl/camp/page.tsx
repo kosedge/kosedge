@@ -88,28 +88,6 @@ export default async function NflCampDeskPage() {
         </div>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-5 backdrop-blur-xl">
-        <h2 className="text-lg font-semibold text-kos-text">Desk notes</h2>
-        <ul className="mt-3 space-y-2 text-sm text-kos-text/75">
-          {desk.notes.map((note) => (
-            <li key={note} className="flex gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-kos-gold/70" />
-              <span>{note}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {desk.writers.map((writer) => (
-            <span
-              key={writer.name}
-              className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-kos-text/80"
-            >
-              {writer.name} · {writer.coverage}
-            </span>
-          ))}
-        </div>
-      </section>
-
       {desk.writerIntel.length > 0 ? (
         <section className="mt-8">
           <div className="mb-4">
@@ -137,8 +115,8 @@ export default async function NflCampDeskPage() {
                       {item.teamName}
                     </h3>
                   </div>
-                  <span className="rounded-md border border-kos-gold/25 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
-                    {item.author}
+                  <span className="rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-text/60">
+                    KosEdge
                   </span>
                 </div>
                 {item.angle ? (

@@ -9,6 +9,10 @@ import {
   PROP_MARKET_LABELS,
   type NflPropBoardRow,
 } from "@/lib/nfl-props-board";
+import {
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
 
 /** Default to a 2025 week with real Odds-API snapshots joined (weeks 4–17). 2026 lights up when yardage markets post. */
 const DEFAULT_SEASON = 2025;
@@ -126,9 +130,12 @@ export default async function NflPropsBoardPage({
         </nav>
       </section>
 
-      {board.error ? (
+      {shouldShowModelUnreachableBanner({
+        error: board.error,
+        hasContent: board.rows.length > 0,
+      }) ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          The props board will populate once the model service is reachable.
+          {modelUnreachableCopy(board.error)}
         </section>
       ) : null}
 

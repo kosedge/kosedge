@@ -1,6 +1,6 @@
 import Link from "next/link";
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
-import { fetchEspnInjuryNews } from "@/lib/nfl-camp-desk";
+import { fetchInjuryNewsFeed } from "@/lib/nfl-injury-news";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +41,7 @@ export default async function NflInjuriesPage({
       ? filters.team.trim().toUpperCase()
       : undefined;
 
-  const injuryNews = await fetchEspnInjuryNews(8);
+  const injuryNews = await fetchInjuryNewsFeed(10);
 
   return (
     <div>
@@ -50,15 +50,16 @@ export default async function NflInjuriesPage({
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-100/80">
-                Camp / preseason injury intel
+                Injuries & News
               </p>
               <h2 className="mt-1 text-lg font-semibold text-kos-text">
-                Fresh public availability headlines
+                Availability headlines · multi-source
               </h2>
               <p className="mt-1 max-w-3xl text-sm text-kos-text/70">
-                Weekly designation tables below may still show the latest prior
-                report week until 2026 camp reports materialize. Use these ESPN
-                headlines plus the Training Camp Desk for current context.
+                Aggregated from ESPN, RotoWire, and Rotoworld beat feeds.
+                Weekly designation tables below may lag during camp — use Camp
+                Desk for team beat context. KosEdge briefs with citations ship
+                here when research clears.
               </p>
             </div>
             <Link
@@ -70,7 +71,7 @@ export default async function NflInjuriesPage({
           </div>
           {injuryNews.length === 0 ? (
             <p className="mt-4 text-sm text-kos-text/65">
-              No injury-tagged ESPN headlines in the current pull. Check Camp
+              No injury headlines in the current multi-source pull. Check Camp
               Desk beats for club-specific hubs.
             </p>
           ) : (
@@ -84,7 +85,7 @@ export default async function NflInjuriesPage({
                     className="block rounded-xl border border-white/10 bg-black/25 p-3 transition hover:border-kos-gold/35"
                   >
                     <p className="text-[11px] uppercase tracking-wide text-kos-text/50">
-                      ESPN
+                      {item.sourceLabel}
                       {item.published
                         ? ` · ${formatPublished(item.published)}`
                         : ""}
@@ -107,7 +108,7 @@ export default async function NflInjuriesPage({
 
       <NflIntelTablePage
         endpoint="injuries"
-        title="NFL Team Intel · Injuries"
+        title="NFL Team Intel · Injuries & News"
         description="Weekly injury designations and practice participation status. During camp / early preseason the desk may show the latest available prior report week until 2026 weekly rows materialize — that fallback is labeled in the header."
         emptyHint="Injury intel is not available yet for the selected season/week. Check Training Camp Desk for public beat updates until weekly reports land."
         season={season}

@@ -48,27 +48,6 @@ const AT_A_GLANCE = [
   },
 ] as const;
 
-const WORKFLOW = [
-  {
-    step: "01",
-    href: "/pro/nfl/fair-lines",
-    title: "KEI Lines",
-    body: "Start with model spreads, totals, and fair moneylines.",
-  },
-  {
-    step: "02",
-    href: "/odds/nfl",
-    title: "Market View",
-    body: "Compare books and locate the best available number.",
-  },
-  {
-    step: "03",
-    href: "/pro/nfl/props",
-    title: "Props Research",
-    body: "Drill into player markets after the game frame is set.",
-  },
-] as const;
-
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
   const content = buildSportOverviewContent("nfl", "NFL");
@@ -94,7 +73,7 @@ export default async function NflOverviewPage() {
               NFL Overview
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              {NFL_TAGLINE} Context, model lines, and writer research — not a
+              {NFL_TAGLINE} Context, model lines, and team research — not a
               picks feed.
             </p>
           </div>
@@ -135,33 +114,6 @@ export default async function NflOverviewPage() {
               <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
                 {item.body}
               </p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Research Workflow */}
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-5 sm:p-6">
-        <h2 className="text-lg font-semibold tracking-tight text-kos-text">
-          Research Workflow
-        </h2>
-        <p className="mt-1 text-sm text-kos-text/65">
-          KEI Lines → Market View → Props Research
-        </p>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          {WORKFLOW.map((item) => (
-            <Link
-              key={item.step}
-              href={item.href}
-              className="group rounded-xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-kos-gold/40"
-            >
-              <span className="text-[11px] font-semibold tracking-[0.14em] text-kos-text/40">
-                {item.step}
-              </span>
-              <h3 className="mt-1 text-base font-semibold text-kos-text group-hover:text-kos-gold">
-                {item.title}
-              </h3>
-              <p className="mt-1 text-xs text-kos-text/65">{item.body}</p>
             </Link>
           ))}
         </div>

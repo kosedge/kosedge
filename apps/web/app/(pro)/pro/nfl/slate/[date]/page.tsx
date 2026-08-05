@@ -77,10 +77,16 @@ export default async function NflWeeklySlatePage({
         </div>
       </div>
 
-      {slate.error ? (
+      {slate.error && slate.sections.length === 0 ? (
         <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-          Fair-lines warning: {slate.error}. Preseason schedule may still load
-          below.
+          {slate.error}
+        </div>
+      ) : null}
+
+      {slate.error && slate.sections.length > 0 ? (
+        <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-kos-text/70">
+          KEI fair-lines sync is delayed — slate cards below use schedule and
+          camp reference data.
         </div>
       ) : null}
 

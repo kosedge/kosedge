@@ -21,7 +21,12 @@ export type CampNewsItem = {
   description: string;
   published: string | null;
   href: string;
-  source: "espn-news";
+  source:
+    | "espn-news"
+    | "rotowire-rss"
+    | "rotoworld-rss"
+    | "vsin-rss"
+    | "kosedge-desk";
 };
 
 export type CampWriterIntelItem = {

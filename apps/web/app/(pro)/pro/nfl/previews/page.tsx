@@ -115,7 +115,7 @@ export default function NflSeasonPreviewsIndexPage() {
                         </h3>
                       </div>
                       <p className="text-right text-xs text-kos-text/60">
-                        {article.author}
+                        KosEdge · 2026
                       </p>
                     </div>
                     {article.angle ? (

@@ -4,6 +4,10 @@ import {
   fetchNflAwardProjections,
   type NflAwardProjectionRow,
 } from "@/lib/nfl-awards";
+import {
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
 
 const DEFAULT_SEASON = 2026;
 
@@ -112,9 +116,12 @@ export default async function NflAwardsPage({
         </div>
       </section>
 
-      {error ? (
+      {shouldShowModelUnreachableBanner({
+        error,
+        hasContent: liveRows.length > 0,
+      }) ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          Award boards will populate once the model service is reachable.
+          {modelUnreachableCopy(error)}
         </section>
       ) : isLive ? (
         <section className="mt-6">

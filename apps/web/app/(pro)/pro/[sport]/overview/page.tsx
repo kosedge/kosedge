@@ -14,10 +14,7 @@ import {
 } from "@/lib/pro-sport-desk";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
-import {
-  getSportGlance,
-  getSportWorkflow,
-} from "@/lib/sport-overview";
+import { getSportGlance } from "@/lib/sport-overview";
 import {
   SPORT_DESK_SUBTITLE,
   SPORT_TAGLINE,
@@ -48,7 +45,6 @@ export default async function SportOverviewPage({
   const content = buildSportOverviewContent(sportKey, sportName);
   const desk = getSportDeskConfig(sportKey);
   const glance = getSportGlance(sportKey);
-  const workflow = getSportWorkflow(sportKey);
   const tonightGames = await getTonightGames(sportKey);
 
   const isWeekly = sportKey === "cfb" || sportKey === "nfl";
@@ -132,31 +128,6 @@ export default async function SportOverviewPage({
               <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
                 {item.body}
               </p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Research Workflow */}
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-5 sm:p-6">
-        <h2 className="text-lg font-semibold tracking-tight text-kos-text">
-          Research Workflow
-        </h2>
-        <p className="mt-1 text-sm text-kos-text/65">{workflow.label}</p>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          {workflow.steps.map((item) => (
-            <Link
-              key={item.step}
-              href={item.href}
-              className="group min-h-11 rounded-xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-kos-gold/40"
-            >
-              <span className="text-[11px] font-semibold tracking-[0.14em] text-kos-text/40">
-                {item.step}
-              </span>
-              <h3 className="mt-1 text-base font-semibold text-kos-text group-hover:text-kos-gold">
-                {item.title}
-              </h3>
-              <p className="mt-1 text-xs text-kos-text/65">{item.body}</p>
             </Link>
           ))}
         </div>

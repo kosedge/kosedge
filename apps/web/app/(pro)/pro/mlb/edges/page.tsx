@@ -6,6 +6,10 @@ import {
   type MlbDeskEdgeRow,
   type MlbDeskMarketType,
 } from "@/lib/mlb-edges";
+import {
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
 
 const MARKET_TABS: MlbDeskMarketType[] = ["all", "ml", "total", "run_line"];
 const MIN_EDGE_OPTIONS = [
@@ -133,9 +137,12 @@ export default async function MlbEdgesDeskPage({
         </div>
       </section>
 
-      {desk.diagnostics.edgesTodayError ? (
+      {shouldShowModelUnreachableBanner({
+        error: desk.diagnostics.edgesTodayError,
+        hasContent: desk.rows.length > 0,
+      }) ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          Edges will populate once the model service is reachable.
+          {modelUnreachableCopy(desk.diagnostics.edgesTodayError)}
         </section>
       ) : null}
 
