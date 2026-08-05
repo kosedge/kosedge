@@ -351,6 +351,17 @@ export default function CfbProjectGameClient({
         home?: Record<string, unknown>;
         away?: Record<string, unknown>;
         matchup?: Record<string, unknown>;
+        player_projections?: {
+          by_team?: Record<
+            string,
+            {
+              game_script?: { script_detail?: string };
+              coherence?: { applied?: boolean };
+            }
+          >;
+          coherence_adjustments_applied?: boolean;
+          script_aware?: boolean;
+        };
       }
     | undefined;
   const matchup = drivers?.matchup ?? {};
@@ -632,17 +643,7 @@ export default function CfbProjectGameClient({
             if (!playerRows.length) return null;
             const awayRows = playerRows.filter((r) => r.team === away);
             const homeRows = playerRows.filter((r) => r.team === home);
-            const ppDrivers = (drivers?.player_projections ?? {}) as {
-              by_team?: Record<
-                string,
-                {
-                  game_script?: { script_detail?: string };
-                  coherence?: { applied?: boolean };
-                }
-              >;
-              coherence_adjustments_applied?: boolean;
-              script_aware?: boolean;
-            };
+            const ppDrivers = drivers?.player_projections ?? {};
             const awayMeta = ppDrivers.by_team?.[away];
             const homeMeta = ppDrivers.by_team?.[home];
             return (
