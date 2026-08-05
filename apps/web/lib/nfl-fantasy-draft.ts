@@ -1,5 +1,6 @@
 import "server-only";
 import { env } from "@/lib/config/env";
+import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 
 export type FantasyScoringProfile = "standard" | "half_ppr" | "ppr";
 
@@ -64,6 +65,7 @@ export type NflFantasyDraftRankingsResponse = {
   count: number;
   rows: NflFantasyDraftRankingRow[];
   error?: string;
+  slateStatus?: string;
 };
 
 function toNumberOrNull(value: unknown): number | null {
@@ -170,10 +172,16 @@ export async function fetchNflFantasyDraftRankings(params: {
       },
     });
     if (!response.ok) {
+      const statusError = `Model service returned ${response.status}.`;
+      const honestStatus = inferHonestEmptySlateStatus({
+        season: params.season,
+        error: statusError,
+      });
       return {
         count: 0,
         rows: [],
-        error: `Model service returned ${response.status}.`,
+        slateStatus: honestStatus ?? undefined,
+        error: honestStatus ? undefined : statusError,
       };
     }
     const payload = (await response.json()) as {
@@ -186,9 +194,21 @@ export async function fetchNflFantasyDraftRankings(params: {
     return {
       count: typeof payload.count === "number" ? payload.count : rows.length,
       rows,
+      slateStatus: rows.length === 0 ? "no_projections_yet" : "ok",
     };
-  } catch {
-    return { count: 0, rows: [], error: "Unable to reach model service." };
+  } catch (cause) {
+    const transportError = "Unable to reach model service.";
+    const honestStatus = inferHonestEmptySlateStatus({
+      season: params.season,
+      error: transportError,
+      cause,
+    });
+    return {
+      count: 0,
+      rows: [],
+      slateStatus: honestStatus ?? undefined,
+      error: honestStatus ? undefined : transportError,
+    };
   } finally {
     clearTimeout(timeout);
   }

@@ -44,8 +44,8 @@ export default function NflSeasonPreviewsIndexPage() {
             2026 Season Previews
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-kos-text/80 sm:text-base">
-            Thirty-two writer-owned team essays — market number first, beat
-            context second, model conflict check before any lean.
+            All 32 KosEdge team previews — market number first, beat context
+            second, model conflict check before any lean.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link

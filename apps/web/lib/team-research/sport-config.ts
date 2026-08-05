@@ -443,7 +443,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "nfl",
     directoryLabel: "NFL Team Research",
     summary:
-      "Handicapping research pages with live intel where wired, plus writer-owned season preview slots.",
+      "Handicapping research pages with live intel where wired, plus KosEdge season preview slots.",
     depthLabel: "Depth chart",
     coachingLabel: "HC / OC / DC",
     statsLabels: ["Pass rate", "Off EPA/play", "Def EPA allowed", "RZ TD rate"],
@@ -454,7 +454,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "mlb",
     directoryLabel: "MLB Team Research",
     summary:
-      "Club research shells for starters, bullpens, park factors, and writer-owned season previews.",
+      "Club research shells for starters, bullpens, park factors, and KosEdge season previews.",
     depthLabel: "Lineup & rotation",
     coachingLabel: "Manager & bench",
     statsLabels: ["Run differential", "wRC+", "FIP", "Bullpen innings"],
@@ -465,7 +465,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "nba",
     directoryLabel: "NBA Team Research",
     summary:
-      "Team research shells for pace, net rating, rotation health, and writer-owned season previews.",
+      "Team research shells for pace, net rating, rotation health, and KosEdge season previews.",
     depthLabel: "Rotation",
     coachingLabel: "Head coach",
     statsLabels: ["Pace", "Off rating", "Def rating", "Net rating"],
@@ -476,7 +476,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "nhl",
     directoryLabel: "NHL Team Research",
     summary:
-      "Team research shells for goalie confirmation, five-on-five rates, and writer-owned season previews.",
+      "Team research shells for goalie confirmation, five-on-five rates, and KosEdge season previews.",
     depthLabel: "Lines & pairs",
     coachingLabel: "Head coach",
     statsLabels: ["xGF%", "Special teams", "GSAx", "PDO"],
@@ -487,7 +487,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "wnba",
     directoryLabel: "WNBA Team Research",
     summary:
-      "Team research shells for usage concentration, travel load, and writer-owned season previews.",
+      "Team research shells for usage concentration, travel load, and KosEdge season previews.",
     depthLabel: "Rotation",
     coachingLabel: "Head coach",
     statsLabels: ["Pace", "Off rating", "Def rating", "Usage leaders"],
@@ -498,7 +498,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "cfb",
     directoryLabel: "CFB Team Research",
     summary:
-      "FBS research shells for tempo, havoc, depth, and provisional writer preview ownership.",
+      "FBS research shells for tempo, havoc, depth, and KosEdge preview slots.",
     depthLabel: "Depth chart",
     coachingLabel: "HC / OC / DC",
     statsLabels: ["Tempo", "Havoc", "Explosiveness", "Success rate"],
@@ -509,7 +509,7 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
     sportKey: "ncaam",
     directoryLabel: "CBB Team Research",
     summary:
-      "College basketball research shells for tempo, efficiency, and provisional writer preview ownership.",
+      "College basketball research shells for tempo, efficiency, and KosEdge preview slots.",
     depthLabel: "Rotation",
     coachingLabel: "Head coach",
     statsLabels: ["Tempo", "Off efficiency", "Def efficiency", "Variance"],

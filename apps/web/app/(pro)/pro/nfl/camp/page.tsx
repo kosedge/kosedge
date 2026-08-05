@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "NFL Training Camp Desk",
   description:
-    "Kos Edge Training Camp Desk — beat links, public camp intel, and writer coverage for the 2026 preseason.",
+    "Kos Edge Training Camp Desk — beat links, public camp intel, and KosEdge coverage for the 2026 preseason.",
 };
 
 function formatPublished(value: string | null): string {
@@ -50,7 +50,7 @@ export default async function NflCampDeskPage() {
           <p className="mt-2 text-xs text-kos-text/55">
             {desk.diagnostics.newsCount} camp headlines ·{" "}
             {desk.diagnostics.injuryNewsCount} injury headlines ·{" "}
-            {desk.diagnostics.writerIntelCount} writer camp notes ·{" "}
+            {desk.diagnostics.writerIntelCount} camp notes ·{" "}
             {desk.diagnostics.beatCount} team beats
             {desk.diagnostics.beatRegistryVersion
               ? ` · registry ${desk.diagnostics.beatRegistryVersion}`

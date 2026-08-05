@@ -46,7 +46,7 @@ export default function SportProHeader({
               <div className="text-base font-extrabold tracking-wide text-kos-text sm:text-lg">
                 KosEdge
               </div>
-              <div className="hidden text-[10px] tracking-[0.14em] uppercase text-kos-text/60 sm:block">
+              <div className="text-[10px] tracking-[0.14em] uppercase text-kos-text/60">
                 {tagline}
               </div>
             </div>
@@ -54,7 +54,7 @@ export default function SportProHeader({
 
           {showSportsNav ? (
             <nav
-              className="-mx-1 flex max-w-[62%] items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-none sm:flex-wrap sm:justify-end sm:gap-1.5 sm:overflow-visible"
+              className="-mx-1 flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:gap-1.5 sm:overflow-visible"
               aria-label="Sport hubs"
             >
               {SPORTS.map((s) => {
@@ -79,7 +79,7 @@ export default function SportProHeader({
         </div>
 
         <nav
-          className="-mx-1 flex gap-1 overflow-x-auto pb-2 pt-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:pb-3"
+          className="-mx-1 flex flex-nowrap gap-1 overflow-x-auto pb-2 pt-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:pb-3"
           aria-label={`${sportLabel} research desk`}
         >
           {primaryNav.map((item) => {
