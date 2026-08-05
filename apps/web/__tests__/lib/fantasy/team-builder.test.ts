@@ -39,6 +39,7 @@ function row(
     adp: 20,
     valueDelta: 5,
     adpMatchedName: null,
+    adpMatchConfidence: "high",
     isRookie: false,
     rookieYear: null,
     draftNumber: null,

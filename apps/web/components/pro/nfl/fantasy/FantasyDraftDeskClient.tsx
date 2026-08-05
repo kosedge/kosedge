@@ -159,7 +159,11 @@ export function FantasyDraftDeskClient({
             </p>
             <p className="mt-1 text-[11px] text-kos-text/40">
               ADP {board.adpFreshnessLabel} · matched {board.adpMatchedCount}/
-              {board.count}
+              {board.count} ({board.adpMatchedHighCount} high for Value Δ
+              {board.adpMatchedCrossFormatCount > 0
+                ? ` · ${board.adpMatchedCrossFormatCount} cross-format`
+                : ""}
+              )
             </p>
           </div>
           <div className="grid min-w-44 gap-2">

@@ -1,7 +1,7 @@
 import "server-only";
 
 import {
-  fetchFantasyProsAdpFeed,
+  fetchFantasyProsAdpBundle,
   formatAdpFreshness,
 } from "@/lib/fantasy/adp-fantasypros";
 import { matchAdpToDeskRows } from "@/lib/fantasy/adp-match";
@@ -180,7 +180,7 @@ export async function loadFantasyDraftDesk(params: {
   const scoringProfile = params.scoringProfile ?? "half_ppr";
   const limit = params.limit ?? 200;
 
-  const [api, adpFeed] = await Promise.all([
+  const [api, adpBundle] = await Promise.all([
     fetchNflFantasyDraftRankings({
       season,
       scoringProfile,
@@ -188,8 +188,9 @@ export async function loadFantasyDraftDesk(params: {
       rookiesOnly: params.rookiesOnly,
       limit,
     }),
-    fetchFantasyProsAdpFeed({ season, scoringProfile }),
+    fetchFantasyProsAdpBundle({ season, scoringProfile }),
   ]);
+  const adpFeed = adpBundle.primary;
 
   const scheduleGames = loadNfl2026ScheduleGames();
   const depthRows = loadNfl2026DepthRows();
@@ -234,8 +235,13 @@ export async function loadFantasyDraftDesk(params: {
       playerName: row.playerName,
       team: row.team,
       position: row.position,
+      rankOverall: row.rankOverall,
     })),
     adpFeed.players,
+    {
+      secondaryPools: adpBundle.secondary,
+      logUnmatched: true,
+    },
   );
 
   const rows = enrichDraftRows({
@@ -245,10 +251,24 @@ export async function loadFantasyDraftDesk(params: {
     adpByPlayerId: adpMatch.byPlayerId,
   });
 
+  const unmatchedPreview = adpMatch.unmatchedRows
+    .slice(0, 12)
+    .map(
+      (row) =>
+        `${row.playerName} (${row.team} ${row.position}${
+          row.rankOverall != null ? ` #${row.rankOverall}` : ""
+        })`,
+    )
+    .join("; ");
+
   limitations = [
     ...limitations,
     ...adpFeed.limitations,
-    `ADP match coverage: ${adpMatch.matched}/${enrichable.length} desk rows linked to FantasyPros (${adpMatch.unmatched} unmatched → ADP shown as —).`,
+    `ADP match coverage: ${adpMatch.matched}/${enrichable.length} linked (${adpMatch.matchedHigh} same-format high-confidence for Value Δ; ${adpMatch.matchedCrossFormat} cross-format ADP display only; ${adpMatch.unmatched} unmatched → —).`,
+    "Matching uses deterministic rules (ids, suffix-stripped names, short names, initial+last, unique team/pos keys, then team-agnostic unique keys for roster moves). No fuzzy edit-distance guesses.",
+    ...(unmatchedPreview
+      ? [`Unmatched sample: ${unmatchedPreview}${adpMatch.unmatched > 12 ? "…" : ""}`]
+      : []),
   ];
 
   const adpOrigin =
@@ -266,6 +286,9 @@ export async function loadFantasyDraftDesk(params: {
     adpFreshnessLabel: formatAdpFreshness(adpFeed),
     adpOrigin,
     adpMatchedCount: adpMatch.matched,
+    adpMatchedHighCount: adpMatch.matchedHigh,
+    adpMatchedCrossFormatCount: adpMatch.matchedCrossFormat,
+    adpUnmatched: adpMatch.unmatchedRows,
     limitations,
     error,
     slateStatus: api.slateStatus,

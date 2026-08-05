@@ -267,6 +267,44 @@ export async function fetchFantasyProsAdpFeed(input: {
   }
 }
 
+const ALL_SCORING: FantasyScoringProfile[] = ["standard", "half_ppr", "ppr"];
+
+/**
+ * Primary format feed + sibling scoring panels for identity / deep-board
+ * coverage. Value Δ uses primary (high confidence) only; siblings may fill
+ * ADP display as cross-format when the primary panel omits a player.
+ */
+export async function fetchFantasyProsAdpBundle(input: {
+  season?: number;
+  scoringProfile?: FantasyScoringProfile;
+}): Promise<{
+  primary: FantasyProsAdpFeed;
+  secondary: Array<{
+    scoringProfile: FantasyScoringProfile;
+    players: FantasyProsAdpFeed["players"];
+  }>;
+}> {
+  const season = input.season ?? 2026;
+  const scoringProfile = input.scoringProfile ?? "half_ppr";
+  const feeds = await Promise.all(
+    ALL_SCORING.map((profile) =>
+      fetchFantasyProsAdpFeed({ season, scoringProfile: profile }),
+    ),
+  );
+  const primary =
+    feeds.find((f) => f.scoringProfile === scoringProfile) ?? feeds[0]!;
+  const secondary = feeds
+    .filter(
+      (f) =>
+        f.scoringProfile !== scoringProfile && f.players.length > 0,
+    )
+    .map((f) => ({
+      scoringProfile: f.scoringProfile,
+      players: f.players,
+    }));
+  return { primary, secondary };
+}
+
 export function formatAdpFreshness(feed: FantasyProsAdpFeed): string {
   const parts: string[] = [];
   if (feed.lastUpdated) parts.push(`updated ${feed.lastUpdated}`);

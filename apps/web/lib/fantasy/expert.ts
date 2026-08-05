@@ -98,8 +98,10 @@ export function buildExpertBlurb(input: {
     input.valueDelta == null ? 0 : Math.abs(Math.round(input.valueDelta));
 
   let lead: string;
-  if (input.adp == null || input.valueDelta == null) {
+  if (input.adp == null) {
     lead = `${input.playerName} (${input.team}): model ${posRank} / overall #${input.rankOverall} — no clean market ADP match yet, so value vs ADP stays blank.`;
+  } else if (input.valueDelta == null) {
+    lead = `${input.playerName} (${input.team}): model ${posRank} / overall #${input.rankOverall} with market ADP ~${input.adp.toFixed(0)} from a sibling scoring panel — shown for coverage, Value Δ left blank until same-format confidence is high.`;
   } else if (value.kind === "value") {
     lead = `${input.playerName} (${input.team}): model ${posRank} / overall #${input.rankOverall} while market ADP sits ~${input.adp.toFixed(0)} — about ${pickGap} picks of value if the board stalls.`;
   } else if (value.kind === "reach") {

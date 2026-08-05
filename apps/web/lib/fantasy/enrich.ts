@@ -1,5 +1,8 @@
 import { valueDelta } from "@/lib/fantasy/adp-proxy";
-import type { AdpMatchResult } from "@/lib/fantasy/adp-match";
+import {
+  isHighConfidenceAdp,
+  type AdpMatchResult,
+} from "@/lib/fantasy/adp-match";
 import { buildDrivers, buildExpertBlurb } from "@/lib/fantasy/expert";
 import { buildRiskFlags, type DepthRow } from "@/lib/fantasy/risk-signals";
 import {
@@ -98,8 +101,11 @@ export function enrichDraftRows(input: {
 
     const adpHit = adpByPlayerId.get(row.playerId);
     const adp = adpHit?.adp ?? null;
+    // Value Δ only for high-confidence (same-format) matches — no weak clutter.
     const delta =
-      adp != null ? valueDelta(row.rankOverall, adp) : null;
+      adp != null && isHighConfidenceAdp(adpHit)
+        ? valueDelta(row.rankOverall, adp)
+        : null;
     const schedule =
       input.scheduleByTeam.get(row.team.toUpperCase()) ?? NEUTRAL_SCHEDULE;
     const riskFlags = committeeProbe;
@@ -163,6 +169,7 @@ export function enrichDraftRows(input: {
       adp,
       valueDelta: delta,
       adpMatchedName: adpHit?.matchedName ?? null,
+      adpMatchConfidence: adpHit?.confidence ?? null,
       isRookie: row.isRookie,
       rookieYear: row.rookieYear,
       draftNumber: row.draftNumber,

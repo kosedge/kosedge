@@ -46,6 +46,7 @@ describe("enrichDraftRows", () => {
             ecr: 10,
             matchedName: "Test Back",
             matchKind: "full_name",
+            confidence: "high",
           },
         ],
       ]),
@@ -54,6 +55,7 @@ describe("enrichDraftRows", () => {
     expect(rows[0]!.adp).toBe(12.5);
     expect(rows[0]!.valueDelta).toBe(9.5);
     expect(rows[0]!.adpMatchedName).toBe("Test Back");
+    expect(rows[0]!.adpMatchConfidence).toBe("high");
     expect(rows[0]!.floorPoints).toBeLessThan(rows[0]!.medianPoints);
     expect(rows[0]!.ceilingPoints).toBeGreaterThan(rows[0]!.medianPoints);
     expect(rows[0]!.expertBlurb.length).toBeGreaterThan(20);
@@ -98,6 +100,61 @@ describe("enrichDraftRows", () => {
     });
     expect(rows[0]!.adp).toBeNull();
     expect(rows[0]!.valueDelta).toBeNull();
+    expect(rows[0]!.adpMatchConfidence).toBeNull();
     expect(rows[0]!.expertBlurb).toMatch(/no clean market ADP/i);
+  });
+
+  it("shows ADP but blanks Value Δ for cross-format matches", () => {
+    const rows = enrichDraftRows({
+      rows: [
+        {
+          season: 2026,
+          scoringProfile: "half_ppr",
+          modelVersion: "test",
+          playerId: "wr1",
+          playerUid: null,
+          playerName: "Deep Board",
+          team: "CAR",
+          position: "WR",
+          gamesProjected: 17,
+          passYardsTotal: 0,
+          rushYardsTotal: 0,
+          receivingYardsTotal: 700,
+          receptionsTotal: 50,
+          passTdsTotal: 0,
+          rushTdsTotal: 0,
+          recTdsTotal: 4,
+          totalPoints: 140,
+          replacementPoints: 100,
+          valueOverReplacement: 40,
+          rankOverall: 80,
+          rankPosition: 32,
+          tier: "WR3",
+          isRookie: false,
+          rookieYear: null,
+          draftNumber: null,
+          updatedAt: null,
+          source: "preseason-fallback",
+        },
+      ],
+      scheduleByTeam: new Map(),
+      depthRows: [],
+      adpByPlayerId: new Map([
+        [
+          "wr1",
+          {
+            adp: 280,
+            ecr: 250,
+            matchedName: "Deep Board",
+            matchKind: "initial_last",
+            confidence: "cross_format",
+            adpScoringProfile: "ppr",
+          },
+        ],
+      ]),
+    });
+    expect(rows[0]!.adp).toBe(280);
+    expect(rows[0]!.valueDelta).toBeNull();
+    expect(rows[0]!.adpMatchConfidence).toBe("cross_format");
   });
 });

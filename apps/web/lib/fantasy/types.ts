@@ -55,6 +55,8 @@ export type FantasyDeskRow = {
   valueDelta: number | null;
   /** FantasyPros display name when ADP matched. */
   adpMatchedName: string | null;
+  /** high = same-format ADP (Value Δ allowed); cross_format = sibling panel ADP only. */
+  adpMatchConfidence: "high" | "cross_format" | null;
   isRookie: boolean;
   rookieYear: number | null;
   draftNumber: number | null;
@@ -76,6 +78,15 @@ export type FantasyDeskBoard = {
   adpFreshnessLabel: string;
   adpOrigin: "live" | "snapshot" | "none";
   adpMatchedCount: number;
+  adpMatchedHighCount: number;
+  adpMatchedCrossFormatCount: number;
+  adpUnmatched: Array<{
+    playerId: string;
+    playerName: string;
+    team: string;
+    position: string;
+    rankOverall: number | null;
+  }>;
   limitations: string[];
   error?: string;
   slateStatus?: string;
