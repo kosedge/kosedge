@@ -125,6 +125,31 @@ class PositionGroupGrades:
     notes: str = ""
 
 
+@dataclass(frozen=True)
+class EfficiencyProfile:
+    """Opponent-adjusted efficiency backbone (SP+/EPA-style carry).
+
+    Scores are 0–100 (higher = better on both sides). Raw SP+ offense/defense
+    kept for transparency; success/explosiveness are proxies when PBP is absent.
+    """
+
+    team: str
+    off_eff: float = 50.0
+    def_eff: float = 50.0
+    success_off: float = 50.0
+    success_def: float = 50.0
+    explosiveness: float = 50.0
+    sp_plus: float = 0.0
+    sp_offense: Optional[float] = None
+    sp_defense: Optional[float] = None
+    sp_rank: Optional[int] = None
+    prior_year: int = 2025
+    carry_to_season: int = 2026
+    source: str = "packaged_sp_plus_final_2025"
+    fidelity: DataFidelity = "approximate"
+    notes: str = ""
+
+
 @dataclass
 class TeamProjectionState:
     """Layer 4 input state — projected team strength for one season path."""
@@ -138,6 +163,7 @@ class TeamProjectionState:
     roster: Optional[RosterConstruction] = None
     qb: Optional[QbSituation] = None
     groups: Optional[PositionGroupGrades] = None
+    efficiency: Optional[EfficiencyProfile] = None
     home_field: Optional[HomeFieldProfile] = None
     coaching: Optional[CoachingContinuity] = None
     source: str = "hierarchical_compose"
@@ -156,6 +182,7 @@ class TeamProjectionState:
             roster=self.roster,
             qb=self.qb,
             groups=self.groups,
+            efficiency=self.efficiency,
             home_field=self.home_field,
             coaching=self.coaching,
             source=self.source,

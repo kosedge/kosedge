@@ -1,0 +1,222 @@
+{
+  "engine_version": "cfb-season-engine-v0.8-efficiency",
+  "power_top10": [
+    {
+      "rank": 1,
+      "team": "OSU",
+      "power_index": 1.61,
+      "offense_index": 1.6598,
+      "defense_index": 1.5602,
+      "off_eff": 76.01,
+      "def_eff": 95.0,
+      "sp_plus": 30.2,
+      "sp_rank": 2
+    },
+    {
+      "rank": 2,
+      "team": "ORE",
+      "power_index": 1.566,
+      "offense_index": 1.6639,
+      "defense_index": 1.4673,
+      "off_eff": 81.02,
+      "def_eff": 85.97,
+      "sp_plus": 29.3,
+      "sp_rank": 3
+    },
+    {
+      "rank": 3,
+      "team": "MISS",
+      "power_index": 1.548,
+      "offense_index": 1.68,
+      "defense_index": 1.4164,
+      "off_eff": 84.02,
+      "def_eff": 71.86,
+      "sp_plus": 25.2,
+      "sp_rank": 5
+    },
+    {
+      "rank": 4,
+      "team": "MIA",
+      "power_index": 1.538,
+      "offense_index": 1.6039,
+      "defense_index": 1.4724,
+      "off_eff": 68.49,
+      "def_eff": 81.35,
+      "sp_plus": 22.3,
+      "sp_rank": 8
+    },
+    {
+      "rank": 5,
+      "team": "TAMU",
+      "power_index": 1.515,
+      "offense_index": 1.6347,
+      "defense_index": 1.3962,
+      "off_eff": 77.51,
+      "def_eff": 74.54,
+      "sp_plus": 20.9,
+      "sp_rank": 10
+    },
+    {
+      "rank": 6,
+      "team": "TEX",
+      "power_index": 1.509,
+      "offense_index": 1.5917,
+      "defense_index": 1.4268,
+      "off_eff": 64.49,
+      "def_eff": 70.89,
+      "sp_plus": 16.3,
+      "sp_rank": 17
+    },
+    {
+      "rank": 7,
+      "team": "ND",
+      "power_index": 1.504,
+      "offense_index": 1.6403,
+      "defense_index": 1.3671,
+      "off_eff": 82.02,
+      "def_eff": 74.78,
+      "sp_plus": 24.5,
+      "sp_rank": 6
+    },
+    {
+      "rank": 8,
+      "team": "IU",
+      "power_index": 1.493,
+      "offense_index": 1.5817,
+      "defense_index": 1.4045,
+      "off_eff": 83.02,
+      "def_eff": 92.29,
+      "sp_plus": 32.4,
+      "sp_rank": 1
+    },
+    {
+      "rank": 9,
+      "team": "USC",
+      "power_index": 1.482,
+      "offense_index": 1.6419,
+      "defense_index": 1.3219,
+      "off_eff": 79.01,
+      "def_eff": 63.59,
+      "sp_plus": 16.9,
+      "sp_rank": 16
+    },
+    {
+      "rank": 10,
+      "team": "MICH",
+      "power_index": 1.481,
+      "offense_index": 1.5544,
+      "defense_index": 1.4071,
+      "off_eff": 58.73,
+      "def_eff": 73.32,
+      "sp_plus": 12.4,
+      "sp_rank": 26
+    }
+  ],
+  "before_after_games": [
+    {
+      "matchup": "MICH@OSU",
+      "week": 1,
+      "neutral": false,
+      "with_efficiency": {
+        "home": 38.36,
+        "away": 28.43,
+        "spread": -9.93,
+        "total": 66.79,
+        "home_wp": 0.681,
+        "home_off_eff": 76.01,
+        "home_def_eff": 95.0
+      },
+      "identity_only_eff50": {
+        "home": 36.92,
+        "away": 31.98,
+        "spread": -4.94,
+        "total": 68.9,
+        "home_wp": 0.5918
+      },
+      "spread_delta_eff_minus_identity": -4.99
+    },
+    {
+      "matchup": "BALL@UGA",
+      "week": 5,
+      "neutral": false,
+      "with_efficiency": {
+        "home": 47.68,
+        "away": 12.84,
+        "spread": -34.84,
+        "total": 60.52,
+        "home_wp": 0.98,
+        "home_off_eff": 74.76,
+        "home_def_eff": 78.43
+      },
+      "identity_only_eff50": {
+        "home": 40.16,
+        "away": 18.88,
+        "spread": -21.28,
+        "total": 59.04,
+        "home_wp": 0.9118
+      },
+      "spread_delta_eff_minus_identity": -13.56
+    },
+    {
+      "matchup": "OSU@IU",
+      "week": 1,
+      "neutral": true,
+      "with_efficiency": {
+        "home": 29.4,
+        "away": 35.39,
+        "spread": 5.99,
+        "total": 64.79,
+        "home_wp": 0.3884,
+        "home_off_eff": 83.02,
+        "home_def_eff": 92.29
+      },
+      "identity_only_eff50": {
+        "home": 28.92,
+        "away": 36.14,
+        "spread": 7.22,
+        "total": 65.06,
+        "home_wp": 0.3672
+      },
+      "spread_delta_eff_minus_identity": -1.23
+    },
+    {
+      "matchup": "ALA@TEX",
+      "week": 5,
+      "neutral": true,
+      "with_efficiency": {
+        "home": 30.2,
+        "away": 28.95,
+        "spread": -1.25,
+        "total": 59.15,
+        "home_wp": 0.5327,
+        "home_off_eff": 64.49,
+        "home_def_eff": 70.89
+      },
+      "identity_only_eff50": {
+        "home": 31.13,
+        "away": 29.38,
+        "spread": -1.75,
+        "total": 60.51,
+        "home_wp": 0.5454
+      },
+      "spread_delta_eff_minus_identity": 0.5
+    }
+  ],
+  "blend_weights": {
+    "offense": {
+      "eff": 0.28,
+      "roster": 0.24,
+      "qb": 0.26,
+      "skill": 0.11,
+      "ol": 0.11
+    },
+    "defense": {
+      "eff": 0.3,
+      "roster": 0.14,
+      "f7": 0.26,
+      "sec": 0.22,
+      "exp": 0.08
+    }
+  },
+  "note": "identity_only_eff50 holds roster/QB/units/HFA/coaching fixed and sets off_eff=def_eff=50."
+}

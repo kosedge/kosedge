@@ -5,6 +5,7 @@ College football 2026 reality (design constraints):
 - Weak YoY team identity — historical ratings alone are NOT enough
 - QB situation is a first-class variable
 - Position groups (OL / skill / front seven / secondary) are real drivers
+- Opponent-adjusted efficiency (SP+/EPA-style) complements roster/QB identity
 - Early-season uncertainty is very high (wider than NFL W1–W4)
 - Home-field advantage is variable (not a flat 3-pt blanket)
 - Coaching continuity / staff change is a first-class early-season lever
@@ -17,11 +18,12 @@ Layers (each module is the source of truth for its concern):
    + supporting cast → ``qb_situation_index`` (material offense lever)
 3. ``position_groups`` — OL, skill, front seven, secondary with inspectable
    talent / experience / portal_impact components
-4. ``team_projection`` — compose → O/D indices + unit-aware game projection
-5. ``home_field`` — variable HFA buckets (baseline ~2 pts)
-6. ``coaching_continuity`` — new HC/OC/DC flags + week-decayed penalties
-7. ``season_sim`` — path-coherent full-season sims (wins dist, week sample)
-8. ``player_hooks`` — QB + skill role-share projections from team totals
+4. ``efficiency`` — opponent-adjusted off/def efficiency (2025 SP+ carry)
+5. ``team_projection`` — compose → O/D indices + unit-aware game projection
+6. ``home_field`` — variable HFA buckets (baseline ~2 pts)
+7. ``coaching_continuity`` — new HC/OC/DC flags + week-decayed penalties
+8. ``season_sim`` — path-coherent full-season sims (wins dist, week sample)
+9. ``player_hooks`` — QB + skill role-share projections from team totals
 
 v0.6 feeds Layers 1–3 from a packaged ESPN 2026 real-roster snapshot
 (DB → snapshot → legacy priors). Returning snap% / portal-out stay approximate
@@ -32,6 +34,9 @@ real-roster overlay kept intact; fidelity remains approximate (no Edge Board KEI
 
 v0.7 allocates team pass/rush/TD pools onto named QB + skill hooks
 (role shares; residual other OK). Does not mutate team scores/spreads.
+
+v0.8 adds opponent-adjusted efficiency backbone (final-2025 SP+ carry) as a
+primary complementary O/D driver; unit weights reduced to avoid double-counting.
 
 Public entry points
 -------------------
@@ -57,6 +62,11 @@ from src.services.cfb_season_engine.loaders import (
 from src.services.cfb_season_engine.real_roster import (
     load_real_roster_snapshot,
     snapshot_meta,
+)
+from src.services.cfb_season_engine.efficiency import (
+    documentation as efficiency_documentation,
+    efficiency_to_dict,
+    snapshot_meta as efficiency_snapshot_meta,
 )
 from src.services.cfb_season_engine.player_hooks import (
     attach_player_projections,
@@ -90,6 +100,7 @@ from src.services.cfb_season_engine.types import (
 from src.services.cfb_season_engine import (
     coaching_continuity,
     conferences,
+    efficiency,
     home_field,
     loaders,
     player_hooks,
@@ -194,6 +205,7 @@ def engine_status_payload(
             "position_groups_breakdown": (
                 unit_grade_breakdown(state.groups) if state.groups else None
             ),
+            "efficiency": efficiency_to_dict(state.efficiency),
             "home_field": profile_to_dict(state.home_field),
             "coaching": coaching_to_dict(state.coaching),
             "compose_notes": dict(state.notes),
@@ -229,21 +241,26 @@ def engine_status_payload(
         key=lambda row: row[1],
         reverse=True,
     )
-    power_style_ladder = [
-        {
-            "rank": i + 1,
-            "team": code,
-            "power_index": round(power, 3),
-            "offense_index": round(off, 3),
-            "defense_index": round(deff, 3),
-            "roster_strength": round(roster_s, 2),
-            "early_season_uncertainty": round(early_u, 3),
-            "conference": universe.conferences.get(code, "Independent"),
-        }
-        for i, (code, power, off, deff, roster_s, early_u) in enumerate(
-            power_ranked[:40]
+    power_style_ladder = []
+    for i, (code, power, off, deff, roster_s, early_u) in enumerate(
+        power_ranked[:40]
+    ):
+        st = universe.teams[code]
+        power_style_ladder.append(
+            {
+                "rank": i + 1,
+                "team": code,
+                "power_index": round(power, 3),
+                "offense_index": round(off, 3),
+                "defense_index": round(deff, 3),
+                "roster_strength": round(roster_s, 2),
+                "off_eff": round(st.efficiency.off_eff, 2) if st.efficiency else None,
+                "def_eff": round(st.efficiency.def_eff, 2) if st.efficiency else None,
+                "sp_plus": round(st.efficiency.sp_plus, 2) if st.efficiency else None,
+                "early_season_uncertainty": round(early_u, 3),
+                "conference": universe.conferences.get(code, "Independent"),
+            }
         )
-    ]
 
     hfa_buckets: Dict[str, int] = {}
     coaching_flags = {"new_hc": 0, "new_oc": 0, "new_dc": 0, "all_returning": 0}
@@ -267,7 +284,8 @@ def engine_status_payload(
         "sport": "cfb",
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
-            "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks"
+            "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
+            "v0.8 opponent-adjusted efficiency backbone"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "mode": meta.get("mode"),
@@ -292,12 +310,14 @@ def engine_status_payload(
             roster_construction.documentation(),
             qb_situation.documentation(),
             position_groups.documentation(),
+            efficiency_documentation(),
             team_projection.documentation(),
             home_field.documentation(),
             coaching_continuity.documentation(),
             season_sim.documentation(),
             player_hooks.documentation(),
         ],
+        "efficiency": efficiency_snapshot_meta(),
         "priors": priors_documentation(),
         "early_season_narrowing": early_season_narrowing_schedule(),
         "schedule": schedule.documentation(),
@@ -344,9 +364,12 @@ def engine_status_payload(
                 "QB names/classes and depth order from ESPN 2026 rosters + "
                 "athlete teamHistory/career splits; returning snap/start shares "
                 "are class-year proxies; portal-out incomplete; recruiting often "
-                "retained from curated priors; HFA/coaching still curated; "
-                "densified schedule is synthetic approximate paths"
+                "retained from curated priors; efficiency from final-2025 SP+ "
+                "carry (opponent-adjusted; success/explosiveness are proxies); "
+                "HFA/coaching still curated; densified schedule is synthetic "
+                "approximate paths"
             ),
+            "efficiency": efficiency_snapshot_meta(),
         },
         "solid_vs_approximate": {
             "solid": [
@@ -354,8 +377,10 @@ def engine_status_payload(
                 "Roster strength formula (snap/start + portal net + recruiting + experience)",
                 "QB situation classification rules + class offense multipliers",
                 "Position group unit formula (talent/experience/portal_impact)",
-                "roster_strength + qb_situation_index + unit grades as projection drivers",
+                "Efficiency blend weights + anti-double-count unit downweight",
+                "off_eff/def_eff + roster_strength + qb_situation_index as projection drivers",
                 "Packaged ESPN 2026 roster snapshot wiring (DB → snapshot → priors)",
+                "Packaged final-2025 SP+ efficiency snapshot wiring",
                 "Variable HFA bucket structure (baseline ~2 pts, elite→poor)",
                 "Coaching continuity flags + week-decay schedule (HC/DC > OC)",
                 "project-game formula (strength → margin → spread/total/WP) + drivers block",
@@ -371,6 +396,8 @@ def engine_status_payload(
                 "Portal-out values without a full departure feed",
                 "QB talent scores derived from 2025 attempt/yard splits",
                 "Position group talent composites from roster composition",
+                "Prior-year SP+ efficiency carry (not live 2026 PBP EPA)",
+                "success_off/def + explosiveness (SP+-correlated proxies, not PBP rates)",
                 "Recruiting capital when retained from curated priors",
                 "HFA env_scores / venue labels (not live home ATS splits)",
                 "Coaching staff change flags for 2026 (curated proxies)",
@@ -387,7 +414,8 @@ def engine_status_payload(
                 "Official preseason depth charts when ESPN publishes them",
                 "Live home scoring-margin / ATS feed",
                 "Live coaching-change feed",
-                "Calibrated unit grades (SP+ / PFF-class)",
+                "Live weekly SP+ / CFBD advanced / full PBP EPA refresh",
+                "True success-rate / iso-explosiveness from play-by-play",
                 "Full night-game / weather model",
                 "Special teams model (thin nudge only)",
                 "Full player box-score engine (completions, routes, air yards)",
@@ -401,7 +429,8 @@ def engine_status_payload(
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
             "package_roster": "scripts/cfb/package_real_roster_2026.py",
-            "ops": "data/ops/cfb-player-hooks-20260804.md",
+            "package_efficiency": "scripts/cfb/package_efficiency_2025_carry.py",
+            "ops": "data/ops/cfb-efficiency-backbone-20260804.md",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
         },

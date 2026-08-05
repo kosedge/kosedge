@@ -18,6 +18,10 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from src.services.cfb_season_engine.coaching_continuity import build_coaching_continuity
 from src.services.cfb_season_engine.conferences import load_conference_map
+from src.services.cfb_season_engine.efficiency import (
+    build_efficiency_profile,
+    snapshot_meta as efficiency_snapshot_meta,
+)
 from src.services.cfb_season_engine.home_field import build_home_field_profile
 from src.services.cfb_season_engine.player_hooks import build_player_hooks
 from src.services.cfb_season_engine.position_groups import build_position_groups
@@ -43,6 +47,7 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 PACKAGED_TEAMS = DATA_DIR / "cfb_fbs_team_priors_2026.json"
 PACKAGED_SCHEDULE = DATA_DIR / "cfb_sample_schedule_2026.json"
 PACKAGED_REAL_ROSTER = DATA_DIR / "cfb_real_roster_snapshot_2026.json"
+PACKAGED_EFFICIENCY = DATA_DIR / "cfb_efficiency_snapshot_2025_carry_2026.json"
 
 # Packaged priors include a few duplicate codes for the same school.
 # Collapse aliases so season-sim standings are not triple-counting A&M etc.
@@ -149,11 +154,17 @@ def _team_state_from_payload(
         team_payload=payload,
     )
     coaching = build_coaching_continuity(team, payload.get("coaching"))
+    efficiency = build_efficiency_profile(
+        team,
+        payload.get("efficiency"),
+        default_source="packaged_sp_plus_final_2025",
+    )
     state = compose_team_projection(
         team,
         roster,
         qb,
         groups,
+        efficiency=efficiency,
         home_field=home_field,
         coaching=coaching,
     )
@@ -228,17 +239,30 @@ def _build_universe_from_team_payloads(
         "roster_as_of": str(roster_meta.get("as_of", blob_meta.get("as_of", ""))),
         "gap_official_schedule": "No official full 2026 FBS schedule in-repo; densified sample used",
         "primary_drivers": (
-            "roster_strength + qb_situation_index + position_groups + "
-            "variable_hfa + coaching_continuity"
+            "off_eff/def_eff (2025 SP+ carry) + roster_strength + "
+            "qb_situation_index + position_groups + variable_hfa + "
+            "coaching_continuity"
         ),
-        "scope": "FBS focus for 2026; v0.6 real-roster overlay",
+        "scope": "FBS focus for 2026; v0.8 efficiency backbone + real-roster overlay",
         "schedule_note": str(sched_meta.get("note", "")),
+        "efficiency_source": str(
+            (efficiency_snapshot_meta() or {}).get("source", {}).get("primary")
+            or "packaged_sp_plus_final_2025"
+        ),
+        "efficiency_as_of": str((efficiency_snapshot_meta() or {}).get("as_of") or ""),
+        "efficiency_fidelity": str(
+            (efficiency_snapshot_meta() or {}).get("fidelity") or "approximate"
+        ),
         "gap_home_splits_feed": "No live home ATS / scoring-margin feed; venue proxies",
         "gap_coaching_feed": "No live coaching-change feed; curated/approximate flags",
         "gap_portal_out_feed": "Portal-out incomplete without full departure feed",
         "gap_measured_snap_pct": (
             "Returning snap/start shares are class-year proxies unless CFBD "
             "returning overlay was packaged"
+        ),
+        "gap_live_efficiency": (
+            "No live 2026 PBP EPA / weekly SP+ refresh; packaged 2025 final "
+            "SP+ carry only"
         ),
     }
     return EngineUniverse(
@@ -375,6 +399,7 @@ def documentation() -> Dict[str, Any]:
         "packaged_teams": str(PACKAGED_TEAMS),
         "packaged_schedule": str(PACKAGED_SCHEDULE),
         "packaged_real_roster": str(PACKAGED_REAL_ROSTER),
+        "packaged_efficiency": str(PACKAGED_EFFICIENCY),
         "schedule_policy": "seed sample + densify_schedule (not official FBS slate)",
         "preference_order": "DB → packaged ESPN real-roster snapshot → legacy priors",
         "db_universe": "not_populated (packaged snapshot is the Railway-safe path)",
@@ -383,10 +408,12 @@ def documentation() -> Dict[str, Any]:
         "portal_source": meta.get("portal_source"),
         "as_of": meta.get("as_of"),
         "coverage": meta.get("coverage"),
+        "efficiency": efficiency_snapshot_meta(),
         "real_vs_approximate": (
             "Packaged ESPN roster snapshot is a REAL in-image artifact. Athlete "
             "identities / QB1 selection inputs are from ESPN 2026 rosters. "
             "Returning snap% and portal-out remain APPROXIMATE proxies. "
+            "Efficiency is packaged final-2025 SP+ carry (APPROXIMATE; no PBP). "
             "Densified schedule is APPROXIMATE. DB path is optional."
         ),
     }
