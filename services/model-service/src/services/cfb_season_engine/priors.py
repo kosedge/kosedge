@@ -14,6 +14,8 @@ v0.5.1 tightens project-game coherence for first UI exposure (measured knobs).
 v0.6 overlays real ESPN 2026 roster / depth / portal-history signals.
 v0.6.1 measured projection calibration — decompress top O indices, temper
 inflated QB proxies, widen blue-blood vs G5 spreads without inventing 45-pt lines.
+v0.7 adds QB + skill player role-share hooks allocated from team totals
+(does not mutate team scores/spreads).
 """
 
 from __future__ import annotations
@@ -21,7 +23,7 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.6.1-calibration"
+ENGINE_VERSION = "cfb-season-engine-v0.7-player-hooks"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.6.1-calibration"
 
 # ---------------------------------------------------------------------------
@@ -41,6 +43,23 @@ LEAGUE_BASE_PLAYS = 70.0
 LEAGUE_BASE_PASS_RATE = 0.55
 EXPECTED_POINTS_CLAMP = (7.0, 55.0)
 PACE_PLAYS_CLAMP = (55.0, 90.0)
+
+# ---------------------------------------------------------------------------
+# Player hooks (v0.7) — approximate role-share allocation priors
+# ---------------------------------------------------------------------------
+# Team yards pool from expected points (includes FG inefficiency / specials).
+PLAYER_YARDS_PER_POINT = 14.2
+PLAYER_POINTS_PER_OFFENSIVE_TD = 7.2
+PLAYER_PASS_YARDS_PER_ATTEMPT = 7.4
+PLAYER_BASE_INT_RATE = 0.022
+PLAYER_QB_RUSH_SHARE_BASE = 0.07
+# Named-player residual so shares sum ≤ team (depth beyond packaged hooks).
+PLAYER_PASS_RESIDUAL = 0.04
+PLAYER_RUSH_RESIDUAL = 0.10
+PLAYER_REC_RESIDUAL = 0.16
+PLAYER_RUSH_TD_RESIDUAL = 0.08
+# RB1/RB2 usage ratio above this ⇒ "feature"; else "committee".
+PLAYER_RB_FEATURE_RATIO = 1.35
 # Stronger matchup response so O/D gaps become bettable spreads (still soft-capped).
 MATCHUP_RESPONSE = 1.22
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
@@ -292,6 +311,8 @@ def documentation() -> Dict[str, Any]:
             "v0.6.1: measured projection calibration — wider STRENGTH_CLAMP, "
             "separate QB_SITUATION_INDEX_CLAMP, steeper score→index, stronger "
             "matchup response; still approximate (not market-grade KEI).",
+            "v0.7: QB + skill player hooks allocate team pass/rush/TD pools "
+            "via depth-order role shares; team scores/spreads unchanged.",
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~2 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
@@ -310,6 +331,10 @@ def documentation() -> Dict[str, Any]:
             "strength_clamp": list(STRENGTH_CLAMP),
             "qb_situation_index_clamp": list(QB_SITUATION_INDEX_CLAMP),
             "score_to_index_divisor": SCORE_TO_INDEX_DIVISOR,
+            "player_yards_per_point": PLAYER_YARDS_PER_POINT,
+            "player_pass_residual": PLAYER_PASS_RESIDUAL,
+            "player_rush_residual": PLAYER_RUSH_RESIDUAL,
+            "player_rec_residual": PLAYER_REC_RESIDUAL,
         },
         "early_season_narrowing": early_season_narrowing_schedule(),
         "roster_strength_weights": {

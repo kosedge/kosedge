@@ -21,7 +21,7 @@ Layers (each module is the source of truth for its concern):
 5. ``home_field`` — variable HFA buckets (baseline ~2 pts)
 6. ``coaching_continuity`` — new HC/OC/DC flags + week-decayed penalties
 7. ``season_sim`` — path-coherent full-season sims (wins dist, week sample)
-8. ``player_hooks`` — thin QB/skill identity hooks where data allows
+8. ``player_hooks`` — QB + skill role-share projections from team totals
 
 v0.6 feeds Layers 1–3 from a packaged ESPN 2026 real-roster snapshot
 (DB → snapshot → legacy priors). Returning snap% / portal-out stay approximate
@@ -29,6 +29,9 @@ unless a CFBD overlay was applied at package time.
 
 v0.6.1 measured projection calibration (priors / matchup / index clamps) —
 real-roster overlay kept intact; fidelity remains approximate (no Edge Board KEI).
+
+v0.7 allocates team pass/rush/TD pools onto named QB + skill hooks
+(role shares; residual other OK). Does not mutate team scores/spreads.
 
 Public entry points
 -------------------
@@ -55,7 +58,10 @@ from src.services.cfb_season_engine.real_roster import (
     load_real_roster_snapshot,
     snapshot_meta,
 )
-from src.services.cfb_season_engine.player_hooks import hooks_to_summaries
+from src.services.cfb_season_engine.player_hooks import (
+    attach_player_projections,
+    hooks_to_summaries,
+)
 from src.services.cfb_season_engine.position_groups import (
     groups_to_dict,
     unit_grade_breakdown,
@@ -110,11 +116,11 @@ def project_game_preview(
     neutral_site: bool = False,
     night_game: bool = False,
 ) -> GameProjection:
-    """Team-level game preview with optional player-hook summaries."""
+    """Team-level game preview with player-hook identity + role-share projections."""
     hook_rows: List[Dict[str, Any]] = []
     for team in (home_team.upper(), away_team.upper()):
         hook_rows.extend(hooks_to_summaries(universe.player_hooks.get(team, [])))
-    return project_game(
+    proj = project_game(
         universe,
         home_team=home_team,
         away_team=away_team,
@@ -125,6 +131,7 @@ def project_game_preview(
         engine_version=DEFAULT_SEASON_ENGINE_VERSION,
         player_hook_summaries=hook_rows,
     )
+    return attach_player_projections(universe, proj)
 
 
 def engine_status_payload(
@@ -260,7 +267,7 @@ def engine_status_payload(
         "sport": "cfb",
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
-            "variable HFA + coaching + v0.6.1 projection calibration"
+            "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "mode": meta.get("mode"),
@@ -355,6 +362,7 @@ def engine_status_payload(
                 "Early-season uncertainty posture (week-indexed narrowing, inspectable)",
                 "Season-sim path coherence (wins dist, week sample, ranking)",
                 "v0.6.1 calibration knobs (inspectable priors; measured, not market-grade)",
+                "v0.7 player role-share allocation (QB + skill; team totals unchanged)",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
@@ -371,6 +379,7 @@ def engine_status_payload(
                 "Game win probs / spreads / totals (calibrated toward sanity, not CLV)",
                 "In-path strength evolution",
                 "Season win totals / ranking-ish standings (SOS-sensitive under densify)",
+                "Player yards/TDs/INTs (role shares of team pools; residual other OK)",
             ],
             "placeholder_or_deferred": [
                 "Full official 2026 FBS schedule feed",
@@ -381,7 +390,7 @@ def engine_status_payload(
                 "Calibrated unit grades (SP+ / PFF-class)",
                 "Full night-game / weather model",
                 "Special teams model (thin nudge only)",
-                "Player box production path",
+                "Full player box-score engine (completions, routes, air yards)",
                 "CFP bracket",
                 "Market-grade calibration / KEI fair lines",
             ],
@@ -392,7 +401,7 @@ def engine_status_payload(
             "simulate": "POST /cfb/season-engine/simulate",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
             "package_roster": "scripts/cfb/package_real_roster_2026.py",
-            "ops": "data/ops/cfb-projection-calibration-20260804.md",
+            "ops": "data/ops/cfb-player-hooks-20260804.md",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
         },

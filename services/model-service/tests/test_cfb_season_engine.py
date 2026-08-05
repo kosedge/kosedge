@@ -55,7 +55,7 @@ from src.services.cfb_season_engine.types import EngineUniverse, HomeFieldProfil
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.6.1-calibration"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.7-player-hooks"
 
 
 def test_qb_situation_classification() -> None:
@@ -660,6 +660,81 @@ def test_project_game_drivers_and_score_coherence() -> None:
     assert abs(payload["home_win_prob"] + payload["away_win_prob"] - 1.0) < 1e-9
 
 
+def test_player_hooks_qb1_leads_and_shares_within_team() -> None:
+    """QB1 gets most pass yards; named shares sum ≤ team; team lines unchanged."""
+    from src.services.cfb_season_engine.team_projection import project_game
+
+    universe = build_packaged_universe(2026)
+    # Baseline team projection without player allocation attach.
+    baseline = project_game(
+        universe, home_team="OSU", away_team="MICH", week=1, neutral_site=False
+    )
+    proj = project_game_preview(
+        universe, home_team="OSU", away_team="MICH", week=1, neutral_site=False
+    )
+    payload = project_game_to_dict(proj)
+
+    # Team totals unchanged by player layer.
+    assert proj.expected_home_score == baseline.expected_home_score
+    assert proj.expected_away_score == baseline.expected_away_score
+    assert proj.spread_home == baseline.spread_home
+    assert proj.expected_total == baseline.expected_total
+    assert proj.home_win_prob == baseline.home_win_prob
+
+    players = payload["player_projections"]
+    assert players
+    assert payload["players"] == players
+    assert payload["drivers"]["player_projections"]["does_not_modify_team_totals"] is True
+
+    for team in ("OSU", "MICH"):
+        team_rows = [p for p in players if p["team"] == team]
+        assert team_rows
+        qbs = [p for p in team_rows if p["position"] == "QB"]
+        assert qbs
+        qb1 = next(p for p in qbs if p["depth_order"] == 1)
+        assert qb1["pass_yards"] is not None and qb1["pass_yards"] > 100
+        if len(qbs) > 1:
+            qb2 = next(p for p in qbs if p["depth_order"] == 2)
+            assert qb1["pass_yards"] > qb2["pass_yards"]
+
+        meta = payload["drivers"]["player_projections"]["by_team"][team]
+        team_pass = meta["team_totals"]["pass_yards"]
+        team_rush = meta["team_totals"]["rush_yards"]
+        named_pass = sum(float(p["pass_yards"] or 0) for p in qbs)
+        named_rush = sum(float(p["rush_yards"] or 0) for p in team_rows)
+        named_rec = sum(
+            float(p["rec_yards"] or 0)
+            for p in team_rows
+            if p["position"] in ("WR", "TE", "RB")
+        )
+        assert named_pass <= team_pass + 1e-6
+        assert named_rush <= team_rush + 1e-6
+        assert named_rec <= team_pass + 1e-6
+        # Residual other is allowed / expected.
+        assert meta["residual"]["pass_yards"] >= -1e-6
+        assert meta["residual"]["rush_yards"] >= -1e-6
+
+        # ESPN real names present.
+        assert any(
+            p["player_name"] and "espn" in (p.get("source") or "").lower()
+            or p["fidelity"]
+            for p in team_rows
+        )
+        assert all(p.get("role") for p in team_rows)
+
+
+def test_player_hooks_depth_order_within_position() -> None:
+    universe = build_packaged_universe(2026)
+    osu = universe.player_hooks.get("OSU") or []
+    assert osu
+    wrs = [h for h in osu if h.position == "WR"]
+    assert len(wrs) >= 2
+    assert sorted(h.depth_order for h in wrs) == list(range(1, len(wrs) + 1))
+    qbs = [h for h in osu if h.position == "QB"]
+    assert qbs[0].depth_order == 1
+    assert qbs[0].player_name  # ESPN identity
+
+
 def test_matchup_ratio_clamp_limits_placeholder_blowouts() -> None:
     """Soft-cap extreme O/D ratios so UGA vs thin mid-major isn't a 45-pt invent."""
     universe = build_packaged_universe(2026)
@@ -864,7 +939,7 @@ def test_status_contract() -> None:
     assert "Variable HFA" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert "Coaching continuity" in " ".join(payload["solid_vs_approximate"]["solid"])
     assert payload["entry_points"]["status"] == "GET /cfb/season-engine/status"
-    assert "cfb-projection-calibration" in payload["entry_points"]["ops"]
+    assert "cfb-player-hooks" in payload["entry_points"]["ops"]
     assert payload.get("calibration_tag")
     assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert payload.get("roster_source")

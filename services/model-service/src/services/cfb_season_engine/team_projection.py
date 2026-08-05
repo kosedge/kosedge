@@ -605,6 +605,9 @@ def project_game_to_dict(proj: GameProjection) -> Dict[str, Any]:
         "home_layers": proj.home_layers,
         "away_layers": proj.away_layers,
         "player_hooks": proj.player_hooks,
+        "player_projections": proj.player_projections,
+        # Alias for UI / clients that prefer a shorter key.
+        "players": proj.player_projections,
         "notes": proj.notes,
         "fidelity": proj.fidelity,
         "projection_formula": project_game_formula_doc(),
