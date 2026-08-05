@@ -77,14 +77,6 @@ export default async function NflCampDeskPage() {
           >
             Season previews
           </Link>
-          <a
-            href={desk.hubHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-xl border border-kos-gold/30 bg-kos-gold/10 px-4 py-2 text-sm text-kos-gold hover:border-kos-gold/50"
-          >
-            ESPN 32-team hub
-          </a>
         </div>
       </div>
 
@@ -215,8 +207,8 @@ export default async function NflCampDeskPage() {
         </div>
         {desk.news.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-black/30 p-6 text-sm text-kos-text/70">
-            No camp-tagged headlines in the current ESPN pull. Use the 32-team
-            hub and beat map below until the next refresh.
+            No camp-tagged headlines in the current ESPN pull. Check the beat
+            map below until the next refresh.
           </div>
         ) : (
           <div className="space-y-3">
