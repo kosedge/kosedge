@@ -212,6 +212,8 @@ class GameProjection:
     home_layers: Dict[str, Any]
     away_layers: Dict[str, Any]
     player_hooks: List[Dict[str, Any]] = field(default_factory=list)
+    # v0.7 role-share player projections (QB + skill) derived from team totals.
+    player_projections: List[Dict[str, Any]] = field(default_factory=list)
     drivers: Dict[str, Any] = field(default_factory=dict)
     uncertainty: Dict[str, Any] = field(default_factory=dict)
     notes: Dict[str, str] = field(default_factory=dict)

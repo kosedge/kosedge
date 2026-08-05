@@ -14,6 +14,24 @@ import {
   type CfbTeamOption,
 } from "@/lib/cfb-season-engine-format";
 
+type PlayerProjectionRow = {
+  player_key?: string;
+  player_name?: string;
+  team?: string;
+  position?: string;
+  role?: string;
+  depth_order?: number;
+  pass_yards?: number | null;
+  pass_tds?: number | null;
+  interceptions?: number | null;
+  rush_yards?: number | null;
+  rush_tds?: number | null;
+  rec_yards?: number | null;
+  rec_tds?: number | null;
+  rb_role_style?: string | null;
+  fidelity?: string;
+};
+
 type ProjectPayload = {
   ok?: boolean;
   mode?: string;
@@ -35,6 +53,8 @@ type ProjectPayload = {
   drivers?: Record<string, unknown>;
   home_layers?: Record<string, unknown>;
   away_layers?: Record<string, unknown>;
+  player_projections?: PlayerProjectionRow[];
+  players?: PlayerProjectionRow[];
   notes?: Record<string, string>;
   error?: string;
   hint?: string;
@@ -167,6 +187,87 @@ function MarketCell({
   );
 }
 
+function fmtStat(v: number | null | undefined, digits = 0): string {
+  if (v == null || !Number.isFinite(v)) return "—";
+  return digits > 0 ? v.toFixed(digits) : String(Math.round(v));
+}
+
+function PlayerHooksTable({
+  team,
+  rows,
+}: {
+  team: string;
+  rows: PlayerProjectionRow[];
+}) {
+  if (!rows.length) return null;
+  const qbs = rows.filter((r) => r.position === "QB");
+  const skill = rows.filter((r) => r.position !== "QB");
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold/85">
+        {team} · player hooks
+      </p>
+      <div className="mt-2 -mx-1 overflow-x-auto">
+        <table className="min-w-[520px] w-full border-collapse text-left text-[11px] sm:text-xs">
+          <thead>
+            <tr className="border-b border-white/10 text-kos-text/45">
+              <th className="px-1.5 py-1.5 font-semibold">Player</th>
+              <th className="px-1.5 py-1.5 font-semibold">Role</th>
+              <th className="px-1.5 py-1.5 font-semibold tabular-nums">Pass</th>
+              <th className="px-1.5 py-1.5 font-semibold tabular-nums">pTD</th>
+              <th className="px-1.5 py-1.5 font-semibold tabular-nums">INT</th>
+              <th className="px-1.5 py-1.5 font-semibold tabular-nums">Rush</th>
+              <th className="px-1.5 py-1.5 font-semibold tabular-nums">Rec</th>
+              <th className="px-1.5 py-1.5 font-semibold tabular-nums">rTD</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...qbs, ...skill].map((r) => {
+              const roleBits = [r.role ?? r.position ?? "—"];
+              if (r.rb_role_style) roleBits.push(r.rb_role_style);
+              const recTd =
+                r.position === "QB"
+                  ? r.rush_tds
+                  : (r.rec_tds ?? 0) + (r.rush_tds ?? 0);
+              return (
+                <tr
+                  key={`${r.team}-${r.player_key ?? r.player_name}`}
+                  className="border-b border-white/5 text-kos-text/85"
+                >
+                  <td className="px-1.5 py-1.5 font-medium text-kos-text">
+                    {r.player_name ?? "—"}
+                  </td>
+                  <td className="px-1.5 py-1.5 text-kos-text/60">
+                    {roleBits.join(" · ")}
+                  </td>
+                  <td className="px-1.5 py-1.5 tabular-nums">
+                    {fmtStat(r.pass_yards)}
+                  </td>
+                  <td className="px-1.5 py-1.5 tabular-nums">
+                    {fmtStat(r.pass_tds, 1)}
+                  </td>
+                  <td className="px-1.5 py-1.5 tabular-nums">
+                    {fmtStat(r.interceptions, 1)}
+                  </td>
+                  <td className="px-1.5 py-1.5 tabular-nums">
+                    {fmtStat(r.rush_yards)}
+                  </td>
+                  <td className="px-1.5 py-1.5 tabular-nums">
+                    {fmtStat(r.rec_yards)}
+                  </td>
+                  <td className="px-1.5 py-1.5 tabular-nums">
+                    {fmtStat(recTd, 1)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export default function CfbProjectGameClient({
   teams,
   defaultHome = "OSU",
@@ -275,8 +376,8 @@ export default function CfbProjectGameClient({
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
           Pick two FBS teams and project a market-style line — spread, total,
-          win probability with American moneyline — plus the roster / QB /
-          unit / HFA / coaching drivers behind it.
+          win probability with American moneyline — plus approximate QB /
+          skill player hooks and the roster / unit / HFA / coaching drivers.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -502,6 +603,31 @@ export default function CfbProjectGameClient({
               </p>
             </div>
           </div>
+
+          {(() => {
+            const playerRows =
+              result.player_projections ?? result.players ?? [];
+            if (!playerRows.length) return null;
+            const awayRows = playerRows.filter((r) => r.team === away);
+            const homeRows = playerRows.filter((r) => r.team === home);
+            return (
+              <div>
+                <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-text/50">
+                  Player hooks (approximate)
+                </h3>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  <PlayerHooksTable team={away} rows={awayRows} />
+                  <PlayerHooksTable team={home} rows={homeRows} />
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-kos-text/45">
+                  Role-share allocation of team pass/rush/TD pools from
+                  expected points — ESPN roster names, residual &quot;other&quot;
+                  allowed. Not a full box-score engine; does not change team
+                  scores or spreads.
+                </p>
+              </div>
+            );
+          })()}
 
           <div>
             <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-text/50">
