@@ -33,13 +33,13 @@ export default async function NflWeeklySlatePage({
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-            Primary writer home · Weekly slate
+            Primary desk home · Weekly slate
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
             {date === "today" ? "Weekly Slate" : `Slate · ${date}`}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Slate snapshot and matchup cards for writer briefs. Model lines and
+            Slate snapshot and matchup cards for KosEdge briefs. Model lines and
             market context when joined — research desk, not a picks feed.
           </p>
         </div>

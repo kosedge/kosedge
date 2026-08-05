@@ -6,7 +6,9 @@ test("homepage renders brand and CTA", async ({ page }) => {
     page.getByRole("link", { name: /Kos Edge Analytics Home/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: /Beat the Number with real Edge/i }),
+    page.getByRole("heading", {
+      name: /Built on Data, Driven by Edge/i,
+    }),
   ).toBeVisible();
 });
 

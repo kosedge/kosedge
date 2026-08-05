@@ -52,27 +52,20 @@ export default function Home() {
             className="flex items-center gap-3 sm:gap-4"
             aria-label="Kos Edge Analytics Home"
           >
-            <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-full overflow-hidden ring-1 ring-white/10">
-              <Image
-                src="/brand/kosedge-logo-v2.png"
-                alt="Kos Edge Analytics"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-
-            <div className="leading-none">
-              <div className="text-2xl sm:text-3xl font-bebas tracking-wider">
-                <span className="text-kos-green">KOS</span>{" "}
-                <span className="text-kos-gold">EDGE</span>{" "}
-                <span className="text-gray-400 text-xl sm:text-2xl font-inter font-normal">
-                  ANALYTICS
-                </span>
+            <Image
+              src="/brand/kosedge-logo.png"
+              alt="Kos Edge Analytics"
+              width={176}
+              height={52}
+              priority
+              className="h-10 w-auto sm:h-11"
+            />
+            <div className="leading-tight">
+              <div className="text-xl font-extrabold tracking-wide text-kos-text sm:text-2xl">
+                KosEdge
               </div>
-              <div className="text-xs sm:text-sm text-gray-400/80 -mt-0.5">
-                Beat the <span className="text-white">Number</span> with real{" "}
-                <span className="text-kos-gold">Edge</span>
+              <div className="text-[10px] tracking-[0.14em] uppercase text-gray-400/90 sm:text-[11px]">
+                Built on Data, Driven by Edge
               </div>
             </div>
           </Link>
@@ -144,7 +137,7 @@ export default function Home() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           <div className="lg:col-span-7">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bebas tracking-tight leading-[0.95]">
-              Beat the <span className="text-white">Number</span> with real{" "}
+              Built on <span className="text-white">Data</span>, Driven by{" "}
               <span className="text-kos-gold">Edge</span>.
             </h1>
 

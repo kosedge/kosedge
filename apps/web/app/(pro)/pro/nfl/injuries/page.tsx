@@ -1,22 +1,9 @@
 import Link from "next/link";
+import InjuryNewsFeedSection from "@/components/pro/InjuryNewsFeedSection";
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
 import { fetchInjuryNewsFeed } from "@/lib/nfl-injury-news";
 
 export const dynamic = "force-dynamic";
-
-function formatPublished(value: string | null): string {
-  if (!value) return "";
-  const ts = Date.parse(value);
-  if (!Number.isFinite(ts)) return value;
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "America/New_York",
-    timeZoneName: "short",
-  }).format(new Date(ts));
-}
 
 export default async function NflInjuriesPage({
   searchParams,
@@ -45,66 +32,13 @@ export default async function NflInjuriesPage({
 
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-4 pt-8 sm:px-6">
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/5 p-5">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-100/80">
-                Injuries & News
-              </p>
-              <h2 className="mt-1 text-lg font-semibold text-kos-text">
-                Availability headlines · multi-source
-              </h2>
-              <p className="mt-1 max-w-3xl text-sm text-kos-text/70">
-                Aggregated from ESPN, RotoWire, and Rotoworld beat feeds.
-                Weekly designation tables below may lag during camp — use Camp
-                Desk for team beat context. KosEdge briefs with citations ship
-                here when research clears.
-              </p>
-            </div>
-            <Link
-              href="/pro/nfl/camp"
-              className="rounded-xl border border-kos-gold/30 bg-kos-gold/10 px-4 py-2 text-sm text-kos-gold hover:border-kos-gold/50"
-            >
-              Training Camp Desk
-            </Link>
-          </div>
-          {injuryNews.length === 0 ? (
-            <p className="mt-4 text-sm text-kos-text/65">
-              No injury headlines in the current multi-source pull. Check Camp
-              Desk beats for club-specific hubs.
-            </p>
-          ) : (
-            <ul className="mt-4 space-y-3">
-              {injuryNews.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block rounded-xl border border-white/10 bg-black/25 p-3 transition hover:border-kos-gold/35"
-                  >
-                    <p className="text-[11px] uppercase tracking-wide text-kos-text/50">
-                      {item.sourceLabel}
-                      {item.published
-                        ? ` · ${formatPublished(item.published)}`
-                        : ""}
-                    </p>
-                    <p className="mt-1 font-medium text-kos-text">
-                      {item.headline}
-                    </p>
-                    {item.description ? (
-                      <p className="mt-1 text-sm text-kos-text/65">
-                        {item.description}
-                      </p>
-                    ) : null}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
+      <InjuryNewsFeedSection
+        sportLabel="NFL"
+        items={injuryNews}
+        sourceSummary="Aggregated from ESPN, RotoWire, Rotoworld, and VSiN beat feeds."
+        emptyHint="No injury headlines in the current multi-source pull. Check Camp Desk beats for club-specific hubs."
+        campHref="/pro/nfl/camp"
+      />
 
       <NflIntelTablePage
         endpoint="injuries"

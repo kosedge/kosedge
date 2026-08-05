@@ -57,7 +57,10 @@ export default async function NflOverviewPage() {
     base: "/pro/nfl",
     edgeBoardHref: "/edge-board/nfl",
     content,
-  }).filter((section) => section.title !== "Weekly Slate");
+  }).filter(
+    (section) =>
+      section.title !== "Weekly Slate" && section.title !== "Betting Desk",
+  );
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">

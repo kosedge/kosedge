@@ -10,6 +10,7 @@ import {
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
 import {
+  honestEmptySlateCopy,
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
@@ -94,6 +95,12 @@ export default async function NflFairLinesPage({
           return isInPastWindow(row.startTime, includePastDays);
         });
 
+  const emptyHonest =
+    !board.error &&
+    visibleLines.length === 0 &&
+    board.slateStatus &&
+    board.slateStatus !== "ok";
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <section className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-6 sm:p-8">
@@ -138,9 +145,16 @@ export default async function NflFairLinesPage({
       {shouldShowModelUnreachableBanner({
         error: board.error,
         hasContent: visibleLines.length > 0,
+        slateStatus: board.slateStatus,
       }) ? (
         <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
           {modelUnreachableCopy(board.error)}
+        </section>
+      ) : null}
+
+      {emptyHonest ? (
+        <section className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/75">
+          {honestEmptySlateCopy(board.slateStatus)}
         </section>
       ) : null}
 

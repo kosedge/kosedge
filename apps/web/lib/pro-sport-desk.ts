@@ -134,7 +134,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/nfl/previews",
         title: "Team Previews",
         description:
-          "All 32 writer-owned 2026 season previews with angles and win-total guides.",
+          "All 32 KosEdge 2026 season previews with angles and win-total guides.",
         cta: "Read previews →",
         accent: "gold",
       },
@@ -150,7 +150,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/nfl/camp",
         title: "Training Camp Desk",
         description:
-          "Beat map, public camp headlines, and writer ownership into kickoff.",
+          "Beat map, public camp headlines, and KosEdge coverage into kickoff.",
         cta: "Open camp desk →",
         accent: "green",
       },

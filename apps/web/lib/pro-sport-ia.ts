@@ -214,14 +214,14 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/camp",
           label: "Training Camp Desk",
-          hint: "Beat map, public camp headlines, and writer coverage owners.",
+          hint: "Beat map, public camp headlines, and KosEdge desk coverage.",
           premium: true,
           status: "active",
         },
         {
           href: "/pro/nfl/previews",
           label: "Team Previews",
-          hint: "All 32 writer-owned 2026 season previews with betting guides.",
+          hint: "All 32 KosEdge 2026 season previews with betting guides.",
           premium: true,
           status: "active",
         },
@@ -471,7 +471,7 @@ function mlbIntelLinks(base: string): OverviewSectionLink[] {
     {
       href: `${base}/teams`,
       label: "Team research hub",
-      hint: "Club directory with park factors, writer preview slots, and handicapping shells.",
+      hint: "Club directory with park factors, KosEdge preview slots, and handicapping shells.",
       premium: true,
       status: "active",
     },
@@ -531,7 +531,7 @@ function genericIntelLinks(
     {
       href: `${base}/teams`,
       label: "Team research hub",
-      hint: "Per-team handicapping shells with writer preview ownership and sport-aware sections.",
+      hint: "Per-team handicapping shells with KosEdge preview slots and sport-aware sections.",
       premium: true,
       status: "active",
     },
@@ -670,7 +670,7 @@ export function buildSportOverviewSections({
         {
           href: `${base}/teams`,
           label: "Team research hub",
-          hint: "Per-team handicapping research pages with writer preview ownership.",
+          hint: "Per-team handicapping research pages with KosEdge preview slots.",
           status: "active",
         },
       ],

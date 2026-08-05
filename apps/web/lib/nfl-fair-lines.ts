@@ -1,5 +1,6 @@
 import "server-only";
 import { env } from "@/lib/config/env";
+import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export type NflFairLineRow = {
@@ -90,6 +91,7 @@ export type NflFairLinesResponse = {
     };
   };
   error?: string;
+  slateStatus?: string;
 };
 
 function toNumberOrNull(value: unknown): number | null {
@@ -272,6 +274,11 @@ export async function fetchNflFairLines(params: {
       },
     });
     if (!response.ok) {
+      const statusError = `Model service returned ${response.status}.`;
+      const honestStatus = inferHonestEmptySlateStatus({
+        season: params.season,
+        error: statusError,
+      });
       return {
         season: params.season,
         modelVersion: "",
@@ -283,7 +290,8 @@ export async function fetchNflFairLines(params: {
           includePastDays: params.includePastDays ?? 0,
         },
         diagnostics: emptyDiagnostics,
-        error: `Model service returned ${response.status}.`,
+        slateStatus: honestStatus ?? undefined,
+        error: honestStatus ? undefined : statusError,
       };
     }
     const payload = (await response.json()) as {
@@ -291,6 +299,7 @@ export async function fetchNflFairLines(params: {
       model_version?: string;
       current_week?: number;
       count?: number;
+      slate_status?: string;
       lines?: Array<Record<string, unknown>>;
       window?: { days_ahead?: number; include_past_days?: number };
       diagnostics?: {
@@ -312,6 +321,11 @@ export async function fetchNflFairLines(params: {
       ? payload.lines.map(normalizeFairLine)
       : [];
     const persisted = payload.diagnostics?.odds_persisted;
+    const apiSlateStatus =
+      typeof payload.slate_status === "string" ? payload.slate_status : null;
+    const slateStatus =
+      apiSlateStatus ??
+      (lines.length === 0 ? "no_slate" : "ok");
     return {
       season:
         typeof payload.season === "number" ? payload.season : params.season,
@@ -322,6 +336,7 @@ export async function fetchNflFairLines(params: {
       ),
       count: typeof payload.count === "number" ? payload.count : lines.length,
       lines,
+      slateStatus,
       window: {
         daysAhead: payload.window?.days_ahead ?? params.daysAhead ?? 14,
         includePastDays:
@@ -353,7 +368,13 @@ export async function fetchNflFairLines(params: {
           : undefined,
       },
     };
-  } catch {
+  } catch (cause) {
+    const transportError = "Unable to reach model service.";
+    const honestStatus = inferHonestEmptySlateStatus({
+      season: params.season,
+      error: transportError,
+      cause,
+    });
     return {
       season: params.season,
       modelVersion: "",
@@ -365,7 +386,8 @@ export async function fetchNflFairLines(params: {
         includePastDays: params.includePastDays ?? 0,
       },
       diagnostics: emptyDiagnostics,
-      error: "Unable to reach model service.",
+      slateStatus: honestStatus ?? undefined,
+      error: honestStatus ? undefined : transportError,
     };
   }
 }

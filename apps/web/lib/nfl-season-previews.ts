@@ -55,9 +55,9 @@ function extractAuthor(source: string): { author: string; desk: string | null } 
   const match = source.match(
     /\*\*By\s+([^*]+?)\*\*\s*·\s*Kos Edge Analytics(?:\s*·\s*([^\n]+))?/i,
   );
-  if (!match) return { author: "Kos Edge Desk", desk: null };
+  if (!match) return { author: "KosEdge", desk: null };
   return {
-    author: match[1].trim(),
+    author: "KosEdge",
     desk: match[2]?.trim() || null,
   };
 }
@@ -105,8 +105,11 @@ function parsePreviewFile(
     extractField(raw, "Sources \\(beat desk\\)") ||
     extractField(raw, "Sources");
 
-  // Drop the H1 from body so the page can own the title.
-  const bodyMarkdown = raw.replace(/^#\s+.+\n+/, "").trim();
+  // Drop the H1 and writer byline from body — page header owns KosEdge attribution.
+  const bodyMarkdown = raw
+    .replace(/^#\s+.+\n+/, "")
+    .replace(/^\*\*By\s+[^*]+\*\*\s*·[^\n]*\n+/im, "")
+    .trim();
   const wordCount = bodyMarkdown.split(/\s+/).filter(Boolean).length;
   if (wordCount < 100) return null;
 

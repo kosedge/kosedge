@@ -12,6 +12,7 @@ const ROTOWIRE_RSS =
   "https://www.rotowire.com/rss/news.php?sport=NFL";
 const ROTOWORLD_RSS =
   "https://www.rotoworld.com/rss/feed.aspx?s=16";
+const VSIN_NFL_RSS = "https://vsin.com/category/nfl/feed/";
 
 function decodeXmlEntities(value: string): string {
   return value
@@ -150,12 +151,12 @@ function sourceLabelFor(item: CampNewsItem): string {
 
 /**
  * Multi-source injury & availability headlines for the Injuries & News desk.
- * ESPN + RotoWire + Rotoworld (NBC) — deduped, newest first.
+ * ESPN + RotoWire + Rotoworld + VSiN — deduped, newest first.
  */
 export async function fetchInjuryNewsFeed(
   limit = 12,
 ): Promise<InjuryNewsItem[]> {
-  const [espn, rotowire, rotoworld] = await Promise.all([
+  const [espn, rotowire, rotoworld, vsin] = await Promise.all([
     fetchEspnInjuryNews(Math.max(limit, 10)),
     fetchRssInjuryNews(
       ROTOWIRE_RSS,
@@ -169,12 +170,19 @@ export async function fetchInjuryNewsFeed(
       "Rotoworld",
       Math.max(limit, 8),
     ),
+    fetchRssInjuryNews(
+      VSIN_NFL_RSS,
+      "vsin-rss",
+      "VSiN",
+      Math.max(limit, 8),
+    ),
   ]);
 
   const merged = dedupeNews([
     ...espn.map((item) => ({ ...item, sourceLabel: sourceLabelFor(item) })),
     ...rotowire,
     ...rotoworld,
+    ...vsin,
   ]);
 
   merged.sort((a, b) => {

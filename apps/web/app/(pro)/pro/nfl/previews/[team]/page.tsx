@@ -63,7 +63,7 @@ export default async function NflSeasonPreviewArticlePage({
 
       <header className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/12 via-black/45 to-black/70 p-6 sm:p-8">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-          Kos Edge Analytics
+          KosEdge
           {article.desk ? ` · ${article.desk}` : ""}
         </p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
