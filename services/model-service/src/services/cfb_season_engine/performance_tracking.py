@@ -655,6 +655,7 @@ def record_result(
     away_score: int,
     source: str = "manual",
     lake_dir: Optional[Path] = None,
+    apply_inseason: bool = False,
 ) -> Optional[ProjectionLog]:
     record = _get_jsonl(proj_id, lake_dir) or _try_db_get(proj_id)
     if record is None:
@@ -670,6 +671,27 @@ def record_result(
     record.updated_at = _utc_now()
     _upsert_jsonl(record, lake_dir)
     _try_db_insert(record)
+    # Optional in-season rating update — never fails the tracking write.
+    if apply_inseason:
+        try:
+            from src.services.cfb_season_engine.in_season_update import ingest_result
+
+            ingest_result(
+                home_team=record.home_team,
+                away_team=record.away_team,
+                home_score=int(home_score),
+                away_score=int(away_score),
+                week=int(record.week or 1),
+                season=int(record.season or 2026),
+                model_spread_home=record.model_spread_home,
+                expected_home_score=record.expected_home_score,
+                expected_away_score=record.expected_away_score,
+                game_id=str(record.game_id or ""),
+                projection_id=str(record.id),
+                source=f"tracking:{source}",
+            )
+        except Exception as exc:  # pragma: no cover
+            log.warning("in-season update from result failed: %s", exc)
     return record
 
 

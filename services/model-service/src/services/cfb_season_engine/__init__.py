@@ -44,6 +44,11 @@ prior-year ratings proxy). Measured priors only; architecture intact.
 v0.8.2 live performance tracking + CLV logging (projection → close → result).
 Projection knobs unchanged from v0.8.1.
 
+v0.8.3 player↔team coherence + game-script allocation (player layer only).
+
+v0.9 in-season updating foundation — shrinkaged efficiency deltas from
+final scores; preseason baseline preserved and inspectable.
+
 Public entry points
 -------------------
 - ``project_game`` / ``project_game_preview`` — team-level matchup projection
@@ -51,6 +56,7 @@ Public entry points
 - ``build_packaged_universe`` / ``resolve_season_universe`` — input builders
 - ``engine_status_payload`` — honesty contract for API / ops
 - ``performance_tracking`` — log / close / result / summary
+- ``in_season_update`` — ingest result → rating deltas / state
 
 This package is **additive**. It does not replace CFB Edge Board markets-only
 behavior or invent KEI fair lines until a later calibrated pass.
@@ -293,7 +299,8 @@ def engine_status_payload(
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
             "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
             "v0.8 opponent-adjusted efficiency backbone + v0.8.1 historical "
-            "closing-line calibration + v0.8.2 performance tracking / CLV"
+            "closing-line calibration + v0.8.2 performance tracking / CLV + "
+            "v0.8.3 player coherence + v0.9 in-season updating foundation"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "historical_calibration": {
@@ -309,6 +316,9 @@ def engine_status_payload(
             "auto_log_env": "CFB_AUTO_LOG_PROJECTIONS",
             "fidelity": "live_paper_log",
         },
+        "in_season_update": __import__(
+            "src.services.cfb_season_engine.in_season_update", fromlist=["documentation"]
+        ).documentation(),
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
