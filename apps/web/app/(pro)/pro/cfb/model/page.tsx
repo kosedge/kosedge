@@ -1,6 +1,9 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
-import { fetchCfbSeasonEngineStatus } from "@/lib/cfb-season-engine";
+import {
+  fetchCfbPerformance,
+  fetchCfbSeasonEngineStatus,
+} from "@/lib/cfb-season-engine";
 import { formatIndex } from "@/lib/cfb-season-engine-format";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +17,10 @@ const TOOLS = [
 ] as const;
 
 export default async function CfbSeasonModelHubPage() {
-  const status = await fetchCfbSeasonEngineStatus();
+  const [status, performance] = await Promise.all([
+    fetchCfbSeasonEngineStatus(),
+    fetchCfbPerformance({ limit: 100 }),
+  ]);
   const ladder = status.power_style_ladder?.top ?? [];
   const solid = status.solid_vs_approximate?.solid?.slice(0, 6) ?? [];
   const approx = status.solid_vs_approximate?.approximate?.slice(0, 6) ?? [];
@@ -28,8 +34,8 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="Hierarchical CFB season engine with opponent-adjusted efficiency (2025 SP+ carry), ESPN 2026 real-roster overlay, and historical closing-line calibration — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
-      badge="CFB hist-cal"
+      summary="Hierarchical CFB season engine with opponent-adjusted efficiency (2025 SP+ carry), ESPN 2026 real-roster overlay, historical closing-line calibration, and live projection/CLV tracking — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
+      badge="CFB tracking"
       primaryHref="/pro/cfb/project-game"
       primaryLabel="Open Project Game"
       secondaryHref="/edge-board/cfb"
@@ -74,10 +80,61 @@ export default async function CfbSeasonModelHubPage() {
             <span className="text-red-300"> — {status.error}</span>
           ) : null}
         </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-4 text-xs">
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              Logged
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              {performance.error
+                ? "—"
+                : `${performance.n_logged ?? 0} · close ${performance.n_with_close ?? 0} · final ${performance.n_with_result ?? 0}`}
+            </div>
+          </div>
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              ATS / SU
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              {performance.error
+                ? "—"
+                : `${performance.ats?.record || "0-0"} · SU ${performance.su?.record || "0-0"}`}
+            </div>
+          </div>
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              Avg CLV
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              {performance.error || performance.clv?.avg_spread_clv == null
+                ? "—"
+                : `${performance.clv.avg_spread_clv > 0 ? "+" : ""}${performance.clv.avg_spread_clv}`}
+            </div>
+          </div>
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              Abs margin err
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              {performance.error ||
+              performance.error_metrics?.avg_abs_margin_error == null
+                ? "—"
+                : performance.error_metrics.avg_abs_margin_error}
+            </div>
+          </div>
+        </div>
         <p className="mt-2 text-xs text-kos-text/50">
           Proxied through Next.js BFF routes — browser never calls Railway with
           secrets. Season simulate stays heavy/API-capped; use Project Game for
-          interactive eval.
+          interactive eval. Performance strip reads{" "}
+          <code className="text-kos-text/60">/cfb/season-engine/performance</code>
+          {performance.error ? (
+            <span className="text-kos-text/40">
+              {" "}
+              (tracking unreachable: {performance.error})
+            </span>
+          ) : null}
+          .
         </p>
         {status.schedule_source ? (
           <p className="mt-2 text-xs text-kos-text/50">

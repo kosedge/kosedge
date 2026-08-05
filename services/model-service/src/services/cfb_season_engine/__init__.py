@@ -41,12 +41,16 @@ primary complementary O/D driver; unit weights reduced to avoid double-counting.
 v0.8.1 historical closing-line calibration (SportsDataverse ESPN lines +
 prior-year ratings proxy). Measured priors only; architecture intact.
 
+v0.8.2 live performance tracking + CLV logging (projection → close → result).
+Projection knobs unchanged from v0.8.1.
+
 Public entry points
 -------------------
 - ``project_game`` / ``project_game_preview`` — team-level matchup projection
 - ``simulate_full_season`` — N path-coherent season sims
 - ``build_packaged_universe`` / ``resolve_season_universe`` — input builders
 - ``engine_status_payload`` — honesty contract for API / ops
+- ``performance_tracking`` — log / close / result / summary
 
 This package is **additive**. It does not replace CFB Edge Board markets-only
 behavior or invent KEI fair lines until a later calibrated pass.
@@ -289,7 +293,7 @@ def engine_status_payload(
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
             "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
             "v0.8 opponent-adjusted efficiency backbone + v0.8.1 historical "
-            "closing-line calibration"
+            "closing-line calibration + v0.8.2 performance tracking / CLV"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "historical_calibration": {
@@ -297,6 +301,13 @@ def engine_status_payload(
             "artifacts": "data/ops/cfb-historical-calibration-20260805/",
             "script": "scripts/cfb/run_historical_calibration.py",
             "fidelity": "approximate_reconstruction",
+        },
+        "performance_tracking": {
+            "ops": "data/ops/cfb-performance-tracking-20260805.md",
+            "module": "src.services.cfb_season_engine.performance_tracking",
+            "migration": "infra/db/049_cfb_performance_tracking.sql",
+            "auto_log_env": "CFB_AUTO_LOG_PROJECTIONS",
+            "fidelity": "live_paper_log",
         },
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
@@ -399,6 +410,7 @@ def engine_status_payload(
                 "v0.6.1 calibration knobs (inspectable priors; measured, not market-grade)",
                 "v0.7 player role-share allocation (QB + skill; team totals unchanged)",
                 "v0.8.1 historical closing-line backtest framework + measured prior knobs",
+                "v0.8.2 performance tracking log → close → result → summary (+ CLV)",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
@@ -439,11 +451,16 @@ def engine_status_payload(
             "status": "GET /cfb/season-engine/status",
             "project_game": "POST /cfb/season-engine/project-game",
             "simulate": "POST /cfb/season-engine/simulate",
+            "projections_log": "POST /cfb/season-engine/projections/log",
+            "projections_close": "POST /cfb/season-engine/projections/{id}/close",
+            "projections_result": "POST /cfb/season-engine/projections/{id}/result",
+            "performance": "GET /cfb/season-engine/performance",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
             "package_roster": "scripts/cfb/package_real_roster_2026.py",
             "package_efficiency": "scripts/cfb/package_efficiency_2025_carry.py",
             "historical_calibration": "scripts/cfb/run_historical_calibration.py",
             "ops": "data/ops/cfb-historical-calibration-20260805.md",
+            "ops_performance": "data/ops/cfb-performance-tracking-20260805.md",
             "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
