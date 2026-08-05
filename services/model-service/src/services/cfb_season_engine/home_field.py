@@ -1,7 +1,7 @@
 """Variable home-field advantage (CFB) — bucketed, inspectable, not flat 3 pts.
 
 Design (bettor-facing, honest fidelity):
-- Baseline ~2.0 points (FBS-ish; not NFL's ~1 pt).
+- Baseline ~1.7 points (FBS-ish; trimmed in v0.8.1 hist-cal; not NFL's ~1 pt).
 - Team buckets from recent home performance proxy / packaged venue prior:
   elite / strong / average / weak / poor.
 - Night games and major environments are noted; night gets a small optional
@@ -21,12 +21,13 @@ from src.services.cfb_season_engine import priors as P
 from src.services.cfb_season_engine.types import DataFidelity, HomeFieldProfile
 
 # Bucket → points. Baseline sits at "average".
+# v0.8.1 hist-cal: trimmed ~0.3 pts after home-dog overrate vs 2023–24 closes.
 BUCKET_POINTS: Dict[str, float] = {
-    "elite": 3.40,
-    "strong": 2.75,
-    "average": 2.00,
-    "weak": 1.25,
-    "poor": 0.70,
+    "elite": 3.10,
+    "strong": 2.45,
+    "average": 1.70,
+    "weak": 1.05,
+    "poor": 0.55,
 }
 
 BUCKET_ORDER = ("poor", "weak", "average", "strong", "elite")

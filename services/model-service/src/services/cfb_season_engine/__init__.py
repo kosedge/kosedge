@@ -38,6 +38,9 @@ v0.7 allocates team pass/rush/TD pools onto named QB + skill hooks
 v0.8 adds opponent-adjusted efficiency backbone (final-2025 SP+ carry) as a
 primary complementary O/D driver; unit weights reduced to avoid double-counting.
 
+v0.8.1 historical closing-line calibration (SportsDataverse ESPN lines +
+prior-year ratings proxy). Measured priors only; architecture intact.
+
 Public entry points
 -------------------
 - ``project_game`` / ``project_game_preview`` — team-level matchup projection
@@ -285,9 +288,16 @@ def engine_status_payload(
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
             "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
-            "v0.8 opponent-adjusted efficiency backbone"
+            "v0.8 opponent-adjusted efficiency backbone + v0.8.1 historical "
+            "closing-line calibration"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
+        "historical_calibration": {
+            "ops": "data/ops/cfb-historical-calibration-20260805.md",
+            "artifacts": "data/ops/cfb-historical-calibration-20260805/",
+            "script": "scripts/cfb/run_historical_calibration.py",
+            "fidelity": "approximate_reconstruction",
+        },
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
         "schedule_game_count": meta.get("schedule_game_count"),
@@ -388,6 +398,7 @@ def engine_status_payload(
                 "Season-sim path coherence (wins dist, week sample, ranking)",
                 "v0.6.1 calibration knobs (inspectable priors; measured, not market-grade)",
                 "v0.7 player role-share allocation (QB + skill; team totals unchanged)",
+                "v0.8.1 historical closing-line backtest framework + measured prior knobs",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
@@ -403,7 +414,8 @@ def engine_status_payload(
                 "Coaching staff change flags for 2026 (curated proxies)",
                 "Densified schedule paths (not official FBS slate)",
                 "Conference affiliations for standings",
-                "Game win probs / spreads / totals (calibrated toward sanity, not CLV)",
+                "Game win probs / spreads / totals (hist-cal vs closes; not CLV/KEI)",
+                "Historical reconstruction (league-avg roster/QB; prior-year ratings proxy)",
                 "In-path strength evolution",
                 "Season win totals / ranking-ish standings (SOS-sensitive under densify)",
                 "Player yards/TDs/INTs (role shares of team pools; residual other OK)",
@@ -430,7 +442,9 @@ def engine_status_payload(
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
             "package_roster": "scripts/cfb/package_real_roster_2026.py",
             "package_efficiency": "scripts/cfb/package_efficiency_2025_carry.py",
-            "ops": "data/ops/cfb-efficiency-backbone-20260804.md",
+            "historical_calibration": "scripts/cfb/run_historical_calibration.py",
+            "ops": "data/ops/cfb-historical-calibration-20260805.md",
+            "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
         },

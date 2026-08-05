@@ -1,0 +1,252 @@
+{
+  "phase": "before",
+  "engine_version": "cfb-season-engine-v0.8-efficiency",
+  "calibration_tag": "cfb-season-engine-priors-v0.6.1-calibration",
+  "load": {
+    "seasons": [
+      2023,
+      2024
+    ],
+    "source": "sportsdataverse espn_cfb_betting + team_box + linescores",
+    "skipped": {
+      "missing_line": 29,
+      "missing_score": 1,
+      "unmapped_team": 525,
+      "fcs_or_unknown": 0
+    },
+    "mapped_games": 1322
+  },
+  "efficiency": {
+    "2023": {
+      "prior_ratings_year": 2022,
+      "teams_with_efficiency": 121
+    },
+    "2024": {
+      "prior_ratings_year": 2023,
+      "teams_with_efficiency": 122
+    }
+  },
+  "priors_snapshot": {
+    "ENGINE_VERSION": "cfb-season-engine-v0.8-efficiency",
+    "CALIBRATION_TAG": "cfb-season-engine-priors-v0.6.1-calibration",
+    "HFA_BASELINE_POINTS": 2.0,
+    "LEAGUE_TEAM_PPG": 27.5,
+    "MATCHUP_RESPONSE": 1.22,
+    "MATCHUP_RATIO_CLAMP": [
+      0.55,
+      1.38
+    ],
+    "WEIGHT_OFF_EFF": 0.28,
+    "WEIGHT_DEF_EFF": 0.3,
+    "EARLY_SEASON_SEPARATION_SOFTEN": {
+      "1": 0.82,
+      "2": 0.86,
+      "3": 0.91,
+      "4": 0.96
+    },
+    "EARLY_SEASON_MARGIN_SD_MULT": {
+      "1": 1.38,
+      "2": 1.26,
+      "3": 1.16,
+      "4": 1.08
+    },
+    "WIN_PROB_MARGIN_SD": 14.5
+  },
+  "metrics": {
+    "engine_version": "cfb-season-engine-v0.8-efficiency",
+    "calibration_tag": "cfb-season-engine-priors-v0.6.1-calibration",
+    "n_games": 1322,
+    "overall": {
+      "n": 1322,
+      "spread_vs_close_bias": 1.0875,
+      "spread_vs_close_mae": 8.4323,
+      "spread_vs_close_rmse": 10.9847,
+      "margin_vs_actual_bias": -1.3474,
+      "margin_vs_actual_mae": 14.7317,
+      "margin_vs_actual_rmse": 18.7041,
+      "total_vs_close_bias": 3.2284,
+      "total_vs_close_mae": 6.2012,
+      "total_vs_close_rmse": 7.8891,
+      "total_vs_actual_bias": 1.8672,
+      "total_vs_actual_mae": 13.4869,
+      "ats_n": 1260,
+      "ats_hit_rate": 0.5151,
+      "ou_n": 1251,
+      "ou_hit_rate": 0.526,
+      "ml_hit_rate": 0.6384,
+      "brier_home_wp": 0.2185
+    },
+    "slices": {
+      "early_season_w1_4": {
+        "n": 401,
+        "spread_vs_close_bias": 2.3428,
+        "spread_vs_close_mae": 9.6054,
+        "spread_vs_close_rmse": 12.6769,
+        "margin_vs_actual_bias": -2.1819,
+        "margin_vs_actual_mae": 15.3968,
+        "margin_vs_actual_rmse": 19.3823,
+        "total_vs_close_bias": 3.4015,
+        "total_vs_close_mae": 6.4296,
+        "total_vs_close_rmse": 8.31,
+        "total_vs_actual_bias": 3.1035,
+        "total_vs_actual_mae": 13.6133,
+        "ats_n": 390,
+        "ats_hit_rate": 0.5231,
+        "ou_n": 384,
+        "ou_hit_rate": 0.5026,
+        "ml_hit_rate": 0.6658,
+        "brier_home_wp": 0.2061
+      },
+      "late_season_w5_plus": {
+        "n": 921,
+        "spread_vs_close_bias": 0.541,
+        "spread_vs_close_mae": 7.9216,
+        "spread_vs_close_rmse": 10.1603,
+        "margin_vs_actual_bias": -0.984,
+        "margin_vs_actual_mae": 14.4421,
+        "margin_vs_actual_rmse": 18.401,
+        "total_vs_close_bias": 3.153,
+        "total_vs_close_mae": 6.1018,
+        "total_vs_close_rmse": 7.6986,
+        "total_vs_actual_bias": 1.3289,
+        "total_vs_actual_mae": 13.4319,
+        "ats_n": 870,
+        "ats_hit_rate": 0.5115,
+        "ou_n": 867,
+        "ou_hit_rate": 0.5363,
+        "ml_hit_rate": 0.6265,
+        "brier_home_wp": 0.2239
+      },
+      "home_favorite": {
+        "n": 812,
+        "spread_vs_close_bias": 7.3038,
+        "spread_vs_close_mae": 8.1143,
+        "spread_vs_close_rmse": 11.0019,
+        "margin_vs_actual_bias": -7.5366,
+        "margin_vs_actual_mae": 14.8077,
+        "margin_vs_actual_rmse": 18.8573,
+        "total_vs_close_bias": 3.2683,
+        "total_vs_close_mae": 6.2943,
+        "total_vs_close_rmse": 8.0033,
+        "total_vs_actual_bias": 2.2769,
+        "total_vs_actual_mae": 13.3432,
+        "ats_n": 769,
+        "ats_hit_rate": 0.528,
+        "ou_n": 769,
+        "ou_hit_rate": 0.5202,
+        "ml_hit_rate": 0.702,
+        "brier_home_wp": 0.2005
+      },
+      "home_dog": {
+        "n": 510,
+        "spread_vs_close_bias": -8.8097,
+        "spread_vs_close_mae": 8.9388,
+        "spread_vs_close_rmse": 10.9573,
+        "margin_vs_actual_bias": 8.5068,
+        "margin_vs_actual_mae": 14.6107,
+        "margin_vs_actual_rmse": 18.4574,
+        "total_vs_close_bias": 3.1648,
+        "total_vs_close_mae": 6.053,
+        "total_vs_close_rmse": 7.7036,
+        "total_vs_actual_bias": 1.2148,
+        "total_vs_actual_mae": 13.7156,
+        "ats_n": 491,
+        "ats_hit_rate": 0.4949,
+        "ou_n": 482,
+        "ou_hit_rate": 0.5353,
+        "ml_hit_rate": 0.5373,
+        "brier_home_wp": 0.2472
+      },
+      "p4_vs_p4": {
+        "n": 649,
+        "spread_vs_close_bias": -0.3645,
+        "spread_vs_close_mae": 7.6539,
+        "spread_vs_close_rmse": 9.8415,
+        "margin_vs_actual_bias": 0.1349,
+        "margin_vs_actual_mae": 13.6551,
+        "margin_vs_actual_rmse": 17.4515,
+        "total_vs_close_bias": 3.3535,
+        "total_vs_close_mae": 6.3386,
+        "total_vs_close_rmse": 8.0636,
+        "total_vs_actual_bias": 2.1155,
+        "total_vs_actual_mae": 13.1042,
+        "ats_n": 617,
+        "ats_hit_rate": 0.5332,
+        "ou_n": 621,
+        "ou_hit_rate": 0.533,
+        "ml_hit_rate": 0.6009,
+        "brier_home_wp": 0.2258
+      },
+      "mixed_or_g5": {
+        "n": 673,
+        "spread_vs_close_bias": 2.4878,
+        "spread_vs_close_mae": 9.183,
+        "spread_vs_close_rmse": 11.9844,
+        "margin_vs_actual_bias": -2.7768,
+        "margin_vs_actual_mae": 15.7699,
+        "margin_vs_actual_rmse": 19.8373,
+        "total_vs_close_bias": 3.1077,
+        "total_vs_close_mae": 6.0688,
+        "total_vs_close_rmse": 7.717,
+        "total_vs_actual_bias": 1.6278,
+        "total_vs_actual_mae": 13.856,
+        "ats_n": 643,
+        "ats_hit_rate": 0.4977,
+        "ou_n": 630,
+        "ou_hit_rate": 0.519,
+        "ml_hit_rate": 0.6746,
+        "brier_home_wp": 0.2115
+      }
+    },
+    "by_season": {
+      "2023": {
+        "n": 647,
+        "spread_vs_close_bias": 0.9973,
+        "spread_vs_close_mae": 8.1121,
+        "spread_vs_close_rmse": 10.5112,
+        "margin_vs_actual_bias": -1.0986,
+        "margin_vs_actual_mae": 14.609,
+        "margin_vs_actual_rmse": 18.6404,
+        "total_vs_close_bias": 3.3822,
+        "total_vs_close_mae": 6.4069,
+        "total_vs_close_rmse": 8.0939,
+        "total_vs_actual_bias": 1.9139,
+        "total_vs_actual_mae": 13.6483,
+        "ats_n": 618,
+        "ats_hit_rate": 0.5194,
+        "ou_n": 610,
+        "ou_hit_rate": 0.5148,
+        "ml_hit_rate": 0.6662,
+        "brier_home_wp": 0.2137
+      },
+      "2024": {
+        "n": 675,
+        "spread_vs_close_bias": 1.174,
+        "spread_vs_close_mae": 8.7392,
+        "spread_vs_close_rmse": 11.4202,
+        "margin_vs_actual_bias": -1.5859,
+        "margin_vs_actual_mae": 14.8494,
+        "margin_vs_actual_rmse": 18.7649,
+        "total_vs_close_bias": 3.081,
+        "total_vs_close_mae": 6.0041,
+        "total_vs_close_rmse": 7.6876,
+        "total_vs_actual_bias": 1.8224,
+        "total_vs_actual_mae": 13.3322,
+        "ats_n": 642,
+        "ats_hit_rate": 0.5109,
+        "ou_n": 641,
+        "ou_hit_rate": 0.5367,
+        "ml_hit_rate": 0.6119,
+        "brier_home_wp": 0.2232
+      }
+    },
+    "reconstruction_limits": [
+      "Prior-year cfb_ratings adj EPA stands in for SP+ efficiency.",
+      "Roster / QB / position groups forced to league-average (no hist roster).",
+      "Coaching flags assumed all-returning.",
+      "HFA from curated 2026 venue proxies (not season-Y home splits).",
+      "ESPN betting lines are resolved closing-ish (core_odds_api / pickcenter).",
+      "Team-code mapping aliases some missing FBS codes onto peers \u2014 skip when both unmapped."
+    ]
+  }
+}
