@@ -93,7 +93,8 @@ Apply: `psql "$DATABASE_URL" -f infra/db/049_cfb_performance_tracking.sql`
 
 ### JSONL fallback
 
-Default lake: `data/ops/cfb_projection_logs/projections.jsonl`  
+Default lake: `services/model-service/data/ops/cfb_projection_logs/projections.jsonl`  
+(Railway `--path-as-root` → `/app/data/ops/cfb_projection_logs/`; falls back to `/tmp` if not writable.)  
 Override: `CFB_PROJECTION_LOG_DIR`  
 Backend: `CFB_PROJECTION_LOG_BACKEND=jsonl|db|auto` (default `auto`).
 

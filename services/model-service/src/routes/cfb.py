@@ -211,14 +211,24 @@ def cfb_performance_summary(
     engine_version: Optional[str] = Query(None),
 ) -> Dict[str, Any]:
     """Recent performance summary: record, avg error, CLV."""
-    from src.services.cfb_season_engine.performance_tracking import (
-        documentation,
-        performance_summary,
-    )
+    try:
+        from src.services.cfb_season_engine.performance_tracking import (
+            documentation,
+            performance_summary,
+        )
 
-    payload = performance_summary(limit=limit, engine_version=engine_version)
-    payload["tracking"] = documentation()
-    return payload
+        payload = performance_summary(limit=limit, engine_version=engine_version)
+        payload["tracking"] = documentation()
+        return payload
+    except Exception as exc:
+        log.exception("cfb performance summary failed: %s", exc)
+        return {
+            "ok": False,
+            "error": f"performance summary failed: {exc}",
+            "n_logged": 0,
+            "n_with_close": 0,
+            "n_with_result": 0,
+        }
 
 
 @router.post("/season-engine/simulate")
