@@ -12,6 +12,7 @@ export type NflSeasonPreviewMeta = {
   angle: string | null;
   market: string | null;
   sources: string | null;
+  publishedDate: string | null;
   href: string;
   excerpt: string;
 };
@@ -104,6 +105,8 @@ function parsePreviewFile(
   const sources =
     extractField(raw, "Sources \\(beat desk\\)") ||
     extractField(raw, "Sources");
+  const publishedDate =
+    extractField(raw, "Published") || extractField(raw, "Date");
 
   // Drop the H1 and writer byline from body — page header owns KosEdge attribution.
   const bodyMarkdown = raw
@@ -122,6 +125,7 @@ function parsePreviewFile(
     angle,
     market,
     sources,
+    publishedDate,
     href: `/pro/nfl/previews/${team.toUpperCase()}`,
     excerpt: firstParagraph(raw),
     bodyMarkdown,
@@ -172,6 +176,7 @@ export function getAllNflSeasonPreviews(): NflSeasonPreviewMeta[] {
       angle: article.angle,
       market: article.market,
       sources: article.sources,
+      publishedDate: article.publishedDate,
       href: article.href,
       excerpt: article.excerpt,
     });
