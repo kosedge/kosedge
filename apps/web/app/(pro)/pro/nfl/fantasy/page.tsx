@@ -1,9 +1,7 @@
 import { FantasyDraftDeskClient } from "@/components/pro/nfl/fantasy/FantasyDraftDeskClient";
 import { loadFantasyDraftDesk } from "@/lib/fantasy/load-desk";
 import type { FantasyScoringProfile } from "@/lib/fantasy/types";
-import {
-  FANTASY_DRAFT_POSITIONS,
-} from "@/lib/nfl-fantasy-draft";
+import { FANTASY_DRAFT_POSITIONS } from "@/lib/nfl-fantasy-draft-shared";
 
 const POSITION_TABS = ["ALL", ...FANTASY_DRAFT_POSITIONS] as const;
 const LIMIT = 250;

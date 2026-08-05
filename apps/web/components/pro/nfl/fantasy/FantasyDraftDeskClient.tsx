@@ -21,7 +21,7 @@ import {
   FANTASY_DRAFT_POSITIONS,
   FANTASY_SCORING_PROFILES,
   type FantasyScoringProfile,
-} from "@/lib/nfl-fantasy-draft";
+} from "@/lib/nfl-fantasy-draft-shared";
 
 const POSITION_TABS = ["ALL", ...FANTASY_DRAFT_POSITIONS] as const;
 const ROSTER_STORAGE_KEY = "kosedge.fantasy.draftDesk.roster.v1";

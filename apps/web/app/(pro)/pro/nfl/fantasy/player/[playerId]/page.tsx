@@ -6,7 +6,7 @@ import {
   draftPositionBadgeClass,
   draftTierBadgeClass,
   draftTierLabel,
-} from "@/lib/nfl-fantasy-draft";
+} from "@/lib/nfl-fantasy-draft-shared";
 
 type SearchValue = string | string[] | undefined;
 
