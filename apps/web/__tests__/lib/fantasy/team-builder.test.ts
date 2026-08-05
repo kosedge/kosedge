@@ -38,6 +38,7 @@ function row(
     tier: "RB1",
     adp: 20,
     valueDelta: 5,
+    adpMatchedName: null,
     isRookie: false,
     rookieYear: null,
     draftNumber: null,

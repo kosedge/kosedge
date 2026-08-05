@@ -1,4 +1,5 @@
-import { ADP_PROXY_LABEL, adpFromModelRank, valueDelta } from "@/lib/fantasy/adp-proxy";
+import { valueDelta } from "@/lib/fantasy/adp-proxy";
+import type { AdpMatchResult } from "@/lib/fantasy/adp-match";
 import { buildDrivers, buildExpertBlurb } from "@/lib/fantasy/expert";
 import { buildRiskFlags, type DepthRow } from "@/lib/fantasy/risk-signals";
 import {
@@ -48,6 +49,8 @@ export function enrichDraftRows(input: {
   rows: EnrichableDraftRow[];
   scheduleByTeam: Map<string, ScheduleWindowNote>;
   depthRows: DepthRow[];
+  /** Real market ADP by desk playerId. Missing → null ADP / value. */
+  adpByPlayerId?: Map<string, AdpMatchResult>;
 }): FantasyDeskRow[] {
   const rushByTeam = new Map<string, Array<{ playerName: string; rushYards: number }>>();
   for (const row of input.rows) {
@@ -56,6 +59,8 @@ export function enrichDraftRows(input: {
     list.push({ playerName: row.playerName, rushYards: row.rushYardsTotal });
     rushByTeam.set(row.team.toUpperCase(), list);
   }
+
+  const adpByPlayerId = input.adpByPlayerId ?? new Map();
 
   return input.rows.map((row) => {
     const committeeProbe = buildRiskFlags({
@@ -91,13 +96,10 @@ export function enrichDraftRows(input: {
           committeeRisk: hasCommittee,
         });
 
-    const adp = adpFromModelRank({
-      modelRank: row.rankOverall,
-      position: row.position,
-      tier: row.tier,
-      playerId: row.playerId,
-    });
-    const delta = valueDelta(row.rankOverall, adp);
+    const adpHit = adpByPlayerId.get(row.playerId);
+    const adp = adpHit?.adp ?? null;
+    const delta =
+      adp != null ? valueDelta(row.rankOverall, adp) : null;
     const schedule =
       input.scheduleByTeam.get(row.team.toUpperCase()) ?? NEUTRAL_SCHEDULE;
     const riskFlags = committeeProbe;
@@ -160,6 +162,7 @@ export function enrichDraftRows(input: {
       tier: row.tier,
       adp,
       valueDelta: delta,
+      adpMatchedName: adpHit?.matchedName ?? null,
       isRookie: row.isRookie,
       rookieYear: row.rookieYear,
       draftNumber: row.draftNumber,
@@ -172,5 +175,3 @@ export function enrichDraftRows(input: {
     };
   });
 }
-
-export { ADP_PROXY_LABEL };

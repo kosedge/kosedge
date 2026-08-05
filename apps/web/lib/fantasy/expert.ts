@@ -82,8 +82,8 @@ export function buildExpertBlurb(input: {
   position: string;
   rankOverall: number;
   rankPosition: number;
-  adp: number;
-  valueDelta: number;
+  adp: number | null;
+  valueDelta: number | null;
   tier: string;
   floorPoints: number;
   ceilingPoints: number;
@@ -94,13 +94,16 @@ export function buildExpertBlurb(input: {
 }): string {
   const value = valueLabel(input.valueDelta);
   const posRank = `${input.position}${input.rankPosition}`;
-  const pickGap = Math.abs(Math.round(input.valueDelta));
+  const pickGap =
+    input.valueDelta == null ? 0 : Math.abs(Math.round(input.valueDelta));
 
   let lead: string;
-  if (value.kind === "value") {
-    lead = `${input.playerName} (${input.team}): model ${posRank} / overall #${input.rankOverall} while ADP proxy sits ~${input.adp.toFixed(0)} — about ${pickGap} picks of value if the board stalls.`;
+  if (input.adp == null || input.valueDelta == null) {
+    lead = `${input.playerName} (${input.team}): model ${posRank} / overall #${input.rankOverall} — no clean market ADP match yet, so value vs ADP stays blank.`;
+  } else if (value.kind === "value") {
+    lead = `${input.playerName} (${input.team}): model ${posRank} / overall #${input.rankOverall} while market ADP sits ~${input.adp.toFixed(0)} — about ${pickGap} picks of value if the board stalls.`;
   } else if (value.kind === "reach") {
-    lead = `${input.playerName} (${input.team}): ADP ~${input.adp.toFixed(0)} is ahead of model #${input.rankOverall} (${posRank}). Only jump if you need the ${input.tier} shape now — otherwise let someone else pay the premium.`;
+    lead = `${input.playerName} (${input.team}): market ADP ~${input.adp.toFixed(0)} is ahead of model #${input.rankOverall} (${posRank}). Only jump if you need the ${input.tier} shape now — otherwise let someone else pay the premium.`;
   } else {
     lead = `${input.playerName} (${input.team}): market and model agree near #${input.rankOverall} / ADP ~${input.adp.toFixed(0)} (${posRank}, ${input.tier}).`;
   }
@@ -152,12 +155,17 @@ export function tierCliffNote(rows: FantasyDeskRow[], position: string): string 
 
 export function notableValueNotes(rows: FantasyDeskRow[], limit = 3): string[] {
   return [...rows]
-    .filter((r) => !["K", "DST"].includes(r.position.toUpperCase()))
-    .sort((a, b) => b.valueDelta - a.valueDelta)
+    .filter(
+      (r) =>
+        !["K", "DST"].includes(r.position.toUpperCase()) &&
+        r.adp != null &&
+        r.valueDelta != null,
+    )
+    .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0))
     .slice(0, limit)
-    .filter((r) => r.valueDelta >= 8)
+    .filter((r) => (r.valueDelta ?? 0) >= 8)
     .map((r) => {
       const driver = r.drivers[0] ?? `${r.tier} profile`;
-      return `${r.playerName} (${r.team} ${r.position}${r.rankPosition}): model #${r.rankOverall} vs ADP ~${r.adp.toFixed(0)} (+${r.valueDelta.toFixed(0)}). ${driver}.`;
+      return `${r.playerName} (${r.team} ${r.position}${r.rankPosition}): model #${r.rankOverall} vs market ADP ~${r.adp!.toFixed(0)} (+${r.valueDelta!.toFixed(0)}). ${driver}.`;
     });
 }

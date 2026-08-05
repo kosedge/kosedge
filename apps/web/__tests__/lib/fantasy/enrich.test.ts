@@ -3,7 +3,7 @@ import { enrichDraftRows } from "@/lib/fantasy/enrich";
 import { NEUTRAL_SCHEDULE } from "@/lib/fantasy/schedule-context";
 
 describe("enrichDraftRows", () => {
-  it("adds ADP, value delta, bands, and expert blurb", () => {
+  it("attaches real ADP and value delta when matched", () => {
     const rows = enrichDraftRows({
       rows: [
         {
@@ -38,12 +38,66 @@ describe("enrichDraftRows", () => {
       ],
       scheduleByTeam: new Map([["KC", NEUTRAL_SCHEDULE]]),
       depthRows: [],
+      adpByPlayerId: new Map([
+        [
+          "rb1",
+          {
+            adp: 12.5,
+            ecr: 10,
+            matchedName: "Test Back",
+            matchKind: "full_name",
+          },
+        ],
+      ]),
     });
     expect(rows).toHaveLength(1);
-    expect(rows[0]!.adp).toBeGreaterThan(0);
+    expect(rows[0]!.adp).toBe(12.5);
+    expect(rows[0]!.valueDelta).toBe(9.5);
+    expect(rows[0]!.adpMatchedName).toBe("Test Back");
     expect(rows[0]!.floorPoints).toBeLessThan(rows[0]!.medianPoints);
     expect(rows[0]!.ceilingPoints).toBeGreaterThan(rows[0]!.medianPoints);
     expect(rows[0]!.expertBlurb.length).toBeGreaterThan(20);
     expect(rows[0]!.drivers.length).toBeGreaterThan(0);
+  });
+
+  it("leaves ADP null when unmatched (no fake precision)", () => {
+    const rows = enrichDraftRows({
+      rows: [
+        {
+          season: 2026,
+          scoringProfile: "half_ppr",
+          modelVersion: "test",
+          playerId: "rb2",
+          playerUid: null,
+          playerName: "Unknown Back",
+          team: "DAL",
+          position: "RB",
+          gamesProjected: 17,
+          passYardsTotal: 0,
+          rushYardsTotal: 800,
+          receivingYardsTotal: 200,
+          receptionsTotal: 30,
+          passTdsTotal: 0,
+          rushTdsTotal: 6,
+          recTdsTotal: 1,
+          totalPoints: 180,
+          replacementPoints: 140,
+          valueOverReplacement: 40,
+          rankOverall: 40,
+          rankPosition: 18,
+          tier: "RB2",
+          isRookie: false,
+          rookieYear: null,
+          draftNumber: null,
+          updatedAt: null,
+          source: "preseason-fallback",
+        },
+      ],
+      scheduleByTeam: new Map(),
+      depthRows: [],
+    });
+    expect(rows[0]!.adp).toBeNull();
+    expect(rows[0]!.valueDelta).toBeNull();
+    expect(rows[0]!.expertBlurb).toMatch(/no clean market ADP/i);
   });
 });

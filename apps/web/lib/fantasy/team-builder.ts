@@ -124,9 +124,14 @@ export function bestAvailableByValue(
   limit = 5,
 ): FantasyDeskRow[] {
   return board
-    .filter((row) => !rosterIds.has(row.playerId))
+    .filter(
+      (row) =>
+        !rosterIds.has(row.playerId) &&
+        row.adp != null &&
+        row.valueDelta != null,
+    )
     .sort((a, b) => {
-      const valueDiff = b.valueDelta - a.valueDelta;
+      const valueDiff = (b.valueDelta ?? 0) - (a.valueDelta ?? 0);
       if (valueDiff !== 0) return valueDiff;
       return a.rankOverall - b.rankOverall;
     })

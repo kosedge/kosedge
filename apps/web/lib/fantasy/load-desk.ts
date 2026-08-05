@@ -1,7 +1,11 @@
 import "server-only";
 
 import {
-  ADP_PROXY_LABEL,
+  fetchFantasyProsAdpFeed,
+  formatAdpFreshness,
+} from "@/lib/fantasy/adp-fantasypros";
+import { matchAdpToDeskRows } from "@/lib/fantasy/adp-match";
+import {
   enrichDraftRows,
   type EnrichableDraftRow,
 } from "@/lib/fantasy/enrich";
@@ -23,7 +27,6 @@ import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts"
 
 const LIMITATIONS_BASE = [
   "Rankings convert season-engine / projection-baseline box-score totals into fantasy points by format (Standard / Half-PPR / PPR).",
-  "ADP is a KosEdge consensus-style proxy until a live FantasyPros/Sleeper/Yahoo feed is ingested — not marketplace ADP.",
   "Floor / median / ceiling use distribution quantiles when the model service provides them; otherwise a position-aware uncertainty band around the median.",
   "Schedule notes compare opponent expected wins in weeks 1–6 vs fantasy playoff weeks 14–17 — a simple softness signal, not full matchup sim.",
   "Risk flags are concise signals from depth chart + projection shape; there is no live injury feed on this desk yet.",
@@ -177,13 +180,16 @@ export async function loadFantasyDraftDesk(params: {
   const scoringProfile = params.scoringProfile ?? "half_ppr";
   const limit = params.limit ?? 200;
 
-  const api = await fetchNflFantasyDraftRankings({
-    season,
-    scoringProfile,
-    position: params.position,
-    rookiesOnly: params.rookiesOnly,
-    limit,
-  });
+  const [api, adpFeed] = await Promise.all([
+    fetchNflFantasyDraftRankings({
+      season,
+      scoringProfile,
+      position: params.position,
+      rookiesOnly: params.rookiesOnly,
+      limit,
+    }),
+    fetchFantasyProsAdpFeed({ season, scoringProfile }),
+  ]);
 
   const scheduleGames = loadNfl2026ScheduleGames();
   const depthRows = loadNfl2026DepthRows();
@@ -221,11 +227,34 @@ export async function loadFantasyDraftDesk(params: {
     }
   }
 
+  const adpMatch = matchAdpToDeskRows(
+    enrichable.map((row) => ({
+      playerId: row.playerId,
+      playerUid: row.playerUid,
+      playerName: row.playerName,
+      team: row.team,
+      position: row.position,
+    })),
+    adpFeed.players,
+  );
+
   const rows = enrichDraftRows({
     rows: enrichable,
     scheduleByTeam,
     depthRows,
+    adpByPlayerId: adpMatch.byPlayerId,
   });
+
+  limitations = [
+    ...limitations,
+    ...adpFeed.limitations,
+    `ADP match coverage: ${adpMatch.matched}/${enrichable.length} desk rows linked to FantasyPros (${adpMatch.unmatched} unmatched → ADP shown as —).`,
+  ];
+
+  const adpOrigin =
+    adpFeed.players.length === 0
+      ? ("none" as const)
+      : adpFeed.origin;
 
   return {
     season,
@@ -233,7 +262,10 @@ export async function loadFantasyDraftDesk(params: {
     count: rows.length,
     rows,
     source,
-    adpSourceLabel: ADP_PROXY_LABEL,
+    adpSourceLabel: adpFeed.sourceLabel,
+    adpFreshnessLabel: formatAdpFreshness(adpFeed),
+    adpOrigin,
+    adpMatchedCount: adpMatch.matched,
     limitations,
     error,
     slateStatus: api.slateStatus,

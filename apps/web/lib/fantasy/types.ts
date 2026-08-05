@@ -46,10 +46,15 @@ export type FantasyDeskRow = {
   rankOverall: number;
   rankPosition: number;
   tier: string;
-  /** Consensus-style ADP proxy (not a live FantasyPros/Sleeper feed). */
-  adp: number;
-  /** modelRank - adp: positive = value (model likes more than ADP), negative = reach. */
-  valueDelta: number;
+  /**
+   * Market ADP (FantasyPros consensus average). Null when unmatched / feed missing —
+   * never invent precision.
+   */
+  adp: number | null;
+  /** ADP − modelRank: positive = value (model likes more than market), negative = reach. */
+  valueDelta: number | null;
+  /** FantasyPros display name when ADP matched. */
+  adpMatchedName: string | null;
   isRookie: boolean;
   rookieYear: number | null;
   draftNumber: number | null;
@@ -68,6 +73,9 @@ export type FantasyDeskBoard = {
   rows: FantasyDeskRow[];
   source: "model-service" | "preseason-fallback" | "empty";
   adpSourceLabel: string;
+  adpFreshnessLabel: string;
+  adpOrigin: "live" | "snapshot" | "none";
+  adpMatchedCount: number;
   limitations: string[];
   error?: string;
   slateStatus?: string;

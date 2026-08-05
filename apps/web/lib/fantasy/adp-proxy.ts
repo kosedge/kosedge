@@ -1,14 +1,14 @@
 /**
- * KosEdge ADP proxy v1.
+ * ADP helpers shared by the desk.
  *
- * There is no live FantasyPros/Sleeper/Yahoo ADP ingest in-repo yet.
- * This maps model VOR rank → a consensus-style ADP that mirrors well-known
- * single-QB draft behavior (QBs fall, elite RBs rise, K/DST last).
- * Labeled honestly in the UI as a proxy until a real feed is wired.
+ * Historical note: `adpFromModelRank` was the Phase 1 consensus-style proxy.
+ * The desk now prefers FantasyPros market ADP (`adp-fantasypros.ts`).
+ * The proxy remains only for tests / emergency offline demos — never as a
+ * silent stand-in on the live value board.
  */
 
 export const ADP_PROXY_LABEL =
-  "KosEdge ADP proxy v1 (consensus-style — not a live marketplace ADP feed)";
+  "KosEdge ADP proxy v1 (legacy — not used on the live value board)";
 
 function stableJitter(seed: string, amplitude: number): number {
   let hash = 0;
@@ -20,8 +20,7 @@ function stableJitter(seed: string, amplitude: number): number {
 }
 
 /**
- * Convert model overall rank into an ADP-like pick number for a 12-team,
- * ~15–16 round draft (~180–192 picks).
+ * Legacy model→ADP proxy. Prefer FantasyPros feed for production desks.
  */
 export function adpFromModelRank(input: {
   modelRank: number;
@@ -33,7 +32,6 @@ export function adpFromModelRank(input: {
   let adp = input.modelRank;
 
   if (pos === "QB") {
-    // Mid/late QBs typically wait longer than pure VOR suggests.
     if (input.modelRank <= 12) adp += 8;
     else if (input.modelRank <= 40) adp += 22;
     else adp += 35;
@@ -48,7 +46,6 @@ export function adpFromModelRank(input: {
     if (input.tier === "elite" || input.tier === "TE1") adp -= 4;
     else adp += 12;
   } else if (pos === "K" || pos === "DST") {
-    // Real ADP parks these near the end regardless of raw points.
     adp = Math.max(adp, 140 + (input.modelRank % 40));
   }
 
@@ -61,12 +58,19 @@ export function valueDelta(modelRank: number, adp: number): number {
   return Math.round((adp - modelRank) * 10) / 10;
 }
 
-export function valueLabel(delta: number): {
-  kind: "value" | "fair" | "reach";
+export function valueLabel(delta: number | null | undefined): {
+  kind: "value" | "fair" | "reach" | "na";
   text: string;
 } {
+  if (delta == null || !Number.isFinite(delta)) {
+    return { kind: "na", text: "—" };
+  }
   if (delta >= 8) return { kind: "value", text: `+${delta.toFixed(0)} value` };
-  if (delta <= -8)
-    return { kind: "reach", text: `${delta.toFixed(0)} reach` };
+  if (delta <= -8) return { kind: "reach", text: `${delta.toFixed(0)} reach` };
   return { kind: "fair", text: "fair" };
+}
+
+export function formatAdp(adp: number | null | undefined, digits = 1): string {
+  if (adp == null || !Number.isFinite(adp)) return "—";
+  return adp.toFixed(digits);
 }

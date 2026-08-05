@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { valueLabel } from "@/lib/fantasy/adp-proxy";
+import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
   notableValueNotes,
   tierCliffNote,
@@ -95,7 +95,10 @@ export function FantasyDraftDeskClient({
     const q = query.trim().toLowerCase();
     let rows = board.rows;
     if (tab === "value") {
-      rows = [...rows].sort((a, b) => b.valueDelta - a.valueDelta);
+      // Real market edge only — drop unmatched ADP so proxy distortion can't leak in.
+      rows = [...rows]
+        .filter((r) => r.adp != null && r.valueDelta != null)
+        .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0));
     }
     if (!q) return rows;
     return rows.filter(
@@ -152,7 +155,11 @@ export function FantasyDraftDeskClient({
               manual team builder. Not a consensus copy board.
             </p>
             <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
-              Source · {board.source} · ADP proxy (not live marketplace)
+              Source · {board.source} · {board.adpSourceLabel}
+            </p>
+            <p className="mt-1 text-[11px] text-kos-text/40">
+              ADP {board.adpFreshnessLabel} · matched {board.adpMatchedCount}/
+              {board.count}
             </p>
           </div>
           <div className="grid min-w-44 gap-2">
@@ -179,9 +186,16 @@ export function FantasyDraftDeskClient({
           <p className="mt-1 text-sky-100/80">
             Live draft-rankings aren&apos;t populated yet — this desk is running
             on the latest season-engine preseason sim bundle (skill positions).
-            ADP is still a KosEdge proxy. Not broken — just honest about the
-            data path.
+            Market ADP still comes from FantasyPros; unmatched names show as —.
+            Not broken — just honest about the data path.
           </p>
+        </section>
+      ) : null}
+
+      {board.adpOrigin === "none" ? (
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
+          Market ADP feed unavailable — Model vs ADP is blank until FantasyPros
+          live or snapshot data loads.
         </section>
       ) : null}
 
@@ -343,8 +357,9 @@ export function FantasyDraftDeskClient({
 
             {filtered.length === 0 ? (
               <div className="p-6 text-center text-sm text-kos-text/60">
-                No players match this search. Clear the query or switch
-                position.
+                {tab === "value"
+                  ? "No market-ADP values for this filter yet — unmatched players stay off the value board."
+                  : "No players match this search. Clear the query or switch position."}
               </div>
             ) : (
               <>
@@ -381,7 +396,7 @@ export function FantasyDraftDeskClient({
                               <p className="mt-0.5 text-xs text-kos-text/55">
                                 {row.position}
                                 {row.rankPosition} · {row.team} · ADP{" "}
-                                {row.adp.toFixed(0)} · Med{" "}
+                                {formatAdp(row.adp, 0)} · Med{" "}
                                 {row.medianPoints.toFixed(0)}
                               </p>
                               <p className="mt-1 text-[11px] text-kos-text/50">
@@ -491,7 +506,7 @@ export function FantasyDraftDeskClient({
                               #{row.rankOverall}
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
-                              {row.adp.toFixed(1)}
+                              {formatAdp(row.adp)}
                             </td>
                             <td
                               className={`border-b border-white/5 px-2.5 py-2 text-sm font-semibold ${
@@ -616,22 +631,23 @@ function PlayerCard({
         <div className="rounded-xl border border-white/10 bg-black/30 p-3">
           <p className="text-[10px] uppercase text-kos-text/45">Model / ADP</p>
           <p className="mt-1 font-semibold text-kos-text">
-            #{row.rankOverall} / {row.adp.toFixed(1)}
+            #{row.rankOverall} / {formatAdp(row.adp)}
           </p>
         </div>
         <div className="rounded-xl border border-white/10 bg-black/30 p-3">
           <p className="text-[10px] uppercase text-kos-text/45">Value Δ</p>
           <p
             className={`mt-1 font-semibold ${
-              row.valueDelta >= 8
+              (row.valueDelta ?? 0) >= 8
                 ? "text-edge-green"
-                : row.valueDelta <= -8
+                : (row.valueDelta ?? 0) <= -8
                   ? "text-rose-300"
                   : "text-kos-text"
             }`}
           >
-            {row.valueDelta >= 0 ? "+" : ""}
-            {row.valueDelta.toFixed(1)}
+            {row.valueDelta == null
+              ? "—"
+              : `${row.valueDelta >= 0 ? "+" : ""}${row.valueDelta.toFixed(1)}`}
           </p>
         </div>
       </div>
@@ -859,7 +875,7 @@ function SuggestBlock({
                     {row.playerName}
                   </p>
                   <p className="text-xs text-kos-text/55">
-                    #{row.rankOverall} · ADP {row.adp.toFixed(0)} ·{" "}
+                    #{row.rankOverall} · ADP {formatAdp(row.adp, 0)} ·{" "}
                     {valueLabel(row.valueDelta).text}
                   </p>
                 </button>

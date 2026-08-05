@@ -21,8 +21,8 @@ player projection stack. **Not** a disconnected consensus board.
    (yards/receptions) + scaled TD means (same 0.60 / 1.35 convention as weekly fantasy).
 3. **Fallback:** If the API is empty/unreachable, the web desk builds a board  
    from the latest `nfl-preseason-sim-2026-*` player totals (skill positions only).
-4. **ADP proxy:** KosEdge consensus-style ADP (`apps/web/lib/fantasy/adp-proxy.ts`)  
-   until a live FantasyPros/Sleeper/Yahoo feed is ingested.
+4. **Market ADP:** FantasyPros consensus ADP (format-aware STD/HALF/PPR) via  
+   partners feed + snapshot fallback. See `docs/NFL_FANTASY_DRAFT_DESK_ADP.md`.
 5. **Schedule context:** Opponent expected wins for weeks 1–6 vs 14–17 from  
    packaged 2026 schedule + preseason team outcomes.
 6. **Risk flags:** Depth chart (W1 packaged) + backfield share pressure from  
@@ -52,7 +52,7 @@ board end (real ADP convention).
 
 ## Known limitations (honest)
 
-- ADP is a **proxy**, not marketplace ADP.  
+- ADP is FantasyPros consensus (platform mix), not a single draft room — unmatched players show ADP as —.  
 - Floor/ceiling on fallback boards use position-aware bands when quantiles  
   are absent.  
 - Schedule softness is a simple opponent-wins signal, not full matchup sim.  
@@ -62,10 +62,10 @@ board end (real ADP convention).
 
 ## Phase 2 hooks
 
-- Live ADP ingest + persistence  
 - Multi-team mock draft room  
 - Richer schedule SOS from season-engine opponent defense indices  
 - Live injury / availability overlay  
+- Optional second ADP source merge (Sleeper/Yahoo) if needed
 
 ## Key files
 

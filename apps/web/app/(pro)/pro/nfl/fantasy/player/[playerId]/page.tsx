@@ -86,11 +86,15 @@ export default async function FantasyPlayerDetailPage({
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Stat
             label="Model rank / ADP"
-            value={`#${row.rankOverall} / ${row.adp.toFixed(1)}`}
+            value={`#${row.rankOverall} / ${row.adp == null ? "—" : row.adp.toFixed(1)}`}
           />
           <Stat
             label="Value Δ (ADP − model)"
-            value={`${row.valueDelta >= 0 ? "+" : ""}${row.valueDelta.toFixed(1)}`}
+            value={
+              row.valueDelta == null
+                ? "—"
+                : `${row.valueDelta >= 0 ? "+" : ""}${row.valueDelta.toFixed(1)}`
+            }
           />
           <Stat label="VOR" value={`+${row.valueOverReplacement.toFixed(1)}`} />
           <Stat
