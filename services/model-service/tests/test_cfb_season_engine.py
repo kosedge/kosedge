@@ -63,7 +63,7 @@ from src.services.cfb_season_engine.types import (
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.8.2-tracking"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.8.3-player-coherence"
 
 
 def test_qb_situation_classification() -> None:
@@ -747,6 +747,131 @@ def test_player_hooks_depth_order_within_position() -> None:
     assert qbs[0].player_name  # ESPN identity
 
 
+def test_player_coherence_aggregates_and_script_blowout_vs_close() -> None:
+    """v0.8.3: named ≤ pools; blowout shifts RB/WR vs close; team lines untouched."""
+    from src.services.cfb_season_engine import player_hooks as PH
+    from src.services.cfb_season_engine.team_projection import project_game
+
+    universe = build_packaged_universe(2026)
+
+    # Close-ish rivalry: script should be milder than a blowout.
+    close_base = project_game(
+        universe, home_team="OSU", away_team="MICH", week=5, neutral_site=False
+    )
+    close = project_game_preview(
+        universe, home_team="OSU", away_team="MICH", week=5, neutral_site=False
+    )
+    assert close.expected_home_score == close_base.expected_home_score
+    assert close.spread_home == close_base.spread_home
+    assert close.expected_total == close_base.expected_total
+    assert close.home_win_prob == close_base.home_win_prob
+
+    # Blowout favorite vs thin mid-major.
+    blow_base = project_game(
+        universe, home_team="UGA", away_team="BALL", week=5, neutral_site=False
+    )
+    blow = project_game_preview(
+        universe, home_team="UGA", away_team="BALL", week=5, neutral_site=False
+    )
+    assert blow.expected_home_score == blow_base.expected_home_score
+    assert blow.spread_home == blow_base.spread_home
+
+    close_payload = project_game_to_dict(close)
+    blow_payload = project_game_to_dict(blow)
+    close_pp = close_payload["drivers"]["player_projections"]
+    blow_pp = blow_payload["drivers"]["player_projections"]
+    assert close_pp["does_not_modify_team_totals"] is True
+    assert blow_pp["script_aware"] is True
+    assert blow_pp["engine_layer"] == "v0.8.3-player-coherence"
+
+    uga_meta = blow_pp["by_team"]["UGA"]
+    assert uga_meta["game_script"]["script_detail"] == "large_lead"
+    assert uga_meta["coherence"]["aggregates_within_pools"] is True
+    assert "game_script" in uga_meta
+
+    # Aggregates ≤ team pools on both games.
+    for payload in (close_payload, blow_payload):
+        pp = payload["drivers"]["player_projections"]
+        for team, meta in pp["by_team"].items():
+            rows = [p for p in payload["player_projections"] if p["team"] == team]
+            team_pass = meta["team_totals"]["pass_yards"]
+            team_rush = meta["team_totals"]["rush_yards"]
+            named_pass = sum(
+                float(p["pass_yards"] or 0) for p in rows if p["position"] == "QB"
+            )
+            named_rush = sum(float(p["rush_yards"] or 0) for p in rows)
+            named_rec = sum(
+                float(p["rec_yards"] or 0)
+                for p in rows
+                if p["position"] in ("WR", "TE", "RB")
+            )
+            assert named_pass <= team_pass + 1e-6
+            assert named_rush <= team_rush + 1e-6
+            assert named_rec <= team_pass + 1e-6
+            assert meta["coherence"]["aggregates_within_pools"] is True
+
+    # Blowout vs close: UGA RB1 rush share of team rush > OSU RB1 in close game,
+    # and UGA WR depth share rises vs WR1 under large_lead.
+    def _rb1_rush_share(payload: dict, team: str) -> float:
+        rows = [p for p in payload["player_projections"] if p["team"] == team]
+        rb1 = next(p for p in rows if p["position"] == "RB" and p["depth_order"] == 1)
+        return float(rb1["rush_share"] or 0.0)
+
+    def _wr_depth_vs_wr1(payload: dict, team: str) -> tuple[float, float]:
+        rows = [p for p in payload["player_projections"] if p["team"] == team]
+        wr1 = next(p for p in rows if p["position"] == "WR" and p["depth_order"] == 1)
+        wr2 = next(p for p in rows if p["position"] == "WR" and p["depth_order"] == 2)
+        return float(wr1["rec_share"] or 0.0), float(wr2["rec_share"] or 0.0)
+
+    # Same-team script contrast via unit helper (identical hooks, different script).
+    uga_state = universe.teams["UGA"]
+    uga_hooks = universe.player_hooks["UGA"]
+    lead_script = PH.build_game_script_signal(
+        own_points=42.0, opp_points=14.0, win_prob=0.92
+    )
+    close_script = PH.build_game_script_signal(
+        own_points=28.0, opp_points=27.0, win_prob=0.52
+    )
+    assert lead_script["script_detail"] == "large_lead"
+    assert close_script["script_detail"] == "neutral"
+
+    lead_rows, lead_meta = PH.allocate_team_player_projections(
+        team="UGA",
+        hooks=uga_hooks,
+        expected_points=35.0,
+        state=uga_state,
+        script=lead_script,
+    )
+    neut_rows, neut_meta = PH.allocate_team_player_projections(
+        team="UGA",
+        hooks=uga_hooks,
+        expected_points=35.0,
+        state=uga_state,
+        script=close_script,
+    )
+    # Team score inputs identical → expected_points pool base same, but
+    # script shifts pass/rush split (lead → more rush yards in allocation pool).
+    assert lead_meta["team_totals"]["rush_yards"] > neut_meta["team_totals"]["rush_yards"]
+    assert lead_meta["team_totals"]["pass_yards"] < neut_meta["team_totals"]["pass_yards"]
+
+    lead_rb1 = next(r for r in lead_rows if r["position"] == "RB" and r["depth_order"] == 1)
+    neut_rb1 = next(r for r in neut_rows if r["position"] == "RB" and r["depth_order"] == 1)
+    assert float(lead_rb1["rush_share"]) > float(neut_rb1["rush_share"])
+
+    lead_wr1 = next(r for r in lead_rows if r["position"] == "WR" and r["depth_order"] == 1)
+    lead_wr2 = next(r for r in lead_rows if r["position"] == "WR" and r["depth_order"] == 2)
+    neut_wr1 = next(r for r in neut_rows if r["position"] == "WR" and r["depth_order"] == 1)
+    neut_wr2 = next(r for r in neut_rows if r["position"] == "WR" and r["depth_order"] == 2)
+    # Blowout lead: WR1 share down / WR2 share up vs neutral.
+    assert float(lead_wr1["rec_share"]) < float(neut_wr1["rec_share"])
+    assert float(lead_wr2["rec_share"]) > float(neut_wr2["rec_share"])
+
+    # Sanity: live project-game also tags script on favorite.
+    assert _rb1_rush_share(blow_payload, "UGA") > 0.0
+    wr1_s, wr2_s = _wr_depth_vs_wr1(blow_payload, "UGA")
+    assert wr1_s > 0.0 and wr2_s > 0.0
+
+
 def test_matchup_ratio_clamp_limits_placeholder_blowouts() -> None:
     """Soft-cap extreme O/D ratios so UGA vs thin mid-major isn't a 45-pt invent."""
     universe = build_packaged_universe(2026)
@@ -1302,7 +1427,7 @@ def test_hist_cal_priors_bounds() -> None:
     """v0.8.1 hist-cal knobs stay inside documented calibration bounds."""
     from src.services.cfb_season_engine import priors as P
 
-    assert P.ENGINE_VERSION == "cfb-season-engine-v0.8.2-tracking"
+    assert P.ENGINE_VERSION == "cfb-season-engine-v0.8.3-player-coherence"
     assert 24.5 <= P.LEAGUE_TEAM_PPG <= 27.0
     assert 1.4 <= P.HFA_BASELINE_POINTS <= 2.2
     assert 1.20 <= P.MATCHUP_RESPONSE <= 1.55
