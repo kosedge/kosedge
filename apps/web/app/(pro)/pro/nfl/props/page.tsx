@@ -221,7 +221,7 @@ export default async function NflPropsBoardPage({
                 : "border border-white/10 bg-white/5 text-kos-text/70 hover:border-edge-green/25"
             }`}
           >
-            2025 W17 (Vegas joins)
+            2025 W17 (market joins)
           </Link>
           <Link
             href={buildHref({

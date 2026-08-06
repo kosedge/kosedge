@@ -12,7 +12,7 @@ export type MlbDeskEdgeRow = {
   matchup: string;
   detail: string;
   kosedgeLine: string;
-  vegasLine: string;
+  marketLine: string;
   edge: number;
   edgeDisplay: string;
   side: string;
@@ -77,7 +77,7 @@ export function deskEdgesFromTodayRow(
       matchup,
       detail: "Moneyline",
       kosedgeLine: formatAmericanOdds(homeSide ? fairHome : fairAway),
-      vegasLine: formatAmericanOdds(
+      marketLine: formatAmericanOdds(
         homeSide
           ? toNumberOrNull(raw.market_home_ml)
           : toNumberOrNull(raw.market_away_ml),
@@ -100,7 +100,7 @@ export function deskEdgesFromTodayRow(
       matchup,
       detail: "Total runs",
       kosedgeLine: formatTotal(toNumberOrNull(raw.fair_total)),
-      vegasLine: formatTotal(toNumberOrNull(raw.market_total)),
+      marketLine: formatTotal(toNumberOrNull(raw.market_total)),
       edge: totalEdge,
       edgeDisplay: `${totalEdge > 0 ? "+" : ""}${totalEdge.toFixed(1)} runs`,
       side: over ? "Over" : "Under",
@@ -130,7 +130,7 @@ export function deskRunLineFromFairLine(
     detail: "Run line (−1.5 / +1.5)",
     kosedgeLine:
       row.fairSpreadHome !== null ? row.fairSpreadHome.toFixed(1) : "−1.5",
-    vegasLine: "—",
+    marketLine: "—",
     edge: lean,
     edgeDisplay: formatEdgeProb(lean),
     side: homeSide ? "Home −1.5" : "Away +1.5",

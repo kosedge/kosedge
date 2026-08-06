@@ -84,7 +84,7 @@ const SPORTSBOOKS: Record<string, SportsbookMeta> = {
     homepage: "",
     chipClass: "bg-white/10 text-gray-300 border-white/20",
   },
-  /** Kosedge provisional Open/Best when Vegas has not posted yet. */
+  /** Kosedge provisional Open/Best when books have not posted yet. */
   keinfl: {
     key: "keinfl",
     name: "KEINFL",

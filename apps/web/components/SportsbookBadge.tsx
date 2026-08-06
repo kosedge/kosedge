@@ -60,7 +60,7 @@ export default function SportsbookBadge({
       rel={external ? "noopener noreferrer" : undefined}
       title={
         meta.key === "keinfl"
-          ? "KEINFL provisional line (Vegas not posted yet)"
+          ? "KEINFL provisional line (books not posted yet)"
           : `${meta.name} — best price · opens homepage`
       }
       className="inline-flex"

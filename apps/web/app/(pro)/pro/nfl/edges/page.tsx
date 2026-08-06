@@ -301,7 +301,7 @@ function EdgeRow({ row }: { row: DeskEdgeRow }) {
       <td className="px-3 py-3 font-semibold text-kos-gold">
         {row.kosedgeLine}
       </td>
-      <td className="px-3 py-3 text-kos-text/90">{row.vegasLine}</td>
+      <td className="px-3 py-3 text-kos-text/90">{row.marketLine}</td>
       <td className="px-3 py-3 font-semibold text-edge-green">
         {row.edgeDisplay}
       </td>

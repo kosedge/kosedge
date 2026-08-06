@@ -256,10 +256,10 @@ export default async function MlbEdgesDeskPage({
                       </div>
                     </div>
                     <div>
-                      <div className="text-kos-text/50">Kosedge / Vegas</div>
+                      <div className="text-kos-text/50">Kosedge / Market</div>
                       <div className="mt-0.5 text-kos-text">
                         <span className="text-kos-gold">{row.kosedgeLine}</span>{" "}
-                        / {row.vegasLine}
+                        / {row.marketLine}
                       </div>
                     </div>
                     <div>
@@ -277,9 +277,9 @@ export default async function MlbEdgesDeskPage({
                 <thead className="text-xs uppercase tracking-wide text-kos-text/55">
                   <tr className="border-b border-white/10">
                     <th className="px-3 py-2 font-semibold">Matchup</th>
-                    <th className="px-3 py-2 font-semibold">Market</th>
+                    <th className="px-3 py-2 font-semibold">Type</th>
                     <th className="px-3 py-2 font-semibold">Kosedge</th>
-                    <th className="px-3 py-2 font-semibold">Vegas</th>
+                    <th className="px-3 py-2 font-semibold">Book</th>
                     <th className="px-3 py-2 font-semibold">Edge</th>
                     <th className="px-3 py-2 font-semibold">Side</th>
                     <th className="px-3 py-2 font-semibold">Quality</th>
@@ -319,7 +319,7 @@ function EdgeRow({ row }: { row: MlbDeskEdgeRow }) {
       <td className="px-3 py-3 font-semibold text-kos-gold">
         {row.kosedgeLine}
       </td>
-      <td className="px-3 py-3 text-kos-text/90">{row.vegasLine}</td>
+      <td className="px-3 py-3 text-kos-text/90">{row.marketLine}</td>
       <td className="px-3 py-3 font-semibold text-edge-green">
         {row.edgeDisplay}
       </td>

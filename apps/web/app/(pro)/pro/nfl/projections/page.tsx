@@ -173,7 +173,7 @@ export default async function NflProjectionsPage({
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
               Team and player futures from the Kos Edge sim — Current / KEI
-              Projected / Vegas Future / Difference where available. Actual stays{" "}
+              Projected / Market Future / Difference where available. Actual stays{" "}
               <span className="font-mono">—</span> until regular-season weeks
               settle.
             </p>

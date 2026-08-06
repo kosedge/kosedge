@@ -297,7 +297,7 @@ export default async function MlbFairLinesPage({
           Edge Board tags compare KEI handicap to the best market — not raw
           model. When model and KEI match, no nowcast/lineup movement has been
           applied yet. Run line uses the model’s home cover probability and fair
-          spread; Edges desk joins live Vegas ML/totals when available.
+          spread; Edges desk joins live market ML/totals when available.
         </p>
       </section>
     </main>

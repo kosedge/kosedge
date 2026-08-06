@@ -25,7 +25,7 @@ export type DeskEdgeRow = {
   matchupOrPlayer: string;
   detail: string;
   kosedgeLine: string;
-  vegasLine: string;
+  marketLine: string;
   edge: number;
   edgeDisplay: string;
   side: string;
@@ -85,7 +85,7 @@ export function deskEdgesFromFairLine(
       kosedgeLine: formatAmericanOdds(
         homeSide ? row.fairHomeMl : row.fairAwayMl,
       ),
-      vegasLine: formatAmericanOdds(
+      marketLine: formatAmericanOdds(
         homeSide ? row.marketHomeMl : row.marketAwayMl,
       ),
       edge: row.mlEdgeProb,
@@ -98,7 +98,7 @@ export function deskEdgesFromFairLine(
   }
 
   if (row.spreadEdge !== null && Math.abs(row.spreadEdge) >= minLineEdge) {
-    // Negative spreadEdge => Kosedge home line more favored than Vegas → lean Home
+    // Negative spreadEdge => Kosedge home line more favored than market → lean Home
     const leanHome = row.spreadEdge < 0;
     out.push({
       id: `${row.gameId}-spread`,
@@ -106,7 +106,7 @@ export function deskEdgesFromFairLine(
       matchupOrPlayer: matchup,
       detail: "Spread",
       kosedgeLine: formatSpread(row.spreadHome),
-      vegasLine: formatSpread(row.marketSpreadHome),
+      marketLine: formatSpread(row.marketSpreadHome),
       edge: row.spreadEdge,
       edgeDisplay: `${row.spreadEdge > 0 ? "+" : ""}${row.spreadEdge.toFixed(1)} pts`,
       side: leanHome ? "Home" : "Away",
@@ -124,7 +124,7 @@ export function deskEdgesFromFairLine(
       matchupOrPlayer: matchup,
       detail: "Total",
       kosedgeLine: formatTotal(row.totalMean),
-      vegasLine: formatTotal(row.marketTotal),
+      marketLine: formatTotal(row.marketTotal),
       edge: row.totalEdge,
       edgeDisplay: `${row.totalEdge > 0 ? "+" : ""}${row.totalEdge.toFixed(1)} pts`,
       side: over ? "Over" : "Under",
@@ -162,7 +162,7 @@ export function deskEdgeFromPropRow(
     matchupOrPlayer: row.playerName,
     detail: `${propMarketLabel(row.marketKey)} · ${row.team}`,
     kosedgeLine: formatPropNumber(row.modelMean),
-    vegasLine: formatPropNumber(row.line),
+    marketLine: formatPropNumber(row.line),
     edge,
     edgeDisplay: formatEdgeProb(edge),
     side: takeOver ? "Over" : "Under",
@@ -189,7 +189,7 @@ function normalizeEdgesTodayRow(
     kosedgeLine: formatAmericanOdds(
       toNumberOrNull(homeSide ? raw.fair_home_ml : raw.fair_away_ml),
     ),
-    vegasLine: formatAmericanOdds(
+    marketLine: formatAmericanOdds(
       toNumberOrNull(homeSide ? raw.market_home_ml : raw.market_away_ml),
     ),
     edge: mlEdge,

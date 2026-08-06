@@ -160,7 +160,7 @@ export default async function NflFairLinesPage({
 
       {!board.error && board.diagnostics.kosedgeOnly ? (
         <section className="mt-6 rounded-2xl border border-sky-400/25 bg-sky-400/10 p-5 text-sm text-sky-100">
-          Vegas lines unavailable — showing Kosedge lines only.
+          Market lines unavailable — showing Kosedge lines only.
         </section>
       ) : null}
 
@@ -305,8 +305,8 @@ export default async function NflFairLinesPage({
                     </th>
                     <th className="px-3 py-2 font-semibold">Fair ML</th>
                     <th className="px-3 py-2 font-semibold">Win probs</th>
-                    <th className="px-3 py-2 font-semibold">Vegas ML</th>
-                    <th className="px-3 py-2 font-semibold">Vegas total</th>
+                    <th className="px-3 py-2 font-semibold">Market ML</th>
+                    <th className="px-3 py-2 font-semibold">Market total</th>
                     <th className="px-3 py-2 font-semibold">ML edge</th>
                   </tr>
                 </thead>

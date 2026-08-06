@@ -8,18 +8,18 @@ import {
 function StatCard({
   label,
   model,
-  vegas,
+  market,
   unit,
   lowerIsBetter = true,
 }: {
   label: string;
   model: number;
-  vegas: number;
+  market: number;
   unit: string;
   lowerIsBetter?: boolean;
 }) {
-  const better = lowerIsBetter ? model < vegas : model > vegas;
-  const pct = percentBetter(model, vegas);
+  const better = lowerIsBetter ? model < market : model > market;
+  const pct = percentBetter(model, market);
   return (
     <div className="rounded-xl border border-kos-border bg-kos-surface/40 p-5">
       <div className="text-sm text-kos-text/70">{label}</div>
@@ -31,9 +31,9 @@ function StatCard({
       </div>
       <div className="mt-1 flex items-baseline gap-3">
         <span className="text-lg text-kos-text/60">
-          {vegas.toFixed(unit === "brier" ? 4 : 3)}
+          {market.toFixed(unit === "brier" ? 4 : 3)}
         </span>
-        <span className="text-xs text-kos-text/50">Vegas closing line</span>
+        <span className="text-xs text-kos-text/50">consensus close</span>
       </div>
       <div
         className={`mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
@@ -43,7 +43,7 @@ function StatCard({
         }`}
       >
         {better
-          ? `${Math.abs(pct).toFixed(1)}% better than Vegas`
+          ? `${Math.abs(pct).toFixed(1)}% better than market`
           : "not better on this metric"}
       </div>
     </div>
@@ -91,19 +91,19 @@ export default function ModelTransparencyPage() {
               <StatCard
                 label="Spread error (MAE, points)"
                 model={report.results2025Holdout.spreadMae.model}
-                vegas={report.results2025Holdout.spreadMae.vegas}
+                market={report.results2025Holdout.spreadMae.vegas}
                 unit="points"
               />
               <StatCard
                 label="Total error (MAE, points)"
                 model={report.results2025Holdout.totalMae.model}
-                vegas={report.results2025Holdout.totalMae.vegas}
+                market={report.results2025Holdout.totalMae.vegas}
                 unit="points"
               />
               <StatCard
                 label="Win probability calibration (Brier)"
                 model={report.results2025Holdout.winProbabilityBrier.model}
-                vegas={report.results2025Holdout.winProbabilityBrier.vegas}
+                market={report.results2025Holdout.winProbabilityBrier.vegas}
                 unit="brier"
               />
             </div>
@@ -113,7 +113,7 @@ export default function ModelTransparencyPage() {
                 resamples)
               </div>
               <div className="mt-2 text-kos-text">
-                Model beats Vegas by{" "}
+                Model beats the market by{" "}
                 <span className="font-semibold text-edge-green">
                   {Math.abs(
                     report.results2025Holdout.spreadSignificance.diff,
@@ -148,13 +148,13 @@ export default function ModelTransparencyPage() {
               <StatCard
                 label="Spread error (MAE, points)"
                 model={report.resultsFull13YrSample.spreadMae.model}
-                vegas={report.resultsFull13YrSample.spreadMae.vegas}
+                market={report.resultsFull13YrSample.spreadMae.vegas}
                 unit="points"
               />
               <StatCard
                 label="Total error (MAE, points)"
                 model={report.resultsFull13YrSample.totalMae.model}
-                vegas={report.resultsFull13YrSample.totalMae.vegas}
+                market={report.resultsFull13YrSample.totalMae.vegas}
                 unit="points"
               />
             </div>
@@ -181,8 +181,8 @@ export default function ModelTransparencyPage() {
         </>
       ) : (
         <p className="text-sm text-kos-text/60">
-          Backtest report not found. Run scripts/nfl/tune_blend_weights.py to
-          generate data/ops/nfl-vegas-benchmark-report.json.
+          Backtest report not found. Run the NFL blend-weight tune script to
+          regenerate the held-out market benchmark report.
         </p>
       )}
 
