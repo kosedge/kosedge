@@ -1,4 +1,7 @@
 # Output Formatting Standards
+
+**Expertise Contract:** All public copy must satisfy `employee-expertise-contract.md` (consensus first → KosEdge angle → what would change the view). Contract wins on conflict. Use market / consensus / books — never “Vegas”.
+
 Required Structure
 1. Clear title
 2. Short lede that states the market question or key number
