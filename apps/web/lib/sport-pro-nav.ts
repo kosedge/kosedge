@@ -85,7 +85,8 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/edges", label: "Edges" },
       { href: "/pro/nfl/props", label: "Props" },
       { href: "/pro/nfl/survivor", label: "Survivor", primary: true },
-      { href: "/pro/nfl/game-boxes", label: "Game Boxes" },
+      // Draft Desk for now; post-kickoff can retarget to Weekly Fantasy Projections.
+      { href: "/pro/nfl/fantasy", label: "Fantasy", primary: true },
       { href: "/pro/nfl/model", label: "Season Model" },
       { href: "/pro/power-ratings/nfl", label: "Power Ratings" },
       { href: "/pro/nfl/teams", label: "Teams" },
@@ -99,7 +100,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/standings", label: "Standings" },
       { href: "/pro/nfl/depth-charts", label: "Depth Charts" },
       { href: "/pro/nfl/injuries", label: "Injuries & News" },
-      { href: "/pro/nfl/fantasy", label: "Draft Desk" },
+      // Fantasy primary nav covers Draft Desk; keep weekly + DFS in tools.
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
       { href: "/pro/nfl/dfs", label: "DFS" },
       { href: "/pro/nfl/player-previews", label: "Player Previews" },

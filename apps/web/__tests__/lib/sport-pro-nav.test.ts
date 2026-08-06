@@ -21,19 +21,26 @@ describe("sport-pro-nav", () => {
     }
   });
 
-  it("surfaces Survivor / Game Boxes / Season Model on NFL primary nav", () => {
-    const nflPrimary = getSportPrimaryNav("nfl").map((i) => i.label);
-    expect(nflPrimary).toContain("Survivor");
-    expect(nflPrimary).toContain("Game Boxes");
-    expect(nflPrimary).toContain("Season Model");
+  it("surfaces Survivor / Fantasy / Season Model on NFL primary nav", () => {
+    const nflPrimary = getSportPrimaryNav("nfl");
+    const labels = nflPrimary.map((i) => i.label);
+    expect(labels).toContain("Survivor");
+    expect(labels).toContain("Fantasy");
+    expect(labels).toContain("Season Model");
+    expect(labels).not.toContain("Game Boxes");
+    const fantasy = nflPrimary.find((i) => i.label === "Fantasy");
+    expect(fantasy?.href).toBe("/pro/nfl/fantasy");
   });
 
-  it("keeps Wall Chart / Fantasy / Awards as NFL-only tools", () => {
+  it("keeps Wall Chart / Awards as NFL-only tools; Fantasy on primary", () => {
     const nflTools = getSportToolNav("nfl").map((i) => i.label);
     expect(nflTools).toContain("Wall Chart");
-    expect(nflTools).toContain("Draft Desk");
     expect(nflTools).toContain("Awards");
-    // Season engine desks live on primary; keep them out of the overflow tools list.
+    expect(nflTools).toContain("Weekly Fantasy");
+    // Fantasy Draft Desk is primary — not duplicated in tools overflow.
+    expect(nflTools).not.toContain("Draft Desk");
+    expect(nflTools).not.toContain("Fantasy");
+    // Season engine desks live on primary / Season Model hub.
     expect(nflTools).not.toContain("Season Model");
     expect(nflTools).not.toContain("Game Boxes");
     expect(nflTools).not.toContain("Survivor");
@@ -49,6 +56,7 @@ describe("sport-pro-nav", () => {
       expect(tools).not.toContain("Survivor");
       expect(primary).not.toContain("Survivor");
       expect(primary).not.toContain("Game Boxes");
+      expect(primary).not.toContain("Fantasy");
       expect(primary).not.toContain("Season Model");
     }
 
@@ -61,6 +69,7 @@ describe("sport-pro-nav", () => {
     expect(cfbPrimary).toContain("Project Game");
     expect(cfbPrimary).not.toContain("Survivor");
     expect(cfbPrimary).not.toContain("Game Boxes");
+    expect(cfbPrimary).not.toContain("Fantasy");
   });
 
   it("uses Tempo for college and Goalie Desk for NHL", () => {
@@ -102,5 +111,20 @@ describe("sport-pro-nav", () => {
     expect(
       isSportNavActive("/pro/nba/fair-lines", "/pro/nba/fair-lines", "nba"),
     ).toBe(true);
+  });
+
+  it("keeps Fantasy nav active across Draft Desk subpages", () => {
+    const href = "/pro/nfl/fantasy";
+    expect(isSportNavActive("/pro/nfl/fantasy", href, "nfl")).toBe(true);
+    expect(isSportNavActive("/pro/nfl/fantasy/builder", href, "nfl")).toBe(
+      true,
+    );
+    expect(isSportNavActive("/pro/nfl/fantasy/mock", href, "nfl")).toBe(true);
+    expect(
+      isSportNavActive("/pro/nfl/fantasy/player/abc", href, "nfl"),
+    ).toBe(true);
+    expect(isSportNavActive("/pro/nfl/weekly-fantasy", href, "nfl")).toBe(
+      false,
+    );
   });
 });
