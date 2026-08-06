@@ -102,11 +102,9 @@ type SnapshotFile = {
 };
 
 const ADP_LIMITATIONS = [
-  "ADP is FantasyPros consensus average draft position (partners API), not a single-platform draft room.",
-  "Format-aware feeds: Standard (STD), Half-PPR (HALF), and PPR — toggled with the desk scoring profile.",
-  "Platform mix and expert panel size vary; FantasyPros aggregates multiple sources (see feed filters / expert count).",
-  "Players without a clean name/team/position match show ADP as — (no fake precision).",
-  "Live feed revalidates about hourly; if unreachable, the desk falls back to a checked-in snapshot.",
+  "ADP from FantasyPros consensus (partners feed), matched to STD / Half / PPR.",
+  "Unmatched names show ADP as —; Value Δ only on high-confidence same-format matches.",
+  "Refreshes ~hourly; uses a saved snapshot if the live feed is unreachable.",
 ];
 
 function partnersUrl(season: number, scoring: FantasyScoringProfile): string {
@@ -175,12 +173,10 @@ function feedFromPartners(
     typeof data.total_experts === "number" ? data.total_experts : null;
   const limitations = [...ADP_LIMITATIONS];
   if (experts != null) {
-    limitations.push(
-      `This snapshot reports ${experts} contributing ADP source(s) in the FantasyPros panel.`,
-    );
+    limitations.push(`FantasyPros panel: ${experts} ADP sources.`);
   }
   if (origin === "snapshot") {
-    limitations.push("Serving checked-in FantasyPros ADP snapshot (live fetch unavailable).");
+    limitations.push("Saved FantasyPros ADP snapshot (live feed unavailable).");
   }
 
   return {
@@ -261,7 +257,7 @@ export async function fetchFantasyProsAdpFeed(input: {
       players: [],
       limitations: [
         ...ADP_LIMITATIONS,
-        "Live FantasyPros ADP and local snapshot both unavailable — Model vs ADP disabled until a feed loads.",
+        "FantasyPros ADP unavailable — Model vs ADP blank until a feed loads.",
       ],
     };
   }

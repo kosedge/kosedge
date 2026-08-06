@@ -26,12 +26,11 @@ import {
 import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts";
 
 const LIMITATIONS_BASE = [
-  "Rankings convert season-engine / projection-baseline box-score totals into fantasy points by format (Standard / Half-PPR / PPR).",
-  "Floor / median / ceiling use distribution quantiles when the model service provides them; otherwise a position-aware uncertainty band around the median.",
-  "Schedule notes compare opponent expected wins in weeks 1–6 vs fantasy playoff weeks 14–17 — a simple softness signal, not full matchup sim.",
-  "Risk flags are concise signals from depth chart + projection shape; there is no live injury feed on this desk yet.",
-  "Team builder is a private roster scratchpad. Multi-team practice lives in Mock Draft (CPU fills other seats; no live Sleeper/ESPN sync).",
-  "Mocks are snake-only, 1QB redraft — no auction, Superflex, or dynasty in this desk.",
+  "Rankings = season-engine fantasy points by format (STD / Half / PPR).",
+  "Floor–med–ceiling from model quantiles when present; else a band around median.",
+  "Schedule softness: W1–6 vs W14–17 opponent expected wins — not a full matchup sim.",
+  "No live injury feed. Builder is a private roster; Mock fills other seats (no league sync).",
+  "Snake 1QB redraft only — no auction, Superflex, or dynasty.",
 ];
 
 function apiRowToEnrichable(row: NflFantasyDraftRankingRow & {
@@ -165,7 +164,7 @@ function buildFallbackBoard(input: {
     rows,
     limitations: [
       ...LIMITATIONS_BASE,
-      `Live draft-rankings API empty/unreachable — board built from preseason sim bundle ${bundle.bundleDirName} (skill positions only; K/DST omitted).`,
+      `Preseason board from season-engine sim (${bundle.bundleDirName}) — skill positions only; K/DST omitted.`,
     ],
   };
 }

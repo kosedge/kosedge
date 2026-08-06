@@ -666,11 +666,14 @@ export function FantasyDraftDeskClient({
         </div>
       ) : null}
 
-      <details className="rounded-2xl border border-white/10 bg-black/25 p-4 text-xs text-kos-text/55">
-        <summary className="cursor-pointer font-semibold uppercase tracking-[0.12em] text-kos-text/40">
-          Methods & limitations
+      <details className="rounded-2xl border border-white/10 bg-black/25 px-3 py-2 sm:p-4 text-[11px] leading-relaxed text-kos-text/55 sm:text-xs">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 font-semibold uppercase tracking-[0.12em] text-kos-text/40 marker:content-none [&::-webkit-details-marker]:hidden">
+          <span>Methods</span>
+          <span className="font-normal normal-case tracking-normal text-kos-text/35">
+            ADP · limits
+          </span>
         </summary>
-        <ul className="mt-3 list-disc space-y-1 pl-4">
+        <ul className="mt-2 list-disc space-y-1.5 pl-4 pb-1 sm:mt-3">
           {board.limitations.map((item) => (
             <li key={item}>{item}</li>
           ))}
