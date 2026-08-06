@@ -33,6 +33,7 @@ import { MOCK_ROUNDS, type MockDraftState, type MockTeamCount } from "@/lib/fant
 import {
   bestAvailableByNeed,
   bestAvailableByValue,
+  type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
 import type { FantasyDeskBoard, FantasyDeskRow, FantasyScoringProfile } from "@/lib/fantasy/types";
 import {
@@ -446,8 +447,13 @@ function LiveView({
     });
   }, [available, query, posFilter]);
 
-  const byValue = bestAvailableByValue(available, rosterSet, 4);
-  const byNeed = bestAvailableByNeed(available, roster, 4);
+  const byValue = bestAvailableByValue(available, rosterSet, 4, {
+    pickOverall: state.nextOverall,
+    roster,
+  });
+  const byNeed = bestAvailableByNeed(available, roster, 4, {
+    pickOverall: state.nextOverall,
+  });
   const recent = state.picks.slice(-10).reverse();
   const pickLabel = formatPickLabel(
     state.nextOverall,
@@ -619,13 +625,13 @@ function LiveView({
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 <SuggestRail
                   title="Best by value"
-                  rows={byValue}
+                  suggestions={byValue}
                   disabled={busy}
                   onPick={onPick}
                 />
                 <SuggestRail
                   title="Best by need"
-                  rows={byNeed}
+                  suggestions={byNeed}
                   disabled={busy}
                   onPick={onPick}
                 />
@@ -794,12 +800,12 @@ function LiveView({
 
 function SuggestRail({
   title,
-  rows,
+  suggestions,
   disabled,
   onPick,
 }: {
   title: string;
-  rows: FantasyDeskRow[];
+  suggestions: ValueAwareSuggestion[];
   disabled: boolean;
   onPick: (id: string) => void;
 }) {
@@ -809,23 +815,38 @@ function SuggestRail({
         {title}
       </p>
       <ul className="mt-2 space-y-1.5">
-        {rows.length === 0 ? (
+        {suggestions.length === 0 ? (
           <li className="text-xs text-kos-text/45">No suggestions</li>
         ) : (
-          rows.map((row) => (
+          suggestions.map(({ row, timingHint, timing }) => (
             <li key={row.playerId}>
               <button
                 type="button"
                 disabled={disabled}
                 onClick={() => onPick(row.playerId)}
-                className="flex w-full items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-1.5 text-left text-xs hover:border-kos-gold/40 disabled:opacity-40"
+                className="flex w-full flex-col gap-0.5 rounded-lg border border-white/10 px-2 py-1.5 text-left text-xs hover:border-kos-gold/40 disabled:opacity-40"
               >
-                <span className="truncate font-semibold text-kos-text">
-                  {row.playerName}
+                <span className="flex w-full items-center justify-between gap-2">
+                  <span className="truncate font-semibold text-kos-text">
+                    {row.playerName}
+                  </span>
+                  <span className="shrink-0 text-kos-text/50">
+                    {row.position} · {valueLabel(row.valueDelta).text}
+                  </span>
                 </span>
-                <span className="shrink-0 text-kos-text/50">
-                  {row.position} · {valueLabel(row.valueDelta).text}
-                </span>
+                {timingHint ? (
+                  <span
+                    className={`text-[10px] ${
+                      timing === "take_now"
+                        ? "text-kos-gold"
+                        : timing === "wait"
+                          ? "text-sky-300/90"
+                          : "text-kos-text/45"
+                    }`}
+                  >
+                    {timingHint}
+                  </span>
+                ) : null}
               </button>
             </li>
           ))

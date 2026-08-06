@@ -88,7 +88,7 @@ describe("team builder", () => {
       row({ playerId: "rb1", position: "RB", medianPoints: 250 }),
     ];
     const suggestions = bestAvailableByNeed(board, roster, 2);
-    expect(suggestions[0]?.position).toBe("WR");
+    expect(suggestions[0]?.row.position).toBe("WR");
   });
 
   it("grades empty roster poorly", () => {
