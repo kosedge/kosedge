@@ -187,9 +187,8 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Model-backed {board.season} rankings — value vs market ADP,
-                floor/median/ceiling, schedule context, builder, and snake
-                mocks. Not a consensus copy board.
+                Model-backed {board.season} rankings vs market ADP — then build
+                a roster and practice in Mock. Not a consensus copy board.
               </p>
               <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
                 Source · {board.source} · {board.adpSourceLabel}
@@ -205,16 +204,16 @@ export function FantasyDraftDeskClient({
             </div>
             <div className="grid min-w-44 gap-2">
               <Link
-                href={`/pro/nfl/fantasy/mock?scoring=${board.scoringProfile}`}
+                href={`/pro/nfl/fantasy/builder?scoring=${board.scoringProfile}`}
                 className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25 active:scale-[0.98]"
               >
-                Start Mock Draft
+                Open Builder
               </Link>
               <Link
-                href={`/pro/nfl/fantasy/builder?scoring=${board.scoringProfile}`}
+                href={`/pro/nfl/fantasy/mock?scoring=${board.scoringProfile}`}
                 className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40 active:scale-[0.98]"
               >
-                Open Team Builder
+                Start Mock
               </Link>
             </div>
           </div>
@@ -817,7 +816,7 @@ function PlayerCard({
           href={`/pro/nfl/fantasy/player/${encodeURIComponent(row.playerId)}?scoring=${row.scoringProfile}`}
           className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
         >
-          Detail
+          Full card
         </Link>
       </div>
     </aside>
@@ -854,7 +853,7 @@ function TeamBuilderPanel({
           <div>
             <h2 className="text-lg font-semibold text-kos-text">Your roster</h2>
             <p className="text-sm text-kos-text/60">
-              Scratchpad for your team — practice with CPU in Mock.
+              Private scratchpad — next step is Mock for CPU practice.
             </p>
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-center">
@@ -864,19 +863,19 @@ function TeamBuilderPanel({
         </div>
         <p className="mt-2 text-sm text-kos-text/70">{grade.detail}</p>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Link
-            href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
-            className="min-h-10 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-3 py-2 text-xs font-semibold text-kos-gold active:scale-[0.98]"
-          >
-            Practice in Mock →
-          </Link>
           <button
             type="button"
             onClick={onBrowse}
             className="min-h-10 rounded-xl border border-white/15 px-3 py-2 text-xs font-semibold text-kos-text/70 active:scale-[0.98]"
           >
-            Browse rankings
+            ← Rankings
           </button>
+          <Link
+            href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
+            className="min-h-10 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-3 py-2 text-xs font-semibold text-kos-gold active:scale-[0.98]"
+          >
+            Start Mock →
+          </Link>
         </div>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {Object.entries(needs).map(([pos, n]) =>
@@ -893,13 +892,13 @@ function TeamBuilderPanel({
         <ul className="mt-4 space-y-2">
           {roster.length === 0 ? (
             <li className="rounded-xl border border-dashed border-white/15 p-4 text-sm text-kos-text/55">
-              <p>No players yet — add from rankings or value board.</p>
+              <p>Empty roster — add players from Rankings or Value.</p>
               <button
                 type="button"
                 onClick={onBrowse}
                 className="mt-3 min-h-10 rounded-lg border border-kos-gold/40 bg-kos-gold/10 px-3 py-2 text-xs font-semibold text-kos-gold"
               >
-                Browse rankings to add
+                Add from Rankings
               </button>
             </li>
           ) : (

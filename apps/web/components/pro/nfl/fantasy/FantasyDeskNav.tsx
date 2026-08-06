@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { FantasyScoringProfile } from "@/lib/fantasy/types";
+import { Fragment } from "react";
 
 type DeskSurface = "rankings" | "builder" | "mock";
 
@@ -9,7 +10,11 @@ type Props = {
   className?: string;
 };
 
-const LINKS: { id: DeskSurface; label: string; href: (s: FantasyScoringProfile) => string }[] = [
+const LINKS: {
+  id: DeskSurface;
+  label: string;
+  href: (s: FantasyScoringProfile) => string;
+}[] = [
   {
     id: "rankings",
     label: "Rankings",
@@ -30,27 +35,41 @@ const LINKS: { id: DeskSurface; label: string; href: (s: FantasyScoringProfile) 
 /** Shared Rankings → Builder → Mock flow strip; preserves scoring. */
 export function FantasyDeskNav({ active, scoring, className = "" }: Props) {
   return (
-    <nav
-      aria-label="Fantasy Draft Desk"
-      className={`flex flex-wrap gap-2 ${className}`}
-    >
-      {LINKS.map((link) => {
-        const isActive = link.id === active;
-        return (
-          <Link
-            key={link.id}
-            href={link.href(scoring)}
-            className={`min-h-10 min-w-[5.5rem] rounded-xl border px-3 py-2 text-center text-sm font-semibold transition active:scale-[0.98] ${
-              isActive
-                ? "border-kos-gold/45 bg-kos-gold/15 text-kos-gold"
-                : "border-white/10 bg-white/5 text-kos-text/70 hover:border-kos-gold/30 hover:text-kos-text"
-            }`}
-            aria-current={isActive ? "page" : undefined}
-          >
-            {link.label}
-          </Link>
-        );
-      })}
-    </nav>
+    <div className={className}>
+      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-kos-text/40">
+        Draft flow
+      </p>
+      <nav
+        aria-label="Rankings, Builder, Mock"
+        className="flex flex-wrap items-center gap-1.5 sm:gap-2"
+      >
+        {LINKS.map((link, index) => {
+          const isActive = link.id === active;
+          return (
+            <Fragment key={link.id}>
+              {index > 0 ? (
+                <span
+                  aria-hidden
+                  className="px-0.5 text-sm text-kos-text/30"
+                >
+                  →
+                </span>
+              ) : null}
+              <Link
+                href={link.href(scoring)}
+                className={`min-h-10 min-w-[5.5rem] rounded-xl border px-3 py-2 text-center text-sm font-semibold transition active:scale-[0.98] ${
+                  isActive
+                    ? "border-kos-gold/45 bg-kos-gold/15 text-kos-gold"
+                    : "border-white/10 bg-white/5 text-kos-text/70 hover:border-kos-gold/30 hover:text-kos-text"
+                }`}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {link.label}
+              </Link>
+            </Fragment>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

@@ -363,13 +363,19 @@ function SetupView({
               onClick={onStart}
               className="min-h-12 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-5 py-3 text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25 active:scale-[0.98]"
             >
-              Start mock draft
+              Start Mock
             </button>
             <Link
               href={`/pro/nfl/fantasy/builder?scoring=${scoring}`}
               className="min-h-12 rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
             >
-              Team Builder
+              ← Builder
+            </Link>
+            <Link
+              href={`/pro/nfl/fantasy?scoring=${scoring}`}
+              className="min-h-12 rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
+            >
+              Rankings
             </Link>
           </div>
         </section>
@@ -490,7 +496,7 @@ function LiveView({
                 onClick={onAbort}
                 className="min-h-10 rounded-lg border border-white/15 px-3 py-2 text-xs font-semibold text-kos-text/70"
               >
-                Quit
+                Leave mock
               </button>
             </div>
           </div>
@@ -933,6 +939,10 @@ function ResultsView({
 
   return (
     <div className="space-y-5">
+      <FantasyDeskNav
+        active="mock"
+        scoring={board.scoringProfile}
+      />
       <section className="rounded-3xl border border-kos-gold/30 bg-[linear-gradient(145deg,#0b0d10_0%,#12151c_45%,#0a0c10_100%)] p-6 sm:p-8">
         <p className="text-[11px] uppercase tracking-[0.14em] text-kos-gold">
           Mock complete
@@ -962,20 +972,20 @@ function ResultsView({
             onClick={onAgain}
             className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-sm font-semibold text-kos-gold active:scale-[0.98]"
           >
-            New mock
+            New Mock
           </button>
           <Link
             href={`/pro/nfl/fantasy/builder?scoring=${board.scoringProfile}`}
             className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
           >
-            Team Builder
+            Builder
           </Link>
           <button
             type="button"
             onClick={onDesk}
-            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
+            className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
           >
-            Draft Desk
+            Rankings
           </button>
         </div>
       </section>

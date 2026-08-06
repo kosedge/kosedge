@@ -41,10 +41,10 @@ export default async function FantasyTeamBuilderPage({
             KOSEDGE
           </p>
           <h1 className="mt-1 font-bebas text-3xl tracking-wide text-kos-text">
-            Team Builder
+            Builder
           </h1>
           <p className="mt-1 text-sm text-kos-text/60">
-            Build a private roster from the same board — then practice in Mock.
+            Rankings → Builder → Mock. Add players here, then practice.
           </p>
         </div>
         <FantasyDeskNav active="builder" scoring={scoring} />

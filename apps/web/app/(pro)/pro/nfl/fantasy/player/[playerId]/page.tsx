@@ -155,13 +155,13 @@ export default async function FantasyPlayerDetailPage({
             href={`/pro/nfl/fantasy/builder?scoring=${scoring}`}
             className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-sm font-semibold text-kos-gold"
           >
-            Open Team Builder
+            Open Builder
           </Link>
           <Link
             href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
             className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
           >
-            Practice in Mock
+            Start Mock
           </Link>
           <Link
             href={`/pro/nfl/teams/${row.team.toLowerCase()}`}
