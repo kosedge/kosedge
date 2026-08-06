@@ -247,6 +247,7 @@ def test_write_artifact(tmp_path) -> None:
 
 
 def test_calibration_report_http_endpoints(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("PROOF_LAKE_BACKEND", "jsonl")
     monkeypatch.setenv("PROJECTION_LOG_BACKEND", "jsonl")
     monkeypatch.setenv("PROJECTION_LOG_DIR", str(tmp_path / "http_cal"))
     import src.services.proof_layer.core as core

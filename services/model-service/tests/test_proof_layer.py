@@ -5,6 +5,8 @@ from __future__ import annotations
 import os
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+os.environ["PROOF_LAKE_BACKEND"] = "jsonl"
+os.environ["PROOF_LAKE_BACKEND"] = "jsonl"
 os.environ["PROJECTION_LOG_BACKEND"] = "jsonl"
 
 from src.services.cfb_season_engine import DEFAULT_SEASON_ENGINE_VERSION
@@ -104,6 +106,7 @@ def test_clv_only_when_close_exists() -> None:
 
 
 def test_proof_http_endpoints(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("PROOF_LAKE_BACKEND", "jsonl")
     monkeypatch.setenv("PROJECTION_LOG_BACKEND", "jsonl")
     monkeypatch.setenv("PROJECTION_LOG_DIR", str(tmp_path / "http"))
     import src.services.proof_layer.core as core
@@ -150,6 +153,7 @@ def test_proof_http_endpoints(tmp_path, monkeypatch) -> None:
 
 
 def test_nfl_game_boxes_log_projection_flag(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("PROOF_LAKE_BACKEND", "jsonl")
     monkeypatch.setenv("PROJECTION_LOG_BACKEND", "jsonl")
     monkeypatch.setenv("PROJECTION_LOG_DIR", str(tmp_path / "nfl_http"))
     import src.services.proof_layer.core as core
