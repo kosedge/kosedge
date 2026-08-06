@@ -404,6 +404,12 @@ def summarize_script_distribution(
     return {
         "home_win_prob_mean": round(sum(s.home_win_prob for s in scripts) / n, 4),
         "expected_total_mean": round(sum(s.expected_total for s in scripts) / n, 2),
+        "expected_home_score_mean": round(
+            sum(s.expected_home_score for s in scripts) / n, 2
+        ),
+        "expected_away_score_mean": round(
+            sum(s.expected_away_score for s in scripts) / n, 2
+        ),
         "pace_plays_mean": round(sum(s.pace_plays for s in scripts) / n, 2),
         "home_pass_rate_mean": round(sum(s.home_pass_rate for s in scripts) / n, 4),
         "away_pass_rate_mean": round(sum(s.away_pass_rate for s in scripts) / n, 4),

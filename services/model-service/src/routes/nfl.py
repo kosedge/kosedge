@@ -4464,6 +4464,10 @@ class SeasonEngineRequestBody(BaseModel):
         False,
         description="When true, attach structured usage/script/injury explain payloads",
     )
+    log_projection: bool = Field(
+        False,
+        description="Persist this game-box projection to the unified proof layer",
+    )
 
 
 class SeasonEngineSurvivorBody(BaseModel):
@@ -4866,6 +4870,7 @@ def _run_season_engine_game_boxes(
     demo: bool,
     injury_paths: Optional[list] = None,
     include_diagnostics: bool = False,
+    log_projection: bool = False,
 ) -> Dict[str, Any]:
     from src.services.nfl_season_engine import project_game_player_boxes
 
@@ -4893,6 +4898,7 @@ def _run_season_engine_game_boxes(
         include_diagnostics=include_diagnostics,
     )
     payload = {
+        "ok": True,
         "mode": schedule_meta.get("mode") or ("demo" if demo else "real"),
         "schedule_source": schedule_meta.get("schedule_source"),
         "schedule_game_count": schedule_meta.get("schedule_game_count"),
@@ -4916,6 +4922,28 @@ def _run_season_engine_game_boxes(
     }
     if include_diagnostics:
         payload["diagnostics"] = proj.diagnostics
+    try:
+        from src.services.proof_layer.adapters import payload_from_nfl_game_boxes
+        from src.services.proof_layer.core import (
+            auto_log_enabled,
+            log_projection as proof_log_projection,
+            maybe_auto_log_projection,
+        )
+
+        proof_payload = payload_from_nfl_game_boxes(payload)
+        if log_projection:
+            try:
+                logged = proof_log_projection(proof_payload, sport="nfl")
+                payload["projection_log_id"] = logged.id
+                payload["projection_logged"] = True
+            except Exception as exc:  # pragma: no cover
+                log.warning("NFL explicit projection log failed: %s", exc)
+                payload["projection_logged"] = False
+        elif auto_log_enabled(sport="nfl"):
+            maybe_auto_log_projection(proof_payload, sport="nfl")
+            payload["projection_logged"] = "async"
+    except Exception as exc:  # pragma: no cover
+        log.debug("NFL projection tracking skipped: %s", exc)
     return payload
 
 
@@ -4931,6 +4959,9 @@ def nfl_season_engine_game_boxes(
     include_diagnostics: bool = Query(
         False, description="Attach usage shares / injury explain payload"
     ),
+    log_projection: bool = Query(
+        False, description="Persist projection to unified proof layer"
+    ),
 ) -> Dict[str, Any]:
     """Project skill-player box-score distributions for a future game."""
     return _run_season_engine_game_boxes(
@@ -4943,6 +4974,7 @@ def nfl_season_engine_game_boxes(
         demo=demo,
         injury_paths=None,
         include_diagnostics=include_diagnostics,
+        log_projection=log_projection,
     )
 
 
@@ -4960,6 +4992,7 @@ def nfl_season_engine_game_boxes_post(
 ) -> Dict[str, Any]:
     """Same as GET game-boxes, with optional ``injury_paths`` in the JSON body."""
     diag = include_diagnostics or bool(body and body.include_diagnostics)
+    log_proj = bool(body and body.log_projection)
     return _run_season_engine_game_boxes(
         home_team=home_team,
         away_team=away_team,
@@ -4970,6 +5003,7 @@ def nfl_season_engine_game_boxes_post(
         demo=demo,
         injury_paths=_season_engine_injury_paths(body),
         include_diagnostics=diag,
+        log_projection=log_proj,
     )
 
 
