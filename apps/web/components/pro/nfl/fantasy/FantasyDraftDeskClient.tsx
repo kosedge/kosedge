@@ -878,8 +878,8 @@ function TeamBuilderPanel({
   roster: FantasyDeskRow[];
   grade: ReturnType<typeof teamGrade>;
   needs: Record<string, number>;
-  byValue: FantasyDeskRow[];
-  byNeed: FantasyDeskRow[];
+  byValue: ValueAwareSuggestion[];
+  byNeed: ValueAwareSuggestion[];
   rosterSet: Set<string>;
   scoring: FantasyScoringProfile;
   onSelect: (id: string) => void;
