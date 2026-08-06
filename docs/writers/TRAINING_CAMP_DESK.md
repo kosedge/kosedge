@@ -41,10 +41,11 @@ Default to news break / camp notebook during July–early September unless the a
 |------|-----|
 | `WebSearch` | Fresh headlines before every piece |
 | `WebFetch` | Read full beat articles / camp notebooks |
+| Trusted Source Index | `docs/writers/TRUSTED_SOURCE_INDEX.md` · `data/writers/nfl-trusted-sources.json` — Tier 1 first |
 | Beat registry | `data/writers/nfl-beat-writers.json` / `.md` |
 | Beat lookup script | `scripts/writers/beat-lookup.py --team XYZ` |
-| X / Twitter | Handles in registry; use if available in environment — never invent tweets |
-| League breakers | `@AdamSchefter`, `@RapSheet` — supplement only |
+| X / Twitter | Handles in trusted index + beat registry; use if available — never invent tweets |
+| League breakers | Tier 1 (`@AdamSchefter`, `@RapSheet`, `@TomPelissero`, …) — confirm with second source when major |
 
 If X tooling is unavailable, WebSearch + WebFetch of Athletic/ESPN/local URLs is sufficient — still cite the writer and outlet.
 
