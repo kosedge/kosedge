@@ -133,6 +133,65 @@ def proof_performance_summary(
         }
 
 
+@router.get("/calibration-report")
+def proof_calibration_report(
+    sport: Literal["nfl", "cfb"] = Query(..., description="Sport filter (required)"),
+    engine_version: Optional[str] = Query(None),
+    season: Optional[int] = Query(None, ge=2010, le=2100),
+    from_ts: Optional[str] = Query(None, alias="from", description="ISO projected_at lower bound"),
+    to_ts: Optional[str] = Query(None, alias="to", description="ISO projected_at upper bound"),
+) -> Dict[str, Any]:
+    from src.services.proof_layer.calibration_report import build_calibration_report
+
+    try:
+        return build_calibration_report(
+            sport=sport,
+            engine_version=engine_version,
+            season=season,
+            from_ts=from_ts,
+            to_ts=to_ts,
+        )
+    except Exception as exc:
+        log.exception("calibration report failed: %s", exc)
+        return {
+            "ok": False,
+            "error": f"calibration report failed: {exc}",
+            "report_type": "historical_calibration",
+        }
+
+
+class GenerateCalibrationReportBody(BaseModel):
+    sport: Literal["nfl", "cfb"]
+    engine_version: Optional[str] = None
+    season: Optional[int] = Field(None, ge=2010, le=2100)
+    from_ts: Optional[str] = None
+    to_ts: Optional[str] = None
+
+
+@router.post("/calibration-report/generate")
+def proof_calibration_report_generate(
+    body: GenerateCalibrationReportBody = Body(...),
+) -> Dict[str, Any]:
+    from src.services.proof_layer.calibration_report import generate_calibration_report
+
+    try:
+        return generate_calibration_report(
+            sport=body.sport,
+            engine_version=body.engine_version,
+            season=body.season,
+            from_ts=body.from_ts,
+            to_ts=body.to_ts,
+            write_artifact=True,
+        )
+    except Exception as exc:
+        log.exception("calibration report generate failed: %s", exc)
+        return {
+            "ok": False,
+            "error": f"calibration report generate failed: {exc}",
+            "report_type": "historical_calibration",
+        }
+
+
 @router.get("/docs")
 def proof_docs() -> Dict[str, Any]:
     from src.services.proof_layer.core import documentation
