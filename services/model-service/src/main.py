@@ -19,6 +19,7 @@ from src.routes import (
     mlb_router,
     nba_router,
     nfl_router,
+    proof_router,
     wnba_router,
 )
 from src.services.nba_possession_simulator import DEFAULT_NBA_MODEL_VERSION
@@ -289,6 +290,7 @@ app = FastAPI(
 # Routers
 app.include_router(edge_board_router)
 app.include_router(cfb_router)
+app.include_router(proof_router)
 app.include_router(mlb_router)
 app.include_router(nba_router)
 app.include_router(nfl_router)
