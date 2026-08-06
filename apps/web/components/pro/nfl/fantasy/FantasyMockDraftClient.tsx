@@ -13,6 +13,7 @@ import {
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
   advanceCpuUntilUserOrDone,
+  autoCompleteDraft,
   availablePlayers,
   buildPostDraftReport,
   createMockDraftState,
@@ -126,6 +127,14 @@ export function FantasyMockDraftClient({
     }
   }
 
+  function onAutoPickToEnd() {
+    if (!state || isDraftComplete(state)) return;
+    if (cpuTimer.current) clearTimeout(cpuTimer.current);
+    setBusy(false);
+    const finished = autoCompleteDraft(board.rows, state);
+    setState(finished);
+  }
+
   function changeScoring(next: FantasyScoringProfile) {
     const params = new URLSearchParams();
     params.set("scoring", next);
@@ -172,6 +181,7 @@ export function FantasyMockDraftClient({
       onPosFilter={setPosFilter}
       onPick={onPick}
       onAbort={resetToSetup}
+      onAutoPickToEnd={onAutoPickToEnd}
     />
   );
 }
@@ -345,6 +355,7 @@ function LiveView({
   onPosFilter,
   onPick,
   onAbort,
+  onAutoPickToEnd,
 }: {
   board: FantasyDeskBoard;
   state: MockDraftState;
@@ -355,7 +366,9 @@ function LiveView({
   onPosFilter: (p: string) => void;
   onPick: (id: string) => void;
   onAbort: () => void;
+  onAutoPickToEnd: () => void;
 }) {
+  const [rosterOpen, setRosterOpen] = useState(false);
   const userTurn = isUserTurn(state);
   const teamIdx = currentTeamIndex(state);
   const roster = useMemo(
@@ -366,6 +379,7 @@ function LiveView({
     () => mockRosterNeeds(roster, board.rows),
     [roster, board.rows],
   );
+  const needChips = Object.entries(needs).filter(([, n]) => n > 0);
   const rosterSet = useMemo(
     () => new Set(roster.map((r) => r.playerId)),
     [roster],
@@ -392,7 +406,7 @@ function LiveView({
 
   const byValue = bestAvailableByValue(available, rosterSet, 4);
   const byNeed = bestAvailableByNeed(available, roster, 4);
-  const recent = state.picks.slice(-6).reverse();
+  const recent = state.picks.slice(-8).reverse();
   const pickLabel = formatPickLabel(
     state.nextOverall,
     state.config.teamCount,
@@ -401,35 +415,110 @@ function LiveView({
     teamIdx != null ? state.teamNames[teamIdx] ?? `Team ${teamIdx + 1}` : "—";
 
   return (
-    <div className="space-y-4">
-      <header className="rounded-2xl border border-kos-gold/30 bg-kos-gold/10 px-4 py-3 sm:px-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-kos-gold">
-              {userTurn ? "Your pick" : busy ? "CPU picking…" : "On the clock"}
-            </p>
-            <p className="mt-0.5 text-lg font-semibold text-kos-text">
-              Pick {pickLabel} · Overall {state.nextOverall}/
-              {state.totalPicks} · {onClock}
-            </p>
+    <div className="space-y-3 sm:space-y-4">
+      <div className="sticky top-0 z-30 -mx-4 space-y-2 bg-[#0a0c10]/px-4 py-2 sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:py-0">
+        <header className="rounded-2xl border border-kos-gold/30 bg-kos-gold/10 px-4 py-3 sm:px-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-kos-gold">
+                {userTurn ? "Your pick" : busy ? "CPU picking…" : "On the clock"}
+              </p>
+              <p className="mt-0.5 text-base font-semibold text-kos-text sm:text-lg">
+                Pick {pickLabel} · {state.nextOverall}/{state.totalPicks} ·{" "}
+                {onClock}
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onAutoPickToEnd}
+                disabled={busy}
+                className="rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold disabled:opacity-40 active:scale-[0.98]"
+              >
+                Auto-pick to end
+              </button>
+              <button
+                type="button"
+                onClick={onAbort}
+                className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-kos-text/70"
+              >
+                Quit
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={onAbort}
-            className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-kos-text/70"
-          >
-            Quit
-          </button>
-        </div>
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">
-          <div
-            className="h-full rounded-full bg-kos-gold transition-all"
-            style={{
-              width: `${Math.min(100, ((state.nextOverall - 1) / state.totalPicks) * 100)}%`,
-            }}
-          />
-        </div>
-      </header>
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/40">
+            <div
+              className="h-full rounded-full bg-kos-gold transition-all"
+              style={{
+                width: `${Math.min(100, ((state.nextOverall - 1) / state.totalPicks) * 100)}%`,
+              }}
+            />
+          </div>
+        </header>
+
+        {/* Compact sticky roster / needs — always visible on mobile */}
+        <section className="rounded-xl border border-white/10 bg-[#10131a]/p-3 shadow-lg shadow-black/40 sm:hidden">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-kos-text/45">
+                Needs · {roster.length} rostered
+              </p>
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {needChips.length > 0 ? (
+                  needChips.map(([pos, n]) => (
+                    <span
+                      key={pos}
+                      className="rounded border border-rose-400/35 bg-rose-400/15 px-1.5 py-0.5 text-[10px] font-semibold text-rose-100"
+                    >
+                      {pos}×{n}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-[10px] text-kos-text/50">
+                    Starters covered
+                  </span>
+                )}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setRosterOpen((v) => !v)}
+              className="shrink-0 rounded-md border border-white/15 px-2 py-1 text-[11px] font-semibold text-kos-text/70"
+            >
+              {rosterOpen ? "Hide" : "Roster"}
+            </button>
+          </div>
+          {rosterOpen ? (
+            <ul className="mt-2 max-h-36 space-y-1 overflow-y-auto border-t border-white/10 pt-2">
+              {roster.length === 0 ? (
+                <li className="text-xs text-kos-text/50">No picks yet.</li>
+              ) : (
+                roster.map((row) => (
+                  <li
+                    key={row.playerId}
+                    className="flex justify-between gap-2 text-xs"
+                  >
+                    <span className="truncate font-medium text-kos-text">
+                      {row.playerName}
+                    </span>
+                    <span className="shrink-0 text-kos-text/50">
+                      {row.position}
+                    </span>
+                  </li>
+                ))
+              )}
+            </ul>
+          ) : roster.length > 0 ? (
+            <p className="mt-1.5 truncate text-[11px] text-kos-text/55">
+              {roster
+                .slice(-4)
+                .map((r) => `${r.position} ${r.playerName}`)
+                .join(" · ")}
+              {roster.length > 4 ? " …" : ""}
+            </p>
+          ) : null}
+        </section>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="space-y-4">
@@ -480,7 +569,8 @@ function LiveView({
               </div>
             ) : (
               <p className="mt-3 text-sm text-kos-text/55">
-                Waiting on {onClock}. Suggestions unlock on your turn.
+                Waiting on {onClock}. Suggestions unlock on your turn — or
+                Auto-pick to end.
               </p>
             )}
 
@@ -501,8 +591,8 @@ function LiveView({
                         {row.position}
                         {row.rankPosition}
                       </span>
-                      {row.team} · #{row.rankOverall} · ADP {formatAdp(row.adp, 0)}{" "}
-                      · {valueLabel(row.valueDelta).text}
+                      {row.team} · #{row.rankOverall} · ADP{" "}
+                      {formatAdp(row.adp, 0)} · {valueLabel(row.valueDelta).text}
                     </p>
                   </div>
                   <button
@@ -518,26 +608,63 @@ function LiveView({
             </ul>
           </section>
 
-          <DraftBoard state={state} />
+          {/* Mobile: compact pick feed — desktop keeps full board */}
+          <section className="rounded-2xl border border-white/10 bg-black/30 p-4 md:hidden">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-kos-text/55">
+              Recent picks
+            </h2>
+            <ul className="mt-3 space-y-2">
+              {recent.length === 0 ? (
+                <li className="text-sm text-kos-text/50">Draft just started.</li>
+              ) : (
+                recent.map((pick) => (
+                  <li
+                    key={pick.overall}
+                    className="flex items-baseline justify-between gap-2 text-sm"
+                  >
+                    <span className="min-w-0 truncate">
+                      <span className="text-kos-text/45">
+                        {formatPickLabel(pick.overall, state.config.teamCount)}
+                      </span>{" "}
+                      <span
+                        className={
+                          pick.isUser
+                            ? "font-semibold text-kos-gold"
+                            : "text-kos-text"
+                        }
+                      >
+                        {pick.playerName}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-[11px] text-kos-text/45">
+                      {pick.position} · {state.teamNames[pick.teamIndex]}
+                    </span>
+                  </li>
+                ))
+              )}
+            </ul>
+          </section>
+
+          <div className="hidden md:block">
+            <DraftBoard state={state} />
+          </div>
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <aside className="hidden space-y-4 lg:sticky lg:top-24 lg:block lg:self-start">
           <section className="rounded-2xl border border-white/10 bg-black/30 p-4">
             <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-kos-text/55">
               Your roster
             </h2>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {Object.entries(needs).map(([pos, n]) =>
-                n > 0 ? (
-                  <span
-                    key={pos}
-                    className="rounded border border-rose-400/30 bg-rose-400/10 px-2 py-0.5 text-[11px] text-rose-200"
-                  >
-                    Need {pos}×{n}
-                  </span>
-                ) : null,
-              )}
-              {Object.values(needs).every((n) => n === 0) ? (
+              {needChips.map(([pos, n]) => (
+                <span
+                  key={pos}
+                  className="rounded border border-rose-400/30 bg-rose-400/10 px-2 py-0.5 text-[11px] text-rose-200"
+                >
+                  Need {pos}×{n}
+                </span>
+              ))}
+              {needChips.length === 0 ? (
                 <span className="text-[11px] text-kos-text/50">
                   Starters covered — drafting depth
                 </span>

@@ -26,7 +26,10 @@ rather than inventing players.
 - Snake order (`mock-draft-engine.ts`)
 - Instant CPU ticks (~280ms) for speed — no live clock in this pass
 - Human one-click draft from available list + value/need suggestion rails
-- Full draft board + roster needs + recent picks
+- **Auto-pick to end** — finishes remaining seats with the same CPU logic and
+  lands on the post-draft grade
+- Full draft board (desktop) + compact recent-pick feed (mobile)
+- Sticky mobile needs/roster strip while on the clock
 
 ## CPU logic (tunable)
 
@@ -63,7 +66,18 @@ Weights live in `MOCK_CPU_WEIGHTS` (`mock-types.ts`).
 
 Results footer shows scoring, slot, and `modelVersion` from the board rows.
 
-## Limitations
+## Round 1 CPU (post-hotfix)
+
+1QB structure is enforced even when model VOR creates huge QB “value” vs ADP:
+
+- Soft need for first QB in R1–R2
+- Value/rank weights dampened for QBs through ~R5
+- Stronger penalties against QB2+ until mid/late rounds
+
+Stress test: elite model QBs with ADP 55–85 must not flood Round 1
+(`mock-r1-cpu.test.ts` expects ≤1 R1 QB on that board).
+
+## Limitations / remaining UX gaps
 
 - Mocks only — no Sleeper/ESPN/Yahoo sync, no auction, no Superflex/TEP, no
   multi-user lobbies, no dynasty.
@@ -71,6 +85,9 @@ Results footer shows scoring, slot, and `modelVersion` from the board rows.
 - Preseason boards may omit K/DST.
 - Available list shows top 60 filtered rows for mobile performance (search +
   position filters cover the rest of the pool).
+- Desktop still uses a wide snake board; phones use a recent-pick feed instead.
+- Auto-pick uses CPU personas for the human seat too (by design for speed).
+- No pause/undo mid-auto-complete.
 
 ## Key files
 

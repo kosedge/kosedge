@@ -189,11 +189,12 @@ export function makeUserPick(
   return appendPick(state, player);
 }
 
-export function makeCpuPick(
+/** Pick for whoever is on the clock using that seat's persona (CPU logic). */
+export function makeSeatPick(
   board: FantasyDeskRow[],
   state: MockDraftState,
 ): MockDraftState {
-  if (isDraftComplete(state) || isUserTurn(state)) return state;
+  if (isDraftComplete(state)) return state;
   const teamIndex = currentTeamIndex(state);
   if (teamIndex == null) return state;
   const roster = rosterForTeam(board, state, teamIndex);
@@ -213,6 +214,14 @@ export function makeCpuPick(
   return appendPick(state, choice);
 }
 
+export function makeCpuPick(
+  board: FantasyDeskRow[],
+  state: MockDraftState,
+): MockDraftState {
+  if (isUserTurn(state)) return state;
+  return makeSeatPick(board, state);
+}
+
 /** Run CPU picks until the user's turn or draft end. Caps for safety. */
 export function advanceCpuUntilUserOrDone(
   board: FantasyDeskRow[],
@@ -227,6 +236,25 @@ export function advanceCpuUntilUserOrDone(
     steps < maxSteps
   ) {
     const next = makeCpuPick(board, current);
+    if (next.nextOverall === current.nextOverall) break;
+    current = next;
+    steps += 1;
+  }
+  return current;
+}
+
+/**
+ * Instantly finish the mock with the same CPU logic for every remaining seat
+ * (including the human seat). Lands on results.
+ */
+export function autoCompleteDraft(
+  board: FantasyDeskRow[],
+  state: MockDraftState,
+): MockDraftState {
+  let current = state;
+  let steps = 0;
+  while (!isDraftComplete(current) && steps < 500) {
+    const next = makeSeatPick(board, current);
     if (next.nextOverall === current.nextOverall) break;
     current = next;
     steps += 1;
