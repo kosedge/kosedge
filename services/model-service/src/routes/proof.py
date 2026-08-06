@@ -115,6 +115,7 @@ def proof_performance_summary(
     engine_version: Optional[str] = Query(None),
 ) -> Dict[str, Any]:
     from src.services.proof_layer.core import documentation, performance_summary
+    from src.services.proof_layer.proof_lake import ProofLakeError
 
     try:
         payload = performance_summary(
@@ -122,14 +123,19 @@ def proof_performance_summary(
         )
         payload["tracking"] = documentation()
         return payload
+    except ProofLakeError as exc:
+        log.exception("proof lake unavailable: %s", exc)
+        return {
+            "ok": False,
+            "error": f"proof lake unavailable: {exc}",
+            "backend": documentation().get("backend"),
+            "lake_dir": documentation().get("lake_dir"),
+        }
     except Exception as exc:
         log.exception("proof performance summary failed: %s", exc)
         return {
             "ok": False,
             "error": f"performance summary failed: {exc}",
-            "n_logged": 0,
-            "n_with_close": 0,
-            "n_with_result": 0,
         }
 
 

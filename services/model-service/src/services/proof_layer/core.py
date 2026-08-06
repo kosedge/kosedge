@@ -1,12 +1,11 @@
 """Unified projection logging, CLV, and grading for NFL + CFB.
 
-Durable JSONL lake (Railway-safe writable path resolution). Optional Postgres
-mirror for CFB when ``CFB_PROJECTION_LOG_DB=1``. Never blocks live projection paths.
+Durable proof lake via Postgres (production) or JSONL (local fallback).
+Never blocks live projection paths on write failures.
 """
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 import threading
@@ -16,21 +15,33 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
+from src.services.proof_layer.proof_lake import (
+    ProofLakeError,
+    get_lake,
+    resolve_backend_name,
+)
+
 log = logging.getLogger("kosedge.proof_layer")
 
 _SERVICE_ROOT = Path(__file__).resolve().parents[3]
 _DEFAULT_LAKE = _SERVICE_ROOT / "data" / "ops" / "projection_logs"
-LAKE_DIR = Path(
-    os.getenv("PROJECTION_LOG_DIR")
-    or os.getenv("PROOF_LAYER_LOG_DIR")
-    or _DEFAULT_LAKE
-)
 JSONL_NAME = "projections.jsonl"
 
-BACKEND = (os.getenv("PROJECTION_LOG_BACKEND") or "auto").strip().lower()
+BACKEND = resolve_backend_name()
 AUTO_LOG_ENV = "PROOF_AUTO_LOG_PROJECTIONS"
 
 SUPPORTED_SPORTS = frozenset({"nfl", "cfb"})
+
+
+def default_lake_dir() -> Path:
+    return Path(
+        os.getenv("PROJECTION_LOG_DIR")
+        or os.getenv("PROOF_LAYER_LOG_DIR")
+        or _DEFAULT_LAKE
+    )
+
+
+LAKE_DIR = default_lake_dir()
 
 
 def _utc_now() -> str:
@@ -258,94 +269,6 @@ def _opt_str(v: Any) -> Optional[str]:
     return s or None
 
 
-def _resolve_lake(lake_dir: Optional[Path] = None) -> Path:
-    candidates: List[Path] = []
-    if lake_dir is not None:
-        candidates.append(Path(lake_dir))
-    else:
-        candidates.append(LAKE_DIR)
-        candidates.append(Path("/tmp/kosedge_projection_logs"))
-    for d in candidates:
-        try:
-            d.mkdir(parents=True, exist_ok=True)
-            probe = d / ".write_probe"
-            probe.write_text("ok", encoding="utf-8")
-            try:
-                probe.unlink()
-            except OSError:
-                pass
-            return d
-        except OSError as exc:
-            log.warning("projection lake not writable (%s): %s", d, exc)
-            continue
-    return Path("/tmp/kosedge_projection_logs")
-
-
-def _jsonl_path(lake_dir: Optional[Path] = None) -> Path:
-    return _resolve_lake(lake_dir) / JSONL_NAME
-
-
-def _read_jsonl(lake_dir: Optional[Path] = None) -> List[ProjectionLog]:
-    path = _jsonl_path(lake_dir)
-    if not path.exists():
-        return []
-    out: List[ProjectionLog] = []
-    try:
-        with path.open("r", encoding="utf-8") as fh:
-            for line in fh:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    out.append(ProjectionLog.from_dict(json.loads(line)))
-                except (json.JSONDecodeError, TypeError, ValueError) as exc:
-                    log.warning("skip bad projection log line: %s", exc)
-    except OSError as exc:
-        log.warning("projection lake read failed: %s", exc)
-        return []
-    return out
-
-
-def _rewrite_jsonl(records: Sequence[ProjectionLog], lake_dir: Optional[Path] = None) -> None:
-    path = _jsonl_path(lake_dir)
-    tmp = path.with_suffix(".tmp")
-    with tmp.open("w", encoding="utf-8") as fh:
-        for rec in records:
-            fh.write(json.dumps(rec.to_dict(), separators=(",", ":"), default=str))
-            fh.write("\n")
-    tmp.replace(path)
-
-
-def _append_jsonl(record: ProjectionLog, lake_dir: Optional[Path] = None) -> None:
-    path = _jsonl_path(lake_dir)
-    with path.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(record.to_dict(), separators=(",", ":"), default=str))
-        fh.write("\n")
-
-
-def _upsert_jsonl(record: ProjectionLog, lake_dir: Optional[Path] = None) -> ProjectionLog:
-    rows = _read_jsonl(lake_dir)
-    found = False
-    for i, row in enumerate(rows):
-        if row.id == record.id:
-            rows[i] = record
-            found = True
-            break
-    if found:
-        _rewrite_jsonl(rows, lake_dir)
-    else:
-        _append_jsonl(record, lake_dir)
-    record.storage = "jsonl"
-    return record
-
-
-def _get_jsonl(proj_id: str, lake_dir: Optional[Path] = None) -> Optional[ProjectionLog]:
-    for row in _read_jsonl(lake_dir):
-        if row.id == proj_id:
-            return row
-    return None
-
-
 def _default_engine_version(sport: str) -> str:
     if sport == "nfl":
         from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
@@ -356,208 +279,26 @@ def _default_engine_version(sport: str) -> str:
     return P.ENGINE_VERSION
 
 
-def _db_enabled_for_sport(sport: str) -> bool:
-    if sport != "cfb":
-        return False
-    backend = (
-        os.getenv("CFB_PROJECTION_LOG_BACKEND")
-        or os.getenv("PROJECTION_LOG_BACKEND")
-        or BACKEND
-        or "auto"
-    ).strip().lower()
-    if backend == "jsonl":
-        return False
-    if backend == "db":
-        return True
-    if os.getenv("CFB_PROJECTION_LOG_DB", "").strip().lower() not in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }:
-        return False
-    return bool(os.getenv("DATABASE_URL"))
-
-
-def _try_db_insert(record: ProjectionLog) -> bool:
-    if not _db_enabled_for_sport(record.sport):
-        return False
-    try:
-        from sqlalchemy import text
-
-        from src.db import SessionLocal
-    except Exception as exc:  # pragma: no cover
-        log.debug("cfb projection db unavailable: %s", exc)
-        return False
-
-    session = None
-    try:
-        session = SessionLocal()
-        session.execute(
-            text(
-                """
-                INSERT INTO cfb_projection_logs (
-                  id, game_key, season, week, home_team, away_team, engine_version,
-                  projected_at, model_spread_home, model_total, home_win_prob,
-                  away_win_prob, expected_home_score, expected_away_score,
-                  drivers, projection, close_spread_home, close_total,
-                  close_captured_at, close_source, spread_clv, total_clv,
-                  home_score, away_score, result_captured_at, result_source,
-                  grade_ats, grade_ou, grade_su, updated_at
-                ) VALUES (
-                  CAST(:id AS uuid), :game_key, :season, :week, :home_team, :away_team,
-                  :engine_version, CAST(:projected_at AS timestamptz),
-                  :model_spread_home, :model_total, :home_win_prob, :away_win_prob,
-                  :expected_home_score, :expected_away_score,
-                  CAST(:drivers AS jsonb), CAST(:projection AS jsonb),
-                  :close_spread_home, :close_total,
-                  CAST(:close_captured_at AS timestamptz), :close_source,
-                  :spread_clv, :total_clv, :home_score, :away_score,
-                  CAST(:result_captured_at AS timestamptz), :result_source,
-                  :grade_ats, :grade_ou, :grade_su,
-                  CAST(:updated_at AS timestamptz)
-                )
-                ON CONFLICT (id) DO UPDATE SET
-                  close_spread_home = EXCLUDED.close_spread_home,
-                  close_total = EXCLUDED.close_total,
-                  close_captured_at = EXCLUDED.close_captured_at,
-                  close_source = EXCLUDED.close_source,
-                  spread_clv = EXCLUDED.spread_clv,
-                  total_clv = EXCLUDED.total_clv,
-                  home_score = EXCLUDED.home_score,
-                  away_score = EXCLUDED.away_score,
-                  result_captured_at = EXCLUDED.result_captured_at,
-                  result_source = EXCLUDED.result_source,
-                  grade_ats = EXCLUDED.grade_ats,
-                  grade_ou = EXCLUDED.grade_ou,
-                  grade_su = EXCLUDED.grade_su,
-                  updated_at = EXCLUDED.updated_at
-                """
-            ),
-            {
-                "id": record.id,
-                "game_key": record.game_key,
-                "season": record.season,
-                "week": record.week,
-                "home_team": record.home_team,
-                "away_team": record.away_team,
-                "engine_version": record.engine_version,
-                "projected_at": record.projected_at,
-                "model_spread_home": record.model_spread_home,
-                "model_total": record.model_total,
-                "home_win_prob": record.home_win_prob,
-                "away_win_prob": record.away_win_prob,
-                "expected_home_score": record.expected_home_score,
-                "expected_away_score": record.expected_away_score,
-                "drivers": json.dumps({**record.drivers, "sport": record.sport}),
-                "projection": json.dumps(
-                    {**record.projection, "sport": record.sport, "market_type": record.market_type}
-                ),
-                "close_spread_home": record.close_spread_home,
-                "close_total": record.close_total,
-                "close_captured_at": record.close_captured_at,
-                "close_source": record.close_source,
-                "spread_clv": record.spread_clv,
-                "total_clv": record.total_clv,
-                "home_score": record.home_score,
-                "away_score": record.away_score,
-                "result_captured_at": record.result_captured_at,
-                "result_source": record.result_source,
-                "grade_ats": record.grade_ats,
-                "grade_ou": record.grade_ou,
-                "grade_su": record.grade_su,
-                "updated_at": record.updated_at or _utc_now(),
-            },
-        )
-        session.commit()
-        record.storage = "db+jsonl"
-        return True
-    except Exception as exc:
-        log.warning("cfb projection db write failed (jsonl retained): %s", exc)
-        if session is not None:
-            try:
-                session.rollback()
-            except Exception:  # pragma: no cover
-                pass
-        return False
-    finally:
-        if session is not None:
-            try:
-                session.close()
-            except Exception:  # pragma: no cover
-                pass
-
-
-def _try_db_get(proj_id: str) -> Optional[ProjectionLog]:
-    if not _db_enabled_for_sport("cfb"):
-        return None
-    try:
-        from sqlalchemy import text
-
-        from src.db import SessionLocal
-    except Exception:
-        return None
-    session = None
-    try:
-        session = SessionLocal()
-        row = session.execute(
-            text(
-                """
-                SELECT id::text, game_key, season, week, home_team, away_team,
-                       engine_version, projected_at::text, model_spread_home,
-                       model_total, home_win_prob, away_win_prob,
-                       expected_home_score, expected_away_score, drivers, projection,
-                       close_spread_home, close_total, close_captured_at::text,
-                       close_source, spread_clv, total_clv, home_score, away_score,
-                       result_captured_at::text, result_source,
-                       grade_ats, grade_ou, grade_su, updated_at::text
-                FROM cfb_projection_logs
-                WHERE id = CAST(:id AS uuid)
-                """
-            ),
-            {"id": proj_id},
-        ).mappings().first()
-        if not row:
-            return None
-        data = dict(row)
-        if "drivers" in data and not isinstance(data["drivers"], dict):
-            data["drivers"] = (
-                json.loads(data["drivers"])
-                if isinstance(data["drivers"], str)
-                else dict(data["drivers"] or {})
-            )
-        if "projection" in data and not isinstance(data["projection"], dict):
-            data["projection"] = (
-                json.loads(data["projection"])
-                if isinstance(data["projection"], str)
-                else dict(data["projection"] or {})
-            )
-        sport = str(
-            (data.get("projection") or {}).get("sport")
-            or (data.get("drivers") or {}).get("sport")
-            or "cfb"
-        )
-        data["sport"] = sport
-        data["market_type"] = (data.get("projection") or {}).get("market_type") or "game"
-        data["storage"] = "db"
-        return ProjectionLog.from_dict(data)
-    except Exception as exc:
-        log.debug("cfb projection db get failed: %s", exc)
-        return None
-    finally:
-        if session is not None:
-            try:
-                session.close()
-            except Exception:  # pragma: no cover
-                pass
-
-
 def _resolve_lake_for_sport(sport: str, lake_dir: Optional[Path]) -> Optional[Path]:
     if lake_dir is not None:
         return lake_dir
     if sport == "cfb" and os.getenv("CFB_PROJECTION_LOG_DIR"):
         return Path(os.getenv("CFB_PROJECTION_LOG_DIR"))
     return None
+
+
+def _lake_backend(lake_dir: Optional[Path] = None):
+    return get_lake(lake_dir=lake_dir)
+
+
+def _persist_record(record: ProjectionLog, *, lake_dir: Optional[Path] = None) -> ProjectionLog:
+    """Write to configured lake; warn on failure (never block live paths)."""
+    try:
+        return _lake_backend(lake_dir).upsert(record)
+    except ProofLakeError as exc:
+        log.warning("proof lake write failed: %s", exc)
+        record.storage = f"failed:{resolve_backend_name()}"
+        return record
 
 
 def log_projection(
@@ -627,14 +368,15 @@ def log_projection(
             "mode": payload.get("mode") or projection_meta.get("mode"),
             "notes": payload.get("notes") or projection_meta.get("notes"),
             "source": projection_meta.get("source"),
-            **{k: v for k, v in projection_meta.items() if k not in {"game_id", "margin_sd", "fidelity", "mode", "notes", "source"}},
+            **{
+                k: v
+                for k, v in projection_meta.items()
+                if k not in {"game_id", "margin_sd", "fidelity", "mode", "notes", "source"}
+            },
         },
         updated_at=_utc_now(),
     )
-    _upsert_jsonl(record, lake)
-    if _try_db_insert(record):
-        _upsert_jsonl(record, lake)
-    return record
+    return _persist_record(record, lake_dir=lake)
 
 
 def record_close(
@@ -645,10 +387,9 @@ def record_close(
     source: str = "manual",
     lake_dir: Optional[Path] = None,
 ) -> Optional[ProjectionLog]:
-    record = _get_jsonl(proj_id, lake_dir) or _try_db_get(proj_id)
+    record = get_projection(proj_id, lake_dir=lake_dir)
     if record is None:
         return None
-    lake = _resolve_lake_for_sport(record.sport, lake_dir)
     if close_spread_home is not None:
         record.close_spread_home = float(close_spread_home)
     if close_total is not None:
@@ -665,9 +406,7 @@ def record_close(
         record.grade_ats = grades.get("grade_ats")
         record.grade_ou = grades.get("grade_ou")
         record.grade_su = grades.get("grade_su")
-    _upsert_jsonl(record, lake)
-    _try_db_insert(record)
-    return record
+    return _persist_record(record, lake_dir=lake_dir)
 
 
 def record_result(
@@ -679,10 +418,9 @@ def record_result(
     lake_dir: Optional[Path] = None,
     apply_inseason: bool = False,
 ) -> Optional[ProjectionLog]:
-    record = _get_jsonl(proj_id, lake_dir) or _try_db_get(proj_id)
+    record = get_projection(proj_id, lake_dir=lake_dir)
     if record is None:
         return None
-    lake = _resolve_lake_for_sport(record.sport, lake_dir)
     record.home_score = int(home_score)
     record.away_score = int(away_score)
     record.result_captured_at = _utc_now()
@@ -692,8 +430,7 @@ def record_result(
     record.grade_ou = grades.get("grade_ou")
     record.grade_su = grades.get("grade_su")
     record.updated_at = _utc_now()
-    _upsert_jsonl(record, lake)
-    _try_db_insert(record)
+    record = _persist_record(record, lake_dir=lake_dir)
     if apply_inseason and record.sport == "cfb":
         try:
             from src.services.cfb_season_engine.in_season_update import ingest_result
@@ -721,7 +458,7 @@ def record_result(
 def get_projection(
     proj_id: str, *, lake_dir: Optional[Path] = None
 ) -> Optional[ProjectionLog]:
-    return _get_jsonl(proj_id, lake_dir) or _try_db_get(proj_id)
+    return _lake_backend(lake_dir).get(proj_id)
 
 
 def list_projections(
@@ -731,14 +468,11 @@ def list_projections(
     engine_version: Optional[str] = None,
     lake_dir: Optional[Path] = None,
 ) -> List[ProjectionLog]:
-    rows = _read_jsonl(lake_dir)
-    if sport:
-        sport_l = sport.strip().lower()
-        rows = [r for r in rows if r.sport == sport_l]
-    if engine_version:
-        rows = [r for r in rows if r.engine_version == engine_version]
-    rows.sort(key=lambda r: r.projected_at or "", reverse=True)
-    return rows[: max(1, min(int(limit), 500))]
+    return _lake_backend(lake_dir).list_records(
+        sport=sport,
+        limit=limit,
+        engine_version=engine_version,
+    )
 
 
 def _record_rate(grades: Sequence[Optional[str]]) -> Dict[str, Any]:
@@ -763,8 +497,11 @@ def performance_summary(
     engine_version: Optional[str] = None,
     lake_dir: Optional[Path] = None,
 ) -> Dict[str, Any]:
-    rows = list_projections(
-        sport=sport, limit=limit, engine_version=engine_version, lake_dir=lake_dir
+    backend = _lake_backend(lake_dir)
+    rows = backend.list_records(
+        sport=sport,
+        limit=limit,
+        engine_version=engine_version,
     )
     with_close = [
         r for r in rows if r.close_spread_home is not None or r.close_total is not None
@@ -820,6 +557,8 @@ def performance_summary(
 
         current_engine = P.ENGINE_VERSION
 
+    lake_health = backend.health()
+
     return {
         "ok": True,
         "sport_filter": sport,
@@ -862,8 +601,9 @@ def performance_summary(
             "n_margin": len(spread_errors),
             "n_total": len(total_errors),
         },
-        "lake_dir": str(lake_dir or LAKE_DIR),
-        "backend": BACKEND,
+        "lake_dir": backend.location,
+        "backend": backend.backend_name,
+        "lake_health": lake_health,
         "recent": recent,
     }
 
@@ -914,17 +654,28 @@ def maybe_auto_log_projection(
 
 
 def documentation() -> Dict[str, Any]:
+    backend = resolve_backend_name()
+    try:
+        lake = get_lake()
+        location = lake.location
+        health = lake.health()
+    except Exception as exc:
+        location = str(LAKE_DIR)
+        health = {"ok": False, "error": str(exc)}
+
     return {
         "module": "proof_layer",
         "supported_sports": sorted(SUPPORTED_SPORTS),
-        "lake_dir": str(LAKE_DIR),
-        "backend": os.getenv("PROJECTION_LOG_BACKEND") or BACKEND,
+        "lake_dir": location,
+        "backend": backend,
+        "lake_health": health,
+        "table": "proof_projections" if backend == "postgres" else None,
         "env": {
-            "PROJECTION_LOG_DIR": "Unified JSONL lake directory",
+            "PROOF_LAKE_BACKEND": "postgres|jsonl|auto (auto → postgres when DATABASE_URL set)",
+            "PROJECTION_LOG_DIR": "JSONL lake directory (dev/fallback only)",
             "PROOF_LAYER_LOG_DIR": "Alias for PROJECTION_LOG_DIR",
-            "CFB_PROJECTION_LOG_DIR": "Optional CFB-only lake override (legacy compat)",
-            "PROJECTION_LOG_BACKEND": "jsonl|db|auto",
-            "CFB_PROJECTION_LOG_DB": "Opt-in Postgres mirror for CFB",
+            "CFB_PROJECTION_LOG_DIR": "Optional CFB-only JSONL override (legacy compat)",
+            "PROJECTION_LOG_BACKEND": "Legacy alias for PROOF_LAKE_BACKEND",
             "PROOF_AUTO_LOG_PROJECTIONS": "Auto-log all supported sports",
             "CFB_AUTO_LOG_PROJECTIONS": "Auto-log CFB only",
             "NFL_AUTO_LOG_PROJECTIONS": "Auto-log NFL only",
@@ -942,6 +693,7 @@ def documentation() -> Dict[str, Any]:
             "performance": "GET /proof/performance?sport=nfl|cfb",
             "calibration_report": "GET /proof/calibration-report?sport=nfl|cfb&engine_version=&from=&to=&season=",
             "calibration_report_generate": "POST /proof/calibration-report/generate",
+            "docs": "GET /proof/docs — shows backend + lake location",
             "cfb_compat": {
                 "log": "POST /cfb/season-engine/projections/log",
                 "close": "POST /cfb/season-engine/projections/{id}/close",
@@ -949,6 +701,10 @@ def documentation() -> Dict[str, Any]:
                 "performance": "GET /cfb/season-engine/performance",
             },
         },
-        "ops": "data/ops/unified-proof-layer-20260806.md",
+        "ops": "data/ops/persistent-proof-lake-20260806.md",
         "calibration_reports": "data/ops/historical-calibration-reports-20260806.md",
+        "durability": (
+            "Production uses Postgres table proof_projections (survives Railway redeploys). "
+            "JSONL is dev/fallback only."
+        ),
     }

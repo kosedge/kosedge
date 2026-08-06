@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+os.environ["PROOF_LAKE_BACKEND"] = "jsonl"
 os.environ["CFB_PROJECTION_LOG_BACKEND"] = "jsonl"
 
 from src.services.cfb_season_engine import DEFAULT_SEASON_ENGINE_VERSION
@@ -103,6 +104,7 @@ def test_log_close_result_summary(tmp_path) -> None:
 
 
 def test_performance_http_endpoints(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("PROOF_LAKE_BACKEND", "jsonl")
     monkeypatch.setenv("CFB_PROJECTION_LOG_BACKEND", "jsonl")
     monkeypatch.setenv("CFB_PROJECTION_LOG_DIR", str(tmp_path / "http_logs"))
     import src.services.cfb_season_engine.performance_tracking as pt

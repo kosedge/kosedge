@@ -15,10 +15,10 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 from src.services.proof_layer.core import (
     LAKE_DIR,
     ProjectionLog,
-    _read_jsonl,
     _record_rate,
     performance_summary,
 )
+from src.services.proof_layer.proof_lake import ProofLakeError, get_lake
 
 _SERVICE_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_REPORT_DIR = _SERVICE_ROOT / "data" / "ops" / "calibration_reports"
@@ -75,20 +75,14 @@ def load_filtered_projections(
     lake_dir: Optional[Path] = None,
 ) -> List[ProjectionLog]:
     """Load all lake rows matching sport / version / season / projected_at window."""
-    rows = _read_jsonl(lake_dir)
-    if sport:
-        sport_l = sport.strip().lower()
-        rows = [r for r in rows if r.sport == sport_l]
-    if engine_version:
-        rows = [r for r in rows if r.engine_version == engine_version]
-    if season is not None:
-        rows = [r for r in rows if int(r.season) == int(season)]
-    if from_ts or to_ts:
-        rows = [
-            r
-            for r in rows
-            if _in_date_range(r.projected_at, from_ts=from_ts, to_ts=to_ts)
-        ]
+    rows = get_lake(lake_dir=lake_dir).list_records(
+        sport=sport,
+        engine_version=engine_version,
+        season=season,
+        from_ts=from_ts,
+        to_ts=to_ts,
+        limit=5000,
+    )
     rows.sort(key=lambda r: (r.projected_at or "", r.game_key or ""))
     return rows
 
@@ -387,7 +381,9 @@ def _summary_lines(
         )
     lines.append("")
     lines.append("---")
-    lines.append("*Generated from unified proof-layer JSONL lake. Closes are never invented.*")
+    lines.append(
+        "*Generated from unified proof lake (Postgres or JSONL). Closes are never invented.*"
+    )
     return "\n".join(lines)
 
 
@@ -406,14 +402,21 @@ def build_calibration_report(
 ) -> Dict[str, Any]:
     """Build structured calibration report + markdown summary."""
     sport_l = sport.strip().lower()
-    rows = load_filtered_projections(
-        sport=sport_l,
-        engine_version=engine_version,
-        season=season,
-        from_ts=from_ts,
-        to_ts=to_ts,
-        lake_dir=lake_dir,
-    )
+    try:
+        rows = load_filtered_projections(
+            sport=sport_l,
+            engine_version=engine_version,
+            season=season,
+            from_ts=from_ts,
+            to_ts=to_ts,
+            lake_dir=lake_dir,
+        )
+    except ProofLakeError as exc:
+        return {
+            "ok": False,
+            "error": f"proof lake unavailable: {exc}",
+            "report_type": "historical_calibration",
+        }
     metrics = _slice_metrics(rows)
     bias = _bias_slices(rows)
     honesty = _honesty_flags(metrics)
@@ -462,7 +465,8 @@ def build_calibration_report(
         "generated_at": _utc_now(),
         "filters": filters,
         "inputs": {
-            "lake_dir": str(lake_dir or LAKE_DIR),
+            "lake_dir": str(lake_dir or get_lake(lake_dir=lake_dir).location),
+            "backend": get_lake(lake_dir=lake_dir).backend_name,
             "projected_at_range": projected_range,
             "engine_versions_seen": versions,
             "seasons_seen": seasons,

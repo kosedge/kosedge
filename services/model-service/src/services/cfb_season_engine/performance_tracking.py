@@ -146,7 +146,7 @@ def documentation() -> Dict[str, Any]:
     doc["engine_version"] = P.ENGINE_VERSION
     doc["lake_dir"] = str(LAKE_DIR)
     doc["backend"] = BACKEND
-    doc["db_opt_in_env"] = "CFB_PROJECTION_LOG_DB"
+    doc["db_opt_in_env"] = "PROOF_LAKE_BACKEND=postgres (auto when DATABASE_URL set)"
     doc["auto_log_env"] = AUTO_LOG_ENV
     doc["unified"] = {
         "module": "src.services.proof_layer",
