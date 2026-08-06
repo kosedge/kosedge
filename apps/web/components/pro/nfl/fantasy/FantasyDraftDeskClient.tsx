@@ -14,6 +14,7 @@ import {
   bestAvailableByValue,
   rosterNeeds,
   teamGrade,
+  type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
 import type { FantasyDeskBoard, FantasyDeskRow } from "@/lib/fantasy/types";
 import {
@@ -153,7 +154,7 @@ export function FantasyDraftDeskClient({
 
   const grade = teamGrade(roster);
   const needs = rosterNeeds(roster);
-  const byValue = bestAvailableByValue(board.rows, rosterSet, 5);
+  const byValue = bestAvailableByValue(board.rows, rosterSet, 5, { roster });
   const byNeed = bestAvailableByNeed(board.rows, roster, 5);
 
   /** Sync update — Add/Remove must paint immediately. */
@@ -877,8 +878,8 @@ function TeamBuilderPanel({
   roster: FantasyDeskRow[];
   grade: ReturnType<typeof teamGrade>;
   needs: Record<string, number>;
-  byValue: FantasyDeskRow[];
-  byNeed: FantasyDeskRow[];
+  byValue: ValueAwareSuggestion[];
+  byNeed: ValueAwareSuggestion[];
   rosterSet: Set<string>;
   scoring: FantasyScoringProfile;
   onSelect: (id: string) => void;
@@ -975,14 +976,14 @@ function TeamBuilderPanel({
       <div className="space-y-5">
         <SuggestBlock
           title="Best available by value"
-          rows={byValue}
+          suggestions={byValue}
           rosterSet={rosterSet}
           onSelect={onSelect}
           onToggle={onToggle}
         />
         <SuggestBlock
           title="Best available by need"
-          rows={byNeed}
+          suggestions={byNeed}
           rosterSet={rosterSet}
           onSelect={onSelect}
           onToggle={onToggle}
@@ -994,13 +995,13 @@ function TeamBuilderPanel({
 
 function SuggestBlock({
   title,
-  rows,
+  suggestions,
   rosterSet,
   onSelect,
   onToggle,
 }: {
   title: string;
-  rows: FantasyDeskRow[];
+  suggestions: ValueAwareSuggestion[];
   rosterSet: Set<string>;
   onSelect: (id: string) => void;
   onToggle: (id: string) => void;
@@ -1010,13 +1011,13 @@ function SuggestBlock({
       <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-kos-text/55">
         {title}
       </h3>
-      {rows.length === 0 ? (
+      {suggestions.length === 0 ? (
         <p className="mt-3 text-sm text-kos-text/50">
           No suggestions — board is empty or fully rostered.
         </p>
       ) : (
         <ul className="mt-3 space-y-2">
-          {rows.map((row) => {
+          {suggestions.map(({ row, timingHint, timing }) => {
             const onRoster = rosterSet.has(row.playerId);
             return (
               <li
@@ -1035,6 +1036,19 @@ function SuggestBlock({
                     #{row.rankOverall} · ADP {formatAdp(row.adp, 0)} ·{" "}
                     {valueLabel(row.valueDelta).text}
                   </p>
+                  {timingHint ? (
+                    <p
+                      className={`mt-0.5 text-[11px] ${
+                        timing === "take_now"
+                          ? "text-kos-gold"
+                          : timing === "wait"
+                            ? "text-sky-300/90"
+                            : "text-kos-text/45"
+                      }`}
+                    >
+                      {timingHint}
+                    </p>
+                  ) : null}
                 </button>
                 <button
                   type="button"

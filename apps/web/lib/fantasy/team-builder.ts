@@ -1,4 +1,12 @@
+import {
+  bestAvailableByNeedAware,
+  bestAvailableByValueAware,
+  type ValueAwareContext,
+  type ValueAwareSuggestion,
+} from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskRow, RosterSlot } from "@/lib/fantasy/types";
+
+export type { ValueAwareContext, ValueAwareSuggestion };
 
 export const STARTER_SLOTS: RosterSlot[] = [
   "QB",
@@ -122,56 +130,29 @@ export function bestAvailableByValue(
   board: FantasyDeskRow[],
   rosterIds: Set<string>,
   limit = 5,
-): FantasyDeskRow[] {
-  return board
-    .filter(
-      (row) =>
-        !rosterIds.has(row.playerId) &&
-        row.adp != null &&
-        row.valueDelta != null,
-    )
-    .sort((a, b) => {
-      const valueDiff = (b.valueDelta ?? 0) - (a.valueDelta ?? 0);
-      if (valueDiff !== 0) return valueDiff;
-      return a.rankOverall - b.rankOverall;
-    })
-    .slice(0, limit);
+  ctx?: Pick<ValueAwareContext, "pickOverall" | "roster">,
+): ValueAwareSuggestion[] {
+  const available = board.filter((row) => !rosterIds.has(row.playerId));
+  const roster =
+    ctx?.roster ?? board.filter((row) => rosterIds.has(row.playerId));
+  return bestAvailableByValueAware(
+    available,
+    { pickOverall: ctx?.pickOverall, roster, available },
+    limit,
+  );
 }
 
 export function bestAvailableByNeed(
   board: FantasyDeskRow[],
   roster: FantasyDeskRow[],
   limit = 5,
-): FantasyDeskRow[] {
-  const needs = rosterNeeds(roster);
+  ctx?: Pick<ValueAwareContext, "pickOverall">,
+): ValueAwareSuggestion[] {
   const rosterIds = new Set(roster.map((r) => r.playerId));
-  const priority = Object.entries(needs)
-    .filter(([pos, n]) => n > 0 && pos !== "FLEX")
-    .sort((a, b) => b[1] - a[1])
-    .map(([pos]) => pos);
-
-  const flexNeed = (needs.FLEX ?? 0) > 0;
-  const out: FantasyDeskRow[] = [];
-  const seen = new Set<string>();
-
-  const pushFrom = (predicate: (row: FantasyDeskRow) => boolean) => {
-    for (const row of board) {
-      if (out.length >= limit) break;
-      if (rosterIds.has(row.playerId) || seen.has(row.playerId)) continue;
-      if (!predicate(row)) continue;
-      out.push(row);
-      seen.add(row.playerId);
-    }
-  };
-
-  for (const pos of priority) {
-    pushFrom((row) => row.position.toUpperCase() === pos);
-  }
-  if (flexNeed) {
-    pushFrom((row) => ["RB", "WR", "TE"].includes(row.position.toUpperCase()));
-  }
-  if (out.length < limit) {
-    pushFrom(() => true);
-  }
-  return out;
+  const available = board.filter((row) => !rosterIds.has(row.playerId));
+  return bestAvailableByNeedAware(
+    available,
+    { pickOverall: ctx?.pickOverall, roster, available },
+    limit,
+  );
 }
