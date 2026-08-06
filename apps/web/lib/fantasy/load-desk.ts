@@ -30,7 +30,8 @@ const LIMITATIONS_BASE = [
   "Floor / median / ceiling use distribution quantiles when the model service provides them; otherwise a position-aware uncertainty band around the median.",
   "Schedule notes compare opponent expected wins in weeks 1–6 vs fantasy playoff weeks 14–17 — a simple softness signal, not full matchup sim.",
   "Risk flags are concise signals from depth chart + projection shape; there is no live injury feed on this desk yet.",
-  "Phase 1 team builder is manual (no multi-team CPU mock room).",
+  "Team builder is a private roster scratchpad. Multi-team practice lives in Mock Draft (CPU fills other seats; no live Sleeper/ESPN sync).",
+  "Mocks are snake-only, 1QB redraft — no auction, Superflex, or dynasty in this desk.",
 ];
 
 function apiRowToEnrichable(row: NflFantasyDraftRankingRow & {

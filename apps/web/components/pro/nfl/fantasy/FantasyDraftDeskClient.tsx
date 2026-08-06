@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
   notableValueNotes,
@@ -25,12 +26,15 @@ import {
 
 const POSITION_TABS = ["ALL", ...FANTASY_DRAFT_POSITIONS] as const;
 const ROSTER_STORAGE_KEY = "kosedge.fantasy.draftDesk.roster.v1";
+const TRUE_VALUE_THRESHOLD = 8;
 
 type Props = {
   board: FantasyDeskBoard;
   initialPosition?: string;
   initialScoring?: FantasyScoringProfile;
   initialTab?: "board" | "value" | "builder";
+  /** When true, hide the big hero (builder route already has a page title). */
+  compactHero?: boolean;
 };
 
 function buildHref(base: Record<string, string | undefined>): string {
@@ -68,6 +72,7 @@ export function FantasyDraftDeskClient({
   initialPosition = "ALL",
   initialScoring = "half_ppr",
   initialTab = "board",
+  compactHero = false,
 }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(
     board.rows[0]?.playerId ?? null,
@@ -75,6 +80,7 @@ export function FantasyDraftDeskClient({
   const [rosterIds, setRosterIds] = useState<string[]>(readStoredRoster);
   const [tab, setTab] = useState<"board" | "value" | "builder">(initialTab);
   const [query, setQuery] = useState("");
+  const [trueValuesOnly, setTrueValuesOnly] = useState(true);
 
   const selected = board.rows.find((r) => r.playerId === selectedId) ?? null;
   const validIds = useMemo(
@@ -91,6 +97,27 @@ export function FantasyDraftDeskClient({
   );
   const rosterSet = useMemo(() => new Set(activeRosterIds), [activeRosterIds]);
 
+  const unmatchedCount = useMemo(
+    () => board.rows.filter((r) => r.adp == null || r.valueDelta == null).length,
+    [board.rows],
+  );
+
+  const valueMatched = useMemo(
+    () =>
+      board.rows.filter((r) => r.adp != null && r.valueDelta != null).length,
+    [board.rows],
+  );
+
+  const trueValueCount = useMemo(
+    () =>
+      board.rows.filter(
+        (r) =>
+          r.valueDelta != null &&
+          Math.abs(r.valueDelta) >= TRUE_VALUE_THRESHOLD,
+      ).length,
+    [board.rows],
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let rows = board.rows;
@@ -99,6 +126,11 @@ export function FantasyDraftDeskClient({
       rows = [...rows]
         .filter((r) => r.adp != null && r.valueDelta != null)
         .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0));
+      if (trueValuesOnly) {
+        rows = rows.filter(
+          (r) => Math.abs(r.valueDelta ?? 0) >= TRUE_VALUE_THRESHOLD,
+        );
+      }
     }
     if (!q) return rows;
     return rows.filter(
@@ -107,7 +139,7 @@ export function FantasyDraftDeskClient({
         r.team.toLowerCase().includes(q) ||
         r.position.toLowerCase().includes(q),
     );
-  }, [board.rows, query, tab]);
+  }, [board.rows, query, tab, trueValuesOnly]);
 
   const expertNotes = useMemo(() => {
     const notes = notableValueNotes(board.rows, 3);
@@ -137,61 +169,74 @@ export function FantasyDraftDeskClient({
   const isEmpty = board.rows.length === 0;
   const isPreseason = board.source === "preseason-fallback";
 
+  const hasKd = board.rows.some((r) =>
+    ["K", "DST"].includes(r.position.toUpperCase()),
+  );
+
   return (
     <div className="fantasy-desk space-y-5">
-      <section className="relative overflow-hidden rounded-3xl border border-kos-gold/30 bg-[radial-gradient(ellipse_at_top_left,_rgba(212,175,55,0.18),_transparent_55%),linear-gradient(145deg,#0b0d10_0%,#12151c_45%,#0a0c10_100%)] p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-kos-gold/10 blur-3xl" />
-        <div className="relative flex flex-wrap items-start justify-between gap-4">
-          <div className="max-w-3xl">
-            <p className="font-bebas text-5xl leading-none tracking-[0.04em] text-kos-gold sm:text-6xl">
-              KOSEDGE
-            </p>
-            <h1 className="mt-2 font-bebas text-3xl tracking-wide text-kos-text sm:text-4xl">
-              Fantasy Draft Desk
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-              Model-backed {board.season} rankings from the season engine —
-              value vs ADP, floor/median/ceiling, schedule context, and a
-              manual team builder. Not a consensus copy board.
-            </p>
-            <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
-              Source · {board.source} · {board.adpSourceLabel}
-            </p>
-            <p className="mt-1 text-[11px] text-kos-text/40">
-              ADP {board.adpFreshnessLabel} · matched {board.adpMatchedCount}/
-              {board.count} ({board.adpMatchedHighCount} high for Value Δ
-              {board.adpMatchedCrossFormatCount > 0
-                ? ` · ${board.adpMatchedCrossFormatCount} cross-format`
-                : ""}
-              )
-            </p>
+      {!compactHero ? (
+        <section className="relative overflow-hidden rounded-3xl border border-kos-gold/30 bg-[radial-gradient(ellipse_at_top_left,_rgba(212,175,55,0.18),_transparent_55%),linear-gradient(145deg,#0b0d10_0%,#12151c_45%,#0a0c10_100%)] p-6 sm:p-8">
+          <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-kos-gold/10 blur-3xl" />
+          <div className="relative flex flex-wrap items-start justify-between gap-4">
+            <div className="max-w-3xl">
+              <p className="font-bebas text-5xl leading-none tracking-[0.04em] text-kos-gold sm:text-6xl">
+                KOSEDGE
+              </p>
+              <h1 className="mt-2 font-bebas text-3xl tracking-wide text-kos-text sm:text-4xl">
+                Fantasy Draft Desk
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
+                Model-backed {board.season} rankings — value vs market ADP,
+                floor/median/ceiling, schedule context, builder, and snake
+                mocks. Not a consensus copy board.
+              </p>
+              <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
+                Source · {board.source} · {board.adpSourceLabel}
+              </p>
+              <p className="mt-1 text-[11px] text-kos-text/40">
+                ADP {board.adpFreshnessLabel} · matched {board.adpMatchedCount}/
+                {board.count} ({board.adpMatchedHighCount} high for Value Δ
+                {board.adpMatchedCrossFormatCount > 0
+                  ? ` · ${board.adpMatchedCrossFormatCount} cross-format`
+                  : ""}
+                )
+              </p>
+            </div>
+            <div className="grid min-w-44 gap-2">
+              <Link
+                href={`/pro/nfl/fantasy/mock?scoring=${board.scoringProfile}`}
+                className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25 active:scale-[0.98]"
+              >
+                Start Mock Draft
+              </Link>
+              <Link
+                href={`/pro/nfl/fantasy/builder?scoring=${board.scoringProfile}`}
+                className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40 active:scale-[0.98]"
+              >
+                Open Team Builder
+              </Link>
+            </div>
           </div>
-          <div className="grid min-w-44 gap-2">
-            <Link
-              href={`/pro/nfl/fantasy/mock?scoring=${board.scoringProfile}`}
-              className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25"
-            >
-              Start Mock Draft
-            </Link>
-            <button
-              type="button"
-              onClick={() => setTab("builder")}
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
-            >
-              Open Team Builder
-            </button>
-          </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
+
+      {!compactHero ? (
+        <FantasyDeskNav
+          active={tab === "builder" ? "builder" : "rankings"}
+          scoring={board.scoringProfile}
+        />
+      ) : null}
 
       {isPreseason ? (
         <section className="rounded-2xl border border-sky-400/30 bg-sky-400/10 p-4 text-sm text-sky-100">
-          <p className="font-semibold text-sky-50">Preseason board active</p>
+          <p className="font-semibold text-sky-50">Preseason board</p>
           <p className="mt-1 text-sky-100/80">
-            Live draft-rankings aren&apos;t populated yet — this desk is running
-            on the latest season-engine preseason sim bundle (skill positions).
-            Market ADP still comes from FantasyPros; unmatched names show as —.
-            Not broken — just honest about the data path.
+            Draft-rankings API isn&apos;t populated yet — rankings use the latest
+            season-engine preseason sim (skill positions
+            {!hasKd ? "; K and DST are unavailable until that feed lands" : ""}
+            ). Market ADP is still FantasyPros; names without a clean match show
+            ADP as —.
           </p>
         </section>
       ) : null}
@@ -338,6 +383,7 @@ export function FantasyDraftDeskClient({
           byValue={byValue}
           byNeed={byNeed}
           rosterSet={rosterSet}
+          scoring={board.scoringProfile}
           onSelect={(id) => {
             setSelectedId(id);
             setTab("board");
@@ -350,19 +396,60 @@ export function FantasyDraftDeskClient({
       {!isEmpty && tab !== "builder" ? (
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
           <section className="overflow-hidden rounded-2xl border border-white/10 bg-black/30">
-            <div className="flex items-baseline justify-between gap-3 border-b border-white/10 px-4 py-3">
-              <h2 className="text-lg font-semibold text-kos-text">
-                {tab === "value" ? "Value Board" : "Draft Rankings"}
-              </h2>
+            <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-white/10 px-4 py-3">
+              <div>
+                <h2 className="text-lg font-semibold text-kos-text">
+                  {tab === "value" ? "Value Board" : "Draft Rankings"}
+                </h2>
+                {tab === "value" ? (
+                  <p className="mt-0.5 text-[11px] text-kos-text/50">
+                    {board.adpSourceLabel} · {board.adpFreshnessLabel} · Value Δ
+                    only on high-confidence same-format matches
+                  </p>
+                ) : null}
+              </div>
               <p className="text-xs text-kos-text/55">
                 {filtered.length} players
               </p>
             </div>
 
+            {tab === "value" ? (
+              <div className="flex flex-wrap items-center gap-2 border-b border-white/10 px-4 py-2.5">
+                <button
+                  type="button"
+                  onClick={() => setTrueValuesOnly(true)}
+                  className={`min-h-9 rounded-lg border px-3 py-1.5 text-xs font-semibold active:scale-[0.98] ${
+                    trueValuesOnly
+                      ? "border-edge-green/40 bg-edge-green/15 text-edge-green"
+                      : "border-white/10 text-kos-text/60"
+                  }`}
+                >
+                  True values (|Δ| ≥ {TRUE_VALUE_THRESHOLD})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTrueValuesOnly(false)}
+                  className={`min-h-9 rounded-lg border px-3 py-1.5 text-xs font-semibold active:scale-[0.98] ${
+                    !trueValuesOnly
+                      ? "border-white/25 bg-white/10 text-kos-text"
+                      : "border-white/10 text-kos-text/60"
+                  }`}
+                >
+                  All matched
+                </button>
+                <span className="text-[11px] text-kos-text/45">
+                  {trueValueCount} true · {valueMatched} matched ·{" "}
+                  {unmatchedCount} unmatched (—)
+                </span>
+              </div>
+            ) : null}
+
             {filtered.length === 0 ? (
               <div className="p-6 text-center text-sm text-kos-text/60">
                 {tab === "value"
-                  ? "No market-ADP values for this filter yet — unmatched players stay off the value board."
+                  ? trueValuesOnly
+                    ? `No |Δ| ≥ ${TRUE_VALUE_THRESHOLD} plays for this filter — try “All matched” or switch format.`
+                    : "No market-ADP values for this filter — unmatched players stay off the value board (ADP —)."
                   : "No players match this search. Clear the query or switch position."}
               </div>
             ) : (
@@ -372,12 +459,16 @@ export function FantasyDraftDeskClient({
                   {filtered.map((row) => {
                     const value = valueLabel(row.valueDelta);
                     const onRoster = rosterSet.has(row.playerId);
+                    const muted =
+                      tab === "value" &&
+                      !trueValuesOnly &&
+                      value.kind === "fair";
                     return (
                       <li
                         key={row.playerId}
-                        className={`px-4 py-3 ${
+                        className={`px-4 py-3.5 ${
                           selectedId === row.playerId ? "bg-kos-gold/10" : ""
-                        }`}
+                        } ${muted ? "opacity-55" : ""}`}
                       >
                         <div className="flex items-start gap-3">
                           <button
@@ -425,7 +516,7 @@ export function FantasyDraftDeskClient({
                             <button
                               type="button"
                               onClick={() => toggleRoster(row.playerId)}
-                              className={`rounded-md border px-2 py-1 text-[11px] font-semibold active:scale-[0.98] ${
+                              className={`min-h-9 min-w-[4.5rem] rounded-md border px-2.5 py-1.5 text-[11px] font-semibold active:scale-[0.98] ${
                                 onRoster
                                   ? "border-edge-green/40 bg-edge-green/15 text-edge-green"
                                   : "border-white/15 bg-white/5 text-kos-text/70"
@@ -472,6 +563,10 @@ export function FantasyDraftDeskClient({
                       {filtered.map((row, idx) => {
                         const value = valueLabel(row.valueDelta);
                         const onRoster = rosterSet.has(row.playerId);
+                        const muted =
+                          tab === "value" &&
+                          !trueValuesOnly &&
+                          value.kind === "fair";
                         return (
                           <tr
                             key={row.playerId}
@@ -481,7 +576,7 @@ export function FantasyDraftDeskClient({
                                 : idx % 2
                                   ? "bg-white/[0.02]"
                                   : ""
-                            } hover:bg-white/[0.04]`}
+                            } hover:bg-white/[0.04] ${muted ? "opacity-55" : ""}`}
                             onClick={() => setSelectedId(row.playerId)}
                           >
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm font-semibold text-kos-text">
@@ -571,16 +666,16 @@ export function FantasyDraftDeskClient({
         </div>
       ) : null}
 
-      <section className="rounded-2xl border border-white/10 bg-black/25 p-4 text-xs text-kos-text/55">
-        <p className="font-semibold uppercase tracking-[0.12em] text-kos-text/40">
+      <details className="rounded-2xl border border-white/10 bg-black/25 p-4 text-xs text-kos-text/55">
+        <summary className="cursor-pointer font-semibold uppercase tracking-[0.12em] text-kos-text/40">
           Methods & limitations
-        </p>
-        <ul className="mt-2 list-disc space-y-1 pl-4">
+        </summary>
+        <ul className="mt-3 list-disc space-y-1 pl-4">
           {board.limitations.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
-      </section>
+      </details>
     </div>
   );
 }
@@ -733,6 +828,7 @@ function TeamBuilderPanel({
   byValue,
   byNeed,
   rosterSet,
+  scoring,
   onSelect,
   onToggle,
   onBrowse,
@@ -743,6 +839,7 @@ function TeamBuilderPanel({
   byValue: FantasyDeskRow[];
   byNeed: FantasyDeskRow[];
   rosterSet: Set<string>;
+  scoring: FantasyScoringProfile;
   onSelect: (id: string) => void;
   onToggle: (id: string) => void;
   onBrowse: () => void;
@@ -754,7 +851,7 @@ function TeamBuilderPanel({
           <div>
             <h2 className="text-lg font-semibold text-kos-text">Your roster</h2>
             <p className="text-sm text-kos-text/60">
-              Manual builder · no CPU mock yet
+              Scratchpad for your team — practice with CPU in Mock.
             </p>
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-center">
@@ -763,6 +860,21 @@ function TeamBuilderPanel({
           </div>
         </div>
         <p className="mt-2 text-sm text-kos-text/70">{grade.detail}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link
+            href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
+            className="min-h-10 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-3 py-2 text-xs font-semibold text-kos-gold active:scale-[0.98]"
+          >
+            Practice in Mock →
+          </Link>
+          <button
+            type="button"
+            onClick={onBrowse}
+            className="min-h-10 rounded-xl border border-white/15 px-3 py-2 text-xs font-semibold text-kos-text/70 active:scale-[0.98]"
+          >
+            Browse rankings
+          </button>
+        </div>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {Object.entries(needs).map(([pos, n]) =>
             n > 0 ? (
@@ -778,11 +890,11 @@ function TeamBuilderPanel({
         <ul className="mt-4 space-y-2">
           {roster.length === 0 ? (
             <li className="rounded-xl border border-dashed border-white/15 p-4 text-sm text-kos-text/55">
-              <p>Roster is empty — not broken.</p>
+              <p>No players yet — add from rankings or value board.</p>
               <button
                 type="button"
                 onClick={onBrowse}
-                className="mt-3 rounded-lg border border-kos-gold/40 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
+                className="mt-3 min-h-10 rounded-lg border border-kos-gold/40 bg-kos-gold/10 px-3 py-2 text-xs font-semibold text-kos-gold"
               >
                 Browse rankings to add
               </button>

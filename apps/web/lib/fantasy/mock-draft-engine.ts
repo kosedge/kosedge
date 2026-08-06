@@ -1,6 +1,6 @@
 /**
  * Snake mock-draft engine — pure, client-safe.
- * Uses Phase 1 FantasyDeskRow rankings + ADP; no live league sync.
+ * Uses FantasyDeskRow rankings + ADP; no live league sync.
  */
 
 import { chooseCpuPlayer } from "@/lib/fantasy/mock-cpu";
@@ -268,7 +268,7 @@ export function buildPostDraftReport(
 ): MockPostDraftReport {
   const roster = userRoster(board, state);
   const starterPoints = projectedStarterPoints(roster);
-  // Use mock-aware needs (K/DST omitted when board has none) — not Phase 1
+  // Use mock-aware needs (K/DST omitted when board has none)
   // teamGrade holes, which always demand K/DST.
   const needs = mockRosterNeeds(roster, board);
   const holes = Object.entries(needs)

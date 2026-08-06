@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { findDeskPlayer, loadFantasyDraftDesk } from "@/lib/fantasy/load-desk";
 import type { FantasyScoringProfile } from "@/lib/fantasy/types";
 import {
@@ -45,12 +46,7 @@ export default async function FantasyPlayerDetailPage({
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <Link
-        href={`/pro/nfl/fantasy?scoring=${scoring}`}
-        className="text-sm font-semibold text-kos-gold hover:underline"
-      >
-        ← Draft Desk
-      </Link>
+      <FantasyDeskNav active="rankings" scoring={scoring} />
 
       <section className="mt-4 overflow-hidden rounded-3xl border border-kos-gold/30 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.16),_transparent_55%),#0b0d10] p-6 sm:p-8">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
@@ -157,13 +153,19 @@ export default async function FantasyPlayerDetailPage({
         <div className="mt-6 flex flex-wrap gap-2">
           <Link
             href={`/pro/nfl/fantasy/builder?scoring=${scoring}`}
-            className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-sm font-semibold text-kos-gold"
+            className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-sm font-semibold text-kos-gold"
           >
-            Add in Team Builder
+            Open Team Builder
+          </Link>
+          <Link
+            href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
+            className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
+          >
+            Practice in Mock
           </Link>
           <Link
             href={`/pro/nfl/teams/${row.team.toLowerCase()}`}
-            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text"
+            className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
           >
             Team page
           </Link>

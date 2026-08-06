@@ -3,8 +3,8 @@ import type { FantasyDeskRow, RiskFlag, ScheduleWindowNote } from "@/lib/fantasy
 
 /**
  * KosEdge Fantasy Expert — sharp, specific, non-generic rationales.
- * Template-driven Phase 1 foundation (no LLM call); ready to swap to
- * a model-backed voice later without changing the desk contract.
+ * Template-driven voice (no LLM call); same desk contract if a model
+ * voice is swapped in later.
  */
 
 export function buildDrivers(input: {

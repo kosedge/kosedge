@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { FantasyDraftDeskClient } from "@/components/pro/nfl/fantasy/FantasyDraftDeskClient";
 import { loadFantasyDraftDesk } from "@/lib/fantasy/load-desk";
 import type { FantasyScoringProfile } from "@/lib/fantasy/types";
@@ -35,26 +35,25 @@ export default async function FantasyTeamBuilderPage({
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-            Phase 1 · Manual
+          <p className="font-bebas text-4xl leading-none tracking-[0.04em] text-kos-gold">
+            KOSEDGE
           </p>
-          <h1 className="font-bebas text-3xl tracking-wide text-kos-text">
+          <h1 className="mt-1 font-bebas text-3xl tracking-wide text-kos-text">
             Team Builder
           </h1>
+          <p className="mt-1 text-sm text-kos-text/60">
+            Build a private roster from the same board — then practice in Mock.
+          </p>
         </div>
-        <Link
-          href={`/pro/nfl/fantasy?scoring=${scoring}`}
-          className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
-        >
-          ← Back to Draft Desk
-        </Link>
+        <FantasyDeskNav active="builder" scoring={scoring} />
       </div>
       <FantasyDraftDeskClient
         board={board}
         initialScoring={scoring}
         initialTab="builder"
+        compactHero
       />
     </main>
   );

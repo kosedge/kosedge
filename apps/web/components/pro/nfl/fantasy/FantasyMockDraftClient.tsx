@@ -10,6 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
   advanceCpuUntilUserOrDone,
@@ -222,9 +223,9 @@ function SetupView({
             Mock Draft Room
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-            Snake mocks powered by KosEdge rankings and FantasyPros ADP. Fast
-            CPU opponents, live needs, post-draft grade — practice without a
-            live league sync.
+            Snake mocks on KosEdge rankings + FantasyPros ADP. You pick your
+            seat; CPU fills every other team. Fast practice — no live league
+            sync.
           </p>
           <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
             {board.season} · {board.adpSourceLabel} · {MOCK_ROUNDS} rounds
@@ -232,19 +233,34 @@ function SetupView({
         </div>
       </section>
 
+      <FantasyDeskNav active="mock" scoring={scoring} />
+
       {board.source === "preseason-fallback" ? (
         <section className="rounded-2xl border border-sky-400/30 bg-sky-400/10 p-4 text-sm text-sky-100">
-          Preseason board active
-          {!hasKd ? " — K/DST not on this board, so those slots are skipped." : "."}{" "}
-          CPU still uses model rank + market ADP when matched.
+          <p className="font-semibold text-sky-50">Preseason board</p>
+          <p className="mt-1 text-sky-100/80">
+            Skill-position rankings from the season-engine preseason sim.
+            {!hasKd
+              ? " K and DST are not on this board — those roster slots are skipped and grades ignore them."
+              : ""}{" "}
+            CPU still mixes model rank with market ADP when matched.
+          </p>
+        </section>
+      ) : !hasKd ? (
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
+          K and DST are unavailable on this board — those slots are skipped in
+          the mock and do not ding your grade.
         </section>
       ) : null}
 
       {emptyBoard ? (
         <section className="rounded-2xl border border-dashed border-white/20 p-8 text-center text-sm text-kos-text/65">
-          Board not loaded — open the{" "}
-          <Link href="/pro/nfl/fantasy" className="text-kos-gold underline">
-            Draft Desk
+          Board not loaded — open{" "}
+          <Link
+            href={`/pro/nfl/fantasy?scoring=${scoring}`}
+            className="text-kos-gold underline"
+          >
+            Rankings
           </Link>{" "}
           first.
         </section>
@@ -252,7 +268,8 @@ function SetupView({
         <section className="rounded-2xl border border-white/10 bg-black/30 p-5 sm:p-6">
           <h2 className="text-lg font-semibold text-kos-text">League setup</h2>
           <p className="mt-1 text-sm text-kos-text/60">
-            Keep it simple — teams, scoring, your slot.
+            Teams, scoring, your slot — then draft manually while CPU handles
+            everyone else.
           </p>
 
           <div className="mt-5 grid gap-5 sm:grid-cols-3">
@@ -263,7 +280,7 @@ function SetupView({
                     key={n}
                     type="button"
                     onClick={() => onTeamCount(n)}
-                    className={`flex-1 rounded-xl border px-3 py-2.5 text-sm font-semibold active:scale-[0.98] ${
+                    className={`min-h-11 flex-1 rounded-xl border px-3 py-2.5 text-sm font-semibold active:scale-[0.98] ${
                       teamCount === n
                         ? "border-kos-gold/50 bg-kos-gold/15 text-kos-gold"
                         : "border-white/15 bg-white/5 text-kos-text/70"
@@ -282,7 +299,7 @@ function SetupView({
                     key={profile.value}
                     type="button"
                     onClick={() => onScoring(profile.value)}
-                    className={`rounded-xl border px-3 py-2.5 text-sm font-semibold active:scale-[0.98] ${
+                    className={`min-h-11 rounded-xl border px-3 py-2.5 text-sm font-semibold active:scale-[0.98] ${
                       scoring === profile.value
                         ? "border-kos-gold/50 bg-kos-gold/15 text-kos-gold"
                         : "border-white/15 bg-white/5 text-kos-text/70"
@@ -298,7 +315,7 @@ function SetupView({
               <select
                 value={userSlot}
                 onChange={(e) => onSlot(Number(e.target.value))}
-                className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-sm font-semibold text-kos-text"
+                className="min-h-11 w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-sm font-semibold text-kos-text"
               >
                 {Array.from({ length: teamCount }, (_, i) => i + 1).map((n) => (
                   <option key={n} value={n}>
@@ -309,18 +326,34 @@ function SetupView({
             </Field>
           </div>
 
+          <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+            <p className="text-sm font-semibold text-kos-text">
+              Mode · CPU others only
+            </p>
+            <p className="mt-1 text-xs text-kos-text/55">
+              You pick every time your seat is on the clock. CPU fills all other
+              teams. Use <span className="text-kos-text/75">Auto-pick to end</span>{" "}
+              mid-draft if you want the room finished for you (including your
+              remaining picks).
+            </p>
+          </div>
+
           <ul className="mt-5 list-disc space-y-1 pl-5 text-xs text-kos-text/55">
             <li>
               Roster: QB / 2 RB / 2 WR / TE / FLEX
-              {hasKd ? " / DST / K" : ""} + bench through {MOCK_ROUNDS} rounds.
+              {hasKd ? " / DST / K" : " (no K/DST on this board)"} + bench
+              through {MOCK_ROUNDS} rounds.
             </li>
             <li>
               CPU mixes ADP, KosEdge value, and need — not pure BPA and not
-              random.
+              random. Late-round QB2 stacking is suppressed once a starter is
+              rostered.
             </li>
             <li>
-              Board: {board.count} players · ADP matched {board.adpMatchedHighCount}{" "}
-              high / {board.adpMatchedCrossFormatCount} cross-format.
+              Board: {board.count} players · ADP matched{" "}
+              {board.adpMatchedHighCount} high /{" "}
+              {board.adpMatchedCrossFormatCount} cross-format ·{" "}
+              {board.adpFreshnessLabel}.
             </li>
           </ul>
 
@@ -328,15 +361,15 @@ function SetupView({
             <button
               type="button"
               onClick={onStart}
-              className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-5 py-3 text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25 active:scale-[0.98]"
+              className="min-h-12 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-5 py-3 text-sm font-semibold text-kos-gold transition hover:bg-kos-gold/25 active:scale-[0.98]"
             >
               Start mock draft
             </button>
             <Link
-              href={`/pro/nfl/fantasy?scoring=${scoring}`}
-              className="rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
+              href={`/pro/nfl/fantasy/builder?scoring=${scoring}`}
+              className="min-h-12 rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
             >
-              Back to Draft Desk
+              Team Builder
             </Link>
           </div>
         </section>
@@ -406,13 +439,23 @@ function LiveView({
 
   const byValue = bestAvailableByValue(available, rosterSet, 4);
   const byNeed = bestAvailableByNeed(available, roster, 4);
-  const recent = state.picks.slice(-8).reverse();
+  const recent = state.picks.slice(-10).reverse();
   const pickLabel = formatPickLabel(
     state.nextOverall,
     state.config.teamCount,
   );
   const onClock =
     teamIdx != null ? state.teamNames[teamIdx] ?? `Team ${teamIdx + 1}` : "—";
+  const hasKd = board.rows.some((r) =>
+    ["K", "DST"].includes(r.position.toUpperCase()),
+  );
+  const posChips = hasKd
+    ? ["ALL", "QB", "RB", "WR", "TE", "K", "DST"]
+    : ["ALL", "QB", "RB", "WR", "TE"];
+  const emptyPosMsg =
+    posFilter === "K" || posFilter === "DST"
+      ? `${posFilter} isn’t on this board (preseason / skill-only). Slots are skipped — pick skill depth instead.`
+      : "No players match this filter.";
 
   return (
     <div className="space-y-3 sm:space-y-4">
@@ -421,7 +464,11 @@ function LiveView({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
               <p className="text-[11px] uppercase tracking-[0.14em] text-kos-gold">
-                {userTurn ? "Your pick" : busy ? "CPU picking…" : "On the clock"}
+                {userTurn
+                  ? "Your pick · CPU others only"
+                  : busy
+                    ? "CPU picking…"
+                    : "On the clock"}
               </p>
               <p className="mt-0.5 text-base font-semibold text-kos-text sm:text-lg">
                 Pick {pickLabel} · {state.nextOverall}/{state.totalPicks} ·{" "}
@@ -433,14 +480,15 @@ function LiveView({
                 type="button"
                 onClick={onAutoPickToEnd}
                 disabled={busy}
-                className="rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold disabled:opacity-40 active:scale-[0.98]"
+                title="CPU completes every remaining pick, including yours"
+                className="min-h-10 rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-2 text-xs font-semibold text-kos-gold disabled:opacity-40 active:scale-[0.98]"
               >
                 Auto-pick to end
               </button>
               <button
                 type="button"
                 onClick={onAbort}
-                className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-kos-text/70"
+                className="min-h-10 rounded-lg border border-white/15 px-3 py-2 text-xs font-semibold text-kos-text/70"
               >
                 Quit
               </button>
@@ -530,12 +578,12 @@ function LiveView({
               <p className="text-xs text-kos-text/45">{filtered.length} shown</p>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {["ALL", "QB", "RB", "WR", "TE", "K", "DST"].map((pos) => (
+              {posChips.map((pos) => (
                 <button
                   key={pos}
                   type="button"
                   onClick={() => onPosFilter(pos)}
-                  className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold ${
+                  className={`min-h-9 rounded-lg border px-3 py-1.5 text-[11px] font-semibold active:scale-[0.98] ${
                     posFilter === pos
                       ? "border-kos-gold/40 bg-kos-gold/15 text-kos-gold"
                       : "border-white/10 text-kos-text/60"
@@ -548,9 +596,15 @@ function LiveView({
                 value={query}
                 onChange={(e) => onQuery(e.target.value)}
                 placeholder="Search"
-                className="min-w-0 flex-1 rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-sm text-kos-text placeholder:text-kos-text/40 sm:max-w-xs"
+                className="min-h-9 min-w-0 flex-1 rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-sm text-kos-text placeholder:text-kos-text/40 sm:max-w-xs"
               />
             </div>
+
+            {!hasKd ? (
+              <p className="mt-2 text-[11px] text-kos-text/45">
+                K/DST unavailable on this board — those slots are skipped.
+              </p>
+            ) : null}
 
             {userTurn ? (
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -569,61 +623,68 @@ function LiveView({
               </div>
             ) : (
               <p className="mt-3 text-sm text-kos-text/55">
-                Waiting on {onClock}. Suggestions unlock on your turn — or
-                Auto-pick to end.
+                Waiting on {onClock} (CPU others only). Suggestions unlock on
+                your turn — or Auto-pick to end.
               </p>
             )}
 
-            <ul className="mt-3 max-h-[28rem] divide-y divide-white/10 overflow-y-auto rounded-xl border border-white/10">
-              {filtered.slice(0, 60).map((row) => (
-                <li
-                  key={row.playerId}
-                  className="flex items-center gap-3 px-3 py-2.5"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-kos-text">
-                      {row.playerName}
-                    </p>
-                    <p className="text-xs text-kos-text/55">
-                      <span
-                        className={`mr-1 inline-flex rounded border px-1 text-[10px] ${draftPositionBadgeClass(row.position)}`}
-                      >
-                        {row.position}
-                        {row.rankPosition}
-                      </span>
-                      {row.team} · #{row.rankOverall} · ADP{" "}
-                      {formatAdp(row.adp, 0)} · {valueLabel(row.valueDelta).text}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    disabled={!userTurn || busy}
-                    onClick={() => onPick(row.playerId)}
-                    className="shrink-0 rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold disabled:cursor-not-allowed disabled:opacity-40 active:scale-[0.98]"
+            {filtered.length === 0 ? (
+              <p className="mt-3 rounded-xl border border-dashed border-white/15 p-4 text-sm text-kos-text/60">
+                {emptyPosMsg}
+              </p>
+            ) : (
+              <ul className="mt-3 max-h-[28rem] divide-y divide-white/10 overflow-y-auto rounded-xl border border-white/10">
+                {filtered.slice(0, 60).map((row) => (
+                  <li
+                    key={row.playerId}
+                    className="flex items-center gap-3 px-3 py-3"
                   >
-                    Draft
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-kos-text">
+                        {row.playerName}
+                      </p>
+                      <p className="text-xs text-kos-text/55">
+                        <span
+                          className={`mr-1 inline-flex rounded border px-1 text-[10px] ${draftPositionBadgeClass(row.position)}`}
+                        >
+                          {row.position}
+                          {row.rankPosition}
+                        </span>
+                        {row.team} · #{row.rankOverall} · ADP{" "}
+                        {formatAdp(row.adp, 0)} ·{" "}
+                        {valueLabel(row.valueDelta).text}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={!userTurn || busy}
+                      onClick={() => onPick(row.playerId)}
+                      className="min-h-10 shrink-0 rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3.5 py-2 text-xs font-semibold text-kos-gold disabled:cursor-not-allowed disabled:opacity-40 active:scale-[0.98]"
+                    >
+                      Draft
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           {/* Mobile: compact pick feed — desktop keeps full board */}
           <section className="rounded-2xl border border-white/10 bg-black/30 p-4 md:hidden">
             <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-kos-text/55">
-              Recent picks
+              Draft history
             </h2>
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-3 max-h-56 space-y-2.5 overflow-y-auto">
               {recent.length === 0 ? (
                 <li className="text-sm text-kos-text/50">Draft just started.</li>
               ) : (
                 recent.map((pick) => (
                   <li
                     key={pick.overall}
-                    className="flex items-baseline justify-between gap-2 text-sm"
+                    className="flex items-baseline justify-between gap-2 border-b border-white/5 pb-2 text-sm last:border-0 last:pb-0"
                   >
-                    <span className="min-w-0 truncate">
-                      <span className="text-kos-text/45">
+                    <span className="min-w-0">
+                      <span className="tabular-nums text-kos-text/45">
                         {formatPickLabel(pick.overall, state.config.teamCount)}
                       </span>{" "}
                       <span
@@ -899,10 +960,16 @@ function ResultsView({
           <button
             type="button"
             onClick={onAgain}
-            className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-sm font-semibold text-kos-gold active:scale-[0.98]"
+            className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-sm font-semibold text-kos-gold active:scale-[0.98]"
           >
             New mock
           </button>
+          <Link
+            href={`/pro/nfl/fantasy/builder?scoring=${board.scoringProfile}`}
+            className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
+          >
+            Team Builder
+          </Link>
           <button
             type="button"
             onClick={onDesk}

@@ -126,4 +126,41 @@ describe("mock CPU", () => {
     expect(hunter).toBeGreaterThan(10);
     expect(follower).toBeGreaterThan(0);
   });
+
+  it("suppresses QB2 once a starter QB is rostered (late rounds)", () => {
+    const qb2 = row({
+      playerId: "qb2",
+      position: "QB",
+      rankOverall: 90,
+      adp: 95,
+      valueDelta: 12,
+    });
+    const wr = row({
+      playerId: "wr",
+      position: "WR",
+      rankOverall: 88,
+      adp: 90,
+      valueDelta: 2,
+    });
+    const roster = [
+      row({
+        playerId: "qb1",
+        position: "QB",
+        rankOverall: 45,
+        adp: 50,
+        valueDelta: 0,
+      }),
+    ];
+    const choice = chooseCpuPlayer({
+      available: [qb2, wr],
+      roster,
+      board: [...roster, qb2, wr],
+      overall: 110, // ~round 10 in 12-team
+      teamCount: 12,
+      persona: "balanced",
+      weights: MOCK_CPU_WEIGHTS.balanced,
+      teamIndex: 3,
+    });
+    expect(choice?.playerId).toBe("wr");
+  });
 });

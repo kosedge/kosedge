@@ -1,5 +1,5 @@
 /**
- * Fantasy Draft Desk Phase 1 shared types.
+ * Fantasy Draft Desk shared types.
  * Built on season-engine / projection-baseline outputs — not a separate model.
  */
 

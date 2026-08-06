@@ -65,9 +65,10 @@ function needScore(
 
   // Avoid brain-dead early QB stacking / early K-DST.
   // 1QB leagues rarely take QB in R1–R2 even when model VOR loves them.
-  if (pos === "QB" && qbCount >= 1 && round < 10) return -55;
-  if (pos === "QB" && qbCount >= 1 && round < 13) return -35;
-  if (pos === "QB" && qbCount >= 2) return -70;
+  // Once a starter QB is rostered, heavily suppress QB2 until deep bench.
+  if (pos === "QB" && qbCount >= 1 && round < 11) return -70;
+  if (pos === "QB" && qbCount >= 1 && round < 14) return -48;
+  if (pos === "QB" && qbCount >= 2) return -90;
   if ((pos === "K" || pos === "DST") && round < 12) return -55;
   if ((pos === "K" || pos === "DST") && round < 14) return -20;
   if (pos === "QB" && qbCount === 0) {
@@ -138,7 +139,7 @@ export function scoreCpuCandidate(input: {
     valueRaw *= 0.25;
   }
   if (pos === "QB" && qbCount >= 1) {
-    valueRaw *= 0.15;
+    valueRaw *= 0.05;
   }
 
   let rankQuality = Math.max(0, 40 - row.rankOverall * 0.12);
@@ -146,10 +147,14 @@ export function scoreCpuCandidate(input: {
     rankQuality *= 0.4;
   }
   if (pos === "QB" && qbCount >= 1) {
-    rankQuality *= 0.35;
+    rankQuality *= 0.15;
+  }
+  // Scarcity on QB2+ is noise in 1QB — don't chase the next name.
+  let scarcity = scarcityBonus(available, row.position, overall);
+  if (pos === "QB" && qbCount >= 1) {
+    scarcity = 0;
   }
   const need = needScore(row, roster, board, overall, teamCount);
-  const scarcity = scarcityBonus(available, row.position, overall);
 
   const noise =
     (stableNoise(`${persona}|${teamIndex}|${overall}|${row.playerId}`) - 0.5) *
