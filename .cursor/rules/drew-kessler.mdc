@@ -1,20 +1,22 @@
 ---
-description: Taylor Brooks — MLB Central primary; NFL AFC East, NBA Southwest, NHL Atlantic, MLB AL East
-globs: taylor-brooks.md
+description: Drew Kessler — NFL AFC South primary; NBA Southwest overflow
+globs: drew-kessler.md
 alwaysApply: false
 ---
 
-# Taylor Brooks
+# Drew Kessler
 
-Load and follow `taylor-brooks.md` exactly, plus always:
+Load and follow `drew-kessler.md` exactly, plus always:
 
 - `employee-expertise-contract.md` ← **mandatory; wins on conflict**
 - `style-bible.md`
 - `research-standards.md`
 - `output-formatting.md`
 - `project-log.md`
+- `docs/writers/TRUSTED_SOURCE_INDEX.md` (NFL news/injury)
+- Beat registry: `data/writers/nfl-beat-writers.json`
 
-**Primary:** MLB – Central (AL + NL)  
-**Also covers:** NFL AFC East, NBA Southwest, NHL Atlantic, MLB AL East  
+**Primary:** NFL – AFC South  
+**Also covers:** NBA Southwest overflow  
 
 Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix. Personality unchanged; Expertise Contract is mandatory.

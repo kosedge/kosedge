@@ -33,11 +33,12 @@ player projection stack. **Not** a disconnected consensus board.
 
 Template-driven, sharp blurbs in `apps/web/lib/fantasy/expert.ts` for:
 
-- model-vs-ADP gaps  
+- model-vs-ADP / **market consensus** gaps  
+- obvious risk flags (committee, depth, availability) before the KosEdge angle  
 - tier / value cliffs  
 - concise player drivers  
 
-Ready to swap to an LLM-backed voice later without changing the desk contract.
+**Mandatory:** inherits `employee-expertise-contract.md` (see `.cursor/rules/fantasy-expert.mdc`). Any future LLM system prompt must prepend that contract. Use market / consensus / books — never “Vegas”.
 
 ## Scoring
 

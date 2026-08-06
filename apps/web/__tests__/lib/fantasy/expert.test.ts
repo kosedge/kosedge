@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  EMPLOYEE_EXPERTISE_CONTRACT_PATH,
   buildDrivers,
   buildExpertBlurb,
   notableValueNotes,
@@ -7,6 +8,12 @@ import {
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
 describe("fantasy expert voice", () => {
+  it("inherits the Employee Expertise Contract path", () => {
+    expect(EMPLOYEE_EXPERTISE_CONTRACT_PATH).toBe(
+      "employee-expertise-contract.md",
+    );
+  });
+
   it("names team and concrete volume in drivers", () => {
     const drivers = buildDrivers({
       position: "RB",
@@ -53,6 +60,43 @@ describe("fantasy expert voice", () => {
     expect(blurb).toMatch(/16 picks|value/);
     expect(blurb).not.toMatch(/Driven by/i);
     expect(blurb).toMatch(/soft open|Stack early/i);
+    expect(blurb).toMatch(/KosEdge:/);
+    expect(blurb).not.toMatch(/Vegas/i);
+  });
+
+  it("surfaces committee risk before KosEdge angle (expertise contract)", () => {
+    const blurb = buildExpertBlurb({
+      playerName: "Committee Back",
+      team: "NYJ",
+      position: "RB",
+      rankOverall: 40,
+      rankPosition: 18,
+      adp: 55,
+      valueDelta: 15,
+      tier: "solid",
+      floorPoints: 100,
+      medianPoints: 140,
+      ceilingPoints: 180,
+      schedule: {
+        early: "neutral",
+        playoff: "neutral",
+        label: "Neutral",
+        detail: "",
+      },
+      riskFlags: [
+        {
+          kind: "committee",
+          label: "Committee",
+          detail: "Split backfield — feature role not locked.",
+        },
+      ],
+      drivers: ["700 rush yards — committee volume on NYJ"],
+    });
+    const riskAt = blurb.indexOf("Risk (price it)");
+    const edgeAt = blurb.indexOf("KosEdge:");
+    expect(riskAt).toBeGreaterThan(-1);
+    expect(edgeAt).toBeGreaterThan(riskAt);
+    expect(blurb).toMatch(/What changes the view/);
   });
 
   it("value notes include a concrete driver", () => {

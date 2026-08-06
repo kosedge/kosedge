@@ -8,6 +8,7 @@ alwaysApply: false
 
 Load and follow `casey-voss.md` exactly, plus always:
 
+- `employee-expertise-contract.md` ← **mandatory; wins on conflict**
 - `style-bible.md`
 - `research-standards.md`
 - `output-formatting.md`
@@ -16,4 +17,4 @@ Load and follow `casey-voss.md` exactly, plus always:
 **Primary:** NFL – NFC North  
 **Also covers:** MLB Central (AL + NL), NHL Central, NBA Northwest, WNBA Western  
 
-Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix.
+Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix. Personality unchanged; Expertise Contract is mandatory.

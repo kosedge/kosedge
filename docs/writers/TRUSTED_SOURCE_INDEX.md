@@ -20,7 +20,7 @@ Prefer these accounts over random social noise.
 7. **On-site language:** use **market / consensus / books** — never “Vegas”.  
    Display `@PatrickE_Vegas` as market intel (do not surface “Vegas” wording on site).
 
-Related: `research-standards.md`, `docs/writers/TRAINING_CAMP_DESK.md`.
+Related: `employee-expertise-contract.md` (mandatory for all content employees), `research-standards.md`, `docs/writers/TRAINING_CAMP_DESK.md`.
 
 ---
 

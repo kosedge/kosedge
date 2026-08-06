@@ -1,5 +1,7 @@
 # Research Standards
 
+**Employee Expertise Contract (mandatory):** `employee-expertise-contract.md` — load first; wins on conflict. Complete its pre-write checklist (consensus → obvious risks → sharp-reader knowledge → KosEdge value-add) before outlining.
+
 ## Required before outline or draft (MANDATORY)
 
 **Scan the internet first.** Before any research outline or draft, actively research current markets and beat reporting. Do not outline or write from memory, stale training knowledge, or model outputs alone.

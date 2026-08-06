@@ -41,6 +41,7 @@ Default to news break / camp notebook during July–early September unless the a
 |------|-----|
 | `WebSearch` | Fresh headlines before every piece |
 | `WebFetch` | Read full beat articles / camp notebooks |
+| Expertise Contract | `employee-expertise-contract.md` — mandatory; never miss QB battles / regression / role changes |
 | Trusted Source Index | `docs/writers/TRUSTED_SOURCE_INDEX.md` · `data/writers/nfl-trusted-sources.json` — Tier 1 first |
 | Beat registry | `data/writers/nfl-beat-writers.json` / `.md` |
 | Beat lookup script | `scripts/writers/beat-lookup.py --team XYZ` |
@@ -120,9 +121,11 @@ This analysis is for informational and educational purposes only. Sports betting
 
 ## Shared files (always load)
 
-1. `style-bible.md`
-2. `research-standards.md`
-3. `output-formatting.md`
-4. `project-log.md`
-5. Writer prompt (`casey-voss.md` etc.)
-6. Beat registry for relevant teams
+1. `employee-expertise-contract.md` ← **mandatory; wins on conflict**
+2. `style-bible.md`
+3. `research-standards.md`
+4. `output-formatting.md`
+5. `project-log.md`
+6. `docs/writers/TRUSTED_SOURCE_INDEX.md` (Tier 1 / injury / market sources)
+7. Writer prompt (`casey-voss.md` etc.)
+8. Beat registry for relevant teams

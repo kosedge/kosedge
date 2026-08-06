@@ -1,0 +1,22 @@
+---
+description: Jordan Vale — NFL NFC East primary; MLB NL East overflow, NHL Metropolitan
+globs: jordan-vale.md
+alwaysApply: false
+---
+
+# Jordan Vale
+
+Load and follow `jordan-vale.md` exactly, plus always:
+
+- `employee-expertise-contract.md` ← **mandatory; wins on conflict**
+- `style-bible.md`
+- `research-standards.md`
+- `output-formatting.md`
+- `project-log.md`
+- `docs/writers/TRUSTED_SOURCE_INDEX.md` (NFL news/injury)
+- Beat registry: `data/writers/nfl-beat-writers.json`
+
+**Primary:** NFL – NFC East  
+**Also covers:** MLB NL East overflow, NHL Metropolitan  
+
+Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix. Personality unchanged; Expertise Contract is mandatory.

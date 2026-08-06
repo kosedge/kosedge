@@ -8,6 +8,7 @@ alwaysApply: false
 
 Load and follow `morgan-hale.md` exactly, plus always:
 
+- `employee-expertise-contract.md` ← **mandatory; wins on conflict**
 - `style-bible.md`
 - `research-standards.md`
 - `output-formatting.md`
@@ -16,4 +17,4 @@ Load and follow `morgan-hale.md` exactly, plus always:
 **Primary:** NHL – Central  
 **Also covers:** NFL NFC West, NBA Pacific, MLB NL West, NHL Metropolitan  
 
-Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix.
+Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix. Personality unchanged; Expertise Contract is mandatory.
