@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { buildNflWeeklySlate } from "@/lib/nfl-slate";
 
 export const dynamic = "force-dynamic";
@@ -78,29 +79,47 @@ export default async function NflWeeklySlatePage({
       </div>
 
       {slate.error && slate.sections.length === 0 ? (
-        <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-          {slate.error}
+        <div className="mt-6">
+          <HonestStatusBanner title="Slate feed note" tone="amber">
+            <p>{slate.error}</p>
+          </HonestStatusBanner>
         </div>
       ) : null}
 
       {slate.error && slate.sections.length > 0 ? (
-        <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-kos-text/70">
-          KEI fair-lines sync is delayed — slate cards below use schedule and
-          camp reference data.
+        <div className="mt-6">
+          <HonestStatusBanner title="Fair-lines delayed" tone="neutral">
+            <p>
+              KEI fair-lines sync is delayed — cards below use schedule and camp
+              reference data. Preseason PLAY tags stay blocked.
+            </p>
+          </HonestStatusBanner>
         </div>
       ) : null}
 
       {slate.sections.length === 0 ? (
-        <div className="mt-8 rounded-2xl border border-white/10 bg-black/30 p-8 text-sm text-kos-text/70">
-          No games resolved for this slate token yet. Try{" "}
-          <Link href="/pro/nfl/slate/today" className="text-kos-gold">
-            /pro/nfl/slate/today
-          </Link>{" "}
-          or week tokens like{" "}
-          <Link href="/pro/nfl/slate/week-1" className="text-kos-gold">
-            /pro/nfl/slate/week-1
-          </Link>
-          .
+        <div className="mt-8">
+          <HonestStatusBanner title="No games on this slate yet" tone="sky">
+            <p>
+              Preseason / early week — this token hasn&apos;t resolved any
+              matchup cards. Try{" "}
+              <Link
+                href="/pro/nfl/slate/today"
+                className="font-semibold text-sky-50 underline underline-offset-2"
+              >
+                Weekly Slate · today
+              </Link>{" "}
+              for the active preseason board when ESPN schedule joins, or a week
+              token like{" "}
+              <Link
+                href="/pro/nfl/slate/week-1"
+                className="font-semibold text-sky-50 underline underline-offset-2"
+              >
+                week-1
+              </Link>
+              .
+            </p>
+          </HonestStatusBanner>
         </div>
       ) : (
         <div className="mt-8 space-y-10">

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
@@ -168,10 +169,17 @@ export function FantasyDraftDeskClient({
 
   const isEmpty = board.rows.length === 0;
   const isPreseason = board.source === "preseason-fallback";
+  const posFilter = (initialPosition || "ALL").toUpperCase();
+  const kdFilter = posFilter === "K" || posFilter === "DST";
 
   const hasKd = board.rows.some((r) =>
     ["K", "DST"].includes(r.position.toUpperCase()),
   );
+  // Only offer K/DST filters when the board actually has those positions.
+  const positionTabs = hasKd
+    ? POSITION_TABS
+    : POSITION_TABS.filter((p) => p !== "K" && p !== "DST");
+  const kdUnavailable = isPreseason || (kdFilter && isEmpty);
 
   return (
     <div className="fantasy-desk space-y-5">
@@ -228,42 +236,73 @@ export function FantasyDraftDeskClient({
       ) : null}
 
       {isPreseason ? (
-        <section className="rounded-2xl border border-sky-400/30 bg-sky-400/10 p-4 text-sm text-sky-100">
-          <p className="font-semibold text-sky-50">Preseason board</p>
-          <p className="mt-1 text-sky-100/80">
-            Draft-rankings API isn&apos;t populated yet — rankings use the latest
-            season-engine preseason sim (skill positions
-            {!hasKd ? "; K and DST are unavailable until that feed lands" : ""}
-            ). Market ADP is still FantasyPros; names without a clean match show
-            ADP as —.
+        <HonestStatusBanner title="Preseason board" tone="sky">
+          <p>
+            Live draft-rankings aren&apos;t populated yet — this desk uses the
+            season-engine preseason sim for skill positions (QB / RB / WR / TE).
+            Market ADP is still FantasyPros; unmatched names show ADP as —.
           </p>
-        </section>
+        </HonestStatusBanner>
+      ) : null}
+
+      {kdUnavailable ? (
+        <HonestStatusBanner title="K / DST unavailable" tone="amber">
+          <p>
+            Kickers and defenses aren&apos;t on the preseason skill board.
+            Filter to QB / RB / WR / TE, or wait until draft rankings include
+            K/DST. Mocks skip those roster slots and do not ding grades for them.
+          </p>
+          {kdFilter ? (
+            <p className="mt-2">
+              <Link
+                href={buildHref({
+                  scoring: initialScoring,
+                  position: undefined,
+                })}
+                className="font-semibold text-amber-50 underline underline-offset-2"
+              >
+                Clear {posFilter} filter →
+              </Link>
+            </p>
+          ) : null}
+        </HonestStatusBanner>
       ) : null}
 
       {board.adpOrigin === "none" ? (
-        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-          Market ADP feed unavailable — Model vs ADP is blank until FantasyPros
-          live or snapshot data loads.
-        </section>
+        <HonestStatusBanner title="Market ADP unavailable" tone="amber">
+          <p>
+            FantasyPros ADP isn&apos;t loaded — Model vs ADP stays blank until
+            the live feed or a saved snapshot returns.
+          </p>
+        </HonestStatusBanner>
       ) : null}
 
       {board.error && !isPreseason && board.source !== "empty" ? (
-        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-          {board.error}
-        </section>
+        <HonestStatusBanner title="Desk note" tone="amber">
+          <p>{board.error}</p>
+        </HonestStatusBanner>
       ) : null}
 
-      {isEmpty ? (
-        <section className="rounded-2xl border border-dashed border-white/20 bg-black/40 p-8 text-center">
-          <p className="font-bebas text-2xl tracking-wide text-kos-text">
-            Board not loaded yet
+      {isEmpty && !kdFilter ? (
+        <HonestStatusBanner title="No players for this view" tone="neutral">
+          <p>
+            Nothing matched this scoring / position filter. Clear filters, or
+            wait for draft rankings / the preseason sim board to load.
           </p>
-          <p className="mx-auto mt-2 max-w-md text-sm text-kos-text/65">
-            No draft rankings or preseason fallback rows for this filter. Clear
-            position filters, or wait for draft-rankings materialization /
-            preseason sim artifacts.
-          </p>
-        </section>
+          {posFilter !== "ALL" ? (
+            <p className="mt-2">
+              <Link
+                href={buildHref({
+                  scoring: initialScoring,
+                  position: undefined,
+                })}
+                className="font-semibold text-kos-text underline underline-offset-2"
+              >
+                Show all positions →
+              </Link>
+            </p>
+          ) : null}
+        </HonestStatusBanner>
       ) : null}
 
       {!isEmpty && expertNotes.length > 0 ? (
@@ -296,8 +335,8 @@ export function FantasyDraftDeskClient({
               className="flex max-w-full gap-2 overflow-x-auto pb-1"
               aria-label="Position filter"
             >
-              {POSITION_TABS.map((tabPos) => {
-                const active = (initialPosition || "ALL") === tabPos;
+              {positionTabs.map((tabPos) => {
+                const active = posFilter === tabPos;
                 return (
                   <Link
                     key={tabPos}

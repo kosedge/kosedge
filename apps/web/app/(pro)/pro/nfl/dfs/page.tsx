@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import {
   loadLatestNflPreseasonBundle2026,
   type PlayerProjectionTotalsRow,
@@ -73,6 +74,15 @@ export default async function NflDfsPage({
           Salary, ownership, and opponent fill when official slate feeds are
           live — projections come from the Kos Edge player model.
         </p>
+        <div className="mt-4">
+          <HonestStatusBanner title="Preseason · slate fields empty" tone="sky">
+            <p>
+              Opp, Salary, Value, and Own% stay blank until a live DFS slate
+              connects. Skill-position projections/ceilings below are season-rate
+              from the model — not a priced contest slate. K/DST omitted.
+            </p>
+          </HonestStatusBanner>
+        </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
             href={buildHref("dk")}
@@ -182,10 +192,6 @@ export default async function NflDfsPage({
           </tbody>
         </table>
       </section>
-      <p className="mt-3 text-xs text-kos-text/45">
-        Opp, Salary, Value, and Own% are clean placeholders until slate feeds
-        connect. Projections and ceilings are from the Kos Edge player model.
-      </p>
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import {
   loadLatestNflPreseasonBundle2026,
   type PlayerProjectionTotalsRow,
@@ -88,7 +89,7 @@ export default async function NflWeeklyFantasyPage({
             href="/pro/nfl/fantasy"
             className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text hover:border-kos-gold/40"
           >
-            Fantasy Draft Board
+            Fantasy Draft Desk
           </Link>
           <Link
             href="/pro/nfl/dfs"
@@ -98,6 +99,27 @@ export default async function NflWeeklyFantasyPage({
           </Link>
         </div>
       </section>
+
+      <div className="mt-6">
+        <HonestStatusBanner title="Preseason · not a live weekly slate" tone="sky">
+          <p>
+            These are season-rate PPG figures from the projection bundle — not
+            week-specific start/sit ranks. K and DST are not included on this
+            surface until weekly fantasy feeds land.
+          </p>
+        </HonestStatusBanner>
+      </div>
+
+      {!bundle ? (
+        <div className="mt-6">
+          <HonestStatusBanner title="Projection bundle missing" tone="amber">
+            <p>
+              No 2026 preseason sim bundle is available in this environment —
+              weekly leaders stay empty until artifacts load.
+            </p>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
 
       <section className="mt-6 flex flex-wrap gap-2">
         {(
@@ -211,9 +233,14 @@ export default async function NflWeeklyFantasyPage({
           </tbody>
         </table>
         {players.length === 0 ? (
-          <p className="p-6 text-sm text-kos-text/60">
-            No projection rows available yet.
-          </p>
+          <div className="p-6">
+            <HonestStatusBanner title="No rows for this filter" tone="neutral">
+              <p>
+                No skill-position projection rows matched. Try ALL / another
+                position, or wait for the preseason bundle to load.
+              </p>
+            </HonestStatusBanner>
+          </div>
         ) : null}
       </section>
     </main>

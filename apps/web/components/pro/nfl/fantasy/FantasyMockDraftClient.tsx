@@ -10,6 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
@@ -236,34 +237,36 @@ function SetupView({
       <FantasyDeskNav active="mock" scoring={scoring} />
 
       {board.source === "preseason-fallback" ? (
-        <section className="rounded-2xl border border-sky-400/30 bg-sky-400/10 p-4 text-sm text-sky-100">
-          <p className="font-semibold text-sky-50">Preseason board</p>
-          <p className="mt-1 text-sky-100/80">
-            Skill-position rankings from the season-engine preseason sim.
-            {!hasKd
-              ? " K and DST are not on this board — those roster slots are skipped and grades ignore them."
-              : ""}{" "}
-            CPU still mixes model rank with market ADP when matched.
+        <HonestStatusBanner title="Preseason board" tone="sky">
+          <p>
+            Skill-position rankings from the season-engine preseason sim. CPU
+            still mixes model rank with market ADP when matched.
           </p>
-        </section>
-      ) : !hasKd ? (
-        <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-          K and DST are unavailable on this board — those slots are skipped in
-          the mock and do not ding your grade.
-        </section>
+        </HonestStatusBanner>
+      ) : null}
+
+      {!hasKd && !emptyBoard ? (
+        <HonestStatusBanner title="K / DST unavailable" tone="amber">
+          <p>
+            Kickers and defenses aren&apos;t on this board — those roster slots
+            are skipped in the mock and do not ding your grade.
+          </p>
+        </HonestStatusBanner>
       ) : null}
 
       {emptyBoard ? (
-        <section className="rounded-2xl border border-dashed border-white/20 p-8 text-center text-sm text-kos-text/65">
-          Board not loaded — open{" "}
-          <Link
-            href={`/pro/nfl/fantasy?scoring=${scoring}`}
-            className="text-kos-gold underline"
-          >
-            Rankings
-          </Link>{" "}
-          first.
-        </section>
+        <HonestStatusBanner title="Mock board empty" tone="neutral">
+          <p>
+            No players loaded for this scoring format. Open{" "}
+            <Link
+              href={`/pro/nfl/fantasy?scoring=${scoring}`}
+              className="font-semibold text-kos-text underline underline-offset-2"
+            >
+              Rankings
+            </Link>{" "}
+            first, then come back to start a mock.
+          </p>
+        </HonestStatusBanner>
       ) : (
         <section className="rounded-2xl border border-white/10 bg-black/30 p-5 sm:p-6">
           <h2 className="text-lg font-semibold text-kos-text">League setup</h2>

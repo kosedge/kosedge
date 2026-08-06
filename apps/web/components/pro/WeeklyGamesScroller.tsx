@@ -26,7 +26,8 @@ const SPORT_SCROLLER_CONTENT: Record<string, SportScrollerContent> = {
   nfl: {
     sectionTitle: "Weekly Matchups",
     sectionSubtitle: "Board timing, key-number pressure, and model separation.",
-    emptyCopy: "NFL matchup cards appear once weekly market feeds refresh.",
+    emptyCopy:
+      "No live REG matchup cards on the board yet — open Weekly Slate for the preseason / camp schedule when posted.",
     signalHigh: "High edge near key numbers",
     signalModerate: "Actionable key-number lean",
     movementSignal: "Spread shifted",
@@ -152,11 +153,19 @@ export default function WeeklyGamesScroller({
 
   if (!games.length) {
     return (
-      <section className="rounded-2xl border border-white/10 bg-black/30 p-5 sm:p-6 backdrop-blur-xl">
+      <section className="rounded-2xl border border-sky-400/25 bg-sky-400/8 p-5 sm:p-6 backdrop-blur-xl">
         <h2 className="text-lg font-semibold text-kos-text">
           {content.sectionTitle}
         </h2>
-        <p className="mt-2 text-sm text-kos-text/70">{content.emptyCopy}</p>
+        <p className="mt-2 text-sm text-kos-text/75">{content.emptyCopy}</p>
+        {sport === "nfl" ? (
+          <Link
+            href="/pro/nfl/slate/today"
+            className="mt-3 inline-flex text-sm font-semibold text-sky-100 underline underline-offset-2"
+          >
+            Open Weekly Slate →
+          </Link>
+        ) : null}
       </section>
     );
   }
