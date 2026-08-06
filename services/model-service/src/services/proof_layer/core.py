@@ -940,6 +940,8 @@ def documentation() -> Dict[str, Any]:
             "close": "POST /proof/projections/{id}/close",
             "result": "POST /proof/projections/{id}/result",
             "performance": "GET /proof/performance?sport=nfl|cfb",
+            "calibration_report": "GET /proof/calibration-report?sport=nfl|cfb&engine_version=&from=&to=&season=",
+            "calibration_report_generate": "POST /proof/calibration-report/generate",
             "cfb_compat": {
                 "log": "POST /cfb/season-engine/projections/log",
                 "close": "POST /cfb/season-engine/projections/{id}/close",
@@ -948,4 +950,5 @@ def documentation() -> Dict[str, Any]:
             },
         },
         "ops": "data/ops/unified-proof-layer-20260806.md",
+        "calibration_reports": "data/ops/historical-calibration-reports-20260806.md",
     }

@@ -1,0 +1,385 @@
+{
+  "ok": true,
+  "report_type": "historical_calibration",
+  "generated_at": "2026-08-06T14:21:53Z",
+  "filters": {
+    "sport": "cfb",
+    "engine_version": null,
+    "season": null,
+    "from": null,
+    "to": null
+  },
+  "inputs": {
+    "lake_dir": "/Users/ryankos/kosedge/.worktrees/historical-calibration-reports/services/model-service/data/ops/projection_logs",
+    "projected_at_range": {
+      "from": null,
+      "to": null
+    },
+    "engine_versions_seen": [],
+    "seasons_seen": []
+  },
+  "honesty_flags": [
+    "no_projections",
+    "thin_sample"
+  ],
+  "metrics": {
+    "n_logged": 0,
+    "n_with_close": 0,
+    "n_with_result": 0,
+    "ats": {
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "n": 0,
+      "win_pct": null,
+      "record": "0-0"
+    },
+    "ou": {
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "n": 0,
+      "win_pct": null,
+      "record": "0-0"
+    },
+    "su": {
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "n": 0,
+      "win_pct": null,
+      "record": "0-0"
+    },
+    "clv": {
+      "n_spread": 0,
+      "avg_spread_clv": null,
+      "spread_clv_positive_rate": null,
+      "n_total": 0,
+      "avg_total_clv": null
+    },
+    "avg_error": {
+      "avg_abs_margin_error": null,
+      "avg_abs_total_error": null,
+      "avg_margin_bias": null,
+      "n_margin": 0,
+      "n_total": 0
+    }
+  },
+  "bias_slices": {
+    "home_favorite": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    },
+    "home_dog": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    },
+    "pick_em": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    },
+    "model_pick_home": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    },
+    "model_pick_away": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    },
+    "early_season_week_le_4": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    },
+    "mid_late_season_week_gt_4": {
+      "n_logged": 0,
+      "n_with_close": 0,
+      "n_with_result": 0,
+      "ats": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "ou": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "su": {
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "n": 0,
+        "win_pct": null,
+        "record": "0-0"
+      },
+      "clv": {
+        "n_spread": 0,
+        "avg_spread_clv": null,
+        "spread_clv_positive_rate": null,
+        "n_total": 0,
+        "avg_total_clv": null
+      },
+      "avg_error": {
+        "avg_abs_margin_error": null,
+        "avg_abs_total_error": null,
+        "avg_margin_bias": null,
+        "n_margin": 0,
+        "n_total": 0
+      },
+      "thin_sample": true
+    }
+  },
+  "summary_text": "# Historical Calibration \u2014 CFB\n\n## Filters\n- **sport**: cfb\n\n## Sample\n- Logged: **0** | With close: **0** | With result: **0**\n- \u26a0\ufe0f **Thin sample** (n_with_result < 30) \u2014 treat metrics as directional only.\n\n## Record (graded projections)\n- No graded games yet.\n\n## Average error\n- Margin MAE: **None** (bias None, n=0)\n- Total MAE: **None** (n=0)\n\n## CLV (requires closes)\n- Spread CLV: not enough close lines.\n- Total CLV: not enough close totals.\n\n## Bias slices (honest caveats per slice)\n- **Home favorite (model_spread_home < 0)**: no graded games\n- **Home dog (model_spread_home > 0)**: no graded games\n- **Model ATS pick: home**: no graded games\n- **Model ATS pick: away**: no graded games\n- **Early season (week \u2264 4)**: no graded games\n- **Mid/late season (week > 4)**: no graded games\n\n---\n*Generated from unified proof-layer JSONL lake. Closes are never invented.*",
+  "performance_summary_parity": {
+    "n_logged": 0,
+    "n_with_close": 0,
+    "n_with_result": 0,
+    "note": "performance_summary uses limit cap; report uses full filtered lake"
+  }
+}

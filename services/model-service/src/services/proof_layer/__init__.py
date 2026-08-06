@@ -4,6 +4,11 @@ from src.services.proof_layer.adapters import (
     payload_from_cfb_project_game,
     payload_from_nfl_game_boxes,
 )
+from src.services.proof_layer.calibration_report import (
+    build_calibration_report,
+    generate_calibration_report,
+    load_filtered_projections,
+)
 from src.services.proof_layer.core import (
     AUTO_LOG_ENV,
     BACKEND,
@@ -26,6 +31,9 @@ from src.services.proof_layer.core import (
 )
 
 __all__ = [
+    "build_calibration_report",
+    "generate_calibration_report",
+    "load_filtered_projections",
     "AUTO_LOG_ENV",
     "BACKEND",
     "JSONL_NAME",
