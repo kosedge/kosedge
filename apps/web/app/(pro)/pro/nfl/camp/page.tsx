@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { formatArticleAttribution } from "@/lib/article-sectionizer";
 import { buildNflCampDesk } from "@/lib/nfl-camp-desk";
 import { getAllNflNewsUpdates } from "@/lib/nfl-news-updates";
 
@@ -109,7 +110,7 @@ export default async function NflCampDeskPage() {
                 className="rounded-2xl border border-kos-gold/20 bg-kos-gold/5 p-4 transition hover:border-kos-gold/40"
               >
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-gold/80">
-                  {item.publishedAt}
+                  {formatArticleAttribution(item.publishedAt)}
                   {item.team ? ` · ${item.team}` : ""}
                 </p>
                 <h3 className="mt-1 text-base font-semibold leading-snug text-kos-text">

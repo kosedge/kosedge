@@ -277,7 +277,70 @@ export function extractInlineSources(markdown: string): string | null {
   return match?.[1]?.trim() ?? null;
 }
 
+/** Default publish date for 2026 season-preview pack when markdown omits Published. */
+export const DEFAULT_ARTICLE_DATE = "July 29, 2026";
+
+const LONG_DATE: Intl.DateTimeFormatOptions = {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+};
+
+/**
+ * Normalize article timestamps for display.
+ * Accepts "July 29, 2026", "July 29, 2026 · 2:15 PM ET", ISO-ish strings.
+ * Strips accidental writer bylines if they leak into the date field.
+ */
+export function formatArticleDate(
+  value: string | null | undefined,
+  opts?: { fallback?: string; includeTime?: boolean },
+): string {
+  const fallback = opts?.fallback ?? DEFAULT_ARTICLE_DATE;
+  if (!value?.trim()) return fallback;
+
+  let raw = value.trim();
+  // Never surface "By Name · …" as a date/attribution line.
+  raw = raw.replace(/^By\s+[^*·|]+?\s*[·|]\s*/i, "").trim();
+  if (!raw) return fallback;
+
+  const parts = raw.split(/\s*[·|]\s*/);
+  const datePart = parts[0]?.trim() || raw;
+  const timePart = parts.slice(1).join(" · ").trim();
+
+  const parsed = Date.parse(datePart);
+  if (!Number.isFinite(parsed)) {
+    // Unparsed but clean — return date segment only unless time requested.
+    if (opts?.includeTime && timePart) return `${datePart} · ${timePart}`;
+    return datePart || fallback;
+  }
+
+  // Format from UTC noon to avoid off-by-one near timezone edges.
+  const safe = new Date(parsed);
+  const utcNoon = new Date(
+    Date.UTC(safe.getFullYear(), safe.getMonth(), safe.getDate(), 12),
+  );
+  const formatted = utcNoon.toLocaleDateString("en-US", LONG_DATE);
+  if (opts?.includeTime && timePart) {
+    return `${formatted} · ${timePart}`;
+  }
+  return formatted;
+}
+
+/** Card/meta line: "KosEdge · July 29, 2026" (or date-only when brand=false). */
+export function formatArticleAttribution(
+  value: string | null | undefined,
+  opts?: { brand?: boolean; includeTime?: boolean; fallback?: string },
+): string {
+  const date = formatArticleDate(value, {
+    fallback: opts?.fallback,
+    includeTime: opts?.includeTime,
+  });
+  if (opts?.brand === false) return date;
+  return `KosEdge · ${date}`;
+}
+
+/** @deprecated Prefer formatArticleDate — kept for existing callers. */
 export function formatPreviewDate(value: string | null | undefined): string {
-  if (value) return value;
-  return "July 29, 2026";
+  return formatArticleDate(value);
 }

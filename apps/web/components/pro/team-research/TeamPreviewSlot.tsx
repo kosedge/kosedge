@@ -1,21 +1,24 @@
 import Link from "next/link";
+import { formatArticleAttribution } from "@/lib/article-sectionizer";
 import type { WriterProfile } from "@/lib/team-research";
 import { getNflSeasonPreview } from "@/lib/nfl-season-previews";
 
 export default function TeamPreviewSlot({
   teamName,
   teamCode,
-  writer,
+  writer: _writer,
   assignmentNote,
   provisional,
 }: {
   teamName: string;
   /** NFL team abbreviation — enables live season-preview wiring. */
   teamCode?: string;
+  /** Kept for call-site compatibility; never shown as a byline. */
   writer: WriterProfile;
   assignmentNote: string;
   provisional?: boolean;
 }) {
+  void _writer;
   const preview =
     teamCode && teamCode.trim()
       ? getNflSeasonPreview(teamCode)
@@ -43,7 +46,11 @@ export default function TeamPreviewSlot({
             <p className="text-[10px] uppercase tracking-wide text-kos-gold/80">
               KosEdge
             </p>
-            <p className="text-sm font-semibold text-kos-gold">2026</p>
+            <p className="text-sm font-semibold text-kos-gold">
+              {formatArticleAttribution(preview.publishedDate, {
+                brand: false,
+              })}
+            </p>
           </div>
         </div>
 

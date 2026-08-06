@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { formatArticleAttribution } from "@/lib/article-sectionizer";
 import {
   getAllNflSeasonPreviews,
   groupPreviewsByConference,
@@ -115,7 +116,7 @@ export default function NflSeasonPreviewsIndexPage() {
                         </h3>
                       </div>
                       <p className="text-right text-xs text-kos-text/60">
-                        KosEdge · 2026
+                        {formatArticleAttribution(article.publishedDate)}
                       </p>
                     </div>
                     {article.angle ? (

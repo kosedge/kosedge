@@ -76,6 +76,7 @@ function parseNewsFile(slug: string, raw: string): NflNewsUpdateArticle | null {
   const sources =
     extractField(raw, "Sources") ?? extractInlineSources(raw);
 
+  // Header owns KosEdge attribution — strip timestamp/meta and any writer byline.
   const bodyMarkdown = raw
     .replace(/^#\s+.+\n+/, "")
     .replace(/^\*\*Timestamp:\*\*[^\n]*\n+/im, "")
@@ -83,6 +84,8 @@ function parseNewsFile(slug: string, raw: string): NflNewsUpdateArticle | null {
     .replace(/^\*\*Team:\*\*[^\n]*\n+/im, "")
     .replace(/^\*\*Category:\*\*[^\n]*\n+/im, "")
     .replace(/^\*\*Sources:\*\*[^\n]*\n+/im, "")
+    .replace(/^\*\*By\s+[^*]+\*\*\s*·?[^\n]*\n+/im, "")
+    .replace(/^By\s+[^\n]+\n+/im, "")
     .trim();
 
   const wordCount = bodyMarkdown.split(/\s+/).filter(Boolean).length;

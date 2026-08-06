@@ -6,6 +6,7 @@ import {
   articleNumberCardClasses,
 } from "@/lib/article-prose";
 import {
+  formatArticleDate,
   sectionizeNewsUpdate,
   type HandicappersNote,
 } from "@/lib/article-sectionizer";
@@ -73,7 +74,7 @@ export default function NewsUpdateArticle({ article }: NewsUpdateArticleProps) {
     <ArticleShell
       eyebrow={`KosEdge · ${article.category}`}
       title={article.title}
-      date={article.publishedAt}
+      date={formatArticleDate(article.publishedAt, { includeTime: true })}
       metaLine={article.team ? `${article.teamName ?? article.team} desk` : undefined}
       bottomLine={bottomLine}
       accent="neutral"

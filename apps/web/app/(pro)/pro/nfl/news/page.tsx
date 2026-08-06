@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { formatArticleAttribution } from "@/lib/article-sectionizer";
 import { getAllNflNewsUpdates } from "@/lib/nfl-news-updates";
 import { articleShellClasses } from "@/lib/article-prose";
 
@@ -33,7 +34,9 @@ export default function NflNewsIndexPage() {
               href={article.href}
               className="block rounded-2xl border border-white/10 bg-kos-surface/40 p-5 transition hover:border-kos-gold/35"
             >
-              <p className="text-xs text-kos-text/60">{article.publishedAt}</p>
+              <p className="text-xs text-kos-text/60">
+                {formatArticleAttribution(article.publishedAt)}
+              </p>
               <h2 className="mt-1 text-lg font-semibold text-kos-text">
                 {article.title}
               </h2>
