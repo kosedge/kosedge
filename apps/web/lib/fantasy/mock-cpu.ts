@@ -64,10 +64,17 @@ function needScore(
   const round = Math.ceil(overall / teamCount);
 
   // Avoid brain-dead early QB stacking / early K-DST.
+  // 1QB leagues rarely take QB in R1–R2 even when model VOR loves them.
   if (pos === "QB" && qbCount >= 1 && round < 9) return -40;
   if (pos === "QB" && qbCount >= 2 && round < 13) return -60;
   if ((pos === "K" || pos === "DST") && round < 12) return -55;
   if ((pos === "K" || pos === "DST") && round < 14) return -20;
+  if (pos === "QB" && qbCount === 0) {
+    if (round <= 2) return 4;
+    if (round <= 4) return 12;
+    if (round <= 6) return 22;
+    return 34 + (needs.QB ?? 0) * 4;
+  }
 
   if ((needs[pos] ?? 0) > 0) return 34 + (needs[pos] ?? 0) * 6;
   if (
@@ -117,12 +124,20 @@ export function scoreCpuCandidate(input: {
           : 0;
   const reachPenalty = market > overall + 35 ? -18 : market > overall + 22 ? -8 : 0;
 
-  const valueRaw =
+  let valueRaw =
     row.valueDelta != null && Number.isFinite(row.valueDelta)
       ? Math.max(-12, Math.min(22, row.valueDelta * 0.65))
       : 0;
+  // Don't let model-vs-ADP QB "value" force 1st-round QBs in 1QB mocks.
+  const round = Math.ceil(overall / teamCount);
+  if (row.position.toUpperCase() === "QB" && round <= 5) {
+    valueRaw *= 0.3;
+  }
 
-  const rankQuality = Math.max(0, 40 - row.rankOverall * 0.12);
+  let rankQuality = Math.max(0, 40 - row.rankOverall * 0.12);
+  if (row.position.toUpperCase() === "QB" && round <= 5) {
+    rankQuality *= 0.45;
+  }
   const need = needScore(row, roster, board, overall, teamCount);
   const scarcity = scarcityBonus(available, row.position, overall);
 

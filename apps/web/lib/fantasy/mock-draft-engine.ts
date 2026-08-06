@@ -15,10 +15,7 @@ import {
   type MockTeamCount,
 } from "@/lib/fantasy/mock-types";
 import { boardHasPosition, mockRosterNeeds } from "@/lib/fantasy/mock-roster";
-import {
-  projectedStarterPoints,
-  teamGrade,
-} from "@/lib/fantasy/team-builder";
+import { projectedStarterPoints } from "@/lib/fantasy/team-builder";
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
 export { boardHasPosition, mockRosterNeeds };
@@ -242,11 +239,26 @@ export function buildPostDraftReport(
   state: MockDraftState,
 ): MockPostDraftReport {
   const roster = userRoster(board, state);
-  const grade = teamGrade(roster);
+  const starterPoints = projectedStarterPoints(roster);
+  // Use mock-aware needs (K/DST omitted when board has none) — not Phase 1
+  // teamGrade holes, which always demand K/DST.
   const needs = mockRosterNeeds(roster, board);
   const holes = Object.entries(needs)
     .filter(([, n]) => n > 0)
     .map(([pos]) => pos);
+
+  let gradeLetter = "C";
+  if (starterPoints >= 1400 && holes.length === 0) gradeLetter = "A";
+  else if (starterPoints >= 1250 && holes.length <= 1) gradeLetter = "B+";
+  else if (starterPoints >= 1100 && holes.length <= 2) gradeLetter = "B";
+  else if (starterPoints >= 950) gradeLetter = "C+";
+  else if (starterPoints >= 800) gradeLetter = "C";
+  else gradeLetter = "D";
+
+  const detail =
+    holes.length === 0
+      ? `Starters project ~${starterPoints.toFixed(0)} season fantasy points.`
+      : `Starters ~${starterPoints.toFixed(0)} pts · still need ${holes.join(", ")}.`;
 
   const byPos = (pos: string) =>
     roster.filter((r) => r.position.toUpperCase() === pos);
@@ -281,8 +293,13 @@ export function buildPostDraftReport(
   if (byPos("QB").length === 0) {
     weaknesses.push("No QB drafted — streamer risk every week.");
   }
-  if (roster.length > 0 && projectedStarterPoints(roster) < 950) {
+  if (roster.length > 0 && starterPoints < 950) {
     weaknesses.push("Starter projection sits below a typical playoff bar.");
+  }
+  if (!boardHasPosition(board, "K") || !boardHasPosition(board, "DST")) {
+    strengths.push(
+      "Board has no K/DST pool — those slots were skipped (not penalized).",
+    );
   }
   if (strengths.length === 0) {
     strengths.push("Balanced enough to compete — no single blow-up category.");
@@ -310,9 +327,9 @@ export function buildPostDraftReport(
     );
 
   return {
-    grade: grade.grade,
-    detail: grade.detail,
-    starterPoints: grade.starterPoints,
+    grade: gradeLetter,
+    detail,
+    starterPoints,
     strengths: strengths.slice(0, 4),
     weaknesses: weaknesses.slice(0, 4),
     values,
