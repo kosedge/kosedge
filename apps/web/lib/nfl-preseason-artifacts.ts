@@ -46,7 +46,39 @@ export type NflPreseasonBundle = {
   teamRows: TeamProjectionRow[];
   playerTotalsRegular: PlayerProjectionTotalsRow[];
   playerTotalsPlayoff: PlayerProjectionTotalsRow[];
+  /** Launch-current research identity when published from 100k season-engine run */
+  launchIdentity?: string | null;
+  nTeamSims?: number | null;
+  engineVersion?: string | null;
 };
+
+export type NflWebLaunchPointer = {
+  bundle_id: string;
+  engine_version?: string;
+  n_team_sims?: number;
+  n_player_sims?: number;
+  generated_at_utc?: string;
+  source_dir?: string;
+  identity?: string;
+  preseason?: boolean;
+};
+
+export function loadNflWebLaunchPointer(): NflWebLaunchPointer | null {
+  const repoRoot = findRepoRoot();
+  if (!repoRoot) return null;
+  const pointerPath = path.join(
+    repoRoot,
+    "data",
+    "ops",
+    "nfl-web-launch-bundle.json",
+  );
+  if (!existsSync(pointerPath)) return null;
+  try {
+    return JSON.parse(readFileSync(pointerPath, "utf8")) as NflWebLaunchPointer;
+  } catch {
+    return null;
+  }
+}
 
 function toNumber(value: string | undefined): number {
   const parsed = Number(value ?? "");
@@ -214,6 +246,35 @@ function loadBundleFromDir(
     }
   }
 
+  let launchIdentity: string | null = null;
+  let nTeamSims: number | null = null;
+  let engineVersion: string | null = null;
+  if (existsSync(summaryPath)) {
+    try {
+      const parsed = JSON.parse(readFileSync(summaryPath, "utf8")) as {
+        engine_version?: string;
+        n_team_sims?: number;
+        web_bundle_id?: string;
+        identity?: string;
+      };
+      engineVersion = parsed.engine_version ?? null;
+      nTeamSims =
+        typeof parsed.n_team_sims === "number" ? parsed.n_team_sims : null;
+    } catch {
+      /* ignore */
+    }
+  }
+  const pointer = loadNflWebLaunchPointer();
+  if (pointer?.bundle_id === bundleDirName) {
+    launchIdentity = pointer.identity ?? null;
+    if (nTeamSims == null && typeof pointer.n_team_sims === "number") {
+      nTeamSims = pointer.n_team_sims;
+    }
+    if (!engineVersion && pointer.engine_version) {
+      engineVersion = pointer.engine_version;
+    }
+  }
+
   return {
     bundleDirName,
     bundlePath,
@@ -222,6 +283,9 @@ function loadBundleFromDir(
     teamRows,
     playerTotalsRegular,
     playerTotalsPlayoff,
+    launchIdentity,
+    nTeamSims,
+    engineVersion,
   };
 }
 
@@ -229,6 +293,12 @@ export function loadLatestNflPreseasonBundle2026(): NflPreseasonBundle | null {
   const repoRoot = findRepoRoot();
   if (!repoRoot) return null;
   const dataOpsPath = path.join(repoRoot, "data", "ops");
+  // Prefer explicit launch-current web pointer when present.
+  const pointer = loadNflWebLaunchPointer();
+  if (pointer?.bundle_id) {
+    const preferred = loadBundleFromDir(dataOpsPath, pointer.bundle_id);
+    if (preferred) return preferred;
+  }
   const bundleDirs = list2026BundleDirectories(dataOpsPath);
   for (const bundleDirName of bundleDirs) {
     const bundle = loadBundleFromDir(dataOpsPath, bundleDirName);
@@ -244,9 +314,16 @@ export function loadNflPreseasonBundles2026(
   const repoRoot = findRepoRoot();
   if (!repoRoot) return [];
   const dataOpsPath = path.join(repoRoot, "data", "ops");
-  const bundleDirs = list2026BundleDirectories(dataOpsPath);
+  const pointer = loadNflWebLaunchPointer();
+  const listed = list2026BundleDirectories(dataOpsPath);
+  const ordered = pointer?.bundle_id
+    ? [
+        pointer.bundle_id,
+        ...listed.filter((name) => name !== pointer.bundle_id),
+      ]
+    : listed;
   const out: NflPreseasonBundle[] = [];
-  for (const bundleDirName of bundleDirs) {
+  for (const bundleDirName of ordered) {
     const bundle = loadBundleFromDir(dataOpsPath, bundleDirName);
     if (bundle) out.push(bundle);
     if (out.length >= limit) break;

@@ -71,11 +71,18 @@ function NflAtAGlance({ rows }: { rows: PowerRatingRow[] }) {
   );
 }
 
-function bundleLabel(id: string): string {
+function bundleLabel(id: string, opts?: { nTeamSims?: number | null }): string {
   const stamp = id.replace("nfl-preseason-sim-2026-", "");
-  if (stamp.length >= 8) {
-    return `Sim ${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}`;
+  const day =
+    stamp.length >= 8
+      ? `${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}`
+      : null;
+  if (opts?.nTeamSims && opts.nTeamSims >= 50000) {
+    return day
+      ? `Launch ${opts.nTeamSims.toLocaleString()} · ${day}`
+      : `Launch ${opts.nTeamSims.toLocaleString()}`;
   }
+  if (day) return `Sim ${day}`;
   return id;
 }
 
@@ -137,19 +144,32 @@ export default async function PowerRatingsSportPage({
       <SportProShell
         sport="nfl"
         pageTitle="NFL Power Ratings"
-        pageSubtitle="Team strength from the Kos Edge preseason simulation engine (expected wins). Off/Def use owned EPA when available. Weekly Δ compares sim snapshots."
+        pageSubtitle="Team strength from the Kos Edge season-engine research layer (expected wins). Off/Def use owned EPA when available. Weekly Δ compares sim snapshots."
       >
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <p className="text-sm text-kos-text/65">
               {board.bundleId
-                ? `Active bundle · ${bundleLabel(board.bundleId)}`
+                ? `Active · ${bundleLabel(board.bundleId, { nTeamSims: board.nTeamSims })}`
                 : "No sim bundle found"}
+              {board.engineVersion ? ` · ${board.engineVersion}` : ""}
               {board.previousBundleId
                 ? ` · Δ vs ${bundleLabel(board.previousBundleId)}`
                 : ""}
             </p>
           </div>
+          {board.launchIdentity || (board.nTeamSims && board.nTeamSims >= 50000) ? (
+            <p className="mt-2 rounded-lg border border-kos-gold/25 bg-kos-gold/10 px-3 py-2 text-xs text-kos-text/80">
+              Launch-current research
+              {board.nTeamSims
+                ? ` · ${board.nTeamSims.toLocaleString()} team W/L paths`
+                : ""}
+              {board.generatedAtUtc
+                ? ` · generated ${board.generatedAtUtc.slice(0, 10)}`
+                : ""}
+              . Preseason numbers — not live week-1 Edge Board grades.
+            </p>
+          ) : null}
 
           {board.availableBundles.length > 1 ? (
             <div className="mt-3 flex flex-wrap gap-1.5">
@@ -165,7 +185,9 @@ export default async function PowerRatingsSportPage({
                         : "rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-kos-text/70 hover:border-kos-gold/30"
                     }
                   >
-                    {bundleLabel(id)}
+                    {bundleLabel(id, {
+                      nTeamSims: active ? board.nTeamSims : null,
+                    })}
                   </Link>
                 );
               })}

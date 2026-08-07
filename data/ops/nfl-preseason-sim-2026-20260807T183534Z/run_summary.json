@@ -1,0 +1,73 @@
+{
+  "label": "launch_current_web_preseason_bundle",
+  "preseason": true,
+  "honest_label": "PRESEASON research numbers from hierarchical season engine nfl-season-engine-v1.12-survivor-planner-ux. Team win distributions from 100000 Layers 1\u20132 team W/L paths. Player season totals from fewer full path-coherent sims (Layers 1\u20134). Not live request-path outputs.",
+  "generated_at_utc": "2026-08-07T18:35:34.303489+00:00",
+  "engine_version": "nfl-season-engine-v1.12-survivor-planner-ux",
+  "season": 2026,
+  "as_of_week": 1,
+  "universe_mode": "packaged",
+  "schedule_meta": {
+    "mode": "real",
+    "schedule_source": "packaged_wall_chart_2026",
+    "schedule_game_count": 272,
+    "schedule_as_of": "2026-08-03",
+    "roster_source": "packaged_nflverse_depth_2026",
+    "roster_as_of": "2026-08-03",
+    "depth_source": "packaged_nflverse_depth_2026",
+    "depth_as_of": "2026-08-03",
+    "depth_team_count": 32,
+    "depth_named_skill_teams": 32,
+    "depth_full_skill_starter_teams": 32,
+    "depth_player_rows": 383,
+    "schedule_note": "REAL packaged 2026 REG schedule (272 games, byes). DB unavailable \u2014 using packaged offline artifacts.",
+    "roster_note": "REAL packaged nflverse depth (32/32 named skill teams); DB weekly preferred when populated."
+  },
+  "universe_notes": {
+    "schedule_source": "packaged_wall_chart_2026",
+    "roster_source": "packaged_nflverse_depth_2026",
+    "depth_source": "packaged_nflverse_depth_2026",
+    "depth_named_skill_teams": 32,
+    "depth_player_rows": 383,
+    "calibration": "nfl-season-engine-cal-v2",
+    "mode": "real"
+  },
+  "n_team_sims": 100000,
+  "n_player_sims": 1000,
+  "survivor_week": 1,
+  "survivor_n_sims": 100000,
+  "seed": 20260807,
+  "workers": 4,
+  "timing_seconds": {
+    "team_wl": 2616.45,
+    "player_full": 1576.81,
+    "survivor": 0.0
+  },
+  "sanity": {
+    "team_mean_wins_sum": 271.9999,
+    "team_mean_wins_sum_ok": true
+  },
+  "files": [
+    "player_season_totals.json",
+    "survivor_week1_evaluate.json",
+    "team_week_win_rates.json",
+    "team_win_distributions.json",
+    "team_wins_from_player_paths.json"
+  ],
+  "related_market_mc_100k": {
+    "path": "data/ops/nfl-preseason-sim-2026-20260729T160818Z",
+    "model_version": "nfl-v1.5-matchup-sim",
+    "n_sims": 100000,
+    "role": "Hub futures / Bernoulli market-MC board (separate from season engine)"
+  },
+  "does_not_touch": [
+    "Railway HTTP /season-engine/simulate (still capped \u2264500)",
+    "Edge board / fantasy live request paths",
+    "Bulk odds loads into Railway"
+  ],
+  "hd_mirror": "/Volumes/KosEdgeData/clean/nfl/research/nfl-season-engine-launch-nfl-season-engine-v1.12-survivor-planner-ux-Nteam100000-Nplayer1000-20260807T172531Z",
+  "ops_pointer": "data/ops/nfl-launch-research-sims-current.md",
+  "ops_note": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.12-survivor-planner-ux-Nteam100000-Nplayer1000-20260807T172531Z/LAUNCH_RESEARCH_NOTE.md",
+  "web_bundle_id": "nfl-preseason-sim-2026-20260807T183534Z",
+  "published_at_utc": "2026-08-07T20:13:01.300380+00:00"
+}

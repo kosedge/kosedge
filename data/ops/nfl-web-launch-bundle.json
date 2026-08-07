@@ -1,0 +1,10 @@
+{
+  "bundle_id": "nfl-preseason-sim-2026-20260807T183534Z",
+  "engine_version": "nfl-season-engine-v1.12-survivor-planner-ux",
+  "n_team_sims": 100000,
+  "n_player_sims": 1000,
+  "generated_at_utc": "2026-08-07T18:35:34.303489+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.12-survivor-planner-ux-Nteam100000-Nplayer1000-20260807T172531Z",
+  "preseason": true,
+  "identity": "nfl-season-engine-v1.12-survivor-planner-ux \u00b7 N_team=100000 \u00b7 20260807T183534Z"
+}

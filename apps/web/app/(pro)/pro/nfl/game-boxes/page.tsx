@@ -6,6 +6,7 @@ import {
   loadSeasonEngineMatchups,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
+import { nflLaunchResearchDeskNotice } from "@/lib/nfl-launch-research";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function NflGameBoxesPage() {
     loadSeasonEngineMatchups({ season: 2026, daysAhead: 28 }),
   ]);
   const packagedNotice = seasonEnginePackagedNotice(status);
+  const launchResearchNotice = nflLaunchResearchDeskNotice();
 
   return (
     <SportHubShell
@@ -57,12 +59,18 @@ export default async function NflGameBoxesPage() {
           {status.depth_as_of || status.roster_as_of
             ? ` (as of ${status.depth_as_of || status.roster_as_of})`
             : ""}
+          {status.engine_version ? ` · ${status.engine_version}` : ""}
         </p>
       ) : (
         <p className="mb-4 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-xs text-red-200">
           Engine status unavailable: {status.error}
         </p>
       )}
+      {launchResearchNotice ? (
+        <p className="mb-4 rounded-lg border border-kos-gold/25 bg-kos-gold/10 px-3 py-2 text-xs text-kos-text/80">
+          {launchResearchNotice}
+        </p>
+      ) : null}
 
       {slate.error ? (
         <p className="mb-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/65">

@@ -164,7 +164,9 @@ function buildFallbackBoard(input: {
     rows,
     limitations: [
       ...LIMITATIONS_BASE,
-      `Preseason board from season-engine sim (${bundle.bundleDirName}) — skill positions only; K/DST omitted.`,
+      bundle.nTeamSims && bundle.nTeamSims >= 50000
+        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths · ${bundle.bundleDirName}) — skill positions only; K/DST omitted.`
+        : `Preseason board from season-engine sim (${bundle.bundleDirName}) — skill positions only; K/DST omitted.`,
     ],
   };
 }
