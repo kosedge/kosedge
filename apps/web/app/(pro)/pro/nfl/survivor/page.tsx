@@ -6,6 +6,7 @@ import {
   loadSeasonEngineMatchups,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
+import { nflLaunchResearchDeskNotice } from "@/lib/nfl-launch-research";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function NflSurvivorPage() {
     loadSeasonEngineMatchups({ season: 2026, daysAhead: 14 }),
   ]);
   const packagedNotice = seasonEnginePackagedNotice(status);
+  const launchResearchNotice = nflLaunchResearchDeskNotice();
 
   return (
     <SportHubShell
@@ -57,6 +59,7 @@ export default async function NflSurvivorPage() {
           {status.depth_as_of || status.roster_as_of
             ? ` (as of ${status.depth_as_of || status.roster_as_of})`
             : ""}
+          {status.engine_version ? ` · ${status.engine_version}` : ""}
           {Array.isArray(status.capabilities) &&
           status.capabilities.includes("survivor_planner")
             ? " · planner ready"
@@ -67,6 +70,11 @@ export default async function NflSurvivorPage() {
           Engine status unavailable: {status.error}
         </p>
       )}
+      {launchResearchNotice ? (
+        <p className="mb-4 rounded-lg border border-kos-gold/25 bg-kos-gold/10 px-3 py-2 text-xs text-kos-text/80">
+          {launchResearchNotice}
+        </p>
+      ) : null}
 
       <SeasonEngineSurvivorShell
         defaultWeek={

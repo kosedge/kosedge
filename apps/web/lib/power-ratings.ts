@@ -41,6 +41,9 @@ export type NflPowerRatingsBoard = {
   previousBundleId: string | null;
   availableBundles: string[];
   generatedAtUtc: string | null;
+  engineVersion?: string | null;
+  nTeamSims?: number | null;
+  launchIdentity?: string | null;
 };
 
 function rankByExpectedWins(
@@ -99,6 +102,9 @@ function nflBoardFromBundles(
     previousBundleId: previous?.bundleDirName ?? null,
     availableBundles,
     generatedAtUtc: current.generatedAtUtc,
+    engineVersion: current.engineVersion ?? null,
+    nTeamSims: current.nTeamSims ?? null,
+    launchIdentity: current.launchIdentity ?? null,
   };
 }
 
@@ -118,6 +124,9 @@ export function getNflPowerRatingsBoard(options?: {
     return {
       rows: [],
       bundleId: null,
+      engineVersion: null,
+      nTeamSims: null,
+      launchIdentity: null,
       previousBundleId: null,
       availableBundles: available,
       generatedAtUtc: null,
