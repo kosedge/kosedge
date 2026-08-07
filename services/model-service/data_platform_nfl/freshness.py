@@ -12,9 +12,17 @@ from sqlalchemy import text
 from .db import SessionLocal
 from .source_matrix import SOURCE_FALLBACK_MATRIX, source_matrix_payload
 
+# Ops-only checks: real SLOs for ownership/DR, but must not paint guest boards
+# as "data freshness degraded" when live board probes are healthy.
+OPS_ONLY_CHECK_NAMES = frozenset({"dr_backup"})
+
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def _blocker_check_name(blocker: str) -> str:
+    return str(blocker or "").split(":", 1)[0]
 
 
 def _hours_since(ts: Optional[datetime]) -> Optional[float]:
@@ -241,18 +249,35 @@ def evaluate_data_freshness(
         if not ingest_ok:
             blockers.append("recent_ingest_failures")
 
-        status = "ok" if not blockers else "degraded"
-        if any(not c.get("ok") for c in checks.values() if c.get("enforced")):
-            status = "degraded"
+        board_blockers = [
+            b for b in blockers if _blocker_check_name(b) not in OPS_ONLY_CHECK_NAMES
+        ]
+        ops_blockers = [
+            b for b in blockers if _blocker_check_name(b) in OPS_ONLY_CHECK_NAMES
+        ]
+        # Keep DR/ops failures visible without claiming board data is stale.
+        for b in ops_blockers:
+            if b not in warnings:
+                warnings.append(b)
+
+        board_check_failed = any(
+            (not c.get("ok")) and bool(c.get("enforced"))
+            for name, c in checks.items()
+            if name not in OPS_ONLY_CHECK_NAMES
+        )
+        status = "degraded" if board_blockers or board_check_failed else "ok"
+        ops_status = "degraded" if ops_blockers else "ok"
 
         payload = {
             "status": status,
+            "ops_status": ops_status,
             "checked_at": _now().isoformat(),
             "in_season": bool(in_season),
             "season": season,
             "week": week,
             "checks": checks,
-            "blockers": blockers,
+            "blockers": board_blockers,
+            "ops_blockers": ops_blockers,
             "warnings": warnings,
             "source_matrix": source_matrix_payload(),
             "product_guidance": {
@@ -267,6 +292,9 @@ def evaluate_data_freshness(
         }
 
         if persist:
+            # Persist full blocker set (board + ops) for ops history.
+            persist_blockers = board_blockers + ops_blockers
+            persist_status = "degraded" if persist_blockers else status
             session.execute(
                 text(
                     """
@@ -279,11 +307,11 @@ def evaluate_data_freshness(
                     """
                 ),
                 {
-                    "status": status,
+                    "status": persist_status,
                     "season": season,
                     "week": week,
                     "checks": json.dumps(checks),
-                    "blockers": json.dumps(blockers),
+                    "blockers": json.dumps(persist_blockers),
                     "source_matrix": json.dumps(source_matrix_payload()),
                 },
             )

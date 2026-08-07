@@ -62,7 +62,30 @@ describe("shouldShowNflDataFreshnessBanner", () => {
     expect(
       shouldShowNflDataFreshnessBanner({
         status: "failed",
+        blockers: ["injuries:stale_30h>24h"],
+      }),
+    ).toBe(true);
+  });
+
+  it("hides ops-only DR backup lag (not board data degradation)", () => {
+    expect(
+      shouldShowNflDataFreshnessBanner({
+        status: "degraded",
+        in_season: false,
+        blockers: ["dr_backup:stale_296.3h>192.0h"],
+      }),
+    ).toBe(false);
+    expect(
+      shouldShowNflDataFreshnessBanner({
+        status: "failed",
         blockers: ["dr_backup:missing_timestamp"],
+      }),
+    ).toBe(false);
+    // Mixed board + ops still shows (board failure is real).
+    expect(
+      shouldShowNflDataFreshnessBanner({
+        status: "degraded",
+        blockers: ["dr_backup:stale_200h>192h", "injuries:stale_30h>24h"],
       }),
     ).toBe(true);
   });

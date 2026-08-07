@@ -244,10 +244,15 @@ def run_data_freshness_check(*, persist_alert: bool = True) -> Dict[str, Any]:
             payload = {"status": "unknown", "raw": raw_out[-4000:]}
 
     status = str(payload.get("status") or "failed")
-    if persist_alert and status != "ok":
+    ops_status = str(payload.get("ops_status") or "ok") if isinstance(payload, dict) else "ok"
+    ops_blockers = payload.get("ops_blockers") if isinstance(payload, dict) else None
+    # Board degradation or ops-only DR failures both warrant ops alerts.
+    # Guest product status may still be ok when only ops_blockers are present.
+    if persist_alert and (status != "ok" or ops_status != "ok" or ops_blockers):
+        alert_status = status if status != "ok" else f"ops_{ops_status}"
         send_nfl_alert(
             alert_type="nfl_data_freshness_degraded",
-            severity="warning" if status == "degraded" else "critical",
+            severity="warning" if alert_status in {"degraded", "ops_degraded"} else "critical",
             payload=payload if isinstance(payload, dict) else {"payload": payload},
         )
     return payload if isinstance(payload, dict) else {"status": status, "payload": payload}

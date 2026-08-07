@@ -37,6 +37,13 @@ const TRANSPORT_BLOCKERS = new Set([
   "model_service_unconfigured",
 ]);
 
+/** Ops ownership/DR signals — real, but not "boards are stale" for guests. */
+const OPS_ONLY_BLOCKER_PREFIXES = ["dr_backup:"] as const;
+
+export function isOpsOnlyFreshnessBlocker(blocker: string): boolean {
+  return OPS_ONLY_BLOCKER_PREFIXES.some((prefix) => blocker.startsWith(prefix));
+}
+
 export function isNflSeasonEngineDeskPath(pathname: string | null | undefined): boolean {
   if (!pathname) return false;
   const path = pathname.split("?")[0] || "";
@@ -48,6 +55,7 @@ export function isNflSeasonEngineDeskPath(pathname: string | null | undefined): 
 /**
  * Show the amber banner only for real owned-data SLO failures.
  * Transport/timeout/DB-probe-unavailable must not look like "boards degraded".
+ * Ops-only DR backup lag must not look like board data degradation.
  */
 export function shouldShowNflDataFreshnessBanner(
   freshness: NflDataFreshnessPayload,
@@ -64,6 +72,11 @@ export function shouldShowNflDataFreshnessBanner(
 
   const onlyTransport = blockers.every((b) => TRANSPORT_BLOCKERS.has(b));
   if (onlyTransport) return false;
+
+  const boardBlockers = blockers.filter(
+    (b) => !TRANSPORT_BLOCKERS.has(b) && !isOpsOnlyFreshnessBlocker(b),
+  );
+  if (boardBlockers.length === 0) return false;
 
   return freshness.status === "degraded" || freshness.status === "failed";
 }
