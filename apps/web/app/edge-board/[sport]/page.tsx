@@ -56,6 +56,19 @@ export default async function EdgeBoardSportPage({
 
   const rows = await getRows(sportKey, slate);
   const gameCount = new Set(rows.map((r) => r.game).filter(Boolean)).size;
+  const nflWeeks = [
+    ...new Set(
+      rows
+        .map((r) => (r as { week?: number }).week)
+        .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
+    ),
+  ].sort((a, b) => a - b);
+  const nflWeekLabel =
+    nflWeeks.length === 1
+      ? `Week ${nflWeeks[0]} REG`
+      : nflWeeks.length > 1
+        ? `Weeks ${nflWeeks[0]}–${nflWeeks[nflWeeks.length - 1]} REG`
+        : "REG";
 
   const isNfl = sportKey === "nfl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
@@ -100,8 +113,8 @@ export default async function EdgeBoardSportPage({
                 ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
                 : isNfl
                   ? slate === "live"
-                    ? `Regular-season research board for the current week. ${keiCode} is the published fair line (identity — no separate Model column yet). Open/Best when books post. Preseason odds are not mixed in. You make the picks.`
-                    : `Projection-backed NFL games with sportsbook odds on file. ${keiCode} = published fair line. Research board — not a picks feed.`
+                    ? `${nflWeekLabel} research board (${gameCount || "—"} games). ${keiCode} = published fair line; Model vs KEI on Fair Lines when the blend splits. Open/Best when books post. PRE exhibitions filtered out. You make the picks.`
+                    : `Forward REG slate (${nflWeekLabel}, ${gameCount || "—"} games with books). ${keiCode} = published fair line. Research board — not a picks feed. PRE filtered out.`
                   : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
             </p>
           </div>
@@ -169,9 +182,9 @@ export default async function EdgeBoardSportPage({
               </Link>
             </div>
             <p className="text-[11px] text-gray-500 max-w-3xl">
-              REG fair-lines only · PRE market noise filtered out · PLAY tags
-              blocked in preseason info mode · empty Open/Best means books
-              have not posted yet (not a missing model)
+              REG fair-lines only · Week 1 live on Current week · Odds slate =
+              forward weeks with books · PRE filtered out · totals sides-only
+              (no Total PLAY) · empty Open/Best means books have not posted
             </p>
           </div>
         ) : null}

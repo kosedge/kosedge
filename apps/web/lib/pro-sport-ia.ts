@@ -57,7 +57,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Camp season: PRE slate + Camp Desk are live. Regular-season Edge Board / KEI lines stay empty until REG weeks post — that is preseason honesty, not a broken desk. Start with Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings.",
+      "Week 1 REG Edge Board + KEI lines are live (forward weeks on the Odds slate when books post). PRE stays info-only — no exhibition edges. Guest path: Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {

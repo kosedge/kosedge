@@ -290,7 +290,11 @@ export async function fetchNflEdgesDesk(params: {
     }),
   ]);
 
-  const fairEdges = fairBoard.lines.flatMap((line) =>
+  // Desk week is authoritative — do not mix forward-week fair-lines into W1.
+  const weekLines = fairBoard.lines.filter(
+    (line) => line.week == null || line.week === params.week,
+  );
+  const fairEdges = weekLines.flatMap((line) =>
     deskEdgesFromFairLine(line, { minProbEdge, minLineEdge }),
   );
   const todayIds = new Set(

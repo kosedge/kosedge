@@ -78,8 +78,8 @@ export default function ProWelcomeHub() {
               NFL guest walkthrough
             </h2>
             <p className="mt-1 text-sm text-kos-text/70">
-              Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings. REG
-              Edge Board stays quiet until regular-season weeks post.
+              Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings. Week 1
+              REG Edge Board + KEI are live — PRE exhibitions stay off the board.
             </p>
           </div>
           <Link

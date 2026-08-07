@@ -25,6 +25,8 @@ export type FlatEdgeBoardRow = {
   note?: string;
   commenceTime?: string;
   kei?: string;
+  /** Research Model (pre-blend) when it diverges from published KEI handicap. */
+  modelKei?: string;
   /** Fair away moneyline (American) when market is Moneyline. */
   keiAway?: string;
   /** Handicap (KEI) home win probability (0–1) for Moneyline edge in prob points. */
@@ -65,6 +67,9 @@ export type LegacyEdgeBoardRow = {
   bestOUBook?: string;
   keiLine?: PricePair;
   keiOU?: PricePair;
+  /** Optional Model (pre-blend) pair when it differs from KEI. */
+  modelLine?: PricePair;
+  modelOU?: PricePair;
   edgeLine?: PricePair;
   edgeOU?: PricePair;
   edgeLineNum?: number;
@@ -508,6 +513,28 @@ export function flatRowsToLegacy(
         }
       : EMPTY_PAIR;
 
+    const lineModel = (lineRow as FlatEdgeBoardRow | undefined)?.modelKei;
+    const totalModel = (totalRow as FlatEdgeBoardRow | undefined)?.modelKei;
+    let modelLine: PricePair | undefined;
+    if (
+      !isMoneyline &&
+      lineModel &&
+      lineKei &&
+      String(lineModel) !== String(lineKei)
+    ) {
+      modelLine = {
+        top: { label: flipSpread(lineModel), juice: "—" },
+        bottom: { label: lineModel, juice: "—" },
+      };
+    }
+    let modelOU: PricePair | undefined;
+    if (totalModel && totalKei && String(totalModel) !== String(totalKei)) {
+      modelOU = {
+        top: { label: `o${totalModel}`, juice: "—" },
+        bottom: { label: `u${totalModel}`, juice: "—" },
+      };
+    }
+
     const parseSpread = (s: string): number | null => {
       const n = parseFloat(String(s).replace(/[^+\-\d.]/g, ""));
       return Number.isFinite(n) ? n : null;
@@ -642,6 +669,8 @@ export function flatRowsToLegacy(
       bestOUBook: totalRow?.bookKey ?? totalRow?.book,
       keiLine,
       keiOU,
+      modelLine,
+      modelOU,
       edgeLine: edgeLineDisplay,
       edgeOU: edgeOUDisplay,
       edgeLineNum,
@@ -827,6 +856,13 @@ export default function EdgeBoard({
               <div className="mt-1 font-semibold text-kos-gold">
                 {(r.keiOU ?? EMPTY_PAIR).top.label}
               </div>
+              {r.modelLine || r.modelOU ? (
+                <div className="mt-2 text-[10px] leading-snug text-gray-400">
+                  Model{" "}
+                  {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
+                  {r.modelOU ? r.modelOU.top.label : "—"}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -1077,6 +1113,11 @@ export default function EdgeBoard({
                       compact
                       valueClassName="text-kos-gold font-semibold"
                     />
+                    {r.modelLine ? (
+                      <div className="mt-1 text-[10px] text-gray-400">
+                        Model {r.modelLine.bottom.label}
+                      </div>
+                    ) : null}
                   </td>
                   <td className={`${TD_DECISION} ${COL_MODEL}`}>
                     <PriceCell
@@ -1084,6 +1125,11 @@ export default function EdgeBoard({
                       compact
                       valueClassName="text-kos-gold font-semibold"
                     />
+                    {r.modelOU ? (
+                      <div className="mt-1 text-[10px] text-gray-400">
+                        Model {r.modelOU.top.label}
+                      </div>
+                    ) : null}
                   </td>
                   <td
                     className={`${TD_DECISION} ${COL_DECISION} ${edgeCellClass(r.tagLine)}`}
@@ -1120,7 +1166,7 @@ export default function EdgeBoard({
           {marketsOnly
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
-              ? "NFL tags — PASS default. Spread PLAY ≥2.5 pts (LEAN off). Totals sides-only (no Total PLAY). Preseason games stay PASS (info desk). KEI = published fair line (not a separate Model column). "
+              ? "NFL tags — PASS default. Spread PLAY ≥2.5 pts (LEAN off). Totals sides-only (no Total PLAY). PRE exhibitions filtered out. KEI = published fair line; Model shown under KEI when the blend splits. "
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}

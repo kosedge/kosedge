@@ -26,7 +26,7 @@ describe("shouldShowModelUnreachableBanner", () => {
     ).toBe(false);
   });
 
-  it("hides preseason transport failures during camp window", () => {
+  it("hides preseason transport failures when slate_status is honest empty", () => {
     expect(
       shouldShowModelUnreachableBanner({
         error: "Unable to reach model service.",
@@ -46,23 +46,22 @@ describe("shouldShowModelUnreachableBanner", () => {
 });
 
 describe("inferHonestEmptySlateStatus", () => {
-  it("maps preseason transport failures to preseason_empty", () => {
+  it("does not mask August transport failures once REG Week 1 board is live", () => {
     const august = new Date("2026-08-05T12:00:00Z");
-    expect(isNflPreseasonDeskWindow(august)).toBe(true);
+    expect(isNflPreseasonDeskWindow(august)).toBe(false);
     expect(
       inferHonestEmptySlateStatus({
         season: 2026,
         error: "Unable to reach model service.",
       }),
-    ).toBe("preseason_empty");
+    ).toBeNull();
   });
 });
 
 describe("honestEmptySlateCopy", () => {
-  it("explains preseason empty distinctly", () => {
-    expect(honestEmptySlateCopy("preseason_empty")).toContain(
-      "regular-season",
-    );
+  it("points guests at Edge Board / KEI when REG window is empty", () => {
+    expect(honestEmptySlateCopy("preseason_empty")).toContain("Edge Board");
+    expect(honestEmptySlateCopy("preseason_empty")).toContain("preseason");
   });
 });
 

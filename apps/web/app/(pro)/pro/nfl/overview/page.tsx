@@ -66,24 +66,24 @@ const DEMO_PATH = [
 
 const AT_A_GLANCE = [
   {
+    href: "/edge-board/nfl",
+    title: "Edge Board",
+    body: "Week 1 REG live — KEI vs market, selective PLAY/PASS. PRE filtered out.",
+  },
+  {
     href: "/pro/nfl/fair-lines",
     title: "KEI Lines",
-    body: "Model spreads & totals when REG weeks post — empty in camp is expected.",
+    body: "Published fair lines + Model vs KEI when the blend splits.",
   },
   {
     href: "/pro/nfl/edges",
     title: "Edges",
-    body: "Thresholded edges only when the REG board is live.",
+    body: "Thresholded REG edges for the current week — sides-first launch.",
   },
   {
     href: "/pro/nfl/camp",
     title: "Camp Desk",
     body: "Live practice notes and KosEdge news breaks during preseason.",
-  },
-  {
-    href: "/pro/nfl/teams",
-    title: "Team Hub",
-    body: "32-team research — depth, scheme, and preview angles.",
   },
 ] as const;
 
@@ -116,22 +116,22 @@ export default async function NflOverviewPage() {
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
               {NFL_TAGLINE} Context, model lines, and team research — not a
-              picks feed. Camp tools below are ready; REG Edge Board stays quiet
-              until regular-season weeks post.
+              picks feed. Week 1 REG Edge Board + KEI are live; camp tools stay
+              for practice notes. No preseason edges.
             </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-56">
             <Link
-              href="/pro/nfl/fantasy/mock"
+              href="/edge-board/nfl"
               className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
             >
-              Start Fantasy Mock
+              Open Week 1 Edge Board
             </Link>
             <Link
-              href="/pro/nfl/slate/today"
+              href="/pro/nfl/fantasy/mock"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
             >
-              Open Weekly Slate
+              Start Fantasy Mock
             </Link>
           </div>
         </div>
@@ -148,8 +148,8 @@ export default async function NflOverviewPage() {
               Guest walkthrough
             </h2>
             <p className="mt-1 max-w-2xl text-sm text-kos-text/65">
-              Five live surfaces for a clean first pass — mock, survivor, a game
-              box, a camp note, then season strength.
+              After the Week 1 Edge Board: mock, survivor, a game box, a camp
+              note, then season strength. PRE exhibitions stay off the board.
             </p>
           </div>
         </div>
