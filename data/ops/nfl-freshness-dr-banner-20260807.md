@@ -16,11 +16,19 @@ Model `/health` + `/health/db` were ok; board probes were offseason-unenforced.
 
 1. **Web** — hide guest banner when blockers are ops-only (`dr_backup:*`).
 2. **Model-service** — split product `status`/`blockers` from `ops_status`/`ops_blockers`; product_guidance follows board SLOs only; ops alerts still fire on DR lag.
-3. **Ops** — re-run `POST /api/jobs/run-nfl-dr-backup` once volume headroom is safe (capacity work deferred to **Thu Aug 13**). Enqueued 2026-08-07; timestamp had not advanced yet (likely dump still failing / worker issue).
+3. **Ops** — `POST /api/jobs/run-nfl-dr-backup?skip_verify=true` enqueued 2026-08-07; new `pg_dump` row landed at **2026-08-07T16:04:34Z** (`age_hours≈0.15`).
+
+## Before / after (prod)
+
+| Check | Before | After |
+|-------|--------|-------|
+| `/health/nfl-data-freshness` | `degraded`, blockers=`dr_backup:stale_296h>192h` | `status=ok`, `ops_blockers=[]`, DR age ~0.15h |
+| `/pro/nfl`, edge-board, fair-lines | Amber “Data freshness degraded · S2026 W1” | No guest degraded banner |
+| Ship | — | `deploy-vercel` @ `7957c067` (+ defense-in-depth code) |
 
 ## Verify
 
 ```bash
-curl -sS https://model-service-production-e253.up.railway.app/health/nfl-data-freshness | jq '{status,ops_status,blockers,ops_blockers}'
+curl -sS https://model-service-production-e253.up.railway.app/health/nfl-data-freshness | jq '{status,ops_status,blockers,ops_blockers,dr:.checks.dr_backup}'
 # Guest pages should not render "Data freshness degraded" for DR-only.
 ```
