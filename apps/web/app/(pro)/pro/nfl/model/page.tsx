@@ -11,12 +11,12 @@ export const dynamic = "force-dynamic";
 const TOOLS = [
   {
     href: "/pro/nfl/game-boxes",
-    title: "Future Game Boxes",
+    title: "Game Boxes",
     body: "Projected QB/RB/WR/TE boxes for a selected matchup — median with p10–p90 ranges, optional star-out scenario.",
   },
   {
     href: "/pro/nfl/survivor",
-    title: "Survivor Helper",
+    title: "Survivor",
     body: "Enter used teams, pick a future week, and rank remaining picks from season-path win rates (byes respected).",
   },
 ] as const;
@@ -32,7 +32,7 @@ export default async function NflSeasonModelHubPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Season Model"
-      summary="Full-season engine for future game boxes and survivor path rankings. Edge Board and KEI stay on their own rails."
+      summary="Full-season engine for Game Boxes and Survivor path rankings. Edge Board and KEI stay on their own rails — empty REG boards in camp are expected."
       badge="NFL season engine"
       primaryHref="/pro/nfl/game-boxes"
       primaryLabel="Open Game Boxes"

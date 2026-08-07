@@ -133,11 +133,23 @@ export function getNflNewsUpdate(slug: string): NflNewsUpdateArticle | null {
   }
 }
 
+function publishedSortKey(value: string): number {
+  // Prefer the date portion before "·" so "August 7, 2026 · 2:00 PM ET" sorts.
+  const datePart = value.split("·")[0]?.trim() ?? value;
+  const ts = Date.parse(datePart);
+  return Number.isFinite(ts) ? ts : 0;
+}
+
 export function getAllNflNewsUpdates(): NflNewsUpdateMeta[] {
   return listNflNewsUpdateSlugs()
     .map((slug) => getNflNewsUpdate(slug))
     .filter((article): article is NflNewsUpdateArticle => article !== null)
-    .map(({ bodyMarkdown: _body, wordCount: _wc, ...meta }) => meta);
+    .map(({ bodyMarkdown: _body, wordCount: _wc, ...meta }) => meta)
+    .sort(
+      (a, b) =>
+        publishedSortKey(b.publishedAt) - publishedSortKey(a.publishedAt) ||
+        a.slug.localeCompare(b.slug),
+    );
 }
 
 export function summarizeNewsLean(bodyMarkdown: string): string | null {

@@ -106,7 +106,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/player-previews", label: "Player Previews" },
       { href: "/pro/nfl/awards", label: "Awards" },
       { href: "/wall-chart/nfl-2026", label: "Wall Chart" },
-      { href: "/pro/nfl/camp", label: "Camp Desk" },
+      { href: "/pro/nfl/camp", label: "Camp" },
       { href: "/pro/model-transparency", label: "Model Health" },
     ],
   },

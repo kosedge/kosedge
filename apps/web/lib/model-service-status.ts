@@ -108,7 +108,7 @@ export function honestEmptySlateCopy(status?: string | null): string {
   switch (status?.trim()) {
     case "preseason_empty":
     case "no_reg_week_games":
-      return "No regular-season games in this window yet — common during camp and early preseason. KosEdge does not invent fair lines or edges until the REG slate posts.";
+      return "No regular-season games in this window yet — expected during camp and early preseason. Use Camp Desk, Fantasy Mock, Survivor, Game Boxes, and Power Ratings now; KosEdge does not invent fair lines or edges until the REG slate posts.";
     case "offseason_empty":
     case "no_slate":
       return "No slate games in the current window. Check back when the season schedule is live.";

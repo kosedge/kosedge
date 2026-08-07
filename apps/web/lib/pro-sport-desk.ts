@@ -148,10 +148,10 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       },
       {
         href: "/pro/nfl/camp",
-        title: "Training Camp Desk",
+        title: "Camp Desk",
         description:
-          "Beat map, public camp headlines, and KosEdge coverage into kickoff.",
-        cta: "Open camp desk →",
+          "KosEdge camp updates, beat map, and practice notes into kickoff.",
+        cta: "Open Camp Desk →",
         accent: "green",
       },
       {
@@ -171,11 +171,11 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "green",
       },
       {
-        href: "/pro/nfl/fantasy",
-        title: "Fantasy Draft Desk",
+        href: "/pro/nfl/fantasy/mock",
+        title: "Fantasy Mock",
         description:
-          "Model vs ADP, floor/median/ceiling, schedule context, and team builder.",
-        cta: "Open draft desk →",
+          "Practice a draft on the model board — Rankings and Builder sit one click back.",
+        cta: "Start Mock →",
         accent: "gold",
       },
       {

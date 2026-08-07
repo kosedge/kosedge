@@ -49,7 +49,7 @@ export default function InjuryNewsFeedSection({
               href={campHref}
               className="rounded-xl border border-kos-gold/30 bg-kos-gold/10 px-4 py-2 text-sm text-kos-gold hover:border-kos-gold/50"
             >
-              {sportLabel === "NFL" ? "Training Camp Desk" : "Sport overview"}
+              {sportLabel === "NFL" ? "Camp Desk" : "Sport overview"}
             </Link>
           ) : null}
         </div>

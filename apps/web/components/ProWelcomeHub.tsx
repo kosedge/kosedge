@@ -32,8 +32,8 @@ const cards: HubCard[] = [
     accent: "gold",
   },
   {
-    title: "Prediction Market",
-    desc: "Prediction market data and insights.",
+    title: "Prediction Markets",
+    desc: "Public prediction-market prices beside model views.",
     href: "/pro/prediction-market",
     accent: "green",
   },
@@ -45,7 +45,7 @@ const cards: HubCard[] = [
   },
   {
     title: "Props Center",
-    desc: "Prop analyzer and edge screens (V1+).",
+    desc: "Cross-sport prop scan — NFL player props live on the NFL Props board.",
     href: "/pro/props-center",
     accent: "green",
   },
@@ -70,16 +70,16 @@ export default function ProWelcomeHub() {
     <section className="w-full">
       <div className="mb-5 rounded-2xl border border-kos-gold/35 bg-kos-gold/10 px-5 py-4 sm:px-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-          Research desk
+          Start here
         </p>
         <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold tracking-tight text-kos-text sm:text-2xl">
-              NFL Overview is live
+              NFL guest walkthrough
             </h2>
             <p className="mt-1 text-sm text-kos-text/70">
-              Shared shell, At a Glance, Weekly Slate, and Edge Board — open the
-              NFL research desk.
+              Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings. REG
+              Edge Board stays quiet until regular-season weeks post.
             </p>
           </div>
           <Link
@@ -124,7 +124,7 @@ export default function ProWelcomeHub() {
               href="/edge-board"
               className="px-4 py-2 rounded-xl bg-kos-green/20 border border-kos-green/40 text-kos-green hover:bg-kos-green/30 hover:border-kos-green/50 transition text-center font-semibold"
             >
-              Free
+              Free Edge Board
             </Link>
             <Link
               href="/"

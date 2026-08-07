@@ -7,9 +7,9 @@ import { getAllNflNewsUpdates } from "@/lib/nfl-news-updates";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "NFL Training Camp Desk",
+  title: "NFL Camp Desk",
   description:
-    "Kos Edge Training Camp Desk — beat links, public camp intel, and KosEdge coverage for the 2026 preseason.",
+    "Kos Edge Camp Desk — first-week camp updates, beat links, and practice notes for the 2026 preseason.",
 };
 
 function formatPublished(value: string | null): string {
@@ -41,14 +41,15 @@ export default async function NflCampDeskPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-            NFL Pro · Training Camp Desk
+            NFL Pro · Camp Desk
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
-            Camp intel & beat map
+            Camp updates & beat map
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Daily cadence surface for July–September: public camp news, ESPN
-            team hubs, and KosEdge beat coverage. Thin edges stay Pass.
+            First-week camp notes on projected starters, usage shifts, QB
+            battles, and injuries that move fantasy or team projections. Public
+            beat hubs below. Thin edges stay Pass.
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
             {desk.diagnostics.newsCount} camp headlines ·{" "}
@@ -66,13 +67,13 @@ export default async function NflCampDeskPage() {
             href="/pro/nfl/overview"
             className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
           >
-            Back to Hub
+            NFL Overview
           </Link>
           <Link
-            href="/pro/nfl/slate/today"
-            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
+            href="/pro/nfl/news"
+            className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
           >
-            Weekly slate
+            All camp updates
           </Link>
           <Link
             href="/pro/nfl/previews"

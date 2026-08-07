@@ -25,26 +25,65 @@ function deskCtaClass(accent: "gold" | "green" | "neutral"): string {
   return "mt-3 inline-block text-sm font-semibold text-kos-gold";
 }
 
+/** Guest / family walkthrough — order is the product story, not a paywall tour. */
+const DEMO_PATH = [
+  {
+    step: "1",
+    href: "/pro/nfl/fantasy/mock",
+    title: "Fantasy Mock",
+    body: "Practice a draft against the model board — Rankings → Builder → Mock.",
+    cta: "Start Mock →",
+  },
+  {
+    step: "2",
+    href: "/pro/nfl/survivor",
+    title: "Survivor",
+    body: "Plan week-by-week picks from season-path win rates (byes respected).",
+    cta: "Open Survivor →",
+  },
+  {
+    step: "3",
+    href: "/pro/nfl/game-boxes",
+    title: "Game Boxes",
+    body: "Projected skill-player boxes for a future matchup — median + ranges.",
+    cta: "Open Game Boxes →",
+  },
+  {
+    step: "4",
+    href: "/pro/nfl/camp",
+    title: "Camp Updates",
+    body: "First-week camp notes: starters, usage, QB battles, injury impact.",
+    cta: "Open Camp Desk →",
+  },
+  {
+    step: "5",
+    href: "/pro/power-ratings/nfl",
+    title: "Power Ratings",
+    body: "Season strength view from the preseason sim — not a live weekly slate.",
+    cta: "Open Power Ratings →",
+  },
+] as const;
+
 const AT_A_GLANCE = [
   {
     href: "/pro/nfl/fair-lines",
-    title: "Model vs Market",
-    body: "KEI lines beside open books — see where the model separates.",
+    title: "KEI Lines",
+    body: "Model spreads & totals when REG weeks post — empty in camp is expected.",
   },
   {
     href: "/pro/nfl/edges",
-    title: "Key Numbers",
-    body: "Thresholded edges around NFL key numbers and totals bands.",
+    title: "Edges",
+    body: "Thresholded edges only when the REG board is live.",
   },
   {
-    href: "/pro/nfl/injuries",
-    title: "Injury Impact",
-    body: "Availability context that changes pricing and role assumptions.",
+    href: "/pro/nfl/camp",
+    title: "Camp Desk",
+    body: "Live practice notes and KosEdge news breaks during preseason.",
   },
   {
     href: "/pro/nfl/teams",
-    title: "Quick Access",
-    body: "32-team research hub — depth, scheme, and preview angles.",
+    title: "Team Hub",
+    body: "32-team research — depth, scheme, and preview angles.",
   },
 ] as const;
 
@@ -77,15 +116,16 @@ export default async function NflOverviewPage() {
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
               {NFL_TAGLINE} Context, model lines, and team research — not a
-              picks feed.
+              picks feed. Camp tools below are ready; REG Edge Board stays quiet
+              until regular-season weeks post.
             </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-56">
             <Link
-              href="/edge-board/nfl"
+              href="/pro/nfl/fantasy/mock"
               className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
             >
-              Open Live Edgeboard
+              Start Fantasy Mock
             </Link>
             <Link
               href="/pro/nfl/slate/today"
@@ -95,6 +135,47 @@ export default async function NflOverviewPage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* Guest demo path — first click should feel finished */}
+      <section className="mt-6">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+              Start here
+            </p>
+            <h2 className="mt-1 text-lg font-semibold tracking-tight text-kos-text">
+              Guest walkthrough
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm text-kos-text/65">
+              Five live surfaces for a clean first pass — mock, survivor, a game
+              box, a camp note, then season strength.
+            </p>
+          </div>
+        </div>
+        <ol className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          {DEMO_PATH.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="flex h-full min-h-11 flex-col rounded-xl border border-kos-gold/25 bg-black/40 px-4 py-4 transition hover:border-kos-gold/50 hover:bg-black/55 active:scale-[0.99]"
+              >
+                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold/80">
+                  Step {item.step}
+                </span>
+                <h3 className="mt-1.5 text-sm font-semibold text-kos-text">
+                  {item.title}
+                </h3>
+                <p className="mt-1.5 flex-1 text-xs leading-relaxed text-kos-text/70">
+                  {item.body}
+                </p>
+                <span className="mt-3 text-sm font-semibold text-kos-gold">
+                  {item.cta}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* At a Glance */}

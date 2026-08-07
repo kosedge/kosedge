@@ -57,7 +57,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Preseason desk live: weekly slate with PRE market + camp strength refs, Training Camp Desk beats, 32 season previews, and the betting path (KEI Lines → Edges → Props).",
+      "Camp season: PRE slate + Camp Desk are live. Regular-season Edge Board / KEI lines stay empty until REG weeks post — that is preseason honesty, not a broken desk. Start with Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
@@ -213,8 +213,8 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         },
         {
           href: "/pro/nfl/camp",
-          label: "Training Camp Desk",
-          hint: "Beat map, public camp headlines, and KosEdge desk coverage.",
+          label: "Camp Desk",
+          hint: "KosEdge camp updates, beat map, and public practice notes.",
           premium: true,
           status: "active",
         },
@@ -262,7 +262,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/prediction-market",
           label: "Prediction Markets",
-          hint: "Prediction market data and insights.",
+          hint: "Cross-check model views against public prediction-market prices.",
           premium: true,
           status: "active",
         },
@@ -290,21 +290,21 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/model",
           label: "Season Model",
-          hint: "Full-season engine hub — game boxes and survivor helper.",
+          hint: "Full-season engine hub — Game Boxes and Survivor.",
           premium: true,
           status: "active",
         },
         {
           href: "/pro/nfl/game-boxes",
           label: "Game Boxes",
-          hint: "Projected player boxes for a future matchup with p10–p90 ranges.",
+          hint: "Projected skill-player boxes for a future matchup (median + p10–p90).",
           premium: true,
           status: "active",
         },
         {
           href: "/pro/nfl/survivor",
-          label: "Survivor Helper",
-          hint: "Rank remaining survivor picks from path-coherent season sims.",
+          label: "Survivor",
+          hint: "Week-by-week survivor planner from path-coherent season sims.",
           premium: true,
           status: "active",
         },
@@ -325,7 +325,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/fantasy",
           label: "Fantasy Draft Desk",
-          hint: "Model ranks vs ADP, floor/median/ceiling, schedule notes, team builder.",
+          hint: "Model ranks vs ADP → Builder → Mock. Start Mock for the guest walkthrough.",
           premium: true,
           status: "active",
         },
@@ -367,7 +367,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/stats",
           label: "League Stats",
-          hint: "Offseason: preseason sim strength table until EPA intel weeks exist.",
+          hint: "Preseason: sim strength table until regular-season EPA weeks post.",
           premium: true,
           status: "active",
         },
@@ -381,7 +381,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/injuries",
           label: "Injuries & News",
-          hint: "Latest available report week (may be prior-season until 2026 camp reports land).",
+          hint: "Weekly injury feed when posted — use Camp Desk for live practice notes now.",
           premium: true,
           status: "active",
         },

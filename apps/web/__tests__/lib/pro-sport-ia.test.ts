@@ -39,7 +39,7 @@ function buildRow(
 const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
   "Weekly Slate": [
     "Weekly Slate",
-    "Training Camp Desk",
+    "Camp Desk",
     "Team Previews",
     "Player Previews",
   ],
@@ -53,7 +53,7 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
     "Futures",
     "Season Model",
     "Game Boxes",
-    "Survivor Helper",
+    "Survivor",
   ],
   "Props & Fantasy": [
     "Player Props Board",
@@ -125,7 +125,7 @@ describe("pro sport IA", () => {
     );
 
     expect(byLabel["Weekly Slate"]).toBe("/pro/nfl/slate/today");
-    expect(byLabel["Training Camp Desk"]).toBe("/pro/nfl/camp");
+    expect(byLabel["Camp Desk"]).toBe("/pro/nfl/camp");
     expect(byLabel["Team Previews"]).toBe("/pro/nfl/previews");
     expect(byLabel["Player Previews"]).toBe("/pro/nfl/player-previews");
     expect(byLabel["KEI Lines"]).toBe("/pro/nfl/fair-lines");

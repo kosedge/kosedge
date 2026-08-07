@@ -237,11 +237,13 @@ export function FantasyDraftDeskClient({
       ) : null}
 
       {isPreseason ? (
-        <HonestStatusBanner title="Preseason board" tone="sky">
+        <HonestStatusBanner title="Preseason fantasy board" tone="sky">
           <p>
-            Live draft-rankings aren&apos;t populated yet — this desk uses the
-            season-engine preseason sim for skill positions (QB / RB / WR / TE).
-            Market ADP is still FantasyPros; unmatched names show ADP as —.
+            Regular-season draft rankings aren&apos;t posted yet — this desk
+            uses the season-engine preseason sim for skill positions (QB / RB /
+            WR / TE). Market ADP is still FantasyPros; unmatched names show ADP
+            as —. That is camp-season honesty, not an unfinished page. Start
+            Mock still works on this board.
           </p>
         </HonestStatusBanner>
       ) : null}
