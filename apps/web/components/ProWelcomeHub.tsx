@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SPORTS } from "@/lib/sports";
-import { getProInsightOfWeek } from "@/lib/insights/pillars";
+import { getFeaturedDeskNote } from "@/lib/insights/content";
 import { TOP_EDGE, HIGHLIGHTED_GAMES } from "@/lib/featured-games";
 import EdgeBoardPreview from "./EdgeBoardPreview";
 
@@ -64,7 +64,12 @@ const cards: HubCard[] = [
 ];
 
 export default function ProWelcomeHub() {
-  const proInsight = getProInsightOfWeek();
+  const deskNote = getFeaturedDeskNote();
+  const deskHref = deskNote
+    ? deskNote.kind === "doctrine"
+      ? `/insights/doctrine/${deskNote.slug}`
+      : `/insights/notes/${deskNote.slug}`
+    : "/insights";
 
   return (
     <section className="w-full">
@@ -148,32 +153,28 @@ export default function ProWelcomeHub() {
             />
           </div>
         </div>
-        {/* Insight of the Week — Pro insight, rotates weekly */}
+        {/* This Week — featured desk note */}
         <div className="rounded-3xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 shadow-xl">
           <h3 className="text-lg font-bebas text-kos-gold tracking-wide">
-            Insight of the Week
+            This Week
           </h3>
           <div className="mt-4 text-sm text-gray-200/90 line-clamp-4">
-            {proInsight ? (
+            {deskNote ? (
               <>
-                <p className="font-medium text-kos-gold">{proInsight.title}</p>
-                {proInsight.body.slice(0, 2).map((b, i) =>
-                  typeof b === "string" ? (
-                    <p key={i} className="mt-2 text-gray-300/90">
-                      {b}
-                    </p>
-                  ) : null,
-                )}
+                <p className="font-medium text-kos-gold">{deskNote.title}</p>
+                <p className="mt-2 text-gray-300/90">{deskNote.bottomLine}</p>
               </>
             ) : (
-              <p className="text-gray-400">Pro insight rotates weekly.</p>
+              <p className="text-gray-400">
+                Desk notes land here — process, reprice, trap spots.
+              </p>
             )}
           </div>
           <Link
-            href="/insights"
+            href={deskHref}
             className="mt-4 inline-block text-sm font-semibold text-kos-gold hover:underline"
           >
-            Browse Insights →
+            Open Insights →
           </Link>
         </div>
       </div>
