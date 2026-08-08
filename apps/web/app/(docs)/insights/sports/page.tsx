@@ -26,9 +26,7 @@ export default function InsightsSportsPage() {
               <h2 className="text-xl font-semibold text-kos-gold">{s.label}</h2>
               <span className="text-xs text-kos-text/50">
                 {s.noteCount} note{s.noteCount === 1 ? "" : "s"}
-                {s.doctrineCount > 0
-                  ? ` · ${s.doctrineCount} doctrine`
-                  : ""}
+                {s.doctrineCount > 0 ? ` · ${s.doctrineCount} doctrine` : ""}
               </span>
             </div>
             <p className="mt-2 text-sm text-kos-text/70">{s.fullName}</p>

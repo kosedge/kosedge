@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import InsightArticleView from "@/components/insights/InsightArticleView";
-import {
-  getDoctrineArticles,
-  getDoctrineBySlug,
-} from "@/lib/insights/content";
+import { getDoctrineArticles, getDoctrineBySlug } from "@/lib/insights/content";
 
 export function generateStaticParams() {
   return getDoctrineArticles().map((a) => ({ slug: a.slug }));

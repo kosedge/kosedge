@@ -19,7 +19,7 @@ export const DESK_NOTES: InsightArticle[] = [
       "A few early NFL numbers are already past our fair; a few still sit soft. The job this week is disagreement — not a full card.",
     keyPoints: [
       "Prioritize spots where KEI and best available still diverge after juice.",
-      "Ignore \"must bet\" narratives on chalk that already moved through fair.",
+      'Ignore "must bet" narratives on chalk that already moved through fair.',
       "Empty sides of the slate are fine — see No Forced Action.",
     ],
     teaser:
@@ -29,13 +29,13 @@ export const DESK_NOTES: InsightArticle[] = [
         heading: "How we're reading the board",
         blocks: [
           "Open the Edge Board with NFL filtered. We're looking for model/KEI vs best gaps that clear threshold — not for stories about public teams.",
-          "If the market has already steamed through our number, that is information. Respect it; don't chase a worse price to be \"on\" a side.",
+          'If the market has already steamed through our number, that is information. Respect it; don\'t chase a worse price to be "on" a side.',
         ],
       },
       {
         heading: "Process note",
         blocks: [
-          "Make the number first, then compare. If you find yourself justifying a play because the side \"feels live,\" step back to Threshold Discipline.",
+          'Make the number first, then compare. If you find yourself justifying a play because the side "feels live," step back to Threshold Discipline.',
         ],
       },
     ],
@@ -66,10 +66,10 @@ export const DESK_NOTES: InsightArticle[] = [
     sports: ["cfb"],
     tags: ["survivor", "trap"],
     bottomLine:
-      "The chalkiest CFB survivor names are where public tickets cluster. Trap risk is about price, volatility, and correlated fade — not about \"who is better.\"",
+      'The chalkiest CFB survivor names are where public tickets cluster. Trap risk is about price, volatility, and correlated fade — not about "who is better."',
     keyPoints: [
       "Survivor is a survival problem, not a straight-up handicap problem.",
-      "Trap spots often look \"safe\" at the wrong number.",
+      'Trap spots often look "safe" at the wrong number.',
       "Passing a week (or holding a landmine) beats forcing a popular name.",
     ],
     teaser:
@@ -140,7 +140,7 @@ export const DESK_NOTES: InsightArticle[] = [
       {
         heading: "Why this stays Pro",
         blocks: [
-          "The weekly reprice diary is ongoing desk work — deeper \"why this number\" than the public doctrine. Doctrine stays free; the live application is the Pro layer.",
+          'The weekly reprice diary is ongoing desk work — deeper "why this number" than the public doctrine. Doctrine stays free; the live application is the Pro layer.',
         ],
       },
     ],

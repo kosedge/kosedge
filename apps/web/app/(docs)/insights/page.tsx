@@ -84,11 +84,7 @@ export default async function InsightsThisWeekPage() {
           </p>
           <div className="mt-4 grid gap-4">
             {teaserOnly.map((article) => (
-              <InsightCard
-                key={article.slug}
-                article={article}
-                teaserOnly
-              />
+              <InsightCard key={article.slug} article={article} teaserOnly />
             ))}
           </div>
         </section>
@@ -114,8 +110,8 @@ export default async function InsightsThisWeekPage() {
           </h2>
           <p className="mt-2 text-sm leading-6 text-kos-text/80">
             Doctrine teaches you how the desk thinks — free. Pro unlocks the
-            ongoing weekly notes: full reprice logic, survivor trap callouts, and
-            archive access tied to live boards.
+            ongoing weekly notes: full reprice logic, survivor trap callouts,
+            and archive access tied to live boards.
           </p>
           <Link
             href="/pro"

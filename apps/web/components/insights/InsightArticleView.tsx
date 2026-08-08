@@ -11,10 +11,7 @@ function Blocks({ blocks }: { blocks: InsightBlock[] }) {
             {block}
           </p>
         ) : (
-          <ul
-            key={i}
-            className="list-disc space-y-1.5 pl-5 text-kos-text/85"
-          >
+          <ul key={i} className="list-disc space-y-1.5 pl-5 text-kos-text/85">
             {block.map((item, j) => (
               <li key={j} className="leading-6">
                 {item}

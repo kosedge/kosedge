@@ -1,8 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import {
-  getDoctrineBySlug,
-  getDeskNoteBySlug,
-} from "@/lib/insights/content";
+import { getDoctrineBySlug, getDeskNoteBySlug } from "@/lib/insights/content";
 
 /**
  * Legacy /insights/[slug] permalinks.

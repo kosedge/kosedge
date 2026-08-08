@@ -23,7 +23,7 @@ export const DOCTRINE: InsightArticle[] = [
       {
         heading: "Why order matters",
         blocks: [
-          "If you start from the market, you inherit its framing — juice, key numbers, and narrative already baked in. Your \"edge\" becomes a story about why the board is wrong instead of a measurement of where your fair disagrees.",
+          'If you start from the market, you inherit its framing — juice, key numbers, and narrative already baked in. Your "edge" becomes a story about why the board is wrong instead of a measurement of where your fair disagrees.',
           "KosEdge starts with an independent number: power, matchup, distribution, and context. Only after that number exists do we compare to open, best, and close.",
         ],
       },
@@ -74,7 +74,7 @@ export const DOCTRINE: InsightArticle[] = [
         blocks: [
           [
             "Treating model output as a bet slip",
-            "Skipping KEI and calling every model/market gap \"edge\"",
+            'Skipping KEI and calling every model/market gap "edge"',
             "Chasing steam without updating fair",
           ],
           "KosEdge keeps the layers visible so you can see whether a play is research disagreement, information reprice, or true market misprice.",
@@ -111,7 +111,7 @@ export const DOCTRINE: InsightArticle[] = [
         heading: "Why thresholds exist",
         blocks: [
           "Without a cutoff, every interesting matchup becomes a bet. Interesting is not +EV. Thresholds turn handicapping into a filter: act only when the price mistake is large enough to survive variance, juice, and your own estimation error.",
-          "\"Close enough\" is how bankrolls die — one soft play at a time, each justified by a story.",
+          '"Close enough" is how bankrolls die — one soft play at a time, each justified by a story.',
         ],
       },
       {
@@ -163,7 +163,7 @@ export const DOCTRINE: InsightArticle[] = [
         blocks: [
           [
             "Not a substitute for edge thresholds",
-            "Not proof a single win was \"sharp\"",
+            'Not proof a single win was "sharp"',
             "Not a reason to bet into a number that no longer clears fair",
           ],
           "KosEdge tracks CLV so you can tell the truth about process. The religion remains: fair number, threshold, price.",
@@ -194,7 +194,7 @@ export const DOCTRINE: InsightArticle[] = [
     bottomLine:
       "Official > trusted beat/insider > noise. Reprice only when the information earns the right to move your number.",
     keyPoints: [
-      "Not all \"news\" deserves a line move.",
+      'Not all "news" deserves a line move.',
       "Tier your sources before you tier your bets.",
       "Late noise is how recreational money buys the wrong side of steam.",
     ],
@@ -213,7 +213,7 @@ export const DOCTRINE: InsightArticle[] = [
       {
         heading: "Injury and reprice logic",
         blocks: [
-          "The question is never \"is this player out?\" alone. It is: how much did the market already move, and does our fair still disagree after a disciplined reprice?",
+          'The question is never "is this player out?" alone. It is: how much did the market already move, and does our fair still disagree after a disciplined reprice?',
           "Desk notes this week will call out trap spots where the public overreacts to a name while the number is already past fair.",
         ],
       },
@@ -237,7 +237,7 @@ export const DOCTRINE: InsightArticle[] = [
     tier: "free",
     tags: ["price", "execution"],
     bottomLine:
-      "Key numbers, juice, and thresholds decide whether a \"good side\" is actually a good bet. Side without price is just a rooting interest.",
+      'Key numbers, juice, and thresholds decide whether a "good side" is actually a good bet. Side without price is just a rooting interest.',
     keyPoints: [
       "Half-points and key numbers change EV more than most narratives.",
       "Juice is part of the price — always.",
@@ -248,7 +248,7 @@ export const DOCTRINE: InsightArticle[] = [
         heading: "Key numbers and juice",
         blocks: [
           "In football, 3 and 7 are not decorations. Crossing a key number can flip a play from pass to act — or kill one that looked fine at a worse number.",
-          "In every sport, -110 vs -105 is real money across a hundred bets. Ignoring juice is how \"small\" leaks compound.",
+          'In every sport, -110 vs -105 is real money across a hundred bets. Ignoring juice is how "small" leaks compound.',
         ],
       },
       {
@@ -287,7 +287,7 @@ export const DOCTRINE: InsightArticle[] = [
       {
         heading: "Variance is not a verdict",
         blocks: [
-          "A 55% process can go cold for weeks. That is math, not betrayal. People who size like every week must \"win\" turn variance into ruin.",
+          'A 55% process can go cold for weeks. That is math, not betrayal. People who size like every week must "win" turn variance into ruin.',
           "KosEdge teaches long-game bankroll thinking so subscribers stay solvent — and subscribed — through normal noise.",
         ],
       },
@@ -296,7 +296,7 @@ export const DOCTRINE: InsightArticle[] = [
         blocks: [
           [
             "Default flat or unit-capped until calibration is proven",
-            "Never size up to \"get even\"",
+            'Never size up to "get even"',
             "Cap exposure per slate and per correlated cluster",
           ],
         ],
@@ -337,14 +337,14 @@ export const DOCTRINE: InsightArticle[] = [
       {
         heading: "Why desks force action",
         blocks: [
-          "Content pressure, dopamine, and \"I put in the work\" all push toward betting something. None of those are +EV.",
+          'Content pressure, dopamine, and "I put in the work" all push toward betting something. None of those are +EV.',
           "KosEdge would rather publish a thin This Week than invent edges that don't clear threshold.",
         ],
       },
       {
         heading: "Survivor and slate traps",
         blocks: [
-          "Forced survivor picks and \"must-play\" narratives are where public money concentrates. Desk notes will flag trap spots — your job is still to pass when the number is wrong.",
+          'Forced survivor picks and "must-play" narratives are where public money concentrates. Desk notes will flag trap spots — your job is still to pass when the number is wrong.',
         ],
       },
     ],
@@ -428,7 +428,7 @@ export const DOCTRINE: InsightArticle[] = [
           [
             "Don't screenshot a single sim path and call it destiny",
             "Don't dump raw model tables into decision-making",
-            "Don't skip threshold once the fair looks \"close\"",
+            'Don\'t skip threshold once the fair looks "close"',
           ],
           "The editorial layer (Insights) explains thinking. The boards show the number. Keep them in their lanes.",
         ],
