@@ -710,8 +710,6 @@ export default function EdgeBoard({
 }) {
   const safeRows = Array.isArray(rows) ? rows : [];
   const keiCode = getKeiCode(sportKey);
-  const edgeGreen =
-    "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
   const hasRealData = safeRows.length > 0;
   const legacy = hasRealData
     ? flatRowsToLegacy(safeRows, sportKey)
