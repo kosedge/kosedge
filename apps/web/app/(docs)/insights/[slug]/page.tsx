@@ -1,38 +1,35 @@
-import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import { getMdxBySlug, getMdxSlugs } from "@/lib/mdx";
-import { useMDXComponents } from "@/mdx-components";
+import { notFound, redirect } from "next/navigation";
+import {
+  getDoctrineBySlug,
+  getDeskNoteBySlug,
+} from "@/lib/insights/content";
 
-export function generateStaticParams() {
-  return getMdxSlugs("insights").map((slug) => ({ slug }));
-}
+/**
+ * Legacy /insights/[slug] permalinks.
+ * Canonical routes are /insights/doctrine/[slug] and /insights/notes/[slug].
+ */
+export default async function LegacyInsightSlugPage({
+  params,
+}: {
+  params: Promise<{ slug: string }> | { slug: string };
+}) {
+  const resolved =
+    params && typeof (params as Promise<unknown>).then === "function"
+      ? await (params as Promise<{ slug: string }>)
+      : (params as { slug: string });
 
-export default function InsightPage({ params }: { params: { slug: string } }) {
-  const components = useMDXComponents({});
-  const slugs = getMdxSlugs("insights");
-  if (!slugs.includes(params.slug)) return notFound();
+  const { slug } = resolved;
 
-  const post = getMdxBySlug("insights", params.slug);
+  // Reserved section paths should never hit this dynamic route, but guard anyway.
+  if (slug === "doctrine" || slug === "sports" || slug === "notes") {
+    redirect(`/insights/${slug}`);
+  }
 
-  return (
-    <main className="min-h-screen bg-kos-black">
-      <article className="mx-auto max-w-3xl px-6 py-14">
-        <div className="rounded-2xl border border-kos-border bg-kos-surface/40 p-8">
-          <p className="text-sm text-kos-text/60">{post.frontmatter.date}</p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight text-kos-text">
-            {post.frontmatter.title}
-          </h1>
-          {post.frontmatter.description && (
-            <p className="mt-4 text-kos-text/80">
-              {post.frontmatter.description}
-            </p>
-          )}
-        </div>
+  const doctrine = getDoctrineBySlug(slug);
+  if (doctrine) redirect(`/insights/doctrine/${slug}`);
 
-        <div className="prose prose-invert mt-10 max-w-none">
-          <MDXRemote source={post.content} components={components} />
-        </div>
-      </article>
-    </main>
-  );
+  const note = getDeskNoteBySlug(slug);
+  if (note) redirect(`/insights/notes/${slug}`);
+
+  return notFound();
 }

@@ -1,3 +1,8 @@
+/**
+ * @deprecated Legacy numbered pillar curriculum (1.1–7.4).
+ * Public Insights UI now uses lib/insights/content (doctrine + desk notes).
+ * Kept temporarily so old imports and content aren't lost during migration.
+ */
 import type { InsightSection } from "../types";
 import type { PillarMeta } from "../types";
 import { getProInsightWeekIndex } from "../rotation";
@@ -37,7 +42,7 @@ const PILLAR_METAS: PillarMeta[] = [
   },
 ];
 
-/** Get section for pillar (1–7) and section index (1–4). */
+/** @deprecated */
 export function getSection(
   pillarNum: number,
   sectionNum: number,
@@ -47,15 +52,17 @@ export function getSection(
   return p ? (p[s] ?? null) : null;
 }
 
+/** @deprecated */
 export function getPillarMeta(pillarNum: number): PillarMeta | null {
   return PILLAR_METAS[pillarNum - 1] ?? null;
 }
 
+/** @deprecated */
 export function getAllPillarMetas(): PillarMeta[] {
   return [...PILLAR_METAS];
 }
 
-/** Current Pro insight of the week (pillars 5, 6, 7 rotating). */
+/** @deprecated Prefer getFeaturedDeskNote from lib/insights/content. */
 export function getProInsightOfWeek(): InsightSection | null {
   const idx = getProInsightWeekIndex();
   const pillarNum = 5 + Math.floor(idx / 4);

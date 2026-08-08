@@ -211,6 +211,15 @@ export default async function SportOverviewPage({
             links={section.links}
           />
         ))}
+        <Link
+          href={`/insights/sports/${sportKey}`}
+          className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-5 hover:border-kos-gold/45 transition"
+        >
+          <h3 className="font-semibold text-kos-gold">Insights</h3>
+          <p className="mt-2 text-sm text-kos-text/70">
+            Desk notes and doctrine for {sportName} — This Week and house rules.
+          </p>
+        </Link>
       </div>
 
       {/* Bottom research tools */}
