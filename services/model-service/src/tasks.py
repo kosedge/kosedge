@@ -977,13 +977,16 @@ def _load_team_strength_priors(
       side before blend.
     - Continuity score → ``prior_travel`` on residual prior mass (not a new
       rating scale; QB factor ≠ full QB premium).
+    - QB premium → capped offense-index delta from projected starter quality
+      (process-over-counting); full-strength uses healthy starter, current
+      reflects starter availability when injury/inactive feed is present.
     - Current component = current-season rolling when the team has completed
       REG games (week-capped); missing current → keep prior (do not drop).
     - Blend: ``w_current = clamp(team_completed_reg / 8, 0, 1)`` (unchanged),
       ``w_prior = (1 - w_current) * prior_travel``,
       ``w_anchor = (1 - w_current) * (1 - prior_travel)`` toward league mean.
-    - Full-strength PR = blended intrinsic; current PR starts equal until
-      injury/availability overlays apply a labeled delta.
+    - Full-strength PR = blended intrinsic (+ starter QB premium); current PR
+      starts equal until injury/availability overlays apply a labeled delta.
     """
     primary_season = int(season_year)
     fallback_season = int(season_year) - 1
@@ -1164,6 +1167,23 @@ def _load_team_strength_priors(
         except Exception:
             continuity_book = {}
 
+    # QB premium book (starter quality → capped offense delta). Separate from
+    # continuity travel; missing splits → stub (do not invent elite identity).
+    qb_premium_book: Dict[str, Any] = {}
+    if use_backbone:
+        try:
+            from src.services.nfl_season_engine.qb_premium import build_qb_premium_book
+
+            qb_premium_book = build_qb_premium_book(
+                session,
+                season=int(primary_season),
+                as_of_week=week_cap_current,
+                teams=set(prior_pkgs) | set(current_pkgs) | set(packaged_priors),
+                team_games=team_games,
+            )
+        except Exception:
+            qb_premium_book = {}
+
     def _continuity_travel(team: str) -> Tuple[float, Optional[float], Any]:
         cont = continuity_book.get(team)
         if cont is None or getattr(cont, "fidelity", None) == "missing":
@@ -1173,6 +1193,18 @@ def _load_team_strength_priors(
             float(cont.continuity_score),
             cont,
         )
+
+    def _apply_qb_premium(team: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+        if not qb_premium_book:
+            return payload
+        try:
+            from src.services.nfl_season_engine.qb_premium import (
+                apply_qb_premium_to_payload,
+            )
+
+            return apply_qb_premium_to_payload(payload, qb_premium_book.get(team))
+        except Exception:
+            return payload
 
     out: Dict[str, Dict[str, float]] = {}
     if use_backbone:
@@ -1201,6 +1233,7 @@ def _load_team_strength_priors(
                     payload["drivers"] = attach_continuity_drivers(
                         payload.get("drivers") or {}, cont_obj
                     )
+                payload = _apply_qb_premium(team, payload)
                 out[team] = {
                     **payload,
                     "_season": float(primary_season if g > 0 else fallback_season),
@@ -1282,7 +1315,7 @@ def _load_team_strength_priors(
                     }
                     if cont_obj is not None:
                         drivers = attach_continuity_drivers(drivers, cont_obj)
-                    out[team] = {
+                    packaged_payload = {
                         "offense_index": round(off, 6),
                         "defense_index": round(deff, 6),
                         "full_strength_offense_index": round(off, 6),
@@ -1314,6 +1347,7 @@ def _load_team_strength_priors(
                             or BACKBONE_SOURCE_PACKAGED
                         ),
                     }
+                    out[team] = _apply_qb_premium(team, packaged_payload)
                 else:
                     # Rolling prior package: blend toward league anchor via travel.
                     blended = blend_packages(
@@ -1331,9 +1365,9 @@ def _load_team_strength_priors(
                         payload["drivers"] = attach_continuity_drivers(
                             payload.get("drivers") or {}, cont_obj
                         )
+                    payload = _apply_qb_premium(team, payload)
                     out[team] = {
                         **payload,
-                        "qb_premium": 0.0,
                         "_season": float(fallback_season),
                         "_week": float(prior_meta_week.get(team) or 0.0),
                         "_source": str(prior_pkg.source or "efficiency_backbone"),
@@ -1348,6 +1382,7 @@ def _load_team_strength_priors(
                 payload = strength_payload_from_package(
                     current_pkg, source=BACKBONE_SOURCE_ROLLING
                 )
+                payload = _apply_qb_premium(team, payload)
                 out[team] = {
                     **payload,
                     "_season": float(primary_season),

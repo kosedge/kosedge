@@ -71,8 +71,8 @@ def initialize_strengths(
             st_index=float(payload.get("st_index", 1.0) or 1.0),
             explosiveness=float(payload.get("explosiveness", 0.0) or 0.0),
             variance=float(payload.get("variance", 1.0) or 1.0),
-            # Stub until real QB identity layer — never invent precision.
-            qb_premium=0.0,
+            # Real QB premium when wired (0.0 + stub label when missing).
+            qb_premium=float(payload.get("qb_premium", 0.0) or 0.0),
             as_of=str(payload.get("as_of", "") or ""),
             version=str(payload.get("version", "") or ""),
             full_strength_offense_index=full_off,

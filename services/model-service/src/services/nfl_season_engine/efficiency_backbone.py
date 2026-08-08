@@ -382,7 +382,8 @@ def strength_payload_from_package(
         "injury_delta_defense": round(float(injury_delta_defense), 6),
         "blend_prior_weight": round(w_prior, 4),
         "blend_current_weight": round(w_cur, 4),
-        "qb_premium": 0.0,  # stub — do not fake
+        # Pass through package hook; live loader may overwrite via qb_premium layer.
+        "qb_premium": round(float(pkg.qb_premium), 6),
         "drivers": drivers,
         "source": str(source or pkg.source),
         "games_played": int(pkg.games_played),
@@ -759,8 +760,7 @@ def blend_packages(
         # Uncertainty tracks current-season sample + continuity discount.
         # Never tighten because league completed_reg flipped from 0→1.
         variance=variance,
-        # QB premium remains a stub (0) until a real identity layer ships.
-        # Continuity's QB *factor* is not a QB premium.
+        # QB premium applied post-blend by qb_premium layer (not continuity).
         qb_premium=0.0,
         games_played=int(games_for_weight),
         as_of=current.as_of or prior.as_of,

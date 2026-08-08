@@ -392,6 +392,10 @@ def test_live_loader_continuity_travel_at_zero_games(monkeypatch) -> None:
         "src.services.nfl_season_engine.continuity_score.build_continuity_book",
         lambda *a, **k: {"KC": high, "LV": low},
     )
+    monkeypatch.setattr(
+        "src.services.nfl_season_engine.qb_premium.build_qb_premium_book",
+        lambda *a, **k: {},
+    )
     out = tasks._load_team_strength_priors(_Session(), season_year=2026, as_of_week=1)
     assert out["KC"]["blend_current_weight"] == 0.0
     assert out["KC"]["blend_prior_weight"] == high.prior_travel_weight

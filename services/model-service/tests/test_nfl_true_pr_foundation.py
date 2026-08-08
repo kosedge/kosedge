@@ -117,6 +117,14 @@ def _patch_continuity_off(monkeypatch) -> None:
     )
 
 
+def _patch_qb_premium_off(monkeypatch) -> None:
+    """Isolate foundation blend tests from QB premium deltas."""
+    monkeypatch.setattr(
+        "src.services.nfl_season_engine.qb_premium.build_qb_premium_book",
+        lambda *args, **kwargs: {},
+    )
+
+
 def test_live_loader_preseason_100_percent_prior(monkeypatch) -> None:
     """Smell 1: 0 REG → prior only; SEA-type ≫ ARI-type from real prior."""
     session = _BlendSession(
@@ -132,6 +140,7 @@ def test_live_loader_preseason_100_percent_prior(monkeypatch) -> None:
         lambda season: ({}, {}),
     )
     _patch_continuity_off(monkeypatch)
+    _patch_qb_premium_off(monkeypatch)
     out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=1)
     assert out["SEA"]["blend_current_weight"] == 0.0
     assert out["SEA"]["blend_prior_weight"] == 1.0
@@ -156,6 +165,7 @@ def test_live_loader_one_game_small_move_not_recalibration(monkeypatch) -> None:
         lambda season: ({}, {}),
     )
     _patch_continuity_off(monkeypatch)
+    _patch_qb_premium_off(monkeypatch)
     session0 = _BlendSession(
         league_completed=0,
         team_games={},
@@ -199,6 +209,7 @@ def test_live_loader_four_games_half_blend(monkeypatch) -> None:
         lambda season: ({}, {}),
     )
     _patch_continuity_off(monkeypatch)
+    _patch_qb_premium_off(monkeypatch)
     out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=4)
     assert abs(out["NE"]["blend_current_weight"] - 0.5) < 1e-9
     assert abs(out["NE"]["blend_prior_weight"] - 0.5) < 1e-9
@@ -217,6 +228,7 @@ def test_live_loader_eight_plus_current_dominated(monkeypatch) -> None:
         lambda season: ({}, {}),
     )
     _patch_continuity_off(monkeypatch)
+    _patch_qb_premium_off(monkeypatch)
     out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=9)
     assert out["KC"]["blend_current_weight"] == 1.0
     assert out["KC"]["blend_prior_weight"] == 0.0
@@ -237,6 +249,7 @@ def test_missing_current_keeps_prior(monkeypatch) -> None:
         lambda season: ({}, {}),
     )
     _patch_continuity_off(monkeypatch)
+    _patch_qb_premium_off(monkeypatch)
     out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=1)
     assert "ARI" in out
     assert out["ARI"]["blend_current_weight"] == 0.0
