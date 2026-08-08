@@ -147,7 +147,7 @@ Smell tests: SEA clearly above ARI on O+D and W2; NE near top (not floor); top/m
 
 - Branch: `fix/nfl-packaged-epa-priors` (from `deploy-vercel`)
 - Web pointer identity: `nfl-season-engine-v1.12-survivor-planner-ux · N_team=50000 · 20260808T011817Z`
-- PR: see GitHub URL after open (this note updated with URL in commit/PR body)
+- **PR:** https://github.com/kosedge/kosedge/pull/134
 - HD mirror to `/Volumes/KosEdgeData/clean/nfl/research/` was attempted; sandbox blocked the external write — repo publish + pointer are authoritative for web.
 
 ## Remaining gaps
