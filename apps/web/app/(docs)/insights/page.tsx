@@ -1,12 +1,14 @@
 import Link from "next/link";
 import InsightsHeader from "@/components/insights/InsightsHeader";
 import InsightCard from "@/components/insights/InsightCard";
-import { isProUser } from "@/lib/auth/pro";
+import { isEntitledProUser } from "@/lib/auth/pro";
 import {
   getRecentDeskNotes,
   getAllDeskNotes,
   partitionDeskNotesForUser,
 } from "@/lib/insights/content";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Insights — This Week",
@@ -15,7 +17,8 @@ export const metadata = {
 };
 
 export default async function InsightsThisWeekPage() {
-  const isPro = await isProUser();
+  // Entitlement only — OPEN_ACCESS_PREVIEW must not unlock Pro notes in prod.
+  const isPro = await isEntitledProUser();
   const recent = getRecentDeskNotes(21);
   const shelf = recent.length > 0 ? recent : getAllDeskNotes().slice(0, 6);
   const { visible, teaserOnly } = partitionDeskNotesForUser(shelf, isPro);
