@@ -22,7 +22,7 @@ The same core must support these surfaces together — not as separate toys:
 | Sprint | Scope | Status |
 |--------|--------|--------|
 | **Sprint 1** | Fix the broken demo-strength path that contaminated “real” packaged / launch-research hierarchies | Done |
-| **Sprint 2** | Football-native efficiency backbone that drives everything above — upstream strength-core replacement, **not** a greenfield season-engine rewrite | Ops note: `nfl-efficiency-backbone-v1-20260807.md` |
+| **Sprint 2** | Football-native efficiency backbone that drives everything above — upstream strength-core replacement, **not** a greenfield season-engine rewrite | Done (v1): `nfl-efficiency-backbone-v1-20260807.md` · **v1.1** ST + true EPA splits: `nfl-efficiency-backbone-v1.1-20260808.md` · wired: `nfl-strength-wired-through-engine-20260808.md` |
 
 ## What stays vs what changes (Sprint 2)
 
