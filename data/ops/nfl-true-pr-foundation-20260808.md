@@ -4,6 +4,8 @@ North star: [`nfl-model-vision.md`](nfl-model-vision.md).
 
 Branch: `feat/nfl-true-pr-foundation` → `deploy-vercel`.
 
+PR: https://github.com/kosedge/kosedge/pull/140
+
 ## Goal
 
 Establish true 2026 power-rating construction on the **live** load path shared by Edge Board and the season engine:
