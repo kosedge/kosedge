@@ -436,7 +436,10 @@ def enforce_finite_team_production(
 
     diag: Dict[str, Any] = {"teams": {}}
     out: List[PlayerBoxScore] = []
-    for team, team_boxes in by_team.items():
+    # Stable team order — avoid PYTHONHASHSEED-dependent iteration if callers
+    # ever fold diagnostics / side effects into seeded paths.
+    for team in sorted(by_team.keys()):
+        team_boxes = by_team[team]
         oi = 1.0
         if strengths_offense and team in strengths_offense:
             oi = float(strengths_offense[team])

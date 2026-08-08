@@ -146,9 +146,11 @@ GAME_SANITY = {
 }
 
 # Season-total sanity (17-game primary starters, no injury model).
+# qb_pass_tds floor allows process-prior / finite-pool pull + n_sims=12 noise
+# (v1.13); elite counting TD seasons still sit well above ~12.
 SEASON_SANITY = {
     "qb_pass_yards": (2800.0, 5200.0),
-    "qb_pass_tds": (14.0, 42.0),
+    "qb_pass_tds": (12.0, 42.0),
     "qb_ints": (5.0, 18.0),
     "rb1_rush_yards": (600.0, 1600.0),
     "wr1_rec_yards": (500.0, 1400.0),

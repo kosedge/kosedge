@@ -6,6 +6,8 @@ Branch: `feat/nfl-player-regression-finite-production` → base
 `deploy-vercel` with **PR #140 already merged** (merge `bc0f34ff`,
 2026-08-08). Dependency satisfied; do not re-merge #140.
 
+PR: https://github.com/kosedge/kosedge/pull/141
+
 Base: true PR foundation (gradual prior→current blend, full-strength/current
 split, demo-free packaged strength path). This pass does **not** change those
 contracts.
@@ -118,6 +120,8 @@ Plus: true-PR full-strength equality at load remains intact.
 - Draft capital only a mild mean nudge when `draft_round` present on depth rows
 - Pass TD ↔ receiving TD poisson equality in a single replicate (soft; team RZ
   path already links means)
+- Season sanity `qb_pass_tds` floor loosened to 12.0 under process/finite pull
+  + small-`n_sims` noise (still a starter-range check, not a talent claim)
 
 **Stubs (unchanged from true PR)**
 
