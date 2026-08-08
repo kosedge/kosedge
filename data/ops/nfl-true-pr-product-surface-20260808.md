@@ -97,9 +97,9 @@ stub those drivers — **indices are never mutated**.
 
 | Team | Intrinsic PR | Continuity | QB | Past SOS | 2026 SOS | Blend |
 |------|-------------:|------------|----|----------|----------|-------|
-| **SEA** | ~1.091 (#2) | Mid (approx; OC change) | Context only (Darnold; no invent lift) | Average/hard mix | Average | Prior-heavy |
+| **SEA** | ~1.091 (#2) | Mid (OC change, approx) | Context only (Darnold; no invent lift) | Average | Average | Prior-heavy |
 | **NYG** | ~0.934 (#27) | **Low** (new staff) | Context only (Dart) | Soft prior slate | Average | Prior-heavy |
-| **DET** | ~1.044 (#8) | Mid approx | Context only (Goff) | Hard prior | **Easy** outlook | Prior-heavy |
+| **DET** | ~1.044 (#8) | Mid (thin evidence labeled approx) | Context only (Goff) | Hard prior | **Easy** outlook | Prior-heavy |
 | **CLE** | ~0.978 (#21) | **Low** (new staff) | Context only | Average | **Easy** outlook | Prior-heavy |
 
 Smell checks on this path:
