@@ -10,13 +10,19 @@ from src.services.nfl_season_engine import (
 from src.services.nfl_season_engine.loaders import (
     STRENGTH_SOURCE_DEMO,
     STRENGTH_SOURCE_PACKAGED_EPA,
+    STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
 )
+
+_REAL_PACKAGED_SOURCES = {
+    STRENGTH_SOURCE_PACKAGED_EPA,
+    STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+}
 
 
 def test_load_packaged_epa_priors_covers_32_teams() -> None:
     priors, meta = load_packaged_epa_priors(2026)
     assert len(priors) == 32
-    assert meta["strength_source"] == STRENGTH_SOURCE_PACKAGED_EPA
+    assert meta["strength_source"] in _REAL_PACKAGED_SOURCES
     assert int(meta["prior_season"]) == 2025
     for team, row in priors.items():
         assert 0.80 <= float(row["offense_index"]) <= 1.25
@@ -27,12 +33,13 @@ def test_packaged_real_universe_uses_epa_not_demo_bumps() -> None:
     packaged = build_packaged_real_universe(2026)
     demo = build_demo_universe(2026)
 
-    assert packaged.notes.get("strength_source") == STRENGTH_SOURCE_PACKAGED_EPA
-    assert "packaged_epa_prior" in str(packaged.notes.get("strengths") or "")
-    assert "demo" not in str(packaged.notes.get("strengths") or "").lower()
+    assert packaged.notes.get("strength_source") in _REAL_PACKAGED_SOURCES
+    strengths_note = str(packaged.notes.get("strengths") or "").lower()
+    assert "packaged" in strengths_note
+    assert "demo" not in strengths_note
 
     for team, state in packaged.strengths.items():
-        assert state.source == STRENGTH_SOURCE_PACKAGED_EPA
+        assert state.source in _REAL_PACKAGED_SOURCES
         # Must not silently reuse demo bump book.
         demo_state = demo.strengths[team]
         assert demo_state.source == STRENGTH_SOURCE_DEMO

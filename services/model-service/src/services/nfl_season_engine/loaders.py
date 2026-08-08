@@ -11,15 +11,19 @@ Depth / roster fallback (fantasy-usable identities):
 3. Packaged ``nfl_depth_chart_2026_w1.json`` (checked-in nflverse slice)
 4. ``demo_depth_chart`` (last resort / explicit ``demo=True``)
 
-Strength priors (real mode):
+Strength priors (real mode) — efficiency backbone → existing O/D slot:
 
 1. DB ``nfl_dp_team_rolling_features_weekly`` via ``_load_team_strength_priors``
-2. Packaged ``nfl_team_epa_priors_<season>.json`` (prior-season EPA averages)
+   (mapped through ``efficiency_backbone`` when success/pace available)
+2. Packaged ``nfl_team_efficiency_backbone_<season>.json`` (preferred) or
+   legacy ``nfl_team_epa_priors_<season>.json``
 3. League-average placeholder — never ``_DEMO_STRENGTH_BUMPS`` in real mode
 
 ``demo=True``: explicit opt-in round-robin + sparse demo skill cores + demo
 strength bumps for offline unit tests. Never silently stay on demo
 schedule/depth/strengths when a real artifact is available.
+
+North star: ``data/ops/nfl-model-vision.md``.
 
 Efficiency rates are always passed through ``calibration.apply_efficiency_priors``
 (or baseline-derived overrides) so Layer 4 is never left on uncalibrated
@@ -58,6 +62,9 @@ _PACKAGED_DEPTH_FILES = {
 _PACKAGED_EPA_PRIOR_FILES = {
     2026: _PACKAGE_DATA_DIR / "nfl_team_epa_priors_2026.json",
 }
+_PACKAGED_EFFICIENCY_BACKBONE_FILES = {
+    2026: _PACKAGE_DATA_DIR / "nfl_team_efficiency_backbone_2026.json",
+}
 
 NFL_TEAMS: List[str] = [
     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
@@ -78,6 +85,8 @@ ROSTER_SOURCE_PACKAGED = "packaged_nflverse_depth_2026"
 STRENGTH_SOURCE_DEMO = "demo_epa_style_prior"
 STRENGTH_SOURCE_EPA_PRIOR = "epa_prior"
 STRENGTH_SOURCE_PACKAGED_EPA = "packaged_epa_prior"
+STRENGTH_SOURCE_EFFICIENCY = "efficiency_backbone"
+STRENGTH_SOURCE_PACKAGED_EFFICIENCY = "packaged_efficiency_backbone"
 STRENGTH_SOURCE_PLACEHOLDER = "placeholder_league_avg"
 
 _SKILL_POSITIONS = ("QB", "RB", "WR", "TE")
@@ -133,17 +142,113 @@ def load_packaged_regular_schedule(season: int) -> Tuple[List[ScheduledGame], Di
     return games, meta
 
 
-def load_packaged_epa_priors(season: int) -> Tuple[Dict[str, Dict[str, float]], Dict[str, Any]]:
-    """Load packaged EPA→strength indices for ``season`` (offline / cold-start).
+def load_packaged_efficiency_backbone(
+    season: int,
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
+    """Load packaged efficiency-backbone strength payloads for ``season``.
 
-    Artifact stores play-weighted prior-season EPA averages already converted
-    through ``tasks._epa_to_strength_indices`` so units match live Edge Board
-    / ``simulate_nfl_game``. Raises when missing or incomplete (not 32 teams).
+    Preferred cold-start artifact (Sprint 2). Each team row already carries
+    O/D indices mapped through ``efficiency_backbone.package_to_strength_indices``
+    plus pace / ST / variance metadata.
     """
+    from src.services.nfl_season_engine.efficiency_backbone import (
+        EFFICIENCY_BACKBONE_VERSION,
+        packages_from_team_rows,
+        strength_payload_from_package,
+    )
+
+    path = _PACKAGED_EFFICIENCY_BACKBONE_FILES.get(int(season))
+    if path is None or not path.is_file():
+        raise FileNotFoundError(
+            f"No packaged efficiency backbone for season={season} "
+            f"(expected under {_PACKAGE_DATA_DIR})"
+        )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    teams_raw = payload.get("teams") or {}
+    # Prefer precomputed strength fields when present; else rebuild packages.
+    out: Dict[str, Dict[str, Any]] = {}
+    if teams_raw and all(
+        isinstance(v, Mapping) and "offense_index" in v for v in teams_raw.values()
+    ):
+        for raw_team, row in teams_raw.items():
+            team = normalize_team_abbr(str(raw_team))
+            if team not in NFL_TEAMS or not isinstance(row, Mapping):
+                continue
+            out[team] = {
+                "offense_index": float(row["offense_index"]),
+                "defense_index": float(row["defense_index"]),
+                "pace_factor": float(row.get("pace_factor", 1.0) or 1.0),
+                "pass_rate_bias": float(row.get("pass_rate_bias", 0.0) or 0.0),
+                "st_index": float(row.get("st_index", 1.0) or 1.0),
+                "explosiveness": float(row.get("explosiveness", 0.0) or 0.0),
+                "variance": float(row.get("variance", 1.0) or 1.0),
+                "qb_premium": float(row.get("qb_premium", 0.0) or 0.0),
+                "as_of": str(payload.get("as_of") or row.get("as_of") or ""),
+                "version": str(
+                    row.get("version")
+                    or payload.get("version")
+                    or EFFICIENCY_BACKBONE_VERSION
+                ),
+                "off_epa_per_play": float(row.get("off_epa_per_play", 0.0) or 0.0),
+                "def_epa_allowed_per_play": float(
+                    row.get("def_epa_allowed_per_play", 0.0) or 0.0
+                ),
+                "games_played": int(row.get("games_played") or row.get("n_weeks") or 0),
+                "_season": float(payload.get("prior_season") or (int(season) - 1)),
+                "source": STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+            }
+    else:
+        rows = [{"team": t, **dict(r)} for t, r in teams_raw.items() if isinstance(r, Mapping)]
+        packages = packages_from_team_rows(
+            rows,
+            as_of=str(payload.get("as_of") or ""),
+            source=STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+            prior_season=int(payload.get("prior_season") or (int(season) - 1)),
+        )
+        for team, pkg in packages.items():
+            if team not in NFL_TEAMS:
+                continue
+            out[team] = strength_payload_from_package(
+                pkg, source=STRENGTH_SOURCE_PACKAGED_EFFICIENCY
+            )
+            out[team]["_season"] = float(
+                payload.get("prior_season") or (int(season) - 1)
+            )
+
+    missing = [t for t in NFL_TEAMS if t not in out]
+    if missing:
+        raise ValueError(
+            f"Packaged efficiency backbone incomplete for season={season}; missing {missing}"
+        )
+    meta = {
+        "strength_source": STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+        "strength_as_of": str(payload.get("as_of") or ""),
+        "prior_season": int(payload.get("prior_season") or (int(season) - 1)),
+        "strength_path": str(path.name),
+        "strength_method": str(
+            payload.get("method") or "efficiency_backbone_v1_packaged"
+        ),
+        "backbone_version": str(payload.get("version") or EFFICIENCY_BACKBONE_VERSION),
+        "team_count": len(out),
+    }
+    return out, meta
+
+
+def load_packaged_epa_priors(season: int) -> Tuple[Dict[str, Dict[str, float]], Dict[str, Any]]:
+    """Load packaged strength indices for ``season`` (offline / cold-start).
+
+    Prefers the Sprint 2 efficiency-backbone artifact; falls back to legacy
+    EPA-prior JSON. Units always match live Edge Board / ``simulate_nfl_game``.
+    """
+    try:
+        return load_packaged_efficiency_backbone(season)
+    except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
+        pass
+
     path = _PACKAGED_EPA_PRIOR_FILES.get(int(season))
     if path is None or not path.is_file():
         raise FileNotFoundError(
-            f"No packaged EPA priors for season={season} "
+            f"No packaged EPA priors / efficiency backbone for season={season} "
             f"(expected under {_PACKAGE_DATA_DIR})"
         )
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -163,6 +268,10 @@ def load_packaged_epa_priors(season: int) -> Tuple[Dict[str, Dict[str, float]], 
             "defense_index": defense_index,
             "pace_factor": float(row.get("pace_factor", 1.0) or 1.0),
             "pass_rate_bias": float(row.get("pass_rate_bias", 0.0) or 0.0),
+            "st_index": float(row.get("st_index", 1.0) or 1.0),
+            "explosiveness": float(row.get("explosiveness", 0.0) or 0.0),
+            "variance": float(row.get("variance", 1.0) or 1.0),
+            "qb_premium": float(row.get("qb_premium", 0.0) or 0.0),
             "off_epa_per_play": float(row.get("off_epa_per_play", 0.0) or 0.0),
             "def_epa_allowed_per_play": float(
                 row.get("def_epa_allowed_per_play", 0.0) or 0.0
@@ -805,31 +914,91 @@ def load_universe_from_db(
     packaged_fill = 0
     packaged_priors: Dict[str, Dict[str, float]] = {}
     packaged_meta: Dict[str, Any] = {}
-    if len(priors) < len(NFL_TEAMS):
-        try:
-            packaged_priors, packaged_meta = load_packaged_epa_priors(season)
-        except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
-            packaged_priors, packaged_meta = {}, {}
+    # Always load packaged backbone for metadata fill (pace/ST) + missing teams.
+    try:
+        packaged_priors, packaged_meta = load_packaged_epa_priors(season)
+    except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
+        packaged_priors, packaged_meta = {}, {}
     for team in NFL_TEAMS:
         prior = priors.get(team) or {}
-        if prior:
+        pkg = packaged_priors.get(team) or {}
+        prior_source = str(prior.get("_source") or "")
+        if prior and prior_source in (
+            STRENGTH_SOURCE_PACKAGED_EPA,
+            STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+            "packaged_epa_prior",
+            "packaged_efficiency_backbone",
+        ):
+            # DB helper already filled from packaged cold-start.
+            packaged_fill += 1
+            strength_inputs[team] = {
+                "offense_index": float(prior.get("offense_index", 1.0)),
+                "defense_index": float(prior.get("defense_index", 1.0)),
+                "pace_factor": float(
+                    prior.get("pace_factor", pkg.get("pace_factor", 1.0)) or 1.0
+                ),
+                "pass_rate_bias": float(
+                    prior.get("pass_rate_bias", pkg.get("pass_rate_bias", 0.0)) or 0.0
+                ),
+                "st_index": float(prior.get("st_index", pkg.get("st_index", 1.0)) or 1.0),
+                "explosiveness": float(
+                    prior.get("explosiveness", pkg.get("explosiveness", 0.0)) or 0.0
+                ),
+                "variance": float(prior.get("variance", pkg.get("variance", 1.0)) or 1.0),
+                "qb_premium": float(
+                    prior.get("qb_premium", pkg.get("qb_premium", 0.0)) or 0.0
+                ),
+                "as_of": str(prior.get("as_of") or packaged_meta.get("strength_as_of") or ""),
+                "version": str(
+                    prior.get("version")
+                    or packaged_meta.get("backbone_version")
+                    or ""
+                ),
+                "source": prior_source or STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+            }
+        elif prior:
             epa_count += 1
             strength_inputs[team] = {
                 "offense_index": float(prior.get("offense_index", 1.0)),
                 "defense_index": float(prior.get("defense_index", 1.0)),
-                "pace_factor": 1.0,
-                "pass_rate_bias": 0.0,
-                "source": STRENGTH_SOURCE_EPA_PRIOR,
+                "pace_factor": float(prior.get("pace_factor", pkg.get("pace_factor", 1.0)) or 1.0),
+                "pass_rate_bias": float(
+                    prior.get("pass_rate_bias", pkg.get("pass_rate_bias", 0.0)) or 0.0
+                ),
+                "st_index": float(prior.get("st_index", pkg.get("st_index", 1.0)) or 1.0),
+                "explosiveness": float(
+                    prior.get("explosiveness", pkg.get("explosiveness", 0.0)) or 0.0
+                ),
+                "variance": float(prior.get("variance", pkg.get("variance", 1.0)) or 1.0),
+                "qb_premium": float(
+                    prior.get("qb_premium", pkg.get("qb_premium", 0.0)) or 0.0
+                ),
+                "as_of": str(prior.get("as_of") or ""),
+                "version": str(prior.get("version") or ""),
+                "source": STRENGTH_SOURCE_EFFICIENCY
+                if prior_source.startswith("efficiency")
+                else STRENGTH_SOURCE_EPA_PRIOR,
             }
         elif team in packaged_priors:
             packaged_fill += 1
-            pkg = packaged_priors[team]
             strength_inputs[team] = {
                 "offense_index": float(pkg.get("offense_index", 1.0)),
                 "defense_index": float(pkg.get("defense_index", 1.0)),
                 "pace_factor": float(pkg.get("pace_factor", 1.0)),
                 "pass_rate_bias": float(pkg.get("pass_rate_bias", 0.0)),
-                "source": STRENGTH_SOURCE_PACKAGED_EPA,
+                "st_index": float(pkg.get("st_index", 1.0) or 1.0),
+                "explosiveness": float(pkg.get("explosiveness", 0.0) or 0.0),
+                "variance": float(pkg.get("variance", 1.0) or 1.0),
+                "qb_premium": float(pkg.get("qb_premium", 0.0) or 0.0),
+                "as_of": str(pkg.get("as_of") or packaged_meta.get("strength_as_of") or ""),
+                "version": str(
+                    pkg.get("version") or packaged_meta.get("backbone_version") or ""
+                ),
+                "source": str(
+                    pkg.get("source")
+                    or packaged_meta.get("strength_source")
+                    or STRENGTH_SOURCE_PACKAGED_EFFICIENCY
+                ),
             }
         else:
             strength_inputs[team] = {
@@ -953,19 +1122,19 @@ def load_universe_from_db(
         coverage = depth_coverage_from_rosters(rosters)
     if epa_count and packaged_fill:
         strength_note = (
-            f"REAL epa_prior for {epa_count}/32 teams; "
-            f"packaged_epa_prior fill for {packaged_fill}/32"
+            f"REAL efficiency_backbone/epa_prior for {epa_count}/32 teams; "
+            f"packaged_efficiency_backbone fill for {packaged_fill}/32"
         )
     elif epa_count:
-        strength_note = f"REAL epa_prior for {epa_count}/32 teams"
+        strength_note = f"REAL efficiency_backbone for {epa_count}/32 teams"
     elif packaged_fill:
         prior_season = packaged_meta.get("prior_season") or (int(season) - 1)
         strength_note = (
-            f"REAL packaged_epa_prior for {packaged_fill}/32 teams "
+            f"REAL packaged_efficiency_backbone for {packaged_fill}/32 teams "
             f"(prior_season={prior_season}; rolling features empty)"
         )
     else:
-        strength_note = "PLACEHOLDER league-average strengths (EPA priors empty)"
+        strength_note = "PLACEHOLDER league-average strengths (efficiency backbone empty)"
 
     final_schedule = schedule[:272] if len(schedule) >= 272 else schedule
     return EngineUniverse(
@@ -992,17 +1161,20 @@ def load_universe_from_db(
 
 
 def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
-    """Real packaged schedule + depth + EPA priors (no DB required).
+    """Real packaged schedule + depth + efficiency backbone (no DB required).
 
     Used when DB is unreachable or empty so the engine still projects against
     the actual 2026 slate (with byes), real skill identities, and prior-season
-    EPA strength hierarchy instead of inventing round-robin / demo bumps.
+    efficiency strength hierarchy instead of inventing round-robin / demo bumps.
     """
     schedule, pkg_meta = load_packaged_regular_schedule(season)
     demo = build_demo_universe(season=season)
 
-    # Strengths: packaged prior-season EPA (never demo bumps for "real" mode).
+    # Strengths: packaged efficiency backbone (never demo bumps for "real" mode).
     epa_priors, epa_meta = load_packaged_epa_priors(season)
+    strength_source = str(
+        epa_meta.get("strength_source") or STRENGTH_SOURCE_PACKAGED_EFFICIENCY
+    )
     strength_inputs: Dict[str, Dict[str, float | str]] = {}
     for team in NFL_TEAMS:
         prior = epa_priors[team]
@@ -1011,14 +1183,20 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
             "defense_index": float(prior["defense_index"]),
             "pace_factor": float(prior.get("pace_factor", 1.0)),
             "pass_rate_bias": float(prior.get("pass_rate_bias", 0.0)),
-            "source": STRENGTH_SOURCE_PACKAGED_EPA,
+            "st_index": float(prior.get("st_index", 1.0) or 1.0),
+            "explosiveness": float(prior.get("explosiveness", 0.0) or 0.0),
+            "variance": float(prior.get("variance", 1.0) or 1.0),
+            "qb_premium": float(prior.get("qb_premium", 0.0) or 0.0),
+            "as_of": str(prior.get("as_of") or epa_meta.get("strength_as_of") or ""),
+            "version": str(prior.get("version") or epa_meta.get("backbone_version") or ""),
+            "source": strength_source,
         }
     strengths = initialize_strengths(strength_inputs)
     prior_season = int(epa_meta.get("prior_season") or (int(season) - 1))
     strength_note = (
-        f"REAL packaged_epa_prior for 32/32 teams "
-        f"(prior_season={prior_season} play-weighted EPA → "
-        f"_epa_to_strength_indices; as_of={epa_meta.get('strength_as_of') or '?'})"
+        f"REAL {strength_source} for 32/32 teams "
+        f"(prior_season={prior_season} efficiency backbone v1 → "
+        f"strength indices; as_of={epa_meta.get('strength_as_of') or '?'})"
     )
 
     roster_source = ROSTER_SOURCE_DEMO
@@ -1058,8 +1236,9 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         "roster_as_of": roster_as_of,
         "depth_source": roster_source,
         "depth_as_of": roster_as_of,
-        "strength_source": str(epa_meta.get("strength_source") or STRENGTH_SOURCE_PACKAGED_EPA),
+        "strength_source": strength_source,
         "strength_as_of": str(epa_meta.get("strength_as_of") or ""),
+        "backbone_version": str(epa_meta.get("backbone_version") or ""),
         "schedule": (
             f"REAL packaged 2026 REG schedule ({len(schedule)} games, byes). "
             "DB unavailable — using packaged offline artifacts."

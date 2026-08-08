@@ -48,10 +48,16 @@ from src.services.nfl_season_engine.injury_paths import (
     InjuryPath,
     parse_injury_paths,
 )
+from src.services.nfl_season_engine.efficiency_backbone import (
+    EFFICIENCY_BACKBONE_VERSION,
+    TeamEfficiencyPackage,
+    package_to_strength_indices,
+)
 from src.services.nfl_season_engine.loaders import (
     build_demo_universe,
     build_packaged_real_universe,
     load_packaged_depth_chart,
+    load_packaged_efficiency_backbone,
     load_packaged_epa_priors,
     load_packaged_regular_schedule,
     load_universe_from_db,
@@ -78,6 +84,7 @@ DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
 
 __all__ = [
     "DEFAULT_SEASON_ENGINE_VERSION",
+    "EFFICIENCY_BACKBONE_VERSION",
     "EngineUniverse",
     "GameBoxProjection",
     "InjuryPath",
@@ -85,14 +92,17 @@ __all__ = [
     "SurvivorEvalResult",
     "SurvivorPlanResult",
     "SurvivorSuggestedPathsResult",
+    "TeamEfficiencyPackage",
     "build_demo_universe",
     "build_packaged_real_universe",
     "evaluate_survivor",
     "evaluate_survivor_plan",
     "load_packaged_depth_chart",
+    "load_packaged_efficiency_backbone",
     "load_packaged_epa_priors",
     "load_packaged_regular_schedule",
     "load_universe_from_db",
+    "package_to_strength_indices",
     "parse_injury_paths",
     "project_game_player_boxes",
     "resolve_season_universe",

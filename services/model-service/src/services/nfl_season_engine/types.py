@@ -25,6 +25,11 @@ class TeamStrengthState:
     ``offense_index`` / ``defense_index`` follow the same convention as
     ``nfl_simulator.NflGameInputs`` (1.0 = league average; higher offense
     and higher defense are both *better*).
+
+    Sprint 2 efficiency-backbone fields (``st_index``, ``explosiveness``,
+    ``variance``, ``qb_premium``, ``as_of``, ``version``) are additive
+    metadata from the in-house NFL efficiency package; O/D/pace remain the
+    contract consumed by game script / Edge Board / survivor.
     """
 
     team: str
@@ -34,6 +39,12 @@ class TeamStrengthState:
     pass_rate_bias: float = 0.0
     source: str = "placeholder"
     games_played: int = 0
+    st_index: float = 1.0
+    explosiveness: float = 0.0
+    variance: float = 1.0
+    qb_premium: float = 0.0
+    as_of: str = ""
+    version: str = ""
 
     def copy(self) -> "TeamStrengthState":
         return TeamStrengthState(
@@ -44,6 +55,12 @@ class TeamStrengthState:
             pass_rate_bias=self.pass_rate_bias,
             source=self.source,
             games_played=self.games_played,
+            st_index=self.st_index,
+            explosiveness=self.explosiveness,
+            variance=self.variance,
+            qb_premium=self.qb_premium,
+            as_of=self.as_of,
+            version=self.version,
         )
 
 
