@@ -994,7 +994,7 @@ def load_universe_from_db(
                 prior.get("explosiveness", pkg.get("explosiveness", 0.0)) or 0.0
             ),
             "variance": float(prior.get("variance", pkg.get("variance", 1.35)) or 1.35),
-            "qb_premium": 0.0,  # stub
+            "qb_premium": float(prior.get("qb_premium", 0.0) or 0.0),
             "games_played": int(prior.get("games_played", 0) or 0),
             "drivers": drivers,
             "as_of": str(

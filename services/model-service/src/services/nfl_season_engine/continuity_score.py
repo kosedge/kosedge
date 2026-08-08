@@ -818,7 +818,7 @@ def attach_continuity_drivers(
     drivers: Dict[str, Any],
     continuity: Optional[TeamContinuity],
 ) -> Dict[str, Any]:
-    """Merge continuity into true-PR drivers; keep QB premium stub explicit."""
+    """Merge continuity into true-PR drivers; do not clobber applied QB premium."""
     out = dict(drivers or {})
     stubs = dict(out.get("stubs") or {})
     stubs.setdefault("qb_premium", "stub_not_applied")
@@ -835,8 +835,7 @@ def attach_continuity_drivers(
         stubs["continuity"] = "stub_not_applied"
     else:
         stubs["continuity"] = "applied"
-    # Honest: staff may be approximate even when QB/roster are real.
-    stubs["qb_premium"] = "stub_not_applied"
+    # Preserve qb_premium stub/applied status set by qb_premium layer.
     out["stubs"] = stubs
     out["continuity"] = continuity.to_drivers()
     # Surface blend travel beside existing blend block when present.
