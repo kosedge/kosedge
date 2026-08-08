@@ -345,11 +345,45 @@ def strength_payload_from_package(
     pkg: TeamEfficiencyPackage,
     *,
     source: Optional[str] = None,
+    injury_delta_offense: float = 0.0,
+    injury_delta_defense: float = 0.0,
+    injury_status: str = "structure_ready_zero",
 ) -> Dict[str, Any]:
-    """Payload accepted by ``initialize_strengths`` / loaders."""
+    """Payload accepted by ``initialize_strengths`` / loaders.
+
+    Exposes full-strength vs current PR: at load time (no injury scars applied)
+    they are equal; injury overlays mutate current indices only and record the
+    delta. Never invents QB premium / continuity / time-of-game SOS.
+    """
     indices = package_to_strength_indices(pkg)
+    # Full-strength = reconstructed intrinsic PR (no availability scars).
+    full_off = float(indices["offense_index"])
+    full_def = float(indices["defense_index"])
+    cur_off = full_off + float(injury_delta_offense)
+    cur_def = full_def + float(injury_delta_defense)
+    drivers = true_pr_drivers(
+        pkg,
+        injury_delta_offense=float(injury_delta_offense),
+        injury_delta_defense=float(injury_delta_defense),
+        injury_status=injury_status,
+    )
+    # Replace package_to_strength_indices drivers with true-PR enriched set.
+    w_cur = float(pkg.notes.get("blend_current_weight", 0.0) or 0.0)
+    w_prior = float(pkg.notes.get("blend_prior_weight", 1.0 - w_cur) or (1.0 - w_cur))
     return {
         **indices,
+        "offense_index": round(cur_off, 6),
+        "defense_index": round(cur_def, 6),
+        "full_strength_offense_index": round(full_off, 6),
+        "full_strength_defense_index": round(full_def, 6),
+        "current_offense_index": round(cur_off, 6),
+        "current_defense_index": round(cur_def, 6),
+        "injury_delta_offense": round(float(injury_delta_offense), 6),
+        "injury_delta_defense": round(float(injury_delta_defense), 6),
+        "blend_prior_weight": round(w_prior, 4),
+        "blend_current_weight": round(w_cur, 4),
+        "qb_premium": 0.0,  # stub — do not fake
+        "drivers": drivers,
         "source": str(source or pkg.source),
         "games_played": int(pkg.games_played),
         "as_of": str(pkg.as_of or ""),
@@ -571,9 +605,20 @@ def build_package_from_season_row(
 def blend_packages(
     prior: TeamEfficiencyPackage,
     current: TeamEfficiencyPackage,
+    *,
+    current_games: Optional[int] = None,
 ) -> TeamEfficiencyPackage:
-    """Blend prior-season → current-season packages with sample-aware weights."""
-    w_cur = prior_current_blend_weight(current_games=current.games_played)
+    """Blend prior-season → current-season packages with sample-aware weights.
+
+    ``current_games`` overrides ``current.games_played`` for the blend weight
+    (prefer schedule-completed REG games when the rolling window is noisy).
+    """
+    games_for_weight = (
+        int(current_games)
+        if current_games is not None
+        else int(current.games_played)
+    )
+    w_cur = prior_current_blend_weight(current_games=games_for_weight)
     w_prior = 1.0 - w_cur
 
     def _blend_unit(a: UnitEfficiency, b: UnitEfficiency) -> UnitEfficiency:
@@ -596,7 +641,8 @@ def blend_packages(
             early_down_plays=int(a.early_down_plays + b.early_down_plays),
         )
 
-    games = max(int(prior.games_played), int(current.games_played))
+    prior_idx = package_to_strength_indices(prior)
+    current_idx = package_to_strength_indices(current)
     return TeamEfficiencyPackage(
         team=current.team or prior.team,
         offense=_blend_unit(prior.offense, current.offense),
@@ -607,9 +653,12 @@ def blend_packages(
         pace=w_prior * prior.pace + w_cur * current.pace,
         pass_rate=w_prior * prior.pass_rate + w_cur * current.pass_rate,
         explosiveness=w_prior * prior.explosiveness + w_cur * current.explosiveness,
-        variance=uncertainty_from_games(current.games_played),
-        qb_premium=w_prior * prior.qb_premium + w_cur * current.qb_premium,
-        games_played=int(current.games_played),
+        # Uncertainty tracks current-season sample only — never tighten because
+        # league completed_reg flipped from 0→1.
+        variance=uncertainty_from_games(games_for_weight),
+        # QB premium remains a stub (0) until a real identity layer ships.
+        qb_premium=0.0,
+        games_played=int(games_for_weight),
         as_of=current.as_of or prior.as_of,
         version=EFFICIENCY_BACKBONE_VERSION,
         source=BACKBONE_SOURCE_BLEND,
@@ -619,8 +668,83 @@ def blend_packages(
             "blend_prior_weight": round(w_prior, 4),
             "prior_source": prior.source,
             "current_source": current.source,
+            "prior_offense_index": float(prior_idx["offense_index"]),
+            "prior_defense_index": float(prior_idx["defense_index"]),
+            "current_component_offense_index": float(current_idx["offense_index"]),
+            "current_component_defense_index": float(current_idx["defense_index"]),
+            "qb_premium_status": "stub_not_applied",
+            "continuity_status": "stub_not_applied",
+            "true_time_of_game_sos_status": "stub_not_applied",
         },
     )
+
+
+def true_pr_drivers(
+    pkg: TeamEfficiencyPackage,
+    *,
+    prior_offense_index: Optional[float] = None,
+    prior_defense_index: Optional[float] = None,
+    current_component_offense_index: Optional[float] = None,
+    current_component_defense_index: Optional[float] = None,
+    injury_delta_offense: float = 0.0,
+    injury_delta_defense: float = 0.0,
+    injury_status: str = "structure_ready_zero",
+) -> Dict[str, Any]:
+    """Minimum-viable inspectable drivers for true PR / Edge Board / ops."""
+    base = visible_drivers(pkg)
+    w_cur = float(pkg.notes.get("blend_current_weight", 0.0) or 0.0)
+    w_prior = float(pkg.notes.get("blend_prior_weight", 1.0 - w_cur) or (1.0 - w_cur))
+    if prior_offense_index is None:
+        prior_offense_index = pkg.notes.get("prior_offense_index")
+    if prior_defense_index is None:
+        prior_defense_index = pkg.notes.get("prior_defense_index")
+    if current_component_offense_index is None:
+        current_component_offense_index = pkg.notes.get("current_component_offense_index")
+    if current_component_defense_index is None:
+        current_component_defense_index = pkg.notes.get("current_component_defense_index")
+    games = int(pkg.games_played)
+    return {
+        **base,
+        "blend": {
+            "w_prior": round(w_prior, 4),
+            "w_current": round(w_cur, 4),
+            "prior_offense_index": (
+                round(float(prior_offense_index), 6)
+                if prior_offense_index is not None
+                else None
+            ),
+            "prior_defense_index": (
+                round(float(prior_defense_index), 6)
+                if prior_defense_index is not None
+                else None
+            ),
+            "current_component_offense_index": (
+                round(float(current_component_offense_index), 6)
+                if current_component_offense_index is not None
+                else None
+            ),
+            "current_component_defense_index": (
+                round(float(current_component_defense_index), 6)
+                if current_component_defense_index is not None
+                else None
+            ),
+        },
+        "injury_availability_delta": {
+            "offense": round(float(injury_delta_offense), 6),
+            "defense": round(float(injury_delta_defense), 6),
+            "status": str(injury_status),
+        },
+        "uncertainty": {
+            "variance": round(float(pkg.variance), 4),
+            "games_played": games,
+            "sample_note": "wide_early" if games <= 4 else "tightening",
+        },
+        "stubs": {
+            "qb_premium": "stub_not_applied",
+            "continuity": "stub_not_applied",
+            "true_time_of_game_sos": "stub_not_applied",
+        },
+    }
 
 
 def packages_from_team_rows(

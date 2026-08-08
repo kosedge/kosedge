@@ -421,8 +421,16 @@ def test_load_team_strength_priors_uses_prior_season_when_unplayed(monkeypatch) 
     Row = namedtuple(
         "Row",
         "season week team off_epa_per_play_5g def_epa_allowed_per_play_5g "
-        "pressure_rate_generated_5g pressure_rate_allowed_5g",
+        "pressure_rate_generated_5g pressure_rate_allowed_5g "
+        "pass_rate_5g success_rate_offense_5g success_rate_defense_allowed_5g "
+        "red_zone_td_rate_5g games_in_window_5",
     )
+
+    class _ScalarResult(_Result):
+        def scalar(self):
+            if self._row is not None and hasattr(self._row, "n"):
+                return self._row.n
+            return 0
 
     class _FakeSession:
         def __init__(self):
@@ -430,42 +438,45 @@ def test_load_team_strength_priors_uses_prior_season_when_unplayed(monkeypatch) 
 
         def execute(self, sql, params=None):
             query = str(sql)
-            self.queries.append((query, dict(params or {})))
-            if "COUNT(*)" in query and "nfl_dp_schedules" in query:
-                return _Result(row=namedtuple("C", "n")(n=0))
+            params = dict(params or {})
+            self.queries.append((query, params))
+            if "COUNT(*)" in query and "nfl_dp_schedules" in query and "UNION ALL" not in query:
+                return _ScalarResult(row=namedtuple("C", "n")(n=0))
+            if "UNION ALL" in query and "nfl_dp_schedules" in query:
+                # Per-team completed games — empty preseason.
+                return _Result(rows=[])
+            if "nfl_dp_team_st_kav_weekly" in query:
+                return _Result(rows=[])
             if "nfl_dp_team_rolling_features_weekly" in query:
                 # Only prior season should be requested when unplayed.
                 assert params["seasons"] == [2025]
                 return _Result(
                     rows=[
-                        Row(2025, 18, "NYG", -0.05, 0.07, 0.17, 0.20),
-                        Row(2025, 18, "DAL", 0.03, 0.08, 0.18, 0.14),
+                        Row(
+                            2025, 18, "NYG", -0.05, 0.07, 0.17, 0.20,
+                            0.58, 0.42, 0.46, 0.50, 5,
+                        ),
+                        Row(
+                            2025, 18, "DAL", 0.03, 0.08, 0.18, 0.14,
+                            0.58, 0.46, 0.44, 0.55, 5,
+                        ),
                     ]
                 )
             raise AssertionError(f"Unexpected SQL: {query}")
 
     session = _FakeSession()
-    # scalar() path: our _Result needs scalar support
-    class _ScalarResult(_Result):
-        def scalar(self):
-            if self._row is not None and hasattr(self._row, "n"):
-                return self._row.n
-            return 0
-
-    orig_execute = session.execute
-
-    def execute_with_scalar(sql, params=None):
-        result = orig_execute(sql, params)
-        query = str(sql)
-        if "COUNT(*)" in query:
-            return _ScalarResult(row=namedtuple("C", "n")(n=0))
-        return result
-
-    session.execute = execute_with_scalar  # type: ignore[method-assign]
+    # Avoid packaged fill expanding to 32 teams in this unit test.
+    monkeypatch.setattr(
+        "src.services.nfl_season_engine.loaders.load_packaged_epa_priors",
+        lambda season: ({}, {}),
+    )
     out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=1)
     assert "NYG" in out and "DAL" in out
     assert out["DAL"]["offense_index"] > out["NYG"]["offense_index"]
     assert out["NYG"]["_season"] == 2025.0
+    assert out["NYG"]["blend_current_weight"] == 0.0
+    assert out["NYG"]["blend_prior_weight"] == 1.0
+    assert out["NYG"]["variance"] >= 1.2  # wide early — not tightened by completed_reg
 
 
 def test_fetch_nfl_market_consensus_lines_passes_team_date_fallback_params() -> None:

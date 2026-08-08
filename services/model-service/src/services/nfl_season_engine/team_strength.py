@@ -55,10 +55,15 @@ def initialize_strengths(
     """
     out: Dict[str, TeamStrengthState] = {}
     for team, payload in teams.items():
+        off = float(payload.get("offense_index", 1.0))
+        deff = float(payload.get("defense_index", 1.0))
+        full_off = float(payload.get("full_strength_offense_index", off) or off)
+        full_def = float(payload.get("full_strength_defense_index", deff) or deff)
+        drivers_raw = payload.get("drivers")
         out[str(team)] = TeamStrengthState(
             team=str(team),
-            offense_index=float(payload.get("offense_index", 1.0)),
-            defense_index=float(payload.get("defense_index", 1.0)),
+            offense_index=off,
+            defense_index=deff,
             pace_factor=float(payload.get("pace_factor", 1.0)),
             pass_rate_bias=float(payload.get("pass_rate_bias", 0.0)),
             source=str(payload.get("source", default_source)),
@@ -66,9 +71,17 @@ def initialize_strengths(
             st_index=float(payload.get("st_index", 1.0) or 1.0),
             explosiveness=float(payload.get("explosiveness", 0.0) or 0.0),
             variance=float(payload.get("variance", 1.0) or 1.0),
-            qb_premium=float(payload.get("qb_premium", 0.0) or 0.0),
+            # Stub until real QB identity layer — never invent precision.
+            qb_premium=0.0,
             as_of=str(payload.get("as_of", "") or ""),
             version=str(payload.get("version", "") or ""),
+            full_strength_offense_index=full_off,
+            full_strength_defense_index=full_def,
+            injury_delta_offense=float(payload.get("injury_delta_offense", 0.0) or 0.0),
+            injury_delta_defense=float(payload.get("injury_delta_defense", 0.0) or 0.0),
+            blend_prior_weight=float(payload.get("blend_prior_weight", 1.0) or 1.0),
+            blend_current_weight=float(payload.get("blend_current_weight", 0.0) or 0.0),
+            drivers=dict(drivers_raw) if isinstance(drivers_raw, Mapping) else {},
         )
     return out
 
