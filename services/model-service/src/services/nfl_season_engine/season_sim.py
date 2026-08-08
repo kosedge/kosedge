@@ -37,7 +37,11 @@ from src.services.nfl_season_engine.injury_paths import (
     apply_injury_paths_for_week,
     injury_paths_to_dicts,
 )
-from src.services.nfl_season_engine.player_regression import regression_summary
+from src.services.nfl_season_engine.player_regression import (
+    accumulate_game_caps_into_season,
+    audit_season_finite_production,
+    regression_summary,
+)
 from src.services.nfl_season_engine.player_usage import allocate_game_usage
 from src.services.nfl_season_engine.production import produce_box_scores
 from src.services.nfl_season_engine.projected_sos import (
@@ -123,6 +127,7 @@ def simulate_one_season_path(
     strengths = copy_strength_book(universe.strengths)
     wins: Dict[str, int] = {t: 0 for t in universe.teams}
     player_totals: Dict[str, Dict[str, Any]] = {}
+    season_caps: Dict[str, Dict[str, float]] = {}
     paths = list(injury_paths or [])
 
     # Path roster book: loaders already applied depth splits; classify only.
@@ -192,6 +197,13 @@ def simulate_one_season_path(
             strengths=week_strengths,
             rng=rng,
         )
+        offense_idx = {
+            t: float(getattr(week_strengths.get(t), "offense_index", 1.0) or 1.0)
+            for t in (script.home_team, script.away_team)
+        }
+        accumulate_game_caps_into_season(
+            season_caps, script=script, strengths_offense=offense_idx
+        )
         for box in boxes:
             row = player_totals.get(box.player_key)
             if row is None:
@@ -223,10 +235,20 @@ def simulate_one_season_path(
             rng=rng,
         )
 
+    # Season-level finite audit (beyond per-box scale-down).
+    _, season_finite_diag = audit_season_finite_production(
+        player_totals, season_caps, damp=True
+    )
+
     result: Dict[str, Any] = {
         "wins": wins,
         "players": player_totals,
         "games": len(schedule),
+        "season_finite": season_finite_diag,
+        "season_caps": {
+            t: {k: round(float(v), 2) for k, v in caps.items()}
+            for t, caps in season_caps.items()
+        },
     }
     if collect_role_transitions:
         result["role_transitions"] = role_transitions
@@ -261,6 +283,9 @@ def simulate_full_season(
 
     sample_depth_structures: Dict[str, Any] = {}
     sample_role_transitions: List[Dict[str, Any]] = []
+    season_finite_path0: Dict[str, Any] = {}
+    season_finite_overflow_paths = 0
+    season_finite_dampened_fields = 0
     for i in range(n_sims):
         path = simulate_one_season_path(
             universe,
@@ -269,10 +294,28 @@ def simulate_full_season(
             collect_role_transitions=(include_diagnostics and i == 0),
         )
         sample_games = int(path["games"])
+        sf = path.get("season_finite") or {}
+        if not sf.get("ok", True):
+            season_finite_overflow_paths += 1
+        season_finite_dampened_fields += int(sf.get("dampened_fields") or 0)
         if include_diagnostics and i == 0:
             sample_depth_structures = path.get("depth_structures") or {}
             # Cap transition log for payload size.
             sample_role_transitions = list(path.get("role_transitions") or [])[:80]
+            # Compact path-0 finite audit (drop per-team detail for payload size).
+            season_finite_path0 = {
+                "ok": bool(sf.get("ok")),
+                "tolerance": sf.get("tolerance"),
+                "teams_checked": sf.get("teams_checked"),
+                "overflow_fields": sf.get("overflow_fields"),
+                "dampened_fields": sf.get("dampened_fields"),
+                "method": sf.get("method"),
+                "teams_over": sorted(
+                    t
+                    for t, d in (sf.get("teams") or {}).items()
+                    if isinstance(d, dict) and d.get("scales_applied")
+                )[:16],
+            }
         for team, w in path["wins"].items():
             win_samples[team].append(int(w))
         for key, row in path["players"].items():
@@ -407,6 +450,14 @@ def simulate_full_season(
             },
             # v1.14 projected schedule difficulty (outlook only; PR unchanged).
             "projected_sos_2026": projected_sos_summary(sos_by_team),
+            # v1.15 season-path finite audit (beyond per-box scale-down).
+            "season_finite_audit": {
+                "path0": season_finite_path0,
+                "overflow_paths": season_finite_overflow_paths,
+                "dampened_fields_total": season_finite_dampened_fields,
+                "n_sims": n_sims,
+                "ok": season_finite_overflow_paths == 0,
+            },
         }
 
     return SeasonSimResult(

@@ -54,10 +54,14 @@ ROOKIE_DRAFT_MEAN_BUMP = {1: 1.025, 2: 1.015, 3: 1.008}
 ROOKIE_EXPERIENCE_CONFIDENCE = 0.45
 # Finite production slack above team expected pool (poisson / variance headroom).
 FINITE_POOL_SLACK = 1.10
+# Season-path audit: named skill sums may float slightly above the sum of
+# per-game caps (path noise / bye weeks); damp only past this tolerance.
+SEASON_FINITE_TOLERANCE = 1.12
 # Approx points per offensive TD for converting implied totals → TD pool.
 POINTS_PER_OFFENSIVE_TD = 6.6
 # Share of team points from offensive TDs (rest FG / defensive / special).
 OFFENSIVE_TD_POINT_SHARE = 0.72
+
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -364,6 +368,7 @@ def regression_summary(role: PlayerRole) -> Dict[str, Any]:
         "process_index": round(float(role.process_index or 1.0), 4),
         "td_process_gap": round(float(role.td_process_gap or 0.0), 4),
         "is_rookie": bool(role.is_rookie),
+        "rookie_status": str(role.rookie_status or ("rookie" if role.is_rookie else "veteran")),
         "experience_confidence": round(float(role.experience_confidence or 1.0), 4),
         "draft_round": role.draft_round,
     }
@@ -518,6 +523,146 @@ def named_sums_within_caps(
 finite_coherence_ok = named_sums_within_caps
 
 
+def empty_season_cap_accum() -> Dict[str, float]:
+    """Zeroed season pool accumulator (mirrors team_production_caps keys)."""
+    return {
+        "pass_yards": 0.0,
+        "rush_yards": 0.0,
+        "rec_yards": 0.0,
+        "skill_tds": 0.0,
+        "pass_tds": 0.0,
+        "games": 0.0,
+    }
+
+
+def accumulate_game_caps_into_season(
+    season_caps: Dict[str, Dict[str, float]],
+    *,
+    script: GameScript,
+    strengths_offense: Optional[Mapping[str, float]] = None,
+) -> None:
+    """Add one game's finite team pools into a season-path accumulator."""
+    for team in (script.home_team, script.away_team):
+        oi = float((strengths_offense or {}).get(team, 1.0))
+        caps = team_production_caps(script, team, offense_index=oi)
+        bucket = season_caps.setdefault(team, empty_season_cap_accum())
+        for key in ("pass_yards", "rush_yards", "rec_yards", "skill_tds", "pass_tds"):
+            bucket[key] += float(caps.get(key, 0.0))
+        bucket["games"] += 1.0
+
+
+def audit_season_finite_production(
+    player_totals: Dict[str, Dict[str, Any]],
+    season_caps_by_team: Mapping[str, Mapping[str, float]],
+    *,
+    tol: float = SEASON_FINITE_TOLERANCE,
+    damp: bool = True,
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
+    """Season-path finite audit: named skill sums vs summed per-game pools.
+
+    Per-game ``enforce_finite_team_production`` already scale-downs boxes.
+    This pass catches silent inflation across 17 games (path noise stacking)
+    and optionally dampens overflowing team fields in-place on ``player_totals``.
+
+    Injury reallocation stays inside the same team pool — dampening is by team
+    field, never invents volume for the other bucket.
+    """
+    by_team: Dict[str, List[str]] = {}
+    for key, row in player_totals.items():
+        team = str(row.get("team") or "")
+        if team:
+            by_team.setdefault(team, []).append(key)
+
+    teams_diag: Dict[str, Any] = {}
+    overflows = 0
+    dampened = 0
+    for team in sorted(by_team.keys()):
+        keys = by_team[team]
+        caps = dict(season_caps_by_team.get(team) or empty_season_cap_accum())
+        sums = {
+            "pass_yards": sum(float(player_totals[k].get("pass_yards") or 0.0) for k in keys),
+            "rush_yards": sum(float(player_totals[k].get("rush_yards") or 0.0) for k in keys),
+            "rec_yards": sum(float(player_totals[k].get("rec_yards") or 0.0) for k in keys),
+            "skill_tds": sum(
+                float(player_totals[k].get("rush_tds") or 0.0)
+                + float(player_totals[k].get("rec_tds") or 0.0)
+                for k in keys
+            ),
+            "pass_tds": sum(float(player_totals[k].get("pass_tds") or 0.0) for k in keys),
+        }
+        scales: Dict[str, float] = {}
+        for field in ("pass_yards", "rush_yards", "rec_yards", "pass_tds"):
+            cap = float(caps.get(field, 0.0)) * float(tol)
+            total = float(sums[field])
+            if cap > 0 and total > cap:
+                overflows += 1
+                s = cap / total
+                scales[field] = round(s, 4)
+                if damp:
+                    dampened += 1
+                    for k in keys:
+                        row = player_totals[k]
+                        row[field] = float(row.get(field) or 0.0) * s
+        # skill TDs (rush+rec) share one pool — scale both fields together
+        skill_cap = float(caps.get("skill_tds", 0.0)) * float(tol)
+        skill_total = float(sums["skill_tds"])
+        if skill_cap > 0 and skill_total > skill_cap:
+            overflows += 1
+            s = skill_cap / skill_total
+            scales["skill_tds"] = round(s, 4)
+            if damp:
+                dampened += 1
+                for k in keys:
+                    row = player_totals[k]
+                    row["rush_tds"] = float(row.get("rush_tds") or 0.0) * s
+                    row["rec_tds"] = float(row.get("rec_tds") or 0.0) * s
+
+        ratio = {
+            k: round(sums[k] / max(1e-9, float(caps.get(k, 0.0))), 4)
+            for k in ("pass_yards", "rush_yards", "rec_yards", "skill_tds", "pass_tds")
+            if float(caps.get(k, 0.0)) > 0
+        }
+        teams_diag[team] = {
+            "caps": {k: round(float(v), 2) for k, v in caps.items()},
+            "named_sums": {k: round(v, 2) for k, v in sums.items()},
+            "ratio_to_cap": ratio,
+            "scales_applied": scales,
+            "within_tol": not scales,
+        }
+
+    ok = overflows == 0
+    diag = {
+        "ok": ok,
+        "tolerance": float(tol),
+        "teams_checked": len(teams_diag),
+        "overflow_fields": overflows,
+        "dampened_fields": dampened if damp else 0,
+        "damp": bool(damp),
+        "teams": teams_diag,
+        "method": (
+            "Sum named skill season totals vs sum of per-game team_production_caps "
+            f"along the path; damp scale-down only when ratio > {tol}."
+        ),
+    }
+    return player_totals, diag
+
+
+def season_finite_coherence_ok(
+    player_totals: Mapping[str, Mapping[str, Any]],
+    season_caps_by_team: Mapping[str, Mapping[str, float]],
+    *,
+    tol: float = SEASON_FINITE_TOLERANCE,
+) -> bool:
+    """Smell helper: season named sums ≤ season caps × tol (no mutation)."""
+    _, diag = audit_season_finite_production(
+        {k: dict(v) for k, v in player_totals.items()},
+        season_caps_by_team,
+        tol=tol,
+        damp=False,
+    )
+    return bool(diag.get("ok"))
+
+
 def method_notes() -> Dict[str, str]:
     return {
         "process_prior": (
@@ -531,11 +676,18 @@ def method_notes() -> Dict[str, str]:
         ),
         "rookies": (
             f"Mean pull {ROOKIE_MEAN_SHRINK} toward league; experience_confidence "
-            f"capped at {ROOKIE_EXPERIENCE_CONFIDENCE}; draft R1–R3 mild bump only."
+            f"capped at {ROOKIE_EXPERIENCE_CONFIDENCE}; draft R1–R3 mild bump only. "
+            "Live is_rookie/draft_round from roster join; unclassified stays neutral "
+            "with label (no invented draft capital)."
         ),
         "finite_production": (
             "Team implied total + pace owns yards/TD pools; named players capped "
             f"with other-bucket floor={USAGE_OTHER_BUCKET_FLOOR} and slack={FINITE_POOL_SLACK}."
+        ),
+        "season_finite_audit": (
+            "After each season path, named skill aggregates are checked against "
+            f"summed per-game caps (tol={SEASON_FINITE_TOLERANCE}); overflow fields "
+            "scale down only. Single-game enforce_finite_team_production unchanged."
         ),
         "stubs": (
             "Opponent-adjusted individual EPA/xYards thin when baselines absent — "

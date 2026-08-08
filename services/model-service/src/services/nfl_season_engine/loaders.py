@@ -62,6 +62,9 @@ _PACKAGED_SCHEDULE_FILES = {
 _PACKAGED_DEPTH_FILES = {
     2026: _PACKAGE_DATA_DIR / "nfl_depth_chart_2026_w1.json",
 }
+_PACKAGED_ROOKIE_FLAG_FILES = {
+    2026: _PACKAGE_DATA_DIR / "nfl_skill_rookie_flags_2026.json",
+}
 _PACKAGED_EPA_PRIOR_FILES = {
     2026: _PACKAGE_DATA_DIR / "nfl_team_epa_priors_2026.json",
 }
@@ -95,13 +98,311 @@ STRENGTH_SOURCE_PLACEHOLDER = "placeholder_league_avg"
 
 _SKILL_POSITIONS = ("QB", "RB", "WR", "TE")
 
+# Approximate overall-pick → round when draft_picks round is unavailable.
+# Compensatory picks make this imperfect; used only when draft_number is known
+# (never invents capital for undrafted / missing rows).
+_DRAFT_PICKS_PER_ROUND = 32
+
 
 def normalize_team_abbr(raw: str) -> str:
     """Normalize common NFL team abbreviations (LAR → LA)."""
     token = str(raw or "").strip().upper()
-    if token == "LAR":
+    if token in ("LAR",):
         return "LA"
+    if token == "AZ":
+        return "ARI"
     return token
+
+
+def draft_round_from_number(draft_number: Optional[int]) -> Optional[int]:
+    """Map overall draft pick → round 1–7 when pick is known.
+
+    Returns ``None`` for missing / non-positive picks (UDFA / unknown). Does
+    **not** invent draft capital — only projects round slots from a real pick.
+    """
+    if draft_number is None:
+        return None
+    try:
+        n = int(draft_number)
+    except (TypeError, ValueError):
+        return None
+    if n < 1:
+        return None
+    return int(min(7, max(1, (n - 1) // _DRAFT_PICKS_PER_ROUND + 1)))
+
+
+def load_packaged_rookie_flags(season: int) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
+    """Load packaged player_id → rookie/draft flags for ``season``.
+
+    Returns ``(by_player_id, meta)``. Missing artifact → empty map (callers
+    leave depth rows unclassified rather than guessing).
+    """
+    path = _PACKAGED_ROOKIE_FLAG_FILES.get(int(season))
+    if path is None or not path.is_file():
+        return {}, {
+            "rookie_flag_source": "missing",
+            "rookie_flag_path": "",
+            "rookie_flag_count": 0,
+        }
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    players = payload.get("players") or {}
+    out: Dict[str, Dict[str, Any]] = {}
+    if isinstance(players, Mapping):
+        for pid, row in players.items():
+            if not pid or not isinstance(row, Mapping):
+                continue
+            out[str(pid)] = dict(row)
+    meta = {
+        "rookie_flag_source": str(payload.get("source") or "packaged_nflverse_rookie_flags"),
+        "rookie_flag_path": str(path.name),
+        "rookie_flag_count": len(out),
+        "rookie_flag_as_of": str(payload.get("as_of") or ""),
+        "flagged_rookies": int(payload.get("flagged_rookies") or 0),
+        "unclassified": int(payload.get("unclassified") or 0),
+    }
+    return out, meta
+
+
+def classify_rookie_from_roster_fields(
+    *,
+    season: int,
+    rookie_year: Optional[int] = None,
+    entry_year: Optional[int] = None,
+    years_exp: Optional[int] = None,
+    draft_number: Optional[int] = None,
+    draft_round: Optional[int] = None,
+) -> Dict[str, Any]:
+    """Derive is_rookie / draft_round / status from roster signals.
+
+    Unclassified when no experience/rookie-year signal exists — leaves
+    ``is_rookie=False`` and ``draft_round=None`` (do not invent capital).
+    """
+    ry = rookie_year
+    ey = entry_year
+    ye = years_exp
+    is_rookie = False
+    status = "veteran"
+    classification = "veteran"
+    if ry is not None and int(ry) == int(season):
+        is_rookie = True
+        status = "rookie"
+        classification = "rookie_year_match"
+    elif ry is None and ye == 0:
+        is_rookie = True
+        status = "rookie"
+        classification = "years_exp_0_unset_rookie_year"
+    elif ry is None and ey is not None and int(ey) == int(season):
+        is_rookie = True
+        status = "rookie"
+        classification = "entry_year_match_unset_rookie_year"
+    elif ry is None and ye is None and ey is None:
+        status = "unclassified"
+        classification = "unclassified_neutral"
+
+    round_i = draft_round
+    if round_i is None:
+        round_i = draft_round_from_number(draft_number)
+    return {
+        "is_rookie": bool(is_rookie),
+        "draft_round": int(round_i) if round_i is not None else None,
+        "draft_number": int(draft_number) if draft_number is not None else None,
+        "rookie_status": status,
+        "rookie_classification": classification,
+    }
+
+
+def enrich_depth_rows_with_rookie_flags(
+    depth_rows: Sequence[Mapping[str, Any]],
+    flags_by_player_id: Mapping[str, Mapping[str, Any]],
+    *,
+    season: int,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Attach is_rookie / draft_round / rookie_status onto depth rows.
+
+    Prefer explicit fields already on the row; else join by ``player_id``.
+    Missing join → unclassified (neutral; no invented draft_round).
+    """
+    out: List[Dict[str, Any]] = []
+    stats = {
+        "rookie_flagged": 0,
+        "rookie_with_draft_round": 0,
+        "unclassified": 0,
+        "veteran": 0,
+        "joined_by_player_id": 0,
+    }
+    for raw in depth_rows:
+        row = dict(raw)
+        pid = str(row.get("player_id") or "").strip()
+        flag = flags_by_player_id.get(pid) if pid else None
+
+        # Explicit row fields win when present (tests / DB pre-joined rows).
+        has_explicit = row.get("is_rookie") is not None or row.get("draft_round") is not None
+        if flag is not None and not has_explicit:
+            stats["joined_by_player_id"] += 1
+            classified = classify_rookie_from_roster_fields(
+                season=season,
+                rookie_year=flag.get("rookie_year"),
+                entry_year=flag.get("entry_year"),
+                years_exp=flag.get("years_exp"),
+                draft_number=flag.get("draft_number"),
+                draft_round=flag.get("draft_round"),
+            )
+            # Packaged flags may already set is_rookie / classification.
+            if "is_rookie" in flag and flag.get("classification"):
+                classified["is_rookie"] = bool(flag.get("is_rookie"))
+                classified["rookie_classification"] = str(flag.get("classification"))
+                classified["rookie_status"] = (
+                    "rookie"
+                    if classified["is_rookie"]
+                    else (
+                        "unclassified"
+                        if str(flag.get("classification", "")).startswith("unclassified")
+                        else "veteran"
+                    )
+                )
+                if flag.get("draft_round") is not None:
+                    try:
+                        classified["draft_round"] = int(flag["draft_round"])
+                    except (TypeError, ValueError):
+                        classified["draft_round"] = None
+                elif classified["is_rookie"] is False and str(
+                    flag.get("classification", "")
+                ).startswith("unclassified"):
+                    classified["draft_round"] = None
+            row.update(classified)
+        elif has_explicit:
+            try:
+                draft_i = (
+                    int(row["draft_round"]) if row.get("draft_round") is not None else None
+                )
+            except (TypeError, ValueError):
+                draft_i = None
+            if draft_i is None and row.get("draft_number") is not None:
+                draft_i = draft_round_from_number(row.get("draft_number"))
+            is_rook = bool(row.get("is_rookie"))
+            row["is_rookie"] = is_rook
+            row["draft_round"] = draft_i
+            row["rookie_status"] = "rookie" if is_rook else str(
+                row.get("rookie_status") or "veteran"
+            )
+            row["rookie_classification"] = str(
+                row.get("rookie_classification")
+                or ("rookie_explicit" if is_rook else "veteran_explicit")
+            )
+        elif pid:
+            # Known identity but no roster flag → unclassified, not a guessed rookie.
+            row["is_rookie"] = False
+            row["draft_round"] = None
+            row["rookie_status"] = "unclassified"
+            row["rookie_classification"] = "unclassified_missing_roster"
+        else:
+            row["is_rookie"] = False
+            row["draft_round"] = None
+            row["rookie_status"] = "unclassified"
+            row["rookie_classification"] = "unclassified_no_player_id"
+
+        if row.get("is_rookie"):
+            stats["rookie_flagged"] += 1
+            if row.get("draft_round") is not None:
+                stats["rookie_with_draft_round"] += 1
+        elif str(row.get("rookie_status") or "") == "unclassified":
+            stats["unclassified"] += 1
+        else:
+            stats["veteran"] += 1
+        out.append(row)
+    return out, stats
+
+
+def _load_rookie_flags_from_db(
+    session: Any,
+    *,
+    season: int,
+) -> Dict[str, Dict[str, Any]]:
+    """Best-effort ``player_id`` → roster rookie/draft fields from DB."""
+    from sqlalchemy import text
+
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (player_id)
+                  player_id, player_name, team, position,
+                  rookie_year, entry_year, draft_number
+                FROM nfl_dp_rosters
+                WHERE season = :season
+                  AND player_id IS NOT NULL
+                  AND player_id <> ''
+                ORDER BY player_id, updated_at DESC NULLS LAST
+                """
+            ),
+            {"season": int(season)},
+        ).fetchall()
+    except Exception:
+        try:
+            rows = session.execute(
+                text(
+                    """
+                    SELECT player_id, player_name, team, position,
+                           rookie_year, entry_year, draft_number
+                    FROM nfl_dp_rosters
+                    WHERE season = :season
+                      AND player_id IS NOT NULL
+                      AND player_id <> ''
+                    """
+                ),
+                {"season": int(season)},
+            ).fetchall()
+        except Exception:
+            return {}
+
+    out: Dict[str, Dict[str, Any]] = {}
+    for r in rows or []:
+        mapping = dict(getattr(r, "_mapping", {}) or {})
+        if not mapping:
+            mapping = {
+                "player_id": getattr(r, "player_id", None),
+                "player_name": getattr(r, "player_name", None),
+                "team": getattr(r, "team", None),
+                "position": getattr(r, "position", None),
+                "rookie_year": getattr(r, "rookie_year", None),
+                "entry_year": getattr(r, "entry_year", None),
+                "draft_number": getattr(r, "draft_number", None),
+            }
+        pid = str(mapping.get("player_id") or "").strip()
+        if not pid:
+            continue
+
+        def _opt_int(key: str) -> Optional[int]:
+            val = mapping.get(key)
+            if val is None or val == "":
+                return None
+            try:
+                return int(val)
+            except (TypeError, ValueError):
+                return None
+
+        classified = classify_rookie_from_roster_fields(
+            season=season,
+            rookie_year=_opt_int("rookie_year"),
+            entry_year=_opt_int("entry_year"),
+            years_exp=None,
+            draft_number=_opt_int("draft_number"),
+            draft_round=None,
+        )
+        out[pid] = {
+            "player_id": pid,
+            "player_name": mapping.get("player_name"),
+            "team": normalize_team_abbr(str(mapping.get("team") or "")),
+            "position": str(mapping.get("position") or "").upper(),
+            "rookie_year": _opt_int("rookie_year"),
+            "entry_year": _opt_int("entry_year"),
+            "draft_number": _opt_int("draft_number"),
+            "draft_round": classified["draft_round"],
+            "is_rookie": classified["is_rookie"],
+            "classification": classified["rookie_classification"],
+            "source": "nfl_dp_rosters",
+        }
+    return out
 
 
 def load_packaged_regular_schedule(season: int) -> Tuple[List[ScheduledGame], Dict[str, Any]]:
@@ -373,6 +674,7 @@ def _role_from_depth_row(
     baseline_eff: Optional[Mapping[str, Dict[str, float]]] = None,
     is_rookie: bool = False,
     draft_round: Optional[int] = None,
+    rookie_status: str = "veteran",
 ) -> Tuple[PlayerRole, bool]:
     """Build a PlayerRole from a depth-chart identity + share priors."""
     conf = (
@@ -380,6 +682,7 @@ def _role_from_depth_row(
         if role_confidence is not None
         else (0.7 if depth == 1 else 0.5)
     )
+    status = str(rookie_status or ("rookie" if is_rookie else "veteran"))
     role = PlayerRole(
         player_key=f"{team}-{pos}{depth}-{name}".replace(" ", ""),
         player_name=name,
@@ -411,6 +714,7 @@ def _role_from_depth_row(
         source=source,
         is_rookie=bool(is_rookie),
         draft_round=draft_round,
+        rookie_status=status,
     )
     hit = False
     key = f"{team}|{pos}|{name}".upper()
@@ -464,6 +768,11 @@ def _rosters_from_depth_rows(
             draft_i = int(draft_raw) if draft_raw is not None else None
         except (TypeError, ValueError):
             draft_i = None
+        status_raw = r.get("rookie_status")
+        if status_raw is None:
+            status_raw = getattr(r, "rookie_status", None)
+        if not status_raw:
+            status_raw = "rookie" if is_rookie_raw else "veteran"
         role, hit = _role_from_depth_row(
             team=team,
             pos=pos,
@@ -474,6 +783,7 @@ def _rosters_from_depth_rows(
             baseline_eff=baseline_eff,
             is_rookie=bool(is_rookie_raw),
             draft_round=draft_i,
+            rookie_status=str(status_raw),
         )
         if hit:
             baseline_hits += 1
@@ -692,6 +1002,7 @@ def _role_from_demo(team: str, row: Mapping[str, Any]) -> PlayerRole:
         draft_round_i = int(draft_round) if draft_round is not None else None
     except (TypeError, ValueError):
         draft_round_i = None
+    is_rook = bool(row.get("is_rookie", False))
     role = PlayerRole(
         player_key=key,
         player_name=str(row["name"]),
@@ -705,8 +1016,9 @@ def _role_from_demo(team: str, row: Mapping[str, Any]) -> PlayerRole:
         red_zone_share=float(row.get("tgt", row.get("rush", 0.1))) * 0.9,
         role_confidence=0.75 if depth == 1 else 0.55,
         source="demo_depth_chart",
-        is_rookie=bool(row.get("is_rookie", False)),
+        is_rookie=is_rook,
         draft_round=draft_round_i,
+        rookie_status=str(row.get("rookie_status") or ("rookie" if is_rook else "veteran")),
     )
     return apply_efficiency_priors(role, overrides=overrides or None, source_suffix="league_efficiency_v1")
 
@@ -1088,7 +1400,7 @@ def load_universe_from_db(
         text(
             """
             SELECT DISTINCT ON (team, position, depth_order)
-              team, player_name, position, depth_order, role_confidence
+              team, player_name, position, depth_order, role_confidence, player_id
             FROM nfl_dp_depth_chart_weekly
             WHERE season = :season
               AND week <= :week
@@ -1106,13 +1418,14 @@ def load_universe_from_db(
                 text(
                     """
                     SELECT DISTINCT ON (team, position, depth_order)
-                      team, player_name, position, depth_order
+                      team, player_name, position, depth_order, player_id
                     FROM (
                       SELECT
                         team,
                         player_name,
                         position,
                         depth_team AS depth_order,
+                        player_id,
                         week
                       FROM nfl_dp_official_depth_charts
                       WHERE season = :season
@@ -1128,15 +1441,32 @@ def load_universe_from_db(
         except Exception:
             official_rows = []
 
+    # Rookie / draft flags: prefer DB rostres; fall back to packaged nflverse join.
+    rookie_flags = _load_rookie_flags_from_db(session, season=season)
+    rookie_flag_meta: Dict[str, Any] = {
+        "rookie_flag_source": "nfl_dp_rosters" if rookie_flags else "missing_db",
+        "rookie_flag_count": len(rookie_flags),
+    }
+    if not rookie_flags:
+        packaged_flags, packaged_flag_meta = load_packaged_rookie_flags(season)
+        rookie_flags = packaged_flags
+        rookie_flag_meta = packaged_flag_meta
+
     rosters: Dict[str, List[PlayerRole]]
     roster_source = ROSTER_SOURCE_DEMO
     roster_as_of = f"season={season};as_of_week<={as_of_week}"
     coverage: Dict[str, Any] = {}
     baseline_hits = 0
+    rookie_enrich_stats: Dict[str, Any] = {}
 
     if weekly_rows:
-        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+        depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
             [dict(r._mapping) for r in weekly_rows],  # type: ignore[attr-defined]
+            rookie_flags,
+            season=season,
+        )
+        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+            depth_rows,
             source="depth_chart_weekly",
             baseline_eff=baseline_eff,
         )
@@ -1152,8 +1482,13 @@ def load_universe_from_db(
                 "(nfl_player_projection_baselines unavailable or empty for as_of_week)"
             )
     elif official_rows:
-        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+        depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
             [dict(r._mapping) for r in official_rows],  # type: ignore[attr-defined]
+            rookie_flags,
+            season=season,
+        )
+        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+            depth_rows,
             source="official_depth_charts",
             baseline_eff=baseline_eff,
         )
@@ -1166,8 +1501,13 @@ def load_universe_from_db(
     else:
         try:
             packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
-            rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+            depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
                 packaged_rows,
+                rookie_flags,
+                season=season,
+            )
+            rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+                depth_rows,
                 source=ROSTER_SOURCE_PACKAGED,
                 baseline_eff=baseline_eff,
             )
@@ -1212,6 +1552,13 @@ def load_universe_from_db(
     else:
         strength_note = "PLACEHOLDER league-average strengths (efficiency backbone empty)"
 
+    if rookie_enrich_stats:
+        roster_note = (
+            f"{roster_note}; rookies_flagged="
+            f"{rookie_enrich_stats.get('rookie_flagged', 0)}"
+            f"/{rookie_flag_meta.get('rookie_flag_source', 'n/a')}"
+        )
+
     final_schedule = schedule[:272] if len(schedule) >= 272 else schedule
     return EngineUniverse(
         season=season,
@@ -1230,6 +1577,7 @@ def load_universe_from_db(
             "strengths": strength_note,
             "rosters": f"{roster_note}; usage_role taxonomy annotated",
             "calibration": CALIBRATION_TAG,
+            "rookie_flags": {**rookie_flag_meta, **rookie_enrich_stats},
             **coverage,
             **{f"cal_{k}": v for k, v in calibration_notes().items()},
         },
@@ -1330,10 +1678,18 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
     )
     rosters = demo.rosters
     coverage: Dict[str, Any] = {}
+    rookie_flag_meta: Dict[str, Any] = {}
+    rookie_enrich_stats: Dict[str, Any] = {}
     try:
         packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
-        rosters, _hits, coverage = _rosters_from_depth_rows(
+        rookie_flags, rookie_flag_meta = load_packaged_rookie_flags(season)
+        depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
             packaged_rows,
+            rookie_flags,
+            season=season,
+        )
+        rosters, _hits, coverage = _rosters_from_depth_rows(
+            depth_rows,
             source=ROSTER_SOURCE_PACKAGED,
             baseline_eff=None,
         )
@@ -1347,7 +1703,9 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
         roster_note = (
             f"REAL packaged nflverse depth ({coverage.get('depth_named_skill_teams', 0)}/32 "
-            "named skill teams); DB weekly preferred when populated."
+            f"named skill teams); rookies_flagged="
+            f"{rookie_enrich_stats.get('rookie_flagged', 0)}; "
+            "DB weekly preferred when populated."
         )
     except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
         coverage = depth_coverage_from_rosters(rosters)
@@ -1370,6 +1728,7 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         "strengths": strength_note,
         "rosters": roster_note,
         "calibration": CALIBRATION_TAG,
+        "rookie_flags": {**rookie_flag_meta, **rookie_enrich_stats},
         **coverage,
         **{f"cal_{k}": v for k, v in calibration_notes().items()},
     }
