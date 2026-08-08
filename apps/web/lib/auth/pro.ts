@@ -30,14 +30,21 @@ export function isOpenAccessPreviewEnabled(): boolean {
 
 /**
  * Check if the current user is a Pro user.
- * Pro status is determined by:
- * 1. User has PRO or ADMIN role, OR
- * 2. User has an active subscription
+ * Respects OPEN_ACCESS_PREVIEW (launch mode) via getProAccessState().
  *
- * On DB/auth errors we return false so the Pro page still renders (pricing view).
+ * For Insights Pro weekly notes, use isEntitledProUser() instead so
+ * production public content is never opened by the preview override.
  */
 export async function isProUser(): Promise<boolean> {
   return (await getProAccessState()) === "authorized";
+}
+
+/**
+ * True Pro entitlement only (role / active subscription).
+ * Ignores OPEN_ACCESS_PREVIEW — use for Insights Pro desk notes.
+ */
+export async function isEntitledProUser(): Promise<boolean> {
+  return (await getEntitledProAccessState()) === "authorized";
 }
 
 /**
@@ -45,11 +52,21 @@ export async function isProUser(): Promise<boolean> {
  * - unauthenticated: no signed-in user
  * - forbidden: signed in but not entitled
  * - authorized: PRO/ADMIN role or active subscription
+ *
+ * When OPEN_ACCESS_PREVIEW is on, returns authorized (launch mode).
  */
 export async function getProAccessState(): Promise<ProAccessState> {
   if (isOpenAccessPreviewEnabled()) {
     return "authorized";
   }
+  return getEntitledProAccessState();
+}
+
+/**
+ * Entitlement without open-access preview override.
+ * Production Insights gating must call this path.
+ */
+export async function getEntitledProAccessState(): Promise<ProAccessState> {
   try {
     const session = await auth();
     if (!session?.user?.id) return "unauthenticated";

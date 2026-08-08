@@ -72,30 +72,21 @@ export default function InsightArticleView({
       </section>
 
       {locked ? (
-        <div className="relative mt-10 overflow-hidden rounded-2xl border border-kos-border">
-          <div className="select-none p-6 blur-sm pointer-events-none">
-            <p className="text-kos-text/80">
-              {article.teaser ??
-                "Full desk note — reprice logic, thresholds, and product links — is for Pro."}
-            </p>
-            <ul className="mt-4 list-disc space-y-1 pl-5 text-kos-text/70">
-              {article.keyPoints.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-kos-black/75 px-6 text-center">
-            <p className="max-w-sm text-kos-text/90">
-              Full weekly desk notes and archives are for Pro. Doctrine stays
-              free.
-            </p>
-            <Link
-              href="/pro"
-              className="mt-4 inline-flex rounded-xl bg-kos-gold px-5 py-3 text-sm font-semibold text-black hover:opacity-90"
-            >
-              Go Pro
-            </Link>
-          </div>
+        <div className="mt-10 rounded-2xl border border-kos-border bg-kos-surface/40 p-6 text-center sm:p-8">
+          <p className="text-sm leading-6 text-kos-text/75">
+            {article.teaser ??
+              "Full desk note — reprice logic, thresholds, and product links — is for Pro."}
+          </p>
+          <p className="mt-4 text-sm leading-6 text-kos-text/90">
+            Full weekly desk notes and archives are for Pro members. Doctrine
+            stays free.
+          </p>
+          <Link
+            href="/pro"
+            className="mt-5 inline-flex rounded-xl bg-kos-gold px-5 py-3 text-sm font-semibold text-black hover:opacity-90"
+          >
+            Go Pro
+          </Link>
         </div>
       ) : (
         <>

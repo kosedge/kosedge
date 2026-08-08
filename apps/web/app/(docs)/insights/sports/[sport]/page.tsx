@@ -2,13 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import InsightsHeader from "@/components/insights/InsightsHeader";
 import InsightCard from "@/components/insights/InsightCard";
-import { isProUser } from "@/lib/auth/pro";
+import { isEntitledProUser } from "@/lib/auth/pro";
 import { getSport } from "@/lib/sports";
 import {
   getDeskNotesBySport,
   getDoctrineArticles,
   partitionDeskNotesForUser,
 } from "@/lib/insights/content";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -33,7 +35,7 @@ export default async function InsightsSportPage({
   const sport = getSport(sportKey);
   if (!sport) return notFound();
 
-  const isPro = await isProUser();
+  const isPro = await isEntitledProUser();
   const notes = getDeskNotesBySport(sportKey);
   const doctrine = getDoctrineArticles().filter((d) =>
     d.sports?.includes(sport.key),

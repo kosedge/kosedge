@@ -18,8 +18,14 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-const { isProUser, hasRole, getUserRole, getProAccessState } =
-  await import("@/lib/auth/pro");
+const {
+  isProUser,
+  isEntitledProUser,
+  hasRole,
+  getUserRole,
+  getProAccessState,
+  getEntitledProAccessState,
+} = await import("@/lib/auth/pro");
 
 describe("Auth Pro Utilities", () => {
   const originalOpenAccessPreview = process.env.OPEN_ACCESS_PREVIEW;
@@ -245,6 +251,41 @@ describe("Auth Pro Utilities", () => {
 
       const result = await getProAccessState();
       expect(result).toBe("forbidden");
+    });
+
+    it("returns authorized when open-access preview is enabled", async () => {
+      process.env.OPEN_ACCESS_PREVIEW = "true";
+      authMock.mockResolvedValue(null);
+      const result = await getProAccessState();
+      expect(result).toBe("authorized");
+    });
+  });
+
+  describe("isEntitledProUser / getEntitledProAccessState", () => {
+    it("ignores OPEN_ACCESS_PREVIEW for anonymous users", async () => {
+      process.env.OPEN_ACCESS_PREVIEW = "true";
+      process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW = "true";
+      authMock.mockResolvedValue(null);
+
+      expect(await getEntitledProAccessState()).toBe("unauthenticated");
+      expect(await isEntitledProUser()).toBe(false);
+      // Preview override still opens general Pro surfaces.
+      expect(await isProUser()).toBe(true);
+    });
+
+    it("returns true for entitled PRO role even when preview is off", async () => {
+      process.env.OPEN_ACCESS_PREVIEW = "false";
+      authMock.mockResolvedValue({
+        user: { id: "user-1", email: "pro@example.com", role: UserRole.PRO },
+      } as any);
+      findUniqueMock.mockResolvedValue({
+        id: "user-1",
+        role: UserRole.PRO,
+        subscriptionStatus: null,
+        subscriptionEnd: null,
+      } as any);
+
+      expect(await isEntitledProUser()).toBe(true);
     });
   });
 });

@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import InsightArticleView from "@/components/insights/InsightArticleView";
-import { isProUser } from "@/lib/auth/pro";
+import { isEntitledProUser } from "@/lib/auth/pro";
 import {
   canReadFullArticle,
   getAllDeskNotes,
   getDeskNoteBySlug,
 } from "@/lib/insights/content";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return getAllDeskNotes().map((a) => ({ slug: a.slug }));
@@ -35,7 +37,8 @@ export default async function DeskNotePage({
   const article = getDeskNoteBySlug(slug);
   if (!article) return notFound();
 
-  const isPro = await isProUser();
+  // Entitlement only — ignore OPEN_ACCESS_PREVIEW for Pro desk notes.
+  const isPro = await isEntitledProUser();
   const locked = !canReadFullArticle(article, isPro);
 
   return (
