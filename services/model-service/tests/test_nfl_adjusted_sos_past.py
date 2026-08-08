@@ -349,6 +349,10 @@ def test_live_loader_blend_still_works_when_sos_thin(monkeypatch) -> None:
         "src.services.nfl_season_engine.loaders.load_packaged_epa_priors",
         lambda season: ({}, {}),
     )
+    monkeypatch.setattr(
+        "src.services.nfl_season_engine.continuity_score.build_continuity_book",
+        lambda *args, **kwargs: {},
+    )
     session = _SosAwareSession(
         league_completed=64,
         team_games={"NE": 4},

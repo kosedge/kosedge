@@ -602,16 +602,47 @@ def build_package_from_season_row(
     return pkg
 
 
+def league_anchor_package(*, team: str = "LEAGUE") -> TeamEfficiencyPackage:
+    """Neutral league-mean package used when continuity discounts prior travel."""
+    return TeamEfficiencyPackage(
+        team=team,
+        offense=UnitEfficiency(),
+        defense=UnitEfficiency(),
+        st_index=1.0,
+        st_epa_per_play=0.0,
+        st_plays=0,
+        pace=1.0,
+        pass_rate=_LEAGUE_PASS_RATE,
+        explosiveness=0.0,
+        variance=uncertainty_from_games(0),
+        qb_premium=0.0,
+        games_played=0,
+        source="league_anchor",
+        notes={"role": "continuity_prior_anchor"},
+    )
+
+
 def blend_packages(
     prior: TeamEfficiencyPackage,
     current: TeamEfficiencyPackage,
     *,
     current_games: Optional[int] = None,
+    prior_travel_weight: float = 1.0,
+    continuity_score: Optional[float] = None,
+    league_anchor: Optional[TeamEfficiencyPackage] = None,
 ) -> TeamEfficiencyPackage:
     """Blend prior-season → current-season packages with sample-aware weights.
 
     ``current_games`` overrides ``current.games_played`` for the blend weight
     (prefer schedule-completed REG games when the rolling window is noisy).
+
+    Continuity prior-travel (does **not** replace games/8):
+      w_current = games/8
+      w_prior   = (1 - w_current) * prior_travel_weight
+      w_anchor  = (1 - w_current) * (1 - prior_travel_weight)
+      blended   = w_prior * prior + w_current * current + w_anchor * league_anchor
+
+    Default ``prior_travel_weight=1.0`` preserves the #140 blend curve exactly.
     """
     games_for_weight = (
         int(current_games)
@@ -619,22 +650,55 @@ def blend_packages(
         else int(current.games_played)
     )
     w_cur = prior_current_blend_weight(current_games=games_for_weight)
-    w_prior = 1.0 - w_cur
+    travel = _clamp(float(prior_travel_weight), 0.0, 1.0)
+    w_prior = (1.0 - w_cur) * travel
+    w_anchor = (1.0 - w_cur) * (1.0 - travel)
+    anchor = league_anchor or league_anchor_package(team=current.team or prior.team)
 
-    def _blend_unit(a: UnitEfficiency, b: UnitEfficiency) -> UnitEfficiency:
+    def _blend_unit(
+        a: UnitEfficiency, b: UnitEfficiency, c: UnitEfficiency
+    ) -> UnitEfficiency:
         return UnitEfficiency(
-            epa_per_play=w_prior * a.epa_per_play + w_cur * b.epa_per_play,
-            success_rate=w_prior * a.success_rate + w_cur * b.success_rate,
-            explosive_rate=w_prior * a.explosive_rate + w_cur * b.explosive_rate,
-            negative_rate=w_prior * a.negative_rate + w_cur * b.negative_rate,
-            pass_epa=w_prior * a.pass_epa + w_cur * b.pass_epa,
-            run_epa=w_prior * a.run_epa + w_cur * b.run_epa,
-            early_down_epa=w_prior * a.early_down_epa + w_cur * b.early_down_epa,
-            late_down_conversion_rate=(
-                w_prior * a.late_down_conversion_rate + w_cur * b.late_down_conversion_rate
+            epa_per_play=(
+                w_prior * a.epa_per_play + w_cur * b.epa_per_play + w_anchor * c.epa_per_play
             ),
-            red_zone_td_rate=w_prior * a.red_zone_td_rate + w_cur * b.red_zone_td_rate,
-            pressure_rate=w_prior * a.pressure_rate + w_cur * b.pressure_rate,
+            success_rate=(
+                w_prior * a.success_rate
+                + w_cur * b.success_rate
+                + w_anchor * c.success_rate
+            ),
+            explosive_rate=(
+                w_prior * a.explosive_rate
+                + w_cur * b.explosive_rate
+                + w_anchor * c.explosive_rate
+            ),
+            negative_rate=(
+                w_prior * a.negative_rate
+                + w_cur * b.negative_rate
+                + w_anchor * c.negative_rate
+            ),
+            pass_epa=w_prior * a.pass_epa + w_cur * b.pass_epa + w_anchor * c.pass_epa,
+            run_epa=w_prior * a.run_epa + w_cur * b.run_epa + w_anchor * c.run_epa,
+            early_down_epa=(
+                w_prior * a.early_down_epa
+                + w_cur * b.early_down_epa
+                + w_anchor * c.early_down_epa
+            ),
+            late_down_conversion_rate=(
+                w_prior * a.late_down_conversion_rate
+                + w_cur * b.late_down_conversion_rate
+                + w_anchor * c.late_down_conversion_rate
+            ),
+            red_zone_td_rate=(
+                w_prior * a.red_zone_td_rate
+                + w_cur * b.red_zone_td_rate
+                + w_anchor * c.red_zone_td_rate
+            ),
+            pressure_rate=(
+                w_prior * a.pressure_rate
+                + w_cur * b.pressure_rate
+                + w_anchor * c.pressure_rate
+            ),
             plays=int(a.plays + b.plays),
             pass_plays=int(a.pass_plays + b.pass_plays),
             run_plays=int(a.run_plays + b.run_plays),
@@ -643,29 +707,72 @@ def blend_packages(
 
     prior_idx = package_to_strength_indices(prior)
     current_idx = package_to_strength_indices(current)
+    cont_score = (
+        float(continuity_score)
+        if continuity_score is not None
+        else float((prior.notes or {}).get("continuity_score", travel) or travel)
+    )
+    try:
+        from src.services.nfl_season_engine.continuity_score import (
+            continuity_uncertainty_boost,
+        )
+
+        var_boost = continuity_uncertainty_boost(cont_score) if travel < 1.0 - 1e-12 else 0.0
+    except Exception:
+        var_boost = 0.0
+    base_var = uncertainty_from_games(games_for_weight)
+    variance = round(_clamp(base_var + var_boost, 0.55, 1.60), 4)
+
+    continuity_status = (
+        "applied"
+        if travel < 1.0 - 1e-12 or continuity_score is not None
+        else "stub_not_applied"
+    )
+    # If caller passed explicit travel=1.0 with a continuity_score, still mark applied.
+    if continuity_score is not None:
+        continuity_status = "applied"
+
     return TeamEfficiencyPackage(
         team=current.team or prior.team,
-        offense=_blend_unit(prior.offense, current.offense),
-        defense=_blend_unit(prior.defense, current.defense),
-        st_index=w_prior * prior.st_index + w_cur * current.st_index,
-        st_epa_per_play=w_prior * prior.st_epa_per_play + w_cur * current.st_epa_per_play,
+        offense=_blend_unit(prior.offense, current.offense, anchor.offense),
+        defense=_blend_unit(prior.defense, current.defense, anchor.defense),
+        st_index=(
+            w_prior * prior.st_index + w_cur * current.st_index + w_anchor * anchor.st_index
+        ),
+        st_epa_per_play=(
+            w_prior * prior.st_epa_per_play
+            + w_cur * current.st_epa_per_play
+            + w_anchor * anchor.st_epa_per_play
+        ),
         st_plays=int(prior.st_plays + current.st_plays),
-        pace=w_prior * prior.pace + w_cur * current.pace,
-        pass_rate=w_prior * prior.pass_rate + w_cur * current.pass_rate,
-        explosiveness=w_prior * prior.explosiveness + w_cur * current.explosiveness,
-        # Uncertainty tracks current-season sample only — never tighten because
-        # league completed_reg flipped from 0→1.
-        variance=uncertainty_from_games(games_for_weight),
+        pace=w_prior * prior.pace + w_cur * current.pace + w_anchor * anchor.pace,
+        pass_rate=(
+            w_prior * prior.pass_rate
+            + w_cur * current.pass_rate
+            + w_anchor * anchor.pass_rate
+        ),
+        explosiveness=(
+            w_prior * prior.explosiveness
+            + w_cur * current.explosiveness
+            + w_anchor * anchor.explosiveness
+        ),
+        # Uncertainty tracks current-season sample + continuity discount.
+        # Never tighten because league completed_reg flipped from 0→1.
+        variance=variance,
         # QB premium remains a stub (0) until a real identity layer ships.
+        # Continuity's QB *factor* is not a QB premium.
         qb_premium=0.0,
         games_played=int(games_for_weight),
         as_of=current.as_of or prior.as_of,
         version=EFFICIENCY_BACKBONE_VERSION,
-        source=BACKBONE_SOURCE_BLEND,
+        source=BACKBONE_SOURCE_BLEND if w_cur > 0 else str(prior.source or BACKBONE_SOURCE_PACKAGED),
         prior_season=int(prior.prior_season or 0),
         notes={
             "blend_current_weight": round(w_cur, 4),
             "blend_prior_weight": round(w_prior, 4),
+            "blend_anchor_weight": round(w_anchor, 4),
+            "prior_travel_weight": round(travel, 4),
+            "continuity_score": round(cont_score, 4) if continuity_score is not None else None,
             "prior_source": prior.source,
             "current_source": current.source,
             "prior_offense_index": float(prior_idx["offense_index"]),
@@ -673,7 +780,7 @@ def blend_packages(
             "current_component_offense_index": float(current_idx["offense_index"]),
             "current_component_defense_index": float(current_idx["defense_index"]),
             "qb_premium_status": "stub_not_applied",
-            "continuity_status": "stub_not_applied",
+            "continuity_status": continuity_status,
             # Past SOS status lives on prior package notes when applied.
             "true_time_of_game_sos_status": str(
                 (prior.notes or {}).get("past_sos", {}).get("status")
@@ -681,6 +788,7 @@ def blend_packages(
                 or "thin_unavailable"
             ),
             "past_sos_prior": (prior.notes or {}).get("past_sos"),
+            "continuity": (prior.notes or {}).get("continuity"),
         },
     )
 
@@ -709,11 +817,21 @@ def true_pr_drivers(
     if current_component_defense_index is None:
         current_component_defense_index = pkg.notes.get("current_component_defense_index")
     games = int(pkg.games_played)
+    cont_notes = pkg.notes.get("continuity") if isinstance(pkg.notes.get("continuity"), dict) else {}
+    cont_status = str(pkg.notes.get("continuity_status") or "stub_not_applied")
+    travel = pkg.notes.get("prior_travel_weight")
+    if travel is None and cont_notes:
+        travel = cont_notes.get("prior_travel_weight")
+    w_anchor = float(pkg.notes.get("blend_anchor_weight", 0.0) or 0.0)
     return {
         **base,
         "blend": {
             "w_prior": round(w_prior, 4),
             "w_current": round(w_cur, 4),
+            "w_anchor": round(w_anchor, 4),
+            "prior_travel_weight": (
+                round(float(travel), 4) if travel is not None else None
+            ),
             "prior_offense_index": (
                 round(float(prior_offense_index), 6)
                 if prior_offense_index is not None
@@ -744,10 +862,15 @@ def true_pr_drivers(
             "variance": round(float(pkg.variance), 4),
             "games_played": games,
             "sample_note": "wide_early" if games <= 4 else "tightening",
+            "continuity_boost": round(
+                float(pkg.variance) - uncertainty_from_games(games), 4
+            )
+            if float(pkg.variance) > uncertainty_from_games(games) + 1e-9
+            else 0.0,
         },
         "stubs": {
             "qb_premium": "stub_not_applied",
-            "continuity": "stub_not_applied",
+            "continuity": cont_status,
             "injury_at_time_depth": "stub_not_applied",
             "full_venue_model": str(
                 (pkg.notes.get("past_sos") or {}).get("full_venue_model")
@@ -758,6 +881,9 @@ def true_pr_drivers(
             ),
         },
         "past_sos": dict(pkg.notes.get("past_sos") or {"status": "thin_unavailable"}),
+        "continuity": dict(cont_notes)
+        if cont_notes
+        else {"status": cont_status},
     }
 
 
