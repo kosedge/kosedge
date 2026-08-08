@@ -16,7 +16,7 @@ const free: Plan = {
   title: "Free",
   price: "$0",
   cadence: "",
-  sub: "Edge Board, odds comparison, and hub access. No commitment.",
+  sub: "Public Edge Board, odds comparison, free Insights Doctrine, and limited weekly notes. No card required.",
   badge: "Start Here",
   cta: "Go to Hub",
 };
@@ -25,29 +25,47 @@ const weekly: Plan = {
   title: "Weekly",
   price: "$5.99",
   cadence: "per week",
-  sub: "Check us out. Full access, short commitment.",
+  sub: "Full Pro desk for a short look. Cancel anytime.",
   badge: "Check Us Out",
-  cta: "Start Weekly",
+  cta: "Explore Pro",
 };
 
 const monthly: Plan = {
   title: "Monthly",
   price: "$12.99",
   cadence: "per month",
-  sub: "Most popular for serious users.",
+  sub: "Most popular for the ongoing season desk.",
   highlight: true,
   badge: "Most Popular",
-  cta: "Start Monthly",
+  cta: "Explore Pro",
 };
 
 const yearly: Plan = {
   title: "Yearly",
   price: "$116.91",
   cadence: "per year",
-  sub: "Best long-term rate. Built for disciplined players.",
+  sub: "Best long-term rate for a full season process.",
   badge: "Best Value",
-  cta: "Start Yearly",
+  cta: "Explore Pro",
 };
+
+const FREE_FEATURES = [
+  "Multi-sport Edge Board (public slate)",
+  "Odds comparison",
+  "Insights Doctrine (house rules)",
+  "Limited weekly Insights teasers",
+  "About / Methodology / public hub access",
+];
+
+const PRO_FEATURES = [
+  "Multi-sport Edge Boards with KEI / Edge / tags",
+  "Model vs KEI where live",
+  "NFL season engine, game boxes, and survivor tools",
+  "Fantasy draft desk + mocks",
+  "CFB project-game / model views",
+  "Full Insights — weekly desk notes + archive",
+  "Sport hubs, power ratings, and deeper Pro tools",
+];
 
 function goToUpgradeFlow(planTitle: string, openAccessPreview: boolean) {
   if (openAccessPreview || planTitle === "Free") {
@@ -64,30 +82,62 @@ export default function ProPricing({
   openAccessPreview?: boolean;
 }) {
   const labelForPlan = (plan: Plan): string => {
-    if (!openAccessPreview) return plan.cta;
+    if (!openAccessPreview) {
+      return plan.title === "Free" ? "Go to Hub" : plan.cta;
+    }
     return plan.title === "Free" ? "Go to Hub" : "Explore Pro";
   };
 
   return (
     <section className="w-full">
       <div className="text-center">
-        <div className="text-sm text-gray-400">Kos Edge Pro</div>
+        <div className="text-sm text-gray-400">KosEdge Pricing</div>
         <h2 className="mt-2 text-4xl sm:text-5xl font-bebas tracking-tight text-kos-gold">
-          Built on Data, Driven by Edge
+          Free desk access. Pro for the full board.
         </h2>
-        <p className="mt-3 text-sm sm:text-base text-gray-200/80 max-w-3xl mx-auto">
-          Pro unlocks:
-          <span className="text-gray-100">
-            {" "}
-            Edge Boards for all sports
-          </span>, <span className="text-gray-100">game breakdowns</span>,{" "}
-          <span className="text-gray-100">season & event previews</span>,{" "}
-          <span className="text-gray-100">power ratings</span>, and{" "}
-          <span className="text-gray-100">props</span>.
-          <span className="block mt-2 text-gray-400">
-            No pick-selling. Just information you can act on.
-          </span>
+        <p className="mt-3 text-sm sm:text-base text-gray-200/80 max-w-3xl mx-auto leading-7">
+          KosEdge is a multi-sport analytics and handicapping desk — Model, KEI,
+          and Edge. Free gets you into the public board and Doctrine. Pro
+          unlocks the live desk: KEI lines, tags, season tools, fantasy, and
+          full Insights.
         </p>
+        <p className="mt-2 text-sm text-gray-400">
+          No pick-selling. Process over vibes. Cancel anytime.
+        </p>
+      </div>
+
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="rounded-3xl border border-white/12 bg-black/30 backdrop-blur-xl p-6 sm:p-7">
+          <h3 className="text-lg font-semibold text-kos-text">Free</h3>
+          <p className="mt-2 text-sm text-gray-300/80 leading-6">
+            Start on the public surfaces. Learn how the desk thinks before you
+            upgrade.
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-gray-200/85">
+            {FREE_FEATURES.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="text-kos-gold shrink-0">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-3xl border border-kos-gold/35 bg-kos-gold/5 backdrop-blur-xl p-6 sm:p-7">
+          <h3 className="text-lg font-semibold text-kos-gold">Pro</h3>
+          <p className="mt-2 text-sm text-gray-200/85 leading-6">
+            The full handicapping desk — numbers, tools, and ongoing notes that
+            match how KosEdge actually works.
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-gray-100/90">
+            {PRO_FEATURES.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="text-kos-gold shrink-0">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -126,7 +176,9 @@ export default function ProPricing({
             </div>
 
             {p.sub && (
-              <div className="mt-2 text-sm text-gray-300/80">{p.sub}</div>
+              <div className="mt-2 text-sm text-gray-300/80 leading-6">
+                {p.sub}
+              </div>
             )}
 
             <button
@@ -143,7 +195,7 @@ export default function ProPricing({
             </button>
             {p.title === "Free" && (
               <p className="mt-2 text-xs text-gray-500">
-                Same hub as Pro — explore before you upgrade.
+                Explore the public desk before you upgrade.
               </p>
             )}
 
@@ -195,13 +247,20 @@ export default function ProPricing({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-500">
-        <Link href="/insights" className="hover:text-gray-300 transition">
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
+        <Link href="/methodology" className="hover:text-gray-300 transition">
           View methodology
         </Link>
         <span className="opacity-40">•</span>
         <Link href="/edge-board" className="hover:text-gray-300 transition">
           See sample Edge Board
+        </Link>
+        <span className="opacity-40">•</span>
+        <Link
+          href="/insights/doctrine"
+          className="hover:text-gray-300 transition"
+        >
+          Insights Doctrine
         </Link>
       </div>
     </section>
