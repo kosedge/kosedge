@@ -198,6 +198,19 @@ def load_packaged_efficiency_backbone(
                     row.get("def_epa_allowed_per_play", 0.0) or 0.0
                 ),
                 "games_played": int(row.get("games_played") or row.get("n_weeks") or 0),
+                "past_sos": dict(row.get("past_sos") or {}),
+                "raw_off_epa": float(
+                    (row.get("past_sos") or {}).get(
+                        "raw_off_epa", row.get("off_epa_per_play", 0.0)
+                    )
+                    or 0.0
+                ),
+                "schedule_adj_off_epa": float(
+                    (row.get("past_sos") or {}).get(
+                        "schedule_adj_off_epa", row.get("off_epa_per_play", 0.0)
+                    )
+                    or 0.0
+                ),
                 "_season": float(payload.get("prior_season") or (int(season) - 1)),
                 "source": STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
             }
@@ -1058,7 +1071,13 @@ def load_universe_from_db(
                     "stubs": {
                         "qb_premium": "stub_not_applied",
                         "continuity": "stub_not_applied",
-                        "true_time_of_game_sos": "stub_not_applied",
+                        "injury_at_time_depth": "stub_not_applied",
+                        "full_venue_model": "stub_not_applied",
+                        "true_time_of_game_sos": "thin_unavailable",
+                    },
+                    "past_sos": {
+                        "status": "thin_unavailable",
+                        "future_schedule_excluded": True,
                     },
                 },
             }
@@ -1268,8 +1287,27 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
                 "stubs": {
                     "qb_premium": "stub_not_applied",
                     "continuity": "stub_not_applied",
-                    "true_time_of_game_sos": "stub_not_applied",
+                    "injury_at_time_depth": "stub_not_applied",
+                    "full_venue_model": str(
+                        (prior.get("past_sos") or {}).get("full_venue_model")
+                        or (
+                            "partial_hfa_only"
+                            if prior.get("past_sos")
+                            else "stub_not_applied"
+                        )
+                    ),
+                    "true_time_of_game_sos": str(
+                        (prior.get("past_sos") or {}).get("status")
+                        or "thin_unavailable"
+                    ),
                 },
+                "past_sos": dict(
+                    prior.get("past_sos")
+                    or {
+                        "status": "thin_unavailable",
+                        "future_schedule_excluded": True,
+                    }
+                ),
             },
             "as_of": str(prior.get("as_of") or epa_meta.get("strength_as_of") or ""),
             "version": str(prior.get("version") or epa_meta.get("backbone_version") or ""),

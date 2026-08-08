@@ -125,3 +125,14 @@ Morning: Vercel should auto-deploy `deploy-vercel`. Spot-check `/pro/nfl/model` 
 | Ops note | [`nfl-true-pr-foundation-20260808.md`](nfl-true-pr-foundation-20260808.md) |
 | Change | Live `_load_team_strength_priors` uses gradual prior→current blend (`games/8`); kills hard switch at `completed_reg >= 1`. Full-strength vs current PR split + drivers/stubs. Edge Board prefers same core as season engine. |
 | Tests | `test_nfl_true_pr_foundation.py` + backbone/packaged — 26 passed locally |
+
+---
+
+## Past SOS / Adjusted Strength of Competition (2026-08-08)
+
+| Field | Value |
+|-------|--------|
+| Status | PR → `deploy-vercel` (on top of merged #140 + #141) |
+| Ops note | [`nfl-adjusted-sos-past-20260808.md`](nfl-adjusted-sos-past-20260808.md) |
+| Change | Prior packages schedule-adjusted via time-of-game opponent efficiency (rolling W−1, else approximate season). Soft/hard slate polarity; future 2026 SOS excluded from intrinsic PR. |
+| Tests | `test_nfl_adjusted_sos_past.py` + true PR / backbone / player regression — 45 passed locally |

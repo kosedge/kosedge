@@ -74,10 +74,11 @@ def test_ne_not_bottom_tier_without_cause() -> None:
         ),
     )
     ne_rank = ranked.index("NE") + 1
-    # 2025 season EPA put NE near the top; must not dump to floor (~29–32).
+    # 2025 season EPA put NE near the top; Past SOS soft-slate deflation is
+    # allowed, but must not dump NE to the floor (~29–32).
     assert ne_rank <= 10, f"NE power rank {ne_rank} among {ranked}"
     ne = packaged.strengths["NE"]
-    assert ne.offense_index >= 1.04
+    assert ne.offense_index >= 1.02
     assert ne.defense_index >= 1.04
 
     # Bottom of league should still be weak clubs, not NE.
