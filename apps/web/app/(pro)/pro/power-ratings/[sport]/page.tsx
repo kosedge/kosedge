@@ -157,7 +157,18 @@ export default async function PowerRatingsSportPage({
                 ? ` · Δ vs ${bundleLabel(board.previousBundleId)}`
                 : ""}
             </p>
+            <Link
+              href="/pro/nfl/model"
+              className="min-h-11 inline-flex items-center rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
+            >
+              True PR drivers →
+            </Link>
           </div>
+          <p className="mt-2 text-xs text-kos-text/50">
+            Expected wins remain the season-outlook board. Continuity, QB
+            premium, past SOS, 2026 schedule outlook, and blend state live on
+            the Season Model True PR surface.
+          </p>
           {board.launchIdentity || (board.nTeamSims && board.nTeamSims >= 50000) ? (
             <p className="mt-2 rounded-lg border border-kos-gold/25 bg-kos-gold/10 px-3 py-2 text-xs text-kos-text/80">
               Launch-current research

@@ -40,6 +40,7 @@ Public entry points
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
 - ``apply_process_priors`` / ``build_player_process_prior`` – player regression
 - ``compute_league_projected_sos`` – 2026 projected schedule difficulty
+- ``serialize_true_pr_product_surface`` – Pro UI driver payload (display only)
 
 This package is **additive**. It does not replace
 ``simulate_nfl_game`` / Edge Board / Model-vs-KEI (#70) paths.
@@ -80,6 +81,9 @@ from src.services.nfl_season_engine.projected_sos import (
     analytic_expected_wins_from_schedule,
     compute_league_projected_sos,
     compute_team_projected_sos,
+)
+from src.services.nfl_season_engine.true_pr_product import (
+    serialize_true_pr_product_surface,
 )
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
@@ -131,6 +135,7 @@ __all__ = [
     "parse_injury_paths",
     "project_game_player_boxes",
     "resolve_season_universe",
+    "serialize_true_pr_product_surface",
     "simulate_full_season",
     "suggest_survivor_paths",
     "universe_schedule_meta",
