@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v2"
-# v1.14: 2026 projected schedule difficulty (Future SOS) on season outlook only.
-# Intrinsic / Week-1 PR unchanged; Past SOS (#142) prior path intact.
-ENGINE_VERSION = "nfl-season-engine-v1.14-projected-sos"
+# v1.15: True PR harden — live rookie flags on depth path + season finite audit.
+# Keeps v1.13 process/finite + v1.14 Future SOS contracts; no new rating theory.
+ENGINE_VERSION = "nfl-season-engine-v1.15-true-pr-harden"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -466,6 +466,12 @@ def calibration_notes() -> Dict[str, str]:
             "opponent power across the REG slate with HFA; attaches to season "
             "outlook (expected wins / survivor path grades) only. Never rewrites "
             "intrinsic PR / Week-1 blend (see projected_sos.py)."
+        ),
+        "true_pr_harden": (
+            "v1.15: populate is_rookie / draft_round from nflverse roster join "
+            "(DB nfl_dp_rosters or packaged flags) so rookie mean-shrink + wider "
+            "CV fire live; season-path finite audit dampens named skill aggregates "
+            "that exceed summed per-game team pools (see player_regression.py)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

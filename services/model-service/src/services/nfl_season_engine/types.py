@@ -133,6 +133,8 @@ class PlayerRole:
     # --- v1.13 player process / regression (additive) ---
     is_rookie: bool = False
     draft_round: Optional[int] = None  # 1–7 when known; None = unknown
+    # veteran | rookie | unclassified — never invent draft capital when unset
+    rookie_status: str = "veteran"
     process_index: float = 1.0  # 1.0 ≈ league process efficiency
     td_process_gap: float = 0.0  # observed TD index − process (>0 = overperformed)
     regression_posture: str = "neutral"  # positive | negative | neutral

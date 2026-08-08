@@ -24,9 +24,9 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.14 keeps player-regression and adds 2026 projected schedule difficulty
-(capability ``projected-sos``) on season outlook / survivor path grades only —
-intrinsic PR is never rewritten by Future SOS.
+v1.15 hardens true PR: live ``is_rookie`` / ``draft_round`` on the depth path
+(so rookie mean-shrink + wider CV fire) and a season-path finite production
+audit beyond per-box scale-down. v1.14 Future SOS outlook-only contract kept.
 
 Public entry points
 -------------------
@@ -71,6 +71,7 @@ from src.services.nfl_season_engine.loaders import (
 )
 from src.services.nfl_season_engine.player_regression import (
     apply_process_priors,
+    audit_season_finite_production,
     build_player_process_prior,
     enforce_finite_team_production,
 )
@@ -112,6 +113,7 @@ __all__ = [
     "TeamProjectedSos",
     "analytic_expected_wins_from_schedule",
     "apply_process_priors",
+    "audit_season_finite_production",
     "build_demo_universe",
     "build_packaged_real_universe",
     "build_player_process_prior",

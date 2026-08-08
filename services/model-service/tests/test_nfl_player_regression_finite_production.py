@@ -31,12 +31,14 @@ from src.services.nfl_season_engine.loaders import STRENGTH_SOURCE_DEMO
 
 def test_engine_version_player_regression() -> None:
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
-    # v1.14+ keeps player-regression capability; version tag may be projected-sos.
-    assert (
-        "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
-        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
+    # v1.15+ keeps player-regression; tag may be true-pr-harden / projected-sos.
+    assert any(
+        token in DEFAULT_SEASON_ENGINE_VERSION
+        for token in ("player-regression", "projected-sos", "true-pr-harden")
     )
-    assert "v1.14" in DEFAULT_SEASON_ENGINE_VERSION or "v1.13" in DEFAULT_SEASON_ENGINE_VERSION
+    assert any(
+        v in DEFAULT_SEASON_ENGINE_VERSION for v in ("v1.15", "v1.14", "v1.13")
+    )
 
 
 def test_negative_regression_high_td_thin_process() -> None:
