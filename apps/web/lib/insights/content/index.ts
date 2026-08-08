@@ -1,10 +1,7 @@
 import type { SportKey } from "@/lib/sports";
 import { SPORTS } from "@/lib/sports";
 import type { InsightArticle } from "../types";
-import {
-  getDoctrineArticles,
-  getDoctrineBySlug,
-} from "./doctrine";
+import { getDoctrineArticles, getDoctrineBySlug } from "./doctrine";
 import {
   getAllDeskNotes,
   getDeskNoteBySlug,
