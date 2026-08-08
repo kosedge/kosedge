@@ -499,7 +499,10 @@ def attach_past_sos_drivers(
     out = dict(drivers or {})
     stubs = dict(out.get("stubs") or {})
     stubs.setdefault("qb_premium", "stub_not_applied")
-    stubs.setdefault("continuity", "stub_not_applied")
+    # Continuity is applied on the strength path separately; do not clobber
+    # an already-applied continuity status with the past-SOS helper default.
+    if "continuity" not in stubs:
+        stubs["continuity"] = "stub_not_applied"
     stubs["injury_at_time_depth"] = "stub_not_applied"
     if sos is None or sos.games <= 0:
         stubs["full_venue_model"] = "stub_not_applied"

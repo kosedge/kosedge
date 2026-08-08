@@ -973,12 +973,15 @@ def _load_team_strength_priors(
 
     Construction (live path):
     - Prior component = prior-season rolling efficiency backbone, else packaged
-      2025-derived backbone (never demo bumps).
+      2025-derived backbone (never demo bumps). Past SOS adjusts the prior
+      side before blend.
+    - Continuity score → ``prior_travel`` on residual prior mass (not a new
+      rating scale; QB factor ≠ full QB premium).
     - Current component = current-season rolling when the team has completed
       REG games (week-capped); missing current → keep prior (do not drop).
-    - Blend: ``w_current = clamp(team_completed_reg / 8, 0, 1)``,
-      ``w_prior = 1 - w_current``. Replaces the old hard switch at
-      ``completed_reg >= 1``.
+    - Blend: ``w_current = clamp(team_completed_reg / 8, 0, 1)`` (unchanged),
+      ``w_prior = (1 - w_current) * prior_travel``,
+      ``w_anchor = (1 - w_current) * (1 - prior_travel)`` toward league mean.
     - Full-strength PR = blended intrinsic; current PR starts equal until
       injury/availability overlays apply a labeled delta.
     """
@@ -1134,6 +1137,43 @@ def _load_team_strength_priors(
             prior_pkgs=prior_pkgs,
         )
 
+    # Continuity score → prior-travel weight (modulates residual prior mass;
+    # does not replace games/8). Missing inputs → neutral factors + labels.
+    continuity_book: Dict[str, Any] = {}
+    if use_backbone:
+        try:
+            from src.services.nfl_season_engine.continuity_score import (
+                attach_continuity_drivers,
+                build_continuity_book,
+            )
+
+            continuity_book = build_continuity_book(
+                session,
+                season=int(primary_season),
+                as_of_week=week_cap_current,
+                teams=set(prior_pkgs) | set(current_pkgs) | set(packaged_priors),
+            )
+            for team, cont in continuity_book.items():
+                pkg = prior_pkgs.get(team)
+                if pkg is None:
+                    continue
+                pkg.notes["continuity"] = cont.to_drivers()
+                pkg.notes["continuity_score"] = float(cont.continuity_score)
+                pkg.notes["prior_travel_weight"] = float(cont.prior_travel_weight)
+                pkg.notes["continuity_status"] = "applied"
+        except Exception:
+            continuity_book = {}
+
+    def _continuity_travel(team: str) -> Tuple[float, Optional[float], Any]:
+        cont = continuity_book.get(team)
+        if cont is None or getattr(cont, "fidelity", None) == "missing":
+            return 1.0, None, None
+        return (
+            float(cont.prior_travel_weight),
+            float(cont.continuity_score),
+            cont,
+        )
+
     out: Dict[str, Dict[str, float]] = {}
     if use_backbone:
         all_teams = set(prior_pkgs) | set(current_pkgs) | set(packaged_priors)
@@ -1141,15 +1181,26 @@ def _load_team_strength_priors(
             prior_pkg = prior_pkgs.get(team)
             current_pkg = current_pkgs.get(team)
             g = int(team_games.get(team, 0) or 0)
+            travel, cont_score, cont_obj = _continuity_travel(team)
             if current_pkg is not None and g <= 0:
                 # Row exists on hydrated grid but team has not completed a REG game.
                 current_pkg = None
 
             if prior_pkg is not None and current_pkg is not None and g > 0:
-                blended = blend_packages(prior_pkg, current_pkg, current_games=g)
+                blended = blend_packages(
+                    prior_pkg,
+                    current_pkg,
+                    current_games=g,
+                    prior_travel_weight=travel,
+                    continuity_score=cont_score,
+                )
                 payload = strength_payload_from_package(
                     blended, source=BACKBONE_SOURCE_BLEND
                 )
+                if cont_obj is not None:
+                    payload["drivers"] = attach_continuity_drivers(
+                        payload.get("drivers") or {}, cont_obj
+                    )
                 out[team] = {
                     **payload,
                     "_season": float(primary_season if g > 0 else fallback_season),
@@ -1160,24 +1211,87 @@ def _load_team_strength_priors(
                     "version": EFFICIENCY_BACKBONE_VERSION,
                 }
             elif prior_pkg is not None:
-                # 100% prior (preseason / missing current / g==0).
+                # Continuity-weighted prior at g==0 (not always 100% prior).
                 if prior_pkg.source == BACKBONE_SOURCE_PACKAGED and prior_pkg.notes.get(
                     "packaged_offense_index"
                 ) is not None:
-                    # Prefer packaged hierarchy indices (already smell-tested).
+                    # Prefer packaged hierarchy indices, then apply prior travel
+                    # shrink toward league mean (1.0) when continuity is low.
+                    from src.services.nfl_season_engine.continuity_score import (
+                        continuity_uncertainty_boost,
+                    )
+
                     var = uncertainty_from_games(0)
-                    off = float(prior_pkg.notes["packaged_offense_index"])
-                    deff = float(prior_pkg.notes["packaged_defense_index"])
+                    if cont_score is not None:
+                        var = min(1.60, var + continuity_uncertainty_boost(cont_score))
+                    raw_off = float(prior_pkg.notes["packaged_offense_index"])
+                    raw_def = float(prior_pkg.notes["packaged_defense_index"])
+                    off = travel * raw_off + (1.0 - travel) * 1.0
+                    deff = travel * raw_def + (1.0 - travel) * 1.0
+                    w_prior = travel
+                    w_anchor = 1.0 - travel
+                    drivers = {
+                        "blend": {
+                            "w_prior": round(w_prior, 4),
+                            "w_current": 0.0,
+                            "w_anchor": round(w_anchor, 4),
+                            "prior_travel_weight": round(travel, 4),
+                            "prior_offense_index": round(raw_off, 6),
+                            "prior_defense_index": round(raw_def, 6),
+                            "current_component_offense_index": None,
+                            "current_component_defense_index": None,
+                        },
+                        "injury_availability_delta": {
+                            "offense": 0.0,
+                            "defense": 0.0,
+                            "status": "structure_ready_zero",
+                        },
+                        "uncertainty": {
+                            "variance": float(var),
+                            "games_played": 0,
+                            "sample_note": "wide_early",
+                        },
+                        "stubs": {
+                            "qb_premium": "stub_not_applied",
+                            "continuity": (
+                                "applied" if cont_obj is not None else "stub_not_applied"
+                            ),
+                            "injury_at_time_depth": "stub_not_applied",
+                            "full_venue_model": str(
+                                (prior_pkg.notes.get("past_sos") or {}).get(
+                                    "full_venue_model"
+                                )
+                                or "stub_not_applied"
+                            ),
+                            "true_time_of_game_sos": str(
+                                (prior_pkg.notes.get("past_sos") or {}).get("status")
+                                or "thin_unavailable"
+                            ),
+                        },
+                        "past_sos": dict(
+                            prior_pkg.notes.get("past_sos")
+                            or {
+                                "status": "thin_unavailable",
+                                "future_schedule_excluded": True,
+                            }
+                        ),
+                        "st_index": float(
+                            prior_pkg.notes.get("packaged_st_index", 1.0) or 1.0
+                        ),
+                        "version": EFFICIENCY_BACKBONE_VERSION,
+                    }
+                    if cont_obj is not None:
+                        drivers = attach_continuity_drivers(drivers, cont_obj)
                     out[team] = {
-                        "offense_index": off,
-                        "defense_index": deff,
-                        "full_strength_offense_index": off,
-                        "full_strength_defense_index": deff,
-                        "current_offense_index": off,
-                        "current_defense_index": deff,
+                        "offense_index": round(off, 6),
+                        "defense_index": round(deff, 6),
+                        "full_strength_offense_index": round(off, 6),
+                        "full_strength_defense_index": round(deff, 6),
+                        "current_offense_index": round(off, 6),
+                        "current_defense_index": round(deff, 6),
                         "injury_delta_offense": 0.0,
                         "injury_delta_defense": 0.0,
-                        "blend_prior_weight": 1.0,
+                        "blend_prior_weight": round(w_prior, 4),
                         "blend_current_weight": 0.0,
                         "pace_factor": float(
                             prior_pkg.notes.get("packaged_pace_factor", 1.0) or 1.0
@@ -1187,61 +1301,10 @@ def _load_team_strength_priors(
                             prior_pkg.notes.get("packaged_st_index", 1.0) or 1.0
                         ),
                         "explosiveness": 0.0,
-                        "variance": float(
-                            prior_pkg.notes.get("packaged_variance", var) or var
-                        ),
+                        "variance": float(var),
                         "qb_premium": 0.0,
                         "games_played": 0,
-                        "drivers": {
-                            "blend": {
-                                "w_prior": 1.0,
-                                "w_current": 0.0,
-                                "prior_offense_index": off,
-                                "prior_defense_index": deff,
-                                "current_component_offense_index": None,
-                                "current_component_defense_index": None,
-                            },
-                            "injury_availability_delta": {
-                                "offense": 0.0,
-                                "defense": 0.0,
-                                "status": "structure_ready_zero",
-                            },
-                            "uncertainty": {
-                                "variance": float(
-                                    prior_pkg.notes.get("packaged_variance", var) or var
-                                ),
-                                "games_played": 0,
-                                "sample_note": "wide_early",
-                            },
-                            "stubs": {
-                                "qb_premium": "stub_not_applied",
-                                "continuity": "stub_not_applied",
-                                "injury_at_time_depth": "stub_not_applied",
-                                "full_venue_model": str(
-                                    (prior_pkg.notes.get("past_sos") or {}).get(
-                                        "full_venue_model"
-                                    )
-                                    or "stub_not_applied"
-                                ),
-                                "true_time_of_game_sos": str(
-                                    (prior_pkg.notes.get("past_sos") or {}).get(
-                                        "status"
-                                    )
-                                    or "thin_unavailable"
-                                ),
-                            },
-                            "past_sos": dict(
-                                prior_pkg.notes.get("past_sos")
-                                or {
-                                    "status": "thin_unavailable",
-                                    "future_schedule_excluded": True,
-                                }
-                            ),
-                            "st_index": float(
-                                prior_pkg.notes.get("packaged_st_index", 1.0) or 1.0
-                            ),
-                            "version": EFFICIENCY_BACKBONE_VERSION,
-                        },
+                        "drivers": drivers,
                         "as_of": str(prior_pkg.as_of or ""),
                         "version": EFFICIENCY_BACKBONE_VERSION,
                         "_season": float(fallback_season),
@@ -1252,18 +1315,24 @@ def _load_team_strength_priors(
                         ),
                     }
                 else:
-                    prior_pkg.notes.setdefault("blend_prior_weight", 1.0)
-                    prior_pkg.notes.setdefault("blend_current_weight", 0.0)
-                    # Keep early-season uncertainty honest when using prior rolling.
-                    prior_pkg.variance = uncertainty_from_games(0)
-                    prior_pkg.games_played = 0
-                    payload = strength_payload_from_package(
-                        prior_pkg, source=str(prior_pkg.source or BACKBONE_SOURCE_ROLLING)
+                    # Rolling prior package: blend toward league anchor via travel.
+                    blended = blend_packages(
+                        prior_pkg,
+                        prior_pkg,
+                        current_games=0,
+                        prior_travel_weight=travel,
+                        continuity_score=cont_score,
                     )
+                    payload = strength_payload_from_package(
+                        blended,
+                        source=str(prior_pkg.source or BACKBONE_SOURCE_ROLLING),
+                    )
+                    if cont_obj is not None:
+                        payload["drivers"] = attach_continuity_drivers(
+                            payload.get("drivers") or {}, cont_obj
+                        )
                     out[team] = {
                         **payload,
-                        "blend_prior_weight": 1.0,
-                        "blend_current_weight": 0.0,
                         "qb_premium": 0.0,
                         "_season": float(fallback_season),
                         "_week": float(prior_meta_week.get(team) or 0.0),

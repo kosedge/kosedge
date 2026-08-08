@@ -470,6 +470,12 @@ def test_load_team_strength_priors_uses_prior_season_when_unplayed(monkeypatch) 
         "src.services.nfl_season_engine.loaders.load_packaged_epa_priors",
         lambda season: ({}, {}),
     )
+    # Isolate prior-season selection from continuity travel (NYG has curated
+    # staff-change flags that would otherwise discount prior weight).
+    monkeypatch.setattr(
+        "src.services.nfl_season_engine.continuity_score.build_continuity_book",
+        lambda *args, **kwargs: {},
+    )
     out = tasks._load_team_strength_priors(session, season_year=2026, as_of_week=1)
     assert "NYG" in out and "DAL" in out
     assert out["DAL"]["offense_index"] > out["NYG"]["offense_index"]
