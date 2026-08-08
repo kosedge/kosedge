@@ -100,3 +100,16 @@ Phase C — confirm one strength core through season engine / survivor / boxes.
 - Rolling live path still lacks week-aligned pass/run/early EPA (packaged has them; rolling has overall 5g + ST).
 - ST play counts approximated for labeling.
 - QB premium still hook-only.
+
+
+---
+
+## End-of-night
+
+| Field | Value |
+|-------|--------|
+| Timestamp | 2026-08-08T12:26:03.735190+00:00 |
+| v1.1 PR | https://github.com/kosedge/kosedge/pull/138 — MERGED into deploy-vercel |
+| Overall | **A PASS · B PASS · C PASS** (UI auth spot-check pending after deploy) |
+
+Morning: Vercel should auto-deploy `deploy-vercel`. Spot-check `/pro/nfl/model` + Edge Board when logged in.
