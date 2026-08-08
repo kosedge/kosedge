@@ -4,6 +4,8 @@ North star: [`nfl-model-vision.md`](nfl-model-vision.md).
 
 Branch: `feat/nfl-true-pr-harden` → base `deploy-vercel`.
 
+PR: https://github.com/kosedge/kosedge/pull/146
+
 Depends on merged True PR stack: #140 blend, #141 player regression / finite,
 #142 past SOS, #143 continuity, #144 QB premium, #145 future SOS. This pass
 **activates and audits** — no new rating philosophy, no KEI/tag changes.
