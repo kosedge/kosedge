@@ -27,6 +27,7 @@ export type TruePrDriverChip = {
   premium?: number | null;
   score?: number | null;
   preseason?: boolean;
+  early_season?: boolean;
   stub?: string | null;
   source?: string | null;
 };
@@ -113,6 +114,7 @@ function asDriver(raw: unknown): TruePrDriverChip {
     premium: typeof d.premium === "number" ? d.premium : null,
     score: typeof d.score === "number" ? d.score : null,
     preseason: Boolean(d.preseason),
+    early_season: Boolean(d.early_season),
     stub: typeof d.stub === "string" ? d.stub : null,
     source: typeof d.source === "string" ? d.source : null,
   };

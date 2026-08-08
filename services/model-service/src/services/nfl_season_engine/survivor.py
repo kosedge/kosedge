@@ -94,6 +94,21 @@ FORMULA_NOTES = {
         "(demo=true) has no byes. Future weeks on bye are skipped when "
         "scoring save_score (not treated as losses)."
     ),
+    "projected_sos_2026": (
+        "Season schedule difficulty from full-strength opponent PR + HFA "
+        "(higher = harder). Outlook / path grade only — does not rewrite "
+        "intrinsic PR or game-level Edge Board lines. "
+        "Harder schedule ≠ weaker team."
+    ),
+    "schedule_difficulty": (
+        "easy / average / hard band from projected_sos_2026. Moves E[wins] "
+        "and path grades with slate difficulty; intrinsic PR unchanged."
+    ),
+    "path_difficulty_grade": (
+        "Letter from projected_sos_2026 vs league baseline (A easiest … F "
+        "hardest). Coherent easier-vs-harder path ranking for survivor — "
+        "not a power-ranking dial."
+    ),
 }
 
 # Multi-week planner path-survival (joint across locked picks).
@@ -151,15 +166,6 @@ PATH_FORMULA_NOTES = {
         "pick_now_score/week; contrarian_save = among WP≥"
         f"{CONTRARIAN_MIN_WP:.0%} candidates prefer lowest save_score "
         "(bank premium future spots)."
-    ),
-    "projected_sos_2026": (
-        "Season schedule difficulty from full-strength opponent PR + HFA "
-        "(higher = harder). Outlook / path grade only — does not rewrite "
-        "intrinsic PR or game-level Edge Board lines."
-    ),
-    "path_difficulty_grade": (
-        "Letter from projected_sos_2026 vs league baseline (A easiest … F "
-        "hardest). Coherent easier-vs-harder path ranking for survivor."
     ),
     "planner_exclusion": (
         "A team locked in any week is removed from ranked_picks for every "
@@ -495,6 +501,9 @@ def evaluate_survivor(
     )
     notes["already_used"] = ",".join(used) if used else "(none)"
     notes["bye_handling"] = FORMULA_NOTES["bye_handling"]
+    notes["projected_sos_2026"] = FORMULA_NOTES["projected_sos_2026"]
+    notes["schedule_difficulty"] = FORMULA_NOTES["schedule_difficulty"]
+    notes["path_difficulty_grade"] = FORMULA_NOTES["path_difficulty_grade"]
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"
 
@@ -1034,6 +1043,9 @@ def evaluate_survivor_plan(
     notes["avg_locked_wp"] = PATH_FORMULA_NOTES["avg_locked_wp"]
     notes["danger_weeks"] = PATH_FORMULA_NOTES["danger_weeks"]
     notes["slate_grade"] = PATH_FORMULA_NOTES["slate_grade"]
+    notes["projected_sos_2026"] = PATH_FORMULA_NOTES["projected_sos_2026"]
+    notes["schedule_difficulty"] = PATH_FORMULA_NOTES["schedule_difficulty"]
+    notes["path_difficulty_grade"] = PATH_FORMULA_NOTES["path_difficulty_grade"]
     notes["used_teams"] = ",".join(used_teams) if used_teams else "(none)"
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"

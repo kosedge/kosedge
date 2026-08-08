@@ -24,6 +24,7 @@ type DriverLike = {
   score?: number | null;
   state?: string | null;
   preseason?: boolean;
+  early_season?: boolean;
 };
 
 export function titleCaseBand(band: string | null | undefined): string {
@@ -101,14 +102,18 @@ export function projectedSosChip(d: DriverLike): DriverChipView | null {
 
 export function blendChip(d: DriverLike): DriverChipView | null {
   if (!d?.available) return null;
-  // Preseason: show prior-heavy; never invent current-sample story.
+  // Preseason / games 0–2: prior-heavy; never invent current-sample story.
+  const early =
+    Boolean(d.preseason) ||
+    Boolean(d.early_season) ||
+    d.state === "prior_heavy";
   return {
     key: "blend",
     title: "Blend",
     value: d.label || titleCaseBand(d.state) || "—",
     detail: d.reason || "",
     approximate: Boolean(d.approximate),
-    muted: Boolean(d.preseason),
+    muted: early,
   };
 }
 

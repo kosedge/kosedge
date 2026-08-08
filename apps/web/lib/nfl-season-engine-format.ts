@@ -326,6 +326,31 @@ export function formatPct(value: number, digits = 1): string {
   return `${(value * 100).toFixed(digits)}%`;
 }
 
+/** Outlook-only slate band — harder schedule ≠ weaker team. */
+export function formatScheduleDifficulty(
+  band: string | null | undefined,
+): string {
+  switch (String(band || "").toLowerCase()) {
+    case "easy":
+      return "Easy slate";
+    case "hard":
+      return "Hard slate";
+    case "average":
+      return "Avg slate";
+    default:
+      return "—";
+  }
+}
+
+/** Survivor path difficulty letter from projected SOS (not a PR dial). */
+export function formatPathDifficultyGrade(
+  grade: string | null | undefined,
+): string {
+  const g = String(grade || "").trim().toUpperCase();
+  if (!g || g === "—" || g === "NULL") return "—";
+  return g;
+}
+
 export function formatRange(dist: StatDist | undefined, digits = 1): string {
   if (!dist) return "";
   return `${formatStatNumber(dist.p10, digits)}–${formatStatNumber(dist.p90, digits)}`;

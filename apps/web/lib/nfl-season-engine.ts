@@ -85,6 +85,10 @@ export type SeasonEngineSurvivorPick = {
   plays_this_week?: boolean;
   already_used?: boolean;
   game_id?: string | null;
+  /** Outlook only — higher = harder slate; does not rewrite intrinsic PR. */
+  projected_sos_2026?: number | null;
+  schedule_difficulty?: "easy" | "average" | "hard" | string | null;
+  path_difficulty_grade?: string | null;
 };
 
 export type SeasonEngineSurvivorResponse = {

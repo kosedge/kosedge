@@ -57,6 +57,19 @@ describe("nfl-true-pr-format", () => {
     expect(chip?.muted).toBe(true);
   });
 
+  it("keeps games 1–2 blend prior-heavy (no Week-1 cliff copy)", () => {
+    const chip = blendChip({
+      available: true,
+      label: "Prior-heavy",
+      state: "prior_heavy",
+      reason: "Games 1/8 — prior-heavy early season (no Week-1 cliff)",
+      early_season: true,
+      preseason: false,
+    });
+    expect(chip?.value).toBe("Prior-heavy");
+    expect(chip?.muted).toBe(true);
+  });
+
   it("builds a scannable chip list", () => {
     const chips = driverChipsForTeam({
       continuity: { available: true, band: "high", reason: "same QB" },

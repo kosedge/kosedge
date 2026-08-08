@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
+  formatPathDifficultyGrade,
   formatPct,
+  formatScheduleDifficulty,
   normalizeSurvivorPlanPicks,
 } from "@/lib/nfl-season-engine-format";
 
@@ -18,6 +20,9 @@ type PlanPick = {
   favorite_wp?: number;
   save_score?: number;
   pick_now_score?: number;
+  schedule_difficulty?: string | null;
+  path_difficulty_grade?: string | null;
+  projected_sos_2026?: number | null;
 };
 
 type PlanWeek = {
@@ -394,8 +399,10 @@ export default function SeasonEngineSurvivorPlannerClient({
           </p>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-kos-text/70">
             Lock one team per week. Matchups stay visible before you pick.
-            Used teams are burned everywhere. Metrics stay readable on a full
-            slate — joint parlay survival is advanced-only.
+            Used teams are burned everywhere. Path SOS is schedule outlook —
+            harder slate ≠ weaker team; E[wins] / path grades move, intrinsic
+            PR does not. Metrics stay readable on a full slate — joint parlay
+            survival is advanced-only.
           </p>
         </div>
 
@@ -668,6 +675,14 @@ export default function SeasonEngineSurvivorPlannerClient({
                         } disabled:cursor-not-allowed disabled:opacity-35`}
                       >
                         <MatchupLine pick={pick} />
+                        {pick.schedule_difficulty ? (
+                          <span className="mt-1 block text-[11px] text-kos-text/50">
+                            {formatScheduleDifficulty(pick.schedule_difficulty)}
+                            {pick.path_difficulty_grade
+                              ? ` · path ${formatPathDifficultyGrade(pick.path_difficulty_grade)}`
+                              : ""}
+                          </span>
+                        ) : null}
                         <span className="mt-1 block text-[11px] text-kos-text/45">
                           {burned
                             ? "Already used"

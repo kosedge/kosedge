@@ -38,8 +38,9 @@ export default function TruePrDriversBoard({
           </h2>
           <p className="mt-1 max-w-2xl text-xs leading-relaxed text-kos-text/60">
             Intrinsic PR is research fair strength. Drivers explain why a team
-            sits where it sits. 2026 SOS is schedule outlook only — it does not
-            change intrinsic PR. Edge stays KEI vs market on Edge Board.
+            sits where it sits. 2026 SOS is schedule outlook only — harder
+            schedule ≠ weaker team. Blend stays prior-heavy through games 0–2
+            (no Week-1 cliff). Edge stays KEI vs market on Edge Board.
           </p>
         </div>
         <p className="text-[11px] text-kos-text/45">
