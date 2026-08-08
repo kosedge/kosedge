@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 export const metadata = {
   title: "Methodology",
@@ -313,6 +314,7 @@ export default function MethodologyPage() {
           Built on Data, Driven by Edge.
         </p>
       </article>
+      <SiteFooter />
     </main>
   );
 }

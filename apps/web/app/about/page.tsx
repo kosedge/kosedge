@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 export const metadata = {
   title: "About",
@@ -226,6 +227,7 @@ export default function AboutPage() {
         </p>
         <p className="mt-2 text-base text-white/90">Welcome to KosEdge.</p>
       </article>
+      <SiteFooter />
     </main>
   );
 }

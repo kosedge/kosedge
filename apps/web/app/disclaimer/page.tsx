@@ -1,4 +1,6 @@
+import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 export const metadata = {
   title: "Disclaimer",
@@ -117,7 +119,14 @@ export default function DisclaimerPage() {
 
         <h2 className="text-2xl font-bold text-kos-gold">Questions</h2>
         <p className="mt-3 text-base leading-7 text-white/75">
-          For product questions, use the normal site contact paths.
+          For product questions, use the{" "}
+          <Link
+            href="/contact"
+            className="font-semibold text-kos-gold hover:underline"
+          >
+            Contact
+          </Link>{" "}
+          page.
         </p>
         <p className="mt-3 text-base leading-7 text-white/75">
           This page is a disclaimer, not legal advice to you.
@@ -127,6 +136,7 @@ export default function DisclaimerPage() {
           Built on Data, Driven by Edge.
         </p>
       </article>
+      <SiteFooter />
     </main>
   );
 }
