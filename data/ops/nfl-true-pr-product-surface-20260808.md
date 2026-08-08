@@ -4,6 +4,8 @@ North star: [`nfl-model-vision.md`](nfl-model-vision.md).
 
 Branch: `feat/nfl-true-pr-product-surface` → `deploy-vercel`.
 
+PR: https://github.com/kosedge/kosedge/pull/147
+
 Depends on merged True PR stack **#140–#146**.
 
 ## Goal
