@@ -4676,6 +4676,7 @@ def nfl_season_engine_status(
             "real_2026_schedule",
             "real_2026_depth",
             "projected_sos_2026",
+            "true_pr_product",
         ],
         "contract": {
             "docs": "data/ops/nfl-season-engine-api-contract-20260803.md",
@@ -4703,6 +4704,8 @@ def nfl_season_engine_status(
                 "projected_sos_2026",
                 "schedule_difficulty",
                 "path_difficulty_grade",
+                "intrinsic_pr",
+                "drivers",
             ],
             "include_diagnostics": (
                 "Query/body flag; game-boxes default false; simulate/survivor "
@@ -4797,13 +4800,65 @@ def nfl_season_engine_status(
             "survivor": "POST /nfl/season-engine/survivor",
             "survivor_plan": "POST /nfl/season-engine/survivor/plan",
             "survivor_suggest_paths": "POST /nfl/season-engine/survivor/suggest-paths",
+            "true_pr": "GET /nfl/season-engine/true-pr",
             "cli": "scripts/nfl/run_hierarchical_season_sim.py",
             "cli_survivor": "scripts/nfl/run_survivor_evaluate.py",
             "cli_harden": "scripts/nfl/harden_validate_season_engine.py",
         },
+        "true_pr_product": {
+            "module": "src.services.nfl_season_engine.true_pr_product",
+            "endpoint": "GET /nfl/season-engine/true-pr",
+            "role": (
+                "Display-only True PR drivers for Pro Season Model UI. "
+                "Does not change intrinsic PR, KEI, or Edge Board lines."
+            ),
+            "docs": "data/ops/nfl-true-pr-product-surface-20260808.md",
+        },
         "additive": True,
         "does_not_modify": ["edge_board", "model_vs_kei_#70", "nfl_market_projections"],
     }
+
+
+@router.get("/season-engine/true-pr")
+def nfl_season_engine_true_pr(
+    season: int = Query(2026, ge=2010, le=2100),
+    as_of_week: int = Query(1, ge=1, le=18),
+    demo: bool = Query(False, description="Probe demo universe instead of real"),
+    team: Optional[str] = Query(
+        None, description="Optional team filter (e.g. KC). Omit for full board."
+    ),
+) -> Dict[str, Any]:
+    """True PR product surface — intrinsic PR + scannable drivers (display only)."""
+    from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
+    from src.services.nfl_season_engine.true_pr_product import (
+        serialize_true_pr_product_surface,
+    )
+
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=season,
+        as_of_week=as_of_week,
+        demo=demo,
+        db_timeout_s=min(2.0, _SEASON_ENGINE_DB_TIMEOUT_S),
+    )
+    payload = serialize_true_pr_product_surface(
+        universe,
+        season=season,
+        as_of_week=as_of_week,
+        mode=str(schedule_meta.get("mode") or ("demo" if demo else "real")),
+        schedule_meta=schedule_meta,
+        engine_version=DEFAULT_SEASON_ENGINE_VERSION,
+        session=None,
+        enrich_display_drivers=True,
+    )
+    if team:
+        code = str(team).strip().upper()
+        if code == "LAR":
+            code = "LA"
+        payload["teams"] = [row for row in payload["teams"] if row.get("team") == code]
+        payload["team_count"] = len(payload["teams"])
+        if not payload["teams"]:
+            payload["error"] = f"Unknown team filter: {team}"
+    return payload
 
 
 @router.post("/season-engine/simulate")

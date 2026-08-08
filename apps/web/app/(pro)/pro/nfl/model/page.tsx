@@ -1,10 +1,12 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
+import TruePrDriversBoard from "@/components/pro/nfl/TruePrDriversBoard";
 import {
   fetchSeasonEngineStatus,
   isSeasonEngineReady,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
+import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +24,10 @@ const TOOLS = [
 ] as const;
 
 export default async function NflSeasonModelHubPage() {
-  const status = await fetchSeasonEngineStatus();
+  const [status, truePr] = await Promise.all([
+    fetchSeasonEngineStatus(),
+    fetchTruePrProductSurface({ season: 2026, asOfWeek: 1 }),
+  ]);
   const ready = isSeasonEngineReady(status);
   const packagedNotice = seasonEnginePackagedNotice(status);
 
@@ -32,13 +37,15 @@ export default async function NflSeasonModelHubPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Season Model"
-      summary="Full-season engine for Game Boxes and Survivor path rankings. Edge Board and KEI stay on their own rails — empty REG boards in camp are expected."
+      summary="True PR board plus full-season tools for Game Boxes and Survivor. Model = research fair; KEI = late reprice; Edge = KEI vs market only."
       badge="NFL season engine"
       primaryHref="/pro/nfl/game-boxes"
       primaryLabel="Open Game Boxes"
       secondaryHref="/pro/nfl/survivor"
       secondaryLabel="Open Survivor"
     >
+      <TruePrDriversBoard surface={truePr} />
+
       <section className="mt-6 grid gap-3 sm:grid-cols-2">
         {TOOLS.map((tool) => (
           <Link

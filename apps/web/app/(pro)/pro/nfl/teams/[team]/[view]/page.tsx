@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import DepthChartRenderer from "@/components/pro/DepthChartRenderer";
 import InjuryStatusPanel from "@/components/pro/InjuryStatusPanel";
+import TruePrTeamStrip from "@/components/pro/nfl/TruePrTeamStrip";
 import TeamIntelFilterBar from "@/components/pro/TeamIntelFilterBar";
 import TeamIntelSectionNav from "@/components/pro/TeamIntelSectionNav";
 import TeamIntelStatCards from "@/components/pro/TeamIntelStatCards";
@@ -16,6 +17,7 @@ import {
   formatTeamRecordWithRank,
   type NflIntelResponseRow,
 } from "@/lib/nfl-intel";
+import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 import {
   buildTrendSnippets,
   extractTeamCodes,
@@ -181,29 +183,38 @@ export default async function NflTeamIntelViewPage({
     redirect(`/pro/nfl/teams/${selectedTeam}/${view}${suffix}`);
   }
 
-  const [stats, statsComparison, depth, injuries, rosters] = await Promise.all([
-    fetchNflIntel("stats", {
-      season: filters.season,
-      week: filters.week,
-      team: selectedTeam,
-    }),
-    fetchNflIntel("stats", { season: filters.season, week: filters.week }),
-    fetchNflIntel("depth-charts", {
-      season: filters.season,
-      week: filters.week,
-      team: selectedTeam,
-    }),
-    fetchNflIntel("injuries", {
-      season: filters.season,
-      week: filters.week,
-      team: selectedTeam,
-    }),
-    fetchNflIntel("rosters", {
-      season: filters.season,
-      week: filters.week,
-      team: selectedTeam,
-    }),
-  ]);
+  const [stats, statsComparison, depth, injuries, rosters, truePrSurface] =
+    await Promise.all([
+      fetchNflIntel("stats", {
+        season: filters.season,
+        week: filters.week,
+        team: selectedTeam,
+      }),
+      fetchNflIntel("stats", { season: filters.season, week: filters.week }),
+      fetchNflIntel("depth-charts", {
+        season: filters.season,
+        week: filters.week,
+        team: selectedTeam,
+      }),
+      fetchNflIntel("injuries", {
+        season: filters.season,
+        week: filters.week,
+        team: selectedTeam,
+      }),
+      fetchNflIntel("rosters", {
+        season: filters.season,
+        week: filters.week,
+        team: selectedTeam,
+      }),
+      view === "overview"
+        ? fetchTruePrProductSurface({
+            season: filters.season ?? 2026,
+            asOfWeek: 1,
+            team: selectedTeam,
+          })
+        : Promise.resolve(null),
+    ]);
+  const truePrRow = truePrSurface?.teams?.[0] ?? null;
 
   const season = standings.season ?? stats.season ?? filters.season ?? null;
   const week = standings.week ?? stats.week ?? filters.week ?? null;
@@ -339,6 +350,13 @@ export default async function NflTeamIntelViewPage({
           </p>
         ) : null}
       </section>
+
+      {view === "overview" ? (
+        <TruePrTeamStrip
+          row={truePrRow}
+          engineVersion={truePrSurface?.engine_version}
+        />
+      ) : null}
 
       {view === "overview" && previewAssignment ? (
         <div className="mt-5">
