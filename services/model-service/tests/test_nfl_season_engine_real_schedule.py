@@ -25,6 +25,7 @@ def test_engine_version_real_2026() -> None:
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
+        or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

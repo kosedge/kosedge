@@ -96,6 +96,11 @@ class PlayerRole:
 
     REAL when loaded from ``nfl_dp_depth_chart_weekly`` + prior usage.
     PLACEHOLDER when synthesized from a demo depth chart.
+
+    Process / regression fields (v1.13) are filled by
+    ``player_regression.apply_process_priors`` — they separate efficiency /
+    opportunity process from counting-stat luck. Defaults leave veterans
+    neutral until annotated.
     """
 
     player_key: str
@@ -125,6 +130,14 @@ class PlayerRole:
     rec_td_rate: float = 0.055
     int_rate: float = 0.018
     source: str = "placeholder"
+    # --- v1.13 player process / regression (additive) ---
+    is_rookie: bool = False
+    draft_round: Optional[int] = None  # 1–7 when known; None = unknown
+    process_index: float = 1.0  # 1.0 ≈ league process efficiency
+    td_process_gap: float = 0.0  # observed TD index − process (>0 = overperformed)
+    regression_posture: str = "neutral"  # positive | negative | neutral
+    regression_confidence: float = 0.0
+    regression_drivers: tuple = ()
 
 
 @dataclass(frozen=True)

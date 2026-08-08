@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v2"
-# v1.12: Survivor Planner UX — slate metrics + suggested paths (additive).
-# Underlying Layers 1–4 / cal-v2 knobs unchanged from v1.11.
-ENGINE_VERSION = "nfl-season-engine-v1.12-survivor-planner-ux"
+# v1.13: Player process regression + finite production (additive on hierarchy).
+# True-PR blend / full-strength split / cal-v2 knobs unchanged.
+ENGINE_VERSION = "nfl-season-engine-v1.13-player-regression"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -451,6 +451,13 @@ def calibration_notes() -> Dict[str, str]:
             "best remaining equity, letter grade) + suggest-paths heuristics "
             "(chalk / balanced / contrarian-save). Joint path_survival kept "
             "as advanced secondary. See PATH_FORMULA_NOTES / suggest_survivor_paths."
+        ),
+        "player_regression": (
+            "v1.13: process priors (efficiency vs league, not raw yards/TDs) → "
+            "positive/negative/neutral regression posture + drivers; rookie "
+            "conservative mean / wide uncertainty; finite team yards/TD caps "
+            "so named players cannot overflow the script pool "
+            "(see player_regression.py)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

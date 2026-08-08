@@ -9,6 +9,8 @@ Four layers (each module is the single source of truth for its concern):
    (+ ``red_zone`` scoring-usage opportunities between usage and TDs)
 4. ``production``     – usage + matchup + script → yards / TDs / receptions / INTs
    (TDs primarily from RZ opportunities × finish rates; yards from general usage)
+   (+ ``player_regression`` process priors / regression posture + finite team
+   yards/TD caps so named players stay inside the script pool)
 
 Injury / availability path shocks (``injury_paths``) adjust Layers 1 and 3
 for specified week ranges before Layers 2–4 run. Layer 3 uses an explicit
@@ -22,8 +24,8 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.12 keeps cal-v2 knobs from v1.11 and adds planner UX metrics +
-suggested paths (capability ``survivor_planner_ux``).
+v1.13 keeps cal-v2 / survivor-planner-ux and adds player process regression
++ finite production (capability ``player-regression``).
 
 Public entry points
 -------------------
@@ -35,6 +37,7 @@ Public entry points
 - ``resolve_season_universe`` / ``build_demo_universe`` /
   ``load_universe_from_db`` / ``build_packaged_real_universe`` – input builders
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
+- ``apply_process_priors`` / ``build_player_process_prior`` – player regression
 
 This package is **additive**. It does not replace
 ``simulate_nfl_game`` / Edge Board / Model-vs-KEI (#70) paths.
@@ -63,6 +66,11 @@ from src.services.nfl_season_engine.loaders import (
     load_universe_from_db,
     resolve_season_universe,
     universe_schedule_meta,
+)
+from src.services.nfl_season_engine.player_regression import (
+    apply_process_priors,
+    build_player_process_prior,
+    enforce_finite_team_production,
 )
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
@@ -93,8 +101,11 @@ __all__ = [
     "SurvivorPlanResult",
     "SurvivorSuggestedPathsResult",
     "TeamEfficiencyPackage",
+    "apply_process_priors",
     "build_demo_universe",
     "build_packaged_real_universe",
+    "build_player_process_prior",
+    "enforce_finite_team_production",
     "evaluate_survivor",
     "evaluate_survivor_plan",
     "load_packaged_depth_chart",

@@ -29,6 +29,10 @@ from src.services.nfl_season_engine.calibration import (
     EFFICIENCY_CV_RUSH,
     USAGE_OTHER_BUCKET_FLOOR,
 )
+from src.services.nfl_season_engine.player_regression import (
+    efficiency_cv_mult,
+    enforce_finite_team_production,
+)
 from src.services.nfl_season_engine.red_zone import (
     NON_RZ_TD_RESIDUAL,
     RZ_FINISH_PASS_I10,
@@ -171,8 +175,14 @@ def produce_box_scores(
     script: GameScript,
     strengths: Mapping[str, TeamStrengthState],
     rng: Optional[random.Random] = None,
+    enforce_finite: bool = True,
 ) -> List[PlayerBoxScore]:
-    """Sample one coherent box-score replicate for every usage row."""
+    """Sample one coherent box-score replicate for every usage row.
+
+    Uses process-adjusted efficiency on ``PlayerRole`` (v1.13) and optionally
+    caps named-player yards/TDs to the team script pool so production stays
+    finite across teammates.
+    """
     rng = rng or random.Random()
     role_lookup: Dict[str, PlayerRole] = {}
     for team_roles in roles.values():
@@ -194,6 +204,7 @@ def produce_box_scores(
         opp = script.away_team if u.team == script.home_team else script.home_team
         pass_m = _matchup_pass_mult(u.team, opp, strengths)
         rush_m = _matchup_rush_mult(u.team, opp, strengths)
+        cv_mult = efficiency_cv_mult(role)
 
         # Thin script efficiency only — volume shifts already come from Layer 2/3
         # play-mix + SCRIPT_USAGE_MATRIX. Keep these mild and intensity-scaled
@@ -214,7 +225,10 @@ def produce_box_scores(
         pass_tds = 0.0
         ints = 0.0
         if u.pass_attempts > 0.0:
-            ypa_i = max(3.5, rng.gauss(ypa, abs(ypa) * EFFICIENCY_CV_PASS))
+            ypa_i = max(
+                3.5,
+                rng.gauss(ypa, abs(ypa) * EFFICIENCY_CV_PASS * cv_mult),
+            )
             pass_yards = u.pass_attempts * ypa_i
             pass_tds = float(
                 _poisson(
@@ -233,7 +247,10 @@ def produce_box_scores(
         rush_tds = 0.0
         if u.carries > 0.0 or float(getattr(u, "rz_carries_i20", 0.0) or 0.0) > 0.0:
             if u.carries > 0.0:
-                ypc_i = max(0.5, rng.gauss(ypc, abs(ypc) * EFFICIENCY_CV_RUSH + 0.22))
+                ypc_i = max(
+                    0.5,
+                    rng.gauss(ypc, abs(ypc) * EFFICIENCY_CV_RUSH * cv_mult + 0.22),
+                )
                 rush_yards = u.carries * ypc_i
             rush_tds = float(_poisson(rng, _rush_td_lambda(u, role)))
 
@@ -242,9 +259,16 @@ def produce_box_scores(
         rec_tds = 0.0
         if u.targets > 0.0 or float(getattr(u, "rz_targets_i20", 0.0) or 0.0) > 0.0:
             if u.targets > 0.0:
-                catch = _clamp(rng.gauss(role.catch_rate, CATCH_RATE_NOISE), 0.28, 0.92)
+                catch = _clamp(
+                    rng.gauss(role.catch_rate, CATCH_RATE_NOISE * cv_mult),
+                    0.28,
+                    0.92,
+                )
                 receptions = u.targets * catch
-                ypr_i = max(2.0, rng.gauss(ypr, abs(ypr) * EFFICIENCY_CV_REC))
+                ypr_i = max(
+                    2.0,
+                    rng.gauss(ypr, abs(ypr) * EFFICIENCY_CV_REC * cv_mult),
+                )
                 rec_yards = receptions * ypr_i
             rec_tds = float(_poisson(rng, _rec_td_lambda(u, role, receptions)))
 
@@ -266,6 +290,14 @@ def produce_box_scores(
                 carries=round(u.carries, 2),
                 targets=round(u.targets, 2),
             )
+        )
+    if enforce_finite and out:
+        offense_idx = {
+            t: float(getattr(strengths.get(t), "offense_index", 1.0) or 1.0)
+            for t in teams
+        }
+        out, _finite_diag = enforce_finite_team_production(
+            out, script=script, strengths_offense=offense_idx
         )
     return out
 

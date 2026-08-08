@@ -50,6 +50,9 @@ from src.services.nfl_season_engine.types import (
     ScheduledGame,
 )
 from src.services.nfl_season_engine.depth_chart import apply_depth_chart_roster_book
+from src.services.nfl_season_engine.player_regression import (
+    apply_process_priors_to_roster_book,
+)
 from src.services.nfl_season_engine.usage_roles import annotate_roster_book
 
 _PACKAGE_DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -355,6 +358,8 @@ def _role_from_depth_row(
     source: str,
     role_confidence: Optional[float] = None,
     baseline_eff: Optional[Mapping[str, Dict[str, float]]] = None,
+    is_rookie: bool = False,
+    draft_round: Optional[int] = None,
 ) -> Tuple[PlayerRole, bool]:
     """Build a PlayerRole from a depth-chart identity + share priors."""
     conf = (
@@ -391,6 +396,8 @@ def _role_from_depth_row(
         ),
         role_confidence=conf,
         source=source,
+        is_rookie=bool(is_rookie),
+        draft_round=draft_round,
     )
     hit = False
     key = f"{team}|{pos}|{name}".upper()
@@ -434,6 +441,16 @@ def _rosters_from_depth_rows(
         conf_raw = r.get("role_confidence")
         if conf_raw is None:
             conf_raw = getattr(r, "role_confidence", None)
+        is_rookie_raw = r.get("is_rookie")
+        if is_rookie_raw is None:
+            is_rookie_raw = getattr(r, "is_rookie", False)
+        draft_raw = r.get("draft_round")
+        if draft_raw is None:
+            draft_raw = getattr(r, "draft_round", None)
+        try:
+            draft_i = int(draft_raw) if draft_raw is not None else None
+        except (TypeError, ValueError):
+            draft_i = None
         role, hit = _role_from_depth_row(
             team=team,
             pos=pos,
@@ -442,6 +459,8 @@ def _rosters_from_depth_rows(
             source=source,
             role_confidence=float(conf_raw) if conf_raw is not None else None,
             baseline_eff=baseline_eff,
+            is_rookie=bool(is_rookie_raw),
+            draft_round=draft_i,
         )
         if hit:
             baseline_hits += 1
@@ -655,6 +674,11 @@ def _role_from_demo(team: str, row: Mapping[str, Any]) -> PlayerRole:
         for k in ("ypa", "ypc", "ypr", "catch_rate", "pass_td_rate", "rush_td_rate", "rec_td_rate", "int_rate")
         if k in row and row[k] is not None
     }
+    draft_round = row.get("draft_round")
+    try:
+        draft_round_i = int(draft_round) if draft_round is not None else None
+    except (TypeError, ValueError):
+        draft_round_i = None
     role = PlayerRole(
         player_key=key,
         player_name=str(row["name"]),
@@ -668,6 +692,8 @@ def _role_from_demo(team: str, row: Mapping[str, Any]) -> PlayerRole:
         red_zone_share=float(row.get("tgt", row.get("rush", 0.1))) * 0.9,
         role_confidence=0.75 if depth == 1 else 0.55,
         source="demo_depth_chart",
+        is_rookie=bool(row.get("is_rookie", False)),
+        draft_round=draft_round_i,
     )
     return apply_efficiency_priors(role, overrides=overrides or None, source_suffix="league_efficiency_v1")
 
@@ -746,6 +772,7 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
     schedule = _round_robin_schedule(season, NFL_TEAMS)
     rosters = annotate_roster_book(rosters)
     rosters, depth_structures = apply_depth_chart_roster_book(rosters)
+    rosters = apply_process_priors_to_roster_book(rosters)
     committee_teams = sorted(
         t for t, s in depth_structures.items() if s.rb_structure == "committee"
     )
@@ -1147,6 +1174,7 @@ def load_universe_from_db(
 
     rosters = annotate_roster_book(rosters)
     rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
+    rosters = apply_process_priors_to_roster_book(rosters)
     if not coverage:
         coverage = depth_coverage_from_rosters(rosters)
     if epa_count and packaged_fill:
@@ -1276,6 +1304,7 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
                 rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
         rosters = annotate_roster_book(rosters)
         rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
+        rosters = apply_process_priors_to_roster_book(rosters)
         roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
         roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
         roster_note = (
