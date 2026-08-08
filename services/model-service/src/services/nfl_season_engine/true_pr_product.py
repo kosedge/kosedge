@@ -78,7 +78,7 @@ def _continuity_reason(cont: Mapping[str, Any]) -> str:
                 bits.append("new staff")
             elif score is not None and score >= 0.7:
                 bits.append("staff returning")
-            elif "new OC" in detail or "OC Kubiak" in detail or "OC " in detail:
+            elif "new OC" in detail or "OC departed" in detail:
                 bits.append("OC change")
             elif "new HC" in detail.lower():
                 bits.append("new HC")
