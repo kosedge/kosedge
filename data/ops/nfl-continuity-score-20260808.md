@@ -6,7 +6,7 @@ Builds on merged **#140** (true PR blend), **#141** (player regression), **#142*
 
 Branch: `feat/nfl-continuity-score` → `deploy-vercel`.
 
-PR: _(filled after open)_
+PR: https://github.com/kosedge/kosedge/pull/143
 
 ## Goal
 
