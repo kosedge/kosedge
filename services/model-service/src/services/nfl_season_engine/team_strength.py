@@ -5,12 +5,15 @@ evolve across a simulated season path.
 
 REAL vs PLACEHOLDER
 -------------------
-- REAL: offense/defense indices loaded from ``_load_team_strength_priors``
-  (EPA-based priors used by live ``simulate_nfl_game``), or from schedule-
-  attached market projections when available.
+- REAL: offense/defense indices from the in-house efficiency backbone
+  (``efficiency_backbone`` → same O/D index contract as live
+  ``simulate_nfl_game``), via DB rolling features / packaged prior-season
+  efficiency files. Demo strength bumps never apply in real mode.
 - PLACEHOLDER: mean-reverting in-path strength updates after each simulated
   game. Evolution gains are calibrated (softened) so season win distributions
   stay in a realistic NFL band without mid-season explosion.
+
+See ``data/ops/nfl-model-vision.md`` (product north star).
 """
 
 from __future__ import annotations
@@ -47,7 +50,8 @@ def initialize_strengths(
     """Build initial strength state for every team.
 
     ``teams`` values may include offense_index, defense_index, pace_factor,
-    pass_rate_bias, source.
+    pass_rate_bias, source, plus efficiency-backbone metadata
+    (st_index, explosiveness, variance, qb_premium, as_of, version).
     """
     out: Dict[str, TeamStrengthState] = {}
     for team, payload in teams.items():
@@ -58,7 +62,13 @@ def initialize_strengths(
             pace_factor=float(payload.get("pace_factor", 1.0)),
             pass_rate_bias=float(payload.get("pass_rate_bias", 0.0)),
             source=str(payload.get("source", default_source)),
-            games_played=0,
+            games_played=int(payload.get("games_played", 0) or 0),
+            st_index=float(payload.get("st_index", 1.0) or 1.0),
+            explosiveness=float(payload.get("explosiveness", 0.0) or 0.0),
+            variance=float(payload.get("variance", 1.0) or 1.0),
+            qb_premium=float(payload.get("qb_premium", 0.0) or 0.0),
+            as_of=str(payload.get("as_of", "") or ""),
+            version=str(payload.get("version", "") or ""),
         )
     return out
 
@@ -161,8 +171,24 @@ def evolve_after_game(
             *STRENGTH_CLAMP,
         )
         state.games_played += 1
-        if state.source == "epa_prior" or state.source.startswith("real"):
-            state.source = f"{state.source}+path_evolved"
+        real_prefix = (
+            state.source in (
+                "epa_prior",
+                "packaged_epa_prior",
+                "efficiency_backbone",
+                "packaged_efficiency_backbone",
+                "efficiency_backbone_rolling",
+                "efficiency_backbone_blend",
+            )
+            or state.source.startswith("real")
+            or state.source.startswith("epa_prior")
+            or state.source.startswith("packaged_epa_prior")
+            or state.source.startswith("efficiency_backbone")
+            or state.source.startswith("packaged_efficiency")
+        )
+        if real_prefix:
+            if "+path_evolved" not in state.source:
+                state.source = f"{state.source}+path_evolved"
         elif "path_evolved" not in state.source:
             state.source = f"{state.source}+path_evolved"
 

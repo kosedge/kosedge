@@ -550,14 +550,34 @@ def _epa_to_strength_indices(
     pressure_allowed: float = 0.0,
 ) -> Dict[str, float]:
     """Map rolling EPA/pressure into the offense/defense index contract used by
-    the handicapping framework (higher defense_index = stronger defense)."""
-    pressure_delta = float(pressure_generated) - float(pressure_allowed)
-    offense_index = _clamp(1.0 + (float(off_epa) * 0.75) + (pressure_delta * 0.18), 0.82, 1.22)
-    defense_index = _clamp(1.0 + ((-float(def_epa_allowed)) * 0.90) + (pressure_delta * 0.14), 0.82, 1.24)
-    return {
-        "offense_index": round(offense_index, 6),
-        "defense_index": round(defense_index, 6),
-    }
+    the handicapping framework (higher defense_index = stronger defense).
+
+    Canonical implementation lives in ``efficiency_backbone.epa_to_strength_indices``
+    (Sprint 2); this wrapper keeps Edge Board / matchup-pack call sites stable.
+    """
+    try:
+        from src.services.nfl_season_engine.efficiency_backbone import (
+            epa_to_strength_indices as _backbone_epa_to_indices,
+        )
+
+        return _backbone_epa_to_indices(
+            off_epa=off_epa,
+            def_epa_allowed=def_epa_allowed,
+            pressure_generated=pressure_generated,
+            pressure_allowed=pressure_allowed,
+        )
+    except Exception:
+        pressure_delta = float(pressure_generated) - float(pressure_allowed)
+        offense_index = _clamp(
+            1.0 + (float(off_epa) * 0.75) + (pressure_delta * 0.18), 0.82, 1.22
+        )
+        defense_index = _clamp(
+            1.0 + ((-float(def_epa_allowed)) * 0.90) + (pressure_delta * 0.14), 0.82, 1.24
+        )
+        return {
+            "offense_index": round(offense_index, 6),
+            "defense_index": round(defense_index, 6),
+        }
 
 
 def _priors_from_matchup_pack(
@@ -662,6 +682,11 @@ def _load_team_strength_priors(
                 def_epa_allowed_per_play_5g,
                 pressure_rate_generated_5g,
                 pressure_rate_allowed_5g,
+                pass_rate_5g,
+                success_rate_offense_5g,
+                success_rate_defense_allowed_5g,
+                red_zone_td_rate_5g,
+                games_in_window_5,
                 ROW_NUMBER() OVER (
                   PARTITION BY season, team
                   ORDER BY week DESC
@@ -677,7 +702,12 @@ def _load_team_strength_priors(
               off_epa_per_play_5g,
               def_epa_allowed_per_play_5g,
               pressure_rate_generated_5g,
-              pressure_rate_allowed_5g
+              pressure_rate_allowed_5g,
+              pass_rate_5g,
+              success_rate_offense_5g,
+              success_rate_defense_allowed_5g,
+              red_zone_td_rate_5g,
+              games_in_window_5
             FROM ranked
             WHERE rn = 1
             """
@@ -685,6 +715,17 @@ def _load_team_strength_priors(
         {"seasons": seasons, "week_cap": week_cap},
     ).fetchall()
     out: Dict[str, Dict[str, float]] = {}
+    try:
+        from src.services.nfl_season_engine.efficiency_backbone import (
+            EFFICIENCY_BACKBONE_VERSION,
+            build_package_from_season_row,
+            strength_payload_from_package,
+        )
+
+        use_backbone = True
+    except Exception:
+        use_backbone = False
+
     for row in rows:
         team = str(row.team or "")
         if not team:
@@ -693,17 +734,86 @@ def _load_team_strength_priors(
         # Prefer exact-season priors; only fallback to prior season when needed.
         if team in out and int(out[team].get("_season", 0)) >= season:
             continue
-        indices = _epa_to_strength_indices(
-            off_epa=_to_float(row.off_epa_per_play_5g) or 0.0,
-            def_epa_allowed=_to_float(row.def_epa_allowed_per_play_5g) or 0.0,
-            pressure_generated=_to_float(row.pressure_rate_generated_5g) or 0.0,
-            pressure_allowed=_to_float(row.pressure_rate_allowed_5g) or 0.0,
-        )
-        out[team] = {
-            **indices,
-            "_season": float(season),
-            "_week": float(_to_float(row.week) or 0.0),
-        }
+        if use_backbone:
+            pkg = build_package_from_season_row(
+                team,
+                {
+                    "off_epa_per_play": _to_float(row.off_epa_per_play_5g) or 0.0,
+                    "def_epa_allowed_per_play": _to_float(row.def_epa_allowed_per_play_5g)
+                    or 0.0,
+                    "pressure_rate_generated": _to_float(row.pressure_rate_generated_5g)
+                    or 0.0,
+                    "pressure_rate_allowed": _to_float(row.pressure_rate_allowed_5g) or 0.0,
+                    "pass_rate": _to_float(getattr(row, "pass_rate_5g", None)) or 0.58,
+                    "success_rate_offense": _to_float(
+                        getattr(row, "success_rate_offense_5g", None)
+                    )
+                    or 0.44,
+                    "success_rate_defense_allowed": _to_float(
+                        getattr(row, "success_rate_defense_allowed_5g", None)
+                    )
+                    or 0.44,
+                    "red_zone_td_rate": _to_float(getattr(row, "red_zone_td_rate_5g", None))
+                    or 0.55,
+                    "n_weeks": int(_to_float(getattr(row, "games_in_window_5", None)) or 0),
+                    "games_played": int(
+                        _to_float(getattr(row, "games_in_window_5", None)) or 0
+                    ),
+                },
+                as_of=f"season={season};week={int(row.week or 0)}",
+                source="efficiency_backbone_rolling",
+                prior_season=int(fallback_season),
+            )
+            payload = strength_payload_from_package(pkg)
+            out[team] = {
+                **payload,
+                "_season": float(season),
+                "_week": float(_to_float(row.week) or 0.0),
+                "_source": "efficiency_backbone",
+                "version": EFFICIENCY_BACKBONE_VERSION,
+            }
+        else:
+            indices = _epa_to_strength_indices(
+                off_epa=_to_float(row.off_epa_per_play_5g) or 0.0,
+                def_epa_allowed=_to_float(row.def_epa_allowed_per_play_5g) or 0.0,
+                pressure_generated=_to_float(row.pressure_rate_generated_5g) or 0.0,
+                pressure_allowed=_to_float(row.pressure_rate_allowed_5g) or 0.0,
+            )
+            out[team] = {
+                **indices,
+                "_season": float(season),
+                "_week": float(_to_float(row.week) or 0.0),
+                "_source": "epa_prior",
+            }
+    # Cold-start / empty rolling tables (e.g. Railway Hobby after wipe): fill
+    # from packaged efficiency backbone so Edge Board + season engine stay on
+    # real hierarchy instead of record/league-average placeholders.
+    if len(out) < 32:
+        try:
+            from src.services.nfl_season_engine.loaders import load_packaged_epa_priors
+
+            packaged, meta = load_packaged_epa_priors(int(season_year))
+            pkg_source = str(meta.get("strength_source") or "packaged_efficiency_backbone")
+            for team, prior in packaged.items():
+                if team in out:
+                    continue
+                out[team] = {
+                    "offense_index": float(prior["offense_index"]),
+                    "defense_index": float(prior["defense_index"]),
+                    "pace_factor": float(prior.get("pace_factor", 1.0) or 1.0),
+                    "pass_rate_bias": float(prior.get("pass_rate_bias", 0.0) or 0.0),
+                    "st_index": float(prior.get("st_index", 1.0) or 1.0),
+                    "explosiveness": float(prior.get("explosiveness", 0.0) or 0.0),
+                    "variance": float(prior.get("variance", 1.0) or 1.0),
+                    "qb_premium": float(prior.get("qb_premium", 0.0) or 0.0),
+                    "as_of": str(prior.get("as_of") or meta.get("strength_as_of") or ""),
+                    "version": str(prior.get("version") or meta.get("backbone_version") or ""),
+                    "_season": float(prior.get("_season") or fallback_season),
+                    "_week": 0.0,
+                    "_source": pkg_source,
+                }
+        except Exception:
+            pass
     return out
 
 
