@@ -6,6 +6,8 @@ Builds on merged **#140** (true PR blend) + **#141** (player regression).
 
 Branch: `feat/nfl-adjusted-sos-past` → `deploy-vercel`.
 
+PR: https://github.com/kosedge/kosedge/pull/142
+
 ## Goal
 
 Replace crude opponent W% thinking with **Adjusted Strength of Competition**

@@ -132,7 +132,8 @@ Morning: Vercel should auto-deploy `deploy-vercel`. Spot-check `/pro/nfl/model` 
 
 | Field | Value |
 |-------|--------|
-| Status | PR → `deploy-vercel` (on top of merged #140 + #141) |
+| Status | PR open → `deploy-vercel` (on top of merged #140 + #141) |
+| PR | https://github.com/kosedge/kosedge/pull/142 |
 | Ops note | [`nfl-adjusted-sos-past-20260808.md`](nfl-adjusted-sos-past-20260808.md) |
 | Change | Prior packages schedule-adjusted via time-of-game opponent efficiency (rolling W−1, else approximate season). Soft/hard slate polarity; future 2026 SOS excluded from intrinsic PR. |
 | Tests | `test_nfl_adjusted_sos_past.py` + true PR / backbone / player regression — 45 passed locally |
