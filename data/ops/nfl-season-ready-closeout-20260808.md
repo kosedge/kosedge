@@ -4,6 +4,8 @@ North star: [`nfl-model-vision.md`](nfl-model-vision.md).
 
 Branch: `feat/nfl-season-ready-closeout` → `deploy-vercel`.
 
+PR: https://github.com/kosedge/kosedge/pull/148
+
 Depends on merged True PR stack **#140–#147** (blend, player finite, past SOS,
 continuity, QB premium, Future SOS, harden, product surface).
 
