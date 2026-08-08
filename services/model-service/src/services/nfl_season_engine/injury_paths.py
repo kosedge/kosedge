@@ -700,10 +700,43 @@ def apply_strength_shock(
     *,
     offense_delta: float,
     pass_rate_nudge: float = 0.0,
+    defense_delta: float = 0.0,
 ) -> TeamStrengthState:
-    """Return a copy of ``state`` with injury offense shock applied."""
+    """Return a copy of ``state`` with injury shock applied to *current* PR.
+
+    Full-strength indices are preserved (intrinsic team without this week's
+    availability scars). Downstream can read both; offense_index/defense_index
+    remain the current (availability-adjusted) contract.
+    """
     shocked = state.copy()
+    # Lock full-strength to the pre-shock book the first time we scar.
+    if "injury_shock" not in (state.source or ""):
+        shocked.full_strength_offense_index = float(state.offense_index)
+        shocked.full_strength_defense_index = float(state.defense_index)
+    else:
+        shocked.full_strength_offense_index = float(
+            state.full_strength_offense_index or state.offense_index
+        )
+        shocked.full_strength_defense_index = float(
+            state.full_strength_defense_index or state.defense_index
+        )
     shocked.offense_index = _clamp(shocked.offense_index + offense_delta, 0.55, 1.45)
+    if abs(defense_delta) > 1e-9:
+        shocked.defense_index = _clamp(shocked.defense_index + defense_delta, 0.55, 1.45)
+    shocked.injury_delta_offense = round(
+        float(shocked.offense_index) - float(shocked.full_strength_offense_index), 6
+    )
+    shocked.injury_delta_defense = round(
+        float(shocked.defense_index) - float(shocked.full_strength_defense_index), 6
+    )
+    if isinstance(shocked.drivers, dict):
+        drivers = dict(shocked.drivers)
+        drivers["injury_availability_delta"] = {
+            "offense": shocked.injury_delta_offense,
+            "defense": shocked.injury_delta_defense,
+            "status": "applied",
+        }
+        shocked.drivers = drivers
     if abs(pass_rate_nudge) > 1e-9:
         shocked.pass_rate_bias = _clamp(shocked.pass_rate_bias + pass_rate_nudge, -0.12, 0.12)
     if "injury_shock" not in shocked.source:

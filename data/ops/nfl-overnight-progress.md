@@ -113,3 +113,14 @@ Phase C — confirm one strength core through season engine / survivor / boxes.
 | Overall | **A PASS · B PASS · C PASS** (UI auth spot-check pending after deploy) |
 
 Morning: Vercel should auto-deploy `deploy-vercel`. Spot-check `/pro/nfl/model` + Edge Board when logged in.
+
+---
+
+## True PR foundation (morning follow-on — 2026-08-08)
+
+| Field | Value |
+|-------|--------|
+| Status | Implemented on `feat/nfl-true-pr-foundation` |
+| Ops note | [`nfl-true-pr-foundation-20260808.md`](nfl-true-pr-foundation-20260808.md) |
+| Change | Live `_load_team_strength_priors` uses gradual prior→current blend (`games/8`); kills hard switch at `completed_reg >= 1`. Full-strength vs current PR split + drivers/stubs. Edge Board prefers same core as season engine. |
+| Tests | `test_nfl_true_pr_foundation.py` + backbone/packaged — 26 passed locally |

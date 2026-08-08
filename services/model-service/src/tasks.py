@@ -646,89 +646,127 @@ def _count_completed_reg_games_season(session: Any, season_year: int) -> int:
         return 0
 
 
-def _load_team_strength_priors(
+def _count_completed_reg_games_by_team(
+    session: Any, season_year: int
+) -> Dict[str, int]:
+    """Per-team completed REG games (schedule truth for prior→current blend)."""
+    out: Dict[str, int] = {}
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT team, COUNT(*)::int AS n
+                FROM (
+                  SELECT UPPER(TRIM(home_team)) AS team
+                  FROM nfl_dp_schedules
+                  WHERE season = :season
+                    AND week BETWEEN 1 AND 18
+                    AND home_score IS NOT NULL
+                    AND away_score IS NOT NULL
+                    AND game_date IS NOT NULL
+                    AND game_date < CURRENT_DATE
+                  UNION ALL
+                  SELECT UPPER(TRIM(away_team)) AS team
+                  FROM nfl_dp_schedules
+                  WHERE season = :season
+                    AND week BETWEEN 1 AND 18
+                    AND home_score IS NOT NULL
+                    AND away_score IS NOT NULL
+                    AND game_date IS NOT NULL
+                    AND game_date < CURRENT_DATE
+                ) played
+                WHERE team IS NOT NULL AND team <> ''
+                GROUP BY team
+                """
+            ),
+            {"season": int(season_year)},
+        ).fetchall()
+        for r in rows:
+            t = str(r.team or "").strip().upper()
+            if t == "LAR":
+                t = "LA"
+            if t:
+                out[t] = int(r.n or 0)
+    except Exception:
+        return {}
+    return out
+
+
+def _fetch_rolling_feature_latest_rows(
     session: Any,
     *,
-    season_year: int,
-    as_of_week: Optional[int] = None,
-) -> Dict[str, Dict[str, float]]:
-    """Load EPA-based team strength priors.
+    seasons: List[int],
+    week_cap: Optional[int],
+) -> List[Any]:
+    return list(
+        session.execute(
+            text(
+                """
+                WITH ranked AS (
+                  SELECT
+                    season,
+                    week,
+                    team,
+                    off_epa_per_play_5g,
+                    def_epa_allowed_per_play_5g,
+                    pressure_rate_generated_5g,
+                    pressure_rate_allowed_5g,
+                    pass_rate_5g,
+                    success_rate_offense_5g,
+                    success_rate_defense_allowed_5g,
+                    red_zone_td_rate_5g,
+                    games_in_window_5,
+                    ROW_NUMBER() OVER (
+                      PARTITION BY season, team
+                      ORDER BY week DESC
+                    ) AS rn
+                  FROM nfl_dp_team_rolling_features_weekly
+                  WHERE season = ANY(:seasons)
+                    AND (:week_cap IS NULL OR week <= :week_cap)
+                )
+                SELECT
+                  season,
+                  week,
+                  team,
+                  off_epa_per_play_5g,
+                  def_epa_allowed_per_play_5g,
+                  pressure_rate_generated_5g,
+                  pressure_rate_allowed_5g,
+                  pass_rate_5g,
+                  success_rate_offense_5g,
+                  success_rate_defense_allowed_5g,
+                  red_zone_td_rate_5g,
+                  games_in_window_5
+                FROM ranked
+                WHERE rn = 1
+                """
+            ),
+            {"seasons": list(seasons), "week_cap": week_cap},
+        ).fetchall()
+    )
 
-    Important early-season behavior: when the target season has no completed
-    REG games yet, ignore that season's hydrated week grid (week DESC would
-    pick week 18 carry-forward) and use the prior season's latest week.
-    When games have been played, prefer rows with week <= as_of_week so a
-    Week-1 board does not silently use Week-18 features.
-    """
-    completed = _count_completed_reg_games_season(session, int(season_year))
-    primary_season = int(season_year)
-    fallback_season = int(season_year) - 1
-    if completed < 1:
-        seasons = [fallback_season]
-        week_cap = None
-    else:
-        seasons = [primary_season, fallback_season]
-        week_cap = int(as_of_week) if as_of_week is not None else None
 
-    rows = session.execute(
-        text(
-            """
-            WITH ranked AS (
-              SELECT
-                season,
-                week,
-                team,
-                off_epa_per_play_5g,
-                def_epa_allowed_per_play_5g,
-                pressure_rate_generated_5g,
-                pressure_rate_allowed_5g,
-                pass_rate_5g,
-                success_rate_offense_5g,
-                success_rate_defense_allowed_5g,
-                red_zone_td_rate_5g,
-                games_in_window_5,
-                ROW_NUMBER() OVER (
-                  PARTITION BY season, team
-                  ORDER BY week DESC
-                ) AS rn
-              FROM nfl_dp_team_rolling_features_weekly
-              WHERE season = ANY(:seasons)
-                AND (:week_cap IS NULL OR week <= :week_cap)
-            )
-            SELECT
-              season,
-              week,
-              team,
-              off_epa_per_play_5g,
-              def_epa_allowed_per_play_5g,
-              pressure_rate_generated_5g,
-              pressure_rate_allowed_5g,
-              pass_rate_5g,
-              success_rate_offense_5g,
-              success_rate_defense_allowed_5g,
-              red_zone_td_rate_5g,
-              games_in_window_5
-            FROM ranked
-            WHERE rn = 1
-            """
-        ),
-        {"seasons": seasons, "week_cap": week_cap},
-    ).fetchall()
-    # Optional ST KAV join (v1.1) — absent table stays neutral.
-    st_by_team: Dict[str, Dict[str, float]] = {}
+def _fetch_st_kav_by_team_season(
+    session: Any,
+    *,
+    seasons: List[int],
+    week_cap: Optional[int],
+) -> Dict[Tuple[int, str], Dict[str, float]]:
+    """Optional ST KAV join (v1.1) keyed by (season, team). Absent → empty."""
+    out: Dict[Tuple[int, str], Dict[str, float]] = {}
     try:
         st_rows = session.execute(
             text(
                 """
-                SELECT DISTINCT ON (team)
-                  team, season, week, raw_st_epa_per_play, st_kav_net_5g
+                SELECT DISTINCT ON (season, team)
+                  season, team, week, raw_st_epa_per_play, st_kav_net_5g
                 FROM nfl_dp_team_st_kav_weekly
                 WHERE season = ANY(:seasons)
                   AND (:week_cap IS NULL OR week <= :week_cap)
-                ORDER BY team, season DESC, week DESC
+                ORDER BY season, team, week DESC
                 """
             ),
-            {"seasons": seasons, "week_cap": week_cap},
+            {"seasons": list(seasons), "week_cap": week_cap},
         ).fetchall()
         for sr in st_rows:
             t = str(sr.team or "").strip().upper()
@@ -736,120 +774,396 @@ def _load_team_strength_priors(
                 t = "LA"
             if not t:
                 continue
-            st_by_team[t] = {
+            out[(int(sr.season or 0), t)] = {
                 "st_epa_per_play": float(_to_float(sr.raw_st_epa_per_play) or 0.0),
-                "st_plays": 80.0,  # ~5g × ~8 ST plays; marks sample present
+                "st_plays": 80.0,
             }
     except Exception:
-        st_by_team = {}
+        return {}
+    return out
 
-    out: Dict[str, Dict[str, float]] = {}
+
+def _rolling_row_to_package_payload(row: Any, st: Dict[str, float]) -> Dict[str, Any]:
+    payload: Dict[str, Any] = {
+        "off_epa_per_play": _to_float(row.off_epa_per_play_5g) or 0.0,
+        "def_epa_allowed_per_play": _to_float(row.def_epa_allowed_per_play_5g) or 0.0,
+        "pressure_rate_generated": _to_float(row.pressure_rate_generated_5g) or 0.0,
+        "pressure_rate_allowed": _to_float(row.pressure_rate_allowed_5g) or 0.0,
+        "pass_rate": _to_float(getattr(row, "pass_rate_5g", None)) or 0.58,
+        "success_rate_offense": _to_float(getattr(row, "success_rate_offense_5g", None))
+        or 0.44,
+        "success_rate_defense_allowed": _to_float(
+            getattr(row, "success_rate_defense_allowed_5g", None)
+        )
+        or 0.44,
+        "red_zone_td_rate": _to_float(getattr(row, "red_zone_td_rate_5g", None)) or 0.55,
+        "n_weeks": int(_to_float(getattr(row, "games_in_window_5", None)) or 0),
+        "games_played": int(_to_float(getattr(row, "games_in_window_5", None)) or 0),
+    }
+    if st:
+        payload["st_epa_per_play"] = float(st.get("st_epa_per_play") or 0.0)
+        payload["st_plays"] = int(st.get("st_plays") or 0)
+    return payload
+
+
+def _load_team_strength_priors(
+    session: Any,
+    *,
+    season_year: int,
+    as_of_week: Optional[int] = None,
+) -> Dict[str, Dict[str, float]]:
+    """Load true-PR team strength (shared Edge Board + season-engine core).
+
+    Construction (live path):
+    - Prior component = prior-season rolling efficiency backbone, else packaged
+      2025-derived backbone (never demo bumps).
+    - Current component = current-season rolling when the team has completed
+      REG games (week-capped); missing current → keep prior (do not drop).
+    - Blend: ``w_current = clamp(team_completed_reg / 8, 0, 1)``,
+      ``w_prior = 1 - w_current``. Replaces the old hard switch at
+      ``completed_reg >= 1``.
+    - Full-strength PR = blended intrinsic; current PR starts equal until
+      injury/availability overlays apply a labeled delta.
+    """
+    primary_season = int(season_year)
+    fallback_season = int(season_year) - 1
+    completed_league = _count_completed_reg_games_season(session, primary_season)
+    team_games = _count_completed_reg_games_by_team(session, primary_season)
+    week_cap_current = int(as_of_week) if as_of_week is not None else None
+
     try:
         from src.services.nfl_season_engine.efficiency_backbone import (
+            BACKBONE_SOURCE_BLEND,
+            BACKBONE_SOURCE_PACKAGED,
+            BACKBONE_SOURCE_ROLLING,
             EFFICIENCY_BACKBONE_VERSION,
+            blend_packages,
             build_package_from_season_row,
+            prior_current_blend_weight,
             strength_payload_from_package,
+            uncertainty_from_games,
         )
 
         use_backbone = True
     except Exception:
         use_backbone = False
 
-    for row in rows:
-        team = str(row.team or "")
-        if not team:
-            continue
-        season = int(row.season or 0)
-        # Prefer exact-season priors; only fallback to prior season when needed.
-        if team in out and int(out[team].get("_season", 0)) >= season:
-            continue
-        if use_backbone:
-            team_key = "LA" if team == "LAR" else team
-            st = st_by_team.get(team_key) or st_by_team.get(team) or {}
-            row_payload = {
-                "off_epa_per_play": _to_float(row.off_epa_per_play_5g) or 0.0,
-                "def_epa_allowed_per_play": _to_float(row.def_epa_allowed_per_play_5g)
-                or 0.0,
-                "pressure_rate_generated": _to_float(row.pressure_rate_generated_5g)
-                or 0.0,
-                "pressure_rate_allowed": _to_float(row.pressure_rate_allowed_5g) or 0.0,
-                "pass_rate": _to_float(getattr(row, "pass_rate_5g", None)) or 0.58,
-                "success_rate_offense": _to_float(
-                    getattr(row, "success_rate_offense_5g", None)
-                )
-                or 0.44,
-                "success_rate_defense_allowed": _to_float(
-                    getattr(row, "success_rate_defense_allowed_5g", None)
-                )
-                or 0.44,
-                "red_zone_td_rate": _to_float(getattr(row, "red_zone_td_rate_5g", None))
-                or 0.55,
-                "n_weeks": int(_to_float(getattr(row, "games_in_window_5", None)) or 0),
-                "games_played": int(
-                    _to_float(getattr(row, "games_in_window_5", None)) or 0
-                ),
-            }
-            if st:
-                row_payload["st_epa_per_play"] = float(st.get("st_epa_per_play") or 0.0)
-                row_payload["st_plays"] = int(st.get("st_plays") or 0)
+    # Always load prior-season rolling (ignore current hydrated grid preseason).
+    prior_rows = _fetch_rolling_feature_latest_rows(
+        session, seasons=[fallback_season], week_cap=None
+    )
+    prior_st = _fetch_st_kav_by_team_season(
+        session, seasons=[fallback_season], week_cap=None
+    )
+    current_rows: List[Any] = []
+    current_st: Dict[Tuple[int, str], Dict[str, float]] = {}
+    if completed_league >= 1:
+        current_rows = _fetch_rolling_feature_latest_rows(
+            session, seasons=[primary_season], week_cap=week_cap_current
+        )
+        current_st = _fetch_st_kav_by_team_season(
+            session, seasons=[primary_season], week_cap=week_cap_current
+        )
+
+    prior_pkgs: Dict[str, Any] = {}
+    current_pkgs: Dict[str, Any] = {}
+    prior_meta_week: Dict[str, float] = {}
+    current_meta_week: Dict[str, float] = {}
+
+    if use_backbone:
+        for row in prior_rows:
+            team = str(row.team or "").strip().upper()
+            if team == "LAR":
+                team = "LA"
+            if not team:
+                continue
+            season = int(row.season or 0)
+            st = prior_st.get((season, team)) or {}
+            pkg = build_package_from_season_row(
+                team,
+                _rolling_row_to_package_payload(row, st),
+                as_of=f"season={season};week={int(row.week or 0)}",
+                source=BACKBONE_SOURCE_ROLLING,
+                prior_season=int(fallback_season),
+                st_epa=float(st["st_epa_per_play"]) if st else None,
+            )
+            # Prior packages use full prior-season sample for uncertainty base;
+            # blend() re-applies current-sample variance.
+            prior_pkgs[team] = pkg
+            prior_meta_week[team] = float(_to_float(row.week) or 0.0)
+        for row in current_rows:
+            team = str(row.team or "").strip().upper()
+            if team == "LAR":
+                team = "LA"
+            if not team:
+                continue
+            season = int(row.season or 0)
+            st = current_st.get((season, team)) or {}
+            g_sched = int(team_games.get(team, 0) or 0)
+            row_payload = _rolling_row_to_package_payload(row, st)
+            # Prefer schedule-completed games for blend weight / uncertainty.
+            if g_sched > 0:
+                row_payload["games_played"] = g_sched
+                row_payload["n_weeks"] = g_sched
             pkg = build_package_from_season_row(
                 team,
                 row_payload,
                 as_of=f"season={season};week={int(row.week or 0)}",
-                source="efficiency_backbone_rolling",
+                source=BACKBONE_SOURCE_ROLLING,
                 prior_season=int(fallback_season),
                 st_epa=float(st["st_epa_per_play"]) if st else None,
             )
-            payload = strength_payload_from_package(pkg)
-            out[team] = {
-                **payload,
-                "_season": float(season),
-                "_week": float(_to_float(row.week) or 0.0),
-                "_source": "efficiency_backbone",
-                "version": EFFICIENCY_BACKBONE_VERSION,
-            }
-        else:
-            indices = _epa_to_strength_indices(
-                off_epa=_to_float(row.off_epa_per_play_5g) or 0.0,
-                def_epa_allowed=_to_float(row.def_epa_allowed_per_play_5g) or 0.0,
-                pressure_generated=_to_float(row.pressure_rate_generated_5g) or 0.0,
-                pressure_allowed=_to_float(row.pressure_rate_allowed_5g) or 0.0,
-            )
-            out[team] = {
-                **indices,
-                "_season": float(season),
-                "_week": float(_to_float(row.week) or 0.0),
-                "_source": "epa_prior",
-            }
-    # Cold-start / empty rolling tables (e.g. Railway Hobby after wipe): fill
-    # from packaged efficiency backbone so Edge Board + season engine stay on
-    # real hierarchy instead of record/league-average placeholders.
-    if len(out) < 32:
-        try:
-            from src.services.nfl_season_engine.loaders import load_packaged_epa_priors
+            current_pkgs[team] = pkg
+            current_meta_week[team] = float(_to_float(row.week) or 0.0)
 
-            packaged, meta = load_packaged_epa_priors(int(season_year))
-            pkg_source = str(meta.get("strength_source") or "packaged_efficiency_backbone")
-            for team, prior in packaged.items():
-                if team in out:
-                    continue
+    # Packaged backbone fill for missing prior packages (cold start / wipe).
+    packaged_priors: Dict[str, Dict[str, Any]] = {}
+    packaged_meta: Dict[str, Any] = {}
+    try:
+        from src.services.nfl_season_engine.loaders import load_packaged_epa_priors
+
+        packaged_priors, packaged_meta = load_packaged_epa_priors(primary_season)
+    except Exception:
+        packaged_priors, packaged_meta = {}, {}
+
+    if use_backbone and packaged_priors:
+        for team, prior in packaged_priors.items():
+            if team in prior_pkgs:
+                continue
+            # Rebuild a prior package from packaged EPA so blend stays package-native.
+            pkg = build_package_from_season_row(
+                team,
+                {
+                    "off_epa_per_play": float(prior.get("off_epa_per_play", 0.0) or 0.0),
+                    "def_epa_allowed_per_play": float(
+                        prior.get("def_epa_allowed_per_play", 0.0) or 0.0
+                    ),
+                    "pressure_rate_generated": 0.16,
+                    "pressure_rate_allowed": 0.16,
+                    "pass_rate": 0.58
+                    + float(prior.get("pass_rate_bias", 0.0) or 0.0),
+                    "success_rate_offense": 0.44,
+                    "success_rate_defense_allowed": 0.44,
+                    "red_zone_td_rate": 0.55,
+                    "n_weeks": int(prior.get("games_played") or 17),
+                    "games_played": int(prior.get("games_played") or 17),
+                    "st_epa_per_play": 0.0,
+                    "st_plays": 0,
+                },
+                as_of=str(prior.get("as_of") or packaged_meta.get("strength_as_of") or ""),
+                source=BACKBONE_SOURCE_PACKAGED,
+                prior_season=int(fallback_season),
+            )
+            # Preserve packaged O/D hierarchy when EPA fields alone are thin:
+            # if packaged indices exist, keep them via notes for payload fill.
+            pkg.notes["packaged_offense_index"] = float(prior["offense_index"])
+            pkg.notes["packaged_defense_index"] = float(prior["defense_index"])
+            pkg.notes["packaged_pace_factor"] = float(prior.get("pace_factor", 1.0) or 1.0)
+            pkg.notes["packaged_st_index"] = float(prior.get("st_index", 1.0) or 1.0)
+            pkg.notes["packaged_variance"] = float(
+                prior.get("variance") or uncertainty_from_games(0)
+            )
+            prior_pkgs[team] = pkg
+
+    out: Dict[str, Dict[str, float]] = {}
+    if use_backbone:
+        all_teams = set(prior_pkgs) | set(current_pkgs) | set(packaged_priors)
+        for team in sorted(all_teams):
+            prior_pkg = prior_pkgs.get(team)
+            current_pkg = current_pkgs.get(team)
+            g = int(team_games.get(team, 0) or 0)
+            if current_pkg is not None and g <= 0:
+                # Row exists on hydrated grid but team has not completed a REG game.
+                current_pkg = None
+
+            if prior_pkg is not None and current_pkg is not None and g > 0:
+                blended = blend_packages(prior_pkg, current_pkg, current_games=g)
+                payload = strength_payload_from_package(
+                    blended, source=BACKBONE_SOURCE_BLEND
+                )
                 out[team] = {
-                    "offense_index": float(prior["offense_index"]),
-                    "defense_index": float(prior["defense_index"]),
-                    "pace_factor": float(prior.get("pace_factor", 1.0) or 1.0),
-                    "pass_rate_bias": float(prior.get("pass_rate_bias", 0.0) or 0.0),
-                    "st_index": float(prior.get("st_index", 1.0) or 1.0),
-                    "explosiveness": float(prior.get("explosiveness", 0.0) or 0.0),
-                    "variance": float(prior.get("variance", 1.0) or 1.0),
-                    "qb_premium": float(prior.get("qb_premium", 0.0) or 0.0),
-                    "as_of": str(prior.get("as_of") or meta.get("strength_as_of") or ""),
-                    "version": str(prior.get("version") or meta.get("backbone_version") or ""),
-                    "_season": float(prior.get("_season") or fallback_season),
-                    "_week": 0.0,
-                    "_source": pkg_source,
+                    **payload,
+                    "_season": float(primary_season if g > 0 else fallback_season),
+                    "_week": float(
+                        current_meta_week.get(team) or prior_meta_week.get(team) or 0.0
+                    ),
+                    "_source": BACKBONE_SOURCE_BLEND,
+                    "version": EFFICIENCY_BACKBONE_VERSION,
                 }
-        except Exception:
-            pass
+            elif prior_pkg is not None:
+                # 100% prior (preseason / missing current / g==0).
+                if prior_pkg.source == BACKBONE_SOURCE_PACKAGED and prior_pkg.notes.get(
+                    "packaged_offense_index"
+                ) is not None:
+                    # Prefer packaged hierarchy indices (already smell-tested).
+                    var = uncertainty_from_games(0)
+                    off = float(prior_pkg.notes["packaged_offense_index"])
+                    deff = float(prior_pkg.notes["packaged_defense_index"])
+                    out[team] = {
+                        "offense_index": off,
+                        "defense_index": deff,
+                        "full_strength_offense_index": off,
+                        "full_strength_defense_index": deff,
+                        "current_offense_index": off,
+                        "current_defense_index": deff,
+                        "injury_delta_offense": 0.0,
+                        "injury_delta_defense": 0.0,
+                        "blend_prior_weight": 1.0,
+                        "blend_current_weight": 0.0,
+                        "pace_factor": float(
+                            prior_pkg.notes.get("packaged_pace_factor", 1.0) or 1.0
+                        ),
+                        "pass_rate_bias": 0.0,
+                        "st_index": float(
+                            prior_pkg.notes.get("packaged_st_index", 1.0) or 1.0
+                        ),
+                        "explosiveness": 0.0,
+                        "variance": float(
+                            prior_pkg.notes.get("packaged_variance", var) or var
+                        ),
+                        "qb_premium": 0.0,
+                        "games_played": 0,
+                        "drivers": {
+                            "blend": {
+                                "w_prior": 1.0,
+                                "w_current": 0.0,
+                                "prior_offense_index": off,
+                                "prior_defense_index": deff,
+                                "current_component_offense_index": None,
+                                "current_component_defense_index": None,
+                            },
+                            "injury_availability_delta": {
+                                "offense": 0.0,
+                                "defense": 0.0,
+                                "status": "structure_ready_zero",
+                            },
+                            "uncertainty": {
+                                "variance": float(
+                                    prior_pkg.notes.get("packaged_variance", var) or var
+                                ),
+                                "games_played": 0,
+                                "sample_note": "wide_early",
+                            },
+                            "stubs": {
+                                "qb_premium": "stub_not_applied",
+                                "continuity": "stub_not_applied",
+                                "true_time_of_game_sos": "stub_not_applied",
+                            },
+                            "st_index": float(
+                                prior_pkg.notes.get("packaged_st_index", 1.0) or 1.0
+                            ),
+                            "version": EFFICIENCY_BACKBONE_VERSION,
+                        },
+                        "as_of": str(prior_pkg.as_of or ""),
+                        "version": EFFICIENCY_BACKBONE_VERSION,
+                        "_season": float(fallback_season),
+                        "_week": float(prior_meta_week.get(team) or 0.0),
+                        "_source": str(
+                            packaged_meta.get("strength_source")
+                            or BACKBONE_SOURCE_PACKAGED
+                        ),
+                    }
+                else:
+                    prior_pkg.notes.setdefault("blend_prior_weight", 1.0)
+                    prior_pkg.notes.setdefault("blend_current_weight", 0.0)
+                    # Keep early-season uncertainty honest when using prior rolling.
+                    prior_pkg.variance = uncertainty_from_games(0)
+                    prior_pkg.games_played = 0
+                    payload = strength_payload_from_package(
+                        prior_pkg, source=str(prior_pkg.source or BACKBONE_SOURCE_ROLLING)
+                    )
+                    out[team] = {
+                        **payload,
+                        "blend_prior_weight": 1.0,
+                        "blend_current_weight": 0.0,
+                        "qb_premium": 0.0,
+                        "_season": float(fallback_season),
+                        "_week": float(prior_meta_week.get(team) or 0.0),
+                        "_source": str(prior_pkg.source or "efficiency_backbone"),
+                        "version": EFFICIENCY_BACKBONE_VERSION,
+                    }
+            elif current_pkg is not None and g > 0:
+                # No prior available — current only (labeled).
+                w = prior_current_blend_weight(current_games=g)
+                current_pkg.notes["blend_current_weight"] = round(w, 4)
+                current_pkg.notes["blend_prior_weight"] = round(1.0 - w, 4)
+                current_pkg.notes["prior_missing"] = True
+                payload = strength_payload_from_package(
+                    current_pkg, source=BACKBONE_SOURCE_ROLLING
+                )
+                out[team] = {
+                    **payload,
+                    "_season": float(primary_season),
+                    "_week": float(current_meta_week.get(team) or 0.0),
+                    "_source": BACKBONE_SOURCE_ROLLING,
+                    "version": EFFICIENCY_BACKBONE_VERSION,
+                    "_fallback": "current_only_prior_missing",
+                }
+        return out
+
+    # Legacy fallback if backbone import fails — no demo strength.
+    rows = list(prior_rows) + list(current_rows)
+    for row in rows:
+        team = str(row.team or "").strip().upper()
+        if team == "LAR":
+            team = "LA"
+        if not team:
+            continue
+        season = int(row.season or 0)
+        if team in out and int(out[team].get("_season", 0)) >= season:
+            continue
+        indices = _epa_to_strength_indices(
+            off_epa=_to_float(row.off_epa_per_play_5g) or 0.0,
+            def_epa_allowed=_to_float(row.def_epa_allowed_per_play_5g) or 0.0,
+            pressure_generated=_to_float(row.pressure_rate_generated_5g) or 0.0,
+            pressure_allowed=_to_float(row.pressure_rate_allowed_5g) or 0.0,
+        )
+        out[team] = {
+            **indices,
+            "full_strength_offense_index": float(indices["offense_index"]),
+            "full_strength_defense_index": float(indices["defense_index"]),
+            "current_offense_index": float(indices["offense_index"]),
+            "current_defense_index": float(indices["defense_index"]),
+            "injury_delta_offense": 0.0,
+            "injury_delta_defense": 0.0,
+            "blend_prior_weight": 1.0 if season == fallback_season else 0.0,
+            "blend_current_weight": 0.0 if season == fallback_season else 1.0,
+            "qb_premium": 0.0,
+            "_season": float(season),
+            "_week": float(_to_float(row.week) or 0.0),
+            "_source": "epa_prior",
+        }
+    if len(out) < 32 and packaged_priors:
+        pkg_source = str(
+            packaged_meta.get("strength_source") or "packaged_efficiency_backbone"
+        )
+        for team, prior in packaged_priors.items():
+            if team in out:
+                continue
+            off = float(prior["offense_index"])
+            deff = float(prior["defense_index"])
+            out[team] = {
+                "offense_index": off,
+                "defense_index": deff,
+                "full_strength_offense_index": off,
+                "full_strength_defense_index": deff,
+                "current_offense_index": off,
+                "current_defense_index": deff,
+                "injury_delta_offense": 0.0,
+                "injury_delta_defense": 0.0,
+                "blend_prior_weight": 1.0,
+                "blend_current_weight": 0.0,
+                "pace_factor": float(prior.get("pace_factor", 1.0) or 1.0),
+                "pass_rate_bias": float(prior.get("pass_rate_bias", 0.0) or 0.0),
+                "st_index": float(prior.get("st_index", 1.0) or 1.0),
+                "variance": float(prior.get("variance", 1.35) or 1.35),
+                "qb_premium": 0.0,
+                "as_of": str(prior.get("as_of") or packaged_meta.get("strength_as_of") or ""),
+                "version": str(prior.get("version") or packaged_meta.get("backbone_version") or ""),
+                "_season": float(prior.get("_season") or fallback_season),
+                "_week": 0.0,
+                "_source": pkg_source,
+            }
     return out
 
 
@@ -3732,37 +4046,40 @@ def run_nfl_market_simulations(
                     matchup_kwargs[_k] = None
                 if matchup_kwargs.get("matchup_week") is not None:
                     matchup_kwargs["matchup_week"] = int(matchup_week_for_priors or 1)
-            # Prefer week-aligned matchup-pack EPA for base strength indices.
-            # Season-max-week rolling priors on a hydrated preseason grid were
-            # fighting the week-1 pack and flipping sides vs market.
-            pack_priors = _priors_from_matchup_pack(
-                matchup_pack if isinstance(matchup_pack, dict) else None
+            # Shared true-PR core: gradual prior→current blend via
+            # `_load_team_strength_priors` (same path as season engine).
+            # Matchup-pack EPA is week-aligned but does not apply the blend —
+            # use it only when the blended book lacks a team.
+            prior_source = "true_pr_blend"
+            cache_key = (int(season_year or -1), matchup_week_for_priors)
+            if season_year is not None and cache_key not in priors_cache:
+                priors_cache[cache_key] = _load_team_strength_priors(
+                    session,
+                    season_year=season_year,
+                    as_of_week=matchup_week_for_priors,
+                )
+            team_priors = priors_cache.get(cache_key, {})
+            home_prior = (
+                team_priors.get(str(m.get("home_abbr") or ""))
+                or team_priors.get(str(m.get("home_team") or ""))
+                or {}
             )
-            prior_source = "matchup_pack"
-            if pack_priors is not None:
-                home_prior, away_prior = pack_priors
-            else:
-                prior_source = "rolling_features"
-                cache_key = (int(season_year or -1), matchup_week_for_priors)
-                if season_year is not None and cache_key not in priors_cache:
-                    priors_cache[cache_key] = _load_team_strength_priors(
-                        session,
-                        season_year=season_year,
-                        as_of_week=matchup_week_for_priors,
-                    )
-                team_priors = priors_cache.get(cache_key, {})
-                # Rolling features are keyed by abbreviation; games rows expose
-                # both abbr and full name. Prefer abbr, then full name.
-                home_prior = (
-                    team_priors.get(str(m.get("home_abbr") or ""))
-                    or team_priors.get(str(m.get("home_team") or ""))
-                    or {}
+            away_prior = (
+                team_priors.get(str(m.get("away_abbr") or ""))
+                or team_priors.get(str(m.get("away_team") or ""))
+                or {}
+            )
+            if not home_prior or not away_prior:
+                pack_priors = _priors_from_matchup_pack(
+                    matchup_pack if isinstance(matchup_pack, dict) else None
                 )
-                away_prior = (
-                    team_priors.get(str(m.get("away_abbr") or ""))
-                    or team_priors.get(str(m.get("away_team") or ""))
-                    or {}
-                )
+                if pack_priors is not None:
+                    prior_source = "matchup_pack_fallback"
+                    pack_home, pack_away = pack_priors
+                    if not home_prior:
+                        home_prior = pack_home
+                    if not away_prior:
+                        away_prior = pack_away
             if season_year is not None and season_year not in tendency_proe_cache:
                 try:
                     from .services.nfl_tendency_pricing import fetch_team_proe_map
@@ -3831,27 +4148,50 @@ def run_nfl_market_simulations(
                 away_info_vel = _to_float(away_nowcast.get("info_velocity_score"))
                 home_hours_change = _to_float(home_nowcast.get("hours_since_change"))
                 away_hours_change = _to_float(away_nowcast.get("hours_since_change"))
+            # Full-strength = blended intrinsic PR; current = after injury/
+            # availability multipliers. Do not overwrite full-strength when
+            # someone sits — both stay available on the prior payloads.
+            full_off_home = float(
+                home_prior.get("full_strength_offense_index", offense_home) or offense_home
+            )
+            full_off_away = float(
+                away_prior.get("full_strength_offense_index", offense_away) or offense_away
+            )
+            full_def_home = float(
+                home_prior.get("full_strength_defense_index", defense_home) or defense_home
+            )
+            full_def_away = float(
+                away_prior.get("full_strength_defense_index", defense_away) or defense_away
+            )
+            cur_off_home = float(offense_home) * float(home_off_mult)
+            cur_off_away = float(offense_away) * float(away_off_mult)
+            # defense_index is "higher = stronger defense" (see
+            # _load_team_strength_priors). injury/roster-continuity nowcast
+            # defense_multiplier is "higher = weaker defense" → DIVISOR.
+            cur_def_home = float(defense_home) / float(home_def_mult or 1.0)
+            cur_def_away = float(defense_away) / float(away_def_mult or 1.0)
+            if isinstance(home_prior, dict):
+                home_prior["full_strength_offense_index"] = full_off_home
+                home_prior["full_strength_defense_index"] = full_def_home
+                home_prior["current_offense_index"] = cur_off_home
+                home_prior["current_defense_index"] = cur_def_home
+                home_prior["injury_delta_offense"] = round(cur_off_home - full_off_home, 6)
+                home_prior["injury_delta_defense"] = round(cur_def_home - full_def_home, 6)
+            if isinstance(away_prior, dict):
+                away_prior["full_strength_offense_index"] = full_off_away
+                away_prior["full_strength_defense_index"] = full_def_away
+                away_prior["current_offense_index"] = cur_off_away
+                away_prior["current_defense_index"] = cur_def_away
+                away_prior["injury_delta_offense"] = round(cur_off_away - full_off_away, 6)
+                away_prior["injury_delta_defense"] = round(cur_def_away - full_def_away, 6)
             inputs = NflGameInputs(
                 game_id=str(m["game_id"]),
                 home_team=str(m["home_team"]),
                 away_team=str(m["away_team"]),
-                offense_index_home=float(offense_home) * float(home_off_mult),
-                offense_index_away=float(offense_away) * float(away_off_mult),
-                # defense_index is "higher = stronger defense" (see
-                # _load_team_strength_priors: defense_index rises with
-                # *negative* EPA allowed, and compute_nfl_projection_decomposition
-                # divides the OPPONENT's offense_index by this team's
-                # defense_index). injury/roster-continuity nowcast
-                # defense_multiplier is documented as "higher = weaker
-                # defense", so it must be applied as a DIVISOR here, not a
-                # multiplier -- multiplying would make an injured/departed
-                # defense look *stronger*. Verified empirically while
-                # building the roster-continuity mechanism (see
-                # nfl_roster_continuity.py): with the old `* multiplier`,
-                # weakening a team's own defense measurably *raised* their
-                # win probability.
-                defense_index_home=float(defense_home) / float(home_def_mult or 1.0),
-                defense_index_away=float(defense_away) / float(away_def_mult or 1.0),
+                offense_index_home=cur_off_home,
+                offense_index_away=cur_off_away,
+                defense_index_home=cur_def_home,
+                defense_index_away=cur_def_away,
                 rest_days_home=_to_float(m.get("rest_days_home")) or 7.0,
                 rest_days_away=_to_float(m.get("rest_days_away")) or 7.0,
                 injury_nowcast_confidence_home=home_injury_conf,

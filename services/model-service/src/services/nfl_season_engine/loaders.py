@@ -87,6 +87,7 @@ STRENGTH_SOURCE_EPA_PRIOR = "epa_prior"
 STRENGTH_SOURCE_PACKAGED_EPA = "packaged_epa_prior"
 STRENGTH_SOURCE_EFFICIENCY = "efficiency_backbone"
 STRENGTH_SOURCE_PACKAGED_EFFICIENCY = "packaged_efficiency_backbone"
+STRENGTH_SOURCE_BLEND = "efficiency_backbone_blend"
 STRENGTH_SOURCE_PLACEHOLDER = "placeholder_league_avg"
 
 _SKILL_POSITIONS = ("QB", "RB", "WR", "TE")
@@ -857,10 +858,12 @@ def load_universe_from_db(
     season: int,
     as_of_week: int = 1,
 ) -> EngineUniverse:
-    """Load schedule + EPA strength priors + best-effort depth roles from DB.
+    """Load schedule + true-PR strength core + best-effort depth roles from DB.
 
-    Falls back to demo roles/strengths for any team missing data so the
-    engine remains runnable. Does not modify Edge Board tables.
+    Strengths come from ``_load_team_strength_priors`` (same gradual
+    prior→current blend as Edge Board). Missing teams use packaged backbone
+    or an explicit ``placeholder_league_avg`` label — never demo strength
+    bumps. Depth may still fall back to ``demo_depth_chart`` as last resort.
     """
     from sqlalchemy import text
 
@@ -919,6 +922,56 @@ def load_universe_from_db(
         packaged_priors, packaged_meta = load_packaged_epa_priors(season)
     except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
         packaged_priors, packaged_meta = {}, {}
+    def _strength_input_from_prior(
+        team: str,
+        prior: Mapping[str, Any],
+        pkg: Mapping[str, Any],
+        *,
+        source: str,
+    ) -> Dict[str, float | str | Dict[str, Any]]:
+        off = float(prior.get("offense_index", pkg.get("offense_index", 1.0)) or 1.0)
+        deff = float(prior.get("defense_index", pkg.get("defense_index", 1.0)) or 1.0)
+        full_off = float(prior.get("full_strength_offense_index", off) or off)
+        full_def = float(prior.get("full_strength_defense_index", deff) or deff)
+        drivers = prior.get("drivers") if isinstance(prior.get("drivers"), dict) else {}
+        return {
+            "offense_index": off,
+            "defense_index": deff,
+            "full_strength_offense_index": full_off,
+            "full_strength_defense_index": full_def,
+            "injury_delta_offense": float(prior.get("injury_delta_offense", 0.0) or 0.0),
+            "injury_delta_defense": float(prior.get("injury_delta_defense", 0.0) or 0.0),
+            "blend_prior_weight": float(prior.get("blend_prior_weight", 1.0) or 1.0),
+            "blend_current_weight": float(prior.get("blend_current_weight", 0.0) or 0.0),
+            "pace_factor": float(
+                prior.get("pace_factor", pkg.get("pace_factor", 1.0)) or 1.0
+            ),
+            "pass_rate_bias": float(
+                prior.get("pass_rate_bias", pkg.get("pass_rate_bias", 0.0)) or 0.0
+            ),
+            "st_index": float(prior.get("st_index", pkg.get("st_index", 1.0)) or 1.0),
+            "explosiveness": float(
+                prior.get("explosiveness", pkg.get("explosiveness", 0.0)) or 0.0
+            ),
+            "variance": float(prior.get("variance", pkg.get("variance", 1.35)) or 1.35),
+            "qb_premium": 0.0,  # stub
+            "games_played": int(prior.get("games_played", 0) or 0),
+            "drivers": drivers,
+            "as_of": str(
+                prior.get("as_of")
+                or pkg.get("as_of")
+                or packaged_meta.get("strength_as_of")
+                or ""
+            ),
+            "version": str(
+                prior.get("version")
+                or pkg.get("version")
+                or packaged_meta.get("backbone_version")
+                or ""
+            ),
+            "source": source,
+        }
+
     for team in NFL_TEAMS:
         prior = priors.get(team) or {}
         pkg = packaged_priors.get(team) or {}
@@ -929,82 +982,58 @@ def load_universe_from_db(
             "packaged_epa_prior",
             "packaged_efficiency_backbone",
         ):
-            # DB helper already filled from packaged cold-start.
             packaged_fill += 1
-            strength_inputs[team] = {
-                "offense_index": float(prior.get("offense_index", 1.0)),
-                "defense_index": float(prior.get("defense_index", 1.0)),
-                "pace_factor": float(
-                    prior.get("pace_factor", pkg.get("pace_factor", 1.0)) or 1.0
-                ),
-                "pass_rate_bias": float(
-                    prior.get("pass_rate_bias", pkg.get("pass_rate_bias", 0.0)) or 0.0
-                ),
-                "st_index": float(prior.get("st_index", pkg.get("st_index", 1.0)) or 1.0),
-                "explosiveness": float(
-                    prior.get("explosiveness", pkg.get("explosiveness", 0.0)) or 0.0
-                ),
-                "variance": float(prior.get("variance", pkg.get("variance", 1.0)) or 1.0),
-                "qb_premium": float(
-                    prior.get("qb_premium", pkg.get("qb_premium", 0.0)) or 0.0
-                ),
-                "as_of": str(prior.get("as_of") or packaged_meta.get("strength_as_of") or ""),
-                "version": str(
-                    prior.get("version")
-                    or packaged_meta.get("backbone_version")
-                    or ""
-                ),
-                "source": prior_source or STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
-            }
+            strength_inputs[team] = _strength_input_from_prior(
+                team,
+                prior,
+                pkg,
+                source=prior_source or STRENGTH_SOURCE_PACKAGED_EFFICIENCY,
+            )
         elif prior:
             epa_count += 1
-            strength_inputs[team] = {
-                "offense_index": float(prior.get("offense_index", 1.0)),
-                "defense_index": float(prior.get("defense_index", 1.0)),
-                "pace_factor": float(prior.get("pace_factor", pkg.get("pace_factor", 1.0)) or 1.0),
-                "pass_rate_bias": float(
-                    prior.get("pass_rate_bias", pkg.get("pass_rate_bias", 0.0)) or 0.0
-                ),
-                "st_index": float(prior.get("st_index", pkg.get("st_index", 1.0)) or 1.0),
-                "explosiveness": float(
-                    prior.get("explosiveness", pkg.get("explosiveness", 0.0)) or 0.0
-                ),
-                "variance": float(prior.get("variance", pkg.get("variance", 1.0)) or 1.0),
-                "qb_premium": float(
-                    prior.get("qb_premium", pkg.get("qb_premium", 0.0)) or 0.0
-                ),
-                "as_of": str(prior.get("as_of") or ""),
-                "version": str(prior.get("version") or ""),
-                "source": STRENGTH_SOURCE_EFFICIENCY
-                if prior_source.startswith("efficiency")
-                else STRENGTH_SOURCE_EPA_PRIOR,
-            }
+            if prior_source == STRENGTH_SOURCE_BLEND or prior_source.endswith("_blend"):
+                src = STRENGTH_SOURCE_BLEND
+            elif prior_source.startswith("efficiency") or prior_source.startswith(
+                "packaged_efficiency"
+            ):
+                src = STRENGTH_SOURCE_EFFICIENCY
+            else:
+                src = STRENGTH_SOURCE_EPA_PRIOR
+            strength_inputs[team] = _strength_input_from_prior(
+                team, prior, pkg, source=src
+            )
         elif team in packaged_priors:
             packaged_fill += 1
-            strength_inputs[team] = {
-                "offense_index": float(pkg.get("offense_index", 1.0)),
-                "defense_index": float(pkg.get("defense_index", 1.0)),
-                "pace_factor": float(pkg.get("pace_factor", 1.0)),
-                "pass_rate_bias": float(pkg.get("pass_rate_bias", 0.0)),
-                "st_index": float(pkg.get("st_index", 1.0) or 1.0),
-                "explosiveness": float(pkg.get("explosiveness", 0.0) or 0.0),
-                "variance": float(pkg.get("variance", 1.0) or 1.0),
-                "qb_premium": float(pkg.get("qb_premium", 0.0) or 0.0),
-                "as_of": str(pkg.get("as_of") or packaged_meta.get("strength_as_of") or ""),
-                "version": str(
-                    pkg.get("version") or packaged_meta.get("backbone_version") or ""
-                ),
-                "source": str(
+            strength_inputs[team] = _strength_input_from_prior(
+                team,
+                pkg,
+                pkg,
+                source=str(
                     pkg.get("source")
                     or packaged_meta.get("strength_source")
                     or STRENGTH_SOURCE_PACKAGED_EFFICIENCY
                 ),
-            }
+            )
         else:
+            # Explicit labeled fallback — never silent demo fill.
             strength_inputs[team] = {
                 "offense_index": 1.0,
                 "defense_index": 1.0,
+                "full_strength_offense_index": 1.0,
+                "full_strength_defense_index": 1.0,
+                "blend_prior_weight": 1.0,
+                "blend_current_weight": 0.0,
+                "variance": 1.35,
+                "qb_premium": 0.0,
                 "source": STRENGTH_SOURCE_PLACEHOLDER,
+                "drivers": {
+                    "fallback": "placeholder_league_avg",
+                    "stubs": {
+                        "qb_premium": "stub_not_applied",
+                        "continuity": "stub_not_applied",
+                        "true_time_of_game_sos": "stub_not_applied",
+                    },
+                },
             }
 
     baseline_eff = _load_baseline_efficiency_map(session, season=season, as_of_week=as_of_week)
@@ -1178,15 +1207,42 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
     strength_inputs: Dict[str, Dict[str, float | str]] = {}
     for team in NFL_TEAMS:
         prior = epa_priors[team]
+        off = float(prior["offense_index"])
+        deff = float(prior["defense_index"])
         strength_inputs[team] = {
-            "offense_index": float(prior["offense_index"]),
-            "defense_index": float(prior["defense_index"]),
+            "offense_index": off,
+            "defense_index": deff,
+            "full_strength_offense_index": off,
+            "full_strength_defense_index": deff,
+            "injury_delta_offense": 0.0,
+            "injury_delta_defense": 0.0,
+            "blend_prior_weight": 1.0,
+            "blend_current_weight": 0.0,
             "pace_factor": float(prior.get("pace_factor", 1.0)),
             "pass_rate_bias": float(prior.get("pass_rate_bias", 0.0)),
             "st_index": float(prior.get("st_index", 1.0) or 1.0),
             "explosiveness": float(prior.get("explosiveness", 0.0) or 0.0),
-            "variance": float(prior.get("variance", 1.0) or 1.0),
-            "qb_premium": float(prior.get("qb_premium", 0.0) or 0.0),
+            "variance": float(prior.get("variance", 1.35) or 1.35),
+            "qb_premium": 0.0,  # stub
+            "games_played": 0,
+            "drivers": {
+                "blend": {"w_prior": 1.0, "w_current": 0.0},
+                "injury_availability_delta": {
+                    "offense": 0.0,
+                    "defense": 0.0,
+                    "status": "structure_ready_zero",
+                },
+                "uncertainty": {
+                    "variance": float(prior.get("variance", 1.35) or 1.35),
+                    "games_played": 0,
+                    "sample_note": "wide_early",
+                },
+                "stubs": {
+                    "qb_premium": "stub_not_applied",
+                    "continuity": "stub_not_applied",
+                    "true_time_of_game_sos": "stub_not_applied",
+                },
+            },
             "as_of": str(prior.get("as_of") or epa_meta.get("strength_as_of") or ""),
             "version": str(prior.get("version") or epa_meta.get("backbone_version") or ""),
             "source": strength_source,
@@ -1195,8 +1251,9 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
     prior_season = int(epa_meta.get("prior_season") or (int(season) - 1))
     strength_note = (
         f"REAL {strength_source} for 32/32 teams "
-        f"(prior_season={prior_season} efficiency backbone v1 → "
-        f"strength indices; as_of={epa_meta.get('strength_as_of') or '?'})"
+        f"(prior_season={prior_season} efficiency backbone; "
+        f"true-PR 100% prior at 0 REG games; "
+        f"as_of={epa_meta.get('strength_as_of') or '?'})"
     )
 
     roster_source = ROSTER_SOURCE_DEMO

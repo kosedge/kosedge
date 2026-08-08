@@ -45,6 +45,16 @@ class TeamStrengthState:
     qb_premium: float = 0.0
     as_of: str = ""
     version: str = ""
+    # True PR split: full-strength = intrinsic (no injury scars); current =
+    # offense_index/defense_index after availability overlays. Equal at load
+    # until injury_paths / nowcast apply a delta.
+    full_strength_offense_index: float = 1.0
+    full_strength_defense_index: float = 1.0
+    injury_delta_offense: float = 0.0
+    injury_delta_defense: float = 0.0
+    blend_prior_weight: float = 1.0
+    blend_current_weight: float = 0.0
+    drivers: Dict[str, Any] = field(default_factory=dict)
 
     def copy(self) -> "TeamStrengthState":
         return TeamStrengthState(
@@ -61,6 +71,13 @@ class TeamStrengthState:
             qb_premium=self.qb_premium,
             as_of=self.as_of,
             version=self.version,
+            full_strength_offense_index=self.full_strength_offense_index,
+            full_strength_defense_index=self.full_strength_defense_index,
+            injury_delta_offense=self.injury_delta_offense,
+            injury_delta_defense=self.injury_delta_defense,
+            blend_prior_weight=self.blend_prior_weight,
+            blend_current_weight=self.blend_current_weight,
+            drivers=dict(self.drivers or {}),
         )
 
 
