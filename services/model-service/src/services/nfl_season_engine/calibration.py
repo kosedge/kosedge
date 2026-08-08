@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v2"
-# v1.13: Player process regression + finite production (additive on hierarchy).
-# True-PR blend / full-strength split / cal-v2 knobs unchanged.
-ENGINE_VERSION = "nfl-season-engine-v1.13-player-regression"
+# v1.14: 2026 projected schedule difficulty (Future SOS) on season outlook only.
+# Intrinsic / Week-1 PR unchanged; Past SOS (#142) prior path intact.
+ENGINE_VERSION = "nfl-season-engine-v1.14-projected-sos"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -460,6 +460,12 @@ def calibration_notes() -> Dict[str, str]:
             "conservative mean / wide uncertainty; finite team yards/TD caps "
             "so named players cannot overflow the script pool "
             "(see player_regression.py)."
+        ),
+        "projected_sos": (
+            "v1.14: 2026 projected schedule difficulty — mean full-strength "
+            "opponent power across the REG slate with HFA; attaches to season "
+            "outlook (expected wins / survivor path grades) only. Never rewrites "
+            "intrinsic PR / Week-1 blend (see projected_sos.py)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

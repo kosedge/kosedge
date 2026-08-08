@@ -4675,6 +4675,7 @@ def nfl_season_engine_status(
             "include_diagnostics",
             "real_2026_schedule",
             "real_2026_depth",
+            "projected_sos_2026",
         ],
         "contract": {
             "docs": "data/ops/nfl-season-engine-api-contract-20260803.md",
@@ -4699,11 +4700,24 @@ def nfl_season_engine_status(
                 "best_remaining_equity",
                 "team_wins",
                 "usage_role",
+                "projected_sos_2026",
+                "schedule_difficulty",
+                "path_difficulty_grade",
             ],
             "include_diagnostics": (
                 "Query/body flag; game-boxes default false; simulate/survivor "
                 "default true for compact win/bye/injury summaries"
             ),
+        },
+        "projected_sos_2026": {
+            "module": "src.services.nfl_season_engine.projected_sos",
+            "role": (
+                "Season schedule difficulty (outlook only). Higher = harder. "
+                "Never rewrites intrinsic / Week-1 PR. Edge Board game lines "
+                "remain matchup-driven."
+            ),
+            "opponent_package": "full_strength_pr",
+            "docs": "data/ops/nfl-projected-sos-2026-20260808.md",
         },
         "usage_roles": {
             "module": "src.services.nfl_season_engine.usage_roles",
@@ -4835,7 +4849,10 @@ def nfl_season_engine_simulate(
         injury_paths=injury_paths,
         include_diagnostics=diag,
     )
-    top_teams = sorted(result.team_wins.items(), key=lambda kv: -kv[1]["mean"])[:8]
+    top_teams = sorted(
+        result.team_wins.items(), key=lambda kv: -float(kv[1]["mean"])
+    )[:8]
+    sos_diag = (result.diagnostics or {}).get("projected_sos_2026") or {}
     return {
         "mode": schedule_meta.get("mode") or ("demo" if demo else "real"),
         "schedule_source": schedule_meta.get("schedule_source"),
@@ -4854,6 +4871,13 @@ def nfl_season_engine_simulate(
         "notes": result.notes,
         "diagnostics": result.diagnostics,
         "injury_paths": (result.diagnostics or {}).get("injury_paths") or [],
+        "projected_sos_2026": {
+            "intrinsic_pr_unchanged": True,
+            "hardest_slate": sos_diag.get("hardest_slate"),
+            "easiest_slate": sos_diag.get("easiest_slate"),
+            "mean_projected_sos": sos_diag.get("mean_projected_sos"),
+            "by_team": sos_diag.get("by_team"),
+        },
         "top_teams_by_wins": [{"team": t, **stats} for t, stats in top_teams],
         "top_players": result.player_season_totals[:25],
     }

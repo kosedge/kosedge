@@ -37,6 +37,7 @@ def test_engine_version_coaching() -> None:
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -244,6 +245,7 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
         or "survivor-planner" in proj.engine_version
         or "calibration" in proj.engine_version
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "coaching_profile" in proj.diagnostics
     assert "tendency_effects" in proj.diagnostics
@@ -275,6 +277,7 @@ def test_injury_depth_red_zone_survivor_still_function() -> None:
         or "survivor-planner" in surv.engine_version
         or "calibration" in surv.engine_version
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

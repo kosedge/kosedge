@@ -157,12 +157,14 @@ File: `services/model-service/tests/test_nfl_qb_premium.py`
 5. **Open competition detection** — heuristic only; camp battles need better feed
 6. **Injury feed coverage** — inactive/out tables not always populated preseason
 7. **Packaged offline universe** — still stubbed unless live loader path runs with DB
+8. **2026 projected SOS** — shipped separately as outlook-only
+   (`nfl-projected-sos-2026-20260808.md`)
 
 ## Explicit non-goals (this pass)
 
 - Full OL premium model
 - Continuity redesign
-- 2026 projected SOS product
+- 2026 projected SOS product (deferred → shipped in follow-on)
 - Fantasy UI
 - KEI / tag policy changes
 

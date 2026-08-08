@@ -262,7 +262,8 @@ class SeasonSimResult:
     n_sims: int
     games_per_season: int
     engine_version: str
-    team_wins: Dict[str, Dict[str, float]]
+    # Win distribution plus optional outlook fields (projected_sos_2026, …).
+    team_wins: Dict[str, Dict[str, Any]]
     player_season_totals: List[Dict[str, Any]]
     sample_path_game_count: int
     notes: Dict[str, str] = field(default_factory=dict)

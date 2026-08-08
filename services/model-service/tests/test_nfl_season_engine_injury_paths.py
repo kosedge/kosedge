@@ -39,6 +39,7 @@ def test_engine_version_surfaces_injury_shocks() -> None:
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

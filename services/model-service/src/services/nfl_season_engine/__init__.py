@@ -24,8 +24,9 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.13 keeps cal-v2 / survivor-planner-ux and adds player process regression
-+ finite production (capability ``player-regression``).
+v1.14 keeps player-regression and adds 2026 projected schedule difficulty
+(capability ``projected-sos``) on season outlook / survivor path grades only —
+intrinsic PR is never rewritten by Future SOS.
 
 Public entry points
 -------------------
@@ -38,6 +39,7 @@ Public entry points
   ``load_universe_from_db`` / ``build_packaged_real_universe`` – input builders
 - ``parse_injury_paths`` – API/CLI JSON → ``InjuryPath`` structs
 - ``apply_process_priors`` / ``build_player_process_prior`` – player regression
+- ``compute_league_projected_sos`` – 2026 projected schedule difficulty
 
 This package is **additive**. It does not replace
 ``simulate_nfl_game`` / Edge Board / Model-vs-KEI (#70) paths.
@@ -72,6 +74,12 @@ from src.services.nfl_season_engine.player_regression import (
     build_player_process_prior,
     enforce_finite_team_production,
 )
+from src.services.nfl_season_engine.projected_sos import (
+    TeamProjectedSos,
+    analytic_expected_wins_from_schedule,
+    compute_league_projected_sos,
+    compute_team_projected_sos,
+)
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
     SurvivorEvalResult,
@@ -101,10 +109,14 @@ __all__ = [
     "SurvivorPlanResult",
     "SurvivorSuggestedPathsResult",
     "TeamEfficiencyPackage",
+    "TeamProjectedSos",
+    "analytic_expected_wins_from_schedule",
     "apply_process_priors",
     "build_demo_universe",
     "build_packaged_real_universe",
     "build_player_process_prior",
+    "compute_league_projected_sos",
+    "compute_team_projected_sos",
     "enforce_finite_team_production",
     "evaluate_survivor",
     "evaluate_survivor_plan",

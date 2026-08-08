@@ -55,6 +55,11 @@ from src.services.nfl_season_engine.injury_paths import (
     apply_injury_paths_for_week,
     injury_paths_to_dicts,
 )
+from src.services.nfl_season_engine.projected_sos import (
+    TeamProjectedSos,
+    compute_league_projected_sos,
+    path_difficulty_grade,
+)
 from src.services.nfl_season_engine.team_strength import (
     copy_strength_book,
     evolve_after_game,
@@ -146,6 +151,15 @@ PATH_FORMULA_NOTES = {
         "pick_now_score/week; contrarian_save = among WP≥"
         f"{CONTRARIAN_MIN_WP:.0%} candidates prefer lowest save_score "
         "(bank premium future spots)."
+    ),
+    "projected_sos_2026": (
+        "Season schedule difficulty from full-strength opponent PR + HFA "
+        "(higher = harder). Outlook / path grade only — does not rewrite "
+        "intrinsic PR or game-level Edge Board lines."
+    ),
+    "path_difficulty_grade": (
+        "Letter from projected_sos_2026 vs league baseline (A easiest … F "
+        "hardest). Coherent easier-vs-harder path ranking for survivor."
     ),
     "planner_exclusion": (
         "A team locked in any week is removed from ranked_picks for every "
@@ -339,6 +353,7 @@ def score_team_survivor(
     max_week: int,
     already_used: Sequence[str],
     game: Optional[ScheduledGame],
+    projected_sos: Optional[TeamProjectedSos] = None,
 ) -> Dict[str, Any]:
     """Compute inspectable survivor scores for one team at ``week``."""
     used = set(_normalize_teams(already_used))
@@ -397,6 +412,11 @@ def score_team_survivor(
         **_matchup_fields(game, team),
         "plays_this_week": plays,
     }
+    if projected_sos is not None:
+        sos_val = float(projected_sos.projected_sos_2026)
+        row["projected_sos_2026"] = round(sos_val, 4)
+        row["schedule_difficulty"] = projected_sos.difficulty_band
+        row["path_difficulty_grade"] = path_difficulty_grade(sos_val)
     return row
 
 
@@ -426,6 +446,7 @@ def evaluate_survivor(
     by_week = schedule_index(universe.schedule)
     max_week = max((g.week for g in universe.schedule), default=week)
     week_games = by_week.get(week, {})
+    sos_by_team = compute_league_projected_sos(universe)
 
     all_rows: List[Dict[str, Any]] = []
     bye_teams: List[str] = []
@@ -439,6 +460,7 @@ def evaluate_survivor(
             max_week=max_week,
             already_used=used,
             game=week_games.get(team),
+            projected_sos=sos_by_team.get(team),
         )
         if not row["plays_this_week"]:
             bye_teams.append(team)
@@ -499,6 +521,23 @@ def evaluate_survivor(
             "used_excluded_from_ranked": used,
             "bye_teams_this_week": sorted(bye_teams),
             "bye_count": len(bye_teams),
+            "projected_sos_2026": {
+                "intrinsic_pr_unchanged": True,
+                "easier_path_teams": sorted(
+                    (
+                        r["team"]
+                        for r in all_rows
+                        if r.get("schedule_difficulty") == "easy"
+                    )
+                )[:8],
+                "harder_path_teams": sorted(
+                    (
+                        r["team"]
+                        for r in all_rows
+                        if r.get("schedule_difficulty") == "hard"
+                    )
+                )[:8],
+            },
         }
 
     return SurvivorEvalResult(
@@ -752,8 +791,10 @@ def _week_candidate_rows(
     sched_out: Mapping[str, Mapping[int, int]],
     max_week: int,
     used_teams: Sequence[str],
+    sos_by_team: Optional[Mapping[str, TeamProjectedSos]] = None,
 ) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
+    sos_book = sos_by_team or {}
     for team in sorted(week_games.keys()):
         row = score_team_survivor(
             team=team,
@@ -764,6 +805,7 @@ def _week_candidate_rows(
             max_week=max_week,
             already_used=used_teams,
             game=week_games.get(team),
+            projected_sos=sos_book.get(team),
         )
         if row["remaining"] and row["plays_this_week"]:
             rows.append(_enrich_pick_row(row))
@@ -900,6 +942,7 @@ def evaluate_survivor_plan(
         locked_items=locked_items,
     )
     schedule_weeks = sorted(by_week.keys())
+    sos_by_team = compute_league_projected_sos(universe)
 
     path_survival = path_ok / n_sims
     locked_marginal: List[float] = []
@@ -929,6 +972,7 @@ def evaluate_survivor_plan(
                     max_week=max_week,
                     already_used=[],
                     game=game,
+                    projected_sos=sos_by_team.get(team),
                 )
             )
             weeks_out.append(
@@ -950,6 +994,7 @@ def evaluate_survivor_plan(
             sched_out=sched_out,
             max_week=max_week,
             used_teams=used_teams,
+            sos_by_team=sos_by_team,
         )
         ranked.sort(
             key=lambda r: (
@@ -1073,6 +1118,7 @@ def suggest_survivor_paths(
         locked_items=locked_items,
     )
     schedule_weeks = sorted(by_week.keys())
+    sos_by_team = compute_league_projected_sos(universe)
 
     strategy_specs = [
         ("chalk", "Chalk", "Highest weekly win % among unused teams."),
@@ -1107,6 +1153,7 @@ def suggest_survivor_paths(
                         max_week=max_week,
                         already_used=[],
                         game=game,
+                        projected_sos=sos_by_team.get(team),
                     )
                 )
                 week_detail.append(
@@ -1129,6 +1176,7 @@ def suggest_survivor_paths(
                 sched_out=sched_out,
                 max_week=max_week,
                 used_teams=list(used),
+                sos_by_team=sos_by_team,
             )
             choice = _pick_strategy_team(candidates, strategy_id)
             if choice is None:
