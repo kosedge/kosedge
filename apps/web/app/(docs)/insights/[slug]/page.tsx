@@ -1,31 +1,32 @@
-import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import ArticleLayout from "@/components/layout/ArticleLayout";
-import { getMdxBySlug, getMdxSlugs } from "@/lib/mdx";
-import { useMDXComponents } from "@/mdx-components";
+import { notFound, redirect } from "next/navigation";
+import { getDoctrineBySlug, getDeskNoteBySlug } from "@/lib/insights/content";
 
-export function generateStaticParams() {
-  return getMdxSlugs("insights").map((slug) => ({ slug }));
-}
+/**
+ * Legacy /insights/[slug] permalinks.
+ * Canonical routes are /insights/doctrine/[slug] and /insights/notes/[slug].
+ */
+export default async function LegacyInsightSlugPage({
+  params,
+}: {
+  params: Promise<{ slug: string }> | { slug: string };
+}) {
+  const resolved =
+    params && typeof (params as Promise<unknown>).then === "function"
+      ? await (params as Promise<{ slug: string }>)
+      : (params as { slug: string });
 
-export default function InsightPage({ params }: { params: { slug: string } }) {
-  // useMDXComponents is a Next MDX helper (not a React Hook); call it
-  // unconditionally so eslint react-hooks rules stay quiet.
-  const mdxComponents = useMDXComponents({});
-  const slugs = getMdxSlugs("insights");
-  if (!slugs.includes(params.slug)) return notFound();
+  const { slug } = resolved;
 
-  const post = getMdxBySlug("insights", params.slug);
+  // Reserved section paths should never hit this dynamic route, but guard anyway.
+  if (slug === "doctrine" || slug === "sports" || slug === "notes") {
+    redirect(`/insights/${slug}`);
+  }
 
-  return (
-    <ArticleLayout
-      title={post.frontmatter.title}
-      subtitle={post.frontmatter.description}
-    >
-      <p className="text-sm text-kos-text/60">{post.frontmatter.date}</p>
-      <div className="prose prose-invert mt-10 max-w-none">
-        <MDXRemote source={post.content} components={mdxComponents} />
-      </div>
-    </ArticleLayout>
-  );
+  const doctrine = getDoctrineBySlug(slug);
+  if (doctrine) redirect(`/insights/doctrine/${slug}`);
+
+  const note = getDeskNoteBySlug(slug);
+  if (note) redirect(`/insights/notes/${slug}`);
+
+  return notFound();
 }
