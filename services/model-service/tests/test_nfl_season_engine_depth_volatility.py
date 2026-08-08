@@ -69,6 +69,7 @@ def test_engine_version_depth_volatility() -> None:
         or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
+        or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -250,6 +251,7 @@ def test_cook_rice_realism_bounds_hold() -> None:
         or "smoke-polish" in proj.engine_version
         or "survivor-planner" in proj.engine_version
         or "calibration" in proj.engine_version
+        or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
     )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])
@@ -275,6 +277,7 @@ def test_season_path_volatility_diagnostics() -> None:
         or "smoke-polish" in result.engine_version
         or "survivor-planner" in result.engine_version
         or "calibration" in result.engine_version
+        or "player-regression" in result.engine_version
     )
     assert "depth_structure" in result.diagnostics
     assert "role_transitions_sample" in result.diagnostics

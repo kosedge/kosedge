@@ -31,9 +31,13 @@ from src.services.nfl_season_engine.types import PlayerRole, TeamStrengthState
 
 
 def test_engine_version_is_calibrated() -> None:
-    # v1.11 deeper calibration; cal-v2 tag; prior feature tags may still appear.
+    # cal-v2 tag remains; engine version tracks latest capability (v1.13+).
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
-    assert "calibration" in DEFAULT_SEASON_ENGINE_VERSION
+    assert (
+        "calibration" in DEFAULT_SEASON_ENGINE_VERSION
+        or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
+    )
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
     assert CALIBRATION_TAG.endswith("v2") or "v2" in CALIBRATION_TAG
 

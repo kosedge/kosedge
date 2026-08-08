@@ -36,6 +36,7 @@ from src.services.nfl_season_engine.injury_paths import (
     injury_paths_to_dicts,
     summarize_adjustments,
 )
+from src.services.nfl_season_engine.player_regression import regression_summary
 from src.services.nfl_season_engine.player_usage import (
     allocate_game_usage,
     share_integrity_summary,
@@ -359,6 +360,11 @@ def project_game_player_boxes(
             accum[box.player_key]["carries"].append(float(box.carries))
             accum[box.player_key]["targets"].append(float(box.targets))
 
+    regression_by_key: Dict[str, Dict[str, Any]] = {}
+    for team in (game.home_team, game.away_team):
+        for role in week_rosters.get(team, []):
+            regression_by_key[role.player_key] = regression_summary(role)
+
     players: List[Dict[str, Any]] = []
     for key, info in meta.items():
         pos = info["position"]
@@ -379,6 +385,7 @@ def project_game_player_boxes(
                 "scoring_role": scoring_role_by_key.get(key, ""),
                 "point_estimate": point,
                 "distributions": distributions,
+                **(regression_by_key.get(key) or {}),
             }
         )
 

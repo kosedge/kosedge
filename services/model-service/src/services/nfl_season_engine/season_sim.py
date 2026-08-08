@@ -37,6 +37,7 @@ from src.services.nfl_season_engine.injury_paths import (
     apply_injury_paths_for_week,
     injury_paths_to_dicts,
 )
+from src.services.nfl_season_engine.player_regression import regression_summary
 from src.services.nfl_season_engine.player_usage import allocate_game_usage
 from src.services.nfl_season_engine.production import produce_box_scores
 from src.services.nfl_season_engine.team_strength import (
@@ -292,6 +293,11 @@ def simulate_full_season(
             "p90": dist["p90"],
         }
 
+    role_by_key: Dict[str, Any] = {}
+    for team_roles in universe.rosters.values():
+        for role in team_roles:
+            role_by_key[role.player_key] = role
+
     player_rows: List[Dict[str, Any]] = []
     for key, meta in player_meta.items():
         samples = player_samples[key]
@@ -303,6 +309,9 @@ def simulate_full_season(
             row[f"{stat}_p10"] = dist["p10"]
             row[f"{stat}_p50"] = dist["p50"]
             row[f"{stat}_p90"] = dist["p90"]
+        role = role_by_key.get(key)
+        if role is not None:
+            row.update(regression_summary(role))
         player_rows.append(row)
 
     # Rank skill leaders by position-primary volume for readability.
@@ -368,6 +377,19 @@ def simulate_full_season(
                     for w in range(1, EARLY_SEASON_LAST_WEEK + 1)
                 },
                 "week_5_plus": early_season_uncertainty(5),
+            },
+            # v1.13 player process / regression posture counts.
+            "player_regression": {
+                "negative": sum(
+                    1 for r in player_rows if r.get("regression_posture") == "negative"
+                ),
+                "positive": sum(
+                    1 for r in player_rows if r.get("regression_posture") == "positive"
+                ),
+                "neutral": sum(
+                    1 for r in player_rows if r.get("regression_posture") == "neutral"
+                ),
+                "rookies": sum(1 for r in player_rows if r.get("is_rookie")),
             },
         }
 
