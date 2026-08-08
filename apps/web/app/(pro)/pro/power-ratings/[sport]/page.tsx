@@ -165,9 +165,10 @@ export default async function PowerRatingsSportPage({
             </Link>
           </div>
           <p className="mt-2 text-xs text-kos-text/50">
-            Expected wins remain the season-outlook board. Continuity, QB
-            premium, past SOS, 2026 schedule outlook, and blend state live on
-            the Season Model True PR surface.
+            Expected wins remain the season-outlook board (schedule difficulty
+            moves E[wins], not intrinsic PR). Continuity, QB premium, past SOS,
+            2026 schedule outlook, and blend state live on the Season Model
+            True PR surface.
           </p>
           {board.launchIdentity || (board.nTeamSims && board.nTeamSims >= 50000) ? (
             <p className="mt-2 rounded-lg border border-kos-gold/25 bg-kos-gold/10 px-3 py-2 text-xs text-kos-text/80">

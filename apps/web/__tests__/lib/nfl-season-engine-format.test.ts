@@ -3,8 +3,10 @@ import {
   buildGameBoxesQuery,
   buildStarOutInjuryPath,
   buildSurvivorBody,
+  formatPathDifficultyGrade,
   formatPct,
   formatRange,
+  formatScheduleDifficulty,
   matchupsFromWallChart,
   normalizeNflTeamCode,
   parseAlreadyUsedTeams,
@@ -114,5 +116,8 @@ describe("nfl-season-engine-format", () => {
     expect(
       formatRange({ mean: 10.2, std: 1, p10: 5.2, p50: 10.2, p90: 15.8 }),
     ).toBe("5.2–15.8");
+    expect(formatScheduleDifficulty("easy")).toBe("Easy slate");
+    expect(formatScheduleDifficulty("hard")).toBe("Hard slate");
+    expect(formatPathDifficultyGrade("a")).toBe("A");
   });
 });

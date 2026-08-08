@@ -157,11 +157,44 @@ def uncertainty_from_games(games_played: int) -> float:
     return round(_clamp(1.35 - 0.05 * g, 0.55, 1.40), 4)
 
 
+# Games 0–2 stay prior-heavy in product copy; games/8 still owns the weights.
+EARLY_SEASON_PRIOR_HEAVY_GAMES = 2
+
+
 def prior_current_blend_weight(*, current_games: int, full_season_games: int = 17) -> float:
     """Weight on current-season sample (rest on prior)."""
     g = max(0, int(current_games))
     # Reach ~full current weight by week 8; still some prior early.
     return _clamp(g / 8.0, 0.0, 1.0)
+
+
+def early_season_prior_heavy(*, current_games: int) -> bool:
+    """True while product posture is prior-heavy (games 0–2)."""
+    return max(0, int(current_games)) <= EARLY_SEASON_PRIOR_HEAVY_GAMES
+
+
+def assert_no_early_season_blend_cliff(
+    *, current_games: int, w_current: float
+) -> None:
+    """Refuse cliff behavior: after 1–2 games, current must stay on games/8.
+
+    Does not redesign the blend — only guards the shipped curve.
+    """
+    g = max(0, int(current_games))
+    expected = prior_current_blend_weight(current_games=g)
+    w = float(w_current)
+    if abs(w - expected) > 1e-6:
+        raise AssertionError(
+            f"blend cliff/mismatch: games={g} w_current={w} expected={expected} (games/8)"
+        )
+    if (
+        g <= EARLY_SEASON_PRIOR_HEAVY_GAMES
+        and w > (EARLY_SEASON_PRIOR_HEAVY_GAMES / 8.0) + 1e-9
+    ):
+        raise AssertionError(
+            f"early-season cliff: games={g} w_current={w} exceeds "
+            f"{EARLY_SEASON_PRIOR_HEAVY_GAMES}/8"
+        )
 
 
 def opponent_adjust_epa(raw_epa: float, *, league_epa: float = 0.0) -> float:
@@ -651,6 +684,9 @@ def blend_packages(
         else int(current.games_played)
     )
     w_cur = prior_current_blend_weight(current_games=games_for_weight)
+    assert_no_early_season_blend_cliff(
+        current_games=games_for_weight, w_current=w_cur
+    )
     travel = _clamp(float(prior_travel_weight), 0.0, 1.0)
     w_prior = (1.0 - w_cur) * travel
     w_anchor = (1.0 - w_cur) * (1.0 - travel)

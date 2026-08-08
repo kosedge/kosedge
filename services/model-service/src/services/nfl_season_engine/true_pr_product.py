@@ -341,11 +341,19 @@ def _shape_blend(drivers: Mapping[str, Any], strength: Any) -> Dict[str, Any]:
         if uncertainty.get("games_played") is not None
         else getattr(strength, "games_played", 0) or 0
     )
+    # Games 0–2: prior-heavy posture (games/8 still owns weights; no cliff copy).
     # Preseason / zero sample: never cosplay "current sample".
-    if games <= 0 or w_current <= 1e-9:
+    if games <= 2 or w_current <= 1e-9:
         state = "prior_heavy"
         label = "Prior-heavy"
-        reason = "Preseason / 0 REG games — prior only (no current sample)"
+        if games <= 0:
+            reason = "Preseason / 0 REG games — prior only (no current sample)"
+        else:
+            reason = (
+                f"Games {games}/8 — prior-heavy early season "
+                f"(prior {float(w_prior):.0%} / current {float(w_current):.0%}; "
+                "no Week-1 cliff)"
+            )
         show = True
     elif w_current >= 0.999:
         state = "current_dominated"
@@ -357,7 +365,7 @@ def _shape_blend(drivers: Mapping[str, Any], strength: Any) -> Dict[str, Any]:
         label = "Blending"
         reason = (
             f"{games}/8 REG into ramp · "
-            f"prior {w_prior:.0%} / current {w_current:.0%}"
+            f"prior {float(w_prior):.0%} / current {float(w_current):.0%}"
         )
         show = True
     return {
@@ -371,6 +379,7 @@ def _shape_blend(drivers: Mapping[str, Any], strength: Any) -> Dict[str, Any]:
         "ramp_games": 8,
         "approximate": False,
         "preseason": games <= 0,
+        "early_season": games <= 2,
     }
 
 

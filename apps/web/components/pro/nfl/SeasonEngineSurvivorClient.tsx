@@ -3,7 +3,9 @@
 import { useMemo, useState, useTransition } from "react";
 import {
   NFL_SEASON_ENGINE_TEAMS,
+  formatPathDifficultyGrade,
   formatPct,
+  formatScheduleDifficulty,
   formatStatNumber,
   parseAlreadyUsedTeams,
   rankSurvivorPicks,
@@ -17,6 +19,9 @@ type SurvivorPick = {
   save_score: number;
   pick_now_score: number;
   plays_this_week?: boolean;
+  schedule_difficulty?: string | null;
+  path_difficulty_grade?: string | null;
+  projected_sos_2026?: number | null;
 };
 
 type SurvivorPayload = {
@@ -107,7 +112,8 @@ export default function SeasonEngineSurvivorClient({
           Mark teams you already used, choose a future week, and rank remaining
           picks from path-coherent season sims. Bye weeks are excluded.
           Scores blend this-week win rate with future save value — not full
-          multi-entry pool EV.
+          multi-entry pool EV. Path SOS is schedule outlook only: harder slate
+          ≠ weaker team; intrinsic PR stays off the SOS dial.
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -268,6 +274,7 @@ export default function SeasonEngineSurvivorClient({
                   <th className="px-3 py-3 font-medium">Team</th>
                   <th className="px-3 py-3 font-medium">Opponent</th>
                   <th className="px-3 py-3 font-medium">Win%</th>
+                  <th className="px-3 py-3 font-medium">Path SOS</th>
                   <th className="px-3 py-3 font-medium">Save</th>
                   <th className="px-3 py-3 font-medium">Pick now</th>
                 </tr>
@@ -294,6 +301,18 @@ export default function SeasonEngineSurvivorClient({
                     <td className="px-3 py-2.5 tabular-nums font-semibold text-kos-text">
                       {formatPct(pick.win_rate)}
                     </td>
+                    <td className="px-3 py-2.5 text-kos-text/70">
+                      <span className="font-medium text-kos-text/85">
+                        {formatScheduleDifficulty(pick.schedule_difficulty)}
+                      </span>
+                      {pick.path_difficulty_grade ? (
+                        <span className="ml-1.5 tabular-nums text-[11px] text-kos-text/45">
+                          {formatPathDifficultyGrade(
+                            pick.path_difficulty_grade,
+                          )}
+                        </span>
+                      ) : null}
+                    </td>
                     <td className="px-3 py-2.5 tabular-nums text-kos-text/70">
                       {formatStatNumber(pick.save_score, 3)}
                     </td>
@@ -305,7 +324,7 @@ export default function SeasonEngineSurvivorClient({
                 {!ranked.length ? (
                   <tr>
                     <td
-                      colSpan={6}
+                      colSpan={7}
                       className="px-4 py-6 text-sm text-kos-text/60"
                     >
                       No remaining teams play this week after exclusions (check

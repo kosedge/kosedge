@@ -24,7 +24,7 @@ export default async function NflSurvivorPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Survivor"
-      summary="Plan the full slate week-by-week with matchups, slate grade, and suggested paths. Locked teams stay burned. Preseason: use future REG weeks — this is a season-path planner, not a live weekly betting board."
+      summary="Plan the full slate week-by-week with matchups, slate grade, path SOS, and suggested paths. Harder schedule ≠ weaker team — SOS moves outlook / E[wins] path grades only. Locked teams stay burned. Preseason: use future REG weeks — season-path planner, not a live weekly betting board."
       badge="Season engine · survivor"
       primaryHref="/pro/nfl/game-boxes"
       primaryLabel="Open Game Boxes"
