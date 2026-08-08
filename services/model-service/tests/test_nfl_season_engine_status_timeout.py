@@ -13,10 +13,10 @@ from src.services.nfl_season_engine.calibration import ENGINE_VERSION
 from src.services.nfl_season_engine.loaders import SCHEDULE_SOURCE_PACKAGED
 
 
-def test_engine_version_includes_player_regression() -> None:
-    assert ENGINE_VERSION == "nfl-season-engine-v1.13-player-regression"
-    assert "v1.13" in ENGINE_VERSION
-    assert "player-regression" in ENGINE_VERSION
+def test_engine_version_includes_projected_sos() -> None:
+    assert ENGINE_VERSION == "nfl-season-engine-v1.14-projected-sos"
+    assert "v1.14" in ENGINE_VERSION
+    assert "projected-sos" in ENGINE_VERSION
 
 
 def test_resolve_falls_back_to_packaged_when_db_times_out(monkeypatch) -> None:

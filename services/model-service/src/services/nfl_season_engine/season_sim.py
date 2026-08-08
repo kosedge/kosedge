@@ -40,6 +40,11 @@ from src.services.nfl_season_engine.injury_paths import (
 from src.services.nfl_season_engine.player_regression import regression_summary
 from src.services.nfl_season_engine.player_usage import allocate_game_usage
 from src.services.nfl_season_engine.production import produce_box_scores
+from src.services.nfl_season_engine.projected_sos import (
+    attach_projected_sos_to_team_wins,
+    compute_league_projected_sos,
+    projected_sos_summary,
+)
 from src.services.nfl_season_engine.team_strength import (
     copy_strength_book,
     evolve_after_game,
@@ -283,15 +288,24 @@ def simulate_full_season(
         if progress_every and (i + 1) % progress_every == 0:
             print(f"  season-engine: {i + 1}/{n_sims} paths")
 
-    team_wins: Dict[str, Dict[str, float]] = {}
+    team_wins_raw: Dict[str, Dict[str, float]] = {}
     for team, samples in win_samples.items():
         dist = _dist_stats([float(x) for x in samples])
-        team_wins[team] = {
+        team_wins_raw[team] = {
             "mean": dist["mean"],
             "p10": dist["p10"],
             "p50": dist["p50"],
             "p90": dist["p90"],
         }
+
+    # Future SOS: schedule difficulty on outlook only — never mutates strengths.
+    sos_by_team = compute_league_projected_sos(universe)
+    team_wins = attach_projected_sos_to_team_wins(
+        team_wins_raw,
+        sos_by_team,
+        strengths=universe.strengths,
+        schedule=universe.schedule,
+    )
 
     role_by_key: Dict[str, Any] = {}
     for team_roles in universe.rosters.values():
@@ -391,6 +405,8 @@ def simulate_full_season(
                 ),
                 "rookies": sum(1 for r in player_rows if r.get("is_rookie")),
             },
+            # v1.14 projected schedule difficulty (outlook only; PR unchanged).
+            "projected_sos_2026": projected_sos_summary(sos_by_team),
         }
 
     return SeasonSimResult(

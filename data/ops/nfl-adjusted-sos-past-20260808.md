@@ -125,12 +125,13 @@ packaged EPA + player regression suites.
 
 ## Remaining gaps (next passes — no scope creep)
 
-1. Forward **2026 projected SOS** product (season expectations only — never Week 1 intrinsic PR)
+1. Forward **2026 projected SOS** product — **shipped** as outlook-only layer
+   (`nfl-projected-sos-2026-20260808.md`; never Week 1 intrinsic PR)
 2. Opponent tiers UI / performance-vs-tier dashboard
 3. Full active-roster / injury-at-time opponent adjustment
 4. Richer venue model beyond HFA + short rest
 5. Optional: wire KAV weekly tables when present as alternate time-of-game book
-6. Continuity score / real QB premium (still separate)
+6. Continuity score / real QB premium — **shipped** (#143 / #144)
 
 ## Progress line
 

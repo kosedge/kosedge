@@ -36,6 +36,7 @@ def test_engine_version_is_calibrated() -> None:
     assert (
         "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")

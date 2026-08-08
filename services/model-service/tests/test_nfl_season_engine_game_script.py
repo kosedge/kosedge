@@ -41,6 +41,7 @@ def test_engine_version_game_script() -> None:
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -291,6 +292,7 @@ def test_buf_kc_realism_bounds_and_diagnostics_play_mix() -> None:
         or "survivor-planner" in proj.engine_version
         or "calibration" in proj.engine_version
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
     by_name = {p["player_name"]: p for p in proj.players}
 

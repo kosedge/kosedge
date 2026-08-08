@@ -42,6 +42,7 @@ def test_engine_version_surfaces_survivor() -> None:
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
+        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -161,6 +162,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
         or "survivor-planner" in result.engine_version
         or "calibration" in result.engine_version
         or "player-regression" in result.engine_version
+        or "projected-sos" in result.engine_version
     )
 
 
@@ -227,6 +229,7 @@ def test_planner_excludes_used_teams_across_weeks() -> None:
         or "calibration" in plan.engine_version
         or "survivor-planner-ux" in plan.engine_version
         or "player-regression" in plan.engine_version
+        or "projected-sos" in plan.engine_version
         or "path_survival" in PATH_FORMULA_NOTES
     )
     assert "path_survival" in PATH_FORMULA_NOTES
