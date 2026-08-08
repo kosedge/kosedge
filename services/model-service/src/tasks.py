@@ -783,6 +783,163 @@ def _fetch_st_kav_by_team_season(
     return out
 
 
+def _fetch_prior_season_schedule_games(
+    session: Any, *, season: int
+) -> List[Dict[str, Any]]:
+    """Completed REG prior-season games for Past SOS (never future slate)."""
+    try:
+        rows = session.execute(
+            text(
+                """
+                SELECT
+                  game_id,
+                  week,
+                  UPPER(TRIM(home_team)) AS home_team,
+                  UPPER(TRIM(away_team)) AS away_team,
+                  game_date
+                FROM nfl_dp_schedules
+                WHERE season = :season
+                  AND week BETWEEN 1 AND 18
+                  AND home_score IS NOT NULL
+                  AND away_score IS NOT NULL
+                  AND home_team IS NOT NULL
+                  AND away_team IS NOT NULL
+                ORDER BY week ASC, game_date ASC NULLS LAST, game_id ASC
+                """
+            ),
+            {"season": int(season)},
+        ).fetchall()
+    except Exception:
+        return []
+    out: List[Dict[str, Any]] = []
+    for r in rows:
+        out.append(
+            {
+                "game_id": str(getattr(r, "game_id", "") or ""),
+                "week": int(getattr(r, "week", 0) or 0),
+                "home_team": str(getattr(r, "home_team", "") or ""),
+                "away_team": str(getattr(r, "away_team", "") or ""),
+                "game_date": getattr(r, "game_date", None),
+            }
+        )
+    return out
+
+
+def _fetch_rolling_weekly_opponent_book(
+    session: Any, *, season: int
+) -> Dict[Tuple[str, int], Any]:
+    """Week-keyed rolling EPA book for time-of-game opponent ratings."""
+    try:
+        from src.services.nfl_season_engine.adjusted_sos import OpponentRating
+
+        rows = session.execute(
+            text(
+                """
+                SELECT week, team, off_epa_per_play_5g, def_epa_allowed_per_play_5g
+                FROM nfl_dp_team_rolling_features_weekly
+                WHERE season = :season
+                  AND week BETWEEN 1 AND 18
+                """
+            ),
+            {"season": int(season)},
+        ).fetchall()
+    except Exception:
+        return {}
+    out: Dict[Tuple[str, int], Any] = {}
+    for r in rows:
+        team = str(getattr(r, "team", "") or "").strip().upper()
+        if team == "LAR":
+            team = "LA"
+        week = int(getattr(r, "week", 0) or 0)
+        if not team or week < 1:
+            continue
+        out[(team, week)] = OpponentRating(
+            off_epa=float(_to_float(getattr(r, "off_epa_per_play_5g", None)) or 0.0),
+            def_epa=float(
+                _to_float(getattr(r, "def_epa_allowed_per_play_5g", None)) or 0.0
+            ),
+            source="time_of_game",
+        )
+    return out
+
+
+def _apply_past_sos_to_prior_packages(
+    session: Any,
+    *,
+    prior_season: int,
+    prior_pkgs: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Schedule-adjust prior packages via Past SOS (prior side only).
+
+    Future / projected schedule is never consulted. Failures leave priors
+    unchanged and are labeled thin_unavailable in drivers when present.
+    """
+    if not prior_pkgs:
+        return prior_pkgs
+    try:
+        from src.services.nfl_season_engine.adjusted_sos import (
+            apply_past_sos_to_package,
+            compute_league_past_sos,
+            expand_schedule_games,
+            rest_days_from_dates,
+            season_book_from_packages,
+        )
+    except Exception:
+        return prior_pkgs
+
+    try:
+        schedule_rows = _fetch_prior_season_schedule_games(
+            session, season=int(prior_season)
+        )
+        if not schedule_rows:
+            return prior_pkgs
+        team_dates: Dict[str, List[Any]] = {}
+        for row in schedule_rows:
+            gdate = row.get("game_date")
+            if gdate is None:
+                continue
+            for key in ("home_team", "away_team"):
+                t = str(row.get(key) or "").strip().upper()
+                if t == "LAR":
+                    t = "LA"
+                if not t:
+                    continue
+                team_dates.setdefault(t, []).append(gdate)
+        rest_lookup = rest_days_from_dates(team_dates)
+        games = expand_schedule_games(schedule_rows, rest_lookup=rest_lookup)
+        weekly_book = _fetch_rolling_weekly_opponent_book(
+            session, season=int(prior_season)
+        )
+        season_book = season_book_from_packages(prior_pkgs)
+        raw_by_team = {
+            team: {
+                "off_epa_per_play": float(
+                    pkg.notes.get("off_epa_raw", pkg.offense.epa_per_play)
+                ),
+                "def_epa_allowed_per_play": float(
+                    pkg.notes.get("def_epa_raw", pkg.defense.epa_per_play)
+                ),
+            }
+            for team, pkg in prior_pkgs.items()
+        }
+        sos_by_team = compute_league_past_sos(
+            games,
+            raw_by_team=raw_by_team,
+            weekly_book=weekly_book,
+            season_book=season_book,
+        )
+        out: Dict[str, Any] = {}
+        for team, pkg in prior_pkgs.items():
+            sos = sos_by_team.get(team)
+            if sos is None:
+                out[team] = pkg
+                continue
+            out[team] = apply_past_sos_to_package(pkg, sos)
+        return out
+    except Exception:
+        return prior_pkgs
+
+
 def _rolling_row_to_package_payload(row: Any, st: Dict[str, float]) -> Dict[str, Any]:
     payload: Dict[str, Any] = {
         "off_epa_per_play": _to_float(row.off_epa_per_play_5g) or 0.0,
@@ -891,6 +1048,9 @@ def _load_team_strength_priors(
             # blend() re-applies current-sample variance.
             prior_pkgs[team] = pkg
             prior_meta_week[team] = float(_to_float(row.week) or 0.0)
+
+        # Packaged fill happens below; Past SOS applied after all prior pkgs exist.
+
         for row in current_rows:
             team = str(row.team or "").strip().upper()
             if team == "LAR":
@@ -964,6 +1124,15 @@ def _load_team_strength_priors(
                 prior.get("variance") or uncertainty_from_games(0)
             )
             prior_pkgs[team] = pkg
+
+    # Past SOS: schedule-adjust prior packages before prior→current blend.
+    # Never uses the upcoming season slate (future SOS is a separate product).
+    if use_backbone and prior_pkgs:
+        prior_pkgs = _apply_past_sos_to_prior_packages(
+            session,
+            prior_season=int(fallback_season),
+            prior_pkgs=prior_pkgs,
+        )
 
     out: Dict[str, Dict[str, float]] = {}
     if use_backbone:
@@ -1047,8 +1216,27 @@ def _load_team_strength_priors(
                             "stubs": {
                                 "qb_premium": "stub_not_applied",
                                 "continuity": "stub_not_applied",
-                                "true_time_of_game_sos": "stub_not_applied",
+                                "injury_at_time_depth": "stub_not_applied",
+                                "full_venue_model": str(
+                                    (prior_pkg.notes.get("past_sos") or {}).get(
+                                        "full_venue_model"
+                                    )
+                                    or "stub_not_applied"
+                                ),
+                                "true_time_of_game_sos": str(
+                                    (prior_pkg.notes.get("past_sos") or {}).get(
+                                        "status"
+                                    )
+                                    or "thin_unavailable"
+                                ),
                             },
+                            "past_sos": dict(
+                                prior_pkg.notes.get("past_sos")
+                                or {
+                                    "status": "thin_unavailable",
+                                    "future_schedule_excluded": True,
+                                }
+                            ),
                             "st_index": float(
                                 prior_pkg.notes.get("packaged_st_index", 1.0) or 1.0
                             ),

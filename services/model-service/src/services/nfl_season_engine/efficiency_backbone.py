@@ -674,7 +674,13 @@ def blend_packages(
             "current_component_defense_index": float(current_idx["defense_index"]),
             "qb_premium_status": "stub_not_applied",
             "continuity_status": "stub_not_applied",
-            "true_time_of_game_sos_status": "stub_not_applied",
+            # Past SOS status lives on prior package notes when applied.
+            "true_time_of_game_sos_status": str(
+                (prior.notes or {}).get("past_sos", {}).get("status")
+                or (current.notes or {}).get("past_sos", {}).get("status")
+                or "thin_unavailable"
+            ),
+            "past_sos_prior": (prior.notes or {}).get("past_sos"),
         },
     )
 
@@ -742,8 +748,16 @@ def true_pr_drivers(
         "stubs": {
             "qb_premium": "stub_not_applied",
             "continuity": "stub_not_applied",
-            "true_time_of_game_sos": "stub_not_applied",
+            "injury_at_time_depth": "stub_not_applied",
+            "full_venue_model": str(
+                (pkg.notes.get("past_sos") or {}).get("full_venue_model")
+                or "stub_not_applied"
+            ),
+            "true_time_of_game_sos": str(
+                (pkg.notes.get("past_sos") or {}).get("status") or "thin_unavailable"
+            ),
         },
+        "past_sos": dict(pkg.notes.get("past_sos") or {"status": "thin_unavailable"}),
     }
 
 

@@ -272,7 +272,14 @@ def test_strength_payload_exposes_full_vs_current_and_stubs() -> None:
     assert payload["full_strength_offense_index"] == payload["current_offense_index"]
     assert payload["injury_delta_offense"] == 0.0
     assert payload["qb_premium"] == 0.0
-    assert payload["drivers"]["stubs"]["true_time_of_game_sos"] == "stub_not_applied"
+    # Past SOS status is exposed when applied; absent → thin_unavailable (not a fake stub).
+    assert payload["drivers"]["stubs"]["true_time_of_game_sos"] in (
+        "thin_unavailable",
+        "applied_time_of_game",
+        "applied_approximate",
+        "mixed",
+    )
+    assert payload["drivers"]["stubs"]["injury_at_time_depth"] == "stub_not_applied"
     assert "st_index" in payload["drivers"]
     book = initialize_strengths({"BUF": payload})
     assert book["BUF"].full_strength_offense_index == book["BUF"].offense_index
