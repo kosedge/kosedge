@@ -8,6 +8,8 @@ corrector; this layer is **outlook only**.
 
 Branch: `feat/nfl-projected-sos-2026` → `deploy-vercel`.
 
+PR: https://github.com/kosedge/kosedge/pull/145
+
 ## Goal
 
 Ship per-team **2026 projected schedule difficulty** so season expectation
