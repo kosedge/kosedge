@@ -73,12 +73,102 @@ def test_package_exposes_off_def_st_pace_variance() -> None:
         prior_season=2025,
     )
     assert pkg.version == EFFICIENCY_BACKBONE_VERSION
+    assert pkg.version == "v1.1"
     assert pkg.st_index == 1.0  # no ST EPA → neutral
     assert pkg.pace > 0.9
     assert pkg.variance < uncertainty_from_games(0)
     idx = package_to_strength_indices(pkg)
     assert "offense_index" in idx and "defense_index" in idx
     assert "pace_factor" in idx and "pass_rate_bias" in idx
+    assert "drivers" in idx
+    assert idx["drivers"]["st_sample"] in ("neutral_hook", "missing", "thin", "ok")
+
+
+def test_true_splits_and_st_move_offense_with_visible_drivers() -> None:
+    base_row = {
+        "off_epa_per_play": 0.02,
+        "def_epa_allowed_per_play": 0.0,
+        "success_rate_offense": 0.44,
+        "success_rate_defense_allowed": 0.44,
+        "offensive_plays": 1000,
+        "defensive_plays": 1000,
+        "pass_plays": 600,
+        "run_plays": 400,
+        "early_down_plays": 700,
+        "red_zone_td_rate": 0.55,
+        "pass_rate": 0.58,
+        "pressure_rate_generated": 0.16,
+        "pressure_rate_allowed": 0.16,
+        "n_weeks": 17,
+        "explosive_pass_plays": 85,
+        "explosive_pass_allowed": 85,
+    }
+    neutral = build_package_from_season_row("AAA", base_row, source="test")
+    pass_heavy = build_package_from_season_row(
+        "BBB",
+        {
+            **base_row,
+            "pass_epa": 0.12,
+            "run_epa": -0.05,
+            "early_down_epa": 0.08,
+        },
+        source="test",
+    )
+    bad_st = build_package_from_season_row(
+        "CCC",
+        {**base_row, "st_epa_per_play": -0.15, "st_plays": 120},
+        source="test",
+        st_epa=-0.15,
+    )
+    good_st = build_package_from_season_row(
+        "DDD",
+        {**base_row, "st_epa_per_play": 0.12, "st_plays": 120},
+        source="test",
+        st_epa=0.12,
+    )
+    n_idx = package_to_strength_indices(neutral)
+    p_idx = package_to_strength_indices(pass_heavy)
+    assert p_idx["offense_index"] > n_idx["offense_index"]
+    assert p_idx["drivers"]["pass_epa_sample"] == "ok"
+    assert p_idx["drivers"]["pass_epa"] == 0.12
+    assert package_to_strength_indices(good_st)["st_index"] > 1.0
+    assert package_to_strength_indices(bad_st)["st_index"] < 1.0
+    # ST moves composite but does not dominate Off/Def base.
+    assert abs(
+        package_to_strength_indices(good_st)["offense_index"]
+        - package_to_strength_indices(bad_st)["offense_index"]
+    ) < 0.08
+
+
+def test_thin_split_labeled_not_invented() -> None:
+    pkg = build_package_from_season_row(
+        "TEA",
+        {
+            "off_epa_per_play": 0.0,
+            "def_epa_allowed_per_play": 0.0,
+            "success_rate_offense": 0.44,
+            "success_rate_defense_allowed": 0.44,
+            "offensive_plays": 80,
+            "defensive_plays": 80,
+            "pass_plays": 40,
+            "run_plays": 30,
+            "early_down_plays": 50,
+            "pass_epa": 0.40,
+            "run_epa": 0.30,
+            "early_down_epa": 0.35,
+            "n_weeks": 1,
+            "pass_rate": 0.58,
+            "pressure_rate_generated": 0.16,
+            "pressure_rate_allowed": 0.16,
+            "red_zone_td_rate": 0.55,
+        },
+        source="test",
+    )
+    drivers = package_to_strength_indices(pkg)["drivers"]
+    assert drivers["pass_epa_sample"] == "thin"
+    assert drivers["run_epa_sample"] == "thin"
+    assert drivers["early_down_sample"] == "thin"
+    assert drivers["split_weights"]["pass"] < 1.0
 
 
 def test_one_game_craziness_regressed_via_blend() -> None:

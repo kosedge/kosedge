@@ -1,4 +1,4 @@
-"""NFL in-house efficiency backbone (Sprint 2).
+"""NFL in-house efficiency backbone (Sprint 2 → v1.1).
 
 Football-native team efficiency package that feeds the **existing** Layer 1
 strength slot (``TeamStrengthState`` / Edge Board ``offense_index`` /
@@ -6,6 +6,10 @@ strength slot (``TeamStrengthState`` / Edge Board ``offense_index`` /
 the season engine hierarchy.
 
 North star: ``data/ops/nfl-model-vision.md``.
+
+v1.1 adds real special-teams contribution (ST KAV / ST EPA) and true
+pass / run / early-down EPA splits as soft Off drivers with visible labels.
+Thin samples are labeled — never invented certainty.
 """
 
 from __future__ import annotations
@@ -13,7 +17,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-EFFICIENCY_BACKBONE_VERSION = "v1"
+EFFICIENCY_BACKBONE_VERSION = "v1.1"
 BACKBONE_SOURCE_PACKAGED = "packaged_efficiency_backbone"
 BACKBONE_SOURCE_ROLLING = "efficiency_backbone_rolling"
 BACKBONE_SOURCE_BLEND = "efficiency_backbone_blend"
@@ -24,12 +28,24 @@ _LEAGUE_EXPLOSIVE_PASS_RATE = 0.085
 _LEAGUE_RZ_TD_RATE = 0.55
 _LEAGUE_PASS_RATE = 0.58
 _LEAGUE_PLAYS_PER_GAME = 62.0  # team offensive plays / game approx
+_LEAGUE_PASS_EPA = 0.0
+_LEAGUE_RUN_EPA = -0.02
+_LEAGUE_EARLY_DOWN_EPA = 0.0
 
 # Soft additives on top of EPA→index (keep hierarchy smell tests intact).
 _W_SUCCESS = 0.12
 _W_EXPLOSIVE = 0.08
 _W_RZ = 0.06
-_W_ST = 0.04  # tiny bleed into composite diagnostics only via st_index path
+_W_ST = 0.065  # v1.1: modest ST bleed (was 0.04); still subordinate to Off/Def
+_W_PASS_EPA = 0.05
+_W_RUN_EPA = 0.035
+_W_EARLY_DOWN = 0.04
+
+# Sample floors for labeling thin splits (season aggregates).
+_THIN_PASS_PLAYS = 200
+_THIN_RUN_PLAYS = 150
+_THIN_EARLY_PLAYS = 250
+_THIN_ST_PLAYS = 40
 
 # Same clamps as tasks._epa_to_strength_indices.
 _OFF_CLAMP = (0.82, 1.22)
@@ -85,6 +101,9 @@ class UnitEfficiency:
     red_zone_td_rate: float = _LEAGUE_RZ_TD_RATE
     pressure_rate: float = 0.15
     plays: int = 0
+    pass_plays: int = 0
+    run_plays: int = 0
+    early_down_plays: int = 0
 
 
 @dataclass
@@ -96,6 +115,7 @@ class TeamEfficiencyPackage:
     defense: UnitEfficiency = field(default_factory=UnitEfficiency)
     st_index: float = 1.0
     st_epa_per_play: float = 0.0
+    st_plays: int = 0
     pace: float = 1.0  # plays/game vs league (1.0 = average)
     pass_rate: float = _LEAGUE_PASS_RATE
     explosiveness: float = 0.0  # offense explosive vs league (signed)
@@ -115,6 +135,7 @@ class TeamEfficiencyPackage:
             "defense": asdict(self.defense),
             "st_index": self.st_index,
             "st_epa_per_play": self.st_epa_per_play,
+            "st_plays": self.st_plays,
             "pace": self.pace,
             "pass_rate": self.pass_rate,
             "explosiveness": self.explosiveness,
@@ -152,12 +173,65 @@ def _rate_delta(value: float, league: float) -> float:
     return float(value) - float(league)
 
 
-def package_to_strength_indices(pkg: TeamEfficiencyPackage) -> Dict[str, float]:
+def _split_confidence(*, plays: int, floor: int) -> Tuple[float, str]:
+    """Return (weight 0..1, label) for a split sample."""
+    n = max(0, int(plays))
+    if n <= 0:
+        return 0.0, "missing"
+    if n < floor:
+        return _clamp(n / float(floor), 0.15, 0.85), "thin"
+    return 1.0, "ok"
+
+
+def visible_drivers(pkg: TeamEfficiencyPackage) -> Dict[str, Any]:
+    """Inspectable Off/Def/ST drivers for Edge Board / ops (v1.1)."""
+    off = pkg.offense
+    pass_w, pass_lbl = _split_confidence(plays=off.pass_plays, floor=_THIN_PASS_PLAYS)
+    run_w, run_lbl = _split_confidence(plays=off.run_plays, floor=_THIN_RUN_PLAYS)
+    early_w, early_lbl = _split_confidence(
+        plays=off.early_down_plays, floor=_THIN_EARLY_PLAYS
+    )
+    st_w, st_lbl = _split_confidence(plays=pkg.st_plays, floor=_THIN_ST_PLAYS)
+    if abs(float(pkg.st_epa_per_play)) < 1e-9 and pkg.st_plays <= 0:
+        st_lbl = "neutral_hook"
+        st_w = 0.0
+    return {
+        "version": EFFICIENCY_BACKBONE_VERSION,
+        "off_epa": round(float(off.epa_per_play), 6),
+        "def_epa_allowed": round(float(pkg.defense.epa_per_play), 6),
+        "pass_epa": round(float(off.pass_epa), 6),
+        "pass_epa_sample": pass_lbl,
+        "pass_plays": int(off.pass_plays),
+        "run_epa": round(float(off.run_epa), 6),
+        "run_epa_sample": run_lbl,
+        "run_plays": int(off.run_plays),
+        "early_down_epa": round(float(off.early_down_epa), 6),
+        "early_down_sample": early_lbl,
+        "early_down_plays": int(off.early_down_plays),
+        "success_rate": round(float(off.success_rate), 6),
+        "explosive_rate": round(float(off.explosive_rate), 6),
+        "red_zone_td_rate": round(float(off.red_zone_td_rate), 6),
+        "st_index": round(float(pkg.st_index), 6),
+        "st_epa_per_play": round(float(pkg.st_epa_per_play), 6),
+        "st_sample": st_lbl,
+        "st_plays": int(pkg.st_plays),
+        "pace": round(float(pkg.pace), 6),
+        "variance": round(float(pkg.variance), 6),
+        "split_weights": {
+            "pass": round(pass_w, 4),
+            "run": round(run_w, 4),
+            "early_down": round(early_w, 4),
+            "st": round(st_w, 4),
+        },
+    }
+
+
+def package_to_strength_indices(pkg: TeamEfficiencyPackage) -> Dict[str, Any]:
     """Map a full efficiency package into the existing O/D index contract.
 
     Base = EPA + pressure (identical units to Edge Board). Soft additives from
-    success / explosiveness / red-zone keep football context without inventing
-    a second strength book. ST stays on ``st_index`` (small optional bleed).
+    success / explosiveness / red-zone / pass-run-early splits keep football
+    context without inventing a second strength book. ST bleeds modestly.
     """
     base = epa_to_strength_indices(
         off_epa=pkg.offense.epa_per_play,
@@ -165,19 +239,83 @@ def package_to_strength_indices(pkg: TeamEfficiencyPackage) -> Dict[str, float]:
         pressure_generated=pkg.defense.pressure_rate,  # generated on defense
         pressure_allowed=pkg.offense.pressure_rate,  # allowed on offense
     )
+    pass_w, _ = _split_confidence(
+        plays=pkg.offense.pass_plays, floor=_THIN_PASS_PLAYS
+    )
+    run_w, _ = _split_confidence(plays=pkg.offense.run_plays, floor=_THIN_RUN_PLAYS)
+    early_w, _ = _split_confidence(
+        plays=pkg.offense.early_down_plays, floor=_THIN_EARLY_PLAYS
+    )
+    st_w, _ = _split_confidence(plays=pkg.st_plays, floor=_THIN_ST_PLAYS)
+    if abs(float(pkg.st_epa_per_play)) < 1e-9 and pkg.st_plays <= 0:
+        st_w = 0.0
+
+    # When split samples missing, fall back to overall EPA (no invent).
+    pass_epa = (
+        pkg.offense.pass_epa
+        if pkg.offense.pass_plays > 0
+        else pkg.offense.epa_per_play
+    )
+    run_epa = (
+        pkg.offense.run_epa if pkg.offense.run_plays > 0 else pkg.offense.epa_per_play
+    )
+    early_epa = (
+        pkg.offense.early_down_epa
+        if pkg.offense.early_down_plays > 0
+        else pkg.offense.epa_per_play
+    )
+
+    split_add = (
+        _W_PASS_EPA * pass_w * _rate_delta(pass_epa, _LEAGUE_PASS_EPA)
+        + _W_RUN_EPA * run_w * _rate_delta(run_epa, _LEAGUE_RUN_EPA)
+        + _W_EARLY_DOWN * early_w * _rate_delta(early_epa, _LEAGUE_EARLY_DOWN_EPA)
+    )
+    # Defense-allowed splits when present (invert: allowing more EPA is worse).
+    def_pass_w, _ = _split_confidence(
+        plays=pkg.defense.pass_plays, floor=_THIN_PASS_PLAYS
+    )
+    def_run_w, _ = _split_confidence(
+        plays=pkg.defense.run_plays, floor=_THIN_RUN_PLAYS
+    )
+    def_early_w, _ = _split_confidence(
+        plays=pkg.defense.early_down_plays, floor=_THIN_EARLY_PLAYS
+    )
+    def_pass = (
+        pkg.defense.pass_epa
+        if pkg.defense.pass_plays > 0
+        else pkg.defense.epa_per_play
+    )
+    def_run = (
+        pkg.defense.run_epa if pkg.defense.run_plays > 0 else pkg.defense.epa_per_play
+    )
+    def_early = (
+        pkg.defense.early_down_epa
+        if pkg.defense.early_down_plays > 0
+        else pkg.defense.epa_per_play
+    )
+    def_split_add = (
+        _W_PASS_EPA * def_pass_w * (-_rate_delta(def_pass, _LEAGUE_PASS_EPA))
+        + _W_RUN_EPA * def_run_w * (-_rate_delta(def_run, _LEAGUE_RUN_EPA))
+        + _W_EARLY_DOWN
+        * def_early_w
+        * (-_rate_delta(def_early, _LEAGUE_EARLY_DOWN_EPA))
+    )
+
     off_add = (
         _W_SUCCESS * _rate_delta(pkg.offense.success_rate, _LEAGUE_SUCCESS_RATE)
         + _W_EXPLOSIVE * _rate_delta(pkg.offense.explosive_rate, _LEAGUE_EXPLOSIVE_PASS_RATE)
         + _W_RZ * _rate_delta(pkg.offense.red_zone_td_rate, _LEAGUE_RZ_TD_RATE)
+        + split_add
     )
     # Defense: lower allowed success / explosive / RZ is better → invert deltas.
     def_add = (
         _W_SUCCESS * (-_rate_delta(pkg.defense.success_rate, _LEAGUE_SUCCESS_RATE))
         + _W_EXPLOSIVE * (-_rate_delta(pkg.defense.explosive_rate, _LEAGUE_EXPLOSIVE_PASS_RATE))
         + _W_RZ * (-_rate_delta(pkg.defense.red_zone_td_rate, _LEAGUE_RZ_TD_RATE))
+        + def_split_add
     )
-    # Tiny ST bleed (symmetric) so ST module is not decorative-only.
-    st_bleed = _W_ST * (float(pkg.st_index) - 1.0)
+    # Modest ST bleed (symmetric) so ST module is not decorative-only.
+    st_bleed = _W_ST * st_w * (float(pkg.st_index) - 1.0)
 
     # Early-season: shrink additives toward 0 when variance high / few games.
     shrink = _clamp(1.0 / max(0.75, float(pkg.variance)), 0.55, 1.0)
@@ -189,6 +327,7 @@ def package_to_strength_indices(pkg: TeamEfficiencyPackage) -> Dict[str, float]:
     )
     pass_rate_bias = _clamp(float(pkg.pass_rate) - _LEAGUE_PASS_RATE, -0.12, 0.12)
     pace_factor = _clamp(float(pkg.pace), 0.88, 1.12)
+    drivers = visible_drivers(pkg)
     return {
         "offense_index": round(offense_index, 6),
         "defense_index": round(defense_index, 6),
@@ -198,6 +337,7 @@ def package_to_strength_indices(pkg: TeamEfficiencyPackage) -> Dict[str, float]:
         "explosiveness": round(float(pkg.explosiveness), 6),
         "variance": round(float(pkg.variance), 6),
         "qb_premium": round(float(pkg.qb_premium), 6),
+        "drivers": drivers,
     }
 
 
@@ -216,6 +356,10 @@ def strength_payload_from_package(
         "version": str(pkg.version or EFFICIENCY_BACKBONE_VERSION),
         "off_epa_per_play": float(pkg.offense.epa_per_play),
         "def_epa_allowed_per_play": float(pkg.defense.epa_per_play),
+        "pass_epa": float(pkg.offense.pass_epa),
+        "run_epa": float(pkg.offense.run_epa),
+        "early_down_epa": float(pkg.offense.early_down_epa),
+        "st_epa_per_play": float(pkg.st_epa_per_play),
     }
 
 
@@ -231,6 +375,9 @@ def build_unit_from_rates(
     run_epa: Optional[float] = None,
     early_down_epa: Optional[float] = None,
     late_down_conversion_rate: float = 0.40,
+    pass_plays: int = 0,
+    run_plays: int = 0,
+    early_down_plays: int = 0,
 ) -> UnitEfficiency:
     sr = _safe_float(success_rate, _LEAGUE_SUCCESS_RATE)
     return UnitEfficiency(
@@ -245,6 +392,9 @@ def build_unit_from_rates(
         red_zone_td_rate=_safe_float(red_zone_td_rate, _LEAGUE_RZ_TD_RATE),
         pressure_rate=_safe_float(pressure_rate, 0.15),
         plays=int(plays or 0),
+        pass_plays=int(pass_plays or 0),
+        run_plays=int(run_plays or 0),
+        early_down_plays=int(early_down_plays or 0),
     )
 
 
@@ -272,8 +422,14 @@ def build_package_from_season_row(
     off_epa = opponent_adjust_epa(off_epa_raw, league_epa=league_off_epa)
     def_epa = opponent_adjust_epa(def_epa_raw, league_epa=league_def_epa)
 
-    pass_plays = _safe_float(row.get("pass_plays"), 0.0)
-    run_plays = _safe_float(row.get("run_plays"), 0.0)
+    pass_plays = int(_safe_float(row.get("pass_plays"), 0.0))
+    run_plays = int(_safe_float(row.get("run_plays"), 0.0))
+    early_down_plays = int(
+        _safe_float(
+            row.get("early_down_plays"),
+            _safe_float(row.get("early_down_off_plays"), 0.0),
+        )
+    )
     pass_rate = _safe_float(row.get("pass_rate"), _LEAGUE_PASS_RATE)
     if pass_rate <= 0 and (pass_plays + run_plays) > 0:
         pass_rate = pass_plays / (pass_plays + run_plays)
@@ -290,6 +446,24 @@ def build_package_from_season_row(
     if def_explosive <= 0:
         def_explosive = _LEAGUE_EXPLOSIVE_PASS_RATE
 
+    # True splits when present; else default to overall EPA (labeled in drivers).
+    off_pass_epa = row.get("pass_epa", row.get("pass_epa_offense"))
+    off_run_epa = row.get("run_epa", row.get("run_epa_offense"))
+    off_early_epa = row.get("early_down_epa", row.get("early_down_epa_offense"))
+    def_pass_epa = row.get("pass_epa_allowed", row.get("pass_epa_defense_allowed"))
+    def_run_epa = row.get("run_epa_allowed", row.get("run_epa_defense_allowed"))
+    def_early_epa = row.get(
+        "early_down_epa_allowed", row.get("early_down_epa_defense_allowed")
+    )
+    def_pass_plays = int(_safe_float(row.get("pass_plays_allowed"), pass_plays if def_pass_epa is not None else 0))
+    def_run_plays = int(_safe_float(row.get("run_plays_allowed"), run_plays if def_run_epa is not None else 0))
+    def_early_plays = int(
+        _safe_float(
+            row.get("early_down_plays_allowed"),
+            early_down_plays if def_early_epa is not None else 0,
+        )
+    )
+
     offense = build_unit_from_rates(
         epa_per_play=off_epa,
         success_rate=_safe_float(row.get("success_rate_offense"), _LEAGUE_SUCCESS_RATE),
@@ -299,9 +473,17 @@ def build_package_from_season_row(
             row.get("pressure_rate_allowed", row.get("pressure_allowed")), 0.15
         ),
         plays=off_plays,
+        pass_epa=_safe_float(off_pass_epa, off_epa) if off_pass_epa is not None else off_epa,
+        run_epa=_safe_float(off_run_epa, off_epa) if off_run_epa is not None else off_epa,
+        early_down_epa=(
+            _safe_float(off_early_epa, off_epa) if off_early_epa is not None else off_epa
+        ),
         late_down_conversion_rate=_safe_float(
             row.get("third_down_conversion_rate"), 0.40
         ),
+        pass_plays=pass_plays if off_pass_epa is not None else 0,
+        run_plays=run_plays if off_run_epa is not None else 0,
+        early_down_plays=early_down_plays if off_early_epa is not None else 0,
     )
     defense = build_unit_from_rates(
         epa_per_play=def_epa,
@@ -316,12 +498,25 @@ def build_package_from_season_row(
             row.get("pressure_rate_generated", row.get("pressure_generated")), 0.15
         ),
         plays=def_plays,
+        pass_epa=_safe_float(def_pass_epa, def_epa) if def_pass_epa is not None else def_epa,
+        run_epa=_safe_float(def_run_epa, def_epa) if def_run_epa is not None else def_epa,
+        early_down_epa=(
+            _safe_float(def_early_epa, def_epa) if def_early_epa is not None else def_epa
+        ),
         late_down_conversion_rate=_safe_float(
             row.get("third_down_conversion_rate_allowed"), 0.40
         ),
+        pass_plays=def_pass_plays if def_pass_epa is not None else 0,
+        run_plays=def_run_plays if def_run_epa is not None else 0,
+        early_down_plays=def_early_plays if def_early_epa is not None else 0,
     )
 
     st_epa_val = _safe_float(st_epa if st_epa is not None else row.get("st_epa_per_play"), 0.0)
+    st_plays = int(_safe_float(row.get("st_plays"), 0.0))
+    # If ST EPA provided explicitly with no play count, treat as season-ok sample.
+    if st_epa is not None or ("st_epa_per_play" in row and row.get("st_epa_per_play") is not None):
+        if st_plays <= 0 and abs(st_epa_val) > 1e-12:
+            st_plays = _THIN_ST_PLAYS  # season avg present → not missing
     st_index = _clamp(1.0 + st_epa_val * 0.55, 0.85, 1.15)
 
     plays_per_game = (
@@ -330,12 +525,14 @@ def build_package_from_season_row(
     pace = plays_per_game / _LEAGUE_PLAYS_PER_GAME
     explosiveness = _rate_delta(offense.explosive_rate, _LEAGUE_EXPLOSIVE_PASS_RATE)
 
-    return TeamEfficiencyPackage(
+    drivers_preview = None
+    pkg = TeamEfficiencyPackage(
         team=str(team),
         offense=offense,
         defense=defense,
         st_index=round(st_index, 6),
         st_epa_per_play=round(st_epa_val, 6),
+        st_plays=int(st_plays),
         pace=round(_clamp(pace, 0.88, 1.12), 6),
         pass_rate=round(_clamp(pass_rate, 0.35, 0.75), 6),
         explosiveness=round(explosiveness, 6),
@@ -351,8 +548,24 @@ def build_package_from_season_row(
             "def_epa_raw": round(def_epa_raw, 6),
             "league_off_epa": round(league_off_epa, 6),
             "league_def_epa": round(league_def_epa, 6),
+            "has_true_pass_run_splits": bool(
+                off_pass_epa is not None and off_run_epa is not None
+            ),
+            "has_early_down_epa": bool(off_early_epa is not None),
+            "has_st_epa": bool(
+                st_epa is not None
+                or (
+                    "st_epa_per_play" in row
+                    and row.get("st_epa_per_play") is not None
+                    and abs(st_epa_val) > 1e-12
+                )
+                or st_plays > 0
+            ),
         },
     )
+    drivers_preview = visible_drivers(pkg)
+    pkg.notes["drivers"] = drivers_preview
+    return pkg
 
 
 def blend_packages(
@@ -378,6 +591,9 @@ def blend_packages(
             red_zone_td_rate=w_prior * a.red_zone_td_rate + w_cur * b.red_zone_td_rate,
             pressure_rate=w_prior * a.pressure_rate + w_cur * b.pressure_rate,
             plays=int(a.plays + b.plays),
+            pass_plays=int(a.pass_plays + b.pass_plays),
+            run_plays=int(a.run_plays + b.run_plays),
+            early_down_plays=int(a.early_down_plays + b.early_down_plays),
         )
 
     games = max(int(prior.games_played), int(current.games_played))
@@ -387,6 +603,7 @@ def blend_packages(
         defense=_blend_unit(prior.defense, current.defense),
         st_index=w_prior * prior.st_index + w_cur * current.st_index,
         st_epa_per_play=w_prior * prior.st_epa_per_play + w_cur * current.st_epa_per_play,
+        st_plays=int(prior.st_plays + current.st_plays),
         pace=w_prior * prior.pace + w_cur * current.pace,
         pass_rate=w_prior * prior.pass_rate + w_cur * current.pass_rate,
         explosiveness=w_prior * prior.explosiveness + w_cur * current.explosiveness,
@@ -432,6 +649,7 @@ def packages_from_team_rows(
             team = "LA"
         if not team:
             continue
+        st_key_present = "st_epa_per_play" in r
         out[team] = build_package_from_season_row(
             team,
             r,
@@ -440,7 +658,7 @@ def packages_from_team_rows(
             prior_season=prior_season,
             league_off_epa=league_off,
             league_def_epa=league_def,
-            st_epa=_safe_float(r.get("st_epa_per_play"), 0.0) if "st_epa_per_play" in r else None,
+            st_epa=_safe_float(r.get("st_epa_per_play"), 0.0) if st_key_present else None,
         )
     return out
 

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Rebuild packaged NFL efficiency-backbone artifact (Sprint 2).
+"""Rebuild packaged NFL efficiency-backbone artifact (Sprint 2 → v1.1).
 
-Source: local / env Postgres ``nfl_dp_team_situational_weekly`` (source=nflverse).
+Source: local / env Postgres
+  - ``nfl_dp_team_situational_weekly`` (source=nflverse)
+  - ``nfl_dp_play_by_play`` → true pass / run / early-down EPA
+  - ``nfl_dp_team_st_kav_weekly`` → real ST EPA (when present)
 
 Writes:
   services/model-service/.../data/nfl_team_efficiency_backbone_<season>.json
@@ -64,6 +67,7 @@ def _fetch_season_avgs(conn: Any, prior_season: int) -> List[Dict[str, Any]]:
           COALESCE(SUM(defensive_plays), 0)::int AS defensive_plays,
           COALESCE(SUM(pass_plays), 0)::int AS pass_plays,
           COALESCE(SUM(run_plays), 0)::int AS run_plays,
+          COALESCE(SUM(early_down_plays), 0)::int AS early_down_plays,
           COALESCE(SUM(explosive_pass_plays), 0)::int AS explosive_pass_plays,
           COALESCE(SUM(explosive_pass_allowed), 0)::int AS explosive_pass_allowed,
           CASE WHEN COALESCE(SUM(offensive_plays),0) > 0
@@ -99,6 +103,118 @@ def _fetch_season_avgs(conn: Any, prior_season: int) -> List[Dict[str, Any]]:
     return rows
 
 
+def _fetch_offensive_splits(conn: Any, prior_season: int) -> Dict[str, Dict[str, Any]]:
+    """True pass / run / early-down EPA from owned PBP (REG weeks 1–18)."""
+    sql = """
+        WITH plays AS (
+          SELECT
+            posteam AS team,
+            defteam AS opp,
+            play_type,
+            down,
+            epa
+          FROM nfl_dp_play_by_play
+          WHERE season = %s
+            AND week BETWEEN 1 AND 18
+            AND play_type IN ('pass', 'run')
+            AND epa IS NOT NULL
+            AND posteam IS NOT NULL
+            AND defteam IS NOT NULL
+        ),
+        off AS (
+          SELECT
+            team,
+            AVG(epa) FILTER (WHERE play_type = 'pass') AS pass_epa,
+            COUNT(*) FILTER (WHERE play_type = 'pass')::int AS pass_plays,
+            AVG(epa) FILTER (WHERE play_type = 'run') AS run_epa,
+            COUNT(*) FILTER (WHERE play_type = 'run')::int AS run_plays,
+            AVG(epa) FILTER (WHERE down IN (1, 2)) AS early_down_epa,
+            COUNT(*) FILTER (WHERE down IN (1, 2))::int AS early_down_plays
+          FROM plays
+          GROUP BY team
+        ),
+        deff AS (
+          SELECT
+            opp AS team,
+            AVG(epa) FILTER (WHERE play_type = 'pass') AS pass_epa_allowed,
+            COUNT(*) FILTER (WHERE play_type = 'pass')::int AS pass_plays_allowed,
+            AVG(epa) FILTER (WHERE play_type = 'run') AS run_epa_allowed,
+            COUNT(*) FILTER (WHERE play_type = 'run')::int AS run_plays_allowed,
+            AVG(epa) FILTER (WHERE down IN (1, 2)) AS early_down_epa_allowed,
+            COUNT(*) FILTER (WHERE down IN (1, 2))::int AS early_down_plays_allowed
+          FROM plays
+          GROUP BY opp
+        )
+        SELECT
+          COALESCE(o.team, d.team) AS team,
+          o.pass_epa, o.pass_plays, o.run_epa, o.run_plays,
+          o.early_down_epa, o.early_down_plays,
+          d.pass_epa_allowed, d.pass_plays_allowed,
+          d.run_epa_allowed, d.run_plays_allowed,
+          d.early_down_epa_allowed, d.early_down_plays_allowed
+        FROM off o
+        FULL OUTER JOIN deff d ON o.team = d.team
+    """
+    cur = conn.cursor()
+    try:
+        cur.execute(sql, (int(prior_season),))
+    except Exception:
+        cur.close()
+        return {}
+    cols = [d[0] for d in cur.description]
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in cur.fetchall():
+        r = dict(zip(cols, row))
+        team = str(r.get("team") or "").strip().upper()
+        if team == "LAR":
+            team = "LA"
+        if not team:
+            continue
+        out[team] = r
+    cur.close()
+    return out
+
+
+def _fetch_st_season(conn: Any, prior_season: int) -> Dict[str, Dict[str, Any]]:
+    """Season-average ST EPA from ST KAV weekly (honest ST module)."""
+    sql = """
+        SELECT
+          team,
+          COUNT(*)::int AS st_games,
+          COALESCE(SUM(
+            CASE WHEN raw_st_epa_per_play IS NULL THEN 0 ELSE 1 END
+          ), 0)::int AS st_plays_proxy,
+          AVG(raw_st_epa_per_play) AS st_epa_per_play
+        FROM nfl_dp_team_st_kav_weekly
+        WHERE season = %s
+        GROUP BY team
+    """
+    cur = conn.cursor()
+    try:
+        cur.execute(sql, (int(prior_season),))
+    except Exception:
+        cur.close()
+        return {}
+    cols = [d[0] for d in cur.description]
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in cur.fetchall():
+        r = dict(zip(cols, row))
+        team = str(r.get("team") or "").strip().upper()
+        if team == "LAR":
+            team = "LA"
+        if not team:
+            continue
+        # Approximate ST play volume: ~8 ST plays/game × games with ST rows.
+        games = int(r.get("st_games") or 0)
+        out[team] = {
+            "st_epa_per_play": r.get("st_epa_per_play"),
+            "st_plays": max(0, games * 8),
+            "st_games": games,
+        }
+    cur.close()
+    return out
+
+
 def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Path]:
     from src.services.nfl_season_engine.efficiency_backbone import (
         EFFICIENCY_BACKBONE_VERSION,
@@ -108,15 +224,19 @@ def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Pat
     )
 
     rows: List[Dict[str, Any]] = []
+    splits: Dict[str, Dict[str, Any]] = {}
+    st_map: Dict[str, Dict[str, Any]] = {}
     used_dsn = ""
     last_err: Optional[Exception] = None
     for candidate in _candidate_dsns(dsn):
         try:
             with _connect(candidate) as conn:
                 rows = _fetch_season_avgs(conn, prior_season)
-            if rows:
-                used_dsn = candidate.split("@")[-1] if "@" in candidate else candidate
-                break
+                if rows:
+                    splits = _fetch_offensive_splits(conn, prior_season)
+                    st_map = _fetch_st_season(conn, prior_season)
+                    used_dsn = candidate.split("@")[-1] if "@" in candidate else candidate
+                    break
         except Exception as exc:  # pragma: no cover - ops path
             last_err = exc
             continue
@@ -131,33 +251,57 @@ def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Pat
         team = str(r.get("team") or "").strip().upper()
         if team == "LAR":
             team = "LA"
-        norm_rows.append(
-            {
-                "team": team,
-                "n_weeks": int(r.get("n_weeks") or 0),
-                "games_played": int(r.get("n_weeks") or 0),
-                "offensive_plays": int(r.get("offensive_plays") or 0),
-                "defensive_plays": int(r.get("defensive_plays") or 0),
-                "pass_plays": int(r.get("pass_plays") or 0),
-                "run_plays": int(r.get("run_plays") or 0),
-                "explosive_pass_plays": int(r.get("explosive_pass_plays") or 0),
-                "explosive_pass_allowed": int(r.get("explosive_pass_allowed") or 0),
-                "off_epa_per_play": float(r.get("off_epa") or 0.0),
-                "def_epa_allowed_per_play": float(r.get("def_epa_allowed") or 0.0),
-                "success_rate_offense": float(r.get("success_rate_offense") or 0.44),
-                "success_rate_defense_allowed": float(
-                    r.get("success_rate_defense_allowed") or 0.44
-                ),
-                "pass_rate": float(r.get("pass_rate") or 0.58),
-                "early_down_pass_rate": float(r.get("early_down_pass_rate") or 0.55),
-                "third_down_conversion_rate": float(
-                    r.get("third_down_conversion_rate") or 0.40
-                ),
-                "red_zone_td_rate": float(r.get("red_zone_td_rate") or 0.55),
-                "pressure_rate_generated": float(r.get("pressure_generated") or 0.0),
-                "pressure_rate_allowed": float(r.get("pressure_allowed") or 0.0),
-            }
-        )
+        sp = splits.get(team) or {}
+        st = st_map.get(team) or {}
+        row: Dict[str, Any] = {
+            "team": team,
+            "n_weeks": int(r.get("n_weeks") or 0),
+            "games_played": int(r.get("n_weeks") or 0),
+            "offensive_plays": int(r.get("offensive_plays") or 0),
+            "defensive_plays": int(r.get("defensive_plays") or 0),
+            "pass_plays": int(sp.get("pass_plays") or r.get("pass_plays") or 0),
+            "run_plays": int(sp.get("run_plays") or r.get("run_plays") or 0),
+            "early_down_plays": int(
+                sp.get("early_down_plays") or r.get("early_down_plays") or 0
+            ),
+            "explosive_pass_plays": int(r.get("explosive_pass_plays") or 0),
+            "explosive_pass_allowed": int(r.get("explosive_pass_allowed") or 0),
+            "off_epa_per_play": float(r.get("off_epa") or 0.0),
+            "def_epa_allowed_per_play": float(r.get("def_epa_allowed") or 0.0),
+            "success_rate_offense": float(r.get("success_rate_offense") or 0.44),
+            "success_rate_defense_allowed": float(
+                r.get("success_rate_defense_allowed") or 0.44
+            ),
+            "pass_rate": float(r.get("pass_rate") or 0.58),
+            "early_down_pass_rate": float(r.get("early_down_pass_rate") or 0.55),
+            "third_down_conversion_rate": float(
+                r.get("third_down_conversion_rate") or 0.40
+            ),
+            "red_zone_td_rate": float(r.get("red_zone_td_rate") or 0.55),
+            "pressure_rate_generated": float(r.get("pressure_generated") or 0.0),
+            "pressure_rate_allowed": float(r.get("pressure_allowed") or 0.0),
+        }
+        if sp.get("pass_epa") is not None:
+            row["pass_epa"] = float(sp["pass_epa"])
+        if sp.get("run_epa") is not None:
+            row["run_epa"] = float(sp["run_epa"])
+        if sp.get("early_down_epa") is not None:
+            row["early_down_epa"] = float(sp["early_down_epa"])
+        if sp.get("pass_epa_allowed") is not None:
+            row["pass_epa_allowed"] = float(sp["pass_epa_allowed"])
+            row["pass_plays_allowed"] = int(sp.get("pass_plays_allowed") or 0)
+        if sp.get("run_epa_allowed") is not None:
+            row["run_epa_allowed"] = float(sp["run_epa_allowed"])
+            row["run_plays_allowed"] = int(sp.get("run_plays_allowed") or 0)
+        if sp.get("early_down_epa_allowed") is not None:
+            row["early_down_epa_allowed"] = float(sp["early_down_epa_allowed"])
+            row["early_down_plays_allowed"] = int(
+                sp.get("early_down_plays_allowed") or 0
+            )
+        if st.get("st_epa_per_play") is not None:
+            row["st_epa_per_play"] = float(st["st_epa_per_play"])
+            row["st_plays"] = int(st.get("st_plays") or 0)
+        norm_rows.append(row)
 
     packages = packages_from_team_rows(
         norm_rows,
@@ -170,16 +314,26 @@ def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Pat
 
     teams_payload: Dict[str, Dict[str, Any]] = {}
     legacy_teams: Dict[str, Dict[str, Any]] = {}
+    st_nonzero = 0
+    splits_ok = 0
     for team, pkg in packages.items():
         idx = package_to_strength_indices(pkg)
+        if abs(float(pkg.st_epa_per_play)) > 1e-9 or pkg.st_plays > 0:
+            st_nonzero += 1
+        if pkg.notes.get("has_true_pass_run_splits"):
+            splits_ok += 1
         teams_payload[team] = {
             **pkg.to_dict(),
-            **idx,
+            **{k: v for k, v in idx.items() if k != "drivers"},
+            "drivers": idx.get("drivers"),
             "n_weeks": pkg.games_played,
             "offensive_plays": pkg.offense.plays,
             "defensive_plays": pkg.defense.plays,
             "off_epa_per_play": round(pkg.offense.epa_per_play, 6),
             "def_epa_allowed_per_play": round(pkg.defense.epa_per_play, 6),
+            "pass_epa": round(pkg.offense.pass_epa, 6),
+            "run_epa": round(pkg.offense.run_epa, 6),
+            "early_down_epa": round(pkg.offense.early_down_epa, 6),
             "pressure_rate_generated": round(pkg.defense.pressure_rate, 6),
             "pressure_rate_allowed": round(pkg.offense.pressure_rate, 6),
             "success_rate_offense": round(pkg.offense.success_rate, 6),
@@ -201,6 +355,9 @@ def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Pat
             "st_index": float(idx["st_index"]),
             "explosiveness": float(idx["explosiveness"]),
             "variance": float(idx["variance"]),
+            "pass_epa": round(pkg.offense.pass_epa, 6),
+            "run_epa": round(pkg.offense.run_epa, 6),
+            "early_down_epa": round(pkg.offense.early_down_epa, 6),
             "n_weeks": pkg.games_played,
             "offensive_plays": pkg.offense.plays,
             "defensive_plays": pkg.defense.plays,
@@ -212,20 +369,27 @@ def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Pat
         "prior_season": int(prior_season),
         "source": "packaged_efficiency_backbone",
         "version": EFFICIENCY_BACKBONE_VERSION,
-        "source_table": "nfl_dp_team_situational_weekly",
-        "source_filter": "source=nflverse",
+        "source_table": "nfl_dp_team_situational_weekly+pbp_splits+st_kav",
+        "source_filter": "source=nflverse; pbp weeks 1-18; st_kav season avg",
         "source_host": used_dsn,
         "as_of": date.today().isoformat(),
-        "method": "efficiency_backbone_v1_play_weighted_situational",
+        "method": "efficiency_backbone_v1.1_play_weighted_situational_splits_st",
         "conversion": (
             "efficiency_backbone.package_to_strength_indices "
-            "(EPA+pressure base + soft success/explosive/RZ; ST module)"
+            "(EPA+pressure base + soft success/explosive/RZ + pass/run/early "
+            "EPA + modest ST)"
         ),
         "notes": (
             f"{season} launch priors = {prior_season} season play-weighted efficiency "
-            "package from nfl_dp_team_situational_weekly. Feeds existing TeamStrength "
-            "slot (offense_index/defense_index/pace). See data/ops/nfl-model-vision.md."
+            "package (situational + true pass/run/early-down EPA from PBP + ST KAV). "
+            "Feeds existing TeamStrength slot. See data/ops/nfl-model-vision.md."
         ),
+        "coverage": {
+            "teams_with_st": st_nonzero,
+            "teams_with_pass_run_splits": splits_ok,
+            "st_source": "nfl_dp_team_st_kav_weekly" if st_map else "missing",
+            "splits_source": "nfl_dp_play_by_play" if splits else "missing",
+        },
         "team_count": len(teams_payload),
         "hierarchy_top8": [t for t, _ in ranked[:8]],
         "hierarchy_bottom5": [t for t, _ in ranked[-5:]],
@@ -242,17 +406,29 @@ def build(season: int, prior_season: int, dsn: Optional[str]) -> Tuple[Path, Pat
         "source_filter": "source=nflverse",
         "source_host": used_dsn,
         "as_of": date.today().isoformat(),
-        "method": "efficiency_backbone_v1_compat_epa_priors",
+        "method": "efficiency_backbone_v1.1_compat_epa_priors",
         "conversion": "efficiency_backbone.package_to_strength_indices",
         "notes": (
             f"Legacy compat mirror of nfl_team_efficiency_backbone_{season}.json "
-            "(Sprint 2). Prefer the efficiency backbone artifact."
+            "(v1.1). Prefer the efficiency backbone artifact."
         ),
         "team_count": len(legacy_teams),
         "teams": legacy_teams,
     }
     legacy_path = OUT_DIR / f"nfl_team_epa_priors_{season}.json"
     legacy_path.write_text(json.dumps(legacy, indent=2) + "\n", encoding="utf-8")
+    print(
+        json.dumps(
+            {
+                "teams": len(packages),
+                "st_teams": st_nonzero,
+                "split_teams": splits_ok,
+                "top8": payload["hierarchy_top8"],
+                "bottom5": payload["hierarchy_bottom5"],
+            },
+            indent=2,
+        )
+    )
     return backbone_path, legacy_path
 
 

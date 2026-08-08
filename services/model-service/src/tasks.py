@@ -714,6 +714,35 @@ def _load_team_strength_priors(
         ),
         {"seasons": seasons, "week_cap": week_cap},
     ).fetchall()
+    # Optional ST KAV join (v1.1) — absent table stays neutral.
+    st_by_team: Dict[str, Dict[str, float]] = {}
+    try:
+        st_rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (team)
+                  team, season, week, raw_st_epa_per_play, st_kav_net_5g
+                FROM nfl_dp_team_st_kav_weekly
+                WHERE season = ANY(:seasons)
+                  AND (:week_cap IS NULL OR week <= :week_cap)
+                ORDER BY team, season DESC, week DESC
+                """
+            ),
+            {"seasons": seasons, "week_cap": week_cap},
+        ).fetchall()
+        for sr in st_rows:
+            t = str(sr.team or "").strip().upper()
+            if t == "LAR":
+                t = "LA"
+            if not t:
+                continue
+            st_by_team[t] = {
+                "st_epa_per_play": float(_to_float(sr.raw_st_epa_per_play) or 0.0),
+                "st_plays": 80.0,  # ~5g × ~8 ST plays; marks sample present
+            }
+    except Exception:
+        st_by_team = {}
+
     out: Dict[str, Dict[str, float]] = {}
     try:
         from src.services.nfl_season_engine.efficiency_backbone import (
@@ -735,34 +764,41 @@ def _load_team_strength_priors(
         if team in out and int(out[team].get("_season", 0)) >= season:
             continue
         if use_backbone:
+            team_key = "LA" if team == "LAR" else team
+            st = st_by_team.get(team_key) or st_by_team.get(team) or {}
+            row_payload = {
+                "off_epa_per_play": _to_float(row.off_epa_per_play_5g) or 0.0,
+                "def_epa_allowed_per_play": _to_float(row.def_epa_allowed_per_play_5g)
+                or 0.0,
+                "pressure_rate_generated": _to_float(row.pressure_rate_generated_5g)
+                or 0.0,
+                "pressure_rate_allowed": _to_float(row.pressure_rate_allowed_5g) or 0.0,
+                "pass_rate": _to_float(getattr(row, "pass_rate_5g", None)) or 0.58,
+                "success_rate_offense": _to_float(
+                    getattr(row, "success_rate_offense_5g", None)
+                )
+                or 0.44,
+                "success_rate_defense_allowed": _to_float(
+                    getattr(row, "success_rate_defense_allowed_5g", None)
+                )
+                or 0.44,
+                "red_zone_td_rate": _to_float(getattr(row, "red_zone_td_rate_5g", None))
+                or 0.55,
+                "n_weeks": int(_to_float(getattr(row, "games_in_window_5", None)) or 0),
+                "games_played": int(
+                    _to_float(getattr(row, "games_in_window_5", None)) or 0
+                ),
+            }
+            if st:
+                row_payload["st_epa_per_play"] = float(st.get("st_epa_per_play") or 0.0)
+                row_payload["st_plays"] = int(st.get("st_plays") or 0)
             pkg = build_package_from_season_row(
                 team,
-                {
-                    "off_epa_per_play": _to_float(row.off_epa_per_play_5g) or 0.0,
-                    "def_epa_allowed_per_play": _to_float(row.def_epa_allowed_per_play_5g)
-                    or 0.0,
-                    "pressure_rate_generated": _to_float(row.pressure_rate_generated_5g)
-                    or 0.0,
-                    "pressure_rate_allowed": _to_float(row.pressure_rate_allowed_5g) or 0.0,
-                    "pass_rate": _to_float(getattr(row, "pass_rate_5g", None)) or 0.58,
-                    "success_rate_offense": _to_float(
-                        getattr(row, "success_rate_offense_5g", None)
-                    )
-                    or 0.44,
-                    "success_rate_defense_allowed": _to_float(
-                        getattr(row, "success_rate_defense_allowed_5g", None)
-                    )
-                    or 0.44,
-                    "red_zone_td_rate": _to_float(getattr(row, "red_zone_td_rate_5g", None))
-                    or 0.55,
-                    "n_weeks": int(_to_float(getattr(row, "games_in_window_5", None)) or 0),
-                    "games_played": int(
-                        _to_float(getattr(row, "games_in_window_5", None)) or 0
-                    ),
-                },
+                row_payload,
                 as_of=f"season={season};week={int(row.week or 0)}",
                 source="efficiency_backbone_rolling",
                 prior_season=int(fallback_season),
+                st_epa=float(st["st_epa_per_play"]) if st else None,
             )
             payload = strength_payload_from_package(pkg)
             out[team] = {
