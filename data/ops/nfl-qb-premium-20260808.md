@@ -7,7 +7,7 @@ Builds on merged **#140** (true PR blend), **#141** (player regression),
 
 Branch: `feat/nfl-qb-premium` → `deploy-vercel`.
 
-PR: _(filled after open)_
+PR: https://github.com/kosedge/kosedge/pull/144
 
 ## Goal
 
