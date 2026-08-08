@@ -266,11 +266,28 @@ export default function Home() {
 
       <footer className="relative z-10 border-t border-white/10 bg-black/35 backdrop-blur py-10">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
-          <p className="text-lg font-medium text-kos-gold">
-            Sharper Data. Smarter Bets.
+          <nav
+            aria-label="Legal"
+            className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm"
+          >
+            <Link href="/privacy" className="hover:text-kos-gold transition">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-kos-gold transition">
+              Terms
+            </Link>
+            <Link href="/contact" className="hover:text-kos-gold transition">
+              Contact
+            </Link>
+            <Link href="/disclaimer" className="hover:text-kos-gold transition">
+              Disclaimer
+            </Link>
+          </nav>
+          <p className="mt-4 text-lg font-medium text-kos-gold">
+            Built on Data, Driven by Edge.
           </p>
           <p className="mt-2 text-sm">
-            © {new Date().getFullYear()} KOS Edge Analytics
+            © {new Date().getFullYear()} KosEdge Analytics
           </p>
         </div>
       </footer>
