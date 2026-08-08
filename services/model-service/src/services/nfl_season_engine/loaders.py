@@ -11,9 +11,15 @@ Depth / roster fallback (fantasy-usable identities):
 3. Packaged ``nfl_depth_chart_2026_w1.json`` (checked-in nflverse slice)
 4. ``demo_depth_chart`` (last resort / explicit ``demo=True``)
 
-``demo=True``: explicit opt-in round-robin + sparse demo skill cores for
-offline unit tests. Never silently stay on demo schedule/depth when a real
-artifact is available.
+Strength priors (real mode):
+
+1. DB ``nfl_dp_team_rolling_features_weekly`` via ``_load_team_strength_priors``
+2. Packaged ``nfl_team_epa_priors_<season>.json`` (prior-season EPA averages)
+3. League-average placeholder — never ``_DEMO_STRENGTH_BUMPS`` in real mode
+
+``demo=True``: explicit opt-in round-robin + sparse demo skill cores + demo
+strength bumps for offline unit tests. Never silently stay on demo
+schedule/depth/strengths when a real artifact is available.
 
 Efficiency rates are always passed through ``calibration.apply_efficiency_priors``
 (or baseline-derived overrides) so Layer 4 is never left on uncalibrated
@@ -49,6 +55,9 @@ _PACKAGED_SCHEDULE_FILES = {
 _PACKAGED_DEPTH_FILES = {
     2026: _PACKAGE_DATA_DIR / "nfl_depth_chart_2026_w1.json",
 }
+_PACKAGED_EPA_PRIOR_FILES = {
+    2026: _PACKAGE_DATA_DIR / "nfl_team_epa_priors_2026.json",
+}
 
 NFL_TEAMS: List[str] = [
     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
@@ -65,6 +74,11 @@ ROSTER_SOURCE_DEMO = "demo_depth_chart"
 ROSTER_SOURCE_WEEKLY = "nfl_dp_depth_chart_weekly"
 ROSTER_SOURCE_OFFICIAL = "nfl_dp_official_depth_charts"
 ROSTER_SOURCE_PACKAGED = "packaged_nflverse_depth_2026"
+
+STRENGTH_SOURCE_DEMO = "demo_epa_style_prior"
+STRENGTH_SOURCE_EPA_PRIOR = "epa_prior"
+STRENGTH_SOURCE_PACKAGED_EPA = "packaged_epa_prior"
+STRENGTH_SOURCE_PLACEHOLDER = "placeholder_league_avg"
 
 _SKILL_POSITIONS = ("QB", "RB", "WR", "TE")
 
@@ -117,6 +131,58 @@ def load_packaged_regular_schedule(season: int) -> Tuple[List[ScheduledGame], Di
         "bye_teams_by_week": payload.get("bye_teams_by_week") or {},
     }
     return games, meta
+
+
+def load_packaged_epa_priors(season: int) -> Tuple[Dict[str, Dict[str, float]], Dict[str, Any]]:
+    """Load packaged EPA→strength indices for ``season`` (offline / cold-start).
+
+    Artifact stores play-weighted prior-season EPA averages already converted
+    through ``tasks._epa_to_strength_indices`` so units match live Edge Board
+    / ``simulate_nfl_game``. Raises when missing or incomplete (not 32 teams).
+    """
+    path = _PACKAGED_EPA_PRIOR_FILES.get(int(season))
+    if path is None or not path.is_file():
+        raise FileNotFoundError(
+            f"No packaged EPA priors for season={season} "
+            f"(expected under {_PACKAGE_DATA_DIR})"
+        )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    teams_raw = payload.get("teams") or {}
+    out: Dict[str, Dict[str, float]] = {}
+    for raw_team, row in teams_raw.items():
+        team = normalize_team_abbr(str(raw_team))
+        if team not in NFL_TEAMS or not isinstance(row, Mapping):
+            continue
+        try:
+            offense_index = float(row["offense_index"])
+            defense_index = float(row["defense_index"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        out[team] = {
+            "offense_index": offense_index,
+            "defense_index": defense_index,
+            "pace_factor": float(row.get("pace_factor", 1.0) or 1.0),
+            "pass_rate_bias": float(row.get("pass_rate_bias", 0.0) or 0.0),
+            "off_epa_per_play": float(row.get("off_epa_per_play", 0.0) or 0.0),
+            "def_epa_allowed_per_play": float(
+                row.get("def_epa_allowed_per_play", 0.0) or 0.0
+            ),
+            "_season": float(payload.get("prior_season") or (int(season) - 1)),
+        }
+    missing = [t for t in NFL_TEAMS if t not in out]
+    if missing:
+        raise ValueError(
+            f"Packaged EPA priors incomplete for season={season}; missing {missing}"
+        )
+    meta = {
+        "strength_source": str(payload.get("source") or STRENGTH_SOURCE_PACKAGED_EPA),
+        "strength_as_of": str(payload.get("as_of") or ""),
+        "prior_season": int(payload.get("prior_season") or (int(season) - 1)),
+        "strength_path": str(path.name),
+        "strength_method": str(payload.get("method") or ""),
+        "team_count": len(out),
+    }
+    return out, meta
 
 
 def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
@@ -363,6 +429,9 @@ def universe_schedule_meta(universe: EngineUniverse) -> Dict[str, Any]:
         "depth_player_rows": int(coverage.get("depth_player_rows") or 0),
         "schedule_note": notes.get("schedule") or "",
         "roster_note": notes.get("rosters") or "",
+        "strength_source": str(notes.get("strength_source") or ""),
+        "strength_as_of": str(notes.get("strength_as_of") or ""),
+        "strength_note": notes.get("strengths") or "",
     }
 
 # Approximate 2025/26 style skill cores for demo / offline runs.
@@ -556,7 +625,7 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
             "defense_index": 1.0 + float(bump.get("def", 0.0)) - 0.5 * jitter,
             "pace_factor": 1.0 + float(bump.get("pace", 0.0)),
             "pass_rate_bias": float(bump.get("pass", 0.0)),
-            "source": "demo_epa_style_prior",
+            "source": STRENGTH_SOURCE_DEMO,
         }
 
     rosters: Dict[str, List[PlayerRole]] = {}
@@ -733,6 +802,14 @@ def load_universe_from_db(
     priors = _load_team_strength_priors(session, season_year=int(season), as_of_week=int(as_of_week))
     strength_inputs: Dict[str, Dict[str, float | str]] = {}
     epa_count = 0
+    packaged_fill = 0
+    packaged_priors: Dict[str, Dict[str, float]] = {}
+    packaged_meta: Dict[str, Any] = {}
+    if len(priors) < len(NFL_TEAMS):
+        try:
+            packaged_priors, packaged_meta = load_packaged_epa_priors(season)
+        except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
+            packaged_priors, packaged_meta = {}, {}
     for team in NFL_TEAMS:
         prior = priors.get(team) or {}
         if prior:
@@ -742,13 +819,23 @@ def load_universe_from_db(
                 "defense_index": float(prior.get("defense_index", 1.0)),
                 "pace_factor": 1.0,
                 "pass_rate_bias": 0.0,
-                "source": "epa_prior",
+                "source": STRENGTH_SOURCE_EPA_PRIOR,
+            }
+        elif team in packaged_priors:
+            packaged_fill += 1
+            pkg = packaged_priors[team]
+            strength_inputs[team] = {
+                "offense_index": float(pkg.get("offense_index", 1.0)),
+                "defense_index": float(pkg.get("defense_index", 1.0)),
+                "pace_factor": float(pkg.get("pace_factor", 1.0)),
+                "pass_rate_bias": float(pkg.get("pass_rate_bias", 0.0)),
+                "source": STRENGTH_SOURCE_PACKAGED_EPA,
             }
         else:
             strength_inputs[team] = {
                 "offense_index": 1.0,
                 "defense_index": 1.0,
-                "source": "placeholder_league_avg",
+                "source": STRENGTH_SOURCE_PLACEHOLDER,
             }
 
     baseline_eff = _load_baseline_efficiency_map(session, season=season, as_of_week=as_of_week)
@@ -864,11 +951,21 @@ def load_universe_from_db(
     rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
     if not coverage:
         coverage = depth_coverage_from_rosters(rosters)
-    strength_note = (
-        f"REAL epa_prior for {epa_count}/32 teams; else placeholder_league_avg"
-        if epa_count
-        else "PLACEHOLDER league-average strengths (EPA priors empty)"
-    )
+    if epa_count and packaged_fill:
+        strength_note = (
+            f"REAL epa_prior for {epa_count}/32 teams; "
+            f"packaged_epa_prior fill for {packaged_fill}/32"
+        )
+    elif epa_count:
+        strength_note = f"REAL epa_prior for {epa_count}/32 teams"
+    elif packaged_fill:
+        prior_season = packaged_meta.get("prior_season") or (int(season) - 1)
+        strength_note = (
+            f"REAL packaged_epa_prior for {packaged_fill}/32 teams "
+            f"(prior_season={prior_season}; rolling features empty)"
+        )
+    else:
+        strength_note = "PLACEHOLDER league-average strengths (EPA priors empty)"
 
     final_schedule = schedule[:272] if len(schedule) >= 272 else schedule
     return EngineUniverse(
@@ -895,14 +992,34 @@ def load_universe_from_db(
 
 
 def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
-    """Real packaged schedule + packaged nflverse depth (no DB required).
+    """Real packaged schedule + depth + EPA priors (no DB required).
 
     Used when DB is unreachable or empty so the engine still projects against
-    the actual 2026 slate (with byes) and real skill identities instead of
-    inventing round-robin / demo generics.
+    the actual 2026 slate (with byes), real skill identities, and prior-season
+    EPA strength hierarchy instead of inventing round-robin / demo bumps.
     """
     schedule, pkg_meta = load_packaged_regular_schedule(season)
     demo = build_demo_universe(season=season)
+
+    # Strengths: packaged prior-season EPA (never demo bumps for "real" mode).
+    epa_priors, epa_meta = load_packaged_epa_priors(season)
+    strength_inputs: Dict[str, Dict[str, float | str]] = {}
+    for team in NFL_TEAMS:
+        prior = epa_priors[team]
+        strength_inputs[team] = {
+            "offense_index": float(prior["offense_index"]),
+            "defense_index": float(prior["defense_index"]),
+            "pace_factor": float(prior.get("pace_factor", 1.0)),
+            "pass_rate_bias": float(prior.get("pass_rate_bias", 0.0)),
+            "source": STRENGTH_SOURCE_PACKAGED_EPA,
+        }
+    strengths = initialize_strengths(strength_inputs)
+    prior_season = int(epa_meta.get("prior_season") or (int(season) - 1))
+    strength_note = (
+        f"REAL packaged_epa_prior for 32/32 teams "
+        f"(prior_season={prior_season} play-weighted EPA → "
+        f"_epa_to_strength_indices; as_of={epa_meta.get('strength_as_of') or '?'})"
+    )
 
     roster_source = ROSTER_SOURCE_DEMO
     roster_as_of = "2025_offseason_approx"
@@ -933,28 +1050,30 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
     except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
         coverage = depth_coverage_from_rosters(rosters)
 
-    notes = dict(demo.notes)
-    notes.update(
-        {
-            "mode": "real",
-            "schedule_source": str(pkg_meta.get("schedule_source") or SCHEDULE_SOURCE_PACKAGED),
-            "schedule_as_of": str(pkg_meta.get("schedule_as_of") or ""),
-            "roster_source": roster_source,
-            "roster_as_of": roster_as_of,
-            "depth_source": roster_source,
-            "depth_as_of": roster_as_of,
-            "schedule": (
-                f"REAL packaged 2026 REG schedule ({len(schedule)} games, byes). "
-                "DB unavailable — using packaged offline artifacts."
-            ),
-            "rosters": roster_note,
-            **coverage,
-        }
-    )
+    notes = {
+        "mode": "real",
+        "schedule_source": str(pkg_meta.get("schedule_source") or SCHEDULE_SOURCE_PACKAGED),
+        "schedule_as_of": str(pkg_meta.get("schedule_as_of") or ""),
+        "roster_source": roster_source,
+        "roster_as_of": roster_as_of,
+        "depth_source": roster_source,
+        "depth_as_of": roster_as_of,
+        "strength_source": str(epa_meta.get("strength_source") or STRENGTH_SOURCE_PACKAGED_EPA),
+        "strength_as_of": str(epa_meta.get("strength_as_of") or ""),
+        "schedule": (
+            f"REAL packaged 2026 REG schedule ({len(schedule)} games, byes). "
+            "DB unavailable — using packaged offline artifacts."
+        ),
+        "strengths": strength_note,
+        "rosters": roster_note,
+        "calibration": CALIBRATION_TAG,
+        **coverage,
+        **{f"cal_{k}": v for k, v in calibration_notes().items()},
+    }
     return EngineUniverse(
         season=season,
         schedule=schedule,
-        strengths=demo.strengths,
+        strengths=strengths,
         rosters=rosters,
         notes=notes,
     )

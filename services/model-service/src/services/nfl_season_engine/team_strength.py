@@ -6,8 +6,9 @@ evolve across a simulated season path.
 REAL vs PLACEHOLDER
 -------------------
 - REAL: offense/defense indices loaded from ``_load_team_strength_priors``
-  (EPA-based priors used by live ``simulate_nfl_game``), or from schedule-
-  attached market projections when available.
+  (EPA-based priors used by live ``simulate_nfl_game``), packaged prior-
+  season EPA (``packaged_epa_prior``) when rolling tables are empty, or
+  schedule-attached market projections when available.
 - PLACEHOLDER: mean-reverting in-path strength updates after each simulated
   game. Evolution gains are calibrated (softened) so season win distributions
   stay in a realistic NFL band without mid-season explosion.
@@ -161,8 +162,14 @@ def evolve_after_game(
             *STRENGTH_CLAMP,
         )
         state.games_played += 1
-        if state.source == "epa_prior" or state.source.startswith("real"):
-            state.source = f"{state.source}+path_evolved"
+        if (
+            state.source in ("epa_prior", "packaged_epa_prior")
+            or state.source.startswith("real")
+            or state.source.startswith("epa_prior")
+            or state.source.startswith("packaged_epa_prior")
+        ):
+            if "+path_evolved" not in state.source:
+                state.source = f"{state.source}+path_evolved"
         elif "path_evolved" not in state.source:
             state.source = f"{state.source}+path_evolved"
 

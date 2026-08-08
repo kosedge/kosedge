@@ -704,6 +704,26 @@ def _load_team_strength_priors(
             "_season": float(season),
             "_week": float(_to_float(row.week) or 0.0),
         }
+    # Cold-start / empty rolling tables (e.g. Railway Hobby after wipe): fill
+    # from packaged prior-season EPA so Edge Board + season engine stay on
+    # real hierarchy instead of record/league-average placeholders.
+    if len(out) < 32:
+        try:
+            from src.services.nfl_season_engine.loaders import load_packaged_epa_priors
+
+            packaged, _meta = load_packaged_epa_priors(int(season_year))
+            for team, prior in packaged.items():
+                if team in out:
+                    continue
+                out[team] = {
+                    "offense_index": float(prior["offense_index"]),
+                    "defense_index": float(prior["defense_index"]),
+                    "_season": float(prior.get("_season") or fallback_season),
+                    "_week": 0.0,
+                    "_source": "packaged_epa_prior",
+                }
+        except Exception:
+            pass
     return out
 
 
