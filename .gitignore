@@ -118,3 +118,4 @@ data/backups/
 data/mlb/statcast_cache/**/pitches_*.csv
 data/mlb/statcast_cache/**/pitches_*.meta.json
 data/mlb/statcast_cache/**/pitcher_raw_counts.json
+data/ops/nfl-phase3-depth-cache/
