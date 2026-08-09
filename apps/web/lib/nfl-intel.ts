@@ -94,8 +94,30 @@ export function formatTeamRecordWithRank(
   return `${record} (${Math.trunc(rank)})`;
 }
 
+export type NflIntelEndpoint =
+  | "rosters"
+  | "stats"
+  | "standings"
+  | "depth-charts"
+  | "injuries"
+  | "coaching";
+
+export type NflCoachingCoverage = {
+  team_count?: number;
+  named_hc_count?: number;
+  full_staff_count?: number;
+  holes?: string[];
+  thin_dc?: string[];
+  source?: string;
+  as_of?: string;
+};
+
+export type NflIntelCoachingResponse = NflIntelResponse & {
+  coverage?: NflCoachingCoverage;
+};
+
 export async function fetchNflIntel(
-  endpoint: "rosters" | "stats" | "standings" | "depth-charts" | "injuries",
+  endpoint: NflIntelEndpoint,
   filters?: {
     season?: number;
     week?: number;
@@ -149,7 +171,7 @@ export async function fetchNflIntel(
         error: `Model service returned ${response.status}.`,
       };
     }
-    const payload = (await response.json()) as Partial<NflIntelResponse>;
+    const payload = (await response.json()) as Partial<NflIntelCoachingResponse>;
     return {
       season: typeof payload.season === "number" ? payload.season : null,
       week: typeof payload.week === "number" ? payload.week : null,
@@ -161,6 +183,11 @@ export async function fetchNflIntel(
           ? payload.selection
           : undefined,
       error: typeof payload.error === "string" ? payload.error : undefined,
+      ...(endpoint === "coaching" &&
+      payload.coverage &&
+      typeof payload.coverage === "object"
+        ? { coverage: payload.coverage }
+        : {}),
     };
   } catch {
     return {
@@ -174,6 +201,36 @@ export async function fetchNflIntel(
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function fetchNflCoachingStaff(filters?: {
+  season?: number;
+  team?: string;
+}): Promise<NflIntelCoachingResponse> {
+  return fetchNflIntel("coaching", {
+    season: filters?.season,
+    team: filters?.team,
+  }) as Promise<NflIntelCoachingResponse>;
+}
+
+export function coachingContinuityBadge(row: NflIntelResponseRow | null): {
+  label: string;
+  tone: "live" | "thin" | "unknown";
+} {
+  if (!row) return { label: "Unknown", tone: "unknown" };
+  const status = typeof row.status === "string" ? row.status : "";
+  const continuity =
+    typeof row.continuity_label === "string" ? row.continuity_label : "";
+  if (status === "thin" || status === "thin_dc") {
+    return { label: "Thin", tone: "thin" };
+  }
+  if (continuity === "new_staff") return { label: "New staff", tone: "live" };
+  if (continuity === "returning") return { label: "Returning", tone: "live" };
+  if (continuity === "partial_change")
+    return { label: "Staff change", tone: "live" };
+  if (row.hc_name || row.oc_name || row.dc_name)
+    return { label: "Named", tone: "live" };
+  return { label: "Unknown", tone: "unknown" };
 }
 
 const CONFERENCE_ORDER: Record<string, number> = {

@@ -756,7 +756,110 @@ INTEL_REQUIRED_TABLES: Dict[str, List[str]] = {
     "standings": ["nfl_dp_standings_weekly"],
     "depth-charts": ["nfl_dp_depth_chart_weekly"],
     "injuries": ["nfl_dp_injuries"],
+    "coaching": [],
 }
+
+
+def _packaged_depth_available(season: int) -> bool:
+    try:
+        from src.services.nfl_season_engine.loaders import load_packaged_depth_chart
+
+        rows, _meta = load_packaged_depth_chart(int(season))
+        return bool(rows)
+    except Exception:
+        return False
+
+
+def _intel_packaged_depth_payload(
+    *,
+    season: int,
+    week: int,
+    team: Optional[str],
+    limit: int,
+    selection_metadata: Optional[Dict[str, Any]] = None,
+    reason: str = "packaged_depth_fallback",
+) -> Dict[str, Any]:
+    from src.services.nfl_season_engine.coaching_staff import packaged_depth_intel_rows
+
+    rows, pack_meta = packaged_depth_intel_rows(
+        season=int(season),
+        week=int(week),
+        team=team,
+        limit=limit,
+    )
+    meta = dict(selection_metadata or _empty_intel_selection_metadata(
+        season=season, week=week, team=team
+    ))
+    meta["fallback_applied"] = True
+    meta["packaged_fallback"] = {
+        "reason": reason,
+        "roster_source": pack_meta.get("roster_source"),
+        "depth_path": pack_meta.get("depth_path"),
+        "depth_row_count": pack_meta.get("depth_row_count"),
+    }
+    return {
+        "season": int(season),
+        "week": int(week),
+        "team": str(team).strip().upper() if team else None,
+        "count": len(rows),
+        "rows": rows,
+        "selection": meta,
+        "source_diagnostics": {
+            "active_source": pack_meta.get("roster_source"),
+            "mix": [
+                {
+                    "source": pack_meta.get("roster_source"),
+                    "row_count": len(rows),
+                }
+            ],
+        },
+    }
+
+
+def _intel_packaged_roster_payload(
+    *,
+    season: int,
+    week: int,
+    team: Optional[str],
+    limit: int,
+    selection_metadata: Optional[Dict[str, Any]] = None,
+    reason: str = "packaged_depth_fallback",
+) -> Dict[str, Any]:
+    from src.services.nfl_season_engine.coaching_staff import packaged_roster_pulse_rows
+
+    rows, pack_meta = packaged_roster_pulse_rows(
+        season=int(season),
+        week=int(week),
+        team=team,
+        limit=limit,
+    )
+    meta = dict(selection_metadata or _empty_intel_selection_metadata(
+        season=season, week=week, team=team
+    ))
+    meta["fallback_applied"] = True
+    meta["packaged_fallback"] = {
+        "reason": reason,
+        "roster_source": pack_meta.get("roster_source"),
+        "depth_path": pack_meta.get("depth_path"),
+        "depth_row_count": pack_meta.get("depth_row_count"),
+    }
+    return {
+        "season": int(season),
+        "week": int(week),
+        "team": str(team).strip().upper() if team else None,
+        "count": len(rows),
+        "rows": rows,
+        "selection": meta,
+        "source_diagnostics": {
+            "active_source": pack_meta.get("roster_source"),
+            "mix": [
+                {
+                    "source": pack_meta.get("roster_source"),
+                    "row_count": len(rows),
+                }
+            ],
+        },
+    }
 
 
 def _fetch_intel_table_presence(session: Any, *, endpoint: str) -> Dict[str, Any]:
@@ -1706,6 +1809,15 @@ def nfl_intel_rosters(
             season=resolved_season,
             week=resolved_week,
         )
+        if len(rows) == 0 and _packaged_depth_available(resolved_season):
+            return _intel_packaged_roster_payload(
+                season=resolved_season,
+                week=resolved_week,
+                team=resolved_team,
+                limit=limit,
+                selection_metadata=selection_metadata,
+                reason="db_rosters_empty",
+            )
         return {
             "season": resolved_season,
             "week": resolved_week,
@@ -1716,7 +1828,7 @@ def nfl_intel_rosters(
             "source_diagnostics": source_diagnostics,
         }
     except (ProgrammingError, OperationalError, SQLAlchemyError) as exc:
-        return _handle_intel_data_access_error(
+        err_payload = _handle_intel_data_access_error(
             session=session,
             endpoint="rosters",
             season=season,
@@ -1724,6 +1836,18 @@ def nfl_intel_rosters(
             team=team,
             exc=exc,
         )
+        fallback_season = int(err_payload.get("season") or season or date.today().year)
+        fallback_week = int(err_payload.get("week") or week or 1)
+        if _packaged_depth_available(fallback_season):
+            return _intel_packaged_roster_payload(
+                season=fallback_season,
+                week=fallback_week,
+                team=team,
+                limit=limit,
+                selection_metadata=err_payload.get("selection"),
+                reason="db_rosters_unavailable",
+            )
+        return err_payload
     finally:
         session.close()
 
@@ -1747,22 +1871,46 @@ def nfl_intel_health() -> Dict[str, Any]:
             )
         except Exception:
             tuning_summary = None
-        endpoints = ["rosters", "stats", "standings", "depth-charts", "injuries"]
+        endpoints = ["rosters", "stats", "standings", "depth-charts", "injuries", "coaching"]
         schema: Dict[str, Any] = {}
         for endpoint in endpoints:
+            if endpoint == "coaching":
+                schema[endpoint] = {
+                    "schema_ready": True,
+                    "required_tables": [],
+                    "present_tables": [],
+                    "missing_tables": [],
+                    "source": "packaged_nfl_coaching_staff_2026",
+                }
+                continue
             schema[endpoint] = _fetch_intel_table_presence(session, endpoint=endpoint)
 
         availability = {
-            endpoint: _fetch_nfl_intel_latest_availability(session, endpoint=endpoint, season=None)
+            endpoint: (
+                {
+                    "season": int(date.today().year),
+                    "week": None,
+                    "row_count": 32,
+                    "team_count": 32,
+                }
+                if endpoint == "coaching"
+                else _fetch_nfl_intel_latest_availability(
+                    session, endpoint=endpoint, season=None
+                )
+            )
             for endpoint in endpoints
         }
         active_sources = {
-            endpoint: _fetch_intel_source_mix(
-                session,
-                endpoint=endpoint,
-                season=availability.get(endpoint, {}).get("season"),
-                week=availability.get(endpoint, {}).get("week"),
-            ).get("active_source")
+            endpoint: (
+                "packaged_nfl_coaching_staff_2026"
+                if endpoint == "coaching"
+                else _fetch_intel_source_mix(
+                    session,
+                    endpoint=endpoint,
+                    season=availability.get(endpoint, {}).get("season"),
+                    week=availability.get(endpoint, {}).get("week"),
+                ).get("active_source")
+            )
             for endpoint in endpoints
             if endpoint != "depth-charts"
         }
@@ -2113,6 +2261,15 @@ def nfl_intel_depth_charts(
                 "limit": limit,
             },
         ).fetchall()
+        if len(rows) == 0 and _packaged_depth_available(resolved_season):
+            return _intel_packaged_depth_payload(
+                season=resolved_season,
+                week=resolved_week,
+                team=resolved_team,
+                limit=limit,
+                selection_metadata=selection_metadata,
+                reason="db_depth_empty",
+            )
         return {
             "season": resolved_season,
             "week": resolved_week,
@@ -2122,7 +2279,7 @@ def nfl_intel_depth_charts(
             "selection": selection_metadata,
         }
     except (ProgrammingError, OperationalError, SQLAlchemyError) as exc:
-        return _handle_intel_data_access_error(
+        err_payload = _handle_intel_data_access_error(
             session=session,
             endpoint="depth-charts",
             season=season,
@@ -2130,8 +2287,65 @@ def nfl_intel_depth_charts(
             team=team,
             exc=exc,
         )
+        fallback_season = int(err_payload.get("season") or season or date.today().year)
+        fallback_week = int(err_payload.get("week") or week or 1)
+        if _packaged_depth_available(fallback_season):
+            return _intel_packaged_depth_payload(
+                season=fallback_season,
+                week=fallback_week,
+                team=team,
+                limit=limit,
+                selection_metadata=err_payload.get("selection"),
+                reason="db_depth_unavailable",
+            )
+        return err_payload
     finally:
         session.close()
+
+
+@router.get("/intel/coaching")
+def nfl_intel_coaching(
+    season: Optional[int] = Query(None, ge=2010, le=2100),
+    team: Optional[str] = Query(None),
+) -> Dict[str, Any]:
+    """HC / OC / DC from the packaged coaching staff book (shared with continuity)."""
+    from src.services.nfl_season_engine.coaching_staff import coaching_intel_rows
+
+    resolved_season = int(season) if season is not None else int(date.today().year)
+    resolved_team = str(team).strip().upper() if team else None
+    rows, pack_meta = coaching_intel_rows(season=resolved_season, team=resolved_team)
+    selection = _empty_intel_selection_metadata(
+        season=season, week=None, team=resolved_team
+    )
+    selection["resolved"] = {
+        "season": resolved_season,
+        "week": None,
+        "team": resolved_team,
+    }
+    selection["packaged_fallback"] = {
+        "reason": "coaching_pack_primary",
+        "coaching_source": pack_meta.get("coaching_source"),
+        "coaching_team_count": pack_meta.get("coaching_team_count"),
+        "coaching_full_staff_count": pack_meta.get("coaching_full_staff_count"),
+        "coaching_thin_dc": pack_meta.get("coaching_thin_dc"),
+    }
+    return {
+        "season": resolved_season,
+        "week": None,
+        "team": resolved_team,
+        "count": len(rows),
+        "rows": rows,
+        "selection": selection,
+        "coverage": {
+            "team_count": pack_meta.get("coaching_team_count"),
+            "named_hc_count": pack_meta.get("coaching_named_hc_count"),
+            "full_staff_count": pack_meta.get("coaching_full_staff_count"),
+            "holes": pack_meta.get("coaching_holes") or [],
+            "thin_dc": pack_meta.get("coaching_thin_dc") or [],
+            "source": pack_meta.get("coaching_source"),
+            "as_of": pack_meta.get("coaching_as_of"),
+        },
+    }
 
 
 @router.get("/intel/injuries")

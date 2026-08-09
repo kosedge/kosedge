@@ -740,7 +740,18 @@ def build_continuity_book(
     except Exception:
         skill_yards = {}
 
-    staff_book = CURATED_STAFF_BY_SEASON.get(int(season), {})
+    # Packaged HC/OC/DC book is the product SoT; curated flags backfill only.
+    try:
+        from src.services.nfl_season_engine.coaching_staff import (
+            continuity_staff_from_packaged,
+        )
+
+        staff_book = dict(continuity_staff_from_packaged(int(season)))
+    except Exception:
+        staff_book = {}
+    for team_key, raw in CURATED_STAFF_BY_SEASON.get(int(season), {}).items():
+        if team_key not in staff_book:
+            staff_book[team_key] = dict(raw)
 
     if not team_list:
         team_list = sorted(
@@ -789,12 +800,15 @@ def build_continuity_book(
         staff_raw = staff_book.get(team)
         staff = None
         if staff_raw is not None:
+            # Only pass known continuity flags — never coerce missing → False/new.
             staff = {
-                "new_hc": bool(staff_raw.get("new_hc")),
-                "new_oc": bool(staff_raw.get("new_oc")),
                 "notes": str(staff_raw.get("notes") or ""),
                 "status": "approximate",
             }
+            if staff_raw.get("new_hc") is not None:
+                staff["new_hc"] = bool(staff_raw.get("new_hc"))
+            if staff_raw.get("new_oc") is not None:
+                staff["new_oc"] = bool(staff_raw.get("new_oc"))
 
         # Major churn heuristic: very low roster return.
         major = bool(roster_ret is not None and roster_ret < 0.42)
