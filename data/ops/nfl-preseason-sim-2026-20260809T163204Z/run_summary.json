@@ -1,0 +1,245 @@
+{
+  "engine_version": "nfl-season-engine-v1.23-soft-flags-enterprise",
+  "generated_at_utc": "2026-08-09T16:37:27.849990+00:00",
+  "n_team_sims": 100000,
+  "n_player_sims": 1000,
+  "step": "100k_expert_sim_candidate",
+  "source_research": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
+  "locked_snapshot": false,
+  "status": "NOT_LOCKED_AWAITING_CLEARANCE",
+  "note": "100k expert-sim candidate \u2014 NOT LOCKED \u2014 awaiting explicit clearance",
+  "timing_seconds": {
+    "team_wl": 2203.87,
+    "player_full": 1260.46,
+    "survivor": 0.0
+  },
+  "runtime_seconds_total": 3464.3,
+  "conservation": {
+    "pass_pool": 125996.4,
+    "rush_pool": 64000.0,
+    "rec_pool": 125996.4,
+    "max_rec_pass_gap_pct": 0.0,
+    "scheme_pass": {
+      "ARI": 4350.4,
+      "BAL": 3578.6,
+      "SEA": 4258.5
+    },
+    "league_pf": 11859.2,
+    "league_pa": 11859.2,
+    "wins_sum": 272.0,
+    "wins_min": 3.8877,
+    "wins_max": 13.157,
+    "wins_range": 9.2693
+  },
+  "cin": {
+    "pass_yards": 5118.9,
+    "points_for": 440.68,
+    "points_against": 424.28,
+    "expected_wins": 10.2918,
+    "burrow_pass_yards": 4812.9,
+    "burrow_pass_tds": 39.3
+  },
+  "jsn": {
+    "rank": 3,
+    "yards": 1428.8,
+    "rec_tds": 10.45,
+    "team": "SEA"
+  },
+  "chase": {
+    "rank": 1,
+    "yards": 1699.7,
+    "rec_tds": 11.61,
+    "team": "CIN"
+  },
+  "nacua": {
+    "rank": 9,
+    "yards": 1352.8,
+    "rec_tds": 9.59,
+    "team": "LA"
+  },
+  "top_rbs": [
+    {
+      "rank": 1,
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "rush_yards": 1502.4,
+      "rush_tds": 11.44
+    },
+    {
+      "rank": 2,
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "rush_yards": 1475.2,
+      "rush_tds": 11.68
+    },
+    {
+      "rank": 3,
+      "player": "James Cook III",
+      "team": "BUF",
+      "rush_yards": 1461.5,
+      "rush_tds": 11.03
+    },
+    {
+      "rank": 4,
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "rush_yards": 1450.0,
+      "rush_tds": 11.37
+    },
+    {
+      "rank": 5,
+      "player": "D'Andre Swift",
+      "team": "CHI",
+      "rush_yards": 1447.2,
+      "rush_tds": 11.03
+    }
+  ],
+  "soft_flags": [
+    "Win ceiling clustering: 6 teams near max.",
+    "PF clustering: 10 teams near same PF.",
+    "Rush soft-ceiling pile: 13 teams at ~2623 rush yds; 11 at soft floor ~1333.",
+    "PF soft-floor pile: 10 teams at PF\u2248286.5.",
+    "Win ceiling pile: ~6 teams at ~13.15\u201313.16 expected wins (range still healthy 3.89\u201313.16).",
+    "Depth soft: Mike Evans labeled SF (packaged depth quirk; not QB hygiene)."
+  ],
+  "label_issues": [],
+  "label_fixes": [],
+  "gates": {
+    "pass_pool_locked": true,
+    "rush_pool_64000": true,
+    "ari_bal_sea_pass_untouched": true,
+    "rec_pass_within_1_5pct": true,
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "cin_not_bottom_tier": true,
+    "offense_smoke": true,
+    "defense_smoke": true,
+    "qb_labels_clean": true,
+    "jsn_top_tier": true
+  },
+  "audits": {
+    "offense_lift": {
+      "rush_pool_after": 64000.0,
+      "method": "offense_variance_lift_v1"
+    },
+    "alpha": {
+      "alpha_players": 0
+    },
+    "pass_tds": {
+      "teams_lifted": [
+        "ARI",
+        "ATL",
+        "BAL",
+        "BUF",
+        "CAR",
+        "CHI",
+        "CIN",
+        "CLE",
+        "DAL",
+        "DEN",
+        "DET",
+        "GB",
+        "HOU",
+        "IND",
+        "JAX",
+        "KC",
+        "LA",
+        "LAC",
+        "LV",
+        "MIA",
+        "MIN",
+        "NE",
+        "NO",
+        "NYG",
+        "NYJ",
+        "PHI",
+        "PIT",
+        "SEA",
+        "SF",
+        "TB",
+        "TEN",
+        "WAS"
+      ]
+    },
+    "rb_priors": {
+      "rush_pool": 64000.0,
+      "top_rb": [
+        [
+          "Derrick Henry",
+          "BAL",
+          1502.4
+        ],
+        [
+          "Christian McCaffrey",
+          "SF",
+          1475.2
+        ],
+        [
+          "James Cook III",
+          "BUF",
+          1461.5
+        ],
+        [
+          "Bijan Robinson",
+          "ATL",
+          1450.0
+        ],
+        [
+          "D'Andre Swift",
+          "CHI",
+          1447.2
+        ],
+        [
+          "Saquon Barkley",
+          "PHI",
+          1447.0
+        ],
+        [
+          "Josh Jacobs",
+          "GB",
+          1430.5
+        ],
+        [
+          "Cam Skattebo",
+          "NYG",
+          1419.9
+        ],
+        [
+          "Bhayshul Tuten",
+          "JAX",
+          1415.8
+        ],
+        [
+          "Rhamondre Stevenson",
+          "NE",
+          1400.4
+        ],
+        [
+          "David Montgomery",
+          "HOU",
+          1397.3
+        ],
+        [
+          "Bucky Irving",
+          "TB",
+          1395.4
+        ]
+      ]
+    },
+    "defense": {
+      "league_pf": 11859.2,
+      "league_pa": 11859.2,
+      "wins_sum": 272.0,
+      "offense_pf_variance_lift": {
+        "applied": true,
+        "method": "offense_pf_variance_lift_v1_23_tapered",
+        "pf_range": 154.21,
+        "pa_range": 96.7,
+        "volume_pf_floors": true
+      }
+    }
+  },
+  "pf_win_half_overlap": 14,
+  "all_gates_pass": true
+}
