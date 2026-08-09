@@ -1,0 +1,1112 @@
+{
+  "team_pass": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "CIN",
+        "team": "CIN",
+        "position": null,
+        "value": 5118.92
+      },
+      {
+        "rank": 2,
+        "label": "LA",
+        "team": "LA",
+        "position": null,
+        "value": 4861.29
+      },
+      {
+        "rank": 3,
+        "label": "DAL",
+        "team": "DAL",
+        "position": null,
+        "value": 4796.24
+      },
+      {
+        "rank": 4,
+        "label": "KC",
+        "team": "KC",
+        "position": null,
+        "value": 4678.33
+      },
+      {
+        "rank": 5,
+        "label": "DEN",
+        "team": "DEN",
+        "position": null,
+        "value": 4518.3
+      },
+      {
+        "rank": 6,
+        "label": "DET",
+        "team": "DET",
+        "position": null,
+        "value": 4405.74
+      },
+      {
+        "rank": 7,
+        "label": "ARI",
+        "team": "ARI",
+        "position": null,
+        "value": 4350.35
+      },
+      {
+        "rank": 8,
+        "label": "SEA",
+        "team": "SEA",
+        "position": null,
+        "value": 4258.51
+      },
+      {
+        "rank": 9,
+        "label": "LAC",
+        "team": "LAC",
+        "position": null,
+        "value": 4172.9
+      },
+      {
+        "rank": 10,
+        "label": "IND",
+        "team": "IND",
+        "position": null,
+        "value": 4127.81
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 28,
+        "label": "CAR",
+        "team": "CAR",
+        "position": null,
+        "value": 3484.41
+      },
+      {
+        "rank": 29,
+        "label": "CLE",
+        "team": "CLE",
+        "position": null,
+        "value": 3470.19
+      },
+      {
+        "rank": 30,
+        "label": "PHI",
+        "team": "PHI",
+        "position": null,
+        "value": 3263.13
+      },
+      {
+        "rank": 31,
+        "label": "NYJ",
+        "team": "NYJ",
+        "position": null,
+        "value": 3193.4
+      },
+      {
+        "rank": 32,
+        "label": "WAS",
+        "team": "WAS",
+        "position": null,
+        "value": 3136.15
+      }
+    ]
+  },
+  "team_rush": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "SF",
+        "team": "SF",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 2,
+        "label": "BAL",
+        "team": "BAL",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 3,
+        "label": "CHI",
+        "team": "CHI",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 4,
+        "label": "JAX",
+        "team": "JAX",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 5,
+        "label": "TB",
+        "team": "TB",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 6,
+        "label": "GB",
+        "team": "GB",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 7,
+        "label": "NYG",
+        "team": "NYG",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 8,
+        "label": "BUF",
+        "team": "BUF",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 9,
+        "label": "ATL",
+        "team": "ATL",
+        "position": null,
+        "value": 2623.51
+      },
+      {
+        "rank": 10,
+        "label": "PHI",
+        "team": "PHI",
+        "position": null,
+        "value": 2623.51
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 28,
+        "label": "PIT",
+        "team": "PIT",
+        "position": null,
+        "value": 1332.58
+      },
+      {
+        "rank": 29,
+        "label": "KC",
+        "team": "KC",
+        "position": null,
+        "value": 1332.58
+      },
+      {
+        "rank": 30,
+        "label": "ARI",
+        "team": "ARI",
+        "position": null,
+        "value": 1332.58
+      },
+      {
+        "rank": 31,
+        "label": "TEN",
+        "team": "TEN",
+        "position": null,
+        "value": 1332.58
+      },
+      {
+        "rank": 32,
+        "label": "CIN",
+        "team": "CIN",
+        "position": null,
+        "value": 1332.58
+      }
+    ]
+  },
+  "points_for": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "CIN",
+        "team": "CIN",
+        "position": null,
+        "value": 440.68
+      },
+      {
+        "rank": 2,
+        "label": "LA",
+        "team": "LA",
+        "position": null,
+        "value": 438.23
+      },
+      {
+        "rank": 3,
+        "label": "DAL",
+        "team": "DAL",
+        "position": null,
+        "value": 436.0
+      },
+      {
+        "rank": 4,
+        "label": "SEA",
+        "team": "SEA",
+        "position": null,
+        "value": 427.51
+      },
+      {
+        "rank": 5,
+        "label": "BAL",
+        "team": "BAL",
+        "position": null,
+        "value": 427.47
+      },
+      {
+        "rank": 6,
+        "label": "SF",
+        "team": "SF",
+        "position": null,
+        "value": 427.43
+      },
+      {
+        "rank": 7,
+        "label": "CHI",
+        "team": "CHI",
+        "position": null,
+        "value": 427.42
+      },
+      {
+        "rank": 8,
+        "label": "HOU",
+        "team": "HOU",
+        "position": null,
+        "value": 427.41
+      },
+      {
+        "rank": 9,
+        "label": "JAX",
+        "team": "JAX",
+        "position": null,
+        "value": 427.4
+      },
+      {
+        "rank": 10,
+        "label": "TB",
+        "team": "TB",
+        "position": null,
+        "value": 427.39
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 28,
+        "label": "PIT",
+        "team": "PIT",
+        "position": null,
+        "value": 286.48
+      },
+      {
+        "rank": 29,
+        "label": "LAC",
+        "team": "LAC",
+        "position": null,
+        "value": 286.48
+      },
+      {
+        "rank": 30,
+        "label": "NO",
+        "team": "NO",
+        "position": null,
+        "value": 286.47
+      },
+      {
+        "rank": 31,
+        "label": "ARI",
+        "team": "ARI",
+        "position": null,
+        "value": 286.47
+      },
+      {
+        "rank": 32,
+        "label": "TEN",
+        "team": "TEN",
+        "position": null,
+        "value": 286.47
+      }
+    ]
+  },
+  "points_against": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "MIA",
+        "team": "MIA",
+        "position": null,
+        "value": 424.5
+      },
+      {
+        "rank": 2,
+        "label": "TB",
+        "team": "TB",
+        "position": null,
+        "value": 424.47
+      },
+      {
+        "rank": 3,
+        "label": "GB",
+        "team": "GB",
+        "position": null,
+        "value": 424.47
+      },
+      {
+        "rank": 4,
+        "label": "WAS",
+        "team": "WAS",
+        "position": null,
+        "value": 424.43
+      },
+      {
+        "rank": 5,
+        "label": "CAR",
+        "team": "CAR",
+        "position": null,
+        "value": 424.42
+      },
+      {
+        "rank": 6,
+        "label": "NYG",
+        "team": "NYG",
+        "position": null,
+        "value": 424.38
+      },
+      {
+        "rank": 7,
+        "label": "CIN",
+        "team": "CIN",
+        "position": null,
+        "value": 424.28
+      },
+      {
+        "rank": 8,
+        "label": "LV",
+        "team": "LV",
+        "position": null,
+        "value": 424.26
+      },
+      {
+        "rank": 9,
+        "label": "TEN",
+        "team": "TEN",
+        "position": null,
+        "value": 424.13
+      },
+      {
+        "rank": 10,
+        "label": "DAL",
+        "team": "DAL",
+        "position": null,
+        "value": 424.09
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 28,
+        "label": "ATL",
+        "team": "ATL",
+        "position": null,
+        "value": 327.99
+      },
+      {
+        "rank": 29,
+        "label": "NO",
+        "team": "NO",
+        "position": null,
+        "value": 327.94
+      },
+      {
+        "rank": 30,
+        "label": "DET",
+        "team": "DET",
+        "position": null,
+        "value": 327.85
+      },
+      {
+        "rank": 31,
+        "label": "JAX",
+        "team": "JAX",
+        "position": null,
+        "value": 327.84
+      },
+      {
+        "rank": 32,
+        "label": "HOU",
+        "team": "HOU",
+        "position": null,
+        "value": 327.79
+      }
+    ]
+  },
+  "expected_wins": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "HOU",
+        "team": "HOU",
+        "position": null,
+        "value": 13.16
+      },
+      {
+        "rank": 2,
+        "label": "JAX",
+        "team": "JAX",
+        "position": null,
+        "value": 13.16
+      },
+      {
+        "rank": 3,
+        "label": "ATL",
+        "team": "ATL",
+        "position": null,
+        "value": 13.16
+      },
+      {
+        "rank": 4,
+        "label": "CHI",
+        "team": "CHI",
+        "position": null,
+        "value": 13.15
+      },
+      {
+        "rank": 5,
+        "label": "BUF",
+        "team": "BUF",
+        "position": null,
+        "value": 13.15
+      },
+      {
+        "rank": 6,
+        "label": "SEA",
+        "team": "SEA",
+        "position": null,
+        "value": 13.15
+      },
+      {
+        "rank": 7,
+        "label": "NE",
+        "team": "NE",
+        "position": null,
+        "value": 13.15
+      },
+      {
+        "rank": 8,
+        "label": "BAL",
+        "team": "BAL",
+        "position": null,
+        "value": 13.15
+      },
+      {
+        "rank": 9,
+        "label": "PHI",
+        "team": "PHI",
+        "position": null,
+        "value": 13.14
+      },
+      {
+        "rank": 10,
+        "label": "IND",
+        "team": "IND",
+        "position": null,
+        "value": 13.14
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 28,
+        "label": "NYJ",
+        "team": "NYJ",
+        "position": null,
+        "value": 3.89
+      },
+      {
+        "rank": 29,
+        "label": "TEN",
+        "team": "TEN",
+        "position": null,
+        "value": 3.89
+      },
+      {
+        "rank": 30,
+        "label": "LV",
+        "team": "LV",
+        "position": null,
+        "value": 3.89
+      },
+      {
+        "rank": 31,
+        "label": "CAR",
+        "team": "CAR",
+        "position": null,
+        "value": 3.89
+      },
+      {
+        "rank": 32,
+        "label": "MIA",
+        "team": "MIA",
+        "position": null,
+        "value": 3.89
+      }
+    ]
+  },
+  "receiving_yards": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "Ja'Marr Chase",
+        "team": "CIN",
+        "position": "WR",
+        "value": 1699.7
+      },
+      {
+        "rank": 2,
+        "label": "CeeDee Lamb",
+        "team": "DAL",
+        "position": "WR",
+        "value": 1630.63
+      },
+      {
+        "rank": 3,
+        "label": "Jaxon Smith-Njigba",
+        "team": "SEA",
+        "position": "WR",
+        "value": 1428.83
+      },
+      {
+        "rank": 4,
+        "label": "Rashee Rice",
+        "team": "KC",
+        "position": "WR",
+        "value": 1420.78
+      },
+      {
+        "rank": 5,
+        "label": "Marvin Harrison Jr.",
+        "team": "ARI",
+        "position": "WR",
+        "value": 1395.16
+      },
+      {
+        "rank": 6,
+        "label": "Mike Evans",
+        "team": "SF",
+        "position": "WR",
+        "value": 1371.45
+      },
+      {
+        "rank": 7,
+        "label": "Brian Thomas Jr.",
+        "team": "JAX",
+        "position": "WR",
+        "value": 1369.18
+      },
+      {
+        "rank": 8,
+        "label": "Courtland Sutton",
+        "team": "DEN",
+        "position": "WR",
+        "value": 1356.0
+      },
+      {
+        "rank": 9,
+        "label": "Puka Nacua",
+        "team": "LA",
+        "position": "WR",
+        "value": 1352.84
+      },
+      {
+        "rank": 10,
+        "label": "Emeka Egbuka",
+        "team": "TB",
+        "position": "WR",
+        "value": 1330.74
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 283,
+        "label": "Demond Claiborne",
+        "team": "MIN",
+        "position": "RB",
+        "value": 53.63
+      },
+      {
+        "rank": 284,
+        "label": "Raheim Sanders",
+        "team": "CLE",
+        "position": "RB",
+        "value": 52.46
+      },
+      {
+        "rank": 285,
+        "label": "Kaytron Allen",
+        "team": "WAS",
+        "position": "RB",
+        "value": 50.81
+      },
+      {
+        "rank": 286,
+        "label": "Will Shipley",
+        "team": "PHI",
+        "position": "RB",
+        "value": 48.64
+      },
+      {
+        "rank": 287,
+        "label": "Isaiah Davis",
+        "team": "NYJ",
+        "position": "RB",
+        "value": 46.96
+      }
+    ]
+  },
+  "rush_yards": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "Derrick Henry",
+        "team": "BAL",
+        "position": "RB",
+        "value": 1502.41
+      },
+      {
+        "rank": 2,
+        "label": "Christian McCaffrey",
+        "team": "SF",
+        "position": "RB",
+        "value": 1475.17
+      },
+      {
+        "rank": 3,
+        "label": "James Cook III",
+        "team": "BUF",
+        "position": "RB",
+        "value": 1461.48
+      },
+      {
+        "rank": 4,
+        "label": "Bijan Robinson",
+        "team": "ATL",
+        "position": "RB",
+        "value": 1450.01
+      },
+      {
+        "rank": 5,
+        "label": "D'Andre Swift",
+        "team": "CHI",
+        "position": "RB",
+        "value": 1447.18
+      },
+      {
+        "rank": 6,
+        "label": "Saquon Barkley",
+        "team": "PHI",
+        "position": "RB",
+        "value": 1446.98
+      },
+      {
+        "rank": 7,
+        "label": "Josh Jacobs",
+        "team": "GB",
+        "position": "RB",
+        "value": 1430.49
+      },
+      {
+        "rank": 8,
+        "label": "Cam Skattebo",
+        "team": "NYG",
+        "position": "RB",
+        "value": 1419.88
+      },
+      {
+        "rank": 9,
+        "label": "Bhayshul Tuten",
+        "team": "JAX",
+        "position": "RB",
+        "value": 1415.76
+      },
+      {
+        "rank": 10,
+        "label": "Rhamondre Stevenson",
+        "team": "NE",
+        "position": "RB",
+        "value": 1400.41
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 92,
+        "label": "Raheim Sanders",
+        "team": "CLE",
+        "position": "RB",
+        "value": 108.43
+      },
+      {
+        "rank": 93,
+        "label": "Emari Demercado",
+        "team": "KC",
+        "position": "RB",
+        "value": 107.78
+      },
+      {
+        "rank": 94,
+        "label": "Dylan Laube",
+        "team": "LV",
+        "position": "RB",
+        "value": 100.8
+      },
+      {
+        "rank": 95,
+        "label": "Keaton Mitchell",
+        "team": "LAC",
+        "position": "RB",
+        "value": 98.58
+      },
+      {
+        "rank": 96,
+        "label": "Devin Neal",
+        "team": "NO",
+        "position": "RB",
+        "value": 96.75
+      }
+    ]
+  },
+  "rec_tds": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "CeeDee Lamb",
+        "team": "DAL",
+        "position": "WR",
+        "value": 11.86
+      },
+      {
+        "rank": 2,
+        "label": "Ja'Marr Chase",
+        "team": "CIN",
+        "position": "WR",
+        "value": 11.61
+      },
+      {
+        "rank": 3,
+        "label": "Rashee Rice",
+        "team": "KC",
+        "position": "WR",
+        "value": 10.62
+      },
+      {
+        "rank": 4,
+        "label": "Jaxon Smith-Njigba",
+        "team": "SEA",
+        "position": "WR",
+        "value": 10.45
+      },
+      {
+        "rank": 5,
+        "label": "Zay Flowers",
+        "team": "BAL",
+        "position": "WR",
+        "value": 10.02
+      },
+      {
+        "rank": 6,
+        "label": "Malik Nabers",
+        "team": "NYG",
+        "position": "WR",
+        "value": 9.76
+      },
+      {
+        "rank": 7,
+        "label": "Puka Nacua",
+        "team": "LA",
+        "position": "WR",
+        "value": 9.59
+      },
+      {
+        "rank": 8,
+        "label": "Emeka Egbuka",
+        "team": "TB",
+        "position": "WR",
+        "value": 9.58
+      },
+      {
+        "rank": 9,
+        "label": "Brian Thomas Jr.",
+        "team": "JAX",
+        "position": "WR",
+        "value": 9.53
+      },
+      {
+        "rank": 10,
+        "label": "Mike Evans",
+        "team": "SF",
+        "position": "WR",
+        "value": 9.47
+      }
+    ]
+  },
+  "rush_tds": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "Christian McCaffrey",
+        "team": "SF",
+        "position": "RB",
+        "value": 11.68
+      },
+      {
+        "rank": 2,
+        "label": "Saquon Barkley",
+        "team": "PHI",
+        "position": "RB",
+        "value": 11.62
+      },
+      {
+        "rank": 3,
+        "label": "Derrick Henry",
+        "team": "BAL",
+        "position": "RB",
+        "value": 11.44
+      },
+      {
+        "rank": 4,
+        "label": "Josh Jacobs",
+        "team": "GB",
+        "position": "RB",
+        "value": 11.37
+      },
+      {
+        "rank": 5,
+        "label": "Bijan Robinson",
+        "team": "ATL",
+        "position": "RB",
+        "value": 11.37
+      },
+      {
+        "rank": 6,
+        "label": "D'Andre Swift",
+        "team": "CHI",
+        "position": "RB",
+        "value": 11.03
+      },
+      {
+        "rank": 7,
+        "label": "James Cook III",
+        "team": "BUF",
+        "position": "RB",
+        "value": 11.03
+      },
+      {
+        "rank": 8,
+        "label": "David Montgomery",
+        "team": "HOU",
+        "position": "RB",
+        "value": 11.02
+      },
+      {
+        "rank": 9,
+        "label": "Zach Charbonnet",
+        "team": "SEA",
+        "position": "RB",
+        "value": 10.45
+      },
+      {
+        "rank": 10,
+        "label": "Bhayshul Tuten",
+        "team": "JAX",
+        "position": "RB",
+        "value": 9.87
+      }
+    ]
+  },
+  "pass_yards": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "Joe Burrow",
+        "team": "CIN",
+        "position": "QB",
+        "value": 4812.94
+      },
+      {
+        "rank": 2,
+        "label": "Matthew Stafford",
+        "team": "LA",
+        "position": "QB",
+        "value": 4540.31
+      },
+      {
+        "rank": 3,
+        "label": "Dak Prescott",
+        "team": "DAL",
+        "position": "QB",
+        "value": 4515.94
+      },
+      {
+        "rank": 4,
+        "label": "Patrick Mahomes",
+        "team": "KC",
+        "position": "QB",
+        "value": 4376.17
+      },
+      {
+        "rank": 5,
+        "label": "Bo Nix",
+        "team": "DEN",
+        "position": "QB",
+        "value": 4220.15
+      },
+      {
+        "rank": 6,
+        "label": "Jared Goff",
+        "team": "DET",
+        "position": "QB",
+        "value": 4114.13
+      },
+      {
+        "rank": 7,
+        "label": "Kyler Murray",
+        "team": "ARI",
+        "position": "QB",
+        "value": 4082.61
+      },
+      {
+        "rank": 8,
+        "label": "Sam Darnold",
+        "team": "SEA",
+        "position": "QB",
+        "value": 3974.64
+      },
+      {
+        "rank": 9,
+        "label": "Justin Herbert",
+        "team": "LAC",
+        "position": "QB",
+        "value": 3902.31
+      },
+      {
+        "rank": 10,
+        "label": "Daniel Jones",
+        "team": "IND",
+        "position": "QB",
+        "value": 3864.47
+      }
+    ],
+    "bottom5": [
+      {
+        "rank": 92,
+        "label": "Haynes King",
+        "team": "CAR",
+        "position": "QB",
+        "value": 100.06
+      },
+      {
+        "rank": 93,
+        "label": "Cam Miller",
+        "team": "MIA",
+        "position": "QB",
+        "value": 98.96
+      },
+      {
+        "rank": 94,
+        "label": "Marcus Mariota",
+        "team": "WAS",
+        "position": "QB",
+        "value": 97.27
+      },
+      {
+        "rank": 95,
+        "label": "Brady Cook",
+        "team": "NYJ",
+        "position": "QB",
+        "value": 93.55
+      },
+      {
+        "rank": 96,
+        "label": "Athan Kaliakmanis",
+        "team": "WAS",
+        "position": "QB",
+        "value": 87.43
+      }
+    ]
+  },
+  "pass_tds": {
+    "top10": [
+      {
+        "rank": 1,
+        "label": "Joe Burrow",
+        "team": "CIN",
+        "position": "QB",
+        "value": 39.3
+      },
+      {
+        "rank": 2,
+        "label": "Dak Prescott",
+        "team": "DAL",
+        "position": "QB",
+        "value": 39.28
+      },
+      {
+        "rank": 3,
+        "label": "Patrick Mahomes",
+        "team": "KC",
+        "position": "QB",
+        "value": 39.12
+      },
+      {
+        "rank": 4,
+        "label": "Matthew Stafford",
+        "team": "LA",
+        "position": "QB",
+        "value": 39.01
+      },
+      {
+        "rank": 5,
+        "label": "Sam Darnold",
+        "team": "SEA",
+        "position": "QB",
+        "value": 35.33
+      },
+      {
+        "rank": 6,
+        "label": "Lamar Jackson",
+        "team": "BAL",
+        "position": "QB",
+        "value": 34.53
+      },
+      {
+        "rank": 7,
+        "label": "Bo Nix",
+        "team": "DEN",
+        "position": "QB",
+        "value": 34.21
+      },
+      {
+        "rank": 8,
+        "label": "Jared Goff",
+        "team": "DET",
+        "position": "QB",
+        "value": 33.67
+      },
+      {
+        "rank": 9,
+        "label": "Justin Herbert",
+        "team": "LAC",
+        "position": "QB",
+        "value": 32.49
+      },
+      {
+        "rank": 10,
+        "label": "Daniel Jones",
+        "team": "IND",
+        "position": "QB",
+        "value": 32.14
+      }
+    ]
+  }
+}

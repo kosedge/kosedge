@@ -1,0 +1,1156 @@
+{
+  "engine_version": "nfl-season-engine-v1.23-soft-flags-enterprise",
+  "generated_at_utc": "2026-08-09T15:03:09.869363+00:00",
+  "n_team_sims": 50000,
+  "n_player_sims": 1000,
+  "step": 3,
+  "method": "final_full_board_smoke_v1",
+  "base_bundle": "nfl-preseason-sim-2026-20260809T150233Z",
+  "locked_snapshot": false,
+  "status": "NOT_LOCKED_AWAITING_REVIEW",
+  "gates": {
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "pass_pool_locked": true,
+    "rush_pool_64000": true,
+    "rec_pass_within_1_5pct": true,
+    "ari_bal_sea_pass_untouched": true,
+    "top_wr_multiple_1400": true,
+    "top_wr_end_1550": true,
+    "top_rb_1400": true,
+    "jsn_top_tier": true,
+    "offense_smoke": true,
+    "defense_smoke": true,
+    "step1_gates_held": true,
+    "step2_gates_held": true
+  },
+  "all_step3_pass": true,
+  "jsn": {
+    "rank": 3,
+    "yards": 1575.2,
+    "rec_tds": 11.72,
+    "target_share": 0.36,
+    "team": "SEA"
+  },
+  "top_wrs": [
+    {
+      "rank": 1,
+      "player": "Puka Nacua",
+      "team": "LA",
+      "rec_yards": 1614.8,
+      "rec_tds": 9.8,
+      "target_share": 0.305
+    },
+    {
+      "rank": 2,
+      "player": "Ja'Marr Chase",
+      "team": "CIN",
+      "rec_yards": 1605.5,
+      "rec_tds": 10.48,
+      "target_share": 0.28
+    },
+    {
+      "rank": 3,
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "rec_yards": 1575.2,
+      "rec_tds": 11.72,
+      "target_share": 0.36
+    },
+    {
+      "rank": 4,
+      "player": "Amon-Ra St. Brown",
+      "team": "DET",
+      "rec_yards": 1504.5,
+      "rec_tds": 9.61,
+      "target_share": 0.318
+    },
+    {
+      "rank": 5,
+      "player": "Justin Jefferson",
+      "team": "MIN",
+      "rec_yards": 1380.9,
+      "rec_tds": 10.4,
+      "target_share": 0.4
+    },
+    {
+      "rank": 6,
+      "player": "George Pickens",
+      "team": "DAL",
+      "rec_yards": 1379.8,
+      "rec_tds": 7.93,
+      "target_share": 0.292
+    },
+    {
+      "rank": 7,
+      "player": "Rashee Rice",
+      "team": "KC",
+      "rec_yards": 1364.6,
+      "rec_tds": 9.25,
+      "target_share": 0.28
+    },
+    {
+      "rank": 8,
+      "player": "CeeDee Lamb",
+      "team": "DAL",
+      "rec_yards": 1323.6,
+      "rec_tds": 8.37,
+      "target_share": 0.28
+    },
+    {
+      "rank": 9,
+      "player": "Courtland Sutton",
+      "team": "DEN",
+      "rec_yards": 1317.8,
+      "rec_tds": 8.98,
+      "target_share": 0.28
+    },
+    {
+      "rank": 10,
+      "player": "Chris Olave",
+      "team": "NO",
+      "rec_yards": 1278.6,
+      "rec_tds": 9.13,
+      "target_share": 0.287
+    },
+    {
+      "rank": 11,
+      "player": "Garrett Wilson",
+      "team": "NYJ",
+      "rec_yards": 1261.2,
+      "rec_tds": 9.54,
+      "target_share": 0.4
+    },
+    {
+      "rank": 12,
+      "player": "Zay Flowers",
+      "team": "BAL",
+      "rec_yards": 1231.1,
+      "rec_tds": 9.72,
+      "target_share": 0.321
+    }
+  ],
+  "top_rbs": [
+    {
+      "rank": 1,
+      "player": "James Cook III",
+      "team": "BUF",
+      "rush_yards": 1478.8,
+      "rush_tds": 10.87,
+      "carry_share": 0.582
+    },
+    {
+      "rank": 2,
+      "player": "Kyren Williams",
+      "team": "LA",
+      "rush_yards": 1459.3,
+      "rush_tds": 11.04,
+      "carry_share": 0.574
+    },
+    {
+      "rank": 3,
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "rush_yards": 1442.5,
+      "rush_tds": 11.04,
+      "carry_share": 0.567
+    },
+    {
+      "rank": 4,
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "rush_yards": 1440.6,
+      "rush_tds": 10.12,
+      "carry_share": 0.567
+    },
+    {
+      "rank": 5,
+      "player": "Javonte Williams",
+      "team": "DAL",
+      "rush_yards": 1439.2,
+      "rush_tds": 10.78,
+      "carry_share": 0.566
+    },
+    {
+      "rank": 6,
+      "player": "Jacory Croskey-Merritt",
+      "team": "WAS",
+      "rush_yards": 1435.1,
+      "rush_tds": 10.42,
+      "carry_share": 0.565
+    },
+    {
+      "rank": 7,
+      "player": "Zach Charbonnet",
+      "team": "SEA",
+      "rush_yards": 1427.0,
+      "rush_tds": 10.77,
+      "carry_share": 0.561
+    },
+    {
+      "rank": 8,
+      "player": "Rhamondre Stevenson",
+      "team": "NE",
+      "rush_yards": 1418.8,
+      "rush_tds": 10.46,
+      "carry_share": 0.558
+    },
+    {
+      "rank": 9,
+      "player": "Cam Skattebo",
+      "team": "NYG",
+      "rush_yards": 1414.8,
+      "rush_tds": 9.99,
+      "carry_share": 0.556
+    },
+    {
+      "rank": 10,
+      "player": "Saquon Barkley",
+      "team": "PHI",
+      "rush_yards": 1409.7,
+      "rush_tds": 10.5,
+      "carry_share": 0.554
+    },
+    {
+      "rank": 11,
+      "player": "Bucky Irving",
+      "team": "TB",
+      "rush_yards": 1402.6,
+      "rush_tds": 10.16,
+      "carry_share": 0.552
+    },
+    {
+      "rank": 12,
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "rush_yards": 1402.2,
+      "rush_tds": 10.67,
+      "carry_share": 0.552
+    }
+  ],
+  "leaders": {
+    "pass_yards": {
+      "top": [
+        {
+          "rank": 1,
+          "pass_yards_total": 4813.15,
+          "player_name": "Joe Burrow",
+          "team": "CIN"
+        },
+        {
+          "rank": 2,
+          "pass_yards_total": 4540.29,
+          "player_name": "Matthew Stafford",
+          "team": "LA"
+        },
+        {
+          "rank": 3,
+          "pass_yards_total": 4516.31,
+          "player_name": "Dak Prescott",
+          "team": "DAL"
+        },
+        {
+          "rank": 4,
+          "pass_yards_total": 4376.38,
+          "player_name": "Patrick Mahomes",
+          "team": "KC"
+        },
+        {
+          "rank": 5,
+          "pass_yards_total": 4220.11,
+          "player_name": "Bo Nix",
+          "team": "DEN"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "pass_yards_total": 87.43,
+          "player_name": "Athan Kaliakmanis",
+          "team": "WAS"
+        },
+        {
+          "rank": 2,
+          "pass_yards_total": 93.55,
+          "player_name": "Brady Cook",
+          "team": "NYJ"
+        },
+        {
+          "rank": 3,
+          "pass_yards_total": 97.27,
+          "player_name": "Marcus Mariota",
+          "team": "WAS"
+        },
+        {
+          "rank": 4,
+          "pass_yards_total": 98.96,
+          "player_name": "Cam Miller",
+          "team": "MIA"
+        },
+        {
+          "rank": 5,
+          "pass_yards_total": 100.06,
+          "player_name": "Haynes King",
+          "team": "CAR"
+        }
+      ]
+    },
+    "rush_yards": {
+      "top": [
+        {
+          "rank": 1,
+          "rush_yards_total": 1478.8,
+          "player_name": "James Cook III",
+          "team": "BUF"
+        },
+        {
+          "rank": 2,
+          "rush_yards_total": 1459.26,
+          "player_name": "Kyren Williams",
+          "team": "LA"
+        },
+        {
+          "rank": 3,
+          "rush_yards_total": 1442.51,
+          "player_name": "Derrick Henry",
+          "team": "BAL"
+        },
+        {
+          "rank": 4,
+          "rush_yards_total": 1440.55,
+          "player_name": "Bijan Robinson",
+          "team": "ATL"
+        },
+        {
+          "rank": 5,
+          "rush_yards_total": 1439.17,
+          "player_name": "Javonte Williams",
+          "team": "DAL"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "rush_yards_total": 114.27,
+          "player_name": "Ollie Gordon II",
+          "team": "MIA"
+        },
+        {
+          "rank": 2,
+          "rush_yards_total": 125.37,
+          "player_name": "Raheim Sanders",
+          "team": "CLE"
+        },
+        {
+          "rank": 3,
+          "rush_yards_total": 125.37,
+          "player_name": "James Conner",
+          "team": "ARI"
+        },
+        {
+          "rank": 4,
+          "rush_yards_total": 125.37,
+          "player_name": "Devin Neal",
+          "team": "NO"
+        },
+        {
+          "rank": 5,
+          "rush_yards_total": 125.37,
+          "player_name": "Dylan Laube",
+          "team": "LV"
+        }
+      ]
+    },
+    "receiving_yards": {
+      "top": [
+        {
+          "rank": 1,
+          "receiving_yards_total": 1614.75,
+          "player_name": "Puka Nacua",
+          "team": "LA",
+          "position": "WR"
+        },
+        {
+          "rank": 2,
+          "receiving_yards_total": 1605.46,
+          "player_name": "Ja'Marr Chase",
+          "team": "CIN",
+          "position": "WR"
+        },
+        {
+          "rank": 3,
+          "receiving_yards_total": 1575.2,
+          "player_name": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "position": "WR"
+        },
+        {
+          "rank": 4,
+          "receiving_yards_total": 1504.49,
+          "player_name": "Amon-Ra St. Brown",
+          "team": "DET",
+          "position": "WR"
+        },
+        {
+          "rank": 5,
+          "receiving_yards_total": 1380.95,
+          "player_name": "Justin Jefferson",
+          "team": "MIN",
+          "position": "WR"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "receiving_yards_total": 63.06,
+          "player_name": "Isaiah Davis",
+          "team": "NYJ",
+          "position": "RB"
+        },
+        {
+          "rank": 2,
+          "receiving_yards_total": 65.34,
+          "player_name": "Kaytron Allen",
+          "team": "WAS",
+          "position": "RB"
+        },
+        {
+          "rank": 3,
+          "receiving_yards_total": 67.98,
+          "player_name": "Will Shipley",
+          "team": "PHI",
+          "position": "RB"
+        },
+        {
+          "rank": 4,
+          "receiving_yards_total": 68.11,
+          "player_name": "Jeremy Ruckert",
+          "team": "NYJ",
+          "position": "TE"
+        },
+        {
+          "rank": 5,
+          "receiving_yards_total": 69.05,
+          "player_name": "Demond Claiborne",
+          "team": "MIN",
+          "position": "RB"
+        }
+      ]
+    },
+    "pass_tds": {
+      "top": [
+        {
+          "rank": 1,
+          "pass_tds_total": 38.25,
+          "player_name": "Joe Burrow",
+          "team": "CIN"
+        },
+        {
+          "rank": 2,
+          "pass_tds_total": 37.24,
+          "player_name": "Dak Prescott",
+          "team": "DAL"
+        },
+        {
+          "rank": 3,
+          "pass_tds_total": 37.16,
+          "player_name": "Matthew Stafford",
+          "team": "LA"
+        },
+        {
+          "rank": 4,
+          "pass_tds_total": 36.62,
+          "player_name": "Patrick Mahomes",
+          "team": "KC"
+        },
+        {
+          "rank": 5,
+          "pass_tds_total": 35.49,
+          "player_name": "Bo Nix",
+          "team": "DEN"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "pass_tds_total": 0.8,
+          "player_name": "Athan Kaliakmanis",
+          "team": "WAS"
+        },
+        {
+          "rank": 2,
+          "pass_tds_total": 0.84,
+          "player_name": "Brady Cook",
+          "team": "NYJ"
+        },
+        {
+          "rank": 3,
+          "pass_tds_total": 0.88,
+          "player_name": "Haynes King",
+          "team": "CAR"
+        },
+        {
+          "rank": 4,
+          "pass_tds_total": 0.89,
+          "player_name": "Cam Miller",
+          "team": "MIA"
+        },
+        {
+          "rank": 5,
+          "pass_tds_total": 0.89,
+          "player_name": "Marcus Mariota",
+          "team": "WAS"
+        }
+      ]
+    },
+    "rush_tds": {
+      "top": [
+        {
+          "rank": 1,
+          "rush_tds_total": 11.04,
+          "player_name": "Kyren Williams",
+          "team": "LA",
+          "position": "RB"
+        },
+        {
+          "rank": 2,
+          "rush_tds_total": 11.04,
+          "player_name": "Derrick Henry",
+          "team": "BAL",
+          "position": "RB"
+        },
+        {
+          "rank": 3,
+          "rush_tds_total": 10.87,
+          "player_name": "James Cook III",
+          "team": "BUF",
+          "position": "RB"
+        },
+        {
+          "rank": 4,
+          "rush_tds_total": 10.83,
+          "player_name": "Josh Jacobs",
+          "team": "GB",
+          "position": "RB"
+        },
+        {
+          "rank": 5,
+          "rush_tds_total": 10.78,
+          "player_name": "Javonte Williams",
+          "team": "DAL",
+          "position": "RB"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "rush_tds_total": 0.57,
+          "player_name": "Aidan O'Connell",
+          "team": "LV",
+          "position": "QB"
+        },
+        {
+          "rank": 2,
+          "rush_tds_total": 0.57,
+          "player_name": "Fernando Mendoza",
+          "team": "LV",
+          "position": "QB"
+        },
+        {
+          "rank": 3,
+          "rush_tds_total": 0.57,
+          "player_name": "Cam Miller",
+          "team": "MIA",
+          "position": "QB"
+        },
+        {
+          "rank": 4,
+          "rush_tds_total": 0.57,
+          "player_name": "Quinn Ewers",
+          "team": "MIA",
+          "position": "QB"
+        },
+        {
+          "rank": 5,
+          "rush_tds_total": 0.59,
+          "player_name": "Dillon Gabriel",
+          "team": "CLE",
+          "position": "QB"
+        }
+      ]
+    },
+    "rec_tds": {
+      "top": [
+        {
+          "rank": 1,
+          "rec_tds_total": 11.72,
+          "player_name": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "position": "WR"
+        },
+        {
+          "rank": 2,
+          "rec_tds_total": 10.48,
+          "player_name": "Ja'Marr Chase",
+          "team": "CIN",
+          "position": "WR"
+        },
+        {
+          "rank": 3,
+          "rec_tds_total": 10.4,
+          "player_name": "Justin Jefferson",
+          "team": "MIN",
+          "position": "WR"
+        },
+        {
+          "rank": 4,
+          "rec_tds_total": 9.8,
+          "player_name": "Puka Nacua",
+          "team": "LA",
+          "position": "WR"
+        },
+        {
+          "rank": 5,
+          "rec_tds_total": 9.72,
+          "player_name": "Zay Flowers",
+          "team": "BAL",
+          "position": "WR"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "rec_tds_total": 0.86,
+          "player_name": "Jeremy Ruckert",
+          "team": "NYJ",
+          "position": "TE"
+        },
+        {
+          "rank": 2,
+          "rec_tds_total": 0.94,
+          "player_name": "Ben Yurosek",
+          "team": "MIN",
+          "position": "TE"
+        },
+        {
+          "rank": 3,
+          "rec_tds_total": 1.03,
+          "player_name": "Will Shipley",
+          "team": "PHI",
+          "position": "RB"
+        },
+        {
+          "rank": 4,
+          "rec_tds_total": 1.06,
+          "player_name": "Ollie Gordon II",
+          "team": "MIA",
+          "position": "RB"
+        },
+        {
+          "rank": 5,
+          "rec_tds_total": 1.08,
+          "player_name": "Luke Schoonmaker",
+          "team": "DAL",
+          "position": "TE"
+        }
+      ]
+    },
+    "points_for": {
+      "top": [
+        {
+          "rank": 1,
+          "points_for": 481.05,
+          "team": "LA"
+        },
+        {
+          "rank": 2,
+          "points_for": 476.46,
+          "team": "DAL"
+        },
+        {
+          "rank": 3,
+          "points_for": 437.66,
+          "team": "CIN"
+        },
+        {
+          "rank": 4,
+          "points_for": 413.24,
+          "team": "SEA"
+        },
+        {
+          "rank": 5,
+          "points_for": 413.18,
+          "team": "BAL"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "points_for": 282.6,
+          "team": "CAR"
+        },
+        {
+          "rank": 2,
+          "points_for": 282.6,
+          "team": "ARI"
+        },
+        {
+          "rank": 3,
+          "points_for": 282.6,
+          "team": "NO"
+        },
+        {
+          "rank": 4,
+          "points_for": 282.61,
+          "team": "TEN"
+        },
+        {
+          "rank": 5,
+          "points_for": 282.61,
+          "team": "PIT"
+        }
+      ]
+    },
+    "points_against": {
+      "top": [
+        {
+          "rank": 1,
+          "points_against": 424.76,
+          "team": "GB"
+        },
+        {
+          "rank": 2,
+          "points_against": 424.76,
+          "team": "MIA"
+        },
+        {
+          "rank": 3,
+          "points_against": 424.67,
+          "team": "NYG"
+        },
+        {
+          "rank": 4,
+          "points_against": 424.67,
+          "team": "WAS"
+        },
+        {
+          "rank": 5,
+          "points_against": 424.67,
+          "team": "CAR"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "points_against": 327.98,
+          "team": "HOU"
+        },
+        {
+          "rank": 2,
+          "points_against": 328.02,
+          "team": "DET"
+        },
+        {
+          "rank": 3,
+          "points_against": 328.06,
+          "team": "JAX"
+        },
+        {
+          "rank": 4,
+          "points_against": 328.3,
+          "team": "MIN"
+        },
+        {
+          "rank": 5,
+          "points_against": 328.31,
+          "team": "ATL"
+        }
+      ]
+    },
+    "expected_wins": {
+      "top": [
+        {
+          "rank": 1,
+          "expected_wins": 12.6,
+          "team": "HOU"
+        },
+        {
+          "rank": 2,
+          "expected_wins": 12.6,
+          "team": "JAX"
+        },
+        {
+          "rank": 3,
+          "expected_wins": 12.6,
+          "team": "SEA"
+        },
+        {
+          "rank": 4,
+          "expected_wins": 12.6,
+          "team": "CHI"
+        },
+        {
+          "rank": 5,
+          "expected_wins": 12.6,
+          "team": "ATL"
+        }
+      ],
+      "bottom": [
+        {
+          "rank": 1,
+          "expected_wins": 3.74,
+          "team": "MIA"
+        },
+        {
+          "rank": 2,
+          "expected_wins": 3.74,
+          "team": "CAR"
+        },
+        {
+          "rank": 3,
+          "expected_wins": 3.74,
+          "team": "TEN"
+        },
+        {
+          "rank": 4,
+          "expected_wins": 3.74,
+          "team": "NYJ"
+        },
+        {
+          "rank": 5,
+          "expected_wins": 3.74,
+          "team": "LV"
+        }
+      ]
+    }
+  },
+  "conservation": {
+    "pass_pool": 125998.1,
+    "rush_pool": 64000.0,
+    "rec_pool": 125998.1,
+    "max_rec_pass_gap_pct": 0.0,
+    "scheme_pass": {
+      "ARI": 4350.4,
+      "BAL": 3578.6,
+      "SEA": 4258.5
+    },
+    "league_pf": 11859.18,
+    "league_pa": 11859.19,
+    "wins_sum": 271.9999,
+    "wins_min": 3.7399,
+    "wins_max": 12.6034,
+    "wins_range": 8.8635
+  },
+  "soft_flags": [],
+  "offense_smoke": {
+    "checks": {
+      "pass_rec_yards_within_1_5pct": true,
+      "league_pass_tds_band": true,
+      "league_rush_tds_band": true,
+      "soft_td_ceilings_floors": true,
+      "pass_tds_match_rec_tds": true,
+      "offensive_yards_identity": true,
+      "rush_pool_band": true,
+      "pass_pool_locked": true,
+      "ari_bal_sea_pass_zones": true
+    },
+    "all_pass": true,
+    "league": {
+      "pass_yards": 125998.1,
+      "rush_yards": 64000.0,
+      "receiving_yards": 125998.1,
+      "pass_tds": 1095.82,
+      "rush_tds": 516.72,
+      "rec_tds": 1095.82,
+      "offensive_tds": 1612.53,
+      "offensive_yards": 189998.1,
+      "ints": 350.27
+    },
+    "pass_rec_fails": [],
+    "td_ceiling_fails": [],
+    "zone_detail": {
+      "ARI": {
+        "yards": 4082.6,
+        "ok": true
+      },
+      "BAL": {
+        "yards": 3344.6,
+        "ok": true
+      },
+      "SEA": {
+        "yards": 3974.6,
+        "ok": true
+      }
+    },
+    "n_teams": 32
+  },
+  "defense_smoke": {
+    "checks": {
+      "pf_equals_pa": true,
+      "wins_sum_272": true,
+      "league_pf_band": true,
+      "pass_yards_still_locked": true,
+      "n_teams_32": true,
+      "soft_pf_bands": true,
+      "soft_pa_bands": true,
+      "sacks_conserved": true,
+      "ints_conserved": true,
+      "pa_range_ge_85": true,
+      "sack_range_ge_18": true,
+      "int_range_ge_6": true,
+      "pass_yards_allowed_conserved": true,
+      "rush_yards_allowed_conserved": true
+    },
+    "all_pass": true,
+    "ranges": {
+      "pa": 96.78,
+      "sacks": 21.55,
+      "ints": 7.89,
+      "pf": 198.45,
+      "wins": 8.86,
+      "pa_min": 327.98,
+      "pa_max": 424.76,
+      "pf_min": 282.6,
+      "pf_max": 481.05,
+      "wins_min": 3.74,
+      "wins_max": 12.6,
+      "sack_min": 25.83,
+      "sack_max": 47.38,
+      "int_min": 7.23,
+      "int_max": 15.12
+    },
+    "league": {
+      "points_for": 11859.18,
+      "points_against": 11859.19,
+      "ppg": 21.8,
+      "wins_sum": 271.9999,
+      "pass_yards": 125998.1,
+      "pass_yards_allowed": 125998.3,
+      "rush_yards_allowed": 64000.1,
+      "sacks": 1149.8,
+      "ints_forced": 350.35
+    },
+    "top_pf": [
+      [
+        "LA",
+        481.1
+      ],
+      [
+        "DAL",
+        476.5
+      ],
+      [
+        "CIN",
+        437.7
+      ],
+      [
+        "SEA",
+        413.2
+      ],
+      [
+        "BAL",
+        413.2
+      ]
+    ],
+    "bot_pf": [
+      [
+        "PIT",
+        282.6
+      ],
+      [
+        "TEN",
+        282.6
+      ],
+      [
+        "NO",
+        282.6
+      ],
+      [
+        "ARI",
+        282.6
+      ],
+      [
+        "CAR",
+        282.6
+      ]
+    ],
+    "top_pa": [
+      [
+        "GB",
+        424.8
+      ],
+      [
+        "MIA",
+        424.8
+      ],
+      [
+        "NYG",
+        424.7
+      ],
+      [
+        "WAS",
+        424.7
+      ],
+      [
+        "CAR",
+        424.7
+      ]
+    ],
+    "bot_pa": [
+      [
+        "ATL",
+        328.3
+      ],
+      [
+        "MIN",
+        328.3
+      ],
+      [
+        "JAX",
+        328.1
+      ],
+      [
+        "DET",
+        328.0
+      ],
+      [
+        "HOU",
+        328.0
+      ]
+    ],
+    "top_wins": [
+      [
+        "HOU",
+        12.6
+      ],
+      [
+        "JAX",
+        12.6
+      ],
+      [
+        "SEA",
+        12.6
+      ],
+      [
+        "CHI",
+        12.6
+      ],
+      [
+        "ATL",
+        12.6
+      ]
+    ],
+    "bot_wins": [
+      [
+        "LV",
+        3.74
+      ],
+      [
+        "NYJ",
+        3.74
+      ],
+      [
+        "TEN",
+        3.74
+      ],
+      [
+        "CAR",
+        3.74
+      ],
+      [
+        "MIA",
+        3.74
+      ]
+    ],
+    "top_sacks": [
+      [
+        "HOU",
+        47.4
+      ],
+      [
+        "JAX",
+        47.4
+      ],
+      [
+        "SEA",
+        47.4
+      ],
+      [
+        "ATL",
+        47.4
+      ],
+      [
+        "BUF",
+        47.4
+      ]
+    ],
+    "bot_sacks": [
+      [
+        "LV",
+        25.8
+      ],
+      [
+        "NYJ",
+        25.8
+      ],
+      [
+        "TEN",
+        25.8
+      ],
+      [
+        "CAR",
+        25.8
+      ],
+      [
+        "MIA",
+        25.8
+      ]
+    ],
+    "top_ints": [
+      [
+        "HOU",
+        15.1
+      ],
+      [
+        "JAX",
+        15.1
+      ],
+      [
+        "SEA",
+        15.1
+      ],
+      [
+        "BAL",
+        15.1
+      ],
+      [
+        "PHI",
+        15.1
+      ]
+    ],
+    "bot_ints": [
+      [
+        "NYJ",
+        7.3
+      ],
+      [
+        "TEN",
+        7.3
+      ],
+      [
+        "CAR",
+        7.3
+      ],
+      [
+        "MIA",
+        7.3
+      ],
+      [
+        "PIT",
+        7.2
+      ]
+    ]
+  },
+  "note": "Step 3 final smoke \u2014 snapshot NOT LOCKED \u2014 awaiting user review"
+}

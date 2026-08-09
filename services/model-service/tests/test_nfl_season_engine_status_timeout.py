@@ -15,8 +15,20 @@ from src.services.nfl_season_engine.loaders import SCHEDULE_SOURCE_PACKAGED
 
 def test_engine_version_includes_projected_sos() -> None:
     assert ENGINE_VERSION.startswith("nfl-season-engine-v1.")
-    assert "v1.14" in ENGINE_VERSION
-    assert any(t in ENGINE_VERSION for t in ("projected-sos", "true-pr-harden", "season-coherence"))
+    assert any(
+        v in ENGINE_VERSION
+        for v in ("v1.14", "v1.15", "v1.16", "v1.17", "v1.18", "v1.19", "v1.20", "v1.21")
+    )
+    assert any(
+        t in ENGINE_VERSION
+        for t in (
+            "projected-sos",
+            "true-pr-harden",
+            "season-coherence",
+            "defense-variance",
+            "team-variance",
+        )
+    )
 
 
 def test_resolve_falls_back_to_packaged_when_db_times_out(monkeypatch) -> None:

@@ -5,10 +5,10 @@ documents an explicit, inspectable conversion from team season (or game)
 production into offensive points. Full FG/special-teams markets remain
 approximate stubs.
 
-Game-level W/L already comes from realized scores in ``game_script`` /
-``season_sim`` (zero-sum: one winner per game). This bridge is for
-diagnostics and season-total reconciliation — it does **not** replace
-path scores.
+v1.19: published season-total PF/PA/W/L close-the-loop lives in
+``data_platform_nfl.defensive_production_stack`` (offense → PF → schedule
+PA → Pythagorean wins = 272). Game-level path W/L still comes from
+realized scores in ``game_script`` / ``season_sim`` (zero-sum).
 """
 
 from __future__ import annotations

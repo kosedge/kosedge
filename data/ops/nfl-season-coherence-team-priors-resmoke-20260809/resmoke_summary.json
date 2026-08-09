@@ -1,0 +1,93 @@
+{
+  "engine_version": "nfl-season-engine-v1.17-season-coherence-team-priors",
+  "method": "budget_ratio_rescale_of_035645Z",
+  "pre_pool": {
+    "ARI": 3829.4,
+    "BAL": 3150.0,
+    "SEA": 3748.5
+  },
+  "post_pool": {
+    "ARI": 4350.4,
+    "BAL": 3578.6,
+    "SEA": 4258.5
+  },
+  "old_post_pool": {
+    "ARI": 5008.4,
+    "BAL": 2907.9,
+    "SEA": 3210.5
+  },
+  "qb1": {
+    "ge_4000": 7,
+    "ge_4500": 3,
+    "lt_3500": 13,
+    "median": 3681.8,
+    "min": 2951.5,
+    "max": 4813.1,
+    "top5": [
+      [
+        "CIN",
+        4813.1,
+        "Joe Burrow"
+      ],
+      [
+        "LA",
+        4540.3,
+        "Matthew Stafford"
+      ],
+      [
+        "DAL",
+        4516.3,
+        "Dak Prescott"
+      ],
+      [
+        "KC",
+        4376.4,
+        "Patrick Mahomes"
+      ],
+      [
+        "DEN",
+        4220.1,
+        "Bo Nix"
+      ]
+    ],
+    "bot5": [
+      [
+        "MIN",
+        3261.7,
+        "Kyler Murray"
+      ],
+      [
+        "CLE",
+        3232.4,
+        "Deshaun Watson"
+      ],
+      [
+        "PHI",
+        3042.2,
+        "Jalen Hurts"
+      ],
+      [
+        "NYJ",
+        2990.7,
+        "Geno Smith"
+      ],
+      [
+        "WAS",
+        2951.5,
+        "Jayden Daniels"
+      ]
+    ],
+    "ARI": 4082.6,
+    "BAL": 3344.6,
+    "SEA": 3974.6
+  },
+  "league_pass": 125998.1,
+  "checks": {
+    "ge4000_not_32_target_6_12": true,
+    "median_3600_3800": true,
+    "left_tail_under_3500": true,
+    "top_tail_ge4500": true,
+    "league_pass_115_130k": true
+  },
+  "all_pass": true
+}

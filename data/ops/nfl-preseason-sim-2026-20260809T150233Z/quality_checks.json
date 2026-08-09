@@ -1,0 +1,330 @@
+{
+  "gates": {
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "pass_pool_locked": true,
+    "rush_pool_64000": true,
+    "ari_bal_sea_pass_untouched": true,
+    "cin_not_bottom_tier": true,
+    "cin_wins_band_9_12": true,
+    "rb_top12_differentiated": true,
+    "top_rb_ge_1400": true,
+    "pf_cluster_lt_12": true,
+    "win_ties_improved": true,
+    "offense_smoke": true,
+    "defense_smoke": true,
+    "kyler_on_ari": true
+  },
+  "offense_smoke": {
+    "checks": {
+      "pass_rec_yards_within_1_5pct": true,
+      "league_pass_tds_band": true,
+      "league_rush_tds_band": true,
+      "soft_td_ceilings_floors": true,
+      "pass_tds_match_rec_tds": true,
+      "offensive_yards_identity": true,
+      "rush_pool_band": true,
+      "pass_pool_locked": true,
+      "ari_bal_sea_pass_zones": true
+    },
+    "all_pass": true,
+    "league": {
+      "pass_yards": 125998.1,
+      "rush_yards": 64000.0,
+      "receiving_yards": 125998.1,
+      "pass_tds": 1095.82,
+      "rush_tds": 516.72,
+      "rec_tds": 1095.82,
+      "offensive_tds": 1612.53,
+      "offensive_yards": 189998.1,
+      "ints": 350.27
+    },
+    "pass_rec_fails": [],
+    "td_ceiling_fails": [],
+    "zone_detail": {
+      "ARI": {
+        "yards": 4082.6,
+        "ok": true
+      },
+      "BAL": {
+        "yards": 3344.6,
+        "ok": true
+      },
+      "SEA": {
+        "yards": 3974.6,
+        "ok": true
+      }
+    },
+    "n_teams": 32
+  },
+  "defense_smoke": {
+    "checks": {
+      "pf_equals_pa": true,
+      "wins_sum_272": true,
+      "league_pf_band": true,
+      "pass_yards_still_locked": true,
+      "n_teams_32": true,
+      "soft_pf_bands": true,
+      "soft_pa_bands": true,
+      "sacks_conserved": true,
+      "ints_conserved": true,
+      "pa_range_ge_85": true,
+      "sack_range_ge_18": true,
+      "int_range_ge_6": true,
+      "pass_yards_allowed_conserved": true,
+      "rush_yards_allowed_conserved": true
+    },
+    "all_pass": true,
+    "ranges": {
+      "pa": 96.78,
+      "sacks": 21.55,
+      "ints": 7.89,
+      "pf": 198.45,
+      "wins": 8.86,
+      "pa_min": 327.98,
+      "pa_max": 424.76,
+      "pf_min": 282.6,
+      "pf_max": 481.05,
+      "wins_min": 3.74,
+      "wins_max": 12.6,
+      "sack_min": 25.83,
+      "sack_max": 47.38,
+      "int_min": 7.23,
+      "int_max": 15.12
+    },
+    "league": {
+      "points_for": 11859.2,
+      "points_against": 11859.2,
+      "ppg": 21.8,
+      "wins_sum": 272.0,
+      "pass_yards": 125998.1,
+      "pass_yards_allowed": 125998.1,
+      "rush_yards_allowed": 64000.0,
+      "sacks": 1149.9,
+      "ints_forced": 350.29
+    },
+    "top_pf": [
+      [
+        "LA",
+        481.0
+      ],
+      [
+        "DAL",
+        476.5
+      ],
+      [
+        "CIN",
+        437.7
+      ],
+      [
+        "SEA",
+        413.2
+      ],
+      [
+        "BAL",
+        413.2
+      ]
+    ],
+    "bot_pf": [
+      [
+        "PIT",
+        282.6
+      ],
+      [
+        "TEN",
+        282.6
+      ],
+      [
+        "NO",
+        282.6
+      ],
+      [
+        "CAR",
+        282.6
+      ],
+      [
+        "ARI",
+        282.6
+      ]
+    ],
+    "top_pa": [
+      [
+        "MIA",
+        424.8
+      ],
+      [
+        "GB",
+        424.8
+      ],
+      [
+        "WAS",
+        424.7
+      ],
+      [
+        "CAR",
+        424.7
+      ],
+      [
+        "NYG",
+        424.7
+      ]
+    ],
+    "bot_pa": [
+      [
+        "ATL",
+        328.3
+      ],
+      [
+        "MIN",
+        328.3
+      ],
+      [
+        "JAX",
+        328.1
+      ],
+      [
+        "DET",
+        328.0
+      ],
+      [
+        "HOU",
+        328.0
+      ]
+    ],
+    "top_wins": [
+      [
+        "HOU",
+        12.6
+      ],
+      [
+        "JAX",
+        12.6
+      ],
+      [
+        "SEA",
+        12.6
+      ],
+      [
+        "CHI",
+        12.6
+      ],
+      [
+        "ATL",
+        12.6
+      ]
+    ],
+    "bot_wins": [
+      [
+        "LV",
+        3.74
+      ],
+      [
+        "NYJ",
+        3.74
+      ],
+      [
+        "TEN",
+        3.74
+      ],
+      [
+        "CAR",
+        3.74
+      ],
+      [
+        "MIA",
+        3.74
+      ]
+    ],
+    "top_sacks": [
+      [
+        "ATL",
+        47.4
+      ],
+      [
+        "BUF",
+        47.4
+      ],
+      [
+        "CLE",
+        47.4
+      ],
+      [
+        "DEN",
+        47.4
+      ],
+      [
+        "DET",
+        47.4
+      ]
+    ],
+    "bot_sacks": [
+      [
+        "PIT",
+        25.8
+      ],
+      [
+        "SF",
+        25.8
+      ],
+      [
+        "TB",
+        25.8
+      ],
+      [
+        "TEN",
+        25.8
+      ],
+      [
+        "WAS",
+        25.8
+      ]
+    ],
+    "top_ints": [
+      [
+        "ARI",
+        15.1
+      ],
+      [
+        "BAL",
+        15.1
+      ],
+      [
+        "CLE",
+        15.1
+      ],
+      [
+        "DEN",
+        15.1
+      ],
+      [
+        "HOU",
+        15.1
+      ]
+    ],
+    "bot_ints": [
+      [
+        "NO",
+        7.3
+      ],
+      [
+        "NYG",
+        7.3
+      ],
+      [
+        "NYJ",
+        7.3
+      ],
+      [
+        "TEN",
+        7.3
+      ],
+      [
+        "PIT",
+        7.2
+      ]
+    ]
+  },
+  "all_pass": true,
+  "locked_snapshot": false
+}

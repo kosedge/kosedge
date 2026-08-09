@@ -1,0 +1,160 @@
+{
+  "defense_stack": {
+    "checks": {
+      "pf_equals_pa": true,
+      "wins_sum_272": true,
+      "league_pf_band": true,
+      "pass_yards_still_locked": true,
+      "n_teams_32": true,
+      "soft_pf_bands": true,
+      "soft_pa_bands": true,
+      "pass_yards_allowed_conserved": true,
+      "rush_yards_allowed_conserved": true
+    },
+    "all_pass": true,
+    "league": {
+      "points_for": 11859.2,
+      "points_against": 11859.2,
+      "ppg": 21.8,
+      "wins_sum": 272.0,
+      "pass_yards": 125998.1,
+      "pass_yards_allowed": 125998.1,
+      "rush_yards_allowed": 60000.0,
+      "sacks": 1150.0,
+      "ints_forced": 350.27
+    },
+    "top_pf": [
+      [
+        "SEA",
+        421.1
+      ],
+      [
+        "LA",
+        415.5
+      ],
+      [
+        "DAL",
+        411.7
+      ],
+      [
+        "BUF",
+        409.4
+      ],
+      [
+        "BAL",
+        406.4
+      ]
+    ],
+    "bot_pf": [
+      [
+        "TEN",
+        333.2
+      ],
+      [
+        "CLE",
+        330.7
+      ],
+      [
+        "NYJ",
+        327.5
+      ],
+      [
+        "MIN",
+        323.4
+      ],
+      [
+        "LV",
+        310.4
+      ]
+    ],
+    "top_pa": [
+      [
+        "DAL",
+        396.7
+      ],
+      [
+        "ARI",
+        393.6
+      ],
+      [
+        "WAS",
+        391.9
+      ],
+      [
+        "NYG",
+        385.8
+      ],
+      [
+        "MIA",
+        385.3
+      ]
+    ],
+    "bot_pa": [
+      [
+        "DET",
+        356.2
+      ],
+      [
+        "DEN",
+        354.5
+      ],
+      [
+        "NO",
+        353.3
+      ],
+      [
+        "HOU",
+        353.1
+      ],
+      [
+        "CLE",
+        348.8
+      ]
+    ],
+    "top_wins": [
+      [
+        "SEA",
+        10.1
+      ],
+      [
+        "BUF",
+        9.7
+      ],
+      [
+        "DEN",
+        9.65
+      ],
+      [
+        "LA",
+        9.57
+      ],
+      [
+        "BAL",
+        9.56
+      ]
+    ],
+    "bot_wins": [
+      [
+        "MIA",
+        7.31
+      ],
+      [
+        "TEN",
+        7.23
+      ],
+      [
+        "NYJ",
+        7.05
+      ],
+      [
+        "ARI",
+        7.02
+      ],
+      [
+        "LV",
+        6.65
+      ]
+    ]
+  },
+  "engine_version": "nfl-season-engine-v1.19-defense-points-wl"
+}

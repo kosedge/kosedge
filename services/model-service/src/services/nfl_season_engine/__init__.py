@@ -24,10 +24,8 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.16 season coherence: team pass/rush season budgets with league pool
-conservation, per-team pace, attempt share, offense-coupled YPA, volume
-regression, and QB1 distribution guards (not 32/32 ≥4000). v1.15 true-PR
-harden + v1.14 Future SOS outlook-only contract kept.
+v1.20 defensive variance lift on PA/sacks/INTs/yards (keeps v1.19 PF/PA/W/L
+loop + locked v1.18 offense). v1.15 true-PR harden + v1.14 SOS kept.
 
 Public entry points
 -------------------

@@ -61,6 +61,11 @@ export type NflWebLaunchPointer = {
   source_dir?: string;
   identity?: string;
   preseason?: boolean;
+  note?: string;
+  locked_snapshot?: boolean;
+  locked_at_utc?: string;
+  lock_tag?: string;
+  engine_commit?: string;
 };
 
 export function loadNflWebLaunchPointer(): NflWebLaunchPointer | null {

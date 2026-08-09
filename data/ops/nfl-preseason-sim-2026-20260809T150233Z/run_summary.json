@@ -1,0 +1,270 @@
+{
+  "engine_version": "nfl-season-engine-v1.23-soft-flags-enterprise",
+  "generated_at_utc": "2026-08-09T15:02:33.798703+00:00",
+  "n_team_sims": 50000,
+  "n_player_sims": 1000,
+  "step": "soft_flags_enterprise_fix",
+  "base_bundle": "nfl-preseason-sim-2026-20260809T144255Z",
+  "locked_snapshot": false,
+  "audits": {
+    "labels": {
+      "applied": true,
+      "fixes": [
+        "Kyler Murray: MIN\u2192ARI (was Jacoby Brissett on ARI QB1)",
+        "J.J. McCarthy: MIN\u2192MIN (was Jacoby Brissett on MIN QB1)",
+        "Michael Penix Jr.: ATL\u2192ATL (was Tua Tagovailoa on ATL QB1)",
+        "Tua Tagovailoa: ATL\u2192MIA (was Malik Willis on MIA QB1)"
+      ],
+      "canonical": {
+        "ARI": "Kyler Murray",
+        "MIN": "J.J. McCarthy",
+        "ATL": "Michael Penix Jr.",
+        "MIA": "Tua Tagovailoa"
+      }
+    },
+    "pass_tds": {
+      "teams_lifted": [
+        "BAL",
+        "CHI",
+        "CIN",
+        "DAL",
+        "DEN",
+        "DET",
+        "HOU",
+        "IND",
+        "JAX",
+        "KC",
+        "LA",
+        "LAC",
+        "NO",
+        "PIT",
+        "SF",
+        "TB",
+        "TEN"
+      ],
+      "lift": {
+        "CIN": 2.68,
+        "LA": 1.78,
+        "DAL": 1.56,
+        "KC": 1.14,
+        "DEN": 0.41,
+        "DET": 0.44,
+        "LAC": 0.43,
+        "IND": 0.31,
+        "SF": 0.27,
+        "CHI": 0.36,
+        "HOU": 0.13,
+        "JAX": 0.12,
+        "TB": 0.07,
+        "NO": 0.14,
+        "TEN": 0.1,
+        "PIT": 0.13,
+        "BAL": 0.22
+      }
+    },
+    "rb_priors": {
+      "rush_pool": 64000.0,
+      "top_rb": [
+        [
+          "James Cook III",
+          "BUF",
+          1478.8
+        ],
+        [
+          "Kyren Williams",
+          "LA",
+          1459.3
+        ],
+        [
+          "Derrick Henry",
+          "BAL",
+          1442.5
+        ],
+        [
+          "Bijan Robinson",
+          "ATL",
+          1440.6
+        ],
+        [
+          "Javonte Williams",
+          "DAL",
+          1439.2
+        ],
+        [
+          "Jacory Croskey-Merritt",
+          "WAS",
+          1435.1
+        ],
+        [
+          "Zach Charbonnet",
+          "SEA",
+          1427.0
+        ],
+        [
+          "Rhamondre Stevenson",
+          "NE",
+          1418.8
+        ],
+        [
+          "Cam Skattebo",
+          "NYG",
+          1414.8
+        ],
+        [
+          "Saquon Barkley",
+          "PHI",
+          1409.7
+        ],
+        [
+          "Bucky Irving",
+          "TB",
+          1402.6
+        ],
+        [
+          "Christian McCaffrey",
+          "SF",
+          1402.2
+        ]
+      ]
+    },
+    "defense": {
+      "league_pf": 11859.2,
+      "league_pa": 11859.2,
+      "wins_sum": 272.0,
+      "offense_pf_variance_lift": {
+        "applied": true,
+        "method": "offense_pf_variance_lift_v1_23_tapered",
+        "pf_range": 198.45,
+        "pa_range": 96.78,
+        "volume_pf_floors": true
+      }
+    }
+  },
+  "cin": {
+    "pass_yards": 5119.1,
+    "points_for": 437.66,
+    "points_against": 424.48,
+    "expected_wins": 9.4657,
+    "burrow_pass_yards": 4813.1,
+    "burrow_pass_tds": 38.25
+  },
+  "top_rbs": [
+    {
+      "rank": 1,
+      "player": "James Cook III",
+      "team": "BUF",
+      "rush_yards": 1478.8,
+      "rush_tds": 10.87
+    },
+    {
+      "rank": 2,
+      "player": "Kyren Williams",
+      "team": "LA",
+      "rush_yards": 1459.3,
+      "rush_tds": 11.04
+    },
+    {
+      "rank": 3,
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "rush_yards": 1442.5,
+      "rush_tds": 11.04
+    },
+    {
+      "rank": 4,
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "rush_yards": 1440.6,
+      "rush_tds": 10.12
+    },
+    {
+      "rank": 5,
+      "player": "Javonte Williams",
+      "team": "DAL",
+      "rush_yards": 1439.2,
+      "rush_tds": 10.78
+    },
+    {
+      "rank": 6,
+      "player": "Jacory Croskey-Merritt",
+      "team": "WAS",
+      "rush_yards": 1435.1,
+      "rush_tds": 10.42
+    },
+    {
+      "rank": 7,
+      "player": "Zach Charbonnet",
+      "team": "SEA",
+      "rush_yards": 1427.0,
+      "rush_tds": 10.77
+    },
+    {
+      "rank": 8,
+      "player": "Rhamondre Stevenson",
+      "team": "NE",
+      "rush_yards": 1418.8,
+      "rush_tds": 10.46
+    },
+    {
+      "rank": 9,
+      "player": "Cam Skattebo",
+      "team": "NYG",
+      "rush_yards": 1414.8,
+      "rush_tds": 9.99
+    },
+    {
+      "rank": 10,
+      "player": "Saquon Barkley",
+      "team": "PHI",
+      "rush_yards": 1409.7,
+      "rush_tds": 10.5
+    },
+    {
+      "rank": 11,
+      "player": "Bucky Irving",
+      "team": "TB",
+      "rush_yards": 1402.6,
+      "rush_tds": 10.16
+    },
+    {
+      "rank": 12,
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "rush_yards": 1402.2,
+      "rush_tds": 10.67
+    }
+  ],
+  "wins": {
+    "min": 3.7399,
+    "max": 12.6034,
+    "range": 8.8635,
+    "sum": 272.0,
+    "max_tie_count": 6
+  },
+  "pf": {
+    "min": 282.6,
+    "max": 481.05,
+    "range": 198.45,
+    "max_tie_count": 8,
+    "max_cluster_0_25": 11,
+    "league": 11859.2
+  },
+  "gates": {
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "pass_pool_locked": true,
+    "rush_pool_64000": true,
+    "ari_bal_sea_pass_untouched": true,
+    "cin_not_bottom_tier": true,
+    "cin_wins_band_9_12": true,
+    "rb_top12_differentiated": true,
+    "top_rb_ge_1400": true,
+    "pf_cluster_lt_12": true,
+    "win_ties_improved": true,
+    "offense_smoke": true,
+    "defense_smoke": true,
+    "kyler_on_ari": true
+  },
+  "note": "Enterprise soft-flag fix \u2014 snapshot NOT LOCKED"
+}

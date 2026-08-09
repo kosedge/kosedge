@@ -754,9 +754,24 @@ def generate_player_regular_season_totals(
 
     budget_audit: Dict[str, Any] = {"applied": False}
     if apply_team_budgets and output_rows:
-        # Season coherence: conserved team pass/rush pools (v1.16 contract).
+        # Season coherence: conserved team pass/rush pools (v1.16/v1.17).
         output_rows, budget_audit = apply_team_volume_budgets(output_rows)
         budget_audit["applied"] = True
+        # Phase-1 offensive stack: TDs/INTs/receiving/rush usage on locked pass.
+        try:
+            from data_platform_nfl.offensive_production_stack import (
+                apply_offensive_production_stack,
+            )
+        except ImportError:
+            from .offensive_production_stack import apply_offensive_production_stack
+
+        output_rows, stack_audit = apply_offensive_production_stack(output_rows)
+        budget_audit["offensive_stack"] = {
+            "applied": stack_audit.get("applied"),
+            "method": stack_audit.get("method"),
+            "smoke_all_pass": (stack_audit.get("smoke") or {}).get("all_pass"),
+            "league": (stack_audit.get("smoke") or {}).get("league"),
+        }
     return output_rows, lock_audit, skill_audit, budget_audit
 
 

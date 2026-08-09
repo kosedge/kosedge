@@ -1,0 +1,283 @@
+{
+  "label": "launch_current_nfl-season-engine-v1.20-defense-variance-lift",
+  "preseason": true,
+  "engine_version": "nfl-season-engine-v1.20-defense-variance-lift",
+  "generated_at_utc": "2026-08-09T12:02:27.462080+00:00",
+  "season": 2026,
+  "n_team_sims": 50000,
+  "n_player_sims": 1000,
+  "ops_note": "v1.20 defensive variance lift; PF+offense locked; wins recomputed from new PA.",
+  "source_offense_board": "data/ops/nfl-preseason-sim-2026-20260809T095703Z",
+  "sanity": {
+    "team_mean_wins_sum": 272.0,
+    "team_mean_wins_sum_ok": true
+  },
+  "defense_stack_smoke": {
+    "checks": {
+      "pf_equals_pa": true,
+      "wins_sum_272": true,
+      "league_pf_band": true,
+      "pass_yards_still_locked": true,
+      "n_teams_32": true,
+      "soft_pf_bands": true,
+      "soft_pa_bands": true,
+      "sacks_conserved": true,
+      "ints_conserved": true,
+      "pa_range_ge_85": true,
+      "sack_range_ge_18": true,
+      "int_range_ge_6": true,
+      "pass_yards_allowed_conserved": true,
+      "rush_yards_allowed_conserved": true
+    },
+    "all_pass": true,
+    "ranges": {
+      "pa": 96.97,
+      "sacks": 22.12,
+      "ints": 8.21,
+      "pa_min": 327.89,
+      "pa_max": 424.85,
+      "sack_min": 25.0,
+      "sack_max": 47.11,
+      "int_min": 6.76,
+      "int_max": 14.97
+    },
+    "league": {
+      "points_for": 11859.2,
+      "points_against": 11859.2,
+      "ppg": 21.8,
+      "wins_sum": 272.0,
+      "pass_yards": 125998.1,
+      "pass_yards_allowed": 125998.1,
+      "rush_yards_allowed": 60000.0,
+      "sacks": 1150.0,
+      "ints_forced": 350.27
+    },
+    "top_pf": [
+      [
+        "SEA",
+        421.1
+      ],
+      [
+        "LA",
+        415.5
+      ],
+      [
+        "DAL",
+        411.7
+      ],
+      [
+        "BUF",
+        409.4
+      ],
+      [
+        "BAL",
+        406.4
+      ]
+    ],
+    "bot_pf": [
+      [
+        "TEN",
+        333.2
+      ],
+      [
+        "CLE",
+        330.7
+      ],
+      [
+        "NYJ",
+        327.5
+      ],
+      [
+        "MIN",
+        323.4
+      ],
+      [
+        "LV",
+        310.4
+      ]
+    ],
+    "top_pa": [
+      [
+        "ARI",
+        424.9
+      ],
+      [
+        "CAR",
+        424.9
+      ],
+      [
+        "CIN",
+        424.9
+      ],
+      [
+        "DAL",
+        424.9
+      ],
+      [
+        "GB",
+        424.9
+      ]
+    ],
+    "bot_pa": [
+      [
+        "MIN",
+        327.9
+      ],
+      [
+        "NE",
+        327.9
+      ],
+      [
+        "NO",
+        327.9
+      ],
+      [
+        "PHI",
+        327.9
+      ],
+      [
+        "SEA",
+        327.9
+      ]
+    ],
+    "top_wins": [
+      [
+        "SEA",
+        10.88
+      ],
+      [
+        "BUF",
+        10.62
+      ],
+      [
+        "BAL",
+        10.56
+      ],
+      [
+        "DEN",
+        10.33
+      ],
+      [
+        "DET",
+        10.26
+      ]
+    ],
+    "bot_wins": [
+      [
+        "MIA",
+        6.31
+      ],
+      [
+        "ARI",
+        6.23
+      ],
+      [
+        "TEN",
+        6.08
+      ],
+      [
+        "NYJ",
+        5.92
+      ],
+      [
+        "LV",
+        5.44
+      ]
+    ],
+    "top_sacks": [
+      [
+        "CLE",
+        47.1
+      ],
+      [
+        "DEN",
+        47.1
+      ],
+      [
+        "HOU",
+        47.1
+      ],
+      [
+        "JAX",
+        47.1
+      ],
+      [
+        "LA",
+        47.1
+      ]
+    ],
+    "bot_sacks": [
+      [
+        "NYG",
+        25.0
+      ],
+      [
+        "NYJ",
+        25.0
+      ],
+      [
+        "SF",
+        25.0
+      ],
+      [
+        "TEN",
+        25.0
+      ],
+      [
+        "WAS",
+        25.0
+      ]
+    ],
+    "top_ints": [
+      [
+        "ARI",
+        15.0
+      ],
+      [
+        "BAL",
+        15.0
+      ],
+      [
+        "CLE",
+        15.0
+      ],
+      [
+        "DEN",
+        15.0
+      ],
+      [
+        "HOU",
+        15.0
+      ]
+    ],
+    "bot_ints": [
+      [
+        "DET",
+        6.8
+      ],
+      [
+        "MIA",
+        6.8
+      ],
+      [
+        "MIN",
+        6.8
+      ],
+      [
+        "NYJ",
+        6.8
+      ],
+      [
+        "TEN",
+        6.8
+      ]
+    ]
+  },
+  "variance_lift": {
+    "applied": true,
+    "method": "defense_variance_lift_v1",
+    "pa_range": 96.97,
+    "sack_range": 22.12,
+    "int_range": 8.21
+  }
+}

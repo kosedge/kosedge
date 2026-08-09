@@ -1,0 +1,229 @@
+{
+  "engine_version": "nfl-season-engine-v1.22-alpha-usage-reanchor",
+  "generated_at_utc": "2026-08-09T14:13:37.643297+00:00",
+  "n_team_sims": 50000,
+  "n_player_sims": 1000,
+  "step": 2,
+  "method": "alpha_usage_reanchor_v1",
+  "base_bundle": "nfl-preseason-sim-2026-20260809T133342Z",
+  "audit": {
+    "pass_pool": 125998.1,
+    "rush_pool": 64000.0,
+    "locked_scheme_pass": {
+      "ARI": 4350.4,
+      "BAL": 3578.6,
+      "SEA": 4258.5
+    },
+    "sticky": {
+      "alpha_players": 20,
+      "retention": 0.875
+    }
+  },
+  "gates": {
+    "top_wr_multiple_1400": true,
+    "top_wr_end_1550": true,
+    "top_rb_1400": true,
+    "jsn_top_tier": true,
+    "rec_pass_within_1_5pct": true,
+    "rush_sum_conserved": true,
+    "pass_pool_locked": true,
+    "ari_bal_sea_pass_untouched": true,
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "offense_smoke": true,
+    "step1_gates_held": true
+  },
+  "jsn": {
+    "rank_before": 8,
+    "rank_after": 3,
+    "yards_before": 891.8,
+    "yards_after": 1575.2
+  },
+  "top_wrs": [
+    {
+      "rank": 1,
+      "player": "Puka Nacua",
+      "team": "LA",
+      "rec_yards": 1614.8,
+      "before": 1008.9
+    },
+    {
+      "rank": 2,
+      "player": "Ja'Marr Chase",
+      "team": "CIN",
+      "rec_yards": 1605.5,
+      "before": 1062.5
+    },
+    {
+      "rank": 3,
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "rec_yards": 1575.2,
+      "before": 891.8
+    },
+    {
+      "rank": 4,
+      "player": "Amon-Ra St. Brown",
+      "team": "DET",
+      "rec_yards": 1504.5,
+      "before": 914.4
+    },
+    {
+      "rank": 5,
+      "player": "Justin Jefferson",
+      "team": "MIN",
+      "rec_yards": 1380.9,
+      "before": 734.8
+    },
+    {
+      "rank": 6,
+      "player": "George Pickens",
+      "team": "DAL",
+      "rec_yards": 1379.8,
+      "before": 633.5
+    },
+    {
+      "rank": 7,
+      "player": "Rashee Rice",
+      "team": "KC",
+      "rec_yards": 1364.6,
+      "before": 991.5
+    },
+    {
+      "rank": 8,
+      "player": "CeeDee Lamb",
+      "team": "DAL",
+      "rec_yards": 1323.6,
+      "before": 995.5
+    },
+    {
+      "rank": 9,
+      "player": "Courtland Sutton",
+      "team": "DEN",
+      "rec_yards": 1317.8,
+      "before": 977.4
+    },
+    {
+      "rank": 10,
+      "player": "Chris Olave",
+      "team": "NO",
+      "rec_yards": 1278.6,
+      "before": 864.0
+    },
+    {
+      "rank": 11,
+      "player": "Garrett Wilson",
+      "team": "NYJ",
+      "rec_yards": 1261.2,
+      "before": 692.8
+    },
+    {
+      "rank": 12,
+      "player": "Zay Flowers",
+      "team": "BAL",
+      "rec_yards": 1231.1,
+      "before": 764.3
+    }
+  ],
+  "top_rbs": [
+    {
+      "rank": 1,
+      "player": "Kyren Williams",
+      "team": "LA",
+      "rush_yards": 1431.6,
+      "before": 1311.3
+    },
+    {
+      "rank": 2,
+      "player": "Javonte Williams",
+      "team": "DAL",
+      "rush_yards": 1431.6,
+      "before": 1308.9
+    },
+    {
+      "rank": 3,
+      "player": "Zach Charbonnet",
+      "team": "SEA",
+      "rush_yards": 1431.6,
+      "before": 1375.5
+    },
+    {
+      "rank": 4,
+      "player": "James Cook III",
+      "team": "BUF",
+      "rush_yards": 1431.6,
+      "before": 1308.9
+    },
+    {
+      "rank": 5,
+      "player": "Jacory Croskey-Merritt",
+      "team": "WAS",
+      "rush_yards": 1431.6,
+      "before": 1389.6
+    },
+    {
+      "rank": 6,
+      "player": "Bhayshul Tuten",
+      "team": "JAX",
+      "rush_yards": 1431.6,
+      "before": 1308.9
+    },
+    {
+      "rank": 7,
+      "player": "Bucky Irving",
+      "team": "TB",
+      "rush_yards": 1431.6,
+      "before": 1308.9
+    },
+    {
+      "rank": 8,
+      "player": "Josh Jacobs",
+      "team": "GB",
+      "rush_yards": 1431.6,
+      "before": 1308.9
+    },
+    {
+      "rank": 9,
+      "player": "Cam Skattebo",
+      "team": "NYG",
+      "rush_yards": 1431.6,
+      "before": 1308.9
+    },
+    {
+      "rank": 10,
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "rush_yards": 1431.6,
+      "before": 1316.8
+    },
+    {
+      "rank": 11,
+      "player": "Rhamondre Stevenson",
+      "team": "NE",
+      "rush_yards": 1431.6,
+      "before": 1316.8
+    },
+    {
+      "rank": 12,
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "rush_yards": 1431.6,
+      "before": 1357.3
+    }
+  ],
+  "conservation": {
+    "max_rec_pass_gap_pct": 0.0,
+    "rush_sum_ok": true
+  },
+  "team_picture": {
+    "wins_min": 4.1199,
+    "wins_max": 11.6953,
+    "wins_range": 7.5754,
+    "wins_sum": 272.0001,
+    "league_pf": 11859.17,
+    "league_pa": 11859.25,
+    "note": "unchanged from Step 1 (player reallocation only)"
+  },
+  "note": "Step 2 only \u2014 snapshot NOT locked; Step 3 NOT started"
+}

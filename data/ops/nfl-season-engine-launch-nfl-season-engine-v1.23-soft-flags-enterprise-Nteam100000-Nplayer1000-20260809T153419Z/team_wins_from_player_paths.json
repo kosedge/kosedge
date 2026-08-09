@@ -1,0 +1,1922 @@
+[
+  {
+    "team": "LA",
+    "mean": 11.103,
+    "p10": 8.0,
+    "p50": 11.0,
+    "p90": 14.0,
+    "projected_sos_2026": 0.9961,
+    "schedule_difficulty": "average",
+    "early_sos": 0.992,
+    "late_sos": 1.0161,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 16,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 3,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        },
+        {
+          "week": 4,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 6,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        },
+        {
+          "week": 2,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        },
+        {
+          "week": 15,
+          "opponent": "DAL",
+          "home_away": "home",
+          "effective_power": 0.898
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.912
+  },
+  {
+    "team": "SEA",
+    "mean": 10.731,
+    "p10": 7.0,
+    "p50": 11.0,
+    "p90": 14.0,
+    "projected_sos_2026": 0.9908,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9969,
+    "late_sos": 1.0142,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 18,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 6,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        },
+        {
+          "week": 15,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 9,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        },
+        {
+          "week": 14,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        },
+        {
+          "week": 13,
+          "opponent": "DAL",
+          "home_away": "home",
+          "effective_power": 0.898
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.691
+  },
+  {
+    "team": "DET",
+    "mean": 10.602,
+    "p10": 7.0,
+    "p50": 11.0,
+    "p90": 14.0,
+    "projected_sos_2026": 0.9704,
+    "schedule_difficulty": "easy",
+    "early_sos": 0.959,
+    "late_sos": 0.984,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 2,
+          "opponent": "BUF",
+          "home_away": "away",
+          "effective_power": 1.1101
+        },
+        {
+          "week": 18,
+          "opponent": "GB",
+          "home_away": "away",
+          "effective_power": 1.0794
+        },
+        {
+          "week": 17,
+          "opponent": "CHI",
+          "home_away": "away",
+          "effective_power": 1.0521
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 3,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 14,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 16,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.275
+  },
+  {
+    "team": "DEN",
+    "mean": 10.45,
+    "p10": 7.0,
+    "p50": 11.0,
+    "p90": 14.0,
+    "projected_sos_2026": 0.9901,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0416,
+    "late_sos": 0.9704,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 17,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        },
+        {
+          "week": 1,
+          "opponent": "KC",
+          "home_away": "away",
+          "effective_power": 1.0717
+        },
+        {
+          "week": 5,
+          "opponent": "LAC",
+          "home_away": "away",
+          "effective_power": 1.05
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 11,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 13,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 14,
+          "opponent": "NYJ",
+          "home_away": "away",
+          "effective_power": 0.8913
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.548
+  },
+  {
+    "team": "PHI",
+    "mean": 10.405,
+    "p10": 7.0,
+    "p50": 10.0,
+    "p90": 14.0,
+    "projected_sos_2026": 0.9795,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9845,
+    "late_sos": 1.0056,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 5,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        },
+        {
+          "week": 3,
+          "opponent": "CHI",
+          "home_away": "away",
+          "effective_power": 1.0521
+        },
+        {
+          "week": 4,
+          "opponent": "LA",
+          "home_away": "home",
+          "effective_power": 1.0472
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 9,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        },
+        {
+          "week": 6,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 1,
+          "opponent": "WAS",
+          "home_away": "home",
+          "effective_power": 0.8914
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.26
+  },
+  {
+    "team": "BUF",
+    "mean": 10.36,
+    "p10": 7.0,
+    "p50": 11.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9919,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0251,
+    "late_sos": 0.997,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 5,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 16,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        },
+        {
+          "week": 1,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 18,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 11,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 10,
+          "opponent": "NYJ",
+          "home_away": "away",
+          "effective_power": 0.8913
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.307
+  },
+  {
+    "team": "HOU",
+    "mean": 10.188,
+    "p10": 7.0,
+    "p50": 10.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9904,
+    "schedule_difficulty": "average",
+    "early_sos": 0.985,
+    "late_sos": 0.9974,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 16,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        },
+        {
+          "week": 6,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        },
+        {
+          "week": 3,
+          "opponent": "IND",
+          "home_away": "away",
+          "effective_power": 1.0807
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 18,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 7,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        },
+        {
+          "week": 2,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 10.049
+  },
+  {
+    "team": "IND",
+    "mean": 10.108,
+    "p10": 7.0,
+    "p50": 10.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9842,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9818,
+    "late_sos": 0.9726,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 11,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        },
+        {
+          "week": 14,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        },
+        {
+          "week": 8,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 6,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 10,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 12,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 9.905
+  },
+  {
+    "team": "NE",
+    "mean": 10.026,
+    "p10": 7.0,
+    "p50": 10.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9924,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9878,
+    "late_sos": 0.9795,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 1,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 4,
+          "opponent": "BUF",
+          "home_away": "away",
+          "effective_power": 1.1101
+        },
+        {
+          "week": 3,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 6,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 5,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 18,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 9.805
+  },
+  {
+    "team": "JAX",
+    "mean": 9.712,
+    "p10": 6.0,
+    "p50": 10.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9943,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0091,
+    "late_sos": 0.9867,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 2,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        },
+        {
+          "week": 15,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        },
+        {
+          "week": 18,
+          "opponent": "IND",
+          "home_away": "away",
+          "effective_power": 1.0807
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 12,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 17,
+          "opponent": "WAS",
+          "home_away": "home",
+          "effective_power": 0.8914
+        },
+        {
+          "week": 1,
+          "opponent": "CLE",
+          "home_away": "home",
+          "effective_power": 0.9296
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 9.869
+  },
+  {
+    "team": "GB",
+    "mean": 9.328,
+    "p10": 6.0,
+    "p50": 9.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9928,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9597,
+    "late_sos": 1.016,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 12,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 7,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        },
+        {
+          "week": 9,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 15,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 8,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 2,
+          "opponent": "NYJ",
+          "home_away": "away",
+          "effective_power": 0.8913
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 9.419
+  },
+  {
+    "team": "KC",
+    "mean": 9.204,
+    "p10": 6.0,
+    "p50": 9.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9961,
+    "schedule_difficulty": "average",
+    "early_sos": 0.975,
+    "late_sos": 1.0111,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 13,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 7,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 8,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 9,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 18,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 11,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 9.271
+  },
+  {
+    "team": "BAL",
+    "mean": 9.144,
+    "p10": 6.0,
+    "p50": 9.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9866,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9852,
+    "late_sos": 0.9884,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 12,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        },
+        {
+          "week": 8,
+          "opponent": "BUF",
+          "home_away": "away",
+          "effective_power": 1.1101
+        },
+        {
+          "week": 1,
+          "opponent": "IND",
+          "home_away": "away",
+          "effective_power": 1.0807
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 4,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 7,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        },
+        {
+          "week": 2,
+          "opponent": "NO",
+          "home_away": "home",
+          "effective_power": 0.9295
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.791
+  },
+  {
+    "team": "NO",
+    "mean": 8.875,
+    "p10": 5.0,
+    "p50": 9.0,
+    "p90": 13.0,
+    "projected_sos_2026": 0.9703,
+    "schedule_difficulty": "easy",
+    "early_sos": 0.975,
+    "late_sos": 0.9776,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 1,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        },
+        {
+          "week": 11,
+          "opponent": "CHI",
+          "home_away": "away",
+          "effective_power": 1.0521
+        },
+        {
+          "week": 17,
+          "opponent": "ATL",
+          "home_away": "away",
+          "effective_power": 1.0405
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 3,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 16,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        },
+        {
+          "week": 10,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.625
+  },
+  {
+    "team": "ATL",
+    "mean": 8.817,
+    "p10": 5.0,
+    "p50": 9.0,
+    "p90": 12.0,
+    "projected_sos_2026": 0.9798,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9868,
+    "late_sos": 0.9849,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 3,
+          "opponent": "GB",
+          "home_away": "away",
+          "effective_power": 1.0794
+        },
+        {
+          "week": 12,
+          "opponent": "MIN",
+          "home_away": "away",
+          "effective_power": 1.0349
+        },
+        {
+          "week": 8,
+          "opponent": "TB",
+          "home_away": "away",
+          "effective_power": 1.0342
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 2,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 9,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        },
+        {
+          "week": 17,
+          "opponent": "NO",
+          "home_away": "home",
+          "effective_power": 0.9295
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.833
+  },
+  {
+    "team": "TB",
+    "mean": 8.721,
+    "p10": 5.0,
+    "p50": 9.0,
+    "p90": 12.0,
+    "projected_sos_2026": 0.9857,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9606,
+    "late_sos": 0.9889,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 11,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        },
+        {
+          "week": 9,
+          "opponent": "CHI",
+          "home_away": "away",
+          "effective_power": 1.0521
+        },
+        {
+          "week": 17,
+          "opponent": "LA",
+          "home_away": "home",
+          "effective_power": 1.0472
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 12,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 15,
+          "opponent": "NO",
+          "home_away": "home",
+          "effective_power": 0.9295
+        },
+        {
+          "week": 2,
+          "opponent": "CLE",
+          "home_away": "home",
+          "effective_power": 0.9296
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.527
+  },
+  {
+    "team": "SF",
+    "mean": 8.717,
+    "p10": 5.0,
+    "p50": 9.0,
+    "p90": 12.0,
+    "projected_sos_2026": 0.9972,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9911,
+    "late_sos": 1.0255,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 1,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 5,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 16,
+          "opponent": "KC",
+          "home_away": "away",
+          "effective_power": 1.0717
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 9,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 2,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 3,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.403
+  },
+  {
+    "team": "CLE",
+    "mean": 8.644,
+    "p10": 5.0,
+    "p50": 9.0,
+    "p90": 12.0,
+    "projected_sos_2026": 0.9687,
+    "schedule_difficulty": "easy",
+    "early_sos": 0.9639,
+    "late_sos": 0.9534,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 1,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        },
+        {
+          "week": 16,
+          "opponent": "BAL",
+          "home_away": "away",
+          "effective_power": 1.0395
+        },
+        {
+          "week": 2,
+          "opponent": "TB",
+          "home_away": "away",
+          "effective_power": 1.0342
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 12,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 3,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 13,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.569
+  },
+  {
+    "team": "LAC",
+    "mean": 8.516,
+    "p10": 5.0,
+    "p50": 8.0,
+    "p90": 12.0,
+    "projected_sos_2026": 1.0035,
+    "schedule_difficulty": "average",
+    "early_sos": 1.014,
+    "late_sos": 0.9972,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 8,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 4,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 18,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 11,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 2,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 1,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.438
+  },
+  {
+    "team": "CHI",
+    "mean": 8.402,
+    "p10": 5.0,
+    "p50": 8.0,
+    "p90": 12.0,
+    "projected_sos_2026": 1.001,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9737,
+    "late_sos": 1.0249,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 8,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 15,
+          "opponent": "BUF",
+          "home_away": "away",
+          "effective_power": 1.1101
+        },
+        {
+          "week": 12,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 4,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 11,
+          "opponent": "NO",
+          "home_away": "home",
+          "effective_power": 0.9295
+        },
+        {
+          "week": 9,
+          "opponent": "TB",
+          "home_away": "home",
+          "effective_power": 0.9378
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.545
+  },
+  {
+    "team": "PIT",
+    "mean": 8.229,
+    "p10": 5.0,
+    "p50": 8.0,
+    "p90": 12.0,
+    "projected_sos_2026": 0.9971,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9943,
+    "late_sos": 0.992,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 11,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        },
+        {
+          "week": 14,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        },
+        {
+          "week": 2,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 16,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 3,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        },
+        {
+          "week": 8,
+          "opponent": "CLE",
+          "home_away": "home",
+          "effective_power": 0.9296
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.306
+  },
+  {
+    "team": "MIN",
+    "mean": 8.185,
+    "p10": 5.0,
+    "p50": 8.0,
+    "p90": 12.0,
+    "projected_sos_2026": 0.9896,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9917,
+    "late_sos": 0.9507,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 8,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        },
+        {
+          "week": 14,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        },
+        {
+          "week": 10,
+          "opponent": "GB",
+          "home_away": "away",
+          "effective_power": 1.0794
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 4,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 13,
+          "opponent": "CAR",
+          "home_away": "home",
+          "effective_power": 0.8859
+        },
+        {
+          "week": 17,
+          "opponent": "NYJ",
+          "home_away": "away",
+          "effective_power": 0.8913
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 8.222
+  },
+  {
+    "team": "CIN",
+    "mean": 7.246,
+    "p10": 4.0,
+    "p50": 7.0,
+    "p90": 11.0,
+    "projected_sos_2026": 0.9852,
+    "schedule_difficulty": "average",
+    "early_sos": 1.008,
+    "late_sos": 0.9809,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 2,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        },
+        {
+          "week": 16,
+          "opponent": "IND",
+          "home_away": "away",
+          "effective_power": 1.0807
+        },
+        {
+          "week": 9,
+          "opponent": "ATL",
+          "home_away": "away",
+          "effective_power": 1.0405
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 8,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 12,
+          "opponent": "NO",
+          "home_away": "home",
+          "effective_power": 0.9295
+        },
+        {
+          "week": 18,
+          "opponent": "CLE",
+          "home_away": "home",
+          "effective_power": 0.9296
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 7.272
+  },
+  {
+    "team": "NYG",
+    "mean": 7.022,
+    "p10": 3.0,
+    "p50": 7.0,
+    "p90": 11.0,
+    "projected_sos_2026": 0.9984,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9468,
+    "late_sos": 1.0266,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 2,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 14,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 7,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 3,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 4,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        },
+        {
+          "week": 10,
+          "opponent": "WAS",
+          "home_away": "home",
+          "effective_power": 0.8914
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.973
+  },
+  {
+    "team": "DAL",
+    "mean": 6.998,
+    "p10": 4.0,
+    "p50": 7.0,
+    "p90": 11.0,
+    "projected_sos_2026": 0.9975,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9913,
+    "late_sos": 1.0267,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 15,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 13,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 4,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 11,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 8,
+          "opponent": "ARI",
+          "home_away": "home",
+          "effective_power": 0.8821
+        },
+        {
+          "week": 17,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.854
+  },
+  {
+    "team": "WAS",
+    "mean": 6.649,
+    "p10": 3.0,
+    "p50": 7.0,
+    "p90": 10.0,
+    "projected_sos_2026": 0.9927,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0083,
+    "late_sos": 0.9862,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 1,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        },
+        {
+          "week": 17,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        },
+        {
+          "week": 9,
+          "opponent": "LA",
+          "home_away": "home",
+          "effective_power": 1.0472
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 5,
+          "opponent": "NYG",
+          "home_away": "home",
+          "effective_power": 0.8855
+        },
+        {
+          "week": 11,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        },
+        {
+          "week": 18,
+          "opponent": "DAL",
+          "home_away": "home",
+          "effective_power": 0.898
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 7.169
+  },
+  {
+    "team": "ARI",
+    "mean": 6.421,
+    "p10": 3.0,
+    "p50": 6.0,
+    "p90": 10.0,
+    "projected_sos_2026": 1.003,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0424,
+    "late_sos": 0.9193,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 6,
+          "opponent": "LA",
+          "home_away": "away",
+          "effective_power": 1.1435
+        },
+        {
+          "week": 9,
+          "opponent": "SEA",
+          "home_away": "away",
+          "effective_power": 1.139
+        },
+        {
+          "week": 11,
+          "opponent": "KC",
+          "home_away": "away",
+          "effective_power": 1.0717
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 15,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 17,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 12,
+          "opponent": "WAS",
+          "home_away": "home",
+          "effective_power": 0.8914
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.788
+  },
+  {
+    "team": "CAR",
+    "mean": 6.367,
+    "p10": 3.0,
+    "p50": 6.0,
+    "p90": 10.0,
+    "projected_sos_2026": 1.0023,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0242,
+    "late_sos": 0.9862,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 6,
+          "opponent": "PHI",
+          "home_away": "away",
+          "effective_power": 1.1026
+        },
+        {
+          "week": 8,
+          "opponent": "GB",
+          "home_away": "away",
+          "effective_power": 1.0794
+        },
+        {
+          "week": 17,
+          "opponent": "SEA",
+          "home_away": "home",
+          "effective_power": 1.0427
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 15,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        },
+        {
+          "week": 14,
+          "opponent": "NO",
+          "home_away": "home",
+          "effective_power": 0.9295
+        },
+        {
+          "week": 7,
+          "opponent": "TB",
+          "home_away": "home",
+          "effective_power": 0.9378
+        }
+      ],
+      "home_away_balance": {
+        "home": 9,
+        "away": 8,
+        "road_heavy": false
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.888
+  },
+  {
+    "team": "MIA",
+    "mean": 6.143,
+    "p10": 3.0,
+    "p50": 6.0,
+    "p90": 10.0,
+    "projected_sos_2026": 0.9983,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9775,
+    "late_sos": 1.0016,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 13,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        },
+        {
+          "week": 11,
+          "opponent": "BUF",
+          "home_away": "away",
+          "effective_power": 1.1101
+        },
+        {
+          "week": 18,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 12,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 5,
+          "opponent": "CIN",
+          "home_away": "home",
+          "effective_power": 0.887
+        },
+        {
+          "week": 7,
+          "opponent": "NYJ",
+          "home_away": "away",
+          "effective_power": 0.8913
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.369
+  },
+  {
+    "team": "TEN",
+    "mean": 5.96,
+    "p10": 3.0,
+    "p50": 6.0,
+    "p90": 10.0,
+    "projected_sos_2026": 0.9934,
+    "schedule_difficulty": "average",
+    "early_sos": 0.9868,
+    "late_sos": 1.0087,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 18,
+          "opponent": "HOU",
+          "home_away": "away",
+          "effective_power": 1.1138
+        },
+        {
+          "week": 12,
+          "opponent": "JAX",
+          "home_away": "away",
+          "effective_power": 1.0942
+        },
+        {
+          "week": 14,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 1,
+          "opponent": "NYJ",
+          "home_away": "home",
+          "effective_power": 0.795
+        },
+        {
+          "week": 13,
+          "opponent": "WAS",
+          "home_away": "home",
+          "effective_power": 0.8914
+        },
+        {
+          "week": 7,
+          "opponent": "CLE",
+          "home_away": "home",
+          "effective_power": 0.9296
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.025
+  },
+  {
+    "team": "LV",
+    "mean": 5.953,
+    "p10": 3.0,
+    "p50": 6.0,
+    "p90": 9.0,
+    "projected_sos_2026": 1.0036,
+    "schedule_difficulty": "average",
+    "early_sos": 1.003,
+    "late_sos": 0.9829,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 11,
+          "opponent": "DEN",
+          "home_away": "away",
+          "effective_power": 1.1239
+        },
+        {
+          "week": 5,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        },
+        {
+          "week": 18,
+          "opponent": "KC",
+          "home_away": "away",
+          "effective_power": 1.0717
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 16,
+          "opponent": "TEN",
+          "home_away": "home",
+          "effective_power": 0.8399
+        },
+        {
+          "week": 1,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 8,
+          "opponent": "NYJ",
+          "home_away": "away",
+          "effective_power": 0.8913
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 6.213
+  },
+  {
+    "team": "NYJ",
+    "mean": 4.774,
+    "p10": 2.0,
+    "p50": 4.0,
+    "p90": 8.0,
+    "projected_sos_2026": 0.9967,
+    "schedule_difficulty": "average",
+    "early_sos": 1.0139,
+    "late_sos": 1.0013,
+    "sos_drivers": {
+      "toughest_opponents": [
+        {
+          "week": 18,
+          "opponent": "BUF",
+          "home_away": "away",
+          "effective_power": 1.1101
+        },
+        {
+          "week": 3,
+          "opponent": "DET",
+          "home_away": "away",
+          "effective_power": 1.0926
+        },
+        {
+          "week": 6,
+          "opponent": "NE",
+          "home_away": "away",
+          "effective_power": 1.0899
+        }
+      ],
+      "easiest_opponents": [
+        {
+          "week": 8,
+          "opponent": "LV",
+          "home_away": "home",
+          "effective_power": 0.8536
+        },
+        {
+          "week": 7,
+          "opponent": "MIA",
+          "home_away": "home",
+          "effective_power": 0.8632
+        },
+        {
+          "week": 5,
+          "opponent": "CLE",
+          "home_away": "home",
+          "effective_power": 0.9296
+        }
+      ],
+      "home_away_balance": {
+        "home": 8,
+        "away": 9,
+        "road_heavy": true
+      },
+      "status": "applied_full_strength"
+    },
+    "analytic_expected_wins": 4.88
+  }
+]

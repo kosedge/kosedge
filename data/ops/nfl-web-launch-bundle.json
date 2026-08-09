@@ -1,10 +1,15 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T035645Z",
-  "engine_version": "nfl-season-engine-v1.16-season-coherence",
-  "n_team_sims": 50000,
+  "bundle_id": "nfl-preseason-sim-2026-20260809T165350Z",
+  "engine_version": "nfl-season-engine-v1.24-soft-piles-cleanup",
+  "n_team_sims": 100000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T03:56:45.305922+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.16-season-coherence-Nteam50000-Nplayer1000-20260809T034834Z",
+  "generated_at_utc": "2026-08-09T16:53:51.671488+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.16-season-coherence \u00b7 N_team=50000 \u00b7 20260809T035645Z"
+  "identity": "nfl-season-engine-v1.24-soft-piles-cleanup \u00b7 N_team=100000 \u00b7 20260809T165350Z",
+  "note": "LOCKED — official 2026 pre-season baseline (v1.24 soft-pile cleanup confirmation board)",
+  "locked_snapshot": true,
+  "locked_at_utc": "2026-08-09T16:57:00+00:00",
+  "lock_tag": "nfl-2026-preseason-baseline-v1.24",
+  "engine_commit": "ab16a4e7218632b31eb186caf51800ea3f31a872"
 }
