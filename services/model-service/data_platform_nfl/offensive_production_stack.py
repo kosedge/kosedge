@@ -1,0 +1,910 @@
+"""Phase-1 full offensive production stack on locked team pass yards.
+
+Order (non-negotiable):
+1. Locked team pass yards (v1.17 board — do not reshuffle the other 29)
+2. Parallel team rush-yards pool (league target ~58–62k)
+3. Efficiency + defense multipliers → TD / INT rates
+4. Usage shares + rookie ramps → player allocation
+5. Tiny conservation renorm only
+6. Smoke against conservation + league TD bands
+
+Mirror lives under ``services/model-service/data_platform_nfl/`` — keep in sync.
+"""
+
+from __future__ import annotations
+
+import math
+import statistics
+from dataclasses import dataclass, field
+from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Tuple
+
+# ---------------------------------------------------------------------------
+# League pools / conversion curves
+# ---------------------------------------------------------------------------
+LEAGUE_PASS_YARDS_POOL = 126_000.0
+LEAGUE_RUSH_YARDS_POOL = 60_000.0  # mid of 58–62k historical band
+# Season yards→TD curves sized to the hand-off league TD bands
+# (pass 1,050–1,150; rush 450–520). Midpoints ≈114.5 / 123.7 YPT.
+# (Hand-off short-scale 14.8–15.4 / 38–42 are treated as curve shape
+#  anchors, not raw season divisors — those would explode TD counts.)
+YARDS_PER_PASS_TD = 114.5
+YARDS_PER_RUSH_TD = 123.7
+DEFAULT_YPA = 6.95
+DEFAULT_YPC = 4.20
+ATTEMPT_SHARE = 0.925
+
+PASS_TD_LEAGUE_MIN = 1_050.0
+PASS_TD_LEAGUE_MAX = 1_150.0
+RUSH_TD_LEAGUE_MIN = 450.0
+RUSH_TD_LEAGUE_MAX = 520.0
+PASS_REC_YARDS_TOLERANCE = 0.015  # ±1.5%
+
+PASS_TD_SOFT_FLOOR = 14.0
+PASS_TD_SOFT_CEILING = 38.0
+RUSH_TD_SOFT_FLOOR = 6.0
+RUSH_TD_SOFT_CEILING = 22.0
+INT_RATE_SOFT_FLOOR = 0.018
+INT_RATE_SOFT_CEILING = 0.034
+
+EFFICIENCY_REGRESSION = 0.40  # 40% toward mean (hand-off: 35–45%)
+VOLUME_REGRESSION = 0.25  # mid of 20–30%
+DEFENSE_TD_SOFT_BOOST = 0.06  # mid of +4–8% vs soft D
+DEFENSE_TD_ELITE_CUT = 0.06  # mid of –4–8% vs elite D
+RZ_SHARE_BOOST = 0.10  # mid of +8–12% for TE / primary WR
+
+# Carry-forward scheme TD multipliers (LaFleur / Doyle / Fleury).
+SCHEME_TD_MULT: Dict[str, float] = {
+    "ARI": 0.95,
+    "BAL": 1.08,
+    "SEA": 1.03,
+}
+
+# Season-average of weekly rookie ramps (Weeks 1–4 / 5–8 / rest-of-season).
+# First-round WR/TE: 55→80→100; Day-2: 40→70→100; Day-3/UDFA: 25→50→85.
+# First-round RB: 45→75→100; later rounds shallower.
+_WEEKS_EARLY = 4.0
+_WEEKS_MID = 4.0
+_WEEKS_LATE = 9.0  # 17 - 8
+
+
+def _season_ramp(early: float, mid: float, late: float) -> float:
+    return (
+        _WEEKS_EARLY * early + _WEEKS_MID * mid + _WEEKS_LATE * late
+    ) / (_WEEKS_EARLY + _WEEKS_MID + _WEEKS_LATE)
+
+
+def rookie_season_share_factor(position: str, draft_round: Optional[int]) -> float:
+    """Season-average share multiplier for a rookie (1.0 = full role)."""
+    pos = str(position or "").upper()
+    rnd = int(draft_round) if draft_round is not None else 7
+    if pos in {"WR", "TE"}:
+        if rnd <= 1:
+            return _season_ramp(0.55, 0.80, 1.00)
+        if rnd <= 3:
+            return _season_ramp(0.40, 0.70, 1.00)
+        return _season_ramp(0.25, 0.50, 0.85)
+    if pos == "RB":
+        if rnd <= 1:
+            return _season_ramp(0.45, 0.75, 1.00)
+        if rnd <= 3:
+            return _season_ramp(0.35, 0.60, 0.90)
+        return _season_ramp(0.25, 0.45, 0.75)
+    if pos == "QB":
+        if rnd <= 1:
+            return _season_ramp(0.70, 0.90, 1.00)
+        return _season_ramp(0.40, 0.65, 0.85)
+    return 1.0
+
+
+def _clamp(value: float, low: float, high: float) -> float:
+    return max(low, min(high, float(value)))
+
+
+def _f(row: Mapping[str, Any], *keys: str, default: float = 0.0) -> float:
+    for k in keys:
+        if k in row and row[k] is not None and row[k] != "":
+            try:
+                return float(row[k])
+            except (TypeError, ValueError):
+                continue
+    return float(default)
+
+
+@dataclass
+class TeamOffenseBudget:
+    team: str
+    pass_yards: float
+    rush_yards: float
+    pass_tds: float = 0.0
+    rush_tds: float = 0.0
+    ints: float = 0.0
+    attempts: float = 0.0
+    int_rate: float = INT_RATE_SOFT_FLOOR
+    notes: List[str] = field(default_factory=list)
+
+
+@dataclass
+class PlayerUsage:
+    player_key: str
+    player_name: str
+    team: str
+    position: str
+    depth_order: int = 99
+    snap_share: float = 0.0
+    target_share: float = 0.0
+    rush_share: float = 0.0
+    red_zone_share: float = 0.0
+    is_rookie: bool = False
+    draft_round: Optional[int] = None
+    int_rate: float = INT_RATE_SOFT_FLOOR
+    ypa: float = DEFAULT_YPA
+    ypc: float = DEFAULT_YPC
+
+
+def defense_td_multiplier(opp_defense_index: float) -> float:
+    """Soft D → boost TD rate; elite D → cut. Index 1.0 = average."""
+    z = float(opp_defense_index) - 1.0
+    # defense_index > 1 = stronger D → negative TD mult
+    if z >= 0.04:
+        return 1.0 - _clamp(z * 1.2, 0.0, DEFENSE_TD_ELITE_CUT)
+    if z <= -0.04:
+        return 1.0 + _clamp((-z) * 1.2, 0.0, DEFENSE_TD_SOFT_BOOST)
+    return 1.0 + (-z) * 0.5
+
+
+def _efficiency_regressed(raw_index: float, *, regression: float = EFFICIENCY_REGRESSION) -> float:
+    """Regress an efficiency index (1.0 = mean) toward 1.0."""
+    return 1.0 + (1.0 - regression) * (float(raw_index) - 1.0)
+
+
+def _volume_regressed(raw: float, mean: float, *, regression: float = VOLUME_REGRESSION) -> float:
+    return mean + (1.0 - regression) * (float(raw) - mean)
+
+
+def locked_team_pass_yards(rows: Sequence[Mapping[str, Any]]) -> Dict[str, float]:
+    out: Dict[str, float] = {}
+    for row in rows:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        out[team] = out.get(team, 0.0) + _f(row, "pass_yards_total", "pass_yards_mean", "pass_yards")
+    return out
+
+
+def build_team_rush_pool(
+    locked_pass: Mapping[str, float],
+    *,
+    strengths: Optional[Mapping[str, Mapping[str, float]]] = None,
+    prior_rush: Optional[Mapping[str, float]] = None,
+    rush_pool: float = LEAGUE_RUSH_YARDS_POOL,
+) -> Dict[str, float]:
+    """Parallel two-way rush pool; pass yards stay locked and unused here."""
+    teams = sorted(locked_pass.keys())
+    if not teams:
+        return {}
+    league_mean = float(rush_pool) / max(1, len(teams))
+    raw: Dict[str, float] = {}
+    for team in teams:
+        st = (strengths or {}).get(team) or {}
+        offense = float(st.get("offense_index", 1.0) or 1.0)
+        pace = float(st.get("pace_factor", 1.0) or 1.0)
+        pass_bias = float(st.get("pass_rate_bias", 0.0) or 0.0)
+        opp_def = float(st.get("opp_defense_index_mean", 1.0) or 1.0)
+        # Run-rate residual: inverse of pass bias + scheme lean.
+        run_rate = _clamp(0.435 - 1.1 * pass_bias, 0.28, 0.58)
+        # BAL / PHI-style run lean already in pass_bias; light scheme nudge.
+        if team == "BAL":
+            run_rate = _clamp(run_rate + 0.02, 0.28, 0.58)
+        if team == "ARI":
+            run_rate = _clamp(run_rate - 0.01, 0.28, 0.58)
+        plays = _clamp(63.5 * pace * (1.0 + 0.10 * (offense - 1.0)), 50.0, 76.0)
+        ypc = DEFAULT_YPC * _clamp(1.0 + 0.35 * (offense - 1.0), 0.90, 1.12)
+        ypc *= _clamp(1.0 - 0.12 * (opp_def - 1.0), 0.90, 1.10)
+        structural = plays * run_rate * 17.0 * ypc * 0.92
+        prior = float((prior_rush or {}).get(team) or structural)
+        prior_r = _volume_regressed(prior, league_mean)
+        blended = 0.70 * structural + 0.30 * prior_r
+        raw[team] = max(800.0, blended)
+    total = sum(raw.values()) or 1.0
+    scale = float(rush_pool) / total
+    return {t: v * scale for t, v in raw.items()}
+
+
+def build_team_pass_tds(
+    locked_pass: Mapping[str, float],
+    *,
+    strengths: Optional[Mapping[str, Mapping[str, float]]] = None,
+    prior_pass_tds: Optional[Mapping[str, float]] = None,
+) -> Dict[str, float]:
+    raw: Dict[str, float] = {}
+    for team, py in locked_pass.items():
+        st = (strengths or {}).get(team) or {}
+        offense = float(st.get("offense_index", 1.0) or 1.0)
+        opp_def = float(st.get("opp_defense_index_mean", 1.0) or 1.0)
+        # Prior-year efficiency residual proxy from offense_index + prior TDs.
+        prior_td = (prior_pass_tds or {}).get(team)
+        if prior_td is not None and py > 1:
+            prior_ypt = py / max(prior_td, 1.0)  # inverted: lower = more efficient
+            # Convert to index vs league YPT.
+            eff_index = YARDS_PER_PASS_TD / max(prior_ypt, 8.0)
+        else:
+            eff_index = offense
+        eff = _efficiency_regressed(eff_index)
+        def_m = defense_td_multiplier(opp_def)
+        scheme = float(SCHEME_TD_MULT.get(team, 1.0))
+        tds = (float(py) / YARDS_PER_PASS_TD) * eff * def_m * scheme
+        tds = _clamp(tds, PASS_TD_SOFT_FLOOR, PASS_TD_SOFT_CEILING)
+        raw[team] = tds
+    # Tiny league-band renorm if outside 1050–1150 (preserve ranks).
+    total = sum(raw.values())
+    target = _clamp(total, PASS_TD_LEAGUE_MIN, PASS_TD_LEAGUE_MAX)
+    if total > 1e-6 and abs(total - target) > 1.0:
+        scale = target / total
+        for t in raw:
+            raw[t] = _clamp(raw[t] * scale, PASS_TD_SOFT_FLOOR, PASS_TD_SOFT_CEILING)
+        # Re-fit to band after soft clamps.
+        total2 = sum(raw.values())
+        if total2 > 1e-6 and not (PASS_TD_LEAGUE_MIN <= total2 <= PASS_TD_LEAGUE_MAX):
+            mid = 0.5 * (PASS_TD_LEAGUE_MIN + PASS_TD_LEAGUE_MAX)
+            scale2 = mid / total2
+            for t in raw:
+                raw[t] = _clamp(raw[t] * scale2, PASS_TD_SOFT_FLOOR, PASS_TD_SOFT_CEILING)
+    return raw
+
+
+def build_team_rush_tds(
+    team_rush: Mapping[str, float],
+    *,
+    strengths: Optional[Mapping[str, Mapping[str, float]]] = None,
+) -> Dict[str, float]:
+    raw: Dict[str, float] = {}
+    for team, ry in team_rush.items():
+        st = (strengths or {}).get(team) or {}
+        offense = float(st.get("offense_index", 1.0) or 1.0)
+        opp_def = float(st.get("opp_defense_index_mean", 1.0) or 1.0)
+        # Goal-line / dual-threat nudge for BAL.
+        gl = 1.08 if team == "BAL" else (0.97 if team == "ARI" else 1.0)
+        if team == "SEA":
+            gl = 1.02
+        eff = _efficiency_regressed(offense)
+        def_m = defense_td_multiplier(opp_def)
+        tds = (float(ry) / YARDS_PER_RUSH_TD) * eff * def_m * gl
+        tds = _clamp(tds, RUSH_TD_SOFT_FLOOR, RUSH_TD_SOFT_CEILING)
+        raw[team] = tds
+    total = sum(raw.values())
+    target = _clamp(total, RUSH_TD_LEAGUE_MIN, RUSH_TD_LEAGUE_MAX)
+    if total > 1e-6 and abs(total - target) > 1.0:
+        scale = target / total
+        for t in raw:
+            raw[t] = _clamp(raw[t] * scale, RUSH_TD_SOFT_FLOOR, RUSH_TD_SOFT_CEILING)
+        total2 = sum(raw.values())
+        if total2 > 1e-6 and not (RUSH_TD_LEAGUE_MIN <= total2 <= RUSH_TD_LEAGUE_MAX):
+            mid = 0.5 * (RUSH_TD_LEAGUE_MIN + RUSH_TD_LEAGUE_MAX)
+            scale2 = mid / total2
+            for t in raw:
+                raw[t] = _clamp(raw[t] * scale2, RUSH_TD_SOFT_FLOOR, RUSH_TD_SOFT_CEILING)
+    return raw
+
+
+def build_team_ints(
+    locked_pass: Mapping[str, float],
+    *,
+    qb_int_rates: Optional[Mapping[str, float]] = None,
+    strengths: Optional[Mapping[str, Mapping[str, float]]] = None,
+) -> Dict[str, Tuple[float, float, float]]:
+    """Return team → (ints, attempts, int_rate)."""
+    out: Dict[str, Tuple[float, float, float]] = {}
+    for team, py in locked_pass.items():
+        st = (strengths or {}).get(team) or {}
+        offense = float(st.get("offense_index", 1.0) or 1.0)
+        attempts = float(py) / max(DEFAULT_YPA * _clamp(offense, 0.90, 1.12), 5.5)
+        attempts /= ATTEMPT_SHARE  # convert yards-implied attempts loosely
+        attempts = float(py) / max(DEFAULT_YPA * _clamp(1.0 + 0.35 * (offense - 1.0), 0.90, 1.12), 5.5)
+        base_rate = float((qb_int_rates or {}).get(team) or 0.022)
+        # Light regression toward 2.2%.
+        rate = 0.022 + 0.70 * (base_rate - 0.022)
+        rate = _clamp(rate, INT_RATE_SOFT_FLOOR, INT_RATE_SOFT_CEILING)
+        out[team] = (attempts * rate, attempts, rate)
+    return out
+
+
+def usage_from_roles(
+    roles: Sequence[Any],
+) -> Dict[str, PlayerUsage]:
+    """Index PlayerRole-like objects by player_key."""
+    out: Dict[str, PlayerUsage] = {}
+    for role in roles:
+        key = str(getattr(role, "player_key", None) or role.get("player_key"))  # type: ignore[union-attr]
+        if not key:
+            continue
+        pos = str(getattr(role, "position", None) or role.get("position") or "").upper()  # type: ignore[union-attr]
+        draft = getattr(role, "draft_round", None) if not isinstance(role, Mapping) else role.get("draft_round")
+        try:
+            draft_i = int(draft) if draft is not None else None
+        except (TypeError, ValueError):
+            draft_i = None
+        is_rookie = bool(
+            getattr(role, "is_rookie", False)
+            if not isinstance(role, Mapping)
+            else role.get("is_rookie")
+        )
+        out[key] = PlayerUsage(
+            player_key=key,
+            player_name=str(
+                getattr(role, "player_name", None)
+                if not isinstance(role, Mapping)
+                else role.get("player_name")
+                or ""
+            ),
+            team=str(
+                getattr(role, "team", None) if not isinstance(role, Mapping) else role.get("team") or ""
+            ),
+            position=pos,
+            depth_order=int(
+                getattr(role, "depth_order", 99)
+                if not isinstance(role, Mapping)
+                else role.get("depth_order") or 99
+            ),
+            snap_share=float(
+                getattr(role, "snap_share", 0.0)
+                if not isinstance(role, Mapping)
+                else role.get("snap_share") or 0.0
+            ),
+            target_share=float(
+                getattr(role, "target_share", 0.0)
+                if not isinstance(role, Mapping)
+                else role.get("target_share") or 0.0
+            ),
+            rush_share=float(
+                getattr(role, "rush_share", 0.0)
+                if not isinstance(role, Mapping)
+                else role.get("rush_share") or 0.0
+            ),
+            red_zone_share=float(
+                getattr(role, "red_zone_share", 0.0)
+                if not isinstance(role, Mapping)
+                else role.get("red_zone_share") or 0.0
+            ),
+            is_rookie=is_rookie,
+            draft_round=draft_i,
+            int_rate=float(
+                getattr(role, "int_rate", INT_RATE_SOFT_FLOOR)
+                if not isinstance(role, Mapping)
+                else role.get("int_rate") or INT_RATE_SOFT_FLOOR
+            ),
+            ypa=float(
+                getattr(role, "ypa", DEFAULT_YPA)
+                if not isinstance(role, Mapping)
+                else role.get("ypa") or DEFAULT_YPA
+            ),
+            ypc=float(
+                getattr(role, "ypc", DEFAULT_YPC)
+                if not isinstance(role, Mapping)
+                else role.get("ypc") or DEFAULT_YPC
+            ),
+        )
+    return out
+
+
+def _fallback_usage_from_rows(rows: Sequence[Mapping[str, Any]]) -> Dict[str, PlayerUsage]:
+    """Depth from current yard ranks when roles unavailable."""
+    by_team: Dict[str, List[Mapping[str, Any]]] = {}
+    for row in rows:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+    out: Dict[str, PlayerUsage] = {}
+    for team, team_rows in by_team.items():
+        for pos in ("QB", "RB", "WR", "TE"):
+            group = [r for r in team_rows if str(r.get("position") or "").upper() == pos]
+            if pos == "QB":
+                group.sort(key=lambda r: -_f(r, "pass_yards_total", "pass_yards_mean"))
+            elif pos == "RB":
+                group.sort(key=lambda r: -_f(r, "rush_yards_total", "rush_yards_mean"))
+            else:
+                group.sort(key=lambda r: -_f(r, "receiving_yards_total", "rec_yards_mean", "rec_yards"))
+            for i, r in enumerate(group, start=1):
+                key = str(r.get("player_key") or "")
+                if not key:
+                    continue
+                # Default hierarchical shares.
+                if pos == "WR":
+                    tgt = {1: 0.26, 2: 0.18, 3: 0.12}.get(i, 0.05)
+                    rz = {1: 0.22, 2: 0.12, 3: 0.08}.get(i, 0.04)
+                    rush = 0.01 if i == 1 else 0.0
+                elif pos == "TE":
+                    tgt = {1: 0.18, 2: 0.08, 3: 0.04}.get(i, 0.02)
+                    rz = {1: 0.20, 2: 0.10, 3: 0.05}.get(i, 0.02)
+                    rush = 0.0
+                elif pos == "RB":
+                    tgt = {1: 0.10, 2: 0.05, 3: 0.03}.get(i, 0.01)
+                    rz = {1: 0.18, 2: 0.10, 3: 0.05}.get(i, 0.02)
+                    rush = {1: 0.52, 2: 0.26, 3: 0.12}.get(i, 0.04)
+                else:
+                    tgt = 0.0
+                    rz = 0.05
+                    rush = {1: 0.08, 2: 0.02, 3: 0.01}.get(i, 0.0)
+                is_rookie = bool(r.get("is_rookie"))
+                draft = r.get("draft_round")
+                try:
+                    draft_i = int(draft) if draft is not None else None
+                except (TypeError, ValueError):
+                    draft_i = None
+                out[key] = PlayerUsage(
+                    player_key=key,
+                    player_name=str(r.get("player_name") or ""),
+                    team=team,
+                    position=pos,
+                    depth_order=i,
+                    snap_share=0.55 if i == 1 else 0.30 if i == 2 else 0.15,
+                    target_share=tgt,
+                    rush_share=rush,
+                    red_zone_share=rz,
+                    is_rookie=is_rookie,
+                    draft_round=draft_i,
+                    int_rate=_f(r, "int_rate", default=INT_RATE_SOFT_FLOOR),
+                )
+    return out
+
+
+def _apply_rookie_to_share(share: float, usage: PlayerUsage) -> float:
+    if not usage.is_rookie:
+        return share
+    return share * rookie_season_share_factor(usage.position, usage.draft_round)
+
+
+def allocate_receiving(
+    rows: List[MutableMapping[str, Any]],
+    team_pass: Mapping[str, float],
+    team_pass_tds: Mapping[str, float],
+    usage_by_key: Mapping[str, PlayerUsage],
+) -> None:
+    by_team: Dict[str, List[MutableMapping[str, Any]]] = {}
+    for row in rows:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+
+    for team, team_rows in by_team.items():
+        pass_y = float(team_pass.get(team, 0.0))
+        pass_td = float(team_pass_tds.get(team, 0.0))
+        weights: Dict[str, float] = {}
+        td_weights: Dict[str, float] = {}
+        for row in team_rows:
+            pos = str(row.get("position") or "").upper()
+            if pos not in {"WR", "TE", "RB"}:
+                row["receiving_yards_total"] = 0.0
+                row["rec_tds_total"] = 0.0
+                if "receptions_total" in row:
+                    row["receptions_total"] = 0.0
+                continue
+            key = str(row.get("player_key") or "")
+            u = usage_by_key.get(key)
+            if u is None:
+                # Minimal fallback weight from prior receiving yards.
+                w = max(_f(row, "receiving_yards_total", "rec_yards_mean", "rec_yards"), 1.0)
+                tw = w
+            else:
+                w = _apply_rookie_to_share(max(u.target_share, 0.0), u)
+                # RZ boost for TE + primary WR.
+                rz_boost = 1.0
+                if pos == "TE" or (pos == "WR" and u.depth_order == 1):
+                    rz_boost = 1.0 + RZ_SHARE_BOOST
+                tw = _apply_rookie_to_share(max(u.red_zone_share, u.target_share), u) * rz_boost
+            weights[key] = max(w, 1e-6)
+            td_weights[key] = max(tw, 1e-6)
+
+        w_sum = sum(weights.values()) or 1.0
+        td_sum = sum(td_weights.values()) or 1.0
+        for row in team_rows:
+            pos = str(row.get("position") or "").upper()
+            if pos not in {"WR", "TE", "RB"}:
+                continue
+            key = str(row.get("player_key") or "")
+            share = weights.get(key, 0.0) / w_sum
+            td_share = td_weights.get(key, 0.0) / td_sum
+            rec_y = pass_y * share
+            row["receiving_yards_total"] = rec_y
+            row["rec_tds_total"] = pass_td * td_share
+            # Receptions ~ yards / YPR proxy.
+            ypr = 11.8 if pos != "RB" else 8.2
+            row["receptions_total"] = rec_y / ypr
+
+
+def allocate_rushing(
+    rows: List[MutableMapping[str, Any]],
+    team_rush: Mapping[str, float],
+    team_rush_tds: Mapping[str, float],
+    usage_by_key: Mapping[str, PlayerUsage],
+) -> None:
+    by_team: Dict[str, List[MutableMapping[str, Any]]] = {}
+    for row in rows:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+
+    for team, team_rows in by_team.items():
+        rush_y = float(team_rush.get(team, 0.0))
+        rush_td = float(team_rush_tds.get(team, 0.0))
+        weights: Dict[str, float] = {}
+        td_weights: Dict[str, float] = {}
+        for row in team_rows:
+            pos = str(row.get("position") or "").upper()
+            key = str(row.get("player_key") or "")
+            if pos not in {"RB", "QB"}:
+                if pos in {"WR", "TE"}:
+                    # Tiny WR rush residual only if already had rush share.
+                    u = usage_by_key.get(key)
+                    if u and u.rush_share > 0.01:
+                        w = _apply_rookie_to_share(u.rush_share, u)
+                        weights[key] = w
+                        td_weights[key] = w * 0.5
+                    else:
+                        row["rush_yards_total"] = 0.0
+                        row["rush_tds_total"] = 0.0
+                continue
+            u = usage_by_key.get(key)
+            if u is None:
+                w = max(_f(row, "rush_yards_total", "rush_yards_mean"), 1.0)
+                tw = w * (1.2 if pos == "RB" else 0.8)
+            else:
+                w = _apply_rookie_to_share(max(u.rush_share, 0.0), u)
+                tw = _apply_rookie_to_share(max(u.red_zone_share, u.rush_share * 0.8), u)
+                if pos == "QB":
+                    tw *= 1.15  # goal-line QB sneak / designed package
+            weights[key] = max(w, 1e-6)
+            td_weights[key] = max(tw, 1e-6)
+
+        # Ensure every RB/QB got a weight entry.
+        for row in team_rows:
+            pos = str(row.get("position") or "").upper()
+            key = str(row.get("player_key") or "")
+            if pos in {"RB", "QB"} and key not in weights:
+                weights[key] = 1e-3
+                td_weights[key] = 1e-3
+
+        w_sum = sum(weights.values()) or 1.0
+        td_sum = sum(td_weights.values()) or 1.0
+        for row in team_rows:
+            key = str(row.get("player_key") or "")
+            if key not in weights:
+                continue
+            row["rush_yards_total"] = rush_y * (weights[key] / w_sum)
+            row["rush_tds_total"] = rush_td * (td_weights[key] / td_sum)
+
+
+def allocate_passing(
+    rows: List[MutableMapping[str, Any]],
+    team_pass: Mapping[str, float],
+    team_pass_tds: Mapping[str, float],
+    team_ints: Mapping[str, Tuple[float, float, float]],
+    usage_by_key: Mapping[str, PlayerUsage],
+) -> None:
+    """Assign pass TDs / INTs; preserve locked QB pass-yard room shares."""
+    by_team: Dict[str, List[MutableMapping[str, Any]]] = {}
+    for row in rows:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+
+    for team, team_rows in by_team.items():
+        qbs = [r for r in team_rows if str(r.get("position") or "").upper() == "QB"]
+
+        def _qb_sort_key(r: Mapping[str, Any]) -> Tuple[int, float]:
+            key = str(r.get("player_key") or "")
+            depth = usage_by_key[key].depth_order if key in usage_by_key else 99
+            return (depth, -_f(r, "pass_yards_total", "pass_yards_mean"))
+
+        qbs.sort(key=_qb_sort_key)
+        pass_y = float(team_pass.get(team, 0.0))
+        pass_td = float(team_pass_tds.get(team, 0.0))
+        ints, attempts, rate = team_ints.get(team, (0.0, 0.0, INT_RATE_SOFT_FLOOR))
+        for r in team_rows:
+            if str(r.get("position") or "").upper() != "QB":
+                r["pass_yards_total"] = 0.0
+                r["pass_tds_total"] = 0.0
+                r["ints_total"] = 0.0
+
+        # Preserve incoming QB pass-yard shares (locked v1.17 board). Fallback
+        # to 92/6/2 only when the room has no pass yards yet.
+        locked_shares: List[float] = [_f(r, "pass_yards_total", "pass_yards_mean") for r in qbs]
+        locked_sum = sum(locked_shares)
+        if locked_sum > 1.0:
+            shares = [y / locked_sum for y in locked_shares]
+        else:
+            room = [0.92, 0.06, 0.02]
+            shares = []
+            for i, r in enumerate(qbs):
+                share = room[i] if i < len(room) else 0.0
+                key = str(r.get("player_key") or "")
+                u = usage_by_key.get(key)
+                if u and u.is_rookie and i == 0:
+                    share = max(share * rookie_season_share_factor("QB", u.draft_round), 0.50)
+                shares.append(share)
+            ssum = sum(shares) or 1.0
+            shares = [s / ssum for s in shares]
+
+        for r, share in zip(qbs, shares):
+            r["pass_yards_total"] = pass_y * share
+            r["pass_tds_total"] = pass_td * share
+            r["ints_total"] = ints * share
+            r["pass_attempts_total"] = attempts * share
+            r["int_rate"] = rate
+
+
+def conservation_renorm(rows: List[MutableMapping[str, Any]], locked_pass: Mapping[str, float]) -> Dict[str, Any]:
+    """Tiny two-way adjustments so receiving ≈ pass and team pools hold."""
+    audit: Dict[str, Any] = {"teams": {}, "method": "offensive_stack_conservation_v1"}
+    by_team: Dict[str, List[MutableMapping[str, Any]]] = {}
+    for row in rows:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+
+    for team, team_rows in by_team.items():
+        target_pass = float(locked_pass.get(team, 0.0))
+        rec_players = [
+            r
+            for r in team_rows
+            if str(r.get("position") or "").upper() in {"WR", "TE", "RB"}
+        ]
+        rec_sum = sum(_f(r, "receiving_yards_total") for r in rec_players) or 1.0
+        # Receiving must match locked pass within tolerance — scale to exact.
+        rec_scale = target_pass / rec_sum
+        for r in rec_players:
+            r["receiving_yards_total"] = _f(r, "receiving_yards_total") * rec_scale
+            r["rec_tds_total"] = _f(r, "rec_tds_total")  # TDs already from pass-TD pool
+            if "receptions_total" in r:
+                r["receptions_total"] = _f(r, "receptions_total") * rec_scale
+
+        # Pass TDs on QBs should equal sum of rec TDs (conservation of offensive pass TDs).
+        qb_pass_td = sum(
+            _f(r, "pass_tds_total")
+            for r in team_rows
+            if str(r.get("position") or "").upper() == "QB"
+        )
+        rec_td_sum = sum(_f(r, "rec_tds_total") for r in rec_players) or 1.0
+        if qb_pass_td > 1e-9:
+            td_scale = qb_pass_td / rec_td_sum
+            for r in rec_players:
+                r["rec_tds_total"] = _f(r, "rec_tds_total") * td_scale
+
+        # anytime TD proxy
+        for r in team_rows:
+            rush_td = _f(r, "rush_tds_total")
+            rec_td = _f(r, "rec_tds_total")
+            r["anytime_td_prob"] = min(0.9999, max(0.0, 1.0 - math.exp(-(rush_td + rec_td))))
+
+        rec_sum2 = sum(_f(r, "receiving_yards_total") for r in rec_players)
+        audit["teams"][team] = {
+            "pass_yards": round(target_pass, 2),
+            "receiving_yards": round(rec_sum2, 2),
+            "pass_rec_gap_pct": round(
+                abs(rec_sum2 - target_pass) / max(target_pass, 1.0), 6
+            ),
+        }
+    return audit
+
+
+def smoke_offensive_stack(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """Fail-closed smoke for Phase-1 offensive conservation."""
+    by_team: Dict[str, Dict[str, float]] = {}
+    for row in rows:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        bucket = by_team.setdefault(
+            team,
+            {
+                "pass_yards": 0.0,
+                "rush_yards": 0.0,
+                "rec_yards": 0.0,
+                "pass_tds": 0.0,
+                "rush_tds": 0.0,
+                "rec_tds": 0.0,
+                "ints": 0.0,
+            },
+        )
+        pos = str(row.get("position") or "").upper()
+        bucket["pass_yards"] += _f(row, "pass_yards_total", "pass_yards_mean")
+        bucket["rush_yards"] += _f(row, "rush_yards_total", "rush_yards_mean")
+        if pos in {"WR", "TE", "RB"}:
+            bucket["rec_yards"] += _f(row, "receiving_yards_total", "rec_yards_mean", "rec_yards")
+            bucket["rec_tds"] += _f(row, "rec_tds_total", "rec_tds_mean")
+        bucket["pass_tds"] += _f(row, "pass_tds_total", "pass_tds_mean")
+        bucket["rush_tds"] += _f(row, "rush_tds_total", "rush_tds_mean")
+        bucket["ints"] += _f(row, "ints_total", "ints_mean", "ints")
+
+    league_pass = sum(v["pass_yards"] for v in by_team.values())
+    league_rush = sum(v["rush_yards"] for v in by_team.values())
+    league_rec = sum(v["rec_yards"] for v in by_team.values())
+    league_pass_td = sum(v["pass_tds"] for v in by_team.values())
+    league_rush_td = sum(v["rush_tds"] for v in by_team.values())
+    league_rec_td = sum(v["rec_tds"] for v in by_team.values())
+
+    pass_rec_fails: List[str] = []
+    td_ceiling_fails: List[str] = []
+    for team, v in by_team.items():
+        gap = abs(v["rec_yards"] - v["pass_yards"]) / max(v["pass_yards"], 1.0)
+        if gap > PASS_REC_YARDS_TOLERANCE + 1e-9:
+            pass_rec_fails.append(f"{team}:{gap:.4f}")
+        if v["pass_tds"] > PASS_TD_SOFT_CEILING + 0.05 or v["pass_tds"] < PASS_TD_SOFT_FLOOR - 0.05:
+            td_ceiling_fails.append(f"{team}:pass_td={v['pass_tds']:.2f}")
+        if v["rush_tds"] > RUSH_TD_SOFT_CEILING + 0.05 or v["rush_tds"] < RUSH_TD_SOFT_FLOOR - 0.05:
+            td_ceiling_fails.append(f"{team}:rush_td={v['rush_tds']:.2f}")
+
+    # Offensive TD identity: pass TDs ≈ rec TDs; offensive TDs = pass + rush.
+    pass_rec_td_gap = abs(league_pass_td - league_rec_td) / max(league_pass_td, 1.0)
+    checks = {
+        "pass_rec_yards_within_1_5pct": len(pass_rec_fails) == 0,
+        "league_pass_tds_band": PASS_TD_LEAGUE_MIN <= league_pass_td <= PASS_TD_LEAGUE_MAX,
+        "league_rush_tds_band": RUSH_TD_LEAGUE_MIN <= league_rush_td <= RUSH_TD_LEAGUE_MAX,
+        "soft_td_ceilings_floors": len(td_ceiling_fails) == 0,
+        "pass_tds_match_rec_tds": pass_rec_td_gap <= 0.02,
+        "offensive_yards_identity": abs((league_pass + league_rush) - (league_pass + league_rush))
+        < 1e-6,
+        "rush_pool_band": 58_000.0 <= league_rush <= 62_000.0,
+        "pass_pool_locked": abs(league_pass - LEAGUE_PASS_YARDS_POOL) < 50.0,
+    }
+    # ARI / BAL / SEA pass-yard zones (QB1).
+    qb1: Dict[str, float] = {}
+    for row in rows:
+        if str(row.get("position") or "").upper() != "QB":
+            continue
+        team = str(row.get("team") or "")
+        y = _f(row, "pass_yards_total", "pass_yards_mean")
+        qb1[team] = max(qb1.get(team, 0.0), y)
+    zones = {
+        "ARI": (3850.0, 4200.0),
+        "BAL": (3250.0, 3550.0),
+        "SEA": (3650.0, 4050.0),
+    }
+    zone_ok = True
+    zone_detail = {}
+    for t, (lo, hi) in zones.items():
+        y = qb1.get(t, 0.0)
+        ok = lo <= y <= hi
+        zone_ok = zone_ok and ok
+        zone_detail[t] = {"yards": round(y, 1), "ok": ok}
+    checks["ari_bal_sea_pass_zones"] = zone_ok
+
+    return {
+        "checks": checks,
+        "all_pass": all(checks.values()),
+        "league": {
+            "pass_yards": round(league_pass, 1),
+            "rush_yards": round(league_rush, 1),
+            "receiving_yards": round(league_rec, 1),
+            "pass_tds": round(league_pass_td, 2),
+            "rush_tds": round(league_rush_td, 2),
+            "rec_tds": round(league_rec_td, 2),
+            "offensive_tds": round(league_pass_td + league_rush_td, 2),
+            "offensive_yards": round(league_pass + league_rush, 1),
+            "ints": round(sum(v["ints"] for v in by_team.values()), 2),
+        },
+        "pass_rec_fails": pass_rec_fails[:10],
+        "td_ceiling_fails": td_ceiling_fails[:10],
+        "zone_detail": zone_detail,
+        "n_teams": len(by_team),
+    }
+
+
+def apply_offensive_production_stack(
+    rows: List[Dict[str, Any]],
+    *,
+    strengths: Optional[Mapping[str, Mapping[str, float]]] = None,
+    usage_by_key: Optional[Mapping[str, PlayerUsage]] = None,
+    lock_pass_yards: bool = True,
+    rush_pool: float = LEAGUE_RUSH_YARDS_POOL,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Full Phase-1 offensive stack on (preferably locked) pass-yard board."""
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    locked = locked_team_pass_yards(work)
+    if lock_pass_yards:
+        # Freeze team pass — microscopic renorm only if drift from 126k.
+        total = sum(locked.values()) or 1.0
+        if abs(total - LEAGUE_PASS_YARDS_POOL) > 25.0:
+            scale = LEAGUE_PASS_YARDS_POOL / total
+            locked = {t: y * scale for t, y in locked.items()}
+
+    prior_rush = {
+        t: sum(
+            _f(r, "rush_yards_total", "rush_yards_mean")
+            for r in work
+            if str(r.get("team") or "") == t
+        )
+        for t in locked
+    }
+    prior_pass_tds = {
+        t: sum(
+            _f(r, "pass_tds_total", "pass_tds_mean")
+            for r in work
+            if str(r.get("team") or "") == t
+        )
+        for t in locked
+    }
+
+    usage = dict(usage_by_key or {})
+    if not usage:
+        usage = _fallback_usage_from_rows(work)
+    # Overlay rookie flags from rows when present.
+    for r in work:
+        key = str(r.get("player_key") or "")
+        if key in usage and r.get("is_rookie") is not None:
+            usage[key].is_rookie = bool(r.get("is_rookie"))
+        if key in usage and r.get("draft_round") is not None:
+            try:
+                usage[key].draft_round = int(r["draft_round"])
+            except (TypeError, ValueError):
+                pass
+
+    qb_int_rates: Dict[str, float] = {}
+    for team in locked:
+        starters = [
+            u
+            for u in usage.values()
+            if u.team == team and u.position == "QB"
+        ]
+        starters.sort(key=lambda u: u.depth_order)
+        if starters:
+            qb_int_rates[team] = _clamp(
+                float(starters[0].int_rate or 0.022),
+                INT_RATE_SOFT_FLOOR,
+                INT_RATE_SOFT_CEILING,
+            )
+
+    team_rush = build_team_rush_pool(
+        locked, strengths=strengths, prior_rush=prior_rush, rush_pool=rush_pool
+    )
+    team_pass_tds = build_team_pass_tds(
+        locked, strengths=strengths, prior_pass_tds=prior_pass_tds
+    )
+    team_rush_tds = build_team_rush_tds(team_rush, strengths=strengths)
+    team_ints = build_team_ints(
+        locked, qb_int_rates=qb_int_rates, strengths=strengths
+    )
+
+    allocate_passing(work, locked, team_pass_tds, team_ints, usage)
+    allocate_receiving(work, locked, team_pass_tds, usage)
+    allocate_rushing(work, team_rush, team_rush_tds, usage)
+    cons = conservation_renorm(work, locked)
+
+    # Attach explicit usage fields for inspectability.
+    for r in work:
+        key = str(r.get("player_key") or "")
+        u = usage.get(key)
+        if u is None:
+            continue
+        r["snap_share"] = round(u.snap_share, 4)
+        r["target_share"] = round(
+            _apply_rookie_to_share(u.target_share, u) if u.position in {"WR", "TE", "RB"} else 0.0,
+            4,
+        )
+        r["carry_share"] = round(
+            _apply_rookie_to_share(u.rush_share, u) if u.position in {"RB", "QB", "WR"} else 0.0,
+            4,
+        )
+        r["is_rookie"] = u.is_rookie
+        r["draft_round"] = u.draft_round
+
+    work.sort(
+        key=lambda r: (
+            -(
+                _f(r, "pass_yards_total")
+                + _f(r, "rush_yards_total")
+                + _f(r, "receiving_yards_total")
+            ),
+            str(r.get("player_name") or ""),
+        )
+    )
+    smoke = smoke_offensive_stack(work)
+    audit = {
+        "applied": True,
+        "method": "offensive_production_stack_v1",
+        "rush_pool": round(sum(team_rush.values()), 1),
+        "pass_pool": round(sum(locked.values()), 1),
+        "conservation": cons,
+        "smoke": smoke,
+        "scheme_td_mult": dict(SCHEME_TD_MULT),
+    }
+    return work, audit
+
+
+def usage_from_roster_book(
+    rosters: Mapping[str, Sequence[Any]],
+) -> Dict[str, PlayerUsage]:
+    """Flatten team → PlayerRole lists into a player_key usage index."""
+    roles: List[Any] = []
+    for team_roles in rosters.values():
+        roles.extend(list(team_roles))
+    return usage_from_roles(roles)

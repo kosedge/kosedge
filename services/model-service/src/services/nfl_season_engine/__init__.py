@@ -24,9 +24,9 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.17 team pass priors: ARI/BAL/SEA identity weights on pre-pool pass-volume
-residuals (keeps v1.16 budgets + 126k pool + QB1 distribution guards).
-v1.15 true-PR harden + v1.14 Future SOS outlook-only contract kept.
+v1.18 offensive production stack: locked pass yards → rush pool → TD/INT
+rates → usage/rookie allocation → conservation renorm (keeps v1.17 ARI/BAL/SEA
+pass priors + 126k pass pool). v1.15 true-PR harden + v1.14 SOS kept.
 
 Public entry points
 -------------------

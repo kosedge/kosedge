@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.17: ARI/BAL/SEA pass-volume identity priors on pre-pool residuals.
-# Keeps v1.16 season-coherence budgets / 126k pool / QB1 distribution shape.
-ENGINE_VERSION = "nfl-season-engine-v1.17-season-coherence-team-priors"
+# v1.18: full offensive production stack on locked v1.17 pass yards
+# (rush pool 60k, TD/INT curves, usage + rookie ramps, conservation).
+ENGINE_VERSION = "nfl-season-engine-v1.18-offensive-production-stack"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -46,7 +46,8 @@ ATTEMPT_SHARE_OF_PASS_PLAYS = 0.925
 # starter-ish pass pool ~115–125k; rush pool ~50–60k.
 # Named skill REG pool. Sized so QB1 median lands ~3.6–3.8k after QB1 share.
 LEAGUE_PASS_YARDS_POOL = 126_000.0
-LEAGUE_RUSH_YARDS_POOL = 56_000.0
+# Phase-1 offensive stack: parallel rush pool in the 58–62k historical band.
+LEAGUE_RUSH_YARDS_POOL = 60_000.0
 # Volume regression: prior outliers shrink toward structural/league mean.
 VOLUME_REGRESSION = 0.40
 VOLUME_PRIOR_BLEND = 0.30
@@ -515,6 +516,13 @@ def calibration_notes() -> Dict[str, str]:
             "pass-volume residual (Brissett/LaFleur dampen; Doyle dual-threat "
             "restore; Darnold 70/30 + Fleury/Shanahan-tree). Soft floors/ceilings "
             "before 126k two-way renorm; other 29 teams untouched."
+        ),
+        "offensive_production_stack": (
+            "v1.18: on locked pass yards — parallel 60k rush pool; yards→TD "
+            "curves with efficiency/defense/scheme residuals; INT rates "
+            "1.8–3.4%; receiving/rush allocation via depth usage + rookie "
+            "season ramps; conservation renorm (pass≈rec ±1.5%). "
+            "See data_platform_nfl/offensive_production_stack.py."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

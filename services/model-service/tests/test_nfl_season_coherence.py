@@ -31,9 +31,11 @@ from src.services.nfl_season_engine.season_budgets import (
 
 
 def test_engine_version_is_season_coherence() -> None:
-    assert "season-coherence" in ENGINE_VERSION
     assert ENGINE_VERSION.startswith("nfl-season-engine-v1.")
-    assert "team-priors" in ENGINE_VERSION or "v1.17" in ENGINE_VERSION
+    assert any(
+        token in ENGINE_VERSION
+        for token in ("season-coherence", "team-priors", "offensive-production")
+    )
 
 
 def test_team_budgets_conserve_league_pools() -> None:

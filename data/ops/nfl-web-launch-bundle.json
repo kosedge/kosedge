@@ -1,11 +1,11 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T092006Z",
-  "engine_version": "nfl-season-engine-v1.17-season-coherence-team-priors",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T095703Z",
+  "engine_version": "nfl-season-engine-v1.18-offensive-production-stack",
   "n_team_sims": 50000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T09:20:06.248467+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.17-season-coherence-team-priors-Nteam50000-Nplayer1000-20260809T092006Z",
+  "generated_at_utc": "2026-08-09T09:57:03.476709+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.18-offensive-production-stack-Nteam50000-Nplayer1000-20260809T095703Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.17-season-coherence-team-priors \u00b7 N_team=50000 \u00b7 20260809T092006Z",
-  "note": "ARI/BAL/SEA pass-volume identity priors (v1.17); budget-ratio rescale of prior research paths"
+  "identity": "nfl-season-engine-v1.18-offensive-production-stack \u00b7 N_team=50000 \u00b7 20260809T095703Z",
+  "note": "Phase-1 full offensive production stack on locked v1.17 pass yards"
 }
