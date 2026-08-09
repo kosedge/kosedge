@@ -1,0 +1,596 @@
+{
+  "pass_yards": {
+    "top": [
+      {
+        "rank": 1,
+        "pass_yards_total": 4813.15,
+        "player_name": "Joe Burrow",
+        "team": "CIN"
+      },
+      {
+        "rank": 2,
+        "pass_yards_total": 4540.29,
+        "player_name": "Matthew Stafford",
+        "team": "LA"
+      },
+      {
+        "rank": 3,
+        "pass_yards_total": 4516.31,
+        "player_name": "Dak Prescott",
+        "team": "DAL"
+      },
+      {
+        "rank": 4,
+        "pass_yards_total": 4376.38,
+        "player_name": "Patrick Mahomes",
+        "team": "KC"
+      },
+      {
+        "rank": 5,
+        "pass_yards_total": 4220.11,
+        "player_name": "Bo Nix",
+        "team": "DEN"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "pass_yards_total": 87.43,
+        "player_name": "Athan Kaliakmanis",
+        "team": "WAS"
+      },
+      {
+        "rank": 2,
+        "pass_yards_total": 93.55,
+        "player_name": "Brady Cook",
+        "team": "NYJ"
+      },
+      {
+        "rank": 3,
+        "pass_yards_total": 97.27,
+        "player_name": "Marcus Mariota",
+        "team": "WAS"
+      },
+      {
+        "rank": 4,
+        "pass_yards_total": 98.96,
+        "player_name": "Cam Miller",
+        "team": "MIA"
+      },
+      {
+        "rank": 5,
+        "pass_yards_total": 100.06,
+        "player_name": "Haynes King",
+        "team": "CAR"
+      }
+    ]
+  },
+  "rush_yards": {
+    "top": [
+      {
+        "rank": 1,
+        "rush_yards_total": 1478.8,
+        "player_name": "James Cook III",
+        "team": "BUF"
+      },
+      {
+        "rank": 2,
+        "rush_yards_total": 1459.26,
+        "player_name": "Kyren Williams",
+        "team": "LA"
+      },
+      {
+        "rank": 3,
+        "rush_yards_total": 1442.51,
+        "player_name": "Derrick Henry",
+        "team": "BAL"
+      },
+      {
+        "rank": 4,
+        "rush_yards_total": 1440.55,
+        "player_name": "Bijan Robinson",
+        "team": "ATL"
+      },
+      {
+        "rank": 5,
+        "rush_yards_total": 1439.17,
+        "player_name": "Javonte Williams",
+        "team": "DAL"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "rush_yards_total": 114.27,
+        "player_name": "Ollie Gordon II",
+        "team": "MIA"
+      },
+      {
+        "rank": 2,
+        "rush_yards_total": 125.37,
+        "player_name": "Raheim Sanders",
+        "team": "CLE"
+      },
+      {
+        "rank": 3,
+        "rush_yards_total": 125.37,
+        "player_name": "James Conner",
+        "team": "ARI"
+      },
+      {
+        "rank": 4,
+        "rush_yards_total": 125.37,
+        "player_name": "Devin Neal",
+        "team": "NO"
+      },
+      {
+        "rank": 5,
+        "rush_yards_total": 125.37,
+        "player_name": "Dylan Laube",
+        "team": "LV"
+      }
+    ]
+  },
+  "receiving_yards": {
+    "top": [
+      {
+        "rank": 1,
+        "receiving_yards_total": 1614.75,
+        "player_name": "Puka Nacua",
+        "team": "LA",
+        "position": "WR"
+      },
+      {
+        "rank": 2,
+        "receiving_yards_total": 1605.46,
+        "player_name": "Ja'Marr Chase",
+        "team": "CIN",
+        "position": "WR"
+      },
+      {
+        "rank": 3,
+        "receiving_yards_total": 1575.2,
+        "player_name": "Jaxon Smith-Njigba",
+        "team": "SEA",
+        "position": "WR"
+      },
+      {
+        "rank": 4,
+        "receiving_yards_total": 1504.49,
+        "player_name": "Amon-Ra St. Brown",
+        "team": "DET",
+        "position": "WR"
+      },
+      {
+        "rank": 5,
+        "receiving_yards_total": 1380.95,
+        "player_name": "Justin Jefferson",
+        "team": "MIN",
+        "position": "WR"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "receiving_yards_total": 63.06,
+        "player_name": "Isaiah Davis",
+        "team": "NYJ",
+        "position": "RB"
+      },
+      {
+        "rank": 2,
+        "receiving_yards_total": 65.34,
+        "player_name": "Kaytron Allen",
+        "team": "WAS",
+        "position": "RB"
+      },
+      {
+        "rank": 3,
+        "receiving_yards_total": 67.98,
+        "player_name": "Will Shipley",
+        "team": "PHI",
+        "position": "RB"
+      },
+      {
+        "rank": 4,
+        "receiving_yards_total": 68.11,
+        "player_name": "Jeremy Ruckert",
+        "team": "NYJ",
+        "position": "TE"
+      },
+      {
+        "rank": 5,
+        "receiving_yards_total": 69.05,
+        "player_name": "Demond Claiborne",
+        "team": "MIN",
+        "position": "RB"
+      }
+    ]
+  },
+  "pass_tds": {
+    "top": [
+      {
+        "rank": 1,
+        "pass_tds_total": 38.25,
+        "player_name": "Joe Burrow",
+        "team": "CIN"
+      },
+      {
+        "rank": 2,
+        "pass_tds_total": 37.24,
+        "player_name": "Dak Prescott",
+        "team": "DAL"
+      },
+      {
+        "rank": 3,
+        "pass_tds_total": 37.16,
+        "player_name": "Matthew Stafford",
+        "team": "LA"
+      },
+      {
+        "rank": 4,
+        "pass_tds_total": 36.62,
+        "player_name": "Patrick Mahomes",
+        "team": "KC"
+      },
+      {
+        "rank": 5,
+        "pass_tds_total": 35.49,
+        "player_name": "Bo Nix",
+        "team": "DEN"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "pass_tds_total": 0.8,
+        "player_name": "Athan Kaliakmanis",
+        "team": "WAS"
+      },
+      {
+        "rank": 2,
+        "pass_tds_total": 0.84,
+        "player_name": "Brady Cook",
+        "team": "NYJ"
+      },
+      {
+        "rank": 3,
+        "pass_tds_total": 0.88,
+        "player_name": "Haynes King",
+        "team": "CAR"
+      },
+      {
+        "rank": 4,
+        "pass_tds_total": 0.89,
+        "player_name": "Cam Miller",
+        "team": "MIA"
+      },
+      {
+        "rank": 5,
+        "pass_tds_total": 0.89,
+        "player_name": "Marcus Mariota",
+        "team": "WAS"
+      }
+    ]
+  },
+  "rush_tds": {
+    "top": [
+      {
+        "rank": 1,
+        "rush_tds_total": 11.04,
+        "player_name": "Kyren Williams",
+        "team": "LA",
+        "position": "RB"
+      },
+      {
+        "rank": 2,
+        "rush_tds_total": 11.04,
+        "player_name": "Derrick Henry",
+        "team": "BAL",
+        "position": "RB"
+      },
+      {
+        "rank": 3,
+        "rush_tds_total": 10.87,
+        "player_name": "James Cook III",
+        "team": "BUF",
+        "position": "RB"
+      },
+      {
+        "rank": 4,
+        "rush_tds_total": 10.83,
+        "player_name": "Josh Jacobs",
+        "team": "GB",
+        "position": "RB"
+      },
+      {
+        "rank": 5,
+        "rush_tds_total": 10.78,
+        "player_name": "Javonte Williams",
+        "team": "DAL",
+        "position": "RB"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "rush_tds_total": 0.57,
+        "player_name": "Aidan O'Connell",
+        "team": "LV",
+        "position": "QB"
+      },
+      {
+        "rank": 2,
+        "rush_tds_total": 0.57,
+        "player_name": "Fernando Mendoza",
+        "team": "LV",
+        "position": "QB"
+      },
+      {
+        "rank": 3,
+        "rush_tds_total": 0.57,
+        "player_name": "Cam Miller",
+        "team": "MIA",
+        "position": "QB"
+      },
+      {
+        "rank": 4,
+        "rush_tds_total": 0.57,
+        "player_name": "Quinn Ewers",
+        "team": "MIA",
+        "position": "QB"
+      },
+      {
+        "rank": 5,
+        "rush_tds_total": 0.59,
+        "player_name": "Dillon Gabriel",
+        "team": "CLE",
+        "position": "QB"
+      }
+    ]
+  },
+  "rec_tds": {
+    "top": [
+      {
+        "rank": 1,
+        "rec_tds_total": 11.72,
+        "player_name": "Jaxon Smith-Njigba",
+        "team": "SEA",
+        "position": "WR"
+      },
+      {
+        "rank": 2,
+        "rec_tds_total": 10.48,
+        "player_name": "Ja'Marr Chase",
+        "team": "CIN",
+        "position": "WR"
+      },
+      {
+        "rank": 3,
+        "rec_tds_total": 10.4,
+        "player_name": "Justin Jefferson",
+        "team": "MIN",
+        "position": "WR"
+      },
+      {
+        "rank": 4,
+        "rec_tds_total": 9.8,
+        "player_name": "Puka Nacua",
+        "team": "LA",
+        "position": "WR"
+      },
+      {
+        "rank": 5,
+        "rec_tds_total": 9.72,
+        "player_name": "Zay Flowers",
+        "team": "BAL",
+        "position": "WR"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "rec_tds_total": 0.86,
+        "player_name": "Jeremy Ruckert",
+        "team": "NYJ",
+        "position": "TE"
+      },
+      {
+        "rank": 2,
+        "rec_tds_total": 0.94,
+        "player_name": "Ben Yurosek",
+        "team": "MIN",
+        "position": "TE"
+      },
+      {
+        "rank": 3,
+        "rec_tds_total": 1.03,
+        "player_name": "Will Shipley",
+        "team": "PHI",
+        "position": "RB"
+      },
+      {
+        "rank": 4,
+        "rec_tds_total": 1.06,
+        "player_name": "Ollie Gordon II",
+        "team": "MIA",
+        "position": "RB"
+      },
+      {
+        "rank": 5,
+        "rec_tds_total": 1.08,
+        "player_name": "Luke Schoonmaker",
+        "team": "DAL",
+        "position": "TE"
+      }
+    ]
+  },
+  "points_for": {
+    "top": [
+      {
+        "rank": 1,
+        "points_for": 481.05,
+        "team": "LA"
+      },
+      {
+        "rank": 2,
+        "points_for": 476.46,
+        "team": "DAL"
+      },
+      {
+        "rank": 3,
+        "points_for": 437.66,
+        "team": "CIN"
+      },
+      {
+        "rank": 4,
+        "points_for": 413.24,
+        "team": "SEA"
+      },
+      {
+        "rank": 5,
+        "points_for": 413.18,
+        "team": "BAL"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "points_for": 282.6,
+        "team": "CAR"
+      },
+      {
+        "rank": 2,
+        "points_for": 282.6,
+        "team": "ARI"
+      },
+      {
+        "rank": 3,
+        "points_for": 282.6,
+        "team": "NO"
+      },
+      {
+        "rank": 4,
+        "points_for": 282.61,
+        "team": "TEN"
+      },
+      {
+        "rank": 5,
+        "points_for": 282.61,
+        "team": "PIT"
+      }
+    ]
+  },
+  "points_against": {
+    "top": [
+      {
+        "rank": 1,
+        "points_against": 424.76,
+        "team": "GB"
+      },
+      {
+        "rank": 2,
+        "points_against": 424.76,
+        "team": "MIA"
+      },
+      {
+        "rank": 3,
+        "points_against": 424.67,
+        "team": "NYG"
+      },
+      {
+        "rank": 4,
+        "points_against": 424.67,
+        "team": "WAS"
+      },
+      {
+        "rank": 5,
+        "points_against": 424.67,
+        "team": "CAR"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "points_against": 327.98,
+        "team": "HOU"
+      },
+      {
+        "rank": 2,
+        "points_against": 328.02,
+        "team": "DET"
+      },
+      {
+        "rank": 3,
+        "points_against": 328.06,
+        "team": "JAX"
+      },
+      {
+        "rank": 4,
+        "points_against": 328.3,
+        "team": "MIN"
+      },
+      {
+        "rank": 5,
+        "points_against": 328.31,
+        "team": "ATL"
+      }
+    ]
+  },
+  "expected_wins": {
+    "top": [
+      {
+        "rank": 1,
+        "expected_wins": 12.6,
+        "team": "HOU"
+      },
+      {
+        "rank": 2,
+        "expected_wins": 12.6,
+        "team": "JAX"
+      },
+      {
+        "rank": 3,
+        "expected_wins": 12.6,
+        "team": "SEA"
+      },
+      {
+        "rank": 4,
+        "expected_wins": 12.6,
+        "team": "CHI"
+      },
+      {
+        "rank": 5,
+        "expected_wins": 12.6,
+        "team": "ATL"
+      }
+    ],
+    "bottom": [
+      {
+        "rank": 1,
+        "expected_wins": 3.74,
+        "team": "MIA"
+      },
+      {
+        "rank": 2,
+        "expected_wins": 3.74,
+        "team": "CAR"
+      },
+      {
+        "rank": 3,
+        "expected_wins": 3.74,
+        "team": "TEN"
+      },
+      {
+        "rank": 4,
+        "expected_wins": 3.74,
+        "team": "NYJ"
+      },
+      {
+        "rank": 5,
+        "expected_wins": 3.74,
+        "team": "LV"
+      }
+    ]
+  }
+}

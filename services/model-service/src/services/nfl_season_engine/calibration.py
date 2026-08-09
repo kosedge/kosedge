@@ -20,7 +20,7 @@ from src.services.nfl_season_engine.types import PlayerRole
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
 # v1.20: defensive variance lift on PA / sacks / INTs / yards (conserved totals).
-ENGINE_VERSION = "nfl-season-engine-v1.22-alpha-usage-reanchor"
+ENGINE_VERSION = "nfl-season-engine-v1.23-soft-flags-enterprise"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)

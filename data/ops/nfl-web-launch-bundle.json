@@ -1,12 +1,12 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T141337Z",
-  "engine_version": "nfl-season-engine-v1.22-alpha-usage-reanchor",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T150309Z",
+  "engine_version": "nfl-season-engine-v1.23-soft-flags-enterprise",
   "n_team_sims": 50000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T14:13:37.643297+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.22-alpha-usage-reanchor-Nteam50000-Nplayer1000-20260809T141337Z",
+  "generated_at_utc": "2026-08-09T15:03:09.869363+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam50000-Nplayer1000-20260809T150309Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.22-alpha-usage-reanchor \u00b7 N_team=50000 \u00b7 20260809T141337Z",
-  "note": "Step 2 alpha usage re-anchor; pass/rush pools locked; snapshot NOT locked",
+  "identity": "nfl-season-engine-v1.23-soft-flags-enterprise \u00b7 N_team=50000 \u00b7 20260809T150309Z",
+  "note": "Step 3 final smoke; NOT LOCKED \u2014 awaiting review",
   "locked_snapshot": false
 }

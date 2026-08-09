@@ -52,10 +52,15 @@ PASS_REC_YARDS_TOLERANCE = 0.015  # ±1.5%
 
 PASS_TD_SOFT_FLOOR = 14.0
 PASS_TD_SOFT_CEILING = 38.0
+PASS_TD_SOFT_CEILING_HIGH_VOLUME = 42.0
 RUSH_TD_SOFT_FLOOR = 6.0
 RUSH_TD_SOFT_CEILING = 22.0
 INT_RATE_SOFT_FLOOR = 0.018
 INT_RATE_SOFT_CEILING = 0.034
+
+# High pass-volume scoring-efficiency floors (enterprise soft-flag fix).
+HIGH_PASS_VOLUME_YARDS = 4_600.0
+MIN_PASS_TD_RATE_HIGH_VOLUME = 0.051  # mid of 4.8–5.5%
 
 EFFICIENCY_REGRESSION = 0.40  # 40% toward mean (hand-off: 35–45%)
 VOLUME_REGRESSION = 0.25  # mid of 20–30% (non-alphas)
@@ -64,13 +69,41 @@ ALPHA_VOLUME_REGRESSION = 0.08
 ALPHA_SHARE_RETENTION = 0.875  # mid of 85–90% prior-year share/yards retention
 WR_ALPHA_YARD_FLOOR = 1_150.0  # WR12–WR15 band under normal circumstances
 WR_ALPHA_TOP5_YARD_FLOOR = 1_400.0  # smoke: multiple 1400+ alphas
-RB_ALPHA_YARD_FLOOR = 1_400.0  # true bell-cows when team rush supports
+# v1.23: soft RB prior with differentiation (hard floor only prevents collapse).
+RB_ALPHA_YARD_SOFT_PRIOR = 1_380.0
+RB_ALPHA_YARD_HARD_FLOOR = 1_350.0
+RB_ALPHA_YARD_SOFT_CEILING = 1_520.0
+RB_ALPHA_YARD_FLOOR = RB_ALPHA_YARD_SOFT_PRIOR  # back-compat alias
+# Stronger continuous spread so top RBs do not pile at one yard line.
+RB_SOFT_PRIOR_TEAM_SPAN = 70.0  # ± about rank
+RB_SOFT_PRIOR_BLEND = 0.90  # weight on soft prior vs current yards
 WR_ALPHA_SHARE_CAP = 0.40
 RB_ALPHA_SHARE_CAP = 0.68
 TE_COMPRESS_WITH_WR_ALPHA = 0.72  # deflate TE when a sticky WR1 alpha is present
 DEFENSE_TD_SOFT_BOOST = 0.06  # mid of +4–8% vs soft D
 DEFENSE_TD_ELITE_CUT = 0.06  # mid of –4–8% vs elite D
 RZ_SHARE_BOOST = 0.10  # mid of +8–12% for TE / primary WR
+
+# OL / scheme proxy bumps for RB soft priors (small continuous nudges).
+RB_OL_PROXY_BUMP: Dict[str, float] = {
+    "BAL": 15.0,
+    "SF": 12.0,
+    "PHI": 12.0,
+    "DET": 10.0,
+    "DAL": 8.0,
+    "LA": 8.0,
+    "BUF": 8.0,
+    "GB": 6.0,
+    "CHI": 5.0,
+}
+
+# Desk hygiene: canonical QB1 labels (stats stay on team slots).
+CANONICAL_QB1_BY_TEAM: Dict[str, str] = {
+    "ARI": "Kyler Murray",
+    "MIN": "J.J. McCarthy",
+    "ATL": "Michael Penix Jr.",
+    "MIA": "Tua Tagovailoa",
+}
 
 # 2025 prior-year volume priors for sticky alpha shares (name → stats).
 # top5_rec / top5_tgt / top5_rush mark league leaderboard membership.
@@ -373,6 +406,20 @@ def build_team_rush_pool(
     return {t: v * scale for t, v in raw.items()}
 
 
+def _pass_td_ceiling_for_volume(pass_yards: float) -> float:
+    if float(pass_yards) >= HIGH_PASS_VOLUME_YARDS:
+        return PASS_TD_SOFT_CEILING_HIGH_VOLUME
+    return PASS_TD_SOFT_CEILING
+
+
+def high_volume_min_pass_tds(pass_yards: float) -> float:
+    """Minimum pass TDs for teams above the high-volume yard threshold."""
+    if float(pass_yards) < HIGH_PASS_VOLUME_YARDS:
+        return 0.0
+    attempts = float(pass_yards) / max(DEFAULT_YPA, 1.0)
+    return attempts * MIN_PASS_TD_RATE_HIGH_VOLUME
+
+
 def build_team_pass_tds(
     locked_pass: Mapping[str, float],
     *,
@@ -396,7 +443,12 @@ def build_team_pass_tds(
         def_m = defense_td_multiplier(opp_def)
         scheme = float(SCHEME_TD_MULT.get(team, 1.0))
         tds = (float(py) / YARDS_PER_PASS_TD) * eff * def_m * scheme
-        tds = _clamp(tds, PASS_TD_SOFT_FLOOR, PASS_TD_SOFT_CEILING)
+        # High-volume seasons cannot land below historical TD-rate floors.
+        min_hv = high_volume_min_pass_tds(float(py))
+        if min_hv > 0:
+            tds = max(tds, min_hv)
+        ceil = _pass_td_ceiling_for_volume(float(py))
+        tds = _clamp(tds, PASS_TD_SOFT_FLOOR, ceil)
         raw[team] = tds
     # Tiny league-band renorm if outside 1050–1150 (preserve ranks).
     total = sum(raw.values())
@@ -404,15 +456,46 @@ def build_team_pass_tds(
     if total > 1e-6 and abs(total - target) > 1.0:
         scale = target / total
         for t in raw:
-            raw[t] = _clamp(raw[t] * scale, PASS_TD_SOFT_FLOOR, PASS_TD_SOFT_CEILING)
+            ceil = _pass_td_ceiling_for_volume(float(locked_pass.get(t, 0.0)))
+            raw[t] = _clamp(raw[t] * scale, PASS_TD_SOFT_FLOOR, ceil)
         # Re-fit to band after soft clamps.
         total2 = sum(raw.values())
         if total2 > 1e-6 and not (PASS_TD_LEAGUE_MIN <= total2 <= PASS_TD_LEAGUE_MAX):
             mid = 0.5 * (PASS_TD_LEAGUE_MIN + PASS_TD_LEAGUE_MAX)
             scale2 = mid / total2
             for t in raw:
-                raw[t] = _clamp(raw[t] * scale2, PASS_TD_SOFT_FLOOR, PASS_TD_SOFT_CEILING)
-    return raw
+                ceil = _pass_td_ceiling_for_volume(float(locked_pass.get(t, 0.0)))
+                raw[t] = _clamp(raw[t] * scale2, PASS_TD_SOFT_FLOOR, ceil)
+    # Re-assert high-volume floors after league renorm (borrow from non-HV teams).
+    return _assert_high_volume_pass_td_floors(raw, locked_pass)
+
+
+def _assert_high_volume_pass_td_floors(
+    pass_tds: Mapping[str, float],
+    locked_pass: Mapping[str, float],
+) -> Dict[str, float]:
+    out = {t: float(v) for t, v in pass_tds.items()}
+    shortfall = 0.0
+    floors: Dict[str, float] = {}
+    for team, py in locked_pass.items():
+        floor = high_volume_min_pass_tds(float(py))
+        if floor <= 0:
+            continue
+        floor = min(floor, _pass_td_ceiling_for_volume(float(py)))
+        floors[team] = floor
+        if out.get(team, 0.0) < floor:
+            shortfall += floor - out.get(team, 0.0)
+            out[team] = floor
+    if shortfall <= 1e-9:
+        return out
+    donors = [t for t in out if t not in floors]
+    donor_pool = sum(max(0.0, out[t] - PASS_TD_SOFT_FLOOR) for t in donors)
+    if donor_pool <= 1e-9:
+        return out
+    for t in donors:
+        room = max(0.0, out[t] - PASS_TD_SOFT_FLOOR)
+        out[t] -= shortfall * (room / donor_pool)
+    return out
 
 
 def build_team_rush_tds(
@@ -920,11 +1003,18 @@ def apply_sticky_alpha_shares(
             sticky_from_yards = (prior_rush * retention) / rush_y
             sticky = max(sticky_from_share, sticky_from_yards)
             sticky = _volume_regressed(sticky, mean_rb1_rush, regression=alpha_volume_regression)
-            # Bell-cow floor when team rush pool supports 1400+.
-            floor_share = 0.0
-            if rush_y * 0.55 >= RB_ALPHA_YARD_FLOOR:
-                floor_share = min(RB_ALPHA_SHARE_CAP, RB_ALPHA_YARD_FLOOR / rush_y)
-            new_share = min(RB_ALPHA_SHARE_CAP, max(u.rush_share, sticky, floor_share))
+            # Soft differentiated prior (not a flat 1400 hard pin).
+            prior_yards = rb_soft_prior_yards(
+                u.player_name,
+                u.team,
+                rush_y,
+                team_rush_rank_pct=_team_rush_rank_pct(team_rush).get(u.team, 0.5),
+                prior=prior,
+            )
+            prior_share = (
+                min(RB_ALPHA_SHARE_CAP, prior_yards / rush_y) if prior_yards else 0.0
+            )
+            new_share = min(RB_ALPHA_SHARE_CAP, max(u.rush_share, sticky, prior_share))
             if new_share > u.rush_share + 1e-6:
                 notes.append(
                     f"{u.player_name}:{u.team}:rush {u.rush_share:.3f}→{new_share:.3f}"
@@ -958,20 +1048,31 @@ def apply_sticky_alpha_shares(
                 u.target_share *= TE_COMPRESS_WITH_WR_ALPHA
                 u.red_zone_share *= TE_COMPRESS_WITH_WR_ALPHA
 
-    # Bell-cow structural floor for RB1 when team rush supports 1400+ even without
-    # a top-5 prior (e.g. new feature-back on a lifted rush team).
+    # Soft structural prior for RB1 when team rush supports the hard floor even
+    # without a top-5 prior (e.g. new feature-back on a lifted rush team).
+    rush_rank = _team_rush_rank_pct(team_rush)
     for u in usage_by_key.values():
         if u.position != "RB" or u.depth_order != 1 or u.is_rookie:
             continue
         rush_y = float(team_rush.get(u.team, 0.0))
-        if rush_y * 0.58 < RB_ALPHA_YARD_FLOOR:
+        if rush_y * 0.58 < RB_ALPHA_YARD_HARD_FLOOR:
             continue
-        floor_share = min(RB_ALPHA_SHARE_CAP, RB_ALPHA_YARD_FLOOR / rush_y)
-        if u.rush_share < floor_share:
+        prior = prior_alpha_lookup(name_by_key.get(u.player_key, u.player_name))
+        prior_yards = rb_soft_prior_yards(
+            u.player_name,
+            u.team,
+            rush_y,
+            team_rush_rank_pct=rush_rank.get(u.team, 0.5),
+            prior=prior,
+        )
+        if prior_yards is None:
+            continue
+        prior_share = min(RB_ALPHA_SHARE_CAP, prior_yards / rush_y)
+        if u.rush_share < prior_share:
             notes.append(
-                f"{u.player_name}:{u.team}:rb1_floor {u.rush_share:.3f}→{floor_share:.3f}"
+                f"{u.player_name}:{u.team}:rb1_soft_prior {u.rush_share:.3f}→{prior_share:.3f}"
             )
-            u.rush_share = floor_share
+            u.rush_share = prior_share
 
     return {
         "alpha_players": len(set(alpha_keys)),
@@ -979,6 +1080,40 @@ def apply_sticky_alpha_shares(
         "alpha_volume_regression": alpha_volume_regression,
         "share_notes": notes[:40],
     }
+
+
+def _team_rush_rank_pct(team_rush: Mapping[str, float]) -> Dict[str, float]:
+    """0 = lowest rush team, 1 = highest (continuous rank percentile)."""
+    items = sorted(((t, float(v)) for t, v in team_rush.items() if t), key=lambda kv: kv[1])
+    if not items:
+        return {}
+    if len(items) == 1:
+        return {items[0][0]: 0.5}
+    n = len(items) - 1
+    return {t: i / n for i, (t, _) in enumerate(items)}
+
+
+def rb_soft_prior_yards(
+    player_name: str,
+    team: str,
+    team_rush: float,
+    *,
+    team_rush_rank_pct: float = 0.5,
+    prior: Optional[Mapping[str, Any]] = None,
+) -> Optional[float]:
+    """Differentiated soft prior yards for an RB1; None if team cannot support."""
+    rush_y = float(team_rush)
+    if rush_y * 0.58 < RB_ALPHA_YARD_HARD_FLOOR:
+        return None
+    base = RB_ALPHA_YARD_SOFT_PRIOR
+    # Team rush rank: top ≈ +span, bottom ≈ −span.
+    team_adj = float(RB_SOFT_PRIOR_TEAM_SPAN) * (2.0 * float(team_rush_rank_pct) - 1.0)
+    prior_rush = float((prior or {}).get("rush_yards") or 0.0)
+    prior_adj = _clamp((prior_rush - 1_200.0) / 12.0, -40.0, 70.0) if prior_rush > 0 else -10.0
+    ol_adj = float(RB_OL_PROXY_BUMP.get(team, 0.0))
+    target = base + team_adj + prior_adj + ol_adj
+    cap = min(RB_ALPHA_YARD_SOFT_CEILING, rush_y * RB_ALPHA_SHARE_CAP)
+    return _clamp(target, RB_ALPHA_YARD_HARD_FLOOR, cap)
 
 
 def _team_rush_map(rows: Sequence[Mapping[str, Any]]) -> Dict[str, float]:
@@ -1179,7 +1314,8 @@ def smoke_offensive_stack(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
         gap = abs(v["rec_yards"] - v["pass_yards"]) / max(v["pass_yards"], 1.0)
         if gap > PASS_REC_YARDS_TOLERANCE + 1e-9:
             pass_rec_fails.append(f"{team}:{gap:.4f}")
-        if v["pass_tds"] > PASS_TD_SOFT_CEILING + 0.05 or v["pass_tds"] < PASS_TD_SOFT_FLOOR - 0.05:
+        pass_ceil = _pass_td_ceiling_for_volume(v["pass_yards"])
+        if v["pass_tds"] > pass_ceil + 0.05 or v["pass_tds"] < PASS_TD_SOFT_FLOOR - 0.05:
             td_ceiling_fails.append(f"{team}:pass_td={v['pass_tds']:.2f}")
         if v["rush_tds"] > RUSH_TD_SOFT_CEILING + 0.05 or v["rush_tds"] < RUSH_TD_SOFT_FLOOR - 0.05:
             td_ceiling_fails.append(f"{team}:rush_td={v['rush_tds']:.2f}")
@@ -1515,3 +1651,248 @@ def usage_from_roster_book(
     for team_roles in rosters.values():
         roles.extend(list(team_roles))
     return usage_from_roles(roles)
+
+
+def _slug_name(name: str) -> str:
+    return "".join(ch for ch in str(name) if ch.isalnum())
+
+
+def repair_qb_team_labels(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    canonical: Optional[Mapping[str, str]] = None,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Fix obvious QB1 labeling mismatches without moving team production pools.
+
+    Identity fields swap onto the correct team slot; numeric season totals stay
+    with the team row so pass/rush conservation is untouched.
+    """
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    canon = dict(canonical or CANONICAL_QB1_BY_TEAM)
+    notes: List[str] = []
+
+    def _find_by_name(name: str) -> Optional[int]:
+        target = _norm_player_name(name)
+        for i, r in enumerate(work):
+            if _norm_player_name(str(r.get("player_name") or "")) == target:
+                return i
+        return None
+
+    def _qb1_index(team: str) -> Optional[int]:
+        cands = [
+            (i, r)
+            for i, r in enumerate(work)
+            if str(r.get("team") or "") == team
+            and str(r.get("position") or "").upper() == "QB"
+        ]
+        if not cands:
+            return None
+        cands.sort(key=lambda ir: -_f(ir[1], "pass_yards_total", "pass_yards_mean"))
+        return cands[0][0]
+
+    def _swap_identity(i: int, j: int) -> None:
+        if i == j:
+            return
+        for key in ("player_name", "player_key", "gsis_id", "player_id"):
+            if key in work[i] or key in work[j]:
+                work[i][key], work[j][key] = work[j].get(key), work[i].get(key)
+        # Normalize keys to team-depth-name pattern when present.
+        for idx in (i, j):
+            team = str(work[idx].get("team") or "")
+            name = str(work[idx].get("player_name") or "")
+            pos = str(work[idx].get("position") or "QB").upper()
+            old_key = str(work[idx].get("player_key") or "")
+            depth = "QB1"
+            if "-QB2" in old_key:
+                depth = "QB2"
+            elif "-QB3" in old_key:
+                depth = "QB3"
+            elif "-QB" in old_key:
+                # keep existing depth token when recognizable
+                parts = old_key.split("-")
+                for p in parts:
+                    if p.startswith("QB") and p[2:].isdigit():
+                        depth = p
+                        break
+            work[idx]["player_key"] = f"{team}-{depth}-{_slug_name(name)}"
+
+    for team, want_name in canon.items():
+        qb1_i = _qb1_index(team)
+        if qb1_i is None:
+            continue
+        cur_name = str(work[qb1_i].get("player_name") or "")
+        if _norm_player_name(cur_name) == _norm_player_name(want_name):
+            continue
+        want_i = _find_by_name(want_name)
+        if want_i is None:
+            notes.append(f"{team}: missing {want_name}")
+            continue
+        # Identity-only swap: team production stays on the QB1/QB2 slots.
+        from_team = str(work[want_i].get("team") or "")
+        notes.append(f"{want_name}: {from_team}→{team} (was {cur_name} on {team} QB1)")
+        _swap_identity(qb1_i, want_i)
+
+    return work, {"applied": True, "fixes": notes, "canonical": canon}
+
+
+def enforce_high_volume_pass_tds_on_rows(
+    rows: Sequence[Mapping[str, Any]],
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Raise team pass-TD pools to high-volume efficiency floors; keep pass yards locked."""
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    locked = locked_team_pass_yards(work)
+    current = {
+        t: sum(
+            _f(r, "pass_tds_total", "pass_tds_mean")
+            for r in work
+            if str(r.get("team") or "") == t and str(r.get("position") or "").upper() == "QB"
+        )
+        for t in locked
+    }
+    # Prefer rebuild via curve so floors + league band stay coherent.
+    target = build_team_pass_tds(locked, prior_pass_tds=current)
+    lifted: Dict[str, float] = {}
+    for team, want in target.items():
+        cur = float(current.get(team, 0.0))
+        if want > cur + 0.05:
+            lifted[team] = want - cur
+        # Always scale QB room to target (also trims if over-ceiling after renorm).
+        qbs = [
+            r
+            for r in work
+            if str(r.get("team") or "") == team
+            and str(r.get("position") or "").upper() == "QB"
+        ]
+        cur_sum = sum(_f(r, "pass_tds_total", "pass_tds_mean") for r in qbs) or 0.0
+        if cur_sum <= 1e-9:
+            # Dump onto top QB.
+            if qbs:
+                qbs.sort(key=lambda r: -_f(r, "pass_yards_total", "pass_yards_mean"))
+                qbs[0]["pass_tds_total"] = want
+            continue
+        scale = want / cur_sum
+        for r in qbs:
+            r["pass_tds_total"] = _f(r, "pass_tds_total", "pass_tds_mean") * scale
+        # Match receiving TD pool to pass TDs for the team.
+        recs = [
+            r
+            for r in work
+            if str(r.get("team") or "") == team
+            and str(r.get("position") or "").upper() in {"WR", "TE", "RB"}
+        ]
+        rec_sum = sum(_f(r, "rec_tds_total", "rec_tds_mean") for r in recs) or 0.0
+        if rec_sum > 1e-9:
+            rscale = want / rec_sum
+            for r in recs:
+                r["rec_tds_total"] = _f(r, "rec_tds_total", "rec_tds_mean") * rscale
+
+    return work, {
+        "applied": True,
+        "method": "high_volume_pass_td_floor_v1",
+        "teams_lifted": sorted(lifted.keys()),
+        "lift": {t: round(v, 2) for t, v in lifted.items()},
+        "team_pass_tds": {t: round(float(v), 2) for t, v in target.items()},
+    }
+
+
+def apply_soft_rb_priors_on_board(
+    rows: Sequence[Mapping[str, Any]],
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Differentiate RB1 yards via soft priors; conserve each team's rush total + league 64k."""
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    team_rush_all = _team_rush_map(work)
+    rush_rank = _team_rush_rank_pct(team_rush_all)
+    notes: List[str] = []
+    league_before = sum(team_rush_all.values())
+
+    by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for r in work:
+        if str(r.get("position") or "").upper() != "RB":
+            continue
+        by_team.setdefault(str(r.get("team") or ""), []).append(r)
+
+    for team, rbs in by_team.items():
+        team_total = float(team_rush_all.get(team, 0.0))
+        rb_pool = sum(_f(r, "rush_yards_total", "rush_yards_mean") for r in rbs)
+        if rb_pool <= 1.0 or team_total <= 1.0:
+            continue
+        rbs_sorted = sorted(rbs, key=lambda r: -_f(r, "rush_yards_total", "rush_yards_mean"))
+        rb1 = rbs_sorted[0]
+        prior = prior_alpha_lookup(str(rb1.get("player_name") or ""))
+        # Soft prior sized against full team rush (supports bell-cow share of team).
+        target = rb_soft_prior_yards(
+            str(rb1.get("player_name") or ""),
+            team,
+            team_total,
+            team_rush_rank_pct=rush_rank.get(team, 0.5),
+            prior=prior,
+        )
+        if target is None:
+            continue
+        # Cap RB1 at RB-only pool (cannot exceed RB room).
+        target = min(target, rb_pool * 0.92)
+        cur = _f(rb1, "rush_yards_total", "rush_yards_mean")
+        # Soft pull toward prior (stronger blend separates the old flat pile).
+        blend = float(RB_SOFT_PRIOR_BLEND)
+        new_y = blend * target + (1.0 - blend) * cur
+        hard_lo = (
+            RB_ALPHA_YARD_HARD_FLOOR
+            if team_total * 0.58 >= RB_ALPHA_YARD_HARD_FLOOR
+            else 0.0
+        )
+        new_y = _clamp(new_y, hard_lo, min(rb_pool * 0.92, team_total * RB_ALPHA_SHARE_CAP))
+        if abs(new_y - cur) < 0.5:
+            continue
+        delta = new_y - cur
+        rb1["rush_yards_total"] = new_y
+        # Take/give from remaining RBs proportional to their rush yards.
+        others = rbs_sorted[1:]
+        other_sum = sum(_f(r, "rush_yards_total", "rush_yards_mean") for r in others)
+        if others and other_sum > 1e-9:
+            for r in others:
+                share = _f(r, "rush_yards_total", "rush_yards_mean") / other_sum
+                r["rush_yards_total"] = max(0.0, _f(r, "rush_yards_total") - delta * share)
+        # Exact RB-room renorm (QB/WR rush untouched → team total conserved).
+        rb_sum = sum(_f(r, "rush_yards_total") for r in rbs) or 1.0
+        scale = rb_pool / rb_sum
+        for r in rbs:
+            r["rush_yards_total"] = _f(r, "rush_yards_total") * scale
+            r["carry_share"] = (
+                round(_f(r, "rush_yards_total") / team_total, 4) if team_total else 0.0
+            )
+        notes.append(
+            f"{rb1.get('player_name')}:{team}:{cur:.0f}→{_f(rb1, 'rush_yards_total'):.0f}"
+        )
+
+    league_after = sum(_team_rush_map(work).values())
+    if abs(league_after - league_before) > 0.5 and league_after > 1e-9:
+        # Microscopic league fix on RB yards only.
+        rb_yards = [
+            r for r in work if str(r.get("position") or "").upper() == "RB"
+        ]
+        rb_sum = sum(_f(r, "rush_yards_total") for r in rb_yards) or 1.0
+        non_rb = league_after - rb_sum
+        need_rb = league_before - non_rb
+        if need_rb > 1e-9:
+            scale = need_rb / rb_sum
+            for r in rb_yards:
+                r["rush_yards_total"] = _f(r, "rush_yards_total") * scale
+
+    return work, {
+        "applied": True,
+        "method": "soft_rb_alpha_priors_v1",
+        "adjustments": notes[:40],
+        "rush_pool": round(sum(_team_rush_map(work).values()), 1),
+        "top_rb": sorted(
+            (
+                (
+                    str(r.get("player_name") or ""),
+                    str(r.get("team") or ""),
+                    round(_f(r, "rush_yards_total"), 1),
+                )
+                for r in work
+                if str(r.get("position") or "").upper() == "RB"
+            ),
+            key=lambda x: -x[2],
+        )[:12],
+    }

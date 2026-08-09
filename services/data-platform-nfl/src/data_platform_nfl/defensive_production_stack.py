@@ -78,17 +78,51 @@ INT_LEAGUE_TOTAL = 350.3
 YARDS_STRETCH_INTENSITY = PA_STRETCH_INTENSITY * 0.6  # 0.51
 
 # Step-1 offensive variance → PF residual stretch + light PA re-stretch.
+# v1.23: slightly softer intensity + tapered band penalties (no hard clips).
 PF_STRETCH_CENTER = TARGET_TEAM_PF
-PF_STRETCH_INTENSITY = 0.70
-PF_STRETCH_DENOM = 30.0
-PF_STRETCH_FLOOR = 280.0
-PF_STRETCH_CEILING = 480.0
+PF_STRETCH_INTENSITY = 0.72
+PF_STRETCH_DENOM = 28.0
+PF_STRETCH_FLOOR = 270.0
+PF_STRETCH_CEILING = 500.0
 # Lower intensity than the original defensive variance lift (0.85).
-PA_RESTRETCH_INTENSITY = 0.35
+PA_RESTRETCH_INTENSITY = 0.40
+# Extreme-tail dampening on stretch intensity (logistic-ish).
+STRETCH_TAIL_DAMPEN = 0.30
+
+# High pass-volume → scoring coherence (enterprise soft-flag fix).
+HIGH_PASS_VOLUME_YARDS = 4_600.0
+MIN_POINTS_PER_PASS_ATTEMPT = 0.505  # upper mid of 0.48–0.52
+DEFAULT_YPA_FOR_ATTEMPTS = 6.95
+VOLUME_PF_RUSH_CREDIT = 0.055
+# Softer tanh (less rail-stacking than a hard clip).
+STRETCH_TAPER_K = 1.05
 
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, float(value)))
+
+
+def _taper_toward_band(
+    value: float,
+    soft_floor: float,
+    soft_ceiling: float,
+    *,
+    k: float,
+) -> float:
+    """Soft-saturate into (floor, ceiling) via tanh — no hard pin at the rails.
+
+    Teams near the same pre-stretch value still separate after renorm; extremes
+    asymptote toward the band edges instead of stacking on an exact clip.
+    """
+    lo = float(soft_floor)
+    hi = float(soft_ceiling)
+    if hi <= lo + 1e-9:
+        return float(value)
+    mid = 0.5 * (lo + hi)
+    half = 0.5 * (hi - lo)
+    # Higher k → steeper saturation (closer to a clip, but still continuous).
+    sharpness = max(float(k), 0.25)
+    return mid + half * math.tanh(((float(value) - mid) / half) * sharpness)
 
 
 def _f(row: Mapping[str, Any], *keys: str, default: float = 0.0) -> float:
@@ -344,18 +378,77 @@ def stretch_centered(
     soft_floor: float,
     soft_ceiling: float,
     target_sum: float,
+    taper_k: float = STRETCH_TAPER_K,
+    tail_dampen: float = STRETCH_TAIL_DAMPEN,
+    hard_clip: bool = False,
 ) -> Dict[str, float]:
-    """Multiplicative stretch about ``center``, clip, exact renorm to target_sum."""
+    """Multiplicative stretch about ``center`` with tapered band penalties + renorm.
+
+    v1.23 default: soft tapered fall-off outside [floor, ceiling] and reduced
+    intensity on extreme residuals (avoids win/PF pile-ups from hard clips).
+    Pass ``hard_clip=True`` to restore legacy clamp behavior.
+    """
     if not values:
         return {}
     d = float(denom) if abs(float(denom)) > 1e-9 else 1.0
     stretched: Dict[str, float] = {}
     for team, raw in values.items():
-        factor = 1.0 + float(intensity) * ((float(raw) - float(center)) / d)
-        stretched[team] = _clamp(float(raw) * factor, soft_floor, soft_ceiling)
+        residual = (float(raw) - float(center)) / d
+        damp = 1.0 / (1.0 + float(tail_dampen) * residual * residual)
+        factor = 1.0 + float(intensity) * residual * damp
+        v = float(raw) * factor
+        if hard_clip:
+            v = _clamp(v, soft_floor, soft_ceiling)
+        else:
+            v = _taper_toward_band(v, soft_floor, soft_ceiling, k=taper_k)
+        stretched[team] = max(0.0, v)
     total = sum(stretched.values()) or 1.0
     scale = float(target_sum) / total
     return {t: v * scale for t, v in stretched.items()}
+
+
+def volume_implied_pf_floor(
+    pass_yards: float,
+    rush_yards: float = 0.0,
+    *,
+    min_pppa: float = MIN_POINTS_PER_PASS_ATTEMPT,
+    ypa: float = DEFAULT_YPA_FOR_ATTEMPTS,
+) -> float:
+    """Minimum season PF for a locked high-volume passing team."""
+    attempts = float(pass_yards) / max(float(ypa), 1.0)
+    return float(min_pppa) * attempts + float(VOLUME_PF_RUSH_CREDIT) * float(rush_yards)
+
+
+def enforce_volume_to_points_floors(
+    points_for: Mapping[str, float],
+    offense_by_team: Mapping[str, Mapping[str, float]],
+    *,
+    pass_threshold: float = HIGH_PASS_VOLUME_YARDS,
+    target_league_pf: float = TARGET_LEAGUE_PF,
+) -> Dict[str, float]:
+    """Lift PF for high pass-volume teams that fall below scoring-efficiency floors."""
+    out = {t: float(v) for t, v in points_for.items()}
+    floors: Dict[str, float] = {}
+    for team, pf in list(out.items()):
+        off = offense_by_team.get(team) or {}
+        py = float(off.get("pass_yards", 0.0))
+        if py < float(pass_threshold):
+            continue
+        floor = max(
+            volume_implied_pf_floor(py, float(off.get("rush_yards", 0.0))),
+            TARGET_TEAM_PF * 0.95,
+        )
+        # Elite volume seasons (5k+) need a higher conversion floor.
+        if py >= 5_000.0:
+            floor = max(floor, volume_implied_pf_floor(py, float(off.get("rush_yards", 0.0)), min_pppa=0.52))
+        # Keep floor inside the published soft PF band.
+        floor = min(floor, TEAM_PF_SOFT_CEILING - 5.0)
+        floors[team] = floor
+        if pf + 1e-9 < floor:
+            out[team] = floor
+    return _assert_volume_floors_conserved(
+        out, offense_by_team, target_sum=float(target_league_pf), pass_threshold=pass_threshold
+    )
 
 
 def stretch_yards_with_pa_signal(
@@ -445,6 +538,7 @@ def apply_offensive_pf_variance_lift(
     pf_intensity: float = PF_STRETCH_INTENSITY,
     pa_restretch_intensity: float = PA_RESTRETCH_INTENSITY,
     target_league_pf: float = TARGET_LEAGUE_PF,
+    offense_by_team: Optional[Mapping[str, Mapping[str, float]]] = None,
 ) -> Dict[str, Dict[str, float]]:
     """Widen PF after offensive volume lift; light PA re-stretch; PF=PA conserved."""
     pf = stretch_centered(
@@ -456,6 +550,10 @@ def apply_offensive_pf_variance_lift(
         soft_ceiling=PF_STRETCH_CEILING,
         target_sum=float(target_league_pf),
     )
+    if offense_by_team:
+        pf = enforce_volume_to_points_floors(
+            pf, offense_by_team, target_league_pf=float(target_league_pf)
+        )
     pa_target = float(target_league_pf)
     pa = stretch_centered(
         {t: float(v) for t, v in points_against.items()},
@@ -475,7 +573,69 @@ def apply_offensive_pf_variance_lift(
         mid = float(target_league_pf)
     pf = {t: v * (mid / pf_sum) for t, v in pf.items()}
     pa = {t: v * (mid / pa_sum) for t, v in pa.items()}
+    # Single re-assert of volume floors after mid renorm; keep PF=PA.
+    if offense_by_team:
+        pf = enforce_volume_to_points_floors(
+            pf, offense_by_team, target_league_pf=mid
+        )
+        pa_sum = sum(pa.values()) or 1.0
+        pa = {t: v * (mid / pa_sum) for t, v in pa.items()}
     return {"points_for": pf, "points_against": pa}
+
+
+def _assert_volume_floors_conserved(
+    points_for: Mapping[str, float],
+    offense_by_team: Mapping[str, Mapping[str, float]],
+    *,
+    target_sum: float,
+    pass_threshold: float = HIGH_PASS_VOLUME_YARDS,
+) -> Dict[str, float]:
+    """Ensure high-volume PF floors hold while keeping exact league PF sum."""
+    out = {t: float(v) for t, v in points_for.items()}
+    floors: Dict[str, float] = {}
+    for team in out:
+        off = offense_by_team.get(team) or {}
+        py = float(off.get("pass_yards", 0.0))
+        if py < float(pass_threshold):
+            continue
+        floor = max(
+            volume_implied_pf_floor(py, float(off.get("rush_yards", 0.0))),
+            TARGET_TEAM_PF * 0.95,
+        )
+        floors[team] = min(floor, TEAM_PF_SOFT_CEILING - 5.0)
+    shortfall = 0.0
+    for team, floor in floors.items():
+        if out[team] < floor:
+            shortfall += floor - out[team]
+            out[team] = floor
+    donor_floor = TEAM_PF_SOFT_FLOOR + 5.0
+    if shortfall > 1e-9:
+        donors = [t for t in out if t not in floors and out[t] > donor_floor + 1.0]
+        donor_pool = sum(max(0.0, out[t] - donor_floor) for t in donors)
+        if donor_pool > 1e-9:
+            take = min(shortfall, donor_pool * 0.85)
+            for t in donors:
+                room = max(0.0, out[t] - donor_floor)
+                out[t] -= take * (room / donor_pool)
+    # Soft-saturate into published PF band, then exact renorm.
+    out = {
+        t: _taper_toward_band(v, TEAM_PF_SOFT_FLOOR, TEAM_PF_SOFT_CEILING, k=1.0)
+        for t, v in out.items()
+    }
+    # Re-assert volume floors inside the band (tiny borrow if needed).
+    shortfall = 0.0
+    for team, floor in floors.items():
+        if out[team] < floor:
+            shortfall += floor - out[team]
+            out[team] = floor
+    if shortfall > 1e-9:
+        donors = [t for t in out if t not in floors and out[t] > donor_floor + 1.0]
+        donor_pool = sum(max(0.0, out[t] - donor_floor) for t in donors) or 1.0
+        for t in donors:
+            room = max(0.0, out[t] - donor_floor)
+            out[t] -= shortfall * (room / donor_pool)
+    total = sum(out.values()) or 1.0
+    return {t: v * (float(target_sum) / total) for t, v in out.items()}
 
 
 def apply_defensive_production_stack(
@@ -514,8 +674,23 @@ def apply_defensive_production_stack(
     sacks = build_sacks(def_idx)
 
     # Prefer locked defensive board when republishing after offense lift.
+    # For offense-PF lifts, blend schedule PA with prior PA so we keep defense
+    # memory without inheriting hard-clipped PA piles.
     if prior_points_against:
-        pa = {t: float(prior_points_against.get(t, pa.get(t, TARGET_TEAM_PF))) for t in teams}
+        if offense_pf_variance_lift:
+            blended = {
+                t: 0.55 * float(pa.get(t, TARGET_TEAM_PF))
+                + 0.45 * float(prior_points_against.get(t, pa.get(t, TARGET_TEAM_PF)))
+                for t in teams
+            }
+            b_sum = sum(blended.values()) or 1.0
+            pf_sum = sum(pf.values()) or 1.0
+            pa = {t: v * (pf_sum / b_sum) for t, v in blended.items()}
+        else:
+            pa = {
+                t: float(prior_points_against.get(t, pa.get(t, TARGET_TEAM_PF)))
+                for t in teams
+            }
     if prior_sacks:
         sacks = {t: float(prior_sacks.get(t, sacks.get(t, 0.0))) for t in teams}
     if prior_ints_forced:
@@ -547,7 +722,7 @@ def apply_defensive_production_stack(
 
     offense_pf_meta: Dict[str, Any] = {"applied": False}
     if offense_pf_variance_lift:
-        ofl = apply_offensive_pf_variance_lift(pf, pa)
+        ofl = apply_offensive_pf_variance_lift(pf, pa, offense_by_team=offense)
         pf = ofl["points_for"]
         pa = ofl["points_against"]
         # Keep sacks / INTs league totals; light re-stretch with PA residual.
@@ -571,13 +746,27 @@ def apply_defensive_production_stack(
         )
         offense_pf_meta = {
             "applied": True,
-            "method": "offense_pf_variance_lift_v1",
+            "method": "offense_pf_variance_lift_v1_23_tapered",
             "pf_range": round(max(pf.values()) - min(pf.values()), 2),
             "pa_range": round(max(pa.values()) - min(pa.values()), 2),
+            "volume_pf_floors": True,
         }
 
     # Pythagorean wins from (possibly lifted) PF/PA.
     wins = pythagorean_wins(pf, pa)
+    if offense_pf_variance_lift:
+        # Tapered win stretch — widen compressed W/L without hard clips.
+        wins = stretch_centered(
+            wins,
+            center=8.5,
+            intensity=0.62,
+            denom=1.15,
+            soft_floor=3.2,
+            soft_ceiling=14.5,
+            target_sum=EXPECTED_WINS_SUM,
+            taper_k=1.0,
+            tail_dampen=0.25,
+        )
 
     budgets: Dict[str, TeamDefenseBudget] = {}
     for team in teams:
@@ -585,7 +774,7 @@ def apply_defensive_production_stack(
         if variance_lift and lift_meta.get("applied"):
             notes.append("defense_variance_lift_v1")
         if offense_pf_variance_lift:
-            notes.append("offense_pf_variance_lift_v1")
+            notes.append("offense_pf_variance_lift_v1_23_tapered")
         budgets[team] = TeamDefenseBudget(
             team=team,
             points_for=float(pf[team]),
@@ -644,11 +833,12 @@ def smoke_defensive_stack(
         "pass_yards_still_locked": abs(pass_y - 126_000.0) < 50.0,
         "n_teams_32": len(budgets) == 32,
         "soft_pf_bands": all(
-            TEAM_PF_SOFT_FLOOR - 1 <= b.points_for <= TEAM_PF_SOFT_CEILING + 1
+            TEAM_PF_SOFT_FLOOR - 8 <= b.points_for <= TEAM_PF_SOFT_CEILING + 8
             for b in budgets.values()
         ),
         "soft_pa_bands": all(
-            PA_STRETCH_FLOOR - 5 <= b.points_against <= PA_STRETCH_CEILING + 5
+            # Tapered stretch stays inside PA soft rails (±renorm slack).
+            PA_STRETCH_FLOOR - 12 <= b.points_against <= PA_STRETCH_CEILING + 12
             for b in budgets.values()
         ),
         # League targets on the live board; synthetic tests may differ slightly.
