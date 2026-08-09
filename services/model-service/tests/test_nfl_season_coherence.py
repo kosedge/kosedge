@@ -34,7 +34,12 @@ def test_engine_version_is_season_coherence() -> None:
     assert ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert any(
         token in ENGINE_VERSION
-        for token in ("season-coherence", "team-priors", "offensive-production")
+        for token in (
+            "season-coherence",
+            "team-priors",
+            "offensive-production",
+            "defense-points",
+        )
     )
 
 

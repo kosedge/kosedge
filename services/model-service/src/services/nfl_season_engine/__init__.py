@@ -24,9 +24,9 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.18 offensive production stack: locked pass yards → rush pool → TD/INT
-rates → usage/rookie allocation → conservation renorm (keeps v1.17 ARI/BAL/SEA
-pass priors + 126k pass pool). v1.15 true-PR harden + v1.14 SOS kept.
+v1.19 defense + PF/PA + Pythagorean W/L on the locked v1.18 offense board
+(keeps pass yards / offensive stack; closes published season-total loop).
+v1.15 true-PR harden + v1.14 SOS kept.
 
 Public entry points
 -------------------

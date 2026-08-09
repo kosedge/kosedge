@@ -19,9 +19,8 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.18: full offensive production stack on locked v1.17 pass yards
-# (rush pool 60k, TD/INT curves, usage + rookie ramps, conservation).
-ENGINE_VERSION = "nfl-season-engine-v1.18-offensive-production-stack"
+# v1.19: defense + PF/PA + Pythagorean W/L on locked v1.18 offense board.
+ENGINE_VERSION = "nfl-season-engine-v1.19-defense-points-wl"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -523,6 +522,12 @@ def calibration_notes() -> Dict[str, str]:
             "1.8–3.4%; receiving/rush allocation via depth usage + rookie "
             "season ramps; conservation renorm (pass≈rec ±1.5%). "
             "See data_platform_nfl/offensive_production_stack.py."
+        ),
+        "defense_points_wl": (
+            "v1.19: team PF from offensive production + FG stub; PA from "
+            "schedule-weighted opponent PF × defense_index; yards allowed / "
+            "INTs forced / sacks; Pythagorean expected wins renormed to 272. "
+            "See data_platform_nfl/defensive_production_stack.py."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

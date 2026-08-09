@@ -42,6 +42,7 @@ def test_engine_version_is_calibrated() -> None:
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "offensive-production" in DEFAULT_SEASON_ENGINE_VERSION
         or "team-priors" in DEFAULT_SEASON_ENGINE_VERSION
+        or "defense-points" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
     assert (
