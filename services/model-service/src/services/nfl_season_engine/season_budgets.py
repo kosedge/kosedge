@@ -1,8 +1,10 @@
 """Season volume budgets — finite team pools before player allocation.
 
-Phase-1 coherence contract (v1.16):
+Phase-1 coherence contract (v1.16) + v1.17 team pass-prior overlays:
 - Each team owns a **season pass-yard** and **rush-yard** budget driven by
   offense/pace/pass identity, coaching tendencies, and opponent-defense slate.
+- Targeted identity weights (ARI / BAL / SEA) adjust the team-level pass-volume
+  residual after the base talent/scheme model and **before** league-pool renorm.
 - Budgets are renormalized to a **league pool** near recent NFL reality.
 - Prior-year volume outliers regress toward the structural mean (tails only).
 - QB1 / RB1 / WR-TE production must draw from these budgets — not 32
@@ -45,6 +47,43 @@ OPP_DEFENSE_RUSH_SCALE = 0.12
 STRENGTH_PASS_BIAS_SCALE = 1.75
 COACH_PASS_BIAS_SCALE = 1.35
 NAMED_SHARE = 1.0 - USAGE_OTHER_BUCKET_FLOOR
+
+# ---------------------------------------------------------------------------
+# Targeted team pass-volume identity overlays (v1.17).
+# Applied to the pre-pool pass residual only for ARI / BAL / SEA. Other 29
+# teams pass through unchanged; global 126k two-way renorm still follows.
+# ---------------------------------------------------------------------------
+# 2024–2025 Darnold high-efficiency volume anchor (team named pass yards).
+SEA_DARNOLD_PASS_BASELINE = 3_900.0
+
+# residual_regression: pass_yards <- mean + k * (pass_yards - mean)
+# scheme_mult: multiplicative scheme/identity weight after residual step
+# soft_floor / soft_ceiling: bounds before league-pool allocation
+TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS: Dict[str, Dict[str, float]] = {
+    "ARI": {
+        # Brissett 2025 negative-script / 68%+ pass-rate residual dampen.
+        "residual_regression": 0.78,
+        # LaFleur: balanced-to-pass lean, not pure volume.
+        "scheme_mult": 0.92,
+        "soft_ceiling": 4_250.0,
+    },
+    "BAL": {
+        # Dual-threat / run-bias damper raised to 0.88× (was effectively stronger).
+        "residual_regression": 0.88,
+        # Doyle: play-action + under-center emphasis.
+        "scheme_mult": 1.12,
+        "soft_floor": 3_150.0,
+    },
+    "SEA": {
+        # 70% Darnold 2024–25 baseline / 30% new-OC structural regression.
+        "darnold_anchor_weight": 0.70,
+        "new_oc_weight": 0.30,
+        "darnold_baseline": SEA_DARNOLD_PASS_BASELINE,
+        # Fleury / Shanahan-tree: efficient intermediate + elevated RB targets.
+        "scheme_mult": 1.05,
+        "soft_floor": 3_400.0,
+    },
+}
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -98,6 +137,72 @@ class TeamSeasonBudget:
             "structural_rush_yards": round(self.structural_rush_yards, 2),
             "notes": list(self.notes),
         }
+
+
+def _replace_pass_yards(budget: TeamSeasonBudget, pass_yards: float, *extra_notes: str) -> TeamSeasonBudget:
+    notes = tuple(list(budget.notes) + [n for n in extra_notes if n])
+    return TeamSeasonBudget(
+        team=budget.team,
+        pass_yards=float(pass_yards),
+        rush_yards=budget.rush_yards,
+        rec_yards=float(pass_yards) * 0.92,
+        pass_plays=budget.pass_plays,
+        rush_plays=budget.rush_plays,
+        pass_rate=budget.pass_rate,
+        pace_plays=budget.pace_plays,
+        ypa=budget.ypa,
+        ypc=budget.ypc,
+        structural_pass_yards=budget.structural_pass_yards,
+        structural_rush_yards=budget.structural_rush_yards,
+        notes=notes,
+    )
+
+
+def apply_team_pass_volume_identity_adjustments(
+    budgets: Mapping[str, TeamSeasonBudget],
+) -> Dict[str, TeamSeasonBudget]:
+    """Identity weights on pass-volume residual before two-way pool allocation.
+
+    Only ARI / BAL / SEA are touched. Soft floors/ceilings apply pre-pool.
+    """
+    if not budgets:
+        return {}
+    pass_vals = [float(b.pass_yards) for b in budgets.values()]
+    league_mean = statistics.fmean(pass_vals) if pass_vals else (LEAGUE_PASS_YARDS_POOL / 32.0)
+    out: Dict[str, TeamSeasonBudget] = {}
+    for team, budget in budgets.items():
+        cfg = TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS.get(str(team))
+        if cfg is None:
+            out[team] = budget
+            continue
+        y = float(budget.pass_yards)
+        notes: List[str] = ["team_pass_identity_prior_v1"]
+        if team == "SEA":
+            baseline = float(cfg.get("darnold_baseline", SEA_DARNOLD_PASS_BASELINE))
+            w_d = float(cfg.get("darnold_anchor_weight", 0.70))
+            w_oc = float(cfg.get("new_oc_weight", 0.30))
+            w_sum = w_d + w_oc
+            if w_sum <= 0:
+                w_d, w_oc, w_sum = 0.70, 0.30, 1.0
+            y = (w_d * baseline + w_oc * y) / w_sum
+            notes.append("sea_darnold_anchor_70_30")
+        else:
+            k = float(cfg.get("residual_regression", 1.0))
+            y = league_mean + k * (y - league_mean)
+            notes.append(f"residual_regression_{k:.2f}")
+        scheme = float(cfg.get("scheme_mult", 1.0))
+        y = y * scheme
+        notes.append(f"scheme_mult_{scheme:.2f}")
+        floor = cfg.get("soft_floor")
+        ceiling = cfg.get("soft_ceiling")
+        if floor is not None and y < float(floor):
+            y = float(floor)
+            notes.append(f"soft_floor_{float(floor):.0f}")
+        if ceiling is not None and y > float(ceiling):
+            y = float(ceiling)
+            notes.append(f"soft_ceiling_{float(ceiling):.0f}")
+        out[team] = _replace_pass_yards(budget, y, *notes)
+    return out
 
 
 def mean_opponent_defense(
@@ -283,7 +388,9 @@ def compute_team_season_budgets(
         team: structural_team_budget(factors)
         for team, factors in factors_by_team.items()
     }
-    return _renormalize_pool(raw, pass_pool=pass_pool, rush_pool=rush_pool)
+    # Identity overlays after base talent/scheme, before 126k two-way pool.
+    adjusted = apply_team_pass_volume_identity_adjustments(raw)
+    return _renormalize_pool(adjusted, pass_pool=pass_pool, rush_pool=rush_pool)
 
 
 def compute_universe_season_budgets(universe: EngineUniverse) -> Dict[str, TeamSeasonBudget]:

@@ -1,0 +1,19 @@
+{
+  "source": "season_engine_launch_research",
+  "engine_version": "nfl-season-engine-v1.17-season-coherence-team-priors",
+  "n_team_sims": 50000,
+  "n_player_sims": 1000,
+  "preseason": true,
+  "honesty": {
+    "playoff_prob": "P(wins>=9) from 100k team W/L win_histogram",
+    "division_title_prob": "softmax(expected_wins) within division (display proxy)",
+    "super_bowl_win_prob": "softmax(expected_wins) league-wide (display proxy; not bracket sims)",
+    "playoff_player_totals": "empty \u2014 full player paths were regular-season only"
+  },
+  "source_bundle": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.17-season-coherence-team-priors-Nteam50000-Nplayer1000-20260809T092006Z",
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 8.0,
+    "sum_playoff_prob": null
+  }
+}

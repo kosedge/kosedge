@@ -19,10 +19,8 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.16: Season coherence — team pass/rush budgets, attempt share, wider
-# script/YPA differentiation, league pool conservation, QB1 distribution shape.
-# Keeps v1.13–v1.15 process/finite/SOS/true-PR contracts.
-ENGINE_VERSION = "nfl-season-engine-v1.16-season-coherence"
+# v1.20: defensive variance lift on PA / sacks / INTs / yards (conserved totals).
+ENGINE_VERSION = "nfl-season-engine-v1.20-defense-variance-lift"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -47,7 +45,8 @@ ATTEMPT_SHARE_OF_PASS_PLAYS = 0.925
 # starter-ish pass pool ~115–125k; rush pool ~50–60k.
 # Named skill REG pool. Sized so QB1 median lands ~3.6–3.8k after QB1 share.
 LEAGUE_PASS_YARDS_POOL = 126_000.0
-LEAGUE_RUSH_YARDS_POOL = 56_000.0
+# Phase-1 offensive stack: parallel rush pool in the 58–62k historical band.
+LEAGUE_RUSH_YARDS_POOL = 60_000.0
 # Volume regression: prior outliers shrink toward structural/league mean.
 VOLUME_REGRESSION = 0.40
 VOLUME_PRIOR_BLEND = 0.30
@@ -510,6 +509,30 @@ def calibration_notes() -> Dict[str, str]:
             "QB1 distribution guards (not 32/32 ≥4000). See season_budgets.py + "
             "scoring_bridge.py. Fantasy preseason-sim totals use the same budget "
             "allocator after QB starter lock."
+        ),
+        "team_pass_priors": (
+            "v1.17: ARI/BAL/SEA multiplicative identity weights on pre-pool "
+            "pass-volume residual (Brissett/LaFleur dampen; Doyle dual-threat "
+            "restore; Darnold 70/30 + Fleury/Shanahan-tree). Soft floors/ceilings "
+            "before 126k two-way renorm; other 29 teams untouched."
+        ),
+        "offensive_production_stack": (
+            "v1.18: on locked pass yards — parallel 60k rush pool; yards→TD "
+            "curves with efficiency/defense/scheme residuals; INT rates "
+            "1.8–3.4%; receiving/rush allocation via depth usage + rookie "
+            "season ramps; conservation renorm (pass≈rec ±1.5%). "
+            "See data_platform_nfl/offensive_production_stack.py."
+        ),
+        "defense_points_wl": (
+            "v1.19: team PF from offensive production + FG stub; PA from "
+            "schedule-weighted opponent PF × defense_index; yards allowed / "
+            "INTs forced / sacks; Pythagorean expected wins renormed to 272. "
+            "See data_platform_nfl/defensive_production_stack.py."
+        ),
+        "defense_variance_lift": (
+            "v1.20: multiplicative stretch on PA / sacks / INTs (yards follow "
+            "PA residual at 0.6× intensity); soft floors/ceilings; exact "
+            "renorm to league totals; Pythagorean wins recomputed from new PA."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

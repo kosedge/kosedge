@@ -1,10 +1,12 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T035645Z",
-  "engine_version": "nfl-season-engine-v1.16-season-coherence",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T120227Z",
+  "engine_version": "nfl-season-engine-v1.20-defense-variance-lift",
   "n_team_sims": 50000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T03:56:45.305922+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.16-season-coherence-Nteam50000-Nplayer1000-20260809T034834Z",
+  "generated_at_utc": "2026-08-09T12:02:27.462080+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.20-defense-variance-lift-Nteam50000-Nplayer1000-20260809T120227Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.16-season-coherence \u00b7 N_team=50000 \u00b7 20260809T035645Z"
+  "locked": true,
+  "identity": "nfl-season-engine-v1.20-defense-variance-lift \u00b7 N_team=50000 \u00b7 20260809T120227Z",
+  "note": "LOCKED pre-season snapshot after defensive variance lift (PA/sacks/INTs/yards); league totals conserved"
 }
