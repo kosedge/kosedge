@@ -24,6 +24,7 @@ import random
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from src.services.nfl_season_engine.calibration import (
+    ATTEMPT_SHARE_OF_PASS_PLAYS,
     DIRICHLET_RUSH_CONCENTRATION,
     DIRICHLET_TARGET_CONCENTRATION,
     QB1_START_RATE,
@@ -114,10 +115,20 @@ def allocate_team_usage(
             script_detail=team_detail,
         )
 
-    # script.pace_plays is already a per-team offensive-play expectation.
-    plays = _clamp(script.pace_plays + rng.gauss(0.0, 3.5), 48.0, 82.0)
+    # v1.16: prefer per-team pace_plays so volume differs by club identity.
+    if side == "home":
+        base_plays = float(getattr(script, "home_pace_plays", 0.0) or 0.0) or float(
+            script.pace_plays
+        )
+    else:
+        base_plays = float(getattr(script, "away_pace_plays", 0.0) or 0.0) or float(
+            script.pace_plays
+        )
+    plays = _clamp(base_plays + rng.gauss(0.0, 3.5), 48.0, 82.0)
     pass_plays = plays * pass_rate
     rush_plays = plays * (1.0 - pass_rate)
+    # Sacks / aborted plays: attempts < pass plays.
+    pass_attempts_pool = pass_plays * ATTEMPT_SHARE_OF_PASS_PLAYS
 
     qbs = [r for r in roles if r.position == "QB"]
     # Include only players with positive effective shares so injured zeros
@@ -172,10 +183,10 @@ def allocate_team_usage(
             starter_share = min(starter_share, 0.91) if starter.depth_order <= 1 else starter_share
         elif team_script == "lead":
             starter_share = min(starter_share, 0.93) if starter.depth_order <= 1 else starter_share
-        qb_attempts[starter.player_key] = pass_plays * starter_share
+        qb_attempts[starter.player_key] = pass_attempts_pool * starter_share
         backups = [r for r in qbs if r.player_key != starter.player_key]
         if backups:
-            residual = pass_plays * (1.0 - starter_share)
+            residual = pass_attempts_pool * (1.0 - starter_share)
             each = residual / len(backups)
             for b in backups:
                 qb_attempts[b.player_key] = each

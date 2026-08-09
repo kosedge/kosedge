@@ -6,7 +6,7 @@ so BUF@KC sanity bands remain stable.
 
 Profile fields
 --------------
-- ``pass_rate_bias`` — baseline pass-rate shift vs league (typical ±0.03)
+- ``pass_rate_bias`` — baseline pass-rate shift vs league (typical ±0.05)
 - ``script_aggression`` — scales score/time script pass deltas (≈0.80–1.20)
 - ``rz_pass_bias`` — red-zone pass preference vs the scripted RZ base (±0.04)
 - ``early_down_pass_bias`` — additive early-down pass tilt (±0.025)
@@ -34,7 +34,8 @@ _NFL_TEAMS = (
 # ---------------------------------------------------------------------------
 # Magnitude clamps — keep coaching overlays modest vs strength / script.
 # ---------------------------------------------------------------------------
-PASS_RATE_BIAS_CLAMP = (-0.035, 0.035)
+# v1.16: widen so coaching actually moves season pass volume (was ±0.035).
+PASS_RATE_BIAS_CLAMP = (-0.055, 0.055)
 SCRIPT_AGGRESSION_CLAMP = (0.80, 1.20)
 RZ_PASS_BIAS_CLAMP = (-0.040, 0.040)
 EARLY_DOWN_PASS_BIAS_CLAMP = (-0.025, 0.025)
@@ -302,11 +303,23 @@ def baseline_pass_rate(
     strength_pass_bias: float = 0.0,
     coaching: Optional[CoachingProfile] = None,
     team: Optional[str] = None,
+    strength_bias_scale: float = 1.75,
+    coach_bias_scale: float = 1.35,
 ) -> float:
-    """League + Layer-1 strength bias + coaching pass_rate_bias (clamped)."""
+    """League + Layer-1 strength bias + coaching pass_rate_bias (clamped).
+
+    v1.16 amplifies strength/coaching identity so pass volume is not nearly
+    identical across all 32 clubs (coherence failure mode).
+    """
     profile = coaching or (profile_for_team(team) if team else None)
     coach_bias = float(profile.pass_rate_bias) if profile is not None else 0.0
-    return _clamp(float(league_base) + float(strength_pass_bias) + coach_bias, 0.38, 0.72)
+    return _clamp(
+        float(league_base)
+        + float(strength_bias_scale) * float(strength_pass_bias)
+        + float(coach_bias_scale) * coach_bias,
+        0.38,
+        0.72,
+    )
 
 
 def explain_tendency_effects(

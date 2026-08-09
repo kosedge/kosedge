@@ -37,10 +37,17 @@ def test_engine_version_is_calibrated() -> None:
         "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
+        or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
-    assert CALIBRATION_TAG.endswith("v2") or "v2" in CALIBRATION_TAG
+    assert (
+        CALIBRATION_TAG.endswith("v2")
+        or "v2" in CALIBRATION_TAG
+        or "v3" in CALIBRATION_TAG
+        or "coherence" in CALIBRATION_TAG
+    )
 
 
 def test_residual_share_keeps_other_bucket() -> None:

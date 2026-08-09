@@ -43,6 +43,8 @@ def test_engine_version_surfaces_deeper_usage() -> None:
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
+        or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -217,6 +219,8 @@ def test_buf_kc_calibration_sanity_preserved() -> None:
         or "calibration" in proj.engine_version
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
+        or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])

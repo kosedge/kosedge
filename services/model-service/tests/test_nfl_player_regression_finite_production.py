@@ -34,10 +34,16 @@ def test_engine_version_player_regression() -> None:
     # v1.15+ keeps player-regression; tag may be true-pr-harden / projected-sos.
     assert any(
         token in DEFAULT_SEASON_ENGINE_VERSION
-        for token in ("player-regression", "projected-sos", "true-pr-harden")
+        for token in (
+            "player-regression",
+            "projected-sos",
+            "true-pr-harden",
+            "season-coherence",
+        )
     )
     assert any(
-        v in DEFAULT_SEASON_ENGINE_VERSION for v in ("v1.15", "v1.14", "v1.13")
+        v in DEFAULT_SEASON_ENGINE_VERSION
+        for v in ("v1.16", "v1.15", "v1.14", "v1.13")
     )
 
 

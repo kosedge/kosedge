@@ -48,8 +48,11 @@ _KNOWN_2026_ROOKIES = (
 
 
 def test_engine_version_true_pr_harden() -> None:
-    assert "v1.15" in DEFAULT_SEASON_ENGINE_VERSION
-    assert "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
+    assert any(v in DEFAULT_SEASON_ENGINE_VERSION for v in ("v1.16", "v1.15"))
+    assert (
+        "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
+        or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+    )
 
 
 def test_draft_round_from_number_does_not_invent() -> None:
