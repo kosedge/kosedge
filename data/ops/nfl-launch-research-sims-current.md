@@ -1,5 +1,6 @@
 # NFL launch research sims — current pointer
 
+- **Status:** **LOCKED** pre-season snapshot (see `nfl-preseason-snapshot-locked.md`)
 - **Web bundle:** `nfl-preseason-sim-2026-20260809T120227Z`
 - **Source research:** `data/ops/nfl-season-engine-launch-nfl-season-engine-v1.20-defense-variance-lift-Nteam50000-Nplayer1000-20260809T120227Z`
 - **Engine:** `nfl-season-engine-v1.20-defense-variance-lift`
