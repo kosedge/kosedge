@@ -5,7 +5,7 @@ Order:
 1. High-volume pass → TD/PF scoring-efficiency floors (CIN + peers)
 2. Soft differentiated RB alpha priors (no flat 1432 pile)
 3. Tapered PF/PA stretch + renorm (replace hard clips)
-4. QB depth-label hygiene (Kyler/Tua/Penix/McCarthy)
+4. QB depth-label hygiene from packaged depth SoT (Kyler MIN / Brissett ARI)
 5. Rebuild Pythagorean wins; write bundle + ops note
 
 Does NOT lock the snapshot.
@@ -234,7 +234,11 @@ def main() -> int:
         "win_ties_improved": max_win_tie <= 6,
         "offense_smoke": bool(off_smoke.get("all_pass")),
         "defense_smoke": bool(def_smoke.get("all_pass")),
-        "kyler_on_ari": any(
+        "kyler_on_min": any(
+            "Kyler" in str(r.get("player_name") or "") and r.get("team") == "MIN"
+            for r in players
+        ),
+        "kyler_not_on_ari": not any(
             "Kyler" in str(r.get("player_name") or "") and r.get("team") == "ARI"
             for r in players
         ),

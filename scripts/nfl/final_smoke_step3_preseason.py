@@ -255,8 +255,8 @@ def main() -> int:
                 f"{team} volume-to-points soft flag: pass={py:.0f} PF={pf_t:.1f} wins={w_t:.2f}."
             )
     kyler = next((r for r in qbs if "Kyler" in str(r.get("player_name") or "")), None)
-    if kyler and str(kyler.get("team") or "") != "ARI":
-        soft_flags.append(f"Kyler Murray labeled {kyler.get('team')} (expected ARI).")
+    if kyler and str(kyler.get("team") or "") != "MIN":
+        soft_flags.append(f"Kyler Murray labeled {kyler.get('team')} (expected MIN).")
 
     gates = {
         "league_pf_pa_11859": abs(league_pf - TARGET_LEAGUE_PF) < 1.0

@@ -19,16 +19,17 @@
   "notes": [
     "Skill-position slice (QB/RB/WR/TE) from latest nflverse depth-chart snapshot.",
     "Preseason/camp depth \u2014 roles can shift; rookies and free-agent landings may be incomplete or volatile.",
-    "Used when nfl_dp_depth_chart_weekly / official tables are empty.",
-    "QB hygiene 20260809: Kyler\u2192ARI1, McCarthy\u2192MIN1, Penix\u2192ATL1, Tua\u2192MIA1; Brissett\u2192MIN2, Willis\u2192ATL2"
+    "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
+    "DB weekly/official must not override these identities when this pack is present.",
+    "QB SoT 20260809: Kyler\u2192MIN1, Brissett\u2192ARI1, McCarthy\u2192MIN2, Penix\u2192ATL1, Tua\u2192MIA1, Willis\u2192ATL2"
   ],
   "rows": [
     {
       "team": "ARI",
       "position": "QB",
       "depth_order": 1,
-      "player_id": "00-0035228",
-      "player_name": "Kyler Murray",
+      "player_id": "00-0033119",
+      "player_name": "Jacoby Brissett",
       "depth_slot": "starter",
       "role_confidence": 0.85
     },
@@ -2187,8 +2188,8 @@
       "team": "MIN",
       "position": "QB",
       "depth_order": 1,
-      "player_id": "00-0039923",
-      "player_name": "J.J. McCarthy",
+      "player_id": "00-0035228",
+      "player_name": "Kyler Murray",
       "depth_slot": "starter",
       "role_confidence": 0.85
     },
@@ -2196,8 +2197,8 @@
       "team": "MIN",
       "position": "QB",
       "depth_order": 2,
-      "player_id": "00-0033119",
-      "player_name": "Jacoby Brissett",
+      "player_id": "00-0039923",
+      "player_name": "J.J. McCarthy",
       "depth_slot": "backup",
       "role_confidence": 0.65
     },

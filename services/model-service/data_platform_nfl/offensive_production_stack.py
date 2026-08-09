@@ -13,9 +13,11 @@ Mirror lives under ``services/model-service/data_platform_nfl/`` — keep in syn
 
 from __future__ import annotations
 
+import json
 import math
 import statistics
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Tuple
 
 # ---------------------------------------------------------------------------
@@ -100,13 +102,49 @@ RB_OL_PROXY_BUMP: Dict[str, float] = {
     "CHI": 5.0,
 }
 
-# Desk hygiene: canonical QB1 labels (stats stay on team slots).
-CANONICAL_QB1_BY_TEAM: Dict[str, str] = {
-    "ARI": "Kyler Murray",
-    "MIN": "J.J. McCarthy",
-    "ATL": "Michael Penix Jr.",
-    "MIA": "Tua Tagovailoa",
-}
+def _packaged_depth_sot_path(season: int = 2026) -> Path:
+    """Resolve packaged depth SoT from either model-service mirror layout."""
+    here = Path(__file__).resolve()
+    name = f"nfl_depth_chart_{int(season)}_w1.json"
+    rel = Path("src/services/nfl_season_engine/data") / name
+    candidates = [
+        here.parents[1] / rel,  # services/model-service/data_platform_nfl/...
+        here.parents[3] / "model-service" / rel,  # services/data-platform-nfl/...
+    ]
+    for path in candidates:
+        if path.is_file():
+            return path
+    return candidates[0]
+
+
+def canonical_qb1_from_depth_sot(season: int = 2026) -> Dict[str, str]:
+    """QB1 labels derived from packaged depth SoT — never a second map."""
+    path = _packaged_depth_sot_path(season)
+    if not path.is_file():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out: Dict[str, str] = {}
+    for row in payload.get("rows") or []:
+        if str(row.get("position") or "").upper() != "QB":
+            continue
+        try:
+            depth = int(row.get("depth_order") or 99)
+        except (TypeError, ValueError):
+            continue
+        if depth != 1:
+            continue
+        team = str(row.get("team") or "").strip().upper()
+        name = str(row.get("player_name") or "").strip()
+        if team and name:
+            out[team] = name
+    return out
+
+
+# Desk hygiene: QB1 labels always mirror packaged depth SoT (single source).
+CANONICAL_QB1_BY_TEAM: Dict[str, str] = canonical_qb1_from_depth_sot(2026)
 
 # Desk hygiene: skill players whose packaged depth team is wrong (identity swap).
 CANONICAL_SKILL_TEAM: Dict[str, str] = {
@@ -1745,14 +1783,16 @@ def repair_qb_team_labels(
     rows: Sequence[Mapping[str, Any]],
     *,
     canonical: Optional[Mapping[str, str]] = None,
+    season: int = 2026,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    """Fix obvious QB1 labeling mismatches without moving team production pools.
+    """Align QB1 labels to packaged depth SoT without moving team production pools.
 
-    Identity fields swap onto the correct team slot; numeric season totals stay
-    with the team row so pass/rush conservation is untouched.
+    Identity fields swap onto the SoT team slot; numeric season totals stay
+    with the team row so pass/rush conservation is untouched. Canonical map is
+    always derived from the depth pack when ``canonical`` is omitted.
     """
     work: List[Dict[str, Any]] = [dict(r) for r in rows]
-    canon = dict(canonical or CANONICAL_QB1_BY_TEAM)
+    canon = dict(canonical or canonical_qb1_from_depth_sot(int(season)))
     notes: List[str] = []
 
     def _find_by_name(name: str) -> Optional[int]:
