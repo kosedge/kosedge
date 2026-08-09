@@ -12,6 +12,8 @@ import TeamTendencyPanels, {
 } from "@/components/pro/TeamTendencyPanels";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
 import {
+  coachingContinuityBadge,
+  fetchNflCoachingStaff,
   fetchNflIntel,
   formatIntelValueWithRank,
   formatTeamRecordWithRank,
@@ -167,8 +169,12 @@ export default async function NflTeamIntelViewPage({
     season: filters.season,
     week: filters.week,
   });
-  const teamCodes = extractTeamCodes(standings.rows);
-  const selectedTeam = resolveTeamCode(canonicalTeam, teamCodes);
+  // Research filters always list the full 32-team directory on team routes.
+  const teamCodes = NFL_TEAM_DIRECTORY.map((entry) => entry.code);
+  const selectedTeam = resolveTeamCode(
+    canonicalTeam,
+    extractTeamCodes(standings.rows),
+  );
 
   // Canonicalize aliases (WSH→WAS) and strip stale ?team= query params so
   // directory / ESPN codes never silently render as Bills.
@@ -183,7 +189,7 @@ export default async function NflTeamIntelViewPage({
     redirect(`/pro/nfl/teams/${selectedTeam}/${view}${suffix}`);
   }
 
-  const [stats, statsComparison, depth, injuries, rosters, truePrSurface] =
+  const [stats, statsComparison, depth, injuries, rosters, coaching, truePrSurface] =
     await Promise.all([
       fetchNflIntel("stats", {
         season: filters.season,
@@ -192,8 +198,8 @@ export default async function NflTeamIntelViewPage({
       }),
       fetchNflIntel("stats", { season: filters.season, week: filters.week }),
       fetchNflIntel("depth-charts", {
-        season: filters.season,
-        week: filters.week,
+        season: filters.season ?? 2026,
+        week: filters.week ?? 1,
         team: selectedTeam,
       }),
       fetchNflIntel("injuries", {
@@ -202,8 +208,12 @@ export default async function NflTeamIntelViewPage({
         team: selectedTeam,
       }),
       fetchNflIntel("rosters", {
-        season: filters.season,
-        week: filters.week,
+        season: filters.season ?? 2026,
+        week: filters.week ?? 1,
+        team: selectedTeam,
+      }),
+      fetchNflCoachingStaff({
+        season: filters.season ?? 2026,
         team: selectedTeam,
       }),
       view === "overview"
@@ -215,6 +225,8 @@ export default async function NflTeamIntelViewPage({
         : Promise.resolve(null),
     ]);
   const truePrRow = truePrSurface?.teams?.[0] ?? null;
+  const coachingRow = coaching.rows[0] ?? null;
+  const coachingBadge = coachingContinuityBadge(coachingRow);
 
   const season = standings.season ?? stats.season ?? filters.season ?? null;
   const week = standings.week ?? stats.week ?? filters.week ?? null;
@@ -470,7 +482,7 @@ export default async function NflTeamIntelViewPage({
             <TeamIntelTable
               title="Roster Pulse"
               rows={rosters.rows.slice(0, 8)}
-              empty="Roster hierarchy is still populating for this period."
+              empty="Roster hierarchy unavailable — packaged depth has no rows for this filter."
               columns={[
                 { key: "position", label: "Pos" },
                 { key: "player_name", label: "Player" },
@@ -487,17 +499,59 @@ export default async function NflTeamIntelViewPage({
                   </h3>
                   <p className="mt-1 text-sm text-kos-text/70">
                     Head coach, offensive coordinator, and defensive coordinator
-                    for scheme context.
+                    from the shared 2026 staff pack.
                   </p>
                 </div>
-                <span className="rounded-full border border-amber-400/35 bg-amber-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-100">
-                  Data pending
+                <span
+                  className={
+                    coachingBadge.tone === "live"
+                      ? "rounded-full border border-emerald-400/35 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-100"
+                      : coachingBadge.tone === "thin"
+                        ? "rounded-full border border-amber-400/35 bg-amber-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-100"
+                        : "rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-kos-text/70"
+                  }
+                >
+                  {coachingBadge.label}
                 </span>
               </div>
-              <p className="mt-4 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-kos-text/70">
-                Coaching profile data pending — HC / OC / DC notes ship with the
-                KosEdge research pass.
-              </p>
+              {coachingRow &&
+              (coachingRow.hc_name ||
+                coachingRow.oc_name ||
+                coachingRow.dc_name) ? (
+                <dl className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {(
+                    [
+                      ["HC", coachingRow.hc_name, coachingRow.new_hc],
+                      ["OC", coachingRow.oc_name, coachingRow.new_oc],
+                      ["DC", coachingRow.dc_name, coachingRow.new_dc],
+                    ] as const
+                  ).map(([role, name, isNew]) => (
+                    <div
+                      key={role}
+                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-3"
+                    >
+                      <dt className="text-[10px] font-semibold uppercase tracking-wide text-kos-text/55">
+                        {role}
+                        {isNew === true ? " · new" : isNew === false ? " · returning" : ""}
+                      </dt>
+                      <dd className="mt-1 text-sm font-medium text-kos-text">
+                        {typeof name === "string" && name.trim()
+                          ? name
+                          : "Unknown"}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <p className="mt-4 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-kos-text/70">
+                  Coaching staff thin or unknown for this team — no invented
+                  names.
+                </p>
+              )}
+              {typeof coachingRow?.notes === "string" &&
+              coachingRow.notes.trim() ? (
+                <p className="mt-3 text-xs text-kos-text/60">{coachingRow.notes}</p>
+              ) : null}
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
                   href="/edge-board/nfl"

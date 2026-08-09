@@ -1,0 +1,201 @@
+{
+  "source": "packaged_nfl_coaching_staff_2026",
+  "season": 2026,
+  "as_of": "2026-08-08",
+  "upstream": "curated desk + public 2026 staff directories; continuity flags only when change is known",
+  "notes": "HC/OC/DC names for product surfaces. Continuity: true=new, false=returning, null=unknown (never invent new-staff defaults).",
+  "teams": {
+    "ARI": {
+      "hc": { "name": "Mike LaFleur", "new": true },
+      "oc": { "name": "Nathaniel Hackett", "new": true },
+      "dc": { "name": "Nick Rallis", "new": false },
+      "notes": "Mike LaFleur HC (new regime)"
+    },
+    "ATL": {
+      "hc": { "name": "Kevin Stefanski", "new": true },
+      "oc": { "name": "Tommy Rees", "new": true },
+      "dc": { "name": "Jeff Ulbrich", "new": null },
+      "notes": "Kevin Stefanski HC (new regime)"
+    },
+    "BAL": {
+      "hc": { "name": "Jesse Minter", "new": true },
+      "oc": { "name": "Declan Doyle", "new": true },
+      "dc": { "name": "Anthony Weaver", "new": true },
+      "notes": "Jesse Minter HC (new regime)"
+    },
+    "BUF": {
+      "hc": { "name": "Joe Brady", "new": true },
+      "oc": { "name": "Pete Carmichael Jr.", "new": true },
+      "dc": { "name": "Jim Leonhard", "new": true },
+      "notes": "Joe Brady promoted OC→HC; new OC"
+    },
+    "CAR": {
+      "hc": { "name": "Dave Canales", "new": false },
+      "oc": { "name": "Brad Idzik", "new": true },
+      "dc": { "name": "Ejiro Evero", "new": false },
+      "notes": null
+    },
+    "CHI": {
+      "hc": { "name": "Ben Johnson", "new": false },
+      "oc": { "name": "Press Taylor", "new": true },
+      "dc": { "name": "Dennis Allen", "new": false },
+      "notes": null
+    },
+    "CIN": {
+      "hc": { "name": "Zac Taylor", "new": false },
+      "oc": { "name": "Dan Pitcher", "new": false },
+      "dc": { "name": "Al Golden", "new": false },
+      "notes": null
+    },
+    "CLE": {
+      "hc": { "name": "Todd Monken", "new": true },
+      "oc": { "name": "Travis Switzer", "new": true },
+      "dc": { "name": "Mike Rutenberg", "new": true },
+      "notes": "Todd Monken HC (new regime)"
+    },
+    "DAL": {
+      "hc": { "name": "Brian Schottenheimer", "new": false },
+      "oc": { "name": "Klayton Adams", "new": null },
+      "dc": { "name": "Christian Parker", "new": true },
+      "notes": null
+    },
+    "DEN": {
+      "hc": { "name": "Sean Payton", "new": false },
+      "oc": { "name": "Davis Webb", "new": true },
+      "dc": { "name": "Vance Joseph", "new": false },
+      "notes": null
+    },
+    "DET": {
+      "hc": { "name": "Dan Campbell", "new": false },
+      "oc": { "name": "Drew Petzing", "new": true },
+      "dc": { "name": "Kelvin Sheppard", "new": false },
+      "notes": null
+    },
+    "GB": {
+      "hc": { "name": "Matt LaFleur", "new": false },
+      "oc": { "name": "Adam Stenavich", "new": false },
+      "dc": { "name": "Jonathan Gannon", "new": true },
+      "notes": null
+    },
+    "HOU": {
+      "hc": { "name": "DeMeco Ryans", "new": false },
+      "oc": { "name": "Nick Caley", "new": null },
+      "dc": { "name": "Matt Burke", "new": null },
+      "notes": null
+    },
+    "IND": {
+      "hc": { "name": "Shane Steichen", "new": false },
+      "oc": { "name": "Jim Bob Cooter", "new": null },
+      "dc": { "name": "Lou Anarumo", "new": null },
+      "notes": null
+    },
+    "JAX": {
+      "hc": { "name": "Liam Coen", "new": false },
+      "oc": { "name": "Grant Udinski", "new": true },
+      "dc": { "name": "Anthony Campanile", "new": null },
+      "notes": null
+    },
+    "KC": {
+      "hc": { "name": "Andy Reid", "new": false },
+      "oc": { "name": "Eric Bieniemy", "new": true },
+      "dc": { "name": "Steve Spagnuolo", "new": false },
+      "notes": null
+    },
+    "LA": {
+      "hc": { "name": "Sean McVay", "new": false },
+      "oc": { "name": "Nate Scheelhaase", "new": true },
+      "dc": { "name": "Chris Shula", "new": false },
+      "notes": "McVay returns; OC LaFleur departed"
+    },
+    "LAC": {
+      "hc": { "name": "Jim Harbaugh", "new": false },
+      "oc": { "name": "Mike McDaniel", "new": true },
+      "dc": { "name": "Chris O'Leary", "new": true },
+      "notes": null
+    },
+    "LV": {
+      "hc": { "name": "Klint Kubiak", "new": true },
+      "oc": { "name": "Andrew Janocko", "new": true },
+      "dc": { "name": "Rob Leonard", "new": true },
+      "notes": "Klint Kubiak HC (new regime)"
+    },
+    "MIA": {
+      "hc": { "name": "Jeff Hafley", "new": true },
+      "oc": { "name": "Bobby Slowik", "new": true },
+      "dc": { "name": "Sean Duggan", "new": true },
+      "notes": "Jeff Hafley HC (new regime)"
+    },
+    "MIN": {
+      "hc": { "name": "Kevin O'Connell", "new": false },
+      "oc": { "name": "Wes Phillips", "new": false },
+      "dc": { "name": "Brian Flores", "new": false },
+      "notes": null
+    },
+    "NE": {
+      "hc": { "name": "Mike Vrabel", "new": false },
+      "oc": { "name": "Josh McDaniels", "new": null },
+      "dc": { "name": "Zak Kuhr", "new": null },
+      "notes": null
+    },
+    "NO": {
+      "hc": { "name": "Kellen Moore", "new": false },
+      "oc": { "name": "Doug Nussmeier", "new": null },
+      "dc": { "name": "Brandon Staley", "new": null },
+      "notes": null
+    },
+    "NYG": {
+      "hc": { "name": "John Harbaugh", "new": true },
+      "oc": { "name": "Matt Nagy", "new": true },
+      "dc": { "name": "Dennard Wilson", "new": true },
+      "notes": "John Harbaugh HC (new regime)"
+    },
+    "NYJ": {
+      "hc": { "name": "Aaron Glenn", "new": false },
+      "oc": { "name": "Frank Reich", "new": true },
+      "dc": { "name": "Brian Duker", "new": true },
+      "notes": null
+    },
+    "PHI": {
+      "hc": { "name": "Nick Sirianni", "new": false },
+      "oc": { "name": "Sean Mannion", "new": true },
+      "dc": { "name": "Vic Fangio", "new": false },
+      "notes": null
+    },
+    "PIT": {
+      "hc": { "name": "Mike McCarthy", "new": true },
+      "oc": { "name": "Brian Angelichio", "new": true },
+      "dc": { "name": "Patrick Graham", "new": true },
+      "notes": "Mike McCarthy HC (new regime)"
+    },
+    "SEA": {
+      "hc": { "name": "Mike Macdonald", "new": false },
+      "oc": { "name": "Brian Fleury", "new": true },
+      "dc": { "name": "Aden Durde", "new": false },
+      "notes": "Macdonald returns; OC Kubiak departed"
+    },
+    "SF": {
+      "hc": { "name": "Kyle Shanahan", "new": false },
+      "oc": { "name": "Klay Kubiak", "new": true },
+      "dc": { "name": "Raheem Morris", "new": true },
+      "notes": null
+    },
+    "TB": {
+      "hc": { "name": "Todd Bowles", "new": false },
+      "oc": { "name": "Zac Robinson", "new": true },
+      "dc": { "name": null, "new": null },
+      "notes": "DC seat thin / unknown in packaged staff"
+    },
+    "TEN": {
+      "hc": { "name": "Robert Saleh", "new": true },
+      "oc": { "name": "Brian Daboll", "new": true },
+      "dc": { "name": "Gus Bradley", "new": true },
+      "notes": "Robert Saleh HC (new regime)"
+    },
+    "WAS": {
+      "hc": { "name": "Dan Quinn", "new": false },
+      "oc": { "name": "David Blough", "new": true },
+      "dc": { "name": "Daronte Jones", "new": null },
+      "notes": null
+    }
+  }
+}

@@ -373,24 +373,28 @@ function nflResearchSections(): TeamResearchSectionConfig[] {
     section({
       key: "roster",
       title: "Roster",
-      description: "Live from NFL intel when season/week filters resolve.",
+      description:
+        "Hierarchy from the shared 2026 depth pack (same source as season engine).",
       status: "live",
-      emptyCopy: "Roster hierarchy still populating for this period.",
+      emptyCopy:
+        "Roster hierarchy unavailable for this filter — depth pack has no rows.",
     }),
     section({
       key: "depth",
       title: "Depth chart",
-      description: "Live depth-chart records from NFL intel.",
+      description:
+        "Starters and backups from the shared packaged depth (engine SoT).",
       status: "live",
-      emptyCopy: "Depth chart records pending for this filter.",
+      emptyCopy:
+        "Depth chart unavailable for this filter — packaged depth has no rows.",
     }),
     section({
       key: "coaching",
       title: "Coaching staff",
-      description: "Head coach, OC, and DC profiles for scheme context.",
-      status: "pending",
+      description: "HC / OC / DC from the packaged coaching staff book.",
+      status: "live",
       emptyCopy:
-        "Coaching profile data pending — scheme notes ship with KosEdge desk.",
+        "Coaching staff thin or unknown for this team — no invented names.",
     }),
     section({
       key: "stats",
