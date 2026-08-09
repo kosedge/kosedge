@@ -56,6 +56,9 @@ function line(partial: Partial<NflFairLineRow> = {}): NflFairLineRow {
     publishTagSpread: "PASS",
     publishTagTotal: "PASS",
     publishTagMl: "PASS",
+    decision: null,
+    actionLabelSpread: null,
+    actionLabelTotal: null,
     ...partial,
   };
 }

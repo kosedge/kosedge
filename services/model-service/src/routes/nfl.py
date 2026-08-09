@@ -40,7 +40,14 @@ from src.services.nfl_model_handicap import (
     resolve_model_and_handicap,
 )
 from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as nfl_publish_moneyline_tag
-from src.services.nfl_side_total_publish_policy import publish_tag as nfl_publish_tag
+from src.services.nfl_side_total_publish_policy import (
+    is_market_side_disagreement,
+    publish_tag as nfl_publish_tag,
+)
+from src.services.nfl_decision_engine import (
+    assess_confidence as nfl_assess_confidence,
+    decide_game as nfl_decide_game,
+)
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
 log = logging.getLogger(__name__)
@@ -3363,6 +3370,57 @@ def nfl_fair_lines(
         model_total = _to_float(mh.get("model_total_mean"))
         model_home_wp = _to_float(mh.get("model_home_win_prob"))
         model_away_wp = _to_float(mh.get("model_away_win_prob"))
+
+        # Decision Engine (Action Layer): Model fair vs market — separate from
+        # publish_tag_* (KEI vs market). Does not mutate locked fair lines.
+        _week_int = int(week_val) if week_val is not None else None
+        _decision_market_spread = (
+            float(compare_spread_home) if compare_spread_home is not None else None
+        )
+        _decision_market_total = (
+            float(compare_total) if compare_total is not None else None
+        )
+        _cover_prob = _to_float(
+            (mapped.get("projection") or {}).get("home_cover_prob")
+            if isinstance(mapped.get("projection"), dict)
+            else None
+        )
+        _over_prob = _to_float(
+            (mapped.get("projection") or {}).get("over_prob")
+            if isinstance(mapped.get("projection"), dict)
+            else None
+        )
+        _decision_conf = nfl_assess_confidence(
+            injury_clear=True,
+            weather_clear=True,
+            qb_clear=True,
+            conflicting_inputs=bool(
+                is_market_side_disagreement(
+                    model_spread_home=model_spread if model_spread is not None else spread_home,
+                    market_spread_home=_decision_market_spread,
+                )
+            )
+            if _decision_market_spread is not None
+            else False,
+        )
+        _decision = nfl_decide_game(
+            week=_week_int,
+            fair_spread_home=model_spread if model_spread is not None else spread_home,
+            market_spread_home=_decision_market_spread,
+            fair_total=model_total if model_total is not None else total_mean,
+            market_total=_decision_market_total,
+            home_abbr=home_abbr,
+            away_abbr=away_abbr,
+            cover_prob=_cover_prob,
+            over_prob=_over_prob,
+            opening_spread_home=float(market_spread_home)
+            if market_spread_home is not None
+            else None,
+            opening_total=float(market_total) if market_total is not None else None,
+            confidence=_decision_conf,
+            price_still_available_spread=_decision_market_spread is not None,
+            price_still_available_total=_decision_market_total is not None,
+        )
         lines.append(
             {
                 "game_id": str(mapped.get("game_id")),
@@ -3435,6 +3493,14 @@ def nfl_fair_lines(
                 "publish_reason_total": total_pub.get("reason"),
                 "publish_reason_ml": ml_pub.get("reason"),
                 "ml_ev": ml_pub.get("ev"),
+                # Action layer (Model fair vs market) — coexists with publish tags
+                "decision": _decision,
+                "action_label_spread": _decision.get("action_label_spread"),
+                "action_label_total": _decision.get("action_label_total"),
+                "decision_edge_magnitude_spread": _decision.get("edge_magnitude_spread"),
+                "decision_edge_magnitude_total": _decision.get("edge_magnitude_total"),
+                "decision_model_confidence": _decision.get("model_confidence"),
+                "decision_week_regime": _decision.get("week_regime"),
             }
         )
 

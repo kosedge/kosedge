@@ -5,6 +5,11 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
+import {
+  assessConfidence,
+  decideGame,
+  decisionResultToApi,
+} from "@/lib/nfl-decision-engine";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
 const ET = "America/New_York";
@@ -151,6 +156,54 @@ export function fairLinesToEdgeBoardRows(
     const publishTagSpread = line.publishTagSpread ?? undefined;
     const publishTagTotal = line.publishTagTotal ?? undefined;
 
+    // Action layer: prefer server decision (Model fair vs market); else compute locally.
+    const decisionBundle =
+      line.decision ??
+      (() => {
+        const compareSpread =
+          line.bestSpreadHome ?? line.marketSpreadHome ?? null;
+        const compareTotal = line.bestTotal ?? line.marketTotal ?? null;
+        const local = decideGame({
+          week: line.week,
+          fairSpreadHome: line.modelSpreadHome ?? line.spreadHome,
+          marketSpreadHome: compareSpread,
+          fairTotal: line.modelTotal ?? line.totalMean,
+          marketTotal: compareTotal,
+          homeAbbr: line.homeAbbr,
+          awayAbbr: line.awayAbbr,
+          openingSpreadHome: line.marketSpreadHome,
+          openingTotal: line.marketTotal,
+          confidence: assessConfidence(),
+          priceStillAvailableSpread: compareSpread != null,
+          priceStillAvailableTotal: compareTotal != null,
+        });
+        return {
+          doctrine: local.doctrine,
+          week: local.week,
+          weekRegime: local.weekRegime,
+          spread: local.spread,
+          total: local.total,
+          edgeMagnitudeSpread: local.edgeMagnitudeSpread,
+          edgeMagnitudeTotal: local.edgeMagnitudeTotal,
+          modelConfidence: local.modelConfidence,
+          actionLabelSpread: local.actionLabelSpread,
+          actionLabelTotal: local.actionLabelTotal,
+        };
+      })();
+
+    const spreadDecision = decisionBundle.spread;
+    const totalDecision = decisionBundle.total;
+    const actionLabelSpread =
+      line.actionLabelSpread ??
+      decisionBundle.actionLabelSpread ??
+      spreadDecision?.actionLabel ??
+      null;
+    const actionLabelTotal =
+      line.actionLabelTotal ??
+      decisionBundle.actionLabelTotal ??
+      totalDecision?.actionLabel ??
+      null;
+
     rows.push({
       id: `${idBase}-spread`,
       game,
@@ -174,6 +227,23 @@ export function fairLinesToEdgeBoardRows(
       week,
       seasonType,
       publishTag: publishTagSpread,
+      actionLabel: actionLabelSpread ?? undefined,
+      decision: spreadDecision
+        ? decisionResultToApi(spreadDecision)
+        : undefined,
+      edgeMagnitude: spreadDecision?.edgeMagnitude,
+      modelConfidenceScore: decisionBundle.modelConfidence?.score,
+      modelConfidenceBand: decisionBundle.modelConfidence?.band,
+      coverProb: spreadDecision?.coverProb ?? undefined,
+      playToNotes: spreadDecision?.playTo?.notes,
+      playToPlay: spreadDecision?.playTo?.playTo,
+      playToLean: spreadDecision?.playTo?.leanTo,
+      playToPass: spreadDecision?.playTo?.passFrom,
+      fairLine: spreadDecision?.fairLine,
+      decisionMarketLine: spreadDecision?.marketLine,
+      isBestBet: spreadDecision?.isBestBet,
+      keyNumberCross: spreadDecision?.keyNumberCross,
+      weekRegime: decisionBundle.weekRegime,
     } as EdgeBoardRow);
 
     rows.push({
@@ -196,6 +266,23 @@ export function fairLinesToEdgeBoardRows(
       week,
       seasonType,
       publishTag: publishTagTotal,
+      actionLabel: actionLabelTotal ?? undefined,
+      decision: totalDecision
+        ? decisionResultToApi(totalDecision)
+        : undefined,
+      edgeMagnitude: totalDecision?.edgeMagnitude,
+      modelConfidenceScore: decisionBundle.modelConfidence?.score,
+      modelConfidenceBand: decisionBundle.modelConfidence?.band,
+      coverProb: totalDecision?.coverProb ?? undefined,
+      playToNotes: totalDecision?.playTo?.notes,
+      playToPlay: totalDecision?.playTo?.playTo,
+      playToLean: totalDecision?.playTo?.leanTo,
+      playToPass: totalDecision?.playTo?.passFrom,
+      fairLine: totalDecision?.fairLine,
+      decisionMarketLine: totalDecision?.marketLine,
+      isBestBet: totalDecision?.isBestBet,
+      keyNumberCross: totalDecision?.keyNumberCross,
+      weekRegime: decisionBundle.weekRegime,
     } as EdgeBoardRow);
   }
 

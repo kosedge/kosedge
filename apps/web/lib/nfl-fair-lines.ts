@@ -2,6 +2,27 @@ import "server-only";
 import { env } from "@/lib/config/env";
 import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import type {
+  ActionLabel,
+  ConfidenceAssessment,
+  DecisionResult,
+  WeekRegime,
+} from "@/lib/nfl-decision-engine";
+
+export type NflDecisionConfidence = ConfidenceAssessment;
+
+export type NflFairLineDecision = {
+  doctrine?: string;
+  week: number | null;
+  weekRegime: WeekRegime;
+  spread: DecisionResult | null;
+  total: DecisionResult | null;
+  edgeMagnitudeSpread: number | null;
+  edgeMagnitudeTotal: number | null;
+  modelConfidence: NflDecisionConfidence | null;
+  actionLabelSpread: ActionLabel | null;
+  actionLabelTotal: ActionLabel | null;
+};
 
 export type NflFairLineRow = {
   gameId: string;
@@ -68,6 +89,13 @@ export type NflFairLineRow = {
   publishTagSpread: "PLAY" | "LEAN" | "PASS" | null;
   publishTagTotal: "PLAY" | "LEAN" | "PASS" | null;
   publishTagMl: "PLAY" | "LEAN" | "PASS" | null;
+  /**
+   * Decision Engine action layer (Model fair vs market).
+   * Coexists with publishTag* (KEI vs market). Does not replace KEI tags.
+   */
+  decision: NflFairLineDecision | null;
+  actionLabelSpread: ActionLabel | null;
+  actionLabelTotal: ActionLabel | null;
 };
 
 export type NflFairLinesResponse = {
@@ -122,6 +150,157 @@ function normalizePublishTag(
   if (!token) return null;
   if (token === "PLAY" || token === "LEAN" || token === "PASS") return token;
   return null;
+}
+
+const ACTION_LABELS = new Set<ActionLabel>([
+  "PASS",
+  "LEAN",
+  "PLAY",
+  "BEST VALUE",
+  "ALERT",
+  "STAY AWAY",
+]);
+
+function normalizeActionLabel(value: unknown): ActionLabel | null {
+  if (value == null) return null;
+  const token = String(value).trim().toUpperCase();
+  if (ACTION_LABELS.has(token as ActionLabel)) return token as ActionLabel;
+  return null;
+}
+
+function normalizeConfidence(raw: unknown): NflDecisionConfidence | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const score = toNumberOrNull(o.score);
+  if (score == null) return null;
+  const bandRaw = String(o.band ?? "").toUpperCase();
+  const band =
+    bandRaw === "HIGH" || bandRaw === "MEDIUM" || bandRaw === "LOW"
+      ? bandRaw
+      : score >= 0.75
+        ? "HIGH"
+        : score >= 0.55
+          ? "MEDIUM"
+          : "LOW";
+  const flags = o.unresolved_flags ?? o.unresolvedFlags;
+  return {
+    score,
+    band,
+    factors:
+      o.factors && typeof o.factors === "object"
+        ? (o.factors as Record<string, unknown>)
+        : {},
+    unresolvedFlags: Array.isArray(flags)
+      ? flags.map((f) => String(f))
+      : [],
+  };
+}
+
+function normalizeDecisionResult(
+  raw: unknown,
+  market: "spread" | "total",
+): DecisionResult | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const actionLabel = normalizeActionLabel(o.action_label ?? o.actionLabel);
+  if (!actionLabel) return null;
+  const playToRaw = (o.play_to ?? o.playTo) as Record<string, unknown> | null;
+  const mcRaw = (o.market_confirmation ?? o.marketConfirmation) as
+    | Record<string, unknown>
+    | null
+    | undefined;
+  const conf =
+    normalizeConfidence(o.model_confidence ?? o.modelConfidence) ??
+    ({
+      score: 0,
+      band: "LOW" as const,
+      factors: {},
+      unresolvedFlags: [],
+    } satisfies NflDecisionConfidence);
+  return {
+    market,
+    actionLabel,
+    pointGrade: String(o.point_grade ?? o.pointGrade ?? "PASS") as DecisionResult["pointGrade"],
+    edgeMagnitude: toNumber(o.edge_magnitude ?? o.edgeMagnitude, 0),
+    modelConfidence: conf,
+    coverProb: toNumberOrNull(o.cover_prob ?? o.coverProb),
+    coverGrade: (o.cover_grade ?? o.coverGrade ?? null) as DecisionResult["coverGrade"],
+    playTo: playToRaw
+      ? {
+          sideOrTotal: String(
+            playToRaw.side_or_total ?? playToRaw.sideOrTotal ?? "",
+          ),
+          playTo: toNumber(playToRaw.play_to ?? playToRaw.playTo, 0),
+          leanTo: toNumber(playToRaw.lean_to ?? playToRaw.leanTo, 0),
+          passFrom: toNumber(playToRaw.pass_from ?? playToRaw.passFrom, 0),
+          fairLine: toNumber(playToRaw.fair_line ?? playToRaw.fairLine, 0),
+          marketLine: toNumber(
+            playToRaw.market_line ?? playToRaw.marketLine,
+            0,
+          ),
+          edgePoints: toNumber(
+            playToRaw.edge_points ?? playToRaw.edgePoints,
+            0,
+          ),
+          notes: String(playToRaw.notes ?? ""),
+        }
+      : null,
+    marketConfirmation: {
+      modelFair: toNumberOrNull(mcRaw?.model_fair ?? mcRaw?.modelFair),
+      opening: toNumberOrNull(mcRaw?.opening),
+      current: toNumberOrNull(mcRaw?.current),
+      closing: toNumberOrNull(mcRaw?.closing),
+      confirmsThesis:
+        typeof (mcRaw?.confirms_thesis ?? mcRaw?.confirmsThesis) === "boolean"
+          ? Boolean(mcRaw?.confirms_thesis ?? mcRaw?.confirmsThesis)
+          : null,
+      weakensThesis:
+        typeof (mcRaw?.weakens_thesis ?? mcRaw?.weakensThesis) === "boolean"
+          ? Boolean(mcRaw?.weakens_thesis ?? mcRaw?.weakensThesis)
+          : null,
+      note: String(mcRaw?.note ?? ""),
+    },
+    isBestBet: Boolean(o.is_best_bet ?? o.isBestBet),
+    modelWarning: Boolean(o.model_warning ?? o.modelWarning),
+    keyNumberCross: Boolean(o.key_number_cross ?? o.keyNumberCross),
+    priceStillAvailable: Boolean(
+      o.price_still_available ?? o.priceStillAvailable ?? true,
+    ),
+    numericalEdge: Boolean(o.numerical_edge ?? o.numericalEdge),
+    confidenceOk: Boolean(o.confidence_ok ?? o.confidenceOk),
+    reason: String(o.reason ?? ""),
+    week: toNumberOrNull(o.week),
+    weekRegime: String(o.week_regime ?? o.weekRegime ?? "early") as WeekRegime,
+    fairLine: toNumberOrNull(o.fair_line ?? o.fairLine),
+    marketLine: toNumberOrNull(o.market_line ?? o.marketLine),
+  };
+}
+
+function normalizeDecision(raw: unknown): NflFairLineDecision | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const conf = normalizeConfidence(o.model_confidence ?? o.modelConfidence);
+  return {
+    doctrine:
+      typeof o.doctrine === "string" ? o.doctrine : "We bet prices, not teams.",
+    week: toNumberOrNull(o.week),
+    weekRegime: String(o.week_regime ?? o.weekRegime ?? "early") as WeekRegime,
+    spread: normalizeDecisionResult(o.spread, "spread"),
+    total: normalizeDecisionResult(o.total, "total"),
+    edgeMagnitudeSpread: toNumberOrNull(
+      o.edge_magnitude_spread ?? o.edgeMagnitudeSpread,
+    ),
+    edgeMagnitudeTotal: toNumberOrNull(
+      o.edge_magnitude_total ?? o.edgeMagnitudeTotal,
+    ),
+    modelConfidence: conf,
+    actionLabelSpread: normalizeActionLabel(
+      o.action_label_spread ?? o.actionLabelSpread,
+    ),
+    actionLabelTotal: normalizeActionLabel(
+      o.action_label_total ?? o.actionLabelTotal,
+    ),
+  };
 }
 
 function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
@@ -210,6 +389,9 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     publishTagSpread: normalizePublishTag(raw.publish_tag_spread),
     publishTagTotal: normalizePublishTag(raw.publish_tag_total),
     publishTagMl: normalizePublishTag(raw.publish_tag_ml),
+    decision: normalizeDecision(raw.decision),
+    actionLabelSpread: normalizeActionLabel(raw.action_label_spread),
+    actionLabelTotal: normalizeActionLabel(raw.action_label_total),
   };
 }
 

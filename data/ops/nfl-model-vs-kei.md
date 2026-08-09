@@ -9,6 +9,7 @@
 | **Model** | Pre-market-blend Monte Carlo research fair (spread + total) | `diagnostics.market_blend.pre_blend_margin_mean` → `model_spread_home = -pre_blend_margin`; `pre_blend_total_mean` → `model_total_mean` when `*_applied` |
 | **KEI (handicap)** | Published product line used by Edge Board + PLAY/LEAN/PASS | Denormalized `spread_home` / `total_mean` (post-blend + totals calibration + overlays) |
 | **Edge / tags** | KEI vs market only | Never Model vs market |
+| **Action layer** (Decision Engine) | Model fair vs market | Edge Board Action Labels + Play-To (see `nfl-decision-engine-edge-board-20260809.md`); coexists with KEI publish tags |
 
 ## What is honest today
 
