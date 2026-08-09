@@ -140,7 +140,12 @@ def simulate_one_season_path(
     wins: Dict[str, int] = {t: 0 for t in universe.teams}
     player_totals: Dict[str, Dict[str, Any]] = {}
     season_caps: Dict[str, Dict[str, float]] = {}
-    paths = list(injury_paths or [])
+    if injury_paths is None:
+        from src.services.nfl_season_engine.injury_paths import parse_injury_paths
+
+        paths = parse_injury_paths(getattr(universe, "packaged_injury_paths", None) or [])
+    else:
+        paths = list(injury_paths)
 
     # Path roster book: loaders already applied depth splits; classify only.
     path_rosters = {t: list(r) for t, r in universe.rosters.items()}
@@ -333,7 +338,12 @@ def simulate_full_season(
     """
     n_sims = max(1, int(n_sims))
     rng = random.Random(seed)
-    paths = list(injury_paths or [])
+    if injury_paths is None:
+        from src.services.nfl_season_engine.injury_paths import parse_injury_paths
+
+        paths = parse_injury_paths(getattr(universe, "packaged_injury_paths", None) or [])
+    else:
+        paths = list(injury_paths)
 
     win_samples: Dict[str, List[int]] = {t: [] for t in universe.teams}
     player_samples: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))

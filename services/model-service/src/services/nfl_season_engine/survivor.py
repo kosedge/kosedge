@@ -54,6 +54,7 @@ from src.services.nfl_season_engine.injury_paths import (
     InjuryPath,
     apply_injury_paths_for_week,
     injury_paths_to_dicts,
+    parse_injury_paths,
 )
 from src.services.nfl_season_engine.projected_sos import (
     TeamProjectedSos,
@@ -234,7 +235,10 @@ def simulate_team_wl_path(
     per-game roster deep-copies from ``apply_injury_paths_for_week``.
     """
     strengths = copy_strength_book(universe.strengths)
-    paths = list(injury_paths or [])
+    if injury_paths is None:
+        paths = parse_injury_paths(getattr(universe, "packaged_injury_paths", None) or [])
+    else:
+        paths = list(injury_paths)
     week_winners: Dict[int, Set[str]] = defaultdict(set)
 
     schedule = sorted(universe.schedule, key=lambda g: (g.week, g.game_id))
@@ -292,7 +296,10 @@ def aggregate_week_team_wins(
     """
     n_sims = max(1, int(n_sims))
     rng = random.Random(seed)
-    paths = list(injury_paths or [])
+    # Preserve None so simulate_team_wl_path can load packaged SoT paths.
+    paths: Optional[Sequence[InjuryPath]] = (
+        None if injury_paths is None else list(injury_paths)
+    )
     win_counts: Dict[str, Dict[int, int]] = {
         t: defaultdict(int) for t in universe.teams
     }

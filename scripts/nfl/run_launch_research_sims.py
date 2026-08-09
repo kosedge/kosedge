@@ -99,7 +99,8 @@ def _team_wl_worker(payload: Tuple[Any, int, int]) -> Dict[str, Any]:
         games_scheduled[game.away_team][game.week] = 1
 
     for _ in range(int(n)):
-        week_winners = simulate_team_wl_path(universe, rng=rng, injury_paths=[])
+        # None → use packaged depth SoT injury_paths when present (daily intel).
+        week_winners = simulate_team_wl_path(universe, rng=rng, injury_paths=None)
         season_wins: Dict[str, int] = {t: 0 for t in teams}
         for week, winners in week_winners.items():
             for team in winners:

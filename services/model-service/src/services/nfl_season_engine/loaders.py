@@ -620,8 +620,12 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
     """Load packaged nflverse skill-depth snapshot for ``season``.
 
     Returns ``(rows, meta)`` where each row has team/position/depth_order/
-    player_name (+ optional player_id). Raises when the artifact is missing
-    or empty — callers fall through to demo depth.
+    player_name (+ optional player_id / injury_* fields). Raises when the
+    artifact is missing or empty — callers fall through to demo depth.
+
+    When the pack is present it is the exclusive player→team SoT. Optional
+    ``ol_roles`` / ``injury_paths`` / ``camp_intel`` ride along in ``meta``
+    for ops + sim defaults (OL does not enter skill usage allocation).
     """
     path = _PACKAGED_DEPTH_FILES.get(int(season))
     if path is None or not path.is_file():
@@ -644,18 +648,37 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
             continue
         if depth > 3:
             continue
-        rows.append(
-            {
-                "team": team,
-                "position": pos,
-                "depth_order": depth,
-                "player_name": name,
-                "player_id": str(r.get("player_id") or ""),
-                "role_confidence": float(r.get("role_confidence") or (0.85 if depth == 1 else 0.6)),
-            }
-        )
+        row: Dict[str, Any] = {
+            "team": team,
+            "position": pos,
+            "depth_order": depth,
+            "player_name": name,
+            "player_id": str(r.get("player_id") or ""),
+            "role_confidence": float(r.get("role_confidence") or (0.85 if depth == 1 else 0.6)),
+        }
+        # Optional camp / injury intel fields (ignored by share math; used by
+        # intel surfaces + packaged injury_paths derivation).
+        for key in (
+            "depth_slot",
+            "injury_status",
+            "injury_window",
+            "injury_note",
+            "injury_sources",
+        ):
+            if key in r and r.get(key) not in (None, ""):
+                row[key] = r.get(key)
+        rows.append(row)
     if not rows:
         raise ValueError(f"Packaged depth chart empty: {path}")
+    injury_paths_raw = payload.get("injury_paths") or []
+    injury_paths = [
+        dict(p)
+        for p in injury_paths_raw
+        if isinstance(p, Mapping) and (p.get("player_name") or p.get("player_key"))
+    ]
+    ol_roles = [
+        dict(p) for p in (payload.get("ol_roles") or []) if isinstance(p, Mapping)
+    ]
     meta = {
         "roster_source": str(payload.get("source") or ROSTER_SOURCE_PACKAGED),
         "roster_as_of": str(payload.get("as_of") or payload.get("as_of_timestamp") or ""),
@@ -663,6 +686,18 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
         "depth_row_count": len(rows),
         "depth_upstream": str(payload.get("upstream") or "nflverse"),
         "depth_week": int(payload.get("week") or 1),
+        "daily_intel_as_of": str(payload.get("daily_intel_as_of") or ""),
+        "injury_paths": injury_paths,
+        "ol_roles": ol_roles,
+        "camp_intel": dict(payload.get("camp_intel") or {})
+        if isinstance(payload.get("camp_intel"), Mapping)
+        else {},
+        "ol_efficiency_hooks": dict(
+            ((payload.get("camp_intel") or {}) if isinstance(payload.get("camp_intel"), Mapping) else {}).get(
+                "ol_efficiency_hooks"
+            )
+            or {}
+        ),
     }
     return rows, meta
 
@@ -1606,6 +1641,9 @@ def load_universe_from_db(
         )
 
     final_schedule = schedule[:272] if len(schedule) >= 272 else schedule
+    packaged_injury_paths = (
+        list(pkg_depth_meta.get("injury_paths") or []) if packaged_rows else []
+    )
     return EngineUniverse(
         season=season,
         schedule=final_schedule,
@@ -1624,9 +1662,13 @@ def load_universe_from_db(
             "rosters": f"{roster_note}; usage_role taxonomy annotated",
             "calibration": CALIBRATION_TAG,
             "rookie_flags": {**rookie_flag_meta, **rookie_enrich_stats},
+            "daily_intel_as_of": str(pkg_depth_meta.get("daily_intel_as_of") or ""),
+            "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
+            "ol_efficiency_hooks": pkg_depth_meta.get("ol_efficiency_hooks") or {},
             **coverage,
             **{f"cal_{k}": v for k, v in calibration_notes().items()},
         },
+        packaged_injury_paths=packaged_injury_paths,
     )
 
 
@@ -1769,8 +1811,18 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
             f"{rookie_enrich_stats.get('rookie_flagged', 0)}; "
             "packaged SoT is exclusive player-to-team source (no DB depth override)."
         )
+        packaged_injury_paths = list(pkg_depth_meta.get("injury_paths") or [])
+        ol_roles_n = len(pkg_depth_meta.get("ol_roles") or [])
+        if pkg_depth_meta.get("daily_intel_as_of"):
+            roster_note += (
+                f" daily_intel_as_of={pkg_depth_meta.get('daily_intel_as_of')}"
+                f"; ol_roles={ol_roles_n}"
+                f"; packaged_injury_paths={len(packaged_injury_paths)}"
+            )
     except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
         coverage = depth_coverage_from_rosters(rosters)
+        packaged_injury_paths = []
+        pkg_depth_meta = {}
 
     notes = {
         "mode": "real",
@@ -1791,6 +1843,9 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         "rosters": roster_note,
         "calibration": CALIBRATION_TAG,
         "rookie_flags": {**rookie_flag_meta, **rookie_enrich_stats},
+        "daily_intel_as_of": str(pkg_depth_meta.get("daily_intel_as_of") or ""),
+        "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
+        "ol_efficiency_hooks": pkg_depth_meta.get("ol_efficiency_hooks") or {},
         **coverage,
         **{f"cal_{k}": v for k, v in calibration_notes().items()},
     }
@@ -1800,6 +1855,7 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         strengths=strengths,
         rosters=rosters,
         notes=notes,
+        packaged_injury_paths=list(packaged_injury_paths),
     )
 
 

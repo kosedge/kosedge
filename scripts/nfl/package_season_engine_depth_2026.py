@@ -43,6 +43,23 @@ SOT_QB_OVERRIDES: dict[str, list[tuple[str, str]]] = {
     "MIA": [(1, "Tua Tagovailoa")],
 }
 
+# Non-QB skill SoT overlays (camp / FA landings). Applied after QB overrides.
+# Format: team -> position -> [(depth_order, player_name, player_id|""), ...]
+SOT_SKILL_OVERRIDES: dict[str, dict[str, list[tuple[int, str, str]]]] = {
+    "WAS": {
+        "WR": [
+            (1, "Terry McLaurin", "00-0035659"),
+            (2, "Stefon Diggs", "00-0031381"),
+            (3, "Antonio Williams", "00-0041040"),
+        ],
+        "TE": [
+            (1, "Chig Okonkwo", "00-0037809"),
+            (2, "Ben Sinnott", "00-0039912"),
+            (3, "John Bates", "00-0036628"),
+        ],
+    },
+}
+
 
 def _load_frame(parquet_path: Path):
     try:
@@ -97,6 +114,60 @@ def _apply_sot_qb_overrides(rows: list[dict]) -> list[dict]:
     return kept
 
 
+def _apply_sot_skill_overrides(rows: list[dict]) -> list[dict]:
+    """Enforce non-QB skill depth SoT (camp/FA) after nflverse packaging."""
+    by_name = {
+        str(r.get("player_name") or "").strip(): r for r in rows if r.get("player_name")
+    }
+    drop_keys: set[tuple[str, str, int]] = set()
+    sot_names: set[str] = set()
+    for team, by_pos in SOT_SKILL_OVERRIDES.items():
+        for pos, slots in by_pos.items():
+            for depth, name, _pid in slots:
+                drop_keys.add((team, pos, int(depth)))
+                sot_names.add(name)
+    kept: list[dict] = []
+    for r in rows:
+        team = str(r.get("team") or "")
+        pos = str(r.get("position") or "")
+        depth = int(r.get("depth_order") or 0)
+        name = str(r.get("player_name") or "").strip()
+        if pos == "QB":
+            kept.append(r)
+            continue
+        if (team, pos, depth) in drop_keys:
+            continue
+        if name in sot_names and pos in {
+            p for tp in SOT_SKILL_OVERRIDES.values() for p in tp
+        }:
+            # Drop SoT names from any competing slot/team at that position.
+            continue
+        kept.append(r)
+    for team, by_pos in SOT_SKILL_OVERRIDES.items():
+        for pos, slots in by_pos.items():
+            for depth, name, pid in slots:
+                prior = by_name.get(name) or {}
+                kept.append(
+                    {
+                        "team": team,
+                        "position": pos,
+                        "depth_order": int(depth),
+                        "player_id": str(
+                            pid or prior.get("player_id") or f"{team}-{pos}-{depth}"
+                        ),
+                        "player_name": name,
+                        "depth_slot": {1: "starter", 2: "backup", 3: "rotation"}.get(
+                            int(depth), "depth"
+                        ),
+                        "role_confidence": 0.85
+                        if int(depth) == 1
+                        else (0.65 if int(depth) == 2 else 0.5),
+                    }
+                )
+    kept.sort(key=lambda r: (r["team"], r["position"], int(r["depth_order"])))
+    return kept
+
+
 def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = "") -> dict:
     import polars as pl
 
@@ -132,6 +203,7 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
         )
 
     rows_out = _apply_sot_qb_overrides(rows_out)
+    rows_out = _apply_sot_skill_overrides(rows_out)
 
     teams = {r["team"] for r in rows_out}
     full = 0
@@ -160,9 +232,52 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
             "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
             "DB weekly/official must not override these identities when this pack is present.",
             "QB SoT overrides applied post-nflverse: Kyler→MIN1, Brissett→ARI1, Penix→ATL1, Tua→MIA1.",
+            "Skill SoT overlays (SOT_SKILL_OVERRIDES) preserve camp/FA landings (e.g. WAS Diggs/Bates).",
         ],
         "rows": rows_out,
     }
+    # Preserve daily intel sections from an existing pack so re-packaging
+    # nflverse rows does not wipe ol_roles / camp_intel / injury_paths.
+    if out_path.is_file():
+        try:
+            prior = json.loads(out_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            prior = {}
+        for key in (
+            "daily_intel_as_of",
+            "ol_roles",
+            "camp_intel",
+            "injury_paths",
+        ):
+            if key in prior and prior.get(key) not in (None, "", [], {}):
+                payload[key] = prior[key]
+        # Carry forward injury_* fields on matching SoT skill identities.
+        prior_by_key = {
+            (
+                str(r.get("team") or ""),
+                str(r.get("position") or ""),
+                int(r.get("depth_order") or 0),
+                str(r.get("player_name") or "").strip(),
+            ): r
+            for r in (prior.get("rows") or [])
+            if isinstance(r, dict)
+        }
+        for r in payload["rows"]:
+            key = (
+                str(r.get("team") or ""),
+                str(r.get("position") or ""),
+                int(r.get("depth_order") or 0),
+                str(r.get("player_name") or "").strip(),
+            )
+            prev = prior_by_key.get(key) or {}
+            for ik in (
+                "injury_status",
+                "injury_window",
+                "injury_note",
+                "injury_sources",
+            ):
+                if ik in prev and prev.get(ik) not in (None, ""):
+                    r[ik] = prev[ik]
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     pos_counts = Counter(r["position"] for r in rows_out)

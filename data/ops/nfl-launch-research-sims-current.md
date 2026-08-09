@@ -1,12 +1,8 @@
 # NFL launch research sims — current pointer
 
-- **Web bundle:** `nfl-preseason-sim-2026-20260809T165350Z`
-- **Source research:** `data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z`
-- **Engine:** `nfl-season-engine-v1.24-soft-piles-cleanup`
-- **Team W/L N:** 100000
-- **Player full N:** 1000
-- **Generated:** 2026-08-09T16:53:51.671488+00:00
-- **Identity:** nfl-season-engine-v1.24-soft-piles-cleanup · N_team=100000 · 20260809T165350Z
-- **Status:** **LOCKED** — official 2026 pre-season baseline (`locked_snapshot: true`)
-- **Lock note:** `data/ops/nfl-2026-preseason-baseline-LOCKED-20260809.md`
-- **Git tag:** `nfl-2026-preseason-baseline-v1.24`
+- **Bundle:** `../../data/ops/nfl-preseason-sim-2026-daily-intel-20260809`
+- **Engine:** `nfl-season-engine-v1.23-soft-flags-enterprise`
+- **Team W/L N:** 5000
+- **Player full N:** 200
+- **Generated:** 2026-08-09T20:25:27.874075+00:00
+- **Detail note:** `../../data/ops/nfl-preseason-sim-2026-daily-intel-20260809/LAUNCH_RESEARCH_NOTE.md`
