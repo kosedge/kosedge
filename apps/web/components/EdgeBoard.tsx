@@ -2,6 +2,7 @@ import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
+import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
 import { noVigHomeProb } from "@/lib/american-odds";
 import { generateGameOverview } from "@/lib/sports";
@@ -35,6 +36,22 @@ export type FlatEdgeBoardRow = {
   seasonType?: string;
   /** Authoritative server tag when present (fair-lines publish policy). */
   publishTag?: "PLAY" | "LEAN" | "PASS";
+  /** Decision Engine action label (Model fair vs market) — NFL action layer. */
+  actionLabel?: ActionLabel;
+  /** Pure |model fair − market| — kept separate from confidence. */
+  edgeMagnitude?: number;
+  modelConfidenceScore?: number;
+  modelConfidenceBand?: ConfidenceBand;
+  coverProb?: number;
+  playToNotes?: string;
+  playToPlay?: number;
+  playToLean?: number;
+  playToPass?: number;
+  fairLine?: number;
+  decisionMarketLine?: number;
+  isBestBet?: boolean;
+  keyNumberCross?: boolean;
+  weekRegime?: string;
 };
 
 export type EdgeBoardRow = FlatEdgeBoardRow;
@@ -86,6 +103,19 @@ export type LegacyEdgeBoardRow = {
   edgeOUCaution?: boolean;
   tagLine?: Tag;
   tagOU?: Tag;
+  /** Decision Engine (Model fair vs market) — separate from KEI publish tags. */
+  actionLabelLine?: ActionLabel;
+  actionLabelOU?: ActionLabel;
+  edgeMagnitudeLine?: number;
+  edgeMagnitudeOU?: number;
+  modelConfidenceScore?: number;
+  modelConfidenceBand?: ConfidenceBand;
+  coverProbLine?: number;
+  coverProbOU?: number;
+  playToLine?: string;
+  playToOU?: string;
+  isBestBetLine?: boolean;
+  isBestBetOU?: boolean;
   overview?: string;
 };
 
@@ -160,6 +190,117 @@ function tagClassName(tag: Tag, compact = false): string {
   if (tag === "PLAY") return `${base} bg-edge-green text-black`;
   if (tag === "LEAN") return `${base} bg-amber-500 text-black`;
   return `${base} bg-white/10 text-gray-400`;
+}
+
+function actionLabelClassName(label: ActionLabel, compact = false): string {
+  const base = compact
+    ? "inline-flex px-2 py-0.5 rounded-md text-[11px] font-bold tracking-wide"
+    : "inline-flex items-center justify-center px-2 py-1 rounded-md text-[12px] font-bold tracking-wide";
+  if (label === "BEST VALUE") return `${base} bg-kos-gold text-black`;
+  if (label === "PLAY") return `${base} bg-edge-green text-black`;
+  if (label === "LEAN") return `${base} bg-amber-500 text-black`;
+  if (label === "ALERT") return `${base} bg-orange-500/90 text-black`;
+  if (label === "STAY AWAY") return `${base} bg-red-500/80 text-white`;
+  return `${base} bg-white/10 text-gray-400`;
+}
+
+function ActionDecisionCell({
+  actionLabel,
+  publishTag,
+  play,
+  playToNotes,
+  edgeMagnitude,
+  confidenceBand,
+  confidenceScore,
+  coverProb,
+  compact = false,
+  caution = false,
+}: {
+  actionLabel?: ActionLabel;
+  publishTag?: Tag;
+  play?: string;
+  playToNotes?: string;
+  edgeMagnitude?: number;
+  confidenceBand?: ConfidenceBand;
+  confidenceScore?: number;
+  coverProb?: number;
+  compact?: boolean;
+  caution?: boolean;
+}) {
+  if (!actionLabel && !publishTag) {
+    return <span className="text-gray-500">—</span>;
+  }
+  return (
+    <div className={compact ? "leading-tight" : "leading-tight text-center"}>
+      {actionLabel ? (
+        <span className={actionLabelClassName(actionLabel, compact)}>
+          {actionLabel}
+        </span>
+      ) : publishTag ? (
+        <span className={tagClassName(publishTag, compact)}>{publishTag}</span>
+      ) : null}
+      {play && actionLabel && actionLabel !== "PASS" && actionLabel !== "STAY AWAY" ? (
+        <div
+          className={`mt-1 text-[11px] font-bold truncate ${
+            actionLabel === "PLAY" || actionLabel === "BEST VALUE"
+              ? "text-edge-green"
+              : actionLabel === "LEAN"
+                ? "text-amber-400"
+                : "text-orange-300"
+          }`}
+        >
+          {play}
+        </div>
+      ) : null}
+      {edgeMagnitude != null ? (
+        <div className="mt-1 text-[10px] text-gray-300 tabular-nums">
+          Edge {edgeMagnitude.toFixed(1)}
+          {confidenceBand ? (
+            <span className="text-gray-500">
+              {" "}
+              · Conf {confidenceBand}
+              {confidenceScore != null
+                ? ` ${Math.round(confidenceScore * 100)}%`
+                : ""}
+            </span>
+          ) : null}
+        </div>
+      ) : confidenceBand ? (
+        <div className="mt-1 text-[10px] text-gray-500">
+          Conf {confidenceBand}
+          {confidenceScore != null
+            ? ` ${Math.round(confidenceScore * 100)}%`
+            : ""}
+        </div>
+      ) : null}
+      {coverProb != null ? (
+        <div className="mt-0.5 text-[10px] text-gray-500 tabular-nums">
+          Cover {(coverProb * 100).toFixed(1)}%
+        </div>
+      ) : null}
+      {playToNotes &&
+      actionLabel &&
+      (actionLabel === "PLAY" ||
+        actionLabel === "LEAN" ||
+        actionLabel === "BEST VALUE" ||
+        actionLabel === "ALERT") ? (
+        <div
+          className="mt-1 text-[9px] text-gray-400 leading-snug line-clamp-3"
+          title={playToNotes}
+        >
+          {playToNotes}
+        </div>
+      ) : null}
+      {caution && actionLabel && actionLabel !== "PASS" ? (
+        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-300/90">
+          Size down
+        </div>
+      ) : null}
+      {publishTag && actionLabel && publishTag !== actionLabel ? (
+        <div className="mt-1 text-[9px] text-gray-600">KEI tag {publishTag}</div>
+      ) : null}
+    </div>
+  );
 }
 
 function EdgeSideCell({
@@ -646,6 +787,21 @@ export function flatRowsToLegacy(
           }
         : EMPTY_PAIR;
 
+    const tagLine = edgeToTag(
+      edgeLineNum,
+      "line",
+      sportKey,
+      lineRow?.seasonType ?? totalRow?.seasonType,
+      lineRow?.publishTag,
+    );
+    const tagOU = edgeToTag(
+      edgeOUNum,
+      "total",
+      sportKey,
+      totalRow?.seasonType ?? lineRow?.seasonType,
+      totalRow?.publishTag,
+    );
+
     result.push({
       id: String(lineRow?.id ?? total?.id ?? gameKey),
       time,
@@ -680,20 +836,22 @@ export function flatRowsToLegacy(
       playLine,
       playOU,
       edgeOUCaution: isNflTotalCaution(edgeOUNum, sportKey),
-      tagLine: edgeToTag(
-        edgeLineNum,
-        "line",
-        sportKey,
-        lineRow?.seasonType ?? totalRow?.seasonType,
-        lineRow?.publishTag,
-      ),
-      tagOU: edgeToTag(
-        edgeOUNum,
-        "total",
-        sportKey,
-        totalRow?.seasonType ?? lineRow?.seasonType,
-        totalRow?.publishTag,
-      ),
+      tagLine,
+      tagOU,
+      actionLabelLine: lineRow?.actionLabel,
+      actionLabelOU: totalRow?.actionLabel,
+      edgeMagnitudeLine: lineRow?.edgeMagnitude ?? edgeLineNum,
+      edgeMagnitudeOU: totalRow?.edgeMagnitude ?? edgeOUNum,
+      modelConfidenceScore:
+        lineRow?.modelConfidenceScore ?? totalRow?.modelConfidenceScore,
+      modelConfidenceBand:
+        lineRow?.modelConfidenceBand ?? totalRow?.modelConfidenceBand,
+      coverProbLine: lineRow?.coverProb,
+      coverProbOU: totalRow?.coverProb,
+      playToLine: lineRow?.playToNotes,
+      playToOU: totalRow?.playToNotes,
+      isBestBetLine: lineRow?.isBestBet,
+      isBestBetOU: totalRow?.isBestBet,
       overview: generateGameOverview(away, home),
     });
   }
@@ -819,7 +977,21 @@ export default function EdgeBoard({
               </p>
             </div>
             <div className="shrink-0 text-right">
-              <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
+              {isNfl ? (
+                <ActionDecisionCell
+                  actionLabel={r.actionLabelLine}
+                  publishTag={r.tagLine}
+                  play={r.playLine}
+                  playToNotes={r.playToLine}
+                  edgeMagnitude={r.edgeMagnitudeLine}
+                  confidenceBand={r.modelConfidenceBand}
+                  confidenceScore={r.modelConfidenceScore}
+                  coverProb={r.coverProbLine}
+                  compact
+                />
+              ) : (
+                <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
+              )}
             </div>
           </div>
 
@@ -891,12 +1063,27 @@ export default function EdgeBoard({
                 tag={r.tagOU}
               />
               <div className="mt-1">
-                <TagPlayCell
-                  tag={r.tagOU}
-                  play={r.playOU}
-                  compact
-                  caution={r.edgeOUCaution}
-                />
+                {isNfl ? (
+                  <ActionDecisionCell
+                    actionLabel={r.actionLabelOU}
+                    publishTag={r.tagOU}
+                    play={r.playOU}
+                    playToNotes={r.playToOU}
+                    edgeMagnitude={r.edgeMagnitudeOU}
+                    confidenceBand={r.modelConfidenceBand}
+                    confidenceScore={r.modelConfidenceScore}
+                    coverProb={r.coverProbOU}
+                    compact
+                    caution={r.edgeOUCaution}
+                  />
+                ) : (
+                  <TagPlayCell
+                    tag={r.tagOU}
+                    play={r.playOU}
+                    compact
+                    caution={r.edgeOUCaution}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -1003,12 +1190,15 @@ export default function EdgeBoard({
                 <th
                   className={`${TH_BASE} text-center text-[14px] font-bold text-white normal-case tracking-normal`}
                 >
-                  <HeaderStack a="Tag" b={isMlb ? "ML" : "Line"} />
+                  <HeaderStack
+                    a={isNfl ? "Action" : "Tag"}
+                    b={isMlb ? "ML" : "Line"}
+                  />
                 </th>
                 <th
                   className={`${TH_BASE} text-center text-[14px] font-bold text-white normal-case tracking-normal`}
                 >
-                  <HeaderStack a="Tag" b="O/U" />
+                  <HeaderStack a={isNfl ? "Action" : "Tag"} b="O/U" />
                 </th>
               </tr>
             </thead>
@@ -1148,14 +1338,41 @@ export default function EdgeBoard({
                     />
                   </td>
                   <td className={`${TD_DECISION} text-center`}>
-                    <TagPlayCell tag={r.tagLine} play={r.playLine} />
+                    {isNfl ? (
+                      <ActionDecisionCell
+                        actionLabel={r.actionLabelLine}
+                        publishTag={r.tagLine}
+                        play={r.playLine}
+                        playToNotes={r.playToLine}
+                        edgeMagnitude={r.edgeMagnitudeLine}
+                        confidenceBand={r.modelConfidenceBand}
+                        confidenceScore={r.modelConfidenceScore}
+                        coverProb={r.coverProbLine}
+                      />
+                    ) : (
+                      <TagPlayCell tag={r.tagLine} play={r.playLine} />
+                    )}
                   </td>
                   <td className={`${TD_DECISION} text-center`}>
-                    <TagPlayCell
-                      tag={r.tagOU}
-                      play={r.playOU}
-                      caution={r.edgeOUCaution}
-                    />
+                    {isNfl ? (
+                      <ActionDecisionCell
+                        actionLabel={r.actionLabelOU}
+                        publishTag={r.tagOU}
+                        play={r.playOU}
+                        playToNotes={r.playToOU}
+                        edgeMagnitude={r.edgeMagnitudeOU}
+                        confidenceBand={r.modelConfidenceBand}
+                        confidenceScore={r.modelConfidenceScore}
+                        coverProb={r.coverProbOU}
+                        caution={r.edgeOUCaution}
+                      />
+                    ) : (
+                      <TagPlayCell
+                        tag={r.tagOU}
+                        play={r.playOU}
+                        caution={r.edgeOUCaution}
+                      />
+                    )}
                   </td>
                 </tr>
               ))}
@@ -1166,16 +1383,20 @@ export default function EdgeBoard({
           {marketsOnly
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
-              ? "NFL tags — PASS default. Spread PLAY ≥2.5 pts (LEAN off). Totals sides-only (no Total PLAY). PRE exhibitions filtered out. KEI = published fair line; Model shown under KEI when the blend splits. "
+              ? "NFL Decision Engine — we bet prices, not teams. Action Labels grade Model fair vs market (PASS / LEAN / PLAY / BEST VALUE / ALERT / STAY AWAY). Edge Magnitude and Model Confidence stay separate. Play-To ladders on every LEAN/PLAY. KEI publish tags (KEI vs market) remain for desk evidence bands and show under Action when they differ. Weeks 1–2 tighter thresholds active by default. "
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb
               ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
-              : "Edge shows pts + side favored vs KEI handicap. ")}
+              : isNfl
+                ? "KEI Edge column still shows KEI handicap vs market. Action uses Model research fair vs market. "
+                : "Edge shows pts + side favored vs KEI handicap. ")}
           {!marketsOnly
-            ? `Tag shows the action at the best book. ${keiCode}: Kos Edge Index (handicap).`
+            ? isNfl
+              ? `${keiCode}: Kos Edge Index (handicap). Locked baseline fair lines are not mutated by this action layer.`
+              : `Tag shows the action at the best book. ${keiCode}: Kos Edge Index (handicap).`
             : null}
         </div>
       </div>

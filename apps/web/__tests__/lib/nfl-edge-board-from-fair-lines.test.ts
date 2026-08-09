@@ -62,11 +62,33 @@ function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
     publishTagSpread: "PASS",
     publishTagTotal: "PASS",
     publishTagMl: "PASS",
+    decision: null,
+    actionLabelSpread: null,
+    actionLabelTotal: null,
     ...partial,
   };
 }
 
 describe("nfl-edge-board-from-fair-lines", () => {
+  it("attaches PLAY action + play-to ladder for a large model edge", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 8,
+        modelSpreadHome: -7,
+        spreadHome: -7,
+        handicapSpreadHome: -7,
+        marketSpreadHome: -3,
+        bestSpreadHome: -3,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    expect((spread as { actionLabel?: string }).actionLabel).toMatch(
+      /PLAY|BEST VALUE/,
+    );
+    expect((spread as { playToNotes?: string }).playToNotes).toBeTruthy();
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(4);
+  });
+
   it("fills KEINFL + market open/best for every fair-line game", () => {
     const rows = fairLinesToEdgeBoardRows([line({})]);
     expect(rows).toHaveLength(2);
@@ -78,6 +100,14 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(total.kei).toBe("41.3");
     expect(total.best).toBe("44.5");
     expect((spread as { modelKei?: string }).modelKei).toBe("-3.5");
+    // Decision Engine action layer attached (Model fair vs market).
+    // Week-1 early regime: |−3.5 − (−3.0)| = 0.5 → PASS (< 1.5).
+    expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(0.5);
+    expect(
+      (spread as { modelConfidenceBand?: string }).modelConfidenceBand,
+    ).toBeTruthy();
+    expect((spread as { weekRegime?: string }).weekRegime).toBe("early");
   });
 
   it("attaches modelKei from pre-blend model fields while kei stays handicap", () => {
