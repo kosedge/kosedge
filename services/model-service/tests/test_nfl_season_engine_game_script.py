@@ -43,6 +43,8 @@ def test_engine_version_game_script() -> None:
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
@@ -296,6 +298,8 @@ def test_buf_kc_realism_bounds_and_diagnostics_play_mix() -> None:
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
     by_name = {p["player_name"]: p for p in proj.players}

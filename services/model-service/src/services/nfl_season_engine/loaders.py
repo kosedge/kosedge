@@ -798,6 +798,37 @@ def _role_from_depth_row(
     return role, hit
 
 
+def _apply_qb_rush_profile_to_role(
+    role: "PlayerRole",
+    *,
+    player_id: str = "",
+) -> "PlayerRole":
+    """Lift QB1 rush_share from SoT player_id tier (general feature)."""
+    from dataclasses import replace
+
+    from src.services.nfl_season_engine.qb_rushing_profile import (
+        apply_qb_rush_to_role_shares,
+        resolve_qb1_profile,
+    )
+
+    if str(role.position or "").upper() != "QB" or int(role.depth_order or 99) != 1:
+        return role
+    profile = resolve_qb1_profile(
+        player_id=player_id,
+        player_name=role.player_name,
+        team=role.team,
+        rush_share=float(role.rush_share or 0.0) or None,
+    )
+    new_rush = apply_qb_rush_to_role_shares(float(role.rush_share or 0.0), profile)
+    if abs(new_rush - float(role.rush_share or 0.0)) < 1e-6:
+        return role
+    return replace(
+        role,
+        rush_share=new_rush,
+        source=f"{role.source}+qb_rush_{profile.tier}",
+    )
+
+
 def _rosters_from_depth_rows(
     depth_rows: Sequence[Mapping[str, Any]],
     *,
@@ -856,6 +887,8 @@ def _rosters_from_depth_rows(
             draft_round=draft_i,
             rookie_status=str(status_raw),
         )
+        pid = str(r.get("player_id") or getattr(r, "player_id", "") or "")
+        role = _apply_qb_rush_profile_to_role(role, player_id=pid)
         if hit:
             baseline_hits += 1
         rosters[team].append(role)
@@ -1860,6 +1893,40 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
                 f"; ol_roles={ol_roles_n}"
                 f"; packaged_injury_paths={len(packaged_injury_paths)}"
             )
+        # Phase 2: transparent OL protection → modest offense_index (not EPA magic).
+        from src.services.nfl_season_engine.ol_protection import (
+            apply_ol_protection_to_strength,
+            build_ol_protection_book,
+        )
+        from dataclasses import replace as _dc_replace
+
+        ol_book = build_ol_protection_book(
+            list(pkg_depth_meta.get("ol_roles") or []),
+            teams=NFL_TEAMS,
+        )
+        patched: Dict[str, Any] = {}
+        for team, state in strengths.items():
+            feat = ol_book.get(team)
+            if feat is None or feat.fidelity != "applied":
+                patched[team] = state
+                continue
+            new_off = apply_ol_protection_to_strength(float(state.offense_index), feat)
+            drivers = dict(getattr(state, "drivers", None) or {})
+            stubs = dict(drivers.get("stubs") or {})
+            stubs["injury_at_time_depth"] = "ol_protection_v1_applied"
+            drivers["stubs"] = stubs
+            drivers["ol_protection"] = feat.to_dict()
+            patched[team] = _dc_replace(
+                state,
+                offense_index=new_off,
+                injury_delta_offense=round(
+                    float(state.injury_delta_offense) + float(feat.offense_index_delta),
+                    6,
+                ),
+                drivers=drivers,
+            )
+        strengths = patched
+        strength_note += "; ol_protection_v1 from SoT ol_roles"
     except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
         coverage = depth_coverage_from_rosters(rosters)
         packaged_injury_paths = []
@@ -1890,7 +1957,15 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         "depth_sha256": str(pkg_depth_meta.get("depth_sha256") or ""),
         "identity_scheme": str(pkg_depth_meta.get("identity_scheme") or ""),
         "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
-        "ol_efficiency_hooks": pkg_depth_meta.get("ol_efficiency_hooks") or {},
+        "ol_roles": list(pkg_depth_meta.get("ol_roles") or []),
+        "ol_efficiency_hooks": {
+            **dict(pkg_depth_meta.get("ol_efficiency_hooks") or {}),
+            "status": "ol_protection_v1_feature",
+            "formula": (
+                "protection=1−edge_out*0.055−C_out*0.040−G_out*0.025"
+                "−competition*0.012; ypa/offense deltas documented in ol_protection.py"
+            ),
+        },
         **coverage,
         **{f"cal_{k}": v for k, v in calibration_notes().items()},
     }

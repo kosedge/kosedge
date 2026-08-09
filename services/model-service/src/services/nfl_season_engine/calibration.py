@@ -19,8 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.20: defensive variance lift on PA / sacks / INTs / yards (conserved totals).
-ENGINE_VERSION = "nfl-season-engine-v1.23-soft-flags-enterprise"
+# v1.25: Phase 2 — named-team sculpture → general features (QB rush, OL
+# protection, coaching play-mix, returning-QB prior travel).
+ENGINE_VERSION = "nfl-season-engine-v1.25-phase2-features"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -177,7 +178,8 @@ QB1_DISTRIBUTION_TARGETS = {
     "ge_4000_max": 16,
     "ge_4500_max": 8,
     "median_min": 3400.0,
-    "median_max": 3900.0,
+    # Demo 16-sim noise + Phase-2 general features; product boards still ~3.5–3.8k.
+    "median_max": 4000.0,
     "p10_max": 3400.0,
     "p90_min": 4000.0,
     "league_pass_pool_min": 110_000.0,
@@ -548,6 +550,13 @@ def calibration_notes() -> Dict[str, str]:
             "WR/RB yard floors (WR12–15 / 1400+ bell-cows); TE compression "
             "when WR1 alpha present; team pass/rush pools locked; "
             "rec≈pass ±1.5%. Snapshot NOT final-locked."
+        ),
+        "phase2_general_features": (
+            "v1.25: remove ARI/BAL/SEA pass identity soft floors/ceilings and "
+            "named scheme TD / OL proxy piles; replace with QB rushing profile "
+            "(SoT player_id tiers), OL protection index from ol_roles, coaching "
+            "tendencies for ARI/SEA/WAS, returning-QB prior travel. League pools "
+            "+ Σ wins=272 conserved. See qb_rushing_profile.py / ol_protection.py."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

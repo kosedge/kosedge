@@ -44,9 +44,13 @@ def test_engine_version_surfaces_survivor() -> None:
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
         or "defense-variance" in DEFAULT_SEASON_ENGINE_VERSION
         or "team-variance" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
@@ -168,6 +172,8 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
         or "player-regression" in result.engine_version
         or "projected-sos" in result.engine_version
         or "season-coherence" in result.engine_version
+        or "phase2-features" in result.engine_version
+        or "soft-flags" in result.engine_version
         or "true-pr-harden" in result.engine_version
     )
 
@@ -237,6 +243,8 @@ def test_planner_excludes_used_teams_across_weeks() -> None:
         or "player-regression" in plan.engine_version
         or "projected-sos" in plan.engine_version
         or "season-coherence" in plan.engine_version
+        or "phase2-features" in plan.engine_version
+        or "soft-flags" in plan.engine_version
         or "true-pr-harden" in plan.engine_version
         or "path_survival" in PATH_FORMULA_NOTES
     )
