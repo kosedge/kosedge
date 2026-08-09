@@ -1,10 +1,11 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T035645Z",
-  "engine_version": "nfl-season-engine-v1.16-season-coherence",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T092006Z",
+  "engine_version": "nfl-season-engine-v1.17-season-coherence-team-priors",
   "n_team_sims": 50000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T03:56:45.305922+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.16-season-coherence-Nteam50000-Nplayer1000-20260809T034834Z",
+  "generated_at_utc": "2026-08-09T09:20:06.248467+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.17-season-coherence-team-priors-Nteam50000-Nplayer1000-20260809T092006Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.16-season-coherence \u00b7 N_team=50000 \u00b7 20260809T035645Z"
+  "identity": "nfl-season-engine-v1.17-season-coherence-team-priors \u00b7 N_team=50000 \u00b7 20260809T092006Z",
+  "note": "ARI/BAL/SEA pass-volume identity priors (v1.17); budget-ratio rescale of prior research paths"
 }

@@ -19,17 +19,21 @@ from src.services.nfl_season_engine.scoring_bridge import (
     wins_zero_sum_ok,
 )
 from src.services.nfl_season_engine.season_budgets import (
+    TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS,
     TeamVolumeFactors,
     allocate_season_totals_into_team_budgets,
+    apply_team_pass_volume_identity_adjustments,
     budget_pool_diagnostics,
     compute_team_season_budgets,
     factors_from_universe,
+    structural_team_budget,
 )
 
 
 def test_engine_version_is_season_coherence() -> None:
     assert "season-coherence" in ENGINE_VERSION
-    assert ENGINE_VERSION.startswith("nfl-season-engine-v1.16")
+    assert ENGINE_VERSION.startswith("nfl-season-engine-v1.")
+    assert "team-priors" in ENGINE_VERSION or "v1.17" in ENGINE_VERSION
 
 
 def test_team_budgets_conserve_league_pools() -> None:
@@ -55,6 +59,44 @@ def test_budget_factors_respond_to_pass_identity() -> None:
     )
     budgets = compute_team_season_budgets({"KC": high, "SF": low})
     assert budgets["KC"].pass_yards > budgets["SF"].pass_yards
+
+
+def test_ari_bal_sea_identity_priors_before_pool() -> None:
+    """ARI/BAL/SEA identity weights move pre-pool residuals; others untouched."""
+    teams = [
+        "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
+        "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC",
+        "LA", "LAC", "LV", "MIA", "MIN", "NE", "NO", "NYG",
+        "NYJ", "PHI", "PIT", "SEA", "SF", "TB", "TEN", "WAS",
+    ]
+    factors = {
+        t: TeamVolumeFactors(
+            team=t,
+            offense_index=1.05 if t == "ARI" else (0.92 if t == "BAL" else 1.0),
+            pace_factor=1.02 if t == "ARI" else 1.0,
+            pass_rate_bias=0.05 if t == "ARI" else (-0.05 if t == "BAL" else 0.0),
+        )
+        for t in teams
+    }
+    raw = {t: structural_team_budget(f) for t, f in factors.items()}
+    adjusted = apply_team_pass_volume_identity_adjustments(raw)
+    assert set(TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS) == {"ARI", "BAL", "SEA"}
+    for t in teams:
+        if t in ("ARI", "BAL", "SEA"):
+            assert adjusted[t].pass_yards != raw[t].pass_yards
+            assert "team_pass_identity_prior_v1" in adjusted[t].notes
+        else:
+            assert adjusted[t].pass_yards == raw[t].pass_yards
+    # Soft bounds pre-pool.
+    assert adjusted["ARI"].pass_yards <= 4250.0
+    assert adjusted["BAL"].pass_yards >= 3150.0
+    assert adjusted["SEA"].pass_yards >= 3400.0
+    # Landing zones (pre-pool, conservative).
+    assert 3500.0 <= adjusted["ARI"].pass_yards <= 4250.0
+    assert 3150.0 <= adjusted["BAL"].pass_yards <= 3800.0
+    assert 3400.0 <= adjusted["SEA"].pass_yards <= 4200.0
+    budgets = compute_team_season_budgets(factors)
+    assert abs(sum(b.pass_yards for b in budgets.values()) - LEAGUE_PASS_YARDS_POOL) < 1.0
 
 
 def test_fantasy_budget_allocation_caps_flat_qb1_band() -> None:

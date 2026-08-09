@@ -43,7 +43,7 @@ def test_engine_version_player_regression() -> None:
     )
     assert any(
         v in DEFAULT_SEASON_ENGINE_VERSION
-        for v in ("v1.16", "v1.15", "v1.14", "v1.13")
+        for v in ("v1.17", "v1.16", "v1.15", "v1.14", "v1.13")
     )
 
 

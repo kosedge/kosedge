@@ -25,6 +25,27 @@ def test_budgets_sum_to_league_pool() -> None:
     assert abs(sum(b.pass_yards for b in budgets.values()) - LEAGUE_PASS_YARDS_POOL) < 1.0
 
 
+def test_identity_priors_only_touch_ari_bal_sea() -> None:
+    strengths = {
+        t: {
+            "offense_index": 1.08 if t == "ARI" else (0.90 if t == "BAL" else 1.0),
+            "pace_factor": 1.0,
+            "pass_rate_bias": 0.05 if t == "ARI" else (-0.05 if t == "BAL" else 0.0),
+        }
+        for t in [
+            "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
+            "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC",
+            "LA", "LAC", "LV", "MIA", "MIN", "NE", "NO", "NYG",
+            "NYJ", "PHI", "PIT", "SEA", "SF", "TB", "TEN", "WAS",
+        ]
+    }
+    budgets = compute_team_season_budgets(strengths)
+    assert budgets["ARI"].pass_yards < budgets["CIN"].pass_yards + 800
+    assert budgets["BAL"].pass_yards >= 3000.0
+    assert budgets["SEA"].pass_yards >= 3300.0
+    assert abs(sum(b.pass_yards for b in budgets.values()) - LEAGUE_PASS_YARDS_POOL) < 1.0
+
+
 def test_apply_breaks_flat_4000_band() -> None:
     rows = []
     for team in [

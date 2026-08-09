@@ -14,7 +14,7 @@ import statistics
 from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Tuple
 
-# Keep in sync with nfl_season_engine.calibration / season_budgets (v1.16).
+# Keep in sync with nfl_season_engine.calibration / season_budgets (v1.17).
 LEAGUE_BASE_PLAYS = 63.5
 LEAGUE_BASE_PASS_RATE = 0.565
 DEFAULT_YPA = 6.95
@@ -31,6 +31,28 @@ YPA_OFFENSE_SCALE = 0.55
 YPC_OFFENSE_SCALE = 0.35
 STRENGTH_PASS_BIAS_SCALE = 1.75
 COACH_PASS_BIAS_SCALE = 1.35
+
+# Targeted identity overlays (mirror season_budgets v1.17). Pre-pool only.
+SEA_DARNOLD_PASS_BASELINE = 3_900.0
+TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS: Dict[str, Dict[str, float]] = {
+    "ARI": {
+        "residual_regression": 0.78,
+        "scheme_mult": 0.92,
+        "soft_ceiling": 4_250.0,
+    },
+    "BAL": {
+        "residual_regression": 0.88,
+        "scheme_mult": 1.12,
+        "soft_floor": 3_150.0,
+    },
+    "SEA": {
+        "darnold_anchor_weight": 0.70,
+        "new_oc_weight": 0.30,
+        "darnold_baseline": SEA_DARNOLD_PASS_BASELINE,
+        "scheme_mult": 1.05,
+        "soft_floor": 3_400.0,
+    },
+}
 
 # Curated coaching pass biases (subset; others → 0). Keep modest.
 _COACH_PASS_BIAS: Dict[str, float] = {
@@ -127,6 +149,43 @@ def synthetic_strengths_from_team_pass_raw(
     return out
 
 
+def _apply_pass_identity_adjustments(
+    raw: Mapping[str, Tuple[float, float]],
+) -> Dict[str, Tuple[float, float]]:
+    """ARI/BAL/SEA pass residual weights before league-pool renorm."""
+    if not raw:
+        return {}
+    pass_vals = [float(p) for p, _ in raw.values()]
+    league_mean = statistics.fmean(pass_vals) if pass_vals else (LEAGUE_PASS_YARDS_POOL / 32.0)
+    out: Dict[str, Tuple[float, float]] = {}
+    for team, (pass_y, rush_y) in raw.items():
+        cfg = TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS.get(str(team))
+        if cfg is None:
+            out[team] = (pass_y, rush_y)
+            continue
+        y = float(pass_y)
+        if team == "SEA":
+            baseline = float(cfg.get("darnold_baseline", SEA_DARNOLD_PASS_BASELINE))
+            w_d = float(cfg.get("darnold_anchor_weight", 0.70))
+            w_oc = float(cfg.get("new_oc_weight", 0.30))
+            w_sum = w_d + w_oc
+            if w_sum <= 0:
+                w_d, w_oc, w_sum = 0.70, 0.30, 1.0
+            y = (w_d * baseline + w_oc * y) / w_sum
+        else:
+            k = float(cfg.get("residual_regression", 1.0))
+            y = league_mean + k * (y - league_mean)
+        y *= float(cfg.get("scheme_mult", 1.0))
+        floor = cfg.get("soft_floor")
+        ceiling = cfg.get("soft_ceiling")
+        if floor is not None:
+            y = max(y, float(floor))
+        if ceiling is not None:
+            y = min(y, float(ceiling))
+        out[team] = (y, rush_y)
+    return out
+
+
 def compute_team_season_budgets(
     strengths: Mapping[str, Mapping[str, float]],
 ) -> Dict[str, TeamSeasonBudget]:
@@ -139,12 +198,13 @@ def compute_team_season_budgets(
             pass_rate_bias=float(payload.get("pass_rate_bias", 0.0) or 0.0),
         )
         raw[str(team)] = (pass_y, rush_y)
-    pass_sum = sum(p for p, _ in raw.values()) or 1.0
-    rush_sum = sum(r for _, r in raw.values()) or 1.0
+    adjusted = _apply_pass_identity_adjustments(raw)
+    pass_sum = sum(p for p, _ in adjusted.values()) or 1.0
+    rush_sum = sum(r for _, r in adjusted.values()) or 1.0
     pass_scale = LEAGUE_PASS_YARDS_POOL / pass_sum
     rush_scale = LEAGUE_RUSH_YARDS_POOL / rush_sum
     out: Dict[str, TeamSeasonBudget] = {}
-    for team, (pass_y, rush_y) in raw.items():
+    for team, (pass_y, rush_y) in adjusted.items():
         py = pass_y * pass_scale
         ry = rush_y * rush_scale
         out[team] = TeamSeasonBudget(

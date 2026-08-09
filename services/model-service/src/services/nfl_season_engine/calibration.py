@@ -19,10 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.16: Season coherence — team pass/rush budgets, attempt share, wider
-# script/YPA differentiation, league pool conservation, QB1 distribution shape.
-# Keeps v1.13–v1.15 process/finite/SOS/true-PR contracts.
-ENGINE_VERSION = "nfl-season-engine-v1.16-season-coherence"
+# v1.17: ARI/BAL/SEA pass-volume identity priors on pre-pool residuals.
+# Keeps v1.16 season-coherence budgets / 126k pool / QB1 distribution shape.
+ENGINE_VERSION = "nfl-season-engine-v1.17-season-coherence-team-priors"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -510,6 +509,12 @@ def calibration_notes() -> Dict[str, str]:
             "QB1 distribution guards (not 32/32 ≥4000). See season_budgets.py + "
             "scoring_bridge.py. Fantasy preseason-sim totals use the same budget "
             "allocator after QB starter lock."
+        ),
+        "team_pass_priors": (
+            "v1.17: ARI/BAL/SEA multiplicative identity weights on pre-pool "
+            "pass-volume residual (Brissett/LaFleur dampen; Doyle dual-threat "
+            "restore; Darnold 70/30 + Fleury/Shanahan-tree). Soft floors/ceilings "
+            "before 126k two-way renorm; other 29 teams untouched."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

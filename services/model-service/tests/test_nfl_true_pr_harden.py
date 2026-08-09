@@ -48,10 +48,11 @@ _KNOWN_2026_ROOKIES = (
 
 
 def test_engine_version_true_pr_harden() -> None:
-    assert any(v in DEFAULT_SEASON_ENGINE_VERSION for v in ("v1.16", "v1.15"))
+    assert any(v in DEFAULT_SEASON_ENGINE_VERSION for v in ("v1.17", "v1.16", "v1.15"))
     assert (
         "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "team-priors" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
