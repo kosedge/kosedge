@@ -1,10 +1,10 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260808T011817Z",
-  "engine_version": "nfl-season-engine-v1.12-survivor-planner-ux",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T035645Z",
+  "engine_version": "nfl-season-engine-v1.16-season-coherence",
   "n_team_sims": 50000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-08T01:18:17.839799+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.12-survivor-planner-ux-Nteam50000-Nplayer1000-20260807T214449Z",
+  "generated_at_utc": "2026-08-09T03:56:45.305922+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.16-season-coherence-Nteam50000-Nplayer1000-20260809T034834Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.12-survivor-planner-ux \u00b7 N_team=50000 \u00b7 20260808T011817Z"
+  "identity": "nfl-season-engine-v1.16-season-coherence \u00b7 N_team=50000 \u00b7 20260809T035645Z"
 }

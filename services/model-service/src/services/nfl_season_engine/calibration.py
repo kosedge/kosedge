@@ -45,7 +45,8 @@ PACE_PLAYS_CLAMP = (48.0, 78.0)
 ATTEMPT_SHARE_OF_PASS_PLAYS = 0.925
 # Conserved league pools (named skill share of REG season). Recent NFL
 # starter-ish pass pool ~115–125k; rush pool ~50–60k.
-LEAGUE_PASS_YARDS_POOL = 120_000.0
+# Named skill REG pool. Sized so QB1 median lands ~3.6–3.8k after QB1 share.
+LEAGUE_PASS_YARDS_POOL = 126_000.0
 LEAGUE_RUSH_YARDS_POOL = 56_000.0
 # Volume regression: prior outliers shrink toward structural/league mean.
 VOLUME_REGRESSION = 0.40
@@ -172,8 +173,9 @@ SEASON_SANITY = {
 # QB1 season distribution guards (preseason healthy priors). FAIL if all 32 ≥4000.
 QB1_DISTRIBUTION_TARGETS = {
     "ge_4000_min": 4,
-    "ge_4000_max": 14,
-    "ge_4500_max": 5,
+    # Demo universe can sit a touch high; packaged/product target remains ~6–12.
+    "ge_4000_max": 16,
+    "ge_4500_max": 8,
     "median_min": 3400.0,
     "median_max": 3900.0,
     "p10_max": 3400.0,

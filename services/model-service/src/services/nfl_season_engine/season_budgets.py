@@ -398,7 +398,12 @@ def enforce_team_season_budgets_on_path(
     *,
     tol: float = 1.02,
 ) -> Dict[str, Any]:
-    """Scale named season totals into team budgets (path conservation)."""
+    """Allocate named season totals **into** team budgets (path conservation).
+
+    Two-way scale (same contract as fantasy ``allocate_season_totals_into_team_budgets``):
+    overflow caps down, underfill lifts toward the team pool. Scale-down-only left
+    the packaged board with a dead ~3.1k QB1 median while budgets sat near 3.7k.
+    """
     by_team: Dict[str, List[str]] = {}
     for key, row in player_totals.items():
         team = str(row.get("team") or "")
@@ -416,27 +421,25 @@ def enforce_team_season_budgets_on_path(
         rush_sum = sum(float(player_totals[k].get("rush_yards") or 0.0) for k in keys)
         rec_sum = sum(float(player_totals[k].get("rec_yards") or 0.0) for k in keys)
         scales: Dict[str, float] = {}
-        if pass_sum > budget.pass_yards * tol and pass_sum > 0:
-            s = budget.pass_yards / pass_sum
-            scales["pass_yards"] = round(s, 4)
+
+        def _allocate(field: str, td_field: str, total: float, target: float) -> None:
+            nonlocal scaled_fields
+            if total <= 1e-9 or target <= 0:
+                return
+            ratio = total / target
+            # Skip microscopic drift inside tol band.
+            if (1.0 / tol) <= ratio <= tol:
+                return
+            s = target / total
+            scales[field] = round(s, 4)
             scaled_fields += 1
             for k in keys:
-                player_totals[k]["pass_yards"] = float(player_totals[k].get("pass_yards") or 0.0) * s
-                player_totals[k]["pass_tds"] = float(player_totals[k].get("pass_tds") or 0.0) * s
-        if rush_sum > budget.rush_yards * tol and rush_sum > 0:
-            s = budget.rush_yards / rush_sum
-            scales["rush_yards"] = round(s, 4)
-            scaled_fields += 1
-            for k in keys:
-                player_totals[k]["rush_yards"] = float(player_totals[k].get("rush_yards") or 0.0) * s
-                player_totals[k]["rush_tds"] = float(player_totals[k].get("rush_tds") or 0.0) * s
-        if rec_sum > budget.rec_yards * tol and rec_sum > 0:
-            s = budget.rec_yards / rec_sum
-            scales["rec_yards"] = round(s, 4)
-            scaled_fields += 1
-            for k in keys:
-                player_totals[k]["rec_yards"] = float(player_totals[k].get("rec_yards") or 0.0) * s
-                player_totals[k]["rec_tds"] = float(player_totals[k].get("rec_tds") or 0.0) * s
+                player_totals[k][field] = float(player_totals[k].get(field) or 0.0) * s
+                player_totals[k][td_field] = float(player_totals[k].get(td_field) or 0.0) * s
+
+        _allocate("pass_yards", "pass_tds", pass_sum, float(budget.pass_yards))
+        _allocate("rush_yards", "rush_tds", rush_sum, float(budget.rush_yards))
+        _allocate("rec_yards", "rec_tds", rec_sum, float(budget.rec_yards))
         teams_diag[team] = {
             "budget": budget.to_dict(),
             "pre": {
@@ -450,7 +453,7 @@ def enforce_team_season_budgets_on_path(
         "ok": scaled_fields == 0,
         "scaled_fields": scaled_fields,
         "teams": teams_diag,
-        "method": "season_budget_path_enforce_v1",
+        "method": "season_budget_path_allocate_v2",
     }
 
 
