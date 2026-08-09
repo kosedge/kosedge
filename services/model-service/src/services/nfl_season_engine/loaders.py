@@ -940,39 +940,40 @@ _DEMO_SKILL: Dict[str, List[Dict[str, Any]]] = {
 # Demo EPA-style talent bumps (offense / defense index deltas vs 1.0).
 # Spread sized so projected win means ~5–12 (recent NFL projection band),
 # with contenders clearly above replacement — not hash noise.
+# v1.16: widen pace/pass identity so demo QB1 season yards are not a flat band.
 _DEMO_STRENGTH_BUMPS: Dict[str, Dict[str, float]] = {
-    "KC": {"off": 0.15, "def": 0.10, "pace": 0.00, "pass": 0.02},
-    "BUF": {"off": 0.14, "def": 0.09, "pace": 0.02, "pass": -0.01},
-    "PHI": {"off": 0.13, "def": 0.09, "pace": 0.01, "pass": -0.02},
-    "SF": {"off": 0.11, "def": 0.12, "pace": -0.01, "pass": 0.00},
-    "DET": {"off": 0.13, "def": 0.07, "pace": 0.02, "pass": 0.01},
-    "BAL": {"off": 0.12, "def": 0.10, "pace": 0.01, "pass": -0.03},
-    "CIN": {"off": 0.10, "def": 0.03, "pace": 0.01, "pass": 0.02},
-    "MIA": {"off": 0.06, "def": 0.01, "pace": 0.03, "pass": 0.03},
-    "DAL": {"off": 0.05, "def": 0.05, "pace": 0.00, "pass": 0.01},
-    "GB": {"off": 0.07, "def": 0.04, "pace": 0.00, "pass": 0.00},
-    "HOU": {"off": 0.06, "def": 0.08, "pace": -0.01, "pass": 0.00},
-    "LAC": {"off": 0.08, "def": 0.05, "pace": 0.00, "pass": 0.01},
-    "MIN": {"off": 0.05, "def": 0.03, "pace": 0.01, "pass": 0.02},
-    "SEA": {"off": 0.03, "def": 0.03, "pace": 0.01, "pass": 0.01},
-    "TB": {"off": 0.04, "def": 0.02, "pace": 0.00, "pass": 0.02},
-    "ATL": {"off": 0.02, "def": 0.00, "pace": 0.01, "pass": 0.00},
-    "LA": {"off": 0.03, "def": 0.05, "pace": -0.01, "pass": 0.01},
-    "PIT": {"off": 0.00, "def": 0.08, "pace": -0.02, "pass": -0.02},
-    "DEN": {"off": 0.01, "def": 0.06, "pace": -0.01, "pass": 0.00},
-    "NYJ": {"off": -0.04, "def": 0.06, "pace": -0.02, "pass": -0.01},
-    "CLE": {"off": -0.05, "def": 0.04, "pace": -0.02, "pass": -0.02},
-    "CHI": {"off": -0.02, "def": -0.01, "pace": 0.00, "pass": 0.00},
-    "IND": {"off": -0.04, "def": -0.03, "pace": 0.00, "pass": 0.00},
-    "JAX": {"off": -0.05, "def": -0.04, "pace": 0.01, "pass": 0.01},
-    "LV": {"off": -0.06, "def": -0.04, "pace": 0.00, "pass": 0.00},
-    "NO": {"off": -0.07, "def": -0.01, "pace": -0.01, "pass": 0.00},
-    "NYG": {"off": -0.08, "def": -0.05, "pace": 0.00, "pass": 0.00},
-    "TEN": {"off": -0.09, "def": -0.05, "pace": -0.01, "pass": -0.01},
-    "CAR": {"off": -0.11, "def": -0.07, "pace": 0.00, "pass": 0.00},
-    "NE": {"off": -0.09, "def": -0.03, "pace": -0.01, "pass": -0.01},
-    "WAS": {"off": 0.02, "def": -0.02, "pace": 0.01, "pass": 0.01},
-    "ARI": {"off": -0.01, "def": -0.04, "pace": 0.01, "pass": 0.01},
+    "KC": {"off": 0.15, "def": 0.10, "pace": 0.03, "pass": 0.045},
+    "BUF": {"off": 0.14, "def": 0.09, "pace": 0.04, "pass": 0.020},
+    "PHI": {"off": 0.13, "def": 0.09, "pace": 0.02, "pass": -0.035},
+    "SF": {"off": 0.11, "def": 0.12, "pace": -0.03, "pass": -0.040},
+    "DET": {"off": 0.13, "def": 0.07, "pace": 0.035, "pass": 0.030},
+    "BAL": {"off": 0.12, "def": 0.10, "pace": 0.02, "pass": -0.050},
+    "CIN": {"off": 0.10, "def": 0.03, "pace": 0.02, "pass": 0.040},
+    "MIA": {"off": 0.06, "def": 0.01, "pace": 0.05, "pass": 0.050},
+    "DAL": {"off": 0.05, "def": 0.05, "pace": 0.01, "pass": 0.035},
+    "GB": {"off": 0.07, "def": 0.04, "pace": 0.00, "pass": 0.015},
+    "HOU": {"off": 0.06, "def": 0.08, "pace": -0.02, "pass": 0.010},
+    "LAC": {"off": 0.08, "def": 0.05, "pace": 0.01, "pass": 0.035},
+    "MIN": {"off": 0.05, "def": 0.03, "pace": 0.02, "pass": 0.040},
+    "SEA": {"off": 0.03, "def": 0.03, "pace": 0.02, "pass": 0.020},
+    "TB": {"off": 0.04, "def": 0.02, "pace": 0.01, "pass": 0.035},
+    "ATL": {"off": 0.02, "def": 0.00, "pace": 0.02, "pass": -0.015},
+    "LA": {"off": 0.03, "def": 0.05, "pace": -0.01, "pass": 0.030},
+    "PIT": {"off": 0.00, "def": 0.08, "pace": -0.04, "pass": -0.040},
+    "DEN": {"off": 0.01, "def": 0.06, "pace": -0.02, "pass": -0.010},
+    "NYJ": {"off": -0.04, "def": 0.06, "pace": -0.035, "pass": -0.025},
+    "CLE": {"off": -0.05, "def": 0.04, "pace": -0.04, "pass": -0.040},
+    "CHI": {"off": -0.02, "def": -0.01, "pace": 0.00, "pass": -0.010},
+    "IND": {"off": -0.04, "def": -0.03, "pace": 0.01, "pass": 0.005},
+    "JAX": {"off": -0.05, "def": -0.04, "pace": 0.02, "pass": 0.020},
+    "LV": {"off": -0.06, "def": -0.04, "pace": 0.00, "pass": 0.010},
+    "NO": {"off": -0.07, "def": -0.01, "pace": -0.02, "pass": 0.005},
+    "NYG": {"off": -0.08, "def": -0.05, "pace": -0.01, "pass": -0.015},
+    "TEN": {"off": -0.09, "def": -0.05, "pace": -0.03, "pass": -0.035},
+    "CAR": {"off": -0.11, "def": -0.07, "pace": -0.01, "pass": -0.020},
+    "NE": {"off": -0.09, "def": -0.03, "pace": -0.03, "pass": -0.030},
+    "WAS": {"off": 0.02, "def": -0.02, "pace": 0.02, "pass": 0.020},
+    "ARI": {"off": -0.01, "def": -0.04, "pace": 0.02, "pass": 0.015},
 }
 
 
@@ -1089,10 +1090,26 @@ def build_demo_universe(season: int = 2026) -> EngineUniverse:
             "source": STRENGTH_SOURCE_DEMO,
         }
 
+    from dataclasses import replace as _dc_replace
+
+    from src.services.nfl_season_engine.calibration import DEFAULT_YPA as _DEFAULT_YPA
+
     rosters: Dict[str, List[PlayerRole]] = {}
     for team in NFL_TEAMS:
         rows = _DEMO_SKILL.get(team) or _generic_skill(team)
-        rosters[team] = [_role_from_demo(team, r) for r in rows]
+        roles = [_role_from_demo(team, r) for r in rows]
+        # v1.16: ladder league-default QB1 YPA off team offense (collapse fix).
+        oi = float(strength_inputs[team]["offense_index"])  # type: ignore[arg-type]
+        ypa_mult = max(0.88, min(1.14, 1.0 + 0.55 * (oi - 1.0)))
+        roles = [
+            _dc_replace(r, ypa=round(_DEFAULT_YPA * ypa_mult, 3))
+            if r.position == "QB"
+            and int(r.depth_order or 99) <= 1
+            and abs(float(r.ypa) - _DEFAULT_YPA) < 0.06
+            else r
+            for r in roles
+        ]
+        rosters[team] = roles
 
     schedule = _round_robin_schedule(season, NFL_TEAMS)
     rosters = annotate_roster_book(rosters)

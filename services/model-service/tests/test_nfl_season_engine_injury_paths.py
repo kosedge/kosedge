@@ -40,6 +40,8 @@ def test_engine_version_surfaces_injury_shocks() -> None:
         or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
+        or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 

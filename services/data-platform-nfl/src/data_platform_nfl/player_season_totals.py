@@ -694,12 +694,18 @@ def generate_player_regular_season_totals(
     model_version: str = "nfl-player-v1",
     apply_qb_lock: bool = True,
     apply_skill_prior: bool = True,
-) -> tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any]]:
+    apply_team_budgets: bool = True,
+) -> tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
     """Season-total rows for every player with at least one real regular-season
     weekly projection, in `CSV_FIELDNAMES` shape.
 
-    Returns (rows, qb_lock_audit, skill_prior_audit).
+    Returns (rows, qb_lock_audit, skill_prior_audit, team_budget_audit).
     """
+    try:
+        from data_platform_nfl.team_volume_budgets import apply_team_volume_budgets
+    except ImportError:  # model-service mirror package layout
+        from .team_volume_budgets import apply_team_volume_budgets
+
     by_player = _fetch_real_weekly_rows(session, season=season, model_version=model_version)
 
     output_rows: List[Dict[str, Any]] = []
@@ -745,7 +751,13 @@ def generate_player_regular_season_totals(
                 str(r.get("player_name") or ""),
             )
         )
-    return output_rows, lock_audit, skill_audit
+
+    budget_audit: Dict[str, Any] = {"applied": False}
+    if apply_team_budgets and output_rows:
+        # Season coherence: conserved team pass/rush pools (v1.16 contract).
+        output_rows, budget_audit = apply_team_volume_budgets(output_rows)
+        budget_audit["applied"] = True
+    return output_rows, lock_audit, skill_audit, budget_audit
 
 
 def evaluate_season_skill_leader_quality(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -1018,12 +1030,15 @@ def generate_and_write_player_season_totals(
     """The single entry point called from scripts/nfl/simulate_2026_season.py.
     Writes both CSVs directly into `out_dir` and returns a small summary dict
     suitable for embedding in that script's run_summary.json."""
-    regular_rows, qb_lock_audit, skill_prior_audit = generate_player_regular_season_totals(
-        session,
-        season=season,
-        model_version=model_version,
-        apply_qb_lock=True,
-        apply_skill_prior=True,
+    regular_rows, qb_lock_audit, skill_prior_audit, budget_audit = (
+        generate_player_regular_season_totals(
+            session,
+            season=season,
+            model_version=model_version,
+            apply_qb_lock=True,
+            apply_skill_prior=True,
+            apply_team_budgets=True,
+        )
     )
     playoff_rows = generate_player_playoff_totals(
         session,
@@ -1046,6 +1061,13 @@ def generate_and_write_player_season_totals(
             "players_adjusted": skill_prior_audit.get("players_adjusted"),
             "anchors_loaded": skill_prior_audit.get("anchors_loaded"),
             "top_adjustments": skill_prior_audit.get("top_adjustments"),
+        },
+        "team_volume_budgets": {
+            "applied": budget_audit.get("applied"),
+            "method": budget_audit.get("method"),
+            "pass_pool": budget_audit.get("pass_pool"),
+            "rush_pool": budget_audit.get("rush_pool"),
+            "strength_source": budget_audit.get("strength_source"),
         },
     }
     quality_path = os.path.join(out_dir, "player_season_pass_quality.json")
@@ -1072,6 +1094,13 @@ def generate_and_write_player_season_totals(
             "method": skill_prior_audit.get("method"),
             "players_adjusted": skill_prior_audit.get("players_adjusted"),
             "anchors_loaded": skill_prior_audit.get("anchors_loaded"),
+        },
+        "team_volume_budgets": {
+            "applied": budget_audit.get("applied"),
+            "method": budget_audit.get("method"),
+            "pass_pool": budget_audit.get("pass_pool"),
+            "rush_pool": budget_audit.get("rush_pool"),
+            "strength_source": budget_audit.get("strength_source"),
         },
         "publish_ready": publish_ready,
     }

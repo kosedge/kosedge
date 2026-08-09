@@ -50,6 +50,9 @@ from src.services.nfl_season_engine.types import (
     TeamStrengthState,
 )
 
+YPA_OFFENSE_SCALE = 0.55
+YPC_OFFENSE_SCALE = 0.35
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
@@ -209,9 +212,17 @@ def produce_box_scores(
         # Thin script efficiency only — volume shifts already come from Layer 2/3
         # play-mix + SCRIPT_USAGE_MATRIX. Keep these mild and intensity-scaled
         # so we do not double-count script with opaque multipliers.
-        ypa = role.ypa * pass_m
-        ypc = role.ypc * rush_m
-        ypr = role.ypr * pass_m
+        #
+        # v1.16: couple efficiency to team offense_index so league-default
+        # QB YPA rows still form a real ladder (collapse root cause).
+        team_str = strengths.get(u.team)
+        oi = float(getattr(team_str, "offense_index", 1.0) or 1.0) if team_str else 1.0
+        ypa_team = _clamp(1.0 + YPA_OFFENSE_SCALE * (oi - 1.0), 0.88, 1.14)
+        ypc_team = _clamp(1.0 + YPC_OFFENSE_SCALE * (oi - 1.0), 0.90, 1.12)
+        process = _clamp(float(getattr(role, "process_index", 1.0) or 1.0), 0.85, 1.20)
+        ypa = role.ypa * pass_m * ypa_team * (0.92 + 0.08 * process)
+        ypc = role.ypc * rush_m * ypc_team
+        ypr = role.ypr * pass_m * ypa_team
         inten = _clamp(float(getattr(u, "script_intensity", 0.55) or 0.55), 0.0, 1.0)
         late_boost = 1.15 if getattr(u, "time_bucket", "") == "late" else 1.0
         eff_scale = 0.55 + 0.45 * inten * late_boost

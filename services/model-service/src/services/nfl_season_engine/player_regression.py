@@ -21,6 +21,7 @@ from dataclasses import dataclass, replace
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from src.services.nfl_season_engine.calibration import (
+    ATTEMPT_SHARE_OF_PASS_PLAYS,
     DEFAULT_PASS_TD_RATE,
     DEFAULT_REC_TD_RATE,
     DEFAULT_REC_TD_RATE_RB,
@@ -394,8 +395,19 @@ def team_production_caps(
     else:
         implied = float(script.away_implied_total or script.expected_away_score or 21.0)
         pass_rate = float(script.away_pass_rate)
-    plays = float(script.pace_plays or 63.5)
+    # v1.16: use side-specific pace when present so caps track team budgets.
+    if team == script.home_team:
+        plays = float(getattr(script, "home_pace_plays", 0.0) or 0.0) or float(
+            script.pace_plays or 63.5
+        )
+    else:
+        plays = float(getattr(script, "away_pace_plays", 0.0) or 0.0) or float(
+            script.pace_plays or 63.5
+        )
     oi = _clamp(float(offense_index or 1.0), 0.75, 1.30)
+    # Efficiency ladder inside the cap (not a flat DEFAULT_YPA for every club).
+    ypa = DEFAULT_YPA * _clamp(1.0 + 0.55 * (oi - 1.0), 0.88, 1.14)
+    ypc = DEFAULT_YPC * _clamp(1.0 + 0.35 * (oi - 1.0), 0.90, 1.12)
     pass_plays = plays * pass_rate
     rush_plays = plays * (1.0 - pass_rate)
     td_cap = max(
@@ -404,9 +416,22 @@ def team_production_caps(
     ) * FINITE_POOL_SLACK
     named_share = 1.0 - USAGE_OTHER_BUCKET_FLOOR
     return {
-        "pass_yards": pass_plays * DEFAULT_YPA * oi * FINITE_POOL_SLACK * named_share,
-        "rush_yards": rush_plays * DEFAULT_YPC * oi * FINITE_POOL_SLACK * named_share,
-        "rec_yards": pass_plays * DEFAULT_YPA * 0.92 * oi * FINITE_POOL_SLACK * named_share,
+        "pass_yards": (
+            pass_plays
+            * ATTEMPT_SHARE_OF_PASS_PLAYS
+            * ypa
+            * FINITE_POOL_SLACK
+            * named_share
+        ),
+        "rush_yards": rush_plays * ypc * FINITE_POOL_SLACK * named_share,
+        "rec_yards": (
+            pass_plays
+            * ATTEMPT_SHARE_OF_PASS_PLAYS
+            * ypa
+            * 0.92
+            * FINITE_POOL_SLACK
+            * named_share
+        ),
         "skill_tds": td_cap * named_share,  # rush + rec TDs (QB pass TDs separate)
         "pass_tds": td_cap * 0.62 * named_share,
         "implied_total": implied,

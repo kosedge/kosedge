@@ -18,10 +18,11 @@ from typing import Any, Dict, Mapping, Optional, Sequence, Tuple
 from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
-CALIBRATION_TAG = "nfl-season-engine-cal-v2"
-# v1.15: True PR harden — live rookie flags on depth path + season finite audit.
-# Keeps v1.13 process/finite + v1.14 Future SOS contracts; no new rating theory.
-ENGINE_VERSION = "nfl-season-engine-v1.15-true-pr-harden"
+CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
+# v1.16: Season coherence — team pass/rush budgets, attempt share, wider
+# script/YPA differentiation, league pool conservation, QB1 distribution shape.
+# Keeps v1.13–v1.15 process/finite/SOS/true-PR contracts.
+ENGINE_VERSION = "nfl-season-engine-v1.16-season-coherence"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -36,9 +37,19 @@ SCORE_NOISE_SD = 9.8
 # compression; early weeks inflate via EARLY_SEASON_MARGIN_SD_MULT.
 WIN_PROB_MARGIN_SD = 12.6
 LEAGUE_BASE_PLAYS = 63.5
-LEAGUE_BASE_PASS_RATE = 0.58
+# Official-play pass rate ~57–59%; dropbacks/attempts are lower after sacks.
+LEAGUE_BASE_PASS_RATE = 0.565
 EXPECTED_POINTS_CLAMP = (9.0, 38.0)
-PACE_PLAYS_CLAMP = (50.0, 76.0)
+PACE_PLAYS_CLAMP = (48.0, 78.0)
+# Pass plays include sacks; attempts ≈ pass_plays × this share.
+ATTEMPT_SHARE_OF_PASS_PLAYS = 0.925
+# Conserved league pools (named skill share of REG season). Recent NFL
+# starter-ish pass pool ~115–125k; rush pool ~50–60k.
+LEAGUE_PASS_YARDS_POOL = 120_000.0
+LEAGUE_RUSH_YARDS_POOL = 56_000.0
+# Volume regression: prior outliers shrink toward structural/league mean.
+VOLUME_REGRESSION = 0.40
+VOLUME_PRIOR_BLEND = 0.30
 # Concave matchup response on offense/defense ratio (1.0 = linear).
 # Raised from 0.96 (cal-v1) so favorites/dogs separate more over a season.
 MATCHUP_RESPONSE = 1.12
@@ -101,7 +112,8 @@ EFFICIENCY_CV_RUSH = 0.24
 EFFICIENCY_CV_REC = 0.23
 CATCH_RATE_NOISE = 0.055
 
-DEFAULT_YPA = 7.15
+# League YPA on attempts (recent NFL closer to ~6.9–7.0 than 7.15).
+DEFAULT_YPA = 6.95
 DEFAULT_YPC = 4.20
 DEFAULT_YPR_WR = 11.8
 DEFAULT_YPR_TE = 10.3
@@ -149,12 +161,28 @@ GAME_SANITY = {
 # qb_pass_tds floor allows process-prior / finite-pool pull + n_sims=12 noise
 # (v1.13); elite counting TD seasons still sit well above ~12.
 SEASON_SANITY = {
-    "qb_pass_yards": (2800.0, 5200.0),
+    "qb_pass_yards": (2600.0, 5200.0),
     "qb_pass_tds": (12.0, 42.0),
     "qb_ints": (5.0, 18.0),
     "rb1_rush_yards": (600.0, 1600.0),
     "wr1_rec_yards": (500.0, 1400.0),
     "wr1_receptions": (45.0, 120.0),
+}
+
+# QB1 season distribution guards (preseason healthy priors). FAIL if all 32 ≥4000.
+QB1_DISTRIBUTION_TARGETS = {
+    "ge_4000_min": 4,
+    "ge_4000_max": 14,
+    "ge_4500_max": 5,
+    "median_min": 3400.0,
+    "median_max": 3900.0,
+    "p10_max": 3400.0,
+    "p90_min": 4000.0,
+    "league_pass_pool_min": 110_000.0,
+    "league_pass_pool_max": 132_000.0,
+    # Named-skill rush can sit slightly under full-league pool (other bucket).
+    "league_rush_pool_min": 45_000.0,
+    "league_rush_pool_max": 66_000.0,
 }
 
 
@@ -472,6 +500,14 @@ def calibration_notes() -> Dict[str, str]:
             "(DB nfl_dp_rosters or packaged flags) so rookie mean-shrink + wider "
             "CV fire live; season-path finite audit dampens named skill aggregates "
             "that exceed summed per-game team pools (see player_regression.py)."
+        ),
+        "season_coherence": (
+            "v1.16: team season pass/rush budgets (strength + coaching + opp D "
+            "slate) with league pool renorm; per-team pace_plays; attempt share "
+            "of pass plays; offense-coupled YPA; volume regression on priors; "
+            "QB1 distribution guards (not 32/32 ≥4000). See season_budgets.py + "
+            "scoring_bridge.py. Fantasy preseason-sim totals use the same budget "
+            "allocator after QB starter lock."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

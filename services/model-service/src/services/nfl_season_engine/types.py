@@ -181,6 +181,9 @@ class GameScript:
     away_hurry_up: float = 0.0
     home_run_rate: float = 0.42
     away_run_rate: float = 0.42
+    # v1.16: per-team offensive play expectation (0 → fall back to pace_plays).
+    home_pace_plays: float = 0.0
+    away_pace_plays: float = 0.0
     # v1.11 early-season uncertainty (week + inspectable posture dict).
     week: int = 0
     early_season_uncertainty: Dict[str, Any] = field(default_factory=dict)

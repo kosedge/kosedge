@@ -24,9 +24,10 @@ scores. The multi-week planner (``evaluate_survivor_plan``) reuses the
 same path matrix for slate metrics + per-week recommendations.
 ``suggest_survivor_paths`` adds chalk / balanced / contrarian-save paths.
 
-v1.15 hardens true PR: live ``is_rookie`` / ``draft_round`` on the depth path
-(so rookie mean-shrink + wider CV fire) and a season-path finite production
-audit beyond per-box scale-down. v1.14 Future SOS outlook-only contract kept.
+v1.16 season coherence: team pass/rush season budgets with league pool
+conservation, per-team pace, attempt share, offense-coupled YPA, volume
+regression, and QB1 distribution guards (not 32/32 ≥4000). v1.15 true-PR
+harden + v1.14 Future SOS outlook-only contract kept.
 
 Public entry points
 -------------------
@@ -85,6 +86,13 @@ from src.services.nfl_season_engine.projected_sos import (
 from src.services.nfl_season_engine.true_pr_product import (
     serialize_true_pr_product_surface,
 )
+from src.services.nfl_season_engine.season_budgets import (
+    TeamSeasonBudget,
+    allocate_season_totals_into_team_budgets,
+    compute_team_season_budgets,
+    compute_universe_season_budgets,
+    qb1_distribution_metrics,
+)
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.survivor import (
     SurvivorEvalResult,
@@ -110,15 +118,19 @@ __all__ = [
     "GameBoxProjection",
     "InjuryPath",
     "SeasonSimResult",
+    "TeamSeasonBudget",
     "SurvivorEvalResult",
     "SurvivorPlanResult",
     "SurvivorSuggestedPathsResult",
     "TeamEfficiencyPackage",
     "TeamProjectedSos",
+    "allocate_season_totals_into_team_budgets",
     "analytic_expected_wins_from_schedule",
     "apply_process_priors",
     "audit_season_finite_production",
     "build_demo_universe",
+    "compute_team_season_budgets",
+    "compute_universe_season_budgets",
     "build_packaged_real_universe",
     "build_player_process_prior",
     "compute_league_projected_sos",
@@ -134,6 +146,7 @@ __all__ = [
     "package_to_strength_indices",
     "parse_injury_paths",
     "project_game_player_boxes",
+    "qb1_distribution_metrics",
     "resolve_season_universe",
     "serialize_true_pr_product_surface",
     "simulate_full_season",

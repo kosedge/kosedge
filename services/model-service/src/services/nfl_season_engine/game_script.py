@@ -281,9 +281,20 @@ def build_game_script(
     home_wp = win_prob_from_expected_scores(home_exp, away_exp, week=week)
     expected_total = home_exp + away_exp
 
-    # pace_plays = per-team offensive snap/play expectation for this game.
-    pace = LEAGUE_BASE_PLAYS * 0.5 * (home.pace_factor + away.pace_factor)
-    pace = _clamp(pace, *PACE_PLAYS_CLAMP)
+    # v1.16: per-team offensive play expectation (own pace + offense), plus a
+    # shared game-pace average for diagnostics. Shared pace alone collapsed
+    # every QB1 into the same attempt band.
+    def _team_pace(state: TeamStrengthState) -> float:
+        return _clamp(
+            LEAGUE_BASE_PLAYS
+            * float(state.pace_factor)
+            * (1.0 + 0.14 * (float(state.offense_index) - 1.0)),
+            *PACE_PLAYS_CLAMP,
+        )
+
+    home_pace = _team_pace(home)
+    away_pace = _team_pace(away)
+    pace = _clamp(0.5 * (home_pace + away_pace), *PACE_PLAYS_CLAMP)
 
     home_coach = profile_for_team(game.home_team)
     away_coach = profile_for_team(game.away_team)
@@ -352,9 +363,12 @@ def build_game_script(
         coaching=away_coach,
     )
 
-    # Mild hurry-up pace bump (shared clock): trailing late teams nudge total plays.
-    hurry_pace = 1.0 + 0.04 * max(home_mix["hurry_up"], away_mix["hurry_up"])
-    pace = _clamp(pace * hurry_pace, *PACE_PLAYS_CLAMP)
+    # Mild hurry-up pace bump: trailing late teams nudge their own plays more.
+    home_hurry = 1.0 + 0.05 * float(home_mix["hurry_up"])
+    away_hurry = 1.0 + 0.05 * float(away_mix["hurry_up"])
+    home_pace = _clamp(home_pace * home_hurry, *PACE_PLAYS_CLAMP)
+    away_pace = _clamp(away_pace * away_hurry, *PACE_PLAYS_CLAMP)
+    pace = _clamp(0.5 * (home_pace + away_pace), *PACE_PLAYS_CLAMP)
 
     script = GameScript(
         game_id=game.game_id,
@@ -371,7 +385,7 @@ def build_game_script(
         away_script=coarse_script(away_detail),
         home_implied_total=round(home_score if realized or force_home_score is not None else home_exp, 2),
         away_implied_total=round(away_score if realized or force_away_score is not None else away_exp, 2),
-        source="team_strength_analytic_cal_v2",
+        source="team_strength_analytic_cal_v3_coherence",
         minutes_remaining=round(minutes, 2),
         time_bucket=bucket,
         home_script_detail=home_detail,
@@ -384,6 +398,8 @@ def build_game_script(
         away_hurry_up=away_mix["hurry_up"],
         home_run_rate=home_mix["run_rate"],
         away_run_rate=away_mix["run_rate"],
+        home_pace_plays=round(home_pace, 2),
+        away_pace_plays=round(away_pace, 2),
         week=week,
         early_season_uncertainty=early_season_uncertainty(week),
     )

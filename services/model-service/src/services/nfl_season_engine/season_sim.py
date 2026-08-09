@@ -49,6 +49,18 @@ from src.services.nfl_season_engine.projected_sos import (
     compute_league_projected_sos,
     projected_sos_summary,
 )
+from src.services.nfl_season_engine.scoring_bridge import (
+    scoring_bridge_documentation,
+    team_season_points_from_player_totals,
+    wins_zero_sum_ok,
+)
+from src.services.nfl_season_engine.season_budgets import (
+    budget_pool_diagnostics,
+    compute_universe_season_budgets,
+    enforce_team_season_budgets_on_path,
+    league_yard_totals,
+    qb1_distribution_metrics,
+)
 from src.services.nfl_season_engine.team_strength import (
     copy_strength_book,
     evolve_after_game,
@@ -239,12 +251,16 @@ def simulate_one_season_path(
     _, season_finite_diag = audit_season_finite_production(
         player_totals, season_caps, damp=True
     )
+    # v1.16: conserved team season budgets (league pool + shape).
+    season_budgets = compute_universe_season_budgets(universe)
+    budget_diag = enforce_team_season_budgets_on_path(player_totals, season_budgets)
 
     result: Dict[str, Any] = {
         "wins": wins,
         "players": player_totals,
         "games": len(schedule),
         "season_finite": season_finite_diag,
+        "season_budgets": budget_diag,
         "season_caps": {
             t: {k: round(float(v), 2) for k, v in caps.items()}
             for t, caps in season_caps.items()
@@ -254,6 +270,49 @@ def simulate_one_season_path(
         result["role_transitions"] = role_transitions
         result["depth_structures"] = {t: s.to_dict() for t, s in structures.items()}
     return result
+
+
+def _season_coherence_diagnostics(
+    *,
+    universe: EngineUniverse,
+    player_rows: Sequence[Dict[str, Any]],
+    mean_wins_sum: float,
+    budget_scaled_paths: int,
+    n_sims: int,
+) -> Dict[str, Any]:
+    """Inspectable QB1 / league-pool / W/L / scoring-bridge diagnostics."""
+    budgets = compute_universe_season_budgets(universe)
+    qb1 = qb1_distribution_metrics(player_rows, pass_key="pass_yards_mean")
+    pools = league_yard_totals(player_rows, pass_key="pass_yards_mean", rush_key="rush_yards_mean")
+    # Sample scoring bridge for one team (diagnostics only; uses season means).
+    sample_team = sorted(universe.teams)[0] if universe.teams else ""
+    fake = {
+        r["player_key"]: {
+            "team": r.get("team"),
+            "pass_yards": float(r.get("pass_yards_mean") or 0.0),
+            "rush_yards": float(r.get("rush_yards_mean") or 0.0),
+            "pass_tds": float(r.get("pass_tds_mean") or 0.0),
+            "rush_tds": float(r.get("rush_tds_mean") or 0.0),
+            "rec_tds": float(r.get("rec_tds_mean") or 0.0),
+            "ints": float(r.get("ints_mean") or 0.0),
+        }
+        for r in player_rows
+    }
+    sample_points = (
+        team_season_points_from_player_totals(fake, sample_team) if sample_team else {}
+    )
+    return {
+        "qb1_pass_yards": qb1,
+        "league_yards": pools,
+        "team_budgets": budget_pool_diagnostics(budgets),
+        "wins_zero_sum_ok": wins_zero_sum_ok(mean_wins_sum),
+        "mean_wins_sum": mean_wins_sum,
+        "budget_scaled_paths": budget_scaled_paths,
+        "n_sims": n_sims,
+        "scoring_bridge": scoring_bridge_documentation(),
+        "sample_team_points": sample_points,
+        "all_qb1_ge_4000": bool(qb1.get("n_teams") == 32 and qb1.get("ge_4000") == 32),
+    }
 
 
 def simulate_full_season(
@@ -286,6 +345,7 @@ def simulate_full_season(
     season_finite_path0: Dict[str, Any] = {}
     season_finite_overflow_paths = 0
     season_finite_dampened_fields = 0
+    season_budget_scaled_paths = 0
     for i in range(n_sims):
         path = simulate_one_season_path(
             universe,
@@ -298,6 +358,9 @@ def simulate_full_season(
         if not sf.get("ok", True):
             season_finite_overflow_paths += 1
         season_finite_dampened_fields += int(sf.get("dampened_fields") or 0)
+        sb = path.get("season_budgets") or {}
+        if int(sb.get("scaled_fields") or 0) > 0:
+            season_budget_scaled_paths += 1
         if include_diagnostics and i == 0:
             sample_depth_structures = path.get("depth_structures") or {}
             # Cap transition log for payload size.
@@ -458,6 +521,14 @@ def simulate_full_season(
                 "n_sims": n_sims,
                 "ok": season_finite_overflow_paths == 0,
             },
+            # v1.16 season coherence — budgets, QB1 shape, W/L zero-sum, scoring bridge.
+            "season_coherence": _season_coherence_diagnostics(
+                universe=universe,
+                player_rows=player_rows,
+                mean_wins_sum=round(sum(v["mean"] for v in team_wins.values()), 3),
+                budget_scaled_paths=season_budget_scaled_paths,
+                n_sims=n_sims,
+            ),
         }
 
     return SeasonSimResult(
