@@ -257,7 +257,12 @@ def project_game_player_boxes(
         game_id=game_id,
     )
     rng = random.Random(seed)
-    paths = list(injury_paths or [])
+    if injury_paths is None:
+        from src.services.nfl_season_engine.injury_paths import parse_injury_paths
+
+        paths = parse_injury_paths(getattr(universe, "packaged_injury_paths", None) or [])
+    else:
+        paths = list(injury_paths)
     # Depth-chart base splits for the two clubs, one week-volatility draw
     # (seeded), then injury shocks — mirrors season-path Layer-3 ordering.
     focus_book = {

@@ -4,8 +4,8 @@
   "source": "packaged_nflverse_depth_2026",
   "upstream": "nflverse/nflverse-data depth_charts release",
   "upstream_url": "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2026.parquet",
-  "as_of": "2026-08-03",
-  "as_of_timestamp": "2026-08-03T10:36:38Z",
+  "as_of": "2026-08-09",
+  "as_of_timestamp": "2026-08-09T19:00:00Z",
   "upstream_last_updated": "2026-08-03 06:36:43 EDT",
   "positions": [
     "QB",
@@ -21,7 +21,11 @@
     "Preseason/camp depth \u2014 roles can shift; rookies and free-agent landings may be incomplete or volatile.",
     "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
     "DB weekly/official must not override these identities when this pack is present.",
-    "QB SoT 20260809: Kyler\u2192MIN1, Brissett\u2192ARI1, McCarthy\u2192MIN2, Penix\u2192ATL1, Tua\u2192MIA1, Willis\u2192ATL2"
+    "QB SoT 20260809: Kyler\u2192MIN1, Brissett\u2192ARI1, McCarthy\u2192MIN2, Penix\u2192ATL1, Tua\u2192MIA1, Willis\u2192ATL2",
+    "Daily roster/injury intel 20260809: WAS camp flashpoint applied (Tunsil/Allegretti/Bates/Diggs).",
+    "Optional row fields: injury_status, injury_window, injury_note, injury_sources.",
+    "ol_roles tracks OL starter/backup/out for SoT + KEI; engine usage allocation remains skill-only.",
+    "injury_paths[] applied by engine when non-empty (week windows required \u2014 no invented IR lengths)."
   ],
   "rows": [
     {
@@ -3370,7 +3374,10 @@
       "player_id": "00-0039910",
       "player_name": "Jayden Daniels",
       "depth_slot": "starter",
-      "role_confidence": 0.85
+      "role_confidence": 0.85,
+      "injury_status": "active",
+      "injury_window": "",
+      "injury_note": "Healthy 1st-team reps in camp (verified 2026-08-09)."
     },
     {
       "team": "WAS",
@@ -3424,25 +3431,36 @@
       "player_id": "00-0037809",
       "player_name": "Chig Okonkwo",
       "depth_slot": "starter",
-      "role_confidence": 0.85
+      "role_confidence": 0.85,
+      "injury_status": "active",
+      "injury_note": "TE1 receiving path while Bates OUT/limited."
     },
     {
       "team": "WAS",
       "position": "TE",
       "depth_order": 2,
-      "player_id": "00-0036628",
-      "player_name": "John Bates",
+      "player_id": "00-0039912",
+      "player_name": "Ben Sinnott",
       "depth_slot": "backup",
-      "role_confidence": 0.65
+      "role_confidence": 0.65,
+      "injury_status": "active",
+      "injury_note": "Elevated to TE2 while Bates sidelined (hamstring)."
     },
     {
       "team": "WAS",
       "position": "TE",
       "depth_order": 3,
-      "player_id": "00-0039912",
-      "player_name": "Ben Sinnott",
+      "player_id": "00-0036628",
+      "player_name": "John Bates",
       "depth_slot": "rotation",
-      "role_confidence": 0.5
+      "role_confidence": 0.5,
+      "injury_status": "out",
+      "injury_window": "unknown / monitor",
+      "injury_note": "Hamstring; Quinn (~Aug 1/8): out a couple of weeks. Not inventing Week-1 IR \u2014 monitor return. Depth demoted to TE3; Okonkwo/Sinnott path.",
+      "injury_sources": [
+        "https://www.commanders.com/news/commanders-training-camp-notebook-treylon-burks-back-together-saturday",
+        "https://commanderswire.usatoday.com/story/sports/nfl/commanders/2026/08/08/commanders-dan-quinn-injury-update-john-bates-nick-allegretti/91226994007/"
+      ]
     },
     {
       "team": "WAS",
@@ -3451,26 +3469,187 @@
       "player_id": "00-0035659",
       "player_name": "Terry McLaurin",
       "depth_slot": "starter",
-      "role_confidence": 0.85
+      "role_confidence": 0.85,
+      "injury_status": "active"
     },
     {
       "team": "WAS",
       "position": "WR",
       "depth_order": 2,
-      "player_id": "00-0041040",
-      "player_name": "Antonio Williams",
+      "player_id": "00-0031381",
+      "player_name": "Stefon Diggs",
       "depth_slot": "backup",
-      "role_confidence": 0.65
+      "role_confidence": 0.65,
+      "injury_status": "active",
+      "injury_window": "",
+      "injury_note": "Signed 2026-08-07; practiced; projected WR2 with McLaurin.",
+      "injury_sources": [
+        "https://www.commanders.com/news/commanders-sign-wr-stefon-diggs"
+      ]
     },
     {
       "team": "WAS",
       "position": "WR",
       "depth_order": 3,
-      "player_id": "00-0039355",
-      "player_name": "Luke McCaffrey",
+      "player_id": "00-0041040",
+      "player_name": "Antonio Williams",
       "depth_slot": "rotation",
-      "role_confidence": 0.5
+      "role_confidence": 0.5,
+      "injury_status": "active",
+      "injury_note": "Camp WR3 competition with McCaffrey/Lane; Diggs insertion drops McCaffrey from pack top-3."
     }
   ],
-  "full_skill_starter_teams": 32
+  "full_skill_starter_teams": 32,
+  "daily_intel_as_of": "2026-08-09",
+  "ol_roles": [
+    {
+      "team": "WAS",
+      "position": "LT",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Brandon Coleman",
+      "player_id": "WAS-LT-1",
+      "injury_status": "active",
+      "role_note": "Camp plan: Coleman slides back to LT after Tunsil torn triceps (Nicki Jhabvala / SI 2026-08-09). Opens LG competition.",
+      "sources": [
+        "https://www.si.com/nfl/commanders/onsi/brandon-coleman-left-tackle-laremy-tunsil-injury-commanders",
+        "https://commanderswire.usatoday.com/story/sports/nfl/commanders/2026/08/09/commanders-laremy-tunsil-injury-replacement/91232445007/"
+      ]
+    },
+    {
+      "team": "WAS",
+      "position": "LT",
+      "depth_order": 2,
+      "depth_slot": "backup",
+      "player_name": "Andrew Wylie",
+      "player_id": "WAS-LT-2",
+      "injury_status": "active",
+      "role_note": "Immediate practice fill behind Tunsil; swing OL. Coleman is preferred LT starter path.",
+      "sources": [
+        "https://www.si.com/nfl/commanders/onsi/commanders-camp-laremy-tunsil-injury-andrew-wylie"
+      ]
+    },
+    {
+      "team": "WAS",
+      "position": "LT",
+      "depth_order": 99,
+      "depth_slot": "out",
+      "player_name": "Laremy Tunsil",
+      "player_id": "WAS-LT-OUT",
+      "injury_status": "out",
+      "injury_window": "majority of 2026 season (surgery; unknown exact return)",
+      "injury_note": "Torn triceps in 2026-08-08 practice (1-on-1 vs Oweh). NFL Network/AP: surgery, miss most of season. Starter OL hit \u2014 not a skill-usage row.",
+      "sources": [
+        "https://www.sportsnet.ca/nfl/article/report-commanders-tunsil-expected-to-miss-most-of-2026-with-torn-triceps/",
+        "https://www.fantasypros.com/nfl/news/601310/laremy-tunsil-torn-triceps-to-undergo-surgery-miss-majority-season.php"
+      ]
+    },
+    {
+      "team": "WAS",
+      "position": "LG",
+      "depth_order": 1,
+      "depth_slot": "starter_competition",
+      "player_name": "Chris Paul",
+      "player_id": "WAS-LG-1",
+      "injury_status": "active",
+      "role_note": "LG competition opens with Coleman moving to LT. Not locked starter \u2014 camp battle.",
+      "sources": [
+        "https://www.si.com/nfl/commanders/onsi/brandon-coleman-left-tackle-laremy-tunsil-injury-commanders"
+      ]
+    },
+    {
+      "team": "WAS",
+      "position": "C",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Nick Allegretti",
+      "player_id": "WAS-C-1",
+      "injury_status": "out",
+      "injury_window": "unknown / monitor (Quinn: ~another week as of 2026-08-08/09)",
+      "injury_note": "Calf strain since camp Day 1; Good-Jones / Gulbin getting center reps. Interior OL instability. Week-1 availability not invented.",
+      "sources": [
+        "https://commanderswire.usatoday.com/story/sports/nfl/commanders/2026/08/09/commanders-offensive-line-dealing-two-injuries/91230469007/",
+        "https://commanderswire.usatoday.com/story/sports/nfl/commanders/2026/08/08/commanders-dan-quinn-injury-update-john-bates-nick-allegretti/91226994007/"
+      ]
+    },
+    {
+      "team": "WAS",
+      "position": "C",
+      "depth_order": 2,
+      "depth_slot": "backup_filling",
+      "player_name": "Julian Good-Jones",
+      "player_id": "WAS-C-2",
+      "injury_status": "active",
+      "role_note": "Filling center snaps while Allegretti out."
+    },
+    {
+      "team": "WAS",
+      "position": "RT",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Josh Conerly Jr.",
+      "player_id": "WAS-RT-1",
+      "injury_status": "active",
+      "role_note": "Remains RT; not sliding to LT in preferred plan."
+    }
+  ],
+  "camp_intel": {
+    "as_of": "2026-08-09",
+    "flashpoints": [
+      {
+        "team": "WAS",
+        "player_name": "Laremy Tunsil",
+        "topic": "LT torn triceps",
+        "severity": "season-altering",
+        "summary": "OUT majority of season; Coleman\u2192LT; LG opens."
+      },
+      {
+        "team": "WAS",
+        "player_name": "Nick Allegretti",
+        "topic": "C calf",
+        "severity": "camp / monitor",
+        "summary": "Missing extended camp; interior OL instability."
+      },
+      {
+        "team": "WAS",
+        "player_name": "John Bates",
+        "topic": "TE hamstring",
+        "severity": "camp / monitor",
+        "summary": "OUT multiple weeks (camp); Okonkwo/Sinnott path in skill SoT."
+      },
+      {
+        "team": "WAS",
+        "player_name": "Trey Amos",
+        "topic": "CB after PUP",
+        "severity": "monitor",
+        "summary": "Activated off PUP 2026-08-07 (official). No confirmed new multi-week OUT as of 2026-08-09 verify \u2014 monitor secondary. Wise remains on PUP (quad); Armstrong activated off PUP.",
+        "sources": [
+          "https://www.commanders.com/news/trey-amos-dorance-armstrong-tress-way-activated",
+          "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/commanders-activate-tress-way-dorance-armstrong-trey-amos"
+        ]
+      },
+      {
+        "team": "WAS",
+        "player_name": "Stefon Diggs",
+        "topic": "WR signing",
+        "severity": "positive",
+        "summary": "On roster + practiced; SoT WR2."
+      },
+      {
+        "team": "WAS",
+        "player_name": "Jayden Daniels",
+        "topic": "QB health",
+        "severity": "positive",
+        "summary": "Healthy 1st team."
+      }
+    ],
+    "ol_efficiency_hooks": {
+      "status": "documented_not_magical",
+      "skill_usage_path": "Script\u2192usage\u2192production reads skill depth SoT only (QB/RB/WR/TE). OL roles tracked in ol_roles; they do not invent pass/rush pool hardcodes.",
+      "team_strength_hook": "TeamStrengthState.injury_delta_offense / drivers.stubs.injury_at_time_depth (currently stub_not_applied in packaged backbone).",
+      "honest_gap": "No calibrated OL\u2192EPA magnitude applied this pass. Tunsil + Allegretti stack is a KEI attention / board risk flag until injury_at_time_depth is wired from ol_roles.",
+      "expected_direction_if_wired": "Weaker blindside + center instability \u2192 lower pass EPA / protection \u2192 modest offense_index and pass-rate bias pressure; rush EPA mixed. Do not invent numeric delta here."
+    }
+  },
+  "injury_paths": []
 }

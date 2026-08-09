@@ -255,6 +255,10 @@ class EngineUniverse:
     strengths: Dict[str, TeamStrengthState]
     rosters: Dict[str, List[PlayerRole]]
     notes: Dict[str, str] = field(default_factory=dict)
+    # Packaged depth SoT injury_paths (dicts). Applied when callers pass
+    # injury_paths=None — empty list means none. Explicit [] from callers
+    # still disables paths.
+    packaged_injury_paths: List[Dict[str, Any]] = field(default_factory=list)
 
     @property
     def teams(self) -> List[str]:
