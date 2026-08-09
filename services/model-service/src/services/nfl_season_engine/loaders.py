@@ -1715,6 +1715,22 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
                 rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
         rosters = annotate_roster_book(rosters)
         rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
+        # v1.16: ladder league-default QB1 YPA off team offense before process priors.
+        from dataclasses import replace as _dc_replace
+        from src.services.nfl_season_engine.calibration import DEFAULT_YPA as _DEFAULT_YPA
+
+        for team in NFL_TEAMS:
+            oi = float(strength_inputs[team]["offense_index"])  # type: ignore[arg-type]
+            ypa_mult = max(0.88, min(1.14, 1.0 + 0.55 * (oi - 1.0)))
+            roles = list(rosters.get(team) or [])
+            rosters[team] = [
+                _dc_replace(r, ypa=round(_DEFAULT_YPA * ypa_mult, 3))
+                if r.position == "QB"
+                and int(r.depth_order or 99) <= 1
+                and abs(float(r.ypa) - _DEFAULT_YPA) < 0.06
+                else r
+                for r in roles
+            ]
         rosters = apply_process_priors_to_roster_book(rosters)
         roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
         roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
