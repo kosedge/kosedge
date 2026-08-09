@@ -462,10 +462,31 @@ def main() -> None:
             "PRESEASON W1 survivor research slate (no already_used). "
             f"Rankings derived from the full {args.n_team_sims}-path team W/L matrix."
         )
+        from src.services.nfl_season_engine.data_integrity import lineage_from_universe_meta
+
+        survivor_payload["lineage"] = lineage_from_universe_meta(
+            meta,
+            engine_version=ENGINE_VERSION,
+            n_team_sims=int(args.n_team_sims),
+            n_player_sims=0 if args.skip_player else int(args.n_player_sims),
+            seed=int(args.seed),
+            injury_paths_count=len(universe.packaged_injury_paths or []),
+        )
+        survivor_payload["snapshot_id"] = survivor_payload["lineage"].get("snapshot_id")
         _write_json(out_dir / "survivor_week1_evaluate.json", survivor_payload)
         print(f"Survivor derive done in {survivor_elapsed:.1f}s", flush=True)
 
     generated = datetime.now(timezone.utc).isoformat()
+    from src.services.nfl_season_engine.data_integrity import lineage_from_universe_meta
+
+    lineage = lineage_from_universe_meta(
+        meta,
+        engine_version=ENGINE_VERSION,
+        n_team_sims=int(args.n_team_sims),
+        n_player_sims=0 if args.skip_player else int(args.n_player_sims),
+        seed=int(args.seed),
+        injury_paths_count=len(universe.packaged_injury_paths or []),
+    )
     summary = {
         "label": "launch_current_nfl_season_engine_research",
         "preseason": True,
@@ -481,6 +502,8 @@ def main() -> None:
         "as_of_week": args.as_of_week,
         "universe_mode": mode,
         "schedule_meta": meta,
+        "lineage": lineage,
+        "snapshot_id": lineage.get("snapshot_id") or meta.get("snapshot_id") or "",
         "universe_notes": {
             k: universe.notes.get(k)
             for k in (
@@ -494,6 +517,8 @@ def main() -> None:
                 "depth_player_rows",
                 "calibration",
                 "mode",
+                "snapshot_id",
+                "daily_intel_as_of",
             )
             if k in universe.notes
         },
@@ -539,6 +564,7 @@ def main() -> None:
         + (f" at n={survivor_payload.get('n_sims')}" if survivor_payload else " (skipped)"),
         f"- **Universe:** {mode} / schedule={meta.get('schedule_source')} / "
         f"roster={meta.get('roster_source') or meta.get('depth_source')}",
+        f"- **snapshot_id:** `{lineage.get('snapshot_id') or meta.get('snapshot_id') or '?'}`",
         f"- **Output dir:** `{out_dir}`",
         f"- **Timing:** team {team_elapsed/60:.1f}m · player {player_elapsed/60:.1f}m · "
         f"survivor {survivor_elapsed/60:.1f}m",

@@ -115,20 +115,25 @@ export function loadNfl2026DepthRows(): DepthRow[] {
     );
     if (!existsSync(depthPath)) return [];
     const parsed = JSON.parse(readFileSync(depthPath, "utf8")) as {
+      snapshot_id?: string;
       rows?: Array<{
         team: string;
         position: string;
         depth_order: number;
         player_name: string;
+        player_id?: string;
         role_confidence: number;
       }>;
     };
+    const snapshotId = String(parsed.snapshot_id ?? "");
     return (parsed.rows ?? []).map((row) => ({
       team: normalizeTeam(row.team),
       position: String(row.position ?? "").toUpperCase(),
       depthOrder: Number(row.depth_order) || 99,
       playerName: String(row.player_name ?? ""),
       roleConfidence: Number(row.role_confidence) || 0.5,
+      playerId: row.player_id ? String(row.player_id) : undefined,
+      snapshotId: snapshotId || undefined,
     }));
   } catch {
     return [];

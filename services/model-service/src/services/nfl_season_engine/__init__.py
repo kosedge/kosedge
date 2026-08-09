@@ -58,6 +58,11 @@ from src.services.nfl_season_engine.efficiency_backbone import (
     TeamEfficiencyPackage,
     package_to_strength_indices,
 )
+from src.services.nfl_season_engine.data_integrity import (
+    assert_depth_sot_integrity,
+    build_run_lineage,
+    validate_packaged_depth_file,
+)
 from src.services.nfl_season_engine.loaders import (
     build_demo_universe,
     build_packaged_real_universe,
@@ -125,8 +130,10 @@ __all__ = [
     "allocate_season_totals_into_team_budgets",
     "analytic_expected_wins_from_schedule",
     "apply_process_priors",
+    "assert_depth_sot_integrity",
     "audit_season_finite_production",
     "build_demo_universe",
+    "build_run_lineage",
     "compute_team_season_budgets",
     "compute_universe_season_budgets",
     "build_packaged_real_universe",
@@ -150,5 +157,6 @@ __all__ = [
     "simulate_full_season",
     "suggest_survivor_paths",
     "universe_schedule_meta",
+    "validate_packaged_depth_file",
     "week_win_rate_for_team",
 ]

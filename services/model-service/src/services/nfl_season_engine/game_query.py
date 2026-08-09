@@ -446,6 +446,21 @@ def project_game_player_boxes(
         notes["injury_path_count"] = str(len(paths))
         notes["injury_active_adjustments"] = str(len(adjustments))
 
+    from src.services.nfl_season_engine.data_integrity import lineage_from_universe_meta
+    from src.services.nfl_season_engine.loaders import universe_schedule_meta
+
+    lineage = lineage_from_universe_meta(
+        universe_schedule_meta(universe),
+        engine_version=engine_version,
+        n_player_sims=n_replicates,
+        seed=seed,
+        injury_paths_count=len(paths) if paths else 0,
+        n_team_sims=None,
+    )
+    lineage["run_config"]["n_replicates"] = n_replicates
+    notes["lineage"] = lineage
+    notes["snapshot_id"] = lineage.get("snapshot_id") or ""
+
     diagnostics: Dict[str, Any] = {}
     if include_diagnostics:
         from src.services.nfl_season_engine.calibration import early_season_uncertainty
@@ -455,6 +470,7 @@ def project_game_player_boxes(
             game.away_team: week_rosters.get(game.away_team, []),
         }
         diagnostics = {
+            "lineage": lineage,
             "early_season_uncertainty": early_season_uncertainty(game.week),
             "usage_shares_home": usage_share_diagnostics(
                 home_roles, script="neutral", pass_rate=0.58
