@@ -1,0 +1,90 @@
+{
+  "engine_version": "nfl-season-engine-v1.21-team-variance-lift",
+  "generated_at_utc": "2026-08-09T13:33:43.063588+00:00",
+  "n_team_sims": 50000,
+  "n_player_sims": 1000,
+  "step": 1,
+  "method": "offense_variance_lift_v1 + offense_pf_variance_lift_v1",
+  "base_bundle": "nfl-preseason-sim-2026-20260809T120227Z",
+  "offense_audit": {
+    "applied": true,
+    "method": "offense_variance_lift_v1",
+    "rush_pool_before": 60000.0,
+    "rush_pool_after": 64000.0,
+    "rush_max": 2542.3,
+    "rush_min": 1291.3,
+    "rush_range": 1251.0,
+    "pass_pool": 125998.1,
+    "locked_scheme_pass": {
+      "ARI": 4350.4,
+      "BAL": 3578.6,
+      "SEA": 4258.5
+    },
+    "top_rush": [
+      [
+        "LA",
+        2542.3
+      ],
+      [
+        "DAL",
+        2542.3
+      ],
+      [
+        "SEA",
+        2542.3
+      ],
+      [
+        "SF",
+        2542.3
+      ],
+      [
+        "CHI",
+        2542.3
+      ]
+    ],
+    "supports_rb_1450_at_60pct": true,
+    "supports_wr_1500_at_38pct": true
+  },
+  "defense_audit": {
+    "league_pf": 11859.2,
+    "league_pa": 11859.2,
+    "wins_sum": 272.0,
+    "offense_pf_variance_lift": {
+      "applied": true,
+      "method": "offense_pf_variance_lift_v1",
+      "pf_range": 186.29,
+      "pa_range": 97.44
+    }
+  },
+  "gates": {
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "top_rush_supports_1450": true,
+    "top_rec_supports_1500": true,
+    "pass_pool_locked": true,
+    "ari_bal_sea_pass_untouched": true,
+    "sacks_1150": true,
+    "ints_350": true,
+    "offense_smoke": true,
+    "defense_smoke": true
+  },
+  "before": {
+    "wins_min": 5.4448,
+    "wins_max": 10.8843,
+    "wins_range": 5.4395,
+    "wins_sum": 272.0001,
+    "rush_pool": 60000.0,
+    "pf_range": 110.66
+  },
+  "after": {
+    "wins_min": 4.1199,
+    "wins_max": 11.6953,
+    "wins_range": 7.5754,
+    "wins_sum": 272.0,
+    "rush_pool": 64000.0,
+    "pf_range": 186.29,
+    "pa_range": 97.44
+  },
+  "note": "Step 1 only \u2014 snapshot NOT locked; Step 2 (alpha usage) NOT started"
+}

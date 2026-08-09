@@ -1,11 +1,12 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T120227Z",
-  "engine_version": "nfl-season-engine-v1.20-defense-variance-lift",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T133342Z",
+  "engine_version": "nfl-season-engine-v1.21-team-variance-lift",
   "n_team_sims": 50000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T12:02:27.462080+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.20-defense-variance-lift-Nteam50000-Nplayer1000-20260809T120227Z",
+  "generated_at_utc": "2026-08-09T13:33:43.063588+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.21-team-variance-lift-Nteam50000-Nplayer1000-20260809T133342Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.20-defense-variance-lift \u00b7 N_team=50000 \u00b7 20260809T120227Z",
-  "note": "Defensive variance lift (PA/sacks/INTs/yards); league totals conserved"
+  "identity": "nfl-season-engine-v1.21-team-variance-lift \u00b7 N_team=50000 \u00b7 20260809T133342Z",
+  "note": "Step 1 team offensive variance lift; pass pool locked; snapshot NOT locked",
+  "locked_snapshot": false
 }

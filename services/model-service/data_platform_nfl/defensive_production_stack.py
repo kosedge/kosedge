@@ -77,6 +77,15 @@ INT_LEAGUE_TOTAL = 350.3
 # Yards: 0.6× PA stretch intensity, driven by PA residual (same direction).
 YARDS_STRETCH_INTENSITY = PA_STRETCH_INTENSITY * 0.6  # 0.51
 
+# Step-1 offensive variance → PF residual stretch + light PA re-stretch.
+PF_STRETCH_CENTER = TARGET_TEAM_PF
+PF_STRETCH_INTENSITY = 0.70
+PF_STRETCH_DENOM = 30.0
+PF_STRETCH_FLOOR = 280.0
+PF_STRETCH_CEILING = 480.0
+# Lower intensity than the original defensive variance lift (0.85).
+PA_RESTRETCH_INTENSITY = 0.35
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, float(value)))
@@ -429,6 +438,46 @@ def apply_defensive_variance_lift(
     }
 
 
+def apply_offensive_pf_variance_lift(
+    points_for: Mapping[str, float],
+    points_against: Mapping[str, float],
+    *,
+    pf_intensity: float = PF_STRETCH_INTENSITY,
+    pa_restretch_intensity: float = PA_RESTRETCH_INTENSITY,
+    target_league_pf: float = TARGET_LEAGUE_PF,
+) -> Dict[str, Dict[str, float]]:
+    """Widen PF after offensive volume lift; light PA re-stretch; PF=PA conserved."""
+    pf = stretch_centered(
+        {t: float(v) for t, v in points_for.items()},
+        center=PF_STRETCH_CENTER,
+        intensity=float(pf_intensity),
+        denom=PF_STRETCH_DENOM,
+        soft_floor=PF_STRETCH_FLOOR,
+        soft_ceiling=PF_STRETCH_CEILING,
+        target_sum=float(target_league_pf),
+    )
+    pa_target = float(target_league_pf)
+    pa = stretch_centered(
+        {t: float(v) for t, v in points_against.items()},
+        center=PA_STRETCH_CENTER,
+        intensity=float(pa_restretch_intensity),
+        denom=PA_STRETCH_DENOM,
+        soft_floor=PA_STRETCH_FLOOR,
+        soft_ceiling=PA_STRETCH_CEILING,
+        target_sum=pa_target,
+    )
+    # Exact PF = PA conservation (microscopic).
+    pf_sum = sum(pf.values()) or 1.0
+    pa_sum = sum(pa.values()) or 1.0
+    mid = 0.5 * (pf_sum + pa_sum)
+    # Prefer exact TARGET_LEAGUE_PF when close.
+    if abs(mid - float(target_league_pf)) < 2.0:
+        mid = float(target_league_pf)
+    pf = {t: v * (mid / pf_sum) for t, v in pf.items()}
+    pa = {t: v * (mid / pa_sum) for t, v in pa.items()}
+    return {"points_for": pf, "points_against": pa}
+
+
 def apply_defensive_production_stack(
     rows: Sequence[Mapping[str, Any]],
     *,
@@ -436,6 +485,10 @@ def apply_defensive_production_stack(
     defense_index: Mapping[str, float],
     offense_index: Optional[Mapping[str, float]] = None,
     variance_lift: bool = True,
+    offense_pf_variance_lift: bool = False,
+    prior_points_against: Optional[Mapping[str, float]] = None,
+    prior_sacks: Optional[Mapping[str, float]] = None,
+    prior_ints_forced: Optional[Mapping[str, float]] = None,
 ) -> Tuple[Dict[str, TeamDefenseBudget], Dict[str, Any]]:
     """Build team PF/PA/W/L + defensive counting stats from locked offense."""
     offense = aggregate_team_offense(rows)
@@ -460,8 +513,18 @@ def apply_defensive_production_stack(
     )
     sacks = build_sacks(def_idx)
 
+    # Prefer locked defensive board when republishing after offense lift.
+    if prior_points_against:
+        pa = {t: float(prior_points_against.get(t, pa.get(t, TARGET_TEAM_PF))) for t in teams}
+    if prior_sacks:
+        sacks = {t: float(prior_sacks.get(t, sacks.get(t, 0.0))) for t in teams}
+    if prior_ints_forced:
+        ints_forced = {
+            t: float(prior_ints_forced.get(t, ints_forced.get(t, 0.0))) for t in teams
+        }
+
     lift_meta: Dict[str, Any] = {"applied": False}
-    if variance_lift:
+    if variance_lift and not prior_points_against:
         lifted = apply_defensive_variance_lift(
             points_against=pa,
             sacks=sacks,
@@ -482,14 +545,47 @@ def apply_defensive_production_stack(
             "int_range": round(max(ints_forced.values()) - min(ints_forced.values()), 2),
         }
 
-    # Pythagorean wins from (possibly lifted) PA.
+    offense_pf_meta: Dict[str, Any] = {"applied": False}
+    if offense_pf_variance_lift:
+        ofl = apply_offensive_pf_variance_lift(pf, pa)
+        pf = ofl["points_for"]
+        pa = ofl["points_against"]
+        # Keep sacks / INTs league totals; light re-stretch with PA residual.
+        sacks = stretch_centered(
+            sacks,
+            center=SACK_STRETCH_CENTER,
+            intensity=SACK_STRETCH_INTENSITY * 0.35,
+            denom=SACK_STRETCH_DENOM,
+            soft_floor=SACK_STRETCH_FLOOR,
+            soft_ceiling=SACK_STRETCH_CEILING,
+            target_sum=float(sum(sacks.values()) or SACK_LEAGUE_TOTAL),
+        )
+        ints_forced = stretch_centered(
+            ints_forced,
+            center=INT_STRETCH_CENTER,
+            intensity=INT_STRETCH_INTENSITY * 0.35,
+            denom=INT_STRETCH_DENOM,
+            soft_floor=INT_STRETCH_FLOOR,
+            soft_ceiling=INT_STRETCH_CEILING,
+            target_sum=float(sum(ints_forced.values()) or INT_LEAGUE_TOTAL),
+        )
+        offense_pf_meta = {
+            "applied": True,
+            "method": "offense_pf_variance_lift_v1",
+            "pf_range": round(max(pf.values()) - min(pf.values()), 2),
+            "pa_range": round(max(pa.values()) - min(pa.values()), 2),
+        }
+
+    # Pythagorean wins from (possibly lifted) PF/PA.
     wins = pythagorean_wins(pf, pa)
 
     budgets: Dict[str, TeamDefenseBudget] = {}
     for team in teams:
         notes = ["defense_points_wl_v1"]
-        if variance_lift:
+        if variance_lift and lift_meta.get("applied"):
             notes.append("defense_variance_lift_v1")
+        if offense_pf_variance_lift:
+            notes.append("offense_pf_variance_lift_v1")
         budgets[team] = TeamDefenseBudget(
             team=team,
             points_for=float(pf[team]),
@@ -509,6 +605,7 @@ def apply_defensive_production_stack(
         "applied": True,
         "method": "defensive_production_stack_v1",
         "variance_lift": lift_meta,
+        "offense_pf_variance_lift": offense_pf_meta,
         "league_pf": round(sum(pf.values()), 2),
         "league_pa": round(sum(pa.values()), 2),
         "wins_sum": round(sum(wins.values()), 4),
@@ -535,6 +632,10 @@ def smoke_defensive_stack(
     pa_range = max(pa_vals) - min(pa_vals) if pa_vals else 0.0
     sack_range = max(sack_vals) - min(sack_vals) if sack_vals else 0.0
     int_range = max(int_vals) - min(int_vals) if int_vals else 0.0
+    win_vals = [b.expected_wins for b in budgets.values()]
+    win_range = max(win_vals) - min(win_vals) if win_vals else 0.0
+    pf_vals = [b.points_for for b in budgets.values()]
+    pf_range = max(pf_vals) - min(pf_vals) if pf_vals else 0.0
 
     checks = {
         "pf_equals_pa": abs(pf - pa) <= 1.0,
@@ -578,8 +679,14 @@ def smoke_defensive_stack(
             "pa": round(pa_range, 2),
             "sacks": round(sack_range, 2),
             "ints": round(int_range, 2),
+            "pf": round(pf_range, 2),
+            "wins": round(win_range, 2),
             "pa_min": round(min(pa_vals), 2),
             "pa_max": round(max(pa_vals), 2),
+            "pf_min": round(min(pf_vals), 2) if pf_vals else 0.0,
+            "pf_max": round(max(pf_vals), 2) if pf_vals else 0.0,
+            "wins_min": round(min(win_vals), 2) if win_vals else 0.0,
+            "wins_max": round(max(win_vals), 2) if win_vals else 0.0,
             "sack_min": round(min(sack_vals), 2),
             "sack_max": round(max(sack_vals), 2),
             "int_min": round(min(int_vals), 2),

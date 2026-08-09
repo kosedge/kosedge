@@ -20,7 +20,7 @@ from src.services.nfl_season_engine.types import PlayerRole
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
 # v1.20: defensive variance lift on PA / sacks / INTs / yards (conserved totals).
-ENGINE_VERSION = "nfl-season-engine-v1.20-defense-variance-lift"
+ENGINE_VERSION = "nfl-season-engine-v1.21-team-variance-lift"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -164,8 +164,9 @@ SEASON_SANITY = {
     "qb_pass_yards": (2600.0, 5200.0),
     "qb_pass_tds": (12.0, 42.0),
     "qb_ints": (5.0, 18.0),
-    "rb1_rush_yards": (600.0, 1600.0),
-    "wr1_rec_yards": (500.0, 1400.0),
+    # Step-1 team variance lift: top rush/rec pools support 1450+ / 1500+ alphas.
+    "rb1_rush_yards": (600.0, 1700.0),
+    "wr1_rec_yards": (500.0, 1700.0),
     "wr1_receptions": (45.0, 120.0),
 }
 
@@ -533,6 +534,13 @@ def calibration_notes() -> Dict[str, str]:
             "v1.20: multiplicative stretch on PA / sacks / INTs (yards follow "
             "PA residual at 0.6× intensity); soft floors/ceilings; exact "
             "renorm to league totals; Pythagorean wins recomputed from new PA."
+        ),
+        "offense_variance_lift": (
+            "v1.21 Step-1: asymmetric rush stretch (pos ~1.4× / neg ~0.55×) to "
+            "~64k league rush pool with soft 1280–2520 team bands; pass pool + "
+            "ARI/BAL/SEA weights frozen; PF residual stretch + light PA "
+            "re-stretch; Pythagorean wins renormed to 272. Player alpha "
+            "re-anchor is Step-2 (not applied here)."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

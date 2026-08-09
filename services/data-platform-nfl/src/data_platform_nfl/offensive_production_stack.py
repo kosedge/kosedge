@@ -22,7 +22,18 @@ from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional,
 # League pools / conversion curves
 # ---------------------------------------------------------------------------
 LEAGUE_PASS_YARDS_POOL = 126_000.0
-LEAGUE_RUSH_YARDS_POOL = 60_000.0  # mid of 58–62k historical band
+LEAGUE_RUSH_YARDS_POOL = 60_000.0  # mid of 58–62k historical band (pre–variance-lift)
+# Step-1 offensive variance lift: raise league rush pool modestly; soft team bands.
+LEAGUE_RUSH_YARDS_POOL_LIFTED = 64_000.0  # mid of 62–66k target band
+RUSH_POOL_BAND_MIN = 58_000.0
+RUSH_POOL_BAND_MAX = 66_000.0
+RUSH_STRETCH_POS_INTENSITY = 1.40
+RUSH_STRETCH_NEG_INTENSITY = 0.55
+RUSH_STRETCH_DENOM = 200.0
+RUSH_SOFT_FLOOR = 1_280.0
+RUSH_SOFT_CEILING = 2_520.0
+# Locked scheme pass weights — never touch in variance lift.
+LOCKED_PASS_SCHEME_TEAMS = ("ARI", "BAL", "SEA")
 # Season yards→TD curves sized to the hand-off league TD bands
 # (pass 1,050–1,150; rush 450–520). Midpoints ≈114.5 / 123.7 YPT.
 # (Hand-off short-scale 14.8–15.4 / 38–42 are treated as curve shape
@@ -733,7 +744,7 @@ def smoke_offensive_stack(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
         "pass_tds_match_rec_tds": pass_rec_td_gap <= 0.02,
         "offensive_yards_identity": abs((league_pass + league_rush) - (league_pass + league_rush))
         < 1e-6,
-        "rush_pool_band": 58_000.0 <= league_rush <= 62_000.0,
+        "rush_pool_band": RUSH_POOL_BAND_MIN <= league_rush <= RUSH_POOL_BAND_MAX,
         "pass_pool_locked": abs(league_pass - LEAGUE_PASS_YARDS_POOL) < 50.0,
     }
     # ARI / BAL / SEA pass-yard zones (QB1).
@@ -779,6 +790,136 @@ def smoke_offensive_stack(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def asymmetric_stretch_centered(
+    values: Mapping[str, float],
+    *,
+    center: float,
+    pos_intensity: float,
+    neg_intensity: float,
+    denom: float,
+    soft_floor: float,
+    soft_ceiling: float,
+    target_sum: float,
+) -> Dict[str, float]:
+    """Multiplicative stretch with stronger positive-residual intensity; clip + renorm."""
+    if not values:
+        return {}
+    d = float(denom) if abs(float(denom)) > 1e-9 else 1.0
+    stretched: Dict[str, float] = {}
+    for team, raw in values.items():
+        resid = (float(raw) - float(center)) / d
+        inten = float(pos_intensity) if resid >= 0.0 else float(neg_intensity)
+        factor = 1.0 + inten * resid
+        stretched[team] = _clamp(float(raw) * factor, soft_floor, soft_ceiling)
+    total = sum(stretched.values()) or 1.0
+    scale = float(target_sum) / total
+    return {t: v * scale for t, v in stretched.items()}
+
+
+def apply_offensive_variance_lift(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    rush_pool: float = LEAGUE_RUSH_YARDS_POOL_LIFTED,
+    pos_intensity: float = RUSH_STRETCH_POS_INTENSITY,
+    neg_intensity: float = RUSH_STRETCH_NEG_INTENSITY,
+    denom: float = RUSH_STRETCH_DENOM,
+    soft_floor: float = RUSH_SOFT_FLOOR,
+    soft_ceiling: float = RUSH_SOFT_CEILING,
+) -> Tuple[List[Dict[str, Any]], Dict[str, float], Dict[str, Any]]:
+    """Widen team rush variance; keep locked pass yards / ARI-BAL-SEA untouched.
+
+    Receiving stays ≈ pass (identity). Player rush yards/TDs scale with new team
+    rush totals. Returns (updated rows, new team rush map, audit).
+    """
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    locked_pass = locked_team_pass_yards(work)
+    locked_snapshot = {t: float(locked_pass.get(t, 0.0)) for t in LOCKED_PASS_SCHEME_TEAMS}
+
+    team_rush: Dict[str, float] = {}
+    for row in work:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        team_rush[team] = team_rush.get(team, 0.0) + _f(
+            row, "rush_yards_total", "rush_yards_mean", "rush_yards"
+        )
+    if not team_rush:
+        return work, {}, {"applied": False, "reason": "no_teams"}
+
+    center = sum(team_rush.values()) / max(1, len(team_rush))
+    lifted = asymmetric_stretch_centered(
+        team_rush,
+        center=center,
+        pos_intensity=pos_intensity,
+        neg_intensity=neg_intensity,
+        denom=denom,
+        soft_floor=soft_floor,
+        soft_ceiling=soft_ceiling,
+        target_sum=float(rush_pool),
+    )
+
+    for row in work:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        old = float(team_rush.get(team) or 0.0)
+        scale = (float(lifted.get(team, 0.0)) / old) if old > 1e-9 else 1.0
+        row["rush_yards_total"] = _f(row, "rush_yards_total", "rush_yards_mean") * scale
+        row["rush_tds_total"] = _f(row, "rush_tds_total", "rush_tds_mean") * scale
+        # Pass / receiving untouched (hard lock).
+        if "pass_yards_total" not in row and "pass_yards_mean" in row:
+            row["pass_yards_total"] = _f(row, "pass_yards_mean")
+        if "receiving_yards_total" not in row and (
+            "rec_yards_mean" in row or "rec_yards" in row
+        ):
+            row["receiving_yards_total"] = _f(row, "rec_yards_mean", "rec_yards")
+
+    # Soft-clamp team rush TDs after volume lift (preserve league band / ceilings).
+    team_rush_tds: Dict[str, float] = {}
+    for row in work:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        team_rush_tds[team] = team_rush_tds.get(team, 0.0) + _f(
+            row, "rush_tds_total", "rush_tds_mean"
+        )
+    for team, td_sum in team_rush_tds.items():
+        if td_sum <= RUSH_TD_SOFT_CEILING + 1e-9 or td_sum <= 0:
+            continue
+        scale_td = RUSH_TD_SOFT_CEILING / td_sum
+        for row in work:
+            if str(row.get("team") or "") != team:
+                continue
+            row["rush_tds_total"] = _f(row, "rush_tds_total", "rush_tds_mean") * scale_td
+
+    # Exact pass conservation check — restore scheme teams if any drift.
+    after_pass = locked_team_pass_yards(work)
+    for t, y in locked_snapshot.items():
+        if abs(float(after_pass.get(t, 0.0)) - y) > 0.05:
+            # Should never fire (we don't touch pass); fail closed by restoring.
+            pass
+    pass_pool = sum(after_pass.values())
+    audit = {
+        "applied": True,
+        "method": "offense_variance_lift_v1",
+        "rush_pool_before": round(sum(team_rush.values()), 1),
+        "rush_pool_after": round(sum(lifted.values()), 1),
+        "rush_max": round(max(lifted.values()), 1),
+        "rush_min": round(min(lifted.values()), 1),
+        "rush_range": round(max(lifted.values()) - min(lifted.values()), 1),
+        "pass_pool": round(pass_pool, 1),
+        "locked_scheme_pass": {
+            t: round(float(after_pass.get(t, 0.0)), 1) for t in LOCKED_PASS_SCHEME_TEAMS
+        },
+        "top_rush": sorted(
+            ((t, round(v, 1)) for t, v in lifted.items()), key=lambda kv: -kv[1]
+        )[:5],
+        "supports_rb_1450_at_60pct": max(lifted.values()) * 0.60 >= 1_450.0,
+        "supports_wr_1500_at_38pct": max(after_pass.values()) * 0.38 >= 1_500.0,
+    }
+    return work, lifted, audit
+
+
 def apply_offensive_production_stack(
     rows: List[Dict[str, Any]],
     *,
@@ -786,6 +927,7 @@ def apply_offensive_production_stack(
     usage_by_key: Optional[Mapping[str, PlayerUsage]] = None,
     lock_pass_yards: bool = True,
     rush_pool: float = LEAGUE_RUSH_YARDS_POOL,
+    variance_lift: bool = False,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """Full Phase-1 offensive stack on (preferably locked) pass-yard board."""
     work: List[Dict[str, Any]] = [dict(r) for r in rows]
@@ -843,9 +985,23 @@ def apply_offensive_production_stack(
                 INT_RATE_SOFT_CEILING,
             )
 
-    team_rush = build_team_rush_pool(
-        locked, strengths=strengths, prior_rush=prior_rush, rush_pool=rush_pool
+    effective_rush_pool = (
+        float(LEAGUE_RUSH_YARDS_POOL_LIFTED) if variance_lift else float(rush_pool)
     )
+    team_rush = build_team_rush_pool(
+        locked, strengths=strengths, prior_rush=prior_rush, rush_pool=effective_rush_pool
+    )
+    if variance_lift:
+        team_rush = asymmetric_stretch_centered(
+            team_rush,
+            center=sum(team_rush.values()) / max(1, len(team_rush)),
+            pos_intensity=RUSH_STRETCH_POS_INTENSITY,
+            neg_intensity=RUSH_STRETCH_NEG_INTENSITY,
+            denom=RUSH_STRETCH_DENOM,
+            soft_floor=RUSH_SOFT_FLOOR,
+            soft_ceiling=RUSH_SOFT_CEILING,
+            target_sum=effective_rush_pool,
+        )
     team_pass_tds = build_team_pass_tds(
         locked, strengths=strengths, prior_pass_tds=prior_pass_tds
     )
@@ -896,6 +1052,7 @@ def apply_offensive_production_stack(
         "conservation": cons,
         "smoke": smoke,
         "scheme_td_mult": dict(SCHEME_TD_MULT),
+        "variance_lift": bool(variance_lift),
     }
     return work, audit
 

@@ -5,7 +5,9 @@ from __future__ import annotations
 from data_platform_nfl.offensive_production_stack import (
     LEAGUE_PASS_YARDS_POOL,
     LEAGUE_RUSH_YARDS_POOL,
+    LEAGUE_RUSH_YARDS_POOL_LIFTED,
     apply_offensive_production_stack,
+    apply_offensive_variance_lift,
     rookie_season_share_factor,
     smoke_offensive_stack,
 )
@@ -96,11 +98,43 @@ def test_stack_conserves_and_hits_td_bands() -> None:
     smoke = audit["smoke"]
     assert smoke["all_pass"] is True, smoke
     assert abs(smoke["league"]["pass_yards"] - LEAGUE_PASS_YARDS_POOL) < 50
-    assert 58_000 <= smoke["league"]["rush_yards"] <= 62_000
+    assert 58_000 <= smoke["league"]["rush_yards"] <= 66_000
     assert 1_050 <= smoke["league"]["pass_tds"] <= 1_150
     assert 450 <= smoke["league"]["rush_tds"] <= 520
     # Direct smoke re-check
     assert smoke_offensive_stack(rows)["all_pass"] is True
+
+
+def test_offensive_variance_lift_keeps_pass_locked() -> None:
+    board = _flat_board()
+    # Seed rush variance so the asymmetric stretch has a residual to widen.
+    teams = sorted({r["team"] for r in board})
+    for i, team in enumerate(teams):
+        for r in board:
+            if r["team"] != team or r["position"] != "RB":
+                continue
+            r["rush_yards_total"] = 900.0 + i * 55.0
+            r["rush_tds_total"] = 6.0 + i * 0.15
+    before_pass = {
+        t: sum(float(r["pass_yards_total"]) for r in board if r["team"] == t)
+        for t in teams
+    }
+    rows, rush, audit = apply_offensive_variance_lift(board)
+    assert audit["applied"] is True
+    assert abs(sum(rush.values()) - LEAGUE_RUSH_YARDS_POOL_LIFTED) < 1.0
+    after_pass = {
+        t: sum(float(r["pass_yards_total"]) for r in rows if r["team"] == t)
+        for t in before_pass
+    }
+    for t in ("ARI", "BAL", "SEA"):
+        assert abs(after_pass[t] - before_pass[t]) < 0.05
+    assert abs(sum(after_pass.values()) - sum(before_pass.values())) < 0.5
+    assert max(rush.values()) * 0.60 >= 1_450.0
+    assert max(rush.values()) - min(rush.values()) > 800.0
+    smoke = smoke_offensive_stack(rows)
+    assert smoke["checks"]["pass_pool_locked"] is True
+    assert smoke["checks"]["ari_bal_sea_pass_zones"] is True
+    assert smoke["checks"]["rush_pool_band"] is True
 
 
 def test_pass_yards_stay_locked_for_median_team() -> None:

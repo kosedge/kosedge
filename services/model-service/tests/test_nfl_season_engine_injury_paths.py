@@ -42,6 +42,8 @@ def test_engine_version_surfaces_injury_shocks() -> None:
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
+        or "defense-variance" in DEFAULT_SEASON_ENGINE_VERSION
+        or "team-variance" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
