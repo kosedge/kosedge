@@ -43,12 +43,13 @@ from data_platform_nfl.offensive_production_stack import (  # noqa: E402
     enforce_high_volume_pass_tds_on_rows,
     locked_team_pass_yards,
     repair_qb_team_labels,
+    repair_skill_team_labels,
     smoke_offensive_stack,
 )
 
 from publish_launch_research_to_web import publish  # noqa: E402
 
-ENGINE = "nfl-season-engine-v1.23-soft-flags-enterprise"
+ENGINE = "nfl-season-engine-v1.24-soft-piles-cleanup"
 SEED_DEFENSE_BUNDLE = ROOT / "data/ops/nfl-preseason-sim-2026-20260809T150309Z"
 CANON_QB1 = {
     "ARI": "Kyler Murray",
@@ -247,7 +248,8 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     summary = json.loads((source / "run_summary.json").read_text(encoding="utf-8"))
     n_team = int(summary.get("n_team_sims") or 100000)
     n_player = int(summary.get("n_player_sims") or 1000)
-    engine = str(summary.get("engine_version") or ENGINE)
+    # Post-board engine version (pile cleanup) — research may still say v1.23.
+    engine = ENGINE
     timing = summary.get("timing_seconds") or {}
 
     published = publish(source, stamp)
@@ -268,12 +270,20 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     before_pass = locked_team_pass_yards(players)
     scheme_before = {t: before_pass[t] for t in LOCKED_PASS_SCHEME_TEAMS}
 
-    # 1) rush variance lift → 64k
+    # 1) rush variance lift → 64k (v1.24 tapered — no hard rush rails)
     players, _team_rush, off_lift_audit = apply_offensive_variance_lift(players)
     # 2) alpha usage
     players, alpha_audit = apply_alpha_usage_reanchor(players)
-    # 3) label hygiene (should be no-op after depth fix)
+    # 3) label hygiene (QB + skill; identity-only)
     players, label_audit = repair_qb_team_labels(players)
+    players, skill_label_audit = repair_skill_team_labels(players)
+    label_audit = {
+        "applied": True,
+        "fixes": list(label_audit.get("fixes") or [])
+        + list(skill_label_audit.get("fixes") or []),
+        "qb": label_audit,
+        "skill": skill_label_audit,
+    }
     # 4) high-volume pass TD floors
     players, td_audit = enforce_high_volume_pass_tds_on_rows(players)
     # 5) soft RB priors
@@ -433,16 +443,61 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     wins_sum = sum(wins)
     league_pf, league_pa = sum(pfs), sum(pas)
 
+    def _max_cluster(vals: List[float], width: float) -> Tuple[int, float]:
+        xs = sorted(vals)
+        best = 1
+        best_at = xs[0] if xs else 0.0
+        j = 0
+        for i in range(len(xs)):
+            while xs[i] - xs[j] > width:
+                j += 1
+            if i - j + 1 > best:
+                best = i - j + 1
+                best_at = xs[j]
+        return best, best_at
+
     # Soft flags
     soft_flags: List[str] = []
     if win_range < 7.5:
         soft_flags.append(f"Win range soft: {win_range:.2f} (<7.5).")
     win_ties_top = Counter(round(w, 2) for w in wins).most_common(1)[0][1]
-    if win_ties_top >= 4:
-        soft_flags.append(f"Win ceiling clustering: {win_ties_top} teams near max.")
+    win_ceil_cluster, win_ceil_at = _max_cluster([w for w in wins if w >= wins_max - 0.05], 0.02)
+    if win_ties_top >= 4 or win_ceil_cluster >= 4:
+        soft_flags.append(
+            f"Win ceiling clustering: {max(win_ties_top, win_ceil_cluster)} teams near max "
+            f"(~{win_ceil_at:.2f})."
+        )
     pf_ties = Counter(round(p, 1) for p in pfs).most_common(1)[0][1]
+    pf_floor_cluster, pf_floor_at = _max_cluster(
+        [p for p in pfs if p <= min(pfs) + 1.0], 0.25
+    )
+    pf_ceil_cluster, pf_ceil_at = _max_cluster(
+        [p for p in pfs if p >= max(pfs) - 2.0], 0.25
+    )
     if pf_ties >= 6:
         soft_flags.append(f"PF clustering: {pf_ties} teams near same PF.")
+    if pf_floor_cluster >= 6:
+        soft_flags.append(
+            f"PF soft-floor pile: {pf_floor_cluster} teams at PF≈{pf_floor_at:.1f}."
+        )
+    if pf_ceil_cluster >= 6:
+        soft_flags.append(
+            f"PF soft-ceiling pile: {pf_ceil_cluster} teams at PF≈{pf_ceil_at:.1f}."
+        )
+
+    rush_vals = list(after_rush.values())
+    rush_ceil_cluster, rush_ceil_at = _max_cluster(
+        [v for v in rush_vals if v >= max(rush_vals) - 5.0], 1.0
+    )
+    rush_floor_cluster, rush_floor_at = _max_cluster(
+        [v for v in rush_vals if v <= min(rush_vals) + 5.0], 1.0
+    )
+    if rush_ceil_cluster >= 6 or rush_floor_cluster >= 6:
+        soft_flags.append(
+            f"Rush soft-ceiling pile: {rush_ceil_cluster} teams at ~{rush_ceil_at:.0f} rush yds; "
+            f"{rush_floor_cluster} at soft floor ~{rush_floor_at:.0f}."
+        )
+
     for r in wr_ranked[:3]:
         if _f(r, "receiving_yards_total") >= 1600 and after_pass[str(r.get("team"))] < 3400:
             soft_flags.append(
@@ -474,6 +529,14 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
         )
         if qb1 is None or str(qb1.get("player_name")) != want:
             label_issues.append(f"{team}: got {None if qb1 is None else qb1.get('player_name')} want {want}")
+    evans = next(
+        (r for r in skill if "Mike Evans" in str(r.get("player_name") or "")),
+        None,
+    )
+    if evans is not None and str(evans.get("team") or "") != "TB":
+        soft_flags.append(
+            f"Depth soft: Mike Evans labeled {evans.get('team')} (expected TB)."
+        )
 
     cin = budgets["CIN"]
     burrow = next((r for r in qbs if "Burrow" in str(r.get("player_name") or "")), None)

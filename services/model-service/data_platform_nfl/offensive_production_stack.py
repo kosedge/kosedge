@@ -30,8 +30,11 @@ RUSH_POOL_BAND_MAX = 66_000.0
 RUSH_STRETCH_POS_INTENSITY = 1.40
 RUSH_STRETCH_NEG_INTENSITY = 0.55
 RUSH_STRETCH_DENOM = 200.0
-RUSH_SOFT_FLOOR = 1_280.0
-RUSH_SOFT_CEILING = 2_520.0
+# v1.24: wider soft rails + tanh taper (no hard clips) to clear rush piles.
+RUSH_SOFT_FLOOR = 1_220.0
+RUSH_SOFT_CEILING = 2_680.0
+RUSH_STRETCH_TAPER_K = 0.62
+RUSH_STRETCH_TAIL_DAMPEN = 0.18
 # Locked scheme pass weights — never touch in variance lift.
 LOCKED_PASS_SCHEME_TEAMS = ("ARI", "BAL", "SEA")
 # Season yards→TD curves sized to the hand-off league TD bands
@@ -103,6 +106,11 @@ CANONICAL_QB1_BY_TEAM: Dict[str, str] = {
     "MIN": "J.J. McCarthy",
     "ATL": "Michael Penix Jr.",
     "MIA": "Tua Tagovailoa",
+}
+
+# Desk hygiene: skill players whose packaged depth team is wrong (identity swap).
+CANONICAL_SKILL_TEAM: Dict[str, str] = {
+    "Mike Evans": "TB",
 }
 
 # 2025 prior-year volume priors for sticky alpha shares (name → stats).
@@ -294,6 +302,24 @@ def rookie_season_share_factor(position: str, draft_round: Optional[int]) -> flo
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, float(value)))
+
+
+def _taper_toward_band(
+    value: float,
+    soft_floor: float,
+    soft_ceiling: float,
+    *,
+    k: float,
+) -> float:
+    """Soft-saturate into (floor, ceiling) via tanh — no hard pin at the rails."""
+    lo = float(soft_floor)
+    hi = float(soft_ceiling)
+    if hi <= lo + 1e-9:
+        return float(value)
+    mid = 0.5 * (lo + hi)
+    half = 0.5 * (hi - lo)
+    sharpness = max(float(k), 0.25)
+    return mid + half * math.tanh(((float(value) - mid) / half) * sharpness)
 
 
 def _f(row: Mapping[str, Any], *keys: str, default: float = 0.0) -> float:
@@ -1376,6 +1402,45 @@ def smoke_offensive_stack(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _break_rush_soft_piles(
+    values: Mapping[str, float],
+    residuals: Mapping[str, float],
+    *,
+    width: float = 2.0,
+    spread: float = 28.0,
+) -> Dict[str, float]:
+    """Separate near-tie rush clusters with residual-ranked micro-spread."""
+    if not values:
+        return {}
+    teams = list(values.keys())
+    ordered = sorted(teams, key=lambda t: (float(values[t]), float(residuals.get(t, 0.0)), t))
+    out = {t: float(values[t]) for t in teams}
+    i = 0
+    n = len(ordered)
+    while i < n:
+        j = i + 1
+        while j < n and abs(out[ordered[j]] - out[ordered[i]]) <= float(width):
+            j += 1
+        cluster = ordered[i:j]
+        if len(cluster) >= 3:
+            cluster_sorted = sorted(
+                cluster, key=lambda t: (float(residuals.get(t, 0.0)), t)
+            )
+            mid = 0.5 * (len(cluster_sorted) - 1)
+            deltas = {
+                t: (idx - mid) * float(spread) / max(mid, 1.0)
+                for idx, t in enumerate(cluster_sorted)
+            }
+            mean_delta = sum(deltas.values()) / len(deltas)
+            for t, d in deltas.items():
+                out[t] = max(0.0, out[t] + d - mean_delta)
+        i = j
+    before = sum(float(v) for v in values.values()) or 1.0
+    after = sum(out.values()) or 1.0
+    scale = before / after
+    return {t: v * scale for t, v in out.items()}
+
+
 def asymmetric_stretch_centered(
     values: Mapping[str, float],
     *,
@@ -1386,20 +1451,39 @@ def asymmetric_stretch_centered(
     soft_floor: float,
     soft_ceiling: float,
     target_sum: float,
+    taper_k: float = RUSH_STRETCH_TAPER_K,
+    tail_dampen: float = RUSH_STRETCH_TAIL_DAMPEN,
+    hard_clip: bool = False,
 ) -> Dict[str, float]:
-    """Multiplicative stretch with stronger positive-residual intensity; clip + renorm."""
+    """Multiplicative stretch with stronger +intensity; tapered band + renorm.
+
+    v1.24 default: tanh taper (no hard clips) so ceiling/floor piles cannot
+    form when many teams saturate the same rail before renorm.
+    """
     if not values:
         return {}
     d = float(denom) if abs(float(denom)) > 1e-9 else 1.0
     stretched: Dict[str, float] = {}
+    residuals: Dict[str, float] = {}
     for team, raw in values.items():
         resid = (float(raw) - float(center)) / d
+        residuals[team] = resid
         inten = float(pos_intensity) if resid >= 0.0 else float(neg_intensity)
-        factor = 1.0 + inten * resid
-        stretched[team] = _clamp(float(raw) * factor, soft_floor, soft_ceiling)
+        damp = 1.0 / (1.0 + float(tail_dampen) * resid * resid)
+        factor = 1.0 + inten * resid * damp
+        v = float(raw) * factor
+        if hard_clip:
+            v = _clamp(v, soft_floor, soft_ceiling)
+        else:
+            v = _taper_toward_band(v, soft_floor, soft_ceiling, k=taper_k)
+        stretched[team] = max(0.0, v)
+    # Break residual-saturated soft piles before league renorm.
+    stretched = _break_rush_soft_piles(stretched, residuals, width=4.0, spread=55.0)
     total = sum(stretched.values()) or 1.0
     scale = float(target_sum) / total
-    return {t: v * scale for t, v in stretched.items()}
+    out = {t: v * scale for t, v in stretched.items()}
+    # Second pass after renorm (scale can re-compress near-ties).
+    return _break_rush_soft_piles(out, residuals, width=8.0, spread=75.0)
 
 
 def apply_offensive_variance_lift(
@@ -1487,7 +1571,7 @@ def apply_offensive_variance_lift(
     pass_pool = sum(after_pass.values())
     audit = {
         "applied": True,
-        "method": "offense_variance_lift_v1",
+        "method": "offense_variance_lift_v1_24_tapered",
         "rush_pool_before": round(sum(team_rush.values()), 1),
         "rush_pool_after": round(sum(lifted.values()), 1),
         "rush_max": round(max(lifted.values()), 1),
@@ -1731,6 +1815,87 @@ def repair_qb_team_labels(
         from_team = str(work[want_i].get("team") or "")
         notes.append(f"{want_name}: {from_team}→{team} (was {cur_name} on {team} QB1)")
         _swap_identity(qb1_i, want_i)
+
+    return work, {"applied": True, "fixes": notes, "canonical": canon}
+
+
+def repair_skill_team_labels(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    canonical: Optional[Mapping[str, str]] = None,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Fix packaged skill labels (e.g. Mike Evans→TB) without moving team pools.
+
+    Identity fields swap onto the top same-position slot on the canonical team;
+    numeric season totals stay with the team row so pass/rush/rec conservation
+    is untouched.
+    """
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    canon = dict(canonical or CANONICAL_SKILL_TEAM)
+    notes: List[str] = []
+
+    def _find_by_name(name: str) -> Optional[int]:
+        target = _norm_player_name(name)
+        for i, r in enumerate(work):
+            if _norm_player_name(str(r.get("player_name") or "")) == target:
+                return i
+        return None
+
+    def _top_pos_index(team: str, position: str) -> Optional[int]:
+        pos = position.upper()
+        key = (
+            "receiving_yards_total"
+            if pos in {"WR", "TE"}
+            else "rush_yards_total"
+            if pos == "RB"
+            else "pass_yards_total"
+        )
+        cands = [
+            (i, r)
+            for i, r in enumerate(work)
+            if str(r.get("team") or "") == team
+            and str(r.get("position") or "").upper() == pos
+        ]
+        if not cands:
+            return None
+        cands.sort(key=lambda ir: -_f(ir[1], key, "receiving_yards_total", "rush_yards_total"))
+        return cands[0][0]
+
+    def _swap_identity(i: int, j: int) -> None:
+        if i == j:
+            return
+        for key in ("player_name", "player_key", "gsis_id", "player_id"):
+            if key in work[i] or key in work[j]:
+                work[i][key], work[j][key] = work[j].get(key), work[i].get(key)
+        for idx in (i, j):
+            team = str(work[idx].get("team") or "")
+            name = str(work[idx].get("player_name") or "")
+            pos = str(work[idx].get("position") or "WR").upper()
+            old_key = str(work[idx].get("player_key") or "")
+            depth = f"{pos}1"
+            parts = old_key.split("-")
+            for p in parts:
+                if p.startswith(pos) and len(p) > len(pos) and p[len(pos) :].isdigit():
+                    depth = p
+                    break
+            work[idx]["player_key"] = f"{team}-{depth}-{_slug_name(name)}"
+
+    for want_name, team in canon.items():
+        want_i = _find_by_name(want_name)
+        if want_i is None:
+            notes.append(f"missing {want_name}")
+            continue
+        cur_team = str(work[want_i].get("team") or "")
+        if cur_team == team:
+            continue
+        pos = str(work[want_i].get("position") or "WR").upper()
+        slot_i = _top_pos_index(team, pos)
+        if slot_i is None:
+            notes.append(f"{team}: no {pos} slot for {want_name}")
+            continue
+        displaced = str(work[slot_i].get("player_name") or "")
+        notes.append(f"{want_name}: {cur_team}→{team} (was {displaced} on {team} {pos}1)")
+        _swap_identity(slot_i, want_i)
 
     return work, {"applied": True, "fixes": notes, "canonical": canon}
 

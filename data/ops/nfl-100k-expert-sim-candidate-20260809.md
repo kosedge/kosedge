@@ -1,8 +1,8 @@
 # NFL 100k Expert-Sim Candidate — 20260809
 
-Engine: `nfl-season-engine-v1.23-soft-flags-enterprise`  
+Engine: `nfl-season-engine-v1.24-soft-piles-cleanup`  
 Source research: `data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z`  
-Web bundle: `nfl-preseason-sim-2026-20260809T163204Z`  
+Web bundle: `nfl-preseason-sim-2026-20260809T165350Z`  
 N team / player: **100,000** / **1,000**  
 Runtime (sim): team 36.7m · player 21.0m · total ~57.7m
 
@@ -21,7 +21,7 @@ Do not tag official baseline. `locked_snapshot: false`. No merge to deploy-verce
 | Rec≈pass max gap | 0.000% |
 | ARI/BAL/SEA pass | {'ARI': 4350.4, 'BAL': 3578.6, 'SEA': 4258.5} |
 | League PF / PA | 11859.2 / 11859.2 |
-| Wins Σ / min / max / range | 272.00 / 3.89 / 13.16 / 9.27 |
+| Wins Σ / min / max / range | 272.00 / 4.40 / 12.83 / 8.43 |
 
 ## Team leaders (top 10 / bottom 5)
 
@@ -51,94 +51,94 @@ Bottom 5:
 ### Rush yards
 | Rank | Team | Yards |
 |-----:|------|------:|
-| 1 | SF | 2623.51 |
-| 2 | BAL | 2623.51 |
-| 3 | CHI | 2623.51 |
-| 4 | JAX | 2623.51 |
-| 5 | TB | 2623.51 |
-| 6 | GB | 2623.51 |
-| 7 | NYG | 2623.51 |
-| 8 | BUF | 2623.51 |
-| 9 | ATL | 2623.51 |
-| 10 | PHI | 2623.51 |
+| 1 | BUF | 2714.49 |
+| 2 | CHI | 2692.47 |
+| 3 | BAL | 2674.35 |
+| 4 | PHI | 2656.05 |
+| 5 | SEA | 2639.22 |
+| 6 | SF | 2627.83 |
+| 7 | NYG | 2619.07 |
+| 8 | NE | 2600.03 |
+| 9 | JAX | 2595.79 |
+| 10 | GB | 2580.59 |
 
 Bottom 5:
 | Rank | Team | Yards |
 |-----:|------|------:|
-| 28 | PIT | 1332.58 |
-| 29 | KC | 1332.58 |
-| 30 | ARI | 1332.58 |
-| 31 | TEN | 1332.58 |
-| 32 | CIN | 1332.58 |
+| 28 | KC | 1334.3 |
+| 29 | MIN | 1322.96 |
+| 30 | TEN | 1317.98 |
+| 31 | ARI | 1310.55 |
+| 32 | CIN | 1255.89 |
 
 ### Points for
 | Rank | Team | PF |
 |-----:|------|---:|
-| 1 | CIN | 440.68 |
-| 2 | LA | 438.23 |
-| 3 | DAL | 436.0 |
-| 4 | SEA | 427.51 |
-| 5 | BAL | 427.47 |
-| 6 | SF | 427.43 |
-| 7 | CHI | 427.42 |
-| 8 | HOU | 427.41 |
-| 9 | JAX | 427.4 |
-| 10 | TB | 427.39 |
+| 1 | LA | 440.85 |
+| 2 | DAL | 437.53 |
+| 3 | CIN | 432.89 |
+| 4 | CHI | 411.73 |
+| 5 | SEA | 410.86 |
+| 6 | BAL | 410.64 |
+| 7 | BUF | 410.38 |
+| 8 | JAX | 410.04 |
+| 9 | TB | 409.44 |
+| 10 | SF | 409.11 |
 
 Bottom 5:
 | Rank | Team | PF |
 |-----:|------|---:|
-| 28 | PIT | 286.48 |
-| 29 | LAC | 286.48 |
-| 30 | NO | 286.47 |
-| 31 | ARI | 286.47 |
-| 32 | TEN | 286.47 |
+| 28 | LV | 309.76 |
+| 29 | MIN | 309.53 |
+| 30 | CLE | 309.28 |
+| 31 | MIA | 309.02 |
+| 32 | TEN | 308.73 |
 
 ### Points against
 | Rank | Team | PA |
 |-----:|------|---:|
-| 1 | MIA | 424.5 |
-| 2 | TB | 424.47 |
-| 3 | GB | 424.47 |
-| 4 | WAS | 424.43 |
-| 5 | CAR | 424.42 |
-| 6 | NYG | 424.38 |
-| 7 | CIN | 424.28 |
-| 8 | LV | 424.26 |
-| 9 | TEN | 424.13 |
-| 10 | DAL | 424.09 |
+| 1 | MIA | 423.45 |
+| 2 | GB | 423.34 |
+| 3 | CAR | 423.31 |
+| 4 | WAS | 423.28 |
+| 5 | NYG | 423.1 |
+| 6 | TB | 423.03 |
+| 7 | CIN | 422.97 |
+| 8 | LV | 422.78 |
+| 9 | DAL | 422.66 |
+| 10 | NYJ | 422.47 |
 
 Bottom 5:
 | Rank | Team | PA |
 |-----:|------|---:|
-| 28 | ATL | 327.99 |
-| 29 | NO | 327.94 |
-| 30 | DET | 327.85 |
-| 31 | JAX | 327.84 |
-| 32 | HOU | 327.79 |
+| 28 | NO | 328.74 |
+| 29 | ATL | 328.7 |
+| 30 | DET | 328.47 |
+| 31 | JAX | 328.44 |
+| 32 | HOU | 328.22 |
 
 ### Expected wins
 | Rank | Team | Wins |
 |-----:|------|-----:|
-| 1 | HOU | 13.16 |
-| 2 | JAX | 13.16 |
-| 3 | ATL | 13.16 |
-| 4 | CHI | 13.15 |
-| 5 | BUF | 13.15 |
-| 6 | SEA | 13.15 |
-| 7 | NE | 13.15 |
-| 8 | BAL | 13.15 |
-| 9 | PHI | 13.14 |
-| 10 | IND | 13.14 |
+| 1 | BUF | 12.83 |
+| 2 | SEA | 12.75 |
+| 3 | CHI | 12.73 |
+| 4 | JAX | 12.72 |
+| 5 | NE | 12.66 |
+| 6 | ATL | 12.65 |
+| 7 | PHI | 12.63 |
+| 8 | KC | 12.59 |
+| 9 | HOU | 12.58 |
+| 10 | BAL | 12.55 |
 
 Bottom 5:
 | Rank | Team | Wins |
 |-----:|------|-----:|
-| 28 | NYJ | 3.89 |
-| 29 | TEN | 3.89 |
-| 30 | LV | 3.89 |
-| 31 | CAR | 3.89 |
-| 32 | MIA | 3.89 |
+| 28 | ARI | 4.59 |
+| 29 | NYJ | 4.54 |
+| 30 | LV | 4.49 |
+| 31 | TEN | 4.44 |
+| 32 | MIA | 4.4 |
 
 ## Individual leaders
 
@@ -150,11 +150,11 @@ Bottom 5:
 | 3 | Jaxon Smith-Njigba | SEA | 1428.83 |
 | 4 | Rashee Rice | KC | 1420.78 |
 | 5 | Marvin Harrison Jr. | ARI | 1395.16 |
-| 6 | Mike Evans | SF | 1371.45 |
+| 6 | Emeka Egbuka | SF | 1371.45 |
 | 7 | Brian Thomas Jr. | JAX | 1369.18 |
 | 8 | Courtland Sutton | DEN | 1356.0 |
 | 9 | Puka Nacua | LA | 1352.84 |
-| 10 | Emeka Egbuka | TB | 1330.74 |
+| 10 | Mike Evans | TB | 1330.74 |
 
 Bottom 5:
 | Rank | Player | Team | Yards |
@@ -168,25 +168,25 @@ Bottom 5:
 ### Rush yards
 | Rank | Player | Team | Yards |
 |-----:|--------|------|------:|
-| 1 | Derrick Henry | BAL | 1502.41 |
-| 2 | Christian McCaffrey | SF | 1475.17 |
-| 3 | James Cook III | BUF | 1461.48 |
-| 4 | Bijan Robinson | ATL | 1450.01 |
-| 5 | D'Andre Swift | CHI | 1447.18 |
-| 6 | Saquon Barkley | PHI | 1446.98 |
-| 7 | Josh Jacobs | GB | 1430.49 |
-| 8 | Cam Skattebo | NYG | 1419.88 |
-| 9 | Bhayshul Tuten | JAX | 1415.76 |
-| 10 | Rhamondre Stevenson | NE | 1400.41 |
+| 1 | James Cook III | BUF | 1503.41 |
+| 2 | Derrick Henry | BAL | 1497.27 |
+| 3 | Saquon Barkley | PHI | 1461.16 |
+| 4 | Christian McCaffrey | SF | 1459.18 |
+| 5 | D'Andre Swift | CHI | 1455.3 |
+| 6 | Bijan Robinson | ATL | 1439.0 |
+| 7 | Zach Charbonnet | SEA | 1422.54 |
+| 8 | Josh Jacobs | GB | 1407.61 |
+| 9 | Cam Skattebo | NYG | 1407.45 |
+| 10 | Bhayshul Tuten | JAX | 1402.09 |
 
 Bottom 5:
 | Rank | Player | Team | Yards |
 |-----:|--------|------|------:|
-| 92 | Raheim Sanders | CLE | 108.43 |
-| 93 | Emari Demercado | KC | 107.78 |
-| 94 | Dylan Laube | LV | 100.8 |
-| 95 | Keaton Mitchell | LAC | 98.58 |
-| 96 | Devin Neal | NO | 96.75 |
+| 92 | Ollie Gordon II | MIA | 113.11 |
+| 93 | Emari Demercado | KC | 107.92 |
+| 94 | Keaton Mitchell | LAC | 107.08 |
+| 95 | Devin Neal | NO | 104.29 |
+| 96 | Dylan Laube | LV | 103.33 |
 
 ### Rec TDs (top 10)
 | Rank | Player | Team | TDs |
@@ -198,23 +198,23 @@ Bottom 5:
 | 5 | Zay Flowers | BAL | 10.02 |
 | 6 | Malik Nabers | NYG | 9.76 |
 | 7 | Puka Nacua | LA | 9.59 |
-| 8 | Emeka Egbuka | TB | 9.58 |
+| 8 | Mike Evans | TB | 9.58 |
 | 9 | Brian Thomas Jr. | JAX | 9.53 |
-| 10 | Mike Evans | SF | 9.47 |
+| 10 | Emeka Egbuka | SF | 9.47 |
 
 ### Rush TDs (top 10)
 | Rank | Player | Team | TDs |
 |-----:|--------|------|----:|
-| 1 | Christian McCaffrey | SF | 11.68 |
-| 2 | Saquon Barkley | PHI | 11.62 |
+| 1 | Saquon Barkley | PHI | 11.76 |
+| 2 | Christian McCaffrey | SF | 11.7 |
 | 3 | Derrick Henry | BAL | 11.44 |
-| 4 | Josh Jacobs | GB | 11.37 |
-| 5 | Bijan Robinson | ATL | 11.37 |
-| 6 | D'Andre Swift | CHI | 11.03 |
-| 7 | James Cook III | BUF | 11.03 |
-| 8 | David Montgomery | HOU | 11.02 |
-| 9 | Zach Charbonnet | SEA | 10.45 |
-| 10 | Bhayshul Tuten | JAX | 9.87 |
+| 4 | James Cook III | BUF | 11.41 |
+| 5 | D'Andre Swift | CHI | 11.32 |
+| 6 | Josh Jacobs | GB | 11.18 |
+| 7 | Bijan Robinson | ATL | 11.16 |
+| 8 | Zach Charbonnet | SEA | 10.51 |
+| 9 | Bhayshul Tuten | JAX | 9.76 |
+| 10 | Bucky Irving | TB | 9.55 |
 
 ### Pass yards
 | Rank | Player | Team | Yards |
@@ -253,33 +253,28 @@ Bottom 5:
 ### Top 5 RBs
 | Rank | Player | Team | Rush yds | Rush TDs |
 |-----:|--------|------|---------:|---------:|
-| 1 | Derrick Henry | BAL | 1502 | 11.4 |
-| 2 | Christian McCaffrey | SF | 1475 | 11.7 |
-| 3 | James Cook III | BUF | 1462 | 11.0 |
-| 4 | Bijan Robinson | ATL | 1450 | 11.4 |
-| 5 | D'Andre Swift | CHI | 1447 | 11.0 |
+| 1 | James Cook III | BUF | 1503 | 11.4 |
+| 2 | Derrick Henry | BAL | 1497 | 11.4 |
+| 3 | Saquon Barkley | PHI | 1461 | 11.8 |
+| 4 | Christian McCaffrey | SF | 1459 | 11.7 |
+| 5 | D'Andre Swift | CHI | 1455 | 11.3 |
 
 ## CIN check
 
 | | Value |
 |--|------:|
 | Pass yards | 5118.9 |
-| PF / PA | 440.7 / 424.3 |
-| Wins | 10.29 |
+| PF / PA | 432.9 / 423.0 |
+| Wins | 8.90 |
 | Burrow pass yds / TDs | 4812.9 / 39.30 |
 
 ## Depth chart labels
 
-- (none; depth chart clean)
+- Mike Evans: SF→TB (was Emeka Egbuka on TB WR1)
 
 ## Soft flags (remaining)
 
-- Rush soft-ceiling pile: 13 teams at ~2623 rush yds; 11 at soft floor ~1333.
-- PF soft-floor pile: 10 teams at PF≈286.5.
-- Win ceiling pile: ~6 teams at ~13.15–13.16 expected wins (range still healthy 3.89–13.16).
-- Depth soft: Mike Evans labeled SF (packaged depth quirk; not QB hygiene).
-- Win ceiling clustering: 6 teams near max.
-- PF clustering: 10 teams near same PF.
+- (none material)
 
 ## Gates
 
@@ -301,7 +296,7 @@ Bottom 5:
 
 ## Method
 1. Packaged universe `--force-packaged` with cleaned QB depth (Kyler ARI / McCarthy MIN / Penix ATL / Tua MIA)
-2. Launch research: 100,000 team W/L + 1,000 full player paths (engine `nfl-season-engine-v1.23-soft-flags-enterprise`)
+2. Launch research: 100,000 team W/L + 1,000 full player paths (engine `nfl-season-engine-v1.24-soft-piles-cleanup`)
 3. Post: offense variance lift → alpha usage → HV pass-TD floors → soft RB priors → tapered PF/PA + Pythagorean wins Σ=272
 4. Constraints held: ~126k pass, ARI/BAL/SEA weights, 64k rush, PF=PA≈11859
 5. **NOT LOCKED — awaiting clearance**

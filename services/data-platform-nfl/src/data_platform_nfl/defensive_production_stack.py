@@ -79,11 +79,12 @@ YARDS_STRETCH_INTENSITY = PA_STRETCH_INTENSITY * 0.6  # 0.51
 
 # Step-1 offensive variance → PF residual stretch + light PA re-stretch.
 # v1.23: slightly softer intensity + tapered band penalties (no hard clips).
+# v1.24: gentler PF/win taper + residual micro-spread to clear soft piles.
 PF_STRETCH_CENTER = TARGET_TEAM_PF
-PF_STRETCH_INTENSITY = 0.72
+PF_STRETCH_INTENSITY = 0.78
 PF_STRETCH_DENOM = 28.0
-PF_STRETCH_FLOOR = 270.0
-PF_STRETCH_CEILING = 500.0
+PF_STRETCH_FLOOR = 265.0
+PF_STRETCH_CEILING = 505.0
 # Lower intensity than the original defensive variance lift (0.85).
 PA_RESTRETCH_INTENSITY = 0.40
 # Extreme-tail dampening on stretch intensity (logistic-ish).
@@ -95,7 +96,19 @@ MIN_POINTS_PER_PASS_ATTEMPT = 0.505  # upper mid of 0.48–0.52
 DEFAULT_YPA_FOR_ATTEMPTS = 6.95
 VOLUME_PF_RUSH_CREDIT = 0.055
 # Softer tanh (less rail-stacking than a hard clip).
-STRETCH_TAPER_K = 1.05
+# v1.24: drop further so soft-floor / soft-ceiling piles separate.
+STRETCH_TAPER_K = 0.78
+# Rank-residual micro-spread after taper (breaks near-ties without hard clips).
+PILE_BREAK_WIDTH = 0.35
+PILE_BREAK_SPREAD = 1.8
+WIN_STRETCH_INTENSITY = 0.72
+WIN_STRETCH_DENOM = 1.05
+WIN_STRETCH_FLOOR = 3.0
+WIN_STRETCH_CEILING = 15.2
+WIN_STRETCH_TAPER_K = 0.62
+WIN_STRETCH_TAIL_DAMPEN = 0.18
+WIN_PILE_BREAK_WIDTH = 0.04
+WIN_PILE_BREAK_SPREAD = 0.12
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -123,6 +136,51 @@ def _taper_toward_band(
     # Higher k → steeper saturation (closer to a clip, but still continuous).
     sharpness = max(float(k), 0.25)
     return mid + half * math.tanh(((float(value) - mid) / half) * sharpness)
+
+
+def _break_soft_piles(
+    values: Mapping[str, float],
+    residuals: Mapping[str, float],
+    *,
+    width: float,
+    spread: float,
+) -> Dict[str, float]:
+    """Within near-tie clusters, apply residual-ranked micro-spread (conserving sum).
+
+    Keeps league totals intact while separating soft-floor / soft-ceiling stacks
+    that survive a gentle tanh taper.
+    """
+    if not values:
+        return {}
+    teams = list(values.keys())
+    ordered = sorted(teams, key=lambda t: (float(values[t]), float(residuals.get(t, 0.0)), t))
+    out = {t: float(values[t]) for t in teams}
+    i = 0
+    n = len(ordered)
+    while i < n:
+        j = i + 1
+        while j < n and abs(out[ordered[j]] - out[ordered[i]]) <= float(width):
+            j += 1
+        cluster = ordered[i:j]
+        if len(cluster) >= 3:
+            # Rank by residual (not current piled value) so order is meaningful.
+            cluster_sorted = sorted(
+                cluster, key=lambda t: (float(residuals.get(t, 0.0)), t)
+            )
+            mid = 0.5 * (len(cluster_sorted) - 1)
+            deltas = {
+                t: (idx - mid) * float(spread) / max(mid, 1.0)
+                for idx, t in enumerate(cluster_sorted)
+            }
+            mean_delta = sum(deltas.values()) / len(deltas)
+            for t, d in deltas.items():
+                out[t] = max(0.0, out[t] + d - mean_delta)
+        i = j
+    # Exact conservation.
+    before = sum(float(v) for v in values.values()) or 1.0
+    after = sum(out.values()) or 1.0
+    scale = before / after
+    return {t: v * scale for t, v in out.items()}
 
 
 def _f(row: Mapping[str, Any], *keys: str, default: float = 0.0) -> float:
@@ -226,8 +284,20 @@ def build_points_for(
     raw = {t: raw_offensive_points(o) for t, o in offense_by_team.items()}
     total = sum(raw.values()) or 1.0
     scale = float(target_league_pf) / total
-    out = {t: _clamp(v * scale, TEAM_PF_SOFT_FLOOR, TEAM_PF_SOFT_CEILING) for t, v in raw.items()}
-    # Re-fit to league target after soft clamps.
+    # v1.24: tapered band (not hard clip) — hard floors created the ~286 PF pile.
+    out = {
+        t: _taper_toward_band(
+            v * scale, TEAM_PF_SOFT_FLOOR, TEAM_PF_SOFT_CEILING, k=STRETCH_TAPER_K
+        )
+        for t, v in raw.items()
+    }
+    out = _break_soft_piles(
+        out,
+        {t: float(raw[t]) for t in out},
+        width=PILE_BREAK_WIDTH,
+        spread=PILE_BREAK_SPREAD,
+    )
+    # Re-fit to league target after soft taper / pile-break.
     total2 = sum(out.values()) or 1.0
     scale2 = float(target_league_pf) / total2
     return {t: v * scale2 for t, v in out.items()}
@@ -541,28 +611,38 @@ def apply_offensive_pf_variance_lift(
     offense_by_team: Optional[Mapping[str, Mapping[str, float]]] = None,
 ) -> Dict[str, Dict[str, float]]:
     """Widen PF after offensive volume lift; light PA re-stretch; PF=PA conserved."""
+    pf_pre = {t: float(v) for t, v in points_for.items()}
     pf = stretch_centered(
-        {t: float(v) for t, v in points_for.items()},
+        pf_pre,
         center=PF_STRETCH_CENTER,
         intensity=float(pf_intensity),
         denom=PF_STRETCH_DENOM,
         soft_floor=PF_STRETCH_FLOOR,
         soft_ceiling=PF_STRETCH_CEILING,
         target_sum=float(target_league_pf),
+        taper_k=STRETCH_TAPER_K,
+    )
+    pf = _break_soft_piles(
+        pf,
+        pf_pre,
+        width=PILE_BREAK_WIDTH,
+        spread=PILE_BREAK_SPREAD,
     )
     if offense_by_team:
         pf = enforce_volume_to_points_floors(
             pf, offense_by_team, target_league_pf=float(target_league_pf)
         )
     pa_target = float(target_league_pf)
+    pa_pre = {t: float(v) for t, v in points_against.items()}
     pa = stretch_centered(
-        {t: float(v) for t, v in points_against.items()},
+        pa_pre,
         center=PA_STRETCH_CENTER,
         intensity=float(pa_restretch_intensity),
         denom=PA_STRETCH_DENOM,
         soft_floor=PA_STRETCH_FLOOR,
         soft_ceiling=PA_STRETCH_CEILING,
         target_sum=pa_target,
+        taper_k=STRETCH_TAPER_K,
     )
     # Exact PF = PA conservation (microscopic).
     pf_sum = sum(pf.values()) or 1.0
@@ -578,6 +658,15 @@ def apply_offensive_pf_variance_lift(
         pf = enforce_volume_to_points_floors(
             pf, offense_by_team, target_league_pf=mid
         )
+        # Break any soft-floor stack created by exact volume-floor pins + renorm.
+        pf = _break_soft_piles(
+            pf,
+            pf_pre,
+            width=PILE_BREAK_WIDTH,
+            spread=PILE_BREAK_SPREAD,
+        )
+        pf_sum = sum(pf.values()) or 1.0
+        pf = {t: v * (mid / pf_sum) for t, v in pf.items()}
         pa_sum = sum(pa.values()) or 1.0
         pa = {t: v * (mid / pa_sum) for t, v in pa.items()}
     return {"points_for": pf, "points_against": pa}
@@ -618,8 +707,9 @@ def _assert_volume_floors_conserved(
                 room = max(0.0, out[t] - donor_floor)
                 out[t] -= take * (room / donor_pool)
     # Soft-saturate into published PF band, then exact renorm.
+    pre_taper = dict(out)
     out = {
-        t: _taper_toward_band(v, TEAM_PF_SOFT_FLOOR, TEAM_PF_SOFT_CEILING, k=1.0)
+        t: _taper_toward_band(v, TEAM_PF_SOFT_FLOOR, TEAM_PF_SOFT_CEILING, k=STRETCH_TAPER_K)
         for t, v in out.items()
     }
     # Re-assert volume floors inside the band (tiny borrow if needed).
@@ -634,6 +724,12 @@ def _assert_volume_floors_conserved(
         for t in donors:
             room = max(0.0, out[t] - donor_floor)
             out[t] -= shortfall * (room / donor_pool)
+    out = _break_soft_piles(
+        out,
+        pre_taper,
+        width=PILE_BREAK_WIDTH,
+        spread=PILE_BREAK_SPREAD,
+    )
     total = sum(out.values()) or 1.0
     return {t: v * (float(target_sum) / total) for t, v in out.items()}
 
@@ -746,7 +842,7 @@ def apply_defensive_production_stack(
         )
         offense_pf_meta = {
             "applied": True,
-            "method": "offense_pf_variance_lift_v1_23_tapered",
+            "method": "offense_pf_variance_lift_v1_24_soft_piles",
             "pf_range": round(max(pf.values()) - min(pf.values()), 2),
             "pa_range": round(max(pa.values()) - min(pa.values()), 2),
             "volume_pf_floors": True,
@@ -756,17 +852,32 @@ def apply_defensive_production_stack(
     wins = pythagorean_wins(pf, pa)
     if offense_pf_variance_lift:
         # Tapered win stretch — widen compressed W/L without hard clips.
+        # v1.24: softer ceiling taper + residual micro-spread clears 13.15 stacks.
+        win_pre = dict(wins)
         wins = stretch_centered(
             wins,
             center=8.5,
-            intensity=0.62,
-            denom=1.15,
-            soft_floor=3.2,
-            soft_ceiling=14.5,
+            intensity=WIN_STRETCH_INTENSITY,
+            denom=WIN_STRETCH_DENOM,
+            soft_floor=WIN_STRETCH_FLOOR,
+            soft_ceiling=WIN_STRETCH_CEILING,
             target_sum=EXPECTED_WINS_SUM,
-            taper_k=1.0,
-            tail_dampen=0.25,
+            taper_k=WIN_STRETCH_TAPER_K,
+            tail_dampen=WIN_STRETCH_TAIL_DAMPEN,
         )
+        win_resid = {
+            t: float(pf.get(t, 0.0)) - float(pa.get(t, 0.0)) for t in wins
+        }
+        wins = _break_soft_piles(
+            wins,
+            win_resid,
+            width=WIN_PILE_BREAK_WIDTH,
+            spread=WIN_PILE_BREAK_SPREAD,
+        )
+        w_sum = sum(wins.values()) or 1.0
+        wins = {t: v * (EXPECTED_WINS_SUM / w_sum) for t, v in wins.items()}
+        # Preserve pre-stretch ordering signal in audit via unused local.
+        _ = win_pre
 
     budgets: Dict[str, TeamDefenseBudget] = {}
     for team in teams:
@@ -774,7 +885,7 @@ def apply_defensive_production_stack(
         if variance_lift and lift_meta.get("applied"):
             notes.append("defense_variance_lift_v1")
         if offense_pf_variance_lift:
-            notes.append("offense_pf_variance_lift_v1_23_tapered")
+            notes.append("offense_pf_variance_lift_v1_24_soft_piles")
         budgets[team] = TeamDefenseBudget(
             team=team,
             points_for=float(pf[team]),

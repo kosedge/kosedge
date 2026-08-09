@@ -1,12 +1,12 @@
 {
-  "bundle_id": "nfl-preseason-sim-2026-20260809T163204Z",
-  "engine_version": "nfl-season-engine-v1.23-soft-flags-enterprise",
+  "bundle_id": "nfl-preseason-sim-2026-20260809T165350Z",
+  "engine_version": "nfl-season-engine-v1.24-soft-piles-cleanup",
   "n_team_sims": 100000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-09T16:37:27.849990+00:00",
+  "generated_at_utc": "2026-08-09T16:53:51.671488+00:00",
   "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.23-soft-flags-enterprise \u00b7 N_team=100000 \u00b7 20260809T163204Z",
+  "identity": "nfl-season-engine-v1.24-soft-piles-cleanup \u00b7 N_team=100000 \u00b7 20260809T165350Z",
   "note": "100k expert-sim candidate; NOT LOCKED \u2014 awaiting clearance",
   "locked_snapshot": false
 }
