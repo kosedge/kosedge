@@ -7,4 +7,6 @@
 - **Player full N:** 1000
 - **Generated:** 2026-08-09T16:53:51.671488+00:00
 - **Identity:** nfl-season-engine-v1.24-soft-piles-cleanup · N_team=100000 · 20260809T165350Z
-- **Note:** 100k expert-sim candidate — **NOT LOCKED — awaiting clearance**
+- **Status:** **LOCKED** — official 2026 pre-season baseline (`locked_snapshot: true`)
+- **Lock note:** `data/ops/nfl-2026-preseason-baseline-LOCKED-20260809.md`
+- **Git tag:** `nfl-2026-preseason-baseline-v1.24`

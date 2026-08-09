@@ -7,6 +7,9 @@
   "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
   "preseason": true,
   "identity": "nfl-season-engine-v1.24-soft-piles-cleanup \u00b7 N_team=100000 \u00b7 20260809T165350Z",
-  "note": "100k expert-sim candidate; NOT LOCKED \u2014 awaiting clearance",
-  "locked_snapshot": false
+  "note": "LOCKED — official 2026 pre-season baseline (v1.24 soft-pile cleanup confirmation board)",
+  "locked_snapshot": true,
+  "locked_at_utc": "2026-08-09T16:57:00+00:00",
+  "lock_tag": "nfl-2026-preseason-baseline-v1.24",
+  "engine_commit": "ab16a4e7218632b31eb186caf51800ea3f31a872"
 }

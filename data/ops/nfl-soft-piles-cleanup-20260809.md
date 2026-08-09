@@ -7,9 +7,10 @@ Source research: `data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft
 
 ## Status
 
-**NOT LOCKED — piles cleared, awaiting lock clearance**
+**LOCKED** — official 2026 pre-season baseline (`locked_snapshot: true`).
 
-Do not tag official baseline. `locked_snapshot: false`. No lock PR.
+Lock note: `data/ops/nfl-2026-preseason-baseline-LOCKED-20260809.md`  
+Git tag: `nfl-2026-preseason-baseline-v1.24`
 
 ## Before → after (pile sizes)
 
@@ -62,4 +63,4 @@ Do not tag official baseline. `locked_snapshot: false`. No lock PR.
 3. Wins: softer ceiling taper + point-diff micro-spread; wins Σ=272
 4. Mike Evans identity → TB (packaged depth quirk; team pools untouched)
 5. Small confirmation = post-board rebuild only (not another 100k MC)
-6. **NOT LOCKED — awaiting clearance**
+6. **LOCKED** as official 2026 pre-season baseline (user clearance 20260809)

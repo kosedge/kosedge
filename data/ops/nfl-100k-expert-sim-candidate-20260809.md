@@ -8,9 +8,12 @@ Runtime (sim): team 36.7m · player 21.0m · total ~57.7m
 
 ## Status
 
-**NOT LOCKED — awaiting clearance**
+**LOCKED** — official 2026 pre-season baseline on cleaned v1.24 confirmation board.
 
-Do not tag official baseline. `locked_snapshot: false`. No merge to deploy-vercel as official until explicit lock.
+- Pointer: `data/ops/nfl-web-launch-bundle.json` (`locked_snapshot: true`)
+- Lock note: `data/ops/nfl-2026-preseason-baseline-LOCKED-20260809.md`
+- Git tag: `nfl-2026-preseason-baseline-v1.24`
+- Honest note: 100k MC was v1.23; locked board is v1.24 post-board soft-pile cleanup (not a second 100k).
 
 ## Conservation
 
@@ -296,7 +299,7 @@ Bottom 5:
 
 ## Method
 1. Packaged universe `--force-packaged` with cleaned QB depth (Kyler ARI / McCarthy MIN / Penix ATL / Tua MIA)
-2. Launch research: 100,000 team W/L + 1,000 full player paths (engine `nfl-season-engine-v1.24-soft-piles-cleanup`)
-3. Post: offense variance lift → alpha usage → HV pass-TD floors → soft RB priors → tapered PF/PA + Pythagorean wins Σ=272
+2. Launch research: 100,000 team W/L + 1,000 full player paths (**v1.23** MC); confirmation board stamped as **v1.24** after soft-pile cleanup (post-board tapered rebuild, not a second 100k)
+3. Post: offense variance lift → alpha usage → HV pass-TD floors → soft RB priors → tapered PF/PA + Pythagorean wins Σ=272 → soft-pile cleanup
 4. Constraints held: ~126k pass, ARI/BAL/SEA weights, 64k rush, PF=PA≈11859
-5. **NOT LOCKED — awaiting clearance**
+5. **LOCKED** as official 2026 pre-season baseline (see `nfl-2026-preseason-baseline-LOCKED-20260809.md`)
