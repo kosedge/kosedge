@@ -1816,14 +1816,15 @@ def nfl_intel_rosters(
             season=resolved_season,
             week=resolved_week,
         )
-        if len(rows) == 0 and _packaged_depth_available(resolved_season):
+        # Packaged depth SoT is authoritative for player→team when present.
+        if _packaged_depth_available(resolved_season):
             return _intel_packaged_roster_payload(
                 season=resolved_season,
                 week=resolved_week,
                 team=resolved_team,
                 limit=limit,
                 selection_metadata=selection_metadata,
-                reason="db_rosters_empty",
+                reason="packaged_depth_sot",
             )
         return {
             "season": resolved_season,
@@ -1852,7 +1853,7 @@ def nfl_intel_rosters(
                 team=team,
                 limit=limit,
                 selection_metadata=err_payload.get("selection"),
-                reason="db_rosters_unavailable",
+                reason="packaged_depth_sot",
             )
         return err_payload
     finally:
@@ -2268,14 +2269,15 @@ def nfl_intel_depth_charts(
                 "limit": limit,
             },
         ).fetchall()
-        if len(rows) == 0 and _packaged_depth_available(resolved_season):
+        # Packaged depth SoT is authoritative for player→team when present.
+        if _packaged_depth_available(resolved_season):
             return _intel_packaged_depth_payload(
                 season=resolved_season,
                 week=resolved_week,
                 team=resolved_team,
                 limit=limit,
                 selection_metadata=selection_metadata,
-                reason="db_depth_empty",
+                reason="packaged_depth_sot",
             )
         return {
             "season": resolved_season,
@@ -2303,7 +2305,7 @@ def nfl_intel_depth_charts(
                 team=team,
                 limit=limit,
                 selection_metadata=err_payload.get("selection"),
-                reason="db_depth_unavailable",
+                reason="packaged_depth_sot",
             )
         return err_payload
     finally:

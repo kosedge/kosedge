@@ -561,11 +561,16 @@ def fetch_current_qb1(
     season: int,
     as_of_week: Optional[int] = None,
 ) -> Dict[str, Tuple[str, str]]:
-    """Current projected QB1: official depth preferred, else packaged."""
+    """Current projected QB1 from packaged depth SoT (exclusive when present)."""
     from sqlalchemy import text
 
     week = int(as_of_week or 1)
-    out: Dict[str, Tuple[str, str]] = {}
+    packaged = _load_packaged_qb1(int(season))
+    if len(packaged) >= 24:
+        return packaged
+
+    # No packaged SoT — bridge from official depth only.
+    out: Dict[str, Tuple[str, str]] = dict(packaged)
     try:
         rows = session.execute(
             text(
@@ -583,14 +588,9 @@ def fetch_current_qb1(
             pid = str(getattr(row, "player_id", None) or row[1] or "").strip()
             name = str(getattr(row, "player_name", None) or row[2] or "")
             if team and pid:
-                out[team] = (pid, name)
+                out.setdefault(team, (pid, name))
     except Exception:
-        out = {}
-
-    if len(out) < 24:
-        packaged = _load_packaged_qb1(int(season))
-        for team, pair in packaged.items():
-            out.setdefault(team, pair)
+        pass
     return out
 
 

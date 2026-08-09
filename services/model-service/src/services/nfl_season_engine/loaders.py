@@ -4,12 +4,16 @@ Default (``demo=False``): real 2026 regular-season schedule — prefer
 ``nfl_dp_schedules`` when a DB session has rows; otherwise the packaged
 wall-chart JSON (272 REG games with byes).
 
-Depth / roster fallback (fantasy-usable identities):
+Depth / roster — **single source of truth** for player→team identities:
 
-1. ``nfl_dp_depth_chart_weekly`` (preferred when populated)
-2. ``nfl_dp_official_depth_charts`` (nflverse official snapshots)
-3. Packaged ``nfl_depth_chart_2026_w1.json`` (checked-in nflverse slice)
+1. Packaged ``nfl_depth_chart_2026_w1.json`` when present for the season
+   (authoritative SoT shared with intel depth/roster surfaces)
+2. ``nfl_dp_depth_chart_weekly`` only when no packaged SoT exists
+3. ``nfl_dp_official_depth_charts`` only when no packaged SoT exists
 4. ``demo_depth_chart`` (last resort / explicit ``demo=True``)
+
+The engine must never prefer stale DB weekly/official rows that disagree
+with the packaged depth SoT. Roster/depth changes update the pack only.
 
 Strength priors (real mode) — efficiency backbone → existing O/D slot:
 
@@ -1459,6 +1463,7 @@ def load_universe_from_db(
             official_rows = []
 
     # Rookie / draft flags: prefer DB rostres; fall back to packaged nflverse join.
+    # Rookie-flag ``team`` is metadata only — never reassigns player→team vs depth SoT.
     rookie_flags = _load_rookie_flags_from_db(session, season=season)
     rookie_flag_meta: Dict[str, Any] = {
         "rookie_flag_source": "nfl_dp_rosters" if rookie_flags else "missing_db",
@@ -1475,8 +1480,51 @@ def load_universe_from_db(
     coverage: Dict[str, Any] = {}
     baseline_hits = 0
     rookie_enrich_stats: Dict[str, Any] = {}
+    roster_note = ""
 
-    if weekly_rows:
+    # Packaged depth is the exclusive player→team SoT when present for season.
+    packaged_rows: Optional[List[Dict[str, Any]]] = None
+    pkg_depth_meta: Dict[str, Any] = {}
+    try:
+        packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
+    except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
+        packaged_rows = None
+
+    if packaged_rows:
+        depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
+            packaged_rows,
+            rookie_flags,
+            season=season,
+        )
+        rosters, baseline_hits, coverage = _rosters_from_depth_rows(
+            depth_rows,
+            source=ROSTER_SOURCE_PACKAGED,
+            baseline_eff=baseline_eff,
+        )
+        roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
+        roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
+        skipped = []
+        if weekly_rows:
+            skipped.append("nfl_dp_depth_chart_weekly")
+        if official_rows:
+            skipped.append("nfl_dp_official_depth_charts")
+        skip_note = (
+            f"; ignored stale DB depth ({', '.join(skipped)}) in favor of packaged SoT"
+            if skipped
+            else ""
+        )
+        if baseline_hits:
+            roster_note = (
+                f"REAL packaged depth SoT identities; efficiency from baselines "
+                f"({baseline_hits} hits) else league priors{skip_note}"
+            )
+        else:
+            roster_note = (
+                "REAL packaged depth SoT identities; PLACEHOLDER league efficiency priors "
+                f"(nfl_player_projection_baselines unavailable or empty for as_of_week)"
+                f"{skip_note}"
+            )
+    elif weekly_rows:
         depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
             [dict(r._mapping) for r in weekly_rows],  # type: ignore[attr-defined]
             rookie_flags,
@@ -1513,36 +1561,17 @@ def load_universe_from_db(
         roster_as_of = f"season={season};official_as_of_week<={as_of_week}"
         roster_note = (
             "REAL nflverse official depth identities "
-            "(weekly inferred table empty; bridged from nfl_dp_official_depth_charts)"
+            "(no packaged SoT; bridged from nfl_dp_official_depth_charts)"
         )
     else:
-        try:
-            packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
-            depth_rows, rookie_enrich_stats = enrich_depth_rows_with_rookie_flags(
-                packaged_rows,
-                rookie_flags,
-                season=season,
-            )
-            rosters, baseline_hits, coverage = _rosters_from_depth_rows(
-                depth_rows,
-                source=ROSTER_SOURCE_PACKAGED,
-                baseline_eff=baseline_eff,
-            )
-            roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
-            roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
-            roster_note = (
-                "REAL packaged nflverse depth snapshot "
-                "(DB weekly + official empty for season)"
-            )
-        except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
-            rosters = {}
-            for team in NFL_TEAMS:
-                rows = _DEMO_SKILL.get(team) or _generic_skill(team)
-                rosters[team] = [_role_from_demo(team, r) for r in rows]
-            roster_source = ROSTER_SOURCE_DEMO
-            roster_as_of = "2025_offseason_approx"
-            roster_note = "PLACEHOLDER demo rosters (all real depth sources empty)"
-            coverage = depth_coverage_from_rosters(rosters)
+        rosters = {}
+        for team in NFL_TEAMS:
+            rows = _DEMO_SKILL.get(team) or _generic_skill(team)
+            rosters[team] = [_role_from_demo(team, r) for r in rows]
+        roster_source = ROSTER_SOURCE_DEMO
+        roster_as_of = "2025_offseason_approx"
+        roster_note = "PLACEHOLDER demo rosters (all real depth sources empty)"
+        coverage = depth_coverage_from_rosters(rosters)
 
     for team in NFL_TEAMS:
         if not rosters.get(team):
@@ -1735,10 +1764,10 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         roster_source = str(pkg_depth_meta.get("roster_source") or ROSTER_SOURCE_PACKAGED)
         roster_as_of = str(pkg_depth_meta.get("roster_as_of") or "")
         roster_note = (
-            f"REAL packaged nflverse depth ({coverage.get('depth_named_skill_teams', 0)}/32 "
+            f"REAL packaged depth SoT ({coverage.get('depth_named_skill_teams', 0)}/32 "
             f"named skill teams); rookies_flagged="
             f"{rookie_enrich_stats.get('rookie_flagged', 0)}; "
-            "DB weekly preferred when populated."
+            "packaged SoT is exclusive player-to-team source (no DB depth override)."
         )
     except (FileNotFoundError, ValueError, OSError, json.JSONDecodeError):
         coverage = depth_coverage_from_rosters(rosters)

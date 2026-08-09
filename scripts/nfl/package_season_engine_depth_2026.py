@@ -33,6 +33,16 @@ DEFAULT_URL = (
 SKILL = ("QB", "RB", "WR", "TE")
 TEAM_MAP = {"LAR": "LA"}
 
+# Enterprise depth SoT overrides applied after nflverse packaging.
+# Depth/roster changes update this map + the JSON pack — never engine hardcodes.
+SOT_QB_OVERRIDES: dict[str, list[tuple[str, str]]] = {
+    # team -> [(depth_order, player_name), ...]
+    "ARI": [(1, "Jacoby Brissett"), (2, "Gardner Minshew II"), (3, "Carson Beck")],
+    "MIN": [(1, "Kyler Murray"), (2, "J.J. McCarthy"), (3, "Carson Wentz")],
+    "ATL": [(1, "Michael Penix Jr."), (2, "Malik Willis")],
+    "MIA": [(1, "Tua Tagovailoa")],
+}
+
 
 def _load_frame(parquet_path: Path):
     try:
@@ -40,6 +50,51 @@ def _load_frame(parquet_path: Path):
     except ImportError as exc:  # pragma: no cover
         raise SystemExit("polars is required to package depth charts") from exc
     return pl.read_parquet(str(parquet_path))
+
+
+def _apply_sot_qb_overrides(rows: list[dict]) -> list[dict]:
+    """Enforce enterprise QB depth SoT after raw nflverse packaging."""
+    by_name = {
+        str(r.get("player_name") or "").strip(): r for r in rows if r.get("player_name")
+    }
+    # Drop overridden QB slots; reinsert SoT identities (preserve player_id when known).
+    drop_keys: set[tuple[str, int]] = set()
+    for team, slots in SOT_QB_OVERRIDES.items():
+        for depth, _name in slots:
+            drop_keys.add((team, int(depth)))
+    # Also remove SoT QBs from any other team slot so they aren't duplicated.
+    sot_names = {name for slots in SOT_QB_OVERRIDES.values() for _, name in slots}
+    kept: list[dict] = []
+    for r in rows:
+        if str(r.get("position") or "") != "QB":
+            kept.append(r)
+            continue
+        team = str(r.get("team") or "")
+        depth = int(r.get("depth_order") or 0)
+        name = str(r.get("player_name") or "").strip()
+        if (team, depth) in drop_keys or name in sot_names:
+            continue
+        kept.append(r)
+    for team, slots in SOT_QB_OVERRIDES.items():
+        for depth, name in slots:
+            prior = by_name.get(name) or {}
+            kept.append(
+                {
+                    "team": team,
+                    "position": "QB",
+                    "depth_order": int(depth),
+                    "player_id": str(prior.get("player_id") or f"{team}-QB-{depth}"),
+                    "player_name": name,
+                    "depth_slot": {1: "starter", 2: "backup", 3: "rotation"}.get(
+                        int(depth), "depth"
+                    ),
+                    "role_confidence": 0.85
+                    if int(depth) == 1
+                    else (0.65 if int(depth) == 2 else 0.5),
+                }
+            )
+    kept.sort(key=lambda r: (r["team"], r["position"], int(r["depth_order"])))
+    return kept
 
 
 def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = "") -> dict:
@@ -76,6 +131,8 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
             }
         )
 
+    rows_out = _apply_sot_qb_overrides(rows_out)
+
     teams = {r["team"] for r in rows_out}
     full = 0
     for team in teams:
@@ -100,7 +157,9 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
         "notes": [
             "Skill-position slice (QB/RB/WR/TE) from latest nflverse depth-chart snapshot.",
             "Preseason/camp depth — roles can shift; rookies and free-agent landings may be incomplete or volatile.",
-            "Used when nfl_dp_depth_chart_weekly / official tables are empty.",
+            "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
+            "DB weekly/official must not override these identities when this pack is present.",
+            "QB SoT overrides applied post-nflverse: Kyler→MIN1, Brissett→ARI1, Penix→ATL1, Tua→MIA1.",
         ],
         "rows": rows_out,
     }

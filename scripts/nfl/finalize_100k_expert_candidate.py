@@ -40,6 +40,7 @@ from data_platform_nfl.offensive_production_stack import (  # noqa: E402
     apply_offensive_variance_lift,
     apply_soft_rb_priors_on_board,
     build_team_rush_tds,
+    canonical_qb1_from_depth_sot,
     enforce_high_volume_pass_tds_on_rows,
     locked_team_pass_yards,
     repair_qb_team_labels,
@@ -51,12 +52,8 @@ from publish_launch_research_to_web import publish  # noqa: E402
 
 ENGINE = "nfl-season-engine-v1.24-soft-piles-cleanup"
 SEED_DEFENSE_BUNDLE = ROOT / "data/ops/nfl-preseason-sim-2026-20260809T150309Z"
-CANON_QB1 = {
-    "ARI": "Kyler Murray",
-    "MIN": "J.J. McCarthy",
-    "ATL": "Michael Penix Jr.",
-    "MIA": "Tua Tagovailoa",
-}
+# Derived from packaged depth SoT at runtime (no independent QB map).
+CANON_QB1 = canonical_qb1_from_depth_sot(2026)
 
 
 class _Game:
@@ -862,7 +859,7 @@ Bottom 5:
 | **ALL** | {'**PASS**' if all(gates.values()) else '**FAIL**'} |
 
 ## Method
-1. Packaged universe `--force-packaged` with cleaned QB depth (Kyler ARI / McCarthy MIN / Penix ATL / Tua MIA)
+1. Packaged universe `--force-packaged` with depth SoT (Kyler MIN / Brissett ARI / Penix ATL / Tua MIA)
 2. Launch research: {n_team:,} team W/L + {n_player:,} full player paths (engine `{engine}`)
 3. Post: offense variance lift → alpha usage → HV pass-TD floors → soft RB priors → tapered PF/PA + Pythagorean wins Σ=272
 4. Constraints held: ~126k pass, ARI/BAL/SEA weights, 64k rush, PF=PA≈11859
