@@ -19,8 +19,8 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.19: defense + PF/PA + Pythagorean W/L on locked v1.18 offense board.
-ENGINE_VERSION = "nfl-season-engine-v1.19-defense-points-wl"
+# v1.20: defensive variance lift on PA / sacks / INTs / yards (conserved totals).
+ENGINE_VERSION = "nfl-season-engine-v1.20-defense-variance-lift"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -528,6 +528,11 @@ def calibration_notes() -> Dict[str, str]:
             "schedule-weighted opponent PF × defense_index; yards allowed / "
             "INTs forced / sacks; Pythagorean expected wins renormed to 272. "
             "See data_platform_nfl/defensive_production_stack.py."
+        ),
+        "defense_variance_lift": (
+            "v1.20: multiplicative stretch on PA / sacks / INTs (yards follow "
+            "PA residual at 0.6× intensity); soft floors/ceilings; exact "
+            "renorm to league totals; Pythagorean wins recomputed from new PA."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

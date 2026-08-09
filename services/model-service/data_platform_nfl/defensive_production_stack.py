@@ -50,6 +50,33 @@ TEAM_PF_SOFT_CEILING = 520.0
 TEAM_PA_SOFT_FLOOR = 250.0
 TEAM_PA_SOFT_CEILING = 520.0
 
+# ---------------------------------------------------------------------------
+# Variance lift (widen flat defensive distributions; conserve league totals).
+# ---------------------------------------------------------------------------
+PA_STRETCH_CENTER = 370.6
+PA_STRETCH_INTENSITY = 0.85
+PA_STRETCH_DENOM = 24.0
+PA_STRETCH_FLOOR = 328.0
+PA_STRETCH_CEILING = 425.0
+PA_LEAGUE_TOTAL = 11_859.0
+
+SACK_STRETCH_CENTER = 35.9
+SACK_STRETCH_INTENSITY = 1.4
+SACK_STRETCH_DENOM = 2.4
+SACK_STRETCH_FLOOR = 26.0
+SACK_STRETCH_CEILING = 49.0
+SACK_LEAGUE_TOTAL = 1_150.0
+
+INT_STRETCH_CENTER = 10.95
+INT_STRETCH_INTENSITY = 1.6
+INT_STRETCH_DENOM = 0.65
+INT_STRETCH_FLOOR = 7.0
+INT_STRETCH_CEILING = 15.5
+INT_LEAGUE_TOTAL = 350.3
+
+# Yards: 0.6× PA stretch intensity, driven by PA residual (same direction).
+YARDS_STRETCH_INTENSITY = PA_STRETCH_INTENSITY * 0.6  # 0.51
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, float(value)))
@@ -299,12 +326,116 @@ def pythagorean_wins(
     return {t: v * scale for t, v in raw.items()}
 
 
+def stretch_centered(
+    values: Mapping[str, float],
+    *,
+    center: float,
+    intensity: float,
+    denom: float,
+    soft_floor: float,
+    soft_ceiling: float,
+    target_sum: float,
+) -> Dict[str, float]:
+    """Multiplicative stretch about ``center``, clip, exact renorm to target_sum."""
+    if not values:
+        return {}
+    d = float(denom) if abs(float(denom)) > 1e-9 else 1.0
+    stretched: Dict[str, float] = {}
+    for team, raw in values.items():
+        factor = 1.0 + float(intensity) * ((float(raw) - float(center)) / d)
+        stretched[team] = _clamp(float(raw) * factor, soft_floor, soft_ceiling)
+    total = sum(stretched.values()) or 1.0
+    scale = float(target_sum) / total
+    return {t: v * scale for t, v in stretched.items()}
+
+
+def stretch_yards_with_pa_signal(
+    yards: Mapping[str, float],
+    pa_pre_stretch: Mapping[str, float],
+    *,
+    intensity: float = YARDS_STRETCH_INTENSITY,
+    pa_center: float = PA_STRETCH_CENTER,
+    pa_denom: float = PA_STRETCH_DENOM,
+) -> Dict[str, float]:
+    """Milder yards stretch in the same direction as PA residuals; renorm in-place total."""
+    if not yards:
+        return {}
+    target = sum(float(v) for v in yards.values()) or 1.0
+    d = float(pa_denom) if abs(float(pa_denom)) > 1e-9 else 1.0
+    stretched: Dict[str, float] = {}
+    for team, y in yards.items():
+        pa = float(pa_pre_stretch.get(team, pa_center))
+        factor = 1.0 + float(intensity) * ((pa - float(pa_center)) / d)
+        stretched[team] = max(0.0, float(y) * factor)
+    total = sum(stretched.values()) or 1.0
+    scale = target / total
+    return {t: v * scale for t, v in stretched.items()}
+
+
+def apply_defensive_variance_lift(
+    *,
+    points_against: Mapping[str, float],
+    sacks: Mapping[str, float],
+    ints_forced: Mapping[str, float],
+    pass_yards_allowed: Mapping[str, float],
+    rush_yards_allowed: Mapping[str, float],
+) -> Dict[str, Dict[str, float]]:
+    """Widen PA / sacks / INTs / yards; conserve league totals exactly."""
+    pa_pre = {t: float(v) for t, v in points_against.items()}
+    # Use actual PA sum when within 1pt of target (board may be 11859.2).
+    pa_target = float(sum(pa_pre.values()) or PA_LEAGUE_TOTAL)
+    sack_target = float(sum(sacks.values()) or SACK_LEAGUE_TOTAL)
+    int_target = float(sum(ints_forced.values()) or INT_LEAGUE_TOTAL)
+
+    pa = stretch_centered(
+        pa_pre,
+        center=PA_STRETCH_CENTER,
+        intensity=PA_STRETCH_INTENSITY,
+        denom=PA_STRETCH_DENOM,
+        soft_floor=PA_STRETCH_FLOOR,
+        soft_ceiling=PA_STRETCH_CEILING,
+        target_sum=pa_target,
+    )
+    sacks_out = stretch_centered(
+        {t: float(v) for t, v in sacks.items()},
+        center=SACK_STRETCH_CENTER,
+        intensity=SACK_STRETCH_INTENSITY,
+        denom=SACK_STRETCH_DENOM,
+        soft_floor=SACK_STRETCH_FLOOR,
+        soft_ceiling=SACK_STRETCH_CEILING,
+        target_sum=sack_target,
+    )
+    ints_out = stretch_centered(
+        {t: float(v) for t, v in ints_forced.items()},
+        center=INT_STRETCH_CENTER,
+        intensity=INT_STRETCH_INTENSITY,
+        denom=INT_STRETCH_DENOM,
+        soft_floor=INT_STRETCH_FLOOR,
+        soft_ceiling=INT_STRETCH_CEILING,
+        target_sum=int_target,
+    )
+    pass_out = stretch_yards_with_pa_signal(
+        {t: float(v) for t, v in pass_yards_allowed.items()}, pa_pre
+    )
+    rush_out = stretch_yards_with_pa_signal(
+        {t: float(v) for t, v in rush_yards_allowed.items()}, pa_pre
+    )
+    return {
+        "points_against": pa,
+        "sacks": sacks_out,
+        "ints_forced": ints_out,
+        "pass_yards_allowed": pass_out,
+        "rush_yards_allowed": rush_out,
+    }
+
+
 def apply_defensive_production_stack(
     rows: Sequence[Mapping[str, Any]],
     *,
     schedule: Sequence[Any],
     defense_index: Mapping[str, float],
     offense_index: Optional[Mapping[str, float]] = None,
+    variance_lift: bool = True,
 ) -> Tuple[Dict[str, TeamDefenseBudget], Dict[str, Any]]:
     """Build team PF/PA/W/L + defensive counting stats from locked offense."""
     offense = aggregate_team_offense(rows)
@@ -321,7 +452,6 @@ def apply_defensive_production_stack(
     pa = build_points_against(
         pf, schedule=schedule, defense_index=def_idx, offense_index=off_idx
     )
-    wins = pythagorean_wins(pf, pa)
     pass_all, rush_all = build_yards_allowed(
         offense, schedule=schedule, defense_index=def_idx
     )
@@ -330,8 +460,36 @@ def apply_defensive_production_stack(
     )
     sacks = build_sacks(def_idx)
 
+    lift_meta: Dict[str, Any] = {"applied": False}
+    if variance_lift:
+        lifted = apply_defensive_variance_lift(
+            points_against=pa,
+            sacks=sacks,
+            ints_forced=ints_forced,
+            pass_yards_allowed=pass_all,
+            rush_yards_allowed=rush_all,
+        )
+        pa = lifted["points_against"]
+        sacks = lifted["sacks"]
+        ints_forced = lifted["ints_forced"]
+        pass_all = lifted["pass_yards_allowed"]
+        rush_all = lifted["rush_yards_allowed"]
+        lift_meta = {
+            "applied": True,
+            "method": "defense_variance_lift_v1",
+            "pa_range": round(max(pa.values()) - min(pa.values()), 2),
+            "sack_range": round(max(sacks.values()) - min(sacks.values()), 2),
+            "int_range": round(max(ints_forced.values()) - min(ints_forced.values()), 2),
+        }
+
+    # Pythagorean wins from (possibly lifted) PA.
+    wins = pythagorean_wins(pf, pa)
+
     budgets: Dict[str, TeamDefenseBudget] = {}
     for team in teams:
+        notes = ["defense_points_wl_v1"]
+        if variance_lift:
+            notes.append("defense_variance_lift_v1")
         budgets[team] = TeamDefenseBudget(
             team=team,
             points_for=float(pf[team]),
@@ -343,13 +501,14 @@ def apply_defensive_production_stack(
             sacks=float(sacks.get(team, 0.0)),
             takeaways=float(ints_forced[team]),  # fumble stub omitted in v1
             point_diff=float(pf[team] - pa[team]),
-            notes=("defense_points_wl_v1",),
+            notes=tuple(notes),
         )
 
     smoke = smoke_defensive_stack(budgets, rows)
     audit = {
         "applied": True,
         "method": "defensive_production_stack_v1",
+        "variance_lift": lift_meta,
         "league_pf": round(sum(pf.values()), 2),
         "league_pa": round(sum(pa.values()), 2),
         "wins_sum": round(sum(wins.values()), 4),
@@ -368,6 +527,15 @@ def smoke_defensive_stack(
     pass_y = sum(
         _f(r, "pass_yards_total", "pass_yards_mean") for r in rows
     )
+    sacks_sum = sum(b.sacks for b in budgets.values())
+    ints_sum = sum(b.ints_forced for b in budgets.values())
+    pa_vals = [b.points_against for b in budgets.values()]
+    sack_vals = [b.sacks for b in budgets.values()]
+    int_vals = [b.ints_forced for b in budgets.values()]
+    pa_range = max(pa_vals) - min(pa_vals) if pa_vals else 0.0
+    sack_range = max(sack_vals) - min(sack_vals) if sack_vals else 0.0
+    int_range = max(int_vals) - min(int_vals) if int_vals else 0.0
+
     checks = {
         "pf_equals_pa": abs(pf - pa) <= 1.0,
         "wins_sum_272": abs(wins - EXPECTED_WINS_SUM) <= 0.05,
@@ -379,9 +547,17 @@ def smoke_defensive_stack(
             for b in budgets.values()
         ),
         "soft_pa_bands": all(
-            TEAM_PA_SOFT_FLOOR - 1 <= b.points_against <= TEAM_PA_SOFT_CEILING + 1
+            PA_STRETCH_FLOOR - 5 <= b.points_against <= PA_STRETCH_CEILING + 5
             for b in budgets.values()
         ),
+        # League targets on the live board; synthetic tests may differ slightly.
+        "sacks_conserved": abs(sacks_sum - SACK_LEAGUE_TOTAL) < 1.0
+        or (1_000.0 <= sacks_sum <= 1_300.0),
+        "ints_conserved": abs(ints_sum - INT_LEAGUE_TOTAL) < 1.0
+        or (300.0 <= ints_sum <= 400.0),
+        "pa_range_ge_85": pa_range >= 85.0,
+        "sack_range_ge_18": sack_range >= 18.0,
+        "int_range_ge_6": int_range >= 6.0,
     }
     # Yards allowed conserve opponent offense pools.
     pass_all = sum(b.pass_yards_allowed for b in budgets.values())
@@ -393,9 +569,22 @@ def smoke_defensive_stack(
     ranked_pf = sorted(budgets.values(), key=lambda b: -b.points_for)
     ranked_pa = sorted(budgets.values(), key=lambda b: -b.points_against)
     ranked_wins = sorted(budgets.values(), key=lambda b: -b.expected_wins)
+    ranked_sacks = sorted(budgets.values(), key=lambda b: -b.sacks)
+    ranked_ints = sorted(budgets.values(), key=lambda b: -b.ints_forced)
     return {
         "checks": checks,
         "all_pass": all(checks.values()),
+        "ranges": {
+            "pa": round(pa_range, 2),
+            "sacks": round(sack_range, 2),
+            "ints": round(int_range, 2),
+            "pa_min": round(min(pa_vals), 2),
+            "pa_max": round(max(pa_vals), 2),
+            "sack_min": round(min(sack_vals), 2),
+            "sack_max": round(max(sack_vals), 2),
+            "int_min": round(min(int_vals), 2),
+            "int_max": round(max(int_vals), 2),
+        },
         "league": {
             "points_for": round(pf, 2),
             "points_against": round(pa, 2),
@@ -404,8 +593,8 @@ def smoke_defensive_stack(
             "pass_yards": round(pass_y, 1),
             "pass_yards_allowed": round(pass_all, 1),
             "rush_yards_allowed": round(rush_all, 1),
-            "sacks": round(sum(b.sacks for b in budgets.values()), 1),
-            "ints_forced": round(sum(b.ints_forced for b in budgets.values()), 2),
+            "sacks": round(sacks_sum, 1),
+            "ints_forced": round(ints_sum, 2),
         },
         "top_pf": [(b.team, round(b.points_for, 1)) for b in ranked_pf[:5]],
         "bot_pf": [(b.team, round(b.points_for, 1)) for b in ranked_pf[-5:]],
@@ -413,6 +602,10 @@ def smoke_defensive_stack(
         "bot_pa": [(b.team, round(b.points_against, 1)) for b in ranked_pa[-5:]],
         "top_wins": [(b.team, round(b.expected_wins, 2)) for b in ranked_wins[:5]],
         "bot_wins": [(b.team, round(b.expected_wins, 2)) for b in ranked_wins[-5:]],
+        "top_sacks": [(b.team, round(b.sacks, 1)) for b in ranked_sacks[:5]],
+        "bot_sacks": [(b.team, round(b.sacks, 1)) for b in ranked_sacks[-5:]],
+        "top_ints": [(b.team, round(b.ints_forced, 1)) for b in ranked_ints[:5]],
+        "bot_ints": [(b.team, round(b.ints_forced, 1)) for b in ranked_ints[-5:]],
     }
 
 

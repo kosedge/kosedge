@@ -39,6 +39,7 @@ def test_engine_version_is_season_coherence() -> None:
             "team-priors",
             "offensive-production",
             "defense-points",
+            "defense-variance",
         )
     )
 

@@ -33,7 +33,7 @@ def _board_and_schedule():
                 "rush_yards_total": 200,
                 "rush_tds_total": 2,
                 "rec_tds_total": 0,
-                "ints_total": 10,
+                "ints_total": 11.0 + (i - 16) * 0.55,  # ~league 350; spread for INT stretch
             }
         )
         rows.append(
@@ -59,8 +59,9 @@ def _board_and_schedule():
         # rotate all but teams[0]
         teams = [teams[0]] + [teams[-1]] + teams[1:-1]
     schedule = schedule[:272]
-    defense = {t: 1.0 + (i - 16) * 0.01 for i, t in enumerate(teams)}
-    offense = {t: 1.0 + (16 - i) * 0.01 for i, t in enumerate(teams)}
+    # Wider D ladder so takeaways / sacks enter the stretch with real residuals.
+    defense = {t: 1.0 + (i - 16) * 0.035 for i, t in enumerate(teams)}
+    offense = {t: 1.0 + (16 - i) * 0.02 for i, t in enumerate(teams)}
     return rows, schedule, defense, offense
 
 
@@ -82,3 +83,7 @@ def test_defense_stack_conserves_pf_pa_wins() -> None:
     assert abs(smoke["league"]["wins_sum"] - EXPECTED_WINS_SUM) <= 0.05
     assert abs(smoke["league"]["points_for"] - smoke["league"]["points_against"]) <= 1.0
     assert smoke_defensive_stack(budgets, rows)["all_pass"] is True
+    assert audit["variance_lift"]["applied"] is True
+    assert smoke["ranges"]["pa"] >= 85.0
+    assert smoke["ranges"]["sacks"] >= 18.0
+    assert smoke["ranges"]["ints"] >= 6.0
