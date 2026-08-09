@@ -38,6 +38,8 @@ def test_engine_version_is_calibrated() -> None:
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
         or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
         or "offensive-production" in DEFAULT_SEASON_ENGINE_VERSION
@@ -45,6 +47,8 @@ def test_engine_version_is_calibrated() -> None:
         or "defense-points" in DEFAULT_SEASON_ENGINE_VERSION
         or "defense-variance" in DEFAULT_SEASON_ENGINE_VERSION
         or "team-variance" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
     )
     assert CALIBRATION_TAG.startswith("nfl-season-engine-cal")
     assert (

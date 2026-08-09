@@ -601,7 +601,7 @@ def build_run_lineage(
             deferred_gaps
             or [
                 "PlayerRole still keys sim math on synthetic player_key; GSIS joined at export/lineage only",
-                "OL→EPA power remains stub (documented_not_magical); ol_roles tracked but not calibrated",
+                "OL protection_v1 is a transparent feature (not calibrated EPA); revisit_by 2026-10-01",
                 "Fantasy season aggregates on web may omit lineage until board writers pass snapshot_id",
                 "player_season_totals.json remains a bare list; lineage lives on sibling run_summary.json",
             ]

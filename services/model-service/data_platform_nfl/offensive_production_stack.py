@@ -37,8 +37,9 @@ RUSH_SOFT_FLOOR = 1_220.0
 RUSH_SOFT_CEILING = 2_680.0
 RUSH_STRETCH_TAPER_K = 0.62
 RUSH_STRETCH_TAIL_DAMPEN = 0.18
-# Locked scheme pass weights — never touch in variance lift.
-LOCKED_PASS_SCHEME_TEAMS = ("ARI", "BAL", "SEA")
+# Legacy alias — Phase 2 removed named-team pass locks; variance lift still
+# never reshuffles locked pass yards (all 32 stay frozen from the budget step).
+LOCKED_PASS_SCHEME_TEAMS: Tuple[str, ...] = ()
 # Season yards→TD curves sized to the hand-off league TD bands
 # (pass 1,050–1,150; rush 450–520). Midpoints ≈114.5 / 123.7 YPT.
 # (Hand-off short-scale 14.8–15.4 / 38–42 are treated as curve shape
@@ -89,18 +90,9 @@ DEFENSE_TD_SOFT_BOOST = 0.06  # mid of +4–8% vs soft D
 DEFENSE_TD_ELITE_CUT = 0.06  # mid of –4–8% vs elite D
 RZ_SHARE_BOOST = 0.10  # mid of +8–12% for TE / primary WR
 
-# OL / scheme proxy bumps for RB soft priors (small continuous nudges).
-RB_OL_PROXY_BUMP: Dict[str, float] = {
-    "BAL": 15.0,
-    "SF": 12.0,
-    "PHI": 12.0,
-    "DET": 10.0,
-    "DAL": 8.0,
-    "LA": 8.0,
-    "BUF": 8.0,
-    "GB": 6.0,
-    "CHI": 5.0,
-}
+# Deprecated named-team OL bumps — Phase 2 uses ol_protection.rb_ypc_bump_yards.
+# Kept empty so undocumented team piles cannot silently reappear.
+RB_OL_PROXY_BUMP: Dict[str, float] = {}
 
 def _packaged_depth_sot_path(season: int = 2026) -> Path:
     """Resolve packaged depth SoT from either model-service mirror layout."""
@@ -294,12 +286,8 @@ PRIOR_YEAR_ALPHA_VOLUME: Dict[str, Dict[str, Any]] = {
     "chasebrown": {"pos": "RB", "rush_yards": 1019.0, "carry_share": 0.55, "top5_rush": False},
 }
 
-# Carry-forward scheme TD multipliers (LaFleur / Doyle / Fleury).
-SCHEME_TD_MULT: Dict[str, float] = {
-    "ARI": 0.95,
-    "BAL": 1.08,
-    "SEA": 1.03,
-}
+# Deprecated — Phase 2 derives scheme TD mult from coaching rz_pass_bias.
+SCHEME_TD_MULT: Dict[str, float] = {}
 
 # Season-average of weekly rookie ramps (Weeks 1–4 / 5–8 / rest-of-season).
 # First-round WR/TE: 55→80→100; Day-2: 40→70→100; Day-3/UDFA: 25→50→85.
@@ -450,13 +438,12 @@ def build_team_rush_pool(
         pace = float(st.get("pace_factor", 1.0) or 1.0)
         pass_bias = float(st.get("pass_rate_bias", 0.0) or 0.0)
         opp_def = float(st.get("opp_defense_index_mean", 1.0) or 1.0)
-        # Run-rate residual: inverse of pass bias + scheme lean.
+        # Run-rate residual: inverse of pass bias (coaching + strength).
+        # Phase 2: no named-team run_rate nudges — coaching_tendencies owns scheme.
         run_rate = _clamp(0.435 - 1.1 * pass_bias, 0.28, 0.58)
-        # BAL / PHI-style run lean already in pass_bias; light scheme nudge.
-        if team == "BAL":
-            run_rate = _clamp(run_rate + 0.02, 0.28, 0.58)
-        if team == "ARI":
-            run_rate = _clamp(run_rate - 0.01, 0.28, 0.58)
+        # Optional QB designed-run script tilt from strengths payload.
+        qb_tilt = float(st.get("qb_script_run_tilt", 0.0) or 0.0)
+        run_rate = _clamp(run_rate + qb_tilt, 0.28, 0.58)
         plays = _clamp(63.5 * pace * (1.0 + 0.10 * (offense - 1.0)), 50.0, 76.0)
         ypc = DEFAULT_YPC * _clamp(1.0 + 0.35 * (offense - 1.0), 0.90, 1.12)
         ypc *= _clamp(1.0 - 0.12 * (opp_def - 1.0), 0.90, 1.10)
@@ -505,7 +492,11 @@ def build_team_pass_tds(
             eff_index = offense
         eff = _efficiency_regressed(eff_index)
         def_m = defense_td_multiplier(opp_def)
-        scheme = float(SCHEME_TD_MULT.get(team, 1.0))
+        # Coaching rz_pass_bias → modest pass-TD scheme mult (general feature).
+        rz_bias = float(st.get("rz_pass_bias", st.get("coach_rz_pass_bias", 0.0)) or 0.0)
+        scheme = _clamp(1.0 + 1.6 * rz_bias, 0.94, 1.08)
+        if team in SCHEME_TD_MULT:
+            scheme = float(SCHEME_TD_MULT[team])  # legacy override path (empty)
         tds = (float(py) / YARDS_PER_PASS_TD) * eff * def_m * scheme
         # High-volume seasons cannot land below historical TD-rate floors.
         min_hv = high_volume_min_pass_tds(float(py))
@@ -572,10 +563,12 @@ def build_team_rush_tds(
         st = (strengths or {}).get(team) or {}
         offense = float(st.get("offense_index", 1.0) or 1.0)
         opp_def = float(st.get("opp_defense_index_mean", 1.0) or 1.0)
-        # Goal-line / dual-threat nudge for BAL.
-        gl = 1.08 if team == "BAL" else (0.97 if team == "ARI" else 1.0)
-        if team == "SEA":
-            gl = 1.02
+        # Goal-line / dual-threat from QB rushing profile (general), not team name.
+        gl = float(st.get("qb_rush_td_gl_mult", 1.0) or 1.0)
+        gl = _clamp(gl, 0.97, 1.12)
+        # Coaching run lean (negative rz_pass_bias) mildly boosts rush TDs.
+        rz_bias = float(st.get("rz_pass_bias", st.get("coach_rz_pass_bias", 0.0)) or 0.0)
+        gl *= _clamp(1.0 - 0.8 * rz_bias, 0.96, 1.06)
         eff = _efficiency_regressed(offense)
         def_m = defense_td_multiplier(opp_def)
         tds = (float(ry) / YARDS_PER_RUSH_TD) * eff * def_m * gl
@@ -1174,7 +1167,13 @@ def rb_soft_prior_yards(
     team_adj = float(RB_SOFT_PRIOR_TEAM_SPAN) * (2.0 * float(team_rush_rank_pct) - 1.0)
     prior_rush = float((prior or {}).get("rush_yards") or 0.0)
     prior_adj = _clamp((prior_rush - 1_200.0) / 12.0, -40.0, 70.0) if prior_rush > 0 else -10.0
-    ol_adj = float(RB_OL_PROXY_BUMP.get(team, 0.0))
+    # Phase 2: OL bump from protection feature when supplied on prior map;
+    # named-team RB_OL_PROXY_BUMP is empty (deprecated).
+    ol_adj = float(
+        (prior or {}).get("ol_rb_bump_yards")
+        or RB_OL_PROXY_BUMP.get(team, 0.0)
+        or 0.0
+    )
     target = base + team_adj + prior_adj + ol_adj
     cap = min(RB_ALPHA_YARD_SOFT_CEILING, rush_y * RB_ALPHA_SHARE_CAP)
     return _clamp(target, RB_ALPHA_YARD_HARD_FLOOR, cap)

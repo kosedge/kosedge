@@ -273,6 +273,38 @@ _CURATED: Dict[str, Dict[str, Any]] = {
         "label": "balanced",
         "source": "curated_prior",
     },
+    # Cardinals — LaFleur HC: balanced-to-pass lean (not pure volume pile).
+    # Replaces ARI named pass soft-ceiling sculpture (Phase 2).
+    "ARI": {
+        "pass_rate_bias": 0.010,
+        "script_aggression": 1.02,
+        "rz_pass_bias": 0.004,
+        "early_down_pass_bias": 0.006,
+        "two_minute_aggression": 1.02,
+        "label": "balanced_pass",
+        "source": "curated_prior",
+    },
+    # Seahawks — new OC Shanahan-tree: efficient intermediate, mild pass tilt.
+    # Replaces SEA Darnold/scheme named pass soft-floor sculpture (Phase 2).
+    "SEA": {
+        "pass_rate_bias": 0.012,
+        "script_aggression": 1.04,
+        "rz_pass_bias": 0.006,
+        "early_down_pass_bias": 0.008,
+        "two_minute_aggression": 1.03,
+        "label": "balanced_pass",
+        "source": "curated_prior",
+    },
+    # Commanders — Quinn staff: balanced; OL protection feature owns injury drag.
+    "WAS": {
+        "pass_rate_bias": 0.008,
+        "script_aggression": 1.04,
+        "rz_pass_bias": 0.005,
+        "early_down_pass_bias": 0.004,
+        "two_minute_aggression": 1.05,
+        "label": "balanced_pass",
+        "source": "curated_prior",
+    },
 }
 
 

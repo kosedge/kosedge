@@ -1,10 +1,11 @@
 """Season volume budgets — finite team pools before player allocation.
 
-Phase-1 coherence contract (v1.16) + v1.17 team pass-prior overlays:
+Phase-1 coherence contract (v1.16) + Phase-2 general volume features (v1.25):
 - Each team owns a **season pass-yard** and **rush-yard** budget driven by
   offense/pace/pass identity, coaching tendencies, and opponent-defense slate.
-- Targeted identity weights (ARI / BAL / SEA) adjust the team-level pass-volume
-  residual after the base talent/scheme model and **before** league-pool renorm.
+- General features (QB rushing profile, returning-QB prior travel, OL
+  protection YPA) adjust residuals **before** league-pool renorm — no
+  ARI/BAL/SEA named hardcodes.
 - Budgets are renormalized to a **league pool** near recent NFL reality.
 - Prior-year volume outliers regress toward the structural mean (tails only).
 - QB1 / RB1 / WR-TE production must draw from these budgets — not 32
@@ -17,6 +18,7 @@ Used by:
 
 from __future__ import annotations
 
+import math
 import statistics
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Tuple
@@ -35,6 +37,14 @@ from src.services.nfl_season_engine.calibration import (
     VOLUME_REGRESSION,
 )
 from src.services.nfl_season_engine.coaching_tendencies import profile_for_team
+from src.services.nfl_season_engine.ol_protection import (
+    OlProtectionFeature,
+    build_ol_protection_book,
+)
+from src.services.nfl_season_engine.qb_rushing_profile import (
+    QbRushingProfile,
+    resolve_qb1_profile,
+)
 from src.services.nfl_season_engine.types import EngineUniverse, TeamStrengthState
 
 GAMES_PER_TEAM = 17.0
@@ -48,42 +58,32 @@ STRENGTH_PASS_BIAS_SCALE = 1.75
 COACH_PASS_BIAS_SCALE = 1.35
 NAMED_SHARE = 1.0 - USAGE_OTHER_BUCKET_FLOOR
 
-# ---------------------------------------------------------------------------
-# Targeted team pass-volume identity overlays (v1.17).
-# Applied to the pre-pool pass residual only for ARI / BAL / SEA. Other 29
-# teams pass through unchanged; global 126k two-way renorm still follows.
-# ---------------------------------------------------------------------------
-# 2024–2025 Darnold high-efficiency volume anchor (team named pass yards).
+# Returning-QB prior anchor (generalizes the old SEA Darnold 70/30 pile).
+# When continuity says same QB1 and a prior pass volume is supplied, blend
+# prior*weight + structural*(1-weight). Weight scales with continuity travel.
+RETURNING_QB_PRIOR_WEIGHT_MAX = 0.70
+# Legacy name kept for import compatibility / ops notes (no longer a team lever).
 SEA_DARNOLD_PASS_BASELINE = 3_900.0
+# Empty — Phase 2 removed named-team pass identity overlays.
+TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS: Dict[str, Dict[str, float]] = {}
 
-# residual_regression: pass_yards <- mean + k * (pass_yards - mean)
-# scheme_mult: multiplicative scheme/identity weight after residual step
-# soft_floor / soft_ceiling: bounds before league-pool allocation
-TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS: Dict[str, Dict[str, float]] = {
-    "ARI": {
-        # Brissett 2025 negative-script / 68%+ pass-rate residual dampen.
-        "residual_regression": 0.78,
-        # LaFleur: balanced-to-pass lean, not pure volume.
-        "scheme_mult": 0.92,
-        "soft_ceiling": 4_250.0,
-    },
-    "BAL": {
-        # Dual-threat / run-bias damper raised to 0.88× (was effectively stronger).
-        "residual_regression": 0.88,
-        # Doyle: play-action + under-center emphasis.
-        "scheme_mult": 1.12,
-        "soft_floor": 3_150.0,
-    },
-    "SEA": {
-        # 70% Darnold 2024–25 baseline / 30% new-OC structural regression.
-        "darnold_anchor_weight": 0.70,
-        "new_oc_weight": 0.30,
-        "darnold_baseline": SEA_DARNOLD_PASS_BASELINE,
-        # Fleury / Shanahan-tree: efficient intermediate + elevated RB targets.
-        "scheme_mult": 1.05,
-        "soft_floor": 3_400.0,
-    },
+# Player-keyed pass-yard priors (SoT player_id) — not team hardcodes.
+# Revisit by 2026-10-01 once 2026 games update the anchors.
+QB_PASS_YARDS_PRIOR_BY_PLAYER_ID: Dict[str, float] = {
+    "00-0034869": SEA_DARNOLD_PASS_BASELINE,  # Sam Darnold
 }
+
+# Low-continuity high-tail shrink (generalizes ARI soft-ceiling sculpture).
+# When prior_travel is low (new staff / new QB regime), compress pass residuals
+# above league mean toward the mean. Documented, applies to every team.
+LOW_CONTINUITY_TRAVEL_THRESHOLD = 0.50
+LOW_CONTINUITY_HIGH_TAIL_K = 0.78  # residual keep-rate above mean
+
+# League-wide soft pass band (all 32 teams) — tanh taper, no named-team pins.
+# Replaces ARI/BAL/SEA soft_floor/soft_ceiling piles with one transparent rail.
+LEAGUE_PASS_SOFT_FLOOR = 2_900.0
+LEAGUE_PASS_SOFT_CEILING = 4_400.0
+LEAGUE_PASS_TAPER_K = 0.55
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -158,12 +158,52 @@ def _replace_pass_yards(budget: TeamSeasonBudget, pass_yards: float, *extra_note
     )
 
 
+def _replace_rush_yards(
+    budget: TeamSeasonBudget, rush_yards: float, *extra_notes: str
+) -> TeamSeasonBudget:
+    notes = tuple(list(budget.notes) + [n for n in extra_notes if n])
+    return TeamSeasonBudget(
+        team=budget.team,
+        pass_yards=budget.pass_yards,
+        rush_yards=float(rush_yards),
+        rec_yards=budget.rec_yards,
+        pass_plays=budget.pass_plays,
+        rush_plays=budget.rush_plays,
+        pass_rate=budget.pass_rate,
+        pace_plays=budget.pace_plays,
+        ypa=budget.ypa,
+        ypc=budget.ypc,
+        structural_pass_yards=budget.structural_pass_yards,
+        structural_rush_yards=budget.structural_rush_yards,
+        notes=notes,
+    )
+
+
 def apply_team_pass_volume_identity_adjustments(
     budgets: Mapping[str, TeamSeasonBudget],
 ) -> Dict[str, TeamSeasonBudget]:
-    """Identity weights on pass-volume residual before two-way pool allocation.
+    """Deprecated no-op — named-team identity overlays removed in Phase 2.
 
-    Only ARI / BAL / SEA are touched. Soft floors/ceilings apply pre-pool.
+    Kept so older callers / tests import cleanly. Prefer
+    ``apply_general_volume_features``.
+    """
+    return {str(t): b for t, b in budgets.items()}
+
+
+def apply_general_volume_features(
+    budgets: Mapping[str, TeamSeasonBudget],
+    *,
+    qb_profiles: Optional[Mapping[str, QbRushingProfile]] = None,
+    ol_protection: Optional[Mapping[str, OlProtectionFeature]] = None,
+    continuity_travel: Optional[Mapping[str, float]] = None,
+    returning_qb: Optional[Mapping[str, bool]] = None,
+    pass_yards_prior: Optional[Mapping[str, float]] = None,
+    new_regime: Optional[Mapping[str, bool]] = None,
+) -> Dict[str, TeamSeasonBudget]:
+    """General pre-pool volume features (QB rush, OL YPA, returning-QB prior).
+
+    Applied to every team identically — no ARI/BAL/SEA hardcodes. League pool
+    renorm still follows in ``compute_team_season_budgets``.
     """
     if not budgets:
         return {}
@@ -171,38 +211,72 @@ def apply_team_pass_volume_identity_adjustments(
     league_mean = statistics.fmean(pass_vals) if pass_vals else (LEAGUE_PASS_YARDS_POOL / 32.0)
     out: Dict[str, TeamSeasonBudget] = {}
     for team, budget in budgets.items():
-        cfg = TEAM_PASS_VOLUME_IDENTITY_ADJUSTMENTS.get(str(team))
-        if cfg is None:
-            out[team] = budget
-            continue
-        y = float(budget.pass_yards)
-        notes: List[str] = ["team_pass_identity_prior_v1"]
-        if team == "SEA":
-            baseline = float(cfg.get("darnold_baseline", SEA_DARNOLD_PASS_BASELINE))
-            w_d = float(cfg.get("darnold_anchor_weight", 0.70))
-            w_oc = float(cfg.get("new_oc_weight", 0.30))
-            w_sum = w_d + w_oc
-            if w_sum <= 0:
-                w_d, w_oc, w_sum = 0.70, 0.30, 1.0
-            y = (w_d * baseline + w_oc * y) / w_sum
-            notes.append("sea_darnold_anchor_70_30")
-        else:
-            k = float(cfg.get("residual_regression", 1.0))
-            y = league_mean + k * (y - league_mean)
-            notes.append(f"residual_regression_{k:.2f}")
-        scheme = float(cfg.get("scheme_mult", 1.0))
-        y = y * scheme
-        notes.append(f"scheme_mult_{scheme:.2f}")
-        floor = cfg.get("soft_floor")
-        ceiling = cfg.get("soft_ceiling")
-        if floor is not None and y < float(floor):
-            y = float(floor)
-            notes.append(f"soft_floor_{float(floor):.0f}")
-        if ceiling is not None and y > float(ceiling):
-            y = float(ceiling)
-            notes.append(f"soft_ceiling_{float(ceiling):.0f}")
-        out[team] = _replace_pass_yards(budget, y, *notes)
+        y_pass = float(budget.pass_yards)
+        y_rush = float(budget.rush_yards)
+        notes: List[str] = ["general_volume_features_v1"]
+
+        qb = (qb_profiles or {}).get(str(team))
+        if qb is None:
+            qb = resolve_qb1_profile(team=str(team))
+        y_pass *= float(qb.pass_volume_mult)
+        y_rush *= float(qb.rush_volume_mult)
+        # Dual-threat script tilt: slight additional rush from designed-run identity.
+        if qb.script_run_tilt > 0:
+            shift = y_pass * float(qb.script_run_tilt) * 0.35
+            y_pass -= shift
+            y_rush += shift
+        notes.append(f"qb_rush_{qb.tier}")
+
+        ol = (ol_protection or {}).get(str(team))
+        if ol is not None and ol.fidelity == "applied":
+            y_pass *= float(ol.ypa_mult)
+            notes.append(f"ol_ypa_{ol.protection_index:.3f}")
+
+        # Returning-QB prior travel (player-id prior map or caller-supplied).
+        is_returning = bool((returning_qb or {}).get(str(team), False))
+        prior = (pass_yards_prior or {}).get(str(team))
+        if prior is None and qb.player_id:
+            prior = QB_PASS_YARDS_PRIOR_BY_PLAYER_ID.get(str(qb.player_id))
+            # Pocket returning starter with a published prior ⇒ treat as returning.
+            if prior is not None and qb.tier == "pocket":
+                is_returning = True
+        travel = float((continuity_travel or {}).get(str(team), 0.55))
+        if is_returning and prior is not None and float(prior) > 0:
+            w = _clamp(RETURNING_QB_PRIOR_WEIGHT_MAX * max(travel, 0.55), 0.0, RETURNING_QB_PRIOR_WEIGHT_MAX)
+            y_pass = w * float(prior) + (1.0 - w) * y_pass
+            notes.append(f"returning_qb_prior_w_{w:.2f}")
+
+        # Low-continuity / new-regime high-tail shrink (generalizes ARI ceiling).
+        regime_new = bool((new_regime or {}).get(str(team), False))
+        if (travel < LOW_CONTINUITY_TRAVEL_THRESHOLD or regime_new) and y_pass > league_mean:
+            y_pass = league_mean + LOW_CONTINUITY_HIGH_TAIL_K * (y_pass - league_mean)
+            notes.append(f"low_cont_high_tail_k_{LOW_CONTINUITY_HIGH_TAIL_K:.2f}")
+
+        # League-wide soft band (all teams) — tanh taper, not a hard clip.
+        y_pass = _taper_pass_yards(y_pass)
+        notes.append("league_pass_soft_taper")
+
+        out[team] = _replace_rush_yards(
+            _replace_pass_yards(budget, y_pass, *notes),
+            y_rush,
+        )
     return out
+
+
+def _taper_pass_yards(value: float) -> float:
+    """Soft-saturate into league pass band via tanh (no hard pin)."""
+    v = float(value)
+    lo = LEAGUE_PASS_SOFT_FLOOR
+    hi = LEAGUE_PASS_SOFT_CEILING
+    half = 0.5 * (hi - lo)
+    if lo <= v <= hi:
+        return v
+    # Map overflow through tanh so extremes bend toward the rail.
+    if v > hi:
+        over = (v - hi) / max(half, 1.0)
+        return hi + half * LEAGUE_PASS_TAPER_K * math.tanh(over)
+    under = (lo - v) / max(half, 1.0)
+    return lo - half * LEAGUE_PASS_TAPER_K * math.tanh(under)
 
 
 def mean_opponent_defense(
@@ -382,19 +456,140 @@ def compute_team_season_budgets(
     *,
     pass_pool: float = LEAGUE_PASS_YARDS_POOL,
     rush_pool: float = LEAGUE_RUSH_YARDS_POOL,
+    qb_profiles: Optional[Mapping[str, QbRushingProfile]] = None,
+    ol_protection: Optional[Mapping[str, OlProtectionFeature]] = None,
+    continuity_travel: Optional[Mapping[str, float]] = None,
+    returning_qb: Optional[Mapping[str, bool]] = None,
+    pass_yards_prior: Optional[Mapping[str, float]] = None,
+    new_regime: Optional[Mapping[str, bool]] = None,
 ) -> Dict[str, TeamSeasonBudget]:
     """Build conserved team season budgets for the league."""
     raw = {
         team: structural_team_budget(factors)
         for team, factors in factors_by_team.items()
     }
-    # Identity overlays after base talent/scheme, before 126k two-way pool.
-    adjusted = apply_team_pass_volume_identity_adjustments(raw)
+    # General features after base talent/scheme, before 126k two-way pool.
+    adjusted = apply_general_volume_features(
+        raw,
+        qb_profiles=qb_profiles,
+        ol_protection=ol_protection,
+        continuity_travel=continuity_travel,
+        returning_qb=returning_qb,
+        pass_yards_prior=pass_yards_prior,
+        new_regime=new_regime,
+    )
     return _renormalize_pool(adjusted, pass_pool=pass_pool, rush_pool=rush_pool)
 
 
+def _volume_feature_context_from_universe(
+    universe: EngineUniverse,
+) -> Dict[str, Any]:
+    """Pull QB / OL / continuity inputs from SoT + roster rush shares."""
+    from src.services.nfl_season_engine.qb_rushing_profile import (
+        profiles_from_depth_rows,
+    )
+
+    qb_profiles: Dict[str, QbRushingProfile] = {}
+    # Prefer packaged depth SoT player_ids (identity join).
+    try:
+        from src.services.nfl_season_engine.loaders import load_packaged_depth_chart
+
+        depth_rows, depth_meta = load_packaged_depth_chart(int(universe.season))
+        qb_profiles.update(profiles_from_depth_rows(depth_rows))
+        ol_roles = list(depth_meta.get("ol_roles") or [])
+    except Exception:
+        depth_rows, depth_meta, ol_roles = [], {}, []
+
+    # Fill gaps from roster rush_share (demo / thin packs).
+    for team, roles in (universe.rosters or {}).items():
+        if str(team) in qb_profiles:
+            continue
+        for role in roles or []:
+            if str(getattr(role, "position", "") or "").upper() != "QB":
+                continue
+            try:
+                depth = int(getattr(role, "depth_order", 99) or 99)
+            except (TypeError, ValueError):
+                continue
+            if depth != 1:
+                continue
+            rs = float(getattr(role, "rush_share", 0.0) or 0.0)
+            qb_profiles[str(team)] = resolve_qb1_profile(
+                player_id=str(getattr(role, "player_id", "") or ""),
+                player_name=str(getattr(role, "player_name", "") or ""),
+                team=str(team),
+                rush_share=rs if rs > 0 else None,
+            )
+
+    notes = getattr(universe, "notes", None) or {}
+    if isinstance(notes, Mapping) and notes.get("ol_roles"):
+        ol_roles = list(notes.get("ol_roles") or [])  # type: ignore[arg-type]
+
+    ol_book = build_ol_protection_book(
+        [r for r in ol_roles if isinstance(r, Mapping)],
+        teams=list(factors_from_universe(universe).keys()),
+    )
+
+    continuity_travel: Dict[str, float] = {}
+    returning_qb: Dict[str, bool] = {}
+    new_regime: Dict[str, bool] = {}
+    for team, state in (universe.strengths or {}).items():
+        drivers = getattr(state, "drivers", None) or {}
+        if not isinstance(drivers, Mapping):
+            continue
+        cont = drivers.get("continuity") or {}
+        if not isinstance(cont, Mapping):
+            continue
+        travel = cont.get("prior_travel_weight")
+        if travel is not None:
+            continuity_travel[str(team)] = float(travel)
+        for fac in cont.get("factors") or []:
+            if not isinstance(fac, Mapping):
+                continue
+            name = str(fac.get("name") or "")
+            if name in {"qb", "qb_returning", "qb_continuity"}:
+                returning_qb[str(team)] = float(fac.get("score") or 0) >= 0.6
+            if name in {"staff", "hc_oc", "coaching_staff"}:
+                # Low staff continuity ⇒ new regime.
+                if float(fac.get("score") or 1.0) < 0.45:
+                    new_regime[str(team)] = True
+        if str(team) not in returning_qb and cont.get("continuity_score") is not None:
+            returning_qb[str(team)] = float(cont["continuity_score"]) >= 0.62
+        if cont.get("continuity_score") is not None and float(cont["continuity_score"]) < 0.45:
+            new_regime[str(team)] = True
+
+    # Curated staff change book (continuity_score.CURATED_STAFF_BY_SEASON) as
+    # new-regime signal when drivers lack continuity factors.
+    try:
+        from src.services.nfl_season_engine.continuity_score import (
+            CURATED_STAFF_BY_SEASON,
+        )
+
+        staff = CURATED_STAFF_BY_SEASON.get(int(universe.season)) or {}
+        for team, flags in staff.items():
+            if flags.get("new_hc") or flags.get("new_oc"):
+                new_regime[str(team)] = True
+                # New OC alone still allows returning-QB prior; new HC+OC or
+                # new HC dampens travel if not already set.
+                if flags.get("new_hc") and flags.get("new_oc"):
+                    continuity_travel.setdefault(str(team), 0.40)
+                elif flags.get("new_oc"):
+                    continuity_travel.setdefault(str(team), 0.55)
+    except Exception:
+        pass
+
+    return {
+        "qb_profiles": qb_profiles,
+        "ol_protection": ol_book,
+        "continuity_travel": continuity_travel,
+        "returning_qb": returning_qb,
+        "new_regime": new_regime,
+    }
+
+
 def compute_universe_season_budgets(universe: EngineUniverse) -> Dict[str, TeamSeasonBudget]:
-    return compute_team_season_budgets(factors_from_universe(universe))
+    ctx = _volume_feature_context_from_universe(universe)
+    return compute_team_season_budgets(factors_from_universe(universe), **ctx)
 
 
 def qb1_pass_yards_by_team(

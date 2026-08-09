@@ -17,7 +17,7 @@ def test_engine_version_includes_projected_sos() -> None:
     assert ENGINE_VERSION.startswith("nfl-season-engine-v1.")
     assert any(
         v in ENGINE_VERSION
-        for v in ("v1.14", "v1.15", "v1.16", "v1.17", "v1.18", "v1.19", "v1.20", "v1.21")
+        for v in ("v1.14", "v1.15", "v1.16", "v1.17", "v1.18", "v1.19", "v1.20", "v1.21", "v1.22", "v1.23", "v1.24", "v1.25")
     )
     assert any(
         t in ENGINE_VERSION
@@ -27,6 +27,8 @@ def test_engine_version_includes_projected_sos() -> None:
             "season-coherence",
             "defense-variance",
             "team-variance",
+            "phase2-features",
+            "soft-flags",
         )
     )
 

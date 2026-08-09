@@ -72,6 +72,8 @@ def test_engine_version_depth_volatility() -> None:
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
@@ -257,6 +259,8 @@ def test_cook_rice_realism_bounds_hold() -> None:
         or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
         or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
         or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
+        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
+        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
     )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
@@ -286,6 +290,8 @@ def test_season_path_volatility_diagnostics() -> None:
         or "player-regression" in result.engine_version
         or "projected-sos" in result.engine_version
         or "season-coherence" in result.engine_version
+        or "phase2-features" in result.engine_version
+        or "soft-flags" in result.engine_version
         or "true-pr-harden" in result.engine_version
     )
     assert "depth_structure" in result.diagnostics
