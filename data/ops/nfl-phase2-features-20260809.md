@@ -87,4 +87,40 @@ PYTHONPATH=src python3 -m pytest \
 
 ## Phase 3 gate
 
-Phase 3 historical replay remains **blocked** until this PR is green on `deploy-vercel` and the audit/policy fields stay current. Do not freeze Decision Engine ladders in this pass.
+Phase 3 historical replay was blocked pending green deploy of this PR. See **Phase 2 CLOSED** below — deploy + smoke are green; Phase 3 is **unblocked**. Do not freeze Decision Engine ladders in this closeout.
+
+## Phase 2 CLOSED (2026-08-09)
+
+| Field | Value |
+|-------|-------|
+| **PR** | [#163](https://github.com/kosedge/kosedge/pull/163) squash → `deploy-vercel` |
+| **Merge SHA** | `80294aae374643a69ab8d3cbfa92419b900563ca` |
+| **Vercel Production** | success (`Production – kosedge` deployment on merge SHA) |
+| **Railway** | success (`Railway up` check + live `engine_version=nfl-season-engine-v1.25-phase2-features`) |
+
+### Post-merge smoke
+
+1. **snapshot_id present** — Live game-box `GET …/nfl/season-engine/game-boxes?home_team=ATL&away_team=TB&season=2026&week=1&n_replicates=50` (Railway + BFF www.kosedge.com): `notes.snapshot_id=nfl-depth-2026-w1-20260809T190000Z`, `notes.lineage.engine_version=nfl-season-engine-v1.25-phase2-features` (+ `pack_sha256`).
+2. **Σ wins = 272** — Live `POST …/nfl/season-engine/simulate?n_team_sims=25&n_player_sims=25&seed=20260809`: `diagnostics.mean_wins_sum=272.0` (locked conservation path).
+3. **QB1 ≥4k band** — Same live sim `top_players`: **7** QBs with `pass_yards_mean ≥ 4000` (3 ≥4.5k); next is Herbert ~3999 — Phase 2 proof neighborhood, not absurd.
+
+### Keep-skim verdict (audit 8 policy Keeps)
+
+All **8** summary Keep rows are real documented policy (SoT hygiene / general rail / conservation / time-limited staff book) — **no silent named-team sculpture leftovers**.
+
+| # | Keep lever | Verdict |
+|---|------------|---------|
+| 1 | `CANONICAL_SKILL_TEAM` (Mike Evans→TB) | **PASS** — SoT identity hygiene only; not a volume lever |
+| 2 | `PRIOR_YEAR_ALPHA_VOLUME` | **PASS** — stats-keyed general prior; revisit 2026-10-01 |
+| 3 | League rush soft floor/ceiling + tanh | **PASS** — all-32 general rail |
+| 4 | High-volume pass TD floor | **PASS** — general volume↔TD coherence |
+| 5 | Soft RB alpha prior band | **PASS** — general prior + rank span |
+| 6 | PF/PA/win tapered stretch | **PASS** — general league taper (v1.24) |
+| 7 | Usage other-bucket floor 8% | **PASS** — general conservation |
+| 8 | `CURATED_STAFF_BY_SEASON[2026]` | **PASS** — explicit time-limited staff book; revisit 2026-10-01 |
+
+Note: audit table also labels `QB_RUSH_TIER_BY_PLAYER_ID` **Keep** (player_id trait; revisit 2026-10-01) — likewise documented policy, not a named-team hack.
+
+### Phase 3
+
+**Unblocked** for historical replay kickoff on this green deploy. Decision Engine polish and Phase 1 gate re-break remain out of scope for this closeout.
