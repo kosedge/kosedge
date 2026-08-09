@@ -634,6 +634,15 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
             f"(expected under {_PACKAGE_DATA_DIR})"
         )
     payload = json.loads(path.read_text(encoding="utf-8"))
+    # Attach / preserve snapshot lineage metadata (Phase 1 integrity gate).
+    from src.services.nfl_season_engine.data_integrity import (
+        ensure_snapshot_metadata,
+        pack_sha256,
+        validate_depth_sot_pack,
+    )
+    import os as _os
+
+    payload = ensure_snapshot_metadata(payload, pack_path=path)
     rows_raw = payload.get("rows") or []
     rows: List[Dict[str, Any]] = []
     for r in rows_raw:
@@ -679,6 +688,7 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
     ol_roles = [
         dict(p) for p in (payload.get("ol_roles") or []) if isinstance(p, Mapping)
     ]
+    sha = pack_sha256(path)
     meta = {
         "roster_source": str(payload.get("source") or ROSTER_SOURCE_PACKAGED),
         "roster_as_of": str(payload.get("as_of") or payload.get("as_of_timestamp") or ""),
@@ -687,6 +697,12 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
         "depth_upstream": str(payload.get("upstream") or "nflverse"),
         "depth_week": int(payload.get("week") or 1),
         "daily_intel_as_of": str(payload.get("daily_intel_as_of") or ""),
+        "snapshot_id": str(payload.get("snapshot_id") or ""),
+        "pack_sha256": sha,
+        "depth_sha256": sha,
+        "identity_scheme": str(
+            payload.get("identity_scheme") or "nflverse_gsis_player_id"
+        ),
         "injury_paths": injury_paths,
         "ol_roles": ol_roles,
         "camp_intel": dict(payload.get("camp_intel") or {})
@@ -699,6 +715,22 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
             or {}
         ),
     }
+    # Fail-closed load path for CI / daily job (opt-in). Default: attach lineage only.
+    if _os.environ.get("NFL_DEPTH_INTEGRITY_FAIL_CLOSED", "").strip() in {
+        "1",
+        "true",
+        "TRUE",
+        "yes",
+    }:
+        report = validate_depth_sot_pack(payload, pack_path=path)
+        if not report.ok:
+            from src.services.nfl_season_engine.data_integrity import DataIntegrityError
+
+            msgs = "; ".join(f"{f.check}: {f.message}" for f in report.findings)
+            raise DataIntegrityError(
+                f"Depth SoT integrity FAILED snapshot_id={report.snapshot_id}: {msgs}"
+            )
+        meta["integrity_ok"] = True
     return rows, meta
 
 
@@ -912,6 +944,11 @@ def universe_schedule_meta(universe: EngineUniverse) -> Dict[str, Any]:
         # Aliases requested by ops/status consumers.
         "depth_source": roster_source,
         "depth_as_of": roster_as_of,
+        "snapshot_id": str(notes.get("snapshot_id") or ""),
+        "pack_sha256": str(notes.get("pack_sha256") or notes.get("depth_sha256") or ""),
+        "depth_sha256": str(notes.get("depth_sha256") or notes.get("pack_sha256") or ""),
+        "daily_intel_as_of": str(notes.get("daily_intel_as_of") or ""),
+        "identity_scheme": str(notes.get("identity_scheme") or ""),
         "depth_team_count": int(coverage.get("depth_team_count") or 0),
         "depth_named_skill_teams": int(coverage.get("depth_named_skill_teams") or 0),
         "depth_full_skill_starter_teams": int(
@@ -1663,6 +1700,10 @@ def load_universe_from_db(
             "calibration": CALIBRATION_TAG,
             "rookie_flags": {**rookie_flag_meta, **rookie_enrich_stats},
             "daily_intel_as_of": str(pkg_depth_meta.get("daily_intel_as_of") or ""),
+            "snapshot_id": str(pkg_depth_meta.get("snapshot_id") or ""),
+            "pack_sha256": str(pkg_depth_meta.get("pack_sha256") or ""),
+            "depth_sha256": str(pkg_depth_meta.get("depth_sha256") or ""),
+            "identity_scheme": str(pkg_depth_meta.get("identity_scheme") or ""),
             "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
             "ol_efficiency_hooks": pkg_depth_meta.get("ol_efficiency_hooks") or {},
             **coverage,
@@ -1844,6 +1885,10 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         "calibration": CALIBRATION_TAG,
         "rookie_flags": {**rookie_flag_meta, **rookie_enrich_stats},
         "daily_intel_as_of": str(pkg_depth_meta.get("daily_intel_as_of") or ""),
+        "snapshot_id": str(pkg_depth_meta.get("snapshot_id") or ""),
+        "pack_sha256": str(pkg_depth_meta.get("pack_sha256") or ""),
+        "depth_sha256": str(pkg_depth_meta.get("depth_sha256") or ""),
+        "identity_scheme": str(pkg_depth_meta.get("identity_scheme") or ""),
         "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
         "ol_efficiency_hooks": pkg_depth_meta.get("ol_efficiency_hooks") or {},
         **coverage,

@@ -3660,5 +3660,6 @@
     "max_age_days_camp_season": 7,
     "archive_dir": "services/model-service/src/services/nfl_season_engine/data/snapshots/",
     "effective_dated": true
-  }
+  },
+  "content_sha256": "ee1a3caa7a78cc2e48b8ef2abd5fe03f9b72a77e7812d450895b351b102f49fe"
 }

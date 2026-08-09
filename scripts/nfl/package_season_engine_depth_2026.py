@@ -49,7 +49,7 @@ SOT_SKILL_OVERRIDES: dict[str, dict[str, list[tuple[int, str, str]]]] = {
     "WAS": {
         "WR": [
             (1, "Terry McLaurin", "00-0035659"),
-            (2, "Stefon Diggs", "00-0031381"),
+            (2, "Stefon Diggs", "00-0031588"),
             (3, "Antonio Williams", "00-0041040"),
         ],
         "TE": [

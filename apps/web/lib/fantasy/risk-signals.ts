@@ -6,6 +6,10 @@ export type DepthRow = {
   depthOrder: number;
   playerName: string;
   roleConfidence: number;
+  /** nflverse GSIS / pack player_id — SoT join key when present */
+  playerId?: string;
+  /** Effective-dated depth snapshot id when pack carries lineage */
+  snapshotId?: string;
 };
 
 function normalizeName(name: string): string {
