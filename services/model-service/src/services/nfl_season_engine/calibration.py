@@ -20,7 +20,7 @@ from src.services.nfl_season_engine.types import PlayerRole
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
 # v1.20: defensive variance lift on PA / sacks / INTs / yards (conserved totals).
-ENGINE_VERSION = "nfl-season-engine-v1.21-team-variance-lift"
+ENGINE_VERSION = "nfl-season-engine-v1.22-alpha-usage-reanchor"
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -540,7 +540,14 @@ def calibration_notes() -> Dict[str, str]:
             "~64k league rush pool with soft 1280–2520 team bands; pass pool + "
             "ARI/BAL/SEA weights frozen; PF residual stretch + light PA "
             "re-stretch; Pythagorean wins renormed to 272. Player alpha "
-            "re-anchor is Step-2 (not applied here)."
+            "re-anchor is Step-2."
+        ),
+        "alpha_usage_reanchor": (
+            "v1.22 Step-2: sticky prior-year elite target/carry shares "
+            "(85–90% retention) with cut volume regression for alphas; "
+            "WR/RB yard floors (WR12–15 / 1400+ bell-cows); TE compression "
+            "when WR1 alpha present; team pass/rush pools locked; "
+            "rec≈pass ±1.5%. Snapshot NOT final-locked."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

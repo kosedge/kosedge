@@ -58,10 +58,162 @@ INT_RATE_SOFT_FLOOR = 0.018
 INT_RATE_SOFT_CEILING = 0.034
 
 EFFICIENCY_REGRESSION = 0.40  # 40% toward mean (hand-off: 35–45%)
-VOLUME_REGRESSION = 0.25  # mid of 20–30%
+VOLUME_REGRESSION = 0.25  # mid of 20–30% (non-alphas)
+# Step-2 alpha protection: cut volume regression for proven alphas; keep efficiency regression.
+ALPHA_VOLUME_REGRESSION = 0.08
+ALPHA_SHARE_RETENTION = 0.875  # mid of 85–90% prior-year share/yards retention
+WR_ALPHA_YARD_FLOOR = 1_150.0  # WR12–WR15 band under normal circumstances
+WR_ALPHA_TOP5_YARD_FLOOR = 1_400.0  # smoke: multiple 1400+ alphas
+RB_ALPHA_YARD_FLOOR = 1_400.0  # true bell-cows when team rush supports
+WR_ALPHA_SHARE_CAP = 0.40
+RB_ALPHA_SHARE_CAP = 0.68
+TE_COMPRESS_WITH_WR_ALPHA = 0.72  # deflate TE when a sticky WR1 alpha is present
 DEFENSE_TD_SOFT_BOOST = 0.06  # mid of +4–8% vs soft D
 DEFENSE_TD_ELITE_CUT = 0.06  # mid of –4–8% vs elite D
 RZ_SHARE_BOOST = 0.10  # mid of +8–12% for TE / primary WR
+
+# 2025 prior-year volume priors for sticky alpha shares (name → stats).
+# top5_rec / top5_tgt / top5_rush mark league leaderboard membership.
+PRIOR_YEAR_ALPHA_VOLUME: Dict[str, Dict[str, Any]] = {
+    # WRs / high-volume pass-catchers (2025)
+    "jaxonsmithnjigba": {
+        "pos": "WR",
+        "rec_yards": 1793.0,
+        "tgt_share": 0.339,
+        "top5_rec": True,
+        "top5_tgt": True,
+    },
+    "pukanacua": {
+        "pos": "WR",
+        "rec_yards": 1715.0,
+        "tgt_share": 0.288,
+        "top5_rec": True,
+        "top5_tgt": True,
+    },
+    "georgepickens": {
+        "pos": "WR",
+        "rec_yards": 1429.0,
+        "tgt_share": 0.255,
+        "top5_rec": True,
+        "top5_tgt": False,
+    },
+    "jamarrchase": {
+        "pos": "WR",
+        "rec_yards": 1412.0,
+        "tgt_share": 0.302,
+        "top5_rec": True,
+        "top5_tgt": True,
+    },
+    "amonrastbrown": {
+        "pos": "WR",
+        "rec_yards": 1401.0,
+        "tgt_share": 0.285,
+        "top5_rec": True,
+        "top5_tgt": True,
+    },
+    "zayflowers": {
+        "pos": "WR",
+        "rec_yards": 1211.0,
+        "tgt_share": 0.262,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "chrisolave": {
+        "pos": "WR",
+        "rec_yards": 1163.0,
+        "tgt_share": 0.272,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "nicocollins": {
+        "pos": "WR",
+        "rec_yards": 1117.0,
+        "tgt_share": 0.231,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "ceedeelamb": {
+        "pos": "WR",
+        "rec_yards": 1077.0,
+        "tgt_share": 0.240,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "justinjefferson": {
+        "pos": "WR",
+        "rec_yards": 1048.0,
+        "tgt_share": 0.260,
+        "top5_rec": False,
+        "top5_tgt": True,
+    },
+    "garrettwilson": {
+        "pos": "WR",
+        "rec_yards": 900.0,
+        "tgt_share": 0.304,
+        "top5_rec": False,
+        "top5_tgt": True,
+    },
+    "drakelondon": {
+        "pos": "WR",
+        "rec_yards": 919.0,
+        "tgt_share": 0.281,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "ajbrown": {
+        "pos": "WR",
+        "rec_yards": 1003.0,
+        "tgt_share": 0.275,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "maliknabers": {
+        "pos": "WR",
+        "rec_yards": 900.0,
+        "tgt_share": 0.244,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "rasheerice": {
+        "pos": "WR",
+        "rec_yards": 1100.0,
+        "tgt_share": 0.262,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "courtlandsutton": {
+        "pos": "WR",
+        "rec_yards": 1017.0,
+        "tgt_share": 0.230,
+        "top5_rec": False,
+        "top5_tgt": False,
+    },
+    "treymcbride": {
+        "pos": "TE",
+        "rec_yards": 1239.0,
+        "tgt_share": 0.254,
+        "top5_rec": True,
+        "top5_tgt": True,
+    },
+    # Bell-cow RBs (2025 rush leaders)
+    "jamescook": {"pos": "RB", "rush_yards": 1621.0, "carry_share": 0.62, "top5_rush": True},
+    "jamescookiii": {"pos": "RB", "rush_yards": 1621.0, "carry_share": 0.62, "top5_rush": True},
+    "derrickhenry": {"pos": "RB", "rush_yards": 1595.0, "carry_share": 0.65, "top5_rush": True},
+    "jonathantaylor": {"pos": "RB", "rush_yards": 1585.0, "carry_share": 0.64, "top5_rush": True},
+    "bijanrobinson": {"pos": "RB", "rush_yards": 1478.0, "carry_share": 0.60, "top5_rush": True},
+    "devonachane": {"pos": "RB", "rush_yards": 1350.0, "carry_share": 0.58, "top5_rush": True},
+    "kyrenwilliams": {"pos": "RB", "rush_yards": 1252.0, "carry_share": 0.58, "top5_rush": False},
+    "jahmyrgibbs": {"pos": "RB", "rush_yards": 1223.0, "carry_share": 0.52, "top5_rush": False},
+    "christianmccaffrey": {"pos": "RB", "rush_yards": 1202.0, "carry_share": 0.58, "top5_rush": False},
+    "javontewilliams": {"pos": "RB", "rush_yards": 1201.0, "carry_share": 0.55, "top5_rush": False},
+    "saquonbarkley": {"pos": "RB", "rush_yards": 1140.0, "carry_share": 0.58, "top5_rush": False},
+    "travisetienne": {"pos": "RB", "rush_yards": 1107.0, "carry_share": 0.55, "top5_rush": False},
+    "dandreswift": {"pos": "RB", "rush_yards": 1087.0, "carry_share": 0.55, "top5_rush": False},
+    "joshjacobs": {"pos": "RB", "rush_yards": 929.0, "carry_share": 0.55, "top5_rush": False},
+    "kennethwalkeriii": {"pos": "RB", "rush_yards": 1027.0, "carry_share": 0.55, "top5_rush": False},
+    "breecehall": {"pos": "RB", "rush_yards": 1065.0, "carry_share": 0.55, "top5_rush": False},
+    "chasebrown": {"pos": "RB", "rush_yards": 1019.0, "carry_share": 0.55, "top5_rush": False},
+}
 
 # Carry-forward scheme TD multipliers (LaFleur / Doyle / Fleury).
 SCHEME_TD_MULT: Dict[str, float] = {
@@ -416,19 +568,19 @@ def _fallback_usage_from_rows(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Pl
                 key = str(r.get("player_key") or "")
                 if not key:
                     continue
-                # Default hierarchical shares.
+                # Default hierarchical shares (WR1 >> TE1 — avoids WR/TE logjam).
                 if pos == "WR":
-                    tgt = {1: 0.26, 2: 0.18, 3: 0.12}.get(i, 0.05)
+                    tgt = {1: 0.28, 2: 0.17, 3: 0.11}.get(i, 0.04)
                     rz = {1: 0.22, 2: 0.12, 3: 0.08}.get(i, 0.04)
                     rush = 0.01 if i == 1 else 0.0
                 elif pos == "TE":
-                    tgt = {1: 0.18, 2: 0.08, 3: 0.04}.get(i, 0.02)
+                    tgt = {1: 0.14, 2: 0.07, 3: 0.03}.get(i, 0.02)
                     rz = {1: 0.20, 2: 0.10, 3: 0.05}.get(i, 0.02)
                     rush = 0.0
                 elif pos == "RB":
-                    tgt = {1: 0.10, 2: 0.05, 3: 0.03}.get(i, 0.01)
+                    tgt = {1: 0.09, 2: 0.05, 3: 0.02}.get(i, 0.01)
                     rz = {1: 0.18, 2: 0.10, 3: 0.05}.get(i, 0.02)
-                    rush = {1: 0.52, 2: 0.26, 3: 0.12}.get(i, 0.04)
+                    rush = {1: 0.58, 2: 0.24, 3: 0.10}.get(i, 0.04)
                 else:
                     tgt = 0.0
                     rz = 0.05
@@ -685,6 +837,304 @@ def conservation_renorm(rows: List[MutableMapping[str, Any]], locked_pass: Mappi
             ),
         }
     return audit
+
+
+def _norm_player_name(name: str) -> str:
+    return "".join(ch for ch in str(name or "").lower() if ch.isalnum())
+
+
+def prior_alpha_lookup(player_name: str) -> Optional[Dict[str, Any]]:
+    """Return 2025 prior-volume row for a player name, if known."""
+    return PRIOR_YEAR_ALPHA_VOLUME.get(_norm_player_name(player_name))
+
+
+def _is_volume_alpha(prior: Mapping[str, Any], *, kind: str) -> bool:
+    if kind == "rec":
+        return bool(prior.get("top5_rec") or prior.get("top5_tgt") or float(prior.get("rec_yards") or 0) >= 1_150.0)
+    if kind == "rush":
+        return bool(prior.get("top5_rush") or float(prior.get("rush_yards") or 0) >= 1_100.0)
+    return False
+
+
+def apply_sticky_alpha_shares(
+    usage_by_key: Dict[str, PlayerUsage],
+    rows: Sequence[Mapping[str, Any]],
+    team_pass: Mapping[str, float],
+    team_rush: Mapping[str, float],
+    *,
+    retention: float = ALPHA_SHARE_RETENTION,
+    alpha_volume_regression: float = ALPHA_VOLUME_REGRESSION,
+) -> Dict[str, Any]:
+    """Raise proven-alpha target/carry shares; leave rookies/depth compressed.
+
+    Sticky rule: retain ``retention`` (85–90%) of prior target/carry share or
+    prior yards as a share of the (locked) 2026 team pool — whichever is higher —
+    then apply only light volume regression. Efficiency regression is unchanged
+    elsewhere in the stack.
+    """
+    name_by_key = {
+        str(r.get("player_key") or ""): str(r.get("player_name") or "") for r in rows
+    }
+    alpha_keys: List[str] = []
+    notes: List[str] = []
+
+    # Structural mean shares for light volume regression anchors.
+    mean_wr1_tgt = 0.26
+    mean_rb1_rush = 0.52
+
+    for key, u in usage_by_key.items():
+        prior = prior_alpha_lookup(name_by_key.get(key, u.player_name))
+        if prior is None or u.is_rookie:
+            continue
+        team = u.team
+        pass_y = float(team_pass.get(team, 0.0))
+        rush_y = float(team_rush.get(team, 0.0))
+
+        if u.position in {"WR", "TE"} and _is_volume_alpha(prior, kind="rec") and pass_y > 1.0:
+            prior_tgt = float(prior.get("tgt_share") or 0.0)
+            prior_rec = float(prior.get("rec_yards") or 0.0)
+            sticky_from_share = prior_tgt * retention
+            sticky_from_yards = (prior_rec * retention) / pass_y
+            sticky = max(sticky_from_share, sticky_from_yards)
+            # Light volume regression only (cut mean-reversion on volume).
+            sticky = _volume_regressed(sticky, mean_wr1_tgt, regression=alpha_volume_regression)
+            yard_floor = (
+                WR_ALPHA_TOP5_YARD_FLOOR
+                if (prior.get("top5_rec") or prior.get("top5_tgt"))
+                else WR_ALPHA_YARD_FLOOR
+            )
+            floor_share = yard_floor / pass_y
+            new_share = min(WR_ALPHA_SHARE_CAP, max(u.target_share, sticky, floor_share))
+            if new_share > u.target_share + 1e-6:
+                notes.append(
+                    f"{u.player_name}:{u.team}:tgt {u.target_share:.3f}→{new_share:.3f}"
+                )
+            u.target_share = new_share
+            u.red_zone_share = max(u.red_zone_share, new_share * 0.85)
+            alpha_keys.append(key)
+
+        if u.position == "RB" and _is_volume_alpha(prior, kind="rush") and rush_y > 1.0:
+            prior_carry = float(prior.get("carry_share") or 0.0)
+            prior_rush = float(prior.get("rush_yards") or 0.0)
+            sticky_from_share = prior_carry * retention if prior_carry > 0 else 0.0
+            sticky_from_yards = (prior_rush * retention) / rush_y
+            sticky = max(sticky_from_share, sticky_from_yards)
+            sticky = _volume_regressed(sticky, mean_rb1_rush, regression=alpha_volume_regression)
+            # Bell-cow floor when team rush pool supports 1400+.
+            floor_share = 0.0
+            if rush_y * 0.55 >= RB_ALPHA_YARD_FLOOR:
+                floor_share = min(RB_ALPHA_SHARE_CAP, RB_ALPHA_YARD_FLOOR / rush_y)
+            new_share = min(RB_ALPHA_SHARE_CAP, max(u.rush_share, sticky, floor_share))
+            if new_share > u.rush_share + 1e-6:
+                notes.append(
+                    f"{u.player_name}:{u.team}:rush {u.rush_share:.3f}→{new_share:.3f}"
+                )
+            u.rush_share = new_share
+            u.red_zone_share = max(u.red_zone_share, new_share * 0.55)
+            if key not in alpha_keys:
+                alpha_keys.append(key)
+
+    # Structural WR1s on teams that can support alpha volume but lack a prior row:
+    # keep hierarchy; do not invent inflated priors for rookies/depth.
+    # Compress TE rooms when a sticky WR alpha is present (fixes WR=TE logjam).
+    alphas_by_team: Dict[str, List[PlayerUsage]] = {}
+    for key in alpha_keys:
+        u = usage_by_key[key]
+        if u.position == "WR":
+            alphas_by_team.setdefault(u.team, []).append(u)
+    for team, wr_alphas in alphas_by_team.items():
+        if not wr_alphas:
+            continue
+        top_wr = max(wr_alphas, key=lambda x: x.target_share)
+        if top_wr.target_share < 0.27:
+            continue
+        for u in usage_by_key.values():
+            if u.team != team or u.position != "TE":
+                continue
+            if prior_alpha_lookup(name_by_key.get(u.player_key, u.player_name)):
+                # Keep McBride-class TE alphas; mild trim only.
+                u.target_share *= 0.92
+            else:
+                u.target_share *= TE_COMPRESS_WITH_WR_ALPHA
+                u.red_zone_share *= TE_COMPRESS_WITH_WR_ALPHA
+
+    # Bell-cow structural floor for RB1 when team rush supports 1400+ even without
+    # a top-5 prior (e.g. new feature-back on a lifted rush team).
+    for u in usage_by_key.values():
+        if u.position != "RB" or u.depth_order != 1 or u.is_rookie:
+            continue
+        rush_y = float(team_rush.get(u.team, 0.0))
+        if rush_y * 0.58 < RB_ALPHA_YARD_FLOOR:
+            continue
+        floor_share = min(RB_ALPHA_SHARE_CAP, RB_ALPHA_YARD_FLOOR / rush_y)
+        if u.rush_share < floor_share:
+            notes.append(
+                f"{u.player_name}:{u.team}:rb1_floor {u.rush_share:.3f}→{floor_share:.3f}"
+            )
+            u.rush_share = floor_share
+
+    return {
+        "alpha_players": len(set(alpha_keys)),
+        "retention": retention,
+        "alpha_volume_regression": alpha_volume_regression,
+        "share_notes": notes[:40],
+    }
+
+
+def _team_rush_map(rows: Sequence[Mapping[str, Any]]) -> Dict[str, float]:
+    out: Dict[str, float] = {}
+    for row in rows:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        out[team] = out.get(team, 0.0) + _f(row, "rush_yards_total", "rush_yards_mean", "rush_yards")
+    return out
+
+
+def _team_stat_map(
+    rows: Sequence[Mapping[str, Any]], *keys: str, positions: Optional[Sequence[str]] = None
+) -> Dict[str, float]:
+    out: Dict[str, float] = {}
+    pos_set = {p.upper() for p in positions} if positions else None
+    for row in rows:
+        team = str(row.get("team") or "")
+        if not team:
+            continue
+        if pos_set is not None and str(row.get("position") or "").upper() not in pos_set:
+            continue
+        out[team] = out.get(team, 0.0) + _f(row, *keys)
+    return out
+
+
+def apply_alpha_usage_reanchor(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    usage_by_key: Optional[Mapping[str, PlayerUsage]] = None,
+    retention: float = ALPHA_SHARE_RETENTION,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Step-2: re-anchor player usage on a locked team pass/rush board.
+
+    Preserves team pass yards, team rush yards, and ARI/BAL/SEA pass weights.
+    Reallocates receiving/rush shares with sticky alpha priors + floors, then
+    conservation-renorms (rec ≈ pass ±1.5%; rush sum exact).
+    """
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    locked_pass = locked_team_pass_yards(work)
+    team_rush = _team_rush_map(work)
+    team_pass_tds = _team_stat_map(work, "pass_tds_total", "pass_tds_mean", positions=("QB",))
+    # Prefer QB pass-TD pool; fall back to rec-TD sum if missing.
+    if sum(team_pass_tds.values()) < 1.0:
+        team_pass_tds = _team_stat_map(
+            work, "rec_tds_total", "rec_tds_mean", positions=("WR", "TE", "RB")
+        )
+    team_rush_tds = _team_stat_map(work, "rush_tds_total", "rush_tds_mean")
+
+    # Snapshot QB pass yards so reallocation cannot drift the locked pool.
+    qb_pass_snapshot = {
+        str(r.get("player_key") or ""): _f(r, "pass_yards_total", "pass_yards_mean")
+        for r in work
+        if str(r.get("position") or "").upper() == "QB"
+    }
+    qb_int_snapshot = {
+        str(r.get("player_key") or ""): _f(r, "ints_total", "ints_mean", "ints")
+        for r in work
+        if str(r.get("position") or "").upper() == "QB"
+    }
+    qb_pass_td_snapshot = {
+        str(r.get("player_key") or ""): _f(r, "pass_tds_total", "pass_tds_mean")
+        for r in work
+        if str(r.get("position") or "").upper() == "QB"
+    }
+
+    usage = dict(usage_by_key or {})
+    if not usage:
+        usage = _fallback_usage_from_rows(work)
+    for r in work:
+        key = str(r.get("player_key") or "")
+        if key in usage and r.get("is_rookie") is not None:
+            usage[key].is_rookie = bool(r.get("is_rookie"))
+        if key in usage and r.get("draft_round") is not None:
+            try:
+                usage[key].draft_round = int(r["draft_round"])
+            except (TypeError, ValueError):
+                pass
+
+    sticky_audit = apply_sticky_alpha_shares(
+        usage, work, locked_pass, team_rush, retention=retention
+    )
+
+    allocate_receiving(work, locked_pass, team_pass_tds, usage)
+    allocate_rushing(work, team_rush, team_rush_tds, usage)
+
+    # Restore locked QB pass / INT identity (usage path must not touch pass pool).
+    for r in work:
+        key = str(r.get("player_key") or "")
+        if str(r.get("position") or "").upper() != "QB":
+            r["pass_yards_total"] = 0.0
+            r["pass_tds_total"] = 0.0
+            r["ints_total"] = 0.0
+            continue
+        r["pass_yards_total"] = qb_pass_snapshot.get(key, 0.0)
+        r["pass_tds_total"] = qb_pass_td_snapshot.get(key, 0.0)
+        r["ints_total"] = qb_int_snapshot.get(key, 0.0)
+
+    # Exact rush conservation per team (allocate already does; re-assert).
+    cons = conservation_renorm(work, locked_pass)
+    for team, target in team_rush.items():
+        team_rows = [r for r in work if str(r.get("team") or "") == team]
+        rush_sum = sum(_f(r, "rush_yards_total") for r in team_rows) or 1.0
+        scale = float(target) / rush_sum
+        if abs(scale - 1.0) > 1e-9:
+            for r in team_rows:
+                r["rush_yards_total"] = _f(r, "rush_yards_total") * scale
+        td_target = float(team_rush_tds.get(team, 0.0))
+        td_sum = sum(_f(r, "rush_tds_total") for r in team_rows) or 1.0
+        if td_target > 1e-9 and abs(td_sum - td_target) > 1e-6:
+            td_scale = td_target / td_sum
+            for r in team_rows:
+                r["rush_tds_total"] = _f(r, "rush_tds_total") * td_scale
+
+    for r in work:
+        key = str(r.get("player_key") or "")
+        u = usage.get(key)
+        if u is None:
+            continue
+        r["snap_share"] = round(u.snap_share, 4)
+        r["target_share"] = round(
+            _apply_rookie_to_share(u.target_share, u) if u.position in {"WR", "TE", "RB"} else 0.0,
+            4,
+        )
+        r["carry_share"] = round(
+            _apply_rookie_to_share(u.rush_share, u) if u.position in {"RB", "QB", "WR"} else 0.0,
+            4,
+        )
+
+    work.sort(
+        key=lambda r: (
+            -(
+                _f(r, "pass_yards_total")
+                + _f(r, "rush_yards_total")
+                + _f(r, "receiving_yards_total")
+            ),
+            str(r.get("player_name") or ""),
+        )
+    )
+    smoke = smoke_offensive_stack(work)
+    after_pass = locked_team_pass_yards(work)
+    audit = {
+        "applied": True,
+        "method": "alpha_usage_reanchor_v1",
+        "retention": retention,
+        "sticky": sticky_audit,
+        "pass_pool": round(sum(after_pass.values()), 1),
+        "rush_pool": round(sum(team_rush.values()), 1),
+        "locked_scheme_pass": {
+            t: round(float(after_pass.get(t, 0.0)), 1) for t in LOCKED_PASS_SCHEME_TEAMS
+        },
+        "conservation": cons,
+        "smoke": smoke,
+    }
+    return work, audit
 
 
 def smoke_offensive_stack(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:

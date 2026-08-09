@@ -6,6 +6,7 @@ from data_platform_nfl.offensive_production_stack import (
     LEAGUE_PASS_YARDS_POOL,
     LEAGUE_RUSH_YARDS_POOL,
     LEAGUE_RUSH_YARDS_POOL_LIFTED,
+    apply_alpha_usage_reanchor,
     apply_offensive_production_stack,
     apply_offensive_variance_lift,
     rookie_season_share_factor,
@@ -155,3 +156,75 @@ def test_pass_yards_stay_locked_for_median_team() -> None:
     # Locked within microscopic renorm.
     for t in before:
         assert abs(after[t] - before[t]) / max(before[t], 1.0) < 0.02
+
+
+def test_alpha_usage_reanchor_lifts_jsn_and_conserves() -> None:
+    board = _flat_board()
+    # Inject named 2025 alphas onto high-volume teams; seed WR=TE logjam.
+    for r in board:
+        if r["team"] == "SEA" and r["player_key"] == "SEA-WR1":
+            r["player_name"] = "Jaxon Smith-Njigba"
+            r["receiving_yards_total"] = 900.0
+        if r["team"] == "SEA" and r["player_key"] == "SEA-TE4":
+            r["player_name"] = "AJ Barner"
+            r["receiving_yards_total"] = 900.0
+        if r["team"] == "CIN" and r["player_key"] == "CIN-WR1":
+            r["player_name"] = "Ja'Marr Chase"
+        if r["team"] == "LA" and r["player_key"] == "LA-WR1":
+            r["player_name"] = "Puka Nacua"
+        if r["team"] == "BUF" and r["player_key"] == "BUF-RB5":
+            r["player_name"] = "James Cook"
+            r["rush_yards_total"] = 1600.0
+        if r["team"] == "BUF" and r["player_key"] == "BUF-RB6":
+            r["rush_yards_total"] = 900.0
+        if r["team"] == "SEA":
+            if r["position"] == "RB" and r["player_key"].endswith("RB5"):
+                r["rush_yards_total"] = 1500.0
+            if r["position"] == "RB" and r["player_key"].endswith("RB6"):
+                r["rush_yards_total"] = 900.0
+
+    before_pass = {
+        t: sum(float(r["pass_yards_total"]) for r in board if r["team"] == t)
+        for t in {r["team"] for r in board}
+    }
+    before_rush = {
+        t: sum(float(r["rush_yards_total"]) for r in board if r["team"] == t)
+        for t in before_pass
+    }
+    rows, audit = apply_alpha_usage_reanchor(board)
+    assert audit["applied"] is True
+    smoke = audit["smoke"]
+    assert smoke["checks"]["pass_rec_yards_within_1_5pct"] is True
+    assert smoke["checks"]["pass_pool_locked"] is True
+
+    after_pass = {
+        t: sum(float(r["pass_yards_total"]) for r in rows if r["team"] == t)
+        for t in before_pass
+    }
+    after_rush = {
+        t: sum(float(r["rush_yards_total"]) for r in rows if r["team"] == t)
+        for t in before_rush
+    }
+    for t in ("ARI", "BAL", "SEA"):
+        assert abs(after_pass[t] - before_pass[t]) < 0.05
+    for t in before_rush:
+        assert abs(after_rush[t] - before_rush[t]) < 0.5
+
+    by_name = {r["player_name"]: r for r in rows}
+    jsn = float(by_name["Jaxon Smith-Njigba"]["receiving_yards_total"])
+    barner = float(by_name["AJ Barner"]["receiving_yards_total"])
+    chase = float(by_name["Ja'Marr Chase"]["receiving_yards_total"])
+    nacua = float(by_name["Puka Nacua"]["receiving_yards_total"])
+    cook = float(by_name["James Cook"]["rush_yards_total"])
+    assert jsn > barner
+    assert jsn >= 1400.0
+    assert chase >= 1400.0
+    assert nacua >= 1400.0
+    assert cook >= 1400.0
+
+    wrs = sorted(
+        (float(r["receiving_yards_total"]) for r in rows if r["position"] == "WR"),
+        reverse=True,
+    )
+    assert wrs[0] >= 1550.0
+    assert sum(1 for y in wrs if y >= 1400.0) >= 2

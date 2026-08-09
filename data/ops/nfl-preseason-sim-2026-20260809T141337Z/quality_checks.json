@@ -1,0 +1,60 @@
+{
+  "gates": {
+    "top_wr_multiple_1400": true,
+    "top_wr_end_1550": true,
+    "top_rb_1400": true,
+    "jsn_top_tier": true,
+    "rec_pass_within_1_5pct": true,
+    "rush_sum_conserved": true,
+    "pass_pool_locked": true,
+    "ari_bal_sea_pass_untouched": true,
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "offense_smoke": true,
+    "step1_gates_held": true
+  },
+  "offense_smoke": {
+    "checks": {
+      "pass_rec_yards_within_1_5pct": true,
+      "league_pass_tds_band": true,
+      "league_rush_tds_band": true,
+      "soft_td_ceilings_floors": true,
+      "pass_tds_match_rec_tds": true,
+      "offensive_yards_identity": true,
+      "rush_pool_band": true,
+      "pass_pool_locked": true,
+      "ari_bal_sea_pass_zones": true
+    },
+    "all_pass": true,
+    "league": {
+      "pass_yards": 125998.1,
+      "rush_yards": 64000.0,
+      "receiving_yards": 125998.1,
+      "pass_tds": 1091.05,
+      "rush_tds": 516.72,
+      "rec_tds": 1091.05,
+      "offensive_tds": 1607.77,
+      "offensive_yards": 189998.1,
+      "ints": 350.27
+    },
+    "pass_rec_fails": [],
+    "td_ceiling_fails": [],
+    "zone_detail": {
+      "ARI": {
+        "yards": 4082.6,
+        "ok": true
+      },
+      "BAL": {
+        "yards": 3344.6,
+        "ok": true
+      },
+      "SEA": {
+        "yards": 3974.6,
+        "ok": true
+      }
+    },
+    "n_teams": 32
+  },
+  "all_step2_pass": true
+}
