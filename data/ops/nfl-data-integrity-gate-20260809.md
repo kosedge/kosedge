@@ -81,6 +81,20 @@ cd services/model-service
 PYTHONPATH=. pytest tests/test_nfl_data_integrity_gate.py -q
 ```
 
-## Phase 2
+## Phase 1 closeout (2026-08-09)
 
-**Blocked until this gate stays green** on CI + daily intel path.
+| Field | Value |
+|-------|-------|
+| **PR** | https://github.com/kosedge/kosedge/pull/162 |
+| **Merge SHA** | `bcf5a5946f24808c8d836c6151e7c47703b06658` (squash → `deploy-vercel`) |
+| **Status** | **Phase 1 CLOSED** |
+
+### Smoke (post-merge)
+
+1. **Live projection lineage** — `GET https://model-service-production-e253.up.railway.app/nfl/season-engine/game-boxes?home_team=ATL&away_team=TB&season=2026&week=1&n_replicates=50` (also BFF `https://www.kosedge.com/api/nfl/season-engine/game-boxes?...`) returns `notes.snapshot_id=nfl-depth-2026-w1-20260809T190000Z` and `notes.lineage.engine_version=nfl-season-engine-v1.23-soft-flags-enterprise` (plus `pack_sha256`). Status endpoints expose `engine_version` + depth as-of; full lineage is on game-box notes.
+2. **Intentional bad check** — `pytest tests/test_nfl_data_integrity_gate.py::test_bad_duplicate_assignment_fails` PASS; in-memory ATL QB1←ARI QB1 collision → `validate_depth_sot_pack` `ok=False` / `duplicate_active_assignment` and `assert_depth_sot_integrity` raises. Production pack untouched (`snapshot_id` still `nfl-depth-2026-w1-20260809T190000Z`).
+3. **Web + Railway on merge commit** — Vercel Production `kosedge` deployment `bcf5a5946f24` **success**; Railway `brave-art` / `model-service` deploy `ci bcf5a5946f24 api` **SUCCESS** (deployment `3a758f25-…`). Engine serves gate commit.
+
+### Phase 2 next
+
+**Unblocked.** Audit special cases → general features. No decision-engine polish until that audit lands. OL→EPA remains stub.
