@@ -264,6 +264,24 @@ def check_bundle(
     except Exception as exc:  # pragma: no cover
         suite.add("KICKOFF_SMOKE", False, f"error: {exc}")
 
+    # I9 / week1_reg_count — Edge Board Week 1 must equal schedule pack (16).
+    # Silent drops (board shows 13) are a hard fail for publish/deploy.
+    try:
+        week1_mod_path = ROOT / "scripts" / "nfl" / "check_edge_board_week1.py"
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "check_edge_board_week1", week1_mod_path
+        )
+        assert spec and spec.loader
+        week1_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(week1_mod)
+        w1_results = week1_mod.check_week1()
+        for check_id, passed, detail in w1_results:
+            suite.add(check_id, passed, detail)
+    except Exception as exc:  # pragma: no cover
+        suite.add("WEEK1_REG_COUNT", False, f"error: {exc}")
+
     return suite
 
 

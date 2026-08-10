@@ -1,8 +1,9 @@
 /**
  * Shared edge-board assembly.
  * NFL: pulls REG fair-lines + Odds API overlay (projection-backed; no PRE odds-only).
- * Week 1 tab = strict Week 1 REG (honest empty; no fallthrough).
- * Full slate = all projection-backed REG games in the pull window.
+ * Week 1 tab = every REG Week 1 schedule-pack game (schedule-driven; no silent drop).
+ * Missing KEI / odds still appear with honest empties.
+ * Full slate = projection-backed REG games in the pull window (+ complete Week 1).
  * Legacy aliases: `live` → week1, `all` → full.
  * KEI = published fair line (identity — no fake Model vs KEI split).
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
@@ -30,7 +31,10 @@ import {
   overlayOddsOntoFairLineRows,
   sortNflEdgeBoardRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
-import { stampNflEdgeBoardWeeksFromSchedule } from "@/lib/nfl-edge-board-week";
+import {
+  ensureNflScheduleWeekOnBoard,
+  stampNflEdgeBoardWeeksFromSchedule,
+} from "@/lib/nfl-edge-board-week";
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
@@ -148,25 +152,31 @@ async function assembleNflEdgeBoardRows(
     rows = filterNflProjectionBackedRows(rows);
     // Stamp REG week from schedule pack BEFORE Week 1 filter (root-cause fix).
     rows = stampNflEdgeBoardWeeksFromSchedule(rows);
+    // Schedule is the driver: pad any REG Week 1 game missing after KEI filter.
+    rows = ensureNflScheduleWeekOnBoard(rows, 1);
     rows = sortNflEdgeBoardRows(rows);
     if (slate === "week1") {
       return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
     }
-    // Full slate without fair-lines: priced projection rows when books exist.
-    return withMatchupEnrichment(filterNflOddsPostedRows(rows));
+    // Full slate without fair-lines: priced projection rows when books exist,
+    // plus schedule-complete Week 1 (empties allowed).
+    const priced = filterNflOddsPostedRows(rows);
+    return withMatchupEnrichment(ensureNflScheduleWeekOnBoard(priced, 1));
   }
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
   rows = filterNflProjectionBackedRows(rows);
   // Stamp missing week from 2026 schedule pack before any week filter.
   rows = stampNflEdgeBoardWeeksFromSchedule(rows);
+  // Schedule-driven Week 1 membership (no silent drop when KEI/odds missing).
+  rows = ensureNflScheduleWeekOnBoard(rows, 1);
   rows = sortNflEdgeBoardRows(rows);
 
   if (slate === "week1") {
-    // Strict Week 1 REG — honest empty only when schedule truly has zero W1 games.
+    // Strict Week 1 REG — count must match schedule pack (normally 16).
     return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
   }
-  // Full slate: every projection-backed REG game in the pull window.
+  // Full slate: every projection-backed REG game in the pull window (+ complete W1).
   return withMatchupEnrichment(rows);
 }
 

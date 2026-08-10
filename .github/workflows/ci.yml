@@ -104,6 +104,7 @@ jobs:
             echo "Expected deliberate I3 break to fail" >&2
             exit 1
           fi
+          python scripts/nfl/check_edge_board_week1.py
 
       - name: Upload test coverage
         if: always()
