@@ -121,7 +121,7 @@ describe("NflIntelTablePage", () => {
     render(page);
 
     expect(
-      screen.getByText("Showing latest available: 2025 W22"),
+      screen.getByText("Not current · showing 2025 W22 (as-of)"),
     ).toBeInTheDocument();
     expect(screen.getByText("AFC · East")).toBeInTheDocument();
     expect(screen.getByText("NFC · West")).toBeInTheDocument();

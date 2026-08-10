@@ -247,6 +247,18 @@ export default async function NflPlayerPreviewsPage() {
               </tr>
             </thead>
             <tbody>
+              {skillFantasy.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-3 py-6 text-sm text-kos-text/60 sm:px-4"
+                  >
+                    Skill-position outlook table is empty for this cycle — not a
+                    ready preview board. Check Fantasy Draft Desk after the next
+                    player materialize.
+                  </td>
+                </tr>
+              ) : null}
               {skillFantasy.map((row) => (
                 <tr
                   key={`fan-${row.playerId}-${row.rankOverall}`}

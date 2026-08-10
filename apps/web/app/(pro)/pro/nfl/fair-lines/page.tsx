@@ -14,6 +14,7 @@ import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
+import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 
 const DEFAULT_SEASON = 2026;
 /** Wide fetch window; UI slate tabs decide what to show. */
@@ -101,14 +102,22 @@ export default async function NflFairLinesPage({
     board.slateStatus &&
     board.slateStatus !== "ok";
 
+  const hasRowsForCurrentWeek = board.lines.some(
+    (row) => row.week != null && row.week === board.currentWeek,
+  );
+  const weekChip = formatNflBoardWeekLabel(board.currentWeek, {
+    hasRowsForCurrentWeek,
+    lineCount: board.lines.length,
+    slateStatus: board.slateStatus,
+  });
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <section className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              KEI Lines · {season}
-              {board.currentWeek ? ` · Week ${board.currentWeek}` : ""}
+              KEI Lines · {season} · {weekChip}
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               KEI Lines
@@ -219,9 +228,7 @@ export default async function NflFairLinesPage({
           <h2 className="text-xl font-semibold text-kos-text">KEI Lines</h2>
           <p className="text-xs text-kos-text/60">
             {visibleLines.length} game{visibleLines.length === 1 ? "" : "s"}
-            {slate === "week" && board.currentWeek
-              ? ` · Week ${board.currentWeek}`
-              : ""}
+            {slate === "week" ? ` · ${weekChip}` : ""}
           </p>
         </div>
 

@@ -90,7 +90,7 @@ export default async function NflIntelTablePage({
           </p>
           {showFallbackHint ? (
             <p className="mt-1 text-xs text-kos-gold/80">
-              Showing latest available: {latestLabel}
+              Not current · showing {latestLabel} (as-of)
             </p>
           ) : null}
         </div>
@@ -113,7 +113,8 @@ export default async function NflIntelTablePage({
             {emptyHint}
             {showRequestedEmptyHint ? (
               <p className="mt-2 text-xs text-kos-text/60">
-                No data for selected period. Latest available: {latestLabel}.
+                No data for selected period. Not current · latest as-of:{" "}
+                {latestLabel}.
               </p>
             ) : null}
           </div>

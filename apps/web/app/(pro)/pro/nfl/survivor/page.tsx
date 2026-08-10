@@ -78,7 +78,9 @@ export default async function NflSurvivorPage() {
 
       <SeasonEngineSurvivorShell
         defaultWeek={
-          slate.currentWeek && slate.currentWeek >= 1 ? slate.currentWeek : 1
+          slate.currentWeek && slate.currentWeek >= 1 && slate.currentWeek < 18
+            ? slate.currentWeek
+            : 1
         }
         engineVersion={status.engine_version || undefined}
         depthSource={status.depth_source || status.roster_source}

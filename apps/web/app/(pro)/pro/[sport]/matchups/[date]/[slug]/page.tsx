@@ -97,7 +97,7 @@ export default async function MatchupPage({
       </div>
 
       <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-        {isNfl ? "Writer matchup brief" : `${sportName} matchup`}
+        {isNfl ? "Brief pending · research links only" : `${sportName} matchup`}
       </p>
       <h1 className="mt-2 text-3xl font-semibold text-kos-text">
         {teams ? `${teams.away} @ ${teams.home}` : `${sportName} Matchup`}
@@ -107,12 +107,14 @@ export default async function MatchupPage({
       </p>
 
       {isNfl ? (
-        <section className="mt-6 rounded-2xl border border-kos-gold/25 bg-linear-to-r from-kos-gold/10 via-black/40 to-black/60 p-5">
-          <h2 className="text-lg font-semibold text-kos-text">Writer preview</h2>
+        <section className="mt-6 rounded-2xl border border-dashed border-white/20 bg-linear-to-r from-kos-gold/10 via-black/40 to-black/60 p-5">
+          <h2 className="text-lg font-semibold text-kos-text">
+            Writer preview · template
+          </h2>
           <p className="mt-2 text-sm text-kos-text/75">
-            Featured matchup brief lands here from the Weekly Slate desk.
-            Until the brief is attached, use Team Previews and Edge Board for
-            research context.
+            Featured matchup brief is not attached yet — this shell is research
+            links only, not a published brief. Use Team Previews and Edge Board
+            for context until the Weekly Slate desk lands copy.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {teams ? (

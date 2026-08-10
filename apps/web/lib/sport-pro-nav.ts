@@ -83,16 +83,17 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/slate/today", label: "Weekly Slate", primary: true },
       { href: "/pro/nfl/fair-lines", label: "KEI Lines" },
       { href: "/pro/nfl/edges", label: "Edges" },
-      { href: "/pro/nfl/props", label: "Props" },
       { href: "/pro/nfl/survivor", label: "Survivor", primary: true },
       // Draft Desk for now; post-kickoff can retarget to Weekly Fantasy Projections.
       { href: "/pro/nfl/fantasy", label: "Fantasy", primary: true },
       { href: "/pro/nfl/model", label: "Season Model" },
+      { href: "/pro/nfl/game-boxes", label: "Game Boxes" },
       { href: "/pro/power-ratings/nfl", label: "Power Ratings" },
+      { href: "/pro/nfl/previews", label: "Team Previews" },
       { href: "/pro/nfl/teams", label: "Teams" },
     ],
     tools: [
-      { href: "/pro/nfl/previews", label: "Team Previews" },
+      // Props / DFS / Awards / Player Previews demoted until live (no "ready" chrome).
       { href: "/odds/nfl", label: "Compare Odds" },
       { href: "/pro/prediction-market", label: "Prediction Markets" },
       { href: "/pro/nfl/execution", label: "Execution Monitor" },
@@ -100,11 +101,8 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/standings", label: "Standings" },
       { href: "/pro/nfl/depth-charts", label: "Depth Charts" },
       { href: "/pro/nfl/injuries", label: "Injuries & News" },
-      // Fantasy primary nav covers Draft Desk; keep weekly + DFS in tools.
+      // Fantasy primary nav covers Draft Desk; weekly stays in tools.
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
-      { href: "/pro/nfl/dfs", label: "DFS" },
-      { href: "/pro/nfl/player-previews", label: "Player Previews" },
-      { href: "/pro/nfl/awards", label: "Awards" },
       { href: "/wall-chart/nfl-2026", label: "Wall Chart" },
       { href: "/pro/nfl/camp", label: "Camp" },
       { href: "/pro/model-transparency", label: "Model Health" },

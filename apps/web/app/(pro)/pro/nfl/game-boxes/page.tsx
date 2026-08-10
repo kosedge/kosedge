@@ -7,6 +7,7 @@ import {
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
 import { nflLaunchResearchDeskNotice } from "@/lib/nfl-launch-research";
+import { resolveNflProjectionDefaultWeek } from "@/lib/nfl-board-week-label";
 
 export const dynamic = "force-dynamic";
 
@@ -86,7 +87,7 @@ export default async function NflGameBoxesPage() {
 
       <SeasonEngineGameBoxesClient
         matchups={slate.matchups}
-        defaultWeek={slate.currentWeek ?? 1}
+        defaultWeek={resolveNflProjectionDefaultWeek(slate.currentWeek)}
         engineVersion={status.engine_version || undefined}
         depthSource={status.depth_source || status.roster_source}
         depthAsOf={status.depth_as_of || status.roster_as_of}

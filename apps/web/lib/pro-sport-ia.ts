@@ -62,7 +62,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
       market: "Betting Desk",
-      props: "Props & Fantasy",
+      props: "Fantasy",
       intel: "Team Intel",
     },
   },
@@ -225,13 +225,6 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           premium: true,
           status: "active",
         },
-        {
-          href: "/pro/nfl/player-previews",
-          label: "Player Previews",
-          hint: "Selective star and role-change outlooks with position filters.",
-          premium: true,
-          status: "active",
-        },
       ],
     },
     {
@@ -263,13 +256,6 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           href: "/pro/prediction-market",
           label: "Prediction Markets",
           hint: "Cross-check model views against public prediction-market prices.",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: "/pro/nfl/props",
-          label: "Props",
-          hint: "Full player prop board — model means, fair prices, market joins.",
           premium: true,
           status: "active",
         },
@@ -311,17 +297,10 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
       ],
     },
     {
-      title: "Props & Fantasy",
+      title: "Fantasy",
       subtitle:
-        "Surface player-level opportunities where feeds are launch-ready while preserving risk discipline.",
+        "Honest preseason draft desk — weekly / DFS shells stay off the ready path until slate feeds join.",
       links: [
-        {
-          href: "/pro/nfl/props",
-          label: "Player Props Board",
-          hint: "Model mean vs line, fair odds, and confidence by market.",
-          premium: true,
-          status: "active",
-        },
         {
           href: "/pro/nfl/fantasy",
           label: "Fantasy Draft Desk",
@@ -333,13 +312,6 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           href: "/pro/nfl/weekly-fantasy",
           label: "Weekly Fantasy Projections",
           hint: "Weekly leaders and player fantasy totals with scoring filters.",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: "/pro/nfl/dfs",
-          label: "DFS Board",
-          hint: "DraftKings and FanDuel salary, projection, value, and ownership.",
           premium: true,
           status: "active",
         },

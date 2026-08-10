@@ -21,21 +21,26 @@ describe("sport-pro-nav", () => {
     }
   });
 
-  it("surfaces Survivor / Fantasy / Season Model on NFL primary nav", () => {
+  it("surfaces Survivor / Fantasy / Season Model / Game Boxes on NFL primary nav", () => {
     const nflPrimary = getSportPrimaryNav("nfl");
     const labels = nflPrimary.map((i) => i.label);
     expect(labels).toContain("Survivor");
     expect(labels).toContain("Fantasy");
     expect(labels).toContain("Season Model");
-    expect(labels).not.toContain("Game Boxes");
+    expect(labels).toContain("Game Boxes");
+    expect(labels).toContain("Team Previews");
+    // Unfinished desks stay off primary until live.
+    expect(labels).not.toContain("Props");
+    expect(labels).not.toContain("DFS");
+    expect(labels).not.toContain("Awards");
+    expect(labels).not.toContain("Player Previews");
     const fantasy = nflPrimary.find((i) => i.label === "Fantasy");
     expect(fantasy?.href).toBe("/pro/nfl/fantasy");
   });
 
-  it("keeps Wall Chart / Awards as NFL-only tools; Fantasy on primary", () => {
+  it("keeps Wall Chart as NFL-only tool; hides unfinished desks; Fantasy on primary", () => {
     const nflTools = getSportToolNav("nfl").map((i) => i.label);
     expect(nflTools).toContain("Wall Chart");
-    expect(nflTools).toContain("Awards");
     expect(nflTools).toContain("Weekly Fantasy");
     // Fantasy Draft Desk is primary — not duplicated in tools overflow.
     expect(nflTools).not.toContain("Draft Desk");
@@ -44,6 +49,12 @@ describe("sport-pro-nav", () => {
     expect(nflTools).not.toContain("Season Model");
     expect(nflTools).not.toContain("Game Boxes");
     expect(nflTools).not.toContain("Survivor");
+    // Unfinished surfaces demoted until live (no tools chrome that looks ready).
+    expect(nflTools).not.toContain("Awards");
+    expect(nflTools).not.toContain("DFS");
+    expect(nflTools).not.toContain("Player Previews");
+    expect(nflTools).not.toContain("Props");
+    expect(nflTools).not.toContain("Team Previews");
 
     for (const sport of SPORTS.filter((s) => s.key !== "nfl" && s.key !== "cfb")) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
