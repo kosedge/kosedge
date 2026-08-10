@@ -152,8 +152,8 @@ export function FantasyDraftDeskClient({
     return notes.slice(0, 5);
   }, [board.rows]);
 
-  const grade = teamGrade(roster);
-  const needs = rosterNeeds(roster);
+  const grade = teamGrade(roster, board.rows);
+  const needs = rosterNeeds(roster, board.rows);
   const byValue = bestAvailableByValue(board.rows, rosterSet, 5, { roster });
   const byNeed = bestAvailableByNeed(board.rows, roster, 5);
 
