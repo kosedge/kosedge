@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
@@ -18,6 +19,11 @@ import {
   buildStatDrop,
   type StatDrop,
 } from "@/lib/edge-board-stat-drop";
+
+/** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
+const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
+/** Stale if last odds capture older than this (same policy as refresh). */
+const EDGE_BOARD_STALE_MS = EDGE_BOARD_REFRESH_MS;
 
 type ExpandPanel = "overview" | "stats" | null;
 
@@ -39,6 +45,12 @@ export type FlatEdgeBoardRow = {
   bestJuiceHome?: string;
   note?: string;
   commenceTime?: string;
+  /** Stacked kickoff line 1 (e.g. 09/10). */
+  kickoffDate?: string;
+  /** Stacked kickoff line 2 (e.g. 8:35 PM). */
+  kickoffTime?: string;
+  /** ISO timestamp of latest odds capture — as-of / stale hint. */
+  linesAsOf?: string;
   kei?: string;
   /** Research Model (pre-blend) when it diverges from published KEI handicap. */
   modelKei?: string;
@@ -116,6 +128,10 @@ export type TeamBlock = {
 export type LegacyEdgeBoardRow = {
   id: string;
   time?: string;
+  kickoffDate?: string;
+  kickoffTime?: string;
+  linesAsOf?: string;
+  linesStale?: boolean;
   teamA: TeamBlock;
   teamB: TeamBlock;
   openOU: PricePair;
@@ -567,12 +583,12 @@ const COL_KEI = "bg-kos-gold/[0.07] border-l border-kos-gold/25";
 const COL_MODEL = COL_KEI;
 const COL_DECISION = "border-l border-white/12";
 const TH_BASE = "py-3.5 px-3";
-const TD_BASE = "py-5 px-3 align-top";
-const TD_DECISION = "py-5 px-2.5 align-top";
+const TD_BASE = "py-6 px-3 align-top";
+const TD_DECISION = "py-6 px-2.5 align-top";
 
 const COL_WIDTHS = [
-  "200px",
-  "108px",
+  "210px",
+  "96px",
   "92px",
   "92px",
   "100px",
@@ -584,6 +600,68 @@ const COL_WIDTHS = [
   "120px",
   "120px",
 ] as const;
+
+function parseKickoffStack(args: {
+  kickoffDate?: string;
+  kickoffTime?: string;
+  time?: string;
+}): { date: string; time: string; local: string } {
+  if (args.kickoffDate || args.kickoffTime) {
+    return {
+      date: args.kickoffDate || "—",
+      time: args.kickoffTime || "—",
+      local: "ET",
+    };
+  }
+  const raw = String(args.time ?? "").trim();
+  if (!raw || raw === "—") return { date: "—", time: "—", local: "" };
+  // "09/10 8:35 PM ET" or similar
+  const m = raw.match(
+    /^(\d{1,2}\/\d{1,2})\s+(.+?)(?:\s+(ET|PT|CT|MT))?$/i,
+  );
+  if (m) {
+    return {
+      date: m[1]!,
+      time: m[2]!.trim(),
+      local: (m[3] || "ET").toUpperCase(),
+    };
+  }
+  return { date: raw, time: "", local: "" };
+}
+
+function KickoffStack({
+  kickoffDate,
+  kickoffTime,
+  time,
+}: {
+  kickoffDate?: string;
+  kickoffTime?: string;
+  time?: string;
+}) {
+  const k = parseKickoffStack({ kickoffDate, kickoffTime, time });
+  return (
+    <div className="leading-snug tabular-nums">
+      <div className="text-sm font-semibold text-gray-200">{k.date}</div>
+      {k.time ? (
+        <div className="mt-0.5 text-xs text-gray-400">
+          {k.time}
+          {k.local ? (
+            <span className="ml-1 text-[10px] uppercase tracking-wide text-gray-500">
+              {k.local}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function isLinesStale(linesAsOf?: string | null): boolean {
+  if (!linesAsOf) return false;
+  const ts = Date.parse(linesAsOf);
+  if (!Number.isFinite(ts)) return false;
+  return Date.now() - ts > EDGE_BOARD_STALE_MS;
+}
 
 function parseAmericanLabel(s: string | undefined): number | null {
   if (s == null || s === "" || s === "—") return null;
@@ -688,20 +766,33 @@ export function flatRowsToLegacy(
           }
         : EMPTY_PAIR;
     }
-    const t = totalRow?.open ?? totalRow?.best ?? "—";
+    // Open total only from true open — never invent open = current.
+    const openTotalRaw = totalRow?.open;
     const openOU: PricePair =
-      t !== "—"
+      openTotalRaw && openTotalRaw !== "—"
         ? {
-            top: { label: `o${t}`, juice: juiceOr(totalRow?.openJuice) },
-            bottom: { label: `u${t}`, juice: juiceOr(totalRow?.openJuiceHome) },
+            top: {
+              label: `o${openTotalRaw}`,
+              juice: juiceOr(totalRow?.openJuice),
+            },
+            bottom: {
+              label: `u${openTotalRaw}`,
+              juice: juiceOr(totalRow?.openJuiceHome),
+            },
           }
         : EMPTY_PAIR;
-    const b = totalRow?.best ?? totalRow?.open ?? "—";
+    const currentTotalRaw = totalRow?.best;
     const bestOU: PricePair =
-      b !== "—"
+      currentTotalRaw && currentTotalRaw !== "—"
         ? {
-            top: { label: `o${b}`, juice: juiceOr(totalRow?.bestJuice) },
-            bottom: { label: `u${b}`, juice: juiceOr(totalRow?.bestJuiceHome) },
+            top: {
+              label: `o${currentTotalRaw}`,
+              juice: juiceOr(totalRow?.bestJuice),
+            },
+            bottom: {
+              label: `u${currentTotalRaw}`,
+              juice: juiceOr(totalRow?.bestJuiceHome),
+            },
           }
         : EMPTY_PAIR;
 
@@ -959,9 +1050,15 @@ export function flatRowsToLegacy(
       : "Home";
     const awaySiteLabel: "Away" | "Home" = "Away";
 
+    const linesAsOf =
+      lineRow?.linesAsOf ?? totalRow?.linesAsOf ?? undefined;
     result.push({
       id: String(lineRow?.id ?? total?.id ?? gameKey),
       time,
+      kickoffDate: lineRow?.kickoffDate ?? totalRow?.kickoffDate,
+      kickoffTime: lineRow?.kickoffTime ?? totalRow?.kickoffTime,
+      linesAsOf,
+      linesStale: isLinesStale(linesAsOf),
       teamA: {
         name: away,
         site: awaySiteLabel,
@@ -1039,6 +1136,7 @@ export default function EdgeBoard({
   /** Optional empty-state copy (e.g. honest Week 1 empty). */
   emptyHint?: string;
 }) {
+  const router = useRouter();
   const safeRows = Array.isArray(rows) ? rows : [];
   const keiCode = getKeiCode(sportKey);
   const edgeGreen =
@@ -1048,6 +1146,15 @@ export default function EdgeBoard({
     id: string;
     panel: Exclude<ExpandPanel, null>;
   } | null>(null);
+
+  // Soft refresh Current lines on the Odds / fair-lines cadence (no redeploy).
+  React.useEffect(() => {
+    if (variant !== "full" || !hasRealData) return;
+    const id = window.setInterval(() => {
+      router.refresh();
+    }, EDGE_BOARD_REFRESH_MS);
+    return () => window.clearInterval(id);
+  }, [variant, hasRealData, router]);
 
   const toggleExpand = React.useCallback(
     (id: string, panel: Exclude<ExpandPanel, null>) => {
@@ -1135,7 +1242,7 @@ export default function EdgeBoard({
   }
 
   const MobileCards = (
-    <div className="lg:hidden mt-6 space-y-4">
+    <div className="lg:hidden mt-6 space-y-5">
       <div className="flex items-center justify-between px-1">
         <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
         <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
@@ -1147,11 +1254,11 @@ export default function EdgeBoard({
       <p className="px-1 text-xs text-gray-400">
         {marketsOnly
           ? `Markets only · ${keiCode} handicap not shipped yet · ET`
-          : `KEI handicap (${keiCode}) vs Market · Edge · Tag · ET`}
+          : `KEI handicap (${keiCode}) vs Market · Open + Current · ET`}
       </p>
       {marketsOnly ? (
         <p className="px-1 text-[11px] text-amber-200/80">
-          Open/Best from books when available. KEI Line / O/U / Edge stay blank
+          Open/Current from books when available. KEI Line / O/U / Edge stay blank
           until a real model exists — we do not invent handicap numbers.
         </p>
       ) : null}
@@ -1162,7 +1269,7 @@ export default function EdgeBoard({
         return (
           <article
             key={r.id}
-            className="rounded-2xl border border-white/12 bg-black/45 p-4 sm:p-5 backdrop-blur-xl"
+            className="rounded-2xl border border-white/14 bg-black/45 p-4 sm:p-5 backdrop-blur-xl"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -1171,18 +1278,33 @@ export default function EdgeBoard({
                     ? `${r.teamA.name} vs ${r.teamB.name}`
                     : `${r.teamA.name} @ ${r.teamB.name}`}
                 </h3>
-                <p className="mt-1 text-[11px] tabular-nums text-gray-400 leading-relaxed">
-                  {r.time ?? "—"}
-                  {r.siteLabel ? (
-                    <span className="block mt-0.5 text-amber-200/90">
-                      {r.siteLabel}
-                    </span>
-                  ) : (
-                    <span className="block mt-0.5">
-                      {r.teamA.site} / {r.teamB.site}
-                    </span>
-                  )}
-                </p>
+                <div className="mt-1.5">
+                  <KickoffStack
+                    kickoffDate={r.kickoffDate}
+                    kickoffTime={r.kickoffTime}
+                    time={r.time}
+                  />
+                </div>
+                {r.siteLabel ? (
+                  <p className="mt-1 text-[11px] text-amber-200/90">
+                    {r.siteLabel}
+                  </p>
+                ) : (
+                  <p className="mt-1 text-[11px] text-gray-400">
+                    {r.teamA.site} / {r.teamB.site}
+                  </p>
+                )}
+                {r.linesStale && r.linesAsOf ? (
+                  <p className="mt-1 text-[10px] text-amber-300/80">
+                    Lines as of{" "}
+                    {new Date(r.linesAsOf).toLocaleString("en-US", {
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                ) : null}
               </div>
               <div className="shrink-0 text-right">
                 {isNfl ? (
@@ -1210,7 +1332,7 @@ export default function EdgeBoard({
                   className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}
                 >
                   <div className="text-[10px] uppercase tracking-wide text-gray-500">
-                    Market
+                    Current
                   </div>
                   <div className="mt-1.5 font-semibold text-gray-50">
                     {r.bestLine.top.label}{" "}
@@ -1223,6 +1345,9 @@ export default function EdgeBoard({
                     <span className="text-[11px] font-normal text-gray-400">
                       ({r.bestOU.top.juice})
                     </span>
+                  </div>
+                  <div className="mt-2 text-[10px] text-gray-500">
+                    Open {r.openLine.top.label} / {r.openOU.top.label}
                   </div>
                   {r.bestLineBook ? (
                     <div className="mt-2">
@@ -1363,13 +1488,18 @@ export default function EdgeBoard({
         <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/10">
           <div className="text-sm text-gray-300">
             {marketsOnly
-              ? `Live books • Open + Best + juice · ${keiCode} pending model`
-              : `Live books • Open + Best + juice • Edge vs ${keiCode}`}
+              ? `Live books • Open + Current + juice · ${keiCode} pending model`
+              : `Live books • Open + Current + juice • Edge vs ${keiCode}`}
           </div>
-          <div className="text-xs text-gray-500">
-            {safeRows.length
-              ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games`
-              : "Waiting for slate"}
+          <div className="text-xs text-gray-500 text-right">
+            <div>
+              {safeRows.length
+                ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games`
+                : "Waiting for slate"}
+            </div>
+            <div className="mt-0.5 text-[10px] text-gray-600">
+              Current refreshes every 6h · Open is first capture
+            </div>
           </div>
         </div>
         <div className="overflow-x-auto">
@@ -1406,7 +1536,7 @@ export default function EdgeBoard({
                   <HeaderStack a="Game" />
                 </th>
                 <th className={TH_BASE}>
-                  <HeaderStack a="Time" />
+                  <HeaderStack a="Kickoff" />
                 </th>
                 <th className={TH_BASE}>
                   <HeaderStack a="Open" b="O/U" />
@@ -1415,10 +1545,10 @@ export default function EdgeBoard({
                   <HeaderStack a="Open" b={lineLabel} />
                 </th>
                 <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
-                  <HeaderStack a="Best" b={lineLabel} />
+                  <HeaderStack a="Current" b={lineLabel} />
                 </th>
                 <th className={`${TH_BASE} ${COL_MARKET} text-gray-100`}>
-                  <HeaderStack a="Best" b="O/U" />
+                  <HeaderStack a="Current" b="O/U" />
                 </th>
                 <th className={`${TH_BASE} ${COL_KEI} text-kos-gold`}>
                   <HeaderStack a={keiLineHeader} b={lineLabel} />
@@ -1461,7 +1591,7 @@ export default function EdgeBoard({
                 return (
                   <React.Fragment key={r.id}>
                     <tr
-                      className={`border-t border-white/[0.10] hover:bg-white/[0.035] transition ${
+                      className={`border-t border-white/[0.14] hover:bg-white/[0.035] transition ${
                         panelOpen ? "bg-white/[0.02]" : ""
                       }`}
                     >
@@ -1482,13 +1612,13 @@ export default function EdgeBoard({
                           )}
                         </div>
                         <div className="mt-0.5 text-xs text-gray-400 leading-relaxed">
-                          {r.isNeutral ? "Neutral" : r.teamA.site}
+                          {r.isNeutral ? "Away" : r.teamA.site}
                           {r.teamA.record ? ` • ${r.teamA.record}` : ""}
                           {r.teamA.confRecord
                             ? ` (${r.teamA.confRecord})`
                             : ""}
                         </div>
-                        <div className="mt-2.5 font-semibold leading-snug">
+                        <div className="mt-3 font-semibold leading-snug">
                           {r.teamB.name}
                           {r.teamB.keiNumber != null ? (
                             <span className="ml-1 text-kos-gold tabular-nums">
@@ -1522,9 +1652,22 @@ export default function EdgeBoard({
                         </button>
                       </td>
                       <td className={`${TD_BASE} px-2`}>
-                        <div className="text-sm font-medium text-gray-300 whitespace-nowrap leading-snug">
-                          {r.time ?? "—"}
-                        </div>
+                        <KickoffStack
+                          kickoffDate={r.kickoffDate}
+                          kickoffTime={r.kickoffTime}
+                          time={r.time}
+                        />
+                        {r.linesStale && r.linesAsOf ? (
+                          <div className="mt-1 text-[10px] text-amber-300/80">
+                            as of{" "}
+                            {new Date(r.linesAsOf).toLocaleString("en-US", {
+                              month: "2-digit",
+                              day: "2-digit",
+                              hour: "numeric",
+                              minute: "2-digit",
+                            })}
+                          </div>
+                        ) : null}
                         <button
                           type="button"
                           onClick={() => toggleExpand(r.id, "stats")}
