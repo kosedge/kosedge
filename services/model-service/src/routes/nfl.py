@@ -3472,8 +3472,8 @@ def nfl_fair_lines(
         model_home_wp = _to_float(mh.get("model_home_win_prob"))
         model_away_wp = _to_float(mh.get("model_away_win_prob"))
 
-        # Decision Engine (Action Layer): Model fair vs market — separate from
-        # publish_tag_* (KEI vs market). Does not mutate locked fair lines.
+        # Tag Policy: KEI vs best available market (not Model alone).
+        # Model remains research-only on the row; publish_tag_* may coexist.
         _week_int = int(week_val) if week_val is not None else None
         _decision_market_spread = (
             float(compare_spread_home) if compare_spread_home is not None else None
@@ -3509,9 +3509,10 @@ def nfl_fair_lines(
         _open_total = _to_float(_open_snap.get("open_total"))
         _decision = nfl_decide_game(
             week=_week_int,
-            fair_spread_home=model_spread if model_spread is not None else spread_home,
+            # Fair for tags = KEI published handicap (Model is research-only).
+            fair_spread_home=spread_home if spread_home is not None else model_spread,
             market_spread_home=_decision_market_spread,
-            fair_total=model_total if model_total is not None else total_mean,
+            fair_total=total_mean if total_mean is not None else model_total,
             market_total=_decision_market_total,
             home_abbr=home_abbr,
             away_abbr=away_abbr,
@@ -3604,7 +3605,7 @@ def nfl_fair_lines(
                 "publish_reason_total": total_pub.get("reason"),
                 "publish_reason_ml": ml_pub.get("reason"),
                 "ml_ev": ml_pub.get("ev"),
-                # Action layer (Model fair vs market) — coexists with publish tags
+                # Tag policy (KEI vs market) — coexists with publish tags
                 "decision": _decision,
                 "action_label_spread": _decision.get("action_label_spread"),
                 "action_label_total": _decision.get("action_label_total"),

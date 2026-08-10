@@ -182,7 +182,7 @@ export function fairLinesToEdgeBoardRows(
     const publishTagSpread = line.publishTagSpread ?? undefined;
     const publishTagTotal = line.publishTagTotal ?? undefined;
 
-    // Action layer: prefer server decision (Model fair vs market); else compute locally.
+    // Tag policy: prefer server decision (KEI vs best market); else compute locally.
     const decisionBundle =
       line.decision ??
       (() => {
@@ -191,9 +191,10 @@ export function fairLinesToEdgeBoardRows(
         const compareTotal = line.bestTotal ?? line.marketTotal ?? null;
         const local = decideGame({
           week: line.week,
-          fairSpreadHome: line.modelSpreadHome ?? line.spreadHome,
+          // Fair for tags = KEI (Model is research-only).
+          fairSpreadHome: line.spreadHome ?? line.modelSpreadHome,
           marketSpreadHome: compareSpread,
-          fairTotal: line.modelTotal ?? line.totalMean,
+          fairTotal: line.totalMean ?? line.modelTotal,
           marketTotal: compareTotal,
           homeAbbr: line.homeAbbr,
           awayAbbr: line.awayAbbr,

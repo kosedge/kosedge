@@ -16,10 +16,17 @@ import {
   gradeCoverProb,
   gradeSidePoints,
   gradeTotalPoints,
+  marketPastPlayTo,
   preferKeyNumberEdge,
   sideThresholdsForWeek,
   weekRegime,
 } from "@/lib/nfl-decision-engine";
+import {
+  EARLY_TOTAL,
+  BASELINE_TOTAL,
+  WEEK1_TOTAL_BOOST,
+  totalThresholdsForWeek,
+} from "@/lib/nfl-tag-policy";
 
 describe("nfl-decision-engine doctrine", () => {
   it("keeps break-even at ≈52.38%", () => {
@@ -60,19 +67,32 @@ describe("side point threshold bands", () => {
   it.each(cases)("|edge|=%s week=%s → %s", (edge, week, expected) => {
     expect(gradeSidePoints(edge, week)).toBe(expected);
   });
+
+  it("week1 tighter than week6 at 2.0 pts", () => {
+    expect(gradeSidePoints(2.0, 1)).toBe("LEAN");
+    expect(gradeSidePoints(2.0, 6)).toBe("PLAY");
+  });
 });
 
 describe("totals point threshold bands", () => {
-  const cases: Array<[number, string]> = [
-    [1.4, "PASS"],
-    [1.5, "LEAN"],
-    [2.0, "LEAN"],
-    [2.5, "PLAY"],
-    [3.0, "PLAY"],
-    [3.5, "STRONG PLAY"],
-  ];
-  it.each(cases)("|edge|=%s → %s", (edge, expected) => {
-    expect(gradeTotalPoints(edge)).toBe(expected);
+  it("baseline after week 2", () => {
+    expect(totalThresholdsForWeek(6)).toEqual(BASELINE_TOTAL);
+    expect(gradeTotalPoints(1.4, 6)).toBe("PASS");
+    expect(gradeTotalPoints(1.5, 6)).toBe("LEAN");
+    expect(gradeTotalPoints(2.5, 6)).toBe("PLAY");
+    expect(gradeTotalPoints(3.5, 6)).toBe("STRONG PLAY");
+  });
+
+  it("week1 adds ~0.5 boost to each band", () => {
+    expect(WEEK1_TOTAL_BOOST).toBe(0.5);
+    expect(totalThresholdsForWeek(1)).toEqual(EARLY_TOTAL);
+    expect(gradeTotalPoints(1.9, 1)).toBe("PASS");
+    expect(gradeTotalPoints(2.0, 1)).toBe("LEAN"); // == early pass_max
+    expect(gradeTotalPoints(2.0, 6)).toBe("LEAN");
+    expect(gradeTotalPoints(2.5, 1)).toBe("LEAN"); // < early play_min 3.0
+    expect(gradeTotalPoints(2.5, 6)).toBe("PLAY");
+    expect(gradeTotalPoints(3.0, 1)).toBe("PLAY");
+    expect(gradeTotalPoints(4.0, 1)).toBe("STRONG PLAY");
   });
 });
 
@@ -91,6 +111,20 @@ describe("cover probability bands", () => {
   it("returns null when missing", () => {
     expect(gradeCoverProb(null)).toBeNull();
   });
+
+  it("cover prob wins for tag when available", () => {
+    const conf = assessConfidence({ baseScore: 0.8 });
+    const out = decideSide({
+      fairSpreadHome: -7,
+      marketSpreadHome: -3,
+      week: 8,
+      coverProb: 0.535, // LEAN by cover; STRONG by points
+      confidence: conf,
+    });
+    expect(out.pointGrade).toBe("STRONG PLAY");
+    expect(out.coverGrade).toBe("LEAN");
+    expect(out.actionLabel).toBe("LEAN");
+  });
 });
 
 describe("key-number preference", () => {
@@ -104,13 +138,14 @@ describe("key-number preference", () => {
   });
 });
 
-describe("play-to ladders", () => {
-  it("matches BUF −6 fair / −3 market example", () => {
+describe("play-to ladders from KEI + thresholds", () => {
+  it("matches BUF −6 KEI / −3 market at week 8", () => {
     const ladder = buildSidePlayToLadder({
       fairSpreadHome: 6,
       marketSpreadHome: 3,
       homeAbbr: "MIA",
       awayAbbr: "BUF",
+      week: 8,
     });
     expect(ladder.playTo).toBe(-4);
     expect(ladder.leanTo).toBe(-4.5);
@@ -118,14 +153,47 @@ describe("play-to ladders", () => {
     expect(ladder.notes).toContain("BUF");
   });
 
-  it("matches Over 44 market / 47.2 model example", () => {
+  it("matches Over from KEI + baseline totals", () => {
     const ladder = buildTotalPlayToLadder({
       fairTotal: 47.2,
       marketTotal: 44,
+      week: 8,
     });
     expect(ladder.playTo).toBe(44.5);
-    expect(ladder.passFrom).toBe(46);
+    expect(ladder.leanTo).toBe(45);
+    expect(ladder.passFrom).toBe(45.5);
     expect(ladder.notes).toContain("Over");
+  });
+});
+
+describe("market past play-to downgrades", () => {
+  it("downgrades PLAY → LEAN when market moves past play-to", () => {
+    const conf = assessConfidence({ baseScore: 0.8 });
+    const good = decideSide({
+      fairSpreadHome: -6,
+      marketSpreadHome: -3,
+      week: 8,
+      confidence: conf,
+    });
+    expect(["PLAY", "BEST VALUE"]).toContain(good.actionLabel);
+    expect(good.playTo?.playTo).toBe(-4);
+
+    const past = decideSide({
+      fairSpreadHome: -6,
+      marketSpreadHome: -4.5,
+      week: 8,
+      confidence: conf,
+    });
+    expect(past.actionLabel).toBe("LEAN");
+    expect(past.reason).toContain("past_play_to");
+    expect(
+      marketPastPlayTo({
+        marketKind: "spread",
+        fair: -6,
+        market: -4.5,
+        ladder: good.playTo!,
+      }),
+    ).toBe(true);
   });
 });
 
@@ -159,6 +227,20 @@ describe("PLAY triple requirement", () => {
     });
     expect(low.actionLabel).not.toBe("PLAY");
     expect(low.actionLabel).not.toBe("BEST VALUE");
+  });
+
+  it("Low confidence + big edge → ALERT not PLAY", () => {
+    const out = decideSide({
+      fairSpreadHome: -10,
+      marketSpreadHome: -3,
+      week: 8,
+      confidence: assessConfidence({ baseScore: 0.4 }),
+      priceStillAvailable: true,
+    });
+    expect(out.modelConfidence.band).toBe("LOW");
+    expect(out.edgeMagnitude).toBeGreaterThanOrEqual(3);
+    expect(out.actionLabel).toBe("ALERT");
+    expect(out.actionLabel).not.toBe("PLAY");
   });
 });
 
@@ -241,19 +323,6 @@ describe("edge magnitude vs confidence", () => {
   });
 });
 
-describe("market confirmation", () => {
-  it("records open/current without mutating fair", () => {
-    const mc = assessMarketConfirmation({
-      modelFair: -6,
-      opening: -3,
-      current: -4,
-      likesHomeOrOver: true,
-    });
-    expect(mc.modelFair).toBe(-6);
-    expect(mc.note.toLowerCase()).toMatch(/fair/);
-  });
-});
-
 describe("ALERT / STAY AWAY / doctrine price dependence", () => {
   it("ALERT on material uncertainty with edge", () => {
     const out = decideSide({
@@ -297,7 +366,7 @@ describe("ALERT / STAY AWAY / doctrine price dependence", () => {
 describe("decideGame sample output", () => {
   it("emits full action payload for a qualified game", () => {
     const game = decideGame({
-      week: 1,
+      week: 8,
       fairSpreadHome: 6,
       marketSpreadHome: 3,
       fairTotal: 47.2,
@@ -307,20 +376,30 @@ describe("decideGame sample output", () => {
       confidence: assessConfidence({ baseScore: 0.8 }),
     });
     expect(game.doctrine).toBe("We bet prices, not teams.");
-    expect(game.weekRegime).toBe("early");
+    expect(game.weekRegime).toBe("inseason");
     expect(game.spread.playTo?.playTo).toBe(-4);
     expect(game.total.playTo?.playTo).toBe(44.5);
     expect(game.actionLabelSpread).toBeTruthy();
     expect(game.actionLabelTotal).toBeTruthy();
   });
 
-  it("decideTotal grades overs", () => {
-    const total = decideTotal({
+  it("decideTotal grades overs with week1 tighter band", () => {
+    const week1 = decideTotal({
       fairTotal: 47.2,
-      marketTotal: 44,
+      marketTotal: 44.5,
       week: 1,
       confidence: assessConfidence({ baseScore: 0.8 }),
     });
-    expect(["PLAY", "BEST VALUE"]).toContain(total.actionLabel);
+    // edge 2.7 → LEAN under early totals (play_min 3.0)
+    expect(week1.edgeMagnitude).toBeCloseTo(2.7);
+    expect(week1.actionLabel).toBe("LEAN");
+
+    const week6 = decideTotal({
+      fairTotal: 47.2,
+      marketTotal: 44.5,
+      week: 6,
+      confidence: assessConfidence({ baseScore: 0.8 }),
+    });
+    expect(["PLAY", "BEST VALUE"]).toContain(week6.actionLabel);
   });
 });

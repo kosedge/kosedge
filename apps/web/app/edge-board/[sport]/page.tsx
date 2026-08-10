@@ -216,10 +216,10 @@ export default async function EdgeBoardSportPage({
             </div>
             <p
               className="text-[11px] text-gray-500"
-              title="Week 1 = REG Week 1 schedule pack (Melbourne + domestic). Full slate = multi-week projection board. PRE filtered out. Open = first capture; Current = latest books. PLAY = KEI vs market."
+              title="We bet prices, not teams. Tag = KEI vs current best market (not Model alone). Edge pts and Confidence stay separate. PLAY/LEAN require play-to still available. Week 1–2 uses tighter bands."
             >
-              {slate === "week1" ? "Week 1" : nflWeekLabel} · REG · Open vs
-              Current · PLAY = KEI vs market
+              {slate === "week1" ? "Week 1" : nflWeekLabel} · Tag = KEI vs
+              market · Play-to on current
             </p>
           </div>
         ) : null}
