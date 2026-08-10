@@ -189,7 +189,12 @@ export default async function EdgeBoardSportPage({
           </div>
         ) : null}
 
-        <EdgeBoard variant="full" rows={rows} sportKey={sportKey} />
+        <EdgeBoard
+          variant="full"
+          rows={rows}
+          sportKey={sportKey}
+          slateWeek={nflWeeks[0] ?? null}
+        />
 
         <p className="mt-6 text-xs text-gray-500">
           {rows.length
