@@ -1,0 +1,7 @@
+[
+  "Vegas preseason win totals: NOT AVAILABLE in-repo (no historical futures file). Baseline skipped.",
+  "Local DB nfl_dp_depth_chart_weekly only covers 2025-2026; Phase 3 uses nflverse W1 packs for 2019-2025.",
+  "nfl_player_projection_baselines only for 2025-2026; historical replay uses league efficiency priors.",
+  "Player rush/rec TD split in usage weekly is coarse (touchdowns_scored bucket).",
+  "Fantasy consensus historical archive unavailable \u2014 baseline skipped cleanly."
+]

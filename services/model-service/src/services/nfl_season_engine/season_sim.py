@@ -138,6 +138,8 @@ def simulate_one_season_path(
     """
     strengths = copy_strength_book(universe.strengths)
     wins: Dict[str, int] = {t: 0 for t in universe.teams}
+    points_for: Dict[str, float] = {t: 0.0 for t in universe.teams}
+    points_against: Dict[str, float] = {t: 0.0 for t in universe.teams}
     player_totals: Dict[str, Dict[str, Any]] = {}
     season_caps: Dict[str, Dict[str, float]] = {}
     if injury_paths is None:
@@ -236,10 +238,16 @@ def simulate_one_season_path(
             row["games"] += 1.0
 
         home_won = bool(outcome["home_won"])
+        home_score = float(outcome["home_score"])
+        away_score = float(outcome["away_score"])
         if home_won:
             wins[game.home_team] += 1
         else:
             wins[game.away_team] += 1
+        points_for[game.home_team] += home_score
+        points_against[game.home_team] += away_score
+        points_for[game.away_team] += away_score
+        points_against[game.away_team] += home_score
 
         # Evolve the path strength book (no temporary injury overlay).
         evolve_after_game(
@@ -247,8 +255,8 @@ def simulate_one_season_path(
             home_team=game.home_team,
             away_team=game.away_team,
             home_won=home_won,
-            home_score=float(outcome["home_score"]),
-            away_score=float(outcome["away_score"]),
+            home_score=home_score,
+            away_score=away_score,
             rng=rng,
         )
 
@@ -262,6 +270,8 @@ def simulate_one_season_path(
 
     result: Dict[str, Any] = {
         "wins": wins,
+        "points_for": points_for,
+        "points_against": points_against,
         "players": player_totals,
         "games": len(schedule),
         "season_finite": season_finite_diag,
@@ -346,6 +356,8 @@ def simulate_full_season(
         paths = list(injury_paths)
 
     win_samples: Dict[str, List[int]] = {t: [] for t in universe.teams}
+    pf_samples: Dict[str, List[float]] = {t: [] for t in universe.teams}
+    pa_samples: Dict[str, List[float]] = {t: [] for t in universe.teams}
     player_samples: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
     player_meta: Dict[str, Dict[str, str]] = {}
     sample_games = 0
@@ -391,6 +403,10 @@ def simulate_full_season(
             }
         for team, w in path["wins"].items():
             win_samples[team].append(int(w))
+        for team, pf in (path.get("points_for") or {}).items():
+            pf_samples.setdefault(team, []).append(float(pf))
+        for team, pa in (path.get("points_against") or {}).items():
+            pa_samples.setdefault(team, []).append(float(pa))
         for key, row in path["players"].items():
             if key not in player_meta:
                 player_meta[key] = {
@@ -407,11 +423,15 @@ def simulate_full_season(
     team_wins_raw: Dict[str, Dict[str, float]] = {}
     for team, samples in win_samples.items():
         dist = _dist_stats([float(x) for x in samples])
+        pf_dist = _dist_stats(pf_samples.get(team) or [0.0])
+        pa_dist = _dist_stats(pa_samples.get(team) or [0.0])
         team_wins_raw[team] = {
             "mean": dist["mean"],
             "p10": dist["p10"],
             "p50": dist["p50"],
             "p90": dist["p90"],
+            "pf_mean": pf_dist["mean"],
+            "pa_mean": pa_dist["mean"],
         }
 
     # Future SOS: schedule difficulty on outlook only — never mutates strengths.

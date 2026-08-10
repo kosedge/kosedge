@@ -1,0 +1,28 @@
+{
+  "earned": [
+    "team_wins vs epa_power",
+    "player_pass_yards scorecard produced (n=472)",
+    "player_rush_yards scorecard produced (n=1051)",
+    "player_rec_yards scorecard produced (n=1699)"
+  ],
+  "not_earned": [
+    "team_wins vs prior_year_regression (higher MAE)",
+    "team_wins vs vegas (missing historical files)"
+  ],
+  "model_wins_mae": 2.5239285714285713,
+  "prior_year_wins_mae": 2.4630301339285716,
+  "epa_power_wins_mae": 2.723437553571429,
+  "vegas_wins_mae": null,
+  "phase4_infrastructure_unblocked": true,
+  "phase4_model_claim_unblocked": false,
+  "note": "Phase 4 infrastructure unblocked (repeatable no-look-ahead replay). Model-value claim stays blocked until team-wins MAE beats prior-year+regression.",
+  "seasons_scored": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ]
+}

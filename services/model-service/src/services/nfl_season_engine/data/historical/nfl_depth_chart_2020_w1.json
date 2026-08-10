@@ -1,0 +1,3095 @@
+{
+  "season": 2020,
+  "week": 1,
+  "as_of": "2020-W1-REG",
+  "cutoff_rule": "nflverse week=1 game_type=REG (preseason\u2192W1 published depth)",
+  "source": "nflverse_depth_charts_historical",
+  "upstream": "nflverse/nflverse-data depth_charts release",
+  "snapshot_id": "nfl-depth-2020-w1-2020W1REG-4bac4215d1ac",
+  "pack_sha256": "4bac4215d1ac25713fd43a20640c281997d13f051963ee042c5064b0fe4e58db",
+  "team_count": 32,
+  "row_count": 342,
+  "full_skill_starter_teams": 28,
+  "look_ahead": false,
+  "protocol_version": "nfl-historical-replay-v1-20260809",
+  "rows": [
+    {
+      "team": "ARI",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0035228",
+      "player_name": "Kyler Murray",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ARI",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0031589",
+      "player_name": "Brett Hundley",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "ARI",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0035752",
+      "player_name": "Chris Streveler",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "ARI",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033118",
+      "player_name": "Kenyan Drake",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ARI",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0034681",
+      "player_name": "Chase Edmonds",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "ARI",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0036383",
+      "player_name": "Eno Benjamin",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "ARI",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0031558",
+      "player_name": "Maxx Williams",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ARI",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034011",
+      "player_name": "Dan Arnold",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "ARI",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033258",
+      "player_name": "Darrell Daniels",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "ARI",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0022921",
+      "player_name": "Larry Fitzgerald",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ARI",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034487",
+      "player_name": "Trent Sherfield",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "ATL",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0026143",
+      "player_name": "Matt Ryan",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ATL",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0022787",
+      "player_name": "Matt Schaub",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "ATL",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0034830",
+      "player_name": "Hayden Hurst",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ATL",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034788",
+      "player_name": "Jaeden Graham",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "ATL",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0028042",
+      "player_name": "Luke Stocker",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "ATL",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0034837",
+      "player_name": "Calvin Ridley",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "ATL",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034132",
+      "player_name": "Christian Blake",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BAL",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0034796",
+      "player_name": "Lamar Jackson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BAL",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0029665",
+      "player_name": "Robert Griffin",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BAL",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0035146",
+      "player_name": "Trace McSorley",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "BAL",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0027966",
+      "player_name": "Mark Ingram",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BAL",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0034184",
+      "player_name": "Gus Edwards",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BAL",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0034975",
+      "player_name": "Justice Hill",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "BAL",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0034753",
+      "player_name": "Mark Andrews",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BAL",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0031598",
+      "player_name": "Nick Boyle",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BAL",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0030663",
+      "player_name": "Willie Snead",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BAL",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0035703",
+      "player_name": "Miles Boykin",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BAL",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036133",
+      "player_name": "James Proche",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "BUF",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0034857",
+      "player_name": "Josh Allen",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BUF",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0030533",
+      "player_name": "Matt Barkley",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BUF",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0036197",
+      "player_name": "Jake Fromm",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "BUF",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0035250",
+      "player_name": "Devin Singletary",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BUF",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0036251",
+      "player_name": "Zack Moss",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BUF",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0032209",
+      "player_name": "T.J. Yeldon",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "BUF",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0035689",
+      "player_name": "Dawson Knox",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BUF",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0032214",
+      "player_name": "Tyler Kroft",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "BUF",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0028097",
+      "player_name": "Lee Smith",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "BUF",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0031588",
+      "player_name": "Stefon Diggs",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "BUF",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033466",
+      "player_name": "Isaiah McKenzie",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CAR",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0031237",
+      "player_name": "Teddy Bridgewater",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CAR",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0035251",
+      "player_name": "Will Grier",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CAR",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0033275",
+      "player_name": "P.J. Walker",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CAR",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033280",
+      "player_name": "Christian McCaffrey",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CAR",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0032063",
+      "player_name": "Mike Davis",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CAR",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0034164",
+      "player_name": "Trenton Cannon",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CAR",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0031484",
+      "player_name": "Chris Manhertz",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CAR",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034365",
+      "player_name": "Ian Thomas",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CAR",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033720",
+      "player_name": "Colin Thompson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CAR",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0032688",
+      "player_name": "Robbie Chosen",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CAR",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033282",
+      "player_name": "Curtis Samuel",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CAR",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0034052",
+      "player_name": "Brandon Zylstra",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CHI",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0033869",
+      "player_name": "Mitchell Trubisky",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CHI",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0029567",
+      "player_name": "Nick Foles",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CHI",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0035685",
+      "player_name": "David Montgomery",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CHI",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0033556",
+      "player_name": "Tarik Cohen",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CHI",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0034597",
+      "player_name": "Ryan Nall",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CHI",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0027696",
+      "player_name": "Jimmy Graham",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CHI",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0036290",
+      "player_name": "Cole Kmet",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CHI",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0030155",
+      "player_name": "Demetrius Harris",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CHI",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0034353",
+      "player_name": "Anthony Miller",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CHI",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0030578",
+      "player_name": "Cordarrelle Patterson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CHI",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0035590",
+      "player_name": "Riley Ridley",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CIN",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0036442",
+      "player_name": "Joe Burrow",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CIN",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0035652",
+      "player_name": "Ryan Finley",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CIN",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0032134",
+      "player_name": "C.J. Uzomah",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CIN",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0035631",
+      "player_name": "Drew Sample",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CIN",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033338",
+      "player_name": "Cethan Carter",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CIN",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0033009",
+      "player_name": "Tyler Boyd",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CIN",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0032543",
+      "player_name": "Alex Erickson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CIN",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0033114",
+      "player_name": "Mike Thomas",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CLE",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0034855",
+      "player_name": "Baker Mayfield",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CLE",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0028986",
+      "player_name": "Case Keenum",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CLE",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0034791",
+      "player_name": "Nick Chubb",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CLE",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0033923",
+      "player_name": "Kareem Hunt",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CLE",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0035628",
+      "player_name": "D'Ernest Johnson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CLE",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0032392",
+      "player_name": "Austin Hooper",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CLE",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0036232",
+      "player_name": "Harrison Bryant",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CLE",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033885",
+      "player_name": "David Njoku",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "CLE",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0031235",
+      "player_name": "Odell Beckham",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "CLE",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034854",
+      "player_name": "KhaDarel Hodge",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "CLE",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0033266",
+      "player_name": "JoJo Natson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DAL",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0033077",
+      "player_name": "Dak Prescott",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DAL",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0027973",
+      "player_name": "Andy Dalton",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DAL",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0036384",
+      "player_name": "Ben DiNucci",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DAL",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033045",
+      "player_name": "Ezekiel Elliott",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DAL",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0035261",
+      "player_name": "Tony Pollard",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DAL",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0036139",
+      "player_name": "Rico Dowdle",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DAL",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033658",
+      "player_name": "Blake Jarwin",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DAL",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0032062",
+      "player_name": "Blake Bell",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DAL",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0034383",
+      "player_name": "Dalton Schultz",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DAL",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0031544",
+      "player_name": "Amari Cooper",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DAL",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036358",
+      "player_name": "CeeDee Lamb",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DAL",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0033591",
+      "player_name": "Noah Brown",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DEN",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0035704",
+      "player_name": "Drew Lock",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DEN",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0032436",
+      "player_name": "Jeff Driskel",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DEN",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0032144",
+      "player_name": "Melvin Gordon",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DEN",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0034109",
+      "player_name": "Phillip Lindsay",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DEN",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0034838",
+      "player_name": "Royce Freeman",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DEN",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0035644",
+      "player_name": "Noah Fant",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DEN",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0032394",
+      "player_name": "Nick Vannett",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DEN",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033564",
+      "player_name": "Jake Butt",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DEN",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0034348",
+      "player_name": "Courtland Sutton",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DEN",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033375",
+      "player_name": "Tim Patrick",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DEN",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036439",
+      "player_name": "Tyrie Cleveland",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DET",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0026498",
+      "player_name": "Matthew Stafford",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DET",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0026544",
+      "player_name": "Chase Daniel",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DET",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0034349",
+      "player_name": "Kerryon Johnson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DET",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0025394",
+      "player_name": "Adrian Peterson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DET",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0035537",
+      "player_name": "Ty Johnson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DET",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0035229",
+      "player_name": "T.J. Hockenson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DET",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0032135",
+      "player_name": "Jesse James",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "DET",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0036008",
+      "player_name": "Hunter Bryant",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "DET",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0029293",
+      "player_name": "Marvin Jones",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "DET",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033094",
+      "player_name": "Marvin Hall",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "GB",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0023459",
+      "player_name": "Aaron Rodgers",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "GB",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0034177",
+      "player_name": "Tim Boyle",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "GB",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0036264",
+      "player_name": "Jordan Love",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "GB",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033293",
+      "player_name": "Aaron Jones",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "GB",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0033948",
+      "player_name": "Jamaal Williams",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "GB",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0032404",
+      "player_name": "Tyler Ervin",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "GB",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0024243",
+      "player_name": "Marcedes Lewis",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "GB",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0033757",
+      "player_name": "Robert Tonyan",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "GB",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0035671",
+      "player_name": "Jace Sternberger",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "GB",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0034272",
+      "player_name": "Marquez Valdes-Scantling",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "GB",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034279",
+      "player_name": "Equanimeous St. Brown",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "HOU",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0033537",
+      "player_name": "Deshaun Watson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "HOU",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0031288",
+      "player_name": "AJ McCarron",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "HOU",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0032187",
+      "player_name": "David Johnson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "HOU",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0032257",
+      "player_name": "Duke Johnson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "HOU",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0034449",
+      "player_name": "Buddy Howell",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "HOU",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0029738",
+      "player_name": "Darren Fells",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "HOU",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034364",
+      "player_name": "Jordan Akins",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "HOU",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0035660",
+      "player_name": "Kahale Warring",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "HOU",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0033127",
+      "player_name": "Will Fuller",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "HOU",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0028002",
+      "player_name": "Randall Cobb",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "HOU",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0034366",
+      "player_name": "Keke Coutee",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "IND",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0022942",
+      "player_name": "Philip Rivers",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "IND",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0033119",
+      "player_name": "Jacoby Brissett",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "IND",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0036226",
+      "player_name": "Jacob Eason",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "IND",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033951",
+      "player_name": "Marlon Mack",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "IND",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0036223",
+      "player_name": "Jonathan Taylor",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "IND",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0034367",
+      "player_name": "Nyheim Hines",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "IND",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033217",
+      "player_name": "Mo Alie-Cox",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "IND",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0036005",
+      "player_name": "Noah Togiai",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "IND",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0033251",
+      "player_name": "Zach Pascal",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "IND",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036252",
+      "player_name": "Michael Pittman",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "IND",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036228",
+      "player_name": "Dezmon Patmon",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "JAX",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0035289",
+      "player_name": "Gardner Minshew",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "JAX",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0036312",
+      "player_name": "Jake Luton",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "JAX",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0030520",
+      "player_name": "Mike Glennon",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "JAX",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0035831",
+      "player_name": "James Robinson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "JAX",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0030404",
+      "player_name": "Chris Thompson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "JAX",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0031951",
+      "player_name": "James O'Shaughnessy",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "JAX",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0030549",
+      "player_name": "Tyler Eifert",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "JAX",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0036250",
+      "player_name": "Tyler Davis",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "JAX",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0032128",
+      "player_name": "Chris Conley",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "JAX",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033681",
+      "player_name": "Keelan Cole",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "JAX",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036254",
+      "player_name": "Collin Johnson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "KC",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0033873",
+      "player_name": "Patrick Mahomes",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "KC",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0026197",
+      "player_name": "Chad Henne",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "KC",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0036360",
+      "player_name": "Clyde Edwards-Helaire",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "KC",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0034301",
+      "player_name": "Darrel Williams",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "KC",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0035148",
+      "player_name": "Darwin Thompson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "KC",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0030506",
+      "player_name": "Travis Kelce",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "KC",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034192",
+      "player_name": "Nick Keizer",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "KC",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033611",
+      "player_name": "Ricky Seals-Jones",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "KC",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0031325",
+      "player_name": "Sammy Watkins",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "KC",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0035140",
+      "player_name": "Mecole Hardman",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "KC",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0033481",
+      "player_name": "Marcus Kemp",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LA",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0033106",
+      "player_name": "Jared Goff",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LA",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0034899",
+      "player_name": "John Wolford",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LA",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033110",
+      "player_name": "Tyler Higbee",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LA",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0033895",
+      "player_name": "Gerald Everett",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LA",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033246",
+      "player_name": "Johnny Mundt",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LA",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0033943",
+      "player_name": "Josh Reynolds",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LA",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036415",
+      "player_name": "Van Jefferson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LAC",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0028118",
+      "player_name": "Tyrod Taylor",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LAC",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0036355",
+      "player_name": "Justin Herbert",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LAC",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0035282",
+      "player_name": "Easton Stick",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LAC",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033699",
+      "player_name": "Austin Ekeler",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LAC",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0034440",
+      "player_name": "Justin Jackson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LAC",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0036370",
+      "player_name": "Joshua Kelley",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LAC",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033090",
+      "player_name": "Hunter Henry",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LAC",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0028142",
+      "player_name": "Virgil Green",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LAC",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0032725",
+      "player_name": "Stephen Anderson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LAC",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0033536",
+      "player_name": "Mike Williams",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LAC",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036382",
+      "player_name": "K.J. Hill",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LV",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0031280",
+      "player_name": "Derek Carr",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LV",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0033958",
+      "player_name": "Nathan Peterman",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LV",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0035700",
+      "player_name": "Josh Jacobs",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LV",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0033025",
+      "player_name": "Jalen Richard",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LV",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0032972",
+      "player_name": "Devontae Booker",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LV",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0031610",
+      "player_name": "Darren Waller",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LV",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034981",
+      "player_name": "Foster Moreau",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "LV",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0029119",
+      "player_name": "Derek Carrier",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "LV",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0034983",
+      "player_name": "Hunter Renfrow",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "LV",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033891",
+      "player_name": "Zay Jones",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIA",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0023682",
+      "player_name": "Ryan Fitzpatrick",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIA",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0036212",
+      "player_name": "Tua Tagovailoa",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIA",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0032780",
+      "player_name": "Jordan Howard",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIA",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0033308",
+      "player_name": "Matt Breida",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIA",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0035311",
+      "player_name": "Myles Gaskin",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "MIA",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0034798",
+      "player_name": "Durham Smythe",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIA",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034829",
+      "player_name": "Mike Gesicki",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIA",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033896",
+      "player_name": "Adam Shaheen",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "MIA",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0035350",
+      "player_name": "Preston Williams",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIA",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0032791",
+      "player_name": "Jakeem Grant",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIA",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036245",
+      "player_name": "Malcolm Perry",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "MIN",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0029604",
+      "player_name": "Kirk Cousins",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIN",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0032245",
+      "player_name": "Sean Mannion",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIN",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0027981",
+      "player_name": "Kyle Rudolph",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIN",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034970",
+      "player_name": "Irv Smith",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIN",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0034270",
+      "player_name": "Tyler Conklin",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "MIN",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0030035",
+      "player_name": "Adam Thielen",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "MIN",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036322",
+      "player_name": "Justin Jefferson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "MIN",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0035976",
+      "player_name": "Dan Chisena",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NE",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0027939",
+      "player_name": "Cam Newton",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NE",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0026625",
+      "player_name": "Brian Hoyer",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NE",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0035264",
+      "player_name": "Jarrett Stidham",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NE",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0031062",
+      "player_name": "James White",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NE",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0030288",
+      "player_name": "Rex Burkhead",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NE",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0036096",
+      "player_name": "J.J. Taylor",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NE",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0034439",
+      "player_name": "Ryan Izzo",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NE",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0036194",
+      "player_name": "Devin Asiasi",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NE",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0036225",
+      "player_name": "Dalton Keene",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NE",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0027150",
+      "player_name": "Julian Edelman",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NE",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034960",
+      "player_name": "Jakobi Meyers",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NE",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0026293",
+      "player_name": "Matt Slater",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NO",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0020531",
+      "player_name": "Drew Brees",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NO",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0033357",
+      "player_name": "Taysom Hill",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NO",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0031503",
+      "player_name": "Jameis Winston",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NO",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033906",
+      "player_name": "Alvin Kamara",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NO",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0030513",
+      "player_name": "Latavius Murray",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NO",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0032200",
+      "player_name": "Ty Montgomery",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NO",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0027061",
+      "player_name": "Jared Cook",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NO",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0036422",
+      "player_name": "Adam Trautman",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NO",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0032765",
+      "player_name": "Michael Thomas",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NO",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036219",
+      "player_name": "Marquez Callaway",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NO",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0035215",
+      "player_name": "Deonte Harty",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NYG",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0035710",
+      "player_name": "Daniel Jones",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYG",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0027688",
+      "player_name": "Colt McCoy",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYG",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0034844",
+      "player_name": "Saquon Barkley",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYG",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0028087",
+      "player_name": "Dion Lewis",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYG",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0033950",
+      "player_name": "Wayne Gallman",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NYG",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033881",
+      "player_name": "Evan Engram",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYG",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034988",
+      "player_name": "Kaden Smith",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYG",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0030443",
+      "player_name": "Levine Toilolo",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NYG",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0032385",
+      "player_name": "Sterling Shepard",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYG",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034273",
+      "player_name": "Damion Ratley",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYJ",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0034869",
+      "player_name": "Sam Darnold",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYJ",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0034401",
+      "player_name": "Mike White",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYJ",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0026158",
+      "player_name": "Joe Flacco",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NYJ",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0030496",
+      "player_name": "Le'Veon Bell",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYJ",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0023500",
+      "player_name": "Frank Gore",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYJ",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0036269",
+      "player_name": "La'Mical Perine",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NYJ",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0034766",
+      "player_name": "Christopher Herndon",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYJ",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0030108",
+      "player_name": "Ryan Griffin",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYJ",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0035259",
+      "player_name": "Trevon Wesco",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "NYJ",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0032054",
+      "player_name": "Breshad Perriman",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "NYJ",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034419",
+      "player_name": "Braxton Berrios",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "NYJ",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036255",
+      "player_name": "Denzel Mims",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PHI",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0032950",
+      "player_name": "Carson Wentz",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PHI",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0032792",
+      "player_name": "Nate Sudfeld",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PHI",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0036389",
+      "player_name": "Jalen Hurts",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PHI",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0035243",
+      "player_name": "Miles Sanders",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PHI",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0034414",
+      "player_name": "Boston Scott",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PHI",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0033725",
+      "player_name": "Corey Clement",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PHI",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0030061",
+      "player_name": "Zach Ertz",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PHI",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034351",
+      "player_name": "Dallas Goedert",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PHI",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0031384",
+      "player_name": "Richard Rodgers",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PHI",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0026189",
+      "player_name": "DeSean Jackson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PHI",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0035246",
+      "player_name": "J.J. Arcega-Whiteside",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PHI",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036398",
+      "player_name": "John Hightower",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PIT",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0022924",
+      "player_name": "Ben Roethlisberger",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PIT",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0034771",
+      "player_name": "Mason Rudolph",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PIT",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0033949",
+      "player_name": "Joshua Dobbs",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PIT",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033553",
+      "player_name": "James Conner",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PIT",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0035217",
+      "player_name": "Benny Snell",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PIT",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0036336",
+      "player_name": "Anthony McFarland",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PIT",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0031387",
+      "player_name": "Eric Ebron",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PIT",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0030470",
+      "player_name": "Vance McDonald",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PIT",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0035222",
+      "player_name": "Zach Gentry",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "PIT",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0035216",
+      "player_name": "Diontae Johnson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "PIT",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036326",
+      "player_name": "Chase Claypool",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "PIT",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0034407",
+      "player_name": "Ray-Ray McCloud",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SEA",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0029263",
+      "player_name": "Russell Wilson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SEA",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0030565",
+      "player_name": "Geno Smith",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SEA",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0033594",
+      "player_name": "Chris Carson",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SEA",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0031045",
+      "player_name": "Carlos Hyde",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SEA",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0035594",
+      "player_name": "Travis Homer",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SEA",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0025418",
+      "player_name": "Greg Olsen",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SEA",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0034159",
+      "player_name": "Will Dissly",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SEA",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0030089",
+      "player_name": "Luke Willson",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SEA",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0032211",
+      "player_name": "Tyler Lockett",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SEA",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033589",
+      "player_name": "David Moore",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SEA",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0035022",
+      "player_name": "Penny Hart",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SF",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0031345",
+      "player_name": "Jimmy Garoppolo",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SF",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0033319",
+      "player_name": "Nick Mullens",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SF",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0033936",
+      "player_name": "C.J. Beathard",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SF",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0031687",
+      "player_name": "Raheem Mostert",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SF",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0032058",
+      "player_name": "Tevin Coleman",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SF",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0031376",
+      "player_name": "Jerick McKinnon",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SF",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033288",
+      "player_name": "George Kittle",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SF",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0030472",
+      "player_name": "Jordan Reed",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SF",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0034073",
+      "player_name": "Ross Dwelley",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "SF",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0033292",
+      "player_name": "Trent Taylor",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "SF",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0034860",
+      "player_name": "Dante Pettis",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "SF",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0034286",
+      "player_name": "Richie James",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "TB",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0019596",
+      "player_name": "Tom Brady",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TB",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0027948",
+      "player_name": "Blaine Gabbert",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TB",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0029857",
+      "player_name": "Ryan Griffin",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "TB",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0034816",
+      "player_name": "Ronald Jones",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TB",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0027029",
+      "player_name": "LeSean McCoy",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TB",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0033856",
+      "player_name": "Leonard Fournette",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "TB",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033879",
+      "player_name": "O.J. Howard",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TB",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0033421",
+      "player_name": "Antony Auclair",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TB",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0031408",
+      "player_name": "Mike Evans",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TB",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0035298",
+      "player_name": "Scott Miller",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TB",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0033006",
+      "player_name": "Jaydon Mickens",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "TEN",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0029701",
+      "player_name": "Ryan Tannehill",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TEN",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0034438",
+      "player_name": "Logan Woodside",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TEN",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0032764",
+      "player_name": "Derrick Henry",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TEN",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0036297",
+      "player_name": "Darrynton Evans",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TEN",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0031209",
+      "player_name": "Senorise Perry",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "TEN",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0033858",
+      "player_name": "Jonnu Smith",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TEN",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0031585",
+      "player_name": "MyCole Pruitt",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TEN",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0033455",
+      "player_name": "Anthony Firkser",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "TEN",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0035676",
+      "player_name": "A.J. Brown",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "TEN",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0033386",
+      "player_name": "Cody Hollister",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "TEN",
+      "position": "WR",
+      "depth_order": 3,
+      "player_id": "00-0036182",
+      "player_name": "Nick Westbrook-Ikhine",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "WAS",
+      "position": "QB",
+      "depth_order": 1,
+      "player_id": "00-0035232",
+      "player_name": "Dwayne Haskins",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "WAS",
+      "position": "QB",
+      "depth_order": 2,
+      "player_id": "00-0034577",
+      "player_name": "Kyle Allen",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "WAS",
+      "position": "QB",
+      "depth_order": 3,
+      "player_id": "00-0023436",
+      "player_name": "Alex Smith",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "WAS",
+      "position": "RB",
+      "depth_order": 1,
+      "player_id": "00-0032602",
+      "player_name": "J.D. McKissic",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "WAS",
+      "position": "RB",
+      "depth_order": 2,
+      "player_id": "00-0036328",
+      "player_name": "Antonio Gibson",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "WAS",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0032741",
+      "player_name": "Peyton Barber",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "WAS",
+      "position": "TE",
+      "depth_order": 1,
+      "player_id": "00-0031260",
+      "player_name": "Logan Thomas",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "WAS",
+      "position": "TE",
+      "depth_order": 2,
+      "player_id": "00-0033528",
+      "player_name": "Jeremy Sprinkle",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    },
+    {
+      "team": "WAS",
+      "position": "TE",
+      "depth_order": 3,
+      "player_id": "00-0034169",
+      "player_name": "Marcus Baugh",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
+    },
+    {
+      "team": "WAS",
+      "position": "WR",
+      "depth_order": 1,
+      "player_id": "00-0034928",
+      "player_name": "Steven Sims",
+      "depth_slot": "starter",
+      "role_confidence": 0.85
+    },
+    {
+      "team": "WAS",
+      "position": "WR",
+      "depth_order": 2,
+      "player_id": "00-0036142",
+      "player_name": "Isaiah Wright",
+      "depth_slot": "backup",
+      "role_confidence": 0.65
+    }
+  ]
+}
