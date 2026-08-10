@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
@@ -16,6 +18,8 @@ import {
   buildStatDrop,
   type StatDrop,
 } from "@/lib/edge-board-stat-drop";
+
+type ExpandPanel = "overview" | "stats" | null;
 
 // Flat API row format (from Odds API / model); kei = our projected line/total/ML
 export type FlatEdgeBoardRow = {
@@ -563,22 +567,22 @@ const COL_KEI = "bg-kos-gold/[0.07] border-l border-kos-gold/25";
 const COL_MODEL = COL_KEI;
 const COL_DECISION = "border-l border-white/12";
 const TH_BASE = "py-3.5 px-3";
-const TD_BASE = "py-3.5 px-3 align-top";
-const TD_DECISION = "py-3.5 px-2.5 align-top";
+const TD_BASE = "py-5 px-3 align-top";
+const TD_DECISION = "py-5 px-2.5 align-top";
 
 const COL_WIDTHS = [
-  "168px",
-  "88px",
-  "88px",
-  "88px",
+  "200px",
+  "108px",
   "92px",
   "92px",
+  "100px",
+  "100px",
+  "96px",
+  "96px",
   "92px",
   "92px",
-  "88px",
-  "88px",
-  "112px",
-  "112px",
+  "120px",
+  "120px",
 ] as const;
 
 function parseAmericanLabel(s: string | undefined): number | null {
@@ -1024,19 +1028,35 @@ export default function EdgeBoard({
   rows,
   sportKey = "ncaam",
   slateWeek = null,
+  emptyHint,
 }: {
   variant?: Variant;
   rows?: FlatEdgeBoardRow[] | null;
   /** Sport key drives the KEI column brand (KEICMB, KEINFL, …). Same board layout every sport. */
   sportKey?: string;
-  /** Active board week (e.g. live tab) — backs season gates when row.week is missing. */
+  /** Active board week (e.g. Week 1 tab) — backs season gates when row.week is missing. */
   slateWeek?: number | null;
+  /** Optional empty-state copy (e.g. honest Week 1 empty). */
+  emptyHint?: string;
 }) {
   const safeRows = Array.isArray(rows) ? rows : [];
   const keiCode = getKeiCode(sportKey);
   const edgeGreen =
     "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
   const hasRealData = safeRows.length > 0;
+  const [expanded, setExpanded] = React.useState<{
+    id: string;
+    panel: Exclude<ExpandPanel, null>;
+  } | null>(null);
+
+  const toggleExpand = React.useCallback(
+    (id: string, panel: Exclude<ExpandPanel, null>) => {
+      setExpanded((prev) =>
+        prev?.id === id && prev.panel === panel ? null : { id, panel },
+      );
+    },
+    [],
+  );
   const inferredWeek = (() => {
     if (slateWeek != null && Number.isFinite(Number(slateWeek))) {
       return Math.trunc(Number(slateWeek));
@@ -1115,7 +1135,7 @@ export default function EdgeBoard({
   }
 
   const MobileCards = (
-    <div className="lg:hidden mt-6 space-y-3">
+    <div className="lg:hidden mt-6 space-y-4">
       <div className="flex items-center justify-between px-1">
         <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
         <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
@@ -1135,153 +1155,198 @@ export default function EdgeBoard({
           until a real model exists — we do not invent handicap numbers.
         </p>
       ) : null}
-      {data.map((r) => (
-        <article
-          key={r.id}
-          className="rounded-2xl border border-white/12 bg-black/45 p-4 backdrop-blur-xl"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="text-sm font-semibold text-gray-100">
-                {r.isNeutral
-                  ? `${r.teamA.name} vs ${r.teamB.name}`
-                  : `${r.teamA.name} @ ${r.teamB.name}`}
-              </h3>
-              <p className="mt-0.5 text-[11px] tabular-nums text-gray-400">
-                {r.time ?? "—"}
-                {r.siteLabel ? ` · ${r.siteLabel}` : ""}
-              </p>
-            </div>
-            <div className="shrink-0 text-right">
-              {isNfl ? (
-                <ActionDecisionCell
-                  actionLabel={r.actionLabelLine}
-                  publishTag={r.tagLine}
-                  play={r.playLine}
-                  playToNotes={r.playToLine}
-                  edgeMagnitude={r.edgeMagnitudeLine}
-                  confidenceBand={r.modelConfidenceBand}
-                  confidenceScore={r.modelConfidenceScore}
-                  confidenceTierConstant={r.modelConfidenceTierConstant}
-                  coverProb={r.coverProbLine}
-                  compact
-                />
-              ) : (
-                <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
-              )}
-            </div>
-          </div>
-
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            <div className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}>
-              <div className="text-[10px] uppercase tracking-wide text-gray-500">
-                Market
+      {data.map((r) => {
+        const overviewOpen =
+          expanded?.id === r.id && expanded.panel === "overview";
+        const statsOpen = expanded?.id === r.id && expanded.panel === "stats";
+        return (
+          <article
+            key={r.id}
+            className="rounded-2xl border border-white/12 bg-black/45 p-4 sm:p-5 backdrop-blur-xl"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-gray-100 leading-snug">
+                  {r.isNeutral
+                    ? `${r.teamA.name} vs ${r.teamB.name}`
+                    : `${r.teamA.name} @ ${r.teamB.name}`}
+                </h3>
+                <p className="mt-1 text-[11px] tabular-nums text-gray-400 leading-relaxed">
+                  {r.time ?? "—"}
+                  {r.siteLabel ? (
+                    <span className="block mt-0.5 text-amber-200/90">
+                      {r.siteLabel}
+                    </span>
+                  ) : (
+                    <span className="block mt-0.5">
+                      {r.teamA.site} / {r.teamB.site}
+                    </span>
+                  )}
+                </p>
               </div>
-              <div className="mt-1 font-semibold text-gray-50">
-                {r.bestLine.top.label}{" "}
-                <span className="text-[11px] font-normal text-gray-400">
-                  ({r.bestLine.top.juice})
-                </span>
-              </div>
-              <div className="mt-1 font-semibold text-gray-50">
-                {r.bestOU.top.label}{" "}
-                <span className="text-[11px] font-normal text-gray-400">
-                  ({r.bestOU.top.juice})
-                </span>
-              </div>
-              {r.bestLineBook ? (
-                <div className="mt-2">
-                  <SportsbookBadge book={r.bestLineBook} compact />
-                </div>
-              ) : null}
-            </div>
-            <div className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}>
-              <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
-                KEI · {keiCode}
-              </div>
-              <div className="mt-1 font-semibold text-kos-gold">
-                {(r.keiLine ?? EMPTY_PAIR).top.label}
-              </div>
-              <div className="mt-1 font-semibold text-kos-gold">
-                {(r.keiOU ?? EMPTY_PAIR).top.label}
-              </div>
-              {r.modelLine || r.modelOU ? (
-                <div className="mt-2 text-[10px] leading-snug text-gray-400">
-                  Model{" "}
-                  {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
-                  {r.modelOU ? r.modelOU.top.label : "—"}
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            <div
-              className={`rounded-xl border border-white/10 px-3 py-2 ${edgeCellClass(r.tagLine)}`}
-            >
-              <div className="text-[10px] uppercase text-gray-500">
-                {edgeLineLabel}
-              </div>
-              <EdgeSideCell
-                edgeNum={r.edgeLineNum}
-                favor={r.edgeLineFavor}
-                tag={r.tagLine}
-              />
-            </div>
-            <div
-              className={`rounded-xl border border-white/10 px-3 py-2 ${edgeCellClass(r.tagOU)}`}
-            >
-              <div className="text-[10px] uppercase text-gray-500">
-                Total edge
-              </div>
-              <EdgeSideCell
-                edgeNum={r.edgeOUNum}
-                favor={r.edgeOUFavor}
-                tag={r.tagOU}
-              />
-              <div className="mt-1">
+              <div className="shrink-0 text-right">
                 {isNfl ? (
                   <ActionDecisionCell
-                    actionLabel={r.actionLabelOU}
-                    publishTag={r.tagOU}
-                    play={r.playOU}
-                    playToNotes={r.playToOU}
-                    edgeMagnitude={r.edgeMagnitudeOU}
+                    actionLabel={r.actionLabelLine}
+                    publishTag={r.tagLine}
+                    play={r.playLine}
+                    playToNotes={r.playToLine}
+                    edgeMagnitude={r.edgeMagnitudeLine}
                     confidenceBand={r.modelConfidenceBand}
                     confidenceScore={r.modelConfidenceScore}
                     confidenceTierConstant={r.modelConfidenceTierConstant}
-                    coverProb={r.coverProbOU}
+                    coverProb={r.coverProbLine}
                     compact
-                    caution={r.edgeOUCaution}
                   />
                 ) : (
-                  <TagPlayCell
-                    tag={r.tagOU}
-                    play={r.playOU}
-                    compact
-                    caution={r.edgeOUCaution}
-                  />
+                  <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
                 )}
               </div>
             </div>
-          </div>
 
-          <details className="mt-3" open={false}>
-            <summary className="min-h-11 cursor-pointer list-none text-xs font-medium text-kos-gold hover:underline [&::-webkit-details-marker]:hidden">
-              Matchup overview ▾
-            </summary>
-            <div className="mt-2 rounded-lg border border-white/10 bg-black/60 p-3 text-[11px] leading-relaxed whitespace-pre-wrap text-gray-300">
-              {r.siteLabel ? (
-                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
-                  {r.siteLabel}
+            <div className="mt-4 -mx-1 overflow-x-auto px-1">
+              <div className="grid min-w-[280px] grid-cols-2 gap-3">
+                <div
+                  className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}
+                >
+                  <div className="text-[10px] uppercase tracking-wide text-gray-500">
+                    Market
+                  </div>
+                  <div className="mt-1.5 font-semibold text-gray-50">
+                    {r.bestLine.top.label}{" "}
+                    <span className="text-[11px] font-normal text-gray-400">
+                      ({r.bestLine.top.juice})
+                    </span>
+                  </div>
+                  <div className="mt-1.5 font-semibold text-gray-50">
+                    {r.bestOU.top.label}{" "}
+                    <span className="text-[11px] font-normal text-gray-400">
+                      ({r.bestOU.top.juice})
+                    </span>
+                  </div>
+                  {r.bestLineBook ? (
+                    <div className="mt-2">
+                      <SportsbookBadge book={r.bestLineBook} compact />
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-              {r.overview ?? "No overview available."}
-              {r.statDrop ? <EdgeBoardStatDrop drop={r.statDrop} /> : null}
+                <div
+                  className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}
+                >
+                  <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
+                    KEI · {keiCode}
+                  </div>
+                  <div className="mt-1.5 font-semibold text-kos-gold">
+                    {(r.keiLine ?? EMPTY_PAIR).top.label}
+                  </div>
+                  <div className="mt-1.5 font-semibold text-kos-gold">
+                    {(r.keiOU ?? EMPTY_PAIR).top.label}
+                  </div>
+                  {r.modelLine || r.modelOU ? (
+                    <div className="mt-2 text-[10px] leading-snug text-gray-400">
+                      Model{" "}
+                      {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
+                      {r.modelOU ? r.modelOU.top.label : "—"}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
             </div>
-          </details>
-        </article>
-      ))}
+
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div
+                className={`rounded-xl border border-white/10 px-3 py-2.5 ${edgeCellClass(r.tagLine)}`}
+              >
+                <div className="text-[10px] uppercase text-gray-500">
+                  {edgeLineLabel}
+                </div>
+                <EdgeSideCell
+                  edgeNum={r.edgeLineNum}
+                  favor={r.edgeLineFavor}
+                  tag={r.tagLine}
+                />
+              </div>
+              <div
+                className={`rounded-xl border border-white/10 px-3 py-2.5 ${edgeCellClass(r.tagOU)}`}
+              >
+                <div className="text-[10px] uppercase text-gray-500">
+                  Total edge
+                </div>
+                <EdgeSideCell
+                  edgeNum={r.edgeOUNum}
+                  favor={r.edgeOUFavor}
+                  tag={r.tagOU}
+                />
+                <div className="mt-1">
+                  {isNfl ? (
+                    <ActionDecisionCell
+                      actionLabel={r.actionLabelOU}
+                      publishTag={r.tagOU}
+                      play={r.playOU}
+                      playToNotes={r.playToOU}
+                      edgeMagnitude={r.edgeMagnitudeOU}
+                      confidenceBand={r.modelConfidenceBand}
+                      confidenceScore={r.modelConfidenceScore}
+                      confidenceTierConstant={r.modelConfidenceTierConstant}
+                      coverProb={r.coverProbOU}
+                      compact
+                      caution={r.edgeOUCaution}
+                    />
+                  ) : (
+                    <TagPlayCell
+                      tag={r.tagOU}
+                      play={r.playOU}
+                      compact
+                      caution={r.edgeOUCaution}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => toggleExpand(r.id, "overview")}
+                aria-expanded={overviewOpen}
+                className="min-h-11 min-w-[7.5rem] rounded-xl border border-white/12 bg-white/5 px-3 text-xs font-semibold text-kos-gold hover:border-kos-gold/40"
+              >
+                {overviewOpen ? "Overview ▴" : "Overview ▾"}
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleExpand(r.id, "stats")}
+                aria-expanded={statsOpen}
+                className="min-h-11 min-w-[7.5rem] rounded-xl border border-white/12 bg-white/5 px-3 text-xs font-semibold text-kos-gold hover:border-kos-gold/40"
+              >
+                {statsOpen ? "Stats ▴" : "Stats ▾"}
+              </button>
+            </div>
+
+            {overviewOpen ? (
+              <div className="mt-3 rounded-lg border border-white/10 bg-black/60 p-3.5 text-[11px] leading-relaxed whitespace-pre-wrap text-gray-300">
+                {r.siteLabel ? (
+                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
+                    {r.siteLabel}
+                  </div>
+                ) : null}
+                {r.overview ?? "No overview available."}
+              </div>
+            ) : null}
+            {statsOpen ? (
+              <div className="mt-3 rounded-lg border border-white/10 bg-black/70 p-3">
+                {r.statDrop ? (
+                  <EdgeBoardStatDrop drop={r.statDrop} />
+                ) : (
+                  <div className="text-xs text-gray-500">
+                    Stat Drop unavailable.
+                  </div>
+                )}
+              </div>
+            ) : null}
+          </article>
+        );
+      })}
     </div>
   );
 
@@ -1294,7 +1359,7 @@ export default function EdgeBoard({
           Tag stay blank. We do not invent handicap numbers.
         </div>
       ) : null}
-      <div className="bg-black/30 border border-white/12 rounded-2xl overflow-hidden backdrop-blur-xl shadow-xl">
+      <div className="bg-black/30 border border-white/12 rounded-2xl backdrop-blur-xl shadow-xl">
         <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/10">
           <div className="text-sm text-gray-300">
             {marketsOnly
@@ -1308,7 +1373,7 @@ export default function EdgeBoard({
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-[1180px] w-full table-fixed text-[13px] tabular-nums">
+          <table className="min-w-[1280px] w-full table-fixed text-[13px] tabular-nums">
             <colgroup>
               {COL_WIDTHS.map((w, i) => (
                 <col key={i} style={{ width: w }} />
@@ -1386,196 +1451,233 @@ export default function EdgeBoard({
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.08] text-gray-200">
-              {data.map((r) => (
-                <tr key={r.id} className="hover:bg-white/[0.035] transition">
-                  <td className={`${TD_BASE} relative pb-8 overflow-visible`}>
-                    <div className="font-semibold truncate">
-                      {r.teamA.name}
-                      {r.teamA.keiNumber != null ? (
-                        <span className="ml-1 text-kos-gold tabular-nums">
-                          ({r.teamA.keiNumber})
-                        </span>
-                      ) : (
-                        r.teamA.keiRank != null && (
-                          <span className="text-gray-400">
-                            {" "}
-                            ({r.teamA.keiRank})
-                          </span>
-                        )
-                      )}
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      {r.isNeutral ? "Neutral" : r.teamA.site}
-                      {r.teamA.record ? ` • ${r.teamA.record}` : ""}
-                      {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
-                    </div>
-                    <div className="mt-1.5 font-semibold truncate">
-                      {r.teamB.name}
-                      {r.teamB.keiNumber != null ? (
-                        <span className="ml-1 text-kos-gold tabular-nums">
-                          ({r.teamB.keiNumber})
-                        </span>
-                      ) : (
-                        r.teamB.keiRank != null && (
-                          <span className="text-gray-400">
-                            {" "}
-                            ({r.teamB.keiRank})
-                          </span>
-                        )
-                      )}
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      {r.isNeutral
-                        ? r.siteLabel || "Neutral"
-                        : r.teamB.site}
-                      {r.teamB.record ? ` • ${r.teamB.record}` : ""}
-                      {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
-                    </div>
-                    <details className="absolute bottom-2.5 left-3 group/details">
-                      <summary className="cursor-pointer text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
-                        Overview ▾
-                      </summary>
-                      <div className="absolute left-0 top-full mt-1 z-50 w-[360px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-4 shadow-xl text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
-                        {r.siteLabel ? (
-                          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
-                            {r.siteLabel}
+            <tbody className="text-gray-200">
+              {data.map((r) => {
+                const overviewOpen =
+                  expanded?.id === r.id && expanded.panel === "overview";
+                const statsOpen =
+                  expanded?.id === r.id && expanded.panel === "stats";
+                const panelOpen = overviewOpen || statsOpen;
+                return (
+                  <React.Fragment key={r.id}>
+                    <tr
+                      className={`border-t border-white/[0.10] hover:bg-white/[0.035] transition ${
+                        panelOpen ? "bg-white/[0.02]" : ""
+                      }`}
+                    >
+                      <td className={TD_BASE}>
+                        <div className="font-semibold leading-snug">
+                          {r.teamA.name}
+                          {r.teamA.keiNumber != null ? (
+                            <span className="ml-1 text-kos-gold tabular-nums">
+                              ({r.teamA.keiNumber})
+                            </span>
+                          ) : (
+                            r.teamA.keiRank != null && (
+                              <span className="text-gray-400">
+                                {" "}
+                                ({r.teamA.keiRank})
+                              </span>
+                            )
+                          )}
+                        </div>
+                        <div className="mt-0.5 text-xs text-gray-400 leading-relaxed">
+                          {r.isNeutral ? "Neutral" : r.teamA.site}
+                          {r.teamA.record ? ` • ${r.teamA.record}` : ""}
+                          {r.teamA.confRecord
+                            ? ` (${r.teamA.confRecord})`
+                            : ""}
+                        </div>
+                        <div className="mt-2.5 font-semibold leading-snug">
+                          {r.teamB.name}
+                          {r.teamB.keiNumber != null ? (
+                            <span className="ml-1 text-kos-gold tabular-nums">
+                              ({r.teamB.keiNumber})
+                            </span>
+                          ) : (
+                            r.teamB.keiRank != null && (
+                              <span className="text-gray-400">
+                                {" "}
+                                ({r.teamB.keiRank})
+                              </span>
+                            )
+                          )}
+                        </div>
+                        <div className="mt-0.5 text-xs text-gray-400 leading-relaxed">
+                          {r.isNeutral
+                            ? r.siteLabel || "Neutral"
+                            : r.teamB.site}
+                          {r.teamB.record ? ` • ${r.teamB.record}` : ""}
+                          {r.teamB.confRecord
+                            ? ` (${r.teamB.confRecord})`
+                            : ""}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(r.id, "overview")}
+                          aria-expanded={overviewOpen}
+                          className="mt-3 min-h-9 rounded-lg px-2 text-[13px] font-medium text-kos-gold hover:bg-white/5 hover:underline"
+                        >
+                          {overviewOpen ? "Overview ▴" : "Overview ▾"}
+                        </button>
+                      </td>
+                      <td className={`${TD_BASE} px-2`}>
+                        <div className="text-sm font-medium text-gray-300 whitespace-nowrap leading-snug">
+                          {r.time ?? "—"}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(r.id, "stats")}
+                          aria-expanded={statsOpen}
+                          className="mt-3 min-h-9 w-full rounded-lg px-1 text-center text-[13px] font-medium text-kos-gold hover:bg-white/5 hover:underline"
+                        >
+                          {statsOpen ? "Stats ▴" : "Stats ▾"}
+                        </button>
+                      </td>
+                      <td className={`${TD_BASE} text-gray-400`}>
+                        <PriceCell
+                          p={r.openOU}
+                          compact
+                          valueClassName="text-gray-400 font-medium"
+                        />
+                      </td>
+                      <td className={`${TD_BASE} text-gray-400`}>
+                        <PriceCell
+                          p={r.openLine}
+                          compact
+                          valueClassName="text-gray-400 font-medium"
+                        />
+                      </td>
+                      <td className={`${TD_BASE} ${COL_MARKET}`}>
+                        <PriceCell
+                          p={r.bestLine}
+                          compact
+                          valueClassName="text-gray-50 font-semibold"
+                          book={r.bestLineBook}
+                        />
+                      </td>
+                      <td className={`${TD_BASE} ${COL_MARKET}`}>
+                        <PriceCell
+                          p={r.bestOU}
+                          compact
+                          valueClassName="text-gray-50 font-semibold"
+                          book={r.bestOUBook}
+                        />
+                      </td>
+                      <td className={`${TD_DECISION} ${COL_MODEL}`}>
+                        <PriceCell
+                          p={r.keiLine ?? EMPTY_PAIR}
+                          compact
+                          valueClassName="text-kos-gold font-semibold"
+                        />
+                        {r.modelLine ? (
+                          <div className="mt-1 text-[10px] text-gray-400">
+                            Model {r.modelLine.bottom.label}
                           </div>
                         ) : null}
-                        {r.overview ?? "No overview available."}
-                      </div>
-                    </details>
-                  </td>
-                  <td className="py-3.5 px-1 align-top relative pb-8 overflow-visible">
-                    <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
-                      {r.time ?? "—"}
-                    </div>
-                    <details className="absolute bottom-2.5 left-0 right-0 group/stats">
-                      <summary className="cursor-pointer text-center text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
-                        Stats ▾
-                      </summary>
-                      <div className="absolute left-0 top-full mt-1 z-50 w-[min(92vw,520px)] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-3 shadow-xl">
-                        {r.statDrop ? (
-                          <EdgeBoardStatDrop drop={r.statDrop} compact />
-                        ) : (
-                          <div className="text-xs text-gray-500">
-                            Stat Drop unavailable.
+                      </td>
+                      <td className={`${TD_DECISION} ${COL_MODEL}`}>
+                        <PriceCell
+                          p={r.keiOU ?? EMPTY_PAIR}
+                          compact
+                          valueClassName="text-kos-gold font-semibold"
+                        />
+                        {r.modelOU ? (
+                          <div className="mt-1 text-[10px] text-gray-400">
+                            Model {r.modelOU.top.label}
                           </div>
+                        ) : null}
+                      </td>
+                      <td
+                        className={`${TD_DECISION} ${COL_DECISION} ${edgeCellClass(r.tagLine)}`}
+                      >
+                        <EdgeSideCell
+                          edgeNum={r.edgeLineNum}
+                          favor={r.edgeLineFavor}
+                          tag={r.tagLine}
+                        />
+                      </td>
+                      <td className={`${TD_DECISION} ${edgeCellClass(r.tagOU)}`}>
+                        <EdgeSideCell
+                          edgeNum={r.edgeOUNum}
+                          favor={r.edgeOUFavor}
+                          tag={r.tagOU}
+                        />
+                      </td>
+                      <td className={`${TD_DECISION} text-center`}>
+                        {isNfl ? (
+                          <ActionDecisionCell
+                            actionLabel={r.actionLabelLine}
+                            publishTag={r.tagLine}
+                            play={r.playLine}
+                            playToNotes={r.playToLine}
+                            edgeMagnitude={r.edgeMagnitudeLine}
+                            confidenceBand={r.modelConfidenceBand}
+                            confidenceScore={r.modelConfidenceScore}
+                            confidenceTierConstant={
+                              r.modelConfidenceTierConstant
+                            }
+                            coverProb={r.coverProbLine}
+                          />
+                        ) : (
+                          <TagPlayCell tag={r.tagLine} play={r.playLine} />
                         )}
-                      </div>
-                    </details>
-                  </td>
-                  <td className={`${TD_BASE} text-gray-400`}>
-                    <PriceCell
-                      p={r.openOU}
-                      compact
-                      valueClassName="text-gray-400 font-medium"
-                    />
-                  </td>
-                  <td className={`${TD_BASE} text-gray-400`}>
-                    <PriceCell
-                      p={r.openLine}
-                      compact
-                      valueClassName="text-gray-400 font-medium"
-                    />
-                  </td>
-                  <td className={`${TD_BASE} ${COL_MARKET}`}>
-                    <PriceCell
-                      p={r.bestLine}
-                      compact
-                      valueClassName="text-gray-50 font-semibold"
-                      book={r.bestLineBook}
-                    />
-                  </td>
-                  <td className={`${TD_BASE} ${COL_MARKET}`}>
-                    <PriceCell
-                      p={r.bestOU}
-                      compact
-                      valueClassName="text-gray-50 font-semibold"
-                      book={r.bestOUBook}
-                    />
-                  </td>
-                  <td className={`${TD_DECISION} ${COL_MODEL}`}>
-                    <PriceCell
-                      p={r.keiLine ?? EMPTY_PAIR}
-                      compact
-                      valueClassName="text-kos-gold font-semibold"
-                    />
-                    {r.modelLine ? (
-                      <div className="mt-1 text-[10px] text-gray-400">
-                        Model {r.modelLine.bottom.label}
-                      </div>
+                      </td>
+                      <td className={`${TD_DECISION} text-center`}>
+                        {isNfl ? (
+                          <ActionDecisionCell
+                            actionLabel={r.actionLabelOU}
+                            publishTag={r.tagOU}
+                            play={r.playOU}
+                            playToNotes={r.playToOU}
+                            edgeMagnitude={r.edgeMagnitudeOU}
+                            confidenceBand={r.modelConfidenceBand}
+                            confidenceScore={r.modelConfidenceScore}
+                            confidenceTierConstant={
+                              r.modelConfidenceTierConstant
+                            }
+                            coverProb={r.coverProbOU}
+                            caution={r.edgeOUCaution}
+                          />
+                        ) : (
+                          <TagPlayCell
+                            tag={r.tagOU}
+                            play={r.playOU}
+                            caution={r.edgeOUCaution}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                    {panelOpen ? (
+                      <tr className="border-t border-white/[0.06] bg-black/55">
+                        <td colSpan={12} className="px-4 py-4">
+                          {overviewOpen ? (
+                            <div className="rounded-xl border border-white/12 bg-black/70 p-4 text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+                              {r.siteLabel ? (
+                                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
+                                  {r.siteLabel}
+                                </div>
+                              ) : null}
+                              {r.overview ?? "No overview available."}
+                            </div>
+                          ) : null}
+                          {statsOpen ? (
+                            <div className="rounded-xl border border-white/12 bg-black/70 p-3.5">
+                              {r.statDrop ? (
+                                <EdgeBoardStatDrop drop={r.statDrop} />
+                              ) : (
+                                <div className="text-xs text-gray-500">
+                                  Stat Drop unavailable.
+                                </div>
+                              )}
+                            </div>
+                          ) : null}
+                        </td>
+                      </tr>
                     ) : null}
-                  </td>
-                  <td className={`${TD_DECISION} ${COL_MODEL}`}>
-                    <PriceCell
-                      p={r.keiOU ?? EMPTY_PAIR}
-                      compact
-                      valueClassName="text-kos-gold font-semibold"
-                    />
-                    {r.modelOU ? (
-                      <div className="mt-1 text-[10px] text-gray-400">
-                        Model {r.modelOU.top.label}
-                      </div>
-                    ) : null}
-                  </td>
-                  <td
-                    className={`${TD_DECISION} ${COL_DECISION} ${edgeCellClass(r.tagLine)}`}
-                  >
-                    <EdgeSideCell
-                      edgeNum={r.edgeLineNum}
-                      favor={r.edgeLineFavor}
-                      tag={r.tagLine}
-                    />
-                  </td>
-                  <td className={`${TD_DECISION} ${edgeCellClass(r.tagOU)}`}>
-                    <EdgeSideCell
-                      edgeNum={r.edgeOUNum}
-                      favor={r.edgeOUFavor}
-                      tag={r.tagOU}
-                    />
-                  </td>
-                  <td className={`${TD_DECISION} text-center`}>
-                    {isNfl ? (
-                      <ActionDecisionCell
-                        actionLabel={r.actionLabelLine}
-                        publishTag={r.tagLine}
-                        play={r.playLine}
-                        playToNotes={r.playToLine}
-                        edgeMagnitude={r.edgeMagnitudeLine}
-                        confidenceBand={r.modelConfidenceBand}
-                        confidenceScore={r.modelConfidenceScore}
-                        confidenceTierConstant={r.modelConfidenceTierConstant}
-                        coverProb={r.coverProbLine}
-                      />
-                    ) : (
-                      <TagPlayCell tag={r.tagLine} play={r.playLine} />
-                    )}
-                  </td>
-                  <td className={`${TD_DECISION} text-center`}>
-                    {isNfl ? (
-                      <ActionDecisionCell
-                        actionLabel={r.actionLabelOU}
-                        publishTag={r.tagOU}
-                        play={r.playOU}
-                        playToNotes={r.playToOU}
-                        edgeMagnitude={r.edgeMagnitudeOU}
-                        confidenceBand={r.modelConfidenceBand}
-                        confidenceScore={r.modelConfidenceScore}
-                        confidenceTierConstant={r.modelConfidenceTierConstant}
-                        coverProb={r.coverProbOU}
-                        caution={r.edgeOUCaution}
-                      />
-                    ) : (
-                      <TagPlayCell
-                        tag={r.tagOU}
-                        play={r.playOU}
-                        caution={r.edgeOUCaution}
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -1612,9 +1714,11 @@ export default function EdgeBoard({
           No Slate Yet
         </div>
         <p className="text-gray-400 text-sm max-w-md mx-auto">
-          {isNfl
-            ? "No regular-season fair-lines in the pull window yet (common in early preseason or upstream timeout). We do not invent Open/Best or KEINFL prices, and we do not fill the board with preseason odds-only games."
-            : "No fair-lines or sportsbook rows for this sport right now (often offseason or upstream timeout). We do not invent Open/Best or KEI prices. When the model service or Odds API returns a slate, this board populates automatically."}
+          {emptyHint
+            ? emptyHint
+            : isNfl
+              ? "No regular-season fair-lines in the pull window yet (common in early preseason or upstream timeout). We do not invent Open/Best or KEINFL prices, and we do not fill the board with preseason odds-only games."
+              : "No fair-lines or sportsbook rows for this sport right now (often offseason or upstream timeout). We do not invent Open/Best or KEI prices. When the model service or Odds API returns a slate, this board populates automatically."}
         </p>
       </div>
     );

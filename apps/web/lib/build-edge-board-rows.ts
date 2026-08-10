@@ -1,7 +1,9 @@
 /**
  * Shared edge-board assembly.
  * NFL: pulls REG fair-lines + Odds API overlay (projection-backed; no PRE odds-only).
- * Live = current REG week; Odds slate = projection-backed games with books.
+ * Week 1 tab = strict Week 1 REG (honest empty; no fallthrough).
+ * Full slate = all projection-backed REG games in the pull window.
+ * Legacy aliases: `live` → week1, `all` → full.
  * KEI = published fair line (identity — no fake Model vs KEI split).
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
  * NBA/WNBA: fair-lines → KEI handicap (model_* identity until pre_blend exists).
@@ -22,9 +24,9 @@ import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
 import {
   fairLinesToEdgeBoardRows,
-  filterNflCurrentWeekRows,
   filterNflOddsPostedRows,
   filterNflProjectionBackedRows,
+  filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
   sortNflEdgeBoardRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
@@ -40,10 +42,24 @@ import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 
 const NFL_EDGE_BOARD_SEASON = 2026;
 
+/** NFL Edge Board slate tabs. `live`/`all` kept as aliases. */
+export type NflEdgeBoardSlate = "week1" | "full" | "live" | "all";
+
 export type AssembleEdgeBoardOptions = {
-  /** NFL: `live` = current REG week; `all` = projection-backed games with books. */
-  slate?: "live" | "all";
+  /** NFL: `week1` (default) = Week 1 REG only; `full` = multi-week projection slate. */
+  slate?: NflEdgeBoardSlate;
 };
+
+export function normalizeNflEdgeBoardSlate(
+  raw: string | null | undefined,
+): "week1" | "full" {
+  const v = String(raw ?? "")
+    .trim()
+    .toLowerCase();
+  if (v === "full" || v === "all") return "full";
+  // week1 | live | missing → Week 1 launch tab
+  return "week1";
+}
 
 function countPriced(rows: EdgeBoardRow[]): number {
   return rows.filter((r) => Boolean(r.best || r.open)).length;
@@ -95,11 +111,29 @@ function withMatchupEnrichment(rows: EdgeBoardRow[]): EdgeBoardRow[] {
   });
 }
 
+function stampWeek1SeasonGates(rows: EdgeBoardRow[]): EdgeBoardRow[] {
+  for (const r of rows) {
+    const row = r as EdgeBoardRow & {
+      week?: number;
+      gamesPlayedAway?: number;
+      gamesPlayedHome?: number;
+    };
+    if (row.week == null || !Number.isFinite(Number(row.week))) {
+      row.week = 1;
+    }
+    if (Number(row.week) === 1) {
+      if (row.gamesPlayedAway == null) row.gamesPlayedAway = 0;
+      if (row.gamesPlayedHome == null) row.gamesPlayedHome = 0;
+    }
+  }
+  return rows;
+}
+
 async function assembleNflEdgeBoardRows(
   oddsRows: EdgeBoardRow[],
   options?: AssembleEdgeBoardOptions,
 ): Promise<EdgeBoardRow[]> {
-  const slate = options?.slate ?? "live";
+  const slate = normalizeNflEdgeBoardSlate(options?.slate);
 
   // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
   const [pulledOdds, fair] = await Promise.all([
@@ -117,7 +151,6 @@ async function assembleNflEdgeBoardRows(
 
   let keiGames: KeiLineGame[] = [];
   let rows: EdgeBoardRow[] = [];
-  const currentWeek = fair.currentWeek || 1;
 
   if (fair.lines.length > 0) {
     keiGames = keiGamesFromNflFairLines(fair.lines);
@@ -131,7 +164,12 @@ async function assembleNflEdgeBoardRows(
     rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
     rows = filterNflProjectionBackedRows(rows);
     rows = sortNflEdgeBoardRows(rows);
-    // Without fair-lines currentWeek, priced projection slate only (honest).
+    if (slate === "week1") {
+      return withMatchupEnrichment(
+        stampWeek1SeasonGates(filterNflStrictWeekRows(rows, 1)),
+      );
+    }
+    // Full slate without fair-lines: priced projection rows when books exist.
     return withMatchupEnrichment(filterNflOddsPostedRows(rows));
   }
 
@@ -139,47 +177,14 @@ async function assembleNflEdgeBoardRows(
   rows = filterNflProjectionBackedRows(rows);
   rows = sortNflEdgeBoardRows(rows);
 
-  if (slate === "live") {
-    let live = filterNflCurrentWeekRows(rows, currentWeek);
-    const anyWeek = live.some((r) =>
-      Number.isFinite(Number((r as { week?: number }).week)),
+  if (slate === "week1") {
+    // Strict Week 1 REG — honest empty, no nearest-week / full-slate fallthrough.
+    return withMatchupEnrichment(
+      stampWeek1SeasonGates(filterNflStrictWeekRows(rows, 1)),
     );
-    // When week is absent on every row, stamp currentWeek then keep a live
-    // window by commence time so we don't dump the full season as "Week 1".
-    if (!anyWeek && live.length > 0) {
-      const now = Date.now();
-      const horizonMs = 10 * 24 * 60 * 60 * 1000;
-      const dated = live.filter((r) => {
-        const t = Date.parse(String(r.commenceTime ?? ""));
-        return Number.isFinite(t) && t >= now - 2 * 24 * 60 * 60 * 1000 && t <= now + horizonMs;
-      });
-      live = dated.length > 0 ? dated : live.slice(0, 40);
-      for (const r of live) {
-        (r as EdgeBoardRow & { week?: number }).week = currentWeek;
-      }
-    }
-    const stampedWeek =
-      live
-        .map((r) => Number((r as { week?: number }).week))
-        .find((w) => Number.isFinite(w)) ?? currentWeek;
-    for (const r of live) {
-      const row = r as EdgeBoardRow & {
-        week?: number;
-        gamesPlayedAway?: number;
-        gamesPlayedHome?: number;
-      };
-      if (row.week == null || !Number.isFinite(Number(row.week))) {
-        row.week = stampedWeek;
-      }
-      if (Number(row.week) === 1) {
-        if (row.gamesPlayedAway == null) row.gamesPlayedAway = 0;
-        if (row.gamesPlayedHome == null) row.gamesPlayedHome = 0;
-      }
-    }
-    return withMatchupEnrichment(live);
   }
-  // Odds slate: projection-backed games that currently have sportsbook prices.
-  return withMatchupEnrichment(filterNflOddsPostedRows(rows));
+  // Full slate: every projection-backed REG game in the pull window.
+  return withMatchupEnrichment(rows);
 }
 
 /**
