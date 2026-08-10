@@ -63,7 +63,9 @@ export function keiGamesFromNflFairLines(
       awayTeam: line.awayTeam,
       homeAbbr: line.homeAbbr,
       awayAbbr: line.awayAbbr,
-      commenceTime: line.startTime ?? line.gameDate ?? undefined,
+      commenceTime:
+        // Single kickoff source shared with Edge Board / Weekly Slate.
+        line.startTime ?? line.gameDate ?? undefined,
       handicapSpreadHome: handicapSpread,
       handicapTotal,
       handicapHomeMl,

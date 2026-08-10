@@ -4,7 +4,11 @@ import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
-import { noVigHomeProb } from "@/lib/american-odds";
+import {
+  formatAmericanOdds,
+  isValidAmericanOdds,
+  noVigHomeProb,
+} from "@/lib/american-odds";
 import { generateGameOverview } from "@/lib/sports";
 
 // Flat API row format (from Odds API / model); kei = our projected line/total/ML
@@ -42,6 +46,7 @@ export type FlatEdgeBoardRow = {
   edgeMagnitude?: number;
   modelConfidenceScore?: number;
   modelConfidenceBand?: ConfidenceBand;
+  modelConfidenceTierConstant?: boolean;
   coverProb?: number;
   playToNotes?: string;
   playToPlay?: number;
@@ -110,6 +115,7 @@ export type LegacyEdgeBoardRow = {
   edgeMagnitudeOU?: number;
   modelConfidenceScore?: number;
   modelConfidenceBand?: ConfidenceBand;
+  modelConfidenceTierConstant?: boolean;
   coverProbLine?: number;
   coverProbOU?: number;
   playToLine?: string;
@@ -204,6 +210,17 @@ function actionLabelClassName(label: ActionLabel, compact = false): string {
   return `${base} bg-white/10 text-gray-400`;
 }
 
+function formatConfidenceLabel(
+  band?: ConfidenceBand,
+  score?: number,
+  tierConstant?: boolean,
+): string | null {
+  if (!band) return null;
+  // Tier-constant 0.72/MEDIUM (and penalty landings) are bands — not calibrated %.
+  if (tierConstant || score == null) return `Conf ${band}`;
+  return `Conf ${band} ${Math.round(score * 100)}%`;
+}
+
 function ActionDecisionCell({
   actionLabel,
   publishTag,
@@ -212,6 +229,7 @@ function ActionDecisionCell({
   edgeMagnitude,
   confidenceBand,
   confidenceScore,
+  confidenceTierConstant,
   coverProb,
   compact = false,
   caution = false,
@@ -223,6 +241,8 @@ function ActionDecisionCell({
   edgeMagnitude?: number;
   confidenceBand?: ConfidenceBand;
   confidenceScore?: number;
+  /** When true, 72%/47% style scores are tier constants — show band only. */
+  confidenceTierConstant?: boolean;
   coverProb?: number;
   compact?: boolean;
   caution?: boolean;
@@ -230,6 +250,11 @@ function ActionDecisionCell({
   if (!actionLabel && !publishTag) {
     return <span className="text-gray-500">—</span>;
   }
+  const confLabel = formatConfidenceLabel(
+    confidenceBand,
+    confidenceScore,
+    confidenceTierConstant,
+  );
   return (
     <div className={compact ? "leading-tight" : "leading-tight text-center"}>
       {actionLabel ? (
@@ -255,23 +280,15 @@ function ActionDecisionCell({
       {edgeMagnitude != null ? (
         <div className="mt-1 text-[10px] text-gray-300 tabular-nums">
           Edge {edgeMagnitude.toFixed(1)}
-          {confidenceBand ? (
+          {confLabel ? (
             <span className="text-gray-500">
               {" "}
-              · Conf {confidenceBand}
-              {confidenceScore != null
-                ? ` ${Math.round(confidenceScore * 100)}%`
-                : ""}
+              · {confLabel}
             </span>
           ) : null}
         </div>
-      ) : confidenceBand ? (
-        <div className="mt-1 text-[10px] text-gray-500">
-          Conf {confidenceBand}
-          {confidenceScore != null
-            ? ` ${Math.round(confidenceScore * 100)}%`
-            : ""}
-        </div>
+      ) : confLabel ? (
+        <div className="mt-1 text-[10px] text-gray-500">{confLabel}</div>
       ) : null}
       {coverProb != null ? (
         <div className="mt-0.5 text-[10px] text-gray-500 tabular-nums">
@@ -569,7 +586,12 @@ export function flatRowsToLegacy(
       return Number.isFinite(n) ? (n <= 0 ? `+${Math.abs(n)}` : `-${n}`) : "—";
     };
     const totalRow = total as FlatEdgeBoardRow | undefined;
-    const juiceOr = (v: string | undefined) => v || "—";
+    const juiceOr = (v: string | undefined) => {
+      if (!v || v === "—") return "—";
+      const n = Number(String(v).replace(/^\+/, ""));
+      if (!Number.isFinite(n)) return "—";
+      return isValidAmericanOdds(n) ? formatAmericanOdds(n) : "—";
+    };
 
     let openLine: PricePair = EMPTY_PAIR;
     let bestLine: PricePair = EMPTY_PAIR;
@@ -846,6 +868,9 @@ export function flatRowsToLegacy(
         lineRow?.modelConfidenceScore ?? totalRow?.modelConfidenceScore,
       modelConfidenceBand:
         lineRow?.modelConfidenceBand ?? totalRow?.modelConfidenceBand,
+      modelConfidenceTierConstant:
+        lineRow?.modelConfidenceTierConstant ??
+        totalRow?.modelConfidenceTierConstant,
       coverProbLine: lineRow?.coverProb,
       coverProbOU: totalRow?.coverProb,
       playToLine: lineRow?.playToNotes,
@@ -986,6 +1011,7 @@ export default function EdgeBoard({
                   edgeMagnitude={r.edgeMagnitudeLine}
                   confidenceBand={r.modelConfidenceBand}
                   confidenceScore={r.modelConfidenceScore}
+                  confidenceTierConstant={r.modelConfidenceTierConstant}
                   coverProb={r.coverProbLine}
                   compact
                 />
@@ -1072,6 +1098,7 @@ export default function EdgeBoard({
                     edgeMagnitude={r.edgeMagnitudeOU}
                     confidenceBand={r.modelConfidenceBand}
                     confidenceScore={r.modelConfidenceScore}
+                    confidenceTierConstant={r.modelConfidenceTierConstant}
                     coverProb={r.coverProbOU}
                     compact
                     caution={r.edgeOUCaution}
@@ -1260,9 +1287,11 @@ export default function EdgeBoard({
                       {r.time ?? "—"}
                     </div>
                     <button
-                      className="absolute bottom-2.5 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
+                      className="absolute bottom-2.5 left-0 right-0 mx-auto text-center text-[14px] text-gray-600 cursor-not-allowed whitespace-nowrap"
                       type="button"
-                      title="Matchup stats panel"
+                      disabled
+                      title="Matchup stats panel not wired — disabled"
+                      aria-disabled="true"
                     >
                       Stats ▾
                     </button>
@@ -1347,6 +1376,7 @@ export default function EdgeBoard({
                         edgeMagnitude={r.edgeMagnitudeLine}
                         confidenceBand={r.modelConfidenceBand}
                         confidenceScore={r.modelConfidenceScore}
+                        confidenceTierConstant={r.modelConfidenceTierConstant}
                         coverProb={r.coverProbLine}
                       />
                     ) : (
@@ -1363,6 +1393,7 @@ export default function EdgeBoard({
                         edgeMagnitude={r.edgeMagnitudeOU}
                         confidenceBand={r.modelConfidenceBand}
                         confidenceScore={r.modelConfidenceScore}
+                        confidenceTierConstant={r.modelConfidenceTierConstant}
                         coverProb={r.coverProbOU}
                         caution={r.edgeOUCaution}
                       />

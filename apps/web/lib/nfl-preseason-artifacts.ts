@@ -2,6 +2,13 @@ import "server-only";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
+import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
+import {
+  lineageFromActiveRun,
+  type NflLineage,
+  type NflWebLaunchPointerLike,
+} from "@/lib/nfl-lineage";
+
 type CsvRow = Record<string, string>;
 
 export type TeamProjectionRow = {
@@ -50,22 +57,24 @@ export type NflPreseasonBundle = {
   launchIdentity?: string | null;
   nTeamSims?: number | null;
   engineVersion?: string | null;
+  /** Truth Layer lineage for Model surfaces */
+  lineage?: NflLineage | null;
+  activeRunId?: string | null;
 };
 
-export type NflWebLaunchPointer = {
+export type NflWebLaunchPointer = NflWebLaunchPointerLike & {
   bundle_id: string;
-  engine_version?: string;
   n_team_sims?: number;
   n_player_sims?: number;
-  generated_at_utc?: string;
   source_dir?: string;
   identity?: string;
   preseason?: boolean;
   note?: string;
   locked_snapshot?: boolean;
-  locked_at_utc?: string;
   lock_tag?: string;
   engine_commit?: string;
+  team_id_scheme?: string;
+  lineage?: NflLineage;
 };
 
 export function loadNflWebLaunchPointer(): NflWebLaunchPointer | null {
@@ -159,7 +168,7 @@ function list2026BundleDirectories(dataOpsPath: string): string[] {
 function mapTeamRows(rows: CsvRow[]): TeamProjectionRow[] {
   return rows.map((row) => ({
     season: toInt(row.season),
-    team: row.team ?? "UNK",
+    team: canonicalizeNflTeam(row.team) ?? row.team ?? "UNK",
     conference: row.conference ?? "",
     division: row.division ?? "",
     expectedWins: toNumber(row.expected_wins),
@@ -176,7 +185,7 @@ function mapPlayerTotalsRows(rows: CsvRow[]): PlayerProjectionTotalsRow[] {
     season: toInt(row.season),
     playerKey: row.player_key ?? "",
     playerName: row.player_name ?? "Unknown",
-    team: row.team ?? "UNK",
+    team: canonicalizeNflTeam(row.team) ?? row.team ?? "UNK",
     position: row.position ?? "UNK",
     gamesProjected: toInt(row.games_projected),
     passYardsTotal: toNumber(row.pass_yards_total),
@@ -280,6 +289,23 @@ function loadBundleFromDir(
     }
   }
 
+  const pointerForLineage = loadNflWebLaunchPointer();
+  const activeRunId =
+    pointerForLineage?.active_run_id ||
+    pointerForLineage?.bundle_id ||
+    bundleDirName;
+  const lineage =
+    pointerForLineage &&
+    (pointerForLineage.active_run_id || pointerForLineage.bundle_id) ===
+      bundleDirName
+      ? lineageFromActiveRun(pointerForLineage, "Model")
+      : ({
+          run_id: bundleDirName,
+          engine_version: engineVersion,
+          generated_at: generatedAtUtc,
+          kind: "Model" as const,
+        } satisfies NflLineage);
+
   return {
     bundleDirName,
     bundlePath,
@@ -291,6 +317,8 @@ function loadBundleFromDir(
     launchIdentity,
     nTeamSims,
     engineVersion,
+    lineage,
+    activeRunId,
   };
 }
 

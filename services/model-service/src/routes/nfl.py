@@ -5,6 +5,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from decimal import Decimal
 from datetime import date, datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, TypedDict
 
 import logging
@@ -94,6 +95,8 @@ NFL_TEAM_CONFERENCE_MAP: Dict[str, str] = {
     "LV": "AFC",
     "LAC": "AFC",
     "LAR": "NFC",
+    # nflverse / season-engine alias — must not drop Rams from conference joins
+    "LA": "NFC",
     "MIA": "AFC",
     "MIN": "NFC",
     "NE": "AFC",
@@ -129,6 +132,7 @@ NFL_TEAM_DIVISION_MAP: Dict[str, str] = {
     "LV": "West",
     "LAC": "West",
     "LAR": "West",
+    "LA": "West",
     "MIA": "East",
     "MIN": "North",
     "NE": "East",
@@ -3507,12 +3511,51 @@ def nfl_fair_lines(
         )
 
     lines.sort(key=lambda row: (str(row.get("start_time") or ""), str(row.get("game_id") or "")))
+    # Drop invalid American prices (|price| < 100) so boards never show -66.
+    for row in lines:
+        for key in (
+            "fair_home_ml",
+            "fair_away_ml",
+            "handicap_fair_home_ml",
+            "handicap_fair_away_ml",
+            "model_fair_home_ml",
+            "model_fair_away_ml",
+            "market_home_ml",
+            "market_away_ml",
+            "best_spread_away_juice",
+            "best_spread_home_juice",
+            "best_total_over_juice",
+            "best_total_under_juice",
+        ):
+            price = row.get(key)
+            if price is None:
+                continue
+            try:
+                p = float(price)
+            except (TypeError, ValueError):
+                row[key] = None
+                continue
+            if p == 0 or abs(p) < 100:
+                row[key] = None
+
+    season_run = _load_nfl_web_active_run()
+    odds_as_of = datetime.now(timezone.utc).isoformat()
     return {
         "season": season,
         "model_version": effective_model_version,
         "current_week": current_week,
         "count": len(lines),
         "lines": lines,
+        "kickoff_source": "games.start_time",
+        "odds_as_of": odds_as_of if market_events else None,
+        "as_of": odds_as_of,
+        "active_run_id": season_run.get("active_run_id"),
+        "lineage": {
+            "run_id": season_run.get("active_run_id") or effective_model_version,
+            "engine_version": season_run.get("engine_version") or effective_model_version,
+            "generated_at": season_run.get("generated_at") or odds_as_of,
+            "kind": "KEI",
+        },
         "window": {
             "days_ahead": days_ahead,
             "include_past_days": include_past_days,
@@ -3526,6 +3569,7 @@ def nfl_fair_lines(
             "kosedge_only": market_joined_count == 0,
             "odds_persisted": odds_persist,
             "current_week": current_week,
+            "odds_as_of": odds_as_of if market_events else None,
         },
     }
 
@@ -3697,6 +3741,40 @@ def run_nfl_simulation(
         session.close()
 
 
+def _load_nfl_web_active_run() -> Dict[str, Any]:
+    """Season-board Truth Layer pointer (active_run_id) from ops registry."""
+    # services/model-service/src/routes/nfl.py → parents[4] = repo root
+    pointer_path = (
+        Path(__file__).resolve().parents[4]
+        / "data"
+        / "ops"
+        / "nfl-web-launch-bundle.json"
+    )
+    if not pointer_path.exists():
+        return {}
+    try:
+        payload = json.loads(pointer_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    return {
+        "active_run_id": payload.get("active_run_id") or payload.get("bundle_id"),
+        "bundle_id": payload.get("bundle_id"),
+        "kind": payload.get("kind") or "Model",
+        "engine_version": payload.get("engine_version"),
+        "generated_at": payload.get("generated_at_utc") or payload.get("locked_at_utc"),
+        "lineage": payload.get("lineage")
+        or {
+            "run_id": payload.get("active_run_id") or payload.get("bundle_id"),
+            "engine_version": payload.get("engine_version"),
+            "generated_at": payload.get("generated_at_utc"),
+            "kind": payload.get("kind") or "Model",
+        },
+        "team_id_scheme": payload.get("team_id_scheme") or "product_canonical_LAR",
+    }
+
+
 @router.get("/ops/active-model")
 def nfl_active_model() -> Dict[str, Any]:
     session = SessionLocal()
@@ -3712,6 +3790,7 @@ def nfl_active_model() -> Dict[str, Any]:
             ),
             {"state_key": MODEL_STATE_KEY},
         ).fetchone()
+        season_run = _load_nfl_web_active_run()
         if row is None:
             return {
                 "state_key": MODEL_STATE_KEY,
@@ -3720,8 +3799,11 @@ def nfl_active_model() -> Dict[str, Any]:
                 "reason": "default",
                 "metadata": {},
                 "updated_at": None,
+                **season_run,
             }
-        return dict(row._mapping)
+        out = dict(row._mapping)
+        out.update(season_run)
+        return out
     finally:
         session.close()
 

@@ -73,6 +73,15 @@ jobs:
           cd services/model-service
           pytest -q
 
+      - name: NFL Truth Layer invariants (block publish)
+        run: |
+          python scripts/nfl/check_nfl_invariants.py
+          # Acceptance: deliberate I3 break must fail the job
+          if python scripts/nfl/check_nfl_invariants.py --deliberate-break I3; then
+            echo "Expected deliberate I3 break to fail" >&2
+            exit 1
+          fi
+
       - name: Comment PR with results
         if: always()
         continue-on-error: true

@@ -57,6 +57,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:web-python-boundary": "node scripts/check-web-python-boundary.mjs",
+    "check:nfl-invariants": "python scripts/nfl/check_nfl_invariants.py",
     "// -------------------- CI --------------------": "",
     "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "test:web:critical": "pnpm --filter @kosedge/web test:critical"

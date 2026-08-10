@@ -9,7 +9,9 @@ import {
   assessConfidence,
   decideGame,
   decisionResultToApi,
+  isTierConstantConfidence,
 } from "@/lib/nfl-decision-engine";
+import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
 const ET = "America/New_York";
@@ -107,7 +109,12 @@ export function fairLinesToEdgeBoardRows(
 
   for (const line of lines) {
     const game = `${line.awayTeam} @ ${line.homeTeam}`;
-    const commenceTime = line.startTime ?? line.gameDate ?? undefined;
+    const commenceTime =
+      resolveNflKickoffIso({
+        gameId: line.gameId,
+        startTime: line.startTime,
+        gameDate: line.gameDate,
+      }) ?? undefined;
     const time = formatCommence(commenceTime ?? null);
     const idBase =
       line.gameId ||
@@ -234,6 +241,9 @@ export function fairLinesToEdgeBoardRows(
       edgeMagnitude: spreadDecision?.edgeMagnitude,
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
+      modelConfidenceTierConstant: decisionBundle.modelConfidence
+        ? isTierConstantConfidence(decisionBundle.modelConfidence)
+        : undefined,
       coverProb: spreadDecision?.coverProb ?? undefined,
       playToNotes: spreadDecision?.playTo?.notes,
       playToPlay: spreadDecision?.playTo?.playTo,
@@ -273,6 +283,9 @@ export function fairLinesToEdgeBoardRows(
       edgeMagnitude: totalDecision?.edgeMagnitude,
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
+      modelConfidenceTierConstant: decisionBundle.modelConfidence
+        ? isTierConstantConfidence(decisionBundle.modelConfidence)
+        : undefined,
       coverProb: totalDecision?.coverProb ?? undefined,
       playToNotes: totalDecision?.playTo?.notes,
       playToPlay: totalDecision?.playTo?.playTo,

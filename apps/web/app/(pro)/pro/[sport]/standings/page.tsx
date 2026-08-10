@@ -7,6 +7,7 @@ import {
   resolveConferenceDivision,
   teamDisplayName,
 } from "@/lib/nfl-team-intel";
+import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts";
 
 export const dynamic = "force-dynamic";
@@ -65,13 +66,13 @@ export default async function StandingsPage({
 
   const bundle = loadLatestNflPreseasonBundle2026();
   const projByTeam = new Map(
-    (bundle?.teamRows ?? []).map(
-      (r) =>
-        [
-          r.team,
-          { wins: r.expectedWins, playoff: r.playoffProb },
-        ] as const,
-    ),
+    (bundle?.teamRows ?? []).map((r) => {
+      const code = canonicalizeNflTeam(r.team) ?? r.team;
+      return [
+        code,
+        { wins: r.expectedWins, playoff: r.playoffProb },
+      ] as const;
+    }),
   );
 
   const intel = await fetchNflIntel("standings", {});
@@ -81,7 +82,7 @@ export default async function StandingsPage({
     rows = intel.rows
       .filter((r) => typeof r.team === "string")
       .map((r) => {
-        const team = String(r.team);
+        const team = canonicalizeNflTeam(String(r.team)) ?? String(r.team);
         const resolved = resolveConferenceDivision(team);
         const proj = projByTeam.get(team);
         return {
@@ -102,10 +103,11 @@ export default async function StandingsPage({
   } else {
     const espnRows = await fetchEspnNflStandings(2025);
     rows = espnRows.map((r) => {
-      const resolved = resolveConferenceDivision(r.team);
-      const proj = projByTeam.get(r.team);
+      const team = canonicalizeNflTeam(r.team) ?? r.team;
+      const resolved = resolveConferenceDivision(team);
+      const proj = projByTeam.get(team);
       return {
-        team: r.team,
+        team,
         wins: r.wins ?? null,
         losses: r.losses ?? null,
         ties: r.ties ?? null,
@@ -121,9 +123,11 @@ export default async function StandingsPage({
     });
   }
 
-  // Ensure all 32 teams appear even if a source misses one.
-  if (rows.length < 32) {
-    const have = new Set(rows.map((r) => r.team));
+  // Ensure all 32 teams appear even if a source misses one (LA/LAR safe).
+  {
+    const have = new Set(
+      rows.map((r) => canonicalizeNflTeam(r.team) ?? r.team),
+    );
     for (const entry of NFL_TEAM_DIRECTORY) {
       if (have.has(entry.code)) continue;
       const proj = projByTeam.get(entry.code);
@@ -141,6 +145,7 @@ export default async function StandingsPage({
         keiProjWins: proj?.wins ?? null,
         playoffProb: proj?.playoff ?? null,
       });
+      have.add(entry.code);
     }
   }
 

@@ -159,6 +159,26 @@ export function confidenceBand(score: number): ConfidenceBand {
   return "LOW";
 }
 
+/** Default clear-board base (0.72 → MEDIUM). Not a calibrated cover probability. */
+export const CONFIDENCE_TIER_BASE = 0.72;
+
+/**
+ * True when confidence is the untuned tier constant (no flags / no historical fit).
+ * UI should label as a band, not invent false precision like "72%".
+ */
+export function isTierConstantConfidence(
+  assessment: Pick<ConfidenceAssessment, "score" | "unresolvedFlags"> & {
+    factors?: ConfidenceAssessment["factors"];
+  },
+): boolean {
+  if (assessment.unresolvedFlags.length > 0) return false;
+  const hf = assessment.factors?.historicalFit;
+  if (typeof hf === "number" && Number.isFinite(hf)) {
+    return false;
+  }
+  return Math.abs(assessment.score - CONFIDENCE_TIER_BASE) < 1e-9;
+}
+
 export function assessConfidence(args: {
   baseScore?: number | null;
   schemeStable?: boolean;

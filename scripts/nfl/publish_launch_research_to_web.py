@@ -15,49 +15,29 @@ import csv
 import json
 import math
 import shutil
-from collections import defaultdict
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "services" / "model-service" / "src"))
+sys.path.insert(0, str(ROOT / "scripts" / "nfl"))
 
-# conference, division-label (matches older team_regular_season_outcomes.csv)
+from services.nfl_canonical_teams import (  # noqa: E402
+    CONFERENCE_OF,
+    canonicalize_team,
+    division_label,
+)
+from nfl_playoff_from_week_rates import (  # noqa: E402
+    apply_playoff_probs_to_team_rows,
+    recompute_playoff_probs,
+)
+
+# conference, division-label — product canonical Rams = LAR (LA alias only).
 TEAM_META: Dict[str, Tuple[str, str]] = {
-    "ARI": ("NFC", "NFC West"),
-    "ATL": ("NFC", "NFC South"),
-    "BAL": ("AFC", "AFC North"),
-    "BUF": ("AFC", "AFC East"),
-    "CAR": ("NFC", "NFC South"),
-    "CHI": ("NFC", "NFC North"),
-    "CIN": ("AFC", "AFC North"),
-    "CLE": ("AFC", "AFC North"),
-    "DAL": ("NFC", "NFC East"),
-    "DEN": ("AFC", "AFC West"),
-    "DET": ("NFC", "NFC North"),
-    "GB": ("NFC", "NFC North"),
-    "HOU": ("AFC", "AFC South"),
-    "IND": ("AFC", "AFC South"),
-    "JAX": ("AFC", "AFC South"),
-    "KC": ("AFC", "AFC West"),
-    "LA": ("NFC", "NFC West"),
-    "LAC": ("AFC", "AFC West"),
-    "LAR": ("NFC", "NFC West"),
-    "LV": ("AFC", "AFC West"),
-    "MIA": ("AFC", "AFC East"),
-    "MIN": ("NFC", "NFC North"),
-    "NE": ("AFC", "AFC East"),
-    "NO": ("NFC", "NFC South"),
-    "NYG": ("NFC", "NFC East"),
-    "NYJ": ("AFC", "AFC East"),
-    "PHI": ("NFC", "NFC East"),
-    "PIT": ("AFC", "AFC North"),
-    "SEA": ("NFC", "NFC West"),
-    "SF": ("NFC", "NFC West"),
-    "TB": ("NFC", "NFC South"),
-    "TEN": ("AFC", "AFC South"),
-    "WAS": ("NFC", "NFC East"),
-    "WSH": ("NFC", "NFC East"),
+    t: (CONFERENCE_OF[t], division_label(t)) for t in CONFERENCE_OF
 }
 
 
@@ -70,13 +50,26 @@ def _softmax(xs: List[float]) -> List[float]:
     return [e / s for e in ex]
 
 
-def _playoff_prob(hist: Dict[str, int], n: int, cutoff: int = 9) -> float:
-    if n <= 0:
-        return 0.0
-    return sum(int(hist.get(str(w), 0)) for w in range(cutoff, 18)) / float(n)
+def _run_invariant_gate(bundle_dir: Path) -> None:
+    """Hard-fail publish when Truth Layer invariants fail."""
+    script = ROOT / "scripts" / "nfl" / "check_nfl_invariants.py"
+    proc = subprocess.run(
+        [sys.executable, str(script), "--bundle", str(bundle_dir)],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+    )
+    if proc.stdout:
+        print(proc.stdout)
+    if proc.returncode != 0:
+        if proc.stderr:
+            print(proc.stderr, file=sys.stderr)
+        raise SystemExit(
+            f"Truth Layer invariants failed for {bundle_dir} — publish blocked"
+        )
 
 
-def publish(source: Path, stamp: str | None) -> Path:
+def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path:
     summary = json.loads((source / "run_summary.json").read_text(encoding="utf-8"))
     teams = json.loads((source / "team_win_distributions.json").read_text(encoding="utf-8"))
     players = []
@@ -99,22 +92,41 @@ def publish(source: Path, stamp: str | None) -> Path:
     out_dir = ROOT / "data" / "ops" / out_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Division-title soft proxy: softmax of expected wins within division
-    by_div: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    # Super Bowl soft proxy: league softmax of expected wins (research display only).
+    # Playoff / division titles come from 7-seed MC (not P(wins>=9)).
+    canon_teams: List[Dict[str, Any]] = []
     for row in teams:
+        team = canonicalize_team(str(row["team"])) or str(row["team"])
+        canon_teams.append({**row, "team": team})
+    sb_weights = _softmax([float(r["mean"]) for r in canon_teams])
+    sb_prob = {str(r["team"]): float(w) for r, w in zip(canon_teams, sb_weights)}
+
+    week_rates_path = source / "team_week_win_rates.json"
+    if not week_rates_path.exists():
+        raise SystemExit(f"missing week win rates for playoff Truth Layer: {week_rates_path}")
+    week_rates = json.loads(week_rates_path.read_text(encoding="utf-8"))
+    playoff_recompute = recompute_playoff_probs(week_rates, n_replicates=20_000, seed=20260810)
+
+    draft_rows: List[Dict[str, Any]] = []
+    season = int(summary.get("season") or 2026)
+    for row in sorted(canon_teams, key=lambda r: (-float(r["mean"]), str(r["team"]))):
         team = str(row["team"])
         conf, div = TEAM_META.get(team, ("UNK", "UNK"))
-        by_div[div].append(row)
-
-    div_title: Dict[str, float] = {}
-    for div, rows in by_div.items():
-        weights = _softmax([float(r["mean"]) for r in rows])
-        for r, w in zip(rows, weights):
-            div_title[str(r["team"])] = float(w)
-
-    # Super Bowl soft proxy: league softmax of expected wins (research display only)
-    sb_weights = _softmax([float(r["mean"]) for r in teams])
-    sb_prob = {str(r["team"]): float(w) for r, w in zip(teams, sb_weights)}
+        draft_rows.append(
+            {
+                "season": season,
+                "team": team,
+                "conference": conf,
+                "division": div,
+                "expected_wins": round(float(row["mean"]), 4),
+                "wins_p10": int(row.get("p10") or 0),
+                "wins_p90": int(row.get("p90") or 0),
+                "playoff_prob": 0.0,
+                "division_title_prob": 0.0,
+                "super_bowl_win_prob": round(sb_prob.get(team, 0.0), 6),
+            }
+        )
+    team_rows = apply_playoff_probs_to_team_rows(draft_rows, playoff_recompute)
 
     team_csv = out_dir / "team_regular_season_outcomes.csv"
     with team_csv.open("w", encoding="utf-8", newline="") as fh:
@@ -133,24 +145,21 @@ def publish(source: Path, stamp: str | None) -> Path:
                 "super_bowl_win_prob",
             ]
         )
-        season = int(summary.get("season") or 2026)
-        for row in sorted(teams, key=lambda r: (-float(r["mean"]), str(r["team"]))):
-            team = str(row["team"])
-            conf, div = TEAM_META.get(team, ("UNK", "UNK"))
-            n = int(row.get("n_sims") or 0)
-            hist = row.get("win_histogram") or {}
+        for row in sorted(
+            team_rows, key=lambda r: (-float(r["expected_wins"]), str(r["team"]))
+        ):
             w.writerow(
                 [
-                    season,
-                    team,
-                    conf,
-                    div,
-                    round(float(row["mean"]), 4),
-                    int(row.get("p10") or 0),
-                    int(row.get("p90") or 0),
-                    round(_playoff_prob(hist, n), 6),
-                    round(div_title.get(team, 0.0), 6),
-                    round(sb_prob.get(team, 0.0), 6),
+                    row["season"],
+                    row["team"],
+                    row["conference"],
+                    row["division"],
+                    row["expected_wins"],
+                    row["wins_p10"],
+                    row["wins_p90"],
+                    row["playoff_prob"],
+                    row["division_title_prob"],
+                    row["super_bowl_win_prob"],
                 ]
             )
 
@@ -213,23 +222,33 @@ def publish(source: Path, stamp: str | None) -> Path:
         w = csv.writer(fh)
         w.writerow(headers)
 
+    sum_afc = playoff_recompute["sanity"]["sum_playoff_afc"]
+    sum_nfc = playoff_recompute["sanity"]["sum_playoff_nfc"]
     quality = {
         "source": "season_engine_launch_research",
         "engine_version": summary.get("engine_version"),
         "n_team_sims": summary.get("n_team_sims"),
         "n_player_sims": summary.get("n_player_sims"),
         "preseason": True,
+        "kind": "Model",
         "honesty": {
-            "playoff_prob": "P(wins>=9) from 100k team W/L win_histogram",
-            "division_title_prob": "softmax(expected_wins) within division (display proxy)",
+            "playoff_prob": "7-seed MC from team_week_win_rates + wall-chart schedule",
+            "division_title_prob": "division winner frequency from same 7-seed MC paths",
             "super_bowl_win_prob": "softmax(expected_wins) league-wide (display proxy; not bracket sims)",
             "playoff_player_totals": "empty — full player paths were regular-season only",
         },
         "source_bundle": str(source.relative_to(ROOT) if source.is_relative_to(ROOT) else source),
         "sanity": {
             "sum_super_bowl_prob": round(sum(sb_prob.values()), 6),
-            "sum_division_title_prob": round(sum(div_title.values()), 6),
-            "sum_playoff_prob": None,
+            "sum_division_title_prob": playoff_recompute["sanity"]["sum_division_title"],
+            "sum_playoff_prob": playoff_recompute["sanity"]["sum_playoff_league"],
+            "sum_playoff_afc": sum_afc,
+            "sum_playoff_nfc": sum_nfc,
+            "sum_expected_wins": playoff_recompute["sanity"]["sum_expected_wins"],
+        },
+        "truth_layer": {
+            "playoff_method": playoff_recompute["method"],
+            "n_replicates": playoff_recompute["n_replicates"],
         },
     }
     (out_dir / "quality_checks.json").write_text(
@@ -247,7 +266,9 @@ def publish(source: Path, stamp: str | None) -> Path:
     )
 
     pointer = {
+        "active_run_id": out_name,
         "bundle_id": out_name,
+        "kind": "Model",
         "engine_version": summary.get("engine_version"),
         "n_team_sims": summary.get("n_team_sims"),
         "n_player_sims": summary.get("n_player_sims"),
@@ -255,6 +276,13 @@ def publish(source: Path, stamp: str | None) -> Path:
         "source_dir": str(source.relative_to(ROOT) if source.is_relative_to(ROOT) else source),
         "preseason": True,
         "identity": f"{summary.get('engine_version')} · N_team={summary.get('n_team_sims')} · {stamp}",
+        "team_id_scheme": "product_canonical_LAR",
+        "lineage": {
+            "run_id": out_name,
+            "engine_version": summary.get("engine_version"),
+            "generated_at": generated,
+            "kind": "Model",
+        },
     }
     (ROOT / "data" / "ops" / "nfl-web-launch-bundle.json").write_text(
         json.dumps(pointer, indent=2) + "\n", encoding="utf-8"
@@ -287,6 +315,9 @@ def publish(source: Path, stamp: str | None) -> Path:
             shutil.rmtree(hd_out)
         shutil.copytree(out_dir, hd_out)
 
+    if not skip_gate:
+        _run_invariant_gate(out_dir)
+
     return out_dir
 
 
@@ -299,8 +330,13 @@ def main() -> None:
         / "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.12-survivor-planner-ux-Nteam100000-Nplayer1000-20260807T172531Z",
     )
     ap.add_argument("--stamp", default=None, help="Override nfl-preseason-sim-2026-<stamp>")
+    ap.add_argument(
+        "--skip-gate",
+        action="store_true",
+        help="Skip Truth Layer invariant gate (debug only)",
+    )
     args = ap.parse_args()
-    out = publish(args.source.resolve(), args.stamp)
+    out = publish(args.source.resolve(), args.stamp, skip_gate=args.skip_gate)
     print(f"PUBLISHED {out}")
     print(f"POINTER data/ops/nfl-web-launch-bundle.json")
 

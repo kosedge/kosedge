@@ -1,0 +1,19 @@
+{
+  "before": {
+    "sum_afc": 7.887857,
+    "sum_nfc": 5.614396,
+    "league": 13.502253,
+    "method": "P(wins>=9)"
+  },
+  "after": {
+    "sum_playoff_afc": 7.0,
+    "sum_playoff_nfc": 7.0,
+    "sum_playoff_league": 14.0,
+    "sum_expected_wins": 272.0,
+    "sum_division_title": 8.0
+  },
+  "method": "7seed_mc_from_week_win_rates_wall_chart",
+  "n_replicates": 20000,
+  "root_cause_layer": 1,
+  "root_cause": "Per-sim path / publish did not select 7 AFC + 7 NFC; used P(wins>=9) proxy"
+}

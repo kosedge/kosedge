@@ -7,7 +7,7 @@
   "source_research": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
   "locked_snapshot": true,
   "status": "LOCKED_OFFICIAL_2026_PRESEASON_BASELINE",
-  "note": "LOCKED — official 2026 pre-season baseline (v1.24 soft-pile cleanup confirmation board; 100k MC was v1.23)",
+  "note": "LOCKED \u2014 official 2026 pre-season baseline (v1.24 soft-pile cleanup confirmation board; 100k MC was v1.23)",
   "lock_tag": "nfl-2026-preseason-baseline-v1.24",
   "engine_commit": "ab16a4e7218632b31eb186caf51800ea3f31a872",
   "timing_seconds": {
@@ -238,5 +238,9 @@
     }
   },
   "pf_win_half_overlap": 12,
-  "all_gates_pass": true
+  "all_gates_pass": true,
+  "active_run_id": "nfl-preseason-sim-2026-20260809T165350Z",
+  "web_bundle_id": "nfl-preseason-sim-2026-20260809T165350Z",
+  "kind": "Model",
+  "truth_layer_note": "Playoff probs patched 2026-08-10 via 7-seed MC from week win rates"
 }

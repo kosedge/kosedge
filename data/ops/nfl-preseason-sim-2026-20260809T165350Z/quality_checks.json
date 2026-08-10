@@ -324,5 +324,24 @@
     ]
   },
   "all_pass": true,
-  "locked_snapshot": true
+  "locked_snapshot": true,
+  "honesty": {
+    "playoff_prob": "7-seed MC from team_week_win_rates + wall-chart schedule (Truth Layer 2026-08-10)",
+    "division_title_prob": "division winner frequency from same 7-seed MC paths",
+    "super_bowl_win_prob": "softmax(expected_wins) league-wide (display proxy; not full bracket sims)",
+    "playoff_player_totals": "empty \u2014 full player paths were regular-season only"
+  },
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 8.0,
+    "sum_playoff_prob": 14.0,
+    "sum_playoff_afc": 7.0,
+    "sum_playoff_nfc": 7.0,
+    "sum_expected_wins": 272.0
+  },
+  "truth_layer": {
+    "patched_at_utc": "2026-08-10T00:00:00+00:00",
+    "playoff_method": "7seed_mc_from_week_win_rates_wall_chart",
+    "n_replicates": 20000
+  }
 }
