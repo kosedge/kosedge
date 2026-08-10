@@ -145,17 +145,14 @@ export default async function NflDfsPage({
       </section>
 
       <section className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+        {/* Opp / Salary / Value / Own% columns hidden until slate feeds join. */}
         <table className="min-w-full text-left text-sm">
           <thead>
             <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/60">
               <th className="px-3 py-3">Player</th>
               <th className="px-3 py-3">Pos</th>
               <th className="px-3 py-3">Team</th>
-              <th className="px-3 py-3">Opp</th>
-              <th className="px-3 py-3">Salary</th>
               <th className="px-3 py-3">Proj</th>
-              <th className="px-3 py-3">Value</th>
-              <th className="px-3 py-3">Own%</th>
               <th className="px-3 py-3">Ceiling</th>
             </tr>
           </thead>
@@ -177,13 +174,9 @@ export default async function NflDfsPage({
                     {r.team}
                   </Link>
                 </td>
-                <td className="px-3 py-2 text-kos-text/40">—</td>
-                <td className="px-3 py-2 text-kos-text/40">—</td>
                 <td className="px-3 py-2 font-semibold text-kos-gold">
                   {r.proj.toFixed(1)}
                 </td>
-                <td className="px-3 py-2 text-kos-text/40">—</td>
-                <td className="px-3 py-2 text-kos-text/40">—</td>
                 <td className="px-3 py-2 text-kos-text/75">
                   {r.ceiling.toFixed(1)}
                 </td>

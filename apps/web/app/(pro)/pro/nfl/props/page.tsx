@@ -91,15 +91,19 @@ export default async function NflPropsBoardPage({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              Week {week} · {season} · Props research
+              {season === 2025
+                ? `Archive · ${season} W${week}`
+                : `Week ${week} · ${season}`}{" "}
+              · Props research
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               Props
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Player prop board with model means and fair prices. PLAY tags
-              surface high-confidence research rows — not bet recommendations.
-              Market edges appear only when a book line is joined.
+              Player prop board with model means and fair prices. Default slate
+              is the 2025 market-join archive until 2026 yardage markets post —
+              not current 2026 week truth. PLAY tags are research rows, not bet
+              recommendations.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -250,8 +254,8 @@ export default async function NflPropsBoardPage({
 
         {!board.error && board.rows.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No prop edges for {season} week {week} yet. Try 2025 W1, or wait for
-            the next materialization cycle.
+            No prop edges for {season} week {week} yet. Try 2025 W17 (market
+            joins), or wait for the next materialization cycle.
           </div>
         ) : null}
 

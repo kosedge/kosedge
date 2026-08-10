@@ -377,9 +377,21 @@ export default function SeasonEngineGameBoxesClient({
 
           {byeWarning || synthetic ? (
             <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
+              {synthetic ? (
+                <span className="font-semibold text-amber-100">
+                  Synthetic matchup / usage — not a real 2026 slate row.{" "}
+                </span>
+              ) : null}
               {byeWarning ||
                 active?.notes?.schedule_match_detail ||
                 "This home/away/week is not on the loaded schedule — hypothetical what-if boxes."}
+            </p>
+          ) : null}
+          {!synthetic &&
+          (active?.players ?? []).some((p) => Boolean(p.usage_role)) ? (
+            <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/85">
+              Usage roles below are model/packaged depth labels — not confirmed
+              2026 snap shares.
             </p>
           ) : null}
 

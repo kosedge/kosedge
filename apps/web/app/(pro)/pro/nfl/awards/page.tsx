@@ -80,13 +80,23 @@ export default async function NflAwardsPage({
             <Link
               key={item.id}
               href={`/pro/nfl/awards?tab=${item.id}`}
+              aria-disabled={!item.live}
               className={
                 tab === item.id
-                  ? "rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold"
-                  : "rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-kos-text/70"
+                  ? item.live
+                    ? "rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold"
+                    : "rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-kos-text/55"
+                  : item.live
+                    ? "rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-kos-text/70"
+                    : "rounded-md border border-dashed border-white/15 bg-transparent px-3 py-1.5 text-xs text-kos-text/45"
               }
             >
               {item.label}
+              {!item.live ? (
+                <span className="ml-1.5 text-[10px] uppercase tracking-wide text-kos-text/40">
+                  Soon
+                </span>
+              ) : null}
             </Link>
           ))}
         </nav>
@@ -136,9 +146,14 @@ export default async function NflAwardsPage({
           />
         </section>
       ) : (
-        <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-6 text-sm text-kos-text/70">
-          {tab.toUpperCase()} rankings will publish when the corresponding award
-          engine is live. MVP and OPOY are available now.
+        <section className="mt-6 rounded-2xl border border-dashed border-white/15 bg-black/30 p-6 text-sm text-kos-text/70">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/45">
+            Placeholder · not live
+          </p>
+          <p className="mt-2">
+            {tab.toUpperCase()} rankings will publish when the corresponding
+            award engine is live. MVP and OPOY are available now.
+          </p>
         </section>
       )}
 

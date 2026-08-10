@@ -41,7 +41,9 @@ describe("seasonEnginePackagedNotice", () => {
         schedule_source: "packaged_wall_chart_2026",
         depth_source: "packaged_nflverse_depth_2026",
       }),
-    ).toBe("Using packaged 2026 schedule/depth");
+    ).toBe(
+      "Not current 2026 depth/usage — packaged schedule/depth (synthetic roles until live feeds land)",
+    );
   });
 
   it("returns null when sources are not packaged", () => {

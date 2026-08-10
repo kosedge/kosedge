@@ -249,7 +249,7 @@ export function seasonEnginePackagedNotice(
     status.roster_source,
   ].filter((s): s is string => typeof s === "string" && s.length > 0);
   if (!sources.some((s) => s.startsWith("packaged"))) return null;
-  return "Using packaged 2026 schedule/depth";
+  return "Not current 2026 depth/usage — packaged schedule/depth (synthetic roles until live feeds land)";
 }
 
 export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {

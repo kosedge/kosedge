@@ -20,7 +20,7 @@ export type HubFooterCard = {
 };
 
 export type SportDeskConfig = {
-  /** Short path label shown under Betting Desk, e.g. "KEI Lines → Edges → Props" */
+  /** Short path label shown under Betting Desk, e.g. "KEI Lines → Edges" */
   pathLabel: string;
   /** Hero / market-section subtitle describing the desk workflow */
   pathSubtitle: string;
@@ -89,9 +89,9 @@ function stubThirdCard(
 
 const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
   nfl: {
-    pathLabel: "KEI Lines → Edges → Props",
+    pathLabel: "KEI Lines → Edges",
     pathSubtitle:
-      "Betting desk path: KEI Lines → Edges → Props, then execution quality.",
+      "Betting desk path: KEI Lines → Edges, then execution quality. Props archive stays off the ready path until 2026 markets join.",
     cards: [
       {
         href: "/pro/nfl/fair-lines",
@@ -111,17 +111,18 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         status: "active",
       },
       {
-        href: "/pro/nfl/props",
-        title: "Props",
+        href: "/pro/nfl/survivor",
+        title: "Survivor",
         description:
-          "Full player prop board — model means, fair prices, market joins.",
-        cta: "Open props board →",
+          "Week-by-week survivor planner from path-coherent season sims.",
+        cta: "Open survivor →",
         accent: "neutral",
         status: "active",
       },
     ],
     footerCards: [
       // Bottom resource grid: no KEI Lines duplicate (lives in Betting Desk).
+      // DFS / Awards / Player Previews / empty Props demoted until live.
       {
         href: "/pro/power-ratings/nfl",
         title: "Power Ratings",
@@ -179,27 +180,11 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "gold",
       },
       {
-        href: "/pro/nfl/dfs",
-        title: "DFS Board",
+        href: "/pro/nfl/game-boxes",
+        title: "Game Boxes",
         description:
-          "DraftKings and FanDuel salary, projection, value, and ownership research.",
-        cta: "Open DFS →",
-        accent: "neutral",
-      },
-      {
-        href: "/pro/nfl/player-previews",
-        title: "Player Previews",
-        description:
-          "Selective star and role-change outlooks with position filters.",
-        cta: "Open player previews →",
-        accent: "neutral",
-      },
-      {
-        href: "/pro/nfl/awards",
-        title: "Awards",
-        description:
-          "MVP, OPOY, DPOY, Rookie, and Coach races with ranked evidence tables.",
-        cta: "View awards →",
+          "Projected skill-player boxes for a future matchup — median with p10–p90 bands.",
+        cta: "Open game boxes →",
         accent: "neutral",
       },
       {

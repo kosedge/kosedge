@@ -292,7 +292,7 @@ function ActionDecisionCell({
       ) : null}
       {coverProb != null ? (
         <div className="mt-0.5 text-[10px] text-gray-500 tabular-nums">
-          Cover {(coverProb * 100).toFixed(1)}%
+          Cover prob {(coverProb * 100).toFixed(1)}%
         </div>
       ) : null}
       {playToNotes &&
