@@ -741,8 +741,7 @@ export function flatRowsToLegacy(
         signedLineEdge = signedProb;
         // Display / tag thresholds use percentage points (MLB: ≥1.5 LEAN / ≥3.0 PLAY).
         edgeLineNum = Math.abs(signedProb) * 100;
-        leanHome =
-          signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
+        leanHome = signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
       }
     } else {
       // Compare home-side market vs home-side KEI.
@@ -830,8 +829,7 @@ export function flatRowsToLegacy(
       teamA: {
         name: away,
         site: "Away",
-        keiNumber:
-          keiLine.top.label !== "—" ? keiLine.top.label : undefined,
+        keiNumber: keiLine.top.label !== "—" ? keiLine.top.label : undefined,
       },
       teamB: {
         name: home,
@@ -895,8 +893,6 @@ export default function EdgeBoard({
 }) {
   const safeRows = Array.isArray(rows) ? rows : [];
   const keiCode = getKeiCode(sportKey);
-  const edgeGreen =
-    "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
   const hasRealData = safeRows.length > 0;
   const legacy = hasRealData
     ? flatRowsToLegacy(safeRows, sportKey)
@@ -913,27 +909,84 @@ export default function EdgeBoard({
 
   if (variant === "home") {
     return (
-      <div className="lg:col-span-5">
+      <div className="lg:col-span-5 w-full min-w-0">
         <div className="relative">
           <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
           <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 gap-3">
               <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
-              <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
+              <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400 shrink-0">
                 Sample
               </span>
             </div>
-            <div className="overflow-hidden rounded-2xl border border-white/10">
-              <table className="w-full text-sm sm:text-base">
+
+            {/* Compact mobile sample — no page-level horizontal overflow */}
+            <div className="sm:hidden space-y-3">
+              {sampleRows.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-2xl border border-white/10 bg-black/40 p-4"
+                >
+                  <div className="font-semibold text-gray-100">
+                    {r.teamA.name} vs {r.teamB.name}
+                  </div>
+                  <div className="mt-1 text-[11px] text-gray-400">
+                    Sample ranks · {r.teamA.name} ({r.teamA.keiRank ?? "—"}) ·{" "}
+                    {r.teamB.name} ({r.teamB.keiRank ?? "—"})
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wide text-gray-400">
+                        Best Line
+                      </div>
+                      <div className="mt-0.5 font-semibold tabular-nums">
+                        {r.bestLine.top.label}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wide text-gray-400">
+                        Best O/U
+                      </div>
+                      <div className="mt-0.5 font-semibold tabular-nums">
+                        {r.bestOU.top.label}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wide text-gray-400">
+                        Edge
+                      </div>
+                      <div className="mt-0.5 font-semibold tabular-nums text-kos-gold">
+                        {r.edgeLineNum != null ? r.edgeLineNum.toFixed(1) : "—"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wide text-gray-400">
+                        Tag
+                      </div>
+                      <div className="mt-1">
+                        {r.tagLine ? (
+                          <span className={tagClassName(r.tagLine, true)}>
+                            {r.tagLine}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">—</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden sm:block overflow-hidden rounded-2xl border border-white/10">
+              <table className="w-full text-sm sm:text-base table-fixed">
                 <thead className="bg-white/5">
                   <tr className="text-left text-gray-300">
-                    <th className="py-2.5 px-3">Game</th>
-                    <th className="py-2.5 px-3">
-                      {isMlb ? "Best Moneyline" : "Best Line"}
-                    </th>
-                    <th className="py-2.5 px-3">Best O/U</th>
-                    <th className="py-2.5 px-3">Edge</th>
-                    <th className="py-2.5 px-3">Tag</th>
+                    <th className="py-2.5 px-3 w-[34%]">Game</th>
+                    <th className="py-2.5 px-3 w-[18%]">Best Line</th>
+                    <th className="py-2.5 px-3 w-[18%]">Best O/U</th>
+                    <th className="py-2.5 px-3 w-[15%]">Edge</th>
+                    <th className="py-2.5 px-3 w-[15%]">Tag</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10 text-gray-200">
@@ -944,14 +997,28 @@ export default function EdgeBoard({
                           {r.teamA.name} vs {r.teamB.name}
                         </div>
                         <div className="text-[11px] text-gray-400">
-                          {r.teamA.name} ({r.teamA.keiRank ?? "—"}) •{" "}
+                          Sample · {r.teamA.name} ({r.teamA.keiRank ?? "—"}) ·{" "}
                           {r.teamB.name} ({r.teamB.keiRank ?? "—"})
                         </div>
                       </td>
-                      <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
-                      <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
-                      <td className="py-2.5 px-3 text-gray-500">—</td>
-                      <td className="py-2.5 px-3 text-gray-500">—</td>
+                      <td className="py-2.5 px-3 tabular-nums">
+                        {r.bestLine.top.label}
+                      </td>
+                      <td className="py-2.5 px-3 tabular-nums">
+                        {r.bestOU.top.label}
+                      </td>
+                      <td className="py-2.5 px-3 font-semibold tabular-nums text-kos-gold">
+                        {r.edgeLineNum != null ? r.edgeLineNum.toFixed(1) : "—"}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        {r.tagLine ? (
+                          <span className={tagClassName(r.tagLine, true)}>
+                            {r.tagLine}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">—</span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -1022,7 +1089,9 @@ export default function EdgeBoard({
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <div className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}>
+            <div
+              className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}
+            >
               <div className="text-[10px] uppercase tracking-wide text-gray-500">
                 Market
               </div>
@@ -1044,7 +1113,9 @@ export default function EdgeBoard({
                 </div>
               ) : null}
             </div>
-            <div className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}>
+            <div
+              className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}
+            >
               <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
                 KEI · {keiCode}
               </div>
@@ -1056,8 +1127,7 @@ export default function EdgeBoard({
               </div>
               {r.modelLine || r.modelOU ? (
                 <div className="mt-2 text-[10px] leading-snug text-gray-400">
-                  Model{" "}
-                  {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
+                  Model {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
                   {r.modelOU ? r.modelOU.top.label : "—"}
                 </div>
               ) : null}
