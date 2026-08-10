@@ -135,15 +135,13 @@ export default async function EdgeBoardSportPage({
             <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
               {sportName} Edge Board
             </h1>
-            <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
-              {marketsOnly
-                ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
-                : isNfl
-                  ? slate === "week1"
-                    ? `Week 1 REG research board (${games || "—"} games). ${keiCode} = published fair line; Model vs KEI on Fair Lines when the blend splits. Open = first capture; Current = latest books (auto-refresh). PRE exhibitions filtered out. You make the picks.`
-                    : `Full REG slate (${nflWeekLabel}, ${games || "—"} games). ${keiCode} = published fair line. Open + Current lines. Research board — not a picks feed. PRE filtered out.`
+            {!isNfl ? (
+              <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
+                {marketsOnly
+                  ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
                   : `KEI (handicap) vs market. Open + Current when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
-            </p>
+              </p>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -168,7 +166,7 @@ export default async function EdgeBoardSportPage({
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           {SPORTS.map((s) => (
             <Link
               key={s.key}
@@ -185,7 +183,7 @@ export default async function EdgeBoardSportPage({
         </div>
 
         {sportKey === "nfl" ? (
-          <div className="mt-4 space-y-2">
+          <div className="mt-3 space-y-1.5">
             <div
               className="flex flex-wrap gap-2"
               role="tablist"
@@ -216,11 +214,12 @@ export default async function EdgeBoardSportPage({
                 Full slate{fullCount ? ` (${fullCount})` : ""}
               </Link>
             </div>
-            <p className="text-[11px] text-gray-500 max-w-3xl">
-              Week 1 = all REG Week 1 games on the schedule pack (Melbourne +
-              domestic) · Full slate = multi-week projection board · PRE
-              filtered out · PLAY = KEI vs market · Open ≠ Current when the
-              line has moved
+            <p
+              className="text-[11px] text-gray-500"
+              title="Week 1 = REG Week 1 schedule pack (Melbourne + domestic). Full slate = multi-week projection board. PRE filtered out. Open = first capture; Current = latest books. PLAY = KEI vs market."
+            >
+              {slate === "week1" ? "Week 1" : nflWeekLabel} · REG · Open vs
+              Current · PLAY = KEI vs market
             </p>
           </div>
         ) : null}
