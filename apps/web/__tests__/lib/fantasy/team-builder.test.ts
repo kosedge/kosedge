@@ -94,4 +94,57 @@ describe("team builder", () => {
   it("grades empty roster poorly", () => {
     expect(teamGrade([]).grade).toBe("D");
   });
+
+  it("does not penalize missing K/DST when board has none (preseason)", () => {
+    const skillBoard = [
+      row({ playerId: "qb", position: "QB", medianPoints: 320 }),
+      row({ playerId: "rb1", position: "RB", medianPoints: 280 }),
+      row({ playerId: "rb2", position: "RB", medianPoints: 260 }),
+      row({ playerId: "wr1", position: "WR", medianPoints: 250 }),
+      row({ playerId: "wr2", position: "WR", medianPoints: 240 }),
+      row({ playerId: "te", position: "TE", medianPoints: 200 }),
+      row({ playerId: "flex", position: "WR", medianPoints: 190 }),
+    ];
+    const fullSkillRoster = skillBoard;
+
+    const needs = rosterNeeds(fullSkillRoster, skillBoard);
+    expect(needs.K).toBe(0);
+    expect(needs.DST).toBe(0);
+    expect(needs.QB).toBe(0);
+    expect(needs.RB).toBe(0);
+    expect(needs.WR).toBe(0);
+    expect(needs.TE).toBe(0);
+    expect(needs.FLEX).toBe(0);
+
+    const grade = teamGrade(fullSkillRoster, skillBoard);
+    expect(grade.detail).not.toMatch(/\bK\b/);
+    expect(grade.detail).not.toContain("DST");
+    expect(grade.detail).not.toContain("still need");
+    // Skill starters clear the A threshold without K/DST points.
+    expect(grade.grade).toBe("A");
+
+    // Empty roster still grades poorly, but holes omit K/DST.
+    const emptyNeeds = rosterNeeds([], skillBoard);
+    expect(emptyNeeds.K).toBe(0);
+    expect(emptyNeeds.DST).toBe(0);
+    expect(emptyNeeds.QB).toBe(1);
+    const emptyGrade = teamGrade([], skillBoard);
+    expect(emptyGrade.grade).toBe("D");
+    expect(emptyGrade.detail).not.toMatch(/\bK\b/);
+    expect(emptyGrade.detail).not.toContain("DST");
+  });
+
+  it("still requires K/DST when board includes them", () => {
+    const board = [
+      row({ playerId: "qb", position: "QB", medianPoints: 320 }),
+      row({ playerId: "k", position: "K", medianPoints: 120 }),
+      row({ playerId: "dst", position: "DST", medianPoints: 110 }),
+    ];
+    const needs = rosterNeeds(
+      [row({ playerId: "qb", position: "QB", medianPoints: 320 })],
+      board,
+    );
+    expect(needs.K).toBe(1);
+    expect(needs.DST).toBe(1);
+  });
 });

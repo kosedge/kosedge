@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { chooseCpuPlayer, scoreCpuCandidate } from "@/lib/fantasy/mock-cpu";
-import { MOCK_CPU_WEIGHTS } from "@/lib/fantasy/mock-types";
+import {
+  chooseCpuPlayer,
+  isCpuReachHardBlocked,
+  scoreCpuCandidate,
+} from "@/lib/fantasy/mock-cpu";
+import { MOCK_CPU_WEIGHTS, type MockCpuPersona } from "@/lib/fantasy/mock-types";
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
 function row(
@@ -162,5 +166,117 @@ describe("mock CPU", () => {
       teamIndex: 3,
     });
     expect(choice?.playerId).toBe("wr");
+  });
+
+  it("hard-blocks lottery ADP reaches in Round 1", () => {
+    expect(
+      isCpuReachHardBlocked({
+        marketAdp: 269,
+        overall: 3,
+        teamCount: 12,
+        position: "TE",
+        round: 1,
+      }),
+    ).toBe(true);
+    expect(
+      isCpuReachHardBlocked({
+        marketAdp: 4,
+        overall: 3,
+        teamCount: 12,
+        position: "RB",
+        round: 1,
+      }),
+    ).toBe(false);
+  });
+
+  it("never selects Gesicki-class late-ADP fringe TE at 1.03 under stress", () => {
+    const chalk = [
+      row({
+        playerId: "rb1",
+        position: "RB",
+        rankOverall: 1,
+        adp: 1.2,
+        valueDelta: 0,
+        valueOverReplacement: 140,
+        medianPoints: 280,
+      }),
+      row({
+        playerId: "wr1",
+        position: "WR",
+        rankOverall: 2,
+        adp: 2.1,
+        valueDelta: 0,
+        valueOverReplacement: 130,
+        medianPoints: 270,
+      }),
+      row({
+        playerId: "rb2",
+        position: "RB",
+        rankOverall: 3,
+        adp: 3.4,
+        valueDelta: 0,
+        valueOverReplacement: 120,
+        medianPoints: 260,
+      }),
+      row({
+        playerId: "wr2",
+        position: "WR",
+        rankOverall: 4,
+        adp: 4.5,
+        valueDelta: 0,
+        valueOverReplacement: 115,
+        medianPoints: 250,
+      }),
+      row({
+        playerId: "rb3",
+        position: "RB",
+        rankOverall: 5,
+        adp: 5.8,
+        valueDelta: 0,
+        valueOverReplacement: 110,
+        medianPoints: 245,
+      }),
+    ];
+    // Fringe TE in top-80 model pool with absurd ADP "value" (pre-fix failure).
+    const gesicki = row({
+      playerId: "gesicki",
+      position: "TE",
+      rankOverall: 48,
+      adp: 269,
+      valueDelta: 221,
+      valueOverReplacement: 35,
+      medianPoints: 145,
+    });
+    const depth = Array.from({ length: 30 }, (_, i) =>
+      row({
+        playerId: `d${i}`,
+        position: i % 2 === 0 ? "RB" : "WR",
+        rankOverall: 10 + i,
+        adp: 10 + i,
+        valueDelta: 0,
+        valueOverReplacement: 80 - i,
+        medianPoints: 200 - i,
+      }),
+    );
+    const available = [...chalk, gesicki, ...depth];
+    const personas = Object.keys(MOCK_CPU_WEIGHTS) as MockCpuPersona[];
+
+    for (const persona of personas) {
+      const choice = chooseCpuPlayer({
+        available,
+        roster: [],
+        board: available,
+        overall: 3, // pick 1.03
+        teamCount: 12,
+        persona,
+        weights: MOCK_CPU_WEIGHTS[persona],
+        teamIndex: 2,
+      });
+      expect(choice?.playerId).not.toBe("gesicki");
+      expect(choice).not.toBeNull();
+      expect(choice!.adp).not.toBeNull();
+      expect(choice!.adp!).toBeLessThan(40);
+      expect(["RB", "WR"]).toContain(choice!.position.toUpperCase());
+    }
   });
 });

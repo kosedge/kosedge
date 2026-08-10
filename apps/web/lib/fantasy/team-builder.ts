@@ -1,3 +1,4 @@
+import { boardHasPosition } from "@/lib/fantasy/mock-roster";
 import {
   bestAvailableByNeedAware,
   bestAvailableByValueAware,
@@ -35,7 +36,15 @@ export type BuiltRoster = {
   byId: Map<string, FantasyDeskRow>;
 };
 
-export function rosterNeeds(rows: FantasyDeskRow[]): Record<string, number> {
+/**
+ * Roster holes for builder grade / suggestions.
+ * When `board` is provided and omits K/DST (preseason path), those slots are
+ * not required — scoring matches the “K/DST unavailable” UI copy.
+ */
+export function rosterNeeds(
+  rows: FantasyDeskRow[],
+  board?: FantasyDeskRow[],
+): Record<string, number> {
   const counts: Record<string, number> = {
     QB: 0,
     RB: 0,
@@ -49,13 +58,22 @@ export function rosterNeeds(rows: FantasyDeskRow[]): Record<string, number> {
     if (pos in counts) counts[pos] = (counts[pos] ?? 0) + 1;
   }
 
+  const wantK =
+    board == null || boardHasPosition(board, "K")
+      ? DEFAULT_ROSTER_NEEDS.K!
+      : 0;
+  const wantDst =
+    board == null || boardHasPosition(board, "DST")
+      ? DEFAULT_ROSTER_NEEDS.DST!
+      : 0;
+
   const needs: Record<string, number> = {};
   needs.QB = Math.max(0, DEFAULT_ROSTER_NEEDS.QB! - (counts.QB ?? 0));
   needs.RB = Math.max(0, DEFAULT_ROSTER_NEEDS.RB! - (counts.RB ?? 0));
   needs.WR = Math.max(0, DEFAULT_ROSTER_NEEDS.WR! - (counts.WR ?? 0));
   needs.TE = Math.max(0, DEFAULT_ROSTER_NEEDS.TE! - (counts.TE ?? 0));
-  needs.K = Math.max(0, DEFAULT_ROSTER_NEEDS.K! - (counts.K ?? 0));
-  needs.DST = Math.max(0, DEFAULT_ROSTER_NEEDS.DST! - (counts.DST ?? 0));
+  needs.K = Math.max(0, wantK - (counts.K ?? 0));
+  needs.DST = Math.max(0, wantDst - (counts.DST ?? 0));
 
   const flexFilled = Math.max(
     0,
@@ -99,13 +117,16 @@ export function projectedStarterPoints(rows: FantasyDeskRow[]): number {
   return starters.reduce((sum, row) => sum + row.medianPoints, 0);
 }
 
-export function teamGrade(rows: FantasyDeskRow[]): {
+export function teamGrade(
+  rows: FantasyDeskRow[],
+  board?: FantasyDeskRow[],
+): {
   grade: string;
   detail: string;
   starterPoints: number;
 } {
   const starterPoints = projectedStarterPoints(rows);
-  const needs = rosterNeeds(rows);
+  const needs = rosterNeeds(rows, board);
   const holes = Object.entries(needs)
     .filter(([, n]) => n > 0)
     .map(([pos]) => pos);
@@ -137,7 +158,12 @@ export function bestAvailableByValue(
     ctx?.roster ?? board.filter((row) => rosterIds.has(row.playerId));
   return bestAvailableByValueAware(
     available,
-    { pickOverall: ctx?.pickOverall, roster, available },
+    {
+      pickOverall: ctx?.pickOverall,
+      roster,
+      available,
+      needs: rosterNeeds(roster, board),
+    },
     limit,
   );
 }
@@ -152,7 +178,12 @@ export function bestAvailableByNeed(
   const available = board.filter((row) => !rosterIds.has(row.playerId));
   return bestAvailableByNeedAware(
     available,
-    { pickOverall: ctx?.pickOverall, roster, available },
+    {
+      pickOverall: ctx?.pickOverall,
+      roster,
+      available,
+      needs: rosterNeeds(roster, board),
+    },
     limit,
   );
 }

@@ -170,4 +170,43 @@ describe("mock R1 CPU after QB hotfix", () => {
     const maxQb = Math.max(...byTeam.values(), 0);
     expect(maxQb).toBeLessThanOrEqual(3);
   });
+
+  it("never lets ADP-269 fringe TE steal a top-5 overall pick", () => {
+    const fringeTe = row({
+      playerId: "gesicki",
+      playerName: "Mike Gesicki",
+      position: "TE",
+      rankOverall: 40,
+      adp: 269,
+      valueDelta: 229,
+      valueOverReplacement: 30,
+      medianPoints: 140,
+    });
+    const board = [fringeTe, ...stressBoard()]
+      .filter(
+        (r, i, arr) => arr.findIndex((x) => x.playerId === r.playerId) === i,
+      )
+      .sort((a, b) => a.rankOverall - b.rankOverall);
+
+    let state = createMockDraftState({
+      config: defaultMockConfig(12, "half_ppr", 12),
+      board,
+    });
+    state = autoCompleteDraft(board, state);
+
+    const top5 = state.picks.filter((p) => p.overall <= 5);
+    expect(top5).toHaveLength(5);
+    expect(top5.every((p) => p.playerId !== "gesicki")).toBe(true);
+    expect(
+      top5.every((p) => {
+        const adp = board.find((r) => r.playerId === p.playerId)?.adp;
+        return adp == null || adp < 40;
+      }),
+    ).toBe(true);
+
+    const gesickiPick = state.picks.find((p) => p.playerId === "gesicki");
+    if (gesickiPick) {
+      expect(gesickiPick.round).toBeGreaterThan(1);
+    }
+  });
 });
