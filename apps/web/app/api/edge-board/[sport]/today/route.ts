@@ -71,8 +71,14 @@ export async function GET(
   const url = new URL(req.url);
   const skipCache = url.searchParams.get("refresh") === "1";
   const slateParam = url.searchParams.get("slate");
-  const slate: "live" | "all" =
-    sport === "nfl" && slateParam === "all" ? "all" : "live";
+  // NFL: week1 (default) | full. Legacy aliases: live → week1, all → full.
+  const slateRaw = String(slateParam ?? "")
+    .trim()
+    .toLowerCase();
+  const slate: "week1" | "full" =
+    sport === "nfl" && (slateRaw === "full" || slateRaw === "all")
+      ? "full"
+      : "week1";
   const cacheBucket = `${sport}:${slate}`;
   const cached = sportCache.get(cacheBucket);
   if (!skipCache && cached && now - cached.ts < ODDS_CACHE_TTL_MS) {

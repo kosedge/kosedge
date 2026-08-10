@@ -349,18 +349,45 @@ export function filterNflProjectionBackedRows(
   return rows.filter((row) => row.game != null && keiGames.has(row.game));
 }
 
+function rowSeasonType(row: EdgeBoardRow): string {
+  return String(
+    (row as EdgeBoardRow & { seasonType?: string }).seasonType ?? "",
+  )
+    .trim()
+    .toUpperCase();
+}
+
 /**
- * Live tab = current REG week. If that week is missing from the pull window
+ * Week 1 / single-week tab: strict week match, REG only.
+ * Empty stays empty — never fall through to another week or the full slate.
+ * PRE exhibitions are excluded even if they share a week number.
+ */
+export function filterNflStrictWeekRows(
+  rows: EdgeBoardRow[],
+  week: number,
+): EdgeBoardRow[] {
+  const target = Number.isFinite(week) ? Math.max(1, Math.trunc(week)) : 1;
+  return rows.filter((row) => {
+    if (rowWeek(row) !== target) return false;
+    const st = rowSeasonType(row);
+    if (st === "PRE" || st === "POST") return false;
+    return true;
+  });
+}
+
+/**
+ * Live / current-week helper. If that week is missing from the pull window
  * (early season / clock skew), show the nearest upcoming week — never dump
  * the full multi-week board as a silent fallback.
+ * Prefer filterNflStrictWeekRows for the launch Week 1 tab.
  */
 export function filterNflCurrentWeekRows(
   rows: EdgeBoardRow[],
   currentWeek: number,
 ): EdgeBoardRow[] {
   const week = Number.isFinite(currentWeek) ? Math.max(1, currentWeek) : 1;
-  const filtered = rows.filter((row) => rowWeek(row) === week);
-  if (filtered.length > 0) return filtered;
+  const strict = filterNflStrictWeekRows(rows, week);
+  if (strict.length > 0) return strict;
 
   const weeks = [
     ...new Set(
@@ -372,11 +399,14 @@ export function filterNflCurrentWeekRows(
   if (weeks.length === 0) {
     // Week missing from payload (schema / join gap). Keep rows so the assembler
     // can stamp currentWeek for season gates — do not silently empty the board.
-    return rows;
+    return rows.filter((row) => {
+      const st = rowSeasonType(row);
+      return st !== "PRE" && st !== "POST";
+    });
   }
 
   const next = weeks.find((w) => w >= week) ?? weeks[weeks.length - 1]!;
-  return rows.filter((row) => rowWeek(row) === next);
+  return filterNflStrictWeekRows(rows, next);
 }
 
 /** Full season board = every game we currently have sportsbook odds on. */

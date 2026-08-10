@@ -2,9 +2,13 @@ import Link from "next/link";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import SportProHeader from "@/components/pro/SportProHeader";
 import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
-import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import {
+  loadAssembledEdgeBoardRows,
+  normalizeNflEdgeBoardSlate,
+} from "@/lib/build-edge-board-rows";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
+import { filterNflStrictWeekRows } from "@/lib/nfl-edge-board-from-fair-lines";
 import {
   resolveSportKey,
   sportDisplayLabel,
@@ -16,7 +20,7 @@ export const dynamic = "force-dynamic";
 
 async function getRows(
   sport: string,
-  slate: "live" | "all",
+  slate: "week1" | "full",
 ): Promise<EdgeBoardRow[]> {
   // Direct assemble for every sport — avoids serverless self-HTTP + empty Odds pulls.
   try {
@@ -24,6 +28,10 @@ async function getRows(
   } catch {
     return [];
   }
+}
+
+function gameCount(rows: EdgeBoardRow[]): number {
+  return new Set(rows.map((r) => r.game).filter(Boolean)).size;
 }
 
 export default async function EdgeBoardSportPage({
@@ -51,11 +59,24 @@ export default async function EdgeBoardSportPage({
         >)
       : ((searchParams as Record<string, string | string[] | undefined>) ?? {});
   const slateRaw = Array.isArray(sp.slate) ? sp.slate[0] : sp.slate;
-  const slate: "live" | "all" =
-    sportKey === "nfl" && slateRaw === "all" ? "all" : "live";
+  const slate =
+    sportKey === "nfl" ? normalizeNflEdgeBoardSlate(slateRaw) : "week1";
 
-  const rows = await getRows(sportKey, slate);
-  const gameCount = new Set(rows.map((r) => r.game).filter(Boolean)).size;
+  // NFL: one full assemble, then derive Week 1 (counts stay cheap; no double pull).
+  let rows: EdgeBoardRow[] = [];
+  let week1Count = 0;
+  let fullCount = 0;
+  if (sportKey === "nfl") {
+    const fullRows = await getRows("nfl", "full");
+    const week1Rows = filterNflStrictWeekRows(fullRows, 1);
+    week1Count = gameCount(week1Rows);
+    fullCount = gameCount(fullRows);
+    rows = slate === "full" ? fullRows : week1Rows;
+  } else {
+    rows = await getRows(sportKey, "week1");
+  }
+
+  const games = gameCount(rows);
   const nflWeeks = [
     ...new Set(
       rows
@@ -112,9 +133,9 @@ export default async function EdgeBoardSportPage({
               {marketsOnly
                 ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
                 : isNfl
-                  ? slate === "live"
-                    ? `${nflWeekLabel} research board (${gameCount || "—"} games). ${keiCode} = published fair line; Model vs KEI on Fair Lines when the blend splits. Open/Best when books post. PRE exhibitions filtered out. You make the picks.`
-                    : `Forward REG slate (${nflWeekLabel}, ${gameCount || "—"} games with books). ${keiCode} = published fair line. Research board — not a picks feed. PRE filtered out.`
+                  ? slate === "week1"
+                    ? `Week 1 REG research board (${games || "—"} games). ${keiCode} = published fair line; Model vs KEI on Fair Lines when the blend splits. Open/Best when books post. PRE exhibitions filtered out. You make the picks.`
+                    : `Full REG slate (${nflWeekLabel}, ${games || "—"} games). ${keiCode} = published fair line. Research board — not a picks feed. PRE filtered out.`
                   : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
             </p>
           </div>
@@ -159,32 +180,40 @@ export default async function EdgeBoardSportPage({
 
         {sportKey === "nfl" ? (
           <div className="mt-4 space-y-2">
-            <div className="flex flex-wrap gap-2">
+            <div
+              className="flex flex-wrap gap-2"
+              role="tablist"
+              aria-label="NFL Edge Board slate"
+            >
               <Link
-                href="/edge-board/nfl"
-                className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                  slate === "live"
+                href="/edge-board/nfl?slate=week1"
+                role="tab"
+                aria-selected={slate === "week1"}
+                className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                  slate === "week1"
                     ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
                     : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
                 }`}
               >
-                Current week
+                Week 1{week1Count ? ` (${week1Count})` : ""}
               </Link>
               <Link
-                href="/edge-board/nfl?slate=all"
-                className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                  slate === "all"
+                href="/edge-board/nfl?slate=full"
+                role="tab"
+                aria-selected={slate === "full"}
+                className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                  slate === "full"
                     ? "bg-kos-gold/20 border border-kos-gold/50 text-kos-gold"
                     : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
                 }`}
               >
-                Odds slate
+                Full slate{fullCount ? ` (${fullCount})` : ""}
               </Link>
             </div>
             <p className="text-[11px] text-gray-500 max-w-3xl">
-              REG fair-lines only · Week 1 live on Current week · Odds slate =
-              forward weeks with books · PRE filtered out · totals sides-only
-              (no Total PLAY) · empty Open/Best means books have not posted
+              Week 1 = REG Week 1 only (Melbourne + domestic) · Full slate =
+              multi-week projection board · PRE filtered out · PLAY = KEI vs
+              market · empty Week 1 stays empty
             </p>
           </div>
         ) : null}
@@ -193,19 +222,26 @@ export default async function EdgeBoardSportPage({
           variant="full"
           rows={rows}
           sportKey={sportKey}
-          slateWeek={nflWeeks[0] ?? null}
+          slateWeek={slate === "week1" ? 1 : nflWeeks[0] ?? null}
+          emptyHint={
+            isNfl && slate === "week1"
+              ? "No Week 1 REG fair-lines in the pull window yet. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board, or wait for Week 1 lines."
+              : undefined
+          }
         />
 
         <p className="mt-6 text-xs text-gray-500">
           {rows.length
-            ? `${gameCount} games${
+            ? `${games} games${
                 sportKey === "nfl"
-                  ? slate === "live"
-                    ? " · current week"
-                    : " · with sportsbook odds"
+                  ? slate === "week1"
+                    ? " · Week 1 REG"
+                    : " · full slate"
                   : ""
               }`
-            : "No slate rows yet — waiting on fair-lines / Odds (or offseason empty). Boards never invent book prices."}
+            : isNfl && slate === "week1"
+              ? "No Week 1 REG games yet — board stays empty (no silent full-slate fallthrough)."
+              : "No slate rows yet — waiting on fair-lines / Odds (or offseason empty). Boards never invent book prices."}
         </p>
       </main>
     </div>

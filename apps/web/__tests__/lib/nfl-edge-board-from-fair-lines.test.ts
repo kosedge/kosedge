@@ -4,6 +4,7 @@ import {
   filterNflCurrentWeekRows,
   filterNflOddsPostedRows,
   filterNflProjectionBackedRows,
+  filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
@@ -295,6 +296,59 @@ describe("nfl-edge-board-from-fair-lines", () => {
     const games = new Set(filtered.map((r) => r.game));
     expect(games.size).toBe(1);
     expect(games.has("New England Patriots @ Seattle Seahawks")).toBe(true);
+    expect(games.has("Green Bay Packers @ Minnesota Vikings")).toBe(false);
+  });
+
+  it("strict Week 1 filter stays empty — no nearest-week fallthrough", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({ week: 2, gameId: "w2" }),
+      line({
+        week: 3,
+        gameId: "w3",
+        homeTeam: "Minnesota Vikings",
+        awayTeam: "Green Bay Packers",
+        homeAbbr: "MIN",
+        awayAbbr: "GB",
+      }),
+      line({
+        week: 1,
+        gameId: "pre1",
+        seasonType: "PRE",
+        homeTeam: "Buffalo Bills",
+        awayTeam: "Houston Texans",
+        homeAbbr: "BUF",
+        awayAbbr: "HOU",
+      }),
+    ]);
+    const week1 = filterNflStrictWeekRows(rows, 1);
+    expect(week1).toHaveLength(0);
+  });
+
+  it("strict Week 1 keeps REG week-1 games and drops PRE", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({ week: 1, gameId: "reg1" }),
+      line({
+        week: 1,
+        gameId: "pre1",
+        seasonType: "PRE",
+        homeTeam: "Buffalo Bills",
+        awayTeam: "Houston Texans",
+        homeAbbr: "BUF",
+        awayAbbr: "HOU",
+      }),
+      line({
+        week: 2,
+        gameId: "w2",
+        homeTeam: "Minnesota Vikings",
+        awayTeam: "Green Bay Packers",
+        homeAbbr: "MIN",
+        awayAbbr: "GB",
+      }),
+    ]);
+    const week1 = filterNflStrictWeekRows(rows, 1);
+    const games = new Set(week1.map((r) => r.game));
+    expect(games.has("New England Patriots @ Seattle Seahawks")).toBe(true);
+    expect(games.has("Houston Texans @ Buffalo Bills")).toBe(false);
     expect(games.has("Green Bay Packers @ Minnesota Vikings")).toBe(false);
   });
 
