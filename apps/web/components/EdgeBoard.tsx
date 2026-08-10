@@ -1,6 +1,12 @@
 import * as React from "react";
 import SportsbookBadge from "@/components/SportsbookBadge";
+import StatDropPanel from "@/components/edge-board/StatDropPanel";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
+import {
+  buildMatchupOverview,
+  type MatchupOverviewContext,
+} from "@/lib/edge-board-matchup-overview";
+import { buildStatDrop, type StatDrop } from "@/lib/edge-board-stat-drop";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
@@ -52,6 +58,19 @@ export type FlatEdgeBoardRow = {
   isBestBet?: boolean;
   keyNumberCross?: boolean;
   weekRegime?: string;
+  /** REG week when known (NFL fair-lines). */
+  week?: number;
+  /** Neutral / international site flag from schedule context. */
+  neutralSite?: boolean;
+  venueCity?: string;
+  venueName?: string;
+  hfaPoints?: number;
+  restDaysHome?: number;
+  restDaysAway?: number;
+  awayWinProb?: number;
+  awayUnitTag?: string;
+  homeUnitTag?: string;
+  gameId?: string;
 };
 
 export type EdgeBoardRow = FlatEdgeBoardRow;
@@ -117,6 +136,8 @@ export type LegacyEdgeBoardRow = {
   isBestBetLine?: boolean;
   isBestBetOU?: boolean;
   overview?: string;
+  /** Uniform betting Stat Drop — always populated (em dash when unknown). */
+  statDrop?: StatDrop;
 };
 
 /** Empty market / KEI / edge cell — never show “Coming soon” on live boards. */
@@ -159,7 +180,23 @@ const sampleRows: LegacyEdgeBoardRow[] = [
       top: { label: "o149.5", juice: "-110" },
       bottom: { label: "u152.5", juice: "-112" },
     },
-    overview: generateGameOverview("Duke", "UNC"),
+    overview: generateGameOverview("Duke", "UNC", {
+      sportKey: "ncaam",
+      gameId: "sample-1",
+    }),
+    statDrop: buildStatDrop({
+      sportKey: "ncaam",
+      gameId: "sample-1",
+      awayTeam: "Duke",
+      homeTeam: "UNC",
+      keiSpreadHome: -5.5,
+      marketSpreadAway: 6.5,
+      marketTotal: 149.5,
+      keiTotal: 150.5,
+      homeWinProb: 0.68,
+      awayWinProb: 0.32,
+      hfaPoints: 3.0,
+    }),
     edgeLineNum: 1.5,
     edgeOUNum: 0.4,
     edgeLineFavor: "Duke",
@@ -239,7 +276,10 @@ function ActionDecisionCell({
       ) : publishTag ? (
         <span className={tagClassName(publishTag, compact)}>{publishTag}</span>
       ) : null}
-      {play && actionLabel && actionLabel !== "PASS" && actionLabel !== "STAY AWAY" ? (
+      {play &&
+      actionLabel &&
+      actionLabel !== "PASS" &&
+      actionLabel !== "STAY AWAY" ? (
         <div
           className={`mt-1 text-[11px] font-bold truncate ${
             actionLabel === "PLAY" || actionLabel === "BEST VALUE"
@@ -297,7 +337,9 @@ function ActionDecisionCell({
         </div>
       ) : null}
       {publishTag && actionLabel && publishTag !== actionLabel ? (
-        <div className="mt-1 text-[9px] text-gray-600">KEI tag {publishTag}</div>
+        <div className="mt-1 text-[9px] text-gray-600">
+          KEI tag {publishTag}
+        </div>
       ) : null}
     </div>
   );
@@ -520,6 +562,62 @@ function parseAmericanLabel(s: string | undefined): number | null {
   return Number.isFinite(n) && n !== 0 ? n : null;
 }
 
+function parseSignedPoint(s: string | undefined): number | null {
+  if (s == null || s === "" || s === "—" || s === "Coming soon") return null;
+  const n = parseFloat(String(s).replace(/[^+\-\d.]/g, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+function parseTotalPoint(s: string | undefined): number | null {
+  if (s == null || s === "" || s === "—" || s === "Coming soon") return null;
+  const n = parseFloat(String(s).replace(/[^\d.]/g, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+function buildCardMatchupContext(args: {
+  sportKey: string;
+  gameId: string;
+  away: string;
+  home: string;
+  lineRow?: FlatEdgeBoardRow;
+  totalRow?: FlatEdgeBoardRow;
+  bestLineAway?: string;
+  keiLineHome?: string;
+  bestTotal?: string;
+  keiTotal?: string;
+  edgeLineNum?: number;
+  edgeOUNum?: number;
+}): MatchupOverviewContext {
+  const src = args.lineRow ?? args.totalRow;
+  return {
+    sportKey: args.sportKey,
+    gameId: src?.gameId ?? args.gameId,
+    awayTeam: args.away,
+    homeTeam: args.home,
+    week: src?.week ?? null,
+    seasonType: src?.seasonType ?? null,
+    weekRegime: src?.weekRegime ?? null,
+    neutralSite: src?.neutralSite ?? null,
+    venueCity: src?.venueCity ?? null,
+    venueName: src?.venueName ?? null,
+    marketSpreadAway: parseSignedPoint(args.bestLineAway),
+    keiSpreadHome: parseSignedPoint(args.keiLineHome),
+    marketTotal: parseTotalPoint(args.bestTotal),
+    keiTotal: parseTotalPoint(args.keiTotal),
+    edgeLineNum: args.edgeLineNum ?? null,
+    edgeOUNum: args.edgeOUNum ?? null,
+    homeWinProb: src?.homeWinProb ?? null,
+    awayWinProb: src?.awayWinProb ?? null,
+    restDaysHome: src?.restDaysHome ?? null,
+    restDaysAway: src?.restDaysAway ?? null,
+    hfaPoints: src?.hfaPoints ?? null,
+    keyNumberCross: src?.keyNumberCross ?? null,
+    modelConfidenceBand: src?.modelConfidenceBand ?? null,
+    awayUnitTag: src?.awayUnitTag ?? null,
+    homeUnitTag: src?.homeUnitTag ?? null,
+  };
+}
+
 export function flatRowsToLegacy(
   flat: FlatEdgeBoardRow[],
   sportKey = "ncaam",
@@ -719,8 +817,7 @@ export function flatRowsToLegacy(
         signedLineEdge = signedProb;
         // Display / tag thresholds use percentage points (MLB: ≥1.5 LEAN / ≥3.0 PLAY).
         edgeLineNum = Math.abs(signedProb) * 100;
-        leanHome =
-          signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
+        leanHome = signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
       }
     } else {
       // Compare home-side market vs home-side KEI.
@@ -808,8 +905,7 @@ export function flatRowsToLegacy(
       teamA: {
         name: away,
         site: "Away",
-        keiNumber:
-          keiLine.top.label !== "—" ? keiLine.top.label : undefined,
+        keiNumber: keiLine.top.label !== "—" ? keiLine.top.label : undefined,
       },
       teamB: {
         name: home,
@@ -852,7 +948,27 @@ export function flatRowsToLegacy(
       playToOU: totalRow?.playToNotes,
       isBestBetLine: lineRow?.isBestBet,
       isBestBetOU: totalRow?.isBestBet,
-      overview: generateGameOverview(away, home),
+      ...(() => {
+        const matchupCtx = buildCardMatchupContext({
+          sportKey,
+          gameId: String(lineRow?.id ?? total?.id ?? gameKey),
+          away,
+          home,
+          lineRow: lineRow ?? undefined,
+          totalRow: totalRow,
+          bestLineAway: bestLine.top.label,
+          keiLineHome:
+            keiLine.bottom.label !== "—" ? keiLine.bottom.label : undefined,
+          bestTotal: bestOU.top.label,
+          keiTotal: keiOU.top.label !== "—" ? keiOU.top.label : undefined,
+          edgeLineNum,
+          edgeOUNum,
+        });
+        return {
+          overview: buildMatchupOverview(matchupCtx),
+          statDrop: buildStatDrop(matchupCtx),
+        };
+      })(),
     });
   }
   return result;
@@ -996,7 +1112,9 @@ export default function EdgeBoard({
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <div className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}>
+            <div
+              className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}
+            >
               <div className="text-[10px] uppercase tracking-wide text-gray-500">
                 Market
               </div>
@@ -1018,7 +1136,9 @@ export default function EdgeBoard({
                 </div>
               ) : null}
             </div>
-            <div className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}>
+            <div
+              className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}
+            >
               <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
                 KEI · {keiCode}
               </div>
@@ -1030,8 +1150,7 @@ export default function EdgeBoard({
               </div>
               {r.modelLine || r.modelOU ? (
                 <div className="mt-2 text-[10px] leading-snug text-gray-400">
-                  Model{" "}
-                  {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
+                  Model {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
                   {r.modelOU ? r.modelOU.top.label : "—"}
                 </div>
               ) : null}
@@ -1094,6 +1213,26 @@ export default function EdgeBoard({
             </summary>
             <div className="mt-2 rounded-lg border border-white/10 bg-black/60 p-3 text-[11px] leading-relaxed whitespace-pre-wrap text-gray-300">
               {r.overview ?? "No overview available."}
+            </div>
+          </details>
+          <details className="mt-2" open>
+            <summary className="min-h-11 cursor-pointer list-none text-xs font-medium text-kos-gold hover:underline [&::-webkit-details-marker]:hidden">
+              Stat Drop ▾
+            </summary>
+            <div className="mt-2">
+              {r.statDrop ? (
+                <StatDropPanel drop={r.statDrop} compact />
+              ) : (
+                <StatDropPanel
+                  drop={buildStatDrop({
+                    sportKey,
+                    gameId: r.id,
+                    awayTeam: r.teamA.name,
+                    homeTeam: r.teamB.name,
+                  })}
+                  compact
+                />
+              )}
             </div>
           </details>
         </article>
@@ -1250,22 +1389,37 @@ export default function EdgeBoard({
                       <summary className="cursor-pointer text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
                         Overview ▾
                       </summary>
-                      <div className="absolute left-0 top-full mt-1 z-50 w-[340px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-4 shadow-xl text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+                      <div className="absolute left-0 top-full mt-1 z-50 w-[360px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-4 shadow-xl text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
                         {r.overview ?? "No overview available."}
                       </div>
                     </details>
                   </td>
-                  <td className="py-3.5 px-1 align-top relative pb-8 overflow-hidden">
+                  <td className="py-3.5 px-1 align-top relative pb-8 overflow-visible">
                     <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
                       {r.time ?? "—"}
                     </div>
-                    <button
-                      className="absolute bottom-2.5 left-0 right-0 mx-auto text-center text-[14px] text-kos-gold hover:text-kos-gold transition whitespace-nowrap"
-                      type="button"
-                      title="Matchup stats panel"
-                    >
-                      Stats ▾
-                    </button>
+                    <details className="absolute bottom-2.5 left-0 right-0 group/stats">
+                      <summary
+                        className="cursor-pointer text-center text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden"
+                        title="Stat Drop"
+                      >
+                        Stat Drop ▾
+                      </summary>
+                      <div className="absolute left-0 top-full mt-1 z-50 w-[320px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-3 shadow-xl">
+                        <StatDropPanel
+                          drop={
+                            r.statDrop ??
+                            buildStatDrop({
+                              sportKey,
+                              gameId: r.id,
+                              awayTeam: r.teamA.name,
+                              homeTeam: r.teamB.name,
+                            })
+                          }
+                          compact
+                        />
+                      </div>
+                    </details>
                   </td>
                   <td className={`${TD_BASE} text-gray-400`}>
                     <PriceCell

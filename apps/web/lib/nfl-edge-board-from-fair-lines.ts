@@ -10,6 +10,7 @@ import {
   decideGame,
   decisionResultToApi,
 } from "@/lib/nfl-decision-engine";
+import { structuralUnitTag } from "@/lib/edge-board-unit-tags";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
 const ET = "America/New_York";
@@ -155,6 +156,29 @@ export function fairLinesToEdgeBoardRows(
     const seasonType = line.seasonType ?? undefined;
     const publishTagSpread = line.publishTagSpread ?? undefined;
     const publishTagTotal = line.publishTagTotal ?? undefined;
+    const awayUnitTag = structuralUnitTag({
+      offenseIndex: line.offenseIndexAway,
+      defenseIndex: line.defenseIndexAway,
+    });
+    const homeUnitTag = structuralUnitTag({
+      offenseIndex: line.offenseIndexHome,
+      defenseIndex: line.defenseIndexHome,
+    });
+    const matchupContext = {
+      week,
+      seasonType,
+      neutralSite: line.neutralSite ?? undefined,
+      venueCity: line.venueCity ?? undefined,
+      venueName: line.venueName ?? undefined,
+      hfaPoints: line.hfaPoints ?? undefined,
+      restDaysHome: line.restDaysHome ?? undefined,
+      restDaysAway: line.restDaysAway ?? undefined,
+      homeWinProb: line.homeWinProb ?? undefined,
+      awayWinProb: line.awayWinProb ?? undefined,
+      awayUnitTag: awayUnitTag ?? undefined,
+      homeUnitTag: homeUnitTag ?? undefined,
+      gameId: idBase,
+    };
 
     // Action layer: prefer server decision (Model fair vs market); else compute locally.
     const decisionBundle =
@@ -244,6 +268,7 @@ export function fairLinesToEdgeBoardRows(
       isBestBet: spreadDecision?.isBestBet,
       keyNumberCross: spreadDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
+      ...matchupContext,
     } as EdgeBoardRow);
 
     rows.push({
@@ -267,9 +292,7 @@ export function fairLinesToEdgeBoardRows(
       seasonType,
       publishTag: publishTagTotal,
       actionLabel: actionLabelTotal ?? undefined,
-      decision: totalDecision
-        ? decisionResultToApi(totalDecision)
-        : undefined,
+      decision: totalDecision ? decisionResultToApi(totalDecision) : undefined,
       edgeMagnitude: totalDecision?.edgeMagnitude,
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
@@ -283,6 +306,7 @@ export function fairLinesToEdgeBoardRows(
       isBestBet: totalDecision?.isBestBet,
       keyNumberCross: totalDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
+      ...matchupContext,
     } as EdgeBoardRow);
   }
 
@@ -337,7 +361,9 @@ export function filterNflCurrentWeekRows(
     ...new Set(
       rows
         .map(rowWeek)
-        .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
+        .filter(
+          (w): w is number => typeof w === "number" && Number.isFinite(w),
+        ),
     ),
   ].sort((a, b) => a - b);
   if (weeks.length === 0) return [];

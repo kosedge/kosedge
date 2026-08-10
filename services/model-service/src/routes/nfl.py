@@ -3185,7 +3185,14 @@ def nfl_fair_lines(
                   p.model_version,
                   p.simulation_count,
                   p.created_at AS projection_created_at,
-                  p.projection
+                  p.projection,
+                  c.rest_days_home,
+                  c.rest_days_away,
+                  c.offense_index_home,
+                  c.offense_index_away,
+                  c.defense_index_home,
+                  c.defense_index_away,
+                  c.context AS game_context
                 FROM nfl_dp_schedules sch
                 JOIN leagues l ON l.code = 'nfl'
                 JOIN seasons s ON s.league_id = l.id AND s.season_year = sch.season
@@ -3195,6 +3202,7 @@ def nfl_fair_lines(
                   ON g.season_id = s.id
                  AND g.home_team_id = home.id
                  AND g.away_team_id = away.id
+                LEFT JOIN nfl_game_context c ON c.game_id = g.id
                 JOIN LATERAL (
                   SELECT *
                   FROM nfl_market_projections np
@@ -3363,6 +3371,25 @@ def nfl_fair_lines(
         home_display = NFL_ABBR_TO_FULL_NAME.get(home_abbr, str(mapped.get("home_team") or home_abbr))
         away_display = NFL_ABBR_TO_FULL_NAME.get(away_abbr, str(mapped.get("away_team") or away_abbr))
 
+        # Edge Board Stat Drop / overview context (schedule + nfl_game_context).
+        game_context_raw = mapped.get("game_context")
+        game_context: Dict[str, Any] = {}
+        if isinstance(game_context_raw, dict):
+            game_context = game_context_raw
+        elif isinstance(game_context_raw, str) and game_context_raw.strip():
+            try:
+                parsed_ctx = json.loads(game_context_raw)
+                if isinstance(parsed_ctx, dict):
+                    game_context = parsed_ctx
+            except Exception:
+                game_context = {}
+        venue_ctx = game_context.get("venue") if isinstance(game_context.get("venue"), dict) else {}
+        neutral_site = bool(venue_ctx.get("neutral_site")) if venue_ctx else False
+        venue_city = venue_ctx.get("city") if isinstance(venue_ctx.get("city"), str) else None
+        venue_name = venue_ctx.get("name") if isinstance(venue_ctx.get("name"), str) else None
+        # Reduced / zero HFA on neutral; standard REG HFA otherwise (desk display).
+        hfa_points = 0.0 if neutral_site else 2.0
+
         week_val = mapped.get("week")
         mh = fair_lines_model_handicap_fields(
             model=model_markets,
@@ -3503,6 +3530,17 @@ def nfl_fair_lines(
                 "decision_edge_magnitude_total": _decision.get("edge_magnitude_total"),
                 "decision_model_confidence": _decision.get("model_confidence"),
                 "decision_week_regime": _decision.get("week_regime"),
+                # Matchup overview + Stat Drop (display only; no season-engine change)
+                "neutral_site": neutral_site,
+                "venue_city": venue_city,
+                "venue_name": venue_name,
+                "hfa_points": hfa_points,
+                "rest_days_home": _to_float(mapped.get("rest_days_home")),
+                "rest_days_away": _to_float(mapped.get("rest_days_away")),
+                "offense_index_home": _to_float(mapped.get("offense_index_home")),
+                "offense_index_away": _to_float(mapped.get("offense_index_away")),
+                "defense_index_home": _to_float(mapped.get("defense_index_home")),
+                "defense_index_away": _to_float(mapped.get("defense_index_away")),
             }
         )
 

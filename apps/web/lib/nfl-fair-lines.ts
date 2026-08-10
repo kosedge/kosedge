@@ -96,6 +96,17 @@ export type NflFairLineRow = {
   decision: NflFairLineDecision | null;
   actionLabelSpread: ActionLabel | null;
   actionLabelTotal: ActionLabel | null;
+  /** Schedule / context for Edge Board overview + Stat Drop. */
+  neutralSite: boolean | null;
+  venueCity: string | null;
+  venueName: string | null;
+  hfaPoints: number | null;
+  restDaysHome: number | null;
+  restDaysAway: number | null;
+  offenseIndexHome: number | null;
+  offenseIndexAway: number | null;
+  defenseIndexHome: number | null;
+  defenseIndexAway: number | null;
 };
 
 export type NflFairLinesResponse = {
@@ -142,9 +153,7 @@ function toIsoOrNull(value: unknown): string | null {
   return null;
 }
 
-function normalizePublishTag(
-  value: unknown,
-): "PLAY" | "LEAN" | "PASS" | null {
+function normalizePublishTag(value: unknown): "PLAY" | "LEAN" | "PASS" | null {
   if (value == null) return null;
   const token = String(value).trim().toUpperCase();
   if (!token) return null;
@@ -190,9 +199,7 @@ function normalizeConfidence(raw: unknown): NflDecisionConfidence | null {
       o.factors && typeof o.factors === "object"
         ? (o.factors as Record<string, unknown>)
         : {},
-    unresolvedFlags: Array.isArray(flags)
-      ? flags.map((f) => String(f))
-      : [],
+    unresolvedFlags: Array.isArray(flags) ? flags.map((f) => String(f)) : [],
   };
 }
 
@@ -220,11 +227,15 @@ function normalizeDecisionResult(
   return {
     market,
     actionLabel,
-    pointGrade: String(o.point_grade ?? o.pointGrade ?? "PASS") as DecisionResult["pointGrade"],
+    pointGrade: String(
+      o.point_grade ?? o.pointGrade ?? "PASS",
+    ) as DecisionResult["pointGrade"],
     edgeMagnitude: toNumber(o.edge_magnitude ?? o.edgeMagnitude, 0),
     modelConfidence: conf,
     coverProb: toNumberOrNull(o.cover_prob ?? o.coverProb),
-    coverGrade: (o.cover_grade ?? o.coverGrade ?? null) as DecisionResult["coverGrade"],
+    coverGrade: (o.cover_grade ??
+      o.coverGrade ??
+      null) as DecisionResult["coverGrade"],
     playTo: playToRaw
       ? {
           sideOrTotal: String(
@@ -347,10 +358,14 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
       raw.model_total_mean ?? raw.handicap_total_mean ?? raw.total_mean,
     ),
     modelHomeWinProb: toNumberOrNull(
-      raw.model_home_win_prob ?? raw.handicap_home_win_prob ?? raw.home_win_prob,
+      raw.model_home_win_prob ??
+        raw.handicap_home_win_prob ??
+        raw.home_win_prob,
     ),
     modelAwayWinProb: toNumberOrNull(
-      raw.model_away_win_prob ?? raw.handicap_away_win_prob ?? raw.away_win_prob,
+      raw.model_away_win_prob ??
+        raw.handicap_away_win_prob ??
+        raw.away_win_prob,
     ),
     modelHomeMl: toNumberOrNull(
       raw.model_fair_home_ml ?? raw.handicap_fair_home_ml ?? raw.fair_home_ml,
@@ -392,6 +407,39 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     decision: normalizeDecision(raw.decision),
     actionLabelSpread: normalizeActionLabel(raw.action_label_spread),
     actionLabelTotal: normalizeActionLabel(raw.action_label_total),
+    neutralSite:
+      typeof raw.neutral_site === "boolean"
+        ? raw.neutral_site
+        : typeof raw.neutralSite === "boolean"
+          ? raw.neutralSite
+          : null,
+    venueCity:
+      typeof raw.venue_city === "string" && raw.venue_city.trim()
+        ? raw.venue_city.trim()
+        : typeof raw.venueCity === "string" && raw.venueCity.trim()
+          ? raw.venueCity.trim()
+          : null,
+    venueName:
+      typeof raw.venue_name === "string" && raw.venue_name.trim()
+        ? raw.venue_name.trim()
+        : typeof raw.venueName === "string" && raw.venueName.trim()
+          ? raw.venueName.trim()
+          : null,
+    hfaPoints: toNumberOrNull(raw.hfa_points ?? raw.hfaPoints),
+    restDaysHome: toNumberOrNull(raw.rest_days_home ?? raw.restDaysHome),
+    restDaysAway: toNumberOrNull(raw.rest_days_away ?? raw.restDaysAway),
+    offenseIndexHome: toNumberOrNull(
+      raw.offense_index_home ?? raw.offenseIndexHome,
+    ),
+    offenseIndexAway: toNumberOrNull(
+      raw.offense_index_away ?? raw.offenseIndexAway,
+    ),
+    defenseIndexHome: toNumberOrNull(
+      raw.defense_index_home ?? raw.defenseIndexHome,
+    ),
+    defenseIndexAway: toNumberOrNull(
+      raw.defense_index_away ?? raw.defenseIndexAway,
+    ),
   };
 }
 
@@ -506,8 +554,7 @@ export async function fetchNflFairLines(params: {
     const apiSlateStatus =
       typeof payload.slate_status === "string" ? payload.slate_status : null;
     const slateStatus =
-      apiSlateStatus ??
-      (lines.length === 0 ? "no_slate" : "ok");
+      apiSlateStatus ?? (lines.length === 0 ? "no_slate" : "ok");
     return {
       season:
         typeof payload.season === "number" ? payload.season : params.season,
