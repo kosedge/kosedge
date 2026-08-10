@@ -582,9 +582,14 @@ const COL_KEI = "bg-kos-gold/[0.07] border-l border-kos-gold/25";
 /** @deprecated Use COL_KEI — kept as alias during migration. */
 const COL_MODEL = COL_KEI;
 const COL_DECISION = "border-l border-white/12";
-const TH_BASE = "py-3.5 px-3";
-const TD_BASE = "py-6 px-3 align-top";
-const TD_DECISION = "py-6 px-2.5 align-top";
+const TH_BASE = "py-3 px-3";
+const TD_BASE = "py-4 px-3 align-top";
+/** pb-11 reserves room for absolute Overview/Stats at a shared baseline. */
+const TD_GAME = "relative py-4 px-3 pb-11 align-top";
+const TD_KICKOFF = "relative py-4 px-2 pb-11 align-top";
+const TD_DECISION = "py-4 px-2.5 align-top";
+const ROW_CTRL_BTN =
+  "absolute bottom-2.5 min-h-9 rounded-lg text-[13px] font-medium text-kos-gold hover:bg-white/5 hover:underline";
 
 const COL_WIDTHS = [
   "210px",
@@ -1242,7 +1247,7 @@ export default function EdgeBoard({
   }
 
   const MobileCards = (
-    <div className="lg:hidden mt-6 space-y-5">
+    <div className="lg:hidden mt-4 space-y-4">
       <div className="flex items-center justify-between px-1">
         <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
         <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
@@ -1269,7 +1274,7 @@ export default function EdgeBoard({
         return (
           <article
             key={r.id}
-            className="rounded-2xl border border-white/14 bg-black/45 p-4 sm:p-5 backdrop-blur-xl"
+            className="rounded-2xl border border-white/14 bg-black/45 p-3.5 sm:p-4 backdrop-blur-xl"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -1278,7 +1283,7 @@ export default function EdgeBoard({
                     ? `${r.teamA.name} vs ${r.teamB.name}`
                     : `${r.teamA.name} @ ${r.teamB.name}`}
                 </h3>
-                <div className="mt-1.5">
+                <div className="mt-1">
                   <KickoffStack
                     kickoffDate={r.kickoffDate}
                     kickoffTime={r.kickoffTime}
@@ -1326,10 +1331,10 @@ export default function EdgeBoard({
               </div>
             </div>
 
-            <div className="mt-4 -mx-1 overflow-x-auto px-1">
-              <div className="grid min-w-[280px] grid-cols-2 gap-3">
+            <div className="mt-3 -mx-1 overflow-x-auto px-1">
+              <div className="grid min-w-[280px] grid-cols-2 gap-2.5">
                 <div
-                  className={`rounded-xl border border-white/10 p-3 ${COL_MARKET}`}
+                  className={`rounded-xl border border-white/10 p-2.5 ${COL_MARKET}`}
                 >
                   <div className="text-[10px] uppercase tracking-wide text-gray-500">
                     Current
@@ -1356,7 +1361,7 @@ export default function EdgeBoard({
                   ) : null}
                 </div>
                 <div
-                  className={`rounded-xl border border-kos-gold/25 p-3 ${COL_KEI}`}
+                  className={`rounded-xl border border-kos-gold/25 p-2.5 ${COL_KEI}`}
                 >
                   <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
                     KEI · {keiCode}
@@ -1429,7 +1434,7 @@ export default function EdgeBoard({
               </div>
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap items-end gap-2">
               <button
                 type="button"
                 onClick={() => toggleExpand(r.id, "overview")}
@@ -1476,7 +1481,7 @@ export default function EdgeBoard({
   );
 
   const DesktopTable = (
-    <div className="hidden lg:block mt-6">
+    <div className="hidden lg:block mt-4">
       {marketsOnly ? (
         <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100/90">
           <span className="font-semibold text-amber-200">Markets only.</span>{" "}
@@ -1485,7 +1490,7 @@ export default function EdgeBoard({
         </div>
       ) : null}
       <div className="bg-black/30 border border-white/12 rounded-2xl backdrop-blur-xl shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
           <div className="text-sm text-gray-300">
             {marketsOnly
               ? `Live books • Open + Current + juice · ${keiCode} pending model`
@@ -1595,7 +1600,7 @@ export default function EdgeBoard({
                         panelOpen ? "bg-white/[0.02]" : ""
                       }`}
                     >
-                      <td className={TD_BASE}>
+                      <td className={TD_GAME}>
                         <div className="font-semibold leading-snug">
                           {r.teamA.name}
                           {r.teamA.keiNumber != null ? (
@@ -1618,7 +1623,7 @@ export default function EdgeBoard({
                             ? ` (${r.teamA.confRecord})`
                             : ""}
                         </div>
-                        <div className="mt-3 font-semibold leading-snug">
+                        <div className="mt-2.5 font-semibold leading-snug">
                           {r.teamB.name}
                           {r.teamB.keiNumber != null ? (
                             <span className="ml-1 text-kos-gold tabular-nums">
@@ -1646,12 +1651,12 @@ export default function EdgeBoard({
                           type="button"
                           onClick={() => toggleExpand(r.id, "overview")}
                           aria-expanded={overviewOpen}
-                          className="mt-3 min-h-9 rounded-lg px-2 text-[13px] font-medium text-kos-gold hover:bg-white/5 hover:underline"
+                          className={`${ROW_CTRL_BTN} left-3 px-2`}
                         >
                           {overviewOpen ? "Overview ▴" : "Overview ▾"}
                         </button>
                       </td>
-                      <td className={`${TD_BASE} px-2`}>
+                      <td className={TD_KICKOFF}>
                         <KickoffStack
                           kickoffDate={r.kickoffDate}
                           kickoffTime={r.kickoffTime}
@@ -1672,7 +1677,7 @@ export default function EdgeBoard({
                           type="button"
                           onClick={() => toggleExpand(r.id, "stats")}
                           aria-expanded={statsOpen}
-                          className="mt-3 min-h-9 w-full rounded-lg px-1 text-center text-[13px] font-medium text-kos-gold hover:bg-white/5 hover:underline"
+                          className={`${ROW_CTRL_BTN} inset-x-1 px-1 text-center`}
                         >
                           {statsOpen ? "Stats ▴" : "Stats ▾"}
                         </button>
@@ -1793,9 +1798,9 @@ export default function EdgeBoard({
                     </tr>
                     {panelOpen ? (
                       <tr className="border-t border-white/[0.06] bg-black/55">
-                        <td colSpan={12} className="px-4 py-4">
+                        <td colSpan={12} className="px-4 py-3.5">
                           {overviewOpen ? (
-                            <div className="rounded-xl border border-white/12 bg-black/70 p-4 text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+                            <div className="rounded-xl border border-white/12 bg-black/70 p-3.5 text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
                               {r.siteLabel ? (
                                 <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
                                   {r.siteLabel}
