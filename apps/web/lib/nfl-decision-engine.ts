@@ -1,40 +1,58 @@
 /**
- * KosEdge NFL Decision Engine (Edge Board Action Layer).
+ * KosEdge NFL Decision Engine (Edge Board Tag Policy + Play-To).
  *
- * Doctrine
+ * Doctrine: we bet prices, not teams.
+ *
+ * Contract
  * --------
- * We bet prices, not teams.
- * The same game can be a PLAY, LEAN, or PASS depending only on the current market number.
- *
- * This layer sits on top of locked model fair lines. It does not change true PR /
- * season-engine math, and it does not unlock or alter the locked preseason baseline.
- *
- * Contract coexistence (Model vs KEI vs Edge)
- * ------------------------------------------
- * - Model research fair → decision-engine fair vs market (this module).
- * - KEI reprice → published product handicap on Edge Board columns.
- * - Edge / publish tags (publishTag*) → KEI vs market only (existing PLAY desk tags).
- * - Action layer (this module) → Model fair vs market for Action Labels + Play-To.
+ * - Model research fair → research only (no PLAY from Model alone).
+ * - KEI reprice → published handicap; Fair for tags.
+ * - Edge / Tag → KEI vs best available market only (this module).
+ * - Thresholds: `nfl-tag-policy.ts` (do not duplicate).
  *
  * Mirrors services/model-service/src/services/nfl_decision_engine.py
  */
 
-export const BREAKEVEN_ATS_MINUS_110 = 0.5238;
+export {
+  BREAKEVEN_ATS_MINUS_110,
+  CONFIDENCE_BEST_BET_MIN,
+  CONFIDENCE_PLAY_MIN,
+  CONFIDENCE_TIER_BASE,
+  COVER_LEAN_MAX,
+  COVER_MODEL_WARNING,
+  COVER_PASS_MAX,
+  COVER_PLAY_MAX,
+  COVER_STRONG_MAX,
+  EARLY_SIDE,
+  INSEASON_SIDE,
+  SPREAD_KEY_NUMBERS,
+  STANDARD_SIDE,
+  TOTAL_KEY_NUMBERS,
+  TOTAL_PASS_MAX,
+  TOTAL_STRONG_MIN,
+  sideThresholdsForWeek,
+  totalThresholdsForWeek,
+  weekRegime,
+  type SidePointThresholds,
+  type WeekRegime,
+} from "./nfl-tag-policy";
 
-export const SPREAD_KEY_NUMBERS = [3, 7, 10, 14] as const;
-export const TOTAL_KEY_NUMBERS = [37, 41, 44, 47, 51] as const;
-
-export const COVER_PASS_MAX = 0.53;
-export const COVER_LEAN_MAX = 0.54;
-export const COVER_PLAY_MAX = 0.56;
-export const COVER_STRONG_MAX = 0.58;
-export const COVER_MODEL_WARNING = 0.6;
-
-export const TOTAL_PASS_MAX = 1.5;
-export const TOTAL_STRONG_MIN = 3.5;
-
-export const CONFIDENCE_PLAY_MIN = 0.55;
-export const CONFIDENCE_BEST_BET_MIN = 0.75;
+import {
+  CONFIDENCE_BEST_BET_MIN,
+  CONFIDENCE_PLAY_MIN,
+  CONFIDENCE_TIER_BASE,
+  COVER_LEAN_MAX,
+  COVER_MODEL_WARNING,
+  COVER_PASS_MAX,
+  COVER_PLAY_MAX,
+  COVER_STRONG_MAX,
+  SPREAD_KEY_NUMBERS,
+  TOTAL_KEY_NUMBERS,
+  sideThresholdsForWeek,
+  totalThresholdsForWeek,
+  weekRegime,
+  type WeekRegime,
+} from "./nfl-tag-policy";
 
 export type ActionLabel =
   | "PASS"
@@ -51,37 +69,8 @@ export type PointGrade =
   | "STRONG PLAY"
   | "EXCEPTIONAL";
 
-export type WeekRegime = "early" | "standard" | "inseason" | "late";
 export type DecisionMarket = "spread" | "total";
 export type ConfidenceBand = "LOW" | "MEDIUM" | "HIGH";
-
-export type SidePointThresholds = {
-  passMax: number;
-  leanMax: number;
-  playMin: number;
-  strongMin: number;
-};
-
-export const EARLY_SIDE: SidePointThresholds = {
-  passMax: 1.5,
-  leanMax: 2.0,
-  playMin: 2.5,
-  strongMin: 3.5,
-};
-
-export const STANDARD_SIDE: SidePointThresholds = {
-  passMax: 1.0,
-  leanMax: 1.5,
-  playMin: 2.0,
-  strongMin: 3.0,
-};
-
-export const INSEASON_SIDE: SidePointThresholds = {
-  passMax: 1.0,
-  leanMax: 1.5,
-  playMin: 2.0,
-  strongMin: 3.0,
-};
 
 export type PlayToLadder = {
   sideOrTotal: string;
@@ -134,24 +123,6 @@ export type DecisionResult = {
   marketLine: number | null;
 };
 
-export function weekRegime(week: number | null | undefined): WeekRegime {
-  if (week == null || !Number.isFinite(week)) return "early";
-  const w = Math.trunc(week);
-  if (w <= 2) return "early";
-  if (w >= 6 && w <= 12) return "inseason";
-  if (w >= 13) return "late";
-  return "standard";
-}
-
-export function sideThresholdsForWeek(
-  week: number | null | undefined,
-): SidePointThresholds {
-  const regime = weekRegime(week);
-  if (regime === "early") return EARLY_SIDE;
-  if (regime === "inseason" || regime === "late") return INSEASON_SIDE;
-  return STANDARD_SIDE;
-}
-
 export function confidenceBand(score: number): ConfidenceBand {
   const s = Math.max(0, Math.min(1, score));
   if (s >= 0.75) return "HIGH";
@@ -159,13 +130,6 @@ export function confidenceBand(score: number): ConfidenceBand {
   return "LOW";
 }
 
-/** Default clear-board base (0.72 → MEDIUM). Not a calibrated cover probability. */
-export const CONFIDENCE_TIER_BASE = 0.72;
-
-/**
- * True when confidence is the untuned tier constant (no flags / no historical fit).
- * UI should label as a band, not invent false precision like "72%".
- */
 export function isTierConstantConfidence(
   assessment: Pick<ConfidenceAssessment, "score" | "unresolvedFlags"> & {
     factors?: ConfidenceAssessment["factors"];
@@ -179,18 +143,20 @@ export function isTierConstantConfidence(
   return Math.abs(assessment.score - CONFIDENCE_TIER_BASE) < 1e-9;
 }
 
-export function assessConfidence(args: {
-  baseScore?: number | null;
-  schemeStable?: boolean;
-  injuryClear?: boolean;
-  weatherClear?: boolean;
-  qbClear?: boolean;
-  historicalFit?: number | null;
-  conflictingInputs?: boolean;
-  liquidityOk?: boolean;
-  extraFlags?: string[];
-} = {}): ConfidenceAssessment {
-  let score = args.baseScore == null ? 0.72 : Number(args.baseScore);
+export function assessConfidence(
+  args: {
+    baseScore?: number | null;
+    schemeStable?: boolean;
+    injuryClear?: boolean;
+    weatherClear?: boolean;
+    qbClear?: boolean;
+    historicalFit?: number | null;
+    conflictingInputs?: boolean;
+    liquidityOk?: boolean;
+    extraFlags?: string[];
+  } = {},
+): ConfidenceAssessment {
+  let score = args.baseScore == null ? CONFIDENCE_TIER_BASE : Number(args.baseScore);
   const flags: string[] = [];
   if (args.schemeStable === false) {
     score -= 0.12;
@@ -250,11 +216,15 @@ export function gradeSidePoints(
   return "STRONG PLAY";
 }
 
-export function gradeTotalPoints(absEdge: number): PointGrade {
+export function gradeTotalPoints(
+  absEdge: number,
+  week?: number | null,
+): PointGrade {
   const e = Math.abs(Number(absEdge));
-  if (e < TOTAL_PASS_MAX) return "PASS";
-  if (e < 2.5) return "LEAN";
-  if (e < TOTAL_STRONG_MIN) return "PLAY";
+  const t = totalThresholdsForWeek(week);
+  if (e < t.passMax) return "PASS";
+  if (e < t.playMin) return "LEAN";
+  if (e < t.strongMin) return "PLAY";
   return "STRONG PLAY";
 }
 
@@ -305,45 +275,66 @@ function roundHalf(x: number): number {
   return Math.round(x * 2) / 2;
 }
 
+function fmtSigned(n: number): string {
+  if (Object.is(n, -0) || n === 0) return "+0";
+  return n > 0 ? `+${n}` : String(n);
+}
+
+/**
+ * Play-to from KEI + week thresholds.
+ * Remaining |KEI − price| at play_to = playMin; lean_to = leanMax; pass_from = passMax.
+ */
 export function buildSidePlayToLadder(args: {
   fairSpreadHome: number;
   marketSpreadHome: number;
   homeAbbr?: string;
   awayAbbr?: string;
+  week?: number | null;
 }): PlayToLadder {
-  const edge = args.fairSpreadHome - args.marketSpreadHome;
-  const likesHome = edge < 0;
+  const fair = args.fairSpreadHome;
+  const market = args.marketSpreadHome;
+  const edge = fair - market;
   const absEdge = Math.abs(edge);
+  const t = sideThresholdsForWeek(args.week);
+  const likesHome = edge < 0;
+
   if (likesHome) {
     const team = args.homeAbbr ?? "HOME";
-    const marketNum = args.marketSpreadHome;
-    let playTo = roundHalf(marketNum + absEdge / 3);
-    let leanTo = roundHalf(marketNum + absEdge / 2);
-    const passFrom = roundHalf(marketNum + (absEdge * 2) / 3);
-    if (playTo < leanTo) [playTo, leanTo] = [leanTo, playTo];
+    let playTo = roundHalf(fair + t.playMin);
+    let leanTo = roundHalf(fair + t.leanMax);
+    let passFrom = roundHalf(fair + t.passMax);
+    const ordered = [playTo, leanTo, passFrom].sort((a, b) => b - a);
+    playTo = ordered[0]!;
+    leanTo = ordered[1]!;
+    passFrom = ordered[2]!;
     return {
-      sideOrTotal: `${team} ${marketNum >= 0 ? "+" : ""}${marketNum}`,
+      sideOrTotal: `${team} ${fmtSigned(market)}`,
       playTo,
       leanTo,
       passFrom,
-      fairLine: args.fairSpreadHome,
-      marketLine: args.marketSpreadHome,
+      fairLine: fair,
+      marketLine: market,
       edgePoints: Math.round(absEdge * 1000) / 1000,
       notes: `Play ${team} to ${fmtSigned(playTo)}; lean ${fmtSigned(leanTo)}; pass ${fmtSigned(passFrom)} or worse`,
     };
   }
+
   const team = args.awayAbbr ?? "AWAY";
-  const marketNum = -args.marketSpreadHome;
-  const playTo = roundHalf(marketNum - absEdge / 3);
-  const leanTo = roundHalf(marketNum - absEdge / 2);
-  const passFrom = roundHalf(marketNum - (absEdge * 2) / 3);
+  const marketNum = -market;
+  let playTo = roundHalf(-(fair - t.playMin));
+  let leanTo = roundHalf(-(fair - t.leanMax));
+  let passFrom = roundHalf(-(fair - t.passMax));
+  const ordered = [playTo, leanTo, passFrom].sort((a, b) => b - a);
+  playTo = ordered[0]!;
+  leanTo = ordered[1]!;
+  passFrom = ordered[2]!;
   return {
     sideOrTotal: `${team} ${fmtSigned(marketNum)}`,
     playTo,
     leanTo,
     passFrom,
-    fairLine: args.fairSpreadHome,
-    marketLine: args.marketSpreadHome,
+    fairLine: fair,
+    marketLine: market,
     edgePoints: Math.round(absEdge * 1000) / 1000,
     notes: `Play ${team} to ${fmtSigned(playTo)}; lean ${fmtSigned(leanTo)}; pass ${fmtSigned(passFrom)} or worse`,
   };
@@ -352,46 +343,70 @@ export function buildSidePlayToLadder(args: {
 export function buildTotalPlayToLadder(args: {
   fairTotal: number;
   marketTotal: number;
+  week?: number | null;
 }): PlayToLadder {
-  const edge = args.fairTotal - args.marketTotal;
-  const likesOver = edge > 0;
+  const fair = args.fairTotal;
+  const market = args.marketTotal;
+  const edge = fair - market;
   const absEdge = Math.abs(edge);
-  const m = args.marketTotal;
+  const t = totalThresholdsForWeek(args.week);
+  const likesOver = edge > 0;
+  const m = market;
+
   if (likesOver) {
-    const playTo = roundHalf(m + 0.5);
-    const leanLo = roundHalf(m + 1.0);
-    const leanHi = roundHalf(m + 1.5);
-    const passFrom = roundHalf(m + 2.0);
+    let playTo = roundHalf(fair - t.playMin);
+    let leanTo = roundHalf(fair - t.leanMax);
+    let passFrom = roundHalf(fair - t.passMax);
+    const ordered = [playTo, leanTo, passFrom].sort((a, b) => a - b);
+    playTo = ordered[0]!;
+    leanTo = ordered[1]!;
+    passFrom = ordered[2]!;
     return {
       sideOrTotal: `Over ${m}`,
       playTo,
-      leanTo: leanHi,
+      leanTo,
       passFrom,
-      fairLine: args.fairTotal,
-      marketLine: args.marketTotal,
+      fairLine: fair,
+      marketLine: market,
       edgePoints: Math.round(absEdge * 1000) / 1000,
-      notes: `Play Over ${playTo} or better; lean ${leanLo}–${leanHi}; pass ${passFrom}+`,
+      notes: `Play Over ${playTo} or better; lean to ${leanTo}; pass ${passFrom}+`,
     };
   }
-  const playTo = roundHalf(m - 0.5);
-  const leanLo = roundHalf(m - 1.5);
-  const leanHi = roundHalf(m - 1.0);
-  const passFrom = roundHalf(m - 2.0);
+
+  let playTo = roundHalf(fair + t.playMin);
+  let leanTo = roundHalf(fair + t.leanMax);
+  let passFrom = roundHalf(fair + t.passMax);
+  const ordered = [playTo, leanTo, passFrom].sort((a, b) => b - a);
+  playTo = ordered[0]!;
+  leanTo = ordered[1]!;
+  passFrom = ordered[2]!;
   return {
     sideOrTotal: `Under ${m}`,
     playTo,
-    leanTo: leanLo,
+    leanTo,
     passFrom,
-    fairLine: args.fairTotal,
-    marketLine: args.marketTotal,
+    fairLine: fair,
+    marketLine: market,
     edgePoints: Math.round(absEdge * 1000) / 1000,
-    notes: `Play Under ${playTo} or better; lean ${leanLo}–${leanHi}; pass ${passFrom} or lower`,
+    notes: `Play Under ${playTo} or better; lean to ${leanTo}; pass ${passFrom} or lower`,
   };
 }
 
-function fmtSigned(n: number): string {
-  if (Object.is(n, -0) || n === 0) return "+0";
-  return n > 0 ? `+${n}` : String(n);
+export function marketPastPlayTo(args: {
+  marketKind: DecisionMarket;
+  fair: number;
+  market: number;
+  ladder: PlayToLadder;
+}): boolean {
+  const edge = args.fair - args.market;
+  if (args.marketKind === "spread") {
+    const likesHome = edge < 0;
+    if (likesHome) return args.market < args.ladder.playTo - 1e-9;
+    return -args.market < args.ladder.playTo - 1e-9;
+  }
+  const likesOver = edge > 0;
+  if (likesOver) return args.market > args.ladder.playTo + 1e-9;
+  return args.market < args.ladder.playTo - 1e-9;
 }
 
 export function assessMarketConfirmation(args: {
@@ -443,14 +458,13 @@ function pointRank(grade: PointGrade): number {
   return order[grade];
 }
 
-function mergeGrades(
+/** Cover prob wins for the tag when available; both still shown. */
+function coverWins(
   pointGrade: PointGrade,
   coverGrade: PointGrade | null,
 ): PointGrade {
   if (!coverGrade) return pointGrade;
-  return pointRank(pointGrade) <= pointRank(coverGrade)
-    ? pointGrade
-    : coverGrade;
+  return coverGrade;
 }
 
 export function evaluateBestBet(args: {
@@ -482,6 +496,24 @@ export function evaluateBestBet(args: {
   );
 }
 
+function confidenceOkForPlay(conf: ConfidenceAssessment): boolean {
+  if (conf.band === "LOW") return false;
+  if (conf.score < CONFIDENCE_PLAY_MIN) return false;
+  if (conf.unresolvedFlags.includes("qb_unresolved")) return false;
+  return true;
+}
+
+function majorUncertainty(conf: ConfidenceAssessment): boolean {
+  return conf.unresolvedFlags.some((f) =>
+    [
+      "qb_unresolved",
+      "injury_unresolved",
+      "weather_unresolved",
+      "conflicting_inputs",
+    ].includes(f),
+  );
+}
+
 export function decideSide(args: {
   fairSpreadHome: number | null | undefined;
   marketSpreadHome: number | null | undefined;
@@ -500,7 +532,6 @@ export function decideSide(args: {
   const conf = args.confidence ?? assessConfidence();
   const week = args.week ?? null;
   const regime = weekRegime(week);
-  const priceStillAvailable = args.priceStillAvailable !== false;
   const matchupSupport = args.matchupSupport !== false;
   const liquidityOk = args.liquidityOk !== false;
   const mc = assessMarketConfirmation({
@@ -528,7 +559,7 @@ export function decideSide(args: {
       isBestBet: false,
       modelWarning: false,
       keyNumberCross: false,
-      priceStillAvailable,
+      priceStillAvailable: args.priceStillAvailable !== false,
       numericalEdge: false,
       confidenceOk: false,
       reason: "missing_fair_or_market",
@@ -539,44 +570,47 @@ export function decideSide(args: {
     };
   }
 
-  const edge = args.fairSpreadHome - args.marketSpreadHome;
+  const fair = args.fairSpreadHome;
+  const market = args.marketSpreadHome;
+  const edge = fair - market;
   const absEdge = Math.abs(edge);
   let pointGrade = gradeSidePoints(absEdge, week);
   const coverGrade = gradeCoverProb(args.coverProb);
-  let effective = mergeGrades(pointGrade, coverGrade);
-  const keyCross = crossesKeyNumber(
-    args.fairSpreadHome,
-    args.marketSpreadHome,
-    "spread",
-  );
+  let effective = coverWins(pointGrade, coverGrade);
+  const keyCross = crossesKeyNumber(fair, market, "spread");
   if (keyCross && pointGrade === "LEAN" && absEdge >= 2.0) {
-    if (pointRank(effective) < pointRank("PLAY")) effective = "PLAY";
+    if (!coverGrade && pointRank(effective) < pointRank("PLAY")) {
+      effective = "PLAY";
+    }
     pointGrade = "PLAY";
   }
+
+  const ladder = buildSidePlayToLadder({
+    fairSpreadHome: fair,
+    marketSpreadHome: market,
+    homeAbbr: args.homeAbbr,
+    awayAbbr: args.awayAbbr,
+    week,
+  });
+  const pastPlayTo = marketPastPlayTo({
+    marketKind: "spread",
+    fair,
+    market,
+    ladder,
+  });
+  if (pastPlayTo && pointRank(effective) >= pointRank("PLAY")) {
+    effective =
+      pointRank(pointGrade) < pointRank("PLAY") ? pointGrade : "LEAN";
+  }
+  const priceOk = args.priceStillAvailable !== false && !pastPlayTo;
 
   const modelWarning =
     args.coverProb != null && Number(args.coverProb) >= COVER_MODEL_WARNING;
   const numericalEdge = ["LEAN", "PLAY", "STRONG PLAY", "EXCEPTIONAL"].includes(
     effective,
   );
-  const confidenceOk =
-    conf.score >= CONFIDENCE_PLAY_MIN &&
-    !conf.unresolvedFlags.includes("qb_unresolved");
-  const majorUncertainty = conf.unresolvedFlags.some((f) =>
-    [
-      "qb_unresolved",
-      "injury_unresolved",
-      "weather_unresolved",
-      "conflicting_inputs",
-    ].includes(f),
-  );
-
-  const ladderArgs = {
-    fairSpreadHome: args.fairSpreadHome,
-    marketSpreadHome: args.marketSpreadHome,
-    homeAbbr: args.homeAbbr,
-    awayAbbr: args.awayAbbr,
-  };
+  const confidenceOk = confidenceOkForPlay(conf);
+  const uncertain = majorUncertainty(conf);
 
   let actionLabel: ActionLabel;
   let reason: string;
@@ -585,22 +619,27 @@ export function decideSide(args: {
   if (args.stayAway || conf.unresolvedFlags.includes("conflicting_inputs")) {
     actionLabel = "STAY AWAY";
     reason = "conflicting_inputs_or_bad_market";
-  } else if (numericalEdge && majorUncertainty) {
+  } else if (numericalEdge && (uncertain || conf.band === "LOW")) {
     actionLabel = "ALERT";
-    reason = "edge_with_material_uncertainty";
-    playTo = buildSidePlayToLadder(ladderArgs);
+    reason =
+      conf.band === "LOW" && !uncertain
+        ? "edge_with_low_confidence"
+        : "edge_with_material_uncertainty";
+    playTo = ladder;
   } else if (effective === "PASS") {
     actionLabel = "PASS";
     reason = "edge_below_week_threshold";
   } else if (effective === "LEAN") {
     actionLabel = "LEAN";
-    reason = "mild_edge_watch_list";
-    playTo = buildSidePlayToLadder(ladderArgs);
-  } else if (numericalEdge && confidenceOk && priceStillAvailable) {
+    reason = pastPlayTo
+      ? "mild_edge_watch_list|past_play_to"
+      : "mild_edge_watch_list";
+    playTo = ladder;
+  } else if (numericalEdge && confidenceOk && priceOk) {
     const isBb = evaluateBestBet({
       pointGrade: effective === "EXCEPTIONAL" ? "STRONG PLAY" : effective,
       confidence: conf,
-      priceAvailable: priceStillAvailable,
+      priceAvailable: priceOk,
       keyNumberCross: keyCross,
       marketConfirmation: mc,
       matchupSupport,
@@ -608,19 +647,22 @@ export function decideSide(args: {
     });
     actionLabel = isBb ? "BEST VALUE" : "PLAY";
     reason = isBb ? "best_bet_strict_cleared" : "play_triple_cleared";
-    playTo = buildSidePlayToLadder(ladderArgs);
-  } else if (numericalEdge && !priceStillAvailable) {
-    actionLabel = "ALERT";
-    reason = "edge_but_price_gone";
-    playTo = buildSidePlayToLadder(ladderArgs);
+    playTo = ladder;
+  } else if (numericalEdge && !priceOk) {
+    actionLabel =
+      pointRank(pointGrade) >= pointRank("PLAY") ? "ALERT" : "LEAN";
+    reason = pastPlayTo
+      ? "edge_but_price_gone|past_play_to"
+      : "edge_but_price_gone";
+    playTo = ladder;
   } else if (numericalEdge && !confidenceOk) {
     actionLabel = "ALERT";
     reason = "edge_but_confidence_insufficient";
-    playTo = buildSidePlayToLadder(ladderArgs);
+    playTo = ladder;
   } else {
     actionLabel = "LEAN";
     reason = "partial_play_requirements";
-    playTo = buildSidePlayToLadder(ladderArgs);
+    playTo = ladder;
   }
 
   if (
@@ -645,14 +687,14 @@ export function decideSide(args: {
     isBestBet: actionLabel === "BEST VALUE",
     modelWarning,
     keyNumberCross: keyCross,
-    priceStillAvailable,
+    priceStillAvailable: priceOk,
     numericalEdge,
     confidenceOk,
     reason,
     week,
     weekRegime: regime,
-    fairLine: args.fairSpreadHome,
-    marketLine: args.marketSpreadHome,
+    fairLine: fair,
+    marketLine: market,
   };
 }
 
@@ -672,7 +714,6 @@ export function decideTotal(args: {
   const conf = args.confidence ?? assessConfidence();
   const week = args.week ?? null;
   const regime = weekRegime(week);
-  const priceStillAvailable = args.priceStillAvailable !== false;
   const matchupSupport = args.matchupSupport !== false;
   const liquidityOk = args.liquidityOk !== false;
   const mc = assessMarketConfirmation({
@@ -700,7 +741,7 @@ export function decideTotal(args: {
       isBestBet: false,
       modelWarning: false,
       keyNumberCross: false,
-      priceStillAvailable,
+      priceStillAvailable: args.priceStillAvailable !== false,
       numericalEdge: false,
       confidenceOk: false,
       reason: "missing_fair_or_market",
@@ -711,29 +752,44 @@ export function decideTotal(args: {
     };
   }
 
-  const edge = args.fairTotal - args.marketTotal;
+  const fair = args.fairTotal;
+  const market = args.marketTotal;
+  const edge = fair - market;
   const absEdge = Math.abs(edge);
-  const pointGrade = gradeTotalPoints(absEdge);
+  const pointGrade = gradeTotalPoints(absEdge, week);
   let coverSideProb = args.overProb ?? null;
   if (args.overProb != null && edge < 0) {
     coverSideProb = 1 - Number(args.overProb);
   }
   const coverGrade = gradeCoverProb(coverSideProb);
-  const effective = mergeGrades(pointGrade, coverGrade);
-  const keyCross = crossesKeyNumber(args.fairTotal, args.marketTotal, "total");
+  let effective = coverWins(pointGrade, coverGrade);
+  const keyCross = crossesKeyNumber(fair, market, "total");
+
+  const ladder = buildTotalPlayToLadder({
+    fairTotal: fair,
+    marketTotal: market,
+    week,
+  });
+  const pastPlayTo = marketPastPlayTo({
+    marketKind: "total",
+    fair,
+    market,
+    ladder,
+  });
+  if (pastPlayTo && pointRank(effective) >= pointRank("PLAY")) {
+    effective =
+      pointRank(pointGrade) < pointRank("PLAY") ? pointGrade : "LEAN";
+  }
+  const priceOk = args.priceStillAvailable !== false && !pastPlayTo;
+
   const modelWarning =
     coverSideProb != null && Number(coverSideProb) >= COVER_MODEL_WARNING;
   const numericalEdge = ["LEAN", "PLAY", "STRONG PLAY", "EXCEPTIONAL"].includes(
     effective,
   );
-  const confidenceOk = conf.score >= CONFIDENCE_PLAY_MIN;
-  const majorUncertainty =
-    conf.unresolvedFlags.length > 0 && conf.score < CONFIDENCE_PLAY_MIN;
-
-  const ladderArgs = {
-    fairTotal: args.fairTotal,
-    marketTotal: args.marketTotal,
-  };
+  const confidenceOk = confidenceOkForPlay(conf);
+  const uncertain =
+    majorUncertainty(conf) && conf.score < CONFIDENCE_PLAY_MIN;
 
   let actionLabel: ActionLabel;
   let reason: string;
@@ -742,22 +798,27 @@ export function decideTotal(args: {
   if (args.stayAway || conf.unresolvedFlags.includes("conflicting_inputs")) {
     actionLabel = "STAY AWAY";
     reason = "conflicting_inputs_or_bad_market";
-  } else if (numericalEdge && majorUncertainty) {
+  } else if (numericalEdge && (uncertain || conf.band === "LOW")) {
     actionLabel = "ALERT";
-    reason = "edge_with_material_uncertainty";
-    playTo = buildTotalPlayToLadder(ladderArgs);
+    reason =
+      conf.band === "LOW"
+        ? "edge_with_low_confidence"
+        : "edge_with_material_uncertainty";
+    playTo = ladder;
   } else if (effective === "PASS") {
     actionLabel = "PASS";
     reason = "edge_below_total_threshold";
   } else if (effective === "LEAN") {
     actionLabel = "LEAN";
-    reason = "mild_edge_watch_list";
-    playTo = buildTotalPlayToLadder(ladderArgs);
-  } else if (numericalEdge && confidenceOk && priceStillAvailable) {
+    reason = pastPlayTo
+      ? "mild_edge_watch_list|past_play_to"
+      : "mild_edge_watch_list";
+    playTo = ladder;
+  } else if (numericalEdge && confidenceOk && priceOk) {
     const isBb = evaluateBestBet({
       pointGrade: effective === "EXCEPTIONAL" ? "STRONG PLAY" : effective,
       confidence: conf,
-      priceAvailable: priceStillAvailable,
+      priceAvailable: priceOk,
       keyNumberCross: keyCross,
       marketConfirmation: mc,
       matchupSupport,
@@ -765,19 +826,22 @@ export function decideTotal(args: {
     });
     actionLabel = isBb ? "BEST VALUE" : "PLAY";
     reason = isBb ? "best_bet_strict_cleared" : "play_triple_cleared";
-    playTo = buildTotalPlayToLadder(ladderArgs);
-  } else if (numericalEdge && !priceStillAvailable) {
-    actionLabel = "ALERT";
-    reason = "edge_but_price_gone";
-    playTo = buildTotalPlayToLadder(ladderArgs);
+    playTo = ladder;
+  } else if (numericalEdge && !priceOk) {
+    actionLabel =
+      pointRank(pointGrade) >= pointRank("PLAY") ? "ALERT" : "LEAN";
+    reason = pastPlayTo
+      ? "edge_but_price_gone|past_play_to"
+      : "edge_but_price_gone";
+    playTo = ladder;
   } else if (numericalEdge && !confidenceOk) {
     actionLabel = "ALERT";
     reason = "edge_but_confidence_insufficient";
-    playTo = buildTotalPlayToLadder(ladderArgs);
+    playTo = ladder;
   } else {
     actionLabel = "LEAN";
     reason = "partial_play_requirements";
-    playTo = buildTotalPlayToLadder(ladderArgs);
+    playTo = ladder;
   }
 
   return {
@@ -793,14 +857,14 @@ export function decideTotal(args: {
     isBestBet: actionLabel === "BEST VALUE",
     modelWarning,
     keyNumberCross: keyCross,
-    priceStillAvailable,
+    priceStillAvailable: priceOk,
     numericalEdge,
     confidenceOk,
     reason,
     week,
     weekRegime: regime,
-    fairLine: args.fairTotal,
-    marketLine: args.marketTotal,
+    fairLine: fair,
+    marketLine: market,
   };
 }
 

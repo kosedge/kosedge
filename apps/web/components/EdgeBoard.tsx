@@ -161,9 +161,17 @@ export type LegacyEdgeBoardRow = {
   edgeOUCaution?: boolean;
   tagLine?: Tag;
   tagOU?: Tag;
-  /** Decision Engine (Model fair vs market) — separate from KEI publish tags. */
+  /** Tag policy (KEI vs market) — Action Labels + Play-To. */
   actionLabelLine?: ActionLabel;
   actionLabelOU?: ActionLabel;
+  fairLineKei?: number;
+  fairOUKei?: number;
+  marketLineCurrent?: number;
+  marketOUCurrent?: number;
+  playToLineNum?: number;
+  playToOUNum?: number;
+  leanToLineNum?: number;
+  leanToOUNum?: number;
   edgeMagnitudeLine?: number;
   edgeMagnitudeOU?: number;
   modelConfidenceScore?: number;
@@ -291,11 +299,20 @@ function formatConfidenceLabel(
   return `Conf ${band} ${Math.round(score * 100)}%`;
 }
 
+function fmtSignedHalf(n: number): string {
+  if (Object.is(n, -0) || n === 0) return "+0";
+  return n > 0 ? `+${n}` : String(n);
+}
+
 function ActionDecisionCell({
   actionLabel,
   publishTag,
   play,
   playToNotes,
+  playToNum,
+  leanToNum,
+  fairKei,
+  marketCurrent,
   edgeMagnitude,
   confidenceBand,
   confidenceScore,
@@ -308,6 +325,10 @@ function ActionDecisionCell({
   publishTag?: Tag;
   play?: string;
   playToNotes?: string;
+  playToNum?: number;
+  leanToNum?: number;
+  fairKei?: number;
+  marketCurrent?: number;
   edgeMagnitude?: number;
   confidenceBand?: ConfidenceBand;
   confidenceScore?: number;
@@ -325,6 +346,19 @@ function ActionDecisionCell({
     confidenceScore,
     confidenceTierConstant,
   );
+  const showLadder =
+    actionLabel === "PLAY" ||
+    actionLabel === "LEAN" ||
+    actionLabel === "BEST VALUE" ||
+    actionLabel === "ALERT";
+  const ladderVerb =
+    actionLabel === "LEAN" ? "Lean to" : actionLabel === "ALERT" ? "Was to" : "Play to";
+  const ladderNum =
+    actionLabel === "LEAN" && leanToNum != null
+      ? leanToNum
+      : playToNum != null
+        ? playToNum
+        : null;
   return (
     <div className={compact ? "leading-tight" : "leading-tight text-center"}>
       {actionLabel ? (
@@ -350,27 +384,36 @@ function ActionDecisionCell({
       {edgeMagnitude != null ? (
         <div className="mt-1 text-[10px] text-gray-300 tabular-nums">
           Edge {edgeMagnitude.toFixed(1)}
-          {confLabel ? (
+          {coverProb != null ? (
             <span className="text-gray-500">
               {" "}
-              · {confLabel}
+              · {(coverProb * 100).toFixed(1)}%
             </span>
           ) : null}
         </div>
-      ) : confLabel ? (
-        <div className="mt-1 text-[10px] text-gray-500">{confLabel}</div>
-      ) : null}
-      {coverProb != null ? (
-        <div className="mt-0.5 text-[10px] text-gray-500 tabular-nums">
-          Cover prob {(coverProb * 100).toFixed(1)}%
+      ) : coverProb != null ? (
+        <div className="mt-1 text-[10px] text-gray-500 tabular-nums">
+          Cover {(coverProb * 100).toFixed(1)}%
         </div>
       ) : null}
-      {playToNotes &&
-      actionLabel &&
-      (actionLabel === "PLAY" ||
-        actionLabel === "LEAN" ||
-        actionLabel === "BEST VALUE" ||
-        actionLabel === "ALERT") ? (
+      {confLabel ? (
+        <div className="mt-0.5 text-[10px] text-gray-500">{confLabel}</div>
+      ) : null}
+      {fairKei != null || marketCurrent != null ? (
+        <div className="mt-0.5 text-[9px] text-gray-500 tabular-nums">
+          Fair KEI {fairKei != null ? fmtSignedHalf(fairKei) : "—"}
+          {" · "}
+          Mkt {marketCurrent != null ? fmtSignedHalf(marketCurrent) : "—"}
+        </div>
+      ) : null}
+      {showLadder && ladderNum != null ? (
+        <div
+          className="mt-1 text-[10px] font-semibold text-gray-300 tabular-nums"
+          title={playToNotes}
+        >
+          {ladderVerb} {fmtSignedHalf(ladderNum)}
+        </div>
+      ) : showLadder && playToNotes ? (
         <div
           className="mt-1 text-[9px] text-gray-400 leading-snug line-clamp-3"
           title={playToNotes}
@@ -384,7 +427,7 @@ function ActionDecisionCell({
         </div>
       ) : null}
       {publishTag && actionLabel && publishTag !== actionLabel ? (
-        <div className="mt-1 text-[9px] text-gray-600">KEI tag {publishTag}</div>
+        <div className="mt-1 text-[9px] text-gray-600">Desk {publishTag}</div>
       ) : null}
     </div>
   );
@@ -1112,6 +1155,14 @@ export function flatRowsToLegacy(
       coverProbOU: totalRow?.coverProb,
       playToLine: lineRow?.playToNotes,
       playToOU: totalRow?.playToNotes,
+      playToLineNum: lineRow?.playToPlay,
+      playToOUNum: totalRow?.playToPlay,
+      leanToLineNum: lineRow?.playToLean,
+      leanToOUNum: totalRow?.playToLean,
+      fairLineKei: lineRow?.fairLine ?? undefined,
+      fairOUKei: totalRow?.fairLine ?? undefined,
+      marketLineCurrent: lineRow?.decisionMarketLine ?? undefined,
+      marketOUCurrent: totalRow?.decisionMarketLine ?? undefined,
       isBestBetLine: lineRow?.isBestBet,
       isBestBetOU: totalRow?.isBestBet,
       overview: overviewText,
@@ -1318,6 +1369,10 @@ export default function EdgeBoard({
                     publishTag={r.tagLine}
                     play={r.playLine}
                     playToNotes={r.playToLine}
+                    playToNum={r.playToLineNum}
+                    leanToNum={r.leanToLineNum}
+                    fairKei={r.fairLineKei}
+                    marketCurrent={r.marketLineCurrent}
                     edgeMagnitude={r.edgeMagnitudeLine}
                     confidenceBand={r.modelConfidenceBand}
                     confidenceScore={r.modelConfidenceScore}
@@ -1414,6 +1469,10 @@ export default function EdgeBoard({
                       publishTag={r.tagOU}
                       play={r.playOU}
                       playToNotes={r.playToOU}
+                      playToNum={r.playToOUNum}
+                      leanToNum={r.leanToOUNum}
+                      fairKei={r.fairOUKei}
+                      marketCurrent={r.marketOUCurrent}
                       edgeMagnitude={r.edgeMagnitudeOU}
                       confidenceBand={r.modelConfidenceBand}
                       confidenceScore={r.modelConfidenceScore}
@@ -1759,6 +1818,10 @@ export default function EdgeBoard({
                             publishTag={r.tagLine}
                             play={r.playLine}
                             playToNotes={r.playToLine}
+                            playToNum={r.playToLineNum}
+                            leanToNum={r.leanToLineNum}
+                            fairKei={r.fairLineKei}
+                            marketCurrent={r.marketLineCurrent}
                             edgeMagnitude={r.edgeMagnitudeLine}
                             confidenceBand={r.modelConfidenceBand}
                             confidenceScore={r.modelConfidenceScore}
@@ -1778,6 +1841,10 @@ export default function EdgeBoard({
                             publishTag={r.tagOU}
                             play={r.playOU}
                             playToNotes={r.playToOU}
+                            playToNum={r.playToOUNum}
+                            leanToNum={r.leanToOUNum}
+                            fairKei={r.fairOUKei}
+                            marketCurrent={r.marketOUCurrent}
                             edgeMagnitude={r.edgeMagnitudeOU}
                             confidenceBand={r.modelConfidenceBand}
                             confidenceScore={r.modelConfidenceScore}
