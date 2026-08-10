@@ -100,3 +100,11 @@ DATABASE_URL=postgresql+psycopg://ryankos:postgres@127.0.0.1:5432/kosedge \
 - No Decision Engine unlock from coherence alone
 - No freezing 2026 baseline
 - No team-specific sculpture to improve historical scores
+
+## Closeout (merged #164 → `deploy-vercel`)
+
+**Merge SHA:** `3a44b7aaaa71dc92711f199ea9b619f3c6b78dca` (2026-08-10)
+
+- **Team-win edge not proven** vs prior-year+regression (pooled MAE 2.524 vs 2.463); loss is multi-year (2020/2021/2024/2025), not COVID-only.
+- **Gate infrastructure landed** (runner, depth packs, scorecards, protocol guards).
+- **Model-value claim on season wins stays blocked.** Do not freeze 2026 baseline; do not open Phase 5 Decision Engine from this pass.
