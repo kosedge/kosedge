@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  deskCardClassName,
-  footerCardClassName,
-  footerCtaClassName,
-  footerTitleClassName,
-  getSportDeskConfig,
-} from "@/lib/pro-sport-desk";
+import { deskCardClassName, getSportDeskConfig } from "@/lib/pro-sport-desk";
 import {
   buildSportOverviewSections,
   buildSportOverviewContent,
@@ -48,10 +42,20 @@ const AT_A_GLANCE = [
   },
 ] as const;
 
+/** Destinations not already covered by At a Glance / Weekly Slate / Betting Desk / mid-grid. */
+const MORE_DESTINATIONS = [
+  { href: "/pro/power-ratings/nfl", label: "Power Ratings" },
+  { href: "/pro/nfl/projections", label: "Futures" },
+  { href: "/wall-chart/nfl-2026", label: "2026 Wall Chart" },
+  { href: "/pro/nfl/player-previews", label: "Player Previews" },
+  { href: "/pro/nfl/awards", label: "Awards" },
+] as const;
+
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
   const content = buildSportOverviewContent("nfl", "NFL");
-  // Weekly Slate is elevated above; keep Betting Desk / Props / Team / Governance.
+  // Weekly Slate + Betting Desk are elevated above; keep Team Intel + Governance only.
+  // Props & Fantasy duplicates Betting Desk Props + hero Fantasy Mock.
   const gridSections = buildSportOverviewSections({
     sportKey: "nfl",
     base: "/pro/nfl",
@@ -59,7 +63,8 @@ export default async function NflOverviewPage() {
     content,
   }).filter(
     (section) =>
-      section.title !== "Weekly Slate" && section.title !== "Betting Desk",
+      section.title === "Team Intel" ||
+      section.title === "Model Governance & Health",
   );
 
   return (
@@ -180,7 +185,7 @@ export default async function NflOverviewPage() {
         </div>
       </section>
 
-      {/* Props / Team Intel / Model Governance */}
+      {/* Team Intel / Model Governance — no Props & Fantasy duplicate block */}
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {gridSections.map((section) => (
           <SportOverviewSection
@@ -192,27 +197,26 @@ export default async function NflOverviewPage() {
         ))}
       </div>
 
-      {/* Bottom resource grid — no KEI Lines duplicate; Team Previews elevated */}
-      <section id="tools" className="mt-8 scroll-mt-28">
-        <h2 className="text-xl font-semibold tracking-tight text-kos-text">
-          Research tools
+      {/* Compact more-links — no duplicate card directory */}
+      <section id="tools" className="mt-8 scroll-mt-28 border-t border-white/10 pt-6">
+        <h2 className="text-sm font-semibold tracking-tight text-kos-text">
+          More
         </h2>
-        <p className="mt-1 text-sm text-kos-text/65">
-          Depth charts, previews, fantasy, governance, and schedule tools.
+        <p className="mt-1 text-xs text-kos-text/60">
+          Secondary destinations not listed above.
         </p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {desk.footerCards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className={footerCardClassName(card.accent)}
-            >
-              <h3 className={footerTitleClassName(card.accent)}>{card.title}</h3>
-              <p className="mt-2 text-sm text-kos-text/80">{card.description}</p>
-              <span className={footerCtaClassName(card.accent)}>{card.cta}</span>
-            </Link>
+        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          {MORE_DESTINATIONS.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="text-kos-gold/90 underline decoration-kos-gold/30 underline-offset-2 hover:text-kos-gold"
+              >
+                {item.label}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
     </main>
   );

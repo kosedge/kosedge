@@ -63,7 +63,8 @@ No material conflict that flips the side. Beat reporting is more optimistic on a
 **Handicapper’s Note**  
 Fair number: ~10.0 (research band 9.8–10.2; Kos Edge sim 9.87)  
 Market number: 10.5 (Over +115 / Under −140)  
-Lean: Pass at −140; juice-aware Under if Under ≤ −120  
+Lean: Pass at −140; juice-aware Under only at −120 or better  
+
 Confidence: 2/5  
 Key risk: Full Mahomes from Week 1 plus mean reversion from 1-9 one-score football can cash Overs — the brand is real; the −140 tax is also real.
 
