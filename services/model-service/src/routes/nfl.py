@@ -288,6 +288,96 @@ def _resolve_current_nfl_board_week(session: Any, season: int) -> int:
     return int(row[0] or 1) if row is not None else 1
 
 
+def _first_open_odds_by_game_ids(
+    session: Any, game_ids: List[str]
+) -> Dict[str, Dict[str, Any]]:
+    """Immutable open + latest capture time from odds_snapshots.
+
+    Open = earliest non-null spread_home / total_points per game.
+    Never invents open from the latest market quote.
+    """
+    if not game_ids:
+        return {}
+    # Dedupe while preserving order for stable binds.
+    unique_ids = list(dict.fromkeys(str(g) for g in game_ids if g))
+    if not unique_ids:
+        return {}
+    try:
+        rows = session.execute(
+            text(
+                """
+                WITH snaps AS (
+                  SELECT
+                    os.game_id::text AS game_id,
+                    m.code AS market_code,
+                    os.spread_home,
+                    os.total_points,
+                    os.captured_at
+                  FROM odds_snapshots os
+                  JOIN markets m ON m.id = os.market_id
+                  WHERE os.game_id::text = ANY(:game_ids)
+                    AND m.code IN ('spread', 'total', 'spreads', 'totals')
+                ),
+                open_spread AS (
+                  SELECT DISTINCT ON (game_id)
+                    game_id,
+                    spread_home AS open_spread_home,
+                    captured_at AS open_captured_at
+                  FROM snaps
+                  WHERE market_code IN ('spread', 'spreads')
+                    AND spread_home IS NOT NULL
+                  ORDER BY game_id, captured_at ASC
+                ),
+                open_total AS (
+                  SELECT DISTINCT ON (game_id)
+                    game_id,
+                    total_points AS open_total,
+                    captured_at AS open_captured_at
+                  FROM snaps
+                  WHERE market_code IN ('total', 'totals')
+                    AND total_points IS NOT NULL
+                  ORDER BY game_id, captured_at ASC
+                ),
+                latest AS (
+                  SELECT game_id, MAX(captured_at) AS odds_captured_at
+                  FROM snaps
+                  GROUP BY game_id
+                )
+                SELECT
+                  COALESCE(os.game_id, ot.game_id, l.game_id) AS game_id,
+                  os.open_spread_home,
+                  ot.open_total,
+                  l.odds_captured_at
+                FROM latest l
+                FULL OUTER JOIN open_spread os ON os.game_id = l.game_id
+                FULL OUTER JOIN open_total ot ON ot.game_id = COALESCE(l.game_id, os.game_id)
+                """
+            ),
+            {"game_ids": unique_ids},
+        ).fetchall()
+    except SQLAlchemyError:
+        log.exception("Failed loading first-open odds from odds_snapshots")
+        return {}
+
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in rows:
+        mapped = dict(row._mapping) if hasattr(row, "_mapping") else {}
+        gid = str(mapped.get("game_id") or "")
+        if not gid:
+            continue
+        open_spread = _to_float(mapped.get("open_spread_home"))
+        open_total = _to_float(mapped.get("open_total"))
+        captured = mapped.get("odds_captured_at")
+        out[gid] = {
+            "open_spread_home": round(open_spread, 2) if open_spread is not None else None,
+            "open_total": round(open_total, 2) if open_total is not None else None,
+            "odds_captured_at": captured.isoformat() if hasattr(captured, "isoformat") else (
+                str(captured) if captured is not None else None
+            ),
+        }
+    return out
+
+
 def _persist_nfl_odds_events_for_training(market_events: List[Dict[str, Any]]) -> Dict[str, int]:
     """Write Odds API events into odds_snapshots (+ market history) for training."""
     if not market_events:
@@ -3158,6 +3248,7 @@ def nfl_fair_lines(
             log.warning("NFL odds persist skipped after fair-lines pull: %s", str(exc)[:300])
 
     current_week = 1
+    open_by_game_id: Dict[str, Dict[str, Any]] = {}
     session = SessionLocal()
     try:
         effective_model_version = model_version or _resolve_active_nfl_model_version(session)
@@ -3237,6 +3328,10 @@ def nfl_fair_lines(
                 "include_past_days": include_past_days,
             },
         ).fetchall()
+        open_by_game_id = _first_open_odds_by_game_ids(
+            session,
+            [str(dict(r._mapping).get("game_id") or "") for r in rows],
+        )
     except SQLAlchemyError as exc:
         raise HTTPException(
             status_code=503,
@@ -3409,6 +3504,9 @@ def nfl_fair_lines(
             if _decision_market_spread is not None
             else False,
         )
+        _open_snap = open_by_game_id.get(str(mapped.get("game_id") or ""), {})
+        _open_spread = _to_float(_open_snap.get("open_spread_home"))
+        _open_total = _to_float(_open_snap.get("open_total"))
         _decision = nfl_decide_game(
             week=_week_int,
             fair_spread_home=model_spread if model_spread is not None else spread_home,
@@ -3419,10 +3517,9 @@ def nfl_fair_lines(
             away_abbr=away_abbr,
             cover_prob=_cover_prob,
             over_prob=_over_prob,
-            opening_spread_home=float(market_spread_home)
-            if market_spread_home is not None
-            else None,
-            opening_total=float(market_total) if market_total is not None else None,
+            # Prefer first-captured open; never fall back to inventing open=current.
+            opening_spread_home=_open_spread,
+            opening_total=_open_total,
             confidence=_decision_conf,
             price_still_available_spread=_decision_market_spread is not None,
             price_still_available_total=_decision_market_total is not None,
@@ -3474,6 +3571,14 @@ def nfl_fair_lines(
                 "market_away_ml": market_away_ml,
                 "market_total": market_total,
                 "market_spread_home": market_spread_home,
+                # Immutable first-captured open from odds_snapshots (not live consensus).
+                "open_spread_home": (
+                    round(_open_spread, 2) if _open_spread is not None else None
+                ),
+                "open_total": (
+                    round(_open_total, 2) if _open_total is not None else None
+                ),
+                "odds_captured_at": _open_snap.get("odds_captured_at"),
                 "best_spread_home": best_spread_home,
                 "best_total": best_total,
                 "best_spread_book": best_spread_book,

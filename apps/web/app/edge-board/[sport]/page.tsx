@@ -9,6 +9,7 @@ import {
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { filterNflStrictWeekRows } from "@/lib/nfl-edge-board-from-fair-lines";
+import { stampNflEdgeBoardWeeksFromSchedule } from "@/lib/nfl-edge-board-week";
 import {
   resolveSportKey,
   sportDisplayLabel,
@@ -67,7 +68,12 @@ export default async function EdgeBoardSportPage({
   let week1Count = 0;
   let fullCount = 0;
   if (sportKey === "nfl") {
-    const fullRows = await getRows("nfl", "full");
+    // Assemble once (full), stamp schedule-pack weeks, then derive Week 1.
+    // Stamping here is belt-and-suspenders with assemble — Week 1 must not
+    // empty when fair-lines omit week but REG W1 games are on the board.
+    const fullRows = stampNflEdgeBoardWeeksFromSchedule(
+      await getRows("nfl", "full"),
+    );
     const week1Rows = filterNflStrictWeekRows(fullRows, 1);
     week1Count = gameCount(week1Rows);
     fullCount = gameCount(fullRows);
@@ -134,9 +140,9 @@ export default async function EdgeBoardSportPage({
                 ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
                 : isNfl
                   ? slate === "week1"
-                    ? `Week 1 REG research board (${games || "—"} games). ${keiCode} = published fair line; Model vs KEI on Fair Lines when the blend splits. Open/Best when books post. PRE exhibitions filtered out. You make the picks.`
-                    : `Full REG slate (${nflWeekLabel}, ${games || "—"} games). ${keiCode} = published fair line. Research board — not a picks feed. PRE filtered out.`
-                  : `KEI (handicap) vs market. Live Open/Best when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
+                    ? `Week 1 REG research board (${games || "—"} games). ${keiCode} = published fair line; Model vs KEI on Fair Lines when the blend splits. Open = first capture; Current = latest books (auto-refresh). PRE exhibitions filtered out. You make the picks.`
+                    : `Full REG slate (${nflWeekLabel}, ${games || "—"} games). ${keiCode} = published fair line. Open + Current lines. Research board — not a picks feed. PRE filtered out.`
+                  : `KEI (handicap) vs market. Open + Current when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
             </p>
           </div>
 
@@ -211,9 +217,10 @@ export default async function EdgeBoardSportPage({
               </Link>
             </div>
             <p className="text-[11px] text-gray-500 max-w-3xl">
-              Week 1 = REG Week 1 only (Melbourne + domestic) · Full slate =
-              multi-week projection board · PRE filtered out · PLAY = KEI vs
-              market · empty Week 1 stays empty
+              Week 1 = all REG Week 1 games on the schedule pack (Melbourne +
+              domestic) · Full slate = multi-week projection board · PRE
+              filtered out · PLAY = KEI vs market · Open ≠ Current when the
+              line has moved
             </p>
           </div>
         ) : null}

@@ -7,6 +7,10 @@ import type { EdgeBoardRow } from "@kosedge/contracts";
 import { buildMatchupContext } from "@/lib/edge-board-matchup-context";
 import { buildMatchupOverview } from "@/lib/edge-board-matchup-overview";
 import { buildStatDrop } from "@/lib/edge-board-stat-drop";
+import {
+  coerceNflWeek,
+  lookupNflScheduleWeek,
+} from "@/lib/nfl-edge-board-week";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { resolveNflSiteContext } from "@/lib/nfl-neutral-sites-2026";
 import { structuralPaceFor } from "@/lib/edge-board-matchup-context";
@@ -125,19 +129,15 @@ export function enrichNflEdgeBoardMatchupFields(
     const { away, home } = parseGameTeams(game);
     const spread = group.find((r) => r.market === "Spread") ?? group[0]!;
     const total = group.find((r) => r.market === "Total");
-    const weekRaw = spread.week ?? total?.week ?? null;
-    const week =
-      weekRaw == null || weekRaw === ("" as unknown)
-        ? null
-        : Number.isFinite(Number(weekRaw))
-          ? Math.trunc(Number(weekRaw))
-          : null;
     const awayAbbr = canonAbbr(
       spread.awayAbbr || abbrFromLabel(away),
     );
     const homeAbbr = canonAbbr(
       spread.homeAbbr || abbrFromLabel(home),
     );
+    const week =
+      coerceNflWeek(spread.week ?? total?.week) ??
+      lookupNflScheduleWeek({ homeAbbr, awayAbbr });
 
     // KEI spread on board is home-side in fair-lines assembly.
     const keiSpreadHome =
@@ -218,6 +218,13 @@ export function enrichNflEdgeBoardMatchupFields(
     for (const row of group) {
       row.awayAbbr = awayAbbr;
       row.homeAbbr = homeAbbr;
+      // Write resolved week back so Week 1 tab / filters see it on the row.
+      if (week != null) row.week = week;
+      if (!row.seasonType) row.seasonType = "REG";
+      if (week === 1) {
+        if (row.gamesPlayedAway == null) row.gamesPlayedAway = 0;
+        if (row.gamesPlayedHome == null) row.gamesPlayedHome = 0;
+      }
       row.keiSpreadHome = keiSpreadHome ?? undefined;
       row.marketSpreadHome = marketSpreadHome ?? undefined;
       row.keiTotal = keiTotal ?? undefined;

@@ -30,6 +30,7 @@ import {
   overlayOddsOntoFairLineRows,
   sortNflEdgeBoardRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
+import { stampNflEdgeBoardWeeksFromSchedule } from "@/lib/nfl-edge-board-week";
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
@@ -111,24 +112,6 @@ function withMatchupEnrichment(rows: EdgeBoardRow[]): EdgeBoardRow[] {
   });
 }
 
-function stampWeek1SeasonGates(rows: EdgeBoardRow[]): EdgeBoardRow[] {
-  for (const r of rows) {
-    const row = r as EdgeBoardRow & {
-      week?: number;
-      gamesPlayedAway?: number;
-      gamesPlayedHome?: number;
-    };
-    if (row.week == null || !Number.isFinite(Number(row.week))) {
-      row.week = 1;
-    }
-    if (Number(row.week) === 1) {
-      if (row.gamesPlayedAway == null) row.gamesPlayedAway = 0;
-      if (row.gamesPlayedHome == null) row.gamesPlayedHome = 0;
-    }
-  }
-  return rows;
-}
-
 async function assembleNflEdgeBoardRows(
   oddsRows: EdgeBoardRow[],
   options?: AssembleEdgeBoardOptions,
@@ -163,11 +146,11 @@ async function assembleNflEdgeBoardRows(
     rows = ensureAllKeiGamesOnBoard(odds, "nfl", keiGames);
     rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
     rows = filterNflProjectionBackedRows(rows);
+    // Stamp REG week from schedule pack BEFORE Week 1 filter (root-cause fix).
+    rows = stampNflEdgeBoardWeeksFromSchedule(rows);
     rows = sortNflEdgeBoardRows(rows);
     if (slate === "week1") {
-      return withMatchupEnrichment(
-        stampWeek1SeasonGates(filterNflStrictWeekRows(rows, 1)),
-      );
+      return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
     }
     // Full slate without fair-lines: priced projection rows when books exist.
     return withMatchupEnrichment(filterNflOddsPostedRows(rows));
@@ -175,13 +158,13 @@ async function assembleNflEdgeBoardRows(
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
   rows = filterNflProjectionBackedRows(rows);
+  // Stamp missing week from 2026 schedule pack before any week filter.
+  rows = stampNflEdgeBoardWeeksFromSchedule(rows);
   rows = sortNflEdgeBoardRows(rows);
 
   if (slate === "week1") {
-    // Strict Week 1 REG — honest empty, no nearest-week / full-slate fallthrough.
-    return withMatchupEnrichment(
-      stampWeek1SeasonGates(filterNflStrictWeekRows(rows, 1)),
-    );
+    // Strict Week 1 REG — honest empty only when schedule truly has zero W1 games.
+    return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
   }
   // Full slate: every projection-backed REG game in the pull window.
   return withMatchupEnrichment(rows);

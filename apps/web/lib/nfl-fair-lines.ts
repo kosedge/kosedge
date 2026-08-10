@@ -70,6 +70,15 @@ export type NflFairLineRow = {
   marketAwayMl: number | null;
   marketTotal: number | null;
   marketSpreadHome: number | null;
+  /**
+   * First-captured / official open (home spread). Immutable once set upstream.
+   * Null when history has no open yet — UI must show — (not invent open=current).
+   */
+  openSpreadHome: number | null;
+  /** First-captured open total. */
+  openTotal: number | null;
+  /** Latest odds snapshot timestamp (ISO) for as-of / stale hints. */
+  oddsCapturedAt: string | null;
   /** Best home spread number across books (pairs with best away). */
   bestSpreadHome: number | null;
   /** Best total number across books (Over-favorable). */
@@ -367,6 +376,13 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     marketAwayMl: toNumberOrNull(raw.market_away_ml),
     marketTotal: toNumberOrNull(raw.market_total),
     marketSpreadHome: toNumberOrNull(raw.market_spread_home),
+    openSpreadHome: toNumberOrNull(
+      raw.open_spread_home ?? raw.opening_spread_home,
+    ),
+    openTotal: toNumberOrNull(raw.open_total ?? raw.opening_total),
+    oddsCapturedAt: toIsoOrNull(
+      raw.odds_captured_at ?? raw.market_captured_at,
+    ),
     bestSpreadHome: toNumberOrNull(raw.best_spread_home),
     bestTotal: toNumberOrNull(raw.best_total),
     bestSpreadBook:

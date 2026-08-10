@@ -47,6 +47,9 @@ function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
     marketAwayMl: null,
     marketTotal: 44.5,
     marketSpreadHome: -3.0,
+    openSpreadHome: null,
+    openTotal: null,
+    oddsCapturedAt: null,
     bestSpreadHome: null,
     bestTotal: null,
     bestSpreadBook: null,
@@ -90,15 +93,17 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(4);
   });
 
-  it("fills KEINFL + market open/best for every fair-line game", () => {
+  it("fills KEINFL + current market; open only from first-capture fields", () => {
     const rows = fairLinesToEdgeBoardRows([line({})]);
     expect(rows).toHaveLength(2);
     const spread = rows.find((r) => r.market === "Spread")!;
     const total = rows.find((r) => r.market === "Total")!;
     expect(spread.kei).toBe("-3.5");
-    expect(spread.open).toBe("+3"); // away side of market consensus -3 home
-    expect(spread.best).toBe("+3"); // falls back to consensus when no best-of-books
+    // No openSpreadHome → open stays blank (never invent open = current).
+    expect(spread.open).toBeUndefined();
+    expect(spread.best).toBe("+3"); // current = consensus when no best-of-books
     expect(total.kei).toBe("41.3");
+    expect(total.open).toBeUndefined();
     expect(total.best).toBe("44.5");
     expect((spread as { modelKei?: string }).modelKei).toBe("-3.5");
     // Decision Engine action layer attached (Model fair vs market).
@@ -109,6 +114,49 @@ describe("nfl-edge-board-from-fair-lines", () => {
       (spread as { modelConfidenceBand?: string }).modelConfidenceBand,
     ).toBeTruthy();
     expect((spread as { weekRegime?: string }).weekRegime).toBe("early");
+  });
+
+  it("keeps open distinct from current when opening fields are present", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        openSpreadHome: -2.5,
+        openTotal: 43.5,
+        marketSpreadHome: -3.5,
+        bestSpreadHome: -3.5,
+        marketTotal: 48.5,
+        bestTotal: 48.5,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    const total = rows.find((r) => r.market === "Total")!;
+    expect(spread.open).toBe("+2.5");
+    expect(spread.best).toBe("+3.5");
+    expect(total.open).toBe("43.5");
+    expect(total.best).toBe("48.5");
+  });
+
+  it("overlay updates current but does not overwrite open", () => {
+    const fair = fairLinesToEdgeBoardRows([
+      line({
+        openSpreadHome: -2.5,
+        marketSpreadHome: -3,
+        bestSpreadHome: -3,
+      }),
+    ]);
+    const overlaid = overlayOddsOntoFairLineRows(fair, [
+      {
+        id: "o1",
+        game: "New England Patriots @ Seattle Seahawks",
+        market: "Spread",
+        open: "+7",
+        best: "+4",
+        bookKey: "fanduel",
+        book: "FanDuel",
+      } as any,
+    ]);
+    const spread = overlaid.find((r) => r.market === "Spread")!;
+    expect(spread.open).toBe("+2.5");
+    expect(spread.best).toBe("+4");
   });
 
   it("attaches modelKei from pre-blend model fields while kei stays handicap", () => {
@@ -131,11 +179,13 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect((total as { modelKei?: string }).modelKei).toBe("43.1");
   });
 
-  it("uses best-of-books for Best Line / Best O/U instead of consensus", () => {
+  it("uses best-of-books for Current Line / Current O/U instead of consensus", () => {
     const rows = fairLinesToEdgeBoardRows([
       line({
         marketSpreadHome: -3.0,
         marketTotal: 44.5,
+        openSpreadHome: -3.0,
+        openTotal: 44.5,
         bestSpreadHome: -3.5,
         bestTotal: 45.0,
         bestSpreadBook: "circa",

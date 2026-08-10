@@ -12,6 +12,7 @@ import {
   isTierConstantConfidence,
 } from "@/lib/nfl-decision-engine";
 import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
+import { coerceNflWeek } from "@/lib/nfl-edge-board-week";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 
 const ET = "America/New_York";
@@ -22,22 +23,30 @@ function formatSigned(point: number): string {
   return rounded > 0 ? `+${rounded}` : String(rounded);
 }
 
-function formatCommence(iso: string | null): string | undefined {
-  if (!iso) return undefined;
+function formatKickoffParts(iso: string | null): {
+  time?: string;
+  kickoffDate?: string;
+  kickoffTime?: string;
+} {
+  if (!iso) return {};
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return undefined;
-  const date = d.toLocaleDateString("en-US", {
+  if (Number.isNaN(d.getTime())) return {};
+  const kickoffDate = d.toLocaleDateString("en-US", {
     timeZone: ET,
     month: "2-digit",
     day: "2-digit",
   });
-  const time = d.toLocaleTimeString("en-US", {
+  const kickoffTime = d.toLocaleTimeString("en-US", {
     timeZone: ET,
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
   });
-  return `${date} ${time} ET`;
+  return {
+    kickoffDate,
+    kickoffTime,
+    time: `${kickoffDate} ${kickoffTime} ET`,
+  };
 }
 
 function normalizeGameKey(game: string): string {
@@ -100,7 +109,8 @@ function formatJuice(price: number | null | undefined): string | undefined {
 /**
  * One Spread + one Total row per fair-line game.
  * KEI always set from Kosedge.
- * Open = market consensus average; Best = best number across books when present.
+ * Open = first-captured open when available (never invented as current).
+ * Best = current best-of-books / consensus (moves on odds refresh).
  */
 export function fairLinesToEdgeBoardRows(
   lines: NflFairLineRow[],
@@ -115,7 +125,7 @@ export function fairLinesToEdgeBoardRows(
         startTime: line.startTime,
         gameDate: line.gameDate,
       }) ?? undefined;
-    const time = formatCommence(commenceTime ?? null);
+    const kickoff = formatKickoffParts(commenceTime ?? null);
     const idBase =
       line.gameId ||
       `${line.awayAbbr}-${line.homeAbbr}-${commenceTime ?? "tba"}`;
@@ -137,7 +147,7 @@ export function fairLinesToEdgeBoardRows(
       line.modelTotal != null
         ? String(Math.round(line.modelTotal * 10) / 10)
         : undefined;
-    // Open = consensus average across books (when joined).
+    // Current = latest consensus / best-of-books (moves with odds refresh).
     const marketAwaySpread =
       line.marketSpreadHome != null
         ? awaySpreadFromHome(line.marketSpreadHome)
@@ -146,7 +156,6 @@ export function fairLinesToEdgeBoardRows(
       line.marketTotal != null
         ? String(Math.round(line.marketTotal * 10) / 10)
         : undefined;
-    // Best = best-of-books number + winning book (not consensus).
     const bestAwaySpread =
       line.bestSpreadHome != null
         ? awaySpreadFromHome(line.bestSpreadHome)
@@ -157,8 +166,18 @@ export function fairLinesToEdgeBoardRows(
         : undefined;
     const bestSpreadBook = line.bestSpreadBook ?? undefined;
     const bestTotalBook = line.bestTotalBook ?? undefined;
+    // Open = first-captured / official open only. Never invent open = current.
+    const openAwaySpread =
+      line.openSpreadHome != null
+        ? awaySpreadFromHome(line.openSpreadHome)
+        : undefined;
+    const openTotal =
+      line.openTotal != null
+        ? String(Math.round(line.openTotal * 10) / 10)
+        : undefined;
+    const linesAsOf = line.oddsCapturedAt ?? undefined;
 
-    const week = line.week ?? undefined;
+    const week = coerceNflWeek(line.week) ?? undefined;
     const seasonType = line.seasonType ?? undefined;
     const publishTagSpread = line.publishTagSpread ?? undefined;
     const publishTagTotal = line.publishTagTotal ?? undefined;
@@ -178,8 +197,8 @@ export function fairLinesToEdgeBoardRows(
           marketTotal: compareTotal,
           homeAbbr: line.homeAbbr,
           awayAbbr: line.awayAbbr,
-          openingSpreadHome: line.marketSpreadHome,
-          openingTotal: line.marketTotal,
+          openingSpreadHome: line.openSpreadHome,
+          openingTotal: line.openTotal,
           confidence: assessConfidence(),
           priceStillAvailableSpread: compareSpread != null,
           priceStillAvailableTotal: compareTotal != null,
@@ -228,10 +247,13 @@ export function fairLinesToEdgeBoardRows(
     rows.push({
       id: `${idBase}-spread`,
       game,
-      time,
+      time: kickoff.time,
+      kickoffDate: kickoff.kickoffDate,
+      kickoffTime: kickoff.kickoffTime,
       commenceTime,
       market: "Spread",
-      open: marketAwaySpread,
+      // Open immutable once set from first capture; Current in `best`.
+      open: openAwaySpread,
       best: bestAwaySpread ?? marketAwaySpread,
       book:
         bestSpreadBook ??
@@ -247,6 +269,7 @@ export function fairLinesToEdgeBoardRows(
       modelKei: modelKeiHome,
       week,
       seasonType,
+      linesAsOf,
       publishTag: publishTagSpread,
       actionLabel: actionLabelSpread ?? undefined,
       decision: spreadDecision
@@ -274,10 +297,12 @@ export function fairLinesToEdgeBoardRows(
     rows.push({
       id: `${idBase}-total`,
       game,
-      time,
+      time: kickoff.time,
+      kickoffDate: kickoff.kickoffDate,
+      kickoffTime: kickoff.kickoffTime,
       commenceTime,
       market: "Total",
-      open: marketTotal,
+      open: openTotal,
       best: bestTotal ?? marketTotal,
       book: bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
       bookKey:
@@ -290,6 +315,7 @@ export function fairLinesToEdgeBoardRows(
       modelKei: modelKeiTotal,
       week,
       seasonType,
+      linesAsOf,
       publishTag: publishTagTotal,
       actionLabel: actionLabelTotal ?? undefined,
       decision: totalDecision
@@ -319,8 +345,7 @@ export function fairLinesToEdgeBoardRows(
 }
 
 function rowWeek(row: EdgeBoardRow): number | null {
-  const w = (row as EdgeBoardRow & { week?: number }).week;
-  return typeof w === "number" && Number.isFinite(w) ? w : null;
+  return coerceNflWeek((row as EdgeBoardRow & { week?: unknown }).week);
 }
 
 function hasSportsbookPrice(row: EdgeBoardRow): boolean {
@@ -482,32 +507,43 @@ export function overlayOddsOntoFairLineRows(
       openJuiceHome?: string;
       bestJuice?: string;
       bestJuiceHome?: string;
+      kickoffDate?: string;
+      kickoffTime?: string;
+      linesAsOf?: string;
+      /** True open from first capture — rare on Odds API path. */
+      openIsImmutable?: boolean;
     };
-    if (odds.open) target.open = odds.open;
-    if (odds.best) target.best = odds.best;
-    if (odds.book)
-      (target as EdgeBoardRow & { book?: string }).book = odds.book;
-    if (src.bookKey) {
-      (target as EdgeBoardRow & { bookKey?: string }).bookKey = src.bookKey;
+    const tgt = target as EdgeBoardRow & {
+      open?: string;
+      best?: string;
+      book?: string;
+      bookKey?: string;
+      openJuice?: string;
+      openJuiceHome?: string;
+      bestJuice?: string;
+      bestJuiceHome?: string;
+      kickoffDate?: string;
+      kickoffTime?: string;
+      linesAsOf?: string;
+    };
+    // Current line moves with odds. Never overwrite a set Open with live books
+    // (Odds API "open" is preferred-book current, not first-captured open).
+    if (odds.best) tgt.best = odds.best;
+    if (odds.book) tgt.book = odds.book;
+    if (src.bookKey) tgt.bookKey = src.bookKey;
+    if (src.bestJuice) tgt.bestJuice = src.bestJuice;
+    if (src.bestJuiceHome) tgt.bestJuiceHome = src.bestJuiceHome;
+    // Fill Open only when missing AND the odds row marks a true immutable open.
+    if (!tgt.open && src.openIsImmutable && odds.open) {
+      tgt.open = odds.open;
+      if (src.openJuice) tgt.openJuice = src.openJuice;
+      if (src.openJuiceHome) tgt.openJuiceHome = src.openJuiceHome;
     }
-    if (src.openJuice) {
-      (target as EdgeBoardRow & { openJuice?: string }).openJuice =
-        src.openJuice;
-    }
-    if (src.openJuiceHome) {
-      (target as EdgeBoardRow & { openJuiceHome?: string }).openJuiceHome =
-        src.openJuiceHome;
-    }
-    if (src.bestJuice) {
-      (target as EdgeBoardRow & { bestJuice?: string }).bestJuice =
-        src.bestJuice;
-    }
-    if (src.bestJuiceHome) {
-      (target as EdgeBoardRow & { bestJuiceHome?: string }).bestJuiceHome =
-        src.bestJuiceHome;
-    }
-    if (odds.time) target.time = odds.time;
-    if (odds.commenceTime) target.commenceTime = odds.commenceTime;
+    if (odds.time) tgt.time = odds.time;
+    if (odds.commenceTime) tgt.commenceTime = odds.commenceTime;
+    if (src.kickoffDate) tgt.kickoffDate = src.kickoffDate;
+    if (src.kickoffTime) tgt.kickoffTime = src.kickoffTime;
+    if (src.linesAsOf) tgt.linesAsOf = src.linesAsOf;
   }
 
   // Do not append odds-only extras (PRE noise, unmatched books). NFL board is
