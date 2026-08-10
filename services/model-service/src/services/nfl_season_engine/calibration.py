@@ -19,9 +19,18 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.25: Phase 2 — named-team sculpture → general features (QB rush, OL
-# protection, coaching play-mix, returning-QB prior travel).
-ENGINE_VERSION = "nfl-season-engine-v1.25-phase2-features"
+# v1.26 Path A2: returning-player prior-year usage-share anchor (not path-end
+# yard blend). See player_usage.anchor_roster_book_to_prior_usage_shares.
+ENGINE_VERSION = "nfl-season-engine-v1.26-phase3-pathA2-usage-prior"
+
+# Path A2 — blend weight toward Y−1 team-share of targets / rush attempts for
+# returning players with material prior volume. Depth archetype fills the rest;
+# no-history / rookies keep depth defaults. Not a path-end season-yards blend.
+PRIOR_USAGE_ANCHOR_WEIGHT = 0.80
+PRIOR_USAGE_MIN_TARGETS = 25.0
+PRIOR_USAGE_MIN_RUSH_ATTEMPTS = 40.0
+# Soft cap on named target / rush sums after anchoring (residual "other" room).
+PRIOR_USAGE_NAMED_SHARE_CAP = 0.92
 
 # ---------------------------------------------------------------------------
 # League environment (team / game script)
@@ -557,6 +566,15 @@ def calibration_notes() -> Dict[str, str]:
             "(SoT player_id tiers), OL protection index from ol_roles, coaching "
             "tendencies for ARI/SEA/WAS, returning-QB prior travel. League pools "
             "+ Σ wins=272 conserved. See qb_rushing_profile.py / ol_protection.py."
+        ),
+        "pathA2_usage_prior": (
+            "v1.26 Path A2: returning players with material Y−1 volume get "
+            "target_share / rush_share blended toward prior-season share of "
+            "team targets / rush attempts at usage construction "
+            f"(weight={PRIOR_USAGE_ANCHOR_WEIGHT}); no-history keep depth "
+            "archetypes; no path-end season-yards blend. Scorecard player "
+            "pass/rush/rec prior baselines use the same position filters as "
+            "the model pool."
         ),
         "sources": (
             "Recent NFL season shapes (2022–2024) + alignment with "

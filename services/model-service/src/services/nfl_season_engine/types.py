@@ -108,6 +108,8 @@ class PlayerRole:
     team: str
     position: str  # QB | RB | WR | TE
     depth_order: int = 1
+    # SoT / nflverse GSIS id when known (historical depth + live packs).
+    player_id: str = ""
     snap_share: float = 0.0
     target_share: float = 0.0
     rush_share: float = 0.0

@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-08-10T01:47:12.061284+00:00",
+  "engine_version": "nfl-season-engine-v1.26-phase3-pathA2-usage-prior",
+  "protocol_version": "nfl-historical-replay-v1-20260809",
+  "n_sims": 25,
+  "seed": 20260809,
+  "seasons": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "replicate_count": 25
+}

@@ -21,12 +21,17 @@ not renormalize WR1/RB1 into unrealistic volume (foundation bug).
 from __future__ import annotations
 
 import random
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from dataclasses import replace
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from src.services.nfl_season_engine.calibration import (
     ATTEMPT_SHARE_OF_PASS_PLAYS,
     DIRICHLET_RUSH_CONCENTRATION,
     DIRICHLET_TARGET_CONCENTRATION,
+    PRIOR_USAGE_ANCHOR_WEIGHT,
+    PRIOR_USAGE_MIN_RUSH_ATTEMPTS,
+    PRIOR_USAGE_MIN_TARGETS,
+    PRIOR_USAGE_NAMED_SHARE_CAP,
     QB1_START_RATE,
     USAGE_OTHER_BUCKET_FLOOR,
     dirichlet_concentration_for_week,
@@ -345,6 +350,130 @@ def usage_share_diagnostics(
             }
         )
     return rows
+
+
+def _clamp_share(value: float, high: float = 0.45) -> float:
+    return max(0.0, min(high, float(value)))
+
+
+def anchor_roles_to_prior_usage_shares(
+    roles: Sequence[PlayerRole],
+    prior_by_player_id: Mapping[str, Mapping[str, float]],
+    *,
+    weight: float = PRIOR_USAGE_ANCHOR_WEIGHT,
+    min_targets: float = PRIOR_USAGE_MIN_TARGETS,
+    min_rush_attempts: float = PRIOR_USAGE_MIN_RUSH_ATTEMPTS,
+    named_share_cap: float = PRIOR_USAGE_NAMED_SHARE_CAP,
+) -> Tuple[List[PlayerRole], Dict[str, Any]]:
+    """Blend depth archetype shares toward Y−1 team volume shares.
+
+    Returning players with material prior targets / rush attempts pull
+    ``target_share`` / ``rush_share`` toward their prior-season share of
+    *team* targets / rush attempts. Rookies / unmatched / thin priors keep
+    depth-order archetypes. Does **not** touch final season yards.
+    """
+    w = _clamp(float(weight), 0.0, 1.0)
+    out: List[PlayerRole] = []
+    anchored_tgt = 0
+    anchored_rush = 0
+    skipped_no_history = 0
+    for role in roles:
+        pid = str(getattr(role, "player_id", "") or "").strip()
+        prior = prior_by_player_id.get(pid) if pid else None
+        if not prior:
+            skipped_no_history += 1
+            out.append(role)
+            continue
+        pos = (role.position or "").upper()
+        new_tgt = float(role.target_share or 0.0)
+        new_rush = float(role.rush_share or 0.0)
+        notes = []
+        prior_tgt_n = float(prior.get("targets") or 0.0)
+        prior_rush_n = float(prior.get("rush_attempts") or 0.0)
+        prior_tgt_share = float(prior.get("target_share") or 0.0)
+        prior_rush_share = float(prior.get("rush_share") or 0.0)
+
+        if pos in ("WR", "TE", "RB") and prior_tgt_n >= min_targets and prior_tgt_share > 0:
+            new_tgt = (1.0 - w) * new_tgt + w * prior_tgt_share
+            new_tgt = _clamp_share(new_tgt, 0.40 if pos != "RB" else 0.22)
+            anchored_tgt += 1
+            notes.append("prior_tgt")
+        if pos in ("RB", "QB") and prior_rush_n >= min_rush_attempts and prior_rush_share > 0:
+            # QBs: rush only — pass volume stays team-pool × QB1 snap.
+            high = 0.85 if pos == "RB" else 0.22
+            new_rush = (1.0 - w) * new_rush + w * prior_rush_share
+            new_rush = _clamp_share(new_rush, high)
+            anchored_rush += 1
+            notes.append("prior_rush")
+        if not notes:
+            skipped_no_history += 1
+            out.append(role)
+            continue
+        route = float(role.route_share or 0.0)
+        if pos in ("WR", "TE") and new_tgt > 0:
+            route = max(route, new_tgt * 3.8)
+        elif pos == "RB" and new_tgt > 0:
+            route = max(route, new_tgt * 2.4)
+        out.append(
+            replace(
+                role,
+                target_share=round(new_tgt, 5),
+                rush_share=round(new_rush, 5),
+                route_share=round(route, 5),
+                source=f"{role.source}+prior_usage_anchor",
+            )
+        )
+
+    # Soft renorm when named shares exceed residual-other room.
+    def _renorm(field: str) -> None:
+        nonlocal out
+        total = sum(float(getattr(r, field) or 0.0) for r in out)
+        if total <= named_share_cap or total <= 0:
+            return
+        scale = named_share_cap / total
+        out = [
+            replace(r, **{field: round(float(getattr(r, field) or 0.0) * scale, 5)})
+            for r in out
+        ]
+
+    _renorm("target_share")
+    _renorm("rush_share")
+    diag = {
+        "anchored_target": anchored_tgt,
+        "anchored_rush": anchored_rush,
+        "skipped_no_history": skipped_no_history,
+        "weight": w,
+        "named_share_cap": named_share_cap,
+    }
+    return out, diag
+
+
+def anchor_roster_book_to_prior_usage_shares(
+    rosters: Mapping[str, Sequence[PlayerRole]],
+    prior_by_player_id: Mapping[str, Mapping[str, float]],
+    **kwargs: Any,
+) -> Tuple[Dict[str, List[PlayerRole]], Dict[str, Any]]:
+    """Apply :func:`anchor_roles_to_prior_usage_shares` per team."""
+    out: Dict[str, List[PlayerRole]] = {}
+    totals = {
+        "anchored_target": 0,
+        "anchored_rush": 0,
+        "skipped_no_history": 0,
+        "teams": 0,
+    }
+    for team, roles in rosters.items():
+        anchored, diag = anchor_roles_to_prior_usage_shares(
+            roles, prior_by_player_id, **kwargs
+        )
+        out[team] = anchored
+        totals["anchored_target"] += int(diag["anchored_target"])
+        totals["anchored_rush"] += int(diag["anchored_rush"])
+        totals["skipped_no_history"] += int(diag["skipped_no_history"])
+        totals["teams"] += 1
+    totals["weight"] = float(
+        kwargs.get("weight", PRIOR_USAGE_ANCHOR_WEIGHT)
+    )
+    return out, totals
 
 
 def share_integrity_summary(

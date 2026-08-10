@@ -887,7 +887,11 @@ def _rosters_from_depth_rows(
             draft_round=draft_i,
             rookie_status=str(status_raw),
         )
-        pid = str(r.get("player_id") or getattr(r, "player_id", "") or "")
+        pid = str(r.get("player_id") or getattr(r, "player_id", "") or "").strip()
+        if pid and not pid.startswith(f"{team}-{pos}-"):
+            from dataclasses import replace as _replace
+
+            role = _replace(role, player_id=pid)
         role = _apply_qb_rush_profile_to_role(role, player_id=pid)
         if hit:
             baseline_hits += 1
