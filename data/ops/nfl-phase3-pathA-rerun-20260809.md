@@ -62,3 +62,5 @@ Shrinking **all** yard types (including QB pass) toward the same 0.5/0.5 prior a
 - No Phase 4/5 unlock from this pass
 - No second lever stacked after revert
 - No scorecard rewrite mid-flight (population mismatch noted in diagnosis only)
+
+Merged as docs+revert only; blend lever dead; failure mode still open; Path A2 next
