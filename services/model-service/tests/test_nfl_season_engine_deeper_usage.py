@@ -47,6 +47,8 @@ def test_engine_version_surfaces_deeper_usage() -> None:
         or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
         or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
+        or "pathA2" in DEFAULT_SEASON_ENGINE_VERSION
+        or "usage-prior" in DEFAULT_SEASON_ENGINE_VERSION
     )
 
 
@@ -225,6 +227,8 @@ def test_buf_kc_calibration_sanity_preserved() -> None:
         or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
         or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
         or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
+        or "pathA2" in DEFAULT_SEASON_ENGINE_VERSION
+        or "usage-prior" in DEFAULT_SEASON_ENGINE_VERSION
     )
     cook = next(p for p in proj.players if "Cook" in p["player_name"])
     rice = next(p for p in proj.players if "Rice" in p["player_name"])

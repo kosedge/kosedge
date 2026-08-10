@@ -37,6 +37,9 @@ from src.services.nfl_season_engine.loaders import (
 from src.services.nfl_season_engine.player_regression import (
     apply_process_priors_to_roster_book,
 )
+from src.services.nfl_season_engine.player_usage import (
+    anchor_roster_book_to_prior_usage_shares,
+)
 from src.services.nfl_season_engine.season_sim import simulate_full_season
 from src.services.nfl_season_engine.team_strength import initialize_strengths
 from src.services.nfl_season_engine.types import (
@@ -583,6 +586,8 @@ def build_historical_replay_universe(
         }
 
     # League efficiency priors only — never Y baselines (would leak Y usage).
+    # Path A2: Y−1 *usage shares* (targets/carries ÷ team) are allowed as a
+    # volume role prior; Y counting-stat baselines remain scorecard-only.
     rosters, _hits, coverage = _rosters_from_depth_rows(
         depth_rows,
         source="historical_nflverse_depth_w1",
@@ -593,6 +598,12 @@ def build_historical_replay_universe(
         rosters = roster_book[0]
     else:
         rosters = roster_book
+    prior_usage = load_prior_year_usage_shares(
+        session, season=int(strength_meta["prior_season"])
+    )
+    rosters, usage_anchor_diag = anchor_roster_book_to_prior_usage_shares(
+        rosters, prior_usage
+    )
     rosters = annotate_roster_book(rosters)
     rosters = apply_process_priors_to_roster_book(rosters)
 
@@ -615,6 +626,7 @@ def build_historical_replay_universe(
             "strength_source": STRENGTH_SOURCE_PACKAGED_EPA,
             "prior_season": int(strength_meta["prior_season"]),
             "look_ahead": False,
+            "prior_usage_anchor": usage_anchor_diag,
             **{f"depth_{k}": v for k, v in coverage.items()},
         },
         packaged_injury_paths=[],
@@ -699,6 +711,74 @@ def load_team_offense_yards(
             "pass_yards": float(r.pass_yards or 0.0),
             "rush_yards": float(r.rush_yards or 0.0),
         }
+    return out
+
+
+def load_prior_year_usage_shares(
+    session: Any, *, season: int
+) -> Dict[str, Dict[str, float]]:
+    """Y−1 player share of team targets / rush attempts (by player_id).
+
+    Used as a *usage input* prior for returning players — not a path-end
+    season-yards blend. ``season`` is the prior season (Y−1).
+    """
+    from sqlalchemy import text
+
+    rows = session.execute(
+        text(
+            """
+            SELECT
+              u.player_id,
+              u.team,
+              SUM(u.targets)::float AS targets,
+              SUM(u.rush_attempts)::float AS rush_attempts,
+              SUM(u.pass_attempts)::float AS pass_attempts
+            FROM nfl_dp_player_usage_weekly u
+            WHERE u.season = :season
+              AND u.week BETWEEN 1 AND 18
+              AND u.source = 'pbp_aggregation'
+              AND u.player_id IS NOT NULL
+              AND u.player_id <> ''
+            GROUP BY u.player_id, u.team
+            """
+        ),
+        {"season": int(season)},
+    ).fetchall()
+    team_tgt: Dict[str, float] = {}
+    team_rush: Dict[str, float] = {}
+    raw: List[Any] = []
+    for r in rows:
+        team = _normalize_team(str(r.team or ""))
+        if team not in NFL_TEAMS:
+            continue
+        tgt = float(r.targets or 0.0)
+        rush = float(r.rush_attempts or 0.0)
+        team_tgt[team] = team_tgt.get(team, 0.0) + tgt
+        team_rush[team] = team_rush.get(team, 0.0) + rush
+        raw.append(r)
+    out: Dict[str, Dict[str, float]] = {}
+    for r in raw:
+        pid = str(r.player_id or "").strip()
+        team = _normalize_team(str(r.team or ""))
+        if not pid or team not in NFL_TEAMS:
+            continue
+        tgt = float(r.targets or 0.0)
+        rush = float(r.rush_attempts or 0.0)
+        # If a player appears on multiple teams in Y−1, keep the higher-volume
+        # row (absolute attempts) so free-agent role priors travel.
+        candidate = {
+            "targets": tgt,
+            "rush_attempts": rush,
+            "pass_attempts": float(r.pass_attempts or 0.0),
+            "target_share": tgt / max(1.0, team_tgt.get(team, 0.0)),
+            "rush_share": rush / max(1.0, team_rush.get(team, 0.0)),
+        }
+        prev = out.get(pid)
+        if prev is None or (
+            candidate["targets"] + candidate["rush_attempts"]
+            > float(prev.get("targets") or 0.0) + float(prev.get("rush_attempts") or 0.0)
+        ):
+            out[pid] = candidate
     return out
 
 
@@ -1091,13 +1171,22 @@ def score_season_predictions(
             act[key] = float(a.get(metric) or 0.0)
         player_pool[metric] = score_vector(pred, act)
 
-    # Baseline player pool (prior-year regression) on same matched keys where pid known
+    # Baseline player pool (prior-year regression) on the **same position
+    # universe** as the model pool (Path A2 scorecard hygiene — #164 diluted
+    # prior pass MAE with near-zero non-QB pass_yards).
     if "prior_year_regression" in baseline_players:
         bpred_map = baseline_players["prior_year_regression"]
         for metric in ("pass_yards", "rush_yards", "rec_yards"):
             pred = {}
             act = {}
             for i, (m, a) in enumerate(pairs):
+                pos = str(m.get("position") or a.get("position") or "")
+                if metric.startswith("pass") and pos != "QB":
+                    continue
+                if metric.startswith("rush") and pos not in ("QB", "RB"):
+                    continue
+                if metric.startswith("rec") and pos not in ("WR", "TE", "RB"):
+                    continue
                 pid = str(a.get("player_id") or "")
                 if pid not in bpred_map:
                     continue
