@@ -211,6 +211,20 @@ export function fairLinesToEdgeBoardRows(
       totalDecision?.actionLabel ??
       null;
 
+    const sharedMatchup = {
+      awayAbbr: line.awayAbbr,
+      homeAbbr: line.homeAbbr,
+      homeWinProb: line.homeWinProb ?? undefined,
+      awayWinProb: line.awayWinProb ?? undefined,
+      keiSpreadHome: handicapSpread ?? undefined,
+      marketSpreadHome:
+        line.bestSpreadHome ?? line.marketSpreadHome ?? undefined,
+      keiTotal: handicapTotal ?? undefined,
+      marketTotal: line.bestTotal ?? line.marketTotal ?? undefined,
+      gamesPlayedAway: week === 1 ? 0 : undefined,
+      gamesPlayedHome: week === 1 ? 0 : undefined,
+    };
+
     rows.push({
       id: `${idBase}-spread`,
       game,
@@ -254,6 +268,7 @@ export function fairLinesToEdgeBoardRows(
       isBestBet: spreadDecision?.isBestBet,
       keyNumberCross: spreadDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
+      ...sharedMatchup,
     } as EdgeBoardRow);
 
     rows.push({
@@ -296,6 +311,7 @@ export function fairLinesToEdgeBoardRows(
       isBestBet: totalDecision?.isBestBet,
       keyNumberCross: totalDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
+      ...sharedMatchup,
     } as EdgeBoardRow);
   }
 
@@ -353,7 +369,11 @@ export function filterNflCurrentWeekRows(
         .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
     ),
   ].sort((a, b) => a - b);
-  if (weeks.length === 0) return [];
+  if (weeks.length === 0) {
+    // Week missing from payload (schema / join gap). Keep rows so the assembler
+    // can stamp currentWeek for season gates — do not silently empty the board.
+    return rows;
+  }
 
   const next = weeks.find((w) => w >= week) ?? weeks[weeks.length - 1]!;
   return rows.filter((row) => rowWeek(row) === next);

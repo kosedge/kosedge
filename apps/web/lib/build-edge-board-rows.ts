@@ -28,12 +28,15 @@ import {
   overlayOddsOntoFairLineRows,
   sortNflEdgeBoardRows,
 } from "@/lib/nfl-edge-board-from-fair-lines";
+import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
 import {
   keiGamesFromNflFairLines,
   resolveKeiGames,
 } from "@/lib/resolve-kei-lines";
+import { getNflPowerRatingsBoard } from "@/lib/power-ratings";
+import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 
 const NFL_EDGE_BOARD_SEASON = 2026;
 
@@ -65,6 +68,31 @@ function withFallback(
 ): EdgeBoardRow[] {
   if (countPriced(oddsRows) > 0 || oddsRows.length > 0) return oddsRows;
   return loadEdgeBoardFallback(sport);
+}
+
+function nflLaunchPowerByAbbr(): Map<string, number> {
+  const map = new Map<string, number>();
+  try {
+    const board = getNflPowerRatingsBoard();
+    for (const row of board.rows) {
+      const abbr = canonicalizeNflTeam(row.teamNorm || row.team);
+      if (!abbr || !Number.isFinite(row.rating)) continue;
+      map.set(abbr, row.rating);
+      if (abbr === "LAR" || abbr === "LA") {
+        map.set("LAR", row.rating);
+        map.set("LA", row.rating);
+      }
+    }
+  } catch {
+    // Power optional — KEI proxy still fills Stat Drop.
+  }
+  return map;
+}
+
+function withMatchupEnrichment(rows: EdgeBoardRow[]): EdgeBoardRow[] {
+  return enrichNflEdgeBoardMatchupFields(rows, {
+    powerByAbbr: nflLaunchPowerByAbbr(),
+  });
 }
 
 async function assembleNflEdgeBoardRows(
@@ -104,7 +132,7 @@ async function assembleNflEdgeBoardRows(
     rows = filterNflProjectionBackedRows(rows);
     rows = sortNflEdgeBoardRows(rows);
     // Without fair-lines currentWeek, priced projection slate only (honest).
-    return filterNflOddsPostedRows(rows);
+    return withMatchupEnrichment(filterNflOddsPostedRows(rows));
   }
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
@@ -112,10 +140,46 @@ async function assembleNflEdgeBoardRows(
   rows = sortNflEdgeBoardRows(rows);
 
   if (slate === "live") {
-    return filterNflCurrentWeekRows(rows, currentWeek);
+    let live = filterNflCurrentWeekRows(rows, currentWeek);
+    const anyWeek = live.some((r) =>
+      Number.isFinite(Number((r as { week?: number }).week)),
+    );
+    // When week is absent on every row, stamp currentWeek then keep a live
+    // window by commence time so we don't dump the full season as "Week 1".
+    if (!anyWeek && live.length > 0) {
+      const now = Date.now();
+      const horizonMs = 10 * 24 * 60 * 60 * 1000;
+      const dated = live.filter((r) => {
+        const t = Date.parse(String(r.commenceTime ?? ""));
+        return Number.isFinite(t) && t >= now - 2 * 24 * 60 * 60 * 1000 && t <= now + horizonMs;
+      });
+      live = dated.length > 0 ? dated : live.slice(0, 40);
+      for (const r of live) {
+        (r as EdgeBoardRow & { week?: number }).week = currentWeek;
+      }
+    }
+    const stampedWeek =
+      live
+        .map((r) => Number((r as { week?: number }).week))
+        .find((w) => Number.isFinite(w)) ?? currentWeek;
+    for (const r of live) {
+      const row = r as EdgeBoardRow & {
+        week?: number;
+        gamesPlayedAway?: number;
+        gamesPlayedHome?: number;
+      };
+      if (row.week == null || !Number.isFinite(Number(row.week))) {
+        row.week = stampedWeek;
+      }
+      if (Number(row.week) === 1) {
+        if (row.gamesPlayedAway == null) row.gamesPlayedAway = 0;
+        if (row.gamesPlayedHome == null) row.gamesPlayedHome = 0;
+      }
+    }
+    return withMatchupEnrichment(live);
   }
   // Odds slate: projection-backed games that currently have sportsbook prices.
-  return filterNflOddsPostedRows(rows);
+  return withMatchupEnrichment(filterNflOddsPostedRows(rows));
 }
 
 /**

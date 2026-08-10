@@ -9,7 +9,13 @@ import {
   isValidAmericanOdds,
   noVigHomeProb,
 } from "@/lib/american-odds";
-import { generateGameOverview } from "@/lib/sports";
+import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
+import { buildMatchupContext } from "@/lib/edge-board-matchup-context";
+import { buildMatchupOverview } from "@/lib/edge-board-matchup-overview";
+import {
+  buildStatDrop,
+  type StatDrop,
+} from "@/lib/edge-board-stat-drop";
 
 // Flat API row format (from Odds API / model); kei = our projected line/total/ML
 export type FlatEdgeBoardRow = {
@@ -36,8 +42,35 @@ export type FlatEdgeBoardRow = {
   keiAway?: string;
   /** Handicap (KEI) home win probability (0–1) for Moneyline edge in prob points. */
   homeWinProb?: number;
+  awayWinProb?: number;
   /** REG / PRE / POST — PRE blocked from season PLAY under info desk. */
   seasonType?: string;
+  week?: number;
+  awayAbbr?: string;
+  homeAbbr?: string;
+  keiSpreadHome?: number;
+  marketSpreadHome?: number;
+  keiTotal?: number;
+  marketTotal?: number;
+  modelPowerAway?: number;
+  modelPowerHome?: number;
+  restDaysAway?: number;
+  restDaysHome?: number;
+  byeAway?: boolean;
+  byeHome?: boolean;
+  gamesPlayedAway?: number;
+  gamesPlayedHome?: number;
+  neutralSite?: boolean;
+  neutralCity?: string;
+  neutralVenue?: string;
+  hfaPoints?: number;
+  structuralTagAway?: string;
+  structuralTagHome?: string;
+  paceAway?: number;
+  paceHome?: number;
+  matchupOverview?: string;
+  matchupVoice?: string;
+  statDrop?: StatDrop;
   /** Authoritative server tag when present (fair-lines publish policy). */
   publishTag?: "PLAY" | "LEAN" | "PASS";
   /** Decision Engine action label (Model fair vs market) — NFL action layer. */
@@ -123,6 +156,9 @@ export type LegacyEdgeBoardRow = {
   isBestBetLine?: boolean;
   isBestBetOU?: boolean;
   overview?: string;
+  statDrop?: StatDrop;
+  isNeutral?: boolean;
+  siteLabel?: string;
 };
 
 /** Empty market / KEI / edge cell — never show “Coming soon” on live boards. */
@@ -130,6 +166,19 @@ const EMPTY_PAIR: PricePair = {
   top: { label: "—", juice: "—" },
   bottom: { label: "—", juice: "—" },
 };
+
+const sampleMatchupCtx = buildMatchupContext({
+  gameId: "sample-duke-unc",
+  awayName: "Duke",
+  homeName: "UNC",
+  week: 8,
+  keiSpreadHome: -5.5,
+  marketSpreadHome: -5.0,
+  keiTotal: 150.5,
+  marketTotal: 149.5,
+});
+const sampleOverview = buildMatchupOverview(sampleMatchupCtx);
+const sampleStatDrop = buildStatDrop(sampleMatchupCtx);
 
 const sampleRows: LegacyEdgeBoardRow[] = [
   {
@@ -165,7 +214,8 @@ const sampleRows: LegacyEdgeBoardRow[] = [
       top: { label: "o149.5", juice: "-110" },
       bottom: { label: "u152.5", juice: "-112" },
     },
-    overview: generateGameOverview("Duke", "UNC"),
+    overview: sampleOverview.text,
+    statDrop: sampleStatDrop,
     edgeLineNum: 1.5,
     edgeOUNum: 0.4,
     edgeLineFavor: "Duke",
@@ -540,6 +590,7 @@ function parseAmericanLabel(s: string | undefined): number | null {
 export function flatRowsToLegacy(
   flat: FlatEdgeBoardRow[],
   sportKey = "ncaam",
+  slateWeek: number | null = null,
 ): LegacyEdgeBoardRow[] {
   const valid = Array.isArray(flat)
     ? flat.filter(
@@ -824,18 +875,98 @@ export function flatRowsToLegacy(
       totalRow?.publishTag,
     );
 
+    const src = (lineRow ?? totalRow) as FlatEdgeBoardRow | undefined;
+    const srcSpread = entry.spread as FlatEdgeBoardRow | undefined;
+    const srcTotal = entry.total as FlatEdgeBoardRow | undefined;
+    const srcMl = entry.moneyline as FlatEdgeBoardRow | undefined;
+    const pickField = <T,>(
+      getter: (r: FlatEdgeBoardRow | undefined) => T | null | undefined,
+    ): T | null => {
+      for (const r of [src, srcSpread, srcTotal, srcMl]) {
+        const v = getter(r);
+        if (v != null && v !== ("" as unknown)) return v as T;
+      }
+      return null;
+    };
+    const parseSignedNum = (s: string | undefined): number | null => {
+      if (!s || s === "—") return null;
+      const n = parseFloat(String(s).replace(/[^+\-\d.]/g, ""));
+      return Number.isFinite(n) ? n : null;
+    };
+    const keiSpreadHome =
+      pickField((r) => r?.keiSpreadHome) ??
+      (!isMoneyline ? parseSignedNum(keiLine.bottom.label) : null);
+    const marketSpreadHome =
+      pickField((r) => r?.marketSpreadHome) ??
+      (!isMoneyline ? parseSignedNum(bestLine.bottom.label) : null);
+    const matchupKeiTotal =
+      pickField((r) => r?.keiTotal) ?? keiTotalNum;
+    const matchupMarketTotal =
+      pickField((r) => r?.marketTotal) ?? bestTotalNum;
+    const weekNum = (() => {
+      const w = pickField((r) => r?.week as number | null | undefined);
+      if (w != null) {
+        const n = Number(w);
+        if (Number.isFinite(n)) return Math.trunc(n);
+      }
+      if (slateWeek != null && Number.isFinite(Number(slateWeek))) {
+        return Math.trunc(Number(slateWeek));
+      }
+      return null;
+    })();
+
+    const matchupCtx = buildMatchupContext({
+      gameId: String(src?.id ?? gameKey).replace(/-spread$|-total$/, ""),
+      awayName: away,
+      homeName: home,
+      awayAbbr:
+        pickField((r) => r?.awayAbbr) ?? undefined,
+      homeAbbr:
+        pickField((r) => r?.homeAbbr) ?? undefined,
+      week: weekNum,
+      seasonType: pickField((r) => r?.seasonType) ?? null,
+      gamesPlayedAway: pickField((r) => r?.gamesPlayedAway) ?? null,
+      gamesPlayedHome: pickField((r) => r?.gamesPlayedHome) ?? null,
+      keiSpreadHome,
+      marketSpreadHome,
+      keiTotal: matchupKeiTotal,
+      marketTotal: matchupMarketTotal,
+      homeWinProb: pickField((r) => r?.homeWinProb),
+      awayWinProb: pickField((r) => r?.awayWinProb),
+      restDaysAway: pickField((r) => r?.restDaysAway),
+      restDaysHome: pickField((r) => r?.restDaysHome),
+      byeAway: Boolean(pickField((r) => r?.byeAway)),
+      byeHome: Boolean(pickField((r) => r?.byeHome)),
+      modelPowerAway: pickField((r) => r?.modelPowerAway),
+      modelPowerHome: pickField((r) => r?.modelPowerHome),
+      neutralSite: pickField((r) => r?.neutralSite),
+      neutralCity: pickField((r) => r?.neutralCity),
+      neutralVenue: pickField((r) => r?.neutralVenue),
+      hfaPoints: pickField((r) => r?.hfaPoints),
+      publishTagSpread: pickField((r) => r?.publishTag),
+      edgeSpreadAbs: edgeLineNum ?? null,
+    });
+    // Always rebuild from context so season/neutral gates stay honest even if
+    // an upstream enrich pass missed week / site fields.
+    const overviewText = buildMatchupOverview(matchupCtx).text;
+    const statDrop = buildStatDrop(matchupCtx);
+    const homeSiteLabel: "Away" | "Home" = matchupCtx.isNeutral
+      ? "Home"
+      : "Home";
+    const awaySiteLabel: "Away" | "Home" = "Away";
+
     result.push({
       id: String(lineRow?.id ?? total?.id ?? gameKey),
       time,
       teamA: {
         name: away,
-        site: "Away",
+        site: awaySiteLabel,
         keiNumber:
           keiLine.top.label !== "—" ? keiLine.top.label : undefined,
       },
       teamB: {
         name: home,
-        site: "Home",
+        site: homeSiteLabel,
         keiNumber:
           keiLine.bottom.label !== "—" ? keiLine.bottom.label : undefined,
       },
@@ -877,7 +1008,12 @@ export function flatRowsToLegacy(
       playToOU: totalRow?.playToNotes,
       isBestBetLine: lineRow?.isBestBet,
       isBestBetOU: totalRow?.isBestBet,
-      overview: generateGameOverview(away, home),
+      overview: overviewText,
+      statDrop,
+      isNeutral: matchupCtx.isNeutral,
+      siteLabel: matchupCtx.isNeutral
+        ? `Neutral${matchupCtx.siteCity ? ` · ${matchupCtx.siteCity}` : ""}`
+        : undefined,
     });
   }
   return result;
@@ -887,19 +1023,31 @@ export default function EdgeBoard({
   variant = "full",
   rows,
   sportKey = "ncaam",
+  slateWeek = null,
 }: {
   variant?: Variant;
   rows?: FlatEdgeBoardRow[] | null;
   /** Sport key drives the KEI column brand (KEICMB, KEINFL, …). Same board layout every sport. */
   sportKey?: string;
+  /** Active board week (e.g. live tab) — backs season gates when row.week is missing. */
+  slateWeek?: number | null;
 }) {
   const safeRows = Array.isArray(rows) ? rows : [];
   const keiCode = getKeiCode(sportKey);
   const edgeGreen =
     "text-[#22c55e] font-bold drop-shadow-[0_0_10px_rgba(34,197,94,0.55)]";
   const hasRealData = safeRows.length > 0;
+  const inferredWeek = (() => {
+    if (slateWeek != null && Number.isFinite(Number(slateWeek))) {
+      return Math.trunc(Number(slateWeek));
+    }
+    const fromRows = safeRows
+      .map((r) => Number(r?.week))
+      .filter((w) => Number.isFinite(w));
+    return fromRows.length ? Math.trunc(fromRows[0]!) : null;
+  })();
   const legacy = hasRealData
-    ? flatRowsToLegacy(safeRows, sportKey)
+    ? flatRowsToLegacy(safeRows, sportKey, inferredWeek)
     : sampleRows;
   const data = hasRealData ? legacy : sampleRows;
   const isNfl = String(sportKey).toLowerCase() === "nfl";
@@ -995,10 +1143,13 @@ export default function EdgeBoard({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <h3 className="text-sm font-semibold text-gray-100">
-                {r.teamA.name} @ {r.teamB.name}
+                {r.isNeutral
+                  ? `${r.teamA.name} vs ${r.teamB.name}`
+                  : `${r.teamA.name} @ ${r.teamB.name}`}
               </h3>
               <p className="mt-0.5 text-[11px] tabular-nums text-gray-400">
                 {r.time ?? "—"}
+                {r.siteLabel ? ` · ${r.siteLabel}` : ""}
               </p>
             </div>
             <div className="shrink-0 text-right">
@@ -1115,12 +1266,18 @@ export default function EdgeBoard({
             </div>
           </div>
 
-          <details className="mt-3">
+          <details className="mt-3" open={false}>
             <summary className="min-h-11 cursor-pointer list-none text-xs font-medium text-kos-gold hover:underline [&::-webkit-details-marker]:hidden">
               Matchup overview ▾
             </summary>
             <div className="mt-2 rounded-lg border border-white/10 bg-black/60 p-3 text-[11px] leading-relaxed whitespace-pre-wrap text-gray-300">
+              {r.siteLabel ? (
+                <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
+                  {r.siteLabel}
+                </div>
+              ) : null}
               {r.overview ?? "No overview available."}
+              {r.statDrop ? <EdgeBoardStatDrop drop={r.statDrop} /> : null}
             </div>
           </details>
         </article>
@@ -1249,7 +1406,7 @@ export default function EdgeBoard({
                       )}
                     </div>
                     <div className="text-xs text-gray-400">
-                      {r.teamA.site}
+                      {r.isNeutral ? "Neutral" : r.teamA.site}
                       {r.teamA.record ? ` • ${r.teamA.record}` : ""}
                       {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
                     </div>
@@ -1269,7 +1426,9 @@ export default function EdgeBoard({
                       )}
                     </div>
                     <div className="text-xs text-gray-400">
-                      {r.teamB.site}
+                      {r.isNeutral
+                        ? r.siteLabel || "Neutral"
+                        : r.teamB.site}
                       {r.teamB.record ? ` • ${r.teamB.record}` : ""}
                       {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
                     </div>
@@ -1277,24 +1436,34 @@ export default function EdgeBoard({
                       <summary className="cursor-pointer text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
                         Overview ▾
                       </summary>
-                      <div className="absolute left-0 top-full mt-1 z-50 w-[340px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-4 shadow-xl text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+                      <div className="absolute left-0 top-full mt-1 z-50 w-[360px] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-4 shadow-xl text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+                        {r.siteLabel ? (
+                          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
+                            {r.siteLabel}
+                          </div>
+                        ) : null}
                         {r.overview ?? "No overview available."}
                       </div>
                     </details>
                   </td>
-                  <td className="py-3.5 px-1 align-top relative pb-8 overflow-hidden">
+                  <td className="py-3.5 px-1 align-top relative pb-8 overflow-visible">
                     <div className="text-sm font-medium text-gray-300 whitespace-nowrap">
                       {r.time ?? "—"}
                     </div>
-                    <button
-                      className="absolute bottom-2.5 left-0 right-0 mx-auto text-center text-[14px] text-gray-600 cursor-not-allowed whitespace-nowrap"
-                      type="button"
-                      disabled
-                      title="Matchup stats panel not wired — disabled"
-                      aria-disabled="true"
-                    >
-                      Stats ▾
-                    </button>
+                    <details className="absolute bottom-2.5 left-0 right-0 group/stats">
+                      <summary className="cursor-pointer text-center text-[14px] text-kos-gold hover:underline whitespace-nowrap list-none [&::-webkit-details-marker]:hidden">
+                        Stats ▾
+                      </summary>
+                      <div className="absolute left-0 top-full mt-1 z-50 w-[min(92vw,520px)] rounded-xl border border-white/15 bg-black/95 backdrop-blur-xl p-3 shadow-xl">
+                        {r.statDrop ? (
+                          <EdgeBoardStatDrop drop={r.statDrop} compact />
+                        ) : (
+                          <div className="text-xs text-gray-500">
+                            Stat Drop unavailable.
+                          </div>
+                        )}
+                      </div>
+                    </details>
                   </td>
                   <td className={`${TD_BASE} text-gray-400`}>
                     <PriceCell
