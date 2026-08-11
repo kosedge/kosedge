@@ -21,15 +21,27 @@ function formatSigned(value: number | null | undefined, digits = 2): string {
   return `${sign}${value.toFixed(digits)}`;
 }
 
-function NflAtAGlance({ rows }: { rows: PowerRatingRow[] }) {
+function formatPoints(value: number | null | undefined, digits = 2): string {
+  if (value == null || !Number.isFinite(value)) return "—";
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${value.toFixed(digits)}`;
+}
+
+function NflAtAGlance({
+  rows,
+  deskMode,
+}: {
+  rows: PowerRatingRow[];
+  deskMode: boolean;
+}) {
   const top5 = rows.slice(0, 5);
   const risers = rows
-    .filter((r) => (r.rankDelta ?? 0) > 0)
-    .sort((a, b) => (b.rankDelta ?? 0) - (a.rankDelta ?? 0))
+    .filter((r) => (r.weeklyDelta ?? 0) > 0)
+    .sort((a, b) => (b.weeklyDelta ?? 0) - (a.weeklyDelta ?? 0))
     .slice(0, 5);
   const fallers = rows
-    .filter((r) => (r.rankDelta ?? 0) < 0)
-    .sort((a, b) => (a.rankDelta ?? 0) - (b.rankDelta ?? 0))
+    .filter((r) => (r.weeklyDelta ?? 0) < 0)
+    .sort((a, b) => (a.weeklyDelta ?? 0) - (b.weeklyDelta ?? 0))
     .slice(0, 5);
 
   const card = (
@@ -62,14 +74,21 @@ function NflAtAGlance({ rows }: { rows: PowerRatingRow[] }) {
     </div>
   );
 
+  const valueOf = (r: PowerRatingRow) =>
+    deskMode ? (r.modelPr ?? r.rating) : r.rating;
+
   return (
     <section className="mt-6 grid gap-3 md:grid-cols-3">
-      {card("Top 5", top5, (r) => `${r.rating.toFixed(2)} wins`)}
+      {card("Top 5", top5, (r) =>
+        deskMode
+          ? `${formatPoints(valueOf(r))} Model PR`
+          : `${r.rating.toFixed(2)} wins`,
+      )}
       {card("Biggest Risers", risers, (r) =>
-        `Rank ${formatSigned(r.rankDelta, 0)} · ${formatSigned(r.weeklyDelta)}`,
+        `Δ ${formatSigned(r.weeklyDelta)}`,
       )}
       {card("Biggest Fallers", fallers, (r) =>
-        `Rank ${formatSigned(r.rankDelta, 0)} · ${formatSigned(r.weeklyDelta)}`,
+        `Δ ${formatSigned(r.weeklyDelta)}`,
       )}
     </section>
   );
@@ -90,6 +109,22 @@ function bundleLabel(id: string, opts?: { nTeamSims?: number | null }): string {
   return id;
 }
 
+const DESK_HEADERS = [
+  "Team",
+  "Model PR",
+  "Ryan Adj",
+  "Ryan PR",
+  "Market PR",
+  "Δ Mkt",
+  "Off",
+  "Def",
+  "ST",
+  "Active PR",
+  "Unc.",
+  "Prev Week",
+  "Weekly Δ",
+] as const;
+
 export default async function PowerRatingsSportPage({
   params,
   searchParams,
@@ -105,6 +140,7 @@ export default async function PowerRatingsSportPage({
 
   if (sportKey === "nfl") {
     const board = getNflPowerRatingsBoard({ bundleId: bundleRaw });
+    const deskMode = board.source === "power_desk";
     const [standings, stats] = await Promise.all([
       fetchNflIntel("standings", {}),
       fetchNflIntel("stats", {}),
@@ -126,18 +162,24 @@ export default async function PowerRatingsSportPage({
       <SportProShell
         sport="nfl"
         pageTitle="NFL Power Ratings"
-        pageSubtitle="Team strength from the Kos Edge season-engine research layer (expected wins). Off/Def use owned EPA when available. Weekly Δ compares sim snapshots."
+        pageSubtitle={
+          deskMode
+            ? "Model PR = points better/worse than average on a neutral field (same strength path as Season Model). Ryan Adj defaults to 0."
+            : "Desk snapshot pending — showing expected-wins outlook until Tuesday publish lands."
+        }
       >
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="min-w-0 space-y-2">
               <p className="text-sm text-kos-text/65">
-                {board.bundleId
-                  ? `Active · ${bundleLabel(board.bundleId, { nTeamSims: board.nTeamSims })}`
-                  : "No sim bundle found"}
+                {deskMode
+                  ? `Method ${board.desk?.method ?? "B"} · ${board.desk?.phase ?? "preseason"}`
+                  : board.bundleId
+                    ? `Active · ${bundleLabel(board.bundleId, { nTeamSims: board.nTeamSims })}`
+                    : "No sim bundle found"}
                 {board.engineVersion ? ` · ${board.engineVersion}` : ""}
-                {board.previousBundleId
-                  ? ` · Δ vs ${bundleLabel(board.previousBundleId)}`
+                {board.activeRunId
+                  ? ` · run ${board.activeRunId.replace("nfl-preseason-sim-2026-", "")}`
                   : ""}
               </p>
               {lineage ? <NflLineageBadge lineage={lineage} /> : null}
@@ -150,117 +192,164 @@ export default async function PowerRatingsSportPage({
             </Link>
           </div>
           <p className="mt-2 text-xs text-kos-text/50">
-            Expected wins remain the season-outlook board (schedule difficulty
-            moves E[wins], not intrinsic PR). Continuity, QB premium, past SOS,
-            2026 schedule outlook, and blend state live on the Season Model
-            True PR surface.
+            {deskMode
+              ? "Model PR is immutable on this snapshot. Ryan PR = Model + Adj. Active PR folds current injuries; Game PR stays on Edge Board. Early-season Tuesday updates use Bayesian shrinkage (Week 1–4 heavy prior)."
+              : "Expected wins remain the season-outlook board. Continuity, QB premium, SOS outlook, and blend live on the Season Model True PR surface."}
           </p>
-          {board.launchIdentity || (board.nTeamSims && board.nTeamSims >= 50000) ? (
-            <p className="mt-2 rounded-lg border border-kos-gold/25 bg-kos-gold/10 px-3 py-2 text-xs text-kos-text/80">
-              Launch-current research
-              {board.nTeamSims
-                ? ` · ${board.nTeamSims.toLocaleString()} team W/L paths`
-                : ""}
-              {board.generatedAtUtc
-                ? ` · generated ${board.generatedAtUtc.slice(0, 10)}`
-                : ""}
-              . Preseason numbers — not live week-1 Edge Board grades.
+          {deskMode && board.desk?.stNote ? (
+            <p className="mt-2 text-xs text-kos-text/45">
+              ST column: {board.desk.stNote}. Market PR shows — until futures /
+              win-total implied powers are wired.
             </p>
           ) : null}
 
-          {board.availableBundles.length > 1 ? (
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {board.availableBundles.slice(0, 8).map((id) => {
-                const active = id === board.bundleId;
-                return (
-                  <Link
-                    key={id}
-                    href={`/pro/power-ratings/nfl?bundle=${encodeURIComponent(id)}`}
-                    className={
-                      active
-                        ? "rounded-md border border-kos-gold/40 bg-kos-gold/15 px-2.5 py-1 text-xs font-semibold text-kos-gold"
-                        : "rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-kos-text/70 hover:border-kos-gold/30"
-                    }
-                  >
-                    {bundleLabel(id, {
-                      nTeamSims: active ? board.nTeamSims : null,
-                    })}
-                  </Link>
-                );
-              })}
-            </div>
-          ) : null}
-
-          <NflAtAGlance rows={enriched} />
+          <NflAtAGlance rows={enriched} deskMode={deskMode} />
 
           <div className="mt-6 overflow-x-auto rounded-2xl border border-kos-border bg-kos-surface/30">
-            <table className="min-w-full text-left">
-              <thead>
-                <tr className="border-b border-kos-border bg-kos-surface/50">
-                  {[
-                    "Rank",
-                    "Team",
-                    "Power Rating",
-                    "Off",
-                    "Def",
-                    "Weekly Δ",
-                    "Rank Δ",
-                    "Record",
-                  ].map((h) => (
-                    <th
-                      key={h}
-                      className="px-3 py-3 text-xs font-semibold uppercase tracking-wide text-kos-text/70"
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {enriched.map((r) => (
-                  <tr
-                    key={r.teamNorm ?? r.team}
-                    className="border-b border-kos-border/40 hover:bg-kos-surface/40"
-                  >
-                    <td className="px-3 py-2.5 text-sm text-kos-text/80">
-                      {r.rank}
-                    </td>
-                    <td className="px-3 py-2.5 text-sm font-medium">
-                      <Link
-                        href={`/pro/nfl/teams/${r.teamNorm}/overview`}
-                        className="text-kos-text hover:text-kos-gold"
+            {deskMode ? (
+              <table className="min-w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-kos-border bg-kos-surface/50">
+                    {DESK_HEADERS.map((h) => (
+                      <th
+                        key={h}
+                        className="whitespace-nowrap px-2.5 py-3 text-xs font-semibold uppercase tracking-wide text-kos-text/70"
                       >
-                        {r.teamNorm}{" "}
-                        <span className="text-kos-text/50">{r.team}</span>
-                      </Link>
-                    </td>
-                    <td className="px-3 py-2.5 text-sm font-semibold text-kos-gold">
-                      {r.rating.toFixed(2)}
-                    </td>
-                    <td className="px-3 py-2.5 text-sm text-kos-text/75">
-                      {r.offense != null ? r.offense.toFixed(3) : "—"}
-                    </td>
-                    <td className="px-3 py-2.5 text-sm text-kos-text/75">
-                      {r.defense != null ? r.defense.toFixed(3) : "—"}
-                    </td>
-                    <td className="px-3 py-2.5 text-sm text-kos-text/75">
-                      {formatSigned(r.weeklyDelta)}
-                    </td>
-                    <td className="px-3 py-2.5 text-sm text-kos-text/75">
-                      {formatSigned(r.rankDelta, 0)}
-                    </td>
-                    <td className="px-3 py-2.5 text-sm text-kos-text/75">
-                      {r.record ?? "—"}
-                    </td>
+                        {h}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {enriched.map((r) => (
+                    <tr
+                      key={r.teamNorm ?? r.team}
+                      className="border-b border-kos-border/40 hover:bg-kos-surface/40"
+                    >
+                      <td className="whitespace-nowrap px-2.5 py-2.5 font-medium">
+                        <Link
+                          href={`/pro/nfl/teams/${r.teamNorm}/overview`}
+                          className="text-kos-text hover:text-kos-gold"
+                        >
+                          {r.teamNorm}
+                        </Link>
+                      </td>
+                      <td className="px-2.5 py-2.5 font-semibold text-kos-gold">
+                        {formatPoints(r.modelPr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.ryanAdj ?? 0)}
+                      </td>
+                      <td className="px-2.5 py-2.5 font-medium text-kos-text">
+                        {formatPoints(r.ryanPr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.marketPr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatSigned(r.deltaMarket)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.offPr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.defPr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.stPr)}
+                        {r.stApproximate ? (
+                          <span className="ml-1 text-[10px] text-kos-text/40">
+                            ≈
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.activePr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {r.uncertainty != null
+                          ? r.uncertainty.toFixed(2)
+                          : "—"}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatPoints(r.prevWeekModelPr)}
+                      </td>
+                      <td className="px-2.5 py-2.5 text-kos-text/75">
+                        {formatSigned(r.weeklyDelta)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <table className="min-w-full text-left">
+                <thead>
+                  <tr className="border-b border-kos-border bg-kos-surface/50">
+                    {[
+                      "Rank",
+                      "Team",
+                      "E[Wins]",
+                      "Off EPA",
+                      "Def EPA",
+                      "Weekly Δ",
+                      "Rank Δ",
+                      "Record",
+                    ].map((h) => (
+                      <th
+                        key={h}
+                        className="px-3 py-3 text-xs font-semibold uppercase tracking-wide text-kos-text/70"
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {enriched.map((r) => (
+                    <tr
+                      key={r.teamNorm ?? r.team}
+                      className="border-b border-kos-border/40 hover:bg-kos-surface/40"
+                    >
+                      <td className="px-3 py-2.5 text-sm text-kos-text/80">
+                        {r.rank}
+                      </td>
+                      <td className="px-3 py-2.5 text-sm font-medium">
+                        <Link
+                          href={`/pro/nfl/teams/${r.teamNorm}/overview`}
+                          className="text-kos-text hover:text-kos-gold"
+                        >
+                          {r.teamNorm}{" "}
+                          <span className="text-kos-text/50">{r.team}</span>
+                        </Link>
+                      </td>
+                      <td className="px-3 py-2.5 text-sm font-semibold text-kos-gold">
+                        {r.rating.toFixed(2)}
+                      </td>
+                      <td className="px-3 py-2.5 text-sm text-kos-text/75">
+                        {r.offense != null ? r.offense.toFixed(3) : "—"}
+                      </td>
+                      <td className="px-3 py-2.5 text-sm text-kos-text/75">
+                        {r.defense != null ? r.defense.toFixed(3) : "—"}
+                      </td>
+                      <td className="px-3 py-2.5 text-sm text-kos-text/75">
+                        {formatSigned(r.weeklyDelta)}
+                      </td>
+                      <td className="px-3 py-2.5 text-sm text-kos-text/75">
+                        {formatSigned(r.rankDelta, 0)}
+                      </td>
+                      <td className="px-3 py-2.5 text-sm text-kos-text/75">
+                        {r.record ?? "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
           <p className="mt-3 text-xs text-kos-text/45">
-            Power Rating = model expected wins. Off = offense EPA/play; Def =
-            defense EPA allowed/play (intel). Empty cells mean that feed is not
-            on the current week yet.
+            {deskMode
+              ? "Model PR units = points vs league average (neutral field). Ryan Adj policy: ±0.25 routine · ±0.5 meaningful · ±1.0 major · >1.0 needs written reason. Tuesday job: scripts/nfl/tuesday_power_ratings_update.py"
+              : "Power Rating fallback = model expected wins. Off/Def = EPA/play (intel)."}
           </p>
         </main>
       </SportProShell>

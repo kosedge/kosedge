@@ -1,0 +1,171 @@
+{
+  "policy": {
+    "routine": 0.25,
+    "meaningful": 0.5,
+    "major": 1.0,
+    "requires_written_reason_above": 1.0
+  },
+  "note": "All adjs default 0. Non-zero requires reason + timestamp.",
+  "teams": {
+    "ARI": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "ATL": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "BAL": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "BUF": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "CAR": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "CHI": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "CIN": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "CLE": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "DAL": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "DEN": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "DET": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "GB": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "HOU": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "IND": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "JAX": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "KC": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "LAC": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "LAR": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "LV": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "MIA": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "MIN": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "NE": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "NO": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "NYG": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "NYJ": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "PHI": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "PIT": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "SEA": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "SF": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "TB": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "TEN": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    },
+    "WAS": {
+      "adj": 0.0,
+      "reason": "",
+      "updated_at_utc": ""
+    }
+  }
+}

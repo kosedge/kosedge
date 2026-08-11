@@ -1,10 +1,15 @@
 /**
  * Power ratings: team strength / rankings per sport.
- * NFL uses the existing preseason simulation engine (expected wins) — not a new formula.
- * Off/Def columns are filled from owned intel EPA when available (same model stack).
+ *
+ * NFL Power Ratings desk (2026-08-11):
+ *   Model PR = Method B compressed neutral-field strength (points vs avg)
+ *   Ryan PR  = Model PR + Ryan Adj (default 0; never overwrites Model)
+ * Snapshot: data/ops/nfl-power-ratings-desk/latest.json (Tuesday publish)
+ * Fallback: preseason expected-wins board (outlook only) when desk missing.
  */
 
 import { readFileSync, existsSync } from "node:fs";
+import path from "node:path";
 import { getSport } from "@/lib/sports";
 import { getPowerRatingsPath } from "@/lib/data-paths";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
@@ -13,6 +18,7 @@ import {
   loadNflPreseasonBundleById2026,
   loadNflPreseasonBundles2026,
   listNflPreseasonBundleIds2026,
+  loadNflWebLaunchPointer,
   type NflPreseasonBundle,
 } from "@/lib/nfl-preseason-artifacts";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
@@ -21,19 +27,33 @@ export type PowerRatingRow = {
   rank: number;
   team: string;
   teamNorm?: string;
+  /** @deprecated Prefer modelPr — kept for non-NFL / wins outlook fallback */
   rating: number;
   adjem?: number;
   torvik?: number;
   barthag?: number;
   year?: number;
-  /** Offense EPA/play (intel) or model offense index when available */
+  /** Offense EPA/play (intel) when desk Off PR unavailable */
   offense?: number | null;
-  /** Defense EPA allowed/play (intel) or model defense index when available */
+  /** Defense EPA allowed/play (intel) when desk Def PR unavailable */
   defense?: number | null;
   weeklyDelta?: number | null;
   rankDelta?: number | null;
   record?: string | null;
   playoffProb?: number | null;
+  /** Desk fields (points vs league average, neutral field) */
+  modelPr?: number | null;
+  ryanAdj?: number | null;
+  ryanPr?: number | null;
+  marketPr?: number | null;
+  deltaMarket?: number | null;
+  offPr?: number | null;
+  defPr?: number | null;
+  stPr?: number | null;
+  stApproximate?: boolean;
+  activePr?: number | null;
+  uncertainty?: number | null;
+  prevWeekModelPr?: number | null;
 };
 
 export type NflPowerIntelRow = {
@@ -43,6 +63,16 @@ export type NflPowerIntelRow = {
   ties?: unknown;
   epa_per_play_offense?: unknown;
   epa_per_play_defense_allowed?: unknown;
+};
+
+export type NflPowerDeskMeta = {
+  method: string | null;
+  methodLabel: string | null;
+  phase: string | null;
+  asOfWeek: number | null;
+  deskVersion: string | null;
+  meanModelPr: number | null;
+  stNote: string | null;
 };
 
 /**
@@ -107,7 +137,122 @@ export type NflPowerRatingsBoard = {
   launchIdentity?: string | null;
   activeRunId?: string | null;
   lineage?: NflPreseasonBundle["lineage"];
+  desk?: NflPowerDeskMeta | null;
+  source: "power_desk" | "expected_wins_fallback";
 };
+
+function findRepoRoot(): string | null {
+  let current = process.cwd();
+  for (let depth = 0; depth < 6; depth += 1) {
+    const dataOps = path.join(current, "data", "ops");
+    if (existsSync(dataOps)) return current;
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+  return null;
+}
+
+function loadPowerDeskSnapshot(): {
+  rows: PowerRatingRow[];
+  meta: NflPowerDeskMeta;
+  generatedAtUtc: string | null;
+  engineVersion: string | null;
+  activeRunId: string | null;
+} | null {
+  const root = findRepoRoot();
+  if (!root) return null;
+  const latest = path.join(
+    root,
+    "data",
+    "ops",
+    "nfl-power-ratings-desk",
+    "latest.json",
+  );
+  if (!existsSync(latest)) return null;
+  try {
+    const raw = JSON.parse(readFileSync(latest, "utf8")) as {
+      teams?: Array<Record<string, unknown>>;
+      method?: string;
+      method_label?: string;
+      phase?: string;
+      as_of_week?: number;
+      desk_version?: string;
+      mean_model_pr?: number;
+      generated_at_utc?: string;
+      engine_version?: string;
+      active_run_id?: string;
+    };
+    if (!Array.isArray(raw.teams) || raw.teams.length === 0) return null;
+    const rows: PowerRatingRow[] = raw.teams.map((t, idx) => {
+      const teamNorm =
+        canonicalizeNflTeam(String(t.team ?? "")) ?? String(t.team ?? "");
+      const modelPr =
+        typeof t.model_pr === "number" ? Number(t.model_pr) : null;
+      const ryanAdj =
+        typeof t.ryan_adj === "number" ? Number(t.ryan_adj) : 0;
+      const ryanPr =
+        typeof t.ryan_pr === "number" ? Number(t.ryan_pr) : modelPr;
+      return {
+        rank: typeof t.rank === "number" ? t.rank : idx + 1,
+        team: teamDisplayName(teamNorm),
+        teamNorm,
+        rating: modelPr ?? 0,
+        modelPr,
+        ryanAdj,
+        ryanPr,
+        marketPr:
+          typeof t.market_pr === "number" ? Number(t.market_pr) : null,
+        deltaMarket:
+          typeof t.delta_market === "number" ? Number(t.delta_market) : null,
+        offPr: typeof t.off_pr === "number" ? Number(t.off_pr) : null,
+        defPr: typeof t.def_pr === "number" ? Number(t.def_pr) : null,
+        stPr: typeof t.st_pr === "number" ? Number(t.st_pr) : null,
+        stApproximate: Boolean(t.st_approximate ?? true),
+        activePr:
+          typeof t.active_pr === "number" ? Number(t.active_pr) : null,
+        uncertainty:
+          typeof t.uncertainty === "number" ? Number(t.uncertainty) : null,
+        prevWeekModelPr:
+          typeof t.prev_week_model_pr === "number"
+            ? Number(t.prev_week_model_pr)
+            : null,
+        weeklyDelta:
+          typeof t.weekly_delta === "number" ? Number(t.weekly_delta) : null,
+        offense: null,
+        defense: null,
+        record: null,
+        playoffProb: null,
+      };
+    });
+    rows.sort(
+      (a, b) =>
+        (b.modelPr ?? b.rating) - (a.modelPr ?? a.rating) ||
+        String(a.teamNorm).localeCompare(String(b.teamNorm)),
+    );
+    rows.forEach((r, i) => {
+      r.rank = i + 1;
+    });
+    return {
+      rows,
+      meta: {
+        method: raw.method ?? "B",
+        methodLabel: raw.method_label ?? null,
+        phase: raw.phase ?? null,
+        asOfWeek: typeof raw.as_of_week === "number" ? raw.as_of_week : null,
+        deskVersion: raw.desk_version ?? null,
+        meanModelPr:
+          typeof raw.mean_model_pr === "number" ? raw.mean_model_pr : null,
+        stNote: "ST approximate (st_index / post-kicker)",
+      },
+      generatedAtUtc: raw.generated_at_utc ?? null,
+      engineVersion: raw.engine_version ?? null,
+      activeRunId: raw.active_run_id ?? null,
+    };
+  } catch {
+    return null;
+  }
+}
 
 function rankByExpectedWins(
   teamRows: NflPreseasonBundle["teamRows"],
@@ -144,7 +289,7 @@ function nflBoardFromBundles(
         rank,
         team: teamDisplayName(row.team),
         teamNorm: row.team,
-        // Rating = expected wins from the active preseason sim bundle (existing engine).
+        // Outlook fallback only — not Model PR points.
         rating: Number(row.expectedWins.toFixed(2)),
         year: row.season,
         offense: null,
@@ -170,6 +315,8 @@ function nflBoardFromBundles(
     launchIdentity: current.launchIdentity ?? null,
     activeRunId: current.activeRunId ?? current.bundleDirName,
     lineage: current.lineage ?? null,
+    desk: null,
+    source: "expected_wins_fallback",
   };
 }
 
@@ -181,6 +328,31 @@ export function getNflPowerRatingsBoard(options?: {
   bundleId?: string | null;
 }): NflPowerRatingsBoard {
   const available = listNflPreseasonBundleIds2026();
+  const pointer = loadNflWebLaunchPointer();
+  const desk = loadPowerDeskSnapshot();
+
+  // Prefer Power Ratings desk snapshot (Model PR points) when present.
+  if (desk && !options?.bundleId) {
+    return {
+      rows: desk.rows,
+      bundleId: pointer?.bundle_id ?? desk.activeRunId,
+      previousBundleId: null,
+      availableBundles: available,
+      generatedAtUtc: desk.generatedAtUtc,
+      engineVersion: desk.engineVersion ?? pointer?.engine_version ?? null,
+      nTeamSims: pointer?.n_team_sims ?? null,
+      launchIdentity: pointer?.identity ?? null,
+      activeRunId:
+        desk.activeRunId ??
+        pointer?.active_run_id ??
+        pointer?.bundle_id ??
+        null,
+      lineage: pointer?.lineage ?? null,
+      desk: desk.meta,
+      source: "power_desk",
+    };
+  }
+
   const current =
     (options?.bundleId
       ? loadNflPreseasonBundleById2026(options.bundleId)
@@ -197,6 +369,8 @@ export function getNflPowerRatingsBoard(options?: {
       generatedAtUtc: null,
       activeRunId: null,
       lineage: null,
+      desk: null,
+      source: "expected_wins_fallback",
     };
   }
   const history = loadNflPreseasonBundles2026(8);
