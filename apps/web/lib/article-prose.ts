@@ -35,7 +35,9 @@ export const articleProseClasses = [
   "prose-li:text-kos-text/90 prose-li:leading-relaxed prose-li:my-1.5",
   "prose-ul:my-4 prose-ol:my-4",
   "prose-blockquote:border-kos-gold/35 prose-blockquote:text-kos-text/85",
-  "prose-td:border-white/10 prose-th:border-white/15",
+  "prose-table:my-0 prose-table:w-full",
+  "prose-th:border-white/15 prose-th:px-3 prose-th:py-2.5",
+  "prose-td:border-white/10 prose-td:px-3 prose-td:py-2.5",
 ].join(" ");
 
 export const articleNavClasses =

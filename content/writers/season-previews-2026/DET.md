@@ -52,7 +52,8 @@ Watch August for three decision points: Gibbs’ participation and chemistry wit
 **Handicapper’s Note**  
 Fair number: ~10.0 (research band 9.8–10.3)  
 Market number: **9.5** (near even; Over sometimes juiced)  
-Lean: Over 9.5 if juice ≤ −115; else Pass  
+Lean: Over 9.5 if juice is −115 or better; else Pass  
+
 Confidence: 2/5  
 Key risk: Secondary PUP timelines and OL re-install pin Detroit at eight or nine even with soft non-division wins — thin Overs die when September looks unfinished.
 

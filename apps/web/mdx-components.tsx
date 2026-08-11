@@ -77,6 +77,47 @@ export function useMDXComponents(
         {children}
       </blockquote>
     ),
+    table: ({ children, ...props }) => (
+      <div className="my-6 overflow-x-auto rounded-xl border border-white/10">
+        <table
+          className="w-full min-w-[18rem] border-collapse text-left text-sm"
+          {...props}
+        >
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children, ...props }) => (
+      <thead className="bg-white/5 text-kos-text" {...props}>
+        {children}
+      </thead>
+    ),
+    tbody: ({ children, ...props }) => (
+      <tbody className="divide-y divide-white/10" {...props}>
+        {children}
+      </tbody>
+    ),
+    tr: ({ children, ...props }) => (
+      <tr className="border-b border-white/10 last:border-b-0" {...props}>
+        {children}
+      </tr>
+    ),
+    th: ({ children, ...props }) => (
+      <th
+        className="px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-kos-gold/90 sm:px-4"
+        {...props}
+      >
+        {children}
+      </th>
+    ),
+    td: ({ children, ...props }) => (
+      <td
+        className="px-3 py-2.5 align-top text-[0.9375rem] leading-relaxed text-kos-text/90 sm:px-4 sm:text-base"
+        {...props}
+      >
+        {children}
+      </td>
+    ),
     ...components,
   };
 }
