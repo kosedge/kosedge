@@ -102,6 +102,9 @@ def test_game_boxes_include_kicking_lines() -> None:
     assert proj.kicking["home"]["fg_att"] > 0
     assert proj.kicking["away"]["fg_att"] > 0
     assert proj.kicking["home"]["fg_made"] > 0
+    assert proj.kicking["home"]["xp_att"] > 0
+    assert proj.kicking["home"]["xp_made"] > 0
+    assert proj.kicking["team_points"]["home"]["points_from_fg"] > 0
     assert proj.kicking["team_points"]["home"]["points_from_kicking"] > 0
     home_td = float(proj.kicking["team_points"]["home"]["points_from_skill_tds"])
     home_kick = float(proj.kicking["team_points"]["home"]["points_from_kicking"])
@@ -110,6 +113,35 @@ def test_game_boxes_include_kicking_lines() -> None:
         > home_td
     )
     assert home_kick > 0
+    assert proj.notes.get("fg_display") == "mean_fg_xp_low_depth_estimate"
+    assert proj.notes.get("depth_label") == "low-depth estimate"
+
+
+def test_defaults_and_fg_display_share_research_depth_gate() -> None:
+    """Game Boxes default ≥2k; FG honesty notes use the same precision gate."""
+    from src.services.nfl_season_engine.sim_depth import (
+        default_n_game_box,
+        default_n_survivor_paths,
+        depth_meta,
+        is_honest_precision,
+    )
+
+    assert default_n_game_box() >= 2000
+    assert default_n_survivor_paths() >= 2000
+    meta = depth_meta(default_n_game_box(), surface="game_boxes")
+    assert meta["honest_precision"] is True
+    assert meta["depth_label"] == "research depth"
+    assert is_honest_precision(2000)
+    assert (
+        "mean_fg_xp_research_depth"
+        if is_honest_precision(2000)
+        else "mean_fg_xp_low_depth_estimate"
+    ) == "mean_fg_xp_research_depth"
+    assert (
+        "mean_fg_xp_research_depth"
+        if is_honest_precision(50)
+        else "mean_fg_xp_low_depth_estimate"
+    ) == "mean_fg_xp_low_depth_estimate"
 
 
 def test_anonymous_kicker_when_no_depth_k() -> None:

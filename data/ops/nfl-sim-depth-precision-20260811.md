@@ -79,7 +79,36 @@ Cold 2k Game Boxes is a desk-wait, not a board-block. BFF `UPSTREAM_TIMEOUT_MS.s
 - [ ] Repeat same game-boxes request twice → second response `notes.cache=hit`; means identical for fixed seed
 - [x] Truth-layer invariants I1–I8 + Week-1 schedule guards green (2026-08-11). `KICKOFF_SMOKE` needs numpy in the local env (unrelated to sim depth).
 
+## Post-kicker alignment (2026-08-11, after #182)
+
+**Depends on:** `#182` / `nfl-season-engine-v1.27-kicker-layer` (FG/XP in scoring + Game Boxes).
+
+### Defaults (unchanged after kicker merge)
+
+| Surface | Default `n` |
+|---------|-------------|
+| Game Boxes | **2,000** |
+| Survivor | **2,000** |
+| Heavy research | 50k–100k unchanged |
+
+Tip of `deploy-vercel` includes both `#181` (`debc7d79`) and `#182` (`7dfceacd`). Defaults still read from `sim_depth.py` / web `NFL_DEFAULT_N_* = 2000`.
+
+### FG honesty (same depth gate as yards / TD)
+
+- Engine notes: `fg_display=mean_fg_xp_research_depth` when `n ≥ 2000`; else `mean_fg_xp_low_depth_estimate` (mirrors `depth_label` / `honest_precision`).
+- Game Boxes kicking panel shows the same `formatDepthBadge(n)` as player yards/TD (`2,000 · research depth` or `… · low-depth estimate`).
+- Box payload includes `fg_att` / `fg_made` / `xp_*` and `team_points.points_from_fg` (not TD-only).
+
+### Smoke notes (post-kicker)
+
+- [x] Defaults ≥2k (Game Boxes + Survivor) after kicker merge
+- [x] Sample box includes FG att/made/XP + FG points in team scoring breakdown
+  - Demo KC@BUF n=80: FG ≈1.63/1.92, XP ≈1.31, kick pts ≈6.2, skill+kick ≈13.9 (not TD-only)
+  - Cache miss→hit same seed: identical FG means; cross-seed |Δfg_att| ≈0.02
+- [x] FG panel labeled with depth badge under the same rules as yards/TD
+- [x] Truth-layer invariants green via repo `.venv` (`test_nfl_truth_layer_invariants` + sim-depth + kicker suites)
+
 ## Deploy
 
-- Vercel: `deploy-vercel` (web honesty + desk defaults)
-- Railway: model-service (defaults, caches, TD enrichment) — required for engine defaults to take effect
+- Vercel: `deploy-vercel` (web honesty + desk defaults + FG depth badge)
+- Railway: model-service (defaults, caches, TD enrichment, `fg_display` notes) — required for engine defaults to take effect

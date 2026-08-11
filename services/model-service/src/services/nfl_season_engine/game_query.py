@@ -571,6 +571,11 @@ def project_game_player_boxes(
         ),
         "td_display": "p_td_plus_expected_rate",
         "kicker_layer": "approximate_fg_xp",
+        "fg_display": (
+            "mean_fg_xp_research_depth"
+            if is_honest_precision(n_replicates)
+            else "mean_fg_xp_low_depth_estimate"
+        ),
         "cache": "miss",
     }
     if not on_schedule:
