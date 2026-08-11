@@ -19,9 +19,9 @@ from src.services.nfl_season_engine.types import PlayerRole
 
 # Bump when calibration constants change in a material way.
 CALIBRATION_TAG = "nfl-season-engine-cal-v3-coherence"
-# v1.26 Path A2: returning-player prior-year usage-share anchor (not path-end
-# yard blend). See player_usage.anchor_roster_book_to_prior_usage_shares.
-ENGINE_VERSION = "nfl-season-engine-v1.26-phase3-pathA2-usage-prior"
+# v1.27 scoped kicker / FG / XP layer (scoring bridge + game boxes).
+# See kicker_layer.py + data/ops/nfl-kicker-layer-20260811.md.
+ENGINE_VERSION = "nfl-season-engine-v1.27-kicker-layer"
 
 # Path A2 — blend weight toward Y−1 team-share of targets / rush attempts for
 # returning players with material prior volume. Depth archetype fills the rest;

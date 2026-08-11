@@ -36,6 +36,11 @@ from src.services.nfl_season_engine.injury_paths import (
     injury_paths_to_dicts,
     summarize_adjustments,
 )
+from src.services.nfl_season_engine.kicker_layer import (
+    project_game_kicking,
+    summarize_kicking_replicates,
+    team_kicker_profile,
+)
 from src.services.nfl_season_engine.player_regression import regression_summary
 from src.services.nfl_season_engine.player_usage import (
     allocate_game_usage,
@@ -335,6 +340,7 @@ def project_game_player_boxes(
                 players=list(hit.players or []),
                 notes=notes,
                 diagnostics=dict(hit.diagnostics or {}),
+                kicking=dict(getattr(hit, "kicking", None) or {}),
             )
 
     rng = random.Random(seed)
@@ -374,6 +380,14 @@ def project_game_player_boxes(
     rz_accum: Dict[str, Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
     rz_pass_home: List[float] = []
     rz_pass_away: List[float] = []
+    kick_home_rows: List[Dict[str, Any]] = []
+    kick_away_rows: List[Dict[str, Any]] = []
+    home_kicker_profile = team_kicker_profile(
+        game.home_team, roles=week_rosters.get(game.home_team, [])
+    )
+    away_kicker_profile = team_kicker_profile(
+        game.away_team, roles=week_rosters.get(game.away_team, [])
+    )
     # Neutral-script share dump for inspectability (pre-MC).
     home_roles = annotate_usage_roles(week_rosters.get(game.home_team, []))
     away_roles = annotate_usage_roles(week_rosters.get(game.away_team, []))
@@ -390,6 +404,39 @@ def project_game_player_boxes(
             script=script,
             strengths=week_strengths,
             rng=rng,
+        )
+        # Offensive TDs for XP: pass + rush (rec_tds double-count pass TDs).
+        home_tds = sum(
+            float(b.pass_tds) + float(b.rush_tds)
+            for b in boxes
+            if b.team == game.home_team
+        )
+        away_tds = sum(
+            float(b.pass_tds) + float(b.rush_tds)
+            for b in boxes
+            if b.team == game.away_team
+        )
+        home_pace = float(script.home_pace_plays or script.pace_plays or 63.5)
+        away_pace = float(script.away_pace_plays or script.pace_plays or 63.5)
+        kick_home_rows.append(
+            project_game_kicking(
+                team=game.home_team,
+                offensive_tds=home_tds,
+                pace_plays=home_pace,
+                script_detail=str(script.home_script_detail or "neutral"),
+                time_bucket=str(script.time_bucket or "mid"),
+                profile=home_kicker_profile,
+            )
+        )
+        kick_away_rows.append(
+            project_game_kicking(
+                team=game.away_team,
+                offensive_tds=away_tds,
+                pace_plays=away_pace,
+                script_detail=str(script.away_script_detail or "neutral"),
+                time_bucket=str(script.time_bucket or "mid"),
+                profile=away_kicker_profile,
+            )
         )
         rz_pass_home.append(
             rz_pass_rate_from_script(
@@ -523,6 +570,7 @@ def project_game_player_boxes(
             else "thin_n_widen_or_hide_tails"
         ),
         "td_display": "p_td_plus_expected_rate",
+        "kicker_layer": "approximate_fg_xp",
         "cache": "miss",
     }
     if not on_schedule:
@@ -658,6 +706,52 @@ def project_game_player_boxes(
             ),
         }
 
+    home_kick = summarize_kicking_replicates(kick_home_rows)
+    away_kick = summarize_kicking_replicates(kick_away_rows)
+    # Team points from skill TDs (mean) + FG/XP — inspectable, not Layer-2 W/L.
+    def _mean_skill_td_points(team: str) -> float:
+        vals: List[float] = []
+        for key, info in meta.items():
+            if info.get("team") != team:
+                continue
+            for stat in ("pass_tds", "rush_tds"):
+                series = accum[key].get(stat) or []
+                if series:
+                    vals.append(statistics.mean(series) * 6.0)
+        return round(sum(vals), 3)
+
+    home_td_pts = _mean_skill_td_points(game.home_team)
+    away_td_pts = _mean_skill_td_points(game.away_team)
+    kicking = {
+        "home": home_kick,
+        "away": away_kick,
+        "team_points": {
+            "home": {
+                "points_from_skill_tds": home_td_pts,
+                "points_from_fg": home_kick.get("points_from_fg", 0.0),
+                "points_from_xp": home_kick.get("points_from_xp", 0.0),
+                "points_from_kicking": home_kick.get("points_from_kicking", 0.0),
+                "points_skill_tds_plus_kicking": round(
+                    home_td_pts + float(home_kick.get("points_from_kicking") or 0.0),
+                    3,
+                ),
+            },
+            "away": {
+                "points_from_skill_tds": away_td_pts,
+                "points_from_fg": away_kick.get("points_from_fg", 0.0),
+                "points_from_xp": away_kick.get("points_from_xp", 0.0),
+                "points_from_kicking": away_kick.get("points_from_kicking", 0.0),
+                "points_skill_tds_plus_kicking": round(
+                    away_td_pts + float(away_kick.get("points_from_kicking") or 0.0),
+                    3,
+                ),
+            },
+        },
+        "model_status": "approximate",
+    }
+    if include_diagnostics:
+        diagnostics["kicking"] = kicking
+
     proj = GameBoxProjection(
         season=universe.season,
         week=game.week,
@@ -670,6 +764,7 @@ def project_game_player_boxes(
         players=players,
         notes=notes,
         diagnostics=diagnostics,
+        kicking=kicking,
     )
     if use_cache and not include_diagnostics:
         game_box_cache_set(cache_key, proj)

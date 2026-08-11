@@ -31,6 +31,20 @@ type PlayerRow = {
   distributions: Record<string, StatDist>;
 };
 
+type KickingTeamLine = {
+  team?: string;
+  kicker_name?: string;
+  fg_att?: number;
+  fg_made?: number;
+  xp_att?: number;
+  xp_made?: number;
+  points_from_fg?: number;
+  points_from_xp?: number;
+  points_from_kicking?: number;
+  model_status?: string;
+  source?: string;
+};
+
 type BoxesPayload = {
   mode?: string;
   schedule_source?: string;
@@ -47,6 +61,25 @@ type BoxesPayload = {
   notes?: Record<string, string>;
   sim_depth?: { depth_label?: string; honest_precision?: boolean; n?: number };
   players?: PlayerRow[];
+  kicking?: {
+    home?: KickingTeamLine;
+    away?: KickingTeamLine;
+    team_points?: {
+      home?: {
+        points_from_skill_tds?: number;
+        points_from_fg?: number;
+        points_from_xp?: number;
+        points_skill_tds_plus_kicking?: number;
+      };
+      away?: {
+        points_from_skill_tds?: number;
+        points_from_fg?: number;
+        points_from_xp?: number;
+        points_skill_tds_plus_kicking?: number;
+      };
+    };
+    model_status?: string;
+  };
   error?: string;
 };
 
@@ -409,6 +442,14 @@ export default function SeasonEngineGameBoxesClient({
             </p>
           ) : null}
 
+          {active.kicking?.home || active.kicking?.away ? (
+            <KickingSummary
+              homeTeam={active.home_team ?? homeTeam}
+              awayTeam={active.away_team ?? awayTeam}
+              kicking={active.kicking}
+            />
+          ) : null}
+
           {injured && baseline ? (
             <div className="grid gap-4 lg:grid-cols-2">
               <TeamBoxTable
@@ -438,6 +479,101 @@ export default function SeasonEngineGameBoxesClient({
           )}
         </section>
       ) : null}
+    </div>
+  );
+}
+
+function KickingSummary({
+  homeTeam,
+  awayTeam,
+  kicking,
+}: {
+  homeTeam: string;
+  awayTeam: string;
+  kicking?: BoxesPayload["kicking"];
+}) {
+  if (!kicking) return null;
+  const sides: Array<{
+    label: string;
+    line?: KickingTeamLine;
+    pts?: {
+      points_from_skill_tds?: number;
+      points_from_fg?: number;
+      points_from_xp?: number;
+      points_skill_tds_plus_kicking?: number;
+    };
+  }> = [
+    {
+      label: awayTeam,
+      line: kicking.away,
+      pts: kicking.team_points?.away,
+    },
+    {
+      label: homeTeam,
+      line: kicking.home,
+      pts: kicking.team_points?.home,
+    },
+  ];
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className="text-sm font-semibold text-kos-text">Kicking / scoring</h3>
+        <p className="text-[11px] text-kos-text/45">
+          FG + XP · {kicking.model_status === "approximate" ? "approximate bands" : "kicker layer"}
+        </p>
+      </div>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {sides.map(({ label, line, pts }) => {
+          if (!line) return null;
+          const name = line.kicker_name?.trim()
+            ? line.kicker_name
+            : `${label} K`;
+          return (
+            <div
+              key={label}
+              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5"
+            >
+              <p className="text-xs font-semibold uppercase tracking-wide text-kos-gold">
+                {label}
+                <span className="ml-2 font-medium normal-case tracking-normal text-kos-text/70">
+                  {name}
+                </span>
+              </p>
+              <dl className="mt-2 grid grid-cols-3 gap-x-2 gap-y-1 text-sm tabular-nums">
+                <div>
+                  <dt className="text-[10px] uppercase text-kos-text/45">FG</dt>
+                  <dd className="text-kos-text">
+                    {(line.fg_made ?? 0).toFixed(1)}/{(line.fg_att ?? 0).toFixed(1)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] uppercase text-kos-text/45">XP</dt>
+                  <dd className="text-kos-text">
+                    {(line.xp_made ?? 0).toFixed(1)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] uppercase text-kos-text/45">Kick pts</dt>
+                  <dd className="text-kos-text">
+                    {(line.points_from_kicking ?? 0).toFixed(1)}
+                  </dd>
+                </div>
+              </dl>
+              {pts ? (
+                <p className="mt-2 text-[11px] text-kos-text/55">
+                  Skill TDs {(pts.points_from_skill_tds ?? 0).toFixed(1)} + FG{" "}
+                  {(pts.points_from_fg ?? 0).toFixed(1)} + XP{" "}
+                  {(pts.points_from_xp ?? 0).toFixed(1)} →{" "}
+                  <span className="text-kos-text/80">
+                    {(pts.points_skill_tds_plus_kicking ?? 0).toFixed(1)} pts
+                  </span>
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

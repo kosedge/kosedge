@@ -295,6 +295,8 @@ class GameBoxProjection:
     notes: Dict[str, str] = field(default_factory=dict)
     # Populated when callers pass include_diagnostics=True.
     diagnostics: Dict[str, Any] = field(default_factory=dict)
+    # v1.27 scoped kicker layer: per-team FG att/made/XP + kicking points.
+    kicking: Dict[str, Any] = field(default_factory=dict)
 
 
 def dist_block(mean: float, std: float, p10: float, p50: float, p90: float) -> Dict[str, float]:
