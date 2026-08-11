@@ -447,6 +447,7 @@ export default function SeasonEngineGameBoxesClient({
               homeTeam={active.home_team ?? homeTeam}
               awayTeam={active.away_team ?? awayTeam}
               kicking={active.kicking}
+              nReplicates={active.n_replicates}
             />
           ) : null}
 
@@ -487,12 +488,15 @@ function KickingSummary({
   homeTeam,
   awayTeam,
   kicking,
+  nReplicates,
 }: {
   homeTeam: string;
   awayTeam: string;
   kicking?: BoxesPayload["kicking"];
+  nReplicates?: number;
 }) {
   if (!kicking) return null;
+  const n = nReplicates ?? NFL_DEFAULT_N_GAME_BOX;
   const sides: Array<{
     label: string;
     line?: KickingTeamLine;
@@ -520,7 +524,11 @@ function KickingSummary({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-sm font-semibold text-kos-text">Kicking / scoring</h3>
         <p className="text-[11px] text-kos-text/45">
-          FG + XP · {kicking.model_status === "approximate" ? "approximate bands" : "kicker layer"}
+          FG + XP ·{" "}
+          {kicking.model_status === "approximate"
+            ? "approximate bands"
+            : "kicker layer"}{" "}
+          · {formatDepthBadge(n)}
         </p>
       </div>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -544,29 +552,31 @@ function KickingSummary({
                 <div>
                   <dt className="text-[10px] uppercase text-kos-text/45">FG</dt>
                   <dd className="text-kos-text">
-                    {(line.fg_made ?? 0).toFixed(1)}/{(line.fg_att ?? 0).toFixed(1)}
+                    {formatStatNumber(line.fg_made ?? 0)}/
+                    {formatStatNumber(line.fg_att ?? 0)}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-[10px] uppercase text-kos-text/45">XP</dt>
                   <dd className="text-kos-text">
-                    {(line.xp_made ?? 0).toFixed(1)}
+                    {formatStatNumber(line.xp_made ?? 0)}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-[10px] uppercase text-kos-text/45">Kick pts</dt>
                   <dd className="text-kos-text">
-                    {(line.points_from_kicking ?? 0).toFixed(1)}
+                    {formatStatNumber(line.points_from_kicking ?? 0)}
                   </dd>
                 </div>
               </dl>
               {pts ? (
                 <p className="mt-2 text-[11px] text-kos-text/55">
-                  Skill TDs {(pts.points_from_skill_tds ?? 0).toFixed(1)} + FG{" "}
-                  {(pts.points_from_fg ?? 0).toFixed(1)} + XP{" "}
-                  {(pts.points_from_xp ?? 0).toFixed(1)} →{" "}
+                  Skill TDs {formatStatNumber(pts.points_from_skill_tds ?? 0)} +
+                  FG {formatStatNumber(pts.points_from_fg ?? 0)} + XP{" "}
+                  {formatStatNumber(pts.points_from_xp ?? 0)} →{" "}
                   <span className="text-kos-text/80">
-                    {(pts.points_skill_tds_plus_kicking ?? 0).toFixed(1)} pts
+                    {formatStatNumber(pts.points_skill_tds_plus_kicking ?? 0)}{" "}
+                    pts
                   </span>
                 </p>
               ) : null}
