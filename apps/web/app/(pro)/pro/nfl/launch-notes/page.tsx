@@ -10,36 +10,29 @@ export const metadata: Metadata = {
 const TERM_ROWS = [
   {
     term: "Model",
-    meaning:
-      "Research fair (pre-handicap). Does not drive PLAY alone.",
+    meaning: "Research fair. Does not drive PLAY alone.",
   },
   {
     term: "KEI",
-    meaning:
-      "Published handicap line (model + information). Edge Board action line.",
+    meaning: "Published handicap. Edge Board action line.",
   },
   {
-    term: "Market / Current",
-    meaning: "Best available / latest books.",
-  },
-  {
-    term: "Open",
-    meaning: "First captured line (doesn't move).",
+    term: "Current / Open",
+    meaning: "Latest books vs first capture.",
   },
   {
     term: "Tag",
     meaning:
-      "PASS / LEAN / PLAY / BEST VALUE / ALERT / STAY AWAY from KEI vs Current.",
+      "PASS / LEAN / PLAY / BEST VALUE / ALERT / STAY AWAY — KEI vs Current.",
   },
   {
     term: "Play-to",
     meaning:
-      "Price at which the tag still holds; worse price → tag downgrades.",
+      "Price where the tag still holds; worse price can downgrade the tag.",
   },
   {
     term: "Confidence",
-    meaning:
-      'Separate from edge size — input quality, not "how much we like the team."',
+    meaning: "Separate from edge size.",
   },
 ] as const;
 
@@ -133,8 +126,8 @@ export default function NflLaunchNotesPage() {
       <section>
         <h2 className="text-xl font-semibold text-kos-gold">Week 1–2</h2>
         <p className="mt-3 text-base leading-7 text-kos-text/80">
-          Tighter thresholds (need more edge to PLAY). Early season uncertainty
-          is intentional.
+          Tighter tag thresholds (need more edge to PLAY). Early season
+          uncertainty is intentional.
         </p>
       </section>
 
@@ -173,6 +166,22 @@ export default function NflLaunchNotesPage() {
           <li>
             K/DST may be unavailable until rankings include them — grades
             don&apos;t punish missing K/DST
+          </li>
+          <li>
+            Guillotine + Sleepers desks live —{" "}
+            <Link
+              href="/pro/nfl/fantasy/guillotine"
+              className="font-semibold text-kos-gold hover:underline"
+            >
+              Guillotine
+            </Link>{" "}
+            ·{" "}
+            <Link
+              href="/pro/nfl/fantasy/sleepers"
+              className="font-semibold text-kos-gold hover:underline"
+            >
+              Sleepers
+            </Link>
           </li>
           <li>Mock is practice; still model-informed, not pure ADP</li>
         </ul>

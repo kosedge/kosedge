@@ -2,7 +2,7 @@
 
 ## What shipped
 
-Public desk primer at **`/pro/nfl/launch-notes`** (Model vs KEI vs Tag, Week 1–2, Edge Board, Fantasy, lineage, responsibility).
+Public desk primer at **`/pro/nfl/launch-notes`** (Model vs KEI vs Tag, Week 1–2, Edge Board, Fantasy incl. Guillotine + Sleepers, lineage, responsibility).
 
 ## Links
 
