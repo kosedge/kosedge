@@ -1,4 +1,4 @@
-"""Tests for NFL strength coherence (wins ↔ playoff ↔ SB ↔ LAR id)."""
+"""Tests for NFL strength coherence (wins ↔ playoff ↔ SB ↔ win_dist ↔ LAR id)."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -18,7 +19,8 @@ def _load_playoff_mod():
     path = SCRIPTS / "nfl_playoff_from_week_rates.py"
     name = "nfl_playoff_from_week_rates"
     if name in sys.modules:
-        return sys.modules[name]
+        # Force reload so new helpers are visible when editing mid-session.
+        del sys.modules[name]
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
@@ -33,16 +35,13 @@ def test_canonicalize_la_to_lar_in_week_rates():
         "LA": {1: 0.6, 2: 0.55, 3: 0.5},
         "SEA": {1: 0.4, 2: 0.45, 3: 0.5},
     }
-    # targets only for present teams — function fills all 32; use tiny synthetic via normalize
     from services.nfl_canonical_teams import CANONICAL_TEAMS
 
     targets = {t: 8.5 for t in CANONICAL_TEAMS}
     targets["LAR"] = 9.7
     targets["SEA"] = 8.5
-    # Seed flat rates for every team so rescale has profiles
     seeded = {t: {w: 0.5 for w in range(1, 18)} for t in CANONICAL_TEAMS}
     seeded["LAR"] = {w: float(rates["LA"].get(w, 0.5)) for w in range(1, 18)}
-    # Put LA key only (legacy) — rescale must canonicalize
     seeded_legacy = {"LA" if t == "LAR" else t: weeks for t, weeks in seeded.items()}
     out = mod.rescale_week_rates_to_expected_wins(seeded_legacy, targets)
     assert "LAR" in out
@@ -58,10 +57,9 @@ def test_rescale_aligns_season_wins_to_board():
     targets = {t: 8.5 for t in CANONICAL_TEAMS}
     targets["LAR"] = 9.6938
     targets["BUF"] = 12.8297
-    # Keep sum ≈ 272
     others = [t for t in CANONICAL_TEAMS if t not in {"LAR", "BUF"}]
     remaining = 272.0 - targets["LAR"] - targets["BUF"]
-    for i, t in enumerate(others):
+    for t in others:
         targets[t] = remaining / len(others)
     aligned = mod.rescale_week_rates_to_expected_wins(rates, targets)
     wins = mod.season_wins_from_rates(aligned)
@@ -97,10 +95,64 @@ def test_flag_contradictions_catches_lar_style_split():
     ]
     flags = mod.flag_wins_playoff_sb_contradictions(rows)
     teams = {f["team"] for f in flags}
-    assert "LAR" in teams  # high playoff thin SB and/or high wins thin SB
-    assert "CHI" in teams  # high wins low playoff
+    assert "LAR" in teams
+    assert "CHI" in teams
     lar = next(f for f in flags if f["team"] == "LAR")
     assert "high_playoff_thin_sb" in lar["reasons"] or "high_wins_thin_sb" in lar["reasons"]
+
+
+def test_flag_win_dist_catches_det_secondary_path():
+    mod = _load_playoff_mod()
+    rows = [{"team": "DET", "expected_wins": 7.0459}]
+    dists = [{"team": "DET", "mean": 10.5716}]
+    flags = mod.flag_win_dist_board_mismatches(rows, dists)
+    assert flags and flags[0]["team"] == "DET"
+    assert "win_dist_secondary_path" in flags[0]["reasons"]
+
+
+def test_build_win_distributions_match_rate_sum():
+    """Marginal Bernoullis must use actual week keys (incl. week 18, skip bye)."""
+    mod = _load_playoff_mod()
+    from services.nfl_canonical_teams import CANONICAL_TEAMS
+
+    rates = {}
+    for t in CANONICAL_TEAMS:
+        # 17 games: weeks 1-5,7-18 (bye week 6) — mirrors wall-chart shape.
+        weeks = {w: 0.4 for w in list(range(1, 6)) + list(range(7, 19))}
+        rates[t] = weeks
+    rates["DET"] = {w: 0.4145 for w in list(range(1, 6)) + list(range(7, 19))}
+    # 17 * 0.4145 ≈ 7.0465
+    rows = mod.build_win_distributions_from_marginal_rates(
+        rates, n_replicates=8_000, seed=20260811
+    )
+    det = next(r for r in rows if r["team"] == "DET")
+    assert det["mean"] == pytest.approx(7.0465, abs=0.15)
+    flags = mod.flag_win_dist_board_mismatches(
+        [{"team": "DET", "expected_wins": 7.0465}],
+        [det],
+    )
+    assert flags == []
+
+
+def test_distribution_row_mean_from_hist():
+    mod = _load_playoff_mod()
+    counts = np.zeros(18, dtype=np.int64)
+    counts[7] = 5000
+    counts[8] = 5000
+    row = mod._distribution_row_from_hist("DET", counts, n_sims=10_000)
+    assert row["team"] == "DET"
+    assert row["mean"] == pytest.approx(7.5, abs=0.01)
+    assert row["p10"] == 7.0
+    assert row["p90"] == 8.0
+
+
+def test_apply_win_dist_percentiles_to_rows():
+    mod = _load_playoff_mod()
+    rows = [{"team": "DET", "expected_wins": 7.0, "wins_p10": 7, "wins_p90": 14}]
+    dists = [{"team": "DET", "p10": 4.0, "p90": 10.0, "mean": 7.0}]
+    out = mod.apply_win_dist_percentiles_to_rows(rows, dists)
+    assert out[0]["wins_p10"] == 4
+    assert out[0]["wins_p90"] == 10
 
 
 def test_apply_playoff_rewrites_sb_when_requested():

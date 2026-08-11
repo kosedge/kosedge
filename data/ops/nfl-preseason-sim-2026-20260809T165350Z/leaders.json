@@ -10,8 +10,8 @@
       },
       {
         "rank": 2,
-        "label": "LA",
-        "team": "LA",
+        "label": "LAR",
+        "team": "LAR",
         "position": null,
         "value": 4861.29
       },
@@ -225,8 +225,8 @@
     "top10": [
       {
         "rank": 1,
-        "label": "LA",
-        "team": "LA",
+        "label": "LAR",
+        "team": "LAR",
         "position": null,
         "value": 440.85
       },
@@ -615,7 +615,7 @@
       {
         "rank": 9,
         "label": "Puka Nacua",
-        "team": "LA",
+        "team": "LAR",
         "position": "WR",
         "value": 1352.84
       },
@@ -823,7 +823,7 @@
       {
         "rank": 7,
         "label": "Puka Nacua",
-        "team": "LA",
+        "team": "LAR",
         "position": "WR",
         "value": 9.59
       },
@@ -936,7 +936,7 @@
       {
         "rank": 2,
         "label": "Matthew Stafford",
-        "team": "LA",
+        "team": "LAR",
         "position": "QB",
         "value": 4540.31
       },
@@ -1061,7 +1061,7 @@
       {
         "rank": 4,
         "label": "Matthew Stafford",
-        "team": "LA",
+        "team": "LAR",
         "position": "QB",
         "value": 39.01
       },

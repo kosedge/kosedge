@@ -264,8 +264,10 @@ def check_bundle(
     except Exception as exc:  # pragma: no cover
         suite.add("KICKOFF_SMOKE", False, f"error: {exc}")
 
-    # STRENGTH_ALIGN — board expected_wins ≈ Σ week win rates (same strength path).
+    # STRENGTH_ALIGN — board expected_wins ≈ Σ week win rates ≈ win_dist.mean
+    # (single production strength path; DET leftover was hierarchical dist μ).
     rates_path = bundle_dir / "team_week_win_rates.json"
+    win_dist_path = bundle_dir / "team_win_distributions.json"
     if rates_path.exists():
         try:
             from nfl_playoff_from_week_rates import (  # noqa: WPS433
@@ -292,16 +294,29 @@ def check_bundle(
                     continue
                 if abs(bw - rw) > 0.35:
                     mismatches.append(f"{t}:{rw:.2f}vs{bw:.2f}")
-            align_ok = not mismatches and "LA" not in rates
-            suite.add(
-                "STRENGTH_ALIGN",
-                align_ok,
-                (
-                    "week-rate Σ ≈ board expected_wins (±0.35); no raw LA key"
-                    if align_ok
-                    else f"mismatches={mismatches[:8]}"
-                ),
+            dist_mismatches = []
+            if win_dist_path.exists():
+                for dist in json.loads(win_dist_path.read_text(encoding="utf-8")):
+                    t = canonicalize_team(str(dist.get("team") or "")) or str(
+                        dist.get("team") or ""
+                    )
+                    if t not in CANONICAL_TEAMS:
+                        continue
+                    bw = board_wins.get(t)
+                    if bw is None:
+                        continue
+                    mean = float(dist.get("mean") or 0)
+                    if abs(mean - bw) > 0.35:
+                        dist_mismatches.append(f"{t}:{mean:.2f}vs{bw:.2f}")
+            align_ok = (
+                not mismatches and not dist_mismatches and "LA" not in rates
             )
+            detail = (
+                "week-rate Σ + win_dist.mean ≈ board expected_wins (±0.35); no raw LA key"
+                if align_ok
+                else f"rate={mismatches[:6]} dist={dist_mismatches[:6]}"
+            )
+            suite.add("STRENGTH_ALIGN", align_ok, detail)
         except Exception as exc:  # pragma: no cover
             suite.add("STRENGTH_ALIGN", False, f"error: {exc}")
     else:

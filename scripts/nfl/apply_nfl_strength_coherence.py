@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-"""Align board wins ↔ week rates ↔ playoff/SB on a preseason bundle.
+"""Align board wins ↔ week rates ↔ win distributions ↔ playoff/SB on a bundle.
 
 Root cause this repairs: soft-pile / defense finalize rewrote
 ``team_regular_season_outcomes.expected_wins`` from PF/PA production budgets
-while leaving ``team_week_win_rates.json`` on the hierarchical MC path. Truth
-Layer playoffs then read the stale rates (LAR ~11.1-win strength → ~84%
-playoff) while displayed wins + softmax SB used the budget path (LAR ~9.69 →
-~0.48% SB).
+while leaving ``team_week_win_rates.json`` and ``team_win_distributions.json``
+on the hierarchical MC path. Truth Layer playoffs then read the stale rates
+(LAR ~11.1-win strength → ~84% playoff) while displayed wins + softmax SB used
+the budget path (LAR ~9.69 → ~0.48% SB). DET kept the secondary path longer:
+board/defense ~7.05 wins while win_dist.mean stayed ~10.57 for Season Model /
+Futures.
 
 This script:
 1. Canonicalizes LA→LAR (and WSH→WAS) on outcomes, week rates, win dist,
-   defense, and player totals.
+   defense, players, and leaders.
 2. Rescales week rates so each team's Σ week p matches board expected wins.
 3. Recomputes 7-seed playoff + strength-bracket Super Bowl from aligned rates.
-4. Writes coherence audit JSON next to the bundle.
+4. Rebuilds ``team_win_distributions`` from the same MC (closes DET dual path).
+5. Writes coherence audit JSON next to the bundle.
 """
 
 from __future__ import annotations
@@ -36,7 +39,10 @@ from services.nfl_canonical_teams import (  # noqa: E402
 )
 from nfl_playoff_from_week_rates import (  # noqa: E402
     apply_playoff_probs_to_team_rows,
+    apply_win_dist_percentiles_to_rows,
+    build_win_distributions_from_marginal_rates,
     e_wins_histogram,
+    flag_win_dist_board_mismatches,
     flag_wins_playoff_sb_contradictions,
     recompute_playoff_probs,
     rescale_week_rates_to_expected_wins,
@@ -102,6 +108,7 @@ def apply_coherence(
             by_team[t] = r
     before_rows = list(by_team.values())
     before_lar = _snapshot_team(before_rows, "LAR")
+    before_det = _snapshot_team(before_rows, "DET")
 
     targets = {
         str(r["team"]): float(r["expected_wins"])
@@ -111,6 +118,13 @@ def apply_coherence(
     if len(targets) != 32:
         missing = [t for t in CANONICAL_TEAMS if t not in targets]
         raise SystemExit(f"expected 32 board teams, missing={missing}")
+
+    win_dist_path = bundle_dir / "team_win_distributions.json"
+    before_dist_mean: Dict[str, float] = {}
+    if win_dist_path.exists():
+        for row in json.loads(win_dist_path.read_text(encoding="utf-8")):
+            t = canonicalize_team(str(row.get("team") or "")) or str(row.get("team") or "")
+            before_dist_mean[t] = float(row.get("mean") or 0)
 
     raw_rates = json.loads(rates_path.read_text(encoding="utf-8"))
     before_rate_wins = season_wins_from_rates(
@@ -125,38 +139,58 @@ def apply_coherence(
         seed=seed,
         run_super_bowl=True,
     )
+    win_distributions = build_win_distributions_from_marginal_rates(
+        aligned_rates,
+        n_replicates=n_replicates,
+        seed=seed,
+    )
     after_rows = apply_playoff_probs_to_team_rows(
         before_rows,
         recomputed,
         rewrite_super_bowl=True,
     )
+    after_rows = apply_win_dist_percentiles_to_rows(after_rows, win_distributions)
     after_lar = _snapshot_team(after_rows, "LAR")
+    after_det = _snapshot_team(after_rows, "DET")
     flags = flag_wins_playoff_sb_contradictions(after_rows)
+    dist_flags = flag_win_dist_board_mismatches(after_rows, win_distributions)
     hist = e_wins_histogram(after_rows)
+    after_dist_mean = {
+        str(r["team"]): float(r["mean"]) for r in win_distributions
+    }
 
     audit = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "bundle": bundle_dir.name,
         "root_cause": (
             "Soft-pile/defense expected_wins (production PF/PA path) diverged from "
-            "hierarchical team_week_win_rates; Truth Layer playoffs used stale rates "
-            "while SB softmax used board wins — LAR showed ~9.7 wins + ~0.48% SB with "
-            "~84% playoff."
+            "hierarchical team_week_win_rates AND stale team_win_distributions means; "
+            "Truth Layer playoffs used rates while Season Model / Futures still showed "
+            "hierarchical win histograms (DET board 7.05 vs dist μ 10.57; LAR 9.69 vs 11.11)."
         ),
         "method": recomputed["method"],
         "n_replicates": n_replicates,
         "seed": seed,
         "before_lar": before_lar,
         "after_lar": after_lar,
+        "before_det": before_det,
+        "after_det": after_det,
         "before_rate_wins_lar": round(float(before_rate_wins.get("LAR") or before_rate_wins.get("LA") or 0), 4),
         "after_rate_wins_lar": round(float(after_rate_wins.get("LAR") or 0), 4),
+        "before_rate_wins_det": round(float(before_rate_wins.get("DET") or 0), 4),
+        "after_rate_wins_det": round(float(after_rate_wins.get("DET") or 0), 4),
+        "before_win_dist_mean_det": round(float(before_dist_mean.get("DET") or 0), 4),
+        "after_win_dist_mean_det": round(float(after_dist_mean.get("DET") or 0), 4),
+        "before_win_dist_mean_lar": round(float(before_dist_mean.get("LAR") or before_dist_mean.get("LA") or 0), 4),
+        "after_win_dist_mean_lar": round(float(after_dist_mean.get("LAR") or 0), 4),
         "sanity": recomputed["sanity"],
         "e_wins_histogram": hist,
         "contradiction_flags": flags,
+        "win_dist_mismatch_flags": dist_flags,
         "production_path": (
             "Player pass/rush/rec yards + TDs and defense PF/PA/expected_wins share the "
-            "soft-pile finalize budget path; week rates are rescaled to those board wins "
-            "so playoff/SB join the same strength story (no separate LAR-lite production)."
+            "soft-pile finalize budget path; week rates AND win distributions are rebuilt "
+            "from those board wins so Power / Futures / Season Model tell one story."
         ),
         "team_id_scheme": "product_canonical_LAR",
     }
@@ -190,8 +224,12 @@ def apply_coherence(
     )
     rates_path.write_text(json.dumps(aligned_rates, indent=2) + "\n", encoding="utf-8")
 
-    win_dist_path = bundle_dir / "team_win_distributions.json"
-    if win_dist_path.exists():
+    # Rebuild win distributions on the production strength path (not id-only canon).
+    if win_distributions:
+        win_dist_path.write_text(
+            json.dumps(win_distributions, indent=2) + "\n", encoding="utf-8"
+        )
+    elif win_dist_path.exists():
         dists = json.loads(win_dist_path.read_text(encoding="utf-8"))
         for row in dists:
             row["team"] = canonicalize_team(str(row.get("team") or "")) or row.get("team")
@@ -207,6 +245,23 @@ def apply_coherence(
         players = [_canon_team_field(r) for r in _load_csv(players_path)]
         _write_csv(players_path, players, fieldnames=list(players[0].keys()))
 
+    leaders_path = bundle_dir / "leaders.json"
+    if leaders_path.exists():
+        leaders = json.loads(leaders_path.read_text(encoding="utf-8"))
+        for _section, payload in list(leaders.items()):
+            if not isinstance(payload, dict):
+                continue
+            for key in ("top10", "bottom5"):
+                rows = payload.get(key)
+                if not isinstance(rows, list):
+                    continue
+                for row in rows:
+                    if isinstance(row, dict) and row.get("team") is not None:
+                        row["team"] = canonicalize_team(str(row["team"])) or row["team"]
+                        if row.get("label") in ("LA", "WSH"):
+                            row["label"] = row["team"]
+        leaders_path.write_text(json.dumps(leaders, indent=2) + "\n", encoding="utf-8")
+
     qc_path = bundle_dir / "quality_checks.json"
     if qc_path.exists():
         qc = json.loads(qc_path.read_text(encoding="utf-8"))
@@ -218,7 +273,11 @@ def apply_coherence(
             "strength-bracket MC on same aligned week rates (not softmax-only)"
         )
         honesty["strength_coherence"] = (
-            "week rates Σ aligned to soft-pile/board expected_wins; product id LAR"
+            "week rates + win distributions aligned to soft-pile/board expected_wins; "
+            "product id LAR"
+        )
+        honesty["win_distributions"] = (
+            "rebuilt from aligned week-rate marginal Bernoullis (E[wins]=Σp=board)"
         )
         qc["honesty"] = honesty
         sanity = dict(qc.get("sanity") or {})
@@ -236,6 +295,10 @@ def apply_coherence(
             "method": recomputed["method"],
             "before_lar": before_lar,
             "after_lar": after_lar,
+            "before_det": before_det,
+            "after_det": after_det,
+            "before_win_dist_mean_det": audit["before_win_dist_mean_det"],
+            "after_win_dist_mean_det": audit["after_win_dist_mean_det"],
         }
         qc_path.write_text(json.dumps(qc, indent=2) + "\n", encoding="utf-8")
 
@@ -269,9 +332,16 @@ def main() -> None:
             "bundle": audit["bundle"],
             "before_lar": audit["before_lar"],
             "after_lar": audit["after_lar"],
+            "before_det": audit.get("before_det"),
+            "after_det": audit.get("after_det"),
+            "before_win_dist_mean_det": audit.get("before_win_dist_mean_det"),
+            "after_win_dist_mean_det": audit.get("after_win_dist_mean_det"),
+            "before_win_dist_mean_lar": audit.get("before_win_dist_mean_lar"),
+            "after_win_dist_mean_lar": audit.get("after_win_dist_mean_lar"),
             "sanity": audit["sanity"],
             "e_wins_histogram": audit["e_wins_histogram"],
             "contradiction_flags": audit["contradiction_flags"],
+            "win_dist_mismatch_flags": audit.get("win_dist_mismatch_flags"),
             "dry_run": args.dry_run,
         },
         indent=2,
