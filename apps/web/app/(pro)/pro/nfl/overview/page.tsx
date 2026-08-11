@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  deskCardClassName,
   footerCardClassName,
   footerCtaClassName,
   footerTitleClassName,
@@ -13,54 +12,16 @@ import {
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 import { NFL_DESK_SUBTITLE, NFL_TAGLINE } from "@/lib/nfl-pro-nav";
 
-function deskTitleClass(accent: "gold" | "green" | "neutral"): string {
-  if (accent === "gold") return "text-lg font-semibold text-kos-gold";
-  if (accent === "green") return "text-lg font-semibold text-edge-green";
-  return "text-lg font-semibold text-kos-text";
-}
-
-function deskCtaClass(accent: "gold" | "green" | "neutral"): string {
-  if (accent === "green")
-    return "mt-3 inline-block text-sm font-semibold text-edge-green";
-  return "mt-3 inline-block text-sm font-semibold text-kos-gold";
-}
-
-const AT_A_GLANCE = [
-  {
-    href: "/edge-board/nfl",
-    title: "Edge Board",
-    body: "Week 1 REG live — KEI vs market, selective PLAY/PASS. PRE filtered out.",
-  },
-  {
-    href: "/pro/nfl/fair-lines",
-    title: "KEI Lines",
-    body: "Published fair lines + Model vs KEI when the blend splits.",
-  },
-  {
-    href: "/pro/nfl/edges",
-    title: "Edges",
-    body: "Thresholded REG edges for the current week — sides-first launch.",
-  },
-  {
-    href: "/pro/nfl/camp",
-    title: "Camp Desk",
-    body: "Practice notes and KosEdge news breaks that feed the model desk.",
-  },
-] as const;
-
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
   const content = buildSportOverviewContent("nfl", "NFL");
-  // Weekly Slate is elevated above; keep Betting Desk / Props / Team / Governance.
+  // Weekly Slate is elevated above; Betting Desk / Fantasy / Team / Governance share card style.
   const gridSections = buildSportOverviewSections({
     sportKey: "nfl",
     base: "/pro/nfl",
     edgeBoardHref: "/edge-board/nfl",
     content,
-  }).filter(
-    (section) =>
-      section.title !== "Weekly Slate" && section.title !== "Betting Desk",
-  );
+  }).filter((section) => section.title !== "Weekly Slate");
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
@@ -96,7 +57,7 @@ export default async function NflOverviewPage() {
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-56">
             <Link
               href="/edge-board/nfl"
-              className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
+              className="rounded-xl border border-edge-green/40 bg-edge-green/12 px-4 py-2.5 text-center text-sm font-semibold text-edge-green shadow-[0_0_18px_rgba(57,255,20,0.18)] transition hover:border-edge-green/60 hover:bg-edge-green/20"
             >
               Open Week 1 Edge Board
             </Link>
@@ -113,31 +74,6 @@ export default async function NflOverviewPage() {
               Start Fantasy Mock
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* At a Glance */}
-      <section className="mt-6">
-        <div className="mb-3 flex items-end justify-between gap-3">
-          <h2 className="text-lg font-semibold tracking-tight text-kos-text">
-            At a Glance
-          </h2>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {AT_A_GLANCE.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50"
-            >
-              <h3 className="text-sm font-semibold text-kos-gold">
-                {item.title}
-              </h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
-                {item.body}
-              </p>
-            </Link>
-          ))}
         </div>
       </section>
 
@@ -173,32 +109,7 @@ export default async function NflOverviewPage() {
         </div>
       </section>
 
-      {/* Betting Desk */}
-      <section className="mt-6">
-        <div className="mb-3">
-          <h2 className="text-xl font-semibold tracking-tight text-kos-text">
-            Betting Desk
-          </h2>
-          <p className="mt-1 text-sm text-kos-text/70">
-            Model lines, edges, and props — research surfaces, not pick sheets.
-          </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {desk.cards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className={deskCardClassName(card.accent, card.status)}
-            >
-              <h3 className={deskTitleClass(card.accent)}>{card.title}</h3>
-              <p className="mt-2 text-sm text-kos-text/75">{card.description}</p>
-              <span className={deskCtaClass(card.accent)}>{card.cta}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Props / Team Intel / Model Governance */}
+      {/* Betting Desk / Fantasy / Team Intel / Model Governance */}
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {gridSections.map((section) => (
           <SportOverviewSection
@@ -210,13 +121,13 @@ export default async function NflOverviewPage() {
         ))}
       </div>
 
-      {/* Bottom resource grid — no KEI Lines duplicate; Team Previews elevated */}
+      {/* Bottom 3×2 research tools */}
       <section id="tools" className="mt-8 scroll-mt-28">
         <h2 className="text-xl font-semibold tracking-tight text-kos-text">
           Research tools
         </h2>
         <p className="mt-1 text-sm text-kos-text/65">
-          Depth charts, previews, fantasy, governance, and schedule tools.
+          Season engine, previews, governance, and schedule tools.
         </p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {desk.footerCards.map((card) => (

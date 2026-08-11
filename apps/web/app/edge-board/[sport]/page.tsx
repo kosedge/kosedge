@@ -115,14 +115,14 @@ export default async function EdgeBoardSportPage({
       <SportProHeader activeSport={sportKey} />
       {isNfl ? <NflDataFreshnessBanner /> : null}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-kos-gold/12 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-kos-green/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute -bottom-56 -right-56 h-[640px] w-[640px] rounded-full bg-kos-gold/10 blur-3xl animate-pulse-slow" />
+        <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-edge-green/12 blur-3xl animate-pulse-slow" />
+        <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-edge-green/10 blur-3xl animate-pulse-slow" />
+        <div className="absolute -bottom-56 -right-56 h-[640px] w-[640px] rounded-full bg-kos-gold/8 blur-3xl animate-pulse-slow" />
         <div
           className="absolute inset-0 opacity-[0.10]"
           style={{
             backgroundImage:
-              "linear-gradient(to right, rgba(245,185,66,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(245,185,66,0.10) 1px, transparent 1px)",
+              "linear-gradient(to right, rgba(57,255,20,0.16) 1px, transparent 1px), linear-gradient(to bottom, rgba(57,255,20,0.08) 1px, transparent 1px)",
             backgroundSize: "56px 56px",
           }}
         />
@@ -139,7 +139,7 @@ export default async function EdgeBoardSportPage({
                 : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}{" "}
               · ET
             </div>
-            <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
+            <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-edge-green">
               {sportName} Edge Board
             </h1>
             {isNfl && nflLineage ? (
@@ -185,8 +185,8 @@ export default async function EdgeBoardSportPage({
               href={`/edge-board/${s.key}`}
               className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
                 s.key === sportKey
-                  ? "bg-kos-gold/20 border border-kos-gold/50 text-kos-gold"
-                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+                  ? "bg-edge-green/20 border border-edge-green/50 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
+                  : "bg-black/30 border border-white/12 hover:border-edge-green/35 text-gray-300"
               }`}
             >
               {s.label}
@@ -207,7 +207,7 @@ export default async function EdgeBoardSportPage({
                 aria-selected={slate === "week1"}
                 className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
                   slate === "week1"
-                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
+                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
                     : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
                 }`}
               >
@@ -219,7 +219,7 @@ export default async function EdgeBoardSportPage({
                 aria-selected={slate === "full"}
                 className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
                   slate === "full"
-                    ? "bg-kos-gold/20 border border-kos-gold/50 text-kos-gold"
+                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
                     : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
                 }`}
               >

@@ -32,21 +32,21 @@ export default function SportProHeader({
         <div className="flex items-center justify-between gap-3 py-2 sm:gap-4 sm:py-3">
           <Link
             href="/"
-            className="flex min-h-11 shrink-0 items-center gap-2.5"
+            className="flex min-h-11 shrink-0 items-center gap-2.5 sm:gap-3"
           >
             <Image
               src="/brand/kosedge-logo.png"
               alt="Kos Edge Analytics"
-              width={160}
-              height={48}
+              width={176}
+              height={52}
               priority
-              className="h-10 w-auto sm:h-11"
+              className="h-11 w-auto sm:h-12"
             />
             <div className="leading-tight">
-              <div className="text-base font-extrabold tracking-wide text-kos-text sm:text-lg">
-                KosEdge
+              <div className="text-lg font-extrabold tracking-wide text-kos-text sm:text-xl">
+                KosEdge Analytics
               </div>
-              <div className="text-[10px] tracking-[0.14em] uppercase text-kos-text/60">
+              <div className="text-[10px] tracking-[0.14em] uppercase text-kos-text/60 sm:text-[11px]">
                 {tagline}
               </div>
             </div>
@@ -84,12 +84,12 @@ export default function SportProHeader({
         >
           {primaryNav.map((item) => {
             const active = isSportNavActive(pathname, item.href, activeSport);
-            const edgeBoard = item.emphasis === "gold";
+            const edgeBoard = item.emphasis === "green";
             const inactiveClass = edgeBoard
-              ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/35 bg-kos-gold/8 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap shadow-[0_0_14px_rgba(245,185,66,0.12)] hover:border-kos-gold/50 hover:bg-kos-gold/14 hover:shadow-[0_0_18px_rgba(245,185,66,0.2)] sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
+              ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-edge-green/35 bg-edge-green/8 px-3 text-sm font-semibold text-edge-green whitespace-nowrap shadow-[0_0_14px_rgba(57,255,20,0.14)] hover:border-edge-green/50 hover:bg-edge-green/14 hover:shadow-[0_0_18px_rgba(57,255,20,0.22)] sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
               : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-transparent px-3 text-sm font-medium text-kos-text/70 whitespace-nowrap hover:border-white/10 hover:bg-white/5 hover:text-kos-text sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs";
             const activeClass = edgeBoard
-              ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/55 bg-kos-gold/18 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap shadow-[0_0_20px_rgba(245,185,66,0.22)] sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
+              ? "inline-flex min-h-11 shrink-0 items-center rounded-md border border-edge-green/55 bg-edge-green/18 px-3 text-sm font-semibold text-edge-green whitespace-nowrap shadow-[0_0_20px_rgba(57,255,20,0.28)] sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs"
               : "inline-flex min-h-11 shrink-0 items-center rounded-md border border-kos-gold/40 bg-kos-gold/12 px-3 text-sm font-semibold text-kos-gold whitespace-nowrap sm:min-h-0 sm:px-2.5 sm:py-1.5 sm:text-xs";
             return (
               <Link

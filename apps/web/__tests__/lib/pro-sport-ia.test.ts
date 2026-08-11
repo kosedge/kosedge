@@ -40,18 +40,21 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
   "Weekly Slate": ["Weekly Slate", "Camp Desk", "Team Previews"],
   "Betting Desk": [
     "KEI Lines",
-    "Compare Odds",
     "Edges",
-    "Prediction Markets",
-    "Execution Monitor",
+    "Props",
+    "Compare Odds",
     "Futures",
-    "Season Model",
-    "Game Boxes",
-    "Survivor",
+    "MVP/Awards",
   ],
-  Fantasy: ["Fantasy Draft Desk", "Weekly Fantasy Projections"],
+  Fantasy: [
+    "Fantasy Draft Desk",
+    "Weekly Fantasy Projections",
+    "Guillotine League",
+    "Sleepers",
+  ],
   "Team Intel": [
     "Team Research Hub",
+    "Power Ratings",
     "Standings",
     "League Stats",
     "Depth Charts",
@@ -120,17 +123,21 @@ describe("pro sport IA", () => {
     expect(byLabel["KEI Lines"]).toBe("/pro/nfl/fair-lines");
     expect(byLabel["Compare Odds"]).toBe("/odds/nfl");
     expect(byLabel.Edges).toBe("/pro/nfl/edges");
-    expect(byLabel["Prediction Markets"]).toBe("/pro/prediction-market");
-    expect(byLabel.Props).toBeUndefined();
-    expect(byLabel["Execution Monitor"]).toBe("/pro/nfl/execution");
+    expect(byLabel.Props).toBe("/pro/nfl/props");
+    expect(byLabel["MVP/Awards"]).toBe("/pro/nfl/awards");
+    expect(byLabel["Prediction Markets"]).toBeUndefined();
+    expect(byLabel["Execution Monitor"]).toBeUndefined();
     expect(byLabel.Futures).toBe("/pro/nfl/projections");
     expect(byLabel["Player Props Board"]).toBeUndefined();
     expect(byLabel["Fantasy Draft Desk"]).toBe("/pro/nfl/fantasy");
     expect(byLabel["Weekly Fantasy Projections"]).toBe(
       "/pro/nfl/weekly-fantasy",
     );
+    expect(byLabel["Guillotine League"]).toBe("/pro/nfl/fantasy/guillotine");
+    expect(byLabel.Sleepers).toBe("/pro/nfl/fantasy/sleepers");
     expect(byLabel["DFS Board"]).toBeUndefined();
     expect(byLabel["Team Research Hub"]).toBe("/pro/nfl/teams");
+    expect(byLabel["Power Ratings"]).toBe("/pro/power-ratings/nfl");
     expect(byLabel.Standings).toBe("/pro/nfl/standings");
     expect(byLabel["League Stats"]).toBe("/pro/nfl/stats");
     expect(byLabel["Depth Charts"]).toBe("/pro/nfl/depth-charts");
@@ -165,7 +172,7 @@ describe("pro sport IA", () => {
     expect(labels).not.toContain("Projections hub");
   });
 
-  it("points NFL betting desk path KEI Lines → Edges", () => {
+  it("points NFL betting desk path KEI Lines → Edges → Props", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
       sportKey: "nfl",
@@ -177,8 +184,7 @@ describe("pro sport IA", () => {
     const marketSection = sections.find(
       (section) => section.title === content.sectionTitles.market,
     );
-    expect(marketSection?.subtitle).toContain("KEI Lines → Edges");
-    expect(marketSection?.subtitle).not.toContain("→ Props");
+    expect(marketSection?.subtitle).toContain("KEI Lines → Edges → Props");
     expect(
       marketSection?.links.find((link) => link.label === "KEI Lines")?.href,
     ).toBe("/pro/nfl/fair-lines");
@@ -186,8 +192,33 @@ describe("pro sport IA", () => {
       marketSection?.links.find((link) => link.label === "Edges")?.href,
     ).toBe("/pro/nfl/edges");
     expect(
-      marketSection?.links.find((link) => link.label === "Props"),
-    ).toBeUndefined();
+      marketSection?.links.find((link) => link.label === "Props")?.href,
+    ).toBe("/pro/nfl/props");
+    expect(
+      marketSection?.links.map((link) => link.label),
+    ).toEqual([
+      "KEI Lines",
+      "Edges",
+      "Props",
+      "Compare Odds",
+      "Futures",
+      "MVP/Awards",
+    ]);
+  });
+
+  it("locks NFL research tools footer to the 3×2 IA grid", () => {
+    const desk = getSportDeskConfig("nfl");
+    expect(desk.footerCards.map((c) => c.title)).toEqual([
+      "Team Previews",
+      "Season Model",
+      "Game Boxes",
+      "Model Health",
+      "Wall Chart",
+      "KEI Lines",
+    ]);
+    expect(desk.footerCards.some((c) => c.title === "Power Ratings")).toBe(
+      false,
+    );
   });
 
   it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {

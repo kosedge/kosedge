@@ -239,13 +239,6 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/odds/nfl",
-          label: "Compare Odds",
-          hint: "Side-by-side spreads and totals across books.",
-          premium: true,
-          status: "active",
-        },
-        {
           href: "/pro/nfl/edges",
           label: "Edges",
           hint: "Thresholded game + prop edges with side and confidence.",
@@ -253,16 +246,16 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/pro/prediction-market",
-          label: "Prediction Markets",
-          hint: "Cross-check model views against public prediction-market prices.",
+          href: "/pro/nfl/props",
+          label: "Props",
+          hint: "Player and team prop research board for the slate.",
           premium: true,
           status: "active",
         },
         {
-          href: "/pro/nfl/execution",
-          label: "Execution Monitor",
-          hint: "Book dispersion, timing windows, and price quality checks.",
+          href: "/odds/nfl",
+          label: "Compare Odds",
+          hint: "Side-by-side spreads and totals across books.",
           premium: true,
           status: "active",
         },
@@ -274,23 +267,9 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/pro/nfl/model",
-          label: "Season Model",
-          hint: "Full-season engine hub — Game Boxes and Survivor.",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: "/pro/nfl/game-boxes",
-          label: "Game Boxes",
-          hint: "Projected skill-player boxes for a future matchup (median + p10–p90).",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: "/pro/nfl/survivor",
-          label: "Survivor",
-          hint: "Week-by-week survivor planner from path-coherent season sims.",
+          href: "/pro/nfl/awards",
+          label: "MVP/Awards",
+          hint: "MVP and OPOY race boards with model award scores.",
           premium: true,
           status: "active",
         },
@@ -299,7 +278,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Fantasy",
       subtitle:
-        "Honest preseason draft desk — weekly / DFS shells stay off the ready path until slate feeds join.",
+        "Draft desk live now — Guillotine and Sleepers hang off final routes for follow-up pages.",
       links: [
         {
           href: "/pro/nfl/fantasy",
@@ -315,6 +294,20 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           premium: true,
           status: "active",
         },
+        {
+          href: "/pro/nfl/fantasy/guillotine",
+          label: "Guillotine League",
+          hint: "Guillotine / FAAB desk — route reserved; page body in a follow-up.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/fantasy/sleepers",
+          label: "Sleepers",
+          hint: "Sleeper and value board — route reserved; page body in a follow-up.",
+          premium: true,
+          status: "active",
+        },
       ],
     },
     {
@@ -326,6 +319,13 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           href: "/pro/nfl/teams",
           label: "Team Research Hub",
           hint: "Team cards with depth, stats, injuries, and tendencies intel.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/power-ratings/nfl",
+          label: "Power Ratings",
+          hint: "Team strength, offense/defense splits, and weekly movement.",
           premium: true,
           status: "active",
         },
