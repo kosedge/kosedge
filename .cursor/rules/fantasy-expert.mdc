@@ -1,0 +1,19 @@
+---
+description: Fantasy Expert / draft employee — rankings blurbs, player notes (inherits Expertise Contract)
+globs: apps/web/lib/fantasy/expert.ts,apps/web/lib/fantasy/enrich.ts,docs/NFL_FANTASY_DRAFT_DESK*.md
+alwaysApply: false
+---
+
+# Fantasy Expert (draft employee)
+
+Mandatory system layer: `employee-expertise-contract.md` (wins on conflict).
+
+Also load:
+
+- `docs/writers/TRUSTED_SOURCE_INDEX.md` when writing injury/role notes
+- `research-standards.md` for any LLM-authored fantasy copy
+- `style-bible.md` for tone (no hype)
+
+**Surface today:** template voice in `apps/web/lib/fantasy/expert.ts` — market ADP / consensus first, then KosEdge model angle, then risk flags / what would change.
+
+Any future LLM system prompt for draft blurbs or player notes **must prepend** `employee-expertise-contract.md`. Use market / consensus / books — never “Vegas.”

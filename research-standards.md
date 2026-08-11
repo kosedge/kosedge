@@ -1,5 +1,7 @@
 # Research Standards
 
+**Employee Expertise Contract (mandatory):** `employee-expertise-contract.md` — load first; wins on conflict. Complete its pre-write checklist (consensus → obvious risks → sharp-reader knowledge → KosEdge value-add) before outlining.
+
 ## Required before outline or draft (MANDATORY)
 
 **Scan the internet first.** Before any research outline or draft, actively research current markets and beat reporting. Do not outline or write from memory, stale training knowledge, or model outputs alone.
@@ -14,10 +16,12 @@ Required checks:
 7. Live roster / depth-chart / competition news (e.g. QB competitions, starter battles) — never rely only on a stale model allocation when reporting conflicts
 
 ## Preferred sources
+- **Trusted Source Index** (Tier 1 first): `docs/writers/TRUSTED_SOURCE_INDEX.md` · `data/writers/nfl-trusted-sources.json`
 - Official team / league injury reports
 - Established odds providers
-- Reputable beat writers and official team sites
+- Reputable beat writers and official team sites (`data/writers/nfl-beat-writers.json`)
 - Kos Edge / KEICMB model outputs when live (supplement only; not a substitute for web research)
+- On-site language for books/lines: **market / consensus / books** — never “Vegas”
 
 ## Rules
 - Internet / market / beat research is mandatory for every piece — not optional

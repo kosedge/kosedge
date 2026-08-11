@@ -4,6 +4,8 @@ Updated: **2026-07-30** · Machine source: `data/writers/nfl-beat-writers.json`
 
 Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --team BUF`
 
+**Trusted sources (Tier 1 alerts, injury, market, data):** see `docs/writers/TRUSTED_SOURCE_INDEX.md` · `data/writers/nfl-trusted-sources.json`. Use Tier 1 for breaking/injury; use this beat list for team-specific practice/lineup confirmation.
+
 ## League breakers
 
 - **Adam Schefter** (ESPN) — @AdamSchefter

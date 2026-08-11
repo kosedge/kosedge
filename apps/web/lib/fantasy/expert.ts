@@ -3,9 +3,15 @@ import type { FantasyDeskRow, RiskFlag, ScheduleWindowNote } from "@/lib/fantasy
 
 /**
  * KosEdge Fantasy Expert — sharp, specific, non-generic rationales.
- * Template-driven voice (no LLM call); same desk contract if a model
- * voice is swapped in later.
+ * Template-driven voice (no LLM call).
+ *
+ * MANDATORY: inherits Employee Expertise Contract
+ * (`employee-expertise-contract.md`). Any future LLM system prompt for
+ * draft blurbs / player notes must prepend that file. Contract wins on
+ * conflict. Use market / consensus / books — never "Vegas".
  */
+export const EMPLOYEE_EXPERTISE_CONTRACT_PATH =
+  "employee-expertise-contract.md" as const;
 
 export function buildDrivers(input: {
   position: string;
@@ -110,9 +116,13 @@ export function buildExpertBlurb(input: {
     lead = `${input.playerName} (${input.team}): market and model agree near #${input.rankOverall} / ADP ~${input.adp.toFixed(0)} (${posRank}, ${input.tier}).`;
   }
 
+  // Expertise Contract order: consensus (lead) → obvious risk → KosEdge edge → what changes.
+  const risk = input.riskFlags[0]
+    ? `Risk (price it): ${input.riskFlags[0].detail}`
+    : "";
   const range = `Season band ${input.floorPoints.toFixed(0)}–${input.ceilingPoints.toFixed(0)} (med ${input.medianPoints.toFixed(0)}).`;
   const why = input.drivers[0]
-    ? `Edge: ${input.drivers.slice(0, 2).join("; ")}.`
+    ? `KosEdge: ${input.drivers.slice(0, 2).join("; ")}.`
     : "";
 
   let sched = "";
@@ -126,11 +136,15 @@ export function buildExpertBlurb(input: {
     sched = `${input.schedule.label}.`;
   }
 
-  const risk = input.riskFlags[0]
-    ? `Flag: ${input.riskFlags[0].detail}`
-    : "";
+  const flip =
+    input.riskFlags[0]?.kind === "committee" ||
+    input.riskFlags[0]?.kind === "depth_volatility"
+      ? "What changes the view: a clean feature role or depth-chart lock in camp/Week 1."
+      : input.riskFlags[0]?.kind === "availability"
+        ? "What changes the view: a clearer full-slate availability path."
+        : "";
 
-  return [lead, range, why, sched, risk].filter(Boolean).join(" ");
+  return [lead, risk, range, why, sched, flip].filter(Boolean).join(" ");
 }
 
 export function tierCliffNote(rows: FantasyDeskRow[], position: string): string | null {

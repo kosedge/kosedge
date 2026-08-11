@@ -1,4 +1,7 @@
 # Kos Edge Style Bible
+
+**Expertise layer:** Every content employee must also obey `employee-expertise-contract.md` (mandatory; wins on conflict with style flavor). Use **market / consensus / books** — never “Vegas” on public copy.
+
 Brand Voice
 - Professional, calm, precise, long-term oriented
 - “Sharper Data. Smarter Bets.”
