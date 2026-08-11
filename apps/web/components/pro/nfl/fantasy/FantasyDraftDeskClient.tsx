@@ -315,7 +315,7 @@ export function FantasyDraftDeskClient({
               Fantasy Expert
             </h2>
             <span className="text-[11px] text-kos-text/50">
-              Model vs ADP · cliffs
+              Rank vs ADP · yards / role
             </span>
           </div>
           <ul className="mt-3 space-y-2">
