@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import {
   fetchNflPropsBoard,
   formatAmericanOdds,
@@ -14,12 +15,13 @@ import {
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
 
-/** Default to a 2025 week with real Odds-API snapshots joined (weeks 4–17). 2026 lights up when yardage markets post. */
-const DEFAULT_SEASON = 2025;
-const DEFAULT_WEEK = 17;
+/** Soft-launch default: current season board — never archive-week CTAs. */
+const DEFAULT_SEASON = 2026;
+const DEFAULT_WEEK = 1;
 const MARKET_TABS = ["ALL", ...Object.keys(PROP_MARKET_LABELS)] as const;
 const TAG_TABS = ["PLAY", "WATCH", "ALL"] as const;
 const LIMIT_OPTIONS = [100, 250, 500] as const;
+const KOSEDGE_DATE = "August 11, 2026";
 
 type SearchValue = string | string[] | undefined;
 
@@ -35,6 +37,24 @@ function buildHref(base: Record<string, string | undefined>): string {
   }
   const query = params.toString();
   return query ? `/pro/nfl/props?${query}` : "/pro/nfl/props";
+}
+
+function asOfLabel(rows: NflPropBoardRow[]): string {
+  const stamps = rows
+    .map((r) => r.updatedAt)
+    .filter((v): v is string => Boolean(v))
+    .map((v) => Date.parse(v))
+    .filter((n) => Number.isFinite(n));
+  if (stamps.length === 0) return KOSEDGE_DATE;
+  const latest = new Date(Math.max(...stamps));
+  return latest.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
 }
 
 export default async function NflPropsBoardPage({
@@ -54,11 +74,10 @@ export default async function NflPropsBoardPage({
       ? weekRaw
       : DEFAULT_WEEK;
   const market = (firstValue(search.market) ?? "ALL").toLowerCase();
-  // Default to PLAY so high-confidence research surfaces first.
-  const tagRaw = (firstValue(search.tag) ?? "PLAY").toUpperCase();
+  const tagRaw = (firstValue(search.tag) ?? "ALL").toUpperCase();
   const tag = TAG_TABS.includes(tagRaw as (typeof TAG_TABS)[number])
     ? tagRaw
-    : "PLAY";
+    : "ALL";
   const team = (firstValue(search.team) ?? "").toUpperCase();
   const limitRaw = Number(firstValue(search.limit));
   const limit = LIMIT_OPTIONS.includes(
@@ -76,6 +95,7 @@ export default async function NflPropsBoardPage({
     limit,
   });
 
+  const hasRows = board.rows.length > 0;
   const activeQuery = {
     season: String(season),
     week: String(week),
@@ -86,218 +106,294 @@ export default async function NflPropsBoardPage({
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-      <section className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-6 sm:p-8">
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+      <section className="rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-5 sm:p-7">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="max-w-4xl">
-            <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              {season === 2025
-                ? `Archive · ${season} W${week}`
-                : `Week ${week} · ${season}`}{" "}
-              · Props research
+          <div className="max-w-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+              Betting Desk · Props research
             </p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               Props
             </h1>
-            <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Player prop board with model means and fair prices. Default slate
-              is the 2025 market-join archive until 2026 yardage markets post —
-              not current 2026 week truth. PLAY tags are research rows, not bet
-              recommendations.
+            <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
+              Player prop board — game/player, market, line, and model mean when
+              markets + hooks are live. Research rows, not bet recommendations.
+            </p>
+            <p className="mt-2 text-xs text-kos-text/55">
+              Date: {KOSEDGE_DATE}
+              {hasRows ? ` · Board as of ${asOfLabel(board.rows)}` : null}
+              {` · ${season} W${week}`}
             </p>
           </div>
-          <div className="grid gap-2 sm:min-w-48">
-            <Link
-              href="/pro/nfl/overview"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40"
-            >
-              NFL Overview
-            </Link>
+          <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link
               href="/edge-board/nfl"
-              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55"
+              className="rounded-xl border border-edge-green/40 bg-edge-green/12 px-4 py-2.5 text-center text-sm font-semibold text-edge-green hover:border-edge-green/60"
             >
               Edge Board →
             </Link>
+            <Link
+              href="/pro/nfl/game-boxes"
+              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text hover:border-kos-gold/35"
+            >
+              Game Boxes
+            </Link>
+            <Link
+              href="/pro/nfl/edges"
+              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text hover:border-kos-gold/35"
+            >
+              Edges
+            </Link>
           </div>
         </div>
-        <nav className="mt-5 flex flex-wrap gap-2" aria-label="Props destinations">
-          <span className="rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold">
-            Player Props Board
-          </span>
-          <Link
-            href="/pro/nfl/weekly-fantasy"
-            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
-          >
-            Weekly Fantasy Points
-          </Link>
-        </nav>
       </section>
 
       {shouldShowModelUnreachableBanner({
         error: board.error,
-        hasContent: board.rows.length > 0,
+        hasContent: hasRows,
       }) ? (
-        <section className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-sm text-amber-100">
-          {modelUnreachableCopy(board.error)}
-        </section>
+        <div className="mt-6">
+          <HonestStatusBanner title="Model service unreachable" tone="amber">
+            <p>{modelUnreachableCopy(board.error)}</p>
+          </HonestStatusBanner>
+        </div>
       ) : null}
 
-      {!board.error && board.diagnostics.kosedgeOnly ? (
-        <section className="mt-6 rounded-2xl border border-sky-400/25 bg-sky-400/10 p-5 text-sm text-sky-100">
-          Showing model means and fair prices. Book edge columns stay blank
-          until markets join.
-        </section>
-      ) : null}
-
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <nav className="flex flex-wrap gap-2" aria-label="Tag filter">
-            {TAG_TABS.map((tab) => {
-              const isActive = tag === tab;
-              return (
-                <Link
-                  key={tab}
-                  href={buildHref({
-                    ...activeQuery,
-                    tag: tab === "ALL" ? undefined : tab,
-                  })}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
-                    isActive
-                      ? "border border-edge-green/45 bg-edge-green/15 text-edge-green"
-                      : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-edge-green/25 hover:text-kos-text"
-                  }`}
-                >
-                  {tab}
-                </Link>
-              );
-            })}
-          </nav>
-          <nav className="flex flex-wrap gap-2" aria-label="Market filter">
-            {MARKET_TABS.map((tab) => {
-              const key = tab.toLowerCase();
-              const isActive = market === key;
-              return (
-                <Link
-                  key={tab}
-                  href={buildHref({
-                    ...activeQuery,
-                    market: key === "all" ? undefined : key,
-                  })}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
-                    isActive
-                      ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
-                      : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-kos-gold/25 hover:text-kos-text"
-                  }`}
-                >
-                  {tab === "ALL" ? "ALL" : propMarketLabel(key)}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="flex items-center gap-2 text-xs text-kos-text/65">
-            <span>Rows:</span>
-            {LIMIT_OPTIONS.map((option) => (
+      {!board.error && !hasRows ? (
+        <div className="mt-6">
+          <HonestStatusBanner
+            title="Player props board fills when markets + model hooks are live"
+            tone="sky"
+          >
+            <p>
+              No live prop rows for {season} week {week} yet. Use Edge Board for
+              game lines, Game Boxes for matchup depth, and Edges when prop edges
+              materialize — we don&apos;t backfill fake rows or wrong-week
+              archives here.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
               <Link
-                key={option}
-                href={buildHref({ ...activeQuery, limit: String(option) })}
-                className={`rounded-md px-2 py-1 font-semibold transition ${
-                  limit === option
-                    ? "bg-white/15 text-kos-text"
-                    : "text-kos-text/60 hover:text-kos-text"
-                }`}
+                href="/edge-board/nfl"
+                className="rounded-lg border border-edge-green/35 bg-edge-green/10 px-3 py-1.5 text-xs font-semibold text-edge-green"
               >
-                {option}
+                Edge Board
               </Link>
-            ))}
-          </div>
+              <Link
+                href="/pro/nfl/game-boxes"
+                className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+              >
+                Game Boxes
+              </Link>
+              <Link
+                href="/pro/nfl/edges"
+                className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+              >
+                Edges
+              </Link>
+            </div>
+          </HonestStatusBanner>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2 text-xs">
-          <Link
-            href={buildHref({
-              season: "2025",
-              week: "17",
-              limit: String(limit),
-            })}
-            className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-              season === 2025 && week === 17
-                ? "border border-edge-green/45 bg-edge-green/15 text-edge-green"
-                : "border border-white/10 bg-white/5 text-kos-text/70 hover:border-edge-green/25"
-            }`}
-          >
-            2025 W17 (market joins)
-          </Link>
-          <Link
-            href={buildHref({
-              season: "2026",
-              week: "1",
-              limit: String(limit),
-            })}
-            className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-              season === 2026 && week === 1
-                ? "border border-kos-gold/45 bg-kos-gold/15 text-kos-gold"
-                : "border border-white/10 bg-white/5 text-kos-text/70 hover:border-kos-gold/25"
-            }`}
-          >
-            2026 W1
-          </Link>
-        </div>
-      </section>
+      ) : null}
 
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
-        <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-xl font-semibold text-kos-text">Props Board</h2>
-          <p className="text-xs text-kos-text/60">
-            {board.count} prop{board.count === 1 ? "" : "s"}
-          </p>
-        </div>
+      {hasRows ? (
+        <>
+          {!board.error && board.diagnostics.kosedgeOnly ? (
+            <div className="mt-6">
+              <HonestStatusBanner title="Model means only" tone="sky">
+                <p>
+                  Showing model means and fair prices. Book edge columns stay
+                  blank until markets join.
+                </p>
+              </HonestStatusBanner>
+            </div>
+          ) : null}
 
-        {!board.error && board.rows.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No prop edges for {season} week {week} yet. Try 2025 W17 (market
-            joins), or wait for the next materialization cycle.
-          </div>
-        ) : null}
-
-        {board.rows.length > 0 ? (
-          <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="text-xs uppercase tracking-wide text-kos-text/55">
-                <tr className="border-b border-white/10">
-                  <th className="px-3 py-2 font-semibold">Player</th>
-                  <th className="px-3 py-2 font-semibold">Market</th>
-                  <th className="px-3 py-2 font-semibold">Line</th>
-                  <th className="px-3 py-2 font-semibold">Model mean</th>
-                  <th className="px-3 py-2 font-semibold">Tag</th>
-                  <th className="px-3 py-2 font-semibold">Fair over</th>
-                  <th className="px-3 py-2 font-semibold">Fair under</th>
-                  <th className="px-3 py-2 font-semibold">Edge over</th>
-                  <th className="px-3 py-2 font-semibold">Edge under</th>
-                  <th className="px-3 py-2 font-semibold">Confidence</th>
-                </tr>
-              </thead>
-              <tbody>
-                {board.rows.map((row, index) => (
-                  <PropRow
-                    key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
-                    row={row}
-                  />
+          <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <nav className="flex flex-wrap gap-2" aria-label="Tag filter">
+                {TAG_TABS.map((tab) => {
+                  const isActive = tag === tab;
+                  return (
+                    <Link
+                      key={tab}
+                      href={buildHref({
+                        ...activeQuery,
+                        tag: tab === "ALL" ? undefined : tab,
+                      })}
+                      className={`min-h-10 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                        isActive
+                          ? "border border-edge-green/45 bg-edge-green/15 text-edge-green"
+                          : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-edge-green/25 hover:text-kos-text"
+                      }`}
+                    >
+                      {tab}
+                    </Link>
+                  );
+                })}
+              </nav>
+              <nav className="flex flex-wrap gap-2" aria-label="Market filter">
+                {MARKET_TABS.map((tab) => {
+                  const key = tab.toLowerCase();
+                  const isActive = market === key;
+                  return (
+                    <Link
+                      key={tab}
+                      href={buildHref({
+                        ...activeQuery,
+                        market: key === "all" ? undefined : key,
+                      })}
+                      className={`min-h-10 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                        isActive
+                          ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
+                          : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-kos-gold/25 hover:text-kos-text"
+                      }`}
+                    >
+                      {tab === "ALL" ? "ALL" : propMarketLabel(key)}
+                    </Link>
+                  );
+                })}
+              </nav>
+              <div className="flex items-center gap-2 text-xs text-kos-text/65">
+                <span>Rows:</span>
+                {LIMIT_OPTIONS.map((option) => (
+                  <Link
+                    key={option}
+                    href={buildHref({ ...activeQuery, limit: String(option) })}
+                    className={`rounded-md px-2 py-1 font-semibold transition ${
+                      limit === option
+                        ? "bg-white/15 text-kos-text"
+                        : "text-kos-text/60 hover:text-kos-text"
+                    }`}
+                  >
+                    {option}
+                  </Link>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        ) : null}
-      </section>
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 className="text-xl font-semibold text-kos-text">Props Board</h2>
+              <p className="text-xs text-kos-text/60">
+                {board.count} prop{board.count === 1 ? "" : "s"}
+              </p>
+            </div>
+
+            {/* Mobile cards */}
+            <ul className="mt-4 space-y-3 md:hidden">
+              {board.rows.map((row, index) => (
+                <PropCard
+                  key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
+                  row={row}
+                />
+              ))}
+            </ul>
+
+            {/* Desktop table */}
+            <div className="mt-4 hidden overflow-x-auto md:block">
+              <table className="min-w-full text-left text-sm">
+                <thead className="text-xs uppercase tracking-wide text-kos-text/55">
+                  <tr className="border-b border-white/10">
+                    <th className="px-3 py-2 font-semibold">Player</th>
+                    <th className="px-3 py-2 font-semibold">Market</th>
+                    <th className="px-3 py-2 font-semibold">Line</th>
+                    <th className="px-3 py-2 font-semibold">Model mean</th>
+                    <th className="px-3 py-2 font-semibold">Tag</th>
+                    <th className="px-3 py-2 font-semibold">Fair over</th>
+                    <th className="px-3 py-2 font-semibold">Fair under</th>
+                    <th className="px-3 py-2 font-semibold">Edge over</th>
+                    <th className="px-3 py-2 font-semibold">Edge under</th>
+                    <th className="px-3 py-2 font-semibold">Confidence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {board.rows.map((row, index) => (
+                    <PropRow
+                      key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
+                      row={row}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p className="mt-4 text-xs text-kos-text/50">
+              For matchup depth and game context, open{" "}
+              <Link
+                href="/pro/nfl/game-boxes"
+                className="font-semibold text-kos-gold hover:underline"
+              >
+                Game Boxes
+              </Link>{" "}
+              or{" "}
+              <Link
+                href="/pro/nfl/edges"
+                className="font-semibold text-kos-gold hover:underline"
+              >
+                Edges
+              </Link>
+              .
+            </p>
+          </section>
+        </>
+      ) : null}
     </main>
   );
 }
 
+function displayTag(row: NflPropBoardRow): string | null {
+  if (!row.tag) return null;
+  return row.tag === "LEAN" ? "WATCH" : row.tag;
+}
+
+function PropCard({ row }: { row: NflPropBoardRow }) {
+  const tag = displayTag(row);
+  return (
+    <li className="rounded-xl border border-white/10 bg-white/3 p-3">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="font-semibold text-kos-text">{row.playerName}</p>
+          <p className="text-xs text-kos-text/55">
+            {row.team} · {propMarketLabel(row.marketKey)}
+          </p>
+        </div>
+        <span className="text-sm font-semibold text-kos-text">
+          {formatPropNumber(row.line)}
+        </span>
+      </div>
+      <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-kos-text/70">
+        <span>
+          Model:{" "}
+          <span className="font-semibold text-kos-gold">
+            {formatPropNumber(row.modelMean)}
+          </span>
+        </span>
+        <span>
+          Conf:{" "}
+          <span className="text-edge-green">
+            {formatConfidence(row.confidence)}
+          </span>
+        </span>
+        <span>Tag: {tag ?? "—"}</span>
+        <span>
+          Edge O/U:{" "}
+          {row.marketJoined
+            ? `${formatEdgeProb(row.edgeOver)} / ${formatEdgeProb(row.edgeUnder)}`
+            : "no mkt"}
+        </span>
+      </div>
+    </li>
+  );
+}
+
 function PropRow({ row }: { row: NflPropBoardRow }) {
-  const displayTag = row.tag === "LEAN" ? "WATCH" : row.tag;
+  const tag = displayTag(row);
   const tagClass =
-    displayTag === "PLAY"
+    tag === "PLAY"
       ? "text-edge-green"
-      : displayTag === "WATCH"
+      : tag === "WATCH"
         ? "text-kos-gold"
         : "text-kos-text/45";
   return (
@@ -321,24 +417,10 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
         {formatPropNumber(row.modelMean)}
       </td>
       <td className={`px-3 py-3 font-semibold ${tagClass}`}>
-        {displayTag ?? "—"}
+        {tag ?? "—"}
         {row.tagSide ? (
           <div className="text-xs font-normal text-kos-text/55">
             {row.tagSide}
-          </div>
-        ) : null}
-        {displayTag === "PLAY" ? (
-          <div className="text-[10px] font-normal text-amber-200/80">
-            Research
-          </div>
-        ) : displayTag === "WATCH" ? (
-          <div className="text-[10px] font-normal text-kos-text/45">
-            Watch only
-          </div>
-        ) : null}
-        {row.sizeDown ? (
-          <div className="text-[10px] font-normal text-amber-200/80">
-            Extreme z
           </div>
         ) : null}
       </td>
@@ -368,4 +450,3 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
     </tr>
   );
 }
-

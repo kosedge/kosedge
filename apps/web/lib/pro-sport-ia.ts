@@ -248,7 +248,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/props",
           label: "Props",
-          hint: "Player and team prop research board for the slate.",
+          hint: "Player prop board when markets + hooks are live; honest empty otherwise.",
           premium: true,
           status: "active",
         },
@@ -269,7 +269,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/awards",
           label: "MVP/Awards",
-          hint: "MVP and OPOY race boards with model award scores.",
+          hint: "Live award races from season-sim production rates — no placeholder tabs.",
           premium: true,
           status: "active",
         },
@@ -278,7 +278,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Fantasy",
       subtitle:
-        "Draft desk live now — Guillotine and Sleepers hang off final routes for follow-up pages.",
+        "Draft desk, guillotine stay-alive desk, and late-round sleeper value vs ADP.",
       links: [
         {
           href: "/pro/nfl/fantasy",
@@ -297,14 +297,14 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/fantasy/guillotine",
           label: "Guillotine League",
-          hint: "Guillotine / FAAB desk — route reserved; page body in a follow-up.",
+          hint: "Stay-alive desk — ranks, schedule softness, safe floor / upside lists.",
           premium: true,
           status: "active",
         },
         {
           href: "/pro/nfl/fantasy/sleepers",
           label: "Sleepers",
-          hint: "Sleeper and value board — route reserved; page body in a follow-up.",
+          hint: "Late-round ADP value from model ranks vs FantasyPros.",
           premium: true,
           status: "active",
         },

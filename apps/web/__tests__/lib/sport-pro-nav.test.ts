@@ -152,6 +152,12 @@ describe("sport-pro-nav", () => {
     expect(
       isSportNavActive("/pro/nfl/fantasy/player/abc", href, "nfl"),
     ).toBe(true);
+    expect(isSportNavActive("/pro/nfl/fantasy/guillotine", href, "nfl")).toBe(
+      true,
+    );
+    expect(isSportNavActive("/pro/nfl/fantasy/sleepers", href, "nfl")).toBe(
+      true,
+    );
     expect(isSportNavActive("/pro/nfl/weekly-fantasy", href, "nfl")).toBe(
       false,
     );
