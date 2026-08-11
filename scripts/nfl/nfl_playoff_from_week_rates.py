@@ -337,6 +337,133 @@ def recompute_playoff_probs(
     return out
 
 
+def build_win_distributions_from_marginal_rates(
+    week_rates: Dict[str, Any],
+    *,
+    n_replicates: int = 20_000,
+    seed: int = 20260811,
+) -> List[Dict[str, Any]]:
+    """Rebuild season win histograms from aligned week-rate marginals.
+
+    Schedule MC (used for 7-seed playoffs) renormalizes home/away week rates per
+    game, so path win totals drift off Σ week p. Season Model / Futures read
+    ``team_win_distributions.mean`` — that must match board ``expected_wins``
+    (DET symptom: board 7.05 vs hierarchical dist μ 10.57). Independent
+    Bernoulli draws per week preserve E[wins] = Σ p on the production path.
+    """
+    rates = _normalize_week_rates(week_rates)
+    rng = np.random.default_rng(seed + 17)
+    rows: List[Dict[str, Any]] = []
+    for team in CANONICAL_TEAMS:
+        weeks = rates.get(team) or {}
+        if not weeks:
+            # Flat 17-game season if rates missing.
+            ps = np.full(17, 0.5, dtype=np.float64)
+        else:
+            # Wall-chart rates are keyed by week number (1..18) with bye omitted.
+            # Do NOT iterate range(1,18) — that drops week 18 and zeros the bye slot,
+            # understating E[wins] (DET rateΣ 7.05 → bogus μ 6.71).
+            ordered = [float(weeks[w]) for w in sorted(weeks)]
+            ps = np.clip(np.array(ordered, dtype=np.float64), 0.0, 1.0)
+        samples = (rng.random((n_replicates, ps.size)) < ps).sum(axis=1).astype(np.int64)
+        # Cap at 17 wins for histogram support even if a bad profile has 18 slots.
+        samples = np.clip(samples, 0, 17)
+        hist = np.bincount(samples, minlength=18)[:18].astype(np.int64)
+        rows.append(_distribution_row_from_hist(team, hist, n_sims=n_replicates))
+    rows.sort(key=lambda r: (-float(r["mean"]), str(r["team"])))
+    return rows
+
+
+def _percentile_from_hist(counts: np.ndarray, pct: float) -> float:
+    """Empirical percentile from a 0..17 win histogram (counts)."""
+    total = int(counts.sum())
+    if total <= 0:
+        return 0.0
+    threshold = (pct / 100.0) * total
+    cum = 0
+    for wins in range(18):
+        cum += int(counts[wins])
+        if cum >= threshold:
+            return float(wins)
+    return 17.0
+
+
+def _distribution_row_from_hist(
+    team: str,
+    counts: np.ndarray,
+    *,
+    n_sims: int,
+) -> Dict[str, Any]:
+    total = float(counts.sum()) or 1.0
+    mean = float(sum(i * int(counts[i]) for i in range(18)) / total)
+    var = float(sum(((i - mean) ** 2) * int(counts[i]) for i in range(18)) / total)
+    return {
+        "team": team,
+        "n_sims": int(n_sims),
+        "mean": round(mean, 4),
+        "std": round(var**0.5, 4),
+        "p10": _percentile_from_hist(counts, 10),
+        "p50": _percentile_from_hist(counts, 50),
+        "p90": _percentile_from_hist(counts, 90),
+        "win_histogram": {str(i): int(counts[i]) for i in range(18)},
+    }
+
+
+def apply_win_dist_percentiles_to_rows(
+    rows: Iterable[Dict[str, Any]],
+    win_distributions: Sequence[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Sync board wins_p10/p90 to rebuilt production-path win distributions."""
+    by_team = {
+        canonicalize_team(str(r.get("team") or "")) or str(r.get("team") or ""): r
+        for r in win_distributions
+    }
+    out: List[Dict[str, Any]] = []
+    for row in rows:
+        team = canonicalize_team(str(row.get("team") or "")) or str(row.get("team") or "")
+        new_row = dict(row)
+        dist = by_team.get(team)
+        if dist:
+            new_row["wins_p10"] = int(round(float(dist["p10"])))
+            new_row["wins_p90"] = int(round(float(dist["p90"])))
+        out.append(new_row)
+    return out
+
+
+def flag_win_dist_board_mismatches(
+    rows: Iterable[Dict[str, Any]],
+    win_distributions: Sequence[Dict[str, Any]],
+    *,
+    tol: float = 0.35,
+) -> List[Dict[str, Any]]:
+    """Report teams whose win_dist.mean still disagrees with board expected_wins."""
+    board = {
+        canonicalize_team(str(r.get("team") or "")) or str(r.get("team") or ""): float(
+            r.get("expected_wins") or 0
+        )
+        for r in rows
+    }
+    flags: List[Dict[str, Any]] = []
+    for dist in win_distributions:
+        team = canonicalize_team(str(dist.get("team") or "")) or str(dist.get("team") or "")
+        bw = board.get(team)
+        if bw is None:
+            continue
+        mean = float(dist.get("mean") or 0)
+        if abs(mean - bw) > tol:
+            flags.append(
+                {
+                    "team": team,
+                    "board_expected_wins": round(bw, 4),
+                    "win_dist_mean": round(mean, 4),
+                    "delta": round(mean - bw, 4),
+                    "reasons": ["win_dist_secondary_path"],
+                }
+            )
+    flags.sort(key=lambda x: (-abs(float(x["delta"])), x["team"]))
+    return flags
+
+
 def apply_playoff_probs_to_team_rows(
     rows: Iterable[Dict[str, Any]],
     recomputed: Dict[str, Any],
