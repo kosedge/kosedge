@@ -17,6 +17,7 @@ from sqlalchemy.exc import OperationalError, ProgrammingError, SQLAlchemyError
 
 from src.celery_app import celery_app
 from src.db import SessionLocal
+from src.services.nfl_canonical_teams import canonicalize_team
 from src.services.odds_api import fetch_odds
 from src.services.nfl_injury_nowcast import fetch_nfl_injury_nowcast
 from src.services.nfl_matchup_features import (
@@ -233,11 +234,33 @@ def _round_intel_numeric_value(value: Any) -> Any:
     return value
 
 
+def _intel_storage_team(team: Optional[str]) -> Optional[str]:
+    """Map product-facing team codes to nflverse storage codes in intel tables.
+
+    Weekly intel tables (standings/stats/rosters/…) store Rams as ``LA``.
+    Product / web Truth Layer uses ``LAR``. Filters must hit storage codes;
+    serialized responses canonicalize back to product ids.
+    """
+    if team is None:
+        return None
+    raw = str(team).strip().upper()
+    if not raw:
+        return None
+    canon = canonicalize_team(raw) or raw
+    if canon == "LAR":
+        return "LA"
+    return canon
+
+
 def _serialize_intel_rows(rows: List[Any]) -> List[Dict[str, Any]]:
     serialized: List[Dict[str, Any]] = []
     for row in rows:
         mapped = dict(row._mapping)
-        serialized.append({key: _round_intel_numeric_value(val) for key, val in mapped.items()})
+        rounded = {key: _round_intel_numeric_value(val) for key, val in mapped.items()}
+        team_raw = rounded.get("team")
+        if isinstance(team_raw, str) and team_raw.strip():
+            rounded["team"] = canonicalize_team(team_raw) or team_raw.strip().upper()
+        serialized.append(rounded)
     return serialized
 
 
@@ -1242,7 +1265,10 @@ def _resolve_nfl_intel_filters(
         )
         resolved_week = latest_for_requested_season.get("week") or latest_all.get("week") or 1
 
-    resolved_team = str(team).strip().upper() if team else None
+    requested_team = str(team).strip().upper() if team else None
+    # SQL filters use nflverse storage codes (LA); product echo stays LAR.
+    product_team = canonicalize_team(requested_team) if requested_team else None
+    resolved_team = _intel_storage_team(requested_team) if requested_team else None
     requested_has_data: Optional[bool] = None
     requested_availability: Optional[_IntelAvailability] = None
     if season is not None and week is not None:
@@ -1255,8 +1281,13 @@ def _resolve_nfl_intel_filters(
         requested_has_data = bool((requested_availability.get("row_count") or 0) > 0)
 
     metadata: Dict[str, Any] = {
-        "requested": {"season": season, "week": week, "team": resolved_team},
-        "resolved": {"season": int(resolved_season), "week": int(resolved_week), "team": resolved_team},
+        "requested": {"season": season, "week": week, "team": requested_team},
+        "resolved": {
+            "season": int(resolved_season),
+            "week": int(resolved_week),
+            "team": product_team or resolved_team,
+            "storage_team": resolved_team,
+        },
         "used_default": {
             "season": season is None,
             "week": week is None,
@@ -1923,7 +1954,7 @@ def nfl_intel_rosters(
         return {
             "season": resolved_season,
             "week": resolved_week,
-            "team": resolved_team,
+            "team": (selection_metadata.get("resolved") or {}).get("team") or resolved_team,
             "count": len(rows),
             "rows": _serialize_intel_rows(rows),
             "selection": selection_metadata,
@@ -2115,7 +2146,7 @@ def nfl_intel_stats(
         return {
             "season": resolved_season,
             "week": resolved_week,
-            "team": resolved_team,
+            "team": (selection_metadata.get("resolved") or {}).get("team") or resolved_team,
             "count": len(rows),
             "rows": _serialize_intel_rows(rows),
             "selection": selection_metadata,
@@ -2215,7 +2246,7 @@ def nfl_intel_standings(
         return {
             "season": resolved_season,
             "week": resolved_week,
-            "team": resolved_team,
+            "team": (selection_metadata.get("resolved") or {}).get("team") or resolved_team,
             "count": len(rows),
             "rows": _serialize_intel_rows(rows),
             "selection": selection_metadata,
@@ -2376,7 +2407,7 @@ def nfl_intel_depth_charts(
         return {
             "season": resolved_season,
             "week": resolved_week,
-            "team": resolved_team,
+            "team": (selection_metadata.get("resolved") or {}).get("team") or resolved_team,
             "count": len(rows),
             "rows": _serialize_intel_rows(rows),
             "selection": selection_metadata,
@@ -2491,7 +2522,7 @@ def nfl_intel_injuries(
         return {
             "season": resolved_season,
             "week": resolved_week,
-            "team": resolved_team,
+            "team": (selection_metadata.get("resolved") or {}).get("team") or resolved_team,
             "count": len(rows),
             "rows": _serialize_intel_rows(rows),
             "selection": selection_metadata,

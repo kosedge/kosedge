@@ -7,6 +7,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { getSport } from "@/lib/sports";
 import { getPowerRatingsPath } from "@/lib/data-paths";
+import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 import {
   loadLatestNflPreseasonBundle2026,
   loadNflPreseasonBundleById2026,
@@ -34,6 +35,66 @@ export type PowerRatingRow = {
   record?: string | null;
   playoffProb?: number | null;
 };
+
+export type NflPowerIntelRow = {
+  team?: unknown;
+  wins?: unknown;
+  losses?: unknown;
+  ties?: unknown;
+  epa_per_play_offense?: unknown;
+  epa_per_play_defense_allowed?: unknown;
+};
+
+/**
+ * Join Power Ratings board rows to intel standings/stats on canonical team ids.
+ * Bundle rows are product-canonical (LAR); nflverse intel often still emits LA.
+ */
+export function enrichNflPowerRatingsWithIntel(
+  rows: PowerRatingRow[],
+  standingsRows: NflPowerIntelRow[],
+  statsRows: NflPowerIntelRow[],
+): PowerRatingRow[] {
+  const standingsByTeam = indexIntelRowsByCanonicalTeam(standingsRows);
+  const statsByTeam = indexIntelRowsByCanonicalTeam(statsRows);
+
+  return rows.map((row) => {
+    const code =
+      canonicalizeNflTeam(row.teamNorm ?? row.team) ?? row.teamNorm ?? "";
+    const st = standingsByTeam.get(code);
+    const stat = statsByTeam.get(code);
+    const wins = typeof st?.wins === "number" ? st.wins : null;
+    const losses = typeof st?.losses === "number" ? st.losses : null;
+    const ties = typeof st?.ties === "number" ? st.ties : null;
+    const record =
+      wins != null && losses != null
+        ? ties && ties > 0
+          ? `${wins}-${losses}-${ties}`
+          : `${wins}-${losses}`
+        : null;
+    const offense =
+      typeof stat?.epa_per_play_offense === "number"
+        ? Number(stat.epa_per_play_offense.toFixed(3))
+        : null;
+    const defense =
+      typeof stat?.epa_per_play_defense_allowed === "number"
+        ? Number(stat.epa_per_play_defense_allowed.toFixed(3))
+        : null;
+    return { ...row, record, offense, defense };
+  });
+}
+
+function indexIntelRowsByCanonicalTeam(
+  rows: NflPowerIntelRow[],
+): Map<string, NflPowerIntelRow> {
+  const map = new Map<string, NflPowerIntelRow>();
+  for (const row of rows) {
+    if (typeof row.team !== "string") continue;
+    const code = canonicalizeNflTeam(row.team) ?? row.team;
+    // First write wins; prefer already-canonical LAR over a later LA duplicate.
+    if (!map.has(code)) map.set(code, row);
+  }
+  return map;
+}
 
 export type NflPowerRatingsBoard = {
   rows: PowerRatingRow[];
