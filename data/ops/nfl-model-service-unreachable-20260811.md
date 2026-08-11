@@ -62,6 +62,16 @@ open https://www.kosedge.com/pro/nfl/fair-lines
 open https://www.kosedge.com/edge-board/nfl
 ```
 
+### Post-fix smoke (2026-08-11 ~16:18–16:20Z)
+
+| Check | Result |
+|-------|--------|
+| `/nfl/fair-lines?season=2026&days_ahead=200` | **200** — count 241, **16 Week 1** rows |
+| `/health`, `/health/db` | **200** |
+| `/nfl/season-engine/game-boxes?…demo=true` | **200** |
+| www KEI Lines hard load | **Week 1 · 16 games**, no unreachable banner |
+| PR | https://github.com/kosedge/kosedge/pull/187 merged → `deploy-vercel` (`1201c7e0`); Railway workflow `31511558608` success |
+
 ## Non-goals / not changed
 
 - Fantasy expert copy
