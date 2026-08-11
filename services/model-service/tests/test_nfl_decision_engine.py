@@ -65,13 +65,17 @@ def test_early_thresholds_active_by_default():
 @pytest.mark.parametrize(
     "edge,week,expected",
     [
-        (1.4, 1, "PASS"),
-        (1.5, 1, "LEAN"),
-        (1.9, 1, "LEAN"),
-        (2.0, 1, "LEAN"),
-        (2.5, 1, "PLAY"),
-        (3.0, 1, "PLAY"),
-        (3.5, 1, "STRONG PLAY"),
+        # Week 1–2: 1.25 / 1.75 / 2.25 / 3.25
+        (1.24, 1, "PASS"),
+        (1.25, 1, "LEAN"),
+        (1.75, 1, "LEAN"),
+        (2.0, 1, "LEAN"),  # gap to play_min stays LEAN
+        (2.24, 1, "LEAN"),
+        (2.25, 1, "PLAY"),
+        (2.75, 1, "PLAY"),
+        (3.0, 1, "PLAY"),  # gap to strong_min stays PLAY
+        (3.25, 1, "STRONG PLAY"),
+        # Midseason Week 3+: 1.0 / 1.5 / 2.0 / 3.0
         (0.9, 4, "PASS"),
         (1.0, 4, "LEAN"),
         (1.5, 4, "LEAN"),
@@ -93,11 +97,13 @@ def test_side_point_bands(edge, week, expected):
 def test_week1_vs_week6_side_boundary():
     assert grade_side_points(2.0, 1) == "LEAN"
     assert grade_side_points(2.0, 6) == "PLAY"
+    assert grade_side_points(2.25, 1) == "PLAY"
 
 
 @pytest.mark.parametrize(
     "edge,week,expected",
     [
+        # Midseason: 1.5 / 2.0 / 2.5 / 3.5
         (1.4, 6, "PASS"),
         (1.5, 6, "LEAN"),
         (2.0, 6, "LEAN"),
@@ -106,12 +112,14 @@ def test_week1_vs_week6_side_boundary():
         (3.0, 6, "PLAY"),
         (3.4, 6, "PLAY"),
         (3.5, 6, "STRONG PLAY"),
-        # Week 1–2: +0.5 boost
-        (1.9, 1, "PASS"),
-        (2.0, 1, "LEAN"),  # == pass_max → LEAN
-        (2.5, 1, "LEAN"),
-        (3.0, 1, "PLAY"),
-        (4.0, 1, "STRONG PLAY"),
+        # Week 1–2: +0.25 boost → 1.75 / 2.25 / 2.75 / 3.75
+        (1.74, 1, "PASS"),
+        (1.75, 1, "LEAN"),  # == early pass_max → LEAN
+        (2.25, 1, "LEAN"),
+        (2.74, 1, "LEAN"),
+        (2.75, 1, "PLAY"),
+        (3.25, 1, "PLAY"),
+        (3.75, 1, "STRONG PLAY"),
     ],
 )
 def test_total_point_bands(edge, week, expected):
@@ -119,7 +127,15 @@ def test_total_point_bands(edge, week, expected):
 
 
 def test_week1_total_boost_config():
-    assert WEEK1_TOTAL_BOOST == 0.5
+    assert WEEK1_TOTAL_BOOST == 0.25
+    assert EARLY_TOTAL.pass_max == 1.75
+    assert EARLY_TOTAL.lean_max == 2.25
+    assert EARLY_TOTAL.play_min == 2.75
+    assert EARLY_TOTAL.strong_min == 3.75
+    assert EARLY_SIDE.pass_max == 1.25
+    assert EARLY_SIDE.lean_max == 1.75
+    assert EARLY_SIDE.play_min == 2.25
+    assert EARLY_SIDE.strong_min == 3.25
     assert total_thresholds_for_week(1) == EARLY_TOTAL
     assert total_thresholds_for_week(6) == BASELINE_TOTAL
 

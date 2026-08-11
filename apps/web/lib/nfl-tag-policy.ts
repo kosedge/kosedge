@@ -1,5 +1,5 @@
 /**
- * Central Edge Board Tag Policy thresholds (2026-08-10).
+ * Central Edge Board Tag Policy thresholds (2026-08-11).
  *
  * Doctrine: we bet prices, not teams. Tags are mechanical.
  * Edge / Tag = KEI vs best available market only.
@@ -30,12 +30,12 @@ export type TotalPointThresholds = {
   strongMin: number;
 };
 
-/** Weeks 1–2 (tighter). */
+/** Weeks 1–2 (tighter) — 2026-08-11 brief. */
 export const EARLY_SIDE: SidePointThresholds = {
-  passMax: 1.5,
-  leanMax: 2.0,
-  playMin: 2.5,
-  strongMin: 3.5,
+  passMax: 1.25,
+  leanMax: 1.75,
+  playMin: 2.25,
+  strongMin: 3.25,
 };
 
 /** Midseason baseline (after Week 2). */
@@ -55,8 +55,8 @@ export const BASELINE_TOTAL: TotalPointThresholds = {
   strongMin: 3.5,
 };
 
-/** Week 1–2: add ~0.5 pt to each totals band. */
-export const WEEK1_TOTAL_BOOST = 0.5;
+/** Week 1–2: +0.25 pt on each totals band → 1.75 / 2.25 / 2.75 / 3.75. */
+export const WEEK1_TOTAL_BOOST = 0.25;
 
 export const EARLY_TOTAL: TotalPointThresholds = {
   passMax: BASELINE_TOTAL.passMax + WEEK1_TOTAL_BOOST,

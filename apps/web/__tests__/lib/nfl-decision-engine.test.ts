@@ -51,11 +51,15 @@ describe("week regimes", () => {
 
 describe("side point threshold bands", () => {
   const cases: Array<[number, number, string]> = [
-    [1.4, 1, "PASS"],
-    [1.5, 1, "LEAN"],
+    // Week 1–2: 1.25 / 1.75 / 2.25 / 3.25
+    [1.24, 1, "PASS"],
+    [1.25, 1, "LEAN"],
+    [1.75, 1, "LEAN"],
     [2.0, 1, "LEAN"],
-    [2.5, 1, "PLAY"],
-    [3.5, 1, "STRONG PLAY"],
+    [2.25, 1, "PLAY"],
+    [2.75, 1, "PLAY"],
+    [3.25, 1, "STRONG PLAY"],
+    // Midseason Week 3+: 1.0 / 1.5 / 2.0 / 3.0
     [0.9, 4, "PASS"],
     [1.0, 4, "LEAN"],
     [2.0, 4, "PLAY"],
@@ -71,6 +75,7 @@ describe("side point threshold bands", () => {
   it("week1 tighter than week6 at 2.0 pts", () => {
     expect(gradeSidePoints(2.0, 1)).toBe("LEAN");
     expect(gradeSidePoints(2.0, 6)).toBe("PLAY");
+    expect(gradeSidePoints(2.25, 1)).toBe("PLAY");
   });
 });
 
@@ -83,16 +88,28 @@ describe("totals point threshold bands", () => {
     expect(gradeTotalPoints(3.5, 6)).toBe("STRONG PLAY");
   });
 
-  it("week1 adds ~0.5 boost to each band", () => {
-    expect(WEEK1_TOTAL_BOOST).toBe(0.5);
+  it("week1 adds +0.25 boost → 1.75 / 2.25 / 2.75 / 3.75", () => {
+    expect(WEEK1_TOTAL_BOOST).toBe(0.25);
+    expect(EARLY_SIDE).toEqual({
+      passMax: 1.25,
+      leanMax: 1.75,
+      playMin: 2.25,
+      strongMin: 3.25,
+    });
+    expect(EARLY_TOTAL).toEqual({
+      passMax: 1.75,
+      leanMax: 2.25,
+      playMin: 2.75,
+      strongMin: 3.75,
+    });
     expect(totalThresholdsForWeek(1)).toEqual(EARLY_TOTAL);
-    expect(gradeTotalPoints(1.9, 1)).toBe("PASS");
-    expect(gradeTotalPoints(2.0, 1)).toBe("LEAN"); // == early pass_max
-    expect(gradeTotalPoints(2.0, 6)).toBe("LEAN");
-    expect(gradeTotalPoints(2.5, 1)).toBe("LEAN"); // < early play_min 3.0
+    expect(gradeTotalPoints(1.74, 1)).toBe("PASS");
+    expect(gradeTotalPoints(1.75, 1)).toBe("LEAN"); // == early pass_max
+    expect(gradeTotalPoints(2.25, 1)).toBe("LEAN");
+    expect(gradeTotalPoints(2.5, 1)).toBe("LEAN"); // < early play_min 2.75
     expect(gradeTotalPoints(2.5, 6)).toBe("PLAY");
-    expect(gradeTotalPoints(3.0, 1)).toBe("PLAY");
-    expect(gradeTotalPoints(4.0, 1)).toBe("STRONG PLAY");
+    expect(gradeTotalPoints(2.75, 1)).toBe("PLAY");
+    expect(gradeTotalPoints(3.75, 1)).toBe("STRONG PLAY");
   });
 });
 
@@ -390,7 +407,7 @@ describe("decideGame sample output", () => {
       week: 1,
       confidence: assessConfidence({ baseScore: 0.8 }),
     });
-    // edge 2.7 → LEAN under early totals (play_min 3.0)
+    // edge 2.7 → LEAN under early totals (play_min 2.75)
     expect(week1.edgeMagnitude).toBeCloseTo(2.7);
     expect(week1.actionLabel).toBe("LEAN");
 
