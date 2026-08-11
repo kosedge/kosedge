@@ -731,6 +731,102 @@ def test_nfl_intel_routes_contracts(monkeypatch) -> None:
     assert injuries.json()["rows"][0]["report_status"] == "Questionable"
 
 
+def test_nfl_intel_canonicalizes_la_to_lar(monkeypatch) -> None:
+    """Product Truth Layer is LAR; nflverse intel storage is LA."""
+
+    class _LarSession(_NflRouteSession):
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            sql = " ".join(str(statement).split()).lower()
+            params = params or {}
+            if "from nfl_dp_standings_weekly" in sql and "from standings order by" in sql:
+                assert params.get("team") in (None, "LA")
+                return _FakeResult(
+                    [
+                        {
+                            "season": 2025,
+                            "week": 22,
+                            "team": "LA",
+                            "wins": 10,
+                            "losses": 7,
+                            "ties": 0,
+                            "points_for": 300,
+                            "points_against": 280,
+                            "point_diff": 20,
+                            "win_pct": 0.588,
+                            "conference": "NFC",
+                            "division": "West",
+                            "conference_wins": None,
+                            "conference_losses": None,
+                            "conference_ties": None,
+                            "conference_pct": None,
+                            "division_wins": None,
+                            "division_losses": None,
+                            "division_ties": None,
+                            "division_pct": None,
+                        }
+                    ]
+                )
+            if "from nfl_dp_team_situational_weekly t" in sql:
+                assert params.get("team") in (None, "LA")
+                return _FakeResult(
+                    [
+                        {
+                            "season": 2025,
+                            "week": 22,
+                            "team": "LA",
+                            "games_played": 17,
+                            "offensive_plays": 1000,
+                            "defensive_plays": 1000,
+                            "pass_rate": 0.55,
+                            "early_down_pass_rate": 0.5,
+                            "red_zone_td_rate": 0.6,
+                            "pressure_rate_allowed": 0.2,
+                            "pressure_rate_generated": 0.25,
+                            "success_rate_offense": 0.45,
+                            "success_rate_defense_allowed": 0.42,
+                            "epa_per_play_offense": 0.112,
+                            "epa_per_play_defense_allowed": -0.041,
+                            "stats_source": "nflverse",
+                            "wins": 10,
+                            "losses": 7,
+                            "ties": 0,
+                            "points_for": 300,
+                            "points_against": 280,
+                            "point_diff": 20,
+                            "win_pct": 0.588,
+                            "standings_source": "nflverse",
+                        }
+                    ]
+                )
+            return super().execute(statement, params)
+
+    monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _LarSession())
+    client = TestClient(app)
+
+    standings = client.get("/nfl/intel/standings", params={"season": 2025, "week": 22, "team": "LAR"})
+    assert standings.status_code == 200
+    payload = standings.json()
+    assert payload["team"] == "LAR"
+    assert payload["selection"]["resolved"]["team"] == "LAR"
+    assert payload["selection"]["resolved"]["storage_team"] == "LA"
+    assert payload["rows"][0]["team"] == "LAR"
+
+    stats = client.get("/nfl/intel/stats", params={"season": 2025, "week": 22, "team": "LAR"})
+    assert stats.status_code == 200
+    assert stats.json()["rows"][0]["team"] == "LAR"
+    assert stats.json()["rows"][0]["epa_per_play_offense"] == 0.112
+
+
+def test_intel_storage_and_serialize_helpers() -> None:
+    assert nfl_routes._intel_storage_team("LAR") == "LA"
+    assert nfl_routes._intel_storage_team("LA") == "LA"
+    assert nfl_routes._intel_storage_team("PHI") == "PHI"
+    row = _FakeRow({"team": "LA", "wins": 10, "epa_per_play_offense": 0.11234})
+    serialized = nfl_routes._serialize_intel_rows([row])
+    assert serialized[0]["team"] == "LAR"
+    assert serialized[0]["epa_per_play_offense"] == 0.112
+
+
 def test_nfl_intel_routes_default_filters(monkeypatch) -> None:
     monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _NflRouteSession())
     client = TestClient(app)

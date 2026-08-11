@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import {
+  enrichNflPowerRatingsWithIntel,
   getNflPowerRatingsBoard,
   getPowerRatings,
   type PowerRatingRow,
@@ -108,40 +109,12 @@ export default async function PowerRatingsSportPage({
       fetchNflIntel("standings", {}),
       fetchNflIntel("stats", {}),
     ]);
-    const standingsByTeam = new Map(
-      standings.rows
-        .filter((r) => typeof r.team === "string")
-        .map((r) => [String(r.team), r] as const),
+    // Join on canonicalizeNflTeam so LAR board rows hit nflverse LA intel rows.
+    const enriched = enrichNflPowerRatingsWithIntel(
+      board.rows,
+      standings.rows,
+      stats.rows,
     );
-    const statsByTeam = new Map(
-      stats.rows
-        .filter((r) => typeof r.team === "string")
-        .map((r) => [String(r.team), r] as const),
-    );
-
-    const enriched = board.rows.map((row) => {
-      const code = row.teamNorm ?? "";
-      const st = standingsByTeam.get(code);
-      const stat = statsByTeam.get(code);
-      const wins = typeof st?.wins === "number" ? st.wins : null;
-      const losses = typeof st?.losses === "number" ? st.losses : null;
-      const ties = typeof st?.ties === "number" ? st.ties : null;
-      const record =
-        wins != null && losses != null
-          ? ties && ties > 0
-            ? `${wins}-${losses}-${ties}`
-            : `${wins}-${losses}`
-          : null;
-      const offense =
-        typeof stat?.epa_per_play_offense === "number"
-          ? Number(stat.epa_per_play_offense.toFixed(3))
-          : null;
-      const defense =
-        typeof stat?.epa_per_play_defense_allowed === "number"
-          ? Number(stat.epa_per_play_defense_allowed.toFixed(3))
-          : null;
-      return { ...row, record, offense, defense };
-    });
 
     const lineage =
       withEngineVersionOverride(
