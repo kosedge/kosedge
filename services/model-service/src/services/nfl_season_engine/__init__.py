@@ -40,6 +40,7 @@ Public entry points
 - ``apply_process_priors`` / ``build_player_process_prior`` – player regression
 - ``compute_league_projected_sos`` – 2026 projected schedule difficulty
 - ``serialize_true_pr_product_surface`` – Pro UI driver payload (display only)
+- ``serialize_power_ratings_desk`` – Model/Ryan PR desk (Method B + shrinkage)
 
 This package is **additive**. It does not replace
 ``simulate_nfl_game`` / Edge Board / Model-vs-KEI (#70) paths.
@@ -88,6 +89,9 @@ from src.services.nfl_season_engine.projected_sos import (
 )
 from src.services.nfl_season_engine.true_pr_product import (
     serialize_true_pr_product_surface,
+)
+from src.services.nfl_season_engine.power_ratings_desk import (
+    serialize_power_ratings_desk,
 )
 from src.services.nfl_season_engine.season_budgets import (
     TeamSeasonBudget,
@@ -162,6 +166,7 @@ __all__ = [
     "qb1_distribution_metrics",
     "resolve_season_universe",
     "serialize_true_pr_product_surface",
+    "serialize_power_ratings_desk",
     "simulate_full_season",
     "suggest_survivor_paths",
     "universe_schedule_meta",

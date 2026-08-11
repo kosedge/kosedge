@@ -5378,6 +5378,7 @@ def nfl_season_engine_status(
             "survivor_plan": "POST /nfl/season-engine/survivor/plan",
             "survivor_suggest_paths": "POST /nfl/season-engine/survivor/suggest-paths",
             "true_pr": "GET /nfl/season-engine/true-pr",
+            "power_ratings": "GET /nfl/season-engine/power-ratings",
             "cli": "scripts/nfl/run_hierarchical_season_sim.py",
             "cli_survivor": "scripts/nfl/run_survivor_evaluate.py",
             "cli_harden": "scripts/nfl/harden_validate_season_engine.py",
@@ -5390,6 +5391,16 @@ def nfl_season_engine_status(
                 "Does not change intrinsic PR, KEI, or Edge Board lines."
             ),
             "docs": "data/ops/nfl-true-pr-product-surface-20260808.md",
+        },
+        "power_ratings_desk": {
+            "module": "src.services.nfl_season_engine.power_ratings_desk",
+            "endpoint": "GET /nfl/season-engine/power-ratings",
+            "method": "B",
+            "role": (
+                "Model PR (points vs avg, neutral field) + Ryan Adj/PR desk. "
+                "Same strength path as wins/playoffs; Edge Board Game PR unchanged."
+            ),
+            "docs": "data/ops/nfl-power-ratings-desk-20260811.md",
         },
         "additive": True,
         "does_not_modify": ["edge_board", "model_vs_kei_#70", "nfl_market_projections"],
@@ -5436,6 +5447,58 @@ def nfl_season_engine_true_pr(
         if not payload["teams"]:
             payload["error"] = f"Unknown team filter: {team}"
     return payload
+
+
+@router.get("/season-engine/power-ratings")
+def nfl_season_engine_power_ratings(
+    season: int = Query(2026, ge=2010, le=2100),
+    as_of_week: int = Query(0, ge=0, le=18),
+    demo: bool = Query(False, description="Probe demo universe instead of real"),
+    phase: str = Query(
+        "preseason",
+        description="preseason | inseason (Tuesday publish sets inseason)",
+    ),
+) -> Dict[str, Any]:
+    """Power Ratings desk — Model PR (Method B) + Ryan Adj/PR + Off/Def/ST."""
+    from src.services.nfl_season_engine import DEFAULT_SEASON_ENGINE_VERSION
+    from src.services.nfl_season_engine.power_ratings_desk import (
+        serialize_power_ratings_desk,
+    )
+
+    week = int(as_of_week or 0)
+    resolve_week = max(1, week) if week else 1
+    universe, schedule_meta = _resolve_season_engine_universe(
+        season=season,
+        as_of_week=resolve_week,
+        demo=demo,
+        db_timeout_s=min(2.0, _SEASON_ENGINE_DB_TIMEOUT_S),
+    )
+    # Prefer launch pointer active_run_id when present on disk (web Truth Layer).
+    active_run_id = None
+    try:
+        from pathlib import Path
+        import json as _json
+
+        pointer = (
+            Path(__file__).resolve().parents[3]
+            / "data"
+            / "ops"
+            / "nfl-web-launch-bundle.json"
+        )
+        if pointer.is_file():
+            active_run_id = _json.loads(pointer.read_text()).get("active_run_id")
+    except Exception:
+        active_run_id = None
+
+    return serialize_power_ratings_desk(
+        universe,
+        season=season,
+        as_of_week=week,
+        phase=str(phase or "preseason"),
+        active_run_id=active_run_id,
+        engine_version=DEFAULT_SEASON_ENGINE_VERSION,
+        schedule_meta=schedule_meta,
+    )
 
 
 @router.post("/season-engine/simulate")
