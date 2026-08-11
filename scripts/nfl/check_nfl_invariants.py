@@ -264,6 +264,49 @@ def check_bundle(
     except Exception as exc:  # pragma: no cover
         suite.add("KICKOFF_SMOKE", False, f"error: {exc}")
 
+    # STRENGTH_ALIGN — board expected_wins ≈ Σ week win rates (same strength path).
+    rates_path = bundle_dir / "team_week_win_rates.json"
+    if rates_path.exists():
+        try:
+            from nfl_playoff_from_week_rates import (  # noqa: WPS433
+                _normalize_week_rates,
+                season_wins_from_rates,
+            )
+
+            rates = _normalize_week_rates(
+                json.loads(rates_path.read_text(encoding="utf-8"))
+            )
+            rate_wins = season_wins_from_rates(rates)
+            board_wins = {
+                canonicalize_team(r.get("team")) or str(r.get("team") or ""): float(
+                    r.get("expected_wins") or 0
+                )
+                for r in rows
+            }
+            mismatches = []
+            for t in CANONICAL_TEAMS:
+                bw = board_wins.get(t)
+                rw = rate_wins.get(t)
+                if bw is None or rw is None:
+                    mismatches.append(f"{t}:missing")
+                    continue
+                if abs(bw - rw) > 0.35:
+                    mismatches.append(f"{t}:{rw:.2f}vs{bw:.2f}")
+            align_ok = not mismatches and "LA" not in rates
+            suite.add(
+                "STRENGTH_ALIGN",
+                align_ok,
+                (
+                    "week-rate Σ ≈ board expected_wins (±0.35); no raw LA key"
+                    if align_ok
+                    else f"mismatches={mismatches[:8]}"
+                ),
+            )
+        except Exception as exc:  # pragma: no cover
+            suite.add("STRENGTH_ALIGN", False, f"error: {exc}")
+    else:
+        suite.add("STRENGTH_ALIGN", False, "missing team_week_win_rates.json")
+
     # I9 / week1_reg_count — Edge Board Week 1 must equal schedule pack (16).
     # Silent drops (board shows 13) are a hard fail for publish/deploy.
     try:

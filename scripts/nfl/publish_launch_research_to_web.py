@@ -105,7 +105,9 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
     if not week_rates_path.exists():
         raise SystemExit(f"missing week win rates for playoff Truth Layer: {week_rates_path}")
     week_rates = json.loads(week_rates_path.read_text(encoding="utf-8"))
-    playoff_recompute = recompute_playoff_probs(week_rates, n_replicates=20_000, seed=20260810)
+    playoff_recompute = recompute_playoff_probs(
+        week_rates, n_replicates=20_000, seed=20260810, run_super_bowl=True
+    )
 
     draft_rows: List[Dict[str, Any]] = []
     season = int(summary.get("season") or 2026)
@@ -123,10 +125,13 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
                 "wins_p90": int(row.get("p90") or 0),
                 "playoff_prob": 0.0,
                 "division_title_prob": 0.0,
+                # Placeholder; overwritten from path-bracket when available.
                 "super_bowl_win_prob": round(sb_prob.get(team, 0.0), 6),
             }
         )
-    team_rows = apply_playoff_probs_to_team_rows(draft_rows, playoff_recompute)
+    team_rows = apply_playoff_probs_to_team_rows(
+        draft_rows, playoff_recompute, rewrite_super_bowl=True
+    )
 
     team_csv = out_dir / "team_regular_season_outcomes.csv"
     with team_csv.open("w", encoding="utf-8", newline="") as fh:
@@ -234,12 +239,21 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
         "honesty": {
             "playoff_prob": "7-seed MC from team_week_win_rates + wall-chart schedule",
             "division_title_prob": "division winner frequency from same 7-seed MC paths",
-            "super_bowl_win_prob": "softmax(expected_wins) league-wide (display proxy; not bracket sims)",
+            "super_bowl_win_prob": (
+                "path-record strength bracket on same 7-seed MC "
+                "(fallback softmax(expected_wins) only if bracket disabled)"
+            ),
             "playoff_player_totals": "empty — full player paths were regular-season only",
         },
         "source_bundle": str(source.relative_to(ROOT) if source.is_relative_to(ROOT) else source),
         "sanity": {
-            "sum_super_bowl_prob": round(sum(sb_prob.values()), 6),
+            "sum_super_bowl_prob": round(
+                float(
+                    (playoff_recompute.get("sanity") or {}).get("sum_super_bowl")
+                    or sum(sb_prob.values())
+                ),
+                6,
+            ),
             "sum_division_title_prob": playoff_recompute["sanity"]["sum_division_title"],
             "sum_playoff_prob": playoff_recompute["sanity"]["sum_playoff_league"],
             "sum_playoff_afc": sum_afc,

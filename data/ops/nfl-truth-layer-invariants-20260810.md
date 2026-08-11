@@ -75,8 +75,9 @@ Wall-chart schedule pack: 272 unique games including NE–SEA + KC–LAC, PHI–
 
 ## Remaining gaps
 
-1. **Super Bowl / full bracket** still softmax(expected wins) — not path-level bracket winners (I2 passes; honesty label required).
-2. Playoff probs are **7-seed MC from week win rates**, not the exact hierarchical joint paths (no per-sim path archive in launch bundle). Next earn: persist path records or couple hierarchical sim to `seed_conference`.
-3. Survivor / Game Boxes live API may still use request-path engine runs — stamp or label archive when ≠ `active_run_id`.
-4. Odds as-of is capture-time on fair-lines response; book-level snapshot stamps can be richer.
-5. Nav prune / matchup overview / props / Path A3 / mock CPU / sim depth — **out of scope** for this PR.
+1. **Super Bowl** on the locked board is now a **path-record strength bracket** on week rates aligned to board wins (`7seed_mc_plus_strength_bracket_sb`) — still not the full hierarchical joint archive, but no longer softmax-only.
+2. Playoff probs remain **7-seed MC from (aligned) week win rates**, not exact hierarchical joint paths. Next earn: persist path records or couple hierarchical sim to `seed_conference`.
+3. **Polarization** of board E[wins] (soft-pile W/L) is reported in strength-coherence ops notes; not smoothed here.
+4. Survivor / Game Boxes live API may still use request-path engine runs — stamp or label archive when ≠ `active_run_id`.
+5. Odds as-of is capture-time on fair-lines response; book-level snapshot stamps can be richer.
+6. Nav prune / matchup overview / props / Path A3 / mock CPU / sim depth — **out of scope** for this PR.
