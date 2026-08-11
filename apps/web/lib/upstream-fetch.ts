@@ -10,6 +10,12 @@ export const UPSTREAM_TIMEOUT_MS = {
   board: 12_000,
   /** Rare heavy ops (backfills, compare dumps) — still capped */
   heavy: 20_000,
+  /**
+   * NFL season-engine Game Boxes / Survivor research-depth runs.
+   * Cold ~65s@2k game-boxes; warm cache should be ms. Edge Board list
+   * must not use this budget — keep board timeout for slate loads.
+   */
+  seasonEngine: 180_000,
 } as const;
 
 export class UpstreamTimeoutError extends Error {

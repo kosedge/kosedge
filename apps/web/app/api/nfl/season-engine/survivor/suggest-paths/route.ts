@@ -3,6 +3,7 @@ import { fetchSeasonEngineSurvivorSuggestPaths } from "@/lib/nfl-season-engine";
 import type { InjuryPathInput } from "@/lib/nfl-season-engine-format";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 180;
 
 export async function POST(req: Request) {
   let raw: Record<string, unknown> = {};

@@ -16,7 +16,7 @@ export function nflLaunchResearchDeskNotice(): string | null {
     n ? `${n} team W/L paths` : null,
     eng,
     when ? `generated ${when}` : null,
-    "Preseason — interactive survivor/game-box runs stay capped for responsiveness",
+    "Interactive desks default to research depth (≥2k); thin runs labeled low-depth estimate",
   ]
     .filter(Boolean)
     .join(" · ");

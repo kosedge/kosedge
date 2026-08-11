@@ -2,16 +2,24 @@
 
 import { useMemo, useState, useTransition } from "react";
 import {
+  NFL_DEFAULT_N_GAME_BOX,
   NFL_SEASON_ENGINE_TEAMS,
   buildStarOutInjuryPath,
+  formatDepthBadge,
+  formatPct,
   formatRange,
   formatStatLabel,
   formatStatNumber,
+  formatTdStat,
+  isTdStat,
   positionSortKey,
   primaryStatsForPosition,
   starOutOptionsForMatchup,
 } from "@/lib/nfl-season-engine-format";
-import type { SeasonEngineMatchupOption } from "@/lib/nfl-season-engine-format";
+import type {
+  SeasonEngineMatchupOption,
+  StatDist,
+} from "@/lib/nfl-season-engine-format";
 
 type PlayerRow = {
   player_key: string;
@@ -20,10 +28,7 @@ type PlayerRow = {
   position: string;
   usage_role?: string;
   point_estimate: Record<string, number>;
-  distributions: Record<
-    string,
-    { mean: number; std: number; p10: number; p50: number; p90: number }
-  >;
+  distributions: Record<string, StatDist>;
 };
 
 type BoxesPayload = {
@@ -40,6 +45,7 @@ type BoxesPayload = {
   engine_version?: string;
   game_script_summary?: Record<string, number>;
   notes?: Record<string, string>;
+  sim_depth?: { depth_label?: string; honest_precision?: boolean; n?: number };
   players?: PlayerRow[];
   error?: string;
 };
@@ -112,7 +118,7 @@ export default function SeasonEngineGameBoxesClient({
             homeTeam,
             awayTeam,
             week,
-            nReplicates: 50,
+            nReplicates: NFL_DEFAULT_N_GAME_BOX,
           }),
         });
         const baseJson = (await baseRes.json()) as BoxesPayload;
@@ -130,7 +136,7 @@ export default function SeasonEngineGameBoxesClient({
               homeTeam,
               awayTeam,
               week,
-              nReplicates: 50,
+              nReplicates: NFL_DEFAULT_N_GAME_BOX,
               injuryPaths: [injuryPath],
             }),
           });
@@ -287,7 +293,8 @@ export default function SeasonEngineGameBoxesClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · 50 replicates · median (p50) with p10–p90 band
+            · {formatDepthBadge(NFL_DEFAULT_N_GAME_BOX)} · yards median +
+            p10–p90 · TDs as P(TD) + expected rate
           </p>
         </div>
         {(depthSource || depthAsOf) && (
@@ -339,15 +346,22 @@ export default function SeasonEngineGameBoxesClient({
             {active.game_script_summary ? (
               <div className="text-right">
                 <p className="text-lg font-semibold tabular-nums text-kos-gold">
-                  {(
-                    (active.game_script_summary.home_win_prob_mean ?? 0) * 100
-                  ).toFixed(1)}
-                  %
+                  {formatPct(active.game_script_summary.home_win_prob_mean ?? 0, {
+                    n: active.n_replicates ?? NFL_DEFAULT_N_GAME_BOX,
+                    digits: 1,
+                  })}
                 </p>
                 <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
                   Home win · total{" "}
                   {(active.game_script_summary.expected_total_mean ?? 0).toFixed(
                     1,
+                  )}
+                </p>
+                <p className="mt-1 text-[11px] text-kos-text/45">
+                  {formatDepthBadge(
+                    active.n_replicates ??
+                      active.sim_depth?.n ??
+                      NFL_DEFAULT_N_GAME_BOX,
                   )}
                 </p>
               </div>
@@ -402,6 +416,7 @@ export default function SeasonEngineGameBoxesClient({
                 team={homeTeam}
                 alsoTeam={awayTeam}
                 players={baseline.players ?? []}
+                nReplicates={baseline.n_replicates}
               />
               <TeamBoxTable
                 title="With injury applied"
@@ -409,6 +424,7 @@ export default function SeasonEngineGameBoxesClient({
                 alsoTeam={awayTeam}
                 players={injured.players ?? []}
                 highlightOut={starOutKey.split("|")[1]}
+                nReplicates={injured.n_replicates}
               />
             </div>
           ) : (
@@ -417,6 +433,7 @@ export default function SeasonEngineGameBoxesClient({
               team={homeTeam}
               alsoTeam={awayTeam}
               players={active.players ?? []}
+              nReplicates={active.n_replicates}
             />
           )}
         </section>
@@ -431,12 +448,14 @@ function TeamBoxTable({
   alsoTeam,
   players,
   highlightOut,
+  nReplicates,
 }: {
   title: string;
   team: string;
   alsoTeam: string;
   players: PlayerRow[];
   highlightOut?: string;
+  nReplicates?: number;
 }) {
   const ordered = [...players]
     .filter((p) => p.team === team || p.team === alsoTeam)
@@ -462,7 +481,8 @@ function TeamBoxTable({
       <div className="border-b border-white/10 px-4 py-3">
         <h3 className="text-sm font-semibold text-kos-text">{title}</h3>
         <p className="mt-0.5 text-[11px] text-kos-text/45">
-          Bold number = median (p50). Band = p10–p90.
+          Yards: median (p50) + p10–p90. TDs: P(TD) + expected rate (not median
+          tails). {formatDepthBadge(nReplicates ?? NFL_DEFAULT_N_GAME_BOX)}.
         </p>
       </div>
       <div className="overflow-x-auto">
@@ -480,8 +500,8 @@ function TeamBoxTable({
                     <th className="px-4 py-2 font-medium">Player</th>
                     <th className="px-3 py-2 font-medium">Pos</th>
                     <th className="px-3 py-2 font-medium">Stat</th>
-                    <th className="px-3 py-2 font-medium">Median</th>
-                    <th className="px-3 py-2 font-medium">Range</th>
+                    <th className="px-3 py-2 font-medium">Projection</th>
+                    <th className="px-3 py-2 font-medium">Detail</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -491,6 +511,7 @@ function TeamBoxTable({
                       highlightOut &&
                       p.player_name.replace(/\s/g, "") ===
                         highlightOut.replace(/\s/g, "");
+                    const n = nReplicates ?? NFL_DEFAULT_N_GAME_BOX;
                     return (
                       <tr
                         key={p.player_key}
@@ -527,6 +548,13 @@ function TeamBoxTable({
                           <div className="space-y-1">
                             {stats.map((stat) => {
                               const dist = p.distributions?.[stat];
+                              if (isTdStat(stat)) {
+                                return (
+                                  <div key={stat}>
+                                    {formatTdStat(dist, { n }).primary}
+                                  </div>
+                                );
+                              }
                               const value = dist?.p50 ?? p.point_estimate?.[stat];
                               return (
                                 <div key={stat}>
@@ -538,11 +566,21 @@ function TeamBoxTable({
                         </td>
                         <td className="px-3 py-2.5 tabular-nums text-xs text-kos-text/55">
                           <div className="space-y-1">
-                            {stats.map((stat) => (
-                              <div key={stat}>
-                                {formatRange(p.distributions?.[stat])}
-                              </div>
-                            ))}
+                            {stats.map((stat) => {
+                              const dist = p.distributions?.[stat];
+                              if (isTdStat(stat)) {
+                                return (
+                                  <div key={stat}>
+                                    {formatTdStat(dist, { n }).secondary}
+                                  </div>
+                                );
+                              }
+                              return (
+                                <div key={stat}>
+                                  {formatRange(dist, { n })}
+                                </div>
+                              );
+                            })}
                           </div>
                         </td>
                       </tr>

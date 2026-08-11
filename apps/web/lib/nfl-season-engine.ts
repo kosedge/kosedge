@@ -396,7 +396,7 @@ export async function fetchSeasonEngineGameBoxes(input: {
     const res = await upstreamFetch(url.toString(), {
       method: hasBody ? "POST" : "GET",
       headers: modelHeaders(),
-      timeoutMs: UPSTREAM_TIMEOUT_MS.heavy,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
       cache: "no-store",
       ...(hasBody
         ? {
@@ -516,7 +516,7 @@ export async function fetchSeasonEngineSurvivor(input: {
     const res = await upstreamFetch(`${base}/nfl/season-engine/survivor`, {
       method: "POST",
       headers: modelHeaders(),
-      timeoutMs: UPSTREAM_TIMEOUT_MS.heavy,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
       cache: "no-store",
       body: JSON.stringify(body),
     });
@@ -624,7 +624,7 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
     const res = await upstreamFetch(`${base}/nfl/season-engine/survivor/plan`, {
       method: "POST",
       headers: modelHeaders(),
-      timeoutMs: 120_000,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
       cache: "no-store",
       body: JSON.stringify(body),
     });
@@ -759,7 +759,7 @@ export async function fetchSeasonEngineSurvivorSuggestPaths(input: {
       {
         method: "POST",
         headers: modelHeaders(),
-        timeoutMs: 120_000,
+        timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
         cache: "no-store",
         body: JSON.stringify({
           season: body.season,

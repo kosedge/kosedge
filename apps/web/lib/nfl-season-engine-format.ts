@@ -60,6 +60,11 @@ export type StatDist = {
   p10: number;
   p50: number;
   p90: number;
+  /** TD honesty fields (engine ≥ research-depth runs). */
+  p_td?: number;
+  expected_rate?: number;
+  fair_american?: number | null;
+  display?: string;
 };
 
 export type InjuryPathInput = {
@@ -101,6 +106,13 @@ export function parseAlreadyUsedTeams(raw: string | string[]): string[] {
   return out;
 }
 
+/** Research-depth floor for honest 1-decimal WP / stable tails. */
+export const NFL_HONEST_PRECISION_MIN_N = 2000;
+
+/** Interactive desk defaults (match model-service sim_depth knobs). */
+export const NFL_DEFAULT_N_GAME_BOX = 2000;
+export const NFL_DEFAULT_N_SURVIVOR_PATHS = 2000;
+
 export function clampInt(
   value: unknown,
   fallback: number,
@@ -115,6 +127,25 @@ export function clampInt(
         : NaN;
   if (!Number.isFinite(n)) return fallback;
   return Math.min(max, Math.max(min, Math.round(n)));
+}
+
+export function isHonestPrecision(n: number | null | undefined): boolean {
+  return typeof n === "number" && Number.isFinite(n) && n >= NFL_HONEST_PRECISION_MIN_N;
+}
+
+export function depthLabel(n: number | null | undefined): string {
+  return isHonestPrecision(n) ? "research depth" : "low-depth estimate";
+}
+
+export function formatDepthBadge(
+  n: number | null | undefined,
+  opts?: { surface?: string },
+): string {
+  const count = typeof n === "number" && Number.isFinite(n) ? Math.round(n) : null;
+  const label = depthLabel(count);
+  const surface = opts?.surface ? `${opts.surface} · ` : "";
+  if (count == null) return `${surface}${label}`;
+  return `${surface}${count.toLocaleString()} · ${label}`;
 }
 
 export function buildGameBoxesQuery(input: {
@@ -149,7 +180,12 @@ export function buildGameBoxesQuery(input: {
     away_team: away,
     week: clampInt(input.week, 1, 1, 22),
     season: clampInt(input.season, 2026, 2020, 2030),
-    n_replicates: clampInt(input.nReplicates, 50, 50, 500),
+    n_replicates: clampInt(
+      input.nReplicates,
+      NFL_DEFAULT_N_GAME_BOX,
+      1,
+      10_000,
+    ),
     ...(input.seed !== undefined
       ? { seed: clampInt(input.seed, 42, 0, 2_147_483_647) }
       : {}),
@@ -184,7 +220,12 @@ export function buildSurvivorBody(input: {
   return {
     season: clampInt(input.season, 2026, 2020, 2030),
     week: clampInt(input.week, 1, 1, 22),
-    n_sims: clampInt(input.nSims, 200, 50, 500),
+    n_sims: clampInt(
+      input.nSims,
+      NFL_DEFAULT_N_SURVIVOR_PATHS,
+      1,
+      20_000,
+    ),
     already_used: parseAlreadyUsedTeams(input.alreadyUsed ?? []),
     top_n: clampInt(input.topN, 16, 1, 32),
     ...(input.seed !== undefined
@@ -243,7 +284,12 @@ export function buildSurvivorPlanBody(input: {
 } {
   return {
     season: clampInt(input.season, 2026, 2020, 2030),
-    n_sims: clampInt(input.nSims, 250, 50, 500),
+    n_sims: clampInt(
+      input.nSims,
+      NFL_DEFAULT_N_SURVIVOR_PATHS,
+      1,
+      20_000,
+    ),
     picks: normalizeSurvivorPlanPicks(input.picks),
     top_n: clampInt(input.topN, 6, 1, 32),
     ...(input.seed !== undefined
@@ -321,9 +367,64 @@ export function formatStatNumber(value: number, digits = 1): string {
   return value.toFixed(digits);
 }
 
-export function formatPct(value: number, digits = 1): string {
+/**
+ * Win% honesty: when ``n`` is provided, 1-decimal only if n ≥ research depth;
+ * otherwise whole %. Without ``n``, keep the requested digit count (legacy).
+ */
+export function formatPct(
+  value: number,
+  digitsOrOpts: number | { n?: number | null; digits?: number } = 1,
+): string {
   if (!Number.isFinite(value)) return "—";
+  const opts =
+    typeof digitsOrOpts === "number"
+      ? { digits: digitsOrOpts }
+      : digitsOrOpts ?? {};
+  const requested =
+    typeof opts.digits === "number" && Number.isFinite(opts.digits)
+      ? opts.digits
+      : 1;
+  const digits =
+    opts.n == null
+      ? requested
+      : isHonestPrecision(opts.n)
+        ? Math.min(requested, 1)
+        : 0;
   return `${(value * 100).toFixed(digits)}%`;
+}
+
+export function formatAmericanOdds(odds: number | null | undefined): string {
+  if (odds == null || !Number.isFinite(odds)) return "";
+  const n = Math.round(odds);
+  return n > 0 ? `+${n}` : String(n);
+}
+
+/** TD cell: prefer P(TD) + expected rate; avoid headline median/p90 tails. */
+export function formatTdStat(
+  dist: StatDist | undefined,
+  opts?: { n?: number | null },
+): { primary: string; secondary: string } {
+  if (!dist) return { primary: "—", secondary: "" };
+  const pTd =
+    typeof dist.p_td === "number" && Number.isFinite(dist.p_td)
+      ? dist.p_td
+      : typeof dist.mean === "number"
+        ? Math.min(1, Math.max(0, dist.mean))
+        : null;
+  const rate =
+    typeof dist.expected_rate === "number" && Number.isFinite(dist.expected_rate)
+      ? dist.expected_rate
+      : dist.mean;
+  const primary =
+    pTd == null ? "—" : `P(TD) ${formatPct(pTd, { n: opts?.n, digits: 1 })}`;
+  const fair = formatAmericanOdds(dist.fair_american ?? null);
+  const secondary = [
+    `exp ${formatStatNumber(rate ?? 0, 2)}`,
+    fair ? `fair ${fair}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return { primary, secondary };
 }
 
 /** Outlook-only slate band — harder schedule ≠ weaker team. */
@@ -351,9 +452,37 @@ export function formatPathDifficultyGrade(
   return g;
 }
 
-export function formatRange(dist: StatDist | undefined, digits = 1): string {
+/**
+ * Yard / volume bands: show p10–p90 at research depth; thin n (when provided)
+ * uses a wider mean± band so we don't overclaim precision.
+ */
+export function formatRange(
+  dist: StatDist | undefined,
+  digitsOrOpts: number | { n?: number | null; digits?: number } = 1,
+): string {
   if (!dist) return "";
+  const opts =
+    typeof digitsOrOpts === "number"
+      ? { digits: digitsOrOpts }
+      : digitsOrOpts ?? {};
+  const digits =
+    typeof opts.digits === "number" && Number.isFinite(opts.digits)
+      ? opts.digits
+      : 1;
+  if (opts.n != null && !isHonestPrecision(opts.n)) {
+    const mean = dist.mean;
+    const std = dist.std;
+    if (!Number.isFinite(mean)) return "";
+    const half = Number.isFinite(std)
+      ? Math.max(std * 1.65, Math.abs(mean) * 0.25)
+      : Math.abs(mean) * 0.35;
+    return `~${formatStatNumber(mean - half, digits)}–${formatStatNumber(mean + half, digits)}`;
+  }
   return `${formatStatNumber(dist.p10, digits)}–${formatStatNumber(dist.p90, digits)}`;
+}
+
+export function isTdStat(stat: string): boolean {
+  return /_tds?$/.test(stat) || stat === "pass_tds" || stat === "rush_tds" || stat === "rec_tds";
 }
 
 export function rankSurvivorPicks<T extends { pick_now_score?: number }>(

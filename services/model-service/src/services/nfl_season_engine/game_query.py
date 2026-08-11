@@ -50,6 +50,17 @@ from src.services.nfl_season_engine.red_zone import (
     rz_pass_rate_from_script,
     scoring_usage_diagnostics,
 )
+from src.services.nfl_season_engine.sim_depth import (
+    default_n_game_box,
+    depth_meta,
+    game_box_cache_get,
+    game_box_cache_set,
+    is_honest_precision,
+    prob_to_american,
+    resolve_n_game_box,
+    scenario_hash,
+    universe_cache_fingerprint,
+)
 from src.services.nfl_season_engine.types import (
     EngineUniverse,
     GameBoxProjection,
@@ -59,6 +70,8 @@ from src.services.nfl_season_engine.types import (
 from src.services.nfl_season_engine.usage_roles import annotate_usage_roles
 
 DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
+
+_TD_STATS = frozenset({"pass_tds", "rush_tds", "rec_tds"})
 
 _POSITION_STATS = {
     "QB": ("pass_yards", "pass_tds", "ints", "rush_yards"),
@@ -111,6 +124,29 @@ def _summarize(values: Sequence[float]) -> Dict[str, float]:
         ordered[max(0, int(round((n - 1) * 0.50)))],
         ordered[max(0, int(round((n - 1) * 0.90)))],
     )
+
+
+def _enrich_td_stat(values: Sequence[float], base: Mapping[str, float]) -> Dict[str, Any]:
+    """Honest TD presentation: P(TD≥1) + expected rate (+ fair American odds)."""
+    out: Dict[str, Any] = dict(base)
+    n = len(values)
+    if n <= 0:
+        out.update(
+            {
+                "p_td": 0.0,
+                "expected_rate": 0.0,
+                "fair_american": None,
+                "display": "p_td",
+            }
+        )
+        return out
+    p_td = sum(1 for v in values if float(v) >= 1.0) / n
+    expected = float(base.get("mean") or 0.0)
+    out["p_td"] = round(p_td, 4)
+    out["expected_rate"] = round(expected, 4)
+    out["fair_american"] = prob_to_american(p_td)
+    out["display"] = "p_td"
+    return out
 
 
 def _coaching_tendency_diagnostics(
@@ -235,11 +271,12 @@ def project_game_player_boxes(
     away_team: str,
     week: Optional[int] = None,
     game_id: Optional[str] = None,
-    n_replicates: int = 500,
+    n_replicates: Optional[int] = None,
     seed: int = 7,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
     injury_paths: Optional[Sequence[InjuryPath]] = None,
     include_diagnostics: bool = False,
+    use_cache: bool = True,
 ) -> GameBoxProjection:
     """Monte Carlo player box projections for one future game.
 
@@ -247,8 +284,13 @@ def project_game_player_boxes(
     script/personnel state, share-integrity checks, and injury availability
     applied for the query week (kept off by default to avoid bloating
     responses).
+
+    Cache key: game_id + run/roster fingerprint + scenario hash + n + seed.
+    Never cross-serves different games. Diagnostics requests bypass cache.
     """
-    n_replicates = max(50, int(n_replicates))
+    n_replicates = resolve_n_game_box(
+        default_n_game_box() if n_replicates is None else n_replicates
+    )
     game = _find_game(
         universe,
         home_team=home_team,
@@ -256,13 +298,47 @@ def project_game_player_boxes(
         week=week,
         game_id=game_id,
     )
-    rng = random.Random(seed)
+
     if injury_paths is None:
         from src.services.nfl_season_engine.injury_paths import parse_injury_paths
 
-        paths = parse_injury_paths(getattr(universe, "packaged_injury_paths", None) or [])
+        paths_for_key = parse_injury_paths(
+            getattr(universe, "packaged_injury_paths", None) or []
+        )
     else:
-        paths = list(injury_paths)
+        paths_for_key = list(injury_paths)
+
+    cache_key = (
+        str(game.game_id),
+        universe_cache_fingerprint(universe),
+        scenario_hash(paths_for_key),
+        int(n_replicates),
+        int(seed),
+        bool(include_diagnostics),
+        str(engine_version),
+    )
+    if use_cache and not include_diagnostics:
+        hit = game_box_cache_get(cache_key)
+        if isinstance(hit, GameBoxProjection):
+            # Shallow-copy notes so callers can annotate without mutating cache.
+            notes = dict(hit.notes or {})
+            notes["cache"] = "hit"
+            return GameBoxProjection(
+                season=hit.season,
+                week=hit.week,
+                game_id=hit.game_id,
+                home_team=hit.home_team,
+                away_team=hit.away_team,
+                n_replicates=hit.n_replicates,
+                engine_version=hit.engine_version,
+                game_script_summary=dict(hit.game_script_summary or {}),
+                players=list(hit.players or []),
+                notes=notes,
+                diagnostics=dict(hit.diagnostics or {}),
+            )
+
+    rng = random.Random(seed)
+    paths = list(paths_for_key)
     # Depth-chart base splits for the two clubs, one week-volatility draw
     # (seeded), then injury shocks — mirrors season-path Layer-3 ordering.
     focus_book = {
@@ -374,12 +450,19 @@ def project_game_player_boxes(
     for key, info in meta.items():
         pos = info["position"]
         wanted = _POSITION_STATS.get(pos, ("rec_yards", "receptions", "rec_tds"))
-        distributions = {stat: _summarize(accum[key].get(stat, [])) for stat in wanted}
+        distributions: Dict[str, Any] = {}
+        for stat in wanted:
+            raw = accum[key].get(stat, [])
+            block = _summarize(raw)
+            if stat in _TD_STATS:
+                distributions[stat] = _enrich_td_stat(raw, block)
+            else:
+                distributions[stat] = block
         # Attach volume context.
         distributions["pass_attempts"] = _summarize(accum[key].get("pass_attempts", []))
         distributions["carries"] = _summarize(accum[key].get("carries", []))
         distributions["targets"] = _summarize(accum[key].get("targets", []))
-        point = {stat: distributions[stat]["mean"] for stat in wanted}
+        point = {stat: float(distributions[stat]["mean"]) for stat in wanted}
         players.append(
             {
                 **info,
@@ -422,6 +505,7 @@ def project_game_player_boxes(
         for t in (game.home_team, game.away_team)
         if universe.schedule and t not in teams_playing_week
     ]
+    depth = depth_meta(n_replicates, surface="game_boxes")
     notes = {
         **dict(universe.notes),
         "query_mode": "single_game_marginal_mc",
@@ -430,6 +514,16 @@ def project_game_player_boxes(
             "(strengths frozen at query-time book + week injury shocks)"
         ),
         "schedule_match": "on_loaded_schedule" if on_schedule else "synthetic_matchup",
+        "depth_label": depth["depth_label"],
+        "honest_precision": "1" if depth["honest_precision"] else "0",
+        "honest_precision_min_n": str(depth["honest_precision_min_n"]),
+        "tails_policy": (
+            "p10_p90_ok"
+            if is_honest_precision(n_replicates)
+            else "thin_n_widen_or_hide_tails"
+        ),
+        "td_display": "p_td_plus_expected_rate",
+        "cache": "miss",
     }
     if not on_schedule:
         notes["schedule_match_detail"] = (
@@ -564,7 +658,7 @@ def project_game_player_boxes(
             ),
         }
 
-    return GameBoxProjection(
+    proj = GameBoxProjection(
         season=universe.season,
         week=game.week,
         game_id=game.game_id,
@@ -577,3 +671,6 @@ def project_game_player_boxes(
         notes=notes,
         diagnostics=diagnostics,
     )
+    if use_cache and not include_diagnostics:
+        game_box_cache_set(cache_key, proj)
+    return proj

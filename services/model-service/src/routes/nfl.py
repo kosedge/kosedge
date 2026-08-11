@@ -4962,7 +4962,12 @@ class SeasonEngineSurvivorBody(BaseModel):
 
     season: int = Field(2026, ge=2010, le=2100)
     week: int = Field(..., ge=1, le=22)
-    n_sims: int = Field(300, ge=1, le=2000)
+    n_sims: Optional[int] = Field(
+        None,
+        ge=1,
+        le=20000,
+        description="Season paths (default NFL_SEASON_ENGINE_N_SURVIVOR_PATHS / 2000)",
+    )
     seed: int = 42
     already_used: List[str] = Field(default_factory=list)
     injury_paths: Optional[List[SeasonEngineInjuryPathBody]] = None
@@ -4979,7 +4984,12 @@ class SeasonEngineSurvivorPlanBody(BaseModel):
     """Multi-week survivor planner request (locked picks + open-week ranks)."""
 
     season: int = Field(2026, ge=2010, le=2100)
-    n_sims: int = Field(300, ge=1, le=2000)
+    n_sims: Optional[int] = Field(
+        None,
+        ge=1,
+        le=20000,
+        description="Season paths (default NFL_SEASON_ENGINE_N_SURVIVOR_PATHS / 2000)",
+    )
     seed: int = 42
     picks: Dict[str, str] = Field(
         default_factory=dict,
@@ -4999,7 +5009,12 @@ class SeasonEngineSurvivorSuggestPathsBody(BaseModel):
     """Heuristic full-season survivor path suggestions (chalk/balanced/save)."""
 
     season: int = Field(2026, ge=2010, le=2100)
-    n_sims: int = Field(250, ge=1, le=2000)
+    n_sims: Optional[int] = Field(
+        None,
+        ge=1,
+        le=20000,
+        description="Season paths (default NFL_SEASON_ENGINE_N_SURVIVOR_PATHS / 2000)",
+    )
     seed: int = 42
     picks: Dict[str, str] = Field(
         default_factory=dict,
@@ -5104,6 +5119,11 @@ def nfl_season_engine_status(
         coaching_tendencies_documentation,
     )
     from src.services.nfl_season_engine.player_usage import usage_rules_documentation
+    from src.services.nfl_season_engine.sim_depth import (
+        HONEST_PRECISION_MIN_N,
+        default_n_game_box,
+        default_n_survivor_paths,
+    )
     from src.services.nfl_season_engine.survivor import (
         FORMULA_NOTES,
         PATH_FORMULA_NOTES,
@@ -5218,11 +5238,24 @@ def nfl_season_engine_status(
             "module": "src.services.nfl_season_engine.survivor",
             "endpoint": "POST /nfl/season-engine/survivor",
             "formula": FORMULA_NOTES,
-            "default_n_sims": 300,
+            "default_n_sims": default_n_survivor_paths(),
             "mode": "team_wl_paths (Layers 1–2; skips player boxes)",
             "planner_endpoint": "POST /nfl/season-engine/survivor/plan",
             "suggest_paths_endpoint": "POST /nfl/season-engine/survivor/suggest-paths",
             "planner_formula": PATH_FORMULA_NOTES,
+            "path_pool_cache": "reuse within active_run fingerprint when safe",
+        },
+        "sim_depth": {
+            "module": "src.services.nfl_season_engine.sim_depth",
+            "n_game_box": default_n_game_box(),
+            "n_survivor_paths": default_n_survivor_paths(),
+            "honest_precision_min_n": HONEST_PRECISION_MIN_N,
+            "env_knobs": [
+                "NFL_SEASON_ENGINE_N_GAME_BOX",
+                "NFL_SEASON_ENGINE_N_SURVIVOR_PATHS",
+                "NFL_SEASON_ENGINE_THIN_DEPTH",
+            ],
+            "docs": "data/ops/nfl-sim-depth-precision-20260811.md",
         },
         "injury_paths": {
             "module": "src.services.nfl_season_engine.injury_paths",
@@ -5431,7 +5464,7 @@ def _run_season_engine_game_boxes(
     away_team: str,
     season: int,
     week: int,
-    n_replicates: int,
+    n_replicates: Optional[int],
     seed: int,
     demo: bool,
     injury_paths: Optional[list] = None,
@@ -5439,6 +5472,7 @@ def _run_season_engine_game_boxes(
     log_projection: bool = False,
 ) -> Dict[str, Any]:
     from src.services.nfl_season_engine import project_game_player_boxes
+    from src.services.nfl_season_engine.sim_depth import depth_meta
 
     universe, schedule_meta = _resolve_season_engine_universe(
         season=season,
@@ -5460,9 +5494,10 @@ def _run_season_engine_game_boxes(
         week=week,
         n_replicates=n_replicates,
         seed=seed,
-        injury_paths=injury_paths or [],
+        injury_paths=injury_paths if injury_paths is not None else None,
         include_diagnostics=include_diagnostics,
     )
+    sim_depth = depth_meta(proj.n_replicates, surface="game_boxes")
     payload = {
         "ok": True,
         "mode": schedule_meta.get("mode") or ("demo" if demo else "real"),
@@ -5481,6 +5516,7 @@ def _run_season_engine_game_boxes(
         "home_team": proj.home_team,
         "away_team": proj.away_team,
         "n_replicates": proj.n_replicates,
+        "sim_depth": sim_depth,
         "engine_version": proj.engine_version,
         "game_script_summary": proj.game_script_summary,
         "notes": proj.notes,
@@ -5519,7 +5555,12 @@ def nfl_season_engine_game_boxes(
     away_team: str = Query(..., min_length=2, max_length=4),
     season: int = Query(2026, ge=2010, le=2100),
     week: int = Query(1, ge=1, le=22),
-    n_replicates: int = Query(400, ge=50, le=5000),
+    n_replicates: Optional[int] = Query(
+        None,
+        ge=1,
+        le=10000,
+        description="MC replicates (default NFL_SEASON_ENGINE_N_GAME_BOX / 2000)",
+    ),
     seed: int = Query(7),
     demo: bool = Query(False),
     include_diagnostics: bool = Query(
@@ -5550,7 +5591,12 @@ def nfl_season_engine_game_boxes_post(
     away_team: str = Query(..., min_length=2, max_length=4),
     season: int = Query(2026, ge=2010, le=2100),
     week: int = Query(1, ge=1, le=22),
-    n_replicates: int = Query(400, ge=50, le=5000),
+    n_replicates: Optional[int] = Query(
+        None,
+        ge=1,
+        le=10000,
+        description="MC replicates (default NFL_SEASON_ENGINE_N_GAME_BOX / 2000)",
+    ),
     seed: int = Query(7),
     demo: bool = Query(False),
     include_diagnostics: bool = Query(False),
@@ -5559,6 +5605,8 @@ def nfl_season_engine_game_boxes_post(
     """Same as GET game-boxes, with optional ``injury_paths`` in the JSON body."""
     diag = include_diagnostics or bool(body and body.include_diagnostics)
     log_proj = bool(body and body.log_projection)
+    # Empty injury list from body should not suppress packaged SoT paths.
+    injury = _season_engine_injury_paths(body)
     return _run_season_engine_game_boxes(
         home_team=home_team,
         away_team=away_team,
@@ -5567,7 +5615,7 @@ def nfl_season_engine_game_boxes_post(
         n_replicates=n_replicates,
         seed=seed,
         demo=demo,
-        injury_paths=_season_engine_injury_paths(body),
+        injury_paths=injury if injury else None,
         include_diagnostics=diag,
         log_projection=log_proj,
     )
@@ -5595,8 +5643,9 @@ def nfl_season_engine_survivor(
         }
     """
     from src.services.nfl_season_engine import evaluate_survivor
+    from src.services.nfl_season_engine.sim_depth import depth_meta
 
-    injury_paths = _season_engine_injury_paths(body)
+    injury = _season_engine_injury_paths(body)
     universe, schedule_meta = _resolve_season_engine_universe(
         season=body.season,
         as_of_week=body.as_of_week,
@@ -5609,7 +5658,7 @@ def nfl_season_engine_survivor(
         n_sims=body.n_sims,
         seed=body.seed,
         already_used=body.already_used,
-        injury_paths=injury_paths,
+        injury_paths=injury if injury else None,
         top_n=body.top_n,
         include_diagnostics=body.include_diagnostics,
     )
@@ -5626,6 +5675,7 @@ def nfl_season_engine_survivor(
         "roster_as_of"
     )
     payload["depth_named_skill_teams"] = schedule_meta.get("depth_named_skill_teams")
+    payload["sim_depth"] = depth_meta(result.n_sims, surface="survivor")
     return payload
 
 
@@ -5642,7 +5692,7 @@ def nfl_season_engine_survivor_plan(
 
         {
           "season": 2026,
-          "n_sims": 300,
+          "n_sims": 2000,
           "picks": {"1": "KC", "2": "BUF"},
           "seed": 42,
           "demo": false,
@@ -5650,8 +5700,9 @@ def nfl_season_engine_survivor_plan(
         }
     """
     from src.services.nfl_season_engine import evaluate_survivor_plan
+    from src.services.nfl_season_engine.sim_depth import depth_meta
 
-    injury_paths = _season_engine_injury_paths(body)
+    injury = _season_engine_injury_paths(body)
     universe, schedule_meta = _resolve_season_engine_universe(
         season=body.season,
         as_of_week=body.as_of_week,
@@ -5664,7 +5715,7 @@ def nfl_season_engine_survivor_plan(
             picks=body.picks,
             n_sims=body.n_sims,
             seed=body.seed,
-            injury_paths=injury_paths,
+            injury_paths=injury if injury else None,
             top_n=body.top_n,
             include_diagnostics=body.include_diagnostics,
         )
@@ -5684,6 +5735,7 @@ def nfl_season_engine_survivor_plan(
         "roster_as_of"
     )
     payload["depth_named_skill_teams"] = schedule_meta.get("depth_named_skill_teams")
+    payload["sim_depth"] = depth_meta(result.n_sims, surface="survivor_plan")
     return payload
 
 @router.post("/season-engine/survivor/suggest-paths")
@@ -5696,8 +5748,9 @@ def nfl_season_engine_survivor_suggest_paths(
     treated as already locked; remaining weeks are filled per strategy.
     """
     from src.services.nfl_season_engine import suggest_survivor_paths
+    from src.services.nfl_season_engine.sim_depth import depth_meta
 
-    injury_paths = _season_engine_injury_paths(body)
+    injury = _season_engine_injury_paths(body)
     universe, schedule_meta = _resolve_season_engine_universe(
         season=body.season,
         as_of_week=body.as_of_week,
@@ -5710,7 +5763,7 @@ def nfl_season_engine_survivor_suggest_paths(
             already_locked=body.picks,
             n_sims=body.n_sims,
             seed=body.seed,
-            injury_paths=injury_paths,
+            injury_paths=injury if injury else None,
             include_diagnostics=body.include_diagnostics,
         )
     except ValueError as exc:
@@ -5728,5 +5781,6 @@ def nfl_season_engine_survivor_suggest_paths(
     payload["depth_as_of"] = schedule_meta.get("depth_as_of") or schedule_meta.get(
         "roster_as_of"
     )
+    payload["sim_depth"] = depth_meta(result.n_sims, surface="survivor_suggest_paths")
     return payload
 

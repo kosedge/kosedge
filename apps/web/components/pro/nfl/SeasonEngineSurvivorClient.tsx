@@ -2,7 +2,9 @@
 
 import { useMemo, useState, useTransition } from "react";
 import {
+  NFL_DEFAULT_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
+  formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
   formatScheduleDifficulty,
@@ -86,7 +88,7 @@ export default function SeasonEngineSurvivorClient({
           body: JSON.stringify({
             week,
             alreadyUsed: used,
-            nSims: 200,
+            nSims: NFL_DEFAULT_N_SURVIVOR_PATHS,
             topN: 16,
           }),
         });
@@ -229,7 +231,11 @@ export default function SeasonEngineSurvivorClient({
               </h2>
               <p className="mt-1 text-xs text-kos-text/60">
                 {result.engine_version || engineVersion || "season engine"}
-                {result.n_sims ? ` · ${result.n_sims} sims` : ""}
+                {" · "}
+                {formatDepthBadge(
+                  result.n_sims ?? NFL_DEFAULT_N_SURVIVOR_PATHS,
+                  { surface: "survivor paths" },
+                )}
               </p>
             </div>
             {ranked[0] ? (
@@ -238,7 +244,12 @@ export default function SeasonEngineSurvivorClient({
                   {ranked[0].team}
                 </p>
                 <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
-                  Top pick · {formatPct(ranked[0].win_rate)} this week
+                  Top pick ·{" "}
+                  {formatPct(ranked[0].win_rate, {
+                    n: result.n_sims ?? NFL_DEFAULT_N_SURVIVOR_PATHS,
+                    digits: 1,
+                  })}{" "}
+                  this week
                 </p>
               </div>
             ) : null}
@@ -299,7 +310,10 @@ export default function SeasonEngineSurvivorClient({
                         : "—"}
                     </td>
                     <td className="px-3 py-2.5 tabular-nums font-semibold text-kos-text">
-                      {formatPct(pick.win_rate)}
+                      {formatPct(pick.win_rate, {
+                        n: result.n_sims ?? NFL_DEFAULT_N_SURVIVOR_PATHS,
+                        digits: 1,
+                      })}
                     </td>
                     <td className="px-3 py-2.5 text-kos-text/70">
                       <span className="font-medium text-kos-text/85">
