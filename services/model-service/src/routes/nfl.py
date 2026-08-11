@@ -3661,7 +3661,12 @@ def nfl_fair_lines(
             if p == 0 or abs(p) < 100:
                 row[key] = None
 
-    season_run = _load_nfl_web_active_run()
+    try:
+        season_run = _load_nfl_web_active_run()
+    except Exception:
+        # Lineage pointer must never take down the KEI / fair-lines board.
+        log.exception("NFL fair-lines: active-run pointer load failed")
+        season_run = {}
     odds_as_of = datetime.now(timezone.utc).isoformat()
     return {
         "season": season,
@@ -3864,16 +3869,37 @@ def run_nfl_simulation(
         session.close()
 
 
+def _nfl_web_launch_bundle_candidates(here: Optional[Path] = None) -> tuple[Path, ...]:
+    """Resolve launch-bundle paths for monorepo + Railway ``--path-as-root``.
+
+    Monorepo: ``services/model-service/src/routes/nfl.py`` → repo ``data/ops/...``.
+    Railway: ``/app/src/routes/nfl.py`` → only parents[0..3] exist; never index
+    ``parents[4]`` (IndexError → 500 on /nfl/fair-lines).
+    """
+    base = (here or Path(__file__)).resolve()
+    rel = Path("data") / "ops" / "nfl-web-launch-bundle.json"
+    out: list[Path] = []
+    for idx in (4, 3, 2):
+        if len(base.parents) > idx:
+            out.append(base.parents[idx] / rel)
+    out.append(Path.cwd() / rel)
+    seen: set[Path] = set()
+    uniq: list[Path] = []
+    for path in out:
+        if path not in seen:
+            seen.add(path)
+            uniq.append(path)
+    return tuple(uniq)
+
+
 def _load_nfl_web_active_run() -> Dict[str, Any]:
     """Season-board Truth Layer pointer (active_run_id) from ops registry."""
-    # services/model-service/src/routes/nfl.py → parents[4] = repo root
-    pointer_path = (
-        Path(__file__).resolve().parents[4]
-        / "data"
-        / "ops"
-        / "nfl-web-launch-bundle.json"
-    )
-    if not pointer_path.exists():
+    pointer_path: Optional[Path] = None
+    for candidate in _nfl_web_launch_bundle_candidates():
+        if candidate.exists():
+            pointer_path = candidate
+            break
+    if pointer_path is None:
         return {}
     try:
         payload = json.loads(pointer_path.read_text(encoding="utf-8"))
