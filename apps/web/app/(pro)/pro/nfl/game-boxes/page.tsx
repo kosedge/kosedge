@@ -1,12 +1,16 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
 import SeasonEngineGameBoxesClient from "@/components/pro/nfl/SeasonEngineGameBoxesClient";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import {
   fetchSeasonEngineStatus,
   loadSeasonEngineMatchups,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
-import { nflLaunchResearchDeskNotice } from "@/lib/nfl-launch-research";
+import {
+  nflLaunchResearchDeskNotice,
+  resolveActiveNflLineage,
+} from "@/lib/nfl-launch-research";
 import { resolveNflProjectionDefaultWeek } from "@/lib/nfl-board-week-label";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +22,9 @@ export default async function NflGameBoxesPage() {
   ]);
   const packagedNotice = seasonEnginePackagedNotice(status);
   const launchResearchNotice = nflLaunchResearchDeskNotice();
+  const lineage = resolveActiveNflLineage({
+    engineVersionOverride: status.engine_version,
+  });
 
   return (
     <SportHubShell
@@ -32,7 +39,7 @@ export default async function NflGameBoxesPage() {
       secondaryHref="/pro/nfl/model"
       secondaryLabel="Season Model hub"
     >
-      <div className="mt-2 mb-4 flex flex-wrap gap-3 text-xs">
+      <div className="mt-2 mb-4 flex flex-wrap items-center gap-3 text-xs">
         <Link
           href="/pro/nfl/model"
           className="font-medium text-kos-gold/90 hover:text-kos-gold"
@@ -45,6 +52,7 @@ export default async function NflGameBoxesPage() {
         >
           Props board →
         </Link>
+        {lineage ? <NflLineageBadge lineage={lineage} /> : null}
       </div>
 
       {!status.error ? (
