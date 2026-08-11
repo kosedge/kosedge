@@ -122,6 +122,7 @@ export function enrichDraftRows(input: {
       valueOverReplacement: row.valueOverReplacement,
       tier: row.tier,
       gamesProjected: row.gamesProjected,
+      rankPosition: row.rankPosition,
     });
     const expertBlurb = buildExpertBlurb({
       playerName: row.playerName,
@@ -138,6 +139,7 @@ export function enrichDraftRows(input: {
       schedule,
       riskFlags,
       drivers,
+      source: row.source,
     });
 
     return {
