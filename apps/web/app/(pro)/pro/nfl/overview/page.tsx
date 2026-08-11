@@ -80,6 +80,18 @@ export default async function NflOverviewPage() {
               team research underneath. Week 1 REG is live; PRE stays off the
               board.
             </p>
+            <p className="mt-3 text-sm">
+              <Link
+                href="/pro/nfl/launch-notes"
+                className="font-semibold text-kos-gold hover:underline"
+              >
+                Soft Launch Notes
+              </Link>
+              <span className="text-kos-text/55">
+                {" "}
+                — Model vs KEI vs Tag in one page.
+              </span>
+            </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-56">
             <Link
@@ -87,6 +99,12 @@ export default async function NflOverviewPage() {
               className="rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
             >
               Open Week 1 Edge Board
+            </Link>
+            <Link
+              href="/pro/nfl/launch-notes"
+              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
+            >
+              Soft Launch Notes
             </Link>
             <Link
               href="/pro/nfl/fantasy/mock"
