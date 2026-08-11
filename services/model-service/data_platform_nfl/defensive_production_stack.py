@@ -37,6 +37,7 @@ POINTS_PER_PASS_TD = 6.0
 POINTS_PER_RUSH_TD = 6.0
 POINTS_PER_REC_TD = 0.0  # already in pass TDs at team level
 POINTS_PER_INT = -2.0
+# Legacy proportional share; raw_offensive_points uses kicker_layer (v1.27).
 FG_EXTRAS_SHARE = 0.22
 
 # Defense multipliers on points/yards allowed.
@@ -236,8 +237,14 @@ def aggregate_team_offense(
     return out
 
 
-def raw_offensive_points(offense: Mapping[str, float]) -> float:
-    """Team PF from skill production + FG/XP stub (no double-count rec yards)."""
+def raw_offensive_points(offense: Mapping[str, float], *, team: str = "") -> float:
+    """Team PF from skill production + scoped FG/XP (no double-count rec yards)."""
+    from src.services.nfl_season_engine.kicker_layer import (
+        GAMES_PER_TEAM_SEASON,
+        kicking_points_for_season_production,
+        team_kicker_profile,
+    )
+
     skill = (
         float(offense.get("pass_yards", 0.0)) * POINTS_PER_PASS_YARD
         + float(offense.get("rush_yards", 0.0)) * POINTS_PER_RUSH_YARD
@@ -247,8 +254,17 @@ def raw_offensive_points(offense: Mapping[str, float]) -> float:
         + float(offense.get("ints", 0.0)) * POINTS_PER_INT
     )
     skill = max(0.0, skill)
-    fg = skill * (FG_EXTRAS_SHARE / max(1e-6, 1.0 - FG_EXTRAS_SHARE))
-    return skill + fg
+    club = str(team or offense.get("team") or "LEAGUE")
+    offensive_tds = float(offense.get("pass_tds", 0.0)) + float(
+        offense.get("rush_tds", 0.0)
+    )
+    kick = kicking_points_for_season_production(
+        team=club,
+        offensive_tds=offensive_tds,
+        games=GAMES_PER_TEAM_SEASON,
+        profile=team_kicker_profile(club),
+    )
+    return skill + float(kick["points_from_kicking"])
 
 
 def defense_allowed_multiplier(defense_index: float, *, scale: float) -> float:
@@ -281,7 +297,7 @@ def build_points_for(
     *,
     target_league_pf: float = TARGET_LEAGUE_PF,
 ) -> Dict[str, float]:
-    raw = {t: raw_offensive_points(o) for t, o in offense_by_team.items()}
+    raw = {t: raw_offensive_points(o, team=t) for t, o in offense_by_team.items()}
     total = sum(raw.values()) or 1.0
     scale = float(target_league_pf) / total
     # v1.24: tapered band (not hard clip) — hard floors created the ~286 PF pile.

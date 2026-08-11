@@ -62,6 +62,12 @@ export type SeasonEngineGameBoxesResponse = {
   game_script_summary?: Record<string, number>;
   notes?: Record<string, string>;
   players: SeasonEnginePlayerRow[];
+  kicking?: {
+    home?: Record<string, unknown>;
+    away?: Record<string, unknown>;
+    team_points?: Record<string, unknown>;
+    model_status?: string;
+  };
   diagnostics?: Record<string, unknown>;
   injury_paths?: InjuryPathInput[];
   error?: string;

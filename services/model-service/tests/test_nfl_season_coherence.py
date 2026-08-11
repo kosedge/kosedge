@@ -43,6 +43,8 @@ def test_engine_version_is_season_coherence() -> None:
             "team-variance",
             "phase2-features",
             "soft-flags",
+            "kicker-layer",
+            "pathA2",
         )
     )
 

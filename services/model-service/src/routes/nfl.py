@@ -5521,6 +5521,7 @@ def _run_season_engine_game_boxes(
         "game_script_summary": proj.game_script_summary,
         "notes": proj.notes,
         "players": proj.players,
+        "kicking": getattr(proj, "kicking", None) or {},
     }
     if include_diagnostics:
         payload["diagnostics"] = proj.diagnostics

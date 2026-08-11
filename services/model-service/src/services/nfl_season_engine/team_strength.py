@@ -99,6 +99,7 @@ def expected_team_points(
     home: bool,
     week: int = 0,
     matchup_response: Optional[float] = None,
+    outdoor_adverse: bool = False,
 ) -> float:
     """Analytic expected points from O/D indices.
 
@@ -106,7 +107,12 @@ def expected_team_points(
     (``LEAGUE_TEAM_PPG``). Home-field matches the live handicapping
     framework prior (~1.05 pts). Early weeks soften separation via
     ``matchup_response_for_week``.
+
+    v1.27: tiny FG-environment delta (dome / outdoor-adverse) so totals
+    feel the kicking surface without re-sculpting Path A calibration.
     """
+    from src.services.nfl_season_engine.kicker_layer import fg_environment_points_delta
+
     raw = offense.offense_index / max(0.55, opponent_defense.defense_index)
     response = (
         float(matchup_response)
@@ -119,6 +125,9 @@ def expected_team_points(
     base = LEAGUE_TEAM_PPG * matchup
     if home:
         base += HOME_FIELD_POINTS
+    base += fg_environment_points_delta(
+        offense.team, outdoor_adverse=outdoor_adverse
+    )
     return _clamp(base, *EXPECTED_POINTS_CLAMP)
 
 
