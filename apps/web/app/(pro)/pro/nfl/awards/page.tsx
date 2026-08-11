@@ -1,15 +1,27 @@
 import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import {
+  CurrentYtdHint,
+  PlayerFutureColumnHeaders,
+  PlayerFutureMobileFields,
+  PlayerFutureTripleCell,
+} from "@/components/pro/nfl/PlayerFutureTripleColumns";
+import {
   awardStatLine,
   fetchNflAwardProjections,
   type NflAwardProjectionRow,
   type NflAwardType,
 } from "@/lib/nfl-awards";
 import {
+  awardOddsForPlayer,
+  loadNflFuturesOdds,
+  type NflFuturesOddsBundle,
+} from "@/lib/nfl-futures-odds";
+import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
+import { CURRENT_YTD_TOOLTIP } from "@/lib/nfl-player-futures";
 
 const DEFAULT_SEASON = 2026;
 const KOSEDGE_DATE = "August 11, 2026";
@@ -68,16 +80,19 @@ function shortNote(row: NflAwardProjectionRow): string {
 export default async function NflAwardsPage() {
   const season = DEFAULT_SEASON;
 
-  const boards = await Promise.all(
-    LIVE_AWARD_META.map(async (meta) => {
-      const result = await fetchNflAwardProjections({
-        season,
-        award: meta.id,
-        limit: 10,
-      });
-      return { ...meta, ...result };
-    }),
-  );
+  const [boards, oddsBundle] = await Promise.all([
+    Promise.all(
+      LIVE_AWARD_META.map(async (meta) => {
+        const result = await fetchNflAwardProjections({
+          season,
+          award: meta.id,
+          limit: 10,
+        });
+        return { ...meta, ...result };
+      }),
+    ),
+    loadNflFuturesOdds(),
+  ]);
 
   const error = boards.find((b) => b.error)?.error;
   const liveBoards = boards.filter((b) => b.rows.length > 0);
@@ -96,13 +111,14 @@ export default async function NflAwardsPage() {
               MVP / Awards
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              Contenders from the player + season model — win/production signal
-              blended with team success. Research board, not a voting forecast.
+              Contenders from the player + season model — Projected (Model %),
+              Current (2026 YTD), and Current odds on every row.
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
               {lineage ? ` · ${lineage}` : null}
             </p>
+            <CurrentYtdHint className="mt-1" />
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link
@@ -174,7 +190,9 @@ export default async function NflAwardsPage() {
               key={board.id}
               title={`${board.label} Favorites`}
               subtitle={board.subtitle}
+              award={board.id}
               rows={board.rows}
+              oddsBundle={oddsBundle}
             />
           ))}
         </div>
@@ -188,7 +206,13 @@ export default async function NflAwardsPage() {
           <p className="mt-2">
             Team success blends projected wins and division-title probability
             from the Monte Carlo. Stat composite compares same-position peers
-            only. Races without live coverage are omitted — not stubbed.
+            only. Current for awards is{" "}
+            <span className="font-mono">—</span> (no fake award progress). Odds
+            join best-effort — missing markets show{" "}
+            <span className="font-mono">—</span>.
+          </p>
+          <p className="mt-2 text-xs text-kos-text/45" title={CURRENT_YTD_TOOLTIP}>
+            {oddsBundle.note}
           </p>
         </section>
       ) : null}
@@ -199,43 +223,61 @@ export default async function NflAwardsPage() {
 function AwardBoard({
   title,
   subtitle,
+  award,
   rows,
+  oddsBundle,
 }: {
   title: string;
   subtitle: string;
+  award: NflAwardType;
   rows: NflAwardProjectionRow[];
+  oddsBundle: NflFuturesOddsBundle;
 }) {
   return (
     <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
       <h2 className="text-xl font-semibold text-kos-text">{title}</h2>
       <p className="mt-1 text-sm text-kos-text/70">{subtitle}</p>
+      <CurrentYtdHint className="mt-1" />
 
       {/* Mobile cards */}
       <ol className="mt-4 space-y-3 sm:hidden">
-        {rows.map((row) => (
-          <li
-            key={`${row.award}-${row.playerId}`}
-            className={`rounded-xl border p-3 ${
-              row.rankOverall === 1
-                ? "border-kos-gold/40 bg-kos-gold/10"
-                : "border-white/10 bg-white/3"
-            }`}
-          >
-            <div className="flex items-baseline justify-between gap-2">
-              <p className="font-semibold text-kos-text">
-                <span className="text-kos-gold">#{row.rankOverall}</span>{" "}
-                {row.playerName}
-              </p>
-              <span className="text-[11px] font-semibold text-kos-gold">
-                {(row.awardScore * 100).toFixed(1)}
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-kos-text/55">
-              {row.team} · {row.position}
-            </p>
-            <p className="mt-2 text-sm text-kos-text/80">{shortNote(row)}</p>
-          </li>
-        ))}
+        {rows.map((row) => {
+          const odds = awardOddsForPlayer(
+            oddsBundle,
+            award,
+            row.playerName,
+          );
+          return (
+            <li
+              key={`${row.award}-${row.playerId}`}
+              className={`rounded-xl border p-3 ${
+                row.rankOverall === 1
+                  ? "border-kos-gold/40 bg-kos-gold/10"
+                  : "border-white/10 bg-white/3"
+              }`}
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="font-semibold text-kos-text">
+                  <span className="text-kos-gold">#{row.rankOverall}</span>{" "}
+                  {row.playerName}
+                </p>
+                <span className="text-[11px] text-kos-text/55">
+                  {row.team} · {row.position}
+                </span>
+              </div>
+              <PlayerFutureMobileFields
+                projected={row.awardScore}
+                current={null}
+                currentKind="award"
+                odds={odds}
+                projectedDigits={1}
+                projectedPercent
+                projectedLabel="Model %"
+              />
+              <p className="mt-2 text-xs text-kos-text/60">{shortNote(row)}</p>
+            </li>
+          );
+        })}
       </ol>
 
       {/* Desktop table */}
@@ -246,36 +288,52 @@ function AwardBoard({
               <th className="px-3 py-2 font-semibold">#</th>
               <th className="px-3 py-2 font-semibold">Player</th>
               <th className="px-3 py-2 font-semibold">Team</th>
-              <th className="px-3 py-2 font-semibold">Signal</th>
+              <PlayerFutureColumnHeaders
+                projectedLabel="Projected"
+                projectedTitle="Model % — award score × 100"
+              />
               <th className="px-3 py-2 font-semibold">Note</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
-              <tr
-                key={`${row.award}-${row.playerId}`}
-                className="border-b border-white/5 hover:bg-white/5"
-              >
-                <td className="px-3 py-3 font-semibold text-kos-gold">
-                  {row.rankOverall}
-                </td>
-                <td className="px-3 py-3">
-                  <div className="font-semibold text-kos-text">
-                    {row.playerName}
-                  </div>
-                  <div className="text-xs text-kos-text/55">{row.position}</div>
-                </td>
-                <td className="px-3 py-3 text-kos-text/80">{row.team}</td>
-                <td className="px-3 py-3 font-semibold text-kos-gold">
-                  {(row.awardScore * 100).toFixed(1)}
-                  <div className="text-xs font-normal text-kos-text/55">
-                    wins {row.teamExpectedWins.toFixed(1)} · playoff{" "}
-                    {percent(row.teamPlayoffProb)}
-                  </div>
-                </td>
-                <td className="px-3 py-3 text-kos-text/75">{shortNote(row)}</td>
-              </tr>
-            ))}
+            {rows.map((row) => {
+              const odds = awardOddsForPlayer(
+                oddsBundle,
+                award,
+                row.playerName,
+              );
+              return (
+                <tr
+                  key={`${row.award}-${row.playerId}`}
+                  className="border-b border-white/5 hover:bg-white/5"
+                >
+                  <td className="px-3 py-3 font-semibold text-kos-gold">
+                    {row.rankOverall}
+                  </td>
+                  <td className="px-3 py-3">
+                    <div className="font-semibold text-kos-text">
+                      {row.playerName}
+                    </div>
+                    <div className="text-xs text-kos-text/55">
+                      {row.position}
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 text-kos-text/80">{row.team}</td>
+                  <PlayerFutureTripleCell
+                    projected={row.awardScore}
+                    current={null}
+                    currentKind="award"
+                    odds={odds}
+                    projectedDigits={1}
+                    projectedPercent
+                    projectedSubLabel="Model %"
+                  />
+                  <td className="px-3 py-3 text-kos-text/75">
+                    {shortNote(row)}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

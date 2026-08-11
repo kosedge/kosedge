@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  CurrentYtdHint,
+  PlayerFutureColumnHeaders,
+  PlayerFutureTripleCell,
+} from "@/components/pro/nfl/PlayerFutureTripleColumns";
+import {
   fetchNflAwardProjections,
   type NflAwardProjectionRow,
+  type NflAwardType,
 } from "@/lib/nfl-awards";
+import {
+  awardOddsForPlayer,
+  loadNflFuturesOdds,
+  type NflFuturesOddsBundle,
+} from "@/lib/nfl-futures-odds";
 import {
   fetchNflFantasyDraftRankings,
   fantasyPointsPerGame,
@@ -36,7 +47,7 @@ function fantasyLine(row: NflFantasyDraftRankingRow): string {
 }
 
 export default async function NflPlayerPreviewsPage() {
-  const [mvp, opoy, fantasy] = await Promise.all([
+  const [mvp, opoy, fantasy, oddsBundle] = await Promise.all([
     fetchNflAwardProjections({
       season: DEFAULT_SEASON,
       award: "mvp",
@@ -52,6 +63,7 @@ export default async function NflPlayerPreviewsPage() {
       scoringProfile: "half_ppr",
       limit: 40,
     }),
+    loadNflFuturesOdds(),
   ]);
 
   const skillFantasy = fantasy.rows
@@ -86,6 +98,7 @@ export default async function NflPlayerPreviewsPage() {
                 ? ` · ${fantasy.rows[0].modelVersion}`
                 : ""}
           </p>
+          <CurrentYtdHint className="mt-1" />
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
@@ -128,105 +141,21 @@ export default async function NflPlayerPreviewsPage() {
         </div>
       ) : null}
 
-      <section className="mt-8">
-        <h2 className="text-xl font-semibold text-kos-text">MVP race</h2>
-        <p className="mt-1 text-sm text-kos-text/65">
-          Weighted team success + stat composite + QB voting prior.
-        </p>
-        <div className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
-          <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/55">
-              <tr>
-                <th className="px-3 py-3 sm:px-4">#</th>
-                <th className="px-3 py-3 sm:px-4">Player</th>
-                <th className="px-3 py-3 sm:px-4">Team</th>
-                <th className="px-3 py-3 sm:px-4">Score</th>
-                <th className="px-3 py-3 sm:px-4">Outlook</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mvp.rows.map((row) => (
-                <tr
-                  key={`mvp-${row.playerId}`}
-                  className="border-b border-white/5 text-kos-text/85"
-                >
-                  <td className="px-3 py-3 sm:px-4">{row.rankOverall}</td>
-                  <td className="px-3 py-3 font-medium sm:px-4">
-                    {row.playerName}
-                    <span className="ml-2 text-xs text-kos-text/50">
-                      {row.position}
-                    </span>
-                  </td>
-                  <td className="px-3 py-3 sm:px-4">
-                    <Link
-                      href={`/pro/nfl/teams/${row.team}`}
-                      className="hover:text-kos-gold"
-                    >
-                      {row.team}
-                    </Link>
-                  </td>
-                  <td className="px-3 py-3 sm:px-4">
-                    {row.awardScore.toFixed(1)}
-                  </td>
-                  <td className="px-3 py-3 text-kos-text/70 sm:px-4">
-                    {awardLine(row)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <AwardRacePreview
+        title="MVP race"
+        subtitle="Weighted team success + stat composite + QB voting prior."
+        award="mvp"
+        rows={mvp.rows}
+        oddsBundle={oddsBundle}
+      />
 
-      <section className="mt-10">
-        <h2 className="text-xl font-semibold text-kos-text">OPOY race</h2>
-        <p className="mt-1 text-sm text-kos-text/65">
-          Offensive Player of the Year board from the same award model.
-        </p>
-        <div className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
-          <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/55">
-              <tr>
-                <th className="px-3 py-3 sm:px-4">#</th>
-                <th className="px-3 py-3 sm:px-4">Player</th>
-                <th className="px-3 py-3 sm:px-4">Team</th>
-                <th className="px-3 py-3 sm:px-4">Score</th>
-                <th className="px-3 py-3 sm:px-4">Outlook</th>
-              </tr>
-            </thead>
-            <tbody>
-              {opoy.rows.map((row) => (
-                <tr
-                  key={`opoy-${row.playerId}`}
-                  className="border-b border-white/5 text-kos-text/85"
-                >
-                  <td className="px-3 py-3 sm:px-4">{row.rankOverall}</td>
-                  <td className="px-3 py-3 font-medium sm:px-4">
-                    {row.playerName}
-                    <span className="ml-2 text-xs text-kos-text/50">
-                      {row.position}
-                    </span>
-                  </td>
-                  <td className="px-3 py-3 sm:px-4">
-                    <Link
-                      href={`/pro/nfl/teams/${row.team}`}
-                      className="hover:text-kos-gold"
-                    >
-                      {row.team}
-                    </Link>
-                  </td>
-                  <td className="px-3 py-3 sm:px-4">
-                    {row.awardScore.toFixed(1)}
-                  </td>
-                  <td className="px-3 py-3 text-kos-text/70 sm:px-4">
-                    {awardLine(row)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <AwardRacePreview
+        title="OPOY race"
+        subtitle="Offensive Player of the Year board from the same award model."
+        award="opoy"
+        rows={opoy.rows}
+        oddsBundle={oddsBundle}
+      />
 
       <section className="mt-10">
         <h2 className="text-xl font-semibold text-kos-text">
@@ -291,5 +220,86 @@ export default async function NflPlayerPreviewsPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function AwardRacePreview({
+  title,
+  subtitle,
+  award,
+  rows,
+  oddsBundle,
+}: {
+  title: string;
+  subtitle: string;
+  award: NflAwardType;
+  rows: NflAwardProjectionRow[];
+  oddsBundle: NflFuturesOddsBundle;
+}) {
+  return (
+    <section className="mt-8">
+      <h2 className="text-xl font-semibold text-kos-text">{title}</h2>
+      <p className="mt-1 text-sm text-kos-text/65">{subtitle}</p>
+      <CurrentYtdHint className="mt-1" />
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+        <table className="min-w-full text-left text-sm">
+          <thead className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/55">
+            <tr>
+              <th className="px-3 py-3 sm:px-4">#</th>
+              <th className="px-3 py-3 sm:px-4">Player</th>
+              <th className="px-3 py-3 sm:px-4">Team</th>
+              <PlayerFutureColumnHeaders
+                projectedLabel="Projected"
+                projectedTitle="Model % — award score × 100"
+              />
+              <th className="px-3 py-3 sm:px-4">Outlook</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => {
+              const odds = awardOddsForPlayer(
+                oddsBundle,
+                award,
+                row.playerName,
+              );
+              return (
+                <tr
+                  key={`${award}-${row.playerId}`}
+                  className="border-b border-white/5 text-kos-text/85"
+                >
+                  <td className="px-3 py-3 sm:px-4">{row.rankOverall}</td>
+                  <td className="px-3 py-3 font-medium sm:px-4">
+                    {row.playerName}
+                    <span className="ml-2 text-xs text-kos-text/50">
+                      {row.position}
+                    </span>
+                  </td>
+                  <td className="px-3 py-3 sm:px-4">
+                    <Link
+                      href={`/pro/nfl/teams/${row.team}`}
+                      className="hover:text-kos-gold"
+                    >
+                      {row.team}
+                    </Link>
+                  </td>
+                  <PlayerFutureTripleCell
+                    projected={row.awardScore}
+                    current={null}
+                    currentKind="award"
+                    odds={odds}
+                    projectedDigits={1}
+                    projectedPercent
+                    projectedSubLabel="Model %"
+                  />
+                  <td className="px-3 py-3 text-kos-text/70 sm:px-4">
+                    {awardLine(row)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
