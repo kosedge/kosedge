@@ -46,16 +46,30 @@ Env knobs (model-service):
 | Survivor WP | Same depth discipline. |
 | Thin/dev | Badge **low-depth estimate**. |
 
-## Latency notes (local demo universe, 2026-08-11)
+## Latency notes (2026-08-11)
 
-| Call | n | Cold | Cached |
-|------|---|------|--------|
-| Game Boxes (1 game) | 50 | ~1.8s | ms |
-| Game Boxes | 2,000 | ~65s | ms |
-| Game Boxes | 5,000 | ~186s | ms |
-| Survivor plan | 120 | ~52s | ms (pool hit) |
+### Real packaged universe (CHI@CAR W1 / survivor plan KC W1)
 
-Production Railway hardware may be faster; still treat cold 2k Game Boxes as a desk-wait, not a board-block. BFF `UPSTREAM_TIMEOUT_MS.seasonEngine` = 180s; Next routes `maxDuration = 180`.
+| Call | n | Cold |
+|------|---|------|
+| Game Boxes | 50 | ~0.8s |
+| Game Boxes | 2,000 | ~30s |
+| Game Boxes | 5,000 | ~144s |
+| Survivor plan | 120 | ~38s |
+| Survivor plan | 2,000 | ~16 min |
+| Survivor plan | 5,000 | ~11 min* |
+
+\*5000 finished faster than 2000 in this run (machine load / variance); both are multi-minute cold. Path-pool cache makes warm planner/suggest ms.
+
+### Demo universe (earlier probe)
+
+| Call | n | Cold |
+|------|---|------|
+| Game Boxes | 2,000 | ~65s |
+| Game Boxes | 5,000 | ~186s |
+| Survivor plan | 120 | ~52s |
+
+Cold 2k Game Boxes is a desk-wait, not a board-block. BFF `UPSTREAM_TIMEOUT_MS.seasonEngine` = 180s; Next routes `maxDuration = 180`. Survivor interactive UX depends on path-pool reuse after the first cold build.
 
 ## Smoke checklist
 
