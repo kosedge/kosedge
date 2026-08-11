@@ -383,6 +383,23 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     _write_csv(out_bundle / "team_regular_season_outcomes.csv", outcome_rows, list(outcome_rows[0].keys()))
     _write_csv(out_bundle / "team_defense_season_totals.csv", defense_rows, list(defense_rows[0].keys()))
 
+    # Align week rates + playoff/SB to board wins (same strength as production budgets).
+    from apply_nfl_strength_coherence import apply_coherence
+
+    coherence_audit = apply_coherence(out_bundle, n_replicates=20_000, seed=20260811)
+    # Reload outcomes after coherence rewrite (playoff/SB + LAR canonicalization).
+    outcome_rows = _load_csv(out_bundle / "team_regular_season_outcomes.csv")
+    players = _load_csv(out_bundle / "player_regular_season_totals.csv")
+    defense_rows = _load_csv(out_bundle / "team_defense_season_totals.csv")
+    after_pass = locked_team_pass_yards(players)
+    after_rush = defaultdict(float)
+    after_rec = defaultdict(float)
+    for r in players:
+        t = str(r.get("team") or "")
+        after_rush[t] += _f(r, "rush_yards_total")
+        if str(r.get("position") or "").upper() in {"WR", "TE", "RB"}:
+            after_rec[t] += _f(r, "receiving_yards_total")
+
     # Leaders / coherence
     qbs = [r for r in players if str(r.get("position") or "").upper() == "QB"]
     wrs = [r for r in players if str(r.get("position") or "").upper() == "WR"]
@@ -658,6 +675,12 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
                 "league_pa": def_audit.get("league_pa"),
                 "wins_sum": def_audit.get("wins_sum"),
                 "offense_pf_variance_lift": def_audit.get("offense_pf_variance_lift"),
+            },
+            "strength_coherence": {
+                "method": coherence_audit.get("method"),
+                "before_lar": coherence_audit.get("before_lar"),
+                "after_lar": coherence_audit.get("after_lar"),
+                "sanity": coherence_audit.get("sanity"),
             },
         },
         "pf_win_half_overlap": pf_win_overlap,

@@ -1,0 +1,61 @@
+{
+  "generated_at_utc": "2026-08-11T22:06:25.213725+00:00",
+  "bundle": "nfl-preseason-sim-2026-20260809T165350Z",
+  "root_cause": "Soft-pile/defense expected_wins (production PF/PA path) diverged from hierarchical team_week_win_rates; Truth Layer playoffs used stale rates while SB softmax used board wins \u2014 LAR showed ~9.7 wins + ~0.48% SB with ~84% playoff.",
+  "method": "7seed_mc_plus_strength_bracket_sb",
+  "n_replicates": 20000,
+  "seed": 20260811,
+  "before_lar": {
+    "team": "LAR",
+    "expected_wins": 9.6938,
+    "playoff_prob": 0.8314,
+    "division_title_prob": 0.36515,
+    "super_bowl_win_prob": 0.0086
+  },
+  "after_lar": {
+    "team": "LAR",
+    "expected_wins": 9.6938,
+    "playoff_prob": 0.8314,
+    "division_title_prob": 0.36515,
+    "super_bowl_win_prob": 0.0708
+  },
+  "before_rate_wins_lar": 9.6938,
+  "after_rate_wins_lar": 9.6938,
+  "sanity": {
+    "sum_playoff_afc": 7.0,
+    "sum_playoff_nfc": 7.0,
+    "sum_playoff_league": 14.0,
+    "sum_expected_wins": 272.0,
+    "sum_division_title": 8.0,
+    "sum_super_bowl": 1.0
+  },
+  "e_wins_histogram": {
+    "<=5": 6,
+    "5-7": 10,
+    "7-10": 5,
+    "10-12": 1,
+    ">=12": 10
+  },
+  "contradiction_flags": [
+    {
+      "team": "DET",
+      "expected_wins": 7.0459,
+      "playoff_prob": 0.5766,
+      "super_bowl_win_prob": 0.02185,
+      "reasons": [
+        "low_wins_high_playoff"
+      ]
+    }
+  ],
+  "production_path": "Player pass/rush/rec yards + TDs and defense PF/PA/expected_wins share the soft-pile finalize budget path; week rates are rescaled to those board wins so playoff/SB join the same strength story (no separate LAR-lite production).",
+  "team_id_scheme": "product_canonical_LAR",
+  "before_lar_original_pre_patch": {
+    "team": "LAR",
+    "expected_wins": 9.6938,
+    "playoff_prob": 0.8422,
+    "division_title_prob": 0.4823,
+    "super_bowl_win_prob": 0.004834,
+    "note": "Truth Layer playoffs from stale hierarchical week rates (LA\u224811.11 E[wins]); SB softmax on soft-pile board wins"
+  },
+  "before_rate_wins_lar_original": 11.1074
+}

@@ -1023,10 +1023,30 @@ def budgets_to_rows(
     prior_outcomes: Optional[Sequence[Mapping[str, Any]]] = None,
 ) -> List[Dict[str, Any]]:
     """Merge defense budgets into team outcome rows for publish."""
+    try:
+        from src.services.nfl_canonical_teams import canonicalize_team
+    except ImportError:  # script path / data-platform package layout
+        try:
+            from services.nfl_canonical_teams import canonicalize_team
+        except ImportError:
+
+            def canonicalize_team(code: Optional[str]) -> Optional[str]:  # type: ignore
+                if code is None:
+                    return None
+                raw = str(code).strip().upper()
+                if raw in {"LA", "STL"}:
+                    return "LAR"
+                if raw == "WSH":
+                    return "WAS"
+                return raw or None
+
     prior_by = {}
     if prior_outcomes:
         for row in prior_outcomes:
-            prior_by[str(row.get("team") or "")] = dict(row)
+            raw = str(row.get("team") or "")
+            key = canonicalize_team(raw) or raw
+            prior_by[key] = dict(row)
+            prior_by[raw] = dict(row)
 
     TEAM_META = {
         "ARI": ("NFC", "NFC West"), "ATL": ("NFC", "NFC South"),
@@ -1037,7 +1057,9 @@ def budgets_to_rows(
         "DET": ("NFC", "NFC North"), "GB": ("NFC", "NFC North"),
         "HOU": ("AFC", "AFC South"), "IND": ("AFC", "AFC South"),
         "JAX": ("AFC", "AFC South"), "KC": ("AFC", "AFC West"),
-        "LA": ("NFC", "NFC West"), "LAC": ("AFC", "AFC West"),
+        # Product canonical Rams = LAR (LA alias still accepted at boundaries).
+        "LA": ("NFC", "NFC West"), "LAR": ("NFC", "NFC West"),
+        "LAC": ("AFC", "AFC West"),
         "LV": ("AFC", "AFC West"), "MIA": ("AFC", "AFC East"),
         "MIN": ("NFC", "NFC North"), "NE": ("AFC", "AFC East"),
         "NO": ("NFC", "NFC South"), "NYG": ("NFC", "NFC East"),
@@ -1048,8 +1070,14 @@ def budgets_to_rows(
     }
 
     # Softmax playoff / division / SB proxies from closed-loop wins.
-    by_div: Dict[str, List[str]] = {}
+    # Prefer product-canonical keys so LA/LAR never double-count.
+    canon_budgets: Dict[str, TeamDefenseBudget] = {}
     for team, b in budgets.items():
+        key = canonicalize_team(str(team)) or str(team)
+        canon_budgets[key] = b
+
+    by_div: Dict[str, List[str]] = {}
+    for team, b in canon_budgets.items():
         conf, div = TEAM_META.get(team, ("UNK", "UNK"))
         by_div.setdefault(div, []).append(team)
 
@@ -1063,19 +1091,20 @@ def budgets_to_rows(
 
     div_title: Dict[str, float] = {}
     for div, teams in by_div.items():
-        weights = _softmax([budgets[t].expected_wins for t in teams])
+        weights = _softmax([canon_budgets[t].expected_wins for t in teams])
         for t, w in zip(teams, weights):
             div_title[t] = float(w)
-    sb_teams = list(budgets.keys())
-    sb_w = _softmax([budgets[t].expected_wins for t in sb_teams])
+    sb_teams = list(canon_budgets.keys())
+    sb_w = _softmax([canon_budgets[t].expected_wins for t in sb_teams])
     sb_prob = {t: float(w) for t, w in zip(sb_teams, sb_w)}
 
     rows: List[Dict[str, Any]] = []
-    for team, b in sorted(budgets.items(), key=lambda kv: -kv[1].expected_wins):
+    for team, b in sorted(canon_budgets.items(), key=lambda kv: -kv[1].expected_wins):
         conf, div = TEAM_META.get(team, ("UNK", "UNK"))
-        prior = prior_by.get(team) or {}
+        prior = prior_by.get(team) or prior_by.get("LA" if team == "LAR" else "") or {}
         win_pct = b.expected_wins / GAMES_PER_TEAM
         # Rough playoff proxy from closed-loop wins (P(wins>=9) ~ logistic).
+        # Finalize / strength-coherence overwrite with 7-seed MC when week rates exist.
         playoff = 1.0 / (1.0 + math.exp(-1.35 * (b.expected_wins - 9.0)))
         rows.append(
             {
