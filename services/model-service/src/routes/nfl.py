@@ -3258,6 +3258,10 @@ def nfl_fair_lines(
         # carry timezone-skew duplicates (same SEA/NE kickoff written as both
         # 2026-09-09 and 2026-09-10 game_date) which would otherwise double the
         # fair-lines board.
+        #
+        # LEFT JOIN projections: missing KEI must not drop a REG schedule game
+        # (Edge Board Week 1 membership is schedule-driven; empties are honest).
+        # Team join accepts LA↔LAR so Rams schedule rows always resolve.
         rows = session.execute(
             text(
                 """
@@ -3284,13 +3288,25 @@ def nfl_fair_lines(
                 FROM nfl_dp_schedules sch
                 JOIN leagues l ON l.code = 'nfl'
                 JOIN seasons s ON s.league_id = l.id AND s.season_year = sch.season
-                JOIN teams home ON home.league_id = l.id AND home.abbr = sch.home_team
-                JOIN teams away ON away.league_id = l.id AND away.abbr = sch.away_team
+                JOIN teams home ON home.league_id = l.id AND (
+                  home.abbr = sch.home_team
+                  OR (
+                    sch.home_team IN ('LA', 'LAR')
+                    AND home.abbr IN ('LA', 'LAR')
+                  )
+                )
+                JOIN teams away ON away.league_id = l.id AND (
+                  away.abbr = sch.away_team
+                  OR (
+                    sch.away_team IN ('LA', 'LAR')
+                    AND away.abbr IN ('LA', 'LAR')
+                  )
+                )
                 JOIN games g
                   ON g.season_id = s.id
                  AND g.home_team_id = home.id
                  AND g.away_team_id = away.id
-                JOIN LATERAL (
+                LEFT JOIN LATERAL (
                   SELECT *
                   FROM nfl_market_projections np
                   WHERE np.game_id = g.id
@@ -3318,7 +3334,8 @@ def nfl_fair_lines(
                   sch.home_team,
                   sch.away_team,
                   abs(COALESCE(g.game_date, (g.start_time AT TIME ZONE 'America/New_York')::date) - sch.game_date),
-                  g.start_time ASC NULLS LAST
+                  g.start_time ASC NULLS LAST,
+                  CASE WHEN p.spread_home IS NOT NULL THEN 0 ELSE 1 END
                 """
             ),
             {

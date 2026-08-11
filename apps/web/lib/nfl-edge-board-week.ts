@@ -5,6 +5,10 @@
  * even though REG Week 1 games (incl. Melbourne) appear on Full slate. Strict
  * Week 1 filter then empties the tab. The wall-chart schedule pack is the
  * same REG slate the product already trusts for the season wall chart.
+ *
+ * Week 1 membership (2026-08-10): schedule pack is the driver. Projections /
+ * odds are attributes — REG Week 1 games never silently disappear when KEI
+ * or books are missing (honest empties instead).
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
@@ -16,9 +20,23 @@ import { lookupNflNeutralSite } from "@/lib/nfl-neutral-sites-2026";
 const NAME_TO_ABBR = new Map(
   NFL_TEAM_DIRECTORY.map((t) => [t.name.toLowerCase(), t.code] as const),
 );
+const ABBR_TO_NAME = new Map(
+  NFL_TEAM_DIRECTORY.map((t) => [t.code, t.name] as const),
+);
 
 function canonAbbr(raw: string): string {
   return canonicalizeNflTeam(raw) || String(raw || "").trim().toUpperCase();
+}
+
+/** Pack / nflverse often emit LA for Rams; product id prefers LAR. */
+function packAbbr(abbr: string): string {
+  const c = canonAbbr(abbr);
+  return c === "LAR" ? "LA" : c;
+}
+
+function teamDisplayName(abbr: string): string {
+  const c = canonAbbr(abbr);
+  return ABBR_TO_NAME.get(c) || c;
 }
 
 function abbrFromLabel(label: string): string {
@@ -164,4 +182,182 @@ export function stampNflEdgeBoardWeeksFromSchedule(
   }
 
   return rows;
+}
+
+export type NflScheduleWeekGame = {
+  gameId: string;
+  season: number;
+  week: number;
+  seasonType: "REG";
+  awayAbbr: string;
+  homeAbbr: string;
+};
+
+/**
+ * Canonical REG slate for a week from the wall-chart schedule pack.
+ * Home-side `vs` entries only (16 for Week 1).
+ */
+export function listNflRegWeekScheduleGames(
+  week: number,
+  season = 2026,
+): NflScheduleWeekGame[] {
+  const target = coerceNflWeek(week);
+  if (target == null) return [];
+  const schedule = getWallChartSchedule();
+  const games: NflScheduleWeekGame[] = [];
+
+  for (const [team, weeks] of Object.entries(schedule)) {
+    const label = weeks[String(target)];
+    if (!label) continue;
+    const text = String(label).trim();
+    if (!/^vs\s+/i.test(text)) continue;
+    const opp = text.replace(/^vs\s+/i, "").trim();
+    const homeAbbr = canonAbbr(team);
+    const awayAbbr = canonAbbr(opp);
+    if (!homeAbbr || !awayAbbr) continue;
+    const weekPad = String(target).padStart(2, "0");
+    games.push({
+      gameId: `${season}-W${weekPad}-${packAbbr(awayAbbr)}@${packAbbr(homeAbbr)}`,
+      season,
+      week: target,
+      seasonType: "REG",
+      awayAbbr,
+      homeAbbr,
+    });
+  }
+
+  return games.sort((a, b) => a.gameId.localeCompare(b.gameId));
+}
+
+function orientedPairKey(awayAbbr: string, homeAbbr: string): string {
+  return `${canonAbbr(awayAbbr)}|${canonAbbr(homeAbbr)}`;
+}
+
+function rowOrientedPairKey(row: EdgeBoardRow): string | null {
+  const r = row as RowWeekFields;
+  const game = String(r.game ?? "");
+  const parsed = parseGameTeams(game);
+  const away = canonAbbr(r.awayAbbr || abbrFromLabel(parsed.away));
+  const home = canonAbbr(r.homeAbbr || abbrFromLabel(parsed.home));
+  if (!away || !home) return null;
+  return orientedPairKey(away, home);
+}
+
+export type NflScheduleWeekDiff = {
+  week: number;
+  scheduleCount: number;
+  boardCount: number;
+  missing: NflScheduleWeekGame[];
+  /** game_ids on schedule but not represented on the board */
+  missingGameIds: string[];
+  ok: boolean;
+};
+
+/** Diff board game membership vs schedule pack for a REG week. */
+export function diffNflBoardVsScheduleWeek(
+  rows: EdgeBoardRow[],
+  week: number,
+): NflScheduleWeekDiff {
+  const schedule = listNflRegWeekScheduleGames(week);
+  const present = new Set<string>();
+  for (const row of rows) {
+    const key = rowOrientedPairKey(row);
+    if (key) present.add(key);
+  }
+  const missing = schedule.filter(
+    (g) => !present.has(orientedPairKey(g.awayAbbr, g.homeAbbr)),
+  );
+  const boardCount = new Set(
+    rows
+      .map(rowOrientedPairKey)
+      .filter((k): k is string => Boolean(k)),
+  ).size;
+  return {
+    week: coerceNflWeek(week) ?? week,
+    scheduleCount: schedule.length,
+    boardCount,
+    missing,
+    missingGameIds: missing.map((g) => g.gameId),
+    ok: missing.length === 0 && boardCount >= schedule.length,
+  };
+}
+
+function emptyScheduleEdgeRows(game: NflScheduleWeekGame): EdgeBoardRow[] {
+  const awayName = teamDisplayName(game.awayAbbr);
+  const homeName = teamDisplayName(game.homeAbbr);
+  const label = `${awayName} @ ${homeName}`;
+  const shared = {
+    game: label,
+    week: game.week,
+    seasonType: game.seasonType,
+    awayAbbr: game.awayAbbr,
+    homeAbbr: game.homeAbbr,
+    gamesPlayedAway: game.week === 1 ? 0 : undefined,
+    gamesPlayedHome: game.week === 1 ? 0 : undefined,
+  };
+  return [
+    {
+      id: `${game.gameId}-spread`,
+      market: "Spread",
+      ...shared,
+    } as EdgeBoardRow,
+    {
+      id: `${game.gameId}-total`,
+      market: "Total",
+      ...shared,
+    } as EdgeBoardRow,
+  ];
+}
+
+/**
+ * Schedule-driven membership: every REG schedule-pack game for `week` appears
+ * on the board. Missing KEI / odds → honest empty rows (no silent drop).
+ * Also force-stamps week + REG on any already-present schedule matchup.
+ */
+export function ensureNflScheduleWeekOnBoard(
+  rows: EdgeBoardRow[],
+  week: number,
+): EdgeBoardRow[] {
+  const schedule = listNflRegWeekScheduleGames(week);
+  if (!schedule.length) return rows;
+
+  const byPair = new Map<string, EdgeBoardRow[]>();
+  for (const row of rows) {
+    const key = rowOrientedPairKey(row);
+    if (!key) continue;
+    const list = byPair.get(key);
+    if (list) list.push(row);
+    else byPair.set(key, [row]);
+  }
+
+  const out = [...rows];
+  const target = coerceNflWeek(week);
+  for (const game of schedule) {
+    const key = orientedPairKey(game.awayAbbr, game.homeAbbr);
+    const existing = byPair.get(key);
+    if (existing?.length) {
+      for (const row of existing) {
+        const r = row as RowWeekFields;
+        if (target != null) r.week = target;
+        r.seasonType = "REG";
+        if (!r.awayAbbr) r.awayAbbr = game.awayAbbr;
+        if (!r.homeAbbr) r.homeAbbr = game.homeAbbr;
+        if (target === 1) {
+          if (r.gamesPlayedAway == null) r.gamesPlayedAway = 0;
+          if (r.gamesPlayedHome == null) r.gamesPlayedHome = 0;
+        }
+      }
+      continue;
+    }
+    if (typeof console !== "undefined" && console.warn) {
+      console.warn(
+        `[edge-board] schedule game missing from board — seeding empty rows: ${game.gameId}`,
+      );
+    }
+    const seeded = emptyScheduleEdgeRows(game);
+    out.push(...seeded);
+    byPair.set(key, seeded);
+  }
+
+  return out;
 }

@@ -9,7 +9,10 @@ import {
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { filterNflStrictWeekRows } from "@/lib/nfl-edge-board-from-fair-lines";
-import { stampNflEdgeBoardWeeksFromSchedule } from "@/lib/nfl-edge-board-week";
+import {
+  ensureNflScheduleWeekOnBoard,
+  stampNflEdgeBoardWeeksFromSchedule,
+} from "@/lib/nfl-edge-board-week";
 import {
   resolveSportKey,
   sportDisplayLabel,
@@ -68,11 +71,12 @@ export default async function EdgeBoardSportPage({
   let week1Count = 0;
   let fullCount = 0;
   if (sportKey === "nfl") {
-    // Assemble once (full), stamp schedule-pack weeks, then derive Week 1.
-    // Stamping here is belt-and-suspenders with assemble — Week 1 must not
-    // empty when fair-lines omit week but REG W1 games are on the board.
-    const fullRows = stampNflEdgeBoardWeeksFromSchedule(
-      await getRows("nfl", "full"),
+    // Assemble once (full), stamp schedule-pack weeks, ensure complete W1
+    // membership, then derive Week 1. Schedule is the driver — never show 13
+    // when the pack has 16 REG Week 1 games.
+    const fullRows = ensureNflScheduleWeekOnBoard(
+      stampNflEdgeBoardWeeksFromSchedule(await getRows("nfl", "full")),
+      1,
     );
     const week1Rows = filterNflStrictWeekRows(fullRows, 1);
     week1Count = gameCount(week1Rows);
@@ -231,7 +235,7 @@ export default async function EdgeBoardSportPage({
           slateWeek={slate === "week1" ? 1 : nflWeeks[0] ?? null}
           emptyHint={
             isNfl && slate === "week1"
-              ? "No Week 1 REG fair-lines in the pull window yet. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board, or wait for Week 1 lines."
+              ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."
               : undefined
           }
         />

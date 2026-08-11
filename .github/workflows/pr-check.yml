@@ -81,6 +81,8 @@ jobs:
             echo "Expected deliberate I3 break to fail" >&2
             exit 1
           fi
+          # Week 1 complete slate — schedule pack == 16; no silent drops
+          python scripts/nfl/check_edge_board_week1.py
 
       - name: Comment PR with results
         if: always()
