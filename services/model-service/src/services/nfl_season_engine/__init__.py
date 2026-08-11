@@ -97,6 +97,11 @@ from src.services.nfl_season_engine.season_budgets import (
     qb1_distribution_metrics,
 )
 from src.services.nfl_season_engine.season_sim import simulate_full_season
+from src.services.nfl_season_engine.sim_depth import (
+    HONEST_PRECISION_MIN_N,
+    default_n_game_box,
+    default_n_survivor_paths,
+)
 from src.services.nfl_season_engine.survivor import (
     SurvivorEvalResult,
     SurvivorPlanResult,
@@ -117,6 +122,7 @@ DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
 __all__ = [
     "DEFAULT_SEASON_ENGINE_VERSION",
     "EFFICIENCY_BACKBONE_VERSION",
+    "HONEST_PRECISION_MIN_N",
     "EngineUniverse",
     "GameBoxProjection",
     "InjuryPath",
@@ -140,6 +146,8 @@ __all__ = [
     "build_player_process_prior",
     "compute_league_projected_sos",
     "compute_team_projected_sos",
+    "default_n_game_box",
+    "default_n_survivor_paths",
     "enforce_finite_team_production",
     "evaluate_survivor",
     "evaluate_survivor_plan",

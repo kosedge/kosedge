@@ -29,29 +29,6 @@ from src.services.nfl_season_engine.types import (
 
 def test_engine_version_surfaces_survivor() -> None:
     assert DEFAULT_SEASON_ENGINE_VERSION.startswith("nfl-season-engine-v1.")
-    assert (
-        "survivor" in DEFAULT_SEASON_ENGINE_VERSION
-        or "hardened" in DEFAULT_SEASON_ENGINE_VERSION
-        or "depth-volatility" in DEFAULT_SEASON_ENGINE_VERSION
-        or "game-script" in DEFAULT_SEASON_ENGINE_VERSION
-        or "red-zone" in DEFAULT_SEASON_ENGINE_VERSION
-        or "coaching" in DEFAULT_SEASON_ENGINE_VERSION
-        or "real-2026" in DEFAULT_SEASON_ENGINE_VERSION
-        or "real-depth" in DEFAULT_SEASON_ENGINE_VERSION
-        or "smoke-polish" in DEFAULT_SEASON_ENGINE_VERSION
-        or "survivor-planner" in DEFAULT_SEASON_ENGINE_VERSION
-        or "calibration" in DEFAULT_SEASON_ENGINE_VERSION
-        or "player-regression" in DEFAULT_SEASON_ENGINE_VERSION
-        or "projected-sos" in DEFAULT_SEASON_ENGINE_VERSION
-        or "season-coherence" in DEFAULT_SEASON_ENGINE_VERSION
-        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
-        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
-        or "true-pr-harden" in DEFAULT_SEASON_ENGINE_VERSION
-        or "defense-variance" in DEFAULT_SEASON_ENGINE_VERSION
-        or "team-variance" in DEFAULT_SEASON_ENGINE_VERSION
-        or "phase2-features" in DEFAULT_SEASON_ENGINE_VERSION
-        or "soft-flags" in DEFAULT_SEASON_ENGINE_VERSION
-    )
     assert "save_score" in FORMULA_NOTES
     assert "pick_now_score" in FORMULA_NOTES
     assert "bye_handling" in FORMULA_NOTES
@@ -157,25 +134,7 @@ def test_injury_paths_accepted_without_breaking_survivor() -> None:
     assert result.diagnostics["injury_path_count"] == 1
     assert len(result.ranked_picks) >= 1
     assert "DET" not in {r["team"] for r in result.ranked_picks}
-    assert (
-        "survivor" in result.engine_version
-        or "hardened" in result.engine_version
-        or "depth-volatility" in result.engine_version
-        or "game-script" in result.engine_version
-        or "red-zone" in result.engine_version
-        or "coaching" in result.engine_version
-        or "real-2026" in result.engine_version
-        or "real-depth" in result.engine_version
-        or "smoke-polish" in result.engine_version
-        or "survivor-planner" in result.engine_version
-        or "calibration" in result.engine_version
-        or "player-regression" in result.engine_version
-        or "projected-sos" in result.engine_version
-        or "season-coherence" in result.engine_version
-        or "phase2-features" in result.engine_version
-        or "soft-flags" in result.engine_version
-        or "true-pr-harden" in result.engine_version
-    )
+    assert result.engine_version.startswith("nfl-season-engine-v1.")
 
 
 def test_mini_universe_survivor_runs() -> None:

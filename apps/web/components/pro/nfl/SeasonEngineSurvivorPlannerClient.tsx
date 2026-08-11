@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
+  NFL_DEFAULT_N_SURVIVOR_PATHS,
+  formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
   formatScheduleDifficulty,
@@ -70,8 +72,8 @@ type SuggestedPath = {
 };
 
 const STORAGE_KEY = "kosedge.nfl.survivor.planner.picks";
-/** Planner interactivity budget — enough for stable WPs, fast enough for lock UX. */
-const N_SIMS = 120;
+/** Research-depth path pool (shared with suggest-paths when safe). */
+const N_SIMS = NFL_DEFAULT_N_SURVIVOR_PATHS;
 
 const selectClass =
   "min-h-11 w-full rounded-lg border border-white/15 bg-black/40 px-2.5 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50";
@@ -98,6 +100,11 @@ function favoriteWp(pick: PlanPick): number {
   if (typeof pick.favorite_wp === "number") return pick.favorite_wp;
   const wp = pick.this_week_wp ?? pick.win_rate;
   return pick.is_favorite === false ? Math.max(0, 1 - wp) : wp;
+}
+
+function fmtWp(value: number | null | undefined, nSims?: number): string {
+  if (value == null || !Number.isFinite(value)) return "—";
+  return formatPct(value, { n: nSims ?? N_SIMS, digits: 1 });
 }
 
 function readPicksFromUrl(): Record<string, string> | null {
@@ -156,7 +163,7 @@ function MatchupLine({ pick }: { pick: PlanPick }) {
         {side}
         {isFav ? (
           <span className="ml-1 tabular-nums text-kos-gold/90">
-            {formatPct(wp)}
+            {fmtWp(wp)}
           </span>
         ) : null}
       </span>
@@ -427,7 +434,7 @@ export default function SeasonEngineSurvivorPlannerClient({
               <p className={labelClass}>Avg weekly WP</p>
               <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
                 {result?.avg_locked_wp != null
-                  ? formatPct(result.avg_locked_wp)
+                  ? fmtWp(result.avg_locked_wp, result.n_sims)
                   : pending && lockedCount
                     ? "…"
                     : "—"}
@@ -447,7 +454,7 @@ export default function SeasonEngineSurvivorPlannerClient({
               <p className={labelClass}>Best left</p>
               <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
                 {result?.best_remaining_equity != null
-                  ? formatPct(result.best_remaining_equity)
+                  ? fmtWp(result.best_remaining_equity, result.n_sims)
                   : lockedCount && result
                     ? "Full"
                     : "—"}
@@ -457,8 +464,10 @@ export default function SeasonEngineSurvivorPlannerClient({
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] opacity-70">
             <p>
-              {result?.n_sims ?? N_SIMS} season sims ·{" "}
-              {engineVersion || result?.engine_version || "season engine"}
+              {formatDepthBadge(result?.n_sims ?? N_SIMS, {
+                surface: "survivor paths",
+              })}{" "}
+              · {engineVersion || result?.engine_version || "season engine"}
             </p>
             <button
               type="button"
@@ -472,7 +481,9 @@ export default function SeasonEngineSurvivorPlannerClient({
             <p className="mt-2 text-xs opacity-80">
               Joint path survival{" "}
               <span className="font-semibold tabular-nums">
-                {result ? formatPct(result.path_survival ?? 0) : "—"}
+                {result
+                  ? fmtWp(result.path_survival ?? 0, result.n_sims)
+                  : "—"}
               </span>
               {result?.path_strength
                 ? ` · ${result.path_strength}`
@@ -536,7 +547,7 @@ export default function SeasonEngineSurvivorPlannerClient({
                   <p className="mt-2 text-[11px] tabular-nums text-kos-text/70">
                     Grade {path.slate_grade ?? "—"}
                     {path.avg_locked_wp != null
-                      ? ` · avg ${formatPct(path.avg_locked_wp)}`
+                      ? ` · avg ${fmtWp(path.avg_locked_wp)}`
                       : ""}
                     {typeof path.danger_weeks === "number"
                       ? ` · ${path.danger_weeks} danger`

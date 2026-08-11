@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { fetchSeasonEngineGameBoxes } from "@/lib/nfl-season-engine";
-import type { InjuryPathInput } from "@/lib/nfl-season-engine-format";
+import {
+  NFL_DEFAULT_N_GAME_BOX,
+  type InjuryPathInput,
+} from "@/lib/nfl-season-engine-format";
 
 export const dynamic = "force-dynamic";
+/** Cold research-depth game boxes can exceed default serverless budgets. */
+export const maxDuration = 180;
 
 function parseBody(raw: unknown): {
   homeTeam?: string;
@@ -79,7 +84,9 @@ export async function GET(req: Request) {
     awayTeam,
     week: Number(url.searchParams.get("week") ?? 1),
     season: Number(url.searchParams.get("season") ?? 2026),
-    nReplicates: Number(url.searchParams.get("n_replicates") ?? 50),
+    nReplicates: Number(
+      url.searchParams.get("n_replicates") ?? NFL_DEFAULT_N_GAME_BOX,
+    ),
     seed: url.searchParams.has("seed")
       ? Number(url.searchParams.get("seed"))
       : undefined,

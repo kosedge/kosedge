@@ -1,12 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
+  NFL_DEFAULT_N_GAME_BOX,
+  NFL_DEFAULT_N_SURVIVOR_PATHS,
+  NFL_HONEST_PRECISION_MIN_N,
   buildGameBoxesQuery,
   buildStarOutInjuryPath,
   buildSurvivorBody,
+  depthLabel,
+  formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
   formatRange,
   formatScheduleDifficulty,
+  formatTdStat,
+  isHonestPrecision,
   matchupsFromWallChart,
   normalizeNflTeamCode,
   parseAlreadyUsedTeams,
@@ -40,8 +47,14 @@ describe("nfl-season-engine-format", () => {
       home_team: "KC",
       away_team: "BUF",
       week: 22,
-      n_replicates: 50,
+      n_replicates: 10,
     });
+    expect(
+      buildGameBoxesQuery({
+        homeTeam: "KC",
+        awayTeam: "BUF",
+      }).n_replicates,
+    ).toBe(NFL_DEFAULT_N_GAME_BOX);
     expect(() =>
       buildGameBoxesQuery({ homeTeam: "KC", awayTeam: "KC" }),
     ).toThrow(/differ/);
@@ -52,16 +65,19 @@ describe("nfl-season-engine-format", () => {
       buildSurvivorBody({
         week: 5,
         alreadyUsed: "KC,BUF",
-        nSims: 9999,
+        nSims: 99999,
         topN: 8,
       }),
     ).toMatchObject({
       week: 5,
       already_used: ["KC", "BUF"],
-      n_sims: 500,
+      n_sims: 20_000,
       top_n: 8,
       include_diagnostics: true,
     });
+    expect(buildSurvivorBody({ week: 1 }).n_sims).toBe(
+      NFL_DEFAULT_N_SURVIVOR_PATHS,
+    );
     expect(
       buildStarOutInjuryPath({
         team: "SF",
@@ -110,14 +126,47 @@ describe("nfl-season-engine-format", () => {
     expect(ranked[0]?.rank).toBe(1);
     expect(primaryStatsForPosition("QB")).toContain("pass_yards");
     expect(formatPct(0.641)).toBe("64.1%");
+    expect(formatPct(0.641, { n: 120, digits: 1 })).toBe("64%");
+    expect(
+      formatPct(0.641, { n: NFL_HONEST_PRECISION_MIN_N, digits: 1 }),
+    ).toBe("64.1%");
     expect(
       formatRange({ mean: 10, std: 1, p10: 5, p50: 10, p90: 15 }),
     ).toBe("5–15");
     expect(
       formatRange({ mean: 10.2, std: 1, p10: 5.2, p50: 10.2, p90: 15.8 }),
     ).toBe("5.2–15.8");
+    expect(
+      formatRange(
+        { mean: 10, std: 2, p10: 5, p50: 10, p90: 15 },
+        { n: 50 },
+      ),
+    ).toMatch(/^~/);
     expect(formatScheduleDifficulty("easy")).toBe("Easy slate");
     expect(formatScheduleDifficulty("hard")).toBe("Hard slate");
     expect(formatPathDifficultyGrade("a")).toBe("A");
+  });
+
+  it("applies sim-depth honesty labels and TD presentation", () => {
+    expect(isHonestPrecision(NFL_DEFAULT_N_GAME_BOX)).toBe(true);
+    expect(isHonestPrecision(120)).toBe(false);
+    expect(depthLabel(120)).toBe("low-depth estimate");
+    expect(formatDepthBadge(2000)).toContain("research depth");
+    const td = formatTdStat(
+      {
+        mean: 0.28,
+        std: 0.5,
+        p10: 0,
+        p50: 0,
+        p90: 1,
+        p_td: 0.24,
+        expected_rate: 0.28,
+        fair_american: 317,
+      },
+      { n: 2000 },
+    );
+    expect(td.primary).toContain("P(TD)");
+    expect(td.secondary).toContain("exp");
+    expect(td.secondary).toContain("fair");
   });
 });

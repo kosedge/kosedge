@@ -65,6 +65,15 @@ from src.services.nfl_season_engine.team_strength import (
     copy_strength_book,
     evolve_after_game,
 )
+from src.services.nfl_season_engine.sim_depth import (
+    default_n_survivor_paths,
+    depth_meta,
+    resolve_n_survivor_paths,
+    scenario_hash,
+    survivor_pool_cache_get,
+    survivor_pool_cache_set,
+    universe_cache_fingerprint,
+)
 from src.services.nfl_season_engine.types import EngineUniverse, ScheduledGame
 
 DEFAULT_SEASON_ENGINE_VERSION = ENGINE_VERSION
@@ -283,6 +292,117 @@ def simulate_team_wl_path(
     return dict(week_winners)
 
 
+@dataclass(frozen=True)
+class SurvivorPathPool:
+    """Reusable team W/L path set for planner + suggest-paths (+ week eval)."""
+
+    n_sims: int
+    seed: int
+    wins_out: Dict[str, Dict[int, int]]
+    sched_out: Dict[str, Dict[int, int]]
+    by_week: Dict[int, Dict[str, ScheduledGame]]
+    max_week: int
+    # Per-path frozenset of (week, winning_team) for joint path_ok checks.
+    path_win_pairs: Tuple[frozenset, ...]
+    cache_key: str = ""
+
+
+def _path_ok_count(
+    path_win_pairs: Sequence[frozenset],
+    locked_items: Sequence[Tuple[int, str]],
+) -> int:
+    if not locked_items:
+        return len(path_win_pairs)
+    needed = tuple(locked_items)
+    return sum(1 for pw in path_win_pairs if all(pair in pw for pair in needed))
+
+
+def get_or_build_survivor_path_pool(
+    universe: EngineUniverse,
+    *,
+    n_sims: int,
+    seed: int,
+    injury_paths: Optional[Sequence[InjuryPath]] = None,
+    use_cache: bool = True,
+) -> Tuple[SurvivorPathPool, bool]:
+    """Build or reuse a season W/L path pool for the active universe fingerprint.
+
+    Safe to share across planner + suggest-paths when run_id / roster / scenario
+    / n_sims / seed match. Locked picks only affect ``path_ok``, not the pool.
+    """
+    n_sims = resolve_n_survivor_paths(n_sims)
+    paths = list(injury_paths) if injury_paths is not None else []
+    # When caller passes None, simulate_team_wl_path may load packaged SoT —
+    # fingerprint that intent separately from explicit [].
+    packaged_mode = injury_paths is None
+    u_fp = universe_cache_fingerprint(universe)
+    scen = scenario_hash(
+        [] if packaged_mode else paths,
+        packaged_injury_mode=packaged_mode,
+    )
+    cache_key = f"survivor|{u_fp}|n={n_sims}|seed={int(seed)}|scen={scen}"
+    if use_cache:
+        hit = survivor_pool_cache_get(cache_key)
+        if isinstance(hit, SurvivorPathPool):
+            return hit, True
+
+    by_week = schedule_index(universe.schedule)
+    schedule_weeks = sorted(by_week.keys())
+    max_week = max(schedule_weeks) if schedule_weeks else 1
+
+    win_counts: Dict[str, Dict[int, int]] = {
+        t: defaultdict(int) for t in universe.teams
+    }
+    for week_map in by_week.values():
+        for team in week_map:
+            win_counts.setdefault(team, defaultdict(int))
+
+    games_scheduled: Dict[str, Dict[int, int]] = {
+        t: defaultdict(int) for t in win_counts
+    }
+    for game in universe.schedule:
+        games_scheduled.setdefault(game.home_team, defaultdict(int))
+        games_scheduled.setdefault(game.away_team, defaultdict(int))
+        games_scheduled[game.home_team][game.week] = 1
+        games_scheduled[game.away_team][game.week] = 1
+
+    rng = random.Random(seed)
+    # Preserve None so simulate_team_wl_path can load packaged SoT paths.
+    sim_paths: Optional[Sequence[InjuryPath]] = None if packaged_mode else paths
+    path_pairs: List[frozenset] = []
+    for _ in range(n_sims):
+        week_winners = simulate_team_wl_path(
+            universe, rng=rng, injury_paths=sim_paths
+        )
+        pairs: Set[Tuple[int, str]] = set()
+        for week, winners in week_winners.items():
+            for team in winners:
+                pairs.add((int(week), str(team)))
+                if team in win_counts:
+                    win_counts[team][week] += 1
+        path_pairs.append(frozenset(pairs))
+
+    pool = SurvivorPathPool(
+        n_sims=n_sims,
+        seed=int(seed),
+        wins_out={
+            t: {int(w): int(c) for w, c in weeks.items()}
+            for t, weeks in win_counts.items()
+        },
+        sched_out={
+            t: {int(w): int(c) for w, c in weeks.items()}
+            for t, weeks in games_scheduled.items()
+        },
+        by_week=by_week,
+        max_week=max_week,
+        path_win_pairs=tuple(path_pairs),
+        cache_key=cache_key,
+    )
+    if use_cache:
+        survivor_pool_cache_set(cache_key, pool)
+    return pool, False
+
+
 def aggregate_week_team_wins(
     universe: EngineUniverse,
     *,
@@ -293,42 +413,15 @@ def aggregate_week_team_wins(
     """Return ``(win_counts[team][week], games_scheduled[team][week])``.
 
     ``games_scheduled`` is 0/1 from the static schedule (same every path).
+    Reuses the survivor path pool cache when safe.
     """
-    n_sims = max(1, int(n_sims))
-    rng = random.Random(seed)
-    # Preserve None so simulate_team_wl_path can load packaged SoT paths.
-    paths: Optional[Sequence[InjuryPath]] = (
-        None if injury_paths is None else list(injury_paths)
+    pool, _hit = get_or_build_survivor_path_pool(
+        universe,
+        n_sims=n_sims,
+        seed=seed,
+        injury_paths=injury_paths,
     )
-    win_counts: Dict[str, Dict[int, int]] = {
-        t: defaultdict(int) for t in universe.teams
-    }
-    games_scheduled: Dict[str, Dict[int, int]] = {
-        t: defaultdict(int) for t in universe.teams
-    }
-    for game in universe.schedule:
-        games_scheduled[game.home_team][game.week] = 1
-        games_scheduled[game.away_team][game.week] = 1
-
-    for _ in range(n_sims):
-        week_winners = simulate_team_wl_path(
-            universe, rng=rng, injury_paths=paths
-        )
-        for week, winners in week_winners.items():
-            for team in winners:
-                if team in win_counts:
-                    win_counts[team][week] += 1
-
-    # Freeze as plain dicts of ints.
-    wins_out = {
-        t: {int(w): int(c) for w, c in weeks.items()}
-        for t, weeks in win_counts.items()
-    }
-    sched_out = {
-        t: {int(w): int(c) for w, c in weeks.items()}
-        for t, weeks in games_scheduled.items()
-    }
-    return wins_out, sched_out
+    return pool.wins_out, pool.sched_out
 
 
 def _matchup_fields(
@@ -437,7 +530,7 @@ def evaluate_survivor(
     universe: EngineUniverse,
     *,
     week: int,
-    n_sims: int = 300,
+    n_sims: Optional[int] = None,
     seed: int = 42,
     already_used: Optional[Sequence[str]] = None,
     injury_paths: Optional[Sequence[InjuryPath]] = None,
@@ -447,17 +540,24 @@ def evaluate_survivor(
 ) -> SurvivorEvalResult:
     """Run team W/L season paths and rank survivor picks for ``week``."""
     week = int(week)
-    n_sims = max(1, int(n_sims))
+    n_sims = resolve_n_survivor_paths(
+        default_n_survivor_paths() if n_sims is None else n_sims
+    )
     used = _normalize_teams(already_used)
-    paths = list(injury_paths or [])
-    win_counts, games_scheduled = aggregate_week_team_wins(
+    # Preserve None so path sims can load packaged SoT injury paths.
+    paths_arg: Optional[Sequence[InjuryPath]] = (
+        None if injury_paths is None else list(injury_paths)
+    )
+    paths = list(paths_arg or [])
+    pool, pool_hit = get_or_build_survivor_path_pool(
         universe,
         n_sims=n_sims,
         seed=seed,
-        injury_paths=paths,
+        injury_paths=paths_arg,
     )
-    by_week = schedule_index(universe.schedule)
-    max_week = max((g.week for g in universe.schedule), default=week)
+    win_counts, games_scheduled = pool.wins_out, pool.sched_out
+    by_week = pool.by_week
+    max_week = pool.max_week
     week_games = by_week.get(week, {})
     sos_by_team = compute_league_projected_sos(universe)
 
@@ -501,6 +601,7 @@ def evaluate_survivor(
     )
     ranked = ranked[: max(1, int(top_n))]
 
+    depth = depth_meta(n_sims, surface="survivor")
     notes = dict(universe.notes)
     notes["survivor_mode"] = (
         "team_wl_paths (Layers 1–2 + injury strength shocks; "
@@ -511,6 +612,9 @@ def evaluate_survivor(
     notes["projected_sos_2026"] = FORMULA_NOTES["projected_sos_2026"]
     notes["schedule_difficulty"] = FORMULA_NOTES["schedule_difficulty"]
     notes["path_difficulty_grade"] = FORMULA_NOTES["path_difficulty_grade"]
+    notes["depth_label"] = str(depth["depth_label"])
+    notes["honest_precision"] = "1" if depth["honest_precision"] else "0"
+    notes["path_pool_cache"] = "hit" if pool_hit else "miss"
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"
 
@@ -520,6 +624,9 @@ def evaluate_survivor(
             "seed": seed,
             "teams": len(universe.teams),
             "max_week": max_week,
+            "n_sims": n_sims,
+            "sim_depth": depth,
+            "path_pool_cache": "hit" if pool_hit else "miss",
             "injury_path_count": len(paths),
             "injury_paths": injury_paths_to_dicts(paths) if paths else [],
             "scoring_knobs": {
@@ -865,7 +972,7 @@ def _build_win_matrix(
     *,
     n_sims: int,
     seed: int,
-    injury_paths: Sequence[InjuryPath],
+    injury_paths: Optional[Sequence[InjuryPath]],
     locked_items: Sequence[Tuple[int, str]],
 ) -> Tuple[
     Dict[str, Dict[int, int]],
@@ -873,63 +980,31 @@ def _build_win_matrix(
     Dict[int, Dict[str, ScheduledGame]],
     int,
     int,
+    bool,
 ]:
-    """Shared season W/L matrix for planner + suggest-paths."""
-    by_week = schedule_index(universe.schedule)
-    schedule_weeks = sorted(by_week.keys())
-    max_week = max(schedule_weeks) if schedule_weeks else 1
-
-    win_counts: Dict[str, Dict[int, int]] = {
-        t: defaultdict(int) for t in universe.teams
-    }
-    for week_map in by_week.values():
-        for team in week_map:
-            win_counts.setdefault(team, defaultdict(int))
-
-    games_scheduled: Dict[str, Dict[int, int]] = {
-        t: defaultdict(int) for t in win_counts
-    }
-    for game in universe.schedule:
-        games_scheduled.setdefault(game.home_team, defaultdict(int))
-        games_scheduled.setdefault(game.away_team, defaultdict(int))
-        games_scheduled[game.home_team][game.week] = 1
-        games_scheduled[game.away_team][game.week] = 1
-
-    rng = random.Random(seed)
-    path_ok = 0
-    paths = list(injury_paths)
-    for _ in range(n_sims):
-        week_winners = simulate_team_wl_path(
-            universe, rng=rng, injury_paths=paths
-        )
-        for week, winners in week_winners.items():
-            for team in winners:
-                if team in win_counts:
-                    win_counts[team][week] += 1
-        if locked_items and all(
-            team in week_winners.get(week, set())
-            for week, team in locked_items
-        ):
-            path_ok += 1
-        elif not locked_items:
-            path_ok += 1
-
-    wins_out = {
-        t: {int(w): int(c) for w, c in weeks.items()}
-        for t, weeks in win_counts.items()
-    }
-    sched_out = {
-        t: {int(w): int(c) for w, c in weeks.items()}
-        for t, weeks in games_scheduled.items()
-    }
-    return wins_out, sched_out, by_week, max_week, path_ok
+    """Shared season W/L matrix for planner + suggest-paths (path-pool cache)."""
+    pool, hit = get_or_build_survivor_path_pool(
+        universe,
+        n_sims=n_sims,
+        seed=seed,
+        injury_paths=injury_paths,
+    )
+    path_ok = _path_ok_count(pool.path_win_pairs, locked_items)
+    return (
+        pool.wins_out,
+        pool.sched_out,
+        pool.by_week,
+        pool.max_week,
+        path_ok,
+        hit,
+    )
 
 
 def evaluate_survivor_plan(
     universe: EngineUniverse,
     *,
     picks: Optional[Mapping[Any, Any]] = None,
-    n_sims: int = 300,
+    n_sims: Optional[int] = None,
     seed: int = 42,
     injury_paths: Optional[Sequence[InjuryPath]] = None,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
@@ -942,19 +1017,24 @@ def evaluate_survivor_plan(
     ranks remaining teams (excluding all locked picks) with the same
     inspectable pick-now / save scores as ``evaluate_survivor``.
     """
-    n_sims = max(1, int(n_sims))
+    n_sims = resolve_n_survivor_paths(
+        default_n_survivor_paths() if n_sims is None else n_sims
+    )
     top_n = max(1, int(top_n))
     locked = normalize_plan_picks(picks)
     validate_plan_picks(universe, locked)
     used_teams = list(locked.values())
-    paths = list(injury_paths or [])
+    paths_arg: Optional[Sequence[InjuryPath]] = (
+        None if injury_paths is None else list(injury_paths)
+    )
+    paths = list(paths_arg or [])
     locked_items = list(locked.items())
 
-    wins_out, sched_out, by_week, max_week, path_ok = _build_win_matrix(
+    wins_out, sched_out, by_week, max_week, path_ok, pool_hit = _build_win_matrix(
         universe,
         n_sims=n_sims,
         seed=seed,
-        injury_paths=paths,
+        injury_paths=paths_arg,
         locked_items=locked_items,
     )
     schedule_weeks = sorted(by_week.keys())
@@ -1040,6 +1120,7 @@ def evaluate_survivor_plan(
         best_remaining_equity=best_remaining,
     )
 
+    depth = depth_meta(n_sims, surface="survivor_plan")
     notes = dict(universe.notes)
     notes["survivor_mode"] = (
         "planner team_wl_paths (Layers 1–2 + injury strength shocks; "
@@ -1054,6 +1135,9 @@ def evaluate_survivor_plan(
     notes["schedule_difficulty"] = PATH_FORMULA_NOTES["schedule_difficulty"]
     notes["path_difficulty_grade"] = PATH_FORMULA_NOTES["path_difficulty_grade"]
     notes["used_teams"] = ",".join(used_teams) if used_teams else "(none)"
+    notes["depth_label"] = str(depth["depth_label"])
+    notes["honest_precision"] = "1" if depth["honest_precision"] else "0"
+    notes["path_pool_cache"] = "hit" if pool_hit else "miss"
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"
 
@@ -1064,6 +1148,9 @@ def evaluate_survivor_plan(
             "teams": len(universe.teams),
             "schedule_weeks": schedule_weeks,
             "max_week": max_week,
+            "n_sims": n_sims,
+            "sim_depth": depth,
+            "path_pool_cache": "hit" if pool_hit else "miss",
             "injury_path_count": len(paths),
             "injury_paths": injury_paths_to_dicts(paths) if paths else [],
             "locked_marginal_win_rates": [
@@ -1111,7 +1198,7 @@ def evaluate_survivor_plan(
 def suggest_survivor_paths(
     universe: EngineUniverse,
     *,
-    n_sims: int = 300,
+    n_sims: Optional[int] = None,
     seed: int = 42,
     injury_paths: Optional[Sequence[InjuryPath]] = None,
     engine_version: str = DEFAULT_SEASON_ENGINE_VERSION,
@@ -1121,19 +1208,25 @@ def suggest_survivor_paths(
     """Generate 2–3 transparent heuristic full-season survivor paths.
 
     Uses the same week×team WP matrix as the planner (not an LLM).
-    Strategies: chalk, balanced (pick_now), contrarian_save.
+    Strategies: chalk, balanced (pick_now), contrarian_save. Shares the
+    active-run path pool with ``evaluate_survivor_plan`` when safe.
     """
-    n_sims = max(1, int(n_sims))
+    n_sims = resolve_n_survivor_paths(
+        default_n_survivor_paths() if n_sims is None else n_sims
+    )
     locked = normalize_plan_picks(already_locked)
     validate_plan_picks(universe, locked)
-    paths = list(injury_paths or [])
+    paths_arg: Optional[Sequence[InjuryPath]] = (
+        None if injury_paths is None else list(injury_paths)
+    )
+    paths = list(paths_arg or [])
     locked_items = list(locked.items())
 
-    wins_out, sched_out, by_week, max_week, _path_ok = _build_win_matrix(
+    wins_out, sched_out, by_week, max_week, _path_ok, pool_hit = _build_win_matrix(
         universe,
         n_sims=n_sims,
         seed=seed,
-        injury_paths=paths,
+        injury_paths=paths_arg,
         locked_items=locked_items,
     )
     schedule_weeks = sorted(by_week.keys())
@@ -1241,8 +1334,12 @@ def suggest_survivor_paths(
             }
         )
 
+    depth = depth_meta(n_sims, surface="survivor_suggest_paths")
     notes = dict(universe.notes)
     notes["suggested_paths"] = PATH_FORMULA_NOTES["suggested_paths"]
+    notes["depth_label"] = str(depth["depth_label"])
+    notes["honest_precision"] = "1" if depth["honest_precision"] else "0"
+    notes["path_pool_cache"] = "hit" if pool_hit else "miss"
     if paths:
         notes["injury_paths"] = f"{len(paths)} path(s) applied"
 
@@ -1251,6 +1348,9 @@ def suggest_survivor_paths(
         diagnostics = {
             "seed": seed,
             "schedule_weeks": schedule_weeks,
+            "n_sims": n_sims,
+            "sim_depth": depth,
+            "path_pool_cache": "hit" if pool_hit else "miss",
             "already_locked": {str(w): t for w, t in locked.items()},
             "strategies": [s[0] for s in strategy_specs],
         }
