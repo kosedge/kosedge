@@ -1,6 +1,6 @@
 # NFL Preseason-Complete Lock — 2026-08-11
 
-**Status: LOCKED**
+**Status: LOCKED** (C6 lineage WAIVE closed 2026-08-11 — see `nfl-lineage-badge-20260811.md`)
 **Gate: preseason-complete**
 **Branch: `feat/nfl-preseason-complete-lock` → `deploy-vercel`**
 
@@ -56,7 +56,7 @@
 | Sample box includes FG/XP in scoring path | **PASS** | `fg_display: mean_fg_xp_research_depth`, `approximate_fg_xp` key present |
 | Survivor paths n ≥ 2,000 | **PASS** | `/api/nfl/season-engine/survivor` → `n_sims: 2000` |
 | No false "data freshness degraded" when healthy | **PASS** | No freshness banner visible on production pages |
-| active_run_id / lineage visible where projections show | **WAIVE** | Pointer JSON has lineage; not surface-exposed on UI cards (acceptable for soft launch) |
+| active_run_id / lineage visible where projections show | **PASS** | Closed by lineage badge UI — see `data/ops/nfl-lineage-badge-20260811.md` |
 
 ### D. Invariants
 
@@ -94,15 +94,15 @@
 |----------|------|------|-------|
 | A. Slate/Board | 6 | 0 | 0 |
 | B. Model/KEI/Tags | 7 | 0 | 0 |
-| C. Engine/Boxes/Survivor | 5 | 0 | 1 |
+| C. Engine/Boxes/Survivor | 6 | 0 | 0 |
 | D. Invariants | 6 | 0 | 0 |
 | E. Fantasy | 3 | 0 | 0 |
 | F. Surfaces/Honesty | 4 | 0 | 0 |
-| **Total** | **31** | **0** | **1** |
+| **Total** | **32** | **0** | **0** |
 
 ### Waiver Detail
 
-- **C6 (active_run_id visible on UI cards)**: Lineage is present in the data layer (`nfl-web-launch-bundle.json`) and API status endpoint, but not surfaced as a user-facing element on individual projection cards. Acceptable for soft-launch; will add lineage badge as part of in-season model-governance UX.
+- **C6 (active_run_id visible on UI cards)**: **CLOSED** 2026-08-11 — lineage badge on Edge Board, Season Model, Power Ratings, Game Boxes, Survivor; Editorial label on team previews. See `data/ops/nfl-lineage-badge-20260811.md`.
 
 ---
 

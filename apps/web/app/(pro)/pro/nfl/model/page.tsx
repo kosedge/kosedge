@@ -1,11 +1,13 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
 import TruePrDriversBoard from "@/components/pro/nfl/TruePrDriversBoard";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import {
   fetchSeasonEngineStatus,
   isSeasonEngineReady,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
+import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +32,9 @@ export default async function NflSeasonModelHubPage() {
   ]);
   const ready = isSeasonEngineReady(status);
   const packagedNotice = seasonEnginePackagedNotice(status);
+  const lineage = resolveActiveNflLineage({
+    engineVersionOverride: status.engine_version || truePr.engine_version,
+  });
 
   return (
     <SportHubShell
@@ -44,6 +49,12 @@ export default async function NflSeasonModelHubPage() {
       secondaryHref="/pro/nfl/survivor"
       secondaryLabel="Open Survivor"
     >
+      {lineage ? (
+        <div className="-mt-2 mb-4">
+          <NflLineageBadge lineage={lineage} />
+        </div>
+      ) : null}
+
       <TruePrDriversBoard surface={truePr} />
 
       <section className="mt-6 grid gap-3 sm:grid-cols-2">

@@ -1,5 +1,11 @@
 import "server-only";
 import { loadNflWebLaunchPointer } from "@/lib/nfl-preseason-artifacts";
+import {
+  lineageFromActiveRun,
+  withEngineVersionOverride,
+  type NflLineage,
+  type NflProjectionKind,
+} from "@/lib/nfl-lineage";
 
 /** Guest-facing one-liner for season desks (survivor / game boxes / model). */
 export function nflLaunchResearchDeskNotice(): string | null {
@@ -20,4 +26,17 @@ export function nflLaunchResearchDeskNotice(): string | null {
   ]
     .filter(Boolean)
     .join(" · ");
+}
+
+/**
+ * Active projection lineage from the web launch pointer.
+ * Optional engineVersionOverride overlays live desk status (never invents run_id).
+ */
+export function resolveActiveNflLineage(opts?: {
+  engineVersionOverride?: string | null;
+  kind?: NflProjectionKind;
+}): NflLineage | null {
+  const pointer = loadNflWebLaunchPointer();
+  const base = lineageFromActiveRun(pointer, opts?.kind ?? "Model");
+  return withEngineVersionOverride(base, opts?.engineVersionOverride);
 }

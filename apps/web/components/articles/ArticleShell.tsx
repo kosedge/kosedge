@@ -16,6 +16,8 @@ export type ArticleShellProps = {
   accent?: "gold" | "neutral";
   breadcrumbs?: ArticleShellBreadcrumb[];
   footerLinks?: Array<{ label: string; href: string }>;
+  /** Optional quiet chip under the date (e.g. Editorial lineage). */
+  headerExtra?: ReactNode;
   children: ReactNode;
 };
 
@@ -28,6 +30,7 @@ export default function ArticleShell({
   accent = "gold",
   breadcrumbs,
   footerLinks,
+  headerExtra,
   children,
 }: ArticleShellProps) {
   const headerBorder =
@@ -60,6 +63,7 @@ export default function ArticleShell({
         <p className={articleShellClasses.eyebrow}>{eyebrow}</p>
         <h1 className={articleShellClasses.title}>{title}</h1>
         <p className={articleShellClasses.date}>{date}</p>
+        {headerExtra ? <div className="mt-2">{headerExtra}</div> : null}
         {metaLine ? (
           <p className={articleShellClasses.meta}>{metaLine}</p>
         ) : null}

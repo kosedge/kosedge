@@ -1,12 +1,16 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
 import SeasonEngineSurvivorShell from "@/components/pro/nfl/SeasonEngineSurvivorShell";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import {
   fetchSeasonEngineStatus,
   loadSeasonEngineMatchups,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
-import { nflLaunchResearchDeskNotice } from "@/lib/nfl-launch-research";
+import {
+  nflLaunchResearchDeskNotice,
+  resolveActiveNflLineage,
+} from "@/lib/nfl-launch-research";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +21,9 @@ export default async function NflSurvivorPage() {
   ]);
   const packagedNotice = seasonEnginePackagedNotice(status);
   const launchResearchNotice = nflLaunchResearchDeskNotice();
+  const lineage = resolveActiveNflLineage({
+    engineVersionOverride: status.engine_version,
+  });
 
   return (
     <SportHubShell
@@ -31,7 +38,7 @@ export default async function NflSurvivorPage() {
       secondaryHref="/wall-chart/nfl-2026"
       secondaryLabel="Wall Chart"
     >
-      <div className="mt-2 mb-4 flex flex-wrap gap-3 text-xs">
+      <div className="mt-2 mb-4 flex flex-wrap items-center gap-3 text-xs">
         <Link
           href="/pro/nfl/model"
           className="font-medium text-kos-gold/90 hover:text-kos-gold"
@@ -44,6 +51,7 @@ export default async function NflSurvivorPage() {
         >
           Wall Chart →
         </Link>
+        {lineage ? <NflLineageBadge lineage={lineage} /> : null}
       </div>
 
       {!status.error ? (

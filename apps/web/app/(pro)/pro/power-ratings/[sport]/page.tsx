@@ -8,6 +8,9 @@ import {
 import { fetchNflIntel } from "@/lib/nfl-intel";
 import { PowerRatingsTable } from "./PowerRatingsTable";
 import SportProShell from "@/components/pro/SportProShell";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
+import { withEngineVersionOverride } from "@/lib/nfl-lineage";
+import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 
 export const dynamic = "force-dynamic";
 
@@ -140,6 +143,12 @@ export default async function PowerRatingsSportPage({
       return { ...row, record, offense, defense };
     });
 
+    const lineage =
+      withEngineVersionOverride(
+        board.lineage ?? null,
+        board.engineVersion,
+      ) ?? resolveActiveNflLineage();
+
     return (
       <SportProShell
         sport="nfl"
@@ -148,15 +157,18 @@ export default async function PowerRatingsSportPage({
       >
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <p className="text-sm text-kos-text/65">
-              {board.bundleId
-                ? `Active · ${bundleLabel(board.bundleId, { nTeamSims: board.nTeamSims })}`
-                : "No sim bundle found"}
-              {board.engineVersion ? ` · ${board.engineVersion}` : ""}
-              {board.previousBundleId
-                ? ` · Δ vs ${bundleLabel(board.previousBundleId)}`
-                : ""}
-            </p>
+            <div className="min-w-0 space-y-2">
+              <p className="text-sm text-kos-text/65">
+                {board.bundleId
+                  ? `Active · ${bundleLabel(board.bundleId, { nTeamSims: board.nTeamSims })}`
+                  : "No sim bundle found"}
+                {board.engineVersion ? ` · ${board.engineVersion}` : ""}
+                {board.previousBundleId
+                  ? ` · Δ vs ${bundleLabel(board.previousBundleId)}`
+                  : ""}
+              </p>
+              {lineage ? <NflLineageBadge lineage={lineage} /> : null}
+            </div>
             <Link
               href="/pro/nfl/model"
               className="min-h-11 inline-flex items-center rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"

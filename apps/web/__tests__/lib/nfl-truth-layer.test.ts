@@ -11,7 +11,11 @@ import {
 import {
   EDITORIAL_SNAPSHOT_NOTE,
   editorialSnapshotLineage,
+  lineageAsOfDate,
   lineageFromActiveRun,
+  shortEngineVersion,
+  truncateRunId,
+  withEngineVersionOverride,
 } from "@/lib/nfl-lineage";
 import {
   assessConfidence,
@@ -54,6 +58,27 @@ describe("NFL Truth Layer — lineage", () => {
     const ed = editorialSnapshotLineage("2026-08-01");
     expect(ed.kind).toBe("Editorial");
     expect(EDITORIAL_SNAPSHOT_NOTE).toMatch(/not active run/);
+  });
+
+  it("formats compact badge fields without inventing run ids", () => {
+    expect(truncateRunId("short-id")).toBe("short-id");
+    expect(
+      truncateRunId("nfl-preseason-sim-2026-20260809T165350Z", 28),
+    ).toMatch(/…/);
+    expect(shortEngineVersion("nfl-season-engine-v1.27-kicker-layer")).toBe(
+      "v1.27-kicker-layer",
+    );
+    expect(lineageAsOfDate("2026-08-09T16:53:51.671488+00:00")).toBe(
+      "2026-08-09",
+    );
+    const base = lineageFromActiveRun({
+      active_run_id: "run-a",
+      engine_version: "v-pointer",
+    });
+    expect(withEngineVersionOverride(base, "v-live")?.engine_version).toBe(
+      "v-live",
+    );
+    expect(withEngineVersionOverride(null, "v-live")).toBeNull();
   });
 });
 
