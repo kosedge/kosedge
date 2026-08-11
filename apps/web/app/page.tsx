@@ -55,14 +55,14 @@ export default function Home() {
             <Image
               src="/brand/kosedge-logo.png"
               alt="Kos Edge Analytics"
-              width={176}
-              height={52}
+              width={192}
+              height={56}
               priority
-              className="h-10 w-auto sm:h-11"
+              className="h-11 w-auto sm:h-12"
             />
             <div className="leading-tight">
               <div className="text-xl font-extrabold tracking-wide text-kos-text sm:text-2xl">
-                KosEdge
+                KosEdge Analytics
               </div>
               <div className="text-[10px] tracking-[0.14em] uppercase text-gray-400/90 sm:text-[11px]">
                 Built on Data, Driven by Edge

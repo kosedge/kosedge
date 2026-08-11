@@ -1249,7 +1249,7 @@ export default function EdgeBoard({
           <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
           <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-3xl font-bebas text-kos-gold">Edge Board</h2>
+              <h2 className="text-3xl font-bebas text-edge-green">Edge Board</h2>
               <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
                 Sample
               </span>
@@ -1300,7 +1300,7 @@ export default function EdgeBoard({
   const MobileCards = (
     <div className="lg:hidden mt-4 space-y-4">
       <div className="flex items-center justify-between px-1">
-        <h2 className="text-2xl font-bebas text-kos-gold">Edge Board</h2>
+        <h2 className="text-2xl font-bebas text-edge-green">Edge Board</h2>
         <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
           {safeRows.length
             ? `${new Set(safeRows.map((r) => r?.game).filter(Boolean)).size} games`

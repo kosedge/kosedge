@@ -13,8 +13,8 @@ export type SportNavItem = {
   href: string;
   label: string;
   primary?: boolean;
-  /** Restrained gold emphasis — Edge Board primary CTA in subnav. */
-  emphasis?: "gold";
+  /** Green glow emphasis — Edge Board primary CTA in subnav. */
+  emphasis?: "green";
 };
 
 export const SPORT_TAGLINE = "Built on Data, Driven by Edge";
@@ -51,7 +51,7 @@ function corePrimary(
       href: `/edge-board/${sport}`,
       label: "Edge Board",
       primary: true,
-      emphasis: "gold",
+      emphasis: "green",
     },
     {
       href: `/pro/${sport}/slate/today`,
@@ -78,22 +78,23 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
         href: "/edge-board/nfl",
         label: "Edge Board",
         primary: true,
-        emphasis: "gold",
+        emphasis: "green",
       },
       { href: "/pro/nfl/slate/today", label: "Weekly Slate", primary: true },
-      { href: "/pro/nfl/fair-lines", label: "KEI Lines" },
       { href: "/pro/nfl/edges", label: "Edges" },
       { href: "/pro/nfl/survivor", label: "Survivor", primary: true },
       // Draft Desk for now; post-kickoff can retarget to Weekly Fantasy Projections.
       { href: "/pro/nfl/fantasy", label: "Fantasy", primary: true },
-      { href: "/pro/nfl/model", label: "Season Model" },
-      { href: "/pro/nfl/game-boxes", label: "Game Boxes" },
       { href: "/pro/power-ratings/nfl", label: "Power Ratings" },
-      { href: "/pro/nfl/previews", label: "Team Previews" },
+      { href: "/pro/nfl/camp", label: "Camp Desk", primary: true },
       { href: "/pro/nfl/teams", label: "Teams" },
     ],
     tools: [
-      // Props / DFS / Awards / Player Previews demoted until live (no "ready" chrome).
+      // Demoted from primary — live in Overview body / More tools.
+      { href: "/pro/nfl/fair-lines", label: "KEI Lines" },
+      { href: "/pro/nfl/model", label: "Season Model" },
+      { href: "/pro/nfl/game-boxes", label: "Game Boxes" },
+      { href: "/pro/nfl/previews", label: "Team Previews" },
       { href: "/odds/nfl", label: "Compare Odds" },
       { href: "/pro/prediction-market", label: "Prediction Markets" },
       { href: "/pro/nfl/execution", label: "Execution Monitor" },
@@ -104,7 +105,6 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       // Fantasy primary nav covers Draft Desk; weekly stays in tools.
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
       { href: "/wall-chart/nfl-2026", label: "Wall Chart" },
-      { href: "/pro/nfl/camp", label: "Camp" },
       { href: "/pro/model-transparency", label: "Model Health" },
     ],
   },

@@ -89,9 +89,9 @@ function stubThirdCard(
 
 const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
   nfl: {
-    pathLabel: "KEI Lines → Edges",
+    pathLabel: "KEI Lines → Edges → Props",
     pathSubtitle:
-      "Betting desk path: KEI Lines → Edges, then execution quality. Props archive stays off the ready path until 2026 markets join.",
+      "Betting desk path: KEI Lines → Edges → Props, then Compare Odds / Futures / Awards.",
     cards: [
       {
         href: "/pro/nfl/fair-lines",
@@ -111,26 +111,16 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         status: "active",
       },
       {
-        href: "/pro/nfl/survivor",
-        title: "Survivor",
-        description:
-          "Week-by-week survivor planner from path-coherent season sims.",
-        cta: "Open survivor →",
+        href: "/pro/nfl/props",
+        title: "Props",
+        description: "Player and team prop research board for the slate.",
+        cta: "Open props →",
         accent: "neutral",
         status: "active",
       },
     ],
     footerCards: [
-      // Bottom resource grid: no KEI Lines duplicate (lives in Betting Desk).
-      // DFS / Awards / Player Previews / empty Props demoted until live.
-      {
-        href: "/pro/power-ratings/nfl",
-        title: "Power Ratings",
-        description:
-          "Team strength, offense/defense splits, and weekly movement from the model engine.",
-        cta: "View ratings →",
-        accent: "gold",
-      },
+      // Bottom 3×2 research grid — Power Ratings lives in Team Intel / primary nav.
       {
         href: "/pro/nfl/previews",
         title: "Team Previews",
@@ -140,44 +130,12 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "gold",
       },
       {
-        href: "/pro/nfl/teams",
-        title: "Team Research Hub",
+        href: "/pro/nfl/model",
+        title: "Season Model",
         description:
-          "32-team directory with depth, injuries, tendencies, and preview slots.",
-        cta: "Open team hub →",
+          "Full-season engine hub — Game Boxes, Survivor, and projection lineage.",
+        cta: "Open season model →",
         accent: "neutral",
-      },
-      {
-        href: "/pro/nfl/camp",
-        title: "Camp Desk",
-        description:
-          "KosEdge camp updates, beat map, and practice notes into kickoff.",
-        cta: "Open Camp Desk →",
-        accent: "green",
-      },
-      {
-        href: "/pro/nfl/projections",
-        title: "Futures",
-        description:
-          "Wins, division, conference, and Super Bowl projections from the sim bundle.",
-        cta: "Open futures →",
-        accent: "gold",
-      },
-      {
-        href: "/wall-chart/nfl-2026",
-        title: "2026 Wall Chart",
-        description:
-          "Interactive + print-friendly 24×18 schedule tracker for the full season.",
-        cta: "Open wall chart →",
-        accent: "green",
-      },
-      {
-        href: "/pro/nfl/fantasy/mock",
-        title: "Fantasy Mock",
-        description:
-          "Practice a draft on the model board — Rankings and Builder sit one click back.",
-        cta: "Start Mock →",
-        accent: "gold",
       },
       {
         href: "/pro/nfl/game-boxes",
@@ -194,6 +152,22 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
           "Transparency, CLV tracking, and performance accountability.",
         cta: "Open model health →",
         accent: "green",
+      },
+      {
+        href: "/wall-chart/nfl-2026",
+        title: "Wall Chart",
+        description:
+          "Interactive + print-friendly 24×18 schedule tracker for the full season.",
+        cta: "Open wall chart →",
+        accent: "green",
+      },
+      {
+        href: "/pro/nfl/fair-lines",
+        title: "KEI Lines",
+        description:
+          "Kosedge spreads, totals, and fair moneylines for the slate.",
+        cta: "Open KEI Lines →",
+        accent: "gold",
       },
     ],
   },

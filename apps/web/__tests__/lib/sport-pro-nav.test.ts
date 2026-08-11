@@ -14,21 +14,36 @@ describe("sport-pro-nav", () => {
       const labels = primary.map((i) => i.label);
       expect(labels).toContain("Overview");
       expect(labels).toContain("Edge Board");
-      expect(labels).toContain("KEI Lines");
       expect(labels).toContain("Edges");
       expect(labels).toContain("Teams");
       expect(labels).toContain("Power Ratings");
+      const edgeBoard = primary.find((i) => i.label === "Edge Board");
+      expect(edgeBoard?.emphasis).toBe("green");
+      if (sport.key !== "nfl") {
+        expect(labels).toContain("KEI Lines");
+      }
     }
   });
 
-  it("surfaces Survivor / Fantasy / Season Model / Game Boxes on NFL primary nav", () => {
+  it("locks NFL primary nav order and demotes KEI / model / boxes / previews", () => {
     const nflPrimary = getSportPrimaryNav("nfl");
     const labels = nflPrimary.map((i) => i.label);
-    expect(labels).toContain("Survivor");
-    expect(labels).toContain("Fantasy");
-    expect(labels).toContain("Season Model");
-    expect(labels).toContain("Game Boxes");
-    expect(labels).toContain("Team Previews");
+    expect(labels).toEqual([
+      "Overview",
+      "Edge Board",
+      "Weekly Slate",
+      "Edges",
+      "Survivor",
+      "Fantasy",
+      "Power Ratings",
+      "Camp Desk",
+      "Teams",
+    ]);
+    // Demoted from primary — live in Overview body / More tools.
+    expect(labels).not.toContain("KEI Lines");
+    expect(labels).not.toContain("Season Model");
+    expect(labels).not.toContain("Game Boxes");
+    expect(labels).not.toContain("Team Previews");
     // Unfinished desks stay off primary until live.
     expect(labels).not.toContain("Props");
     expect(labels).not.toContain("DFS");
@@ -38,23 +53,26 @@ describe("sport-pro-nav", () => {
     expect(fantasy?.href).toBe("/pro/nfl/fantasy");
   });
 
-  it("keeps Wall Chart as NFL-only tool; hides unfinished desks; Fantasy on primary", () => {
+  it("keeps Wall Chart as NFL-only tool; Fantasy on primary; demoted desks in tools", () => {
     const nflTools = getSportToolNav("nfl").map((i) => i.label);
     expect(nflTools).toContain("Wall Chart");
     expect(nflTools).toContain("Weekly Fantasy");
+    expect(nflTools).toContain("KEI Lines");
+    expect(nflTools).toContain("Season Model");
+    expect(nflTools).toContain("Game Boxes");
+    expect(nflTools).toContain("Team Previews");
     // Fantasy Draft Desk is primary — not duplicated in tools overflow.
     expect(nflTools).not.toContain("Draft Desk");
     expect(nflTools).not.toContain("Fantasy");
-    // Season engine desks live on primary / Season Model hub.
-    expect(nflTools).not.toContain("Season Model");
-    expect(nflTools).not.toContain("Game Boxes");
     expect(nflTools).not.toContain("Survivor");
+    // Camp Desk is primary — not duplicated in tools.
+    expect(nflTools).not.toContain("Camp");
+    expect(nflTools).not.toContain("Camp Desk");
     // Unfinished surfaces demoted until live (no tools chrome that looks ready).
     expect(nflTools).not.toContain("Awards");
     expect(nflTools).not.toContain("DFS");
     expect(nflTools).not.toContain("Player Previews");
     expect(nflTools).not.toContain("Props");
-    expect(nflTools).not.toContain("Team Previews");
 
     for (const sport of SPORTS.filter((s) => s.key !== "nfl" && s.key !== "cfb")) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
