@@ -175,6 +175,19 @@ curl -sS https://www.kosedge.com/api/nfl/season-engine/status | python3 -m json.
 
 ---
 
+---
+
+## Enterprise spine follow-on (2026-08-11 / #199)
+
+Single strength spine + Injury→KEI cadence locked in:
+
+- [`nfl-enterprise-spine-lock-20260811.md`](./nfl-enterprise-spine-lock-20260811.md) — complete vs waits-for-kickoff; soft-launch ready / enterprise PR not finished
+- [`nfl-strength-spine-audit-20260811.md`](./nfl-strength-spine-audit-20260811.md) — 32/32 dual-path clean; DET report-only
+- #199 merge SHA: `ec0e8ccc56345f5e25b941bb368689a960faa1d3`
+
+---
+
 *Locked by: agent · 2026-08-11T14:52Z*
 *Branch: `feat/nfl-preseason-complete-lock`*
 *Base: `deploy-vercel` @ `23e2b3f8`*
+*Spine follow-on: 2026-08-12 · `ec0e8ccc`*
