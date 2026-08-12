@@ -31,6 +31,7 @@ const LIMITATIONS_BASE = [
   "Schedule softness: W1–6 vs W14–17 opponent expected wins — not a full matchup sim.",
   "No live injury feed. Builder is a private roster; Mock fills other seats (no league sync).",
   "Snake 1QB redraft only — no auction, Superflex, or dynasty.",
+  "|modelRank − ADP| ≥ 40 (TE/QB2 ≥ 60) is flagged High deviation with drivers — not hidden, not silent alpha.",
 ];
 
 function apiRowToEnrichable(row: NflFantasyDraftRankingRow & {

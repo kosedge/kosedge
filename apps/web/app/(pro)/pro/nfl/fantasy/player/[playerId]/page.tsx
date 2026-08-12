@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
+import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { findDeskPlayer, loadFantasyDraftDesk } from "@/lib/fantasy/load-desk";
 import type { FantasyScoringProfile } from "@/lib/fantasy/types";
 import {
@@ -71,6 +72,7 @@ export default async function FantasyPlayerDetailPage({
           <span className="text-sm text-kos-text/60">
             Overall #{row.rankOverall}
           </span>
+          <AdpQaFlagChip flag={row.adpQaFlag} />
         </div>
 
         <div className="mt-6 grid grid-cols-3 gap-3 text-center">
@@ -98,6 +100,21 @@ export default async function FantasyPlayerDetailPage({
             value={String(row.gamesProjected)}
           />
         </div>
+
+        {row.adpQaFlag ? (
+          <div className="mt-6 rounded-2xl border border-kos-gold/25 bg-kos-gold/8 p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-gold">
+              {row.adpQaFlag.categoryLabel} · why this gap
+            </p>
+            <ul className="mt-3 space-y-2">
+              {row.adpQaFlag.drivers.map((driver) => (
+                <li key={driver} className="text-sm text-kos-text/80">
+                  · {driver}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         <div className="mt-6 rounded-2xl border border-white/10 bg-black/35 p-4">
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-gold">

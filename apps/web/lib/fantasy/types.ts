@@ -3,6 +3,8 @@
  * Built on season-engine / projection-baseline outputs — not a separate model.
  */
 
+import type { AdpQaFlag } from "@/lib/fantasy/adp-qa-flags";
+
 export type FantasyScoringProfile = "standard" | "half_ppr" | "ppr";
 
 export type FantasyDraftPosition = "QB" | "RB" | "WR" | "TE" | "K" | "DST";
@@ -64,6 +66,11 @@ export type FantasyDeskRow = {
   riskFlags: RiskFlag[];
   expertBlurb: string;
   drivers: string[];
+  /**
+   * High |modelRank − ADP| QA stamp. Null when unmatched ADP or gap is
+   * inside the position threshold — never a silent wall of outliers.
+   */
+  adpQaFlag?: AdpQaFlag | null;
   updatedAt: string | null;
   source: "model-service" | "preseason-fallback";
 };

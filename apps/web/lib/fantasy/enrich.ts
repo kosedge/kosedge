@@ -3,6 +3,7 @@ import {
   isHighConfidenceAdp,
   type AdpMatchResult,
 } from "@/lib/fantasy/adp-match";
+import { resolveAdpQaFlag } from "@/lib/fantasy/adp-qa-flags";
 import { buildDrivers, buildExpertBlurb } from "@/lib/fantasy/expert";
 import { buildRiskFlags, type DepthRow } from "@/lib/fantasy/risk-signals";
 import {
@@ -141,6 +142,25 @@ export function enrichDraftRows(input: {
       drivers,
       source: row.source,
     });
+    const adpQaFlag = resolveAdpQaFlag({
+      position: row.position,
+      rankPosition: row.rankPosition,
+      rankOverall: row.rankOverall,
+      tier: row.tier,
+      team: row.team,
+      gamesProjected: row.gamesProjected,
+      passYardsTotal: row.passYardsTotal,
+      rushYardsTotal: row.rushYardsTotal,
+      receivingYardsTotal: row.receivingYardsTotal,
+      receptionsTotal: row.receptionsTotal,
+      valueOverReplacement: row.valueOverReplacement,
+      adp,
+      valueDelta: delta,
+      existingDrivers: drivers,
+      riskFlags,
+      schedule,
+      source: row.source,
+    });
 
     return {
       season: row.season,
@@ -179,6 +199,7 @@ export function enrichDraftRows(input: {
       riskFlags,
       expertBlurb,
       drivers,
+      adpQaFlag,
       updatedAt: row.updatedAt,
       source: row.source,
     };

@@ -60,6 +60,7 @@ describe("enrichDraftRows", () => {
     expect(rows[0]!.ceilingPoints).toBeGreaterThan(rows[0]!.medianPoints);
     expect(rows[0]!.expertBlurb.length).toBeGreaterThan(20);
     expect(rows[0]!.drivers.length).toBeGreaterThan(0);
+    expect(rows[0]!.adpQaFlag).toBeNull();
   });
 
   it("leaves ADP null when unmatched (no fake precision)", () => {
@@ -102,6 +103,7 @@ describe("enrichDraftRows", () => {
     expect(rows[0]!.valueDelta).toBeNull();
     expect(rows[0]!.adpMatchConfidence).toBeNull();
     expect(rows[0]!.expertBlurb).toMatch(/no clean market ADP/i);
+    expect(rows[0]!.adpQaFlag).toBeNull();
   });
 
   it("shows ADP but blanks Value Δ for cross-format matches", () => {
@@ -156,5 +158,61 @@ describe("enrichDraftRows", () => {
     expect(rows[0]!.adp).toBe(280);
     expect(rows[0]!.valueDelta).toBeNull();
     expect(rows[0]!.adpMatchConfidence).toBe("cross_format");
+    expect(rows[0]!.adpQaFlag).toBeNull();
+  });
+
+  it("flags Gesicki-class ADP gap on enrich and keeps the player", () => {
+    const rows = enrichDraftRows({
+      rows: [
+        {
+          season: 2026,
+          scoringProfile: "half_ppr",
+          modelVersion: "test",
+          playerId: "te-gesicki",
+          playerUid: null,
+          playerName: "M.Gesicki",
+          team: "CIN",
+          position: "TE",
+          gamesProjected: 17,
+          passYardsTotal: 0,
+          rushYardsTotal: 0,
+          receivingYardsTotal: 620,
+          receptionsTotal: 55,
+          passTdsTotal: 0,
+          rushTdsTotal: 0,
+          recTdsTotal: 7.7,
+          totalPoints: 140,
+          replacementPoints: 90,
+          valueOverReplacement: 50,
+          rankOverall: 47,
+          rankPosition: 8,
+          tier: "TE2",
+          isRookie: false,
+          rookieYear: null,
+          draftNumber: null,
+          updatedAt: null,
+          source: "preseason-fallback",
+        },
+      ],
+      scheduleByTeam: new Map(),
+      depthRows: [],
+      adpByPlayerId: new Map([
+        [
+          "te-gesicki",
+          {
+            adp: 251,
+            ecr: 289,
+            matchedName: "Mike Gesicki",
+            matchKind: "full_name",
+            confidence: "high",
+          },
+        ],
+      ]),
+    });
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.adpQaFlag?.label).toBe("Model ≫ market");
+    expect(rows[0]!.adpQaFlag?.drivers.length).toBeGreaterThanOrEqual(3);
+    expect(rows[0]!.adpQaFlag?.drivers.join(" ")).not.toMatch(/7\.7/);
+    expect(rows[0]!.expertBlurb).toMatch(/likes him more than market/i);
   });
 });
