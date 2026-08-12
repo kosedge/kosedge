@@ -1316,6 +1316,9 @@ export default function EdgeBoard({
         <p className="px-1 text-[11px] text-amber-200/80">
           Open/Current from books when available. KEI Line / O/U / Edge stay blank
           until a real model exists — we do not invent handicap numbers.
+          {String(sportKey).toLowerCase() === "cfb"
+            ? " Books ≠ KEI. Project Game stays MODEL research."
+            : ""}
         </p>
       ) : null}
       {data.map((r) => {
@@ -1546,6 +1549,9 @@ export default function EdgeBoard({
           <span className="font-semibold text-amber-200">Markets only.</span>{" "}
           {keiCode} handicap is not shipped for this sport yet — KEI / Edge /
           Tag stay blank. We do not invent handicap numbers.
+          {String(sportKey).toLowerCase() === "cfb"
+            ? " Live books only — not KEI. Project Game is MODEL research, not an Edge Board line."
+            : ""}
         </div>
       ) : null}
       <div className="bg-black/30 border border-white/12 rounded-2xl backdrop-blur-xl shadow-xl">

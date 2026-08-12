@@ -5,6 +5,10 @@ import {
   fetchCfbSeasonEngineStatus,
 } from "@/lib/cfb-season-engine";
 import { formatIndex } from "@/lib/cfb-season-engine-format";
+import {
+  cfbModelDeskHonestyNote,
+  cfbModelDeskTruthStates,
+} from "@/lib/cfb-truth-label";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +39,9 @@ export default async function CfbSeasonModelHubPage() {
       base="/pro/cfb"
       title="Season Model"
       summary="Hierarchical CFB season engine with opponent-adjusted efficiency (2025 SP+ carry), ESPN 2026 real-roster overlay, historical closing-line calibration, and live projection/CLV tracking — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
-      badge="CFB tracking"
+      truthStates={cfbModelDeskTruthStates()}
+      truthTestId="cfb-truth-state"
+      honestyNote={cfbModelDeskHonestyNote()}
       primaryHref="/pro/cfb/project-game"
       primaryLabel="Open Project Game"
       secondaryHref="/edge-board/cfb"

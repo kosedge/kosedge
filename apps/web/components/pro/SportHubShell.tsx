@@ -1,9 +1,11 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
   getSportEdgeBoardHref,
   getSportOverviewHref,
 } from "@/lib/sport-pro-nav";
+import type { TruthUiState } from "@/lib/truth-ui-state";
 
 /**
  * Compact page chrome for sport tool surfaces already wrapped by SportProShell.
@@ -16,6 +18,9 @@ export default function SportHubShell({
   title,
   summary,
   badge,
+  truthStates,
+  honestyNote,
+  truthTestId = "truth-state",
   children,
   primaryHref,
   primaryLabel,
@@ -28,6 +33,9 @@ export default function SportHubShell({
   title: string;
   summary: string;
   badge?: string;
+  truthStates?: TruthUiState[];
+  honestyNote?: string;
+  truthTestId?: string;
   children: ReactNode;
   primaryHref?: string;
   primaryLabel?: string;
@@ -47,15 +55,31 @@ export default function SportHubShell({
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[28px_28px] opacity-40" />
         <div className="relative flex flex-wrap items-start justify-between gap-4 sm:gap-5">
           <div className="max-w-2xl">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-              {badge ?? `${sportName} research desk`}
-            </p>
+            {truthStates?.length ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <TruthStateBadges states={truthStates} testId={truthTestId} />
+                {badge ? (
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
+                    {badge}
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
+                {badge ?? `${sportName} research desk`}
+              </p>
+            )}
             <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-kos-text sm:mt-2 sm:text-3xl">
               {title}
             </h1>
             <p className="mt-1.5 text-sm text-kos-text/75 sm:mt-2 sm:text-base">
               {summary}
             </p>
+            {honestyNote ? (
+              <p className="mt-2 text-xs leading-relaxed text-kos-text/55">
+                {honestyNote}
+              </p>
+            ) : null}
             <div className="mt-3 flex flex-wrap gap-3 text-xs">
               <Link
                 href={overviewHref}

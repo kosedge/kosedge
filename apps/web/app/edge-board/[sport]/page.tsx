@@ -3,6 +3,7 @@ import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import SportProHeader from "@/components/pro/SportProHeader";
 import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
 import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
+import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
   loadAssembledEdgeBoardRows,
   normalizeNflEdgeBoardSlate,
@@ -144,6 +145,14 @@ export default async function EdgeBoardSportPage({
                 : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}{" "}
               · ET
             </div>
+            {marketsOnly ? (
+              <div className="mt-2">
+                <TruthStateBadges
+                  states={["LIVE"]}
+                  testId={sportKey === "cfb" ? "cfb-truth-state" : "truth-state"}
+                />
+              </div>
+            ) : null}
             <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-edge-green">
               {sportName} Edge Board
             </h1>
@@ -155,7 +164,9 @@ export default async function EdgeBoardSportPage({
             {!isNfl ? (
               <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
                 {marketsOnly
-                  ? `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
+                  ? sportKey === "cfb"
+                    ? `Live sportsbook Open/Best when available. ${keiCode} handicap is not shipped — KEI columns stay blank (books ≠ KEI). Project Game numbers are MODEL research and are not copied here as edge. Research board, not picks.`
+                    : `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
                   : `KEI (handicap) vs market. Open + Current when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
               </p>
             ) : null}
