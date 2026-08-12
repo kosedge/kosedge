@@ -5,6 +5,12 @@ import {
   buildGameBoxesQuery,
   buildSurvivorBody,
   buildSurvivorPlanBody,
+  canonicalizeSuggestedPath,
+  canonicalizeSurvivorPickRow,
+  canonicalizeSurvivorPlanWeek,
+  canonicalizeTeamCodeMap,
+  normalizeNflTeamCode,
+  parseAlreadyUsedTeams,
   type InjuryPathInput,
   type SeasonEngineMatchupOption,
 } from "@/lib/nfl-season-engine-format";
@@ -122,6 +128,7 @@ export type SeasonEngineSurvivorPlanWeek = {
   locked_team?: string | null;
   locked_pick?: SeasonEngineSurvivorPick | null;
   ranked_picks: SeasonEngineSurvivorPick[];
+  available_teams?: string[];
 };
 
 export type SeasonEngineSurvivorPlanResponse = {
@@ -561,14 +568,20 @@ export async function fetchSeasonEngineSurvivor(input: {
       week: Number(payload.week ?? body.week),
       n_sims: Number(payload.n_sims ?? body.n_sims),
       engine_version: String(payload.engine_version ?? ""),
-      already_used: Array.isArray(payload.already_used)
-        ? (payload.already_used as string[])
-        : body.already_used,
+      already_used: parseAlreadyUsedTeams(
+        Array.isArray(payload.already_used)
+          ? (payload.already_used as string[])
+          : body.already_used,
+      ),
       ranked_picks: Array.isArray(payload.ranked_picks)
-        ? (payload.ranked_picks as SeasonEngineSurvivorPick[])
+        ? (payload.ranked_picks as SeasonEngineSurvivorPick[]).map(
+            canonicalizeSurvivorPickRow,
+          )
         : [],
       all_teams_week: Array.isArray(payload.all_teams_week)
-        ? (payload.all_teams_week as SeasonEngineSurvivorPick[])
+        ? (payload.all_teams_week as SeasonEngineSurvivorPick[]).map(
+            canonicalizeSurvivorPickRow,
+          )
         : undefined,
       formula:
         payload.formula && typeof payload.formula === "object"
@@ -672,15 +685,20 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
       season: Number(payload.season ?? body.season),
       n_sims: Number(payload.n_sims ?? body.n_sims),
       engine_version: String(payload.engine_version ?? ""),
-      locked_picks:
+      locked_picks: canonicalizeTeamCodeMap(
         payload.locked_picks && typeof payload.locked_picks === "object"
           ? (payload.locked_picks as Record<string, string>)
           : body.picks,
-      used_teams: Array.isArray(payload.used_teams)
-        ? (payload.used_teams as string[])
-        : Object.values(body.picks),
+      ),
+      used_teams: parseAlreadyUsedTeams(
+        Array.isArray(payload.used_teams)
+          ? (payload.used_teams as string[])
+          : Object.values(body.picks),
+      ),
       weeks: Array.isArray(payload.weeks)
-        ? (payload.weeks as SeasonEngineSurvivorPlanWeek[])
+        ? (payload.weeks as SeasonEngineSurvivorPlanWeek[]).map(
+            canonicalizeSurvivorPlanWeek,
+          )
         : [],
       path_survival: Number(payload.path_survival ?? 0),
       path_survival_pct: Number(payload.path_survival_pct ?? 0),
@@ -806,7 +824,9 @@ export async function fetchSeasonEngineSurvivorSuggestPaths(input: {
       n_sims: Number(payload.n_sims ?? body.n_sims),
       engine_version: String(payload.engine_version ?? ""),
       paths: Array.isArray(payload.paths)
-        ? (payload.paths as SeasonEngineSuggestedPath[])
+        ? (payload.paths as SeasonEngineSuggestedPath[]).map(
+            canonicalizeSuggestedPath,
+          )
         : [],
       formula:
         payload.formula && typeof payload.formula === "object"
@@ -865,19 +885,23 @@ export async function loadSeasonEngineMatchups(params?: {
           const ts = Date.parse(row.startTime);
           return Number.isFinite(ts) ? ts >= now - 3 * 60 * 60 * 1000 : true;
         })
-        .map((row) => ({
-          id:
-            row.gameId ||
-            `${row.awayAbbr}@${row.homeAbbr}-W${row.week ?? "?"}`,
-          label: `${row.awayAbbr} @ ${row.homeAbbr}${
-            row.week != null ? ` · W${row.week}` : ""
-          }`,
-          homeTeam: row.homeAbbr,
-          awayTeam: row.awayAbbr,
-          week: row.week,
-          startTime: row.startTime,
-          source: "fair-lines" as const,
-        }));
+        .map((row) => {
+          const homeTeam =
+            normalizeNflTeamCode(row.homeAbbr) || row.homeAbbr;
+          const awayTeam =
+            normalizeNflTeamCode(row.awayAbbr) || row.awayAbbr;
+          return {
+            id: row.gameId || `${awayTeam}@${homeTeam}-W${row.week ?? "?"}`,
+            label: `${awayTeam} @ ${homeTeam}${
+              row.week != null ? ` · W${row.week}` : ""
+            }`,
+            homeTeam,
+            awayTeam,
+            week: row.week,
+            startTime: row.startTime,
+            source: "fair-lines" as const,
+          };
+        });
       if (matchups.length > 0) {
         return {
           matchups,

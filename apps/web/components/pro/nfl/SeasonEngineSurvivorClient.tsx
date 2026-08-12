@@ -9,6 +9,7 @@ import {
   formatPct,
   formatScheduleDifficulty,
   formatStatNumber,
+  normalizeNflTeamCode,
   parseAlreadyUsedTeams,
   rankSurvivorPicks,
 } from "@/lib/nfl-season-engine-format";
@@ -71,9 +72,13 @@ export default function SeasonEngineSurvivorClient({
   );
 
   function toggleTeam(team: string) {
-    setUsed((prev) =>
-      prev.includes(team) ? prev.filter((t) => t !== team) : [...prev, team],
-    );
+    const code = normalizeNflTeamCode(team) ?? team;
+    setUsed((prev) => {
+      const canon = parseAlreadyUsedTeams(prev);
+      return canon.includes(code)
+        ? canon.filter((t) => t !== code)
+        : [...canon, code];
+    });
   }
 
   function run() {

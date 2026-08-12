@@ -48,6 +48,7 @@ from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
+from src.services.nfl_canonical_teams import canonicalize_team
 from src.services.nfl_season_engine.calibration import ENGINE_VERSION
 from src.services.nfl_season_engine.game_script import build_game_script
 from src.services.nfl_season_engine.injury_paths import (
@@ -203,13 +204,19 @@ class SurvivorEvalResult:
         return asdict(self)
 
 
+def _normalize_team_code(raw: Any) -> str:
+    """Product canonical team id: LA/STL → LAR. LAC unchanged."""
+    t = str(raw or "").strip().upper()
+    if not t:
+        return ""
+    return canonicalize_team(t) or t
+
+
 def _normalize_teams(teams: Optional[Sequence[str]]) -> List[str]:
     out: List[str] = []
     seen: Set[str] = set()
     for raw in teams or []:
-        t = str(raw or "").strip().upper()
-        if t == "LAR":
-            t = "LA"
+        t = _normalize_team_code(raw)
         if not t or t in seen:
             continue
         seen.add(t)
@@ -217,14 +224,50 @@ def _normalize_teams(teams: Optional[Sequence[str]]) -> List[str]:
     return out
 
 
+def _storage_keys(team: str) -> Tuple[str, ...]:
+    """Canonical id plus nflverse/storage aliases for map lookup."""
+    raw = str(team or "").strip().upper()
+    if not raw:
+        return ()
+    canon = _normalize_team_code(raw) or raw
+    keys: List[str] = []
+    for key in (canon, raw):
+        if key and key not in keys:
+            keys.append(key)
+    if canon == "LAR":
+        for alias in ("LA", "STL"):
+            if alias not in keys:
+                keys.append(alias)
+    elif canon == "WAS":
+        if "WSH" not in keys:
+            keys.append("WSH")
+    elif canon == "LAC":
+        if "SD" not in keys:
+            keys.append("SD")
+    return tuple(keys)
+
+
+def _team_map_get(
+    mapping: Optional[Mapping[str, Any]], team: str, default: Any = None
+) -> Any:
+    if not mapping:
+        return default
+    for key in _storage_keys(team):
+        if key in mapping:
+            return mapping[key]
+    return default
+
+
 def schedule_index(
     schedule: Sequence[ScheduledGame],
 ) -> Dict[int, Dict[str, ScheduledGame]]:
-    """Map week → team → game for opponent / home-away lookup."""
+    """Map week → canonical team → game for opponent / home-away lookup."""
     by_week: Dict[int, Dict[str, ScheduledGame]] = defaultdict(dict)
     for game in schedule:
-        by_week[game.week][game.home_team] = game
-        by_week[game.week][game.away_team] = game
+        home = _normalize_team_code(game.home_team) or game.home_team
+        away = _normalize_team_code(game.away_team) or game.away_team
+        by_week[game.week][home] = game
+        by_week[game.week][away] = game
     return dict(by_week)
 
 
@@ -313,7 +356,10 @@ def _path_ok_count(
 ) -> int:
     if not locked_items:
         return len(path_win_pairs)
-    needed = tuple(locked_items)
+    needed = tuple(
+        (int(week), _normalize_team_code(team) or str(team))
+        for week, team in locked_items
+    )
     return sum(1 for pw in path_win_pairs if all(pair in pw for pair in needed))
 
 
@@ -351,7 +397,7 @@ def get_or_build_survivor_path_pool(
     max_week = max(schedule_weeks) if schedule_weeks else 1
 
     win_counts: Dict[str, Dict[int, int]] = {
-        t: defaultdict(int) for t in universe.teams
+        t: defaultdict(int) for t in _normalize_teams(universe.teams)
     }
     for week_map in by_week.values():
         for team in week_map:
@@ -361,10 +407,12 @@ def get_or_build_survivor_path_pool(
         t: defaultdict(int) for t in win_counts
     }
     for game in universe.schedule:
-        games_scheduled.setdefault(game.home_team, defaultdict(int))
-        games_scheduled.setdefault(game.away_team, defaultdict(int))
-        games_scheduled[game.home_team][game.week] = 1
-        games_scheduled[game.away_team][game.week] = 1
+        home = _normalize_team_code(game.home_team) or game.home_team
+        away = _normalize_team_code(game.away_team) or game.away_team
+        games_scheduled.setdefault(home, defaultdict(int))
+        games_scheduled.setdefault(away, defaultdict(int))
+        games_scheduled[home][game.week] = 1
+        games_scheduled[away][game.week] = 1
 
     rng = random.Random(seed)
     # Preserve None so simulate_team_wl_path can load packaged SoT paths.
@@ -377,9 +425,10 @@ def get_or_build_survivor_path_pool(
         pairs: Set[Tuple[int, str]] = set()
         for week, winners in week_winners.items():
             for team in winners:
-                pairs.add((int(week), str(team)))
-                if team in win_counts:
-                    win_counts[team][week] += 1
+                canon = _normalize_team_code(team) or str(team)
+                pairs.add((int(week), canon))
+                win_counts.setdefault(canon, defaultdict(int))
+                win_counts[canon][week] += 1
         path_pairs.append(frozenset(pairs))
 
     pool = SurvivorPathPool(
@@ -434,15 +483,18 @@ def _matchup_fields(
             "game_id": None,
             "plays_this_week": False,
         }
-    if team == game.home_team:
+    team_c = _normalize_team_code(team) or str(team or "").strip().upper()
+    home_c = _normalize_team_code(game.home_team) or game.home_team
+    away_c = _normalize_team_code(game.away_team) or game.away_team
+    if team_c == home_c:
         return {
-            "opponent": game.away_team,
+            "opponent": away_c,
             "home_away": "home",
             "game_id": game.game_id,
             "plays_this_week": True,
         }
     return {
-        "opponent": game.home_team,
+        "opponent": home_c,
         "home_away": "away",
         "game_id": game.game_id,
         "plays_this_week": True,
@@ -464,8 +516,9 @@ def score_team_survivor(
     """Compute inspectable survivor scores for one team at ``week``."""
     used = set(_normalize_teams(already_used))
     n_sims = max(1, int(n_sims))
-    team_wins = win_counts.get(team) or {}
-    team_sched = games_scheduled.get(team) or {}
+    team = _normalize_team_code(team) or str(team or "").strip().upper()
+    team_wins = _team_map_get(win_counts, team) or {}
+    team_sched = _team_map_get(games_scheduled, team) or {}
 
     this_wins = int(team_wins.get(week, 0))
     this_week_wp = this_wins / n_sims
@@ -563,7 +616,7 @@ def evaluate_survivor(
 
     all_rows: List[Dict[str, Any]] = []
     bye_teams: List[str] = []
-    for team in universe.teams:
+    for team in _normalize_teams(universe.teams):
         row = score_team_survivor(
             team=team,
             week=week,
@@ -572,8 +625,8 @@ def evaluate_survivor(
             games_scheduled=games_scheduled,
             max_week=max_week,
             already_used=used,
-            game=week_games.get(team),
-            projected_sos=sos_by_team.get(team),
+            game=_team_map_get(week_games, team),
+            projected_sos=_team_map_get(sos_by_team, team),
         )
         if not row["plays_this_week"]:
             bye_teams.append(team)
@@ -681,11 +734,9 @@ def week_win_rate_for_team(
     result: SurvivorEvalResult, team: str
 ) -> Optional[float]:
     """Convenience: P(team wins evaluation week) from an eval result."""
-    t = str(team or "").strip().upper()
-    if t == "LAR":
-        t = "LA"
+    t = _normalize_team_code(team)
     for row in result.all_teams_week:
-        if row["team"] == t:
+        if _normalize_team_code(row["team"]) == t:
             return float(row["win_rate"])
     return None
 
@@ -734,15 +785,6 @@ class SurvivorSuggestedPathsResult:
         return asdict(self)
 
 
-def _normalize_team_code(raw: Any) -> str:
-    t = str(raw or "").strip().upper()
-    if t == "LAR":
-        return "LA"
-    if t == "WSH":
-        return "WAS"
-    return t
-
-
 def normalize_plan_picks(
     picks: Optional[Mapping[Any, Any]],
 ) -> Dict[int, str]:
@@ -780,14 +822,14 @@ def validate_plan_picks(
 ) -> None:
     """Reject unknown teams, bye-week locks, and weeks with no slate."""
     by_week = schedule_index(universe.schedule)
-    team_set = {str(t).upper() for t in universe.teams}
-    if "LAR" in team_set:
-        team_set.add("LA")
+    team_set = set(_normalize_teams(universe.teams))
     for week, team in picks.items():
-        if team not in team_set and team not in universe.teams:
+        canon = _normalize_team_code(team) or team
+        if canon not in team_set:
             # Allow any team that appears on the schedule even if not in strengths.
             on_schedule = any(
-                team in week_map for week_map in by_week.values()
+                _team_map_get(week_map, canon) is not None
+                for week_map in by_week.values()
             )
             if not on_schedule:
                 raise ValueError(f"Unknown team {team} for week {week}")
@@ -796,7 +838,7 @@ def validate_plan_picks(
             raise ValueError(
                 f"Week {week} has no scheduled games on this universe"
             )
-        if team not in week_games:
+        if _team_map_get(week_games, canon) is None:
             raise ValueError(
                 f"Team {team} is on bye or not scheduled in week {week}"
             )
@@ -887,8 +929,12 @@ def compute_slate_metrics(
 def _enrich_pick_row(row: Dict[str, Any]) -> Dict[str, Any]:
     """Add matchup label + favorite flag for planner UI (additive)."""
     out = dict(row)
-    team = str(out.get("team") or "")
+    team = _normalize_team_code(out.get("team")) or str(out.get("team") or "")
     opponent = out.get("opponent")
+    if opponent:
+        opponent = _normalize_team_code(opponent) or opponent
+    out["team"] = team
+    out["opponent"] = opponent
     home_away = out.get("home_away")
     wp = float(out.get("win_rate") or out.get("win_prob") or 0.0)
     if opponent:
@@ -918,17 +964,22 @@ def _week_candidate_rows(
 ) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     sos_book = sos_by_team or {}
+    seen: Set[str] = set()
     for team in sorted(week_games.keys()):
+        canon = _normalize_team_code(team) or team
+        if canon in seen:
+            continue
+        seen.add(canon)
         row = score_team_survivor(
-            team=team,
+            team=canon,
             week=week,
             n_sims=n_sims,
             win_counts=wins_out,
             games_scheduled=sched_out,
             max_week=max_week,
             already_used=used_teams,
-            game=week_games.get(team),
-            projected_sos=sos_book.get(team),
+            game=_team_map_get(week_games, canon),
+            projected_sos=_team_map_get(sos_book, canon),
         )
         if row["remaining"] and row["plays_this_week"]:
             rows.append(_enrich_pick_row(row))
@@ -1043,7 +1094,8 @@ def evaluate_survivor_plan(
     path_survival = path_ok / n_sims
     locked_marginal: List[float] = []
     for week, team in locked_items:
-        locked_marginal.append(int(wins_out.get(team, {}).get(week, 0)) / n_sims)
+        wins = _team_map_get(wins_out, team) or {}
+        locked_marginal.append(int(wins.get(week, 0)) / n_sims)
 
     strength, geo = path_strength_band(
         locked_count=len(locked_items),
@@ -1057,7 +1109,7 @@ def evaluate_survivor_plan(
         week_games = by_week.get(week, {})
         if week in locked:
             team = locked[week]
-            game = week_games.get(team)
+            game = _team_map_get(week_games, team)
             row = _enrich_pick_row(
                 score_team_survivor(
                     team=team,
@@ -1068,7 +1120,7 @@ def evaluate_survivor_plan(
                     max_week=max_week,
                     already_used=[],
                     game=game,
-                    projected_sos=sos_by_team.get(team),
+                    projected_sos=_team_map_get(sos_by_team, team),
                 )
             )
             weeks_out.append(
@@ -1254,7 +1306,7 @@ def suggest_survivor_paths(
         for week in schedule_weeks:
             if week in picks:
                 team = picks[week]
-                game = by_week.get(week, {}).get(team)
+                game = _team_map_get(by_week.get(week, {}), team)
                 row = _enrich_pick_row(
                     score_team_survivor(
                         team=team,
@@ -1265,7 +1317,7 @@ def suggest_survivor_paths(
                         max_week=max_week,
                         already_used=[],
                         game=game,
-                        projected_sos=sos_by_team.get(team),
+                        projected_sos=_team_map_get(sos_by_team, team),
                     )
                 )
                 week_detail.append(
@@ -1311,7 +1363,7 @@ def suggest_survivor_paths(
             )
 
         marginal = [
-            float(wins_out.get(team, {}).get(week, 0)) / n_sims
+            float((_team_map_get(wins_out, team) or {}).get(week, 0)) / n_sims
             for week, team in sorted(picks.items())
         ]
         # Remaining equity after this full path → always null / slate full.

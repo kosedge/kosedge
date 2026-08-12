@@ -3,6 +3,8 @@
  * Kept free of server-only imports for unit tests.
  */
 
+import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
+
 export const NFL_SEASON_ENGINE_TEAMS = [
   "ARI",
   "ATL",
@@ -20,8 +22,8 @@ export const NFL_SEASON_ENGINE_TEAMS = [
   "IND",
   "JAX",
   "KC",
-  "LA",
   "LAC",
+  "LAR",
   "LV",
   "MIA",
   "MIN",
@@ -80,12 +82,161 @@ export type InjuryPathInput = {
 
 const TEAM_SET = new Set<string>(NFL_SEASON_ENGINE_TEAMS);
 
-/** Normalize common aliases (LAR → LA) and uppercase. */
+/** Whole-token Rams code `LA` (never LAC). */
+const RAW_LA_RAMS = /(^|[^A-Z])LA(?![A-Z])/;
+
+/** Product canonical: LA/STL → LAR. LAC unchanged. Unknown codes stay null. */
 export function normalizeNflTeamCode(raw: string): string | null {
-  const token = raw.trim().toUpperCase();
-  if (!token) return null;
-  const mapped = token === "LAR" ? "LA" : token === "WSH" ? "WAS" : token;
+  const mapped = canonicalizeNflTeam(raw);
+  if (!mapped) return null;
   return TEAM_SET.has(mapped) ? mapped : null;
+}
+
+/** Canonicalize any NFL code for API ingest (unknown tokens pass through uppercased). */
+export function canonicalizeSurvivorTeamCode(raw: unknown): string {
+  if (raw == null) return "";
+  const mapped = canonicalizeNflTeam(String(raw));
+  return mapped ?? "";
+}
+
+export type SurvivorPickTeamFields = {
+  team?: string;
+  opponent?: string | null;
+  matchup_label?: string | null;
+  favorite_team?: string | null;
+  home_away?: string | null;
+};
+
+export function canonicalizeSurvivorPickRow<T extends SurvivorPickTeamFields>(
+  row: T,
+): T {
+  const team = row.team ? canonicalizeSurvivorTeamCode(row.team) : row.team;
+  const opponent =
+    row.opponent != null && row.opponent !== ""
+      ? canonicalizeSurvivorTeamCode(row.opponent)
+      : row.opponent;
+  const favorite_team =
+    row.favorite_team != null && row.favorite_team !== ""
+      ? canonicalizeSurvivorTeamCode(row.favorite_team)
+      : row.favorite_team;
+  let matchup_label = row.matchup_label;
+  if (team && opponent) {
+    matchup_label =
+      row.home_away === "away" ? `${team} @ ${opponent}` : `${team} vs ${opponent}`;
+  } else if (typeof matchup_label === "string" && matchup_label) {
+    matchup_label = matchup_label.replace(/(^|[^A-Z])LA(?![A-Z])/g, "$1LAR");
+  }
+  return { ...row, team, opponent, favorite_team, matchup_label };
+}
+
+export function canonicalizeTeamCodeMap(
+  raw: Record<string, string> | null | undefined,
+): Record<string, string> {
+  if (!raw || typeof raw !== "object") return {};
+  const out: Record<string, string> = {};
+  for (const [week, team] of Object.entries(raw)) {
+    const code = canonicalizeSurvivorTeamCode(team);
+    if (code) out[week] = code;
+  }
+  return out;
+}
+
+const SURVIVOR_TEAM_KEYS = new Set([
+  "team",
+  "opponent",
+  "locked_team",
+  "favorite_team",
+]);
+const SURVIVOR_TEAM_LIST_KEYS = new Set([
+  "already_used",
+  "used_teams",
+  "available_teams",
+]);
+
+/** Paths where raw Rams code `LA` appears in survivor JSON (empty = clean). */
+export function rawLaRamsHits(payload: unknown, path = "$"): string[] {
+  const hits: string[] = [];
+  if (payload == null) return hits;
+  if (Array.isArray(payload)) {
+    payload.forEach((item, i) => {
+      hits.push(...rawLaRamsHits(item, `${path}[${i}]`));
+    });
+    return hits;
+  }
+  if (typeof payload !== "object") return hits;
+  const rec = payload as Record<string, unknown>;
+  for (const [key, value] of Object.entries(rec)) {
+    const next = `${path}.${key}`;
+    if (SURVIVOR_TEAM_KEYS.has(key) && value === "LA") {
+      hits.push(next);
+    } else if (
+      SURVIVOR_TEAM_LIST_KEYS.has(key) &&
+      Array.isArray(value) &&
+      value.includes("LA")
+    ) {
+      hits.push(next);
+    } else if (
+      key === "matchup_label" &&
+      typeof value === "string" &&
+      RAW_LA_RAMS.test(value)
+    ) {
+      hits.push(next);
+    } else if (
+      (key === "locked_picks" || key === "picks") &&
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value)
+    ) {
+      for (const [week, team] of Object.entries(
+        value as Record<string, unknown>,
+      )) {
+        if (team === "LA") hits.push(`${next}.${week}`);
+      }
+    } else {
+      hits.push(...rawLaRamsHits(value, next));
+    }
+  }
+  return hits;
+}
+
+export function canonicalizeSurvivorPlanWeek<
+  T extends {
+    locked_team?: string | null;
+    locked_pick?: SurvivorPickTeamFields | null;
+    ranked_picks?: SurvivorPickTeamFields[];
+    available_teams?: string[];
+  },
+>(week: T): T {
+  return {
+    ...week,
+    locked_team: week.locked_team
+      ? canonicalizeSurvivorTeamCode(week.locked_team)
+      : week.locked_team,
+    locked_pick: week.locked_pick
+      ? canonicalizeSurvivorPickRow(week.locked_pick)
+      : week.locked_pick,
+    ranked_picks: Array.isArray(week.ranked_picks)
+      ? week.ranked_picks.map((row) => canonicalizeSurvivorPickRow(row))
+      : week.ranked_picks,
+    available_teams: Array.isArray(week.available_teams)
+      ? parseAlreadyUsedTeams(week.available_teams)
+      : week.available_teams,
+  };
+}
+
+export function canonicalizeSuggestedPath<
+  T extends {
+    picks?: Record<string, string>;
+    weeks?: SurvivorPickTeamFields[];
+  },
+>(path: T): T {
+  return {
+    ...path,
+    picks: path.picks ? canonicalizeTeamCodeMap(path.picks) : path.picks,
+    weeks: Array.isArray(path.weeks)
+      ? path.weeks.map((row) => canonicalizeSurvivorPickRow(row))
+      : path.weeks,
+  };
 }
 
 export function parseAlreadyUsedTeams(raw: string | string[]): string[] {
