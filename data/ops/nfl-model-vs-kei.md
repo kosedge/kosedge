@@ -16,7 +16,8 @@
 - When market blend was applied for a market, Model ≠ KEI for that market (spread and/or total).
 - When blend was **not** applied, Model = KEI (identity). We do **not** invent cosmetic deltas.
 - Fair ML / win probs are computed **after** blend today → Model ML = KEI (identity). No dual ML columns on Fair Lines yet.
-- Injury nowcast / weather are **inputs** to the sim (inside Model), not a separate MLB-style nowcast reprice that freezes Model while updating KEI.
+- Injury nowcast / weather remain **inputs** to full research sims (`line_role=model`).
+- **Kickoff Injury → KEI cadence** (2026-08-11) can reprice KEI only via `line_role=handicap`, freezing stamped `model_markets`. See `data/ops/nfl-injury-kei-cadence-20260811.md` and `nfl_injury_kei_cadence`.
 - Legacy projection rows without stamped `model_markets` still resolve Model from `diagnostics.market_blend` on `/nfl/fair-lines` read.
 
 ## Pipeline stamp
@@ -25,7 +26,7 @@ On each `run_nfl_market_simulations` insert (and ad-hoc `/nfl/simulations/{game_
 
 - `model_markets` / `handicap_markets`
 - top-level `model_*` / `handicap_*` aliases
-- `line_role` (`model` for full research re-sims; `handicap` reserved if a product-only reprice path is added later)
+- `line_role` (`model` for full research re-sims; `handicap` for injury→KEI product-only reprice)
 
 No new DB columns required — JSON projection + fair-lines payload fields.
 
@@ -38,6 +39,6 @@ No new DB columns required — JSON projection + fair-lines payload fields.
 ## Remaining limitations
 
 1. No separate Model ML / win-prob distribution (would need pre-blend win rates).
-2. No MLB-style “freeze Model across later nowcast reprice” until NFL has a handicap-only update path (`line_role=handicap` + prior fetch).
+2. Injury→KEI handicap path is shipped for report windows (fixture / SoT JSON dry-run ready); live DB upsert enqueue still follows Railway job wiring — see `docs/runbooks/nfl-kickoff-injury-kei.md`.
 3. Supervised overlay / slate totals cal after blend move KEI further from Model; that is intentional (product line) and documented.
 4. Rows with empty/missing `market_blend` stay identity until the next sim stamps or diagnostics carry pre_blend.

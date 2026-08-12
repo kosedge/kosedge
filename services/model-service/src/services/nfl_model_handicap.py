@@ -9,8 +9,9 @@ Honesty limits:
   - Model spread/total diverge from KEI only when diagnostics.market_blend
     recorded a pre_blend_* mean (spread_applied / total_applied).
   - Win probs and fair MLs are post-blend only today → Model ML = KEI (identity).
-  - Injury nowcast / weather are inputs to the sim (inside Model), not a
-    separate MLB-style nowcast reprice step.
+  - Injury report cadence may reprice KEI via line_role=handicap while freezing
+    stamped model_markets (see nfl_injury_kei_cadence). Full research re-sims
+    still stamp line_role=model.
   - If blend was not applied, Model = KEI (identity). Do not invent deltas.
 """
 
@@ -322,3 +323,32 @@ def fair_lines_model_handicap_fields(
             and _to_float(m_total) == _to_float(h_total)
         ),
     }
+
+
+def extract_prior_model_markets(row: Any) -> Optional[Dict[str, Any]]:
+    """Pull model_markets from a prior nfl projection row / mapping.
+
+    Used by injury→KEI handicap reprices so Model research fair stays frozen.
+    """
+    if row is None:
+        return None
+    mapping = dict(row._mapping) if hasattr(row, "_mapping") else dict(row)
+    proj = mapping.get("projection")
+    if isinstance(proj, str):
+        try:
+            import json
+
+            proj = json.loads(proj)
+        except Exception:
+            proj = None
+    if isinstance(proj, dict):
+        stamped = extract_model_markets_from_projection(proj)
+        if stamped is not None:
+            return stamped
+    # Direct model_markets on the row itself (fixture / in-memory).
+    direct = _coerce_model_markets(mapping.get("model_markets"))
+    if direct is not None:
+        return direct
+    if isinstance(mapping.get("markets"), dict):
+        return extract_model_markets_from_projection(mapping)
+    return None
