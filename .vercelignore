@@ -12,3 +12,8 @@ apps/android-odds-widget
 data/ops/nfl-player-prop-vegas-benchmark/raw_prop_records*.json
 data/ops/nfl-player-prop-vegas-benchmark/*_pre_*.json
 data/ops/nfl-totals-resim-*.json
+# Local NCAAB research dumps — never needed on the Next serverless functions
+apps/web/data/raw
+apps/web/data/historical-odds
+apps/web/playwright-report
+apps/web/coverage

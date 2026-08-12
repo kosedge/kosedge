@@ -1,6 +1,4 @@
 import "server-only";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import path from "node:path";
 import {
   cardsFromDayFile,
   collectPreviewDeltas,
@@ -18,6 +16,9 @@ import {
 } from "@/lib/nfl-espn-news";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
+import campDesk20260812 from "../../../content/writers/camp-desk-2026/2026-08-12.json";
+import campRotationQueue from "../../../content/writers/camp-desk-2026/rotation-queue.json";
+import beatWritersJson from "../../../data/writers/nfl-beat-writers.json";
 
 export type CampBeatLink = {
   team: string;
@@ -137,57 +138,21 @@ const ESPN_TEAM_CAMP_HUBS: Record<string, string> = {
   WAS: "https://www.espn.com/nfl/story/_/id/49368181/training-camp-2026-latest-news-intel-updates-buzz-all-32-teams",
 };
 
-function findRepoRoot(): string | null {
-  let current = process.cwd();
-  for (let depth = 0; depth < 6; depth += 1) {
-    if (existsSync(path.join(current, "data", "writers"))) return current;
-    const parent = path.dirname(current);
-    if (parent === current) break;
-    current = parent;
-  }
-  return null;
-}
-
-function campDeskDir(): string | null {
-  const root = findRepoRoot();
-  if (!root) return null;
-  const dir = path.join(root, "content", "writers", "camp-desk-2026");
-  return existsSync(dir) ? dir : null;
-}
-
 function loadCampDeskDayFiles(): CampDeskDayFile[] {
-  const dir = campDeskDir();
-  if (!dir) return [];
-  const files: CampDeskDayFile[] = [];
-  for (const name of readdirSync(dir)) {
-    if (!name.endsWith(".json") || name === "rotation-queue.json") continue;
-    try {
-      const raw = JSON.parse(
-        readFileSync(path.join(dir, name), "utf8"),
-      ) as CampDeskDayFile;
-      if (raw?.desk_date && raw.league_wrap && Array.isArray(raw.team_notes)) {
-        files.push(raw);
-      }
-    } catch {
-      continue;
-    }
-  }
-  return files.sort((a, b) => b.desk_date.localeCompare(a.desk_date));
+  const bundled = [campDesk20260812 as CampDeskDayFile];
+  return bundled
+    .filter(
+      (raw) =>
+        Boolean(raw?.desk_date) &&
+        Boolean(raw.league_wrap) &&
+        Array.isArray(raw.team_notes),
+    )
+    .sort((a, b) => b.desk_date.localeCompare(a.desk_date));
 }
 
 function loadRotationNext(): string[] {
-  const dir = campDeskDir();
-  if (!dir) return [];
-  const filePath = path.join(dir, "rotation-queue.json");
-  if (!existsSync(filePath)) return [];
-  try {
-    const raw = JSON.parse(readFileSync(filePath, "utf8")) as {
-      next_pulse?: string[];
-    };
-    return Array.isArray(raw.next_pulse) ? raw.next_pulse : [];
-  } catch {
-    return [];
-  }
+  const bundled = campRotationQueue as { next_pulse?: string[] };
+  return Array.isArray(bundled.next_pulse) ? bundled.next_pulse : [];
 }
 
 function wireItemInWindow(item: CampNewsItem, now: Date, inCamp: boolean): boolean {
@@ -199,78 +164,7 @@ function wireItemInWindow(item: CampNewsItem, now: Date, inCamp: boolean): boole
 }
 
 function loadBeatRegistry(): BeatRegistry | null {
-  const root = findRepoRoot();
-  if (!root) return null;
-  const filePath = path.join(root, "data", "writers", "nfl-beat-writers.json");
-  if (!existsSync(filePath)) return null;
-  try {
-    return JSON.parse(readFileSync(filePath, "utf-8")) as BeatRegistry;
-  } catch {
-    return null;
-  }
-}
-
-function parseMarkdownLinks(
-  markdown: string,
-): Array<{ label: string; href: string }> {
-  const links: Array<{ label: string; href: string }> = [];
-  const pattern = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
-  let match: RegExpExecArray | null;
-  while ((match = pattern.exec(markdown)) !== null) {
-    links.push({ label: match[1].trim(), href: match[2].trim() });
-  }
-  return links;
-}
-
-function loadWriterCampIntel(): CampWriterIntelItem[] {
-  const root = findRepoRoot();
-  if (!root) return [];
-  const dir = path.join(root, "content", "writers", "season-previews-2026");
-  if (!existsSync(dir)) return [];
-  const byCode = new Map(
-    NFL_TEAM_DIRECTORY.map((entry) => [entry.code, entry] as const),
-  );
-  const items: CampWriterIntelItem[] = [];
-  for (const name of readdirSync(dir)) {
-    if (!name.endsWith(".md") || name === "INDEX.md") continue;
-    const team = name.replace(/\.md$/, "").toUpperCase();
-    let raw = "";
-    try {
-      raw = readFileSync(path.join(dir, name), "utf8");
-    } catch {
-      continue;
-    }
-    const campRefs =
-      raw.match(/\*\*Camp\s*\/\s*market refs:\*\*\s*(.+)$/im)?.[1]?.trim() ??
-      "";
-    const sources =
-      raw.match(/\*\*Sources(?:\s*\(beat desk\))?:\*\*\s*(.+)$/im)?.[1]?.trim() ??
-      "";
-    const market =
-      raw
-        .match(
-          /\*\*Market(?:\s*\([^)]*\))?:\*\*\s*(.+)$/im,
-        )?.[1]
-        ?.trim() ?? "";
-    const refsBlob = [campRefs, sources, market].filter(Boolean).join(" · ");
-    if (!refsBlob) continue;
-    const author =
-      raw.match(
-        /\*\*By\s+([^*]+?)\*\*\s*·\s*Kos Edge Analytics/i,
-      )?.[1]?.trim() ?? "Kos Edge Desk";
-    const angle = raw.match(/\*\*Angle:\*\*\s*(.+)$/im)?.[1]?.trim() ?? null;
-    const sourceLinks = parseMarkdownLinks(refsBlob).slice(0, 4);
-    items.push({
-      team,
-      teamName: byCode.get(team)?.name ?? team,
-      author,
-      angle,
-      campRefsMarkdown: refsBlob,
-      previewHref: `/pro/nfl/previews/${team}`,
-      sourceLinks,
-    });
-  }
-  return items.sort((a, b) => a.teamName.localeCompare(b.teamName));
+  return (beatWritersJson as BeatRegistry) ?? null;
 }
 
 function buildBeats(registry: BeatRegistry | null): CampBeatLink[] {
@@ -314,7 +208,9 @@ export async function buildNflCampDesk(opts?: {
     dayFiles.flatMap((file) => cardsFromDayFile(file)),
     { now, team: opts?.team, inCamp },
   );
-  const writerIntel = loadWriterCampIntel();
+  // Preview "camp refs" blocks are not the Camp Desk product surface — skip
+  // scanning season-previews so NFT does not pull that tree into this route.
+  const writerIntel: CampWriterIntelItem[] = [];
   const beats = buildBeats(registry);
   return {
     generatedAt: now.toISOString(),

@@ -29,6 +29,35 @@ const nextConfig: NextConfig = {
   // the dependency and excludes it from the deployed function bundle --
   // this silently broke these pages in production ("No 2026 preseason
   // simulation bundle was found yet") despite the files being committed.
+  // Keep heavy monorepo training/raw artifacts out of every serverless NFT.
+  // findRepoRoot()-style probes under data/ otherwise pull hundreds of MB.
+  outputFileTracingExcludes: {
+    "*": [
+      // apps/web/data (NCAAB raw odds ~300MB) — NOT repo-root ../../data
+      "./data/raw/**/*",
+      "./data/processed/**/*",
+      "./data/historical-odds/**/*",
+      "./data/fantasy/**/*",
+      "./src/**/*",
+      "./prisma/**/*",
+      "./scripts/**/*",
+      "../../data/raw/**/*",
+      "../../data/processed/**/*",
+      "../../data/mlb/**/*",
+      "../../data/backups/**/*",
+      "../../apps/android-odds-widget/**/*",
+      "../../**/.gradle/**/*",
+      "./**/playwright-report/**/*",
+      "./**/coverage/**/*",
+      "./tsconfig.tsbuildinfo",
+    ],
+    "/pro/nfl/camp": [
+      "./data/**/*",
+      "../../data/ops/**/*",
+      "../../data/fantasy/**/*",
+    ],
+  },
+
   outputFileTracingIncludes: {
     "/pro/nfl/projections": ["../../data/ops/**/*"],
     "/pro/nfl/previews": ["../../content/writers/season-previews-2026/**/*"],
@@ -37,12 +66,9 @@ const nextConfig: NextConfig = {
     ],
     "/pro/nfl/stats": ["../../data/ops/**/*"],
     "/pro/nfl/slate/[date]": ["../../data/ops/**/*"],
-    // Camp Desk only needs beat registry + desk JSON + preview camp refs.
-    // Do NOT include data/ops here — it balloons shared functions past Vercel's
-    // 250mb uncompressed limit (see pro/[sport]/injuries deploy failures).
+    // Camp Desk: beat registry + daily JSON only (no season-previews / data/ops).
     "/pro/nfl/camp": [
       "../../data/writers/**/*",
-      "../../content/writers/season-previews-2026/**/*",
       "../../content/writers/camp-desk-2026/**/*",
     ],
     "/pro/[sport]/tracking": [
