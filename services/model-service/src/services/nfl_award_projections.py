@@ -150,6 +150,7 @@ def compute_stat_composite(
 
 
 def score_mvp_candidate(*, position: str, team_success_score: float, stat_composite: float) -> float:
+    """Relative 0–1 award index — not P(MVP). Does not sum to 1 across players."""
     position_prior = QB_POSITION_PRIOR if str(position or "").upper() == "QB" else NON_QB_POSITION_PRIOR
     return round(
         MVP_TEAM_WEIGHT * team_success_score
@@ -160,6 +161,7 @@ def score_mvp_candidate(*, position: str, team_success_score: float, stat_compos
 
 
 def score_opoy_candidate(*, team_success_score: float, stat_composite: float) -> float:
+    """Relative 0–1 award index — not P(OPOY). Does not sum to 1 across players."""
     return round(OPOY_TEAM_WEIGHT * team_success_score + OPOY_STAT_WEIGHT * stat_composite, 4)
 
 

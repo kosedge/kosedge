@@ -59,7 +59,7 @@ export function PlayerFutureTripleCell({
   currentDigits?: number;
   projectedUnit?: string;
   projectedPercent?: boolean;
-  /** Quiet sublabel under projected (e.g. "Model %", "yds"). */
+  /** Quiet sublabel under projected (e.g. "Award Score", "yds"). */
   projectedSubLabel?: string;
 }) {
   const proj = formatProjectedValue(projected, {

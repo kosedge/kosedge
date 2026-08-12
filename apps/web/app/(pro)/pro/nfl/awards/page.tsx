@@ -7,6 +7,11 @@ import {
   PlayerFutureTripleCell,
 } from "@/components/pro/nfl/PlayerFutureTripleColumns";
 import {
+  AWARD_SCORE_LABEL,
+  AWARD_SCORE_TITLE,
+  awardScoreIndex,
+} from "@/lib/nfl-award-score";
+import {
   awardStatLine,
   fetchNflAwardProjections,
   type NflAwardProjectionRow,
@@ -111,8 +116,9 @@ export default async function NflAwardsPage() {
               MVP / Awards
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              Contenders from the player + season model — Projected (Model %),
-              Current (2026 YTD), and Current odds on every row.
+              Contenders from the player + season model — Award Score (relative
+              index, not a probability), Current (2026 YTD), and Current odds
+              on every row.
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
@@ -204,11 +210,14 @@ export default async function NflAwardsPage() {
             Methodology
           </p>
           <p className="mt-2">
-            Team success blends projected wins and division-title probability
-            from the Monte Carlo. Stat composite compares same-position peers
-            only. Current for awards is{" "}
-            <span className="font-mono">—</span> (no fake award progress). Odds
-            join best-effort — missing markets show{" "}
+            Award Score is a relative 0–100 model index (team success + stat
+            composite + position prior) — not P(award). Multiple contenders can
+            sit in the 70–90 band; scores do not sum to 100. True award
+            probabilities would require one winner per sim path. Team success
+            blends projected wins and division-title probability from the Monte
+            Carlo. Stat composite compares same-position peers only. Current
+            for awards is <span className="font-mono">—</span> (no fake award
+            progress). Odds join best-effort — missing markets show{" "}
             <span className="font-mono">—</span>.
           </p>
           <p className="mt-2 text-xs text-kos-text/45" title={CURRENT_YTD_TOOLTIP}>
@@ -266,13 +275,12 @@ function AwardBoard({
                 </span>
               </div>
               <PlayerFutureMobileFields
-                projected={row.awardScore}
+                projected={awardScoreIndex(row.awardScore)}
                 current={null}
                 currentKind="award"
                 odds={odds}
                 projectedDigits={1}
-                projectedPercent
-                projectedLabel="Model %"
+                projectedLabel={AWARD_SCORE_LABEL}
               />
               <p className="mt-2 text-xs text-kos-text/60">{shortNote(row)}</p>
             </li>
@@ -289,8 +297,8 @@ function AwardBoard({
               <th className="px-3 py-2 font-semibold">Player</th>
               <th className="px-3 py-2 font-semibold">Team</th>
               <PlayerFutureColumnHeaders
-                projectedLabel="Projected"
-                projectedTitle="Model % — award score × 100"
+                projectedLabel={AWARD_SCORE_LABEL}
+                projectedTitle={AWARD_SCORE_TITLE}
               />
               <th className="px-3 py-2 font-semibold">Note</th>
             </tr>
@@ -320,13 +328,12 @@ function AwardBoard({
                   </td>
                   <td className="px-3 py-3 text-kos-text/80">{row.team}</td>
                   <PlayerFutureTripleCell
-                    projected={row.awardScore}
+                    projected={awardScoreIndex(row.awardScore)}
                     current={null}
                     currentKind="award"
                     odds={odds}
                     projectedDigits={1}
-                    projectedPercent
-                    projectedSubLabel="Model %"
+                    projectedSubLabel={AWARD_SCORE_LABEL}
                   />
                   <td className="px-3 py-3 text-kos-text/75">
                     {shortNote(row)}

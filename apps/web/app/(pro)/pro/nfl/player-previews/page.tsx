@@ -6,6 +6,11 @@ import {
   PlayerFutureTripleCell,
 } from "@/components/pro/nfl/PlayerFutureTripleColumns";
 import {
+  AWARD_SCORE_LABEL,
+  AWARD_SCORE_TITLE,
+  awardScoreIndex,
+} from "@/lib/nfl-award-score";
+import {
   fetchNflAwardProjections,
   type NflAwardProjectionRow,
   type NflAwardType,
@@ -249,8 +254,8 @@ function AwardRacePreview({
               <th className="px-3 py-3 sm:px-4">Player</th>
               <th className="px-3 py-3 sm:px-4">Team</th>
               <PlayerFutureColumnHeaders
-                projectedLabel="Projected"
-                projectedTitle="Model % — award score × 100"
+                projectedLabel={AWARD_SCORE_LABEL}
+                projectedTitle={AWARD_SCORE_TITLE}
               />
               <th className="px-3 py-3 sm:px-4">Outlook</th>
             </tr>
@@ -283,13 +288,12 @@ function AwardRacePreview({
                     </Link>
                   </td>
                   <PlayerFutureTripleCell
-                    projected={row.awardScore}
+                    projected={awardScoreIndex(row.awardScore)}
                     current={null}
                     currentKind="award"
                     odds={odds}
                     projectedDigits={1}
-                    projectedPercent
-                    projectedSubLabel="Model %"
+                    projectedSubLabel={AWARD_SCORE_LABEL}
                   />
                   <td className="px-3 py-3 text-kos-text/70 sm:px-4">
                     {awardLine(row)}
