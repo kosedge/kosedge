@@ -26,6 +26,7 @@ from src.services.nfl_matchup_features import (
 )
 from src.services.nfl_portfolio_optimizer import optimize_nfl_portfolio
 from src.services.nfl_player_identity import apply_manual_mapping_resolution
+from src.services.nfl_props_eligibility import filter_investable_rows
 from src.services.nfl_simulator import (
     DEFAULT_NFL_MODEL_VERSION,
     NflGameInputs,
@@ -4222,6 +4223,7 @@ def nfl_props_board(
     session = SessionLocal()
     try:
         tag_filter = (tag or "").strip().upper() or None
+        fetch_limit = min(2000, max(int(limit) * 4, int(limit)))
         rows = session.execute(
             text(
                 """
@@ -4270,10 +4272,13 @@ def nfl_props_board(
                 "tag_filter": tag_filter,
                 "min_confidence": min_confidence,
                 "min_abs_edge": min_abs_edge,
-                "limit": limit,
+                "limit": fetch_limit,
             },
         ).fetchall()
         serialized = [dict(r._mapping) for r in rows]
+        raw_count = len(serialized)
+        serialized, dropped = filter_investable_rows(serialized)
+        serialized = serialized[: int(limit)]
         with_market = sum(
             1
             for row in serialized
@@ -4299,6 +4304,9 @@ def nfl_props_board(
                 "lean_count": tagged_watch,  # backward-compatible alias
                 "box_score_sourced_count": box_sourced,
                 "policy": "PLAY/WATCH/PASS enterprise v2",
+                "eligibility": "skill_positions_plus_involvement_floors",
+                "raw_count": raw_count,
+                "eligibility_dropped": dropped,
             },
         }
     finally:

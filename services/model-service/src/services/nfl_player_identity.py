@@ -75,7 +75,7 @@ _PROP_MARKET_POSITIONS: Dict[str, Optional[List[str]]] = {
     "rush_yds": ["RB", "FB", "QB", "WR"],
     "rec_yds": ["WR", "TE", "RB", "FB"],
     "receptions": ["WR", "TE", "RB", "FB"],
-    "anytime_td": None,
+    "anytime_td": ["QB", "RB", "FB", "HB", "WR", "TE"],
 }
 
 
