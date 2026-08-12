@@ -453,8 +453,8 @@ export function formatPathDifficultyGrade(
 }
 
 /**
- * Yard / volume bands: show p10–p90 at research depth; thin n (when provided)
- * uses a wider mean± band so we don't overclaim precision.
+ * Yard / volume bands: show typical range (p10–p90 values) at research depth;
+ * thin n (when provided) uses a wider mean± band so we don't overclaim precision.
  */
 export function formatRange(
   dist: StatDist | undefined,

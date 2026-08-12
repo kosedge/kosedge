@@ -223,6 +223,9 @@ describe("pro sport IA", () => {
     expect(desk.footerCards.some((c) => c.title === "Power Ratings")).toBe(
       false,
     );
+    const gameBoxes = desk.footerCards.find((c) => c.title === "Game Boxes");
+    expect(gameBoxes?.description.toLowerCase()).not.toMatch(/p10/);
+    expect(gameBoxes?.description.toLowerCase()).toContain("typical range");
   });
 
   it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {

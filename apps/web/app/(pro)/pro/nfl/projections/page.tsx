@@ -30,6 +30,12 @@ import {
   type NflFuturesOddsBundle,
 } from "@/lib/nfl-futures-odds";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
+import {
+  HIDE_PERCENTILES_LABEL,
+  RANGE_TOOLTIP,
+  SHOW_PERCENTILES_LABEL,
+  formatPercentileReveal,
+} from "@/lib/nfl-range-ux";
 
 type SearchValue = string | string[] | undefined;
 
@@ -40,6 +46,33 @@ function firstValue(value: SearchValue): string | undefined {
 
 function percentage(value: number, digits = 1): string {
   return `${(value * 100).toFixed(digits)}%`;
+}
+
+function projectionsHref(params: {
+  tab?: string;
+  team?: string;
+  position?: string;
+  player?: string;
+  teamSort?: string;
+  playerSort?: string;
+  phase?: string;
+  percentiles?: boolean;
+}): string {
+  const sp = new URLSearchParams();
+  if (params.tab && params.tab !== "team") sp.set("tab", params.tab);
+  if (params.team) sp.set("team", params.team);
+  if (params.position) sp.set("position", params.position);
+  if (params.player) sp.set("player", params.player);
+  if (params.teamSort && params.teamSort !== "playoff") {
+    sp.set("teamSort", params.teamSort);
+  }
+  if (params.playerSort && params.playerSort !== "yards") {
+    sp.set("playerSort", params.playerSort);
+  }
+  if (params.phase && params.phase !== "regular") sp.set("phase", params.phase);
+  if (params.percentiles) sp.set("percentiles", "1");
+  const q = sp.toString();
+  return q ? `/pro/nfl/projections?${q}` : "/pro/nfl/projections";
 }
 
 function totalYards(player: PlayerProjectionTotalsRow): number {
@@ -169,6 +202,17 @@ export default async function NflProjectionsPage({
   const teamSort = firstValue(search.teamSort) ?? "playoff";
   const playerSort = firstValue(search.playerSort) ?? "yards";
   const phase = firstValue(search.phase) === "playoff" ? "playoff" : "regular";
+  const showPercentiles = firstValue(search.percentiles) === "1";
+  const queryState = {
+    tab,
+    team: team || undefined,
+    position: position || undefined,
+    player: playerSearch || undefined,
+    teamSort,
+    playerSort,
+    phase,
+    percentiles: showPercentiles,
+  };
 
   const uniqueTeams = [
     ...new Set(bundle.teamRows.map((row) => row.team)),
@@ -372,6 +416,9 @@ export default async function NflProjectionsPage({
           className="grid gap-3 md:grid-cols-2 xl:grid-cols-6"
         >
           <input type="hidden" name="tab" value={tab} />
+          {showPercentiles ? (
+            <input type="hidden" name="percentiles" value="1" />
+          ) : null}
           <label className="text-xs text-kos-text/70">
             Team
             <select
@@ -456,6 +503,12 @@ export default async function NflProjectionsPage({
             rows={teamRows.slice(0, 32)}
             actuals={actuals}
             oddsBundle={oddsBundle}
+            nSims={bundle.nTeamSims ?? null}
+            showPercentiles={showPercentiles}
+            percentilesHref={projectionsHref({
+              ...queryState,
+              percentiles: !showPercentiles,
+            })}
           />
         ) : null}
 
@@ -480,22 +533,113 @@ function TeamFuturesBoard({
   rows,
   actuals,
   oddsBundle,
+  nSims,
+  showPercentiles,
+  percentilesHref,
 }: {
   rows: TeamProjectionRow[];
   actuals: Awaited<ReturnType<typeof loadNflProjectionActualsAsync>>;
   oddsBundle: NflFuturesOddsBundle;
+  nSims: number | null;
+  showPercentiles: boolean;
+  percentilesHref: string;
 }) {
   return (
     <article className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5 xl:col-span-2">
-      <h2 className="text-xl font-semibold text-kos-text">
-        Team · Wins / Div / Conf / SB
-      </h2>
-      <p className="mt-1 text-sm text-kos-text/70">
-        Wins use Projected · Current · odds (odds — until win-total markets
-        join). Super Bowl column joins best available SB winner price.
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-semibold text-kos-text">
+            Team · Wins / Div / Conf / SB
+          </h2>
+          <p className="mt-1 text-sm text-kos-text/70">
+            Wins use Projected · Current · odds (odds — until win-total markets
+            join). Super Bowl column joins best available SB winner price.
+          </p>
+        </div>
+        <Link
+          href={percentilesHref}
+          className="min-h-11 shrink-0 rounded-lg px-2 py-2 text-xs font-semibold text-kos-gold/90 underline-offset-2 hover:underline sm:min-h-0 sm:py-1"
+          title={showPercentiles ? RANGE_TOOLTIP : undefined}
+        >
+          {showPercentiles ? HIDE_PERCENTILES_LABEL : SHOW_PERCENTILES_LABEL}
+        </Link>
+      </div>
       <CurrentYtdHint className="mt-1" />
-      <div className="mt-4 overflow-x-auto">
+      {showPercentiles ? (
+        <p className="mt-1 text-[11px] text-kos-text/50" title={RANGE_TOOLTIP}>
+          {RANGE_TOOLTIP}
+          {nSims != null && nSims > 0
+            ? ` · ${nSims.toLocaleString()} sims`
+            : ""}
+        </p>
+      ) : null}
+
+      {/* Mobile cards — wins / playoff / SB, no percentile jargon by default */}
+      <ol className="mt-4 space-y-3 sm:hidden">
+        {rows.map((row) => {
+          const sbOdds = superBowlOddsForTeam(oddsBundle, row.team);
+          return (
+            <li
+              key={row.team}
+              className="rounded-xl border border-white/10 bg-white/3 p-3"
+            >
+              <p className="font-semibold text-kos-text">{row.team}</p>
+              <dl className="mt-2 grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <dt className="text-[10px] uppercase tracking-wide text-kos-text/45">
+                    Wins
+                  </dt>
+                  <dd className="mt-0.5 text-sm font-semibold tabular-nums text-kos-gold">
+                    {formatProjectedValue(row.expectedWins, { digits: 1 })}
+                  </dd>
+                  <dd className="text-[11px] tabular-nums text-kos-text/55">
+                    {formatCurrentYtd(
+                      teamActualWins(actuals, row.team),
+                      "counting",
+                      0,
+                    )}{" "}
+                    current
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] uppercase tracking-wide text-kos-text/45">
+                    Playoff
+                  </dt>
+                  <dd className="mt-0.5 text-sm tabular-nums text-kos-text/85">
+                    {percentage(row.playoffProb, 2)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] uppercase tracking-wide text-kos-text/45">
+                    SB
+                  </dt>
+                  <dd className="mt-0.5 text-sm tabular-nums text-kos-gold">
+                    {percentage(row.superBowlWinProb, 2)}
+                  </dd>
+                  <dd className="text-[11px] tabular-nums text-kos-text/55">
+                    {formatCurrentOdds(sbOdds)}
+                  </dd>
+                </div>
+              </dl>
+              {showPercentiles ? (
+                <p
+                  className="mt-2 text-[11px] tabular-nums text-kos-text/55"
+                  title={RANGE_TOOLTIP}
+                >
+                  {formatPercentileReveal({
+                    p10: row.winsP10,
+                    p50: row.expectedWins,
+                    p90: row.winsP90,
+                    digits: 1,
+                  })}
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="mt-4 hidden overflow-x-auto sm:block">
         <table className="min-w-full border-separate border-spacing-0">
           <thead>
             <tr>
@@ -503,9 +647,14 @@ function TeamFuturesBoard({
                 Team
               </th>
               <PlayerFutureColumnHeaders projectedLabel="Wins (proj)" />
-              <th className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65">
-                P10-P90
-              </th>
+              {showPercentiles ? (
+                <th
+                  className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
+                  title={RANGE_TOOLTIP}
+                >
+                  Percentiles
+                </th>
+              ) : null}
               <th className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65">
                 Playoff
               </th>
@@ -536,9 +685,20 @@ function TeamFuturesBoard({
                     projectedDigits={1}
                     projectedSubLabel="wins"
                   />
-                  <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
-                    {row.winsP10}-{row.winsP90}
-                  </td>
+                  {showPercentiles ? (
+                    <td
+                      className="border-b border-white/5 px-3 py-2 text-xs tabular-nums text-kos-text/75"
+                      title={RANGE_TOOLTIP}
+                    >
+                      {formatPercentileReveal({
+                        // Artifact ships expected wins (mean) + p10/p90; no separate wins_p50.
+                        p10: row.winsP10,
+                        p50: row.expectedWins,
+                        p90: row.winsP90,
+                        digits: 1,
+                      })}
+                    </td>
+                  ) : null}
                   <td className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85">
                     {percentage(row.playoffProb, 2)}
                   </td>
