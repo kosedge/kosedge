@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { fetchSeasonEngineSurvivorPlan } from "@/lib/nfl-season-engine";
-import type { InjuryPathInput } from "@/lib/nfl-season-engine-format";
+import {
+  duplicateSurvivorPlanTeams,
+  type InjuryPathInput,
+} from "@/lib/nfl-season-engine-format";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 180;
@@ -18,6 +21,19 @@ export async function POST(req: Request) {
     picksRaw && typeof picksRaw === "object" && !Array.isArray(picksRaw)
       ? (picksRaw as Record<string, string>)
       : {};
+
+  const dupes = duplicateSurvivorPlanTeams(picks);
+  if (dupes.length) {
+    return NextResponse.json(
+      {
+        error: `Team ${dupes.join(", ")} locked in multiple weeks; survivor allows one use`,
+        used_teams: Object.values(picks),
+        locked_picks: picks,
+        weeks: [],
+      },
+      { status: 400 },
+    );
+  }
 
   const result = await fetchSeasonEngineSurvivorPlan({
     picks,

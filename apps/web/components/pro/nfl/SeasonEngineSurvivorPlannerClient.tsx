@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
   NFL_DEFAULT_N_SURVIVOR_PATHS,
+  NFL_SEASON_ENGINE_TEAMS,
+  NFL_SURVIVOR_PLAN_TOP_N,
   formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
@@ -251,7 +253,7 @@ export default function SeasonEngineSurvivorPlannerClient({
           body: JSON.stringify({
             picks: nextPicks,
             nSims: N_SIMS,
-            topN: 6,
+            topN: NFL_SURVIVOR_PLAN_TOP_N,
           }),
         });
         const json = (await res.json()) as PlanPayload;
@@ -319,6 +321,11 @@ export default function SeasonEngineSurvivorPlannerClient({
   }, [hydrated]);
 
   const used = useMemo(() => new Set(Object.values(picks)), [picks]);
+  const usedList = useMemo(() => [...used].sort(), [used]);
+  const availableList = useMemo(
+    () => NFL_SEASON_ENGINE_TEAMS.filter((t) => !used.has(t)),
+    [used],
+  );
   const weeks = result?.weeks ?? [];
   const grade = result?.slate_grade ?? "Empty";
   const lockedCount = Object.keys(picks).length;
@@ -330,8 +337,9 @@ export default function SeasonEngineSurvivorPlannerClient({
   }
 
   function lockWeek(week: number, team: string) {
+    const canon = normalizeNflTeamCode(team) ?? team.trim().toUpperCase();
+    if (!canon) return;
     const next = { ...picks };
-    const canon = normalizeNflTeamCode(team) ?? team;
     for (const [w, t] of Object.entries(next)) {
       if ((normalizeNflTeamCode(t) ?? t) === canon) delete next[w];
     }
@@ -416,7 +424,7 @@ export default function SeasonEngineSurvivorPlannerClient({
         </div>
 
         <div
-          className={`sticky top-[var(--kos-pro-header-h,7.5rem)] z-30 border-b border-white/10 px-3 py-3 backdrop-blur-md sm:static sm:z-auto sm:border-b-0 sm:px-5 sm:py-4 sm:backdrop-blur-none ${gradeTone(grade)}`}
+          className={`border-b border-white/10 px-3 py-3 sm:px-5 sm:py-4 ${gradeTone(grade)}`}
         >
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="min-w-0">
@@ -497,6 +505,23 @@ export default function SeasonEngineSurvivorPlannerClient({
         </div>
 
         <div className="space-y-3 px-4 py-4 sm:px-5">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <p className={labelClass}>Teams used ({usedList.length})</p>
+              <p className="min-h-11 rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-kos-text/80">
+                Used: {usedList.length ? usedList.join(", ") : "none"}
+              </p>
+            </div>
+            <div>
+              <p className={labelClass}>
+                Teams available ({availableList.length})
+              </p>
+              <p className="min-h-11 rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-kos-text/80">
+                Available:{" "}
+                {availableList.length ? availableList.join(", ") : "none left"}
+              </p>
+            </div>
+          </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <button
               type="button"
@@ -505,9 +530,6 @@ export default function SeasonEngineSurvivorPlannerClient({
             >
               Reset plan
             </button>
-            <p className="text-xs text-kos-text/55 break-words">
-              Used: {used.size ? [...used].sort().join(", ") : "none"}
-            </p>
             {(depthSource || depthAsOf) && (
               <p className="text-[11px] text-kos-text/45 break-words">
                 Depth {depthSource || "—"}
@@ -636,38 +658,23 @@ export default function SeasonEngineSurvivorPlannerClient({
                   ) : null}
                 </div>
 
-                <div className="flex w-full flex-col gap-2 sm:min-w-[12rem] sm:flex-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-                  <label className="sr-only" htmlFor={`plan-week-${week}`}>
-                    Week {week} pick
-                  </label>
-                  <select
-                    id={`plan-week-${week}`}
-                    className={`${selectClass} sm:max-w-[14rem]`}
-                    value={lockedTeam}
-                    onChange={(e) => {
-                      const team = e.target.value;
-                      if (!team) clearWeek(week);
-                      else lockWeek(week, team);
-                    }}
-                  >
-                    {!locked ? <option value="">— pick —</option> : null}
-                    {locked ? <option value="">— clear —</option> : null}
-                    {selectOptions.map((team) => (
-                      <option key={team} value={team}>
-                        {team}
-                        {used.has(team) && team !== lockedTeam ? " (used)" : ""}
-                      </option>
-                    ))}
-                  </select>
-                  {locked ? (
-                    <button
-                      type="button"
-                      onClick={() => clearWeek(week)}
-                      className="min-h-11 w-full rounded-lg border border-white/15 px-3 text-sm font-semibold text-kos-text/70 hover:border-white/30 sm:w-auto"
-                    >
-                      Clear
-                    </button>
-                  ) : null}
+                <div className="flex w-full flex-col gap-2 sm:min-w-[14rem] sm:max-w-sm sm:flex-1 sm:items-stretch sm:justify-end">
+                  <WeekTeamPicker
+                    week={week}
+                    lockedTeam={lockedTeam}
+                    options={selectOptions.map((team) => {
+                      const pick =
+                        ranked.find((r) => r.team === team) ||
+                        (lockedPick?.team === team ? lockedPick : null);
+                      return {
+                        team,
+                        pick,
+                        burned: used.has(team) && team !== lockedTeam,
+                      };
+                    })}
+                    onPick={(team) => lockWeek(week, team)}
+                    onClear={() => clearWeek(week)}
+                  />
                 </div>
               </div>
 
@@ -739,6 +746,119 @@ export default function SeasonEngineSurvivorPlannerClient({
           {result.formula.best_remaining_equity ? (
             <p>Best left: {result.formula.best_remaining_equity}</p>
           ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function WeekTeamPicker({
+  week,
+  lockedTeam,
+  options,
+  onPick,
+  onClear,
+}: {
+  week: number;
+  lockedTeam: string;
+  options: Array<{
+    team: string;
+    pick: PlanPick | null;
+    burned: boolean;
+  }>;
+  onPick: (team: string) => void;
+  onClear: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const listId = `plan-week-${week}-list`;
+  const filtered = options.filter((opt) => {
+    if (!query.trim()) return true;
+    const q = query.trim().toLowerCase();
+    const opp = opt.pick?.opponent?.toLowerCase() ?? "";
+    return opt.team.toLowerCase().includes(q) || opp.includes(q);
+  });
+  const locked = Boolean(lockedTeam);
+
+  return (
+    <div className="relative z-20 w-full">
+      <label className="sr-only" htmlFor={`plan-week-${week}`}>
+        Week {week} pick
+      </label>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          id={`plan-week-${week}`}
+          aria-label={
+            locked ? `Week ${week} pick ${lockedTeam}` : `Week ${week} pick`
+          }
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={listId}
+          onClick={() => setOpen((v) => !v)}
+          className={`${selectClass} text-left`}
+        >
+          {locked ? lockedTeam : "Pick any remaining team"}
+        </button>
+        {locked ? (
+          <button
+            type="button"
+            onClick={onClear}
+            className="min-h-11 shrink-0 rounded-lg border border-white/15 px-3 text-sm font-semibold text-kos-text/70 hover:border-white/30"
+          >
+            Clear
+          </button>
+        ) : null}
+      </div>
+      {open ? (
+        <div className="absolute left-0 right-0 top-full z-40 mt-1 rounded-xl border border-white/15 bg-[#10131a] shadow-xl shadow-black/50">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search team / opponent"
+            className="min-h-11 w-full border-b border-white/10 bg-transparent px-3 text-sm text-kos-text placeholder:text-kos-text/40 outline-none"
+            autoFocus
+          />
+          <ul
+            id={listId}
+            role="listbox"
+            className="max-h-64 overflow-y-auto py-1"
+          >
+            {filtered.length === 0 ? (
+              <li className="px-3 py-2 text-sm text-kos-text/55">
+                No remaining teams match.
+              </li>
+            ) : (
+              filtered.map((opt) => (
+                <li key={opt.team} role="option" aria-selected={opt.team === lockedTeam}>
+                  <button
+                    type="button"
+                    disabled={opt.burned}
+                    onClick={() => {
+                      if (opt.burned) return;
+                      onPick(opt.team);
+                      setOpen(false);
+                      setQuery("");
+                    }}
+                    className="flex min-h-11 w-full flex-col items-start px-3 py-2 text-left text-sm disabled:cursor-not-allowed disabled:opacity-40 hover:bg-kos-gold/10"
+                  >
+                    {opt.pick ? (
+                      <MatchupLine pick={opt.pick} />
+                    ) : (
+                      <span className="font-semibold text-kos-text">{opt.team}</span>
+                    )}
+                    <span className="text-[11px] text-kos-text/45">
+                      {opt.burned
+                        ? "Already used"
+                        : opt.team === lockedTeam
+                          ? "Current lock"
+                          : "Tap to lock"}
+                    </span>
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       ) : null}
     </div>

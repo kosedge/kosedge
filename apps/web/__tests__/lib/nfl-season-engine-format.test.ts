@@ -4,12 +4,15 @@ import {
   NFL_DEFAULT_N_SURVIVOR_PATHS,
   NFL_HONEST_PRECISION_MIN_N,
   NFL_SEASON_ENGINE_TEAMS,
+  NFL_SURVIVOR_PLAN_TOP_N,
   buildGameBoxesQuery,
   buildStarOutInjuryPath,
   buildSurvivorBody,
+  buildSurvivorPlanBody,
   canonicalizeSurvivorPickRow,
   canonicalizeTeamCodeMap,
   depthLabel,
+  duplicateSurvivorPlanTeams,
   formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
@@ -224,5 +227,14 @@ describe("nfl-season-engine-format", () => {
         available_teams: ["LAR", "LAC"],
       }),
     ).toEqual([]);
+  });
+
+  it("drops duplicate survivor teams client-side and flags them for the API", () => {
+    expect(
+      normalizeSurvivorPlanPicks({ "1": "KC", "2": "KC", "3": "BUF" }),
+    ).toEqual({ "1": "KC", "3": "BUF" });
+    expect(duplicateSurvivorPlanTeams({ "1": "KC", "2": "kc" })).toEqual(["KC"]);
+    expect(buildSurvivorPlanBody({}).top_n).toBe(NFL_SURVIVOR_PLAN_TOP_N);
+  });
   });
 });

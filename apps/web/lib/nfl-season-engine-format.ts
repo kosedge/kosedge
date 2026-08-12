@@ -263,6 +263,8 @@ export const NFL_HONEST_PRECISION_MIN_N = 2000;
 /** Interactive desk defaults (match model-service sim_depth knobs). */
 export const NFL_DEFAULT_N_GAME_BOX = 2000;
 export const NFL_DEFAULT_N_SURVIVOR_PATHS = 2000;
+/** Full remaining slate so the picker can show every unused team + matchup. */
+export const NFL_SURVIVOR_PLAN_TOP_N = 32;
 
 export function clampInt(
   value: unknown,
@@ -414,6 +416,23 @@ export function normalizeSurvivorPlanPicks(
   return out;
 }
 
+/** Teams that appear more than once in a raw planner map (before normalize). */
+export function duplicateSurvivorPlanTeams(
+  picks: Record<string, string> | Record<number, string> | null | undefined,
+): string[] {
+  if (!picks || typeof picks !== "object") return [];
+  const counts = new Map<string, number>();
+  for (const raw of Object.values(picks)) {
+    const team = normalizeNflTeamCode(String(raw ?? ""));
+    if (!team) continue;
+    counts.set(team, (counts.get(team) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .filter(([, n]) => n > 1)
+    .map(([team]) => team)
+    .sort();
+}
+
 export function buildSurvivorPlanBody(input: {
   picks?: Record<string, string> | Record<number, string>;
   nSims?: number;
@@ -442,7 +461,7 @@ export function buildSurvivorPlanBody(input: {
       20_000,
     ),
     picks: normalizeSurvivorPlanPicks(input.picks),
-    top_n: clampInt(input.topN, 6, 1, 32),
+    top_n: clampInt(input.topN, NFL_SURVIVOR_PLAN_TOP_N, 1, 32),
     ...(input.seed !== undefined
       ? { seed: clampInt(input.seed, 42, 0, 2_147_483_647) }
       : {}),

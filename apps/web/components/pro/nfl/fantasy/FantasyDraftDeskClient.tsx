@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
+import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
   notableValueNotes,
@@ -38,15 +39,20 @@ type Props = {
   initialTab?: "board" | "value" | "builder";
   /** When true, hide the big hero (builder route already has a page title). */
   compactHero?: boolean;
+  /** Rankings vs builder route — scoring links stay on this path. */
+  basePath?: string;
 };
 
-function buildHref(base: Record<string, string | undefined>): string {
+function buildHref(
+  basePath: string,
+  base: Record<string, string | undefined>,
+): string {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(base)) {
     if (value) params.set(key, value);
   }
   const query = params.toString();
-  return query ? `/pro/nfl/fantasy?${query}` : "/pro/nfl/fantasy";
+  return query ? `${basePath}?${query}` : basePath;
 }
 
 function readStoredRoster(): string[] {
@@ -76,6 +82,7 @@ export function FantasyDraftDeskClient({
   initialScoring = "half_ppr",
   initialTab = "board",
   compactHero = false,
+  basePath = "/pro/nfl/fantasy",
 }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(
     board.rows[0]?.playerId ?? null,
@@ -84,6 +91,9 @@ export function FantasyDraftDeskClient({
   const [tab, setTab] = useState<"board" | "value" | "builder">(initialTab);
   const [query, setQuery] = useState("");
   const [trueValuesOnly, setTrueValuesOnly] = useState(true);
+  const [posFilter, setPosFilter] = useState(
+    (initialPosition || "ALL").toUpperCase(),
+  );
 
   const selected = board.rows.find((r) => r.playerId === selectedId) ?? null;
   const validIds = useMemo(
@@ -123,7 +133,11 @@ export function FantasyDraftDeskClient({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const pos = posFilter.toUpperCase();
     let rows = board.rows;
+    if (pos !== "ALL") {
+      rows = rows.filter((r) => r.position.toUpperCase() === pos);
+    }
     if (tab === "value") {
       // Real market edge only — drop unmatched ADP so proxy distortion can't leak in.
       rows = [...rows]
@@ -142,7 +156,7 @@ export function FantasyDraftDeskClient({
         r.team.toLowerCase().includes(q) ||
         r.position.toLowerCase().includes(q),
     );
-  }, [board.rows, query, tab, trueValuesOnly]);
+  }, [board.rows, query, tab, trueValuesOnly, posFilter]);
 
   const expertNotes = useMemo(() => {
     const notes = notableValueNotes(board.rows, 3);
@@ -171,7 +185,6 @@ export function FantasyDraftDeskClient({
 
   const isEmpty = board.rows.length === 0;
   const isPreseason = board.source === "preseason-fallback";
-  const posFilter = (initialPosition || "ALL").toUpperCase();
   const kdFilter = posFilter === "K" || posFilter === "DST";
 
   const hasKd = board.rows.some((r) =>
@@ -181,7 +194,7 @@ export function FantasyDraftDeskClient({
   const positionTabs = hasKd
     ? POSITION_TABS
     : POSITION_TABS.filter((p) => p !== "K" && p !== "DST");
-  const kdUnavailable = isPreseason || (kdFilter && isEmpty);
+  const kdUnavailable = !hasKd;
 
   return (
     <div className="fantasy-desk space-y-5">
@@ -252,21 +265,23 @@ export function FantasyDraftDeskClient({
       {kdUnavailable ? (
         <HonestStatusBanner title="K / DST unavailable" tone="amber">
           <p>
-            Kickers and defenses aren&apos;t on the preseason skill board.
-            Filter to QB / RB / WR / TE, or wait until draft rankings include
-            K/DST. Mocks skip those roster slots and do not ding grades for them.
+            Kickers and defenses are not on this board. Preseason player totals
+            are QB / RB / WR / TE only — named K/DST rankings wait until{" "}
+            <code className="text-amber-50">nfl_kicker_dst_projections</code>{" "}
+            materializes into{" "}
+            <code className="text-amber-50">/nfl/fantasy/draft-rankings</code>{" "}
+            (and the preseason bundle). Until then mocks skip those roster slots
+            and grades do not ding missing K/DST. No invented projections.
           </p>
           {kdFilter ? (
             <p className="mt-2">
-              <Link
-                href={buildHref({
-                  scoring: initialScoring,
-                  position: undefined,
-                })}
+              <button
+                type="button"
+                onClick={() => setPosFilter("ALL")}
                 className="font-semibold text-amber-50 underline underline-offset-2"
               >
                 Clear {posFilter} filter →
-              </Link>
+              </button>
             </p>
           ) : null}
         </HonestStatusBanner>
@@ -295,15 +310,13 @@ export function FantasyDraftDeskClient({
           </p>
           {posFilter !== "ALL" ? (
             <p className="mt-2">
-              <Link
-                href={buildHref({
-                  scoring: initialScoring,
-                  position: undefined,
-                })}
+              <button
+                type="button"
+                onClick={() => setPosFilter("ALL")}
                 className="font-semibold text-kos-text underline underline-offset-2"
               >
                 Show all positions →
-              </Link>
+              </button>
             </p>
           ) : null}
         </HonestStatusBanner>
@@ -342,20 +355,18 @@ export function FantasyDraftDeskClient({
               {positionTabs.map((tabPos) => {
                 const active = posFilter === tabPos;
                 return (
-                  <Link
+                  <button
                     key={tabPos}
-                    href={buildHref({
-                      scoring: initialScoring,
-                      position: tabPos === "ALL" ? undefined : tabPos,
-                    })}
-                    className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                    type="button"
+                    onClick={() => setPosFilter(tabPos)}
+                    className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-semibold transition active:scale-[0.98] ${
                       active
                         ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
                         : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-kos-gold/25"
                     }`}
                   >
                     {tabPos}
-                  </Link>
+                  </button>
                 );
               })}
             </nav>
@@ -365,10 +376,8 @@ export function FantasyDraftDeskClient({
                 return (
                   <Link
                     key={profile.value}
-                    href={buildHref({
+                    href={buildHref(basePath, {
                       scoring: profile.value,
-                      position:
-                        initialPosition === "ALL" ? undefined : initialPosition,
                     })}
                     className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
                       active
@@ -407,13 +416,25 @@ export function FantasyDraftDeskClient({
                   : ""}
               </button>
             ))}
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search player / team"
-              className="min-w-0 flex-1 rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-sm text-kos-text placeholder:text-kos-text/40 focus:border-kos-gold/40 focus:outline-none sm:ml-auto sm:max-w-xs"
-            />
+            {tab !== "builder" ? (
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search player / team"
+                className="min-w-0 flex-1 rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-sm text-kos-text placeholder:text-kos-text/40 focus:border-kos-gold/40 focus:outline-none sm:ml-auto sm:max-w-xs"
+              />
+            ) : null}
           </div>
+          {tab !== "builder" ? (
+            <div className="mt-3 md:hidden">
+              <PlayerCombobox
+                players={board.rows}
+                rosterSet={rosterSet}
+                onToggle={toggleRoster}
+                positionFilter={posFilter}
+              />
+            </div>
+          ) : null}
         </section>
       ) : null}
 
@@ -426,12 +447,11 @@ export function FantasyDraftDeskClient({
           byNeed={byNeed}
           rosterSet={rosterSet}
           scoring={board.scoringProfile}
-          onSelect={(id) => {
-            setSelectedId(id);
-            setTab("board");
-          }}
+          onSelect={(id) => setSelectedId(id)}
           onToggle={toggleRoster}
           onBrowse={() => setTab("board")}
+          boardRows={board.rows}
+          posFilter={posFilter}
         />
       ) : null}
 
@@ -707,6 +727,14 @@ export function FantasyDraftDeskClient({
           </section>
 
           <div className="lg:sticky lg:top-24 lg:self-start">
+            <div className="mb-4 hidden md:block">
+              <PlayerCombobox
+                players={board.rows}
+                rosterSet={rosterSet}
+                onToggle={toggleRoster}
+                positionFilter={posFilter}
+              />
+            </div>
             <PlayerCard
               row={selected}
               onRoster={selected ? rosterSet.has(selected.playerId) : false}
@@ -905,6 +933,8 @@ function TeamBuilderPanel({
   onSelect,
   onToggle,
   onBrowse,
+  boardRows,
+  posFilter,
 }: {
   roster: FantasyDeskRow[];
   grade: ReturnType<typeof teamGrade>;
@@ -916,6 +946,8 @@ function TeamBuilderPanel({
   onSelect: (id: string) => void;
   onToggle: (id: string) => void;
   onBrowse: () => void;
+  boardRows: FantasyDeskRow[];
+  posFilter: string;
 }) {
   return (
     <section className="grid gap-5 lg:grid-cols-2">
@@ -933,6 +965,14 @@ function TeamBuilderPanel({
           </div>
         </div>
         <p className="mt-2 text-sm text-kos-text/70">{grade.detail}</p>
+        <div className="mt-4">
+          <PlayerCombobox
+            players={boardRows}
+            rosterSet={rosterSet}
+            onToggle={onToggle}
+            positionFilter={posFilter}
+          />
+        </div>
         <div className="mt-3 flex flex-wrap gap-2">
           <button
             type="button"
@@ -963,14 +1003,7 @@ function TeamBuilderPanel({
         <ul className="mt-4 space-y-2">
           {roster.length === 0 ? (
             <li className="rounded-xl border border-dashed border-white/15 p-4 text-sm text-kos-text/55">
-              <p>Empty roster — add players from Rankings or Value.</p>
-              <button
-                type="button"
-                onClick={onBrowse}
-                className="mt-3 min-h-10 rounded-lg border border-kos-gold/40 bg-kos-gold/10 px-3 py-2 text-xs font-semibold text-kos-gold"
-              >
-                Add from Rankings
-              </button>
+              <p>Empty roster — search the drop box above, then Add to builder.</p>
             </li>
           ) : (
             roster.map((row) => (

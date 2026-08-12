@@ -4,6 +4,7 @@ import {
   bestAvailableByNeedAware,
   bestAvailableByValueAware,
   computeTiming,
+  MAX_RECOMMEND_RANK_DELTA,
   reachPenalty,
   scoreValueAwarePlayer,
   VALUE_AWARE_WEIGHTS,
@@ -246,7 +247,8 @@ describe("value-aware recommendations", () => {
         2,
       );
       expect(atPick18[0]?.row.playerId).toBe("discount");
-      expect(atPick18[0]?.timing).toBe("wait");
+      expect(atPick18[0]?.timing).toBe("fair");
+      expect(atPick18[0]?.timingHint).toBeNull();
     });
   });
 
@@ -316,6 +318,54 @@ describe("value-aware recommendations", () => {
       expect(VALUE_AWARE_WEIGHTS.reachPenaltyPerPick).toBeGreaterThan(0);
       expect(VALUE_AWARE_WEIGHTS.discountBonusScale).toBeGreaterThan(0);
       expect(VALUE_AWARE_WEIGHTS.eliteRankThreshold).toBe(12);
+    });
+  });
+
+  describe("MAX_RECOMMEND_RANK_DELTA = 12", () => {
+    it("never take-now / wait-spam when ADP is more than 12 spots later", () => {
+      expect(MAX_RECOMMEND_RANK_DELTA).toBe(12);
+      const lottery = row({
+        playerId: "gesicki",
+        playerName: "M.Gesicki",
+        position: "TE",
+        rankOverall: 47,
+        adp: 251,
+      });
+      const atR1 = scoreValueAwarePlayer(lottery, emptyCtx([lottery], [], 10));
+      expect(atR1.timing).toBe("fair");
+      expect(atR1.timingHint).toBeNull();
+
+      const suggestions = bestAvailableByValueAware(
+        [lottery],
+        emptyCtx([lottery], [], 10),
+        3,
+      );
+      expect(suggestions[0]?.timing).not.toBe("take_now");
+    });
+
+    it("still allows take-now when the reach vs ADP is within 12", () => {
+      const player = row({
+        playerId: "near",
+        playerName: "Near ADP",
+        position: "RB",
+        rankOverall: 22,
+        adp: 24,
+      });
+      const scored = scoreValueAwarePlayer(player, emptyCtx([player], [], 22));
+      expect(scored.timing).toBe("take_now");
+    });
+
+    it("builder mode does not CTA wait/take when |model−ADP| > 12", () => {
+      const player = row({
+        playerId: "gap",
+        playerName: "Big Gap",
+        position: "WR",
+        rankOverall: 20,
+        adp: 48,
+      });
+      const scored = scoreValueAwarePlayer(player, emptyCtx([player], []));
+      expect(scored.timing).toBe("fair");
+      expect(scored.timingHint).toBeNull();
     });
   });
 });

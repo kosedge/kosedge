@@ -54,6 +54,7 @@ export default async function FantasyTeamBuilderPage({
         initialScoring={scoring}
         initialTab="builder"
         compactHero
+        basePath="/pro/nfl/fantasy/builder"
       />
     </main>
   );
