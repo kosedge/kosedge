@@ -14,9 +14,12 @@ This script:
 1. Canonicalizes LA→LAR (and WSH→WAS) on outcomes, week rates, win dist,
    defense, players, and leaders.
 2. Rescales week rates so each team's Σ week p matches board expected wins.
-3. Recomputes 7-seed playoff + strength-bracket Super Bowl from aligned rates.
-4. Rebuilds ``team_win_distributions`` from the same MC (closes DET dual path).
-5. Writes coherence audit JSON next to the bundle.
+3. Projects those rates onto the complementary wall-chart game graph
+   (iterate until Σ p ≈ hp/(hp+ap) E[wins]) so playoff MC path records
+   match published wins — independent PF/PA rescale is not a valid season.
+4. Recomputes 7-seed playoff + strength-bracket Super Bowl from aligned rates.
+5. Publishes path-MC expected_wins + win_dist from the same draws.
+6. Writes coherence audit JSON next to the bundle.
 """
 
 from __future__ import annotations
@@ -44,6 +47,7 @@ from nfl_playoff_from_week_rates import (  # noqa: E402
     e_wins_histogram,
     flag_win_dist_board_mismatches,
     flag_wins_playoff_sb_contradictions,
+    project_rates_onto_schedule,
     recompute_playoff_probs,
     rescale_week_rates_to_expected_wins,
     season_wins_from_rates,
@@ -131,6 +135,7 @@ def apply_coherence(
         {canonicalize_team(k) or k: v for k, v in raw_rates.items()}
     )
     aligned_rates = rescale_week_rates_to_expected_wins(raw_rates, targets)
+    aligned_rates, schedule_proj = project_rates_onto_schedule(aligned_rates)
     after_rate_wins = season_wins_from_rates(aligned_rates)
 
     recomputed = recompute_playoff_probs(
@@ -139,14 +144,17 @@ def apply_coherence(
         seed=seed,
         run_super_bowl=True,
     )
-    win_distributions = build_win_distributions_from_marginal_rates(
-        aligned_rates,
-        n_replicates=n_replicates,
-        seed=seed,
+    win_distributions = recomputed.get("win_distributions") or (
+        build_win_distributions_from_marginal_rates(
+            aligned_rates,
+            n_replicates=n_replicates,
+            seed=seed,
+        )
     )
     after_rows = apply_playoff_probs_to_team_rows(
         before_rows,
         recomputed,
+        rewrite_expected_wins=True,
         rewrite_super_bowl=True,
     )
     after_rows = apply_win_dist_percentiles_to_rows(after_rows, win_distributions)
@@ -163,10 +171,11 @@ def apply_coherence(
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "bundle": bundle_dir.name,
         "root_cause": (
-            "Soft-pile/defense expected_wins (production PF/PA path) diverged from "
-            "hierarchical team_week_win_rates AND stale team_win_distributions means; "
-            "Truth Layer playoffs used rates while Season Model / Futures still showed "
-            "hierarchical win histograms (DET board 7.05 vs dist μ 10.57; LAR 9.69 vs 11.11)."
+            "Independent week-rate rescale to PF/PA Pythagorean wins made "
+            "STRENGTH_ALIGN green on marginals while 7-seed MC uses hp/(hp+ap); "
+            "LAR 9.69 board vs ~10.8 path wins (CHI 13.93 vs ~10.8) — same run, "
+            "two statistics. Project rates onto the complementary schedule, then "
+            "publish path-MC wins/playoff/SB/win_dist from those draws."
         ),
         "method": recomputed["method"],
         "n_replicates": n_replicates,
@@ -187,10 +196,17 @@ def apply_coherence(
         "e_wins_histogram": hist,
         "contradiction_flags": flags,
         "win_dist_mismatch_flags": dist_flags,
+        "schedule_projection": {
+            "iterations": schedule_proj.get("iterations"),
+            "final_max_gap": schedule_proj.get("final_max_gap"),
+            "converged": schedule_proj.get("converged"),
+            "history": schedule_proj.get("history"),
+        },
         "production_path": (
-            "Player pass/rush/rec yards + TDs and defense PF/PA/expected_wins share the "
-            "soft-pile finalize budget path; week rates AND win distributions are rebuilt "
-            "from those board wins so Power / Futures / Season Model tell one story."
+            "Player pass/rush/rec yards + TDs and defense PF/PA stay on the "
+            "soft-pile finalize budget path. Published expected_wins / playoff / "
+            "SB / win_dist are the complementary wall-chart path MC from week "
+            "rates (hp/(hp+ap)), not independent PF/PA Pythagorean stretch."
         ),
         "team_id_scheme": "product_canonical_LAR",
     }
@@ -238,6 +254,13 @@ def apply_coherence(
     defense_path = bundle_dir / "team_defense_season_totals.csv"
     if defense_path.exists():
         defense = [_canon_team_field(r) for r in _load_csv(defense_path)]
+        wins_by_team = {
+            str(r["team"]): r.get("expected_wins") for r in after_rows
+        }
+        for row in defense:
+            t = str(row.get("team") or "")
+            if t in wins_by_team and wins_by_team[t] is not None:
+                row["expected_wins"] = wins_by_team[t]
         _write_csv(defense_path, defense, fieldnames=list(defense[0].keys()))
 
     players_path = bundle_dir / "player_regular_season_totals.csv"
@@ -267,17 +290,20 @@ def apply_coherence(
         qc = json.loads(qc_path.read_text(encoding="utf-8"))
         honesty = dict(qc.get("honesty") or {})
         honesty["playoff_prob"] = (
-            "7-seed MC from week rates rescaled to board expected_wins (strength coherence)"
+            "7-seed MC from week rates projected onto complementary wall-chart games"
         )
         honesty["super_bowl_win_prob"] = (
-            "strength-bracket MC on same aligned week rates (not softmax-only)"
+            "strength-bracket MC on the same path draws as expected_wins / playoff"
+        )
+        honesty["expected_wins"] = (
+            "path-MC mean from complementary hp/(hp+ap) games — not PF/PA Pythagorean stretch"
         )
         honesty["strength_coherence"] = (
-            "week rates + win distributions aligned to soft-pile/board expected_wins; "
-            "product id LAR"
+            "week rates projected onto schedule until Σp ≈ pairwise E[wins]; "
+            "board wins + win_dist + playoff/SB from the same path MC; product id LAR"
         )
         honesty["win_distributions"] = (
-            "rebuilt from aligned week-rate marginal Bernoullis (E[wins]=Σp=board)"
+            "rebuilt from path-MC win totals (same draws as 7-seed playoff / SB)"
         )
         qc["honesty"] = honesty
         sanity = dict(qc.get("sanity") or {})
@@ -342,6 +368,7 @@ def main() -> None:
             "e_wins_histogram": audit["e_wins_histogram"],
             "contradiction_flags": audit["contradiction_flags"],
             "win_dist_mismatch_flags": audit.get("win_dist_mismatch_flags"),
+            "schedule_projection": audit.get("schedule_projection"),
             "dry_run": args.dry_run,
         },
         indent=2,

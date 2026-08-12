@@ -1,46 +1,46 @@
 {
-  "generated_at_utc": "2026-08-12T10:20:05.836362+00:00",
+  "generated_at_utc": "2026-08-12T11:31:22.025038+00:00",
   "bundle": "nfl-preseason-sim-2026-20260809T165350Z",
-  "root_cause": "Soft-pile/defense expected_wins (production PF/PA path) diverged from hierarchical team_week_win_rates AND stale team_win_distributions means; Truth Layer playoffs used rates while Season Model / Futures still showed hierarchical win histograms (DET board 7.05 vs dist \u03bc 10.57; LAR 9.69 vs 11.11).",
+  "root_cause": "Independent week-rate rescale to PF/PA Pythagorean wins made STRENGTH_ALIGN green on marginals while 7-seed MC uses hp/(hp+ap); LAR 9.69 board vs ~10.8 path wins (CHI 13.93 vs ~10.8) \u2014 same run, two statistics. Project rates onto the complementary schedule, then publish path-MC wins/playoff/SB/win_dist from those draws.",
   "method": "7seed_mc_plus_strength_bracket_sb",
   "n_replicates": 5000,
   "seed": 20260811,
   "before_lar": {
     "team": "LAR",
     "expected_wins": 9.6938,
-    "playoff_prob": 0.8314,
-    "division_title_prob": 0.36515,
-    "super_bowl_win_prob": 0.0708
-  },
-  "after_lar": {
-    "team": "LAR",
-    "expected_wins": 9.6938,
     "playoff_prob": 0.8088,
     "division_title_prob": 0.3398,
     "super_bowl_win_prob": 0.0688
   },
-  "before_det": {
-    "team": "DET",
-    "expected_wins": 7.0454,
-    "playoff_prob": 0.5766,
-    "division_title_prob": 0.2703,
-    "super_bowl_win_prob": 0.02185
+  "after_lar": {
+    "team": "LAR",
+    "expected_wins": 11.0808,
+    "playoff_prob": 0.8552,
+    "division_title_prob": 0.479,
+    "super_bowl_win_prob": 0.1116
   },
-  "after_det": {
+  "before_det": {
     "team": "DET",
     "expected_wins": 7.0454,
     "playoff_prob": 0.5348,
     "division_title_prob": 0.239,
     "super_bowl_win_prob": 0.02
   },
+  "after_det": {
+    "team": "DET",
+    "expected_wins": 10.4858,
+    "playoff_prob": 0.7588,
+    "division_title_prob": 0.4962,
+    "super_bowl_win_prob": 0.0772
+  },
   "before_rate_wins_lar": 9.6938,
-  "after_rate_wins_lar": 9.6938,
-  "before_rate_wins_det": 7.0459,
-  "after_rate_wins_det": 7.0454,
-  "before_win_dist_mean_det": 7.0523,
-  "after_win_dist_mean_det": 7.03,
-  "before_win_dist_mean_lar": 9.7311,
-  "after_win_dist_mean_lar": 9.686,
+  "after_rate_wins_lar": 11.0992,
+  "before_rate_wins_det": 7.0454,
+  "after_rate_wins_det": 10.4155,
+  "before_win_dist_mean_det": 7.03,
+  "after_win_dist_mean_det": 10.4858,
+  "before_win_dist_mean_lar": 9.686,
+  "after_win_dist_mean_lar": 11.0808,
   "sanity": {
     "sum_playoff_afc": 7.0,
     "sum_playoff_nfc": 7.0,
@@ -50,14 +50,53 @@
     "sum_super_bowl": 1.0
   },
   "e_wins_histogram": {
-    "<=5": 5,
-    "5-7": 8,
-    "7-10": 8,
-    "10-12": 4,
-    ">=12": 7
+    "<=5": 0,
+    "5-7": 7,
+    "7-10": 16,
+    "10-12": 9,
+    ">=12": 0
   },
   "contradiction_flags": [],
   "win_dist_mismatch_flags": [],
-  "production_path": "Player pass/rush/rec yards + TDs and defense PF/PA/expected_wins share the soft-pile finalize budget path; week rates AND win distributions are rebuilt from those board wins so Power / Futures / Season Model tell one story.",
+  "schedule_projection": {
+    "iterations": 4,
+    "final_max_gap": 0.2949,
+    "converged": true,
+    "history": [
+      {
+        "iter": 0,
+        "max_gap": 3.0835,
+        "lar_marginal": 9.6938,
+        "lar_pairwise": 10.8182,
+        "chi_marginal": 13.9282,
+        "chi_pairwise": 10.8447
+      },
+      {
+        "iter": 1,
+        "max_gap": 1.2203,
+        "lar_marginal": 10.8182,
+        "lar_pairwise": 11.0541,
+        "chi_marginal": 10.8447,
+        "chi_pairwise": 9.6244
+      },
+      {
+        "iter": 2,
+        "max_gap": 0.5651,
+        "lar_marginal": 11.0541,
+        "lar_pairwise": 11.0992,
+        "chi_marginal": 9.6244,
+        "chi_pairwise": 9.0593
+      },
+      {
+        "iter": 3,
+        "max_gap": 0.2949,
+        "lar_marginal": 11.0992,
+        "lar_pairwise": 11.1039,
+        "chi_marginal": 9.0593,
+        "chi_pairwise": 8.7792
+      }
+    ]
+  },
+  "production_path": "Player pass/rush/rec yards + TDs and defense PF/PA stay on the soft-pile finalize budget path. Published expected_wins / playoff / SB / win_dist are the complementary wall-chart path MC from week rates (hp/(hp+ap)), not independent PF/PA Pythagorean stretch.",
   "team_id_scheme": "product_canonical_LAR"
 }

@@ -170,13 +170,48 @@ def test_apply_playoff_rewrites_sb_when_requested():
         "playoff_prob": {"LAR": 0.55},
         "division_title_prob": {"LAR": 0.22},
         "super_bowl_win_prob": {"LAR": 0.031},
+        "expected_wins_check": {"LAR": 10.82},
     }
     out = mod.apply_playoff_probs_to_team_rows(
-        rows, recomputed, rewrite_super_bowl=True
+        rows, recomputed, rewrite_super_bowl=True, rewrite_expected_wins=True
     )
     assert out[0]["team"] == "LAR"
     assert out[0]["playoff_prob"] == 0.55
     assert out[0]["super_bowl_win_prob"] == 0.031
+    assert out[0]["expected_wins"] == 10.82
+
+
+def test_pairwise_wins_crush_noncomplementary_marginals():
+    """Independent 0.98 rates are not 0.98 game WPs once hp/(hp+ap) runs."""
+    mod = _load_playoff_mod()
+    from services.nfl_canonical_teams import CANONICAL_TEAMS
+
+    rates = {t: {w: 0.5 for w in range(1, 19) if w != 11} for t in CANONICAL_TEAMS}
+    rates["CHI"] = {w: 0.98 for w in range(1, 19) if w != 11}
+    rates["LAR"] = {w: 0.57 for w in range(1, 19) if w != 11}
+    marginal = mod.season_wins_from_rates(rates)
+    pairwise = mod.pairwise_expected_wins(rates)
+    assert marginal["CHI"] == pytest.approx(16.66, abs=0.05)
+    assert pairwise["CHI"] < marginal["CHI"] - 2.0
+    assert abs(sum(pairwise.values()) - 272.0) < 1e-6
+
+
+def test_project_rates_onto_schedule_closes_chi_lar_gap():
+    mod = _load_playoff_mod()
+    from services.nfl_canonical_teams import CANONICAL_TEAMS
+
+    rates = {t: {w: 0.5 for w in range(1, 19) if w != 11} for t in CANONICAL_TEAMS}
+    rates["CHI"] = {w: 0.82 for w in range(1, 19) if w != 11}
+    rates["LAR"] = {w: 0.57 for w in range(1, 19) if w != 11}
+    projected, audit = mod.project_rates_onto_schedule(rates, max_iter=6, tol=0.35)
+    assert audit["converged"] is True
+    assert audit["final_max_gap"] <= 0.35
+    marg = mod.season_wins_from_rates(projected)
+    pair = mod.pairwise_expected_wins(projected)
+    assert abs(marg["CHI"] - pair["CHI"]) <= 0.35
+    assert abs(marg["LAR"] - pair["LAR"]) <= 0.35
+    # Must not hand-set LAR to a 12-win pile; just close the dual statistic.
+    assert 8.0 <= pair["LAR"] <= 12.5
 
 
 def test_histogram_bands():
