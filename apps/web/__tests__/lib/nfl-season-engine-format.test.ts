@@ -3,9 +3,12 @@ import {
   NFL_DEFAULT_N_GAME_BOX,
   NFL_DEFAULT_N_SURVIVOR_PATHS,
   NFL_HONEST_PRECISION_MIN_N,
+  NFL_SEASON_ENGINE_TEAMS,
   buildGameBoxesQuery,
   buildStarOutInjuryPath,
   buildSurvivorBody,
+  canonicalizeSurvivorPickRow,
+  canonicalizeTeamCodeMap,
   depthLabel,
   formatDepthBadge,
   formatPathDifficultyGrade,
@@ -16,23 +19,28 @@ import {
   isHonestPrecision,
   matchupsFromWallChart,
   normalizeNflTeamCode,
+  normalizeSurvivorPlanPicks,
   parseAlreadyUsedTeams,
   primaryStatsForPosition,
   rankSurvivorPicks,
+  rawLaRamsHits,
   starOutOptionsForMatchup,
 } from "@/lib/nfl-season-engine-format";
 import wallChart2026 from "@/lib/nfl-wall-chart-2026.schedule.json";
 
 describe("nfl-season-engine-format", () => {
   it("normalizes team aliases and parses used lists", () => {
-    expect(normalizeNflTeamCode("lar")).toBe("LA");
+    expect(normalizeNflTeamCode("lar")).toBe("LAR");
+    expect(normalizeNflTeamCode("LA")).toBe("LAR");
     expect(normalizeNflTeamCode("WSH")).toBe("WAS");
+    expect(normalizeNflTeamCode("LAC")).toBe("LAC");
     expect(normalizeNflTeamCode("zzz")).toBeNull();
     expect(parseAlreadyUsedTeams("KC, buf; LAR LAR")).toEqual([
       "KC",
       "BUF",
-      "LA",
+      "LAR",
     ]);
+    expect(parseAlreadyUsedTeams("LA, LAR, LAC")).toEqual(["LAR", "LAC"]);
   });
 
   it("shapes game-boxes query with clamps and validation", () => {
@@ -105,8 +113,11 @@ describe("nfl-season-engine-format", () => {
     expect(matchups.some((m) => m.awayTeam === "ARI" && m.homeTeam === "LAC" && m.week === 1)).toBe(
       true,
     );
-    expect(matchups.some((m) => m.awayTeam === "SF" && m.homeTeam === "LA" && m.week === 1)).toBe(
+    expect(matchups.some((m) => m.awayTeam === "SF" && m.homeTeam === "LAR" && m.week === 1)).toBe(
       true,
+    );
+    expect(matchups.some((m) => m.homeTeam === "LA" || m.awayTeam === "LA")).toBe(
+      false,
     );
     const week5Teams = new Set(
       matchups
@@ -168,5 +179,50 @@ describe("nfl-season-engine-format", () => {
     expect(td.primary).toContain("P(TD)");
     expect(td.secondary).toContain("exp");
     expect(td.secondary).toContain("fair");
+  });
+
+  it("keeps LAR as the only Rams id in the engine team list", () => {
+    expect(NFL_SEASON_ENGINE_TEAMS).toContain("LAR");
+    expect(NFL_SEASON_ENGINE_TEAMS).toContain("LAC");
+    expect(NFL_SEASON_ENGINE_TEAMS).not.toContain("LA");
+  });
+
+  it("collapses LA/LAR planner picks and rewrites survivor JSON to LAR", () => {
+    expect(normalizeSurvivorPlanPicks({ "1": "LA", "2": "LAR" })).toEqual({
+      "1": "LAR",
+    });
+    expect(canonicalizeTeamCodeMap({ "1": "LA", "6": "LAC" })).toEqual({
+      "1": "LAR",
+      "6": "LAC",
+    });
+    const rewritten = canonicalizeSurvivorPickRow({
+      team: "LA",
+      opponent: "LV",
+      home_away: "away",
+      matchup_label: "LA @ LV",
+      favorite_team: "LA",
+    });
+    expect(rewritten).toMatchObject({
+      team: "LAR",
+      opponent: "LV",
+      matchup_label: "LAR @ LV",
+      favorite_team: "LAR",
+    });
+    const dirty = {
+      already_used: ["LA"],
+      ranked_picks: [{ team: "LA", opponent: "LV", matchup_label: "LA @ LV" }],
+      used_teams: ["LAC"],
+    };
+    expect(rawLaRamsHits(dirty).length).toBeGreaterThan(0);
+    expect(
+      rawLaRamsHits({
+        already_used: ["LAR"],
+        ranked_picks: [
+          { team: "LAR", opponent: "LV", matchup_label: "LAR @ LV" },
+        ],
+        used_teams: ["LAC"],
+        available_teams: ["LAR", "LAC"],
+      }),
+    ).toEqual([]);
   });
 });

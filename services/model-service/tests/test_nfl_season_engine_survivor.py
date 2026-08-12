@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import re
+from typing import Any
+
 import pytest
 
 from src.services.nfl_season_engine import (
@@ -326,4 +329,107 @@ def test_suggest_survivor_paths_returns_three_valid() -> None:
     # Strategies should not all be identical on demo slate.
     pick_maps = [tuple(sorted(p["picks"].items())) for p in result.paths]
     assert len(set(pick_maps)) >= 2
+
+
+_RAW_LA_RAMS = re.compile(r"(^|[^A-Z])LA(?![A-Z])")
+_TEAM_KEYS = {"team", "opponent", "locked_team", "favorite_team"}
+_LIST_KEYS = {"already_used", "used_teams", "available_teams"}
+
+
+def _raw_la_rams_hits(payload: Any, path: str = "$") -> list[str]:
+    hits: list[str] = []
+    if isinstance(payload, list):
+        for i, item in enumerate(payload):
+            hits.extend(_raw_la_rams_hits(item, f"{path}[{i}]"))
+        return hits
+    if not isinstance(payload, dict):
+        return hits
+    for key, value in payload.items():
+        next_path = f"{path}.{key}"
+        if key in _TEAM_KEYS and value == "LA":
+            hits.append(next_path)
+        elif key in _LIST_KEYS and isinstance(value, list) and "LA" in value:
+            hits.append(next_path)
+        elif (
+            key == "matchup_label"
+            and isinstance(value, str)
+            and _RAW_LA_RAMS.search(value)
+        ):
+            hits.append(next_path)
+        elif key in ("locked_picks", "picks") and isinstance(value, dict):
+            for week, team in value.items():
+                if team == "LA":
+                    hits.append(f"{next_path}.{week}")
+        else:
+            hits.extend(_raw_la_rams_hits(value, next_path))
+    return hits
+
+
+def test_survivor_emits_lar_never_raw_la() -> None:
+    universe = build_demo_universe(2026)
+    result = evaluate_survivor(
+        universe, week=1, n_sims=24, seed=1, already_used=[], top_n=32
+    )
+    payload = result.to_dict()
+    teams = {r["team"] for r in result.all_teams_week}
+    assert "LAR" in teams
+    assert "LAC" in teams
+    assert "LA" not in teams
+    assert _raw_la_rams_hits(payload) == []
+    assert week_win_rate_for_team(result, "LA") == week_win_rate_for_team(
+        result, "LAR"
+    )
+
+
+def test_burning_la_alias_removes_lar_from_available() -> None:
+    universe = build_demo_universe(2026)
+    via_la = evaluate_survivor(
+        universe, week=1, n_sims=20, seed=2, already_used=["LA"], top_n=32
+    )
+    via_lar = evaluate_survivor(
+        universe, week=1, n_sims=20, seed=2, already_used=["LAR"], top_n=32
+    )
+    ranked_la = {r["team"] for r in via_la.ranked_picks}
+    ranked_lar = {r["team"] for r in via_lar.ranked_picks}
+    assert "LAR" not in ranked_la
+    assert "LA" not in ranked_la
+    assert ranked_la == ranked_lar
+    assert via_la.already_used == ["LAR"]
+    assert "LAC" in {r["team"] for r in via_la.all_teams_week}
+
+
+def test_cannot_double_pick_la_and_lar() -> None:
+    universe = build_demo_universe(2026)
+    with pytest.raises(ValueError, match="multiple weeks"):
+        evaluate_survivor_plan(
+            universe,
+            picks={"1": "LA", "2": "LAR"},
+            n_sims=8,
+            seed=1,
+        )
+
+
+def test_real_week1_slate_has_no_raw_la_rams() -> None:
+    universe = build_packaged_real_universe(2026)
+    result = evaluate_survivor(
+        universe, week=1, n_sims=16, seed=4, already_used=[], top_n=32
+    )
+    payload = result.to_dict()
+    assert _raw_la_rams_hits(payload) == []
+    rams = next(r for r in result.all_teams_week if r["team"] == "LAR")
+    chargers = next(r for r in result.all_teams_week if r["team"] == "LAC")
+    assert rams["plays_this_week"] is True
+    assert rams["opponent"] != "LA"
+    assert chargers["team"] == "LAC"
+    # SF @ LAR in week 1 on the 2026 wall chart.
+    assert rams["opponent"] == "SF"
+    plan = evaluate_survivor_plan(
+        universe, picks={"1": "LA"}, n_sims=12, seed=4, top_n=8
+    )
+    assert plan.locked_picks == {"1": "LAR"}
+    assert plan.used_teams == ["LAR"]
+    week1 = next(w for w in plan.weeks if w["week"] == 1)
+    assert week1["locked_team"] == "LAR"
+    assert "LA" not in (week1.get("available_teams") or [])
+    assert _raw_la_rams_hits(plan.to_dict()) == []
 

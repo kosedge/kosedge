@@ -7,6 +7,7 @@ import {
   formatPathDifficultyGrade,
   formatPct,
   formatScheduleDifficulty,
+  normalizeNflTeamCode,
   normalizeSurvivorPlanPicks,
 } from "@/lib/nfl-season-engine-format";
 
@@ -330,10 +331,11 @@ export default function SeasonEngineSurvivorPlannerClient({
 
   function lockWeek(week: number, team: string) {
     const next = { ...picks };
+    const canon = normalizeNflTeamCode(team) ?? team;
     for (const [w, t] of Object.entries(next)) {
-      if (t === team) delete next[w];
+      if ((normalizeNflTeamCode(t) ?? t) === canon) delete next[w];
     }
-    next[String(week)] = team;
+    next[String(week)] = canon;
     setPicks(normalizeSurvivorPlanPicks(next));
     pulseWeek(week);
   }
