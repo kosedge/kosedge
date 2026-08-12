@@ -1,15 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { formatArticleAttribution } from "@/lib/article-sectionizer";
+import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
 import { buildNflCampDesk } from "@/lib/nfl-camp-desk";
-import { getAllNflNewsUpdates } from "@/lib/nfl-news-updates";
+import {
+  formatCampDeskShortDate,
+  type CampDeskCard,
+} from "@/lib/nfl-camp-desk-daily";
+import { NFL_TEAM_DIRECTORY, teamDisplayName } from "@/lib/nfl-team-intel";
+import {
+  NFL_PRODUCT_SEASON,
+  resolveNflTruthLabel,
+} from "@/lib/nfl-truth-label";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "NFL Camp Desk",
   description:
-    "Kos Edge Camp Desk — first-week camp updates, beat links, and practice notes for the 2026 preseason.",
+    "KosEdge daily camp desk — league wrap and team notes. ESPN and beats are sources, not the product.",
 };
 
 function formatPublished(value: string | null): string {
@@ -26,9 +34,108 @@ function formatPublished(value: string | null): string {
   }).format(new Date(ts));
 }
 
-export default async function NflCampDeskPage() {
-  const desk = await buildNflCampDesk();
-  const kosEdgeNews = getAllNflNewsUpdates();
+function CampNoteCard({ card }: { card: CampDeskCard }) {
+  const isWrap = card.kind === "league_wrap";
+  return (
+    <article
+      className={`rounded-2xl border p-4 sm:p-5 ${
+        isWrap
+          ? "border-kos-gold/30 bg-kos-gold/5"
+          : "border-white/10 bg-black/35"
+      }`}
+      data-testid={isWrap ? "camp-desk-wrap" : "camp-desk-note"}
+      data-desk-date={card.desk_date}
+      data-source-type={card.source_type}
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+          KosEdge · {formatCampDeskShortDate(card.desk_date)}
+        </p>
+        {card.is_material_depth ? (
+          <span className="rounded-md border border-amber-400/35 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
+            SoT flag
+          </span>
+        ) : null}
+      </div>
+      <h2 className="mt-2 text-lg font-semibold leading-snug text-kos-text sm:text-xl">
+        {card.title}
+      </h2>
+      <p className="mt-2 text-sm leading-relaxed text-kos-text/85">
+        <span className="font-semibold text-kos-text/70">Bottom line. </span>
+        {card.bottom_line}
+      </p>
+      {card.key_points.length > 0 ? (
+        <div className="mt-3">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/50">
+            Key points
+          </p>
+          <ul className="mt-1.5 list-disc space-y-1.5 pl-5 text-sm text-kos-text/80">
+            {card.key_points.map((point) => (
+              <li key={point.slice(0, 48)}>{point}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {card.what_to_watch ? (
+        <p className="mt-3 text-sm text-kos-text/75">
+          <span className="font-semibold text-kos-text/70">What to watch. </span>
+          {card.what_to_watch}
+        </p>
+      ) : null}
+      {card.sot_flag ? (
+        <p className="mt-2 text-xs text-amber-100/80">{card.sot_flag}</p>
+      ) : null}
+      {card.sources.length > 0 ? (
+        <div className="mt-3">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/50">
+            Sources
+          </p>
+          <ul className="mt-1 space-y-1 text-sm">
+            {card.sources.map((source) => (
+              <li key={source.href}>
+                <a
+                  href={source.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-kos-gold/90 underline-offset-2 hover:underline"
+                >
+                  {source.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {card.href && card.kind === "team_note" ? (
+        <Link
+          href={card.href}
+          className="mt-3 inline-flex min-h-11 items-center rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm hover:border-kos-gold/35"
+        >
+          Season preview →
+        </Link>
+      ) : null}
+    </article>
+  );
+}
+
+export default async function NflCampDeskPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const raw = await searchParams;
+  const teamRaw = raw.team;
+  const teamFilter =
+    typeof teamRaw === "string" && teamRaw.trim()
+      ? teamRaw.trim().toUpperCase()
+      : null;
+  const desk = await buildNflCampDesk({ team: teamFilter });
+  const truth = resolveNflTruthLabel({
+    season: NFL_PRODUCT_SEASON,
+    launchPreseason: true,
+  });
+  const wrap = desk.kosedgeCards.find((card) => card.kind === "league_wrap");
+  const notes = desk.kosedgeCards.filter((card) => card.kind === "team_note");
   const beatsByDivision = new Map<string, typeof desk.beats>();
   for (const beat of desk.beats) {
     const list = beatsByDivision.get(beat.division) ?? [];
@@ -40,249 +147,146 @@ export default async function NflCampDeskPage() {
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-            NFL Pro · Camp Desk
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
+              NFL Pro · Camp Desk
+            </p>
+            <NflTruthStateBadge state="PRESEASON" />
+          </div>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
-            Camp updates & beat map
+            KosEdge daily desk
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            First-week camp notes on projected starters, usage shifts, QB
-            battles, and injuries that move fantasy or team projections. Public
-            beat hubs below. Thin edges stay Pass.
+            League wrap and short team notes when there is real news. ESPN and
+            beat reporters are sources. Thin camp info stays Pass — we do not
+            invent a lean from one good practice. {truth.period_line}.
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
-            {desk.diagnostics.newsCount} camp headlines ·{" "}
-            {desk.diagnostics.injuryNewsCount} injury headlines ·{" "}
-            {desk.diagnostics.writerIntelCount} camp notes ·{" "}
+            {desk.diagnostics.kosedgeCardCount} KosEdge cards ·{" "}
+            {desk.diagnostics.wireCount} wire items (72h) ·{" "}
             {desk.diagnostics.beatCount} team beats
-            {desk.diagnostics.beatRegistryVersion
-              ? ` · registry ${desk.diagnostics.beatRegistryVersion}`
-              : ""}{" "}
-            · era {desk.eraLabel}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
             href="/pro/nfl/overview"
-            className="rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
+            className="min-h-11 inline-flex items-center rounded-xl border border-kos-border bg-kos-surface/40 px-4 py-2 text-sm hover:border-kos-gold/40"
           >
             NFL Overview
           </Link>
           <Link
             href="/pro/nfl/news"
-            className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
+            className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
           >
-            All camp updates
+            News archive
           </Link>
           <Link
             href="/pro/nfl/previews"
-            className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
+            className="min-h-11 inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
           >
             Season previews
           </Link>
         </div>
       </div>
 
-      {kosEdgeNews.length > 0 ? (
-        <section className="mt-8">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="text-xl font-semibold text-kos-text">
-                KosEdge news breaks
-              </h2>
-              <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-                Sourced camp updates in the news template — fast scan, bottom
-                line up front, Pass when the edge is thin.
-              </p>
-            </div>
-            <Link
-              href="/pro/nfl/news"
-              className="text-sm text-kos-gold hover:text-kos-gold/90"
-            >
-              All updates →
-            </Link>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {kosEdgeNews.slice(0, 4).map((item) => (
-              <Link
-                key={item.slug}
-                href={item.href}
-                className="rounded-2xl border border-kos-gold/20 bg-kos-gold/5 p-4 transition hover:border-kos-gold/40"
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-gold/80">
-                  {formatArticleAttribution(item.publishedAt)}
-                  {item.team ? ` · ${item.team}` : ""}
-                </p>
-                <h3 className="mt-1 text-base font-semibold leading-snug text-kos-text">
-                  {item.title}
-                </h3>
-                <p className="mt-2 line-clamp-3 text-sm text-kos-text/75">
-                  {item.excerpt}
-                </p>
-              </Link>
+      <form
+        method="get"
+        className="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border border-white/10 bg-black/25 p-3 sm:p-4"
+      >
+        <label className="text-sm text-kos-text/70">
+          Team
+          <select
+            name="team"
+            defaultValue={teamFilter ?? ""}
+            className="mt-1 block min-h-11 min-w-[12rem] rounded-lg border border-white/15 bg-black/50 px-3 text-sm text-kos-text"
+          >
+            <option value="">All teams with notes</option>
+            {NFL_TEAM_DIRECTORY.map((team) => (
+              <option key={team.code} value={team.code}>
+                {team.code} · {team.name}
+              </option>
             ))}
-          </div>
-        </section>
-      ) : null}
+          </select>
+        </label>
+        <button
+          type="submit"
+          className="min-h-11 rounded-lg border border-kos-gold/35 bg-kos-gold/10 px-4 text-sm font-semibold text-kos-gold"
+        >
+          Filter
+        </button>
+        {teamFilter ? (
+          <Link
+            href="/pro/nfl/camp"
+            className="min-h-11 inline-flex items-center text-sm text-kos-text/60 hover:text-kos-text"
+          >
+            Clear
+          </Link>
+        ) : null}
+      </form>
 
-      {desk.writerIntel.length > 0 ? (
-        <section className="mt-8">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-kos-text">
-              Camp intel
-            </h2>
-            <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-              KosEdge camp / market references from published 2026 season
-              previews — the live substitute for full news-break posts until
-              dedicated breaks clear research standards.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {desk.writerIntel.map((item) => (
-              <article
-                key={item.team}
-                className="rounded-2xl border border-white/10 bg-black/30 p-4"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-kos-text/50">
-                      {item.team}
-                    </p>
-                    <h3 className="mt-0.5 font-semibold text-kos-text">
-                      {item.teamName}
-                    </h3>
-                  </div>
-                  <span className="rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-text/60">
-                    KosEdge
-                  </span>
-                </div>
-                {item.angle ? (
-                  <p className="mt-2 text-sm text-kos-text/80">{item.angle}</p>
-                ) : null}
-                {item.sourceLinks.length > 0 ? (
-                  <ul className="mt-3 space-y-1.5 text-sm">
-                    {item.sourceLinks.map((link) => (
-                      <li key={link.href}>
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-kos-gold/90 underline-offset-2 hover:underline"
-                        >
-                          {link.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="mt-3 text-sm text-kos-text/65">
-                    {item.campRefsMarkdown}
-                  </p>
-                )}
-                <Link
-                  href={item.previewHref}
-                  className="mt-3 inline-flex rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm hover:border-kos-gold/35"
-                >
-                  Full preview →
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {desk.injuryNews.length > 0 ? (
-        <section className="mt-8">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-kos-text">
-              Camp injury / availability
-            </h2>
-            <p className="mt-1 text-sm text-kos-text/65">
-              Public ESPN headlines that mention injuries or practice
-              availability. Official weekly designations still live on the
-              injuries intel table.
-            </p>
-          </div>
-          <div className="space-y-3">
-            {desk.injuryNews.map((item) => (
-              <a
-                key={`inj-${item.id}`}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4 transition hover:border-amber-400/40"
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-100/70">
-                  Injury / availability
-                  {item.published ? ` · ${formatPublished(item.published)}` : ""}
-                </p>
-                <h3 className="mt-1 text-base font-semibold text-kos-text">
-                  {item.headline}
-                </h3>
-                {item.description ? (
-                  <p className="mt-2 text-sm text-kos-text/70">
-                    {item.description}
-                  </p>
-                ) : null}
-              </a>
-            ))}
-          </div>
-          <div className="mt-3">
-            <Link
-              href="/pro/nfl/injuries"
-              className="text-sm text-kos-gold/90 underline-offset-2 hover:underline"
-            >
-              Open injuries intel table →
-            </Link>
-          </div>
-        </section>
-      ) : null}
-
-      <section className="mt-8">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-semibold text-kos-text">
-              Latest camp headlines
-            </h2>
-            <p className="mt-1 text-sm text-kos-text/65">
-              Filtered from ESPN NFL news for camp / roster / hold-in context.
-              External links open the source.
-            </p>
-          </div>
-        </div>
-        {desk.news.length === 0 ? (
+      <section className="mt-8 space-y-4">
+        {wrap ? <CampNoteCard card={wrap} /> : null}
+        {notes.map((card) => (
+          <CampNoteCard key={card.id} card={card} />
+        ))}
+        {desk.kosedgeCards.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-black/30 p-6 text-sm text-kos-text/70">
-            No camp-tagged headlines in the current ESPN pull. Check the beat
-            map below until the next refresh.
+            No KosEdge camp notes inside the 72-hour window
+            {teamFilter ? ` for ${teamDisplayName(teamFilter)}` : ""}. Quiet
+            days stay empty — no filler.
           </div>
-        ) : (
-          <div className="space-y-3">
-            {desk.news.map((item) => (
-              <a
-                key={item.id}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-5 transition hover:border-kos-gold/35"
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-kos-text/50">
-                  ESPN
-                  {item.published ? ` · ${formatPublished(item.published)}` : ""}
-                </p>
-                <h3 className="mt-1 text-base font-semibold text-kos-text">
-                  {item.headline}
-                </h3>
-                {item.description ? (
-                  <p className="mt-2 text-sm text-kos-text/70">
-                    {item.description}
-                  </p>
-                ) : null}
-              </a>
-            ))}
-          </div>
-        )}
+        ) : null}
       </section>
+
+      {desk.rotationNext.length > 0 ? (
+        <p className="mt-4 text-xs text-kos-text/50">
+          Quiet-club pulse queue: {desk.rotationNext.join(" · ")}
+        </p>
+      ) : null}
+
+      {desk.sotFlags.length > 0 ? (
+        <p className="mt-4 text-xs text-kos-text/50">
+          SoT flags ({desk.sotFlags.map((card) => card.team_ids[0]).join(", ")}
+          ): queue the existing depth job. This page does not publish a new
+          model run.
+        </p>
+      ) : null}
+
+      <details className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4">
+        <summary className="cursor-pointer text-sm font-semibold text-kos-text">
+          Wire · ESPN headlines (not the desk)
+        </summary>
+        <p className="mt-2 text-xs text-kos-text/55">
+          Public headlines from the last 72 hours. Citations only — KosEdge
+          judgment lives in the cards above.
+        </p>
+        {desk.wire.length === 0 && desk.injuryNews.length === 0 ? (
+          <p className="mt-3 text-sm text-kos-text/60">
+            No camp-tagged ESPN items inside the freshness window.
+          </p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {[...desk.injuryNews, ...desk.wire].map((item) => (
+              <li key={`${item.source}-${item.id}`}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm hover:border-white/20"
+                >
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-kos-text/45">
+                    ESPN
+                    {item.published ? ` · ${formatPublished(item.published)}` : ""}
+                  </span>
+                  <span className="mt-0.5 block text-kos-text/85">
+                    {item.headline}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </details>
 
       <section className="mt-10">
         <div className="mb-4">
@@ -290,8 +294,8 @@ export default async function NflCampDeskPage() {
             Beat map · all 32
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-            Primary beat reporters for each club. Jump to the season preview or
-            public camp hub.
+            Primary beat reporters. Jump to the season preview or public camp
+            hub — those links are research, not today&apos;s desk.
           </p>
         </div>
         <div className="space-y-6">
@@ -308,44 +312,33 @@ export default async function NflCampDeskPage() {
                       key={beat.team}
                       className="rounded-2xl border border-white/10 bg-black/30 p-4"
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-wide text-kos-text/50">
-                            {beat.team}
-                          </p>
-                          <h4 className="mt-0.5 font-semibold text-kos-text">
-                            {beat.teamName}
-                          </h4>
-                        </div>
-                        <span className="rounded-md border border-kos-gold/25 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
-                          KosEdge
-                        </span>
-                      </div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-kos-text/50">
+                        {beat.team}
+                      </p>
+                      <h4 className="mt-0.5 font-semibold text-kos-text">
+                        {beat.teamName}
+                      </h4>
                       <p className="mt-2 text-sm text-kos-text/70">
                         {beat.primaryWriter
-                          ? `${beat.primaryWriter}${beat.primaryOutlet ? ` · ${beat.primaryOutlet}` : ""}${beat.primaryHandle ? ` · ${beat.primaryHandle}` : ""}`
+                          ? `${beat.primaryWriter}${beat.primaryOutlet ? ` · ${beat.primaryOutlet}` : ""}`
                           : "Beat listing pending registry refresh"}
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2 text-sm">
                         <Link
                           href={beat.previewHref}
-                          className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                          className="min-h-11 inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
                         >
                           Preview
                         </Link>
-                        {beat.espnCampHref ? (
-                          <a
-                            href={beat.espnCampHref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
-                          >
-                            Camp hub
-                          </a>
-                        ) : null}
+                        <Link
+                          href={`/pro/nfl/camp?team=${beat.team}`}
+                          className="min-h-11 inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                        >
+                          Desk notes
+                        </Link>
                         <Link
                           href={`/pro/nfl/teams/${beat.team}/overview`}
-                          className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                          className="min-h-11 inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
                         >
                           Team intel
                         </Link>

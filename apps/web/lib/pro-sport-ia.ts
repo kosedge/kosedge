@@ -214,7 +214,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/camp",
           label: "Camp Desk",
-          hint: "KosEdge camp updates, beat map, and public practice notes.",
+          hint: "KosEdge daily wrap and team notes — ESPN is a source, not the product.",
           premium: true,
           status: "active",
         },

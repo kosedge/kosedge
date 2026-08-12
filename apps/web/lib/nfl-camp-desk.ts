@@ -1,7 +1,17 @@
 import "server-only";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import {
+  cardsFromDayFile,
+  collectPreviewDeltas,
+  collectSotFlags,
+  selectCampDeskCards,
+  type CampDeskCard,
+  type CampDeskDayFile,
+  type CampPreviewDelta,
+} from "@/lib/nfl-camp-desk-daily";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
+import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
 
 export type CampBeatLink = {
   team: string;
@@ -43,6 +53,11 @@ export type CampDeskPayload = {
   generatedAt: string;
   eraLabel: string;
   hubHref: string;
+  kosedgeCards: CampDeskCard[];
+  sotFlags: CampDeskCard[];
+  previewDelta: CampPreviewDelta[];
+  rotationNext: string[];
+  wire: CampNewsItem[];
   news: CampNewsItem[];
   injuryNews: CampNewsItem[];
   writerIntel: CampWriterIntelItem[];
@@ -55,6 +70,8 @@ export type CampDeskPayload = {
     writerIntelCount: number;
     beatCount: number;
     beatRegistryVersion: string | null;
+    kosedgeCardCount: number;
+    wireCount: number;
   };
 };
 
@@ -176,6 +193,56 @@ function findRepoRoot(): string | null {
     current = parent;
   }
   return null;
+}
+
+function campDeskDir(): string | null {
+  const root = findRepoRoot();
+  if (!root) return null;
+  const dir = path.join(root, "content", "writers", "camp-desk-2026");
+  return existsSync(dir) ? dir : null;
+}
+
+function loadCampDeskDayFiles(): CampDeskDayFile[] {
+  const dir = campDeskDir();
+  if (!dir) return [];
+  const files: CampDeskDayFile[] = [];
+  for (const name of readdirSync(dir)) {
+    if (!name.endsWith(".json") || name === "rotation-queue.json") continue;
+    try {
+      const raw = JSON.parse(
+        readFileSync(path.join(dir, name), "utf8"),
+      ) as CampDeskDayFile;
+      if (raw?.desk_date && raw.league_wrap && Array.isArray(raw.team_notes)) {
+        files.push(raw);
+      }
+    } catch {
+      continue;
+    }
+  }
+  return files.sort((a, b) => b.desk_date.localeCompare(a.desk_date));
+}
+
+function loadRotationNext(): string[] {
+  const dir = campDeskDir();
+  if (!dir) return [];
+  const filePath = path.join(dir, "rotation-queue.json");
+  if (!existsSync(filePath)) return [];
+  try {
+    const raw = JSON.parse(readFileSync(filePath, "utf8")) as {
+      next_pulse?: string[];
+    };
+    return Array.isArray(raw.next_pulse) ? raw.next_pulse : [];
+  } catch {
+    return [];
+  }
+}
+
+function wireItemInWindow(item: CampNewsItem, now: Date, inCamp: boolean): boolean {
+  if (!inCamp) return true;
+  if (!item.published) return false;
+  const ts = Date.parse(item.published);
+  if (!Number.isFinite(ts)) return false;
+  return now.getTime() - ts <= 72 * 60 * 60 * 1000;
 }
 
 function loadBeatRegistry(): BeatRegistry | null {
@@ -340,38 +407,58 @@ function buildBeats(registry: BeatRegistry | null): CampBeatLink[] {
   });
 }
 
-export async function buildNflCampDesk(): Promise<CampDeskPayload> {
+export async function buildNflCampDesk(opts?: {
+  now?: Date;
+  team?: string | null;
+}): Promise<CampDeskPayload> {
+  const now = opts?.now ?? new Date();
+  const inCamp = isNflCalendarPreseason(NFL_PRODUCT_SEASON, now);
   const registry = loadBeatRegistry();
   const articles = await fetchEspnNflArticles(50);
-  const news = articles
+  const wire = articles
     .filter((item) => isCampRelevant(item.headline, item.description))
-    .slice(0, 14);
+    .filter((item) => wireItemInWindow(item, now, inCamp))
+    .slice(0, 12);
   const injuryNews = articles
     .filter((item) => isInjuryRelevant(item.headline, item.description))
+    .filter((item) => wireItemInWindow(item, now, inCamp))
     .slice(0, 8);
+  const dayFiles = loadCampDeskDayFiles();
+  const kosedgeCards = selectCampDeskCards(
+    dayFiles.flatMap((file) => cardsFromDayFile(file)),
+    { now, team: opts?.team, inCamp },
+  );
   const writerIntel = loadWriterCampIntel();
   const beats = buildBeats(registry);
   return {
-    generatedAt: new Date().toISOString(),
+    generatedAt: now.toISOString(),
     eraLabel: registry?.era ?? "training-camp",
     hubHref:
       "https://www.espn.com/nfl/story/_/id/49368181/training-camp-2026-latest-news-intel-updates-buzz-all-32-teams",
-    news,
+    kosedgeCards,
+    sotFlags: collectSotFlags(kosedgeCards),
+    previewDelta: collectPreviewDeltas(dayFiles),
+    rotationNext: loadRotationNext(),
+    wire,
+    news: wire,
     injuryNews,
     writerIntel,
     beats,
     writers: WRITER_COVERAGE,
     notes: [
-      "Camp Desk surfaces public beat hubs + ESPN camp news. Kos Edge writers own the Pass/Lean judgment — thin edges stay Pass.",
-      "PRE boards use market + camp strength reference; season PLAY tags remain blocked under the info desk.",
-      "Writer camp intel below is sourced from published 2026 season-preview beat refs — full news-break templates live in docs/writers/TRAINING_CAMP_DESK.md.",
+      "Camp Desk hero is KosEdge-dated notes. ESPN / beats live in Sources and a collapsed Wire — they are citations, not the product.",
+      "During camp, notes older than 72 hours are buried unless pinned. Empty team days stay empty — no filler essays.",
+      "Material depth flags queue the existing SoT job. Prose does not publish a new active_run.",
+      "Market mentions stay Pass unless a KEI path already supports a tag.",
     ],
     diagnostics: {
-      newsCount: news.length,
+      newsCount: wire.length,
       injuryNewsCount: injuryNews.length,
       writerIntelCount: writerIntel.length,
       beatCount: beats.length,
       beatRegistryVersion: registry?.version ?? null,
+      kosedgeCardCount: kosedgeCards.length,
+      wireCount: wire.length,
     },
   };
 }
