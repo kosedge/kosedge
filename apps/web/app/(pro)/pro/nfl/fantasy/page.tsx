@@ -38,7 +38,6 @@ export default async function NflFantasyDraftDeskPage({
   const board = await loadFantasyDraftDesk({
     season: 2026,
     scoringProfile: scoring,
-    position: position === "ALL" ? undefined : position,
     rookiesOnly,
     limit: LIMIT,
   });
@@ -49,6 +48,7 @@ export default async function NflFantasyDraftDeskPage({
         board={board}
         initialPosition={position}
         initialScoring={scoring}
+        basePath="/pro/nfl/fantasy"
       />
     </main>
   );

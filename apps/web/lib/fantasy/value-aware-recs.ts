@@ -21,6 +21,12 @@
 import { rosterNeeds } from "@/lib/fantasy/team-builder";
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
+/**
+ * Hard cap vs ADP for user-facing take/wait CTAs (12-team round).
+ * Value Δ and High deviation flags may still show larger gaps.
+ */
+export const MAX_RECOMMEND_RANK_DELTA = 12;
+
 /** Tunable recommendation knobs — adjust without touching UI. */
 export const VALUE_AWARE_WEIGHTS = {
   /** Base model-strength offset before rank decay. */
@@ -195,6 +201,32 @@ export function scoreValueAwarePlayer(
   return { row, score, timing, timingHint };
 }
 
+/** Spots before ADP this pick would be (positive = reach vs market). */
+export function adpReachSpots(
+  row: FantasyDeskRow,
+  pickOverall: number | undefined,
+): number | null {
+  if (pickOverall == null || row.adp == null || !Number.isFinite(row.adp)) {
+    return null;
+  }
+  return row.adp - pickOverall;
+}
+
+/** True when a take-now / reach CTA would exceed the ±12 ADP policy. */
+export function exceedsRecommendReachCap(
+  row: FantasyDeskRow,
+  pickOverall: number | undefined,
+): boolean {
+  const spots = adpReachSpots(row, pickOverall);
+  if (spots == null) {
+    if (pickOverall == null && row.valueDelta != null) {
+      return Math.abs(row.valueDelta) > MAX_RECOMMEND_RANK_DELTA;
+    }
+    return false;
+  }
+  return spots > MAX_RECOMMEND_RANK_DELTA;
+}
+
 export function computeTiming(
   row: FantasyDeskRow,
   pickOverall: number | undefined,
@@ -206,8 +238,12 @@ export function computeTiming(
   const adp = row.adp;
   const pos = row.position.toUpperCase();
   const hasNeed = positionalNeedScore(row, needs) > 0;
+  const overCap = exceedsRecommendReachCap(row, pickOverall);
 
   if (pickOverall == null) {
+    if (overCap) {
+      return { timing: "fair", timingHint: null };
+    }
     if (row.valueDelta != null && row.valueDelta >= 8) {
       return { timing: "wait", timingHint: "Market discount — target later" };
     }
@@ -221,6 +257,11 @@ export function computeTiming(
     if (hasNeed && row.rankOverall <= 36) {
       return { timing: "take_now", timingHint: "Fills need — take now" };
     }
+    return { timing: "fair", timingHint: null };
+  }
+
+  // Past ±12 vs ADP: show the player, never a take-now or must-wait CTA.
+  if (overCap) {
     return { timing: "fair", timingHint: null };
   }
 

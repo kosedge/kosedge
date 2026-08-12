@@ -124,7 +124,7 @@ export default function SeasonEngineSurvivorClient({
             </label>
             <select
               id="survivor-week"
-              className={selectClass}
+              className={`${selectClass} scheme-dark`}
               value={week}
               onChange={(e) => setWeek(Number(e.target.value))}
             >
@@ -138,9 +138,19 @@ export default function SeasonEngineSurvivorClient({
           <div>
             <p className={labelClass}>Already used ({used.length})</p>
             <p className="min-h-11 rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-kos-text/80">
-              {used.length ? used.join(", ") : "None — all 32 available"}
+              Used: {used.length ? used.join(", ") : "none"}
             </p>
           </div>
+        </div>
+        <div className="mt-4">
+          <p className={labelClass}>
+            Teams available ({NFL_SEASON_ENGINE_TEAMS.length - used.length})
+          </p>
+          <p className="min-h-11 rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-kos-text/80">
+            Available:{" "}
+            {NFL_SEASON_ENGINE_TEAMS.filter((t) => !used.includes(t)).join(", ") ||
+              "none left"}
+          </p>
         </div>
 
         <div className="mt-4">
