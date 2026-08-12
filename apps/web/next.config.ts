@@ -42,7 +42,9 @@ const nextConfig: NextConfig = {
       "../../data/ops/**/*",
       "../../content/writers/season-previews-2026/**/*",
       "../../content/writers/news-breaks-2026/**/*",
+      "../../content/writers/camp-desk-2026/**/*",
     ],
+    "/pro/[sport]/tracking": ["../../data/ops/**/*"],
     "/pro/nfl/injuries": [
       "../../data/writers/**/*",
       "../../content/writers/season-previews-2026/**/*",
