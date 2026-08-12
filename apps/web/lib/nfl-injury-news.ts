@@ -1,10 +1,10 @@
 import "server-only";
 import {
   fetchEspnInjuryNews,
-  type CampNewsItem,
-} from "@/lib/nfl-camp-desk";
+  type EspnNflNewsItem,
+} from "@/lib/nfl-espn-news";
 
-export type InjuryNewsItem = CampNewsItem & {
+export type InjuryNewsItem = EspnNflNewsItem & {
   sourceLabel: string;
 };
 
@@ -66,7 +66,7 @@ function parseRssItems(xml: string): Array<{
 
 async function fetchRssInjuryNews(
   url: string,
-  source: CampNewsItem["source"],
+  source: EspnNflNewsItem["source"],
   sourceLabel: string,
   limit: number,
 ): Promise<InjuryNewsItem[]> {
@@ -134,7 +134,7 @@ function dedupeNews(items: InjuryNewsItem[]): InjuryNewsItem[] {
   return out;
 }
 
-function sourceLabelFor(item: CampNewsItem): string {
+function sourceLabelFor(item: EspnNflNewsItem): string {
   switch (item.source) {
     case "espn-news":
       return "ESPN";

@@ -37,17 +37,19 @@ const nextConfig: NextConfig = {
     ],
     "/pro/nfl/stats": ["../../data/ops/**/*"],
     "/pro/nfl/slate/[date]": ["../../data/ops/**/*"],
+    // Camp Desk only needs beat registry + desk JSON + preview camp refs.
+    // Do NOT include data/ops here — it balloons shared functions past Vercel's
+    // 250mb uncompressed limit (see pro/[sport]/injuries deploy failures).
     "/pro/nfl/camp": [
       "../../data/writers/**/*",
-      "../../data/ops/**/*",
       "../../content/writers/season-previews-2026/**/*",
-      "../../content/writers/news-breaks-2026/**/*",
       "../../content/writers/camp-desk-2026/**/*",
     ],
-    "/pro/[sport]/tracking": ["../../data/ops/**/*"],
+    "/pro/[sport]/tracking": [
+      "../../data/ops/nfl-clv-benchmark-report.json",
+    ],
     "/pro/nfl/injuries": [
       "../../data/writers/**/*",
-      "../../content/writers/season-previews-2026/**/*",
     ],
     "/pro/prediction-market": [
       "../../data/ops/**/*",
