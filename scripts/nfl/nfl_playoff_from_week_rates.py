@@ -135,6 +135,81 @@ def season_wins_from_rates(rates: Dict[str, Dict[int, float]]) -> Dict[str, floa
     return {t: float(sum(weeks.values())) for t, weeks in rates.items()}
 
 
+def pairwise_expected_wins(
+    week_rates: Dict[str, Any],
+    *,
+    schedule: Optional[Dict[str, Dict[str, str]]] = None,
+) -> Dict[str, float]:
+    """E[wins] from the complementary game graph used by 7-seed MC.
+
+    Independent team week-rate sums are *not* this number: ``home_win_prob``
+    renormalizes ``hp / (hp + ap)`` per game, so a 13.9-win marginal can
+    realize ~10.8 path wins (CHI) while a 9.7-win marginal realizes ~10.8
+    (LAR). Futures must publish this projection, not the pre-renormalized Σ.
+    """
+    rates = _normalize_week_rates(week_rates)
+    games = build_schedule_games(schedule)
+    wins = {t: 0.0 for t in CANONICAL_TEAMS}
+    for home, away, week in games:
+        p = home_win_prob(home, away, week, rates)
+        if home in wins:
+            wins[home] += p
+        if away in wins:
+            wins[away] += 1.0 - p
+    return wins
+
+
+def project_rates_onto_schedule(
+    week_rates: Dict[str, Any],
+    *,
+    max_iter: int = 8,
+    tol: float = 0.35,
+    clip: Tuple[float, float] = (0.02, 0.98),
+    schedule: Optional[Dict[str, Dict[str, str]]] = None,
+) -> Tuple[Dict[str, Dict[int, float]], Dict[str, Any]]:
+    """Iterate rescale-to-pairwise until Σ week p ≈ complementary E[wins].
+
+    Independent rescale to PF/PA board targets (#196) makes STRENGTH_ALIGN
+    green on marginals while the playoff MC still uses hp/(hp+ap). This
+    projection is the lowest layer that makes those two the same number
+    without hand-editing a franchise.
+    """
+    rates = _normalize_week_rates(week_rates)
+    history: List[Dict[str, Any]] = []
+    pairwise: Dict[str, float] = {}
+    max_gap = 0.0
+    for i in range(max_iter):
+        pairwise = pairwise_expected_wins(rates, schedule=schedule)
+        marginal = season_wins_from_rates(rates)
+        gaps = {
+            t: abs(float(marginal.get(t, 0.0)) - float(pairwise.get(t, 0.0)))
+            for t in CANONICAL_TEAMS
+        }
+        max_gap = max(gaps.values()) if gaps else 0.0
+        history.append(
+            {
+                "iter": i,
+                "max_gap": round(float(max_gap), 4),
+                "lar_marginal": round(float(marginal.get("LAR") or 0.0), 4),
+                "lar_pairwise": round(float(pairwise.get("LAR") or 0.0), 4),
+                "chi_marginal": round(float(marginal.get("CHI") or 0.0), 4),
+                "chi_pairwise": round(float(pairwise.get("CHI") or 0.0), 4),
+            }
+        )
+        if max_gap <= tol:
+            break
+        rates = rescale_week_rates_to_expected_wins(
+            rates, pairwise, clip=clip
+        )
+    return rates, {
+        "iterations": len(history),
+        "final_max_gap": round(float(max_gap), 4),
+        "converged": bool(max_gap <= tol),
+        "history": history,
+        "pairwise": {t: round(float(pairwise.get(t, 0.0)), 4) for t in CANONICAL_TEAMS},
+    }
+
+
 def rescale_week_rates_to_expected_wins(
     week_rates: Dict[str, Any],
     targets: Dict[str, float],
@@ -247,6 +322,7 @@ def recompute_playoff_probs(
     div_titles = {t: 0 for t in CANONICAL_TEAMS}
     wins_sum = {t: 0 for t in CANONICAL_TEAMS}
     sb_wins = {t: 0 for t in CANONICAL_TEAMS}
+    win_hist = {t: np.zeros(18, dtype=np.int64) for t in CANONICAL_TEAMS}
 
     home_list = [g[0] for g in games]
     away_list = [g[1] for g in games]
@@ -276,6 +352,7 @@ def recompute_playoff_probs(
                 records[away_list[i]] += 1
         for t in CANONICAL_TEAMS:
             wins_sum[t] += records[t]
+            win_hist[t][min(17, int(records[t]))] += 1
 
         seeds = {
             "AFC": seed_conference(rng, records, afc),
@@ -334,6 +411,13 @@ def recompute_playoff_probs(
     if sb_prob is not None:
         out["super_bowl_win_prob"] = sb_prob
         out["sanity"]["sum_super_bowl"] = round(sum(sb_prob.values()), 6)
+    out["win_distributions"] = [
+        _distribution_row_from_hist(t, win_hist[t], n_sims=n_replicates)
+        for t in CANONICAL_TEAMS
+    ]
+    out["win_distributions"].sort(
+        key=lambda r: (-float(r["mean"]), str(r["team"]))
+    )
     return out
 
 

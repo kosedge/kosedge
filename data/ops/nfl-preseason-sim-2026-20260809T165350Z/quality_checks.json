@@ -326,12 +326,13 @@
   "all_pass": true,
   "locked_snapshot": true,
   "honesty": {
-    "playoff_prob": "7-seed MC from week rates rescaled to board expected_wins (strength coherence)",
+    "playoff_prob": "7-seed MC from week rates projected onto complementary wall-chart games",
     "division_title_prob": "division winner frequency from same 7-seed MC paths",
-    "super_bowl_win_prob": "strength-bracket MC on same aligned week rates (not softmax-only)",
+    "super_bowl_win_prob": "strength-bracket MC on the same path draws as expected_wins / playoff",
     "playoff_player_totals": "empty \u2014 full player paths were regular-season only",
-    "strength_coherence": "week rates + win distributions aligned to soft-pile/board expected_wins; product id LAR",
-    "win_distributions": "rebuilt from aligned week-rate marginal Bernoullis (E[wins]=\u03a3p=board)"
+    "strength_coherence": "week rates projected onto schedule until \u03a3p \u2248 pairwise E[wins]; board wins + win_dist + playoff/SB from the same path MC; product id LAR",
+    "win_distributions": "rebuilt from path-MC win totals (same draws as 7-seed playoff / SB)",
+    "expected_wins": "path-MC mean from complementary hp/(hp+ap) games \u2014 not PF/PA Pythagorean stretch"
   },
   "sanity": {
     "sum_super_bowl_prob": 1.0,
@@ -347,37 +348,37 @@
     "n_replicates": 20000
   },
   "strength_coherence": {
-    "applied_at_utc": "2026-08-12T10:20:05.836362+00:00",
+    "applied_at_utc": "2026-08-12T11:31:22.025038+00:00",
     "method": "7seed_mc_plus_strength_bracket_sb",
     "before_lar": {
-      "team": "LAR",
-      "expected_wins": 9.6938,
-      "playoff_prob": 0.8314,
-      "division_title_prob": 0.36515,
-      "super_bowl_win_prob": 0.0708
-    },
-    "after_lar": {
       "team": "LAR",
       "expected_wins": 9.6938,
       "playoff_prob": 0.8088,
       "division_title_prob": 0.3398,
       "super_bowl_win_prob": 0.0688
     },
-    "before_det": {
-      "team": "DET",
-      "expected_wins": 7.0454,
-      "playoff_prob": 0.5766,
-      "division_title_prob": 0.2703,
-      "super_bowl_win_prob": 0.02185
+    "after_lar": {
+      "team": "LAR",
+      "expected_wins": 11.0808,
+      "playoff_prob": 0.8552,
+      "division_title_prob": 0.479,
+      "super_bowl_win_prob": 0.1116
     },
-    "after_det": {
+    "before_det": {
       "team": "DET",
       "expected_wins": 7.0454,
       "playoff_prob": 0.5348,
       "division_title_prob": 0.239,
       "super_bowl_win_prob": 0.02
     },
-    "before_win_dist_mean_det": 7.0523,
-    "after_win_dist_mean_det": 7.03
+    "after_det": {
+      "team": "DET",
+      "expected_wins": 10.4858,
+      "playoff_prob": 0.7588,
+      "division_title_prob": 0.4962,
+      "super_bowl_win_prob": 0.0772
+    },
+    "before_win_dist_mean_det": 7.03,
+    "after_win_dist_mean_det": 10.4858
   }
 }

@@ -9,16 +9,17 @@
   "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
   "preseason": true,
   "identity": "nfl-season-engine-v1.24-soft-piles-cleanup · N_team=100000 · 20260809T165350Z",
-  "note": "LOCKED — official 2026 pre-season baseline (v1.24 soft-pile cleanup); Truth Layer playoff patch 2026-08-10; win-distribution conservation reshape v1.24.1 2026-08-11 (consecutive pile-break; C1–C6 green)",
+  "note": "LOCKED — official 2026 pre-season baseline (v1.24 soft-pile cleanup); Truth Layer playoff patch 2026-08-10; win-distribution conservation reshape v1.24.1 2026-08-11; path-align v1.24.2 2026-08-12 (complementary game-graph wins; LAR 9.69→11.08)",
   "locked_snapshot": true,
   "locked_at_utc": "2026-08-09T16:57:00+00:00",
   "lock_tag": "nfl-2026-preseason-baseline-v1.24",
   "engine_commit": "ab16a4e7218632b31eb186caf51800ea3f31a872",
   "team_id_scheme": "product_canonical_LAR",
   "conservation": {
-    "pass": "v1.24.1-consecutive-pile-break",
-    "applied_at_utc": "2026-08-12T10:20:05Z",
-    "ops_note": "data/ops/nfl-futures-conservation-20260811.md"
+    "pass": "v1.24.2-path-align-complementary-games",
+    "applied_at_utc": "2026-08-12T11:31:22Z",
+    "ops_note": "data/ops/nfl-lar-wins-coherence-20260812.md",
+    "prior_pass": "v1.24.1-consecutive-pile-break"
   },
   "lineage": {
     "run_id": "nfl-preseason-sim-2026-20260809T165350Z",
