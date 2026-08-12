@@ -15,6 +15,8 @@ import {
   teamDisplayName,
 } from "@/lib/nfl-team-intel";
 import { assignTeamPreviewWriter } from "@/lib/team-research";
+import { nflActualRecordColumnLabel, resolveNflTruthLabel } from "@/lib/nfl-truth-label";
+import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
 
 export default async function NflTeamsIndexPage({
   searchParams,
@@ -73,6 +75,14 @@ export default async function NflTeamsIndexPage({
 
   const season = standings.season ?? filters.season ?? null;
   const week = standings.week ?? filters.week ?? null;
+  const truth = resolveNflTruthLabel({
+    season,
+    week,
+    fallbackApplied: Boolean(standings.selection?.fallback_applied),
+    latestSeason: standings.selection?.latest_available?.season,
+    latestWeek: standings.selection?.latest_available?.week,
+  });
+  const recordDt = nflActualRecordColumnLabel(truth);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -99,11 +109,15 @@ export default async function NflTeamsIndexPage({
           split signals. Cards route directly to the team hub with selected
           season/week preserved.
         </p>
-        <p className="mt-2 text-xs text-kos-text/65">
-          {season ? `Season ${season}` : "Season unavailable"}{" "}
-          {week ? `· Week ${week}` : ""} · {fallbackCodes.length} teams in
-          current filter
+        <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-kos-text/65">
+          <NflTruthStateBadge state={truth.ui_state} />
+          <span>
+            {truth.period_line} · {fallbackCodes.length} teams in current filter
+          </span>
         </p>
+        {truth.honesty_note ? (
+          <p className="mt-1 text-xs text-kos-gold/80">{truth.honesty_note}</p>
+        ) : null}
       </section>
 
       {standings.error ? (
@@ -120,7 +134,7 @@ export default async function NflTeamsIndexPage({
           const statsIndex = statsIndexByTeam.get(teamCode) ?? -1;
           const href = buildTeamIntelHref(teamCode, "overview", {
             season: season ?? undefined,
-            week: week ?? undefined,
+            week: truth.week ?? undefined,
           });
           const directoryEntry = NFL_TEAM_DIRECTORY.find(
             (entry) => entry.code === teamCode,
@@ -164,7 +178,7 @@ export default async function NflTeamsIndexPage({
               <dl className="mt-4 grid grid-cols-2 gap-2 text-sm text-kos-text/80">
                 <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
                   <dt className="text-[11px] uppercase tracking-wide text-kos-text/60">
-                    Record
+                    {recordDt}
                   </dt>
                   <dd className="mt-1 font-semibold text-kos-text">
                     {formatTeamRecordWithRank(

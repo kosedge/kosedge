@@ -39,6 +39,8 @@ import {
   type TendencyPerspective,
 } from "@/lib/nfl-tendencies";
 import { assignTeamPreviewWriter } from "@/lib/team-research";
+import { nflActualRecordColumnLabel, resolveNflTruthLabel } from "@/lib/nfl-truth-label";
+import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
 
 const SITUATION_TAB_KEYS: SituationTabKey[] = [
   "down_distance",
@@ -230,10 +232,24 @@ export default async function NflTeamIntelViewPage({
 
   const season = standings.season ?? stats.season ?? filters.season ?? null;
   const week = standings.week ?? stats.week ?? filters.week ?? null;
+  const truth = resolveNflTruthLabel({
+    season,
+    week,
+    fallbackApplied: Boolean(
+      standings.selection?.fallback_applied || stats.selection?.fallback_applied,
+    ),
+    latestSeason:
+      standings.selection?.latest_available?.season ??
+      stats.selection?.latest_available?.season,
+    latestWeek:
+      standings.selection?.latest_available?.week ??
+      stats.selection?.latest_available?.week,
+  });
+  const recordDt = nflActualRecordColumnLabel(truth);
   const selectedFilters = {
     ...filters,
     season: season ?? undefined,
-    week: week ?? undefined,
+    week: truth.week ?? undefined,
   };
 
   const perspective: TendencyPerspective =
@@ -345,15 +361,20 @@ export default async function NflTeamIntelViewPage({
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
           {teamDisplayName(selectedTeam)}
         </h1>
-        <p className="mt-2 text-sm text-kos-text/75">
-          {season ? `Season ${season}` : "Season unavailable"}{" "}
-          {week ? `· Week ${week}` : ""} · Premium team intel view for matchup
-          prep and execution context.
+        <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-kos-text/75">
+          <NflTruthStateBadge state={truth.ui_state} />
+          <span>
+            {truth.period_line} · Premium team intel view for matchup prep and
+            execution context.
+          </span>
         </p>
+        {truth.honesty_note ? (
+          <p className="mt-1 text-xs text-kos-gold/80">{truth.honesty_note}</p>
+        ) : null}
         <TeamIntelSectionNav
           activeView={view}
           team={selectedTeam}
-          filters={{ season: season ?? undefined, week: week ?? undefined }}
+          filters={{ season: season ?? undefined, week: truth.week ?? undefined }}
         />
         {directoryEntry ? (
           <p className="mt-3 text-xs text-kos-text/60">
@@ -388,7 +409,7 @@ export default async function NflTeamIntelViewPage({
             Quick Market Context
           </h2>
           <p className="mt-2 text-sm text-kos-text/75">
-            Record{" "}
+            {recordDt}{" "}
             {formatTeamRecordWithRank(
               standingsRow,
               standingsRankMaps.win_pct?.get(standingsIndex),
@@ -643,7 +664,7 @@ export default async function NflTeamIntelViewPage({
             season={tendencyData.profile.season}
             requestedSeason={tendencyData.profile.requestedSeason}
             usedFallback={tendencyData.profile.usedFallback}
-            filters={{ season: season ?? undefined, week: week ?? undefined }}
+            filters={{ season: season ?? undefined, week: truth.week ?? undefined }}
             perspective={perspective}
             activeSituation={activeSituation}
             activeQbSituation={activeQbSituation}

@@ -4,6 +4,8 @@
  * active board week before that REG week exists.
  */
 
+import { formatNflWeekLabel } from "@/lib/nfl-truth-label";
+
 const EMPTY_SLATE_STATUSES = new Set([
   "no_slate",
   "preseason_empty",
@@ -19,26 +21,21 @@ export function formatNflBoardWeekLabel(
     hasRowsForCurrentWeek?: boolean;
     lineCount?: number;
     slateStatus?: string | null;
+    season?: number | null;
+    now?: Date;
   },
 ): string {
-  const week =
-    typeof currentWeek === "number" && Number.isFinite(currentWeek)
-      ? Math.trunc(currentWeek)
-      : null;
-  if (week == null || week < 1) return "Preseason / camp";
-
   const emptySlate =
     opts?.lineCount === 0 ||
     (opts?.slateStatus != null &&
       EMPTY_SLATE_STATUSES.has(opts.slateStatus.trim()));
   const noRowsForWeek = opts?.hasRowsForCurrentWeek === false;
 
-  // Backend MAX(week) often returns 18 when no upcoming games remain.
-  if (week >= 18 && (emptySlate || noRowsForWeek)) {
-    return "Preseason / camp";
-  }
-
-  return `Week ${week}`;
+  return formatNflWeekLabel(currentWeek, {
+    season: opts?.season,
+    now: opts?.now,
+    emptySlate: emptySlate || noRowsForWeek,
+  });
 }
 
 /** Default week for projection desks — never open on a stale Week 18 MAX fallback. */

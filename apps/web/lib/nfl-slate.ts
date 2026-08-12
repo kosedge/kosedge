@@ -20,6 +20,7 @@ import {
   type NflPreseasonMarketSnap,
 } from "@/lib/nfl-preseason-odds";
 import { safeUpperCase } from "@/lib/sports";
+import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 
 export type NflSlateCard = {
   id: string;
@@ -288,12 +289,18 @@ export async function buildNflWeeklySlate(
     });
   }
   if (regCards.length > 0) {
+    const regWeekLabel = formatNflBoardWeekLabel(
+      resolved.mode === "week" ? resolved.week : currentWeek,
+      { season, lineCount: regCards.length },
+    );
     sections.push({
       key: "regular",
       title:
-        resolved.mode === "week"
-          ? `Regular season · Week ${resolved.week}`
-          : `Regular season · Weeks ${currentWeek}–${currentWeek + 1}`,
+        regWeekLabel === "Preseason"
+          ? "Regular season (upcoming)"
+          : resolved.mode === "week"
+            ? `Regular season · ${regWeekLabel}`
+            : `Regular season · ${regWeekLabel}–${formatNflBoardWeekLabel(currentWeek + 1, { season })}`,
       subtitle:
         "Kos Edge fair-lines with live market join, publish tags, and best-book context.",
       cards: regCards.sort((a, b) =>

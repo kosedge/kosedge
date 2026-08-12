@@ -1,9 +1,20 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
+import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
 import { fetchNflIntel } from "@/lib/nfl-intel";
-import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts";
+import {
+  loadLatestNflPreseasonBundle2026,
+  loadNflWebLaunchPointer,
+} from "@/lib/nfl-preseason-artifacts";
+import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
+import {
+  nflModelPlayoffColumnLabel,
+  nflModelWinsColumnLabel,
+  resolveNflTruthLabel,
+} from "@/lib/nfl-truth-label";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +70,17 @@ export default async function StatsPage({
   }
 
   const bundle = loadLatestNflPreseasonBundle2026();
+  const pointer = loadNflWebLaunchPointer();
+  const lineage = resolveActiveNflLineage();
+  const truth = resolveNflTruthLabel({
+    season: 2026,
+    week: null,
+    isModelSurface: true,
+    launchPreseason: Boolean(pointer?.preseason ?? true),
+    runId: lineage?.run_id,
+    modelVersion: lineage?.engine_version,
+    generatedAt: lineage?.generated_at,
+  });
   let rows = bundle?.teamRows ?? [];
   if (team) rows = rows.filter((row) => row.team === team);
   rows = rows
@@ -72,9 +94,13 @@ export default async function StatsPage({
           <h1 className="text-3xl font-semibold tracking-tight text-kos-text">
             NFL League Stats
           </h1>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <NflTruthStateBadges states={["PRESEASON", "MODEL"]} />
+            {lineage ? <NflLineageBadge lineage={lineage} /> : null}
+          </div>
           <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
             <span className="font-semibold text-kos-gold/90">
-              Offseason fallback · preseason sim strength
+              {truth.period_line} · MODEL preseason sim
             </span>
             . Weekly EPA / pass-rate intel is empty until 2026 weeks play — this
             table is expected wins / playoff probs, not fake EPA.
@@ -112,9 +138,9 @@ export default async function StatsPage({
               <tr>
                 <th className="px-4 py-3">Team</th>
                 <th className="px-4 py-3">Conf / Div</th>
-                <th className="px-4 py-3">Exp wins</th>
+                <th className="px-4 py-3">{nflModelWinsColumnLabel()}</th>
                 <th className="px-4 py-3">Win p10–p90</th>
-                <th className="px-4 py-3">Playoff %</th>
+                <th className="px-4 py-3">{nflModelPlayoffColumnLabel()}</th>
                 <th className="px-4 py-3">Division %</th>
                 <th className="px-4 py-3">SB %</th>
               </tr>

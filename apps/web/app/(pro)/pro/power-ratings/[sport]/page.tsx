@@ -10,8 +10,10 @@ import { fetchNflIntel } from "@/lib/nfl-intel";
 import { PowerRatingsTable } from "./PowerRatingsTable";
 import SportProShell from "@/components/pro/SportProShell";
 import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
+import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
 import { withEngineVersionOverride } from "@/lib/nfl-lineage";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
+import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
 
 export const dynamic = "force-dynamic";
 
@@ -171,6 +173,14 @@ export default async function PowerRatingsSportPage({
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="min-w-0 space-y-2">
+              <NflTruthStateBadges
+                states={
+                  isNflCalendarPreseason(NFL_PRODUCT_SEASON) ||
+                  board.desk?.phase === "preseason"
+                    ? ["PRESEASON", "MODEL"]
+                    : ["MODEL"]
+                }
+              />
               <p className="text-sm text-kos-text/65">
                 {deskMode
                   ? `Method ${board.desk?.method ?? "B"} · ${board.desk?.phase ?? "preseason"}`

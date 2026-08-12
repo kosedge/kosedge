@@ -4,6 +4,7 @@ import {
   isNflSeasonEngineDeskPath,
   shouldShowNflDataFreshnessBanner,
 } from "@/lib/nfl-data-freshness";
+import { formatNflFreshnessPeriod } from "@/lib/nfl-truth-label";
 
 export async function NflDataFreshnessBanner() {
   const pathname = (await headers()).get("x-pathname");
@@ -21,6 +22,11 @@ export async function NflDataFreshnessBanner() {
     ? freshness.blockers.slice(0, 4).join(" · ")
     : freshness.error || "owned data freshness check failed";
 
+  const period = formatNflFreshnessPeriod(
+    freshness.season,
+    freshness.week,
+  );
+
   return (
     <div
       role="status"
@@ -29,9 +35,7 @@ export async function NflDataFreshnessBanner() {
       <div className="mx-auto flex max-w-6xl flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
         <p className="font-medium tracking-tight">
           Data freshness degraded
-          {freshness.season != null && freshness.week != null
-            ? ` · S${freshness.season} W${freshness.week}`
-            : ""}
+          {period ? ` · ${period}` : ""}
         </p>
         <p className="text-amber-100/80">
           Boards may use last owned snapshots. PLAY stake tags should be treated

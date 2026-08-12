@@ -18,8 +18,19 @@ describe("nfl-board-week-label", () => {
         hasRowsForCurrentWeek: false,
         lineCount: 0,
         slateStatus: "preseason_empty",
+        now: new Date("2026-08-12T16:00:00Z"),
+        season: 2026,
       }),
-    ).toBe("Preseason / camp");
+    ).toBe("Preseason");
+  });
+
+  it("treats Week 18 as Preseason in August even without an empty-slate flag", () => {
+    expect(
+      formatNflBoardWeekLabel(18, {
+        now: new Date("2026-08-12T16:00:00Z"),
+        season: 2026,
+      }),
+    ).toBe("Preseason");
   });
 
   it("clamps projection default week off stale Week 18", () => {

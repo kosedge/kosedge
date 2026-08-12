@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
+import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
 import { fetchNflIntel } from "@/lib/nfl-intel";
 import { fetchEspnNflStandings } from "@/lib/nfl-espn-schedule";
 import {
@@ -8,7 +10,13 @@ import {
   teamDisplayName,
 } from "@/lib/nfl-team-intel";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
-import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts";
+import { loadLatestNflPreseasonBundle2026, loadNflWebLaunchPointer } from "@/lib/nfl-preseason-artifacts";
+import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
+import {
+  nflModelPlayoffColumnLabel,
+  nflModelWinsColumnLabel,
+  resolveNflTruthLabel,
+} from "@/lib/nfl-truth-label";
 
 export const dynamic = "force-dynamic";
 
@@ -153,7 +161,39 @@ export default async function StandingsPage({
     rows = rows.filter((r) => r.conference === confFilter);
   }
 
+  const sourceIsEspnFallback = intel.count === 0;
+  const pointer = loadNflWebLaunchPointer();
+  const truth = resolveNflTruthLabel({
+    season: sourceIsEspnFallback ? 2025 : intel.season,
+    week: sourceIsEspnFallback ? 18 : intel.week,
+    fallbackApplied:
+      sourceIsEspnFallback || Boolean(intel.selection?.fallback_applied),
+    latestSeason: sourceIsEspnFallback
+      ? 2025
+      : intel.selection?.latest_available?.season,
+    latestWeek: sourceIsEspnFallback
+      ? 18
+      : intel.selection?.latest_available?.week,
+    launchPreseason: Boolean(pointer?.preseason),
+  });
+  const recordCol = sourceIsEspnFallback
+    ? "2025 W–L"
+    : intel.season != null && intel.season < 2026
+      ? `${intel.season} W–L`
+      : truth.ui_state === "PRESEASON" || truth.ui_state === "ARCHIVE"
+        ? "W–L (not 2026 current)"
+        : "W–L";
+  const lineage = resolveActiveNflLineage();
+  const sourceNote = sourceIsEspnFallback
+    ? "ARCHIVE 2025 finals beside MODEL 2026 expected wins — not 2026 current."
+    : `${truth.period_line} · W–L is actual when in-season; E[wins] / playoff % are MODEL.`;
+
   rows.sort((a, b) => {
+    if (truth.ui_state !== "LIVE") {
+      const aw = a.keiProjWins ?? -1;
+      const bw = b.keiProjWins ?? -1;
+      if (bw !== aw) return bw - aw;
+    }
     const aw = a.winPct ?? -1;
     const bw = b.winPct ?? -1;
     if (bw !== aw) return bw - aw;
@@ -177,11 +217,6 @@ export default async function StandingsPage({
     .sort((a, b) => (b.playoffProb ?? 0) - (a.playoffProb ?? 0))
     .slice(0, 6);
 
-  const sourceNote =
-    intel.count > 0
-      ? "Live intel standings"
-      : "2025 final standings (labeled fallback) + KEI 2026 projections";
-
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -192,6 +227,16 @@ export default async function StandingsPage({
           <h1 className="mt-2 text-3xl font-semibold text-kos-text">
             Standings
           </h1>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <NflTruthStateBadges
+              states={
+                sourceIsEspnFallback || truth.ui_state === "ARCHIVE"
+                  ? ["ARCHIVE", "MODEL"]
+                  : [truth.ui_state, "MODEL"]
+              }
+            />
+            {lineage ? <NflLineageBadge lineage={lineage} /> : null}
+          </div>
           <p className="mt-2 text-sm text-kos-text/70">{sourceNote}</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -249,7 +294,7 @@ export default async function StandingsPage({
       <section className="mt-6 grid gap-3 md:grid-cols-2">
         <div className="rounded-xl border border-white/10 bg-black/35 p-4">
           <h2 className="text-sm font-semibold text-kos-gold">
-            At a Glance · High playoff probability
+            At a Glance · MODEL high playoff %
           </h2>
           <ul className="mt-3 space-y-1.5 text-sm">
             {clinched.length === 0 ? (
@@ -273,7 +318,7 @@ export default async function StandingsPage({
         </div>
         <div className="rounded-xl border border-white/10 bg-black/35 p-4">
           <h2 className="text-sm font-semibold text-kos-gold">
-            At a Glance · Bubble
+            At a Glance · MODEL bubble
           </h2>
           <ul className="mt-3 space-y-1.5 text-sm">
             {bubble.length === 0 ? (
@@ -308,14 +353,14 @@ export default async function StandingsPage({
                 <thead>
                   <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/55">
                     <th className="px-3 py-3">Team</th>
-                    <th className="px-3 py-3">W-L</th>
+                    <th className="px-3 py-3">{recordCol}</th>
                     <th className="px-3 py-3">Win%</th>
                     <th className="px-3 py-3">Div</th>
                     <th className="px-3 py-3">PD</th>
                     <th className="px-3 py-3">Streak</th>
                     <th className="px-3 py-3">Last 5</th>
-                    <th className="px-3 py-3">KEI Proj Wins</th>
-                    <th className="px-3 py-3">Playoff Prob</th>
+                    <th className="px-3 py-3">{nflModelWinsColumnLabel()}</th>
+                    <th className="px-3 py-3">{nflModelPlayoffColumnLabel()}</th>
                   </tr>
                 </thead>
                 <tbody>
