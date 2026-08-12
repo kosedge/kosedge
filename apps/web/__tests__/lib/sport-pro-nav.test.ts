@@ -20,7 +20,12 @@ describe("sport-pro-nav", () => {
       const edgeBoard = primary.find((i) => i.label === "Edge Board");
       expect(edgeBoard?.emphasis).toBe("green");
       if (sport.key !== "nfl") {
-        expect(labels).toContain("KEI Lines");
+        if (sport.key === "cfb" || sport.key === "nhl") {
+          expect(labels).toContain("Fair Lines");
+          expect(labels).not.toContain("KEI Lines");
+        } else {
+          expect(labels).toContain("KEI Lines");
+        }
       }
     }
   });
@@ -98,6 +103,10 @@ describe("sport-pro-nav", () => {
     expect(cfbTools).not.toContain("Project Game");
     expect(cfbPrimary).toContain("Season Model");
     expect(cfbPrimary).toContain("Project Game");
+    expect(cfbPrimary).toContain("Fair Lines");
+    expect(cfbPrimary).not.toContain("KEI Lines");
+    expect(cfbTools).toContain("KEI (not shipped)");
+    expect(cfbTools).not.toContain("KEI Projections");
     expect(cfbPrimary).not.toContain("Survivor");
     expect(cfbPrimary).not.toContain("Game Boxes");
     expect(cfbPrimary).not.toContain("Fantasy");

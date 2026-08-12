@@ -8,6 +8,7 @@
 
 import type { SportKey } from "@/lib/sports";
 import { getSport, supportsPropsFantasy } from "@/lib/sports";
+import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 
 export type SportNavItem = {
   href: string;
@@ -27,10 +28,19 @@ type SportNavConfig = {
 };
 
 function sharedTools(sport: SportKey): SportNavItem[] {
+  const keiTool: SportNavItem = sportIsMarketsOnlyEdgeBoard(sport)
+    ? {
+        href: `/pro/kei-lines/${sport}`,
+        label: "KEI (not shipped)",
+      }
+    : {
+        href: `/pro/kei-lines/${sport}`,
+        label: "KEI Projections",
+      };
   return [
     { href: `/odds/${sport}`, label: "Compare Odds" },
     { href: `/pro/${sport}/execution`, label: "Execution Monitor" },
-    { href: `/pro/kei-lines/${sport}`, label: "KEI Projections" },
+    keiTool,
     { href: `/pro/${sport}/tracking`, label: "Sport Tracking" },
     { href: "/pro/model-transparency", label: "Model Health" },
     { href: "/pro/clv-tracker", label: "CLV Tracker" },
@@ -58,7 +68,10 @@ function corePrimary(
       label: opts.slateLabel,
       primary: true,
     },
-    { href: `/pro/${sport}/fair-lines`, label: "KEI Lines" },
+    {
+      href: `/pro/${sport}/fair-lines`,
+      label: sportIsMarketsOnlyEdgeBoard(sport) ? "Fair Lines" : "KEI Lines",
+    },
     {
       href: sport === "mlb" ? "/pro/mlb/edges" : `/pro/${sport}/edges`,
       label: "Edges",
