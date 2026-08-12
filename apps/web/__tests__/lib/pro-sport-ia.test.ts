@@ -144,6 +144,10 @@ describe("pro sport IA", () => {
     expect(byLabel["Injuries & News"]).toBe("/pro/nfl/injuries");
     expect(byLabel["Model Transparency"]).toBe("/pro/model-transparency");
     expect(byLabel["Sport Tracking"]).toBe("/pro/nfl/tracking");
+    const tracking = sections
+      .flatMap((section) => section.links)
+      .find((link) => link.label === "Sport Tracking");
+    expect(tracking?.hint).toMatch(/incomplete/i);
     expect(byLabel["Global CLV Tracker"]).toBe("/pro/clv-tracker");
     expect(byLabel.Performance).toBe("/pro/model-transparency");
 

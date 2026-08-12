@@ -155,6 +155,11 @@ from .services.nfl_player_projection_engine import (
 )
 from .services.nfl_prop_edge_policy import anytime_td_prob_from_td_mean
 from .services.nfl_props_eligibility import is_investable_prop
+from .services.nfl_clv_semantics import (
+    moneyline_clv as nfl_moneyline_clv,
+    summarize_clv_values as nfl_summarize_clv_values,
+    total_clv as nfl_total_clv,
+)
 from .services.nfl_player_prop_calibration import (
     apply_prop_calibration,
     default_calibration_bundle,
@@ -5458,7 +5463,10 @@ def run_nfl_clv_attribution(
                 close_imp = _american_implied_prob(close_price) if close_price is not None else None
                 if side is not None and open_imp is not None and close_imp is not None:
                     model_line = fair_home_ml if side == "home" else fair_away_ml
-                    clv_value = close_imp - open_imp
+                    clv_value = nfl_moneyline_clv(
+                        open_price=int(open_price),
+                        close_price=int(close_price),
+                    )
                     session.execute(
                         text(
                             """
@@ -5511,7 +5519,11 @@ def run_nfl_clv_attribution(
                 if abs(total_diff) >= MIN_TOTAL_EDGE_POINTS:
                     total_side = "over" if total_diff > 0 else "under"
             if total_side is not None and open_total is not None and close_total is not None:
-                total_clv = (close_total - open_total) if total_side == "over" else (open_total - close_total)
+                total_clv = nfl_total_clv(
+                    side=total_side,
+                    open_total=float(open_total),
+                    close_total=float(close_total),
+                )
                 session.execute(
                     text(
                         """
@@ -5601,12 +5613,19 @@ def _compute_nfl_market_clv_summary(clv_rows: List[Dict[str, Any]]) -> Dict[str,
             buckets[market].append(float(clv_value))
     out: Dict[str, Any] = {}
     for market, values in buckets.items():
+        summary = nfl_summarize_clv_values(values)
+        avg = summary.get("avg_clv")
+        pos_rate = summary.get("positive_clv_rate")
+        beat_rate = summary.get("beat_close_rate")
         out[market] = {
-            "sample_size": len(values),
-            "avg_clv": round(sum(values) / len(values), 6) if values else None,
-            "positive_rate": (
-                round(sum(1 for value in values if value > 0.0) / len(values), 6) if values else None
-            ),
+            "sample_size": summary["n"],
+            "avg_clv": None if avg is None else round(float(avg), 6),
+            "positive_rate": None if pos_rate is None else round(float(pos_rate), 6),
+            "beat_close": summary["beat_close"],
+            "push": summary["push"],
+            "lose_close": summary["lose_close"],
+            "decided_n": summary["decided_n"],
+            "beat_close_rate": None if beat_rate is None else round(float(beat_rate), 6),
         }
     return out
 

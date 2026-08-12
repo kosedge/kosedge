@@ -27,6 +27,13 @@ from src.services.nfl_matchup_features import (
 from src.services.nfl_portfolio_optimizer import optimize_nfl_portfolio
 from src.services.nfl_player_identity import apply_manual_mapping_resolution
 from src.services.nfl_props_eligibility import filter_investable_rows
+from src.services.nfl_clv_semantics import (
+    NFL_CLV_DEFINITION,
+    NFL_CLV_POPULATION,
+    NFL_CLV_TIMESTAMPS,
+    assess_live_clv_trust,
+    market_summary_from_counts,
+)
 from src.services.nfl_simulator import (
     DEFAULT_NFL_MODEL_VERSION,
     NflGameInputs,
@@ -2555,8 +2562,9 @@ def nfl_clv_summary(
                   market_code,
                   COUNT(*)::int AS sample_size,
                   AVG(clv_value)::numeric AS avg_clv,
-                  SUM(CASE WHEN clv_value > 0 THEN 1 ELSE 0 END)::int AS positive_clv,
-                  SUM(CASE WHEN clv_value <= 0 THEN 1 ELSE 0 END)::int AS non_positive_clv
+                  SUM(CASE WHEN clv_value > 1e-12 THEN 1 ELSE 0 END)::int AS beat_close,
+                  SUM(CASE WHEN ABS(clv_value) <= 1e-12 THEN 1 ELSE 0 END)::int AS push,
+                  SUM(CASE WHEN clv_value < -1e-12 THEN 1 ELSE 0 END)::int AS lose_close
                 FROM nfl_clv_attribution
                 WHERE model_version = :model_version
                   AND created_at >= NOW() - make_interval(days => :lookback_days)
@@ -2568,22 +2576,44 @@ def nfl_clv_summary(
         ).fetchall()
 
         market_stats: Dict[str, Any] = {}
+        total_n = 0
+        total_beat = 0
+        total_push = 0
+        total_lose = 0
         for row in rows:
             m = dict(row._mapping)
-            sample_size = _to_int(m.get("sample_size")) or 0
-            positive = _to_int(m.get("positive_clv")) or 0
-            hit_rate = (positive / sample_size) if sample_size > 0 else None
-            market_stats[str(m.get("market_code"))] = {
-                "sample_size": sample_size,
-                "avg_clv": _to_float(m.get("avg_clv")),
-                "positive_clv": positive,
-                "non_positive_clv": _to_int(m.get("non_positive_clv")) or 0,
-                "positive_clv_rate": hit_rate,
-            }
+            n = _to_int(m.get("sample_size")) or 0
+            beat = _to_int(m.get("beat_close")) or 0
+            push = _to_int(m.get("push")) or 0
+            lose = _to_int(m.get("lose_close")) or 0
+            total_n += n
+            total_beat += beat
+            total_push += push
+            total_lose += lose
+            market_stats[str(m.get("market_code"))] = market_summary_from_counts(
+                n=n,
+                beat=beat,
+                push=push,
+                lose=lose,
+                avg_clv=_to_float(m.get("avg_clv")),
+            )
 
+        as_of = date.today()
+        trust = assess_live_clv_trust(
+            as_of=as_of,
+            n=total_n,
+            beat=total_beat,
+            push=total_push,
+            lose=total_lose,
+        )
         return {
             "model_version": model_version,
             "lookback_days": int(lookback_days),
+            "definition": NFL_CLV_DEFINITION,
+            "population": NFL_CLV_POPULATION,
+            "timestamps": NFL_CLV_TIMESTAMPS,
+            "markets_covered": ["moneyline", "total"],
+            "trust": trust,
             "markets": market_stats,
         }
     finally:
