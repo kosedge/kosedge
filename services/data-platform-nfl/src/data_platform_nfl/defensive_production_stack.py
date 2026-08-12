@@ -107,8 +107,13 @@ WIN_STRETCH_FLOOR = 3.0
 WIN_STRETCH_CEILING = 15.2
 WIN_STRETCH_TAPER_K = 0.62
 WIN_STRETCH_TAIL_DAMPEN = 0.18
-WIN_PILE_BREAK_WIDTH = 0.04
-WIN_PILE_BREAK_SPREAD = 0.12
+# v1.24.1 conservation: consecutive-gap clusters + wider win micro-spread.
+# Prior width=0.04 vs cluster *first* left a ~10-team 12.55–12.83 ceiling band.
+WIN_PILE_BREAK_WIDTH = 0.15
+WIN_PILE_BREAK_SPREAD = 1.2
+# Publish guard: teams within this band of the league max must stay ≤ this count.
+WIN_CEILING_CLUSTER_BAND = 0.35
+WIN_CEILING_CLUSTER_MAX = 3
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -147,8 +152,9 @@ def _break_soft_piles(
 ) -> Dict[str, float]:
     """Within near-tie clusters, apply residual-ranked micro-spread (conserving sum).
 
-    Keeps league totals intact while separating soft-floor / soft-ceiling stacks
-    that survive a gentle tanh taper.
+    Clusters by **consecutive** gaps ≤ ``width`` (chain), not distance to the
+    first member — the latter fragmented soft ceilings into size-2 pairs that
+    never received a spread (2026-08-11 Futures 12.6 pile).
     """
     if not values:
         return {}
@@ -159,7 +165,7 @@ def _break_soft_piles(
     n = len(ordered)
     while i < n:
         j = i + 1
-        while j < n and abs(out[ordered[j]] - out[ordered[i]]) <= float(width):
+        while j < n and abs(out[ordered[j]] - out[ordered[j - 1]]) <= float(width):
             j += 1
         cluster = ordered[i:j]
         if len(cluster) >= 3:
@@ -181,6 +187,18 @@ def _break_soft_piles(
     after = sum(out.values()) or 1.0
     scale = before / after
     return {t: v * scale for t, v in out.items()}
+
+
+def ceiling_cluster_count(
+    wins: Mapping[str, float],
+    *,
+    band: float = WIN_CEILING_CLUSTER_BAND,
+) -> int:
+    """How many teams sit within ``band`` wins of the league maximum."""
+    if not wins:
+        return 0
+    top = max(float(v) for v in wins.values())
+    return sum(1 for v in wins.values() if top - float(v) <= float(band))
 
 
 def _f(row: Mapping[str, Any], *keys: str, default: float = 0.0) -> float:
@@ -934,6 +952,8 @@ def smoke_defensive_stack(
     int_range = max(int_vals) - min(int_vals) if int_vals else 0.0
     win_vals = [b.expected_wins for b in budgets.values()]
     win_range = max(win_vals) - min(win_vals) if win_vals else 0.0
+    win_by_team = {b.team: float(b.expected_wins) for b in budgets.values()}
+    ceil_n = ceiling_cluster_count(win_by_team)
     pf_vals = [b.points_for for b in budgets.values()]
     pf_range = max(pf_vals) - min(pf_vals) if pf_vals else 0.0
 
@@ -967,6 +987,13 @@ def smoke_defensive_stack(
     rush_y = sum(_f(r, "rush_yards_total", "rush_yards_mean") for r in rows)
     checks["pass_yards_allowed_conserved"] = abs(pass_all - pass_y) < 1.0
     checks["rush_yards_allowed_conserved"] = abs(rush_all - rush_y) < 1.0
+    # Ceiling soft-pile is a hard fail only when the offense PF/win stretch path ran.
+    stretched = any(
+        "offense_pf_variance_lift_v1_24_soft_piles" in (b.notes or ())
+        for b in budgets.values()
+    )
+    if stretched:
+        checks["win_ceiling_not_soft_pile"] = ceil_n <= WIN_CEILING_CLUSTER_MAX
 
     ranked_pf = sorted(budgets.values(), key=lambda b: -b.points_for)
     ranked_pa = sorted(budgets.values(), key=lambda b: -b.points_against)
@@ -982,6 +1009,7 @@ def smoke_defensive_stack(
             "ints": round(int_range, 2),
             "pf": round(pf_range, 2),
             "wins": round(win_range, 2),
+            "win_ceiling_cluster": ceil_n,
             "pa_min": round(min(pa_vals), 2),
             "pa_max": round(max(pa_vals), 2),
             "pf_min": round(min(pf_vals), 2) if pf_vals else 0.0,

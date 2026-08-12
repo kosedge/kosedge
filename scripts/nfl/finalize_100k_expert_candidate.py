@@ -475,7 +475,10 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     if win_range < 7.5:
         soft_flags.append(f"Win range soft: {win_range:.2f} (<7.5).")
     win_ties_top = Counter(round(w, 2) for w in wins).most_common(1)[0][1]
-    win_ceil_cluster, win_ceil_at = _max_cluster([w for w in wins if w >= wins_max - 0.05], 0.02)
+    # v1.24.1: 0.35 band of league max (not 0.02-near-exact-max) — catches 12.6 soft piles.
+    win_ceil_cluster, win_ceil_at = _max_cluster(
+        [w for w in wins if w >= wins_max - 0.35], 0.35
+    )
     if win_ties_top >= 4 or win_ceil_cluster >= 4:
         soft_flags.append(
             f"Win ceiling clustering: {max(win_ties_top, win_ceil_cluster)} teams near max "

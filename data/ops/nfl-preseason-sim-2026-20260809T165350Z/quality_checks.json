@@ -347,7 +347,7 @@
     "n_replicates": 20000
   },
   "strength_coherence": {
-    "applied_at_utc": "2026-08-11T22:23:13.666276+00:00",
+    "applied_at_utc": "2026-08-12T10:20:05.836362+00:00",
     "method": "7seed_mc_plus_strength_bracket_sb",
     "before_lar": {
       "team": "LAR",
@@ -359,25 +359,25 @@
     "after_lar": {
       "team": "LAR",
       "expected_wins": 9.6938,
-      "playoff_prob": 0.8314,
-      "division_title_prob": 0.36515,
-      "super_bowl_win_prob": 0.0708
+      "playoff_prob": 0.8088,
+      "division_title_prob": 0.3398,
+      "super_bowl_win_prob": 0.0688
     },
     "before_det": {
       "team": "DET",
-      "expected_wins": 7.0459,
+      "expected_wins": 7.0454,
       "playoff_prob": 0.5766,
       "division_title_prob": 0.2703,
       "super_bowl_win_prob": 0.02185
     },
     "after_det": {
       "team": "DET",
-      "expected_wins": 7.0459,
-      "playoff_prob": 0.5766,
-      "division_title_prob": 0.2703,
-      "super_bowl_win_prob": 0.02185
+      "expected_wins": 7.0454,
+      "playoff_prob": 0.5348,
+      "division_title_prob": 0.239,
+      "super_bowl_win_prob": 0.02
     },
-    "before_win_dist_mean_det": 10.5716,
-    "after_win_dist_mean_det": 7.0523
+    "before_win_dist_mean_det": 7.0523,
+    "after_win_dist_mean_det": 7.03
   }
 }

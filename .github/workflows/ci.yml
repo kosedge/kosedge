@@ -105,6 +105,7 @@ jobs:
             exit 1
           fi
           python scripts/nfl/check_edge_board_week1.py
+          python scripts/nfl/check_season_sim_conservation.py --n-path-replicates 500
 
       - name: Upload test coverage
         if: always()

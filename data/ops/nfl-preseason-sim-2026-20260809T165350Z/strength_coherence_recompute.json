@@ -1,9 +1,9 @@
 {
-  "generated_at_utc": "2026-08-11T22:23:13.666276+00:00",
+  "generated_at_utc": "2026-08-12T10:20:05.836362+00:00",
   "bundle": "nfl-preseason-sim-2026-20260809T165350Z",
   "root_cause": "Soft-pile/defense expected_wins (production PF/PA path) diverged from hierarchical team_week_win_rates AND stale team_win_distributions means; Truth Layer playoffs used rates while Season Model / Futures still showed hierarchical win histograms (DET board 7.05 vs dist \u03bc 10.57; LAR 9.69 vs 11.11).",
   "method": "7seed_mc_plus_strength_bracket_sb",
-  "n_replicates": 20000,
+  "n_replicates": 5000,
   "seed": 20260811,
   "before_lar": {
     "team": "LAR",
@@ -15,32 +15,32 @@
   "after_lar": {
     "team": "LAR",
     "expected_wins": 9.6938,
-    "playoff_prob": 0.8314,
-    "division_title_prob": 0.36515,
-    "super_bowl_win_prob": 0.0708
+    "playoff_prob": 0.8088,
+    "division_title_prob": 0.3398,
+    "super_bowl_win_prob": 0.0688
   },
   "before_det": {
     "team": "DET",
-    "expected_wins": 7.0459,
+    "expected_wins": 7.0454,
     "playoff_prob": 0.5766,
     "division_title_prob": 0.2703,
     "super_bowl_win_prob": 0.02185
   },
   "after_det": {
     "team": "DET",
-    "expected_wins": 7.0459,
-    "playoff_prob": 0.5766,
-    "division_title_prob": 0.2703,
-    "super_bowl_win_prob": 0.02185
+    "expected_wins": 7.0454,
+    "playoff_prob": 0.5348,
+    "division_title_prob": 0.239,
+    "super_bowl_win_prob": 0.02
   },
   "before_rate_wins_lar": 9.6938,
   "after_rate_wins_lar": 9.6938,
   "before_rate_wins_det": 7.0459,
-  "after_rate_wins_det": 7.0459,
-  "before_win_dist_mean_det": 10.5716,
-  "after_win_dist_mean_det": 7.0523,
-  "before_win_dist_mean_lar": 11.1074,
-  "after_win_dist_mean_lar": 9.7311,
+  "after_rate_wins_det": 7.0454,
+  "before_win_dist_mean_det": 7.0523,
+  "after_win_dist_mean_det": 7.03,
+  "before_win_dist_mean_lar": 9.7311,
+  "after_win_dist_mean_lar": 9.686,
   "sanity": {
     "sum_playoff_afc": 7.0,
     "sum_playoff_nfc": 7.0,
@@ -50,23 +50,13 @@
     "sum_super_bowl": 1.0
   },
   "e_wins_histogram": {
-    "<=5": 6,
-    "5-7": 10,
-    "7-10": 5,
-    "10-12": 1,
-    ">=12": 10
+    "<=5": 5,
+    "5-7": 8,
+    "7-10": 8,
+    "10-12": 4,
+    ">=12": 7
   },
-  "contradiction_flags": [
-    {
-      "team": "DET",
-      "expected_wins": 7.0459,
-      "playoff_prob": 0.5766,
-      "super_bowl_win_prob": 0.02185,
-      "reasons": [
-        "low_wins_high_playoff"
-      ]
-    }
-  ],
+  "contradiction_flags": [],
   "win_dist_mismatch_flags": [],
   "production_path": "Player pass/rush/rec yards + TDs and defense PF/PA/expected_wins share the soft-pile finalize budget path; week rates AND win distributions are rebuilt from those board wins so Power / Futures / Season Model tell one story.",
   "team_id_scheme": "product_canonical_LAR"

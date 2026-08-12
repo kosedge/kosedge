@@ -83,6 +83,8 @@ jobs:
           fi
           # Week 1 complete slate — schedule pack == 16; no silent drops
           python scripts/nfl/check_edge_board_week1.py
+          # Futures conservation C1–C6 + ceiling soft-pile guard
+          python scripts/nfl/check_season_sim_conservation.py --n-path-replicates 500
 
       - name: Comment PR with results
         if: always()

@@ -87,3 +87,32 @@ def test_defense_stack_conserves_pf_pa_wins() -> None:
     assert smoke["ranges"]["pa"] >= 85.0
     assert smoke["ranges"]["sacks"] >= 18.0
     assert smoke["ranges"]["ints"] >= 6.0
+
+
+def test_defense_stack_win_ceiling_cleared_with_pf_lift() -> None:
+    rows, schedule, defense, offense = _board_and_schedule()
+    scale = 126_000.0 / sum(float(r["pass_yards_total"]) for r in rows)
+    for r in rows:
+        r["pass_yards_total"] *= scale
+    budgets, audit = apply_defensive_production_stack(
+        rows,
+        schedule=schedule,
+        defense_index=defense,
+        offense_index=offense,
+        offense_pf_variance_lift=True,
+    )
+    smoke = audit["smoke"]
+    assert smoke["all_pass"] is True, smoke
+    assert smoke["checks"]["win_ceiling_not_soft_pile"] is True
+    assert smoke["ranges"]["win_ceiling_cluster"] <= 3
+
+
+def test_break_soft_piles_consecutive_not_first_member() -> None:
+    from data_platform_nfl.defensive_production_stack import _break_soft_piles
+
+    # Chain of near-ties that fragment under "vs first" clustering.
+    values = {t: 12.55 + i * 0.03 for i, t in enumerate("ABCDEFGHIJ")}
+    residuals = {t: float(i) for i, t in enumerate("ABCDEFGHIJ")}
+    out = _break_soft_piles(values, residuals, width=0.15, spread=1.2)
+    assert max(out.values()) - min(out.values()) > 1.0
+    assert abs(sum(out.values()) - sum(values.values())) < 1e-9
