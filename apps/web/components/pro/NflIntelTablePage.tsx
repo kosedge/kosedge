@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
 import {
   fetchNflIntel,
   formatIntelValueWithRank,
@@ -7,6 +8,7 @@ import {
   type NflIntelResponseRow,
 } from "@/lib/nfl-intel";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
+import { resolveNflTruthLabel } from "@/lib/nfl-truth-label";
 
 type IntelEndpoint =
   | "rosters"
@@ -62,15 +64,18 @@ export default async function NflIntelTablePage({
   const latestSeason =
     typeof latest?.season === "number" ? latest.season : null;
   const latestWeek = typeof latest?.week === "number" ? latest.week : null;
-  const latestLabel =
-    latestSeason && latestWeek ? `${latestSeason} W${latestWeek}` : null;
+  const truth = resolveNflTruthLabel({
+    season: data.season,
+    week: data.week,
+    fallbackApplied: Boolean(data.selection?.fallback_applied),
+    latestSeason,
+    latestWeek,
+  });
   const requestedHadNoData =
     data.selection?.requested_availability?.has_data === false;
-  const showFallbackHint = Boolean(
-    data.selection?.fallback_applied && latestLabel,
-  );
+  const showFallbackHint = Boolean(truth.honesty_note);
   const showRequestedEmptyHint = Boolean(
-    rows.length === 0 && requestedHadNoData && latestLabel,
+    rows.length === 0 && requestedHadNoData && truth.honesty_note,
   );
 
   return (
@@ -83,15 +88,16 @@ export default async function NflIntelTablePage({
           <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
             {description}
           </p>
-          <p className="mt-2 text-xs text-kos-text/60">
-            {data.season ? `Season ${data.season}` : "Season unavailable"}
-            {data.week ? ` • Week ${data.week}` : ""}
-            {` • ${data.count} rows`}
-          </p>
-          {showFallbackHint ? (
-            <p className="mt-1 text-xs text-kos-gold/80">
-              Not current · showing {latestLabel} (as-of)
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <NflTruthStateBadge state={truth.ui_state} />
+            <p className="text-xs text-kos-text/60">
+              {truth.period_line}
+              {` · ${data.count} rows`}
+              {truth.is_current ? "" : " · not current"}
             </p>
+          </div>
+          {showFallbackHint && truth.honesty_note ? (
+            <p className="mt-1 text-xs text-kos-gold/80">{truth.honesty_note}</p>
           ) : null}
         </div>
         <Link
@@ -113,8 +119,7 @@ export default async function NflIntelTablePage({
             {emptyHint}
             {showRequestedEmptyHint ? (
               <p className="mt-2 text-xs text-kos-text/60">
-                No data for selected period. Not current · latest as-of:{" "}
-                {latestLabel}.
+                No data for selected period. {truth.honesty_note}
               </p>
             ) : null}
           </div>

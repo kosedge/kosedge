@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 
@@ -56,6 +56,10 @@ vi.mock("@/lib/nfl-intel", () => ({
 
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
 import { fetchNflIntel } from "@/lib/nfl-intel";
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe("NflIntelTablePage", () => {
   it("renders fallback guidance when latest period is used", async () => {
@@ -121,11 +125,50 @@ describe("NflIntelTablePage", () => {
     render(page);
 
     expect(
-      screen.getByText("Not current · showing 2025 W22 (as-of)"),
+      screen.getByText("ARCHIVE · showing 2025 finals (as-of) — not 2026 current"),
     ).toBeInTheDocument();
+    expect(screen.getByText(/Season 2025 · finals/)).toBeInTheDocument();
+    expect(screen.queryByText(/W22/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Week 18/)).not.toBeInTheDocument();
+    expect(screen.getByTestId("nfl-truth-state")).toHaveTextContent("ARCHIVE");
     expect(screen.getByText("AFC · East")).toBeInTheDocument();
     expect(screen.getByText("NFC · West")).toBeInTheDocument();
     expect(screen.getByText("BUF")).toBeInTheDocument();
     expect(screen.getByText("13-4 (1)")).toBeInTheDocument();
+  });
+
+  it("does not present 2026 Week 18 as current in August", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-12T16:00:00Z"));
+    vi.mocked(fetchNflIntel).mockResolvedValue({
+      season: 2026,
+      week: 18,
+      team: null,
+      count: 1,
+      rows: [{ team: "LAR", position: "QB", player_name: "Stafford" }],
+      selection: {
+        fallback_applied: true,
+        latest_available: { season: 2026, week: 18, row_count: 1 },
+      },
+    });
+
+    const page = await NflIntelTablePage({
+      endpoint: "depth-charts",
+      title: "NFL Depth Charts",
+      description: "Depth",
+      emptyHint: "No data",
+      columns: [
+        { key: "team", label: "Team" },
+        { key: "player_name", label: "Player" },
+      ],
+    });
+
+    render(page);
+
+    expect(screen.getByText(/Season 2026 · Preseason/)).toBeInTheDocument();
+    expect(screen.getByTestId("nfl-truth-state")).toHaveTextContent("PRESEASON");
+    expect(screen.queryByText(/Week 18/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/2026 W18/)).not.toBeInTheDocument();
+    vi.useRealTimers();
   });
 });

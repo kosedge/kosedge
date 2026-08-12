@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import type { TeamIntelFilters } from "@/lib/nfl-team-intel";
+import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
 import {
   InstantFilterBar,
   InstantSelect,
@@ -42,6 +43,9 @@ export default function TeamIntelFilterBar({
   const conference = filters.conference ?? "";
   const division = filters.division ?? "";
   const query = filters.query ?? "";
+  const preseasonLatest = isNflCalendarPreseason(
+    filters.season ?? NFL_PRODUCT_SEASON,
+  );
 
   function buildHref(updates: Record<string, string | null | undefined>) {
     const params = new URLSearchParams();
@@ -137,7 +141,7 @@ export default function TeamIntelFilterBar({
           pending={pending}
           onChange={(value) => navigate({ week: value || null })}
           options={[
-            { value: "", label: "Latest" },
+            { value: "", label: preseasonLatest ? "Preseason" : "Latest" },
             ...Array.from({ length: 22 }, (_, i) => ({
               value: String(i + 1),
               label: `Week ${i + 1}`,

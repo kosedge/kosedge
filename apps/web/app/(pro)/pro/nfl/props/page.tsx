@@ -17,6 +17,7 @@ import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
+import { formatNflWeekLabel } from "@/lib/nfl-truth-label";
 
 /** Soft-launch default: current season board — never archive-week CTAs. */
 const DEFAULT_SEASON = 2026;
@@ -130,7 +131,7 @@ export default async function NflPropsBoardPage({
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
               {hasRows ? ` · Board as of ${asOfLabel(board.rows)}` : null}
-              {` · ${season} W${week}`}
+              {` · ${season} ${formatNflWeekLabel(week, { season })}`}
             </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">

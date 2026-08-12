@@ -14,6 +14,7 @@ import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
+import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import {
   resolveSportKey,
@@ -98,7 +99,11 @@ export default async function EdgeBoardSportPage({
   ].sort((a, b) => a - b);
   const nflWeekLabel =
     nflWeeks.length === 1
-      ? `Week ${nflWeeks[0]} REG`
+      ? formatNflBoardWeekLabel(nflWeeks[0], {
+          season: 2026,
+          hasRowsForCurrentWeek: games > 0,
+          lineCount: games,
+        })
       : nflWeeks.length > 1
         ? `Weeks ${nflWeeks[0]}–${nflWeeks[nflWeeks.length - 1]} REG`
         : "REG";
