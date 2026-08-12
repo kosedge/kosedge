@@ -154,6 +154,7 @@ from .services.nfl_player_projection_engine import (
     usage_rank_depth_orders,
 )
 from .services.nfl_prop_edge_policy import anytime_td_prob_from_td_mean
+from .services.nfl_props_eligibility import is_investable_prop
 from .services.nfl_player_prop_calibration import (
     apply_prop_calibration,
     default_calibration_bundle,
@@ -15914,6 +15915,13 @@ def materialize_nfl_player_props_edges(
                 ("anytime_td", float(atd_mean), float(atd_std), atd_mean),
             ]
             for market_key, raw_mean, raw_std, model_p50 in markets:
+                if not is_investable_prop(
+                    market_key=market_key,
+                    position=position,
+                    model_mean=float(raw_mean) if raw_mean is not None else None,
+                    role_confidence=role_conf,
+                ):
+                    continue
                 market = select_prop_market_for_player(
                     market_lookup,
                     player_match_keys=player_match_keys,

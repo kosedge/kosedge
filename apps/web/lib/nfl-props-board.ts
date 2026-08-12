@@ -1,5 +1,6 @@
 import "server-only";
 import { env } from "@/lib/config/env";
+import { isInvestableProp } from "@/lib/nfl-props-eligibility";
 
 export type NflPropBoardRow = {
   season: number;
@@ -35,6 +36,8 @@ export type NflPropBoardRow = {
   stakeEligible: boolean;
   projectionSource: "box_score" | "baseline" | null;
   zOver: number | null;
+  position: string | null;
+  roleConfidence: number | null;
 };
 
 export type NflPropsBoardResponse = {
@@ -47,6 +50,8 @@ export type NflPropsBoardResponse = {
     watchCount?: number;
     leanCount?: number;
     boxScoreSourcedCount?: number;
+    rawCount?: number;
+    eligibilityDropped?: number;
   };
   error?: string;
 };
@@ -144,6 +149,13 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     projectionSource:
       sourceRaw === "box_score" || sourceRaw === "baseline" ? sourceRaw : null,
     zOver: toNumberOrNull(diagnostics.z_over),
+    position:
+      typeof diagnostics.position === "string" && diagnostics.position.trim()
+        ? diagnostics.position.trim().toUpperCase()
+        : raw.position != null
+          ? String(raw.position).toUpperCase()
+          : null,
+    roleConfidence: toNumberOrNull(diagnostics.role_confidence),
   };
 }
 
@@ -159,7 +171,12 @@ export async function fetchNflPropsBoard(params: {
   limit?: number;
 }): Promise<NflPropsBoardResponse> {
   const base = env.MODEL_SERVICE_URL;
-  const emptyDiagnostics = { marketJoinedCount: 0, kosedgeOnly: true };
+  const emptyDiagnostics = {
+    marketJoinedCount: 0,
+    kosedgeOnly: true,
+    rawCount: 0,
+    eligibilityDropped: 0,
+  };
 
   if (!base) {
     return {
@@ -214,27 +231,35 @@ export async function fetchNflPropsBoard(params: {
         box_score_sourced_count?: number;
       };
     };
-    const rows = Array.isArray(payload.rows)
+    const allRows = Array.isArray(payload.rows)
       ? payload.rows.map(normalizePropRow)
       : [];
-    const marketJoinedCount =
-      typeof payload.diagnostics?.market_joined_count === "number"
-        ? payload.diagnostics.market_joined_count
-        : rows.filter((row) => row.marketJoined).length;
+    const rows = allRows.filter((row) =>
+      isInvestableProp({
+        marketKey: row.marketKey,
+        position: row.position,
+        modelMean: row.modelMean,
+        line: row.line,
+        confidence: row.confidence,
+        roleConfidence: row.roleConfidence,
+        marketJoined: row.marketJoined,
+      }),
+    );
+    const eligibilityDropped = allRows.length - rows.length;
+    const marketJoinedCount = rows.filter((row) => row.marketJoined).length;
     return {
-      count: typeof payload.count === "number" ? payload.count : rows.length,
+      count: rows.length,
       rows,
       diagnostics: {
         marketJoinedCount,
-        kosedgeOnly: Boolean(
-          payload.diagnostics?.kosedge_only ??
-          (rows.length > 0 && marketJoinedCount === 0),
-        ),
+        kosedgeOnly: Boolean(rows.length > 0 && marketJoinedCount === 0),
         playCount: payload.diagnostics?.play_count,
         watchCount:
           payload.diagnostics?.watch_count ?? payload.diagnostics?.lean_count,
         leanCount: payload.diagnostics?.lean_count,
         boxScoreSourcedCount: payload.diagnostics?.box_score_sourced_count,
+        rawCount: allRows.length,
+        eligibilityDropped,
       },
     };
   } catch {

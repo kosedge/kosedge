@@ -7,9 +7,12 @@ import {
   formatEdgeProb,
   formatPropNumber,
   propMarketLabel,
-  PROP_MARKET_LABELS,
   type NflPropBoardRow,
 } from "@/lib/nfl-props-board";
+import {
+  PRIMARY_BOARD_MARKETS,
+  PROPS_ELIGIBILITY_NOTE,
+} from "@/lib/nfl-props-eligibility";
 import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
@@ -18,7 +21,7 @@ import {
 /** Soft-launch default: current season board — never archive-week CTAs. */
 const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
-const MARKET_TABS = ["ALL", ...Object.keys(PROP_MARKET_LABELS)] as const;
+const MARKET_TABS = ["ALL", ...PRIMARY_BOARD_MARKETS] as const;
 const TAG_TABS = ["PLAY", "WATCH", "ALL"] as const;
 const LIMIT_OPTIONS = [100, 250, 500] as const;
 const KOSEDGE_DATE = "August 11, 2026";
@@ -96,6 +99,10 @@ export default async function NflPropsBoardPage({
   });
 
   const hasRows = board.rows.length > 0;
+  const filteredEmpty =
+    !board.error &&
+    !hasRows &&
+    (board.diagnostics.eligibilityDropped ?? 0) > 0;
   const activeQuery = {
     season: String(season),
     week: String(week),
@@ -117,8 +124,8 @@ export default async function NflPropsBoardPage({
               Props
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              Player prop board — game/player, market, line, and model mean when
-              markets + hooks are live. Research rows, not bet recommendations.
+              Investable player props — skill positions with involvement floors.
+              Research rows, not bet recommendations.
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
@@ -160,7 +167,7 @@ export default async function NflPropsBoardPage({
         </div>
       ) : null}
 
-      {!board.error && !hasRows ? (
+      {!board.error && !hasRows && !filteredEmpty ? (
         <div className="mt-6">
           <HonestStatusBanner
             title="Player props board fills when markets + model hooks are live"
@@ -168,9 +175,8 @@ export default async function NflPropsBoardPage({
           >
             <p>
               No live prop rows for {season} week {week} yet. Use Edge Board for
-              game lines, Game Boxes for matchup depth, and Edges when prop edges
-              materialize — we don&apos;t backfill fake rows or wrong-week
-              archives here.
+              game lines and Game Boxes for matchup depth — we don&apos;t
+              backfill fake rows or wrong-week archives here.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Link
@@ -196,7 +202,7 @@ export default async function NflPropsBoardPage({
         </div>
       ) : null}
 
-      {hasRows ? (
+      {hasRows || filteredEmpty ? (
         <>
           {!board.error && board.diagnostics.kosedgeOnly ? (
             <div className="mt-6">
@@ -281,6 +287,12 @@ export default async function NflPropsBoardPage({
               </p>
             </div>
 
+            {filteredEmpty ? (
+              <p className="mt-4 text-sm text-kos-text/70">
+                No investable props for this filter yet.
+              </p>
+            ) : (
+              <>
             {/* Mobile cards */}
             <ul className="mt-4 space-y-3 md:hidden">
               {board.rows.map((row, index) => (
@@ -318,9 +330,11 @@ export default async function NflPropsBoardPage({
                 </tbody>
               </table>
             </div>
+              </>
+            )}
 
             <p className="mt-4 text-xs text-kos-text/50">
-              For matchup depth and game context, open{" "}
+              {PROPS_ELIGIBILITY_NOTE} For matchup depth, open{" "}
               <Link
                 href="/pro/nfl/game-boxes"
                 className="font-semibold text-kos-gold hover:underline"
@@ -356,7 +370,9 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
         <div>
           <p className="font-semibold text-kos-text">{row.playerName}</p>
           <p className="text-xs text-kos-text/55">
-            {row.team} · {propMarketLabel(row.marketKey)}
+            {row.team}
+            {row.position ? ` · ${row.position}` : ""} ·{" "}
+            {propMarketLabel(row.marketKey)}
           </p>
         </div>
         <span className="text-sm font-semibold text-kos-text">
@@ -402,6 +418,7 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
         <div className="font-semibold text-kos-text">{row.playerName}</div>
         <div className="text-xs text-kos-text/55">
           {row.team}
+          {row.position ? ` · ${row.position}` : ""}
           {row.projectionSource
             ? ` · ${row.projectionSource === "box_score" ? "MC" : "base"}`
             : ""}
