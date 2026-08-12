@@ -43,10 +43,18 @@ bash scripts/nfl/run_daily_roster_injury_intel.sh --gate
 
 ### 5. Propagate
 - [ ] Confirm loader path is pack-primary (`build_packaged_real_universe` / DB loader ignores weekly when pack present).
-- [ ] Re-sim affected teams (or full board on flash days):
+- [ ] Re-sim affected teams (or full board on flash days) when research Model must move:
 
 ```bash
 bash scripts/nfl/run_daily_roster_injury_intel.sh --sim
+```
+
+- [ ] **Injury → KEI reprice** (product line; freezes Model fair / Model PR):
+
+```bash
+# Midweek affected / Friday full slate / gameday inactives
+./scripts/nfl/run-injury-kei-reprice.sh --window friday_final --dry-run
+# See data/ops/nfl-injury-kei-cadence-20260811.md + docs/runbooks/nfl-kickoff-injury-kei.md
 ```
 
 - [ ] Conservation: pass/rush pools OK; **Σ mean wins = 272**.

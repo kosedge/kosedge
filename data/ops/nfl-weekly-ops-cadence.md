@@ -13,6 +13,7 @@
 | 1. Ingest + harden | `SEASON=2026 WEEK=N ./scripts/nfl/run-weekly-inseason-update.sh` | Owned nflverse → features → baselines → props |
 | 2. Projection actuals | Included in step 1; or `write_projection_actuals.py --season 2026 --from-db` | Hub Actual column; live API: `GET /nfl/ops/projection-actuals?season=2026` |
 | 3. Market sims | Existing launch-hardening / fair-lines refresh | Keep Visual Crossing on Railway |
+| 3b. Injury → KEI | `./scripts/nfl/run-injury-kei-reprice.sh --window friday_final` (Thu midweek / Fri 16:00 ET / gameday −90m) | SoT → Active PR → KEI; Model frozen. Config: `data/ops/nfl-injury-kei-cadence/config.json` |
 | 4. Paper book | `PYTHONPATH=services/model-service:. .venv/bin/python scripts/nfl/paper_book_tracker.py --season 2026` | Locked thresholds — **do not retune** |
 | 5. Publish check | Spot-check `/pro/nfl/fair-lines` + Edge Board | Selective PLAY only; totals PASS; PRE = INFO |
 | 6. Deploy web (if JSON artifact changed) | Push `deploy-vercel` | Live actuals API covers most weeks without redeploy |

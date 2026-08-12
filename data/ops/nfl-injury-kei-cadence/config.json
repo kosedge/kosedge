@@ -1,0 +1,73 @@
+{
+  "as_of": "2026-08-11",
+  "timezone": "America/New_York",
+  "doctrine": {
+    "updates": ["sot_depth", "active_pr", "kei_handicap", "edge_tags"],
+    "does_not_modify": ["model_pr", "tuesday_shrink", "ryan_adj", "model_markets_research"]
+  },
+  "windows": {
+    "midweek": {
+      "label": "Midweek report",
+      "day_et": "thu",
+      "hour_et": 16,
+      "minute_et": 0,
+      "scope": "affected",
+      "action": "ingest_sot_kei"
+    },
+    "friday_final": {
+      "label": "Friday final",
+      "day_et": "fri",
+      "hour_et": 16,
+      "minute_et": 0,
+      "scope": "full_slate",
+      "action": "ingest_sot_kei"
+    },
+    "gameday_inactives": {
+      "label": "Gameday inactives",
+      "minutes_before_kickoff": 90,
+      "scope": "game",
+      "action": "final_kei_stamp",
+      "lock_pre_kick_kei": true
+    },
+    "post_game": {
+      "label": "Post-game",
+      "scope": "played_game",
+      "action": "no_kei_change",
+      "tuesday_pr_only": true
+    }
+  },
+  "status_participation": {
+    "out": 0.0,
+    "doubtful": 0.25,
+    "questionable": 0.5,
+    "limited": 0.85,
+    "probable": 0.95,
+    "full": 1.0,
+    "healthy": 1.0,
+    "ir": 0.0,
+    "pup": 0.0,
+    "suspended": 0.0,
+    "inactive": 0.0
+  },
+  "impact_points": {
+    "qb1_out_spread": 3.5,
+    "qb1_doubtful_spread": 2.5,
+    "qb1_questionable_spread": 1.0,
+    "qb1_out_total": 1.5,
+    "qb1_doubtful_total": 1.0,
+    "qb1_questionable_total": 0.5,
+    "skill_out_spread": 0.75,
+    "skill_out_total": 0.4,
+    "ol_out_spread": 0.5,
+    "ol_out_total": 0.25,
+    "defense_out_spread": 0.6,
+    "defense_out_total": 0.2
+  },
+  "log_thresholds": {
+    "spread_pts": 0.25,
+    "total_pts": 0.5
+  },
+  "qb1_force_reprice_statuses": ["out", "doubtful"],
+  "manual_sot_until_feed_live": true,
+  "notes": "Official injury feed thin in preseason — SoT pack edits are manual until feed live."
+}
