@@ -32,7 +32,7 @@ export default async function NflGameBoxesPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Game Boxes"
-      summary="Projected skill-player boxes for a future matchup — yards, TDs, receptions, INTs as median with p10–p90 bands. Optional star-out scenario. Preseason: pick any upcoming REG week — this is a projection desk, not a live betting board."
+      summary="Projected skill-player boxes for a future matchup — yards, TDs, receptions, INTs as median with typical range (low–high). Optional star-out scenario. Preseason: pick any upcoming REG week — this is a projection desk, not a live betting board."
       badge="Season engine · game boxes"
       primaryHref="/pro/nfl/survivor"
       primaryLabel="Open Survivor"

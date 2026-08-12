@@ -141,7 +141,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/nfl/game-boxes",
         title: "Game Boxes",
         description:
-          "Projected skill-player boxes for a future matchup — median with p10–p90 bands.",
+          "Projected skill-player boxes for a future matchup — median with typical range (low–high).",
         cta: "Open game boxes →",
         accent: "neutral",
       },

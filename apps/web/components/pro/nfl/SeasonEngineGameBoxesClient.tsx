@@ -20,6 +20,14 @@ import type {
   SeasonEngineMatchupOption,
   StatDist,
 } from "@/lib/nfl-season-engine-format";
+import {
+  HIDE_PERCENTILES_LABEL,
+  RANGE_LABEL,
+  RANGE_TOOLTIP,
+  SHOW_PERCENTILES_LABEL,
+  TYPICAL_RANGE_LABEL,
+  formatPercentileReveal,
+} from "@/lib/nfl-range-ux";
 
 type PlayerRow = {
   player_key: string;
@@ -326,8 +334,8 @@ export default function SeasonEngineGameBoxesClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · {formatDepthBadge(NFL_DEFAULT_N_GAME_BOX)} · yards median +
-            p10–p90 · TDs as P(TD) + expected rate
+            · {formatDepthBadge(NFL_DEFAULT_N_GAME_BOX)} · yards median +{" "}
+            {TYPICAL_RANGE_LABEL.toLowerCase()} · TDs as P(TD) + expected rate
           </p>
         </div>
         {(depthSource || depthAsOf) && (
@@ -603,6 +611,7 @@ function TeamBoxTable({
   highlightOut?: string;
   nReplicates?: number;
 }) {
+  const [showPercentiles, setShowPercentiles] = useState(false);
   const ordered = [...players]
     .filter((p) => p.team === team || p.team === alsoTeam)
     .sort((a, b) => {
@@ -625,11 +634,26 @@ function TeamBoxTable({
   return (
     <div className="rounded-2xl border border-white/10 bg-black/25 overflow-hidden">
       <div className="border-b border-white/10 px-4 py-3">
-        <h3 className="text-sm font-semibold text-kos-text">{title}</h3>
-        <p className="mt-0.5 text-[11px] text-kos-text/45">
-          Yards: median (p50) + p10–p90. TDs: P(TD) + expected rate (not median
-          tails). {formatDepthBadge(nReplicates ?? NFL_DEFAULT_N_GAME_BOX)}.
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-semibold text-kos-text">{title}</h3>
+            <p className="mt-0.5 text-[11px] text-kos-text/45">
+              Yards: median + {TYPICAL_RANGE_LABEL.toLowerCase()}. TDs: P(TD) +
+              expected rate (not median tails).{" "}
+              {formatDepthBadge(nReplicates ?? NFL_DEFAULT_N_GAME_BOX)}.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowPercentiles((v) => !v)}
+            className="min-h-11 shrink-0 rounded-lg px-2 text-[11px] font-semibold text-kos-gold/90 underline-offset-2 hover:underline sm:min-h-0 sm:py-1"
+            title={RANGE_TOOLTIP}
+          >
+            {showPercentiles
+              ? HIDE_PERCENTILES_LABEL
+              : SHOW_PERCENTILES_LABEL}
+          </button>
+        </div>
       </div>
       <div className="overflow-x-auto">
         {byTeam.map((t) => {
@@ -647,7 +671,9 @@ function TeamBoxTable({
                     <th className="px-3 py-2 font-medium">Pos</th>
                     <th className="px-3 py-2 font-medium">Stat</th>
                     <th className="px-3 py-2 font-medium">Projection</th>
-                    <th className="px-3 py-2 font-medium">Detail</th>
+                    <th className="px-3 py-2 font-medium" title={RANGE_TOOLTIP}>
+                      {RANGE_LABEL}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -722,8 +748,18 @@ function TeamBoxTable({
                                 );
                               }
                               return (
-                                <div key={stat}>
+                                <div key={stat} title={RANGE_TOOLTIP}>
                                   {formatRange(dist, { n })}
+                                  {showPercentiles && dist ? (
+                                    <div className="mt-0.5 text-[10px] text-kos-text/40">
+                                      {formatPercentileReveal({
+                                        p10: dist.p10,
+                                        p50: dist.p50,
+                                        p90: dist.p90,
+                                        digits: 1,
+                                      })}
+                                    </div>
+                                  ) : null}
                                 </div>
                               );
                             })}

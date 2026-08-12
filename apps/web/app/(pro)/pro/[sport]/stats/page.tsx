@@ -15,6 +15,7 @@ import {
   nflModelWinsColumnLabel,
   resolveNflTruthLabel,
 } from "@/lib/nfl-truth-label";
+import { RANGE_LABEL, RANGE_TOOLTIP, formatRangeBand } from "@/lib/nfl-range-ux";
 
 export const dynamic = "force-dynamic";
 
@@ -139,7 +140,9 @@ export default async function StatsPage({
                 <th className="px-4 py-3">Team</th>
                 <th className="px-4 py-3">Conf / Div</th>
                 <th className="px-4 py-3">{nflModelWinsColumnLabel()}</th>
-                <th className="px-4 py-3">Win p10–p90</th>
+                <th className="px-4 py-3" title={RANGE_TOOLTIP}>
+                  {RANGE_LABEL}
+                </th>
                 <th className="px-4 py-3">{nflModelPlayoffColumnLabel()}</th>
                 <th className="px-4 py-3">Division %</th>
                 <th className="px-4 py-3">SB %</th>
@@ -163,8 +166,8 @@ export default async function StatsPage({
                     {row.conference} {row.division}
                   </td>
                   <td className="px-4 py-3">{row.expectedWins.toFixed(2)}</td>
-                  <td className="px-4 py-3">
-                    {row.winsP10}–{row.winsP90}
+                  <td className="px-4 py-3" title={RANGE_TOOLTIP}>
+                    {formatRangeBand(row.winsP10, row.winsP90)}
                   </td>
                   <td className="px-4 py-3">
                     {(row.playoffProb * 100).toFixed(1)}%
