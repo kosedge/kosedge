@@ -98,7 +98,8 @@ describe("fantasy expert voice", () => {
     });
     expect(blurb).toContain("C.McCaffrey");
     expect(blurb).toContain("SF");
-    expect(blurb).toMatch(/16 picks|value/);
+    expect(blurb).toMatch(/likes him more than market/i);
+    expect(blurb).not.toMatch(/16 picks of value|take .* early/i);
     expect(blurb).not.toMatch(/Driven by/i);
     expect(blurb).toMatch(/soft open|Stack early/i);
   });
@@ -117,7 +118,8 @@ describe("fantasy expert voice", () => {
     } as FantasyDeskRow;
     const notes = notableValueNotes([row], 1);
     expect(notes[0]).toContain("1100 receiving yards");
-    expect(notes[0]).toMatch(/\+18/);
+    expect(notes[0]).toMatch(/likes him more than ADP/i);
+    expect(notes[0]).not.toMatch(/\+18/);
   });
 });
 
@@ -248,7 +250,7 @@ describe("ADP gap framing honesty", () => {
     expect(blurb).toMatch(/Camp-season sim/i);
   });
 
-  it("keeps pick-gap framing for credible early-round value", () => {
+  it("soft-frames gaps worse than ±12 so copy never says take a round early", () => {
     expect(
       shouldSoftFrameAdpGap({
         position: "TE",
@@ -256,7 +258,7 @@ describe("ADP gap framing honesty", () => {
         rankPosition: 3,
         valueDelta: 70,
       }),
-    ).toBe(false);
+    ).toBe(true);
 
     const blurb = buildExpertBlurb({
       playerName: "T.Kelce",
@@ -275,8 +277,8 @@ describe("ADP gap framing honesty", () => {
       drivers: ["900 receiving yards (~53/g)"],
       source: "model-service",
     });
-    expect(blurb).toMatch(/70 picks of value/i);
-    expect(blurb).not.toMatch(/lottery smash/i);
+    expect(blurb).toMatch(/likes him more than market/i);
+    expect(blurb).not.toMatch(/70 picks of value|take .* early|full round/i);
   });
 
   it("soft-frames QB2 lottery ADP gaps", () => {

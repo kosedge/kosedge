@@ -1,4 +1,5 @@
 import { valueLabel } from "@/lib/fantasy/adp-proxy";
+import { MAX_RECOMMEND_RANK_DELTA } from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskRow, RiskFlag, ScheduleWindowNote } from "@/lib/fantasy/types";
 
 /**
@@ -11,6 +12,8 @@ import type { FantasyDeskRow, RiskFlag, ScheduleWindowNote } from "@/lib/fantasy
  *   headline ~7 TDs.
  * - Huge ADP gaps on fringe TE / QB2 use soft "likes more than market"
  *   framing — not lottery +200 smash copy.
+ * - Never tell users to take a player a full round early when
+ *   |model − ADP| > MAX_RECOMMEND_RANK_DELTA (12).
  * - Prefer yards / role / schedule; TDs only when not absurd.
  */
 
@@ -44,20 +47,8 @@ export function shouldSoftFrameAdpGap(input: {
     return false;
   }
   const gap = Math.abs(input.valueDelta);
-  if (gap < LOTTERY_ADP_GAP) return false;
-
-  const pos = input.position.toUpperCase();
-  const earlyCredible = input.rankOverall <= EARLY_ROUND_RANK_MAX;
-
-  if (pos === "TE") {
-    // TE lottery smash only if model is also early-round credible.
-    return !earlyCredible;
-  }
-  if (pos === "QB" && input.rankPosition >= QB2_POS_RANK_MIN) {
-    return true;
-  }
-  // Any deep-board player with a huge gap — don't lead with lottery math.
-  return !earlyCredible;
+  // ±12 policy: never imply "take a round early" when the gap is a full round+.
+  return gap > MAX_RECOMMEND_RANK_DELTA;
 }
 
 /**
@@ -269,6 +260,11 @@ export function tierCliffNote(rows: FantasyDeskRow[], position: string): string 
   if (bestGap < 12) return null;
   const before = posRows[cliffAt - 1]!;
   const after = posRows[cliffAt]!;
+  const adpDelta =
+    before.adp != null ? Math.abs(before.rankOverall - before.adp) : 0;
+  if (adpDelta > MAX_RECOMMEND_RANK_DELTA) {
+    return `${position} cliff: VOR drops after ${before.playerName} (${position}${before.rankPosition}, overall #${before.rankOverall}) — next is ${after.playerName} at −${bestGap.toFixed(0)} VOR. Not a take-early vs ADP.`;
+  }
   return `${position} cliff: take ${before.playerName} (${position}${before.rankPosition}, overall #${before.rankOverall}) before the drop — next is ${after.playerName} at −${bestGap.toFixed(0)} VOR.`;
 }
 

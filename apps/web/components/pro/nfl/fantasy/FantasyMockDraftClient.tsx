@@ -250,7 +250,9 @@ function SetupView({
         <HonestStatusBanner title="K / DST unavailable" tone="amber">
           <p>
             Kickers and defenses aren&apos;t on this board — those roster slots
-            are skipped in the mock and do not ding your grade.
+            are skipped in the mock and do not ding your grade. Named K/DST
+            wait on nfl_kicker_dst_projections → draft-rankings. No invented
+            projections.
           </p>
         </HonestStatusBanner>
       ) : null}
@@ -319,7 +321,7 @@ function SetupView({
               <select
                 value={userSlot}
                 onChange={(e) => onSlot(Number(e.target.value))}
-                className="min-h-11 w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-sm font-semibold text-kos-text"
+                className="min-h-11 w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-sm font-semibold text-kos-text scheme-dark"
               >
                 {Array.from({ length: teamCount }, (_, i) => i + 1).map((n) => (
                   <option key={n} value={n}>

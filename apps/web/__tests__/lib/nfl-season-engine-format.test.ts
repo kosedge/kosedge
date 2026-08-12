@@ -3,10 +3,13 @@ import {
   NFL_DEFAULT_N_GAME_BOX,
   NFL_DEFAULT_N_SURVIVOR_PATHS,
   NFL_HONEST_PRECISION_MIN_N,
+  NFL_SURVIVOR_PLAN_TOP_N,
   buildGameBoxesQuery,
   buildStarOutInjuryPath,
   buildSurvivorBody,
+  buildSurvivorPlanBody,
   depthLabel,
+  duplicateSurvivorPlanTeams,
   formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
@@ -16,6 +19,7 @@ import {
   isHonestPrecision,
   matchupsFromWallChart,
   normalizeNflTeamCode,
+  normalizeSurvivorPlanPicks,
   parseAlreadyUsedTeams,
   primaryStatsForPosition,
   rankSurvivorPicks,
@@ -168,5 +172,13 @@ describe("nfl-season-engine-format", () => {
     expect(td.primary).toContain("P(TD)");
     expect(td.secondary).toContain("exp");
     expect(td.secondary).toContain("fair");
+  });
+
+  it("drops duplicate survivor teams client-side and flags them for the API", () => {
+    expect(
+      normalizeSurvivorPlanPicks({ "1": "KC", "2": "KC", "3": "BUF" }),
+    ).toEqual({ "1": "KC", "3": "BUF" });
+    expect(duplicateSurvivorPlanTeams({ "1": "KC", "2": "kc" })).toEqual(["KC"]);
+    expect(buildSurvivorPlanBody({}).top_n).toBe(NFL_SURVIVOR_PLAN_TOP_N);
   });
 });

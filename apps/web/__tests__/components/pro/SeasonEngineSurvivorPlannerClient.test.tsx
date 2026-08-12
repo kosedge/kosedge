@@ -160,6 +160,29 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
     15000,
   );
 
+  it("lists used + available at top and can pick any remaining team from the dropdown", async () => {
+    const user = userEvent.setup();
+    render(<SeasonEngineSurvivorPlannerClient engineVersion="test-engine" />);
+
+    await waitFor(
+      () => {
+        expect(screen.getByRole("button", { name: /SEA/ })).toBeInTheDocument();
+      },
+      { timeout: 10000 },
+    );
+    expect(screen.getByText(/Used: none/)).toBeInTheDocument();
+    expect(screen.getByText(/Available:/).textContent || "").toMatch(/CHI/);
+
+    await user.click(screen.getByRole("button", { name: "Week 1 pick" }));
+    const list = screen.getByRole("listbox");
+    await user.click(within(list).getByRole("button", { name: /CHI/ }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Used: CHI/)).toBeInTheDocument();
+    });
+    expect(screen.getByText(/Available:/).textContent || "").not.toMatch(/\bCHI\b/);
+  }, 15000);
+
   it("resets plan including localStorage and URL picks", async () => {
     const user = userEvent.setup();
     window.localStorage.setItem(
