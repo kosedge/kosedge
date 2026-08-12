@@ -4432,13 +4432,15 @@ def nfl_award_projections_board(
     model_version: str = Query("nfl-player-v1"),
     limit: int = Query(20, ge=1, le=50),
 ) -> Dict[str, Any]:
-    """MVP / Offensive Player of the Year contender leaderboard. Each row
-    carries the supporting projected stats (team win total, division-title
-    probability, passing/rushing/receiving yards+TDs) and the intermediate
-    `team_success_score` / `stat_composite` terms behind `award_score`, so the
-    ranking is inspectable rather than a bare name+score. See
-    `services/model-service/src/services/nfl_award_projections.py` for the
-    full weighting methodology."""
+    """MVP / Offensive Player of the Year contender leaderboard.
+
+    `award_score` is a relative 0–1 model index (team success + stat composite
+    + MVP position prior) — **not** P(award). Values across candidates do not
+    sum to 1. Do not expose this field as a percent or probability in product
+    UI. Each row also carries supporting projected stats and the intermediate
+    `team_success_score` / `stat_composite` terms so the ranking is
+    inspectable. See `nfl_award_projections.py` for weights.
+    """
     session = SessionLocal()
     try:
         rows = session.execute(

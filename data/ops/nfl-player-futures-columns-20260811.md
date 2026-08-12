@@ -16,7 +16,7 @@ Quiet UI hint on surfaces: `Current = 2026 YTD (0 before Week 1)`.
 
 | Surface | Route | Columns |
 |---------|-------|---------|
-| Awards | `/pro/nfl/awards` | # · Player · Team · Projected (Model %) · Current (—) · Current odds · Note |
+| Awards | `/pro/nfl/awards` | # · Player · Team · **Award Score** (0–100 index, not %) · Current (—) · Current odds · Note |
 | Futures · Player | `/pro/nfl/projections?tab=player` | # · Player · Tm · Pos · Projected · Current (0) · Current odds — race via yards/TDs/receptions |
 | Futures · Team | `/pro/nfl/projections?tab=team` | Wins use Projected · Current (0) · odds (—); SB odds joined when available |
 | Player Previews awards | `/pro/nfl/player-previews` | Same Projected · Current · Current odds on MVP/OPOY tables |
