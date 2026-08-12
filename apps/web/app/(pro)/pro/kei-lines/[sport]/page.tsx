@@ -3,6 +3,7 @@ import SportProShell from "@/components/pro/SportProShell";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import { getKeiLines } from "@/lib/kei-lines";
+import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { KeiLinesTable } from "./KeiLinesTable";
 import { NcaamKeiLinesClient } from "./NcaamKeiLinesClient";
 
@@ -25,9 +26,11 @@ export default async function KeiLinesSportPage({
       sport={sportKey}
       pageTitle={`${sportName} — ${keiCode} Lines`}
       pageSubtitle={`${getKeiProductLabel(sportKey)}. ${
-        isNcaam
-          ? "Projected spread and over/under by game date. Use the dropdown to pick a day."
-          : "Projected spread and over/under for each game."
+        sportIsMarketsOnlyEdgeBoard(sportKey)
+          ? "No KEI handicap on this sport yet — this table stays empty (no invented lines). Use Edge Board for sportsbook Open/Best."
+          : isNcaam
+            ? "Projected spread and over/under by game date. Use the dropdown to pick a day."
+            : "Projected spread and over/under for each game."
       } Research baselines — not picks.`}
       actions={
         <Link
@@ -42,7 +45,11 @@ export default async function KeiLinesSportPage({
         {isNcaam ? (
           <NcaamKeiLinesClient games={games} sportName={sportName} />
         ) : (
-          <KeiLinesTable games={games} sportName={sportName} />
+          <KeiLinesTable
+            games={games}
+            sportName={sportName}
+            marketsOnly={sportIsMarketsOnlyEdgeBoard(sportKey)}
+          />
         )}
       </main>
     </SportProShell>

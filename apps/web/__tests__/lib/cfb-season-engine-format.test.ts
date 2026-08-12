@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   americanOddsFromWinProb,
@@ -81,5 +83,17 @@ describe("cfb-season-engine-format", () => {
     expect(formatAmericanOdds(148)).toBe("+148");
     expect(formatWinProbWithMl(0.596)).toBe("59.6% (-148)");
     expect(formatProjectedScoreLine(31.9, 36.9)).toBe("31.9 – 36.9");
+  });
+});
+
+describe("CFB model page honesty", () => {
+  it("interpolates roster depth/portal instead of printing brace placeholders", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/cfb/model/page.tsx"),
+      "utf8",
+    );
+    expect(src).toContain("` · depth ${status.depth_source}`");
+    expect(src).toContain("` · portal ${status.portal_source}`");
+    expect(src).not.toContain("` · depth {status.depth_source}`");
   });
 });

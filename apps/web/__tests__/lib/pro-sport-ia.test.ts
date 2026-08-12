@@ -228,6 +228,16 @@ describe("pro sport IA", () => {
     expect(gameBoxes?.description.toLowerCase()).toContain("typical range");
   });
 
+  it("does not advertise invented KEI on the CFB hub footer", () => {
+    const desk = getSportDeskConfig("cfb");
+    const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
+    expect(edge?.description.toLowerCase()).toContain("no cfb kei");
+    expect(edge?.description.toLowerCase()).not.toContain("directional edge tags");
+    const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
+    expect(kei?.description.toLowerCase()).toContain("honest empty");
+    expect(kei?.description.toLowerCase()).not.toContain("projected spread/total baselines");
+  });
+
   it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {
     const desk = getSportDeskConfig("mlb");
     expect(desk.pathLabel).toBe("Fair Lines → Edges → Run Line");

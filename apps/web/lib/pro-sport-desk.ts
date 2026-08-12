@@ -37,14 +37,23 @@ const SHARED_FOOTER = (sportKey: string): HubFooterCard[] => [
     cta: "View ratings →",
     accent: "gold",
   },
-  {
-    href: `/pro/kei-lines/${sportKey}`,
-    title: "KEI Lines",
-    description:
-      "Projected spread/total baselines to benchmark current market prices.",
-    cta: "View KEI lines →",
-    accent: "neutral",
-  },
+  sportKey === "cfb" || sportKey === "nhl"
+    ? {
+        href: `/pro/kei-lines/${sportKey}`,
+        title: "KEI Lines",
+        description:
+          "No handicap model on this sport yet — honest empty, not invented KEI.",
+        cta: "View KEI status →",
+        accent: "neutral",
+      }
+    : {
+        href: `/pro/kei-lines/${sportKey}`,
+        title: "KEI Lines",
+        description:
+          "Projected spread/total baselines to benchmark current market prices.",
+        cta: "View KEI lines →",
+        accent: "neutral",
+      },
 ];
 
 function stubFairLines(sportKey: string, marketNoun: string): BettingDeskCard {
@@ -368,7 +377,8 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       {
         href: "/edge-board/cfb",
         title: "Public Edge Board",
-        description: "Open vs best prices with KEI and directional edge tags.",
+        description:
+          "Sportsbook Open/Best when posted. No CFB KEI handicap yet — columns stay blank.",
         cta: "Open edge board →",
         accent: "green",
       },

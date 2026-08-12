@@ -1,4 +1,5 @@
 import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { supportsPropsFantasy } from "@/lib/sports";
 
@@ -585,7 +586,9 @@ function marketLinksForSport({
     {
       href: `/pro/kei-lines/${sportKey}`,
       label: "KEI projections",
-      hint: "Projected spread and total table by matchup.",
+      hint: sportIsMarketsOnlyEdgeBoard(sportKey)
+        ? "No KEI fair lines yet — markets-only until a handicap model ships."
+        : "Projected spread and total table by matchup.",
       premium: true,
       status: "active",
     },

@@ -150,8 +150,8 @@ export default async function CfbSeasonModelHubPage() {
         {status.roster_source ? (
           <p className="mt-1 text-xs text-kos-text/50">
             Roster: {status.roster_source}
-            {status.depth_source ? ` · depth {status.depth_source}` : ""}
-            {status.portal_source ? ` · portal {status.portal_source}` : ""}
+            {status.depth_source ? ` · depth ${status.depth_source}` : ""}
+            {status.portal_source ? ` · portal ${status.portal_source}` : ""}
             {status.as_of || status.roster_as_of
               ? ` · as_of ${status.as_of || status.roster_as_of}`
               : ""}
