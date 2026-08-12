@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
   americanOddsFromWinProb,
   formatAmericanOdds,
@@ -13,6 +14,7 @@ import {
   formatWinProb,
   type CfbTeamOption,
 } from "@/lib/cfb-season-engine-format";
+import { cfbModelDeskTruthStates } from "@/lib/cfb-truth-label";
 
 type PlayerProjectionRow = {
   player_key?: string;
@@ -531,6 +533,11 @@ export default function CfbProjectGameClient({
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
+                <TruthStateBadges
+                  states={cfbModelDeskTruthStates()}
+                  testId="cfb-truth-state"
+                  className="mb-2"
+                />
                 <h2 className="text-xl font-semibold tracking-tight text-kos-text sm:text-2xl">
                   {away} @ {home}
                   <span className="ml-2 text-sm font-normal text-kos-text/50">
@@ -709,8 +716,8 @@ export default function CfbProjectGameClient({
           <p className="text-[11px] leading-relaxed text-kos-text/45">
             Drivers are inspectable layer inputs — not calibrated market
             attribution. ML is converted from model win probability (no vig).
-            Fidelity: {result.fidelity ?? "approximate"}. Edge Board CFB stays
-            markets-only.
+            Fidelity: {result.fidelity ?? "approximate"}. MODEL research — not a
+            published handicap. Edge Board CFB stays live books only; no KEI.
           </p>
         </section>
       ) : null}

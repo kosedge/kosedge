@@ -3,6 +3,10 @@ import SportHubShell from "@/components/pro/SportHubShell";
 import CfbProjectGameClient from "@/components/pro/cfb/CfbProjectGameClient";
 import { fetchCfbSeasonEngineStatus } from "@/lib/cfb-season-engine";
 import { teamOptionsFromCodes } from "@/lib/cfb-season-engine-format";
+import {
+  cfbModelDeskHonestyNote,
+  cfbModelDeskTruthStates,
+} from "@/lib/cfb-truth-label";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +21,9 @@ export default async function CfbProjectGamePage() {
       base="/pro/cfb"
       title="Project Game"
       summary="Market-style team projection — projected score, favorite spread, total, and win% with American moneyline, approximate QB / skill player hooks, plus scannable roster / unit / HFA / coaching drivers and early-season uncertainty."
-      badge="Season engine · player hooks"
+      truthStates={cfbModelDeskTruthStates()}
+      truthTestId="cfb-truth-state"
+      honestyNote={cfbModelDeskHonestyNote()}
       primaryHref="/pro/cfb/model"
       primaryLabel="Season Model hub"
       secondaryHref="/edge-board/cfb"

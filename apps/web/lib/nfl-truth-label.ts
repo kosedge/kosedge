@@ -6,7 +6,9 @@
  * UI state machine: LIVE | MODEL | PRESEASON | ARCHIVE
  */
 
-export type NflTruthUiState = "LIVE" | "MODEL" | "PRESEASON" | "ARCHIVE";
+import type { TruthUiState } from "@/lib/truth-ui-state";
+
+export type NflTruthUiState = TruthUiState;
 
 export type NflTruthSourceType =
   | "actual"
