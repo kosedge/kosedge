@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AutoSubmitForm from "@/components/pro/AutoSubmitForm";
+import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import {
   CurrentYtdHint,
   PlayerFutureColumnHeaders,
@@ -7,6 +8,7 @@ import {
 } from "@/components/pro/nfl/PlayerFutureTripleColumns";
 import {
   loadLatestNflPreseasonBundle2026,
+  loadNflWebLaunchPointer,
   type PlayerProjectionTotalsRow,
   type TeamProjectionRow,
 } from "@/lib/nfl-preseason-artifacts";
@@ -27,6 +29,7 @@ import {
   superBowlOddsForTeam,
   type NflFuturesOddsBundle,
 } from "@/lib/nfl-futures-odds";
+import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 
 type SearchValue = string | string[] | undefined;
 
@@ -133,6 +136,13 @@ export default async function NflProjectionsPage({
 }) {
   const search = await searchParams;
   const bundle = loadLatestNflPreseasonBundle2026();
+  const pointer = loadNflWebLaunchPointer();
+  const lineage =
+    bundle?.lineage ??
+    resolveActiveNflLineage({
+      engineVersionOverride: bundle?.engineVersion ?? pointer?.engine_version,
+    });
+  const isPreseasonResearch = Boolean(pointer?.preseason ?? true);
   const [actuals, oddsBundle] = await Promise.all([
     loadNflProjectionActualsAsync(2026),
     loadNflFuturesOdds(),
@@ -197,9 +207,14 @@ export default async function NflProjectionsPage({
       <section className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
-            <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              2026 Futures · Research desk
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
+                {isPreseasonResearch
+                  ? "2026 Futures · PRESEASON / MODEL"
+                  : "2026 Futures · Research desk"}
+              </p>
+              <NflLineageBadge lineage={lineage} />
+            </div>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               Futures
             </h1>
@@ -208,10 +223,14 @@ export default async function NflProjectionsPage({
               future row shows Projected · Current (2026 YTD) · Current odds.
             </p>
             <p className="mt-2 text-xs text-kos-text/65">
+              {isPreseasonResearch
+                ? "Honesty: preseason Model board — soft-pile W/L after conservation reshape; not a locked in-season futures market. "
+                : ""}
               Source: {bundle.bundleDirName}
               {bundle.generatedAtUtc
                 ? ` • Generated ${new Date(bundle.generatedAtUtc).toLocaleString()}`
                 : ""}
+              {bundle.engineVersion ? ` • ${bundle.engineVersion}` : ""}
               {actuals.asOfUtc
                 ? ` • Actuals as of ${new Date(actuals.asOfUtc).toLocaleString()}`
                 : " • Actuals: awaiting Week 1+"}

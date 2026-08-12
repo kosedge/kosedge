@@ -1,0 +1,146 @@
+{
+  "applied_at_utc": "2026-08-12T10:20:05.958902+00:00",
+  "method": "reshape_wins_from_pf_pa_v1_24_1_consecutive_pile_break",
+  "pile_break": {
+    "width": 0.15,
+    "spread": 1.2,
+    "clustering": "consecutive_gap"
+  },
+  "before": {
+    "sum": 272.0,
+    "hist": {
+      "<=6": 9,
+      "7-9": 12,
+      "10-11": 1,
+      ">=12": 10
+    },
+    "ceiling_cluster_0_35": 10,
+    "top10": [
+      [
+        "BUF",
+        12.8297
+      ],
+      [
+        "SEA",
+        12.746
+      ],
+      [
+        "CHI",
+        12.7283
+      ],
+      [
+        "JAX",
+        12.7209
+      ],
+      [
+        "NE",
+        12.6634
+      ],
+      [
+        "ATL",
+        12.6537
+      ],
+      [
+        "PHI",
+        12.6251
+      ],
+      [
+        "KC",
+        12.5918
+      ],
+      [
+        "HOU",
+        12.5838
+      ],
+      [
+        "BAL",
+        12.5517
+      ]
+    ]
+  },
+  "after": {
+    "sum": 272.0,
+    "hist": {
+      "<=6": 10,
+      "7-9": 11,
+      "10-11": 4,
+      ">=12": 7
+    },
+    "ceiling_cluster_0_35": 2,
+    "top10": [
+      [
+        "CHI",
+        13.9282
+      ],
+      [
+        "JAX",
+        13.6542
+      ],
+      [
+        "BUF",
+        13.3763
+      ],
+      [
+        "SEA",
+        13.1059
+      ],
+      [
+        "ATL",
+        12.827
+      ],
+      [
+        "BAL",
+        12.5383
+      ],
+      [
+        "NE",
+        12.2634
+      ],
+      [
+        "PHI",
+        11.9584
+      ],
+      [
+        "IND",
+        11.6628
+      ],
+      [
+        "KC",
+        11.6584
+      ]
+    ],
+    "LAR": 9.6938,
+    "DET": 7.0454
+  },
+  "coherence": {
+    "sanity": {
+      "sum_playoff_afc": 7.0,
+      "sum_playoff_nfc": 7.0,
+      "sum_playoff_league": 14.0,
+      "sum_expected_wins": 272.0,
+      "sum_division_title": 8.0,
+      "sum_super_bowl": 1.0
+    },
+    "after_lar": {
+      "team": "LAR",
+      "expected_wins": 9.6938,
+      "playoff_prob": 0.8088,
+      "division_title_prob": 0.3398,
+      "super_bowl_win_prob": 0.0688
+    },
+    "after_det": {
+      "team": "DET",
+      "expected_wins": 7.0454,
+      "playoff_prob": 0.5348,
+      "division_title_prob": 0.239,
+      "super_bowl_win_prob": 0.02
+    },
+    "e_wins_histogram": {
+      "<=5": 5,
+      "5-7": 8,
+      "7-10": 8,
+      "10-12": 4,
+      ">=12": 7
+    }
+  }
+}
