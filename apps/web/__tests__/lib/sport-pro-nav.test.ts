@@ -49,6 +49,7 @@ describe("sport-pro-nav", () => {
     expect(labels).not.toContain("DFS");
     expect(labels).not.toContain("Awards");
     expect(labels).not.toContain("Player Previews");
+    expect(labels).not.toContain("Sport Tracking");
     const fantasy = nflPrimary.find((i) => i.label === "Fantasy");
     expect(fantasy?.href).toBe("/pro/nfl/fantasy");
   });
@@ -73,6 +74,7 @@ describe("sport-pro-nav", () => {
     expect(nflTools).not.toContain("DFS");
     expect(nflTools).not.toContain("Player Previews");
     expect(nflTools).not.toContain("Props");
+    expect(nflTools).not.toContain("Sport Tracking");
 
     for (const sport of SPORTS.filter((s) => s.key !== "nfl" && s.key !== "cfb")) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);

@@ -374,7 +374,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/tracking",
           label: "Sport Tracking",
-          hint: "CLV and post-close quality review pipeline.",
+          hint: "Incomplete until 2026 REG closes — definition and historical CLV on the page.",
           premium: true,
           status: "active",
         },
