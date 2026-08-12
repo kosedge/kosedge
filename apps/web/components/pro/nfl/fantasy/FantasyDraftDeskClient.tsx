@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
+import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
 import {
   notableValueNotes,
@@ -529,6 +530,11 @@ export function FantasyDraftDeskClient({
                                   </span>
                                 ) : null}
                               </p>
+                              {row.adpQaFlag ? (
+                                <div className="mt-1">
+                                  <AdpQaFlagChip flag={row.adpQaFlag} />
+                                </div>
+                              ) : null}
                               <p className="mt-0.5 text-xs text-kos-text/55">
                                 {row.position}
                                 {row.rankPosition} · {row.team} · ADP{" "}
@@ -624,12 +630,15 @@ export function FantasyDraftDeskClient({
                               {row.rankOverall}
                             </td>
                             <td className="sticky left-0 border-b border-white/5 bg-[#0c0f14]/px-2.5 py-2 text-sm font-semibold text-kos-text">
-                              {row.playerName}
-                              {row.isRookie ? (
-                                <span className="ml-1.5 rounded border border-kos-gold/40 px-1 text-[10px] text-kos-gold">
-                                  R
-                                </span>
-                              ) : null}
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <span>{row.playerName}</span>
+                                {row.isRookie ? (
+                                  <span className="rounded border border-kos-gold/40 px-1 text-[10px] text-kos-gold">
+                                    R
+                                  </span>
+                                ) : null}
+                                <AdpQaFlagChip flag={row.adpQaFlag} />
+                              </div>
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2">
                               <span
@@ -756,6 +765,11 @@ function PlayerCard({
             {row.team} · {row.position}
             {row.rankPosition} · {draftTierLabel(row.tier)}
           </p>
+          {row.adpQaFlag ? (
+            <div className="mt-2">
+              <AdpQaFlagChip flag={row.adpQaFlag} />
+            </div>
+          ) : null}
         </div>
         <span
           className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}
@@ -794,6 +808,21 @@ function PlayerCard({
           </p>
         </div>
       </div>
+
+      {row.adpQaFlag ? (
+        <div className="mt-4 rounded-xl border border-kos-gold/25 bg-kos-gold/8 p-3">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-kos-gold">
+            {row.adpQaFlag.categoryLabel} · why this gap
+          </p>
+          <ul className="mt-2 space-y-1.5">
+            {row.adpQaFlag.drivers.map((d) => (
+              <li key={d} className="text-sm text-kos-text/80">
+                · {d}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       <div className="mt-4">
         <p className="text-[10px] uppercase tracking-[0.12em] text-kos-text/45">

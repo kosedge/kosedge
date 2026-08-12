@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
+import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { formatAdp } from "@/lib/fantasy/adp-proxy";
 import { loadFantasyDraftDesk } from "@/lib/fantasy/load-desk";
 import {
@@ -188,6 +189,9 @@ export default async function NflSleepersPage({
                       >
                         {row.playerName}
                       </Link>
+                      <div className="mt-1">
+                        <AdpQaFlagChip flag={row.adpQaFlag} />
+                      </div>
                     </td>
                     <td className="px-3 py-3 text-kos-text/80">
                       {row.position}
@@ -234,6 +238,9 @@ function SleeperCard({
           >
             {row.playerName}
           </Link>
+          <div className="mt-1">
+            <AdpQaFlagChip flag={row.adpQaFlag} />
+          </div>
           <p className="text-xs text-kos-text/55">
             {row.position}
             {row.rankPosition} · {row.team}
