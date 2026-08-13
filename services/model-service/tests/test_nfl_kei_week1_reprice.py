@@ -270,7 +270,8 @@ def test_weather_stub_outdoor_and_indoor() -> None:
     _, outdoor = _apply(home_abbr="SEA", away_abbr="NE")
     weather = [e["reason"] for e in outdoor["considered_not_applied"] if e["factor"] == "weather"]
     assert weather
-    assert "no forecast" in weather[0]
+    assert "not applied" in weather[0]
+    assert "indoor" not in weather[0]
 
     _, indoor = _apply(home_abbr="DET", away_abbr="NO")
     weather_i = [e["reason"] for e in indoor["considered_not_applied"] if e["factor"] == "weather"]
@@ -278,11 +279,51 @@ def test_weather_stub_outdoor_and_indoor() -> None:
     assert "indoor" in weather_i[0]
 
 
+def test_outdoor_extreme_wind_moves_total_kei() -> None:
+    new_h, log = _apply(
+        home_abbr="PHI",
+        away_abbr="WAS",
+        weather_obs={"available": True, "source": "test", "wind_mph": 28, "temp_f": 55, "precip_mm": 0},
+    )
+    assert log["total_delta"] == -1.5
+    assert new_h["total_mean"] == 42.5
+    assert new_h["spread_home"] == -3.0  # weather is totals-only
+    reasons = " ".join(e["reason"] for e in log["applied_factors"])
+    assert "wind 28" in reasons
+
+
+def test_dome_stays_flat_even_with_extreme_wind_obs() -> None:
+    new_h, log = _apply(
+        home_abbr="MIN",
+        away_abbr="GB",
+        weather_obs={"available": True, "source": "test", "wind_mph": 30, "temp_f": 5, "precip_mm": 4},
+    )
+    weather = [e for e in log["considered_not_applied"] if e["factor"] == "weather"]
+    assert weather and "indoor" in weather[0]["reason"]
+    assert log["total_delta"] == 0.0
+    assert new_h["total_mean"] == 44.0
+
+
 def test_ref_stub_always_logged() -> None:
     _, log = _apply()
     refs = [e for e in log["considered_not_applied"] if e["factor"] == "ref"]
     assert refs
     assert "ref not applied" in refs[0]["reason"]
+
+
+def test_ref_crew_tiny_total_does_not_dominate() -> None:
+    officials = {
+        "loaded": True,
+        "crews": [
+            {"home": "PHI", "away": "WAS", "crew": "Kemp", "total_tendency": 1.5},
+        ],
+    }
+    new_h, log = _apply(officials=officials)
+    refs = [e for e in log["applied_factors"] if e["factor"] == "ref"]
+    assert refs
+    assert refs[0]["total_pts"] == 0.5  # cap
+    assert new_h["total_mean"] == 44.5
+    assert new_h["spread_home"] == -3.0
 
 
 def test_short_week_not_applied_week1() -> None:
