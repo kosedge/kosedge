@@ -31,20 +31,35 @@ Bulk parquet stays on HD. Packaged 2026 prior JSON is in-image so project-game c
 | Team | Rank | Mean pts | σ | QB class | Notes |
 | --- | ---: | ---: | ---: | --- | --- |
 | OSU | 1 | +19.07 | 4.27 | incumbent | blue-blood, tight σ |
-| UGA | 2 | +16.69 | 4.27 | incumbent* | *classifier; camp battle is human review |
+| UGA | 2 | +16.69 | 4.27† | incumbent† | **open / high uncertainty** — do not trust σ |
 | ND | 3 | +16.10 | 4.28 | incumbent | |
 | ALA | 4 | +16.07 | 4.26 | incumbent | |
 | TEX | 5 | +15.21 | 4.26 | incumbent | |
-| ORE | 8 | +13.86 | **6.17** | portal | portal QB → wider σ |
-| FSU | 25 | +10.42 | 4.26 | incumbent | |
+| MICH | 7 | +14.13 | 4.27† | incumbent† | **open / high uncertainty** — Underwood missing from pack |
+| ORE | 8 | +13.86 | **6.17** | portal | portal QB → wider σ (directionally correct) |
+| LSU | 10 | +13.23 | 4.26† | incumbent† | **open / high uncertainty** — pack QB1 ≠ public starter |
+| FSU | 25 | +10.42 | 4.26† | incumbent† | **open / high uncertainty** — FCS-attempt heuristic vs named starter |
 | COLO | 46 | +7.66 | 4.26 | incumbent | |
 | RICE | 144 | −1.86 | **8.03** | true_freshman | rebuild + new QB |
 | MASS | 146 | −2.18 | 4.28 | incumbent | weak program, returning QB |
 | BALL | 147 | −3.62 | **7.65** | open_competition | G5 rebuild, widest among full-history G5 |
 
-UGA/OSU-type **>>** rebuild G5 on mean. High-churn / new QB **>** returning-starter powerhouse on σ. 2026 prior does **not** use 2026 game results.
+UGA/OSU-type **>>** rebuild G5 on mean. High-churn / new QB **>** returning-starter powerhouse on σ **when the classifier is honest**. 2026 prior does **not** use 2026 game results.
 
-\* UGA QB1 in the 2026-08-12 pack is Ryan Puglisi (1 start / 27 attempts). The engine labels `incumbent`; open camp (Puglisi vs Stockton) remains **human review** — σ is too tight for that battle.
+σ floor ~4.3 even for “stable” programs is a bit tight for preseason; fine for v1 **if** we widen when QB situation ≠ clean incumbent. † rows below are **not** clean incumbents — treat as open / high uncertainty until a SoT override (news → expert note → pack → prior recomputed).
+
+### Do not trust Week 0 σ — camp QB flags (audit 2026-08-12)
+
+Pack heuristic = ESPN 2026 roster QB1 by 2025 attempts. That is **not** a named starter lock. Same class of bug as the roster-refresh conflict table.
+
+| Team | Pack label | Pack QB1 | Reality / expert note | Prior σ (wrong) | Ops label until override |
+| --- | --- | --- | --- | ---: | --- |
+| **UGA** | incumbent | Ryan Puglisi (27 att) | Gunner Stockton is the 2026 starter; **absent** from ESPN roster | 4.27 | **open / high uncertainty** |
+| **MICH** | incumbent | Brayden Fowler-Nicolosi (82 att, CSU) | Bryce Underwood “clear No. 1”; **absent** from ESPN roster | 4.27 | **open / high uncertainty** |
+| **FSU** | incumbent | Dean DeNobile (347 att, Lafayette) | Ashton Daniels named starter 2026-04-21; both on roster, heuristic ranked FCS attempts | 4.26 | **open / high uncertainty** |
+| **LSU** | incumbent | Landen Clark (277 att, Elon) | Sam Leavitt is the public QB1; both on roster, heuristic ranked FCS attempts | 4.26 | **open / high uncertainty** |
+
+Do **not** treat 4.3σ as real confidence for these four. Mean ranks can stay as program research; uncertainty must be read as **open competition** (~7σ class) until overrides land. Do not wire this prior into published spreads until (1) camp QB overrides and (2) walk-forward vs closes.
 
 ## Phase A — garbage-time + opponent-adj
 
@@ -131,7 +146,7 @@ Engine version stays `cfb-season-engine-v0.9-inseason`.
 
 ## Remaining gaps
 
-- **Open camp QB battles** (UGA Puglisi vs Stockton, others) still human review — classifier can call a 27-attempt QB1 `incumbent` and understate σ.
+- **Camp QB SoT overrides not applied.** UGA / MICH / FSU / LSU are labeled `incumbent` with σ≈4.3; ops treats them as **open / high uncertainty**. Doctrine: news → expert note → pack override → prior recomputed. Until then, do not trust Week 0 σ for those teams.
 - **Returning production** is team-level class-year proxy, not measured SNAP% by unit.
 - **Portal-out** incomplete; no player-value translation matrix (v2).
 - Some packaged codes (IDHO, ACU, CHAT, …) have little/no FBS PBP history → program 0, σ clipped to 9.5.
@@ -161,9 +176,10 @@ HD must be mounted (`/Volumes/KosEdgeData`). Production model-service does not i
 - No matchup interaction matrix
 - No wholesale season-engine replacement
 - PRESEASON + MODEL labels stay on product
+- Prior is **research only** (`used_in_spread: false`); do not publish from it until camp QB overrides + walk-forward
 
 ## Next (not this PR)
 
-1. Walk-forward vs lake closes (Week 0–4 emphasis)  
-2. Tighten QB-battle σ when the pack is an open camp  
+1. Optional: QB situation honesty patch (UGA / FSU / LSU / MICH SoT overrides) **before** backtest  
+2. Walk-forward vs lake closes (Week 0–4 emphasis) — MAE / ATS / CLV stub; still no KEI  
 3. KEI only when pure fairs are trustworthy
