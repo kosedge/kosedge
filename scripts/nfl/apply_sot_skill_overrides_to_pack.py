@@ -41,8 +41,8 @@ def main() -> int:
     notes = list(payload.get("notes") or [])
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
     note = (
-        f"Skill SoT {stamp}: Walker→SEA RB1, Charbonnet→SEA RB2, "
-        "KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved)."
+        f"Skill SoT {stamp}: HOTFIX Walker→KC RB1 (2026 FA; pack-as-SoT was wrong). "
+        "Charbonnet→SEA RB1. Johnson KC RB2."
     )
     if note not in notes:
         notes.append(note)

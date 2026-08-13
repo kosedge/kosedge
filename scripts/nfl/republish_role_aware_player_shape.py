@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Copy a published web bundle and re-shape player totals (no 100k re-run).
 
-Aligns skill identities to the depth pack (pack team wins), then applies
+Aligns skill identities to the depth pack (corrected SoT), then applies
 ``apply_role_aware_player_shape`` on touched teams only.
 
 Does NOT flip ``nfl-web-launch-bundle.json`` — run
@@ -27,7 +27,7 @@ from data_platform_nfl.role_aware_production import (  # noqa: E402
     apply_role_aware_player_shape,
 )
 
-SOURCE_DEFAULT = ROOT / "data/ops/nfl-preseason-sim-2026-20260813T161500Z"
+SOURCE_DEFAULT = ROOT / "data/ops/nfl-preseason-sim-2026-20260813T164500Z"
 DEPTH_PACK = (
     ROOT
     / "services/model-service/src/services/nfl_season_engine/data"
@@ -62,6 +62,23 @@ def _teams_from_moves(moves: List[str]) -> Set[str]:
             if team:
                 teams.add(team)
     return teams
+
+
+def _moves_are_rb_only(moves: List[str], rows: List[Dict[str, Any]]) -> bool:
+    names = set()
+    for move in moves:
+        if ":" not in move:
+            continue
+        names.add(move.split(":", 1)[0].strip().lower())
+    if not names:
+        return True
+    for row in rows:
+        n = str(row.get("player_name") or "").strip().lower()
+        if n not in names:
+            continue
+        if str(row.get("position") or "").upper() in {"WR", "TE"}:
+            return False
+    return True
 
 
 def main() -> int:
@@ -101,8 +118,11 @@ def main() -> int:
             players, pack_rows
         )
     touched = sorted(_teams_from_moves(list(identity_audit.get("moves") or [])))
+    skip_wr_alpha = _moves_are_rb_only(list(identity_audit.get("moves") or []), players)
     if touched:
-        shaped, audit = apply_role_aware_player_shape(players, teams=touched)
+        shaped, audit = apply_role_aware_player_shape(
+            players, teams=touched, skip_wr_alpha=skip_wr_alpha
+        )
     else:
         shaped, audit = players, {"applied": False, "n_notes": 0, "reason": "no_identity_moves"}
     fields = list(players[0].keys()) if players else []
@@ -134,6 +154,7 @@ def main() -> int:
                 "identity": identity_audit,
                 "playoff_identity": playoff_audit,
                 "touched_teams": touched,
+                "skip_wr_alpha": skip_wr_alpha if touched else False,
                 "shape": audit,
             },
             indent=2,
@@ -150,6 +171,7 @@ def main() -> int:
                 "n_identity_moves": identity_audit.get("n_moves"),
                 "identity_moves": identity_audit.get("moves"),
                 "touched_teams": touched,
+                "skip_wr_alpha": skip_wr_alpha if touched else False,
                 "n_notes": audit.get("n_notes"),
                 "rush_pool": audit.get("rush_pool"),
                 "pointer_flipped": False,

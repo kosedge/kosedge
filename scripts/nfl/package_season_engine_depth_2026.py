@@ -59,21 +59,21 @@ SOT_SKILL_OVERRIDES: dict[str, dict[str, list[tuple[int, str, str]]]] = {
             (3, "John Bates", "00-0036628"),
         ],
     },
-    # nflverse 2026 depth parked Walker on KC and left Charbonnet as SEA RB1.
-    # Desk SoT: Walker is SEA RB1; Charbonnet is SEA RB2. KC RB1 becomes the
-    # next listed Chief (Emmett Johnson) — Pacheco-on-DET is flagged, not
-    # auto-moved.
+    # 2026 reality (user-confirmed, ADP-agreed): Walker signed with KC after
+    # Super Bowl MVP in Seattle. A prior overlay wrongly parked him on SEA.
+    # This overlay is the lock so a re-pack cannot revive Walker-SEA.
     "SEA": {
         "RB": [
-            (1, "Kenneth Walker III", "00-0038134"),
-            (2, "Zach Charbonnet", "00-0039165"),
-            (3, "Jadarian Price", "00-0041512"),
+            (1, "Zach Charbonnet", "00-0039165"),
+            (2, "Jadarian Price", "00-0041512"),
+            (3, "George Holani", "00-0039299"),
         ],
     },
     "KC": {
         "RB": [
-            (1, "Emmett Johnson", "00-0041013"),
-            (2, "Emari Demercado", "00-0038705"),
+            (1, "Kenneth Walker III", "00-0038134"),
+            (2, "Emmett Johnson", "00-0041013"),
+            (3, "Emari Demercado", "00-0038705"),
         ],
     },
 }
@@ -257,7 +257,7 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
             "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
             "DB weekly/official must not override these identities when this pack is present.",
             "QB SoT overrides applied post-nflverse: Kyler→MIN1, Brissett→ARI1, Tua→ATL1, Willis→MIA1.",
-            "Skill SoT overlays (SOT_SKILL_OVERRIDES): WAS Diggs/Bates; SEA Walker RB1 / Charbonnet RB2.",
+            "Skill SoT overlays (SOT_SKILL_OVERRIDES): WAS Diggs/Bates; KC Walker RB1; SEA Charbonnet RB1.",
         ],
         "rows": rows_out,
     }

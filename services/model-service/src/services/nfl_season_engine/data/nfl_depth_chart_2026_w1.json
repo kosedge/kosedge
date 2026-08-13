@@ -28,7 +28,8 @@
     "injury_paths[] applied by engine when non-empty (week windows required \u2014 no invented IR lengths).",
     "Data integrity gate 20260809: snapshot_id effective-dated; Diggs player_id corrected to GSIS 00-0031588 (was Adams collision).",
     "Go-mode SoT audit 20260813: Tua\u2192ATL (open_competition vs Penix); Willis\u2192MIA1; CLE QB open_competition (Watson/Sanders); MIN Murray named starter (desk 2026-08-12). Demo fill blocked when pack present.",
-    "Skill SoT 2026-08-13T15:33Z: Walker\u2192SEA RB1, Charbonnet\u2192SEA RB2, KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved)."
+    "Skill SoT 2026-08-13T15:33Z: Walker\u2192SEA RB1, Charbonnet\u2192SEA RB2, KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved).",
+    "Skill SoT 2026-08-13T17:25Z: HOTFIX Walker\u2192KC RB1 (2026 FA; pack-as-SoT was wrong). Charbonnet\u2192SEA RB1. Johnson KC RB2."
   ],
   "rows": [
     {
@@ -1696,8 +1697,8 @@
       "team": "KC",
       "position": "RB",
       "depth_order": 1,
-      "player_id": "00-0041013",
-      "player_name": "Emmett Johnson",
+      "player_id": "00-0038134",
+      "player_name": "Kenneth Walker III",
       "depth_slot": "starter",
       "role_confidence": 0.85
     },
@@ -1705,10 +1706,19 @@
       "team": "KC",
       "position": "RB",
       "depth_order": 2,
-      "player_id": "00-0038705",
-      "player_name": "Emari Demercado",
+      "player_id": "00-0041013",
+      "player_name": "Emmett Johnson",
       "depth_slot": "backup",
       "role_confidence": 0.65
+    },
+    {
+      "team": "KC",
+      "position": "RB",
+      "depth_order": 3,
+      "player_id": "00-0038705",
+      "player_name": "Emari Demercado",
+      "depth_slot": "rotation",
+      "role_confidence": 0.5
     },
     {
       "team": "KC",
@@ -2979,8 +2989,8 @@
       "team": "SEA",
       "position": "RB",
       "depth_order": 1,
-      "player_id": "00-0038134",
-      "player_name": "Kenneth Walker III",
+      "player_id": "00-0039165",
+      "player_name": "Zach Charbonnet",
       "depth_slot": "starter",
       "role_confidence": 0.85
     },
@@ -2988,8 +2998,8 @@
       "team": "SEA",
       "position": "RB",
       "depth_order": 2,
-      "player_id": "00-0039165",
-      "player_name": "Zach Charbonnet",
+      "player_id": "00-0041512",
+      "player_name": "Jadarian Price",
       "depth_slot": "backup",
       "role_confidence": 0.65
     },
@@ -2997,8 +3007,8 @@
       "team": "SEA",
       "position": "RB",
       "depth_order": 3,
-      "player_id": "00-0041512",
-      "player_name": "Jadarian Price",
+      "player_id": "00-0039299",
+      "player_name": "George Holani",
       "depth_slot": "rotation",
       "role_confidence": 0.5
     },

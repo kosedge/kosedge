@@ -73,6 +73,12 @@ COMMITTEE_RB1_TD_SHARE = 0.55
 # Depth-chart RB1 without a rush prior cannot keep Henry-class TDs.
 NON_ALPHA_RB1_TD_SHARE = 0.38
 
+# 2026 desk: SoT RB1s whose prior-year rush sits just under the 1,200 alpha
+# cut. Feature share of the *new* team's conserved rush pool — not a magnet.
+FORCE_FEATURE_RB = {
+    "kennethwalkeriii",  # KC RB1 (FA); 2025 prior 1,027
+}
+
 
 def depth_from_player_key(player_key: str) -> Optional[int]:
     match = _KEY_DEPTH_RE.match(str(player_key or ""))
@@ -85,6 +91,8 @@ def depth_from_player_key(player_key: str) -> Optional[int]:
 
 
 def _is_rush_alpha(player_name: str) -> bool:
+    if _norm_player_name(player_name) in FORCE_FEATURE_RB:
+        return True
     prior = prior_alpha_lookup(player_name) or PRIOR_YEAR_ALPHA_VOLUME.get(
         _norm_player_name(player_name)
     )
@@ -141,6 +149,7 @@ def apply_role_aware_player_shape(
     rows: Sequence[Mapping[str, Any]],
     *,
     teams: Optional[Sequence[str]] = None,
+    skip_wr_alpha: bool = False,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """Reallocate rush/rec/TDs inside each team by depth role + talent.
 
@@ -283,7 +292,12 @@ def apply_role_aware_player_shape(
             for r in team_rows
             if str(r.get("position") or "").upper() == "QB"
         )
-        if ordered and _is_three_down(rb1_name) and team_pass > 1.0:
+        if (
+            not skip_wr_alpha
+            and ordered
+            and _is_three_down(rb1_name)
+            and team_pass > 1.0
+        ):
             rb1 = ordered[0]
             want = team_pass * THREE_DOWN_RB_TGT
             cur_rec = _f(rb1, "receiving_yards_total", "rec_yards_mean")
@@ -327,7 +341,7 @@ def apply_role_aware_player_shape(
             if str(r.get("position") or "").upper() == "WR"
             and _is_rec_alpha(str(r.get("player_name") or ""))
         ]
-        if wr_alphas and team_pass > 1.0:
+        if wr_alphas and team_pass > 1.0 and not skip_wr_alpha:
             wr1 = max(
                 wr_alphas, key=lambda r: _f(r, "receiving_yards_total", "rec_yards_mean")
             )
@@ -365,13 +379,18 @@ def apply_role_aware_player_shape(
                     )
 
         # Rec TDs follow receiving yards within team (pass TDs stay on QBs).
+        rec_targets = (
+            [r for r in skill if str(r.get("position") or "").upper() == "RB"]
+            if skip_wr_alpha
+            else list(skill)
+        )
         rec_td_pool = sum(
             _f(r, "rec_tds_total", "rec_tds_mean")
-            for r in skill
+            for r in rec_targets
         )
-        rec_yd_sum = sum(_f(r, "receiving_yards_total") for r in skill) or 1.0
+        rec_yd_sum = sum(_f(r, "receiving_yards_total") for r in rec_targets) or 1.0
         if rec_td_pool > 1e-9:
-            for r in skill:
+            for r in rec_targets:
                 r["rec_tds_total"] = rec_td_pool * (
                     _f(r, "receiving_yards_total") / rec_yd_sum
                 )
@@ -469,19 +488,21 @@ def align_skill_identities_to_depth_sot(
 
     snap_rush = _team_rush_map(work)
     snap_rush_td: Dict[str, float] = {}
-    snap_rec: Dict[str, float] = {}
-    snap_rec_td: Dict[str, float] = {}
-    snap_recp: Dict[str, float] = {}
+    snap_rec_pos: Dict[Tuple[str, str], float] = {}
+    snap_rec_td_pos: Dict[Tuple[str, str], float] = {}
+    snap_recp_pos: Dict[Tuple[str, str], float] = {}
     for row in work:
         team = str(row.get("team") or "")
+        pos = str(row.get("position") or "").upper()
         snap_rush_td[team] = snap_rush_td.get(team, 0.0) + _f(
             row, "rush_tds_total", "rush_tds_mean"
         )
-        snap_rec[team] = snap_rec.get(team, 0.0) + _f(row, "receiving_yards_total")
-        snap_rec_td[team] = snap_rec_td.get(team, 0.0) + _f(
+        key = (team, pos)
+        snap_rec_pos[key] = snap_rec_pos.get(key, 0.0) + _f(row, "receiving_yards_total")
+        snap_rec_td_pos[key] = snap_rec_td_pos.get(key, 0.0) + _f(
             row, "rec_tds_total", "rec_tds_mean"
         )
-        snap_recp[team] = snap_recp.get(team, 0.0) + _f(row, "receptions_total")
+        snap_recp_pos[key] = snap_recp_pos.get(key, 0.0) + _f(row, "receptions_total")
 
     moves: List[str] = []
     for row in work:
@@ -535,11 +556,22 @@ def align_skill_identities_to_depth_sot(
                 continue
             _scale_team_field(team_rows, "rush_yards_total", float(snap_rush.get(team, 0.0)))
             _scale_team_field(team_rows, "rush_tds_total", float(snap_rush_td.get(team, 0.0)))
-            _scale_team_field(
-                team_rows, "receiving_yards_total", float(snap_rec.get(team, 0.0))
-            )
-            _scale_team_field(team_rows, "rec_tds_total", float(snap_rec_td.get(team, 0.0)))
-            _scale_team_field(team_rows, "receptions_total", float(snap_recp.get(team, 0.0)))
+            # Rec stays inside the position group so an RB identity move cannot
+            # inflate/deflate WR/TE receiving (JSN/Puka/Rice collateral).
+            by_pos: Dict[str, List[Dict[str, Any]]] = {}
+            for row in team_rows:
+                by_pos.setdefault(str(row.get("position") or "").upper(), []).append(row)
+            for pos, pos_rows in by_pos.items():
+                key = (team, pos)
+                _scale_team_field(
+                    pos_rows, "receiving_yards_total", float(snap_rec_pos.get(key, 0.0))
+                )
+                _scale_team_field(
+                    pos_rows, "rec_tds_total", float(snap_rec_td_pos.get(key, 0.0))
+                )
+                _scale_team_field(
+                    pos_rows, "receptions_total", float(snap_recp_pos.get(key, 0.0))
+                )
 
     return work, {
         "applied": True,
