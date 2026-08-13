@@ -64,7 +64,7 @@ behavior or invent KEI fair lines until a later calibrated pass.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 from src.services.cfb_season_engine.loaders import (
     build_demo_universe,
@@ -156,6 +156,26 @@ def project_game_preview(
         player_hook_summaries=hook_rows,
     )
     return attach_player_projections(universe, proj)
+
+
+def _preseason_prior_status(season: int, example_codes: Sequence[str]) -> Dict[str, Any]:
+    from src.services.cfb_warehouse.preseason_prior import load_packaged_prior, lookup_prior
+
+    pack = load_packaged_prior(int(season))
+    examples = {code: lookup_prior(code, season=int(season)) for code in example_codes}
+    return {
+        "present": bool(pack.get("present")),
+        "as_of": pack.get("as_of"),
+        "n": pack.get("n"),
+        "leakage": pack.get("leakage") or "seasons < prior_year",
+        "used_in_spread": False,
+        "examples": {k: v for k, v in examples.items() if v},
+        "ops": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
+        "note": (
+            "Neutral-field points vs average FBS + uncertainty σ. "
+            "Research input on project-game; does not change spread/WP/KEI."
+        ),
+    }
 
 
 def engine_status_payload(
@@ -355,6 +375,7 @@ def engine_status_payload(
         "conferences": conferences.documentation(),
         "project_game_formula": project_game_formula_doc(),
         "examples": examples,
+        "preseason_prior": _preseason_prior_status(season, example_codes),
         "hfa_bucket_counts": hfa_buckets,
         "coaching_flag_counts": coaching_flags,
         "roster_strength_ladder": {
@@ -410,6 +431,8 @@ def engine_status_payload(
                 "Position group unit formula (talent/experience/portal_impact)",
                 "Efficiency blend weights + anti-double-count unit downweight",
                 "off_eff/def_eff + roster_strength + qb_situation_index as projection drivers",
+                "Opponent-adjusted PBP EPA week snapshots (week W uses same-season week < W)",
+                "Preseason prior mean+σ (seasons < Y; roster as_of 2026-08-12; not in spread)",
                 "Packaged ESPN 2026 roster snapshot wiring (DB → snapshot → priors)",
                 "Packaged final-2025 SP+ efficiency snapshot wiring",
                 "Variable HFA bucket structure (baseline ~2 pts, elite→poor)",
@@ -429,7 +452,8 @@ def engine_status_payload(
                 "Portal-out values without a full departure feed",
                 "QB talent scores derived from 2025 attempt/yard splits",
                 "Position group talent composites from roster composition",
-                "Prior-year SP+ efficiency carry (not live 2026 PBP EPA)",
+                "Prior-year SP+ efficiency carry (project-game still uses packaged SP+; PBP adj is research)",
+                "Garbage-time weights + program-prior EPA→points scale (backtestable defaults)",
                 "success_off/def + explosiveness (SP+-correlated proxies, not PBP rates)",
                 "Recruiting capital when retained from curated priors",
                 "HFA env_scores / venue labels (not live home ATS splits)",
@@ -455,6 +479,9 @@ def engine_status_payload(
                 "Full player box-score engine (completions, routes, air yards)",
                 "CFP bracket",
                 "Market-grade calibration / KEI fair lines",
+                "Walk-forward vs closing lines (Week 0–4)",
+                "Full portal player-value translation matrix",
+                "Open camp QB battles (human review; not a single starter lock)",
             ],
         },
         "entry_points": {
@@ -472,6 +499,8 @@ def engine_status_payload(
             "ops": "data/ops/cfb-historical-calibration-20260805.md",
             "ops_performance": "data/ops/cfb-performance-tracking-20260805.md",
             "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
+            "ops_efficiency_prior": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
+            "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
         },

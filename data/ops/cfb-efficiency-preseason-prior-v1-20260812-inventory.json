@@ -1,0 +1,124 @@
+{
+  "as_of": "2026-08-13",
+  "seasons": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "team_games": 20588,
+  "week_rows": 25741,
+  "by_season": {
+    "2014": {
+      "status": "ok",
+      "plays": 155521,
+      "team_games": 1706,
+      "week_rows": 2142,
+      "fbs_team_games": 1523
+    },
+    "2015": {
+      "status": "ok",
+      "plays": 158501,
+      "team_games": 1730,
+      "week_rows": 2016,
+      "fbs_team_games": 1540
+    },
+    "2016": {
+      "status": "ok",
+      "plays": 155622,
+      "team_games": 1714,
+      "week_rows": 2016,
+      "fbs_team_games": 1520
+    },
+    "2017": {
+      "status": "ok",
+      "plays": 155505,
+      "team_games": 1744,
+      "week_rows": 2064,
+      "fbs_team_games": 1573
+    },
+    "2018": {
+      "status": "ok",
+      "plays": 158249,
+      "team_games": 1768,
+      "week_rows": 2096,
+      "fbs_team_games": 1629
+    },
+    "2019": {
+      "status": "ok",
+      "plays": 156888,
+      "team_games": 1780,
+      "week_rows": 2227,
+      "fbs_team_games": 1624
+    },
+    "2020": {
+      "status": "ok",
+      "plays": 100420,
+      "team_games": 1130,
+      "week_rows": 2176,
+      "fbs_team_games": 1077
+    },
+    "2021": {
+      "status": "ok",
+      "plays": 146367,
+      "team_games": 1684,
+      "week_rows": 2128,
+      "fbs_team_games": 1575
+    },
+    "2022": {
+      "status": "ok",
+      "plays": 149654,
+      "team_games": 1722,
+      "week_rows": 2160,
+      "fbs_team_games": 1596
+    },
+    "2023": {
+      "status": "ok",
+      "plays": 153626,
+      "team_games": 1806,
+      "week_rows": 2160,
+      "fbs_team_games": 1679
+    },
+    "2024": {
+      "status": "ok",
+      "plays": 162950,
+      "team_games": 1892,
+      "week_rows": 2278,
+      "fbs_team_games": 1684
+    },
+    "2025": {
+      "status": "ok",
+      "plays": 165850,
+      "team_games": 1912,
+      "week_rows": 2278,
+      "fbs_team_games": 1713
+    }
+  },
+  "garbage": {
+    "competitive_margin": 16.0,
+    "deep_margin": 24.0,
+    "late_secs": 720,
+    "deep_secs": 300,
+    "under_two_margin": 8.0,
+    "under_two_mult": 0.4,
+    "min_weight": 0.1,
+    "first_half_blowout_weight": 0.85,
+    "time_secs_rem_unit": "seconds_remaining_in_half"
+  },
+  "shrink_plays": 80.0,
+  "adj_iters": 4,
+  "explosive": {
+    "epa": 1.0,
+    "yards": 15
+  },
+  "leakage": "week W snapshot uses only same-season week < W",
+  "dir": "/Volumes/KosEdgeData/clean/cfb/historical/efficiency"
+}

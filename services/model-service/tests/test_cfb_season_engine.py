@@ -1124,6 +1124,8 @@ def test_status_and_project_game_http() -> None:
     assert body["additive"] is True
     assert "examples" in body
     assert "position_groups" in body["examples"]["UGA"]
+    assert body["preseason_prior"]["used_in_spread"] is False
+    assert body["preseason_prior"]["examples"]["UGA"]["mean_points"] > body["preseason_prior"]["examples"]["BALL"]["mean_points"]
 
     proj = client.post(
         "/cfb/season-engine/project-game",
@@ -1147,6 +1149,8 @@ def test_status_and_project_game_http() -> None:
     assert "qb_situation_index" in data["away_layers"]["qb"]
     assert "position_groups" in data["home_layers"]
     assert "components" in data["home_layers"]["position_groups"]
+    assert data["research_prior"]["used_in_spread"] is False
+    assert data["research_prior"]["away"]["mean_points"] > data["research_prior"]["home"]["mean_points"]
     assert "projection_formula" in data
     assert "drivers" in data
     assert data["drivers"]["home"]["roster_strength"] is not None
