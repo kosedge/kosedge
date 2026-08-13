@@ -184,7 +184,7 @@ def build_enterprise_report_stub(
         "walkforward": wf,
         "publish_policy": {
             "mainlines": "research_only" if wf.get("status") != "ready" else "calibrating",
-            "props": "queued_until_mainlines_honest",
+            "props": "research_only",
         },
         "data_policy": {
             "odds_api_historical_repull": (

@@ -15,6 +15,6 @@ def test_publish_tag_defaults_research_only() -> None:
 def test_board_publish_posture_stays_research_until_evidence() -> None:
     posture = board_publish_posture(n_with_close_lines=0, ats=None)
     assert posture["mainlines"] == "research_only"
-    assert posture["props"] == "queued_until_mainlines_honest"
+    assert posture["props"] == "research_only"
     cleared = board_publish_posture(n_with_close_lines=80, ats=0.55)
     assert cleared["mainlines"] == "calibrating"
