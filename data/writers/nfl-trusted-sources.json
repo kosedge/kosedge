@@ -1,0 +1,156 @@
+{
+  "version": "2026.08.06",
+  "updated": "2026-08-06",
+  "title": "KosEdge NFL Trusted Source Index",
+  "docs": "docs/writers/TRUSTED_SOURCE_INDEX.md",
+  "beat_writers_registry": "data/writers/nfl-beat-writers.json",
+  "external_contact_index": "KosEdge_NFL_X_Contact_Index_v1.pdf",
+  "notes": "Approved X/Twitter sources for NFL content, injury/news desks, market notes, and employee-style writing. Prefer these over random social noise. On-site language: market / consensus / books — never Vegas. Display @PatrickE_Vegas as market intel.",
+  "usage_rules": [
+    "Tier 1 first for breaking/injury alerts",
+    "Confirm major claims with a second reliable source when possible",
+    "Beat writers for team-specific practice/lineup context",
+    "Medical accounts for timeline interpretation, not rumor invention",
+    "Market accounts for movement context, not blind copy",
+    "Always attribute source cleanly",
+    "On-site language: use market / consensus / books, not Vegas"
+  ],
+  "display_overrides": {
+    "@PatrickE_Vegas": {
+      "site_label": "market intel",
+      "avoid_words": ["Vegas"]
+    }
+  },
+  "tiers": {
+    "tier1_alert": {
+      "priority": 1,
+      "label": "Tier 1 Alert",
+      "accounts": [
+        {
+          "x": "@32BeatWriters",
+          "role": "local_practice_lineup"
+        },
+        {
+          "x": "@AdamSchefter",
+          "role": "leaguewide_breaking"
+        },
+        {
+          "x": "@MySportsUpdate",
+          "role": "fast_nfl_aggregator"
+        },
+        {
+          "x": "@ProFootballDoc",
+          "role": "injury_analysis"
+        },
+        {
+          "x": "@FBInjuryDoc",
+          "role": "recovery_timelines"
+        },
+        {
+          "x": "@NFLInjuryNws",
+          "role": "fast_injury_headlines"
+        },
+        {
+          "x": "@RapSheet",
+          "role": "breaking_transactions"
+        },
+        {
+          "x": "@KevinRothWx",
+          "role": "weather_impact"
+        },
+        {
+          "x": "@PatrickE_Vegas",
+          "role": "sharp_money_book_liability",
+          "site_label": "market intel"
+        },
+        {
+          "x": "@rotoworld_fb",
+          "role": "injury_transaction_wire"
+        },
+        {
+          "x": "@TomPelissero",
+          "role": "injuries_transactions_discipline"
+        },
+        {
+          "x": "@UnderdogNFL",
+          "role": "player_news_practice"
+        }
+      ]
+    },
+    "breaking_insiders": {
+      "priority": 2,
+      "label": "Breaking News / Insiders",
+      "accounts": [
+        { "x": "@AlbertBreer" },
+        { "x": "@AroundTheNFL" },
+        { "x": "@JFowlerESPN" },
+        { "x": "@jjones9" },
+        { "x": "@Schultz_Report" },
+        { "x": "@MikeGarafolo" },
+        { "x": "@NFLonCBS" },
+        { "x": "@ProFootballTalk" }
+      ]
+    },
+    "injury_medical": {
+      "priority": 2,
+      "label": "Injury / Medical",
+      "accounts": [
+        { "x": "@FantasyDPT" },
+        { "x": "@SportMDAnalysis" },
+        { "x": "@jmthrivept" },
+        { "x": "@DrJesseMorse" },
+        { "x": "@BangedUpBills" },
+        { "x": "@TheFantasyPT" },
+        { "x": "@Stephania_ESPN" }
+      ]
+    },
+    "sharp_market": {
+      "priority": 2,
+      "label": "Sharp / Market",
+      "accounts": [
+        { "x": "@adamchernoff" },
+        { "x": "@BFawkes22" },
+        { "x": "@capjack2000" },
+        { "x": "@EvanHAbrams" },
+        { "x": "@RASPicks" },
+        { "x": "@robpizzola" },
+        { "x": "@RufusPeabody" },
+        { "x": "@spanky" },
+        { "x": "@SharpFootball" }
+      ]
+    },
+    "data_analytics": {
+      "priority": 3,
+      "label": "Data / Usage / Analytics",
+      "accounts": [
+        { "x": "@dwainmcfarland" },
+        { "x": "@FantasyProsNFL" },
+        { "x": "@kvalenzuela17" },
+        { "x": "@KevinCole___" },
+        { "x": "@MattFtheOracle" },
+        { "x": "@PFF_Fantasy" },
+        { "x": "@SethWalder" },
+        { "x": "@tejfbanalytics" }
+      ]
+    },
+    "referee": {
+      "priority": 3,
+      "label": "Referee",
+      "accounts": [
+        { "x": "@BenAustro" },
+        { "x": "@footballzebras" },
+        { "x": "@NFLFootballOps" },
+        { "x": "@NFLOfficiating" }
+      ]
+    }
+  },
+  "beat_writers_and_official_teams": {
+    "use_for": "local injury / practice / lineup confirmation",
+    "in_repo": [
+      "data/writers/nfl-beat-writers.json",
+      "data/writers/nfl-beat-writers.md"
+    ],
+    "lookup": "python scripts/writers/beat-lookup.py --team BUF",
+    "external_pdf": "KosEdge_NFL_X_Contact_Index_v1.pdf"
+  }
+}
