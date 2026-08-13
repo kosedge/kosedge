@@ -6,13 +6,16 @@ Architecture (NFL, 2026):
   spread_home / total_mean columns = handicap aliases for one release
 
 Honesty limits:
-  - Model spread/total diverge from KEI only when diagnostics.market_blend
-    recorded a pre_blend_* mean (spread_applied / total_applied).
+  - Model spread/total diverge from KEI when diagnostics.market_blend
+    recorded a pre_blend_* mean (spread_applied / total_applied), OR when
+    a handicap-role reprice ran (injury cadence or Week 1 Gate B desk factors).
   - Win probs and fair MLs are post-blend only today → Model ML = KEI (identity).
   - Injury report cadence may reprice KEI via line_role=handicap while freezing
-    stamped model_markets (see nfl_injury_kei_cadence). Full research re-sims
-    still stamp line_role=model.
-  - If blend was not applied, Model = KEI (identity). Do not invent deltas.
+    stamped model_markets (see nfl_injury_kei_cadence). Week 1 REG Gate B
+    applies the same freeze at fair-lines read time (nfl_kei_week1_reprice).
+  - Full research re-sims still stamp line_role=model.
+  - If blend was not applied and no desk factor fires, Model = KEI (identity).
+    Do not invent cosmetic deltas.
 """
 
 from __future__ import annotations

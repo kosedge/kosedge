@@ -43,6 +43,10 @@ class _Session:
         sql = " ".join(str(statement).split()).lower()
         if "from nfl_model_runtime_state" in sql:
             return _Result([{"active_model_version": "nfl-v1.5-matchup-sim"}])
+        if "from nfl_dp_schedules" in sql and "spread_home" not in sql:
+            return _Result([{"week": 1}])
+        if "odds_snapshots" in sql:
+            return _Result([])
         if "from nfl_market_projections np" in sql and "spread_home" in sql:
             return _Result(
                 [

@@ -14,7 +14,8 @@ const TERM_ROWS = [
   },
   {
     term: "KEI",
-    meaning: "Published handicap. Edge Board action line.",
+    meaning:
+      "Model + Week 1 desk factors (injury / QB / rest-travel). Edge Board action line. Edge/Tag = KEI vs market, never Model vs market.",
   },
   {
     term: "Current / Open",
@@ -73,8 +74,8 @@ export default function NflLaunchNotesPage() {
       <section>
         <h2 className="text-xl font-semibold text-kos-gold">Bottom line</h2>
         <p className="mt-3 text-base leading-7 text-kos-text/80">
-          This is a research desk with Model fair, KEI handicap, and tags vs
-          market.
+          This is a research desk with Model fair, KEI = model + Week 1 desk
+          factors, and tags vs market.
         </p>
         <p className="mt-2 text-base leading-7 text-kos-text/80">
           It isn&apos;t guaranteed picks or a tip service.

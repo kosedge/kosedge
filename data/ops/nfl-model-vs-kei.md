@@ -18,6 +18,7 @@
 - Fair ML / win probs are computed **after** blend today → Model ML = KEI (identity). No dual ML columns on Fair Lines yet.
 - Injury nowcast / weather remain **inputs** to full research sims (`line_role=model`).
 - **Kickoff Injury → KEI cadence** (2026-08-11) can reprice KEI only via `line_role=handicap`, freezing stamped `model_markets`. See `data/ops/nfl-injury-kei-cadence-20260811.md` and `nfl_injury_kei_cadence`.
+- **Week 1 Gate B desk reprice** (2026-08-13) applies injury / QB confirmation / rest-travel on `/nfl/fair-lines` read, freezing Model. See `data/ops/nfl-kei-week1-reprice-20260813.md`. Weather and refs are honest stubs (not invented).
 - Legacy projection rows without stamped `model_markets` still resolve Model from `diagnostics.market_blend` on `/nfl/fair-lines` read.
 
 ## Pipeline stamp

@@ -7,6 +7,7 @@ import {
   formatSpread,
   formatTotal,
   formatWinProb,
+  keiRepriceDriverLine,
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
 import {
@@ -123,9 +124,9 @@ export default async function NflFairLinesPage({
               KEI Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Model = pre-market-blend research fair. KEI handicap = the product
-              line (post-blend + calibration) shown on the Edge Board — tags
-              compare KEI to market, not Model. Kickoffs in ET.
+              Model = pre-market-blend research fair (stable). KEI = model +
+              Week 1 desk factors (injury / QB confirmation / rest-travel).
+              Tags compare KEI to market, not Model. Kickoffs in ET.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -253,6 +254,11 @@ export default async function NflFairLinesPage({
                   <p className="mt-1 text-xs text-kos-text/55">
                     {formatKickoff(row.startTime)} · ET
                   </p>
+                  {keiRepriceDriverLine(row.keiReprice) ? (
+                    <p className="mt-1 text-[11px] text-kos-text/45">
+                      {keiRepriceDriverLine(row.keiReprice)}
+                    </p>
+                  ) : null}
                   <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <div className="text-kos-text/50">Model spread</div>
@@ -331,9 +337,10 @@ export default async function NflFairLinesPage({
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
         <p>
           Model is the pre-market-blend Monte Carlo fair when blend applied;
-          otherwise Model equals KEI. Fair ML / win probs are post-blend only
-          (no separate Model ML yet). Edges and PLAY/LEAN tags use KEI vs market
-          only.
+          otherwise Model equals KEI until Week 1 desk factors fire. Fair ML /
+          win probs are post-blend only (no separate Model ML yet). Edges and
+          PLAY/LEAN tags use KEI vs market only. Weather and refs are stubbed
+          this pass (logged, not invented).
         </p>
       </section>
     </main>
@@ -341,6 +348,7 @@ export default async function NflFairLinesPage({
 }
 
 function FairLineRow({ row }: { row: NflFairLineRow }) {
+  const drivers = keiRepriceDriverLine(row.keiReprice);
   return (
     <tr className="border-b border-white/5 transition hover:bg-white/5">
       <td className="px-3 py-3">
@@ -350,6 +358,11 @@ function FairLineRow({ row }: { row: NflFairLineRow }) {
         <div className="text-xs text-kos-text/55">
           {row.awayTeam} at {row.homeTeam}
         </div>
+        {drivers ? (
+          <div className="mt-1 max-w-xs text-[11px] leading-snug text-kos-text/40">
+            {drivers}
+          </div>
+        ) : null}
       </td>
       <td className="px-3 py-3 text-kos-text/80">
         {formatKickoff(row.startTime)}
