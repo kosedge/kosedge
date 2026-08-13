@@ -672,6 +672,8 @@ def project_game(
 
 
 def project_game_to_dict(proj: GameProjection) -> Dict[str, Any]:
+    from src.services.cfb_warehouse.preseason_prior import research_prior_block
+
     return {
         "season": proj.season,
         "week": proj.week,
@@ -698,6 +700,10 @@ def project_game_to_dict(proj: GameProjection) -> Dict[str, Any]:
         "notes": proj.notes,
         "fidelity": proj.fidelity,
         "projection_formula": project_game_formula_doc(),
+        # Research-only. Does not change spread / WP / KEI.
+        "research_prior": research_prior_block(
+            proj.home_team, proj.away_team, season=int(proj.season)
+        ),
     }
 
 

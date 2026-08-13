@@ -1,0 +1,1185 @@
+{
+  "as_of": "2026-08-12",
+  "season": 2026,
+  "n": 147,
+  "source": "cfb_warehouse.preseason_prior",
+  "leakage": "seasons < prior_year",
+  "teams": {
+    "OSU": {
+      "mean_points": 19.065,
+      "sigma_points": 4.265,
+      "rank": 1,
+      "qb_class": "incumbent",
+      "program_points": 15.321,
+      "roster_strength": 71.2
+    },
+    "UGA": {
+      "mean_points": 16.689,
+      "sigma_points": 4.265,
+      "rank": 2,
+      "qb_class": "incumbent",
+      "program_points": 13.029,
+      "roster_strength": 70.5
+    },
+    "ND": {
+      "mean_points": 16.096,
+      "sigma_points": 4.275,
+      "rank": 3,
+      "qb_class": "incumbent",
+      "program_points": 12.982,
+      "roster_strength": 65.95
+    },
+    "ALA": {
+      "mean_points": 16.066,
+      "sigma_points": 4.264,
+      "rank": 4,
+      "qb_class": "incumbent",
+      "program_points": 12.089,
+      "roster_strength": 73.14
+    },
+    "TEX": {
+      "mean_points": 15.208,
+      "sigma_points": 4.261,
+      "rank": 5,
+      "qb_class": "incumbent",
+      "program_points": 11.328,
+      "roster_strength": 72.33
+    },
+    "TAMU": {
+      "mean_points": 14.226,
+      "sigma_points": 4.265,
+      "rank": 6,
+      "qb_class": "incumbent",
+      "program_points": 10.728,
+      "roster_strength": 69.15
+    },
+    "MICH": {
+      "mean_points": 14.126,
+      "sigma_points": 4.265,
+      "rank": 7,
+      "qb_class": "incumbent",
+      "program_points": 10.633,
+      "roster_strength": 69.11
+    },
+    "ORE": {
+      "mean_points": 13.862,
+      "sigma_points": 6.167,
+      "rank": 8,
+      "qb_class": "portal",
+      "program_points": 12.098,
+      "roster_strength": 68.03
+    },
+    "PSU": {
+      "mean_points": 13.602,
+      "sigma_points": 4.491,
+      "rank": 9,
+      "qb_class": "incumbent",
+      "program_points": 11.041,
+      "roster_strength": 68.01
+    },
+    "LSU": {
+      "mean_points": 13.23,
+      "sigma_points": 4.26,
+      "rank": 10,
+      "qb_class": "incumbent",
+      "program_points": 9.401,
+      "roster_strength": 71.91
+    },
+    "TENN": {
+      "mean_points": 12.947,
+      "sigma_points": 4.265,
+      "rank": 11,
+      "qb_class": "incumbent",
+      "program_points": 9.583,
+      "roster_strength": 68.03
+    },
+    "WASH": {
+      "mean_points": 12.798,
+      "sigma_points": 4.266,
+      "rank": 12,
+      "qb_class": "incumbent",
+      "program_points": 9.659,
+      "roster_strength": 66.16
+    },
+    "IU": {
+      "mean_points": 12.765,
+      "sigma_points": 4.278,
+      "rank": 13,
+      "qb_class": "incumbent",
+      "program_points": 10.233,
+      "roster_strength": 61.1
+    },
+    "MISS": {
+      "mean_points": 12.765,
+      "sigma_points": 6.157,
+      "rank": 14,
+      "qb_class": "portal",
+      "program_points": 10.261,
+      "roster_strength": 74.2
+    },
+    "MIA": {
+      "mean_points": 12.694,
+      "sigma_points": 6.158,
+      "rank": 15,
+      "qb_class": "portal",
+      "program_points": 10.44,
+      "roster_strength": 72.12
+    },
+    "CLEM": {
+      "mean_points": 12.606,
+      "sigma_points": 4.262,
+      "rank": 16,
+      "qb_class": "incumbent",
+      "program_points": 8.79,
+      "roster_strength": 71.8
+    },
+    "OU": {
+      "mean_points": 12.217,
+      "sigma_points": 6.159,
+      "rank": 17,
+      "qb_class": "portal",
+      "program_points": 10.062,
+      "roster_strength": 71.29
+    },
+    "LOU": {
+      "mean_points": 11.639,
+      "sigma_points": 4.269,
+      "rank": 18,
+      "qb_class": "incumbent",
+      "program_points": 8.571,
+      "roster_strength": 65.57
+    },
+    "AUB": {
+      "mean_points": 11.51,
+      "sigma_points": 4.254,
+      "rank": 19,
+      "qb_class": "incumbent",
+      "program_points": 7.716,
+      "roster_strength": 71.62
+    },
+    "KSU": {
+      "mean_points": 10.992,
+      "sigma_points": 4.268,
+      "rank": 20,
+      "qb_class": "incumbent",
+      "program_points": 8.252,
+      "roster_strength": 62.83
+    },
+    "USC": {
+      "mean_points": 10.876,
+      "sigma_points": 6.166,
+      "rank": 21,
+      "qb_class": "portal",
+      "program_points": 9.108,
+      "roster_strength": 68.07
+    },
+    "ISU": {
+      "mean_points": 10.683,
+      "sigma_points": 4.27,
+      "rank": 22,
+      "qb_class": "incumbent",
+      "program_points": 8.033,
+      "roster_strength": 62.08
+    },
+    "UTAH": {
+      "mean_points": 10.605,
+      "sigma_points": 6.158,
+      "rank": 23,
+      "qb_class": "portal",
+      "program_points": 8.813,
+      "roster_strength": 68.27
+    },
+    "SMU": {
+      "mean_points": 10.423,
+      "sigma_points": 4.263,
+      "rank": 24,
+      "qb_class": "incumbent",
+      "program_points": 7.323,
+      "roster_strength": 65.83
+    },
+    "FSU": {
+      "mean_points": 10.417,
+      "sigma_points": 4.264,
+      "rank": 25,
+      "qb_class": "incumbent",
+      "program_points": 7.071,
+      "roster_strength": 67.88
+    },
+    "ASU": {
+      "mean_points": 10.127,
+      "sigma_points": 4.262,
+      "rank": 26,
+      "qb_class": "incumbent",
+      "program_points": 7.003,
+      "roster_strength": 66.03
+    },
+    "TCU": {
+      "mean_points": 9.768,
+      "sigma_points": 4.272,
+      "rank": 27,
+      "qb_class": "incumbent",
+      "program_points": 7.075,
+      "roster_strength": 62.44
+    },
+    "BOISE": {
+      "mean_points": 9.507,
+      "sigma_points": 4.272,
+      "rank": 28,
+      "qb_class": "incumbent",
+      "program_points": 7.046,
+      "roster_strength": 60.51
+    },
+    "BYU": {
+      "mean_points": 9.506,
+      "sigma_points": 4.275,
+      "rank": 29,
+      "qb_class": "incumbent",
+      "program_points": 7.014,
+      "roster_strength": 60.77
+    },
+    "SCAR": {
+      "mean_points": 9.475,
+      "sigma_points": 4.268,
+      "rank": 30,
+      "qb_class": "incumbent",
+      "program_points": 6.39,
+      "roster_strength": 65.71
+    },
+    "CIN": {
+      "mean_points": 9.375,
+      "sigma_points": 4.269,
+      "rank": 31,
+      "qb_class": "incumbent",
+      "program_points": 6.663,
+      "roster_strength": 62.6
+    },
+    "ARK": {
+      "mean_points": 9.245,
+      "sigma_points": 4.261,
+      "rank": 32,
+      "qb_class": "incumbent",
+      "program_points": 6.07,
+      "roster_strength": 66.46
+    },
+    "PITT": {
+      "mean_points": 9.11,
+      "sigma_points": 4.271,
+      "rank": 33,
+      "qb_class": "incumbent",
+      "program_points": 6.471,
+      "roster_strength": 61.99
+    },
+    "GT": {
+      "mean_points": 9.004,
+      "sigma_points": 4.261,
+      "rank": 34,
+      "qb_class": "incumbent",
+      "program_points": 5.894,
+      "roster_strength": 65.92
+    },
+    "ARI": {
+      "mean_points": 8.945,
+      "sigma_points": 4.266,
+      "rank": 35,
+      "qb_class": "incumbent",
+      "program_points": 6.021,
+      "roster_strength": 64.37
+    },
+    "UCF": {
+      "mean_points": 8.876,
+      "sigma_points": 4.265,
+      "rank": 36,
+      "qb_class": "incumbent",
+      "program_points": 5.948,
+      "roster_strength": 64.4
+    },
+    "NCSU": {
+      "mean_points": 8.824,
+      "sigma_points": 4.262,
+      "rank": 37,
+      "qb_class": "incumbent",
+      "program_points": 5.687,
+      "roster_strength": 66.14
+    },
+    "UK": {
+      "mean_points": 8.75,
+      "sigma_points": 4.264,
+      "rank": 38,
+      "qb_class": "incumbent",
+      "program_points": 5.756,
+      "roster_strength": 64.95
+    },
+    "TTU": {
+      "mean_points": 8.635,
+      "sigma_points": 7.647,
+      "rank": 39,
+      "qb_class": "open_competition",
+      "program_points": 8.616,
+      "roster_strength": 65.16
+    },
+    "KU": {
+      "mean_points": 8.625,
+      "sigma_points": 4.267,
+      "rank": 40,
+      "qb_class": "incumbent",
+      "program_points": 5.98,
+      "roster_strength": 62.04
+    },
+    "BAY": {
+      "mean_points": 8.516,
+      "sigma_points": 4.263,
+      "rank": 41,
+      "qb_class": "incumbent",
+      "program_points": 5.395,
+      "roster_strength": 66.01
+    },
+    "WIS": {
+      "mean_points": 8.442,
+      "sigma_points": 4.265,
+      "rank": 42,
+      "qb_class": "incumbent",
+      "program_points": 5.53,
+      "roster_strength": 64.27
+    },
+    "MD": {
+      "mean_points": 8.026,
+      "sigma_points": 4.263,
+      "rank": 43,
+      "qb_class": "incumbent",
+      "program_points": 5.153,
+      "roster_strength": 63.94
+    },
+    "DUKE": {
+      "mean_points": 7.865,
+      "sigma_points": 4.269,
+      "rank": 44,
+      "qb_class": "incumbent",
+      "program_points": 5.149,
+      "roster_strength": 62.63
+    },
+    "MIZZ": {
+      "mean_points": 7.689,
+      "sigma_points": 6.561,
+      "rank": 45,
+      "qb_class": "unknown",
+      "program_points": 8.409,
+      "roster_strength": 49.0
+    },
+    "COLO": {
+      "mean_points": 7.662,
+      "sigma_points": 4.256,
+      "rank": 46,
+      "qb_class": "incumbent",
+      "program_points": 3.935,
+      "roster_strength": 71.06
+    },
+    "WSU": {
+      "mean_points": 7.604,
+      "sigma_points": 4.266,
+      "rank": 47,
+      "qb_class": "incumbent",
+      "program_points": 5.528,
+      "roster_strength": 57.3
+    },
+    "IOWA": {
+      "mean_points": 7.575,
+      "sigma_points": 7.646,
+      "rank": 48,
+      "qb_class": "open_competition",
+      "program_points": 7.496,
+      "roster_strength": 65.66
+    },
+    "MINN": {
+      "mean_points": 7.567,
+      "sigma_points": 4.271,
+      "rank": 49,
+      "qb_class": "incumbent",
+      "program_points": 5.057,
+      "roster_strength": 60.92
+    },
+    "UF": {
+      "mean_points": 7.52,
+      "sigma_points": 8.023,
+      "rank": 50,
+      "qb_class": "true_freshman",
+      "program_points": 7.496,
+      "roster_strength": 68.53
+    },
+    "ILL": {
+      "mean_points": 7.304,
+      "sigma_points": 6.168,
+      "rank": 51,
+      "qb_class": "portal",
+      "program_points": 6.224,
+      "roster_strength": 62.33
+    },
+    "JMU": {
+      "mean_points": 6.892,
+      "sigma_points": 7.69,
+      "rank": 52,
+      "qb_class": "open_competition",
+      "program_points": 7.696,
+      "roster_strength": 58.3
+    },
+    "WVU": {
+      "mean_points": 6.857,
+      "sigma_points": 4.265,
+      "rank": 53,
+      "qb_class": "incumbent",
+      "program_points": 4.107,
+      "roster_strength": 62.92
+    },
+    "MSST": {
+      "mean_points": 6.847,
+      "sigma_points": 6.164,
+      "rank": 54,
+      "qb_class": "portal",
+      "program_points": 5.554,
+      "roster_strength": 64.11
+    },
+    "UVA": {
+      "mean_points": 6.743,
+      "sigma_points": 6.156,
+      "rank": 55,
+      "qb_class": "portal",
+      "program_points": 4.825,
+      "roster_strength": 69.32
+    },
+    "VT": {
+      "mean_points": 6.634,
+      "sigma_points": 4.269,
+      "rank": 56,
+      "qb_class": "incumbent",
+      "program_points": 3.924,
+      "roster_strength": 62.58
+    },
+    "USF": {
+      "mean_points": 6.477,
+      "sigma_points": 4.271,
+      "rank": 57,
+      "qb_class": "incumbent",
+      "program_points": 4.453,
+      "roster_strength": 56.87
+    },
+    "MSU": {
+      "mean_points": 6.404,
+      "sigma_points": 4.265,
+      "rank": 58,
+      "qb_class": "incumbent",
+      "program_points": 3.42,
+      "roster_strength": 64.87
+    },
+    "UCLA": {
+      "mean_points": 6.344,
+      "sigma_points": 6.323,
+      "rank": 59,
+      "qb_class": "portal",
+      "program_points": 5.738,
+      "roster_strength": 65.05
+    },
+    "TROY": {
+      "mean_points": 5.964,
+      "sigma_points": 4.269,
+      "rank": 60,
+      "qb_class": "incumbent",
+      "program_points": 3.668,
+      "roster_strength": 59.13
+    },
+    "CAL": {
+      "mean_points": 5.955,
+      "sigma_points": 4.268,
+      "rank": 61,
+      "qb_class": "incumbent",
+      "program_points": 3.289,
+      "roster_strength": 62.22
+    },
+    "ARMY": {
+      "mean_points": 5.897,
+      "sigma_points": 4.294,
+      "rank": 62,
+      "qb_class": "incumbent",
+      "program_points": 4.648,
+      "roster_strength": 50.41
+    },
+    "OHIO": {
+      "mean_points": 5.804,
+      "sigma_points": 4.294,
+      "rank": 63,
+      "qb_class": "incumbent",
+      "program_points": 4.395,
+      "roster_strength": 51.74
+    },
+    "WAKE": {
+      "mean_points": 5.788,
+      "sigma_points": 6.163,
+      "rank": 64,
+      "qb_class": "portal",
+      "program_points": 4.525,
+      "roster_strength": 63.86
+    },
+    "NEB": {
+      "mean_points": 5.749,
+      "sigma_points": 6.315,
+      "rank": 65,
+      "qb_class": "portal",
+      "program_points": 4.706,
+      "roster_strength": 68.69
+    },
+    "TULN": {
+      "mean_points": 5.63,
+      "sigma_points": 7.648,
+      "rank": 66,
+      "qb_class": "open_competition",
+      "program_points": 6.124,
+      "roster_strength": 60.88
+    },
+    "AFA": {
+      "mean_points": 5.416,
+      "sigma_points": 4.268,
+      "rank": 67,
+      "qb_class": "incumbent",
+      "program_points": 3.203,
+      "roster_strength": 58.44
+    },
+    "MEM": {
+      "mean_points": 5.397,
+      "sigma_points": 7.647,
+      "rank": 68,
+      "qb_class": "open_competition",
+      "program_points": 5.787,
+      "roster_strength": 61.75
+    },
+    "UNLV": {
+      "mean_points": 5.369,
+      "sigma_points": 6.166,
+      "rank": 69,
+      "qb_class": "portal",
+      "program_points": 4.503,
+      "roster_strength": 60.55
+    },
+    "OKST": {
+      "mean_points": 5.127,
+      "sigma_points": 4.274,
+      "rank": 70,
+      "qb_class": "incumbent",
+      "program_points": 3.134,
+      "roster_strength": 56.61
+    },
+    "TXST": {
+      "mean_points": 5.111,
+      "sigma_points": 4.269,
+      "rank": 71,
+      "qb_class": "incumbent",
+      "program_points": 3.049,
+      "roster_strength": 57.18
+    },
+    "UTSA": {
+      "mean_points": 5.052,
+      "sigma_points": 6.18,
+      "rank": 72,
+      "qb_class": "portal",
+      "program_points": 4.697,
+      "roster_strength": 56.29
+    },
+    "PUR": {
+      "mean_points": 5.018,
+      "sigma_points": 4.261,
+      "rank": 73,
+      "qb_class": "incumbent",
+      "program_points": 2.048,
+      "roster_strength": 64.75
+    },
+    "WKU": {
+      "mean_points": 5.005,
+      "sigma_points": 4.273,
+      "rank": 74,
+      "qb_class": "incumbent",
+      "program_points": 3.015,
+      "roster_strength": 56.58
+    },
+    "ORST": {
+      "mean_points": 4.935,
+      "sigma_points": 4.278,
+      "rank": 75,
+      "qb_class": "incumbent",
+      "program_points": 3.056,
+      "roster_strength": 55.66
+    },
+    "TOL": {
+      "mean_points": 4.916,
+      "sigma_points": 6.561,
+      "rank": 76,
+      "qb_class": "unknown",
+      "program_points": 5.636,
+      "roster_strength": 49.0
+    },
+    "RUT": {
+      "mean_points": 4.788,
+      "sigma_points": 6.158,
+      "rank": 77,
+      "qb_class": "portal",
+      "program_points": 3.161,
+      "roster_strength": 66.89
+    },
+    "VAN": {
+      "mean_points": 4.783,
+      "sigma_points": 7.647,
+      "rank": 78,
+      "qb_class": "open_competition",
+      "program_points": 4.829,
+      "roster_strength": 64.62
+    },
+    "SYR": {
+      "mean_points": 4.594,
+      "sigma_points": 6.164,
+      "rank": 79,
+      "qb_class": "portal",
+      "program_points": 3.409,
+      "roster_strength": 63.21
+    },
+    "MRSH": {
+      "mean_points": 4.504,
+      "sigma_points": 6.167,
+      "rank": 80,
+      "qb_class": "portal",
+      "program_points": 3.835,
+      "roster_strength": 58.91
+    },
+    "NW": {
+      "mean_points": 4.432,
+      "sigma_points": 6.173,
+      "rank": 81,
+      "qb_class": "portal",
+      "program_points": 3.976,
+      "roster_strength": 57.13
+    },
+    "SJSU": {
+      "mean_points": 4.399,
+      "sigma_points": 4.301,
+      "rank": 82,
+      "qb_class": "incumbent",
+      "program_points": 2.628,
+      "roster_strength": 54.76
+    },
+    "USA": {
+      "mean_points": 4.082,
+      "sigma_points": 6.169,
+      "rank": 83,
+      "qb_class": "portal",
+      "program_points": 3.595,
+      "roster_strength": 57.39
+    },
+    "APP": {
+      "mean_points": 4.061,
+      "sigma_points": 8.55,
+      "rank": 84,
+      "qb_class": "true_freshman",
+      "program_points": 5.53,
+      "roster_strength": 56.09
+    },
+    "M-OH": {
+      "mean_points": 4.059,
+      "sigma_points": 4.284,
+      "rank": 85,
+      "qb_class": "incumbent",
+      "program_points": 2.564,
+      "roster_strength": 52.46
+    },
+    "HOU": {
+      "mean_points": 4.057,
+      "sigma_points": 8.025,
+      "rank": 86,
+      "qb_class": "true_freshman",
+      "program_points": 4.854,
+      "roster_strength": 61.69
+    },
+    "UL": {
+      "mean_points": 3.955,
+      "sigma_points": 4.284,
+      "rank": 87,
+      "qb_class": "incumbent",
+      "program_points": 2.486,
+      "roster_strength": 52.24
+    },
+    "ODU": {
+      "mean_points": 3.951,
+      "sigma_points": 6.579,
+      "rank": 88,
+      "qb_class": "unknown",
+      "program_points": 4.671,
+      "roster_strength": 49.0
+    },
+    "WYO": {
+      "mean_points": 3.933,
+      "sigma_points": 4.28,
+      "rank": 89,
+      "qb_class": "incumbent",
+      "program_points": 2.198,
+      "roster_strength": 54.46
+    },
+    "UNC": {
+      "mean_points": 3.873,
+      "sigma_points": 7.651,
+      "rank": 90,
+      "qb_class": "open_competition",
+      "program_points": 4.209,
+      "roster_strength": 62.2
+    },
+    "LIB": {
+      "mean_points": 3.755,
+      "sigma_points": 6.163,
+      "rank": 91,
+      "qb_class": "portal",
+      "program_points": 2.954,
+      "roster_strength": 60.01
+    },
+    "TA&M": {
+      "mean_points": 3.498,
+      "sigma_points": 8.806,
+      "rank": 92,
+      "qb_class": "incumbent",
+      "program_points": 0.0,
+      "roster_strength": 69.15
+    },
+    "TXAM": {
+      "mean_points": 3.498,
+      "sigma_points": 8.806,
+      "rank": 93,
+      "qb_class": "incumbent",
+      "program_points": 0.0,
+      "roster_strength": 69.15
+    },
+    "UTAHST": {
+      "mean_points": 3.369,
+      "sigma_points": 6.165,
+      "rank": 94,
+      "qb_class": "portal",
+      "program_points": 2.72,
+      "roster_strength": 58.74
+    },
+    "UNT": {
+      "mean_points": 3.198,
+      "sigma_points": 6.561,
+      "rank": 95,
+      "qb_class": "unknown",
+      "program_points": 3.918,
+      "roster_strength": 49.0
+    },
+    "SDSU": {
+      "mean_points": 3.054,
+      "sigma_points": 6.172,
+      "rank": 96,
+      "qb_class": "portal",
+      "program_points": 2.806,
+      "roster_strength": 55.4
+    },
+    "FAU": {
+      "mean_points": 3.051,
+      "sigma_points": 4.261,
+      "rank": 97,
+      "qb_class": "incumbent",
+      "program_points": 0.656,
+      "roster_strength": 59.96
+    },
+    "ECU": {
+      "mean_points": 2.992,
+      "sigma_points": 6.561,
+      "rank": 98,
+      "qb_class": "unknown",
+      "program_points": 3.712,
+      "roster_strength": 49.0
+    },
+    "NAVY": {
+      "mean_points": 2.878,
+      "sigma_points": 7.66,
+      "rank": 99,
+      "qb_class": "open_competition",
+      "program_points": 4.444,
+      "roster_strength": 51.95
+    },
+    "LT": {
+      "mean_points": 2.748,
+      "sigma_points": 4.283,
+      "rank": 100,
+      "qb_class": "incumbent",
+      "program_points": 1.142,
+      "roster_strength": 53.38
+    },
+    "BC": {
+      "mean_points": 2.686,
+      "sigma_points": 7.647,
+      "rank": 101,
+      "qb_class": "open_competition",
+      "program_points": 3.15,
+      "roster_strength": 61.13
+    },
+    "OLE": {
+      "mean_points": 2.504,
+      "sigma_points": 9.5,
+      "rank": 102,
+      "qb_class": "portal",
+      "program_points": 0.0,
+      "roster_strength": 74.2
+    },
+    "ULM": {
+      "mean_points": 2.491,
+      "sigma_points": 4.281,
+      "rank": 103,
+      "qb_class": "incumbent",
+      "program_points": 0.05,
+      "roster_strength": 60.34
+    },
+    "FRES": {
+      "mean_points": 2.435,
+      "sigma_points": 7.659,
+      "rank": 104,
+      "qb_class": "open_competition",
+      "program_points": 3.994,
+      "roster_strength": 52.01
+    },
+    "FAU2": {
+      "mean_points": 2.395,
+      "sigma_points": 8.804,
+      "rank": 105,
+      "qb_class": "incumbent",
+      "program_points": 0.0,
+      "roster_strength": 59.96
+    },
+    "DEL": {
+      "mean_points": 2.387,
+      "sigma_points": 4.316,
+      "rank": 106,
+      "qb_class": "incumbent",
+      "program_points": 0.39,
+      "roster_strength": 56.64
+    },
+    "BGSU": {
+      "mean_points": 2.276,
+      "sigma_points": 4.275,
+      "rank": 107,
+      "qb_class": "incumbent",
+      "program_points": 0.564,
+      "roster_strength": 54.27
+    },
+    "WMU": {
+      "mean_points": 2.246,
+      "sigma_points": 6.17,
+      "rank": 108,
+      "qb_class": "portal",
+      "program_points": 1.966,
+      "roster_strength": 55.67
+    },
+    "NIU": {
+      "mean_points": 2.195,
+      "sigma_points": 4.287,
+      "rank": 109,
+      "qb_class": "incumbent",
+      "program_points": 0.748,
+      "roster_strength": 52.06
+    },
+    "OREST": {
+      "mean_points": 1.879,
+      "sigma_points": 8.812,
+      "rank": 110,
+      "qb_class": "incumbent",
+      "program_points": 0.0,
+      "roster_strength": 55.66
+    },
+    "HAW": {
+      "mean_points": 1.877,
+      "sigma_points": 8.812,
+      "rank": 111,
+      "qb_class": "incumbent",
+      "program_points": 0.0,
+      "roster_strength": 55.64
+    },
+    "GASO": {
+      "mean_points": 1.853,
+      "sigma_points": 6.162,
+      "rank": 112,
+      "qb_class": "portal",
+      "program_points": 1.147,
+      "roster_strength": 59.22
+    },
+    "GAST": {
+      "mean_points": 1.549,
+      "sigma_points": 6.17,
+      "rank": 113,
+      "qb_class": "portal",
+      "program_points": 1.228,
+      "roster_strength": 56.01
+    },
+    "MTSU": {
+      "mean_points": 1.49,
+      "sigma_points": 4.268,
+      "rank": 114,
+      "qb_class": "incumbent",
+      "program_points": -0.538,
+      "roster_strength": 56.9
+    },
+    "ULL": {
+      "mean_points": 1.469,
+      "sigma_points": 8.815,
+      "rank": 115,
+      "qb_class": "incumbent",
+      "program_points": 0.0,
+      "roster_strength": 52.24
+    },
+    "CCU": {
+      "mean_points": 1.317,
+      "sigma_points": 8.03,
+      "rank": 116,
+      "qb_class": "true_freshman",
+      "program_points": 2.637,
+      "roster_strength": 57.33
+    },
+    "STAN": {
+      "mean_points": 1.229,
+      "sigma_points": 7.65,
+      "rank": 117,
+      "qb_class": "open_competition",
+      "program_points": 1.723,
+      "roster_strength": 60.88
+    },
+    "UAB": {
+      "mean_points": 1.126,
+      "sigma_points": 6.565,
+      "rank": 118,
+      "qb_class": "unknown",
+      "program_points": 1.846,
+      "roster_strength": 49.0
+    },
+    "JVST": {
+      "mean_points": 1.031,
+      "sigma_points": 6.583,
+      "rank": 119,
+      "qb_class": "unknown",
+      "program_points": 1.751,
+      "roster_strength": 49.0
+    },
+    "NMSU": {
+      "mean_points": 1.028,
+      "sigma_points": 4.266,
+      "rank": 120,
+      "qb_class": "incumbent",
+      "program_points": -1.27,
+      "roster_strength": 59.15
+    },
+    "ACU": {
+      "mean_points": 0.961,
+      "sigma_points": 9.5,
+      "rank": 121,
+      "qb_class": "portal",
+      "program_points": 0.0,
+      "roster_strength": 61.34
+    },
+    "UNM": {
+      "mean_points": 0.815,
+      "sigma_points": 6.561,
+      "rank": 122,
+      "qb_class": "unknown",
+      "program_points": 1.535,
+      "roster_strength": 49.0
+    },
+    "SHSU": {
+      "mean_points": 0.795,
+      "sigma_points": 4.399,
+      "rank": 123,
+      "qb_class": "incumbent",
+      "program_points": -1.408,
+      "roster_strength": 58.36
+    },
+    "CSU": {
+      "mean_points": 0.588,
+      "sigma_points": 6.561,
+      "rank": 124,
+      "qb_class": "unknown",
+      "program_points": 1.308,
+      "roster_strength": 49.0
+    },
+    "CHAT": {
+      "mean_points": 0.422,
+      "sigma_points": 9.5,
+      "rank": 125,
+      "qb_class": "portal",
+      "program_points": 0.0,
+      "roster_strength": 56.85
+    },
+    "MOST": {
+      "mean_points": 0.277,
+      "sigma_points": 6.168,
+      "rank": 126,
+      "qb_class": "portal",
+      "program_points": -0.131,
+      "roster_strength": 56.73
+    },
+    "TLSA": {
+      "mean_points": 0.174,
+      "sigma_points": 6.168,
+      "rank": 127,
+      "qb_class": "portal",
+      "program_points": -0.166,
+      "roster_strength": 56.17
+    },
+    "FIU": {
+      "mean_points": -0.154,
+      "sigma_points": 6.178,
+      "rank": 128,
+      "qb_class": "portal",
+      "program_points": -0.521,
+      "roster_strength": 56.39
+    },
+    "EMU": {
+      "mean_points": -0.155,
+      "sigma_points": 6.167,
+      "rank": 129,
+      "qb_class": "portal",
+      "program_points": -0.687,
+      "roster_strength": 57.77
+    },
+    "NEV": {
+      "mean_points": -0.304,
+      "sigma_points": 6.561,
+      "rank": 130,
+      "qb_class": "unknown",
+      "program_points": 0.416,
+      "roster_strength": 49.0
+    },
+    "USM": {
+      "mean_points": -0.407,
+      "sigma_points": 6.215,
+      "rank": 131,
+      "qb_class": "portal",
+      "program_points": -1.343,
+      "roster_strength": 61.13
+    },
+    "KENNESAW": {
+      "mean_points": -0.475,
+      "sigma_points": 6.198,
+      "rank": 132,
+      "qb_class": "portal",
+      "program_points": -0.902,
+      "roster_strength": 56.89
+    },
+    "FAY": {
+      "mean_points": -0.502,
+      "sigma_points": 9.5,
+      "rank": 133,
+      "qb_class": "unknown",
+      "program_points": 0.0,
+      "roster_strength": 50.82
+    },
+    "SOUTH": {
+      "mean_points": -0.502,
+      "sigma_points": 9.5,
+      "rank": 134,
+      "qb_class": "unknown",
+      "program_points": 0.0,
+      "roster_strength": 50.82
+    },
+    "ARST": {
+      "mean_points": -0.584,
+      "sigma_points": 6.561,
+      "rank": 135,
+      "qb_class": "unknown",
+      "program_points": 0.136,
+      "roster_strength": 49.0
+    },
+    "TEM": {
+      "mean_points": -0.666,
+      "sigma_points": 7.65,
+      "rank": 136,
+      "qb_class": "open_competition",
+      "program_points": 0.288,
+      "roster_strength": 57.05
+    },
+    "CMU": {
+      "mean_points": -0.798,
+      "sigma_points": 7.659,
+      "rank": 137,
+      "qb_class": "open_competition",
+      "program_points": 0.698,
+      "roster_strength": 52.53
+    },
+    "CONN": {
+      "mean_points": -0.913,
+      "sigma_points": 8.052,
+      "rank": 138,
+      "qb_class": "true_freshman",
+      "program_points": 0.934,
+      "roster_strength": 52.94
+    },
+    "AKR": {
+      "mean_points": -1.019,
+      "sigma_points": 6.163,
+      "rank": 139,
+      "qb_class": "portal",
+      "program_points": -1.656,
+      "roster_strength": 58.64
+    },
+    "BUFF": {
+      "mean_points": -1.102,
+      "sigma_points": 7.655,
+      "rank": 140,
+      "qb_class": "open_competition",
+      "program_points": 0.139,
+      "roster_strength": 54.66
+    },
+    "KENT": {
+      "mean_points": -1.35,
+      "sigma_points": 4.284,
+      "rank": 141,
+      "qb_class": "incumbent",
+      "program_points": -2.87,
+      "roster_strength": 52.67
+    },
+    "UTEP": {
+      "mean_points": -1.4,
+      "sigma_points": 6.171,
+      "rank": 142,
+      "qb_class": "portal",
+      "program_points": -1.611,
+      "roster_strength": 55.09
+    },
+    "CHAR": {
+      "mean_points": -1.498,
+      "sigma_points": 6.168,
+      "rank": 143,
+      "qb_class": "portal",
+      "program_points": -2.074,
+      "roster_strength": 58.13
+    },
+    "RICE": {
+      "mean_points": -1.855,
+      "sigma_points": 8.034,
+      "rank": 144,
+      "qb_class": "true_freshman",
+      "program_points": -0.007,
+      "roster_strength": 52.93
+    },
+    "IDHO": {
+      "mean_points": -1.994,
+      "sigma_points": 9.5,
+      "rank": 145,
+      "qb_class": "true_freshman",
+      "program_points": 0.0,
+      "roster_strength": 51.72
+    },
+    "MASS": {
+      "mean_points": -2.179,
+      "sigma_points": 4.275,
+      "rank": 146,
+      "qb_class": "incumbent",
+      "program_points": -4.137,
+      "roster_strength": 56.32
+    },
+    "BALL": {
+      "mean_points": -3.62,
+      "sigma_points": 7.654,
+      "rank": 147,
+      "qb_class": "open_competition",
+      "program_points": -2.295,
+      "roster_strength": 53.96
+    }
+  }
+}

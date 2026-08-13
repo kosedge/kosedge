@@ -1,0 +1,104 @@
+{
+  "as_of": "2026-08-12",
+  "season": 2026,
+  "n": 147,
+  "leakage": "seasons < prior_year",
+  "examples": {
+    "OSU": {
+      "mean_points": 19.065,
+      "sigma_points": 4.265,
+      "rank": 1,
+      "qb_class": "incumbent",
+      "program_points": 15.321,
+      "roster_strength": 71.2
+    },
+    "UGA": {
+      "mean_points": 16.689,
+      "sigma_points": 4.265,
+      "rank": 2,
+      "qb_class": "incumbent",
+      "program_points": 13.029,
+      "roster_strength": 70.5
+    },
+    "ND": {
+      "mean_points": 16.096,
+      "sigma_points": 4.275,
+      "rank": 3,
+      "qb_class": "incumbent",
+      "program_points": 12.982,
+      "roster_strength": 65.95
+    },
+    "ALA": {
+      "mean_points": 16.066,
+      "sigma_points": 4.264,
+      "rank": 4,
+      "qb_class": "incumbent",
+      "program_points": 12.089,
+      "roster_strength": 73.14
+    },
+    "TEX": {
+      "mean_points": 15.208,
+      "sigma_points": 4.261,
+      "rank": 5,
+      "qb_class": "incumbent",
+      "program_points": 11.328,
+      "roster_strength": 72.33
+    },
+    "ORE": {
+      "mean_points": 13.862,
+      "sigma_points": 6.167,
+      "rank": 8,
+      "qb_class": "portal",
+      "program_points": 12.098,
+      "roster_strength": 68.03
+    },
+    "FSU": {
+      "mean_points": 10.417,
+      "sigma_points": 4.264,
+      "rank": 25,
+      "qb_class": "incumbent",
+      "program_points": 7.071,
+      "roster_strength": 67.88
+    },
+    "COLO": {
+      "mean_points": 7.662,
+      "sigma_points": 4.256,
+      "rank": 46,
+      "qb_class": "incumbent",
+      "program_points": 3.935,
+      "roster_strength": 71.06
+    },
+    "BALL": {
+      "mean_points": -3.62,
+      "sigma_points": 7.654,
+      "rank": 147,
+      "qb_class": "open_competition",
+      "program_points": -2.295,
+      "roster_strength": 53.96
+    },
+    "KENT": {
+      "mean_points": -1.35,
+      "sigma_points": 4.284,
+      "rank": 141,
+      "qb_class": "incumbent",
+      "program_points": -2.87,
+      "roster_strength": 52.67
+    },
+    "MASS": {
+      "mean_points": -2.179,
+      "sigma_points": 4.275,
+      "rank": 146,
+      "qb_class": "incumbent",
+      "program_points": -4.137,
+      "roster_strength": 56.32
+    },
+    "RICE": {
+      "mean_points": -1.855,
+      "sigma_points": 8.034,
+      "rank": 144,
+      "qb_class": "true_freshman",
+      "program_points": -0.007,
+      "roster_strength": 52.93
+    }
+  }
+}
