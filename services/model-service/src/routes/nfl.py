@@ -49,6 +49,10 @@ from src.services.nfl_model_handicap import (
     fair_lines_model_handicap_fields,
     resolve_model_and_handicap,
 )
+from src.services.nfl_kei_week1_reprice import (
+    apply_week1_kei_reprice,
+    load_week1_pack,
+)
 from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as nfl_publish_moneyline_tag
 from src.services.nfl_side_total_publish_policy import (
     is_market_side_disagreement,
@@ -3438,6 +3442,11 @@ def nfl_fair_lines(
 
     lines: List[Dict[str, Any]] = []
     market_joined_count = 0
+    try:
+        week1_pack = load_week1_pack(int(season))
+    except Exception:
+        week1_pack = None
+    kei_reprice_applied_games = 0
     for row in rows:
         mapped = dict(row._mapping)
         home_abbr = _nfl_team_to_abbr(mapped.get("home_abbr") or mapped.get("home_team")) or str(
@@ -3476,6 +3485,35 @@ def nfl_fair_lines(
             fair_home_ml=mapped.get("fair_home_ml"),
             fair_away_ml=mapped.get("fair_away_ml"),
         )
+        # Gate B: KEI = Model + Week 1 desk factors. Model stays frozen.
+        try:
+            handicap_markets, kei_reprice_log = apply_week1_kei_reprice(
+                handicap=handicap_markets,
+                home_abbr=home_abbr,
+                away_abbr=away_abbr,
+                week=mapped.get("week"),
+                season=int(mapped.get("season") or season),
+                season_type=str(mapped.get("season_type") or "REG"),
+                projection=mapped.get("projection"),
+                start_time=mapped.get("start_time"),
+                pack=week1_pack,
+            )
+        except Exception:
+            log.exception("NFL Week 1 KEI reprice failed; using identity handicap")
+            kei_reprice_log = {
+                "skipped": True,
+                "applied": False,
+                "reason": "reprice_error",
+                "qb_clear": True,
+                "injury_clear": True,
+                "weather_clear": True,
+                "spread_delta": 0.0,
+                "total_delta": 0.0,
+                "applied_factors": [],
+                "considered_not_applied": [],
+            }
+        if kei_reprice_log.get("applied"):
+            kei_reprice_applied_games += 1
         # Edges / publish tags always use handicap (KEI), never Model.
         spread_home = _to_float(handicap_markets.get("spread_home", spread_home))
         total_mean = _to_float(handicap_markets.get("total_mean", total_mean))
@@ -3571,9 +3609,9 @@ def nfl_fair_lines(
             else None
         )
         _decision_conf = nfl_assess_confidence(
-            injury_clear=True,
-            weather_clear=True,
-            qb_clear=True,
+            injury_clear=bool(kei_reprice_log.get("injury_clear", True)),
+            weather_clear=bool(kei_reprice_log.get("weather_clear", True)),
+            qb_clear=bool(kei_reprice_log.get("qb_clear", True)),
             conflicting_inputs=bool(
                 is_market_side_disagreement(
                     model_spread_home=model_spread if model_spread is not None else spread_home,
@@ -3644,6 +3682,7 @@ def nfl_fair_lines(
                 "model_fair_home_ml": _to_int(mh.get("model_fair_home_ml")),
                 "model_fair_away_ml": _to_int(mh.get("model_fair_away_ml")),
                 "model_equals_kei": bool(mh.get("model_equals_kei")),
+                "kei_reprice": kei_reprice_log,
                 "model_version": str(mapped.get("model_version") or effective_model_version),
                 "simulation_count": _to_int(mapped.get("simulation_count")),
                 "projection_created_at": mapped.get("projection_created_at"),
@@ -3760,6 +3799,10 @@ def nfl_fair_lines(
             "odds_persisted": odds_persist,
             "current_week": current_week,
             "odds_as_of": odds_as_of if market_events else None,
+            "kei_week1_reprice": {
+                "applied_games": kei_reprice_applied_games,
+                "doctrine": "KEI = model + Week 1 desk factors; Edge/Tag = KEI vs market",
+            },
         },
     }
 

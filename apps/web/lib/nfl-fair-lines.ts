@@ -24,6 +24,30 @@ export type NflFairLineDecision = {
   actionLabelTotal: ActionLabel | null;
 };
 
+export type NflKeiRepriceFactor = {
+  factor: string;
+  applied: boolean;
+  team: string | null;
+  direction: string;
+  spreadPts: number;
+  totalPts: number;
+  confidenceDelta: number;
+  reason: string;
+};
+
+export type NflKeiRepriceLog = {
+  applied: boolean;
+  skipped: boolean;
+  reason: string;
+  spreadDelta: number;
+  totalDelta: number;
+  qbClear: boolean | null;
+  injuryClear: boolean | null;
+  capped: boolean;
+  appliedFactors: NflKeiRepriceFactor[];
+  consideredNotApplied: NflKeiRepriceFactor[];
+};
+
 export type NflFairLineRow = {
   gameId: string;
   season: number;
@@ -61,8 +85,10 @@ export type NflFairLineRow = {
   modelAwayWinProb: number | null;
   modelHomeMl: number | null;
   modelAwayMl: number | null;
-  /** True when Model spread/total match KEI (no blend divergence). */
+  /** True when Model spread/total match KEI (no blend or Week 1 desk-factor divergence). */
   modelEqualsKei: boolean | null;
+  /** Gate B adjustment log (Week 1 REG). Null/absent when reprice skipped. */
+  keiReprice: NflKeiRepriceLog | null;
   modelVersion: string;
   simulationCount: number | null;
   projectionCreatedAt: string | null;
@@ -203,6 +229,62 @@ function normalizeConfidence(raw: unknown): NflDecisionConfidence | null {
       ? flags.map((f) => String(f))
       : [],
   };
+}
+
+function normalizeKeiRepriceFactor(raw: unknown): NflKeiRepriceFactor | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const factor = typeof o.factor === "string" ? o.factor : "";
+  if (!factor) return null;
+  return {
+    factor,
+    applied: Boolean(o.applied),
+    team: typeof o.team === "string" ? o.team : null,
+    direction: typeof o.direction === "string" ? o.direction : "none",
+    spreadPts: toNumber(o.spread_pts ?? o.spreadPts, 0),
+    totalPts: toNumber(o.total_pts ?? o.totalPts, 0),
+    confidenceDelta: toNumber(o.confidence_delta ?? o.confidenceDelta, 0),
+    reason: typeof o.reason === "string" ? o.reason : "",
+  };
+}
+
+function normalizeKeiReprice(raw: unknown): NflKeiRepriceLog | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const appliedFactors = Array.isArray(o.applied_factors ?? o.appliedFactors)
+    ? ((o.applied_factors ?? o.appliedFactors) as unknown[])
+        .map(normalizeKeiRepriceFactor)
+        .filter((x): x is NflKeiRepriceFactor => x != null)
+    : [];
+  const considered = Array.isArray(
+    o.considered_not_applied ?? o.consideredNotApplied,
+  )
+    ? ((o.considered_not_applied ?? o.consideredNotApplied) as unknown[])
+        .map(normalizeKeiRepriceFactor)
+        .filter((x): x is NflKeiRepriceFactor => x != null)
+    : [];
+  return {
+    applied: Boolean(o.applied),
+    skipped: Boolean(o.skipped),
+    reason: typeof o.reason === "string" ? o.reason : "",
+    spreadDelta: toNumber(o.spread_delta ?? o.spreadDelta, 0),
+    totalDelta: toNumber(o.total_delta ?? o.totalDelta, 0),
+    qbClear: typeof o.qb_clear === "boolean" ? o.qb_clear : null,
+    injuryClear: typeof o.injury_clear === "boolean" ? o.injury_clear : null,
+    capped: Boolean(o.capped),
+    appliedFactors,
+    consideredNotApplied: considered,
+  };
+}
+
+export function keiRepriceDriverLine(log: NflKeiRepriceLog | null): string | null {
+  if (!log || log.skipped) return null;
+  const names = log.appliedFactors
+    .filter((f) => f.factor !== "injury_net")
+    .map((f) => f.reason || f.factor)
+    .filter(Boolean);
+  if (names.length === 0) return null;
+  return names.slice(0, 4).join(" · ");
 }
 
 function normalizeDecisionResult(
@@ -369,6 +451,7 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     ),
     modelEqualsKei:
       typeof raw.model_equals_kei === "boolean" ? raw.model_equals_kei : null,
+    keiReprice: normalizeKeiReprice(raw.kei_reprice),
     modelVersion: String(raw.model_version ?? ""),
     simulationCount: toNumberOrNull(raw.simulation_count),
     projectionCreatedAt: toIsoOrNull(raw.projection_created_at),
