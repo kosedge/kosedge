@@ -55,7 +55,8 @@ def test_status_exposes_roster_depth_portal_sources() -> None:
     assert payload["roster_source"] == ROSTER_SOURCE_PACKAGED_ESPN
     assert payload["depth_source"]
     assert payload["portal_source"]
-    assert payload["as_of"] or payload["roster_as_of"]
+    as_of = str(payload["as_of"] or payload["roster_as_of"] or "")
+    assert as_of >= "2026-08-12"
     assert payload["data_sources"]["roster_source"] == ROSTER_SOURCE_PACKAGED_ESPN
     # Must not claim portal feeds are simply "not_wired" when snapshot is present.
     assert "not_wired" not in str(payload["data_sources"].get("roster_source", ""))
@@ -96,10 +97,22 @@ def test_known_teams_differ_from_legacy_placeholder_qb_names() -> None:
         assert ball.roster.source == ROSTER_SOURCE_PACKAGED_ESPN
         assert ball.qb and ball.qb.starter_name
 
+    # Engine code UF must be Florida Gators, not ESPN's Findlay (UF) collision.
+    uf = teams["UF"]
+    assert "Gators" in str(uf.get("espn_team_name") or "")
+    assert "Findlay" not in str(uf.get("espn_team_name") or "")
+    assert (uf.get("qb") or {}).get("starter_name")
+
+    colo = teams["COLO"]["qb"]
+    assert colo["starter_name"]
+    assert "Salter" not in colo["starter_name"]
+
 
 def test_snapshot_file_coverage_counts() -> None:
     blob = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     cov = blob.get("coverage") or {}
+    assert str(blob.get("as_of") or "") >= "2026-08-12"
     assert int(cov.get("teams_with_roster") or 0) >= 100
+    assert int(cov.get("teams_with_named_qb") or 0) >= 100
     assert int(cov.get("total_depth_rows") or 0) >= 500
     assert blob.get("roster_source") == ROSTER_SOURCE_PACKAGED_ESPN
