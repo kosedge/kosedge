@@ -172,3 +172,37 @@ def test_walker_sea_rb1_takes_feature_share_not_committee_magnet() -> None:
     assert walker["rush_yards_total"] > charb["rush_yards_total"] + 200
     assert abs(sum(r["rush_yards_total"] for r in out if r["team"] == "SEA") - sea_rush) < 2.0
     assert by["Emmett Johnson"]["team"] == "KC"
+
+
+def test_evans_egbuka_follow_pack_not_inverted_csv() -> None:
+    from data_platform_nfl.role_aware_production import align_skill_identities_to_depth_sot
+
+    rows = [
+        _qb("TB", "Baker Mayfield", 3800, 80),
+        _wr("TB", 1, "Mike Evans", 1336),
+        _wr("TB", 2, "Chris Godwin", 800),
+        _qb("SF", "Brock Purdy", 4200, 200),
+        _wr("SF", 1, "Emeka Egbuka", 1409),
+        _wr("SF", 2, "Brandon Aiyuk", 900),
+    ]
+    pack = [
+        {"team": "SF", "position": "WR", "depth_order": 1, "player_name": "Mike Evans"},
+        {"team": "TB", "position": "WR", "depth_order": 1, "player_name": "Emeka Egbuka"},
+        {"team": "TB", "position": "WR", "depth_order": 2, "player_name": "Chris Godwin"},
+        {"team": "SF", "position": "WR", "depth_order": 2, "player_name": "Brandon Aiyuk"},
+    ]
+    tb_rec = sum(r["receiving_yards_total"] for r in rows if r["team"] == "TB")
+    sf_rec = sum(r["receiving_yards_total"] for r in rows if r["team"] == "SF")
+    aligned, moves = align_skill_identities_to_depth_sot(rows, pack)
+    assert any("Mike Evans" in m and "SF" in m for m in moves["moves"])
+    assert any("Emeka Egbuka" in m and "TB" in m for m in moves["moves"])
+    evans = next(r for r in aligned if r["player_name"] == "Mike Evans")
+    egbuka = next(r for r in aligned if r["player_name"] == "Emeka Egbuka")
+    assert evans["team"] == "SF"
+    assert egbuka["team"] == "TB"
+    out, _ = apply_role_aware_player_shape(aligned, teams=("TB", "SF"))
+    by = {r["player_name"]: r for r in out}
+    assert by["Mike Evans"]["team"] == "SF"
+    assert by["Emeka Egbuka"]["team"] == "TB"
+    assert abs(sum(r["receiving_yards_total"] for r in out if r["team"] == "TB") - tb_rec) < 2.0
+    assert abs(sum(r["receiving_yards_total"] for r in out if r["team"] == "SF") - sf_rec) < 2.0

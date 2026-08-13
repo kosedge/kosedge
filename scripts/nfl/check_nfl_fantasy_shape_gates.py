@@ -31,6 +31,29 @@ DEPTH_PATH = (
     / "nfl_depth_chart_2026_w1.json"
 )
 
+MUST_RECONCILE_TEAMS = {
+    "ajbrown": "NE",
+    "mikeevans": "SF",
+    "emekaegbuka": "TB",
+    "djmoore": "BUF",
+    "travisetienne": "NO",
+    "davidmontgomery": "HOU",
+    "jaylenwaddle": "DEN",
+    "michaelpittman": "PIT",
+    "isiahpacheco": "DET",
+    "kennethwalkeriii": "SEA",
+    "zachcharbonnet": "SEA",
+}
+
+
+def _canon_team(team: str) -> str:
+    token = (team or "").strip().upper()
+    if token in {"LA", "LAR"}:
+        return "LAR"
+    if token in {"JAC", "JAX"}:
+        return "JAX"
+    return token
+
 
 def _norm(name: str) -> str:
     return re.sub(r"[^a-z0-9]", "", (name or "").lower())
@@ -183,6 +206,15 @@ def main() -> int:
         "chase": pack(find_player(ranked, "JaMarr Chase", "Ja'Marr Chase")),
         "baker": pack(find_player(ranked, "Baker Mayfield")),
         "jones": pack(find_player(ranked, "Daniel Jones")),
+        "evans": pack(find_player(ranked, "Mike Evans")),
+        "egbuka": pack(find_player(ranked, "Emeka Egbuka")),
+        "ajbrown": pack(find_player(ranked, "A.J. Brown", "AJ Brown")),
+        "djmoore": pack(find_player(ranked, "DJ Moore")),
+        "etienne": pack(find_player(ranked, "Travis Etienne")),
+        "montgomery": pack(find_player(ranked, "David Montgomery")),
+        "waddle": pack(find_player(ranked, "Jaylen Waddle")),
+        "pittman": pack(find_player(ranked, "Michael Pittman")),
+        "pacheco": pack(find_player(ranked, "Isiah Pacheco")),
     }
 
     rbs = [r for r in ranked if str(r.get("position") or "").upper() == "RB"]
@@ -277,6 +309,68 @@ def main() -> int:
 
     if top5_pts and top5_spread < 50.0:
         failures.append(f"Top-5 RB medians within {top5_spread:.1f} pts (<50)")
+
+    pack_by_name: Dict[str, str] = {}
+    for (team, pos), slots in sot.items():
+        for _depth, pname, _slot in slots:
+            pack_by_name[_norm(pname)] = _canon_team(team)
+
+    named_want = {
+        "ajbrown": "NE",
+        "evans": "SF",
+        "egbuka": "TB",
+        "djmoore": "BUF",
+        "etienne": "NO",
+        "montgomery": "HOU",
+        "waddle": "DEN",
+        "pittman": "PIT",
+        "pacheco": "DET",
+        "walker": "SEA",
+        "charbonnet": "SEA",
+    }
+    for key, want in named_want.items():
+        row = named.get(key) or {}
+        if not row:
+            failures.append(f"{key} missing from CSV/fantasy")
+            continue
+        got = _canon_team(str(row.get("team") or ""))
+        if got != want:
+            failures.append(
+                f"{row.get('player')} fantasy/CSV {got} ≠ pack {want}"
+            )
+
+    identity_mismatches = []
+    for row in ranked:
+        name = _norm(str(row.get("player_name") or ""))
+        pack_team = pack_by_name.get(name)
+        if not pack_team:
+            continue
+        csv_team = _canon_team(str(row.get("team") or ""))
+        if csv_team != pack_team:
+            identity_mismatches.append(
+                f"{row.get('player_name')} CSV {csv_team} ≠ pack {pack_team}"
+            )
+    if identity_mismatches:
+        failures.extend(identity_mismatches[:20])
+
+    top100_adp_mismatch = []
+    for needle, adp_rank in adp.items():
+        if "|" in needle:
+            continue
+        if adp_rank is None or float(adp_rank) > 100:
+            continue
+        pack_team = pack_by_name.get(needle)
+        csv_row = find_player(ranked, needle)
+        if not pack_team or not csv_row:
+            continue
+        csv_team = _canon_team(str(csv_row.get("team") or ""))
+        if csv_team != pack_team:
+            top100_adp_mismatch.append(
+                f"ADP {int(adp_rank)} {csv_row.get('player_name')} "
+                f"fantasy {csv_team} ≠ pack {pack_team}"
+            )
+    if top100_adp_mismatch:
+        failures.extend(top100_adp_mismatch)
 
     report = {
         "bundle": args.bundle.name,

@@ -1,0 +1,34 @@
+{
+  "identity": {
+    "applied": true,
+    "method": "align_skill_identities_to_depth_sot",
+    "moves": [
+      "Emeka Egbuka:SF-d1\u2192TB-d1",
+      "Mike Evans:TB-d1\u2192SF-d1"
+    ],
+    "n_moves": 2,
+    "rush_pool": 64000.0
+  },
+  "playoff_identity": {
+    "applied": true,
+    "method": "align_skill_identities_to_depth_sot",
+    "moves": [],
+    "n_moves": 0,
+    "rush_pool": 0
+  },
+  "touched_teams": [
+    "SF",
+    "TB"
+  ],
+  "shape": {
+    "applied": true,
+    "method": "role_aware_player_shape_v1",
+    "adjustments": [
+      "Bucky Irving:TB:rush 1137\u21921335",
+      "Kenny Gainwell:TB:rush 890\u2192940",
+      "Sean Tucker:TB:rush 445\u2192198"
+    ],
+    "n_notes": 3,
+    "rush_pool": 64000.0
+  }
+}

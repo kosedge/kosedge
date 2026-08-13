@@ -437,6 +437,7 @@ def align_skill_identities_to_depth_sot(
     *,
     positions: Sequence[str] = ("RB", "WR", "TE"),
     only_names: Optional[Sequence[str]] = None,
+    restore_budgets: bool = True,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """Move skill identities onto the depth-pack team/slot; keep franchise budgets.
 
@@ -523,19 +524,22 @@ def align_skill_identities_to_depth_sot(
             team, pos, depth, str(row.get("player_name") or "")
         )
 
-    by_team: Dict[str, List[Dict[str, Any]]] = {}
-    for row in work:
-        by_team.setdefault(str(row.get("team") or ""), []).append(row)
-    all_teams = set(by_team) | set(snap_rush)
-    for team in all_teams:
-        team_rows = by_team.get(team) or []
-        if not team_rows:
-            continue
-        _scale_team_field(team_rows, "rush_yards_total", float(snap_rush.get(team, 0.0)))
-        _scale_team_field(team_rows, "rush_tds_total", float(snap_rush_td.get(team, 0.0)))
-        _scale_team_field(team_rows, "receiving_yards_total", float(snap_rec.get(team, 0.0)))
-        _scale_team_field(team_rows, "rec_tds_total", float(snap_rec_td.get(team, 0.0)))
-        _scale_team_field(team_rows, "receptions_total", float(snap_recp.get(team, 0.0)))
+    if restore_budgets:
+        by_team: Dict[str, List[Dict[str, Any]]] = {}
+        for row in work:
+            by_team.setdefault(str(row.get("team") or ""), []).append(row)
+        all_teams = set(by_team) | set(snap_rush)
+        for team in all_teams:
+            team_rows = by_team.get(team) or []
+            if not team_rows:
+                continue
+            _scale_team_field(team_rows, "rush_yards_total", float(snap_rush.get(team, 0.0)))
+            _scale_team_field(team_rows, "rush_tds_total", float(snap_rush_td.get(team, 0.0)))
+            _scale_team_field(
+                team_rows, "receiving_yards_total", float(snap_rec.get(team, 0.0))
+            )
+            _scale_team_field(team_rows, "rec_tds_total", float(snap_rec_td.get(team, 0.0)))
+            _scale_team_field(team_rows, "receptions_total", float(snap_recp.get(team, 0.0)))
 
     return work, {
         "applied": True,
