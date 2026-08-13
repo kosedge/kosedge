@@ -1,0 +1,36 @@
+{
+  "as_of": "2026-08-13",
+  "adopted": true,
+  "adopt_reason": "holdout_mae_improved_2.703",
+  "scale": 2.75,
+  "hfa": 3.8,
+  "fitted_scale": 2.75,
+  "fitted_hfa": 3.8,
+  "baseline_scale": 1.0,
+  "baseline_hfa": 1.7,
+  "train_years": [
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "holdout_years": [
+    2024,
+    2025
+  ],
+  "fit_weeks": "0-4",
+  "fair": "fair_spread_home = -HFA - scale * (prior_home - prior_away)",
+  "epa_in_fair": false,
+  "used_in_spread": false,
+  "mae_adopt_margin": 0.5,
+  "fit": {
+    "scale": 2.75,
+    "hfa": 3.8,
+    "train_mae": 6.9911,
+    "method": "grid_mae",
+    "n_train": 774,
+    "baseline_train_mae": 9.6199
+  },
+  "holdout_w0_4_mae_baseline": 9.604,
+  "holdout_w0_4_mae_calibrated": 6.901
+}
