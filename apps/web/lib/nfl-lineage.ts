@@ -15,6 +15,8 @@ export type NflLineage = {
   engine_version: string | null;
   generated_at: string | null;
   kind: NflProjectionKind;
+  lockTag?: string | null;
+  nTeamSims?: number | null;
 };
 
 export type NflWebLaunchPointerLike = {
@@ -24,6 +26,9 @@ export type NflWebLaunchPointerLike = {
   generated_at_utc?: string;
   locked_at_utc?: string;
   kind?: NflProjectionKind;
+  lock_tag?: string;
+  n_team_sims?: number;
+  identity?: string;
 };
 
 /** Production NFL projection set pointer → lineage for Model surfaces. */
@@ -39,6 +44,9 @@ export function lineageFromActiveRun(
     engine_version: pointer.engine_version ?? null,
     generated_at: pointer.generated_at_utc ?? pointer.locked_at_utc ?? null,
     kind: pointer.kind ?? kind,
+    lockTag: pointer.lock_tag ?? null,
+    nTeamSims:
+      typeof pointer.n_team_sims === "number" ? pointer.n_team_sims : null,
   };
 }
 

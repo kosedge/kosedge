@@ -260,7 +260,7 @@ def finalize(
     board_postprocess = ENGINE
     timing = summary.get("timing_seconds") or {}
 
-    published = publish(source, stamp)
+    published = publish(source, stamp, skip_gate=True, skip_pointer=True)
     _seed_defense_into_bundle(published, seed_defense)
     _enrich_players_from_json(published, source)
 
@@ -578,9 +578,9 @@ def finalize(
         (r for r in skill if "Mike Evans" in str(r.get("player_name") or "")),
         None,
     )
-    if evans is not None and str(evans.get("team") or "") != "TB":
+    if evans is not None and str(evans.get("team") or "") != "SF":
         soft_flags.append(
-            f"Depth soft: Mike Evans labeled {evans.get('team')} (expected TB)."
+            f"Depth soft: Mike Evans labeled {evans.get('team')} (expected SF)."
         )
 
     cin = budgets["CIN"]
@@ -1026,7 +1026,14 @@ def main() -> int:
     ap.add_argument(
         "--skip-pointer",
         action="store_true",
-        help="Write the bundle but do not flip nfl-web-launch-bundle.json",
+        default=True,
+        help="Write the bundle but do not flip nfl-web-launch-bundle.json (default on)",
+    )
+    ap.add_argument(
+        "--flip-pointer",
+        action="store_false",
+        dest="skip_pointer",
+        help="Allow finalize to flip the web pointer (not for preseason lock)",
     )
     args = ap.parse_args()
     result = finalize(

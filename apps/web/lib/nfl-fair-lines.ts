@@ -2,12 +2,15 @@ import "server-only";
 import { env } from "@/lib/config/env";
 import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 import type {
   ActionLabel,
   ConfidenceAssessment,
   DecisionResult,
   WeekRegime,
 } from "@/lib/nfl-decision-engine";
+
+export { keiRepriceDriverLine };
 
 export type NflDecisionConfidence = ConfidenceAssessment;
 
@@ -277,15 +280,7 @@ function normalizeKeiReprice(raw: unknown): NflKeiRepriceLog | null {
   };
 }
 
-export function keiRepriceDriverLine(log: NflKeiRepriceLog | null): string | null {
-  if (!log || log.skipped) return null;
-  const names = log.appliedFactors
-    .filter((f) => f.factor !== "injury_net")
-    .map((f) => f.reason || f.factor)
-    .filter(Boolean);
-  if (names.length === 0) return null;
-  return names.slice(0, 4).join(" · ");
-}
+import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 
 function normalizeDecisionResult(
   raw: unknown,

@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT / "services" / "data-platform-nfl" / "src"))
 
 from data_platform_nfl.role_aware_production import (  # noqa: E402
     align_skill_identities_to_depth_sot,
+    apply_feature_rush_floors,
     apply_role_aware_player_shape,
 )
 
@@ -97,6 +98,18 @@ def main() -> int:
         dest="align_depth_sot",
         help="Skip identity alignment (shape only).",
     )
+    ap.add_argument(
+        "--feature-rush-floors",
+        action="store_true",
+        default=True,
+        help="Lift starved feature-RB1 team rush pools from fat donors (default on).",
+    )
+    ap.add_argument(
+        "--no-feature-rush-floors",
+        action="store_false",
+        dest="feature_rush_floors",
+        help="Skip Walker-class team rush floors.",
+    )
     args = ap.parse_args()
     source = args.source_bundle.resolve()
     if not (source / "player_regular_season_totals.csv").is_file():
@@ -117,7 +130,13 @@ def main() -> int:
         players, identity_audit = align_skill_identities_to_depth_sot(
             players, pack_rows
         )
-    touched = sorted(_teams_from_moves(list(identity_audit.get("moves") or [])))
+    floor_audit: dict = {"applied": False}
+    if args.feature_rush_floors:
+        players, floor_audit = apply_feature_rush_floors(players)
+    touched = sorted(
+        set(_teams_from_moves(list(identity_audit.get("moves") or [])))
+        | set(floor_audit.get("touched_teams") or [])
+    )
     skip_wr_alpha = _moves_are_rb_only(list(identity_audit.get("moves") or []), players)
     if touched:
         shaped, audit = apply_role_aware_player_shape(
@@ -152,6 +171,7 @@ def main() -> int:
         json.dumps(
             {
                 "identity": identity_audit,
+                "feature_rush_floors": floor_audit,
                 "playoff_identity": playoff_audit,
                 "touched_teams": touched,
                 "skip_wr_alpha": skip_wr_alpha if touched else False,
@@ -170,6 +190,11 @@ def main() -> int:
                 "stamp": stamp,
                 "n_identity_moves": identity_audit.get("n_moves"),
                 "identity_moves": identity_audit.get("moves"),
+                "feature_rush_floors": {
+                    "applied": floor_audit.get("applied"),
+                    "transfers": floor_audit.get("transfers"),
+                    "touched_teams": floor_audit.get("touched_teams"),
+                },
                 "touched_teams": touched,
                 "skip_wr_alpha": skip_wr_alpha if touched else False,
                 "n_notes": audit.get("n_notes"),

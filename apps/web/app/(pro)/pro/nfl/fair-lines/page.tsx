@@ -339,8 +339,10 @@ export default async function NflFairLinesPage({
           Model is the pre-market-blend Monte Carlo fair when blend applied;
           otherwise Model equals KEI until Week 1 desk factors fire. Fair ML /
           win probs are post-blend only (no separate Model ML yet). Edges and
-          PLAY/LEAN tags use KEI vs market only. Weather and refs are stubbed
-          this pass (logged, not invented).
+          PLAY/LEAN tags use KEI vs market only. Weather, rest/short week, and
+          refs show on the driver line when applied — otherwise honest
+          not-applied (never climatology or fake numbers). REG Week 1 lines
+          when books have them; no preseason market theater.
         </p>
       </section>
     </main>

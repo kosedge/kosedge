@@ -1,28 +1,62 @@
 {
-  "active_run_id": "nfl-preseason-sim-2026-20260813T172000Z",
-  "bundle_id": "nfl-preseason-sim-2026-20260813T172000Z",
+  "active_run_id": "nfl-preseason-sim-2026-20260813T214500Z",
+  "bundle_id": "nfl-preseason-sim-2026-20260813T214500Z",
   "kind": "Model",
   "engine_version": "nfl-season-engine-v1.27-kicker-layer",
-  "board_postprocess": "role-aware-player-shape-v1-walker-kc-hotfix",
   "n_team_sims": 100000,
   "n_player_sims": 1000,
-  "generated_at_utc": "2026-08-13T17:20:00+00:00",
-  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260813T121720Z",
-  "parent_bundle_id": "nfl-preseason-sim-2026-20260813T164500Z",
+  "generated_at_utc": "2026-08-13T20:54:50.234117+00:00",
+  "source_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260813T193726Z",
   "preseason": true,
-  "identity": "nfl-season-engine-v1.27-kicker-layer · N_team=100000 · 20260813T172000Z",
-  "note": "HOTFIX: pack was wrong. Walker=KC RB1 (2026 FA; ADP agreed). Charbonnet=SEA RB1. Evans SF / Egbuka TB hold. Weekly props remain gated. NOT LOCKED.",
-  "locked_snapshot": false,
-  "safe_to_quote_atl_mia_team_wl": true,
-  "player_paths_complete": true,
-  "sot_qb_checksum_ok": true,
-  "fantasy_shape_gates_ok": true,
-  "props_path_coherent": "gated",
+  "identity": "nfl-season-engine-2026-preseason-lock \u00b7 N_team=100000 \u00b7 2026-08-13",
   "team_id_scheme": "product_canonical_LAR",
+  "locked_snapshot": true,
+  "lock_tag": "nfl-season-engine-2026-preseason-lock",
   "lineage": {
-    "run_id": "nfl-preseason-sim-2026-20260813T172000Z",
+    "run_id": "nfl-preseason-sim-2026-20260813T214500Z",
     "engine_version": "nfl-season-engine-v1.27-kicker-layer",
-    "generated_at": "2026-08-13T17:20:00+00:00",
-    "kind": "Model"
+    "generated_at": "2026-08-13T20:54:50.234117+00:00",
+    "kind": "Model",
+    "lockTag": "nfl-season-engine-2026-preseason-lock",
+    "nTeamSims": 100000
+  },
+  "sot_qb_checksum": {
+    "ok": true,
+    "failed": [],
+    "rows": [
+      {
+        "team": "ATL",
+        "needle": "Tua",
+        "must_match": true,
+        "depth_qb1": "Tua Tagovailoa",
+        "volume_qb1": "Tua Tagovailoa",
+        "ok": true
+      },
+      {
+        "team": "MIA",
+        "needle": "Willis",
+        "must_match": true,
+        "depth_qb1": "Malik Willis",
+        "volume_qb1": "Malik Willis",
+        "ok": true
+      },
+      {
+        "team": "MIN",
+        "needle": "Kyler",
+        "must_match": true,
+        "depth_qb1": "Kyler Murray",
+        "volume_qb1": "Kyler Murray",
+        "ok": true
+      },
+      {
+        "team": "ARI",
+        "needle": "Kyler",
+        "must_match": false,
+        "depth_qb1": "Jacoby Brissett",
+        "volume_qb1": "Jacoby Brissett",
+        "ok": true
+      }
+    ],
+    "bundle": "/Users/ryankos/kosedge/data/ops/nfl-preseason-sim-2026-20260813T214500Z"
   }
 }

@@ -225,14 +225,23 @@ def check_bundle(
     if summary_path.exists():
         summary = json.loads(summary_path.read_text(encoding="utf-8"))
         summary_run = summary.get("web_bundle_id") or summary.get("active_run_id")
-    i8_ok = bool(active) and active == bundle_name
-    if summary_run and summary_run != active:
-        i8_ok = False
-    suite.add(
-        "I8",
-        i8_ok,
-        f"active_run_id={active!r} bundle={bundle_name!r} summary_run={summary_run!r}",
-    )
+    # I8 — bundle self-id. Pointer alignment is required only after the
+    # pointer already names this bundle. Pre-flip publish of a candidate
+    # must not fail I8 or the pointer can never move.
+    bundle_self = summary_run in (None, "", bundle_name)
+    if active == bundle_name:
+        i8_ok = bundle_self
+        i8_detail = (
+            f"active_run_id={active!r} bundle={bundle_name!r} "
+            f"summary_run={summary_run!r}"
+        )
+    else:
+        i8_ok = bundle_self
+        i8_detail = (
+            f"candidate bundle={bundle_name!r} summary_run={summary_run!r} "
+            f"(pointer still {active!r}; pre-flip)"
+        )
+    suite.add("I8", i8_ok, i8_detail)
 
     # Kickoff smoke (schedule pack): NE–SEA + 4 others appear once each as unique games
     try:
