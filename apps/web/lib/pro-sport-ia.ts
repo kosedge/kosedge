@@ -58,7 +58,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Week 1 REG Edge Board + KEI lines are live (forward weeks on the Odds slate when books post). PRE stays info-only — no exhibition edges. Guest path: Fantasy Mock → Survivor → Game Boxes → Camp → Power Ratings.",
+      "Week 1 REG live · PRE off board · KEI = model + desk factors. Guest path: Edge Board → Survivor → Fantasy → Season Model.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
@@ -284,7 +284,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/fantasy",
           label: "Fantasy Draft Desk",
-          hint: "Model ranks vs ADP → Builder → Mock. Start Mock for the guest walkthrough.",
+          hint: "Model ranks vs ADP → Builder → Mock.",
           premium: true,
           status: "active",
         },

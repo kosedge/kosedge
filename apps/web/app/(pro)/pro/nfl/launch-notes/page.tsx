@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "NFL Desk — Soft Launch Notes",
+  title: "How to read the NFL desk",
   description:
-    "How to read the NFL desk for soft launch: Model, KEI, tags, play-to, and Edge Board — research only, not a tip service.",
+    "Week 1 REG live · PRE off board · KEI = model + desk factors. Model, KEI, tags, play-to, and Edge Board — research only, not a tip service.",
 };
 
 const TERM_ROWS = [
@@ -41,12 +41,12 @@ export default function NflLaunchNotesPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-        NFL Pro · Soft launch
+        Week 1 REG live · PRE off board · KEI = model + desk factors
       </p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-        NFL Desk — Soft Launch Notes
+        How to read the NFL desk
       </h1>
-      <p className="mt-2 text-sm text-kos-text/65">Date: August 11, 2026</p>
+      <p className="mt-2 text-sm text-kos-text/65">Date: August 13, 2026</p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         <Link

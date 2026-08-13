@@ -16,6 +16,11 @@ from .source_matrix import SOURCE_FALLBACK_MATRIX, source_matrix_payload
 # as "data freshness degraded" when live board probes are healthy.
 OPS_ONLY_CHECK_NAMES = frozenset({"dr_backup"})
 
+# Residual honesty: expected gaps, not board SLO failures.
+# Injury book is the packaged depth SoT until a live injury API is wired.
+# Weather is a KEI stub ("weather not applied") — not a freshness probe.
+RESIDUAL_HONESTY_CHECK_NAMES = frozenset({"injuries"})
+
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
@@ -250,13 +255,25 @@ def evaluate_data_freshness(
             blockers.append("recent_ingest_failures")
 
         board_blockers = [
-            b for b in blockers if _blocker_check_name(b) not in OPS_ONLY_CHECK_NAMES
+            b
+            for b in blockers
+            if _blocker_check_name(b) not in OPS_ONLY_CHECK_NAMES
+            and _blocker_check_name(b) not in RESIDUAL_HONESTY_CHECK_NAMES
         ]
         ops_blockers = [
             b for b in blockers if _blocker_check_name(b) in OPS_ONLY_CHECK_NAMES
         ]
+        residual_blockers = [
+            b
+            for b in blockers
+            if _blocker_check_name(b) in RESIDUAL_HONESTY_CHECK_NAMES
+        ]
         # Keep DR/ops failures visible without claiming board data is stale.
         for b in ops_blockers:
+            if b not in warnings:
+                warnings.append(b)
+        # Residual honesty (no live injury API) — warn, do not degrade boards.
+        for b in residual_blockers:
             if b not in warnings:
                 warnings.append(b)
 
@@ -264,6 +281,7 @@ def evaluate_data_freshness(
             (not c.get("ok")) and bool(c.get("enforced"))
             for name, c in checks.items()
             if name not in OPS_ONLY_CHECK_NAMES
+            and name not in RESIDUAL_HONESTY_CHECK_NAMES
         )
         status = "degraded" if board_blockers or board_check_failed else "ok"
         ops_status = "degraded" if ops_blockers else "ok"
@@ -278,6 +296,7 @@ def evaluate_data_freshness(
             "checks": checks,
             "blockers": board_blockers,
             "ops_blockers": ops_blockers,
+            "residual_honesty": residual_blockers,
             "warnings": warnings,
             "source_matrix": source_matrix_payload(),
             "product_guidance": {

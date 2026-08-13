@@ -51,18 +51,27 @@ describe("shouldShowNflDataFreshnessBanner", () => {
     ).toBe(false);
   });
 
+  it("hides residual honesty (no live injury API) — not board degradation", () => {
+    expect(
+      shouldShowNflDataFreshnessBanner({
+        status: "degraded",
+        blockers: ["injuries:stale_30h>24h"],
+      }),
+    ).toBe(false);
+    expect(
+      shouldShowNflDataFreshnessBanner({
+        status: "failed",
+        blockers: ["injuries:missing_timestamp"],
+      }),
+    ).toBe(false);
+  });
+
   it("shows real owned-data SLO degradation", () => {
     expect(
       shouldShowNflDataFreshnessBanner({
         status: "degraded",
         in_season: true,
         blockers: ["player_props_odds:stale"],
-      }),
-    ).toBe(true);
-    expect(
-      shouldShowNflDataFreshnessBanner({
-        status: "failed",
-        blockers: ["injuries:stale_30h>24h"],
       }),
     ).toBe(true);
   });
@@ -85,7 +94,14 @@ describe("shouldShowNflDataFreshnessBanner", () => {
     expect(
       shouldShowNflDataFreshnessBanner({
         status: "degraded",
-        blockers: ["dr_backup:stale_200h>192h", "injuries:stale_30h>24h"],
+        blockers: ["dr_backup:stale_200h>192h", "player_props_odds:stale"],
+      }),
+    ).toBe(true);
+    // Injury residual + real board SLO still shows.
+    expect(
+      shouldShowNflDataFreshnessBanner({
+        status: "degraded",
+        blockers: ["injuries:stale_30h>24h", "player_props_odds:stale"],
       }),
     ).toBe(true);
   });
@@ -119,7 +135,7 @@ describe("fetchNflDataFreshness", () => {
               detail: {
                 status: "degraded",
                 in_season: true,
-                blockers: ["injuries:stale"],
+                blockers: ["player_props_odds:stale"],
               },
             }),
             { status: 503 },
@@ -128,7 +144,7 @@ describe("fetchNflDataFreshness", () => {
     );
     const result = await fetchNflDataFreshness();
     expect(result.status).toBe("degraded");
-    expect(result.blockers).toEqual(["injuries:stale"]);
+    expect(result.blockers).toEqual(["player_props_odds:stale"]);
     expect(shouldShowNflDataFreshnessBanner(result)).toBe(true);
   });
 });
