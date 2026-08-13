@@ -10,7 +10,7 @@ import {
   buildSportOverviewContent,
 } from "@/lib/pro-sport-ia";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
-import { NFL_DESK_SUBTITLE, NFL_TAGLINE } from "@/lib/nfl-pro-nav";
+import { NFL_DESK_SUBTITLE, NFL_GUEST_PATH, NFL_TAGLINE, NFL_WEEK1_POSTURE } from "@/lib/nfl-pro-nav";
 
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
@@ -37,16 +37,14 @@ export default async function NflOverviewPage() {
               NFL Overview
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              {NFL_TAGLINE} Edge Board and KEI first — fair lines, edges, and
-              team research underneath. Week 1 REG is live; PRE stays off the
-              board.
+              {NFL_TAGLINE}. {NFL_WEEK1_POSTURE}. {NFL_GUEST_PATH}.
             </p>
             <p className="mt-3 text-sm">
               <Link
                 href="/pro/nfl/launch-notes"
                 className="font-semibold text-kos-gold hover:underline"
               >
-                Soft Launch Notes
+                How to read the desk
               </Link>
               <span className="text-kos-text/55">
                 {" "}
@@ -65,7 +63,7 @@ export default async function NflOverviewPage() {
               href="/pro/nfl/launch-notes"
               className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
             >
-              Soft Launch Notes
+              How to read the desk
             </Link>
             <Link
               href="/pro/nfl/fantasy/mock"

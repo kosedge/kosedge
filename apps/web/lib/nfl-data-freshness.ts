@@ -40,8 +40,17 @@ const TRANSPORT_BLOCKERS = new Set([
 /** Ops ownership/DR signals — real, but not "boards are stale" for guests. */
 const OPS_ONLY_BLOCKER_PREFIXES = ["dr_backup:"] as const;
 
+/** Expected gaps (packaged SoT injury book; weather is a KEI stub). Not board SLO failures. */
+const RESIDUAL_HONESTY_BLOCKER_PREFIXES = ["injuries:"] as const;
+
 export function isOpsOnlyFreshnessBlocker(blocker: string): boolean {
   return OPS_ONLY_BLOCKER_PREFIXES.some((prefix) => blocker.startsWith(prefix));
+}
+
+export function isResidualHonestyFreshnessBlocker(blocker: string): boolean {
+  return RESIDUAL_HONESTY_BLOCKER_PREFIXES.some((prefix) =>
+    blocker.startsWith(prefix),
+  );
 }
 
 export function isNflSeasonEngineDeskPath(pathname: string | null | undefined): boolean {
@@ -74,7 +83,10 @@ export function shouldShowNflDataFreshnessBanner(
   if (onlyTransport) return false;
 
   const boardBlockers = blockers.filter(
-    (b) => !TRANSPORT_BLOCKERS.has(b) && !isOpsOnlyFreshnessBlocker(b),
+    (b) =>
+      !TRANSPORT_BLOCKERS.has(b) &&
+      !isOpsOnlyFreshnessBlocker(b) &&
+      !isResidualHonestyFreshnessBlocker(b),
   );
   if (boardBlockers.length === 0) return false;
 

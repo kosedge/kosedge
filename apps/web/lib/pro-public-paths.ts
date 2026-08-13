@@ -1,6 +1,6 @@
 /**
- * Pro routes that stay open without Pro entitlement during soft launch
- * (and after paywall returns). Matched via proxy `x-pathname`.
+ * Pro routes that stay open without Pro entitlement (desk notes + after paywall).
+ * Matched via proxy `x-pathname`.
  */
 const PUBLIC_PRO_PATH_PREFIXES = ["/pro/nfl/launch-notes"] as const;
 

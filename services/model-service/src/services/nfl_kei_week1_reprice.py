@@ -133,6 +133,33 @@ class Week1Pack:
         rows.sort(key=lambda r: int(r.get("depth_order") or 99))
         return rows
 
+    @classmethod
+    def from_payload(cls, payload: Mapping[str, Any]) -> "Week1Pack":
+        """Index a raw depth-pack JSON (same SoT file, no second map)."""
+        skill: Dict[str, List[Dict[str, Any]]] = {}
+        for raw in payload.get("rows") or []:
+            if not isinstance(raw, Mapping):
+                continue
+            team = _norm_team(raw.get("team"))
+            if not team:
+                continue
+            skill.setdefault(team, []).append(dict(raw))
+        ol: Dict[str, List[Dict[str, Any]]] = {}
+        for raw in payload.get("ol_roles") or []:
+            if not isinstance(raw, Mapping):
+                continue
+            team = _norm_team(raw.get("team"))
+            if not team:
+                continue
+            ol.setdefault(team, []).append(dict(raw))
+        return cls(
+            skill_by_team=skill,
+            ol_by_team=ol,
+            snapshot_id=str(payload.get("snapshot_id") or ""),
+            as_of=str(payload.get("as_of") or payload.get("as_of_timestamp") or ""),
+            loaded=bool(skill),
+        )
+
 
 @lru_cache(maxsize=4)
 def load_week1_pack(season: int = SCOPE_SEASON) -> Week1Pack:

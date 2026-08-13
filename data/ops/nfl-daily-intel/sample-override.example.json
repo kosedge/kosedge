@@ -1,0 +1,24 @@
+{
+  "as_of": "2026-08-13",
+  "approved_by": "desk-fixture",
+  "fixture": true,
+  "notes": "Fixture only — McLaurin is not actually out. --write refused unless --allow-fixture.",
+  "overrides": [
+    {
+      "team": "WAS",
+      "player_name": "Terry McLaurin",
+      "position": "WR",
+      "layer": "rows",
+      "field": "injury_status",
+      "before": null,
+      "after": "out",
+      "reason": "Sample desk override for round-trip test (not a real IR).",
+      "as_of": "2026-08-13",
+      "confidence": "high",
+      "destination": "kei_only",
+      "sources": [
+        "https://www.commanders.com/"
+      ]
+    }
+  ]
+}

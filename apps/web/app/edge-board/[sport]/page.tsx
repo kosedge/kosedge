@@ -247,12 +247,12 @@ export default async function EdgeBoardSportPage({
               title="We bet prices, not teams. Tag = KEI vs current best market (not Model alone). Edge pts and Confidence stay separate. PLAY/LEAN require play-to still available. Week 1–2 uses tighter bands."
             >
               {slate === "week1" ? "Week 1" : nflWeekLabel} · Tag = KEI vs
-              market · KEI = model + Week 1 desk factors ·{" "}
+              market · KEI = model + desk factors ·{" "}
               <Link
                 href="/pro/nfl/launch-notes"
                 className="text-kos-gold/80 hover:text-kos-gold hover:underline"
               >
-                Soft Launch Notes
+                How to read the desk
               </Link>
             </p>
           </div>
