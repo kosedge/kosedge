@@ -1,14 +1,15 @@
 # NFL launch research sims — current pointer
 
-- **Web bundle:** `nfl-preseason-sim-2026-20260813T151800Z`
+- **Web bundle:** `nfl-preseason-sim-2026-20260813T161500Z`
 - **Source research:** `data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260813T121720Z`
-- **Parent board:** `nfl-preseason-sim-2026-20260813T132801Z` (role-aware player reshape; team W/L copied)
-- **Engine:** `nfl-season-engine-v1.27-kicker-layer` (board post: role-aware player shape v1)
+- **Parent board:** `nfl-preseason-sim-2026-20260813T151800Z` (#226 role-aware shape)
+- **Engine:** `nfl-season-engine-v1.27-kicker-layer` (board post: SEA/KC identity realloc on role-aware v1)
 - **Team W/L N:** 100000
 - **Player full N:** 1000 (complete)
-- **Generated:** 2026-08-13T15:18:00Z
-- **Identity:** nfl-season-engine-v1.27-kicker-layer · N_team=100000 · 20260813T151800Z
+- **Generated:** 2026-08-13T16:15:00Z
+- **Identity:** nfl-season-engine-v1.27-kicker-layer · N_team=100000 · 20260813T161500Z
 - **SoT checksum:** ATL Tua / MIA Willis / MIN Kyler / ARI ≠ Kyler — **PASS**
 - **Safe to quote ATL/MIA season W/L + PF:** **yes**
-- **Fantasy shape gates:** **PASS** (see `nfl-projection-fantasy-enterprise-fix-20260813.md`)
-- **Note:** Not a locked official baseline — player production reshaped in-team; 100k team W/L unchanged
+- **Fantasy shape gates:** **PASS** (see `nfl-week1-depth-props-perfect-20260813.md`)
+- **Weekly props:** `PROPS_PATH_COHERENT=gated` (honest not-live banner)
+- **Note:** Not a locked official baseline — Walker/Charbonnet SoT + SEA/KC player realloc; 100k team W/L unchanged

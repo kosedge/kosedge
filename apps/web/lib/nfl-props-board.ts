@@ -1,6 +1,10 @@
 import "server-only";
 import { env } from "@/lib/config/env";
 import { isInvestableProp } from "@/lib/nfl-props-eligibility";
+import {
+  NFL_WEEKLY_PROPS_LIVE,
+  NFL_WEEKLY_PROPS_PATH_COHERENT,
+} from "@/lib/nfl-weekly-props-live";
 
 export type NflPropBoardRow = {
   season: number;
@@ -52,6 +56,8 @@ export type NflPropsBoardResponse = {
     boxScoreSourcedCount?: number;
     rawCount?: number;
     eligibilityDropped?: number;
+    notLive?: boolean;
+    pathCoherent?: "yes" | "gated";
   };
   error?: string;
 };
@@ -176,7 +182,17 @@ export async function fetchNflPropsBoard(params: {
     kosedgeOnly: true,
     rawCount: 0,
     eligibilityDropped: 0,
+    notLive: !NFL_WEEKLY_PROPS_LIVE,
+    pathCoherent: NFL_WEEKLY_PROPS_PATH_COHERENT,
   };
+
+  if (!NFL_WEEKLY_PROPS_LIVE) {
+    return {
+      count: 0,
+      rows: [],
+      diagnostics: emptyDiagnostics,
+    };
+  }
 
   if (!base) {
     return {

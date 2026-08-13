@@ -1,0 +1,30 @@
+{
+  "identity": {
+    "applied": true,
+    "method": "align_skill_identities_to_depth_sot",
+    "moves": [
+      "Zach Charbonnet:SEA-d1\u2192SEA-d2",
+      "Kenneth Walker III:KC-d1\u2192SEA-d1",
+      "Jadarian Price:SEA-d2\u2192SEA-d3",
+      "Emmett Johnson:KC-d2\u2192KC-d1",
+      "Emari Demercado:KC-d3\u2192KC-d2"
+    ],
+    "n_moves": 5,
+    "rush_pool": 64000.0
+  },
+  "shape": {
+    "applied": true,
+    "method": "role_aware_player_shape_v1",
+    "adjustments": [
+      "Emmett Johnson:KC:rush 842\u2192733",
+      "Emari Demercado:KC:rush 421\u2192573",
+      "Kenneth Walker III:SEA:rush 491\u21921395",
+      "Zach Charbonnet:SEA:rush 971\u2192981",
+      "Jadarian Price:SEA:rush 760\u2192207",
+      "George Holani:SEA:rush 380\u21920",
+      "Jaxon Smith-Njigba:SEA:wr_alpha 1153\u21921293"
+    ],
+    "n_notes": 7,
+    "rush_pool": 64000.0
+  }
+}

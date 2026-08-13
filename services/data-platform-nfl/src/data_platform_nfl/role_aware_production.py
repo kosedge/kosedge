@@ -139,22 +139,28 @@ def _is_committee(rbs: Sequence[Mapping[str, Any]]) -> bool:
 
 def apply_role_aware_player_shape(
     rows: Sequence[Mapping[str, Any]],
+    *,
+    teams: Optional[Sequence[str]] = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """Reallocate rush/rec/TDs inside each team by depth role + talent.
 
     Does not reshuffle locked team pass yards. Conserves each team's rush
-    total and the league rush pool.
+    total and the league rush pool (when ``teams`` is None). Pass ``teams``
+    to reshape only touched franchises after a SoT identity move.
     """
     work: List[Dict[str, Any]] = [dict(r) for r in rows]
     team_rush_before = _team_rush_map(work)
     league_before = sum(team_rush_before.values())
     notes: List[str] = []
+    only = {str(t).strip().upper() for t in teams} if teams else None
 
     by_team: Dict[str, List[Dict[str, Any]]] = {}
     for row in work:
         by_team.setdefault(str(row.get("team") or ""), []).append(row)
 
     for team, team_rows in by_team.items():
+        if only is not None and str(team).strip().upper() not in only:
+            continue
         team_rush = float(team_rush_before.get(team, 0.0))
         if team_rush <= 1.0:
             continue
@@ -378,7 +384,7 @@ def apply_role_aware_player_shape(
                 r["carry_share"] = round(_f(r, "rush_yards_total") / team_rush, 4)
 
     league_after = sum(_team_rush_map(work).values())
-    if abs(league_after - league_before) > 0.5 and league_after > 1e-9:
+    if only is None and abs(league_after - league_before) > 0.5 and league_after > 1e-9:
         scale = league_before / league_after
         for r in work:
             r["rush_yards_total"] = _f(r, "rush_yards_total") * scale
@@ -388,5 +394,153 @@ def apply_role_aware_player_shape(
         "method": "role_aware_player_shape_v1",
         "adjustments": notes[:60],
         "n_notes": len(notes),
+        "rush_pool": round(sum(_team_rush_map(work).values()), 1),
+    }
+
+
+def _slug_name(name: str) -> str:
+    return "".join(ch for ch in str(name) if ch.isalnum())
+
+
+def _key_team(team: str) -> str:
+    token = str(team or "").strip().upper()
+    if token == "LAR":
+        return "LA"
+    return token
+
+
+def _csv_team_from_pack(pack_team: str, csv_teams: set[str]) -> str:
+    token = str(pack_team or "").strip().upper()
+    if token == "LA" and "LAR" in csv_teams:
+        return "LAR"
+    if token == "LAR":
+        return "LAR"
+    return token
+
+
+def _rebuild_player_key(team: str, pos: str, depth: int, name: str) -> str:
+    return f"{_key_team(team)}-{pos}{int(depth)}-{_slug_name(name)}"
+
+
+def _scale_team_field(rows: Sequence[MutableMapping[str, Any]], field: str, target: float) -> None:
+    cur = sum(_f(r, field) for r in rows)
+    if cur <= 1e-9 or abs(cur - target) < 0.5:
+        return
+    factor = target / cur
+    for row in rows:
+        row[field] = _f(row, field) * factor
+
+
+def align_skill_identities_to_depth_sot(
+    rows: Sequence[Mapping[str, Any]],
+    pack_rows: Sequence[Mapping[str, Any]],
+    *,
+    positions: Sequence[str] = ("RB", "WR", "TE"),
+    only_names: Optional[Sequence[str]] = None,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Move skill identities onto the depth-pack team/slot; keep franchise budgets.
+
+    Yards travel with the *team* they were simulated on, not with the name.
+    After relabeling, each team's rush/rec/TD totals are scaled back to the
+    pre-move snapshot, then the caller should run ``apply_role_aware_player_shape``.
+    """
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    csv_teams = {str(r.get("team") or "").strip().upper() for r in work}
+    pos_set = {p.upper() for p in positions}
+
+    pack_by_name: Dict[Tuple[str, str], Tuple[str, int]] = {}
+    allow = None
+    if only_names:
+        allow = {_norm_player_name(n) for n in only_names if n}
+    for prow in pack_rows:
+        pos = str(prow.get("position") or "").upper()
+        if pos not in pos_set:
+            continue
+        name = _norm_player_name(str(prow.get("player_name") or ""))
+        if not name:
+            continue
+        try:
+            depth = int(prow.get("depth_order") or 99)
+        except (TypeError, ValueError):
+            continue
+        team = _csv_team_from_pack(str(prow.get("team") or ""), csv_teams)
+        pack_by_name[(name, pos)] = (team, depth)
+
+    snap_rush = _team_rush_map(work)
+    snap_rush_td: Dict[str, float] = {}
+    snap_rec: Dict[str, float] = {}
+    snap_rec_td: Dict[str, float] = {}
+    snap_recp: Dict[str, float] = {}
+    for row in work:
+        team = str(row.get("team") or "")
+        snap_rush_td[team] = snap_rush_td.get(team, 0.0) + _f(
+            row, "rush_tds_total", "rush_tds_mean"
+        )
+        snap_rec[team] = snap_rec.get(team, 0.0) + _f(row, "receiving_yards_total")
+        snap_rec_td[team] = snap_rec_td.get(team, 0.0) + _f(
+            row, "rec_tds_total", "rec_tds_mean"
+        )
+        snap_recp[team] = snap_recp.get(team, 0.0) + _f(row, "receptions_total")
+
+    moves: List[str] = []
+    for row in work:
+        pos = str(row.get("position") or "").upper()
+        if pos not in pos_set:
+            continue
+        name = _norm_player_name(str(row.get("player_name") or ""))
+        if allow is not None and name not in allow:
+            continue
+        hit = pack_by_name.get((name, pos))
+        if not hit:
+            continue
+        pack_team, pack_depth = hit
+        csv_team = str(row.get("team") or "").strip().upper()
+        old_depth = depth_from_player_key(str(row.get("player_key") or "")) or 99
+        if csv_team == pack_team.upper() and old_depth == pack_depth:
+            continue
+        old_team = str(row.get("team") or "")
+        row["team"] = pack_team
+        row["player_key"] = _rebuild_player_key(
+            pack_team, pos, pack_depth, str(row.get("player_name") or "")
+        )
+        moves.append(
+            f"{row.get('player_name')}:{old_team}-d{old_depth}→{pack_team}-d{pack_depth}"
+        )
+
+    used: Dict[str, int] = {}
+    for row in work:
+        key = str(row.get("player_key") or "")
+        if not key:
+            continue
+        if key not in used:
+            used[key] = 1
+            continue
+        pos = str(row.get("position") or "RB").upper()
+        team = str(row.get("team") or "")
+        depth = (depth_from_player_key(key) or 3) + used.get(key, 1)
+        used[key] = used.get(key, 1) + 1
+        row["player_key"] = _rebuild_player_key(
+            team, pos, depth, str(row.get("player_name") or "")
+        )
+
+    by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for row in work:
+        by_team.setdefault(str(row.get("team") or ""), []).append(row)
+    all_teams = set(by_team) | set(snap_rush)
+    for team in all_teams:
+        team_rows = by_team.get(team) or []
+        if not team_rows:
+            continue
+        _scale_team_field(team_rows, "rush_yards_total", float(snap_rush.get(team, 0.0)))
+        _scale_team_field(team_rows, "rush_tds_total", float(snap_rush_td.get(team, 0.0)))
+        _scale_team_field(team_rows, "receiving_yards_total", float(snap_rec.get(team, 0.0)))
+        _scale_team_field(team_rows, "rec_tds_total", float(snap_rec_td.get(team, 0.0)))
+        _scale_team_field(team_rows, "receptions_total", float(snap_recp.get(team, 0.0)))
+
+    return work, {
+        "applied": True,
+        "method": "align_skill_identities_to_depth_sot",
+        "moves": moves,
+        "n_moves": len(moves),
         "rush_pool": round(sum(_team_rush_map(work).values()), 1),
     }

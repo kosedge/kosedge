@@ -27,7 +27,8 @@
     "ol_roles tracks OL starter/backup/out for SoT + KEI; engine usage allocation remains skill-only.",
     "injury_paths[] applied by engine when non-empty (week windows required \u2014 no invented IR lengths).",
     "Data integrity gate 20260809: snapshot_id effective-dated; Diggs player_id corrected to GSIS 00-0031588 (was Adams collision).",
-    "Go-mode SoT audit 20260813: Tua\u2192ATL (open_competition vs Penix); Willis\u2192MIA1; CLE QB open_competition (Watson/Sanders); MIN Murray named starter (desk 2026-08-12). Demo fill blocked when pack present."
+    "Go-mode SoT audit 20260813: Tua\u2192ATL (open_competition vs Penix); Willis\u2192MIA1; CLE QB open_competition (Watson/Sanders); MIN Murray named starter (desk 2026-08-12). Demo fill blocked when pack present.",
+    "Skill SoT 2026-08-13T15:33Z: Walker\u2192SEA RB1, Charbonnet\u2192SEA RB2, KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved)."
   ],
   "rows": [
     {
@@ -1695,8 +1696,8 @@
       "team": "KC",
       "position": "RB",
       "depth_order": 1,
-      "player_id": "00-0038134",
-      "player_name": "Kenneth Walker III",
+      "player_id": "00-0041013",
+      "player_name": "Emmett Johnson",
       "depth_slot": "starter",
       "role_confidence": 0.85
     },
@@ -1704,19 +1705,10 @@
       "team": "KC",
       "position": "RB",
       "depth_order": 2,
-      "player_id": "00-0041013",
-      "player_name": "Emmett Johnson",
-      "depth_slot": "backup",
-      "role_confidence": 0.65
-    },
-    {
-      "team": "KC",
-      "position": "RB",
-      "depth_order": 3,
       "player_id": "00-0038705",
       "player_name": "Emari Demercado",
-      "depth_slot": "rotation",
-      "role_confidence": 0.5
+      "depth_slot": "backup",
+      "role_confidence": 0.65
     },
     {
       "team": "KC",
@@ -2987,8 +2979,8 @@
       "team": "SEA",
       "position": "RB",
       "depth_order": 1,
-      "player_id": "00-0039165",
-      "player_name": "Zach Charbonnet",
+      "player_id": "00-0038134",
+      "player_name": "Kenneth Walker III",
       "depth_slot": "starter",
       "role_confidence": 0.85
     },
@@ -2996,8 +2988,8 @@
       "team": "SEA",
       "position": "RB",
       "depth_order": 2,
-      "player_id": "00-0041512",
-      "player_name": "Jadarian Price",
+      "player_id": "00-0039165",
+      "player_name": "Zach Charbonnet",
       "depth_slot": "backup",
       "role_confidence": 0.65
     },
@@ -3005,8 +2997,8 @@
       "team": "SEA",
       "position": "RB",
       "depth_order": 3,
-      "player_id": "00-0039299",
-      "player_name": "George Holani",
+      "player_id": "00-0041512",
+      "player_name": "Jadarian Price",
       "depth_slot": "rotation",
       "role_confidence": 0.5
     },
@@ -3477,11 +3469,7 @@
       "role_confidence": 0.5,
       "injury_status": "out",
       "injury_window": "unknown / monitor",
-      "injury_note": "Hamstring; Quinn (~Aug 1/8): out a couple of weeks. Not inventing Week-1 IR \u2014 monitor return. Depth demoted to TE3; Okonkwo/Sinnott path.",
-      "injury_sources": [
-        "https://www.commanders.com/news/commanders-training-camp-notebook-treylon-burks-back-together-saturday",
-        "https://commanderswire.usatoday.com/story/sports/nfl/commanders/2026/08/08/commanders-dan-quinn-injury-update-john-bates-nick-allegretti/91226994007/"
-      ]
+      "injury_note": "Hamstring; Quinn (~Aug 1/8): out a couple of weeks. Not inventing Week-1 IR \u2014 monitor return. Depth demoted to TE3; Okonkwo/Sinnott path."
     },
     {
       "team": "WAS",
@@ -3502,11 +3490,7 @@
       "depth_slot": "backup",
       "role_confidence": 0.65,
       "injury_status": "active",
-      "injury_window": "",
-      "injury_note": "Signed 2026-08-07; practiced; projected WR2 with McLaurin.",
-      "injury_sources": [
-        "https://www.commanders.com/news/commanders-sign-wr-stefon-diggs"
-      ]
+      "injury_note": "Signed 2026-08-07; practiced; projected WR2 with McLaurin."
     },
     {
       "team": "WAS",

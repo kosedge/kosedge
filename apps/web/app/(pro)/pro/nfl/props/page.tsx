@@ -10,6 +10,11 @@ import {
   type NflPropBoardRow,
 } from "@/lib/nfl-props-board";
 import {
+  NFL_WEEKLY_PROPS_GATE_BODY,
+  NFL_WEEKLY_PROPS_GATE_TITLE,
+  NFL_WEEKLY_PROPS_LIVE,
+} from "@/lib/nfl-weekly-props-live";
+import {
   PRIMARY_BOARD_MARKETS,
   PROPS_ELIGIBILITY_NOTE,
 } from "@/lib/nfl-props-eligibility";
@@ -168,7 +173,35 @@ export default async function NflPropsBoardPage({
         </div>
       ) : null}
 
-      {!board.error && !hasRows && !filteredEmpty ? (
+      {!NFL_WEEKLY_PROPS_LIVE ? (
+        <div className="mt-6">
+          <HonestStatusBanner title={NFL_WEEKLY_PROPS_GATE_TITLE} tone="amber">
+            <p>{NFL_WEEKLY_PROPS_GATE_BODY}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href="/pro/nfl/fantasy"
+                className="rounded-lg border border-edge-green/35 bg-edge-green/10 px-3 py-1.5 text-xs font-semibold text-edge-green"
+              >
+                Fantasy desk
+              </Link>
+              <Link
+                href="/pro/nfl/projections"
+                className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
+              >
+                Season projections
+              </Link>
+              <Link
+                href="/edge-board/nfl"
+                className="rounded-lg border border-edge-green/35 bg-edge-green/10 px-3 py-1.5 text-xs font-semibold text-edge-green"
+              >
+                Edge Board
+              </Link>
+            </div>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
+
+      {NFL_WEEKLY_PROPS_LIVE && !board.error && !hasRows && !filteredEmpty ? (
         <div className="mt-6">
           <HonestStatusBanner
             title="Player props board fills when markets + model hooks are live"
@@ -203,7 +236,7 @@ export default async function NflPropsBoardPage({
         </div>
       ) : null}
 
-      {hasRows || filteredEmpty ? (
+      {NFL_WEEKLY_PROPS_LIVE && (hasRows || filteredEmpty) ? (
         <>
           {!board.error && board.diagnostics.kosedgeOnly ? (
             <div className="mt-6">
