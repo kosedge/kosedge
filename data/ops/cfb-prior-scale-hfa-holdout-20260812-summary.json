@@ -1,0 +1,67 @@
+{
+  "as_of": "2026-08-13",
+  "adopted": true,
+  "adopt_reason": "holdout_mae_improved_2.703",
+  "scale": 2.75,
+  "hfa": 3.8,
+  "baseline_scale": 1.0,
+  "baseline_hfa": 1.7,
+  "train_years": [2020, 2021, 2022, 2023],
+  "holdout_years": [2024, 2025],
+  "fit_weeks": "0-4",
+  "epa_in_fair": false,
+  "used_in_spread": false,
+  "close_definition": "last owned lake snap strictly before kickoff (not a true lock)",
+  "example_game_id": "401628323",
+  "example_close": -13.5,
+  "example_baseline_fair": -5.038,
+  "example_calibrated_fair": -13.855,
+  "exclusions": {
+    "train": {
+      "eligible": 774,
+      "excluded_identity": 331,
+      "excluded_no_prior": 8,
+      "excluded_no_close": 71
+    },
+    "holdout": {
+      "eligible": 475,
+      "excluded_identity": 245,
+      "excluded_no_prior": 7,
+      "excluded_no_close": 0
+    }
+  },
+  "holdout": {
+    "w0_4": {
+      "n": 475,
+      "baseline_mae": 9.604,
+      "calibrated_mae": 6.901,
+      "baseline_mean_error": 4.404,
+      "calibrated_mean_error": 0.324,
+      "calibrated_ats_rate": 0.4796,
+      "calibrated_ats_ci95": [0.4334, 0.5262]
+    },
+    "w0_1": {
+      "n": 175,
+      "baseline_mae": 8.058,
+      "calibrated_mae": 6.926,
+      "baseline_mean_error": 3.937,
+      "calibrated_mean_error": 0.836,
+      "calibrated_ats_rate": 0.4506,
+      "calibrated_ats_ci95": [0.376, 0.5275]
+    }
+  },
+  "train": {
+    "w0_4": {
+      "n": 774,
+      "baseline_mae": 9.62,
+      "calibrated_mae": 6.991,
+      "calibrated_ats_rate": 0.4705
+    },
+    "w0_1": {
+      "n": 264,
+      "baseline_mae": 8.564,
+      "calibrated_mae": 7.456,
+      "calibrated_ats_rate": 0.4458
+    }
+  }
+}
