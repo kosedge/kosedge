@@ -1,0 +1,67 @@
+{
+  "as_of": "2026-08-12",
+  "season": 2026,
+  "source": "expert_qb_override",
+  "doctrine": "News → expert note → SoT override → recompute. Do not invent ESPN-missing identities. Do not silently rewrite the ESPN roster pack.",
+  "ops": "data/ops/cfb-qb-honesty-prior-20260812.md",
+  "teams": {
+    "UGA": {
+      "qb_class": "open_competition",
+      "open_competition": true,
+      "is_portal": false,
+      "is_true_freshman": false,
+      "keep_pack_name": true,
+      "reason": "Public 2026 starter is Gunner Stockton; he is absent from the ESPN 2026 roster. Pack lists Ryan Puglisi (27 att) as incumbent. True camp battle / missing-identity — do not invent Stockton.",
+      "evidence": "roster-refresh conflict table 2026-08-12; ESPN 2026 UGA roster missing Stockton"
+    },
+    "MICH": {
+      "qb_class": "open_competition",
+      "open_competition": true,
+      "is_portal": false,
+      "is_true_freshman": false,
+      "keep_pack_name": true,
+      "reason": "Bryce Underwood is the public No. 1 and is absent from the ESPN 2026 roster. Pack lists Brayden Fowler-Nicolosi (CSU transfer, 82 att). Do not invent Underwood.",
+      "evidence": "roster-refresh conflict table 2026-08-12; Whittingham 'clear No. 1'; ESPN roster missing Underwood"
+    },
+    "FSU": {
+      "qb_class": "open_competition",
+      "open_competition": true,
+      "is_portal": true,
+      "is_true_freshman": false,
+      "starter_name": "Ashton Daniels",
+      "starter_key": "4838679",
+      "unconfirmed_starter": true,
+      "reason": "Ashton Daniels named starter 2026-04-21 and is on the ESPN roster. Pack heuristic ranked Dean DeNobile (347 Lafayette att) over Daniels (119). Name aligned to Daniels; situation stays open/high-σ until multi-week confirmation — not incumbent.",
+      "evidence": "roster-refresh conflict table 2026-08-12; ESPN roster contains Daniels (portal=true)"
+    },
+    "LSU": {
+      "qb_class": "open_competition",
+      "open_competition": true,
+      "is_portal": true,
+      "is_true_freshman": false,
+      "starter_name": "Sam Leavitt",
+      "starter_key": "5078810",
+      "unconfirmed_starter": true,
+      "reason": "Sam Leavitt is the public QB1 and is on the ESPN roster. Pack heuristic ranked Landen Clark (277 Elon att) over Leavitt (239). Name aligned to Leavitt; situation stays open/high-σ until multi-week confirmation — not incumbent.",
+      "evidence": "roster-refresh conflict table 2026-08-12; ESPN roster contains Leavitt (portal=true)"
+    },
+    "ALA": {
+      "qb_class": "open_competition",
+      "open_competition": true,
+      "is_portal": false,
+      "is_true_freshman": false,
+      "keep_pack_name": true,
+      "reason": "Open camp Austin Mack vs Keelon Russell; no starter named. Pack called Mack incumbent on 32 backup attempts. Do not name Russell as locked QB1.",
+      "evidence": "roster-refresh conflict table 2026-08-12"
+    },
+    "UF": {
+      "qb_class": "open_competition",
+      "open_competition": true,
+      "is_portal": false,
+      "is_true_freshman": false,
+      "keep_pack_name": true,
+      "reason": "Open camp Tramell Jones Jr. vs Aaron Philo; no starter named. Pack classed Jones as true_freshman on a 35–28 attempt edge. Do not invent a named starter.",
+      "evidence": "roster-refresh conflict table 2026-08-12"
+    }
+  }
+}

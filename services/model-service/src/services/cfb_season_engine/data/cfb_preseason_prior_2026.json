@@ -13,34 +13,18 @@
       "program_points": 15.321,
       "roster_strength": 71.2
     },
-    "UGA": {
-      "mean_points": 16.689,
-      "sigma_points": 4.265,
-      "rank": 2,
-      "qb_class": "incumbent",
-      "program_points": 13.029,
-      "roster_strength": 70.5
-    },
     "ND": {
       "mean_points": 16.096,
       "sigma_points": 4.275,
-      "rank": 3,
+      "rank": 2,
       "qb_class": "incumbent",
       "program_points": 12.982,
       "roster_strength": 65.95
     },
-    "ALA": {
-      "mean_points": 16.066,
-      "sigma_points": 4.264,
-      "rank": 4,
-      "qb_class": "incumbent",
-      "program_points": 12.089,
-      "roster_strength": 73.14
-    },
     "TEX": {
       "mean_points": 15.208,
       "sigma_points": 4.261,
-      "rank": 5,
+      "rank": 3,
       "qb_class": "incumbent",
       "program_points": 11.328,
       "roster_strength": 72.33
@@ -48,47 +32,47 @@
     "TAMU": {
       "mean_points": 14.226,
       "sigma_points": 4.265,
-      "rank": 6,
+      "rank": 4,
       "qb_class": "incumbent",
       "program_points": 10.728,
       "roster_strength": 69.15
     },
-    "MICH": {
-      "mean_points": 14.126,
-      "sigma_points": 4.265,
-      "rank": 7,
-      "qb_class": "incumbent",
-      "program_points": 10.633,
-      "roster_strength": 69.11
-    },
     "ORE": {
       "mean_points": 13.862,
       "sigma_points": 6.167,
-      "rank": 8,
+      "rank": 5,
       "qb_class": "portal",
       "program_points": 12.098,
       "roster_strength": 68.03
     },
+    "UGA": {
+      "mean_points": 13.689,
+      "sigma_points": 7.647,
+      "rank": 6,
+      "qb_class": "open_competition",
+      "program_points": 13.029,
+      "roster_strength": 70.5
+    },
     "PSU": {
       "mean_points": 13.602,
       "sigma_points": 4.491,
-      "rank": 9,
+      "rank": 7,
       "qb_class": "incumbent",
       "program_points": 11.041,
       "roster_strength": 68.01
     },
-    "LSU": {
-      "mean_points": 13.23,
-      "sigma_points": 4.26,
-      "rank": 10,
-      "qb_class": "incumbent",
-      "program_points": 9.401,
-      "roster_strength": 71.91
+    "ALA": {
+      "mean_points": 13.066,
+      "sigma_points": 7.646,
+      "rank": 8,
+      "qb_class": "open_competition",
+      "program_points": 12.089,
+      "roster_strength": 73.14
     },
     "TENN": {
       "mean_points": 12.947,
       "sigma_points": 4.265,
-      "rank": 11,
+      "rank": 9,
       "qb_class": "incumbent",
       "program_points": 9.583,
       "roster_strength": 68.03
@@ -96,7 +80,7 @@
     "WASH": {
       "mean_points": 12.798,
       "sigma_points": 4.266,
-      "rank": 12,
+      "rank": 10,
       "qb_class": "incumbent",
       "program_points": 9.659,
       "roster_strength": 66.16
@@ -104,7 +88,7 @@
     "IU": {
       "mean_points": 12.765,
       "sigma_points": 4.278,
-      "rank": 13,
+      "rank": 11,
       "qb_class": "incumbent",
       "program_points": 10.233,
       "roster_strength": 61.1
@@ -112,7 +96,7 @@
     "MISS": {
       "mean_points": 12.765,
       "sigma_points": 6.157,
-      "rank": 14,
+      "rank": 12,
       "qb_class": "portal",
       "program_points": 10.261,
       "roster_strength": 74.2
@@ -120,7 +104,7 @@
     "MIA": {
       "mean_points": 12.694,
       "sigma_points": 6.158,
-      "rank": 15,
+      "rank": 13,
       "qb_class": "portal",
       "program_points": 10.44,
       "roster_strength": 72.12
@@ -128,7 +112,7 @@
     "CLEM": {
       "mean_points": 12.606,
       "sigma_points": 4.262,
-      "rank": 16,
+      "rank": 14,
       "qb_class": "incumbent",
       "program_points": 8.79,
       "roster_strength": 71.8
@@ -136,7 +120,7 @@
     "OU": {
       "mean_points": 12.217,
       "sigma_points": 6.159,
-      "rank": 17,
+      "rank": 15,
       "qb_class": "portal",
       "program_points": 10.062,
       "roster_strength": 71.29
@@ -144,7 +128,7 @@
     "LOU": {
       "mean_points": 11.639,
       "sigma_points": 4.269,
-      "rank": 18,
+      "rank": 16,
       "qb_class": "incumbent",
       "program_points": 8.571,
       "roster_strength": 65.57
@@ -152,15 +136,23 @@
     "AUB": {
       "mean_points": 11.51,
       "sigma_points": 4.254,
-      "rank": 19,
+      "rank": 17,
       "qb_class": "incumbent",
       "program_points": 7.716,
       "roster_strength": 71.62
     },
+    "MICH": {
+      "mean_points": 11.126,
+      "sigma_points": 7.647,
+      "rank": 18,
+      "qb_class": "open_competition",
+      "program_points": 10.633,
+      "roster_strength": 69.11
+    },
     "KSU": {
       "mean_points": 10.992,
       "sigma_points": 4.268,
-      "rank": 20,
+      "rank": 19,
       "qb_class": "incumbent",
       "program_points": 8.252,
       "roster_strength": 62.83
@@ -168,7 +160,7 @@
     "USC": {
       "mean_points": 10.876,
       "sigma_points": 6.166,
-      "rank": 21,
+      "rank": 20,
       "qb_class": "portal",
       "program_points": 9.108,
       "roster_strength": 68.07
@@ -176,7 +168,7 @@
     "ISU": {
       "mean_points": 10.683,
       "sigma_points": 4.27,
-      "rank": 22,
+      "rank": 21,
       "qb_class": "incumbent",
       "program_points": 8.033,
       "roster_strength": 62.08
@@ -184,7 +176,7 @@
     "UTAH": {
       "mean_points": 10.605,
       "sigma_points": 6.158,
-      "rank": 23,
+      "rank": 22,
       "qb_class": "portal",
       "program_points": 8.813,
       "roster_strength": 68.27
@@ -192,23 +184,23 @@
     "SMU": {
       "mean_points": 10.423,
       "sigma_points": 4.263,
-      "rank": 24,
+      "rank": 23,
       "qb_class": "incumbent",
       "program_points": 7.323,
       "roster_strength": 65.83
     },
-    "FSU": {
-      "mean_points": 10.417,
-      "sigma_points": 4.264,
-      "rank": 25,
-      "qb_class": "incumbent",
-      "program_points": 7.071,
-      "roster_strength": 67.88
+    "LSU": {
+      "mean_points": 10.23,
+      "sigma_points": 7.644,
+      "rank": 24,
+      "qb_class": "open_competition",
+      "program_points": 9.401,
+      "roster_strength": 71.91
     },
     "ASU": {
       "mean_points": 10.127,
       "sigma_points": 4.262,
-      "rank": 26,
+      "rank": 25,
       "qb_class": "incumbent",
       "program_points": 7.003,
       "roster_strength": 66.03
@@ -216,7 +208,7 @@
     "TCU": {
       "mean_points": 9.768,
       "sigma_points": 4.272,
-      "rank": 27,
+      "rank": 26,
       "qb_class": "incumbent",
       "program_points": 7.075,
       "roster_strength": 62.44
@@ -224,7 +216,7 @@
     "BOISE": {
       "mean_points": 9.507,
       "sigma_points": 4.272,
-      "rank": 28,
+      "rank": 27,
       "qb_class": "incumbent",
       "program_points": 7.046,
       "roster_strength": 60.51
@@ -232,7 +224,7 @@
     "BYU": {
       "mean_points": 9.506,
       "sigma_points": 4.275,
-      "rank": 29,
+      "rank": 28,
       "qb_class": "incumbent",
       "program_points": 7.014,
       "roster_strength": 60.77
@@ -240,7 +232,7 @@
     "SCAR": {
       "mean_points": 9.475,
       "sigma_points": 4.268,
-      "rank": 30,
+      "rank": 29,
       "qb_class": "incumbent",
       "program_points": 6.39,
       "roster_strength": 65.71
@@ -248,7 +240,7 @@
     "CIN": {
       "mean_points": 9.375,
       "sigma_points": 4.269,
-      "rank": 31,
+      "rank": 30,
       "qb_class": "incumbent",
       "program_points": 6.663,
       "roster_strength": 62.6
@@ -256,7 +248,7 @@
     "ARK": {
       "mean_points": 9.245,
       "sigma_points": 4.261,
-      "rank": 32,
+      "rank": 31,
       "qb_class": "incumbent",
       "program_points": 6.07,
       "roster_strength": 66.46
@@ -264,7 +256,7 @@
     "PITT": {
       "mean_points": 9.11,
       "sigma_points": 4.271,
-      "rank": 33,
+      "rank": 32,
       "qb_class": "incumbent",
       "program_points": 6.471,
       "roster_strength": 61.99
@@ -272,7 +264,7 @@
     "GT": {
       "mean_points": 9.004,
       "sigma_points": 4.261,
-      "rank": 34,
+      "rank": 33,
       "qb_class": "incumbent",
       "program_points": 5.894,
       "roster_strength": 65.92
@@ -280,7 +272,7 @@
     "ARI": {
       "mean_points": 8.945,
       "sigma_points": 4.266,
-      "rank": 35,
+      "rank": 34,
       "qb_class": "incumbent",
       "program_points": 6.021,
       "roster_strength": 64.37
@@ -288,7 +280,7 @@
     "UCF": {
       "mean_points": 8.876,
       "sigma_points": 4.265,
-      "rank": 36,
+      "rank": 35,
       "qb_class": "incumbent",
       "program_points": 5.948,
       "roster_strength": 64.4
@@ -296,7 +288,7 @@
     "NCSU": {
       "mean_points": 8.824,
       "sigma_points": 4.262,
-      "rank": 37,
+      "rank": 36,
       "qb_class": "incumbent",
       "program_points": 5.687,
       "roster_strength": 66.14
@@ -304,7 +296,7 @@
     "UK": {
       "mean_points": 8.75,
       "sigma_points": 4.264,
-      "rank": 38,
+      "rank": 37,
       "qb_class": "incumbent",
       "program_points": 5.756,
       "roster_strength": 64.95
@@ -312,7 +304,7 @@
     "TTU": {
       "mean_points": 8.635,
       "sigma_points": 7.647,
-      "rank": 39,
+      "rank": 38,
       "qb_class": "open_competition",
       "program_points": 8.616,
       "roster_strength": 65.16
@@ -320,7 +312,7 @@
     "KU": {
       "mean_points": 8.625,
       "sigma_points": 4.267,
-      "rank": 40,
+      "rank": 39,
       "qb_class": "incumbent",
       "program_points": 5.98,
       "roster_strength": 62.04
@@ -328,7 +320,7 @@
     "BAY": {
       "mean_points": 8.516,
       "sigma_points": 4.263,
-      "rank": 41,
+      "rank": 40,
       "qb_class": "incumbent",
       "program_points": 5.395,
       "roster_strength": 66.01
@@ -336,7 +328,7 @@
     "WIS": {
       "mean_points": 8.442,
       "sigma_points": 4.265,
-      "rank": 42,
+      "rank": 41,
       "qb_class": "incumbent",
       "program_points": 5.53,
       "roster_strength": 64.27
@@ -344,10 +336,18 @@
     "MD": {
       "mean_points": 8.026,
       "sigma_points": 4.263,
-      "rank": 43,
+      "rank": 42,
       "qb_class": "incumbent",
       "program_points": 5.153,
       "roster_strength": 63.94
+    },
+    "UF": {
+      "mean_points": 7.92,
+      "sigma_points": 7.645,
+      "rank": 43,
+      "qb_class": "open_competition",
+      "program_points": 7.496,
+      "roster_strength": 68.53
     },
     "DUKE": {
       "mean_points": 7.865,
@@ -397,13 +397,13 @@
       "program_points": 5.057,
       "roster_strength": 60.92
     },
-    "UF": {
-      "mean_points": 7.52,
-      "sigma_points": 8.023,
+    "FSU": {
+      "mean_points": 7.417,
+      "sigma_points": 7.646,
       "rank": 50,
-      "qb_class": "true_freshman",
-      "program_points": 7.496,
-      "roster_strength": 68.53
+      "qb_class": "open_competition",
+      "program_points": 7.071,
+      "roster_strength": 67.88
     },
     "ILL": {
       "mean_points": 7.304,
