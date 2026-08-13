@@ -15,10 +15,35 @@ SDV_BASE = (
 USER_AGENT = "kosedge-cfb-historical-warehouse/1.0"
 
 
-def http_get(url: str) -> bytes:
+def http_get(url: str, *, timeout: int = 90) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=90) as resp:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read()
+
+
+def fetch_sdv_file(
+    tag: str,
+    filename: str,
+    *,
+    cache_dir: Path,
+    timeout: int = 300,
+) -> Path:
+    """Download-once binary asset (parquet) into cache_dir. Not a live request path."""
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    dest = cache_dir / filename
+    if dest.exists() and dest.stat().st_size > 0:
+        return dest
+    url = f"{SDV_BASE}/{tag}/{filename}"
+    tmp = dest.with_suffix(dest.suffix + ".part")
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=timeout) as resp, tmp.open("wb") as out:
+        while True:
+            chunk = resp.read(1024 * 1024)
+            if not chunk:
+                break
+            out.write(chunk)
+    tmp.replace(dest)
+    return dest
 
 
 def fetch_sdv_csv(

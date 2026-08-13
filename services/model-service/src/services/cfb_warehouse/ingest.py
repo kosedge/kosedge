@@ -19,7 +19,13 @@ from src.services.cfb_warehouse.identity import (
     resolve_team_code,
 )
 from src.services.cfb_warehouse.leakage import era_tag
+from src.services.cfb_warehouse.odds_lake import (
+    export_odds_lake,
+    load_odds_lake,
+    overlay_closing_lines,
+)
 from src.services.cfb_warehouse.paths import clean_dir, ensure_dirs, hd_mounted, raw_dir
+from src.services.cfb_warehouse.pbp import PBP_SEASONS, ingest_pbp
 from src.services.cfb_warehouse.sdv import fetch_sdv_csv
 
 DEFAULT_SEASONS = tuple(range(2020, 2026))
@@ -260,6 +266,8 @@ def run_ingest(
     *,
     seasons: Sequence[int] = DEFAULT_SEASONS,
     prefer_hd: bool = True,
+    ingest_odds: bool = True,
+    ingest_pbp_seasons: Sequence[int] | None = PBP_SEASONS,
 ) -> Dict[str, Any]:
     raw, clean = ensure_dirs(prefer_hd=prefer_hd)
     cache_dir = raw / "sdv"
@@ -300,18 +308,61 @@ def run_ingest(
         _write_parquet(clean / "closing_lines.parquet", all_closes)
         _write_parquet(clean / "odds_snapshots.parquet", all_snaps)
 
-    pbp_readme = clean / "pbp" / "README.md"
-    if not pbp_readme.exists():
-        pbp_readme.write_text(
-            "# CFB PBP (path only)\n\n"
-            "v1 does not ingest play-by-play. Opponent-adj EPA lands here later.\n"
-            "Do not live-query CFBD/cfbfastR from model-service.\n",
-            encoding="utf-8",
-        )
+    odds_meta: Dict[str, Any] = {"status": "skipped"}
+    if ingest_odds and all_games:
+        try:
+            export_meta = export_odds_lake(prefer_hd=prefer_hd)
+            lake_snaps = load_odds_lake(prefer_hd=prefer_hd)
+            merged, join_stats = overlay_closing_lines(all_games, all_closes, lake_snaps)
+            all_closes = merged
+            _write_parquet(clean / "closing_lines.parquet", all_closes)
+            odds_meta = {"export": export_meta, "join": join_stats, "status": "ok"}
+            for season, payload in by_season.items():
+                if not isinstance(payload, dict) or payload.get("status") != "ok":
+                    continue
+                payload["with_close_spread"] = sum(
+                    1
+                    for c in all_closes
+                    if str(c.get("season")) == str(season)
+                    and c.get("close_spread_home") is not None
+                )
+                payload["with_open_spread"] = sum(
+                    1
+                    for c in all_closes
+                    if str(c.get("season")) == str(season)
+                    and c.get("open_spread_home") is not None
+                )
+                payload["lake_primary"] = sum(
+                    1
+                    for c in all_closes
+                    if str(c.get("season")) == str(season)
+                    and c.get("source") == "odds_api_lake"
+                )
+        except Exception as exc:  # noqa: BLE001 — lake is overlay, games still valid
+            odds_meta = {"status": "failed", "error": str(exc)[:240]}
+
+    pbp_meta: Dict[str, Any] = {"status": "skipped"}
+    if ingest_pbp_seasons:
+        try:
+            pbp_meta = ingest_pbp(seasons=ingest_pbp_seasons, prefer_hd=prefer_hd)
+            pbp_meta["status"] = "ok" if pbp_meta.get("plays") else pbp_meta.get("status", "ok")
+        except Exception as exc:  # noqa: BLE001
+            pbp_meta = {"status": "failed", "error": str(exc)[:240]}
+    else:
+        pbp_readme = clean / "pbp" / "README.md"
+        if not pbp_readme.exists():
+            pbp_readme.write_text(
+                "# CFB PBP\n\nRun ingest with PBP enabled to download season parquet.\n"
+                "Do not live-query CFBD/cfbfastR from model-service.\n",
+                encoding="utf-8",
+            )
 
     inventory = {
         "as_of": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-        "source": "sportsdataverse espn_cfb_betting + team_box + linescores + schedules",
+        "source": (
+            "sportsdataverse schedules/box/linescores + odds_api_lake primary "
+            "+ sdv betting fill + espn_cfb_pbp"
+        ),
         "hd_mounted": hd_mounted(),
         "raw_dir": str(raw),
         "clean_dir": str(clean),
@@ -326,13 +377,22 @@ def run_ingest(
         },
         "by_season": by_season,
         "fetch_errors": fetch_errors,
-        "owned_odds_api_cfb_inventory": {
-            "note": (
-                "HD inventory CSV lists 174,606 CFB Odds API rows (2020–2026, "
-                "DK/FD) but clean/odds/cfb JSONL is not landed yet — join key "
-                "is (game_date, home, away) once files are copied. Do not drop years."
-            ),
-            "inventory_csv": "/Volumes/KosEdgeData/inventory/odds-inventory-by-sport-20260806.csv",
+        "owned_odds_api_cfb_inventory": odds_meta,
+        "pbp": {
+            "plays": pbp_meta.get("plays"),
+            "games": pbp_meta.get("games"),
+            "seasons": pbp_meta.get("seasons"),
+            "by_season": {
+                k: {
+                    "plays": v.get("plays"),
+                    "games": v.get("games"),
+                    "raw_cols": v.get("raw_cols"),
+                    "status": v.get("status"),
+                }
+                for k, v in (pbp_meta.get("by_season") or {}).items()
+            }
+            if isinstance(pbp_meta.get("by_season"), dict)
+            else pbp_meta,
         },
         "leakage_rule": "strictly_before_kickoff",
         "engine_read_path": "none — season-engine does not live-query this warehouse",

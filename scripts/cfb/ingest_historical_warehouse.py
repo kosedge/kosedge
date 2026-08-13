@@ -32,9 +32,29 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Write under data/cfb/warehouse even if HD is mounted",
     )
+    parser.add_argument("--skip-odds", action="store_true", help="Skip Odds API lake overlay")
+    parser.add_argument("--skip-pbp", action="store_true", help="Skip cfbfastR PBP download")
+    parser.add_argument(
+        "--pbp-seasons",
+        default="2014-2025",
+        help="PBP seasons as start-end or comma list (default 2014-2025)",
+    )
     args = parser.parse_args(argv)
     seasons = [int(s.strip()) for s in args.seasons.split(",") if s.strip()]
-    inventory = run_ingest(seasons=seasons, prefer_hd=not args.repo_fallback)
+    pbp_seasons = None
+    if not args.skip_pbp:
+        raw = args.pbp_seasons.strip()
+        if "-" in raw and "," not in raw:
+            a, b = raw.split("-", 1)
+            pbp_seasons = list(range(int(a), int(b) + 1))
+        else:
+            pbp_seasons = [int(s.strip()) for s in raw.split(",") if s.strip()]
+    inventory = run_ingest(
+        seasons=seasons,
+        prefer_hd=not args.repo_fallback,
+        ingest_odds=not args.skip_odds,
+        ingest_pbp_seasons=pbp_seasons,
+    )
     print(json.dumps(inventory, indent=2, default=str))
     return 0 if inventory.get("games") else 1
 

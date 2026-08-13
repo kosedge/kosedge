@@ -100,8 +100,17 @@ CREATE TABLE IF NOT EXISTS cfb_wh_feature_registry (
 );
 
 INSERT INTO cfb_wh_feature_registry (feature_name, notes)
-VALUES (
-  'model_fair_placeholder',
-  'Skeleton backtest fairs must stamp available_at strictly before kickoff.'
-)
+VALUES
+  (
+    'model_fair_placeholder',
+    'Skeleton backtest fairs must stamp available_at strictly before kickoff.'
+  ),
+  (
+    'pbp_core',
+    'cfbfastR/SDV play-by-play core columns. available_at = play wallclock; game G may only use prior games.'
+  ),
+  (
+    'odds_api_lake_close',
+    'Close = last owned odds snapshot strictly before kickoff. Open = first snapshot.'
+  )
 ON CONFLICT (feature_name) DO NOTHING;

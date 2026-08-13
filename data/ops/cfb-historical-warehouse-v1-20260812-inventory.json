@@ -1,6 +1,6 @@
 {
   "as_of": "2026-08-13",
-  "source": "sportsdataverse espn_cfb_betting + team_box + linescores + schedules",
+  "source": "sportsdataverse schedules/box/linescores + odds_api_lake primary + sdv betting fill + espn_cfb_pbp",
   "hd_mounted": true,
   "raw_dir": "/Volumes/KosEdgeData/raw/cfb/historical",
   "clean_dir": "/Volumes/KosEdgeData/clean/cfb/historical",
@@ -27,7 +27,7 @@
     "2020": {
       "status": "ok",
       "games": 571,
-      "with_close_spread": 37,
+      "with_close_spread": 512,
       "with_kickoff": 571,
       "fcs_flagged": 34,
       "skipped": {
@@ -36,12 +36,14 @@
         "missing_line": 534,
         "same_team": 0,
         "not_final": 121
-      }
+      },
+      "with_open_spread": 477,
+      "lake_primary": 477
     },
     "2021": {
       "status": "ok",
       "games": 891,
-      "with_close_spread": 122,
+      "with_close_spread": 814,
       "with_kickoff": 891,
       "fcs_flagged": 116,
       "skipped": {
@@ -50,12 +52,14 @@
         "missing_line": 769,
         "same_team": 0,
         "not_final": 4
-      }
+      },
+      "with_open_spread": 696,
+      "lake_primary": 696
     },
     "2022": {
       "status": "ok",
       "games": 900,
-      "with_close_spread": 125,
+      "with_close_spread": 838,
       "with_kickoff": 900,
       "fcs_flagged": 119,
       "skipped": {
@@ -64,12 +68,14 @@
         "missing_line": 775,
         "same_team": 0,
         "not_final": 4
-      }
+      },
+      "with_open_spread": 717,
+      "lake_primary": 717
     },
     "2023": {
       "status": "ok",
       "games": 911,
-      "with_close_spread": 882,
+      "with_close_spread": 907,
       "with_kickoff": 911,
       "fcs_flagged": 116,
       "skipped": {
@@ -78,7 +84,9 @@
         "missing_line": 29,
         "same_team": 0,
         "not_final": 0
-      }
+      },
+      "with_open_spread": 713,
+      "lake_primary": 713
     },
     "2024": {
       "status": "ok",
@@ -92,7 +100,9 @@
         "missing_line": 0,
         "same_team": 0,
         "not_final": 1
-      }
+      },
+      "with_open_spread": 793,
+      "lake_primary": 793
     },
     "2025": {
       "status": "ok",
@@ -106,13 +116,132 @@
         "missing_line": 0,
         "same_team": 0,
         "not_final": 0
-      }
+      },
+      "with_open_spread": 788,
+      "lake_primary": 788
     }
   },
   "fetch_errors": {},
   "owned_odds_api_cfb_inventory": {
-    "note": "HD inventory CSV lists 174,606 CFB Odds API rows (2020\u20132026, DK/FD) but clean/odds/cfb JSONL is not landed yet \u2014 join key is (game_date, home, away) once files are copied. Do not drop years.",
-    "inventory_csv": "/Volumes/KosEdgeData/inventory/odds-inventory-by-sport-20260806.csv"
+    "export": {
+      "as_of": "2026-08-13",
+      "source": "odds_snapshots postgres (the-odds-api-historical-enterprise)",
+      "rows": 174606,
+      "games": 4736,
+      "by_season": {
+        "2020": 18058,
+        "2021": 31601,
+        "2022": 28322,
+        "2023": 28840,
+        "2024": 32284,
+        "2025": 35492,
+        "2026": 9
+      },
+      "dir": "/Volumes/KosEdgeData/clean/odds/cfb",
+      "join_key": "(game_date, home_name, away_name)"
+    },
+    "join": {
+      "lake_snaps": 174606,
+      "games": 5196,
+      "matched": 4184,
+      "matched_with_close_spread": 4184,
+      "unmatched": 1012,
+      "primary": "odds_api_lake",
+      "fill": "sportsdataverse_espn_cfb_betting"
+    },
+    "status": "ok"
+  },
+  "pbp": {
+    "plays": 1819153,
+    "games": 10297,
+    "seasons": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "by_season": {
+      "2014": {
+        "plays": 155521,
+        "games": 854,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2015": {
+        "plays": 158501,
+        "games": 866,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2016": {
+        "plays": 155622,
+        "games": 858,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2017": {
+        "plays": 155505,
+        "games": 872,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2018": {
+        "plays": 158249,
+        "games": 884,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2019": {
+        "plays": 156888,
+        "games": 890,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2020": {
+        "plays": 100420,
+        "games": 565,
+        "raw_cols": 476,
+        "status": "ok"
+      },
+      "2021": {
+        "plays": 146367,
+        "games": 842,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2022": {
+        "plays": 149654,
+        "games": 861,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2023": {
+        "plays": 153626,
+        "games": 903,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2024": {
+        "plays": 162950,
+        "games": 946,
+        "raw_cols": 477,
+        "status": "ok"
+      },
+      "2025": {
+        "plays": 165850,
+        "games": 956,
+        "raw_cols": 476,
+        "status": "ok"
+      }
+    }
   },
   "leakage_rule": "strictly_before_kickoff",
   "engine_read_path": "none \u2014 season-engine does not live-query this warehouse"
