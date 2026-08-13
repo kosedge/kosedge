@@ -1,0 +1,4 @@
+# Local CFB warehouse fallback when /Volumes/KosEdgeData is unmounted.
+# Canonical bulk store is HD: raw/cfb/historical + clean/cfb/historical.
+raw/
+clean/

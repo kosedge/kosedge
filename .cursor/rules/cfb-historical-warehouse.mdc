@@ -1,0 +1,19 @@
+---
+description: CFB historical warehouse zero-leakage contract — no future features, no live 20-year queries
+globs: "**/cfb_warehouse/**,**/cfb_season_engine/**,scripts/cfb/**"
+alwaysApply: false
+---
+
+# CFB warehouse leakage
+
+Predicting game G may only use rows with `available_at` **strictly before kickoff**. If kickoff is missing: `available_at.date < game_date`, else `feature_week < game_week`. Unprovable timestamps are **not** available.
+
+Forbidden as same-season features: final-season ratings, end-of-year SOS, post-hoc recruiting revisions, “what the freshman became”.
+
+CFBD / cfbfastR / SportsDataverse are **ingest**. Download once to `/Volumes/KosEdgeData` (or gitignored `data/cfb/warehouse`). Season-engine / project-game must not live-query 20 years of history per request.
+
+Odds: owned `odds_snapshots` lake is primary (open = first snap, close = last snap strictly before kickoff). SDV/CFBD betting is fill only. Join key `(game_date, home_name, away_name)`.
+
+PBP: `raw/cfb/pbp/play_by_play_{year}.parquet` plus core EPA/success columns under `clean/cfb/historical/pbp/`. Not an opponent-adj mart.
+
+Register new backtest features in `cfb_wh_feature_registry` and call `assert_available_before_kickoff`. No KEI from this warehouse.
