@@ -1,0 +1,119 @@
+{
+  "as_of": "2026-08-13",
+  "source": "sportsdataverse espn_cfb_betting + team_box + linescores + schedules",
+  "hd_mounted": true,
+  "raw_dir": "/Volumes/KosEdgeData/raw/cfb/historical",
+  "clean_dir": "/Volumes/KosEdgeData/clean/cfb/historical",
+  "seasons": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "identity": {
+    "teams": 136,
+    "team_aliases": 293
+  },
+  "games": 5196,
+  "closing_lines": 5196,
+  "odds_snapshots": 5196,
+  "season_range": {
+    "min": 2020,
+    "max": 2025
+  },
+  "by_season": {
+    "2020": {
+      "status": "ok",
+      "games": 571,
+      "with_close_spread": 37,
+      "with_kickoff": 571,
+      "fcs_flagged": 34,
+      "skipped": {
+        "missing_sides": 0,
+        "missing_score": 0,
+        "missing_line": 534,
+        "same_team": 0,
+        "not_final": 121
+      }
+    },
+    "2021": {
+      "status": "ok",
+      "games": 891,
+      "with_close_spread": 122,
+      "with_kickoff": 891,
+      "fcs_flagged": 116,
+      "skipped": {
+        "missing_sides": 0,
+        "missing_score": 0,
+        "missing_line": 769,
+        "same_team": 0,
+        "not_final": 4
+      }
+    },
+    "2022": {
+      "status": "ok",
+      "games": 900,
+      "with_close_spread": 125,
+      "with_kickoff": 900,
+      "fcs_flagged": 119,
+      "skipped": {
+        "missing_sides": 0,
+        "missing_score": 0,
+        "missing_line": 775,
+        "same_team": 0,
+        "not_final": 4
+      }
+    },
+    "2023": {
+      "status": "ok",
+      "games": 911,
+      "with_close_spread": 882,
+      "with_kickoff": 911,
+      "fcs_flagged": 116,
+      "skipped": {
+        "missing_sides": 0,
+        "missing_score": 0,
+        "missing_line": 29,
+        "same_team": 0,
+        "not_final": 0
+      }
+    },
+    "2024": {
+      "status": "ok",
+      "games": 965,
+      "with_close_spread": 965,
+      "with_kickoff": 965,
+      "fcs_flagged": 166,
+      "skipped": {
+        "missing_sides": 0,
+        "missing_score": 0,
+        "missing_line": 0,
+        "same_team": 0,
+        "not_final": 1
+      }
+    },
+    "2025": {
+      "status": "ok",
+      "games": 958,
+      "with_close_spread": 958,
+      "with_kickoff": 958,
+      "fcs_flagged": 150,
+      "skipped": {
+        "missing_sides": 0,
+        "missing_score": 0,
+        "missing_line": 0,
+        "same_team": 0,
+        "not_final": 0
+      }
+    }
+  },
+  "fetch_errors": {},
+  "owned_odds_api_cfb_inventory": {
+    "note": "HD inventory CSV lists 174,606 CFB Odds API rows (2020\u20132026, DK/FD) but clean/odds/cfb JSONL is not landed yet \u2014 join key is (game_date, home, away) once files are copied. Do not drop years.",
+    "inventory_csv": "/Volumes/KosEdgeData/inventory/odds-inventory-by-sport-20260806.csv"
+  },
+  "leakage_rule": "strictly_before_kickoff",
+  "engine_read_path": "none \u2014 season-engine does not live-query this warehouse"
+}

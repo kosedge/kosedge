@@ -8,6 +8,9 @@ Preference order (same spirit as NFL depth cutover):
 
 Loaders never invent precision when rows are missing — derived returning /
 portal-out numerics stay labeled approximate.
+
+The CFB historical warehouse (HD parquet / ``cfb_wh_*``) is ingest-only.
+Season-engine loaders do not live-query 20 years of history per request.
 """
 
 from __future__ import annotations
