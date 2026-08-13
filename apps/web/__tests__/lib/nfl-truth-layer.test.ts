@@ -80,6 +80,18 @@ describe("NFL Truth Layer — lineage", () => {
     );
     expect(withEngineVersionOverride(null, "v-live")).toBeNull();
   });
+
+  it("carries lock pin + N onto lineage", () => {
+    const lin = lineageFromActiveRun({
+      active_run_id: "nfl-preseason-sim-2026-lock",
+      engine_version: "nfl-season-engine-v1.27-kicker-layer",
+      generated_at_utc: "2026-08-13T19:00:00Z",
+      lock_tag: "nfl-season-engine-2026-preseason-lock",
+      n_team_sims: 100000,
+    });
+    expect(lin?.lockTag).toBe("nfl-season-engine-2026-preseason-lock");
+    expect(lin?.nTeamSims).toBe(100000);
+  });
 });
 
 describe("NFL Truth Layer — confidence band honesty", () => {

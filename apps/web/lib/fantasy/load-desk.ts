@@ -23,7 +23,7 @@ import {
   fetchNflFantasyDraftRankings,
   type NflFantasyDraftRankingRow,
 } from "@/lib/nfl-fantasy-draft";
-import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts";
+import { loadLatestNflPreseasonBundle2026, loadNflWebLaunchPointer } from "@/lib/nfl-preseason-artifacts";
 
 const LIMITATIONS_BASE = [
   "Model rank = projected fantasy points (Half-PPR default), not ADP and not a VOR-only sort. VOR is still computed and shown. Large |Δ| vs ADP means investigate role/injury — not a silent edge.",
@@ -162,13 +162,19 @@ function buildFallbackBoard(input: {
   }
   rows = rows.slice(0, input.limit);
 
+  const pointer = loadNflWebLaunchPointer();
+  const lockBit = pointer?.lock_tag
+    ? ` · pin ${pointer.lock_tag}`
+    : "";
+  const when = pointer?.generated_at_utc?.slice(0, 10);
+  const dateBit = when ? ` · ${when}` : "";
   return {
     rows,
     limitations: [
       ...LIMITATIONS_BASE,
       bundle.nTeamSims && bundle.nTeamSims >= 50000
-        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths · ${bundle.bundleDirName}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in draft-rankings.`
-        : `Preseason board from season-engine sim (${bundle.bundleDirName}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in draft-rankings.`,
+        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths${lockBit}${dateBit} · ${bundle.bundleDirName}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in draft-rankings.`
+        : `Preseason board from season-engine sim (${bundle.bundleDirName}${lockBit}${dateBit}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in draft-rankings.`,
     ],
   };
 }

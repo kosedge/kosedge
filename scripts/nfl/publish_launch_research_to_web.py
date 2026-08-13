@@ -69,7 +69,126 @@ def _run_invariant_gate(bundle_dir: Path) -> None:
         )
 
 
-def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path:
+def _apply_feature_floors_to_bundle(bundle_dir: Path) -> Dict[str, Any]:
+    sys.path.insert(0, str(ROOT / "services" / "data-platform-nfl" / "src"))
+    from data_platform_nfl.role_aware_production import (  # noqa: WPS433
+        align_skill_identities_to_depth_sot,
+        apply_feature_rush_floors,
+        apply_role_aware_player_shape,
+    )
+
+    depth_pack = (
+        ROOT
+        / "services/model-service/src/services/nfl_season_engine/data"
+        / "nfl_depth_chart_2026_w1.json"
+    )
+    pack_rows = json.loads(depth_pack.read_text(encoding="utf-8")).get("rows") or []
+
+    csv_path = bundle_dir / "player_regular_season_totals.csv"
+    with csv_path.open(encoding="utf-8", newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    if not rows:
+        return {"applied": False, "reason": "empty_csv"}
+    fields = list(rows[0].keys())
+    aligned, identity_audit = align_skill_identities_to_depth_sot(rows, pack_rows)
+    # League-wide role-aware first (kills the engine RB blob, creates real
+    # feature shares). Then Walker-class floors, then reshape touched teams.
+    shaped_all, shape_all_audit = apply_role_aware_player_shape(
+        aligned, skip_wr_alpha=False
+    )
+    floored, floor_audit = apply_feature_rush_floors(shaped_all)
+    touched = list(floor_audit.get("touched_teams") or [])
+    if touched:
+        shaped, shape_audit = apply_role_aware_player_shape(
+            floored, teams=touched, skip_wr_alpha=True
+        )
+    else:
+        shaped, shape_audit = floored, {"applied": False, "reason": "no_floor_transfers"}
+    for extra in (
+        "rush_yards_total",
+        "rush_tds_total",
+        "receiving_yards_total",
+        "receptions_total",
+        "rec_tds_total",
+        "carry_share",
+    ):
+        if extra not in fields:
+            fields.append(extra)
+    with csv_path.open("w", encoding="utf-8", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        for row in shaped:
+            writer.writerow(row)
+    audit = {
+        "identity": identity_audit,
+        "league_shape": {
+            "applied": shape_all_audit.get("applied"),
+            "n_notes": shape_all_audit.get("n_notes"),
+            "rush_pool": shape_all_audit.get("rush_pool"),
+        },
+        "feature_rush_floors": floor_audit,
+        "shape": shape_audit,
+        "touched_teams": touched,
+    }
+    (bundle_dir / "role_aware_shape_audit.json").write_text(
+        json.dumps(audit, indent=2) + "\n", encoding="utf-8"
+    )
+    return audit
+
+
+def _run_release_gate(bundle_dir: Path) -> None:
+    script = ROOT / "scripts" / "nfl" / "preseason_release_gate.py"
+    proc = subprocess.run(
+        [sys.executable, str(script), "--bundle", str(bundle_dir)],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+    )
+    if proc.stdout:
+        print(proc.stdout)
+    if proc.returncode != 0:
+        if proc.stderr:
+            print(proc.stderr, file=sys.stderr)
+        raise SystemExit(
+            f"Preseason release gate failed for {bundle_dir} — pointer not flipped"
+        )
+
+
+def _write_pointer(pointer: Dict[str, Any]) -> None:
+    (ROOT / "data" / "ops" / "nfl-web-launch-bundle.json").write_text(
+        json.dumps(pointer, indent=2) + "\n", encoding="utf-8"
+    )
+    (ROOT / "data" / "ops" / "nfl-launch-research-sims-current.md").write_text(
+        "\n".join(
+            [
+                "# NFL launch research sims — current pointer",
+                "",
+                f"- **Web bundle:** `{pointer.get('bundle_id')}`",
+                f"- **Source research:** `{pointer.get('source_dir')}`",
+                f"- **Engine:** `{pointer.get('engine_version')}`",
+                f"- **Lock tag:** `{pointer.get('lock_tag') or '—'}`",
+                f"- **Team W/L N:** {pointer.get('n_team_sims')}",
+                f"- **Player full N:** {pointer.get('n_player_sims')}",
+                f"- **Generated:** {pointer.get('generated_at_utc')}",
+                f"- **Identity:** {pointer.get('identity')}",
+                f"- **Locked snapshot:** {pointer.get('locked_snapshot')}",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+
+def publish(
+    source: Path,
+    stamp: str | None,
+    *,
+    skip_gate: bool = False,
+    skip_pointer: bool = False,
+    lock_tag: str | None = None,
+    apply_feature_floors: bool = False,
+    require_release_gate: bool = False,
+) -> Path:
     summary = json.loads((source / "run_summary.json").read_text(encoding="utf-8"))
     teams = json.loads((source / "team_win_distributions.json").read_text(encoding="utf-8"))
     players = []
@@ -279,6 +398,24 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
         json.dumps(web_summary, indent=2, default=str) + "\n", encoding="utf-8"
     )
 
+    if apply_feature_floors:
+        floor_audit = _apply_feature_floors_to_bundle(out_dir)
+        web_summary["feature_rush_floors"] = {
+            "applied": (floor_audit.get("feature_rush_floors") or {}).get("applied"),
+            "transfers": (floor_audit.get("feature_rush_floors") or {}).get("transfers"),
+        }
+        (out_dir / "run_summary.json").write_text(
+            json.dumps(web_summary, indent=2, default=str) + "\n", encoding="utf-8"
+        )
+
+    day = str(generated)[:10] if generated else datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    identity_bits = [
+        lock_tag or summary.get("engine_version"),
+        f"N_team={summary.get('n_team_sims')}",
+        day,
+    ]
+    identity = " · ".join(str(b) for b in identity_bits if b)
+
     pointer = {
         "active_run_id": out_name,
         "bundle_id": out_name,
@@ -289,39 +426,32 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
         "generated_at_utc": generated,
         "source_dir": str(source.relative_to(ROOT) if source.is_relative_to(ROOT) else source),
         "preseason": True,
-        "identity": f"{summary.get('engine_version')} · N_team={summary.get('n_team_sims')} · {stamp}",
+        "identity": identity,
         "team_id_scheme": "product_canonical_LAR",
+        "locked_snapshot": bool(lock_tag),
+        "lock_tag": lock_tag,
         "lineage": {
             "run_id": out_name,
             "engine_version": summary.get("engine_version"),
             "generated_at": generated,
             "kind": "Model",
+            "lockTag": lock_tag,
+            "nTeamSims": summary.get("n_team_sims"),
         },
     }
-    (ROOT / "data" / "ops" / "nfl-web-launch-bundle.json").write_text(
-        json.dumps(pointer, indent=2) + "\n", encoding="utf-8"
+    web_summary["identity"] = identity
+    if lock_tag:
+        web_summary["lock_tag"] = lock_tag
+        quality["lock_tag"] = lock_tag
+    quality["identity"] = identity
+    (out_dir / "quality_checks.json").write_text(
+        json.dumps(quality, indent=2) + "\n", encoding="utf-8"
+    )
+    (out_dir / "run_summary.json").write_text(
+        json.dumps(web_summary, indent=2, default=str) + "\n", encoding="utf-8"
     )
 
-    # Keep markdown pointer in sync
-    (ROOT / "data" / "ops" / "nfl-launch-research-sims-current.md").write_text(
-        "\n".join(
-            [
-                "# NFL launch research sims — current pointer",
-                "",
-                f"- **Web bundle:** `{out_name}`",
-                f"- **Source research:** `{pointer['source_dir']}`",
-                f"- **Engine:** `{pointer['engine_version']}`",
-                f"- **Team W/L N:** {pointer['n_team_sims']}",
-                f"- **Player full N:** {pointer['n_player_sims']}",
-                f"- **Generated:** {generated}",
-                f"- **Identity:** {pointer['identity']}",
-                "",
-            ]
-        ),
-        encoding="utf-8",
-    )
-
-    # HD mirror if present
+    # HD mirror if present (bundle only — pointer waits for gates)
     hd = Path("/Volumes/KosEdgeData/clean/nfl/research")
     if hd.is_dir():
         hd_out = hd / out_name
@@ -335,13 +465,17 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
 
         chk = _sot_checksum(out_dir)
         pointer["sot_qb_checksum"] = chk
-        (ROOT / "data" / "ops" / "nfl-web-launch-bundle.json").write_text(
-            json.dumps(pointer, indent=2) + "\n", encoding="utf-8"
-        )
         if not chk.get("ok"):
             raise SystemExit(
                 "SoT QB checksum failed — publish blocked: " + "; ".join(chk.get("failed") or [])
             )
+        if require_release_gate or lock_tag:
+            _run_release_gate(out_dir)
+
+    if not skip_pointer:
+        _write_pointer(pointer)
+    else:
+        print(f"skip_pointer=true — bundle {out_name} written; pointer not flipped", flush=True)
 
     return out_dir
 
@@ -360,10 +494,41 @@ def main() -> None:
         action="store_true",
         help="Skip Truth Layer invariant gate (debug only)",
     )
+    ap.add_argument(
+        "--skip-pointer",
+        action="store_true",
+        help="Write the bundle but do not flip nfl-web-launch-bundle.json",
+    )
+    ap.add_argument(
+        "--lock-tag",
+        default=None,
+        help="Pin tag (e.g. nfl-season-engine-2026-preseason-lock). Implies release gate.",
+    )
+    ap.add_argument(
+        "--apply-feature-floors",
+        action="store_true",
+        help="Lift starved feature-RB1 team rush pools before gating",
+    )
+    ap.add_argument(
+        "--require-release-gate",
+        action="store_true",
+        help="Run preseason_release_gate.py before pointer flip",
+    )
     args = ap.parse_args()
-    out = publish(args.source.resolve(), args.stamp, skip_gate=args.skip_gate)
+    out = publish(
+        args.source.resolve(),
+        args.stamp,
+        skip_gate=args.skip_gate,
+        skip_pointer=args.skip_pointer,
+        lock_tag=args.lock_tag,
+        apply_feature_floors=args.apply_feature_floors,
+        require_release_gate=args.require_release_gate,
+    )
     print(f"PUBLISHED {out}")
-    print(f"POINTER data/ops/nfl-web-launch-bundle.json")
+    if args.skip_pointer:
+        print("POINTER skipped")
+    else:
+        print("POINTER data/ops/nfl-web-launch-bundle.json")
 
 
 if __name__ == "__main__":

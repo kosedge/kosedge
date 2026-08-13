@@ -43,10 +43,16 @@ export default function NflLineageBadge({
   const engine = shortEngineVersion(lineage.engine_version);
   const asOf = lineageAsOfDate(lineage.generated_at);
   const runShort = truncateRunId(lineage.run_id);
+  const nLabel =
+    typeof lineage.nTeamSims === "number"
+      ? `${lineage.nTeamSims.toLocaleString()} paths`
+      : null;
   const titleParts = [
     lineage.kind,
+    lineage.lockTag ? `pin ${lineage.lockTag}` : null,
     `run ${lineage.run_id}`,
     lineage.engine_version ? `engine ${lineage.engine_version}` : null,
+    nLabel,
     asOf ? `as of ${asOf}` : null,
   ].filter(Boolean);
 
@@ -70,6 +76,22 @@ export default function NflLineageBadge({
             ·
           </span>
           <span className="text-kos-text/55">{engine}</span>
+        </>
+      ) : null}
+      {lineage.lockTag ? (
+        <>
+          <span className="text-kos-text/25" aria-hidden>
+            ·
+          </span>
+          <span className="text-kos-gold/70">{lineage.lockTag}</span>
+        </>
+      ) : null}
+      {nLabel ? (
+        <>
+          <span className="text-kos-text/25" aria-hidden>
+            ·
+          </span>
+          <span className="tabular-nums text-kos-text/45">{nLabel}</span>
         </>
       ) : null}
       {asOf ? (

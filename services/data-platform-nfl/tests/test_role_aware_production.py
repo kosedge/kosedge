@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from data_platform_nfl.role_aware_production import apply_role_aware_player_shape
+from data_platform_nfl.role_aware_production import (
+    apply_feature_rush_floors,
+    apply_role_aware_player_shape,
+)
 
 
 def _rb(team: str, depth: int, name: str, rush: float, rec: float = 200.0, rush_td: float = 6.0) -> dict:
@@ -216,3 +219,61 @@ def test_evans_egbuka_follow_pack_not_inverted_csv() -> None:
     assert by["Emeka Egbuka"]["team"] == "TB"
     assert abs(sum(r["receiving_yards_total"] for r in out if r["team"] == "TB") - tb_rec) < 2.0
     assert abs(sum(r["receiving_yards_total"] for r in out if r["team"] == "SF") - sf_rec) < 2.0
+
+
+def test_feature_rush_floors_lifts_walker_kc_not_sea_or_committee() -> None:
+    """Walker-class: raise starved KC pool from fat donors; SEA stays put."""
+    rows = [
+        _qb("KC", "Patrick Mahomes", 4100, 55),
+        _rb("KC", 1, "Kenneth Walker III", 904, 280, 6.0),
+        _rb("KC", 2, "Emmett Johnson", 320, 180, 2.0),
+        _rb("KC", 3, "Emari Demercado", 82, 40, 0.4),
+        _qb("SEA", "Sam Darnold", 3500, 180),
+        _rb("SEA", 1, "Zach Charbonnet", 1188, 339, 7.9),
+        _rb("SEA", 2, "Jadarian Price", 722, 218, 5.1),
+        _rb("SEA", 3, "George Holani", 208, 60, 1.5),
+        _qb("CIN", "Joe Burrow", 4200, 40),
+        _rb("CIN", 1, "Chase Brown", 590, 250, 4.0),
+        _rb("CIN", 2, "Samaje Perine", 400, 80, 2.0),
+        _rb("CIN", 3, "Tahj Brooks", 347, 40, 1.0),
+        _qb("BUF", "Josh Allen", 3400, 400),
+        _rb("BUF", 1, "James Cook", 1597, 316, 12.0),
+        _rb("BUF", 2, "Ray Davis", 500, 80, 3.0),
+        _rb("BUF", 3, "Ty Johnson", 252, 40, 1.0),
+        _qb("BAL", "Lamar Jackson", 3200, 700),
+        _rb("BAL", 1, "Derrick Henry", 1494, 200, 13.0),
+        _rb("BAL", 2, "Justice Hill", 400, 80, 2.0),
+        _rb("BAL", 3, "Rasheen Ali", 133, 20, 0.5),
+        _qb("SF", "Brock Purdy", 4200, 200),
+        _rb("SF", 1, "Christian McCaffrey", 1677, 500, 14.0),
+        _rb("SF", 2, "Jordan Mason", 500, 80, 3.0),
+        _rb("SF", 3, "Isaac Guerendo", 270, 40, 1.0),
+    ]
+    league_rush = sum(r["rush_yards_total"] for r in rows)
+    league_td = sum(r["rush_tds_total"] for r in rows)
+    sea_rush = sum(r["rush_yards_total"] for r in rows if r["team"] == "SEA")
+    cin_rush = sum(r["rush_yards_total"] for r in rows if r["team"] == "CIN")
+    floored, audit = apply_feature_rush_floors(rows)
+    assert audit["applied"] is True
+    kc_rush = sum(r["rush_yards_total"] for r in floored if r["team"] == "KC")
+    assert 1840 <= kc_rush <= 1860, kc_rush
+    assert abs(sum(r["rush_yards_total"] for r in floored if r["team"] == "SEA") - sea_rush) < 1.0
+    assert abs(sum(r["rush_yards_total"] for r in floored if r["team"] == "CIN") - cin_rush) < 1.0
+    assert abs(sum(r["rush_yards_total"] for r in floored) - league_rush) < 1.5
+    assert abs(sum(r["rush_tds_total"] for r in floored) - league_td) < 0.05
+    for donor in ("BUF", "BAL", "SF"):
+        assert sum(r["rush_yards_total"] for r in floored if r["team"] == donor) >= 2199.0
+    touched = set(audit["touched_teams"])
+    shaped, _ = apply_role_aware_player_shape(floored, teams=touched, skip_wr_alpha=True)
+    by = {r["player_name"]: r for r in shaped}
+    walker = by["Kenneth Walker III"]
+    johnson = by["Emmett Johnson"]
+    charb = by["Zach Charbonnet"]
+    brown = by["Chase Brown"]
+    assert walker["team"] == "KC"
+    assert walker["rush_yards_total"] > johnson["rush_yards_total"]
+    assert walker["rush_yards_total"] >= 1100
+    assert walker["rush_yards_total"] < 1600
+    assert charb["team"] == "SEA"
+    assert abs(sum(r["rush_yards_total"] for r in shaped if r["team"] == "SEA") - sea_rush) < 2.0
+    assert brown["rush_yards_total"] < 700

@@ -79,6 +79,18 @@ FORCE_FEATURE_RB = {
     "kennethwalkeriii",  # KC RB1 (FA); 2025 prior 1,027
 }
 
+# Walker-class: feature RB1 on a starved team pool. Raise the franchise rush
+# budget from fat donors — do not invent 1,800 free yards, do not donate SEA
+# (Charbonnet stays feature without a ghost Walker). Only thin-pool feature
+# backs (not every alpha whose team sits at 1.6k). Fill thinnest first.
+FEATURE_TEAM_RUSH_FLOOR = 1_850.0
+FEATURE_TEAM_RUSH_CAP = 2_100.0
+STARVE_TEAM_RUSH_MAX = 1_600.0
+STARVE_RB1_RUSH_MAX = 1_100.0
+DONOR_TEAM_RUSH_MIN = 2_200.0
+DONOR_RB1_RUSH_MIN = 1_100.0
+PROTECTED_DONOR_TEAMS = frozenset({"SEA"})
+
 
 def depth_from_player_key(player_key: str) -> Optional[int]:
     match = _KEY_DEPTH_RE.match(str(player_key or ""))
@@ -133,6 +145,163 @@ def _sort_rbs(rbs: Sequence[MutableMapping[str, Any]]) -> List[MutableMapping[st
         return (depth, rush, str(row.get("player_name") or ""))
 
     return sorted(rbs, key=key)
+
+
+def _canon_csv_team(team: str) -> str:
+    token = str(team or "").strip().upper()
+    if token == "LA":
+        return "LAR"
+    return token
+
+
+def apply_feature_rush_floors(
+    rows: Sequence[Mapping[str, Any]],
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Lift starved feature-RB1 team rush pools from fat donors.
+
+    League rush yards and rush TDs stay conserved. Only SoT RB1s that are
+    rush-alpha / FORCE_FEATURE on a sub-floor pool are lifted. Committee
+    NON_ALPHA RB1s stay put. SEA is never a donor.
+    """
+    work: List[Dict[str, Any]] = [dict(r) for r in rows]
+    team_rush = _team_rush_map(work)
+    league_rush_before = sum(team_rush.values())
+    team_rush_td: Dict[str, float] = {}
+    by_team: Dict[str, List[Dict[str, Any]]] = {}
+    for row in work:
+        team = str(row.get("team") or "")
+        by_team.setdefault(team, []).append(row)
+        team_rush_td[team] = team_rush_td.get(team, 0.0) + _f(
+            row, "rush_tds_total", "rush_tds_mean"
+        )
+    league_td_before = sum(team_rush_td.values())
+
+    starved: List[Dict[str, Any]] = []
+    donors: List[Dict[str, Any]] = []
+    for team, team_rows in by_team.items():
+        rbs = [r for r in team_rows if str(r.get("position") or "").upper() == "RB"]
+        if not rbs:
+            continue
+        ordered = _sort_rbs(rbs)
+        rb1_name = str(ordered[0].get("player_name") or "")
+        rush = float(team_rush.get(team, 0.0))
+        rb1_rush = _f(ordered[0], "rush_yards_total", "rush_yards_mean")
+        canon = _canon_csv_team(team)
+        if (
+            _is_rush_alpha(rb1_name)
+            and rush + 1e-6 < STARVE_TEAM_RUSH_MAX
+            and rb1_rush + 1e-6 < STARVE_RB1_RUSH_MAX
+        ):
+            need = min(
+                FEATURE_TEAM_RUSH_FLOOR - rush,
+                FEATURE_TEAM_RUSH_CAP - rush,
+            )
+            if need >= 8.0:
+                starved.append(
+                    {
+                        "team": team,
+                        "rb1": rb1_name,
+                        "need": need,
+                        "rush": rush,
+                        "rb1_rush": rb1_rush,
+                    }
+                )
+        if (
+            canon not in PROTECTED_DONOR_TEAMS
+            and rush > DONOR_TEAM_RUSH_MIN
+            and rb1_rush >= DONOR_RB1_RUSH_MIN
+        ):
+            surplus = rush - DONOR_TEAM_RUSH_MIN
+            if surplus >= 8.0:
+                donors.append(
+                    {
+                        "team": team,
+                        "rb1": rb1_name,
+                        "surplus": surplus,
+                        "rush": rush,
+                        "rb1_rush": rb1_rush,
+                    }
+                )
+
+    transfers: List[str] = []
+    touched: List[str] = []
+    starved.sort(key=lambda s: float(s["rush"]))
+    remaining = sum(float(d["surplus"]) for d in donors)
+    if starved and donors and remaining >= 8.0:
+        # Take from donors proportional to surplus; fill thinnest pools first.
+        total_surplus = remaining
+        got_by_team: Dict[str, float] = {}
+        for target in starved:
+            got = min(float(target["need"]), remaining)
+            if got < 8.0:
+                continue
+            remaining -= got
+            got_by_team[str(target["team"])] = got
+        actual_pool = sum(got_by_team.values())
+        if actual_pool >= 8.0:
+            td_moved_total = 0.0
+            for donor in donors:
+                team = str(donor["team"])
+                gave = actual_pool * (float(donor["surplus"]) / total_surplus)
+                rush = float(donor["rush"])
+                td_gave = (
+                    (team_rush_td.get(team, 0.0) * (gave / rush)) if rush > 1e-9 else 0.0
+                )
+                td_moved_total += td_gave
+                _scale_team_field(by_team[team], "rush_yards_total", rush - gave)
+                _scale_team_field(
+                    by_team[team],
+                    "rush_tds_total",
+                    team_rush_td.get(team, 0.0) - td_gave,
+                )
+                transfers.append(
+                    f"{team}:rush {rush:.0f}→{rush - gave:.0f} donor {donor['rb1']}"
+                )
+                touched.append(team)
+            for target in starved:
+                team = str(target["team"])
+                got = got_by_team.get(team, 0.0)
+                if got < 8.0:
+                    continue
+                rush = float(target["rush"])
+                td_got = (
+                    td_moved_total * (got / actual_pool) if actual_pool > 1e-9 else 0.0
+                )
+                _scale_team_field(by_team[team], "rush_yards_total", rush + got)
+                _scale_team_field(
+                    by_team[team],
+                    "rush_tds_total",
+                    team_rush_td.get(team, 0.0) + td_got,
+                )
+                transfers.append(
+                    f"{team}:rush {rush:.0f}→{rush + got:.0f} feature {target['rb1']}"
+                )
+                touched.append(team)
+
+    league_rush_after = sum(_team_rush_map(work).values())
+    league_td_after = sum(_f(r, "rush_tds_total") for r in work)
+    if abs(league_rush_after - league_rush_before) > 0.5 and league_rush_after > 1e-9:
+        scale = league_rush_before / league_rush_after
+        for row in work:
+            row["rush_yards_total"] = _f(row, "rush_yards_total") * scale
+        league_rush_after = sum(_team_rush_map(work).values())
+    if abs(league_td_after - league_td_before) > 0.05 and league_td_after > 1e-9:
+        scale = league_td_before / league_td_after
+        for row in work:
+            row["rush_tds_total"] = _f(row, "rush_tds_total") * scale
+
+    return work, {
+        "applied": bool(transfers),
+        "method": "feature_rush_floors_v1",
+        "floor": FEATURE_TEAM_RUSH_FLOOR,
+        "cap": FEATURE_TEAM_RUSH_CAP,
+        "starved": starved,
+        "donors": donors,
+        "transfers": transfers,
+        "touched_teams": sorted({_canon_csv_team(t) for t in touched}),
+        "rush_pool": round(sum(_team_rush_map(work).values()), 1),
+        "rush_td_pool": round(sum(_f(r, "rush_tds_total") for r in work), 3),
+    }
 
 
 def _is_committee(rbs: Sequence[Mapping[str, Any]]) -> bool:

@@ -1,0 +1,76 @@
+{
+  "identity": {
+    "applied": true,
+    "method": "align_skill_identities_to_depth_sot",
+    "moves": [],
+    "n_moves": 0,
+    "rush_pool": 59990.6
+  },
+  "league_shape": {
+    "applied": true,
+    "n_notes": 107,
+    "rush_pool": 59990.6
+  },
+  "feature_rush_floors": {
+    "applied": true,
+    "method": "feature_rush_floors_v1",
+    "floor": 1850.0,
+    "cap": 2100.0,
+    "starved": [
+      {
+        "team": "KC",
+        "rb1": "Kenneth Walker III",
+        "need": 309.63700000000017,
+        "rush": 1540.3629999999998,
+        "rb1_rush": 975.9739967999999
+      }
+    ],
+    "donors": [
+      {
+        "team": "BUF",
+        "rb1": "James Cook III",
+        "surplus": 310.217000000001,
+        "rush": 2510.217000000001,
+        "rb1_rush": 1457.9340336000005
+      },
+      {
+        "team": "BAL",
+        "rb1": "Derrick Henry",
+        "surplus": 245.0969999999993,
+        "rush": 2445.0969999999993,
+        "rb1_rush": 1403.6
+      }
+    ],
+    "transfers": [
+      "BUF:rush 2510\u21922337 donor James Cook III",
+      "BAL:rush 2445\u21922308 donor Derrick Henry",
+      "KC:rush 1540\u21921850 feature Kenneth Walker III"
+    ],
+    "touched_teams": [
+      "BAL",
+      "BUF",
+      "KC"
+    ],
+    "rush_pool": 59990.6,
+    "rush_td_pool": 406.47
+  },
+  "shape": {
+    "applied": true,
+    "method": "role_aware_player_shape_v1",
+    "adjustments": [
+      "James Cook III:BUF:rush 1357\u21921426",
+      "Ray Davis:BUF:rush 494\u2192445",
+      "Ty Johnson:BUF:rush 206\u2192185",
+      "Derrick Henry:BAL:rush 1325\u21921380",
+      "Justice Hill:BAL:rush 417\u2192379",
+      "Rasheen Ali:BAL:rush 174\u2192158"
+    ],
+    "n_notes": 6,
+    "rush_pool": 59990.6
+  },
+  "touched_teams": [
+    "BAL",
+    "BUF",
+    "KC"
+  ]
+}
