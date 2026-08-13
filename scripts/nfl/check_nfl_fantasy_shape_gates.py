@@ -41,7 +41,7 @@ MUST_RECONCILE_TEAMS = {
     "jaylenwaddle": "DEN",
     "michaelpittman": "PIT",
     "isiahpacheco": "DET",
-    "kennethwalkeriii": "SEA",
+    "kennethwalkeriii": "KC",
     "zachcharbonnet": "SEA",
 }
 
@@ -282,27 +282,30 @@ def main() -> int:
 
     walker = named["walker"]
     if walker:
-        if walker["team"] != "SEA":
-            failures.append(f"Walker team {walker['team']} (need SEA)")
+        if walker["team"] != "KC":
+            failures.append(f"Walker team {walker['team']} (need KC)")
         sot_d = walker.get("sot_depth")
-        if sot_d not in (1, None) and walker["team"] == "SEA":
+        if sot_d not in (1, None) and walker["team"] == "KC":
             failures.append(f"Walker SoT depth {sot_d} (need RB1)")
+        if walker["pos_rank"] > 32:
+            failures.append(
+                f"Walker RB{walker['pos_rank']} (need starter band as KC RB1; "
+                "rank≠ADP under conserved KC rush)"
+            )
+        johnson = pack(find_player(ranked, "Emmett Johnson"))
+        if johnson and walker["rush"] < johnson["rush"]:
+            failures.append("Walker rush behind Johnson (need KC primary)")
     else:
         failures.append("Walker missing")
 
     charb = named["charbonnet"]
     if charb:
-        adp_n = charb.get("adp")
+        if charb["team"] != "SEA":
+            failures.append(f"Charbonnet team {charb['team']} (need SEA)")
         sot_d = charb.get("sot_depth")
-        if charb["team"] == "SEA" and sot_d == 1:
-            failures.append("Charbonnet still SEA RB1 over Walker")
-        if sot_d == 2 and charb["pos_rank"] <= 8:
+        if sot_d not in (1, None):
             failures.append(
-                f"Charbonnet RB{charb['pos_rank']} with SoT RB2 (need outside top 8)"
-            )
-        if adp_n is not None and adp_n > 100 and sot_d == 2 and charb["pos_rank"] <= 8:
-            failures.append(
-                f"Charbonnet RB{charb['pos_rank']} with ADP {adp_n} and SoT RB2"
+                f"Charbonnet SoT depth {sot_d} (need SEA RB1; Walker is KC)"
             )
     else:
         failures.append("Charbonnet missing")
@@ -325,7 +328,7 @@ def main() -> int:
         "waddle": "DEN",
         "pittman": "PIT",
         "pacheco": "DET",
-        "walker": "SEA",
+        "walker": "KC",
         "charbonnet": "SEA",
     }
     for key, want in named_want.items():

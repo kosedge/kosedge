@@ -1,6 +1,6 @@
 /**
  * Weekly `/props/board` is a Postgres box-sim path, not the season CSV.
- * Until that sim is rebuilt on the post-SoT (Walker/SEA) + post-#226 shape,
+ * Until that sim is rebuilt on the post-SoT (Walker/KC) + post-#226 shape,
  * do not render stale/wrong-role weekly rows. Season desks stay live.
  *
  * Flip to true only after box-sim materializer lineage matches the launch bundle.

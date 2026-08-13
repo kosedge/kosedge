@@ -12,7 +12,7 @@ const MUST: Array<{ name: string; team: string }> = [
   { name: "Jaylen Waddle", team: "DEN" },
   { name: "Michael Pittman", team: "PIT" },
   { name: "Isiah Pacheco", team: "DET" },
-  { name: "Kenneth Walker", team: "SEA" },
+  { name: "Kenneth Walker", team: "KC" },
   { name: "Zach Charbonnet", team: "SEA" },
 ];
 

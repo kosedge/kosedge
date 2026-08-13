@@ -1,0 +1,267 @@
+{
+  "engine_version": "nfl-season-engine-v1.24-soft-piles-cleanup",
+  "generated_at_utc": "2026-08-13T13:32:35.933824+00:00",
+  "n_team_sims": 100000,
+  "n_player_sims": 1000,
+  "step": "100k_expert_sim_candidate",
+  "source_research": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260813T121720Z",
+  "locked_snapshot": false,
+  "status": "NOT_LOCKED_AWAITING_CLEARANCE",
+  "note": "100k expert-sim candidate \u2014 NOT LOCKED \u2014 awaiting explicit clearance",
+  "timing_seconds": {
+    "team_wl": 2826.25,
+    "player_full": 1414.41,
+    "survivor": 0.0
+  },
+  "runtime_seconds_total": 4240.7,
+  "conservation": {
+    "pass_pool": 125994.4,
+    "rush_pool": 64000.0,
+    "rec_pool": 125994.4,
+    "max_rec_pass_gap_pct": 0.0,
+    "scheme_pass": {
+      "ARI": 4918.8,
+      "BAL": 3021.4,
+      "SEA": 3803.2
+    },
+    "league_pf": 11859.2,
+    "league_pa": 11859.2,
+    "wins_sum": 272.0,
+    "wins_min": 3.3805,
+    "wins_max": 14.0479,
+    "wins_range": 10.6674
+  },
+  "cin": {
+    "pass_yards": 5167.0,
+    "points_for": 439.8,
+    "points_against": 425.43,
+    "expected_wins": 9.4368,
+    "burrow_pass_yards": 4857.3,
+    "burrow_pass_tds": 39.35
+  },
+  "jsn": {
+    "rank": 16,
+    "yards": 1276.1,
+    "rec_tds": 9.58,
+    "team": "SEA"
+  },
+  "chase": {
+    "rank": 1,
+    "yards": 1715.7,
+    "rec_tds": 11.61,
+    "team": "CIN"
+  },
+  "nacua": {
+    "rank": 8,
+    "yards": 1326.3,
+    "rec_tds": 9.59,
+    "team": "LAR"
+  },
+  "top_rbs": [
+    {
+      "rank": 1,
+      "player": "James Cook III",
+      "team": "BUF",
+      "rush_yards": 1505.4,
+      "rush_tds": 11.44
+    },
+    {
+      "rank": 2,
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "rush_yards": 1500.4,
+      "rush_tds": 11.44
+    },
+    {
+      "rank": 3,
+      "player": "Saquon Barkley",
+      "team": "PHI",
+      "rush_yards": 1464.1,
+      "rush_tds": 11.98
+    },
+    {
+      "rank": 4,
+      "player": "Christian McCaffrey",
+      "team": "SF",
+      "rush_yards": 1452.2,
+      "rush_tds": 11.78
+    },
+    {
+      "rank": 5,
+      "player": "D'Andre Swift",
+      "team": "CHI",
+      "rush_yards": 1438.4,
+      "rush_tds": 11.28
+    }
+  ],
+  "soft_flags": [
+    "JSN not top-tier (rank=16)."
+  ],
+  "label_issues": [],
+  "label_fixes": [
+    "Mike Evans: SF\u2192TB (was Emeka Egbuka on TB WR1)"
+  ],
+  "gates": {
+    "pass_pool_locked": true,
+    "rush_pool_64000": true,
+    "ari_bal_sea_pass_untouched": true,
+    "rec_pass_within_1_5pct": true,
+    "league_pf_pa_11859": true,
+    "wins_sum_272": true,
+    "win_range_ge_7_5": true,
+    "cin_not_bottom_tier": true,
+    "offense_smoke": false,
+    "defense_smoke": true,
+    "qb_labels_clean": true,
+    "jsn_top_tier": false
+  },
+  "audits": {
+    "offense_lift": {
+      "rush_pool_after": 64000.0,
+      "method": "offense_variance_lift_v1_24_tapered"
+    },
+    "alpha": {
+      "alpha_players": 0
+    },
+    "pass_tds": {
+      "teams_lifted": [
+        "ARI",
+        "ATL",
+        "BAL",
+        "BUF",
+        "CAR",
+        "CHI",
+        "CIN",
+        "CLE",
+        "DAL",
+        "DEN",
+        "DET",
+        "GB",
+        "HOU",
+        "IND",
+        "JAX",
+        "KC",
+        "LA",
+        "LAC",
+        "LV",
+        "MIA",
+        "MIN",
+        "NE",
+        "NO",
+        "NYG",
+        "NYJ",
+        "PHI",
+        "PIT",
+        "SEA",
+        "SF",
+        "TB",
+        "TEN",
+        "WAS"
+      ]
+    },
+    "rb_priors": {
+      "rush_pool": 64000.0,
+      "top_rb": [
+        [
+          "James Cook III",
+          "BUF",
+          1505.4
+        ],
+        [
+          "Derrick Henry",
+          "BAL",
+          1500.4
+        ],
+        [
+          "Saquon Barkley",
+          "PHI",
+          1464.1
+        ],
+        [
+          "Christian McCaffrey",
+          "SF",
+          1452.2
+        ],
+        [
+          "D'Andre Swift",
+          "CHI",
+          1438.4
+        ],
+        [
+          "Cam Skattebo",
+          "NYG",
+          1434.4
+        ],
+        [
+          "Zach Charbonnet",
+          "SEA",
+          1425.3
+        ],
+        [
+          "Bijan Robinson",
+          "ATL",
+          1416.9
+        ],
+        [
+          "Josh Jacobs",
+          "GB",
+          1406.6
+        ],
+        [
+          "Rhamondre Stevenson",
+          "NE",
+          1406.3
+        ],
+        [
+          "Bhayshul Tuten",
+          "JAX",
+          1404.5
+        ],
+        [
+          "Jacory Croskey-Merritt",
+          "WAS",
+          1392.1
+        ]
+      ]
+    },
+    "defense": {
+      "league_pf": 11859.2,
+      "league_pa": 11859.2,
+      "wins_sum": 272.0,
+      "offense_pf_variance_lift": {
+        "applied": true,
+        "method": "offense_pf_variance_lift_v1_24_soft_piles",
+        "pf_range": 133.63,
+        "pa_range": 95.65,
+        "volume_pf_floors": true
+      }
+    },
+    "strength_coherence": {
+      "method": "7seed_mc_plus_strength_bracket_sb",
+      "before_lar": {
+        "team": "LAR",
+        "expected_wins": 13.5034,
+        "playoff_prob": 0.997716,
+        "division_title_prob": 0.672151,
+        "super_bowl_win_prob": 0.138163
+      },
+      "after_lar": {
+        "team": "LAR",
+        "expected_wins": 11.1073,
+        "playoff_prob": 0.8474,
+        "division_title_prob": 0.49815,
+        "super_bowl_win_prob": 0.11385
+      },
+      "sanity": {
+        "sum_playoff_afc": 7.0,
+        "sum_playoff_nfc": 7.0,
+        "sum_playoff_league": 14.0,
+        "sum_expected_wins": 272.0,
+        "sum_division_title": 8.0,
+        "sum_super_bowl": 1.0
+      }
+    }
+  },
+  "pf_win_half_overlap": 12,
+  "all_gates_pass": false
+}

@@ -2,7 +2,7 @@
   "as_of": "2026-08-13",
   "approved_by": "desk",
   "fixture": false,
-  "notes": "Franchise identity SoT — applied via SOT_SKILL_OVERRIDES onto the one depth pack (same map as WAS Diggs). Daily intel cannot reassign team today; this file is the desk approval record, not a second depth map. QB1 identities unchanged — no 100k republish.",
+  "notes": "HOTFIX: pack-as-SoT was wrong. Walker signed with KC in March 2026 (ADP KC ~18). Reality/ADP corrected; pack overlay updated so Walker-SEA cannot recur. Daily intel still cannot reassign team; SOT_SKILL_OVERRIDES is the lock.",
   "overrides": [
     {
       "team": "KC",
@@ -13,13 +13,14 @@
       "field": "depth_order",
       "before": 1,
       "after": 1,
-      "reason": "Desk SoT: Walker is SEA RB1. Pack rewrite via SOT_SKILL_OVERRIDES moves franchise; this row documents the identity change. Do not apply --write (would not change team).",
+      "reason": "Desk SoT hotfix: Walker is KC RB1 (2026 FA). Prior pack overlay wrongly parked him on SEA.",
       "as_of": "2026-08-13",
       "confidence": "high",
-      "destination": "wait_republish",
+      "destination": "pack_sot_skill_overrides",
       "sources": [
-        "https://www.seahawks.com/",
-        "desk-sot-20260813"
+        "user-confirmed-20260813",
+        "adp-fantasypros-2026-half_ppr KC ~18",
+        "desk-sot-hotfix-20260813"
       ]
     },
     {
@@ -29,15 +30,15 @@
       "position": "RB",
       "layer": "rows",
       "field": "depth_order",
-      "before": 1,
-      "after": 2,
-      "reason": "Walker SEA RB1 → Charbonnet is SEA RB2, not a false RB1.",
+      "before": 2,
+      "after": 1,
+      "reason": "Walker is KC. Charbonnet is SEA RB1 / primary, not RB2 behind a ghost Walker.",
       "as_of": "2026-08-13",
       "confidence": "high",
-      "destination": "wait_republish",
+      "destination": "pack_sot_skill_overrides",
       "sources": [
-        "https://www.seahawks.com/",
-        "desk-sot-20260813"
+        "user-confirmed-20260813",
+        "desk-sot-hotfix-20260813"
       ]
     }
   ]

@@ -1,0 +1,41 @@
+{
+  "identity": {
+    "applied": true,
+    "method": "align_skill_identities_to_depth_sot",
+    "moves": [
+      "Zach Charbonnet:SEA-d2\u2192SEA-d1",
+      "Kenneth Walker III:SEA-d1\u2192KC-d1",
+      "Jadarian Price:SEA-d3\u2192SEA-d2",
+      "Emmett Johnson:KC-d1\u2192KC-d2",
+      "Emari Demercado:KC-d2\u2192KC-d3"
+    ],
+    "n_moves": 5,
+    "rush_pool": 64000.0
+  },
+  "playoff_identity": {
+    "applied": true,
+    "method": "align_skill_identities_to_depth_sot",
+    "moves": [],
+    "n_moves": 0,
+    "rush_pool": 0
+  },
+  "touched_teams": [
+    "KC",
+    "SEA"
+  ],
+  "skip_wr_alpha": true,
+  "shape": {
+    "applied": true,
+    "method": "role_aware_player_shape_v1",
+    "adjustments": [
+      "Kenneth Walker III:KC:rush 689\u2192904",
+      "Emmett Johnson:KC:rush 362\u2192284",
+      "Emari Demercado:KC:rush 283\u2192118",
+      "Zach Charbonnet:SEA:rush 2038\u21921188",
+      "Jadarian Price:SEA:rush 429\u2192930",
+      "George Holani:SEA:rush 0\u2192465"
+    ],
+    "n_notes": 6,
+    "rush_pool": 64000.0
+  }
+}
