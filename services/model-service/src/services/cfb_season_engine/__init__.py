@@ -376,6 +376,10 @@ def engine_status_payload(
         "project_game_formula": project_game_formula_doc(),
         "examples": examples,
         "preseason_prior": _preseason_prior_status(season, example_codes),
+        "qb_situation_overrides": __import__(
+            "src.services.cfb_season_engine.qb_situation_overrides",
+            fromlist=["documentation"],
+        ).documentation(),
         "hfa_bucket_counts": hfa_buckets,
         "coaching_flag_counts": coaching_flags,
         "roster_strength_ladder": {
@@ -433,6 +437,7 @@ def engine_status_payload(
                 "off_eff/def_eff + roster_strength + qb_situation_index as projection drivers",
                 "Opponent-adjusted PBP EPA week snapshots (week W uses same-season week < W)",
                 "Preseason prior mean+σ (seasons < Y; roster as_of 2026-08-12; not in spread)",
+                "QB situation SoT overrides (camp/news; ESPN pack not silently rewritten)",
                 "Packaged ESPN 2026 roster snapshot wiring (DB → snapshot → priors)",
                 "Packaged final-2025 SP+ efficiency snapshot wiring",
                 "Variable HFA bucket structure (baseline ~2 pts, elite→poor)",
@@ -500,6 +505,7 @@ def engine_status_payload(
             "ops_performance": "data/ops/cfb-performance-tracking-20260805.md",
             "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
             "ops_efficiency_prior": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
+            "ops_qb_honesty": "data/ops/cfb-qb-honesty-prior-20260812.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
