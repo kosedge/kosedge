@@ -85,6 +85,8 @@ ESPN_CODE_ALIASES: Dict[str, str] = {
     "PIT": "PITT",
     "FRESNO": "FRES",
     "NMST": "NMSU",
+    # ESPN uses FLA for the Gators; UF is Findlay (D2).
+    "UF": "FLA",
 }
 
 UNIT_POS = {
@@ -152,7 +154,15 @@ def _team_rank_for_abbrev(team: Mapping[str, Any]) -> Tuple[int, int]:
     name = str(team.get("displayName") or "").lower()
     # Deprioritize junior-college / satellite / club-ish collisions.
     penalty = 0
-    for token in ("newark", "junior", "club", "alumni", "scout"):
+    for token in (
+        "newark",
+        "junior",
+        "club",
+        "alumni",
+        "scout",
+        "findlay",
+        "oilers",
+    ):
         if token in name:
             penalty += 100
     try:
@@ -189,11 +199,12 @@ def resolve_espn_team(
     code: str, espn: Mapping[str, Mapping[str, str]]
 ) -> Optional[Tuple[str, Mapping[str, str]]]:
     code_u = code.upper()
-    if code_u in espn:
-        return code_u, espn[code_u]
+    # Explicit engine aliases win over ESPN's raw abbreviation (UF=Findlay vs FLA=Gators).
     alias = ESPN_CODE_ALIASES.get(code_u)
     if alias and alias in espn:
         return alias, espn[alias]
+    if code_u in espn:
+        return code_u, espn[code_u]
     return None
 
 

@@ -1,16 +1,16 @@
 {
-  "as_of": "2026-08-04",
+  "as_of": "2026-08-12",
   "team_count": 134,
   "unmatched": [
     "FAY",
     "SOUTH"
   ],
   "coverage": {
-    "teams_with_roster": 133,
-    "teams_with_named_qb": 133,
-    "teams_with_portal_in": 126,
-    "total_athletes": 13116,
-    "total_depth_rows": 5863
+    "teams_with_roster": 134,
+    "teams_with_named_qb": 134,
+    "teams_with_portal_in": 129,
+    "total_athletes": 13353,
+    "total_depth_rows": 5903
   },
   "cfbd": {
     "enabled": false,
@@ -21,54 +21,54 @@
       "qb": "Ryan Puglisi",
       "qb_class": "incumbent",
       "roster_strength_inputs": {
-        "returning_production": 53.59,
-        "portal_in_value": 43.7,
-        "experience_index": 43.6
+        "returning_production": 62.52,
+        "portal_in_value": 61.83,
+        "experience_index": 56.92
       }
     },
     "TEX": {
       "qb": "Arch Manning",
       "qb_class": "incumbent",
       "roster_strength_inputs": {
-        "returning_production": 64.65,
-        "portal_in_value": 54.5,
-        "experience_index": 53.1
+        "returning_production": 66.27,
+        "portal_in_value": 63.88,
+        "experience_index": 61.54
       }
     },
     "FSU": {
       "qb": "Dean DeNobile",
       "qb_class": "incumbent",
       "roster_strength_inputs": {
-        "returning_production": 58.87,
-        "portal_in_value": 55.5,
-        "experience_index": 48.0
+        "returning_production": 61.9,
+        "portal_in_value": 64.37,
+        "experience_index": 56.91
       }
     },
     "COLO": {
-      "qb": "Kaidon Salter",
-      "qb_class": "portal",
+      "qb": "Julian Lewis",
+      "qb_class": "incumbent",
       "roster_strength_inputs": {
-        "returning_production": 76.39,
-        "portal_in_value": 65.7,
-        "experience_index": 61.46
+        "returning_production": 70.56,
+        "portal_in_value": 60.97,
+        "experience_index": 69.3
       }
     },
     "PSU": {
       "qb": "Rocco Becht",
       "qb_class": "incumbent",
       "roster_strength_inputs": {
-        "returning_production": 65.61,
-        "portal_in_value": 48.2,
-        "experience_index": 50.0
+        "returning_production": 65.28,
+        "portal_in_value": 57.19,
+        "experience_index": 58.62
       }
     },
     "BALL": {
       "qb": "Keldric Luster",
       "qb_class": "open_competition",
       "roster_strength_inputs": {
-        "returning_production": 58.69,
-        "portal_in_value": 50.2,
-        "experience_index": 49.3
+        "returning_production": 55.22,
+        "portal_in_value": 53.17,
+        "experience_index": 51.75
       }
     }
   }
