@@ -45,7 +45,7 @@ const cards: HubCard[] = [
   },
   {
     title: "Props Center",
-    desc: "Cross-sport prop scan — NFL player props live on the NFL Props board.",
+    desc: "Cross-sport prop scan — NFL weekly player props gated; season desk is live.",
     href: "/pro/props-center",
     accent: "green",
   },

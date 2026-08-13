@@ -89,6 +89,26 @@ def test_known_conflicts_match_desk() -> None:
     assert cle_qbs[0]["competition_status"] == "open_competition"
     assert cle_qbs[1]["player_name"] == "Shedeur Sanders"
 
+    rbs = _starters([r for r in rows if r["position"] == "RB"])
+    assert rbs[("SEA", "RB")]["player_name"] == "Kenneth Walker III"
+    sea_rbs = sorted(
+        [r for r in rows if r["team"] == "SEA" and r["position"] == "RB"],
+        key=lambda r: int(r["depth_order"]),
+    )
+    assert sea_rbs[0]["player_name"] == "Kenneth Walker III"
+    assert sea_rbs[1]["player_name"] == "Zach Charbonnet"
+    walker = [r for r in rows if r["player_name"] == "Kenneth Walker III"]
+    assert len(walker) == 1 and walker[0]["team"] == "SEA"
+    charb = [r for r in rows if r["player_name"] == "Zach Charbonnet"]
+    assert len(charb) == 1 and charb[0]["team"] == "SEA"
+    assert int(charb[0]["depth_order"]) == 2
+    kc_walker = [
+        r
+        for r in rows
+        if r["team"] == "KC" and r["player_name"] == "Kenneth Walker III"
+    ]
+    assert kc_walker == []
+
 
 def test_no_demo_fill_when_pack_present() -> None:
     universe, meta = resolve_season_universe(season=2026, demo=False, session=None)

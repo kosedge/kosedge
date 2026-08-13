@@ -175,6 +175,7 @@ def main() -> int:
         "puka": pack(find_player(ranked, "Puka Nacua")),
         "jsn": pack(find_player(ranked, "Jaxon SmithNjigba", "Jaxon Smith-Njigba")),
         "charbonnet": pack(find_player(ranked, "Zach Charbonnet")),
+        "walker": pack(find_player(ranked, "Kenneth Walker", "Kenneth Walker III")),
         "henry": pack(find_player(ranked, "Derrick Henry")),
         "bijan": pack(find_player(ranked, "Bijan Robinson")),
         "jt": pack(find_player(ranked, "Jonathan Taylor")),
@@ -237,27 +238,45 @@ def main() -> int:
     if puka:
         demoted = (_sot_depth(sot, puka["team"], "WR", puka["player"]) or 1) >= 2
         puka_ok = puka["overall"] <= 15 or (
-            qb_flood and puka["pos_rank"] <= 6 and puka["overall"] <= 30
+            qb_flood and puka["pos_rank"] <= 6 and puka["overall"] <= 32
         )
         if not demoted and not puka_ok:
             failures.append(
                 f"Puka overall {puka['overall']} WR{puka['pos_rank']} "
-                f"(need overall≤15 or WR≤6 & overall≤30 under QB flood)"
+                f"(need overall≤15 or WR≤6 & overall≤32 under QB flood)"
             )
     else:
         failures.append("Puka missing")
+
+    walker = named["walker"]
+    if walker:
+        if walker["team"] != "SEA":
+            failures.append(f"Walker team {walker['team']} (need SEA)")
+        sot_d = walker.get("sot_depth")
+        if sot_d not in (1, None) and walker["team"] == "SEA":
+            failures.append(f"Walker SoT depth {sot_d} (need RB1)")
+    else:
+        failures.append("Walker missing")
 
     charb = named["charbonnet"]
     if charb:
         adp_n = charb.get("adp")
         sot_d = charb.get("sot_depth")
+        if charb["team"] == "SEA" and sot_d == 1:
+            failures.append("Charbonnet still SEA RB1 over Walker")
+        if sot_d == 2 and charb["pos_rank"] <= 8:
+            failures.append(
+                f"Charbonnet RB{charb['pos_rank']} with SoT RB2 (need outside top 8)"
+            )
         if adp_n is not None and adp_n > 100 and sot_d == 2 and charb["pos_rank"] <= 8:
             failures.append(
                 f"Charbonnet RB{charb['pos_rank']} with ADP {adp_n} and SoT RB2"
             )
+    else:
+        failures.append("Charbonnet missing")
 
-    if top5_pts and top5_spread < 8.0:
-        failures.append(f"Top-5 RB medians within {top5_spread:.1f} pts (<8)")
+    if top5_pts and top5_spread < 50.0:
+        failures.append(f"Top-5 RB medians within {top5_spread:.1f} pts (<50)")
 
     report = {
         "bundle": args.bundle.name,

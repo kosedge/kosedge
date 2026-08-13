@@ -59,6 +59,23 @@ SOT_SKILL_OVERRIDES: dict[str, dict[str, list[tuple[int, str, str]]]] = {
             (3, "John Bates", "00-0036628"),
         ],
     },
+    # nflverse 2026 depth parked Walker on KC and left Charbonnet as SEA RB1.
+    # Desk SoT: Walker is SEA RB1; Charbonnet is SEA RB2. KC RB1 becomes the
+    # next listed Chief (Emmett Johnson) — Pacheco-on-DET is flagged, not
+    # auto-moved.
+    "SEA": {
+        "RB": [
+            (1, "Kenneth Walker III", "00-0038134"),
+            (2, "Zach Charbonnet", "00-0039165"),
+            (3, "Jadarian Price", "00-0041512"),
+        ],
+    },
+    "KC": {
+        "RB": [
+            (1, "Emmett Johnson", "00-0041013"),
+            (2, "Emari Demercado", "00-0038705"),
+        ],
+    },
 }
 
 
@@ -148,23 +165,30 @@ def _apply_sot_skill_overrides(rows: list[dict]) -> list[dict]:
         for pos, slots in by_pos.items():
             for depth, name, pid in slots:
                 prior = by_name.get(name) or {}
-                kept.append(
-                    {
-                        "team": team,
-                        "position": pos,
-                        "depth_order": int(depth),
-                        "player_id": str(
-                            pid or prior.get("player_id") or f"{team}-{pos}-{depth}"
-                        ),
-                        "player_name": name,
-                        "depth_slot": {1: "starter", 2: "backup", 3: "rotation"}.get(
-                            int(depth), "depth"
-                        ),
-                        "role_confidence": 0.85
-                        if int(depth) == 1
-                        else (0.65 if int(depth) == 2 else 0.5),
-                    }
-                )
+                row = {
+                    "team": team,
+                    "position": pos,
+                    "depth_order": int(depth),
+                    "player_id": str(
+                        pid or prior.get("player_id") or f"{team}-{pos}-{depth}"
+                    ),
+                    "player_name": name,
+                    "depth_slot": {1: "starter", 2: "backup", 3: "rotation"}.get(
+                        int(depth), "depth"
+                    ),
+                    "role_confidence": 0.85
+                    if int(depth) == 1
+                    else (0.65 if int(depth) == 2 else 0.5),
+                }
+                for ik in (
+                    "injury_status",
+                    "injury_window",
+                    "injury_note",
+                    "competition_status",
+                ):
+                    if prior.get(ik) not in (None, ""):
+                        row[ik] = prior[ik]
+                kept.append(row)
     kept.sort(key=lambda r: (r["team"], r["position"], int(r["depth_order"])))
     return kept
 
@@ -232,8 +256,8 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
             "Preseason/camp depth — roles can shift; rookies and free-agent landings may be incomplete or volatile.",
             "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
             "DB weekly/official must not override these identities when this pack is present.",
-            "QB SoT overrides applied post-nflverse: Kyler→MIN1, Brissett→ARI1, Penix→ATL1, Tua→MIA1.",
-            "Skill SoT overlays (SOT_SKILL_OVERRIDES) preserve camp/FA landings (e.g. WAS Diggs/Bates).",
+            "QB SoT overrides applied post-nflverse: Kyler→MIN1, Brissett→ARI1, Tua→ATL1, Willis→MIA1.",
+            "Skill SoT overlays (SOT_SKILL_OVERRIDES): WAS Diggs/Bates; SEA Walker RB1 / Charbonnet RB2.",
         ],
         "rows": rows_out,
     }

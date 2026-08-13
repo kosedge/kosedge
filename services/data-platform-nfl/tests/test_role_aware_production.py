@@ -125,3 +125,50 @@ def test_puka_alpha_not_stuck_at_wr8_volume() -> None:
     by = {r["player_name"]: r for r in out}
     puka = by["Puka Nacua"]
     assert puka["receiving_yards_total"] >= 1400
+
+
+def test_walker_sea_rb1_takes_feature_share_not_committee_magnet() -> None:
+    from data_platform_nfl.role_aware_production import align_skill_identities_to_depth_sot
+
+    rows = [
+        _qb("SEA", "Sam Darnold", 3500, 180),
+        _rb("SEA", 1, "Zach Charbonnet", 1188, 339, 7.9),
+        _rb("SEA", 2, "Jadarian Price", 930, 218, 8.6),
+        _rb("SEA", 3, "George Holani", 465, 60, 4.3),
+        _wr("SEA", 1, "Jaxon Smith-Njigba", 1276),
+        _wr("SEA", 2, "Cooper Kupp", 700),
+        _qb("KC", "Patrick Mahomes", 4100, 300),
+        _rb("KC", 1, "Kenneth Walker III", 601, 407, 4.0),
+        _rb("KC", 2, "Emmett Johnson", 470, 182, 4.3),
+        _rb("KC", 3, "Emari Demercado", 235, 73, 2.2),
+        _wr("KC", 1, "Rashee Rice", 1100),
+    ]
+    pack = [
+        {"team": "SEA", "position": "RB", "depth_order": 1, "player_name": "Kenneth Walker III"},
+        {"team": "SEA", "position": "RB", "depth_order": 2, "player_name": "Zach Charbonnet"},
+        {"team": "SEA", "position": "RB", "depth_order": 3, "player_name": "Jadarian Price"},
+        {"team": "KC", "position": "RB", "depth_order": 1, "player_name": "Emmett Johnson"},
+        {"team": "KC", "position": "RB", "depth_order": 2, "player_name": "Emari Demercado"},
+        {"team": "TB", "position": "WR", "depth_order": 1, "player_name": "Emeka Egbuka"},
+        {"team": "SF", "position": "WR", "depth_order": 1, "player_name": "Mike Evans"},
+    ]
+    sea_rush = sum(r["rush_yards_total"] for r in rows if r["team"] == "SEA")
+    aligned, moves = align_skill_identities_to_depth_sot(
+        rows,
+        pack,
+        only_names=["Kenneth Walker III", "Zach Charbonnet", "Jadarian Price", "Emmett Johnson", "Emari Demercado"],
+    )
+    assert not any("Mike Evans" in m or "Egbuka" in m for m in moves["moves"])
+    assert any("Kenneth Walker III" in m and "SEA" in m for m in moves["moves"])
+    walker_row = next(r for r in aligned if r["player_name"] == "Kenneth Walker III")
+    assert walker_row["team"] == "SEA"
+    charb_row = next(r for r in aligned if r["player_name"] == "Zach Charbonnet")
+    assert "RB2" in str(charb_row["player_key"])
+    out, _ = apply_role_aware_player_shape(aligned)
+    by = {r["player_name"]: r for r in out}
+    walker = by["Kenneth Walker III"]
+    charb = by["Zach Charbonnet"]
+    assert walker["team"] == "SEA"
+    assert walker["rush_yards_total"] > charb["rush_yards_total"] + 200
+    assert abs(sum(r["rush_yards_total"] for r in out if r["team"] == "SEA") - sea_rush) < 2.0
+    assert by["Emmett Johnson"]["team"] == "KC"
