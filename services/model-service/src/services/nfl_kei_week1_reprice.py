@@ -15,18 +15,20 @@ OL injuries live in pack ``ol_roles``; skill injuries on pack rows.
 
 Honesty
 -------
-- Weather: stub unless the frozen projection already applied a real forecast.
-  Never invent stadium weather.
-- Refs: always "ref not applied".
+- Weather: indoor → not applied; outdoor uses a real forecast (Open-Meteo / desk
+  obs) when in horizon. Never climatology. Never invent stadium weather.
+- Refs: apply only from a Week 1 crew pack. Empty pack → "ref not applied".
 - Open QB competition: wider uncertainty / lower confidence — not a fake spread lock.
 - Do not restack a factor already inside the frozen model snapshot.
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
@@ -41,6 +43,13 @@ SCOPE_WEEK = 1
 SPREAD_CAP = 4.0
 TOTAL_CAP = 2.0
 TEAM_INJURY_SPREAD_CAP = 1.5
+WEATHER_TOTAL_CAP = 1.5
+REF_TOTAL_CAP = 0.5
+# Wind/cold/precip bands — totals first; weather does not move the spread.
+WIND_BAND_MPH = 20.0
+WIND_EXTREME_MPH = 25.0
+COLD_BAND_F = 20.0
+PRECIP_BAND_MM = 2.0
 
 # Timezone hours west of ET. Cross-country = |delta| >= 3.
 _PACIFIC = frozenset({"SEA", "SF", "LA", "LAR", "LAC", "ARI", "LV"})
@@ -669,8 +678,80 @@ def _kickoff_weekday_et(start_time: Any) -> Optional[int]:
     return dt.astimezone(TZ_EASTERN).weekday()
 
 
-def _weather_factors(*, home: str, projection: Any) -> Tuple[List[FactorEntry], bool]:
-    """Honest stub. Never fake stadium weather. Indoor → not applied (indoor)."""
+def _geo_team(home: str) -> str:
+    code = _norm_team(home)
+    return "LAR" if code in {"LA", "LAR"} else code
+
+
+def _weather_total_from_obs(obs: Mapping[str, Any]) -> Tuple[float, List[str]]:
+    """Totals-first bands. Never invent values — missing readings are skipped."""
+    notes: List[str] = []
+    total = 0.0
+    wind = _to_float(obs.get("wind_mph"))
+    temp = _to_float(obs.get("temp_f"))
+    precip = _to_float(obs.get("precip_mm"))
+    if wind is not None:
+        if wind >= WIND_EXTREME_MPH:
+            total -= 1.5
+            notes.append(f"wind {wind:.0f} mph")
+        elif wind >= WIND_BAND_MPH:
+            total -= 1.0
+            notes.append(f"wind {wind:.0f} mph")
+    if temp is not None and temp <= COLD_BAND_F:
+        total -= 0.5
+        notes.append(f"temp {temp:.0f}F")
+    if precip is not None and precip >= PRECIP_BAND_MM:
+        total -= 0.5
+        notes.append(f"precip {precip:.1f} mm")
+    clamped, _ = _clamp(total, WEATHER_TOTAL_CAP)
+    return round(clamped, 4), notes
+
+
+def _fetch_real_forecast(*, home: str, start_time: Any) -> Optional[Dict[str, Any]]:
+    """Open-Meteo / VC only. Never climatology. Swallows network errors."""
+    if start_time is None:
+        return None
+    if isinstance(start_time, datetime):
+        kickoff = start_time
+    elif isinstance(start_time, str) and start_time.strip():
+        try:
+            kickoff = datetime.fromisoformat(start_time.strip().replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    else:
+        return None
+    if kickoff.tzinfo is None:
+        kickoff = kickoff.replace(tzinfo=timezone.utc)
+    try:
+        from src.services.nfl_environment import TEAM_HOME_GEO, fetch_game_weather_context
+    except Exception:
+        return None
+    geo = TEAM_HOME_GEO.get(_geo_team(home))
+    if not geo:
+        return None
+    try:
+        payload = fetch_game_weather_context(
+            game_time_iso=kickoff.isoformat(),
+            lat=float(geo["lat"]),
+            lon=float(geo["lon"]),
+        )
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    if "climatology" in str(payload.get("source") or ""):
+        return None
+    return payload
+
+
+def _weather_factors(
+    *,
+    home: str,
+    projection: Any,
+    start_time: Any = None,
+    weather_obs: Optional[Mapping[str, Any]] = None,
+) -> Tuple[List[FactorEntry], bool]:
+    """Indoor / restack / real forecast. Never fabricate stadium weather."""
     home_n = _norm_team(home)
     if home_n in INDOOR_TEAMS:
         return [
@@ -690,21 +771,124 @@ def _weather_factors(*, home: str, projection: Any) -> Tuple[List[FactorEntry], 
                 reason="weather already in frozen model snapshot — not restacked",
             )
         ], True
+
+    obs: Optional[Mapping[str, Any]] = weather_obs
+    if obs is None:
+        obs = _fetch_real_forecast(home=home_n, start_time=start_time)
+
+    if not obs:
+        reason = (
+            "weather not applied (no kickoff for forecast)"
+            if start_time is None
+            else "weather not applied (no forecast on this read path)"
+        )
+        return [
+            _entry(factor="weather", applied=False, team=home_n, reason=reason)
+        ], True
+
+    if obs.get("available") is False:
+        status = str(obs.get("status") or "")
+        if status == "outside_forecast_window":
+            reason = "weather not applied (beyond forecast horizon)"
+        else:
+            reason = f"weather not applied ({status or 'forecast unavailable'})"
+        return [
+            _entry(factor="weather", applied=False, team=home_n, reason=reason)
+        ], True
+
+    delta, notes = _weather_total_from_obs(obs)
+    source = str(obs.get("source") or "forecast")
+    if not notes:
+        wind = _to_float(obs.get("wind_mph"))
+        temp = _to_float(obs.get("temp_f"))
+        detail = []
+        if wind is not None:
+            detail.append(f"wind {wind:.0f} mph")
+        if temp is not None:
+            detail.append(f"temp {temp:.0f}F")
+        tail = ", ".join(detail) if detail else "bands quiet"
+        return [
+            _entry(
+                factor="weather",
+                applied=False,
+                team=home_n,
+                reason=f"weather not applied ({source}; {tail} — below KEI bands)",
+            )
+        ], True
+
     return [
         _entry(
             factor="weather",
-            applied=False,
+            applied=True,
             team=home_n,
-            reason="weather not applied (no forecast on this read path)",
+            direction="under",
+            total_pts=delta,
+            reason=f"weather {source}: {', '.join(notes)} (totals first, cap ±{WEATHER_TOTAL_CAP})",
         )
     ], True
 
 
-def _ref_factor() -> FactorEntry:
+@lru_cache(maxsize=4)
+def load_week1_officials(season: int = SCOPE_SEASON) -> Dict[str, Any]:
+    path = (
+        Path(__file__).resolve().parent
+        / "nfl_season_engine"
+        / "data"
+        / f"nfl_week1_officials_{season}.json"
+    )
+    if not path.is_file():
+        return {"crews": [], "loaded": False, "snapshot_id": ""}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"crews": [], "loaded": False, "snapshot_id": ""}
+    if not isinstance(payload, dict):
+        return {"crews": [], "loaded": False, "snapshot_id": ""}
+    payload = dict(payload)
+    payload["loaded"] = True
+    return payload
+
+
+def _ref_factor(
+    *,
+    home: str,
+    away: str,
+    officials: Optional[Mapping[str, Any]] = None,
+) -> FactorEntry:
+    """Tiny total tendency only when a real Week 1 crew row exists. Never invent."""
+    pack = officials if officials is not None else load_week1_officials(SCOPE_SEASON)
+    crews = list(pack.get("crews") or []) if isinstance(pack, Mapping) else []
+    home_n = _norm_team(home)
+    away_n = _norm_team(away)
+    match: Optional[Mapping[str, Any]] = None
+    for raw in crews:
+        if not isinstance(raw, Mapping):
+            continue
+        if _norm_team(raw.get("home")) == home_n and _norm_team(raw.get("away")) == away_n:
+            match = raw
+            break
+    if match is None:
+        return _entry(
+            factor="ref",
+            applied=False,
+            reason="ref not applied (no Week 1 crew assignment)",
+        )
+    crew_name = str(match.get("crew") or match.get("referee") or "crew").strip() or "crew"
+    raw_total = _to_float(match.get("total_tendency"))
+    if raw_total is None or abs(raw_total) < 1e-9:
+        return _entry(
+            factor="ref",
+            applied=False,
+            reason=f"ref not applied ({crew_name} — no / neutral total tendency)",
+        )
+    clamped, _ = _clamp(raw_total, REF_TOTAL_CAP)
+    direction = "over" if clamped > 0 else "under"
     return _entry(
         factor="ref",
-        applied=False,
-        reason="ref not applied (crew data not ready)",
+        applied=True,
+        direction=direction,
+        total_pts=round(clamped, 4),
+        reason=f"ref {crew_name} total tendency {clamped:+.2f} (cap ±{REF_TOTAL_CAP})",
     )
 
 
@@ -736,6 +920,8 @@ def apply_week1_kei_reprice(
     projection: Any = None,
     start_time: Any = None,
     pack: Optional[Week1Pack] = None,
+    weather_obs: Optional[Mapping[str, Any]] = None,
+    officials: Optional[Mapping[str, Any]] = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Return (new_handicap, log). Model markets are not touched.
 
@@ -845,12 +1031,27 @@ def apply_week1_kei_reprice(
         else:
             considered.append(e)
 
-    # --- Weather stub ---
-    weather_entries, weather_clear = _weather_factors(home=home, projection=projection)
-    considered.extend(weather_entries)
+    # --- Weather (real forecast when present; never climatology) ---
+    weather_entries, weather_clear = _weather_factors(
+        home=home,
+        projection=projection,
+        start_time=start_time,
+        weather_obs=weather_obs,
+    )
+    for e in weather_entries:
+        if e.applied:
+            net_total += e.total_pts
+            applied.append(e)
+        else:
+            considered.append(e)
 
-    # --- Refs stub ---
-    considered.append(_ref_factor())
+    # --- Refs (crew pack only; empty pack → not applied) ---
+    ref_entry = _ref_factor(home=home, away=away, officials=officials)
+    if ref_entry.applied:
+        net_total += ref_entry.total_pts
+        applied.append(ref_entry)
+    else:
+        considered.append(ref_entry)
 
     capped = False
     clamped_spread, cap_s = _clamp(net_spread, SPREAD_CAP)
@@ -893,7 +1094,13 @@ def apply_week1_kei_reprice(
         "considered_not_applied": [e.as_dict() for e in considered],
         "pack_snapshot_id": pack.snapshot_id,
         "pack_as_of": pack.as_of,
-        "caps": {"spread": SPREAD_CAP, "total": TOTAL_CAP, "team_injury_spread": TEAM_INJURY_SPREAD_CAP},
+        "caps": {
+            "spread": SPREAD_CAP,
+            "total": TOTAL_CAP,
+            "team_injury_spread": TEAM_INJURY_SPREAD_CAP,
+            "weather_total": WEATHER_TOTAL_CAP,
+            "ref_total": REF_TOTAL_CAP,
+        },
     }
     return handicap_out, log
 
