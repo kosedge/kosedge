@@ -21,6 +21,7 @@ import math
 import shutil
 import sys
 from collections import Counter, defaultdict
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
@@ -391,6 +392,15 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     outcome_rows = _load_csv(out_bundle / "team_regular_season_outcomes.csv")
     players = _load_csv(out_bundle / "player_regular_season_totals.csv")
     defense_rows = _load_csv(out_bundle / "team_defense_season_totals.csv")
+    # Budgets were keyed pre-coherence (LA / WSH). Soft-flag lookups use
+    # post-coherence player keys (LAR / WAS).
+    from services.nfl_canonical_teams import canonicalize_team
+
+    remapped_budgets = {}
+    for t, b in budgets.items():
+        canon = canonicalize_team(str(t)) or str(t)
+        remapped_budgets[canon] = b if b.team == canon else replace(b, team=canon)
+    budgets = remapped_budgets
     after_pass = locked_team_pass_yards(players)
     after_rush = defaultdict(float)
     after_rec = defaultdict(float)
@@ -539,13 +549,21 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     # Depth labels
     label_issues = []
     for team, want in CANON_QB1.items():
+        canon = canonicalize_team(str(team)) or str(team)
         qb1 = max(
-            (r for r in qbs if r.get("team") == team),
+            (
+                r
+                for r in qbs
+                if (canonicalize_team(str(r.get("team") or "")) or str(r.get("team") or ""))
+                == canon
+            ),
             key=lambda r: _f(r, "pass_yards_total"),
             default=None,
         )
         if qb1 is None or str(qb1.get("player_name")) != want:
-            label_issues.append(f"{team}: got {None if qb1 is None else qb1.get('player_name')} want {want}")
+            label_issues.append(
+                f"{canon}: got {None if qb1 is None else qb1.get('player_name')} want {want}"
+            )
     evans = next(
         (r for r in skill if "Mike Evans" in str(r.get("player_name") or "")),
         None,
@@ -885,7 +903,7 @@ Bottom 5:
 | **ALL** | {'**PASS**' if all(gates.values()) else '**FAIL**'} |
 
 ## Method
-1. Packaged universe `--force-packaged` with depth SoT (Kyler MIN / Brissett ARI / Penix ATL / Tua MIA)
+1. Packaged universe `--force-packaged` with depth SoT (Tua ATL open vs Penix / Willis MIA / Kyler MIN / CLE open)
 2. Launch research: {n_team:,} team W/L + {n_player:,} full player paths (engine `{engine}`)
 3. Post: offense variance lift → alpha usage → HV pass-TD floors → soft RB priors → tapered PF/PA + Pythagorean wins Σ=272
 4. Constraints held: ~126k pass, ARI/BAL/SEA weights, 64k rush, PF=PA≈11859
@@ -917,6 +935,8 @@ Bottom 5:
         json.dumps(
             {
                 "bundle_id": out_bundle.name,
+                "active_run_id": out_bundle.name,
+                "kind": "Model",
                 "engine_version": engine,
                 "n_team_sims": n_team,
                 "n_player_sims": n_player,
@@ -924,8 +944,15 @@ Bottom 5:
                 "source_dir": str(source.relative_to(ROOT)),
                 "preseason": True,
                 "identity": f"{engine} · N_team={n_team} · {stamp}",
+                "team_id_scheme": "product_canonical_LAR",
                 "note": "100k expert-sim candidate; NOT LOCKED — awaiting clearance",
                 "locked_snapshot": False,
+                "lineage": {
+                    "run_id": out_bundle.name,
+                    "engine_version": engine,
+                    "generated_at": generated,
+                    "kind": "Model",
+                },
             },
             indent=2,
         )

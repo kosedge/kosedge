@@ -1,0 +1,8 @@
+{
+  "snapshot_id": "nfl-officials-w1-2026-empty",
+  "as_of": "2026-08-13T00:00:00Z",
+  "season": 2026,
+  "week": 1,
+  "note": "No Week 1 crew assignments loaded. Do not invent referees. KEI logs ref not applied until a real crew row exists.",
+  "crews": []
+}
