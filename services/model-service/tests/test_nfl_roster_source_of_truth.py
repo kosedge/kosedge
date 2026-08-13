@@ -172,7 +172,7 @@ def test_intel_depth_matches_engine_sot() -> None:
 def test_was_daily_intel_20260809_depth_sot() -> None:
     """WAS camp flashpoint: Diggs WR2, Bates OUT/TE3, Sinnott TE2, OL roles."""
     rows, meta = load_packaged_depth_chart(2026)
-    assert meta.get("daily_intel_as_of") == "2026-08-09"
+    assert str(meta.get("daily_intel_as_of") or "") >= "2026-08-09"
     was = [r for r in rows if r["team"] == "WAS"]
     wr = sorted(
         [r for r in was if r["position"] == "WR"], key=lambda r: int(r["depth_order"])
@@ -211,6 +211,9 @@ def test_was_daily_intel_20260809_depth_sot() -> None:
     )
     assert was_wr2.player_name == "Stefon Diggs"
     assert was_wr2.team == "WAS"
-    # Engine must not invent OL→EPA magnitudes; hook is documented only.
+    # Pack documents the honest OL→EPA gap. Universe notes may tag the
+    # ol_protection_v1 feature without inventing a magnitude.
+    pack_hooks = meta.get("ol_efficiency_hooks") or {}
+    assert pack_hooks.get("status") == "documented_not_magical"
     hooks = universe.notes.get("ol_efficiency_hooks") or {}
-    assert hooks.get("status") == "documented_not_magical"
+    assert hooks.get("status") in ("documented_not_magical", "ol_protection_v1_feature")

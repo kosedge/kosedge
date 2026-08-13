@@ -239,18 +239,21 @@ def packaged_depth_intel_rows(
         if wanted and code != wanted:
             continue
         depth_order = int(r.get("depth_order") or 0)
+        pack_slot = str(r.get("depth_slot") or "").strip()
         out.append(
             {
                 "season": int(season),
                 "week": int(week),
                 "team": code,
                 "position": str(r.get("position") or ""),
-                "depth_slot": depth_slot_for_order(depth_order),
+                "depth_slot": pack_slot or depth_slot_for_order(depth_order),
                 "depth_order": depth_order,
                 "player_uid": str(r.get("player_id") or "") or None,
                 "player_id": str(r.get("player_id") or "") or None,
                 "player_name": str(r.get("player_name") or ""),
                 "role_confidence": float(r.get("role_confidence") or 0.0),
+                "competition_status": r.get("competition_status") or None,
+                "injury_status": r.get("injury_status") or None,
                 "inferred_source": str(
                     meta.get("roster_source") or "packaged_nflverse_depth_2026"
                 ),
@@ -261,7 +264,7 @@ def packaged_depth_intel_rows(
             str(row["team"]),
             pos_rank.get(str(row["position"]), 10),
             str(row["position"]),
-            {"starter": 0, "backup": 1, "rotation": 2, "depth": 3}.get(
+            {"starter": 0, "open_competition": 0, "named_starter": 0, "backup": 1, "rotation": 2, "depth": 3}.get(
                 str(row["depth_slot"]), 4
             ),
             int(row["depth_order"]),
