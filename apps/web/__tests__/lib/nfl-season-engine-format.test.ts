@@ -236,5 +236,4 @@ describe("nfl-season-engine-format", () => {
     expect(duplicateSurvivorPlanTeams({ "1": "KC", "2": "kc" })).toEqual(["KC"]);
     expect(buildSurvivorPlanBody({}).top_n).toBe(NFL_SURVIVOR_PLAN_TOP_N);
   });
-  });
 });
