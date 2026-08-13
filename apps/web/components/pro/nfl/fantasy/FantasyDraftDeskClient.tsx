@@ -211,9 +211,10 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Board order is value-aware vs ADP; Model # and points stay raw.
-                Then build a roster and practice in Mock. Not a consensus copy
-                board.
+                Board order is projected fantasy points (Half-PPR default).
+                Model # / pts stay raw. ADP and Value Δ are the market
+                comparison — large gaps mean investigate role, not a silent
+                edge.
               </p>
               <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
                 Source · {board.source} · {board.adpSourceLabel}

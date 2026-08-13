@@ -83,20 +83,15 @@ def test_rank_season_fantasy_players_computes_independent_position_ranks() -> No
     assert by_key["rb2"]["rank_position"] == 2
 
 
-def test_rank_season_fantasy_players_overall_rank_uses_vor_not_raw_points() -> None:
-    # A deep QB pool (every QB clustered near the top, mirroring real
-    # single-QB scoring behavior) should NOT let a merely-good QB outrank an
-    # RB who dominates a shallow RB pool, even though the QB's raw points
-    # total is higher -- this is the entire point of VOR-based overall rank.
-    qb_pool = [_player(f"qb{i}", "QB", 210.0 - i) for i in range(1, 20)]  # qb1=209..qb19=191
-    rb_pool = [_player(f"rb{i}", "RB", 200.0 - (i * 15)) for i in range(1, 6)]  # rb1=185 .. rb5=125
+def test_rank_season_fantasy_players_overall_rank_uses_projected_points() -> None:
+    qb_pool = [_player(f"qb{i}", "QB", 210.0 - i) for i in range(1, 20)]
+    rb_pool = [_player(f"rb{i}", "RB", 200.0 - (i * 15)) for i in range(1, 6)]
     ranked = rank_season_fantasy_players(qb_pool + rb_pool)
     by_key = {p["player_key"]: p for p in ranked}
-    # qb1 has more raw points than rb1 (209 > 185) but sits in a deep QB
-    # pool (replacement ~ qb12 => 198), while rb1 dominates a shallow RB
-    # pool (replacement = the worst available RB, rb5 = 125) giving rb1 a
-    # much larger VOR (60 vs qb1's 11) -- rb1 must rank ABOVE qb1 overall.
-    assert by_key["rb1"]["rank_overall"] < by_key["qb1"]["rank_overall"]
+    # qb1 has more raw points than rb1 (209 > 185) → overall rank follows points.
+    # VOR is still computed (rb1 VOR > qb1 VOR in this pool).
+    assert by_key["qb1"]["rank_overall"] < by_key["rb1"]["rank_overall"]
+    assert by_key["rb1"]["value_over_replacement"] > by_key["qb1"]["value_over_replacement"]
 
 
 def test_rank_season_fantasy_players_assigns_tier_from_position_rank() -> None:

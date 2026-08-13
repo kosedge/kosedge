@@ -1,0 +1,439 @@
+{
+  "bundle": "nfl-preseason-sim-2026-20260813T151800Z",
+  "pass": true,
+  "failures": [],
+  "qb_300": 13,
+  "qb_flood": true,
+  "top5_rb": [
+    {
+      "player": "Christian McCaffrey",
+      "pts": 369.1,
+      "pos_rank": 1
+    },
+    {
+      "player": "Bijan Robinson",
+      "pts": 310.3,
+      "pos_rank": 2
+    },
+    {
+      "player": "James Cook III",
+      "pts": 291.5,
+      "pos_rank": 3
+    },
+    {
+      "player": "Jahmyr Gibbs",
+      "pts": 290.2,
+      "pos_rank": 4
+    },
+    {
+      "player": "Derrick Henry",
+      "pts": 266.6,
+      "pos_rank": 5
+    }
+  ],
+  "named": {
+    "gibbs": {
+      "player": "Jahmyr Gibbs",
+      "team": "DET",
+      "pos": "RB",
+      "overall": 23,
+      "pos_rank": 4,
+      "pts": 290.2,
+      "rush": 1154.7,
+      "rec": 588.7,
+      "pass": 0.0,
+      "rush_td": 8.53,
+      "rec_td": 4.81,
+      "pass_td": 0.0,
+      "adp": 1.0,
+      "delta": -22.0,
+      "sot_depth": 1
+    },
+    "allen": {
+      "player": "Josh Allen",
+      "team": "BUF",
+      "pos": "QB",
+      "overall": 10,
+      "pos_rank": 8,
+      "pts": 323.5,
+      "rush": 288.6,
+      "rec": 0.0,
+      "pass": 3406.9,
+      "rush_td": 7.04,
+      "rec_td": 0.0,
+      "pass_td": 29.02,
+      "adp": 22.0,
+      "delta": 12.0,
+      "sot_depth": 1
+    },
+    "lamar": {
+      "player": "Lamar Jackson",
+      "team": "BAL",
+      "pos": "QB",
+      "overall": 11,
+      "pos_rank": 9,
+      "pts": 321.1,
+      "rush": 422.6,
+      "rec": 0.0,
+      "pass": 2829.5,
+      "rush_td": 8.36,
+      "rec_td": 0.0,
+      "pass_td": 28.88,
+      "adp": 37.0,
+      "delta": 26.0,
+      "sot_depth": 1
+    },
+    "puka": {
+      "player": "Puka Nacua",
+      "team": "LAR",
+      "pos": "WR",
+      "overall": 30,
+      "pos_rank": 5,
+      "pts": 283.1,
+      "rush": 0.0,
+      "rec": 1450.0,
+      "pass": 0.0,
+      "rush_td": 0.0,
+      "rec_td": 12.78,
+      "pass_td": 0.0,
+      "adp": 4.0,
+      "delta": -26.0,
+      "sot_depth": 1
+    },
+    "jsn": {
+      "player": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "pos": "WR",
+      "overall": 54,
+      "pos_rank": 16,
+      "pts": 251.8,
+      "rush": 0.0,
+      "rec": 1276.1,
+      "pass": 0.0,
+      "rush_td": 0.0,
+      "rec_td": 11.68,
+      "pass_td": 0.0,
+      "adp": 6.0,
+      "delta": -48.0,
+      "sot_depth": 1
+    },
+    "charbonnet": {
+      "player": "Zach Charbonnet",
+      "team": "SEA",
+      "pos": "RB",
+      "overall": 59,
+      "pos_rank": 9,
+      "pts": 239.6,
+      "rush": 1188.1,
+      "rec": 339.0,
+      "pass": 0.0,
+      "rush_td": 7.94,
+      "rec_td": 3.1,
+      "pass_td": 0.0,
+      "adp": 124.0,
+      "delta": 65.0,
+      "sot_depth": 1
+    },
+    "henry": {
+      "player": "Derrick Henry",
+      "team": "BAL",
+      "pos": "RB",
+      "overall": 40,
+      "pos_rank": 5,
+      "pts": 266.6,
+      "rush": 1493.7,
+      "rec": 262.4,
+      "pass": 0.0,
+      "rush_td": 9.82,
+      "rec_td": 2.68,
+      "pass_td": 0.0,
+      "adp": 21.0,
+      "delta": -19.0,
+      "sot_depth": 1
+    },
+    "bijan": {
+      "player": "Bijan Robinson",
+      "team": "ATL",
+      "pos": "RB",
+      "overall": 14,
+      "pos_rank": 2,
+      "pts": 310.3,
+      "rush": 1534.9,
+      "rec": 359.2,
+      "pass": 0.0,
+      "rush_td": 13.4,
+      "rec_td": 3.1,
+      "pass_td": 0.0,
+      "adp": 2.0,
+      "delta": -12.0,
+      "sot_depth": 1
+    },
+    "jt": {
+      "player": "Jonathan Taylor",
+      "team": "IND",
+      "pos": "RB",
+      "overall": 45,
+      "pos_rank": 6,
+      "pts": 258.7,
+      "rush": 1209.9,
+      "rec": 377.9,
+      "pass": 0.0,
+      "rush_td": 9.68,
+      "rec_td": 3.14,
+      "pass_td": 0.0,
+      "adp": 7.0,
+      "delta": -38.0,
+      "sot_depth": 1
+    },
+    "cook": {
+      "player": "James Cook III",
+      "team": "BUF",
+      "pos": "RB",
+      "overall": 22,
+      "pos_rank": 3,
+      "pts": 291.5,
+      "rush": 1596.6,
+      "rec": 316.1,
+      "pass": 0.0,
+      "rush_td": 10.77,
+      "rec_td": 2.71,
+      "pass_td": 0.0,
+      "adp": 9.0,
+      "delta": -13.0,
+      "sot_depth": 1
+    },
+    "chase": {
+      "player": "Ja'Marr Chase",
+      "team": "CIN",
+      "pos": "WR",
+      "overall": 9,
+      "pos_rank": 1,
+      "pts": 327.9,
+      "rush": 0.0,
+      "rec": 1715.7,
+      "pass": 0.0,
+      "rush_td": 0.0,
+      "rec_td": 13.95,
+      "pass_td": 0.0,
+      "adp": 3.0,
+      "delta": -6.0,
+      "sot_depth": 1
+    },
+    "baker": {
+      "player": "Baker Mayfield",
+      "team": "TB",
+      "pos": "QB",
+      "overall": 29,
+      "pos_rank": 21,
+      "pts": 284.5,
+      "rush": 64.4,
+      "rec": 0.0,
+      "pass": 3683.6,
+      "rush_td": 1.04,
+      "rec_td": 0.0,
+      "pass_td": 31.13,
+      "adp": 131.0,
+      "delta": 102.0,
+      "sot_depth": 1
+    },
+    "jones": {
+      "player": "Daniel Jones",
+      "team": "IND",
+      "pos": "QB",
+      "overall": 18,
+      "pos_rank": 14,
+      "pts": 298.2,
+      "rush": 43.8,
+      "rec": 0.0,
+      "pass": 3965.7,
+      "rush_td": 0.71,
+      "rec_td": 0.0,
+      "pass_td": 32.74,
+      "adp": 178.0,
+      "delta": 160.0,
+      "sot_depth": 1
+    }
+  },
+  "top30": [
+    {
+      "overall": 1,
+      "player": "Christian McCaffrey",
+      "pos": "RB",
+      "pts": 369.1
+    },
+    {
+      "overall": 2,
+      "player": "Joe Burrow",
+      "pos": "QB",
+      "pts": 358.3
+    },
+    {
+      "overall": 3,
+      "player": "Bo Nix",
+      "pos": "QB",
+      "pts": 354.6
+    },
+    {
+      "overall": 4,
+      "player": "Dak Prescott",
+      "pos": "QB",
+      "pts": 351.4
+    },
+    {
+      "overall": 5,
+      "player": "Jacoby Brissett",
+      "pos": "QB",
+      "pts": 348.0
+    },
+    {
+      "overall": 6,
+      "player": "Matthew Stafford",
+      "pos": "QB",
+      "pts": 342.1
+    },
+    {
+      "overall": 7,
+      "player": "Patrick Mahomes",
+      "pos": "QB",
+      "pts": 339.0
+    },
+    {
+      "overall": 8,
+      "player": "Caleb Williams",
+      "pos": "QB",
+      "pts": 334.0
+    },
+    {
+      "overall": 9,
+      "player": "Ja'Marr Chase",
+      "pos": "WR",
+      "pts": 327.9
+    },
+    {
+      "overall": 10,
+      "player": "Josh Allen",
+      "pos": "QB",
+      "pts": 323.5
+    },
+    {
+      "overall": 11,
+      "player": "Lamar Jackson",
+      "pos": "QB",
+      "pts": 321.1
+    },
+    {
+      "overall": 12,
+      "player": "Jalen Hurts",
+      "pos": "QB",
+      "pts": 313.8
+    },
+    {
+      "overall": 13,
+      "player": "Jared Goff",
+      "pos": "QB",
+      "pts": 313.4
+    },
+    {
+      "overall": 14,
+      "player": "Bijan Robinson",
+      "pos": "RB",
+      "pts": 310.3
+    },
+    {
+      "overall": 15,
+      "player": "Marvin Harrison Jr.",
+      "pos": "WR",
+      "pts": 305.4
+    },
+    {
+      "overall": 16,
+      "player": "Drake Maye",
+      "pos": "QB",
+      "pts": 304.6
+    },
+    {
+      "overall": 17,
+      "player": "Justin Herbert",
+      "pos": "QB",
+      "pts": 300.4
+    },
+    {
+      "overall": 18,
+      "player": "Daniel Jones",
+      "pos": "QB",
+      "pts": 298.2
+    },
+    {
+      "overall": 19,
+      "player": "Brock Purdy",
+      "pos": "QB",
+      "pts": 298.0
+    },
+    {
+      "overall": 20,
+      "player": "Jayden Daniels",
+      "pos": "QB",
+      "pts": 292.6
+    },
+    {
+      "overall": 21,
+      "player": "C.J. Stroud",
+      "pos": "QB",
+      "pts": 292.1
+    },
+    {
+      "overall": 22,
+      "player": "James Cook III",
+      "pos": "RB",
+      "pts": 291.5
+    },
+    {
+      "overall": 23,
+      "player": "Jahmyr Gibbs",
+      "pos": "RB",
+      "pts": 290.2
+    },
+    {
+      "overall": 24,
+      "player": "Tyler Shough",
+      "pos": "QB",
+      "pts": 289.8
+    },
+    {
+      "overall": 25,
+      "player": "Trevor Lawrence",
+      "pos": "QB",
+      "pts": 286.9
+    },
+    {
+      "overall": 26,
+      "player": "George Pickens",
+      "pos": "WR",
+      "pts": 286.2
+    },
+    {
+      "overall": 27,
+      "player": "CeeDee Lamb",
+      "pos": "WR",
+      "pts": 285.4
+    },
+    {
+      "overall": 28,
+      "player": "Sam Darnold",
+      "pos": "QB",
+      "pts": 284.8
+    },
+    {
+      "overall": 29,
+      "player": "Baker Mayfield",
+      "pos": "QB",
+      "pts": 284.5
+    },
+    {
+      "overall": 30,
+      "player": "Puka Nacua",
+      "pos": "WR",
+      "pts": 283.1
+    }
+  ]
+}

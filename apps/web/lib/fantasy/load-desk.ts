@@ -18,7 +18,6 @@ import type {
   FantasyDeskBoard,
   FantasyScoringProfile,
 } from "@/lib/fantasy/types";
-import { applyDeskRankPolicy } from "@/lib/fantasy/desk-rank-policy";
 import { rankSeasonFantasyPlayers } from "@/lib/fantasy/vor-rank";
 import {
   fetchNflFantasyDraftRankings,
@@ -27,14 +26,13 @@ import {
 import { loadLatestNflPreseasonBundle2026 } from "@/lib/nfl-preseason-artifacts";
 
 const LIMITATIONS_BASE = [
-  "Model # / pts = season-engine fantasy points by format (STD / Half / PPR), ranked by VOR. Those numbers are not blended with ADP.",
-  "Board order (Rk) = value-aware desk key in rank space, not raw model points: board_key = modelRank + reach_penalty_slots − wait_bubble. Reaching ADP by 1+ rounds is penalized; waiting on a model favorite may bubble modestly. Raw model points are not the sort key (QB pts would flood a 1QB board). Unmatched / cross-format ADP is not blended (key = modelRank; Value Δ stays —).",
-  "QB: extra reach penalty when Model ranks a QB 2+ rounds ahead of ADP — same 1QB late-QB2 philosophy as Mock.",
+  "Model rank = projected fantasy points (Half-PPR default), not ADP and not a VOR-only sort. VOR is still computed and shown. Large |Δ| vs ADP means investigate role/injury — not a silent edge.",
+  "Value-aware ADP timing lives on Mock / Builder suggestions (reach cap ±12). The rankings table does not erase model points to chase consensus.",
   "Floor–med–ceiling from model quantiles when present; else a band around median.",
   "Schedule softness: W1–6 vs W14–17 opponent expected wins — not a full matchup sim.",
   "No live injury feed. Builder is a private roster; Mock fills other seats (no league sync).",
   "Snake 1QB redraft only — no auction, Superflex, or dynasty.",
-  "|modelRank − ADP| ≥ 40 (TE/QB2 ≥ 60) is flagged High deviation with drivers — not hidden, not silent alpha.",
+  "|modelRank − ADP| ≥ 8 with high ADP-match confidence is flagged High deviation as a data/role warning — not a bet slip.",
 ];
 
 function apiRowToEnrichable(row: NflFantasyDraftRankingRow & {
@@ -250,14 +248,12 @@ export async function loadFantasyDraftDesk(params: {
     },
   );
 
-  const rows = applyDeskRankPolicy(
-    enrichDraftRows({
-      rows: enrichable,
-      scheduleByTeam,
-      depthRows,
-      adpByPlayerId: adpMatch.byPlayerId,
-    }),
-  );
+  const rows = enrichDraftRows({
+    rows: enrichable,
+    scheduleByTeam,
+    depthRows,
+    adpByPlayerId: adpMatch.byPlayerId,
+  });
 
   const unmatchedPreview = adpMatch.unmatchedRows
     .slice(0, 12)

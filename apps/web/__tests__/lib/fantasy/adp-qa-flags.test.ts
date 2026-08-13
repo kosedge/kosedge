@@ -40,12 +40,14 @@ function baseInput(
 }
 
 describe("adp-qa-flags", () => {
-  it("uses 40 default and 60 for TE / QB2", () => {
+  it("uses |Δ|≥8 for every position (role/data warning, not a bet slip)", () => {
     expect(adpQaGapThreshold("WR", 10)).toBe(ADP_QA_GAP_DEFAULT);
     expect(adpQaGapThreshold("RB", 8)).toBe(ADP_QA_GAP_DEFAULT);
     expect(adpQaGapThreshold("QB", 1)).toBe(ADP_QA_GAP_DEFAULT);
     expect(adpQaGapThreshold("TE", 8)).toBe(ADP_QA_GAP_TE_OR_QB2);
     expect(adpQaGapThreshold("QB", 13)).toBe(ADP_QA_GAP_TE_OR_QB2);
+    expect(ADP_QA_GAP_DEFAULT).toBe(8);
+    expect(ADP_QA_GAP_TE_OR_QB2).toBe(8);
   });
 
   it("does not flag unmatched ADP", () => {
@@ -60,7 +62,7 @@ describe("adp-qa-flags", () => {
     ).toBeNull();
   });
 
-  it("does not flag TE at |Δ| 50 (below TE threshold 60)", () => {
+  it("flags TE at |Δ| 50 (same |Δ|≥8 investigate-role rule)", () => {
     expect(
       resolveAdpQaFlag(
         baseInput({
@@ -71,7 +73,7 @@ describe("adp-qa-flags", () => {
           valueDelta: 50,
         }),
       ),
-    ).toBeNull();
+    ).not.toBeNull();
   });
 
   it("flags Gesicki-class TE gap with drivers, not lottery TD copy", () => {
@@ -94,10 +96,10 @@ describe("adp-qa-flags", () => {
     );
     expect(flag).not.toBeNull();
     expect(flag!.kind).toBe("model_ahead");
-    expect(flag!.label).toBe("Model ≫ market");
-    expect(flag!.categoryLabel).toBe("High deviation");
+    expect(flag!.label).toBe("Role vs ADP");
+    expect(flag!.categoryLabel).toBe("Check role");
     expect(flag!.absGap).toBe(204);
-    expect(flag!.threshold).toBe(60);
+    expect(flag!.threshold).toBe(8);
     expect(flag!.preseason).toBe(true);
     expect(flag!.drivers.length).toBeGreaterThanOrEqual(3);
     expect(flag!.drivers.join(" ")).toMatch(/CIN TE8/);
@@ -123,7 +125,7 @@ describe("adp-qa-flags", () => {
       }),
     );
     expect(flag?.kind).toBe("market_ahead");
-    expect(flag?.label).toBe("Market ≫ model");
+    expect(flag?.label).toBe("ADP vs role");
     expect(flag?.drivers.join(" ")).toMatch(/Value Δ -50/);
   });
 

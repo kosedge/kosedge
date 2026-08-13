@@ -39,7 +39,6 @@ from data_platform_nfl.offensive_production_stack import (  # noqa: E402
     LOCKED_PASS_SCHEME_TEAMS,
     apply_alpha_usage_reanchor,
     apply_offensive_variance_lift,
-    apply_soft_rb_priors_on_board,
     build_team_rush_tds,
     canonical_qb1_from_depth_sot,
     enforce_high_volume_pass_tds_on_rows,
@@ -47,6 +46,9 @@ from data_platform_nfl.offensive_production_stack import (  # noqa: E402
     repair_qb_team_labels,
     repair_skill_team_labels,
     smoke_offensive_stack,
+)
+from data_platform_nfl.role_aware_production import (  # noqa: E402
+    apply_role_aware_player_shape,
 )
 
 from publish_launch_research_to_web import publish  # noqa: E402
@@ -238,7 +240,13 @@ def _enrich_players_from_json(bundle: Path, source: Path) -> None:
     _write_csv(csv_path, rows, fields)
 
 
-def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -> Dict[str, Any]:
+def finalize(
+    source: Path,
+    *,
+    seed_defense: Path,
+    stamp: Optional[str] = None,
+    skip_pointer: bool = False,
+) -> Dict[str, Any]:
     source = source.resolve()
     if not (source / "run_summary.json").exists():
         raise FileNotFoundError(f"Missing research run_summary: {source}")
@@ -246,8 +254,10 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     summary = json.loads((source / "run_summary.json").read_text(encoding="utf-8"))
     n_team = int(summary.get("n_team_sims") or 100000)
     n_player = int(summary.get("n_player_sims") or 1000)
-    # Post-board engine version (pile cleanup) — research may still say v1.23.
-    engine = ENGINE
+    # Research identity stays v1.27; board post-process is the pile/shape layer.
+    research_engine = str(summary.get("engine_version") or ENGINE)
+    engine = research_engine
+    board_postprocess = ENGINE
     timing = summary.get("timing_seconds") or {}
 
     published = publish(source, stamp)
@@ -284,8 +294,8 @@ def finalize(source: Path, *, seed_defense: Path, stamp: Optional[str] = None) -
     }
     # 4) high-volume pass TD floors
     players, td_audit = enforce_high_volume_pass_tds_on_rows(players)
-    # 5) soft RB priors
-    players, rb_audit = apply_soft_rb_priors_on_board(players)
+    # 5) role-aware RB/WR/QB shape (replaces the 1,380-yard RB magnet)
+    players, rb_audit = apply_role_aware_player_shape(players)
 
     # 5b) rebuild rush-TD curve on lifted 64k pool (engine paths under-count TDs)
     team_rush_map: Dict[str, float] = defaultdict(float)
@@ -905,60 +915,65 @@ Bottom 5:
 ## Method
 1. Packaged universe `--force-packaged` with depth SoT (Tua ATL open vs Penix / Willis MIA / Kyler MIN / CLE open)
 2. Launch research: {n_team:,} team W/L + {n_player:,} full player paths (engine `{engine}`)
-3. Post: offense variance lift → alpha usage → HV pass-TD floors → soft RB priors → tapered PF/PA + Pythagorean wins Σ=272
+3. Post: offense variance lift → alpha usage → HV pass-TD floors → role-aware player shape → tapered PF/PA + Pythagorean wins Σ=272
 4. Constraints held: ~126k pass, ARI/BAL/SEA weights, 64k rush, PF=PA≈11859
 5. **NOT LOCKED — awaiting clearance**
 """,
         encoding="utf-8",
     )
 
-    # Pointers — locked_snapshot false
-    (ROOT / "data/ops/nfl-launch-research-sims-current.md").write_text(
-        "\n".join(
-            [
-                "# NFL launch research sims — current pointer",
-                "",
-                f"- **Web bundle:** `{out_bundle.name}`",
-                f"- **Source research:** `{source.relative_to(ROOT)}`",
-                f"- **Engine:** `{engine}`",
-                f"- **Team W/L N:** {n_team}",
-                f"- **Player full N:** {n_player}",
-                f"- **Generated:** {generated}",
-                f"- **Identity:** {engine} · N_team={n_team} · {stamp}",
-                "- **Note:** 100k expert-sim candidate — **NOT LOCKED — awaiting clearance**",
-                "",
-            ]
-        ),
-        encoding="utf-8",
-    )
-    (ROOT / "data/ops/nfl-web-launch-bundle.json").write_text(
-        json.dumps(
-            {
-                "bundle_id": out_bundle.name,
-                "active_run_id": out_bundle.name,
-                "kind": "Model",
-                "engine_version": engine,
-                "n_team_sims": n_team,
-                "n_player_sims": n_player,
-                "generated_at_utc": generated,
-                "source_dir": str(source.relative_to(ROOT)),
-                "preseason": True,
-                "identity": f"{engine} · N_team={n_team} · {stamp}",
-                "team_id_scheme": "product_canonical_LAR",
-                "note": "100k expert-sim candidate; NOT LOCKED — awaiting clearance",
-                "locked_snapshot": False,
-                "lineage": {
-                    "run_id": out_bundle.name,
-                    "engine_version": engine,
-                    "generated_at": generated,
-                    "kind": "Model",
-                },
-            },
-            indent=2,
+    # Pointers — locked_snapshot false. Skip until fantasy-shape gates pass.
+    if not skip_pointer:
+        (ROOT / "data/ops/nfl-launch-research-sims-current.md").write_text(
+            "\n".join(
+                [
+                    "# NFL launch research sims — current pointer",
+                    "",
+                    f"- **Web bundle:** `{out_bundle.name}`",
+                    f"- **Source research:** `{source.relative_to(ROOT)}`",
+                    f"- **Engine:** `{engine}`",
+                    f"- **Board post-process:** `{board_postprocess}`",
+                    f"- **Team W/L N:** {n_team}",
+                    f"- **Player full N:** {n_player}",
+                    f"- **Generated:** {generated}",
+                    f"- **Identity:** {engine} · N_team={n_team} · {stamp}",
+                    "- **Note:** 100k expert-sim candidate — **NOT LOCKED — awaiting clearance**",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
         )
-        + "\n",
-        encoding="utf-8",
-    )
+        (ROOT / "data/ops/nfl-web-launch-bundle.json").write_text(
+            json.dumps(
+                {
+                    "bundle_id": out_bundle.name,
+                    "active_run_id": out_bundle.name,
+                    "kind": "Model",
+                    "engine_version": engine,
+                    "board_postprocess": board_postprocess,
+                    "n_team_sims": n_team,
+                    "n_player_sims": n_player,
+                    "generated_at_utc": generated,
+                    "source_dir": str(source.relative_to(ROOT)),
+                    "preseason": True,
+                    "identity": f"{engine} · N_team={n_team} · {stamp}",
+                    "team_id_scheme": "product_canonical_LAR",
+                    "note": "100k expert-sim candidate; NOT LOCKED — awaiting clearance",
+                    "locked_snapshot": False,
+                    "lineage": {
+                        "run_id": out_bundle.name,
+                        "engine_version": engine,
+                        "generated_at": generated,
+                        "kind": "Model",
+                    },
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+    else:
+        print(f"skip_pointer=true — bundle {out_bundle.name} written; pointer not flipped", flush=True)
 
     # HD mirror of finalized web bundle if available
     hd = Path("/Volumes/KosEdgeData/clean/nfl/research")
@@ -968,11 +983,12 @@ Bottom 5:
             if hd_out.exists():
                 shutil.rmtree(hd_out)
             shutil.copytree(out_bundle, hd_out)
-            (hd / "CURRENT.md").write_text(
-                (ROOT / "data/ops/nfl-launch-research-sims-current.md").read_text(encoding="utf-8")
-                + f"\n- **HD mirror:** `{hd_out}`\n",
-                encoding="utf-8",
-            )
+            if not skip_pointer:
+                (hd / "CURRENT.md").write_text(
+                    (ROOT / "data/ops/nfl-launch-research-sims-current.md").read_text(encoding="utf-8")
+                    + f"\n- **HD mirror:** `{hd_out}`\n",
+                    encoding="utf-8",
+                )
         except OSError as exc:
             print(f"HD mirror skipped ({exc})", flush=True)
 
@@ -1007,8 +1023,18 @@ def main() -> int:
         help="Prior enterprise board for PA/sacks/INT memory",
     )
     ap.add_argument("--stamp", default=None)
+    ap.add_argument(
+        "--skip-pointer",
+        action="store_true",
+        help="Write the bundle but do not flip nfl-web-launch-bundle.json",
+    )
     args = ap.parse_args()
-    result = finalize(args.source, seed_defense=args.seed_defense.resolve(), stamp=args.stamp)
+    result = finalize(
+        args.source,
+        seed_defense=args.seed_defense.resolve(),
+        stamp=args.stamp,
+        skip_pointer=args.skip_pointer,
+    )
     return 0 if result.get("all_gates_pass") else 1
 
 
