@@ -7,10 +7,10 @@
 import { QB2_POS_RANK_MIN } from "@/lib/fantasy/expert";
 import type { RiskFlag, ScheduleWindowNote } from "@/lib/fantasy/types";
 
-/** Default |modelRank − ADP| to flag (RB/WR/QB1). */
-export const ADP_QA_GAP_DEFAULT = 40;
-/** TE and QB2 use a higher bar — positional ADP is noisier. */
-export const ADP_QA_GAP_TE_OR_QB2 = 60;
+/** Default |modelRank − ADP| to flag (RB/WR/QB1) as a role/data warning. */
+export const ADP_QA_GAP_DEFAULT = 8;
+/** TE and QB2 still flag at |Δ|≥8 — noisier ADP, same investigate-role rule. */
+export const ADP_QA_GAP_TE_OR_QB2 = 8;
 
 export type AdpQaFlagKind = "model_ahead" | "market_ahead";
 
@@ -19,7 +19,7 @@ export type AdpQaFlag = {
   /** Short chip: "Model ≫ market" / "Market ≫ model" */
   label: string;
   /** Umbrella copy for title/tooltip. */
-  categoryLabel: "High deviation";
+  categoryLabel: "Check role";
   absGap: number;
   threshold: number;
   /** Required when flagged — role, volume, VOR/Δ, depth/availability, schedule. */
@@ -186,12 +186,12 @@ export function resolveAdpQaFlag(input: {
   const kind: AdpQaFlagKind =
     input.valueDelta > 0 ? "model_ahead" : "market_ahead";
   const label =
-    kind === "model_ahead" ? "Model ≫ market" : "Market ≫ model";
+    kind === "model_ahead" ? "Role vs ADP" : "ADP vs role";
 
   return {
     kind,
     label,
-    categoryLabel: "High deviation",
+    categoryLabel: "Check role",
     absGap,
     threshold,
     preseason: input.source === "preseason-fallback",

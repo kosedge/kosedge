@@ -46,6 +46,12 @@ export type FantasyDeskRow = {
   replacementPoints: number;
   valueOverReplacement: number;
   rankOverall: number;
+  /**
+   * Board display order after value-aware desk policy (1 = first row).
+   * Distinct from `rankOverall` (raw model VOR rank). Absent on rows that
+   * have not been through `applyDeskRankPolicy`.
+   */
+  deskOrder?: number;
   rankPosition: number;
   tier: string;
   /**

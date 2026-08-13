@@ -33,11 +33,13 @@ from data_platform_nfl.defensive_production_stack import (  # noqa: E402
 )
 from data_platform_nfl.offensive_production_stack import (  # noqa: E402
     LOCKED_PASS_SCHEME_TEAMS,
-    apply_soft_rb_priors_on_board,
     enforce_high_volume_pass_tds_on_rows,
     locked_team_pass_yards,
     repair_qb_team_labels,
     smoke_offensive_stack,
+)
+from data_platform_nfl.role_aware_production import (  # noqa: E402
+    apply_role_aware_player_shape,
 )
 
 BASE_BUNDLE = ROOT / "data/ops/nfl-preseason-sim-2026-20260809T144255Z"
@@ -113,8 +115,8 @@ def main() -> int:
     # --- 1: high-volume pass TD efficiency floors ---
     players, td_audit = enforce_high_volume_pass_tds_on_rows(players)
 
-    # --- 2: soft RB priors (conserves team + league rush) ---
-    players, rb_audit = apply_soft_rb_priors_on_board(players)
+    # --- 2: role-aware RB/WR/QB shape (conserves team + league rush) ---
+    players, rb_audit = apply_role_aware_player_shape(players)
 
     after_pass = locked_team_pass_yards(players)
     after_rush = defaultdict(float)

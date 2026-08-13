@@ -1,6 +1,10 @@
 /**
  * Web-side port of model-service nfl_fantasy_draft_rankings pure ranking.
  * Used for preseason-fallback boards when Railway draft rankings are empty.
+ *
+ * Overall rank is projected fantasy points (Half-PPR default). VOR is still
+ * computed and displayed. Value-aware ADP blend belongs on Mock/Builder
+ * suggestions, not the Model rank column.
  */
 
 export const POSITION_TIER_BOUNDARIES: Record<
@@ -138,7 +142,7 @@ export function rankSeasonFantasyPlayers<T extends RankablePlayer>(
     });
   }
 
-  all.sort((a, b) => {
+    all.sort((a, b) => {
     const aEnd = POSITIONS_APPENDED_TO_BOARD_END.has(
       String(a.position).toUpperCase(),
     );
@@ -146,8 +150,9 @@ export function rankSeasonFantasyPlayers<T extends RankablePlayer>(
       String(b.position).toUpperCase(),
     );
     if (aEnd !== bEnd) return aEnd ? 1 : -1;
-    const vorDiff = b.valueOverReplacement - a.valueOverReplacement;
-    if (vorDiff !== 0) return vorDiff;
+    const ptsDiff =
+      (Number(b.totalPoints) || 0) - (Number(a.totalPoints) || 0);
+    if (ptsDiff !== 0) return ptsDiff;
     return String(a.playerKey).localeCompare(String(b.playerKey));
   });
 

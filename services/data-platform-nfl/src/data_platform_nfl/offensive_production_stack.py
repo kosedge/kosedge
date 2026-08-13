@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import statistics
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -282,8 +283,24 @@ PRIOR_YEAR_ALPHA_VOLUME: Dict[str, Dict[str, Any]] = {
     "bijanrobinson": {"pos": "RB", "rush_yards": 1478.0, "carry_share": 0.60, "top5_rush": True},
     "devonachane": {"pos": "RB", "rush_yards": 1350.0, "carry_share": 0.58, "top5_rush": True},
     "kyrenwilliams": {"pos": "RB", "rush_yards": 1252.0, "carry_share": 0.58, "top5_rush": False},
-    "jahmyrgibbs": {"pos": "RB", "rush_yards": 1223.0, "carry_share": 0.52, "top5_rush": False},
-    "christianmccaffrey": {"pos": "RB", "rush_yards": 1202.0, "carry_share": 0.58, "top5_rush": False},
+    "jahmyrgibbs": {
+        "pos": "RB",
+        "rush_yards": 1412.0,
+        "rec_yards": 517.0,
+        "tgt_share": 0.11,
+        "carry_share": 0.62,
+        "three_down": True,
+        "top5_rush": True,
+    },
+    "christianmccaffrey": {
+        "pos": "RB",
+        "rush_yards": 1202.0,
+        "rec_yards": 645.0,
+        "tgt_share": 0.13,
+        "carry_share": 0.58,
+        "three_down": True,
+        "top5_rush": False,
+    },
     "javontewilliams": {"pos": "RB", "rush_yards": 1201.0, "carry_share": 0.55, "top5_rush": False},
     "saquonbarkley": {"pos": "RB", "rush_yards": 1140.0, "carry_share": 0.58, "top5_rush": False},
     "travisetienne": {"pos": "RB", "rush_yards": 1107.0, "carry_share": 0.55, "top5_rush": False},
@@ -705,16 +722,26 @@ def _fallback_usage_from_rows(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Pl
     for team, team_rows in by_team.items():
         for pos in ("QB", "RB", "WR", "TE"):
             group = [r for r in team_rows if str(r.get("position") or "").upper() == pos]
-            if pos == "QB":
-                group.sort(key=lambda r: -_f(r, "pass_yards_total", "pass_yards_mean"))
-            elif pos == "RB":
-                group.sort(key=lambda r: -_f(r, "rush_yards_total", "rush_yards_mean"))
-            else:
-                group.sort(key=lambda r: -_f(r, "receiving_yards_total", "rec_yards_mean", "rec_yards"))
+            def _row_depth(row: Mapping[str, Any], fallback: int) -> int:
+                key = str(row.get("player_key") or "")
+                match = re.search(r"-(?:QB|RB|WR|TE|K|DST)(\d+)-", key, re.I)
+                if match:
+                    try:
+                        return int(match.group(1))
+                    except (TypeError, ValueError):
+                        return fallback
+                return fallback
+
+            group.sort(key=lambda r: (_row_depth(r, 99), -_f(
+                r,
+                "pass_yards_total" if pos == "QB" else "rush_yards_total" if pos == "RB" else "receiving_yards_total",
+                "pass_yards_mean" if pos == "QB" else "rush_yards_mean" if pos == "RB" else "rec_yards_mean",
+            )))
             for i, r in enumerate(group, start=1):
                 key = str(r.get("player_key") or "")
                 if not key:
                     continue
+                i = _row_depth(r, i)
                 # Default hierarchical shares (WR1 >> TE1 — avoids WR/TE logjam).
                 if pos == "WR":
                     tgt = {1: 0.28, 2: 0.17, 3: 0.11}.get(i, 0.04)
@@ -1112,16 +1139,18 @@ def apply_sticky_alpha_shares(
                 u.target_share *= TE_COMPRESS_WITH_WR_ALPHA
                 u.red_zone_share *= TE_COMPRESS_WITH_WR_ALPHA
 
-    # Soft structural prior for RB1 when team rush supports the hard floor even
-    # without a top-5 prior (e.g. new feature-back on a lifted rush team).
+    # Soft structural prior ONLY for proven rush alphas — never pin a
+    # Charbonnet-class RB1 to the old 1,380 magnet just because the team rushes.
     rush_rank = _team_rush_rank_pct(team_rush)
     for u in usage_by_key.values():
         if u.position != "RB" or u.depth_order != 1 or u.is_rookie:
             continue
-        rush_y = float(team_rush.get(u.team, 0.0))
-        if rush_y * 0.58 < RB_ALPHA_YARD_HARD_FLOOR:
-            continue
         prior = prior_alpha_lookup(name_by_key.get(u.player_key, u.player_name))
+        if prior is None or not _is_volume_alpha(prior, kind="rush"):
+            continue
+        rush_y = float(team_rush.get(u.team, 0.0))
+        if rush_y <= 1.0:
+            continue
         prior_yards = rb_soft_prior_yards(
             u.player_name,
             u.team,

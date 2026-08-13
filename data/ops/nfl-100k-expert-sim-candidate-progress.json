@@ -1,24 +1,15 @@
 {
   "status": "complete",
   "sim_rc": 0,
-  "finalize_rc": 0,
-  "out_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.23-soft-flags-enterprise-Nteam100000-Nplayer1000-20260809T153419Z",
-  "web_bundle": "nfl-preseason-sim-2026-20260809T163204Z",
-  "ops_note": "data/ops/nfl-100k-expert-sim-candidate-20260809.md",
-  "engine_version": "nfl-season-engine-v1.23-soft-flags-enterprise",
-  "n_team_sims": 100000,
-  "n_player_sims": 1000,
-  "runtime_seconds_total": 3464.3,
-  "updated_at_utc": "2026-08-09T16:37:38.270136+00:00",
+  "finalize_rc": 1,
+  "player_paths": 1000,
+  "player_paths_complete": true,
+  "out_dir": "/Users/ryankos/kosedge/data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260813T121720Z",
+  "web_bundle": "nfl-preseason-sim-2026-20260813T132801Z",
+  "updated_at_utc": "2026-08-13T14:00:00+00:00",
+  "log": "data/ops/nfl-100k-expert-sim-candidate-20260813T121719Z-run.log",
   "locked_snapshot": false,
-  "note": "NOT LOCKED \u2014 awaiting clearance",
-  "all_gates_pass": true,
-  "soft_flags": [
-    "Win ceiling clustering: 6 teams near max.",
-    "PF clustering: 10 teams near same PF.",
-    "Rush soft-ceiling pile: 13 teams at ~2623 rush yds; 11 at soft floor ~1333.",
-    "PF soft-floor pile: 10 teams at PF\u2248286.5.",
-    "Win ceiling pile: ~6 teams at ~13.15\u201313.16 expected wins (range still healthy 3.89\u201313.16).",
-    "Depth soft: Mike Evans labeled SF (packaged depth quirk; not QB hygiene)."
-  ]
+  "sot_qb_checksum_ok": true,
+  "remaining_finalize_gates": ["offense_smoke", "jsn_top_tier"],
+  "note": "Player 1k finished 1000/1000. Finalize wrote the web bundle; remaining gates are fantasy volume (JSN / ARI-BAL-SEA zones), not dual-map identity."
 }

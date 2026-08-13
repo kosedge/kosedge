@@ -16,23 +16,16 @@ data-platform-nfl package -- these are separate services that only share
 the Postgres schema), and fantasy points are computed from those season
 totals via the already-canonical `fantasy_points_from_projection()`.
 
-WHY OVERALL RANK USES VALUE OVER REPLACEMENT (VOR), NOT RAW POINTS
+OVERALL RANK = PROJECTED FANTASY POINTS (Half-PPR default)
 --------------------------------------------------------------------
-Sorting the whole board by raw season fantasy points is a well-known
-beginner mistake for single-QB leagues: standard/half-PPR scoring (~1 pt per
-25 pass yards + 4 pts/passing TD) gives basically every real starting QB a
-high, tightly-clustered point total, while RB/WR/TE point totals fan out
-much more widely between an elite RB1 and a replacement-level waiver option.
-A raw-points sort therefore stacks the ENTIRE top of the board with QBs
-(even mediocre ones), which is exactly backwards from how real single-QB
-drafts play out -- there, an elite RB/WR goes in round 1 and even a top-5 QB
-often waits until round 3-6, because a 12-team single-QB league only ever
-needs 12-ish competent QBs and there's rarely a shortage of them, whereas
-elite RB/WR production is scarce and irreplaceable.
+The desk Model rank is sorted projected points. That is honest: if the
+engine projects Allen / Lamar / Gibbs as high-scoring, they rank that way.
+VOR is still computed and shown (and used on Mock/Builder suggestions).
+A previous VOR-only overall sort buried dual-threat QBs at overall ~80-100
+while ADP had them in rounds 2-4 -- that read as a silent "edge."
 
-Value Over Replacement fixes this by asking "how much better is this player
-than the player I could otherwise get for free off the waiver wire at the
-same position", which is the actual question a draft decision answers.
+Value Over Replacement still answers "how much better than waiver
+replacement at this position" and remains a displayed column.
 `POSITION_REPLACEMENT_RANK` sets, for each position, WHICH positional rank
 counts as "replacement level" in a standard 12-team single-QB roster
 (1 QB, 2 RB, 2 WR, 1 TE, 1 RB/WR/TE flex):
@@ -152,9 +145,8 @@ def rank_season_fantasy_players(players: Sequence[Dict[str, Any]]) -> List[Dict[
     `value_over_replacement`, and `rank_overall` added to each.
 
     `rank_position` is the traditional "Nth-best at this position by raw
-    points" ranking. `rank_overall` is instead ordered by
-    `value_over_replacement` (see module docstring) -- the realistic
-    draft-value ordering across positions.
+    points" ranking. `rank_overall` is the same points order across
+    positions (K/DST appended last). VOR is still attached as a column.
 
     Ties are broken by `player_key` ascending so output order is
     deterministic given the same input -- this matters because ranks are
@@ -180,17 +172,14 @@ def rank_season_fantasy_players(players: Sequence[Dict[str, Any]]) -> List[Dict[
             )
 
     all_players = [player for group in players_by_position.values() for player in group]
-    # See POSITIONS_APPENDED_TO_BOARD_END's docstring: K/DST are sorted
-    # after every other position regardless of their own VOR (a real,
-    # documented positional convention every real ADP dataset follows, not
-    # a VOR tuning problem), then by VOR within that bottom tier so "best
-    # available K/DST right now" is still meaningful.
+    # K/DST stay at the end of the board. Skill overall rank is projected
+    # fantasy points (VOR remains a displayed column / mock signal).
     board_end_positions = {p.upper() for p in POSITIONS_APPENDED_TO_BOARD_END}
     overall_ordered = sorted(
         all_players,
         key=lambda p: (
             str(p.get("position") or "").upper() in board_end_positions,
-            -float(p.get("value_over_replacement") or 0.0),
+            -float(p.get("total_points") or 0.0),
             str(p.get("player_key") or ""),
         ),
     )

@@ -60,7 +60,8 @@ describe("enrichDraftRows", () => {
     expect(rows[0]!.ceilingPoints).toBeGreaterThan(rows[0]!.medianPoints);
     expect(rows[0]!.expertBlurb.length).toBeGreaterThan(20);
     expect(rows[0]!.drivers.length).toBeGreaterThan(0);
-    expect(rows[0]!.adpQaFlag).toBeNull();
+    expect(rows[0]!.adpQaFlag).not.toBeNull();
+    expect(rows[0]!.adpQaFlag!.categoryLabel).toBe("Check role");
   });
 
   it("leaves ADP null when unmatched (no fake precision)", () => {
@@ -210,7 +211,7 @@ describe("enrichDraftRows", () => {
       ]),
     });
     expect(rows).toHaveLength(1);
-    expect(rows[0]!.adpQaFlag?.label).toBe("Model ≫ market");
+    expect(rows[0]!.adpQaFlag?.label).toBe("Role vs ADP");
     expect(rows[0]!.adpQaFlag?.drivers.length).toBeGreaterThanOrEqual(3);
     expect(rows[0]!.adpQaFlag?.drivers.join(" ")).not.toMatch(/7\.7/);
     expect(rows[0]!.expertBlurb).toMatch(/likes him more than market/i);

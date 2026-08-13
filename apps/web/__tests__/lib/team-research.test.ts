@@ -30,7 +30,7 @@ describe("team-research directories", () => {
     expect(getTeamDirectory("mlb")).toHaveLength(30);
     expect(getTeamDirectory("nba")).toHaveLength(30);
     expect(getTeamDirectory("nhl")).toHaveLength(32);
-    expect(getTeamDirectory("wnba")).toHaveLength(13);
+    expect(getTeamDirectory("wnba")).toHaveLength(15);
     expect(getTeamDirectory("cfb").length).toBeGreaterThan(100);
     expect(getTeamDirectory("ncaam").length).toBeGreaterThan(80);
   });

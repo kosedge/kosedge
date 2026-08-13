@@ -331,6 +331,17 @@ def publish(source: Path, stamp: str | None, *, skip_gate: bool = False) -> Path
 
     if not skip_gate:
         _run_invariant_gate(out_dir)
+        from check_nfl_sot_qb_checksum import checksum as _sot_checksum
+
+        chk = _sot_checksum(out_dir)
+        pointer["sot_qb_checksum"] = chk
+        (ROOT / "data" / "ops" / "nfl-web-launch-bundle.json").write_text(
+            json.dumps(pointer, indent=2) + "\n", encoding="utf-8"
+        )
+        if not chk.get("ok"):
+            raise SystemExit(
+                "SoT QB checksum failed — publish blocked: " + "; ".join(chk.get("failed") or [])
+            )
 
     return out_dir
 
