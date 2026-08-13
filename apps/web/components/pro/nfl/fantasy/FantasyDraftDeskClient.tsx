@@ -7,6 +7,7 @@ import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
+import { boardRank } from "@/lib/fantasy/desk-rank-policy";
 import {
   notableValueNotes,
   tierCliffNote,
@@ -210,8 +211,9 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Model-backed {board.season} rankings vs market ADP — then build
-                a roster and practice in Mock. Not a consensus copy board.
+                Board order is value-aware vs ADP; Model # and points stay raw.
+                Then build a roster and practice in Mock. Not a consensus copy
+                board.
               </p>
               <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
                 Source · {board.source} · {board.adpSourceLabel}
@@ -539,7 +541,7 @@ export function FantasyDraftDeskClient({
                             className="flex min-w-0 flex-1 items-start gap-3 text-left"
                           >
                             <span className="w-8 shrink-0 pt-0.5 text-sm font-semibold text-kos-text">
-                              {row.rankOverall}
+                              {boardRank(row)}
                             </span>
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-semibold text-kos-text">
@@ -557,7 +559,8 @@ export function FantasyDraftDeskClient({
                               ) : null}
                               <p className="mt-0.5 text-xs text-kos-text/55">
                                 {row.position}
-                                {row.rankPosition} · {row.team} · ADP{" "}
+                                {row.rankPosition} · {row.team} · Model #
+                                {row.rankOverall} · ADP{" "}
                                 {formatAdp(row.adp, 0)} · Med{" "}
                                 {row.medianPoints.toFixed(0)}
                               </p>
@@ -604,7 +607,7 @@ export function FantasyDraftDeskClient({
                     <thead>
                       <tr>
                         {[
-                          "Rk",
+                          "Board",
                           "Player",
                           "Pos",
                           "Team",
@@ -647,7 +650,7 @@ export function FantasyDraftDeskClient({
                             onClick={() => setSelectedId(row.playerId)}
                           >
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm font-semibold text-kos-text">
-                              {row.rankOverall}
+                              {boardRank(row)}
                             </td>
                             <td className="sticky left-0 border-b border-white/5 bg-[#0c0f14]/px-2.5 py-2 text-sm font-semibold text-kos-text">
                               <div className="flex flex-wrap items-center gap-1.5">
@@ -802,7 +805,7 @@ function PlayerCard({
         <span
           className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}
         >
-          #{row.rankOverall}
+          #{boardRank(row)}
         </span>
       </div>
 
