@@ -10,7 +10,8 @@ Depth / roster — **single source of truth** for player→team identities:
    (authoritative SoT shared with intel depth/roster surfaces)
 2. ``nfl_dp_depth_chart_weekly`` only when no packaged SoT exists
 3. ``nfl_dp_official_depth_charts`` only when no packaged SoT exists
-4. ``demo_depth_chart`` (last resort / explicit ``demo=True``)
+4. ``demo_depth_chart`` (explicit ``demo=True`` only — never a silent fill
+   when the packaged SoT is present)
 
 The engine must never prefer stale DB weekly/official rows that disagree
 with the packaged depth SoT. Roster/depth changes update the pack only.
@@ -673,6 +674,7 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
             "injury_window",
             "injury_note",
             "injury_sources",
+            "competition_status",
         ):
             if key in r and r.get(key) not in (None, ""):
                 row[key] = r.get(key)
@@ -1137,6 +1139,24 @@ def _role_from_demo(team: str, row: Mapping[str, Any]) -> PlayerRole:
     return apply_efficiency_priors(role, overrides=overrides or None, source_suffix="league_efficiency_v1")
 
 
+def _ensure_team_rosters(
+    rosters: Dict[str, List[PlayerRole]],
+    *,
+    allow_demo_fill: bool,
+) -> List[str]:
+    """Fill missing teams. When the pack is present, never invent synthetic starters."""
+    holes: List[str] = []
+    for team in NFL_TEAMS:
+        if rosters.get(team):
+            continue
+        holes.append(team)
+        if allow_demo_fill:
+            rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
+        else:
+            rosters[team] = []
+    return holes
+
+
 def _round_robin_schedule(season: int, teams: Sequence[str]) -> List[ScheduledGame]:
     """Build a 272-game (17×32/2) schedule via mirrored round-robin.
 
@@ -1345,7 +1365,8 @@ def load_universe_from_db(
     Strengths come from ``_load_team_strength_priors`` (same gradual
     prior→current blend as Edge Board). Missing teams use packaged backbone
     or an explicit ``placeholder_league_avg`` label — never demo strength
-    bumps. Depth may still fall back to ``demo_depth_chart`` as last resort.
+    bumps. Depth does **not** silently fall back to ``demo_depth_chart`` when
+    the packaged SoT is present (empty team = hole, not a fake starter).
     """
     from sqlalchemy import text
 
@@ -1682,9 +1703,12 @@ def load_universe_from_db(
         roster_note = "PLACEHOLDER demo rosters (all real depth sources empty)"
         coverage = depth_coverage_from_rosters(rosters)
 
-    for team in NFL_TEAMS:
-        if not rosters.get(team):
-            rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
+    depth_holes = _ensure_team_rosters(
+        rosters, allow_demo_fill=packaged_rows is None
+    )
+    demo_fill = (
+        "applied_last_resort" if packaged_rows is None else "blocked_pack_present"
+    )
 
     rosters = annotate_roster_book(rosters)
     rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
@@ -1743,6 +1767,8 @@ def load_universe_from_db(
             "identity_scheme": str(pkg_depth_meta.get("identity_scheme") or ""),
             "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
             "ol_efficiency_hooks": pkg_depth_meta.get("ol_efficiency_hooks") or {},
+            "demo_depth_fill": demo_fill,
+            "depth_team_holes": depth_holes,
             **coverage,
             **{f"cal_{k}": v for k, v in calibration_notes().items()},
         },
@@ -1846,6 +1872,8 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
     coverage: Dict[str, Any] = {}
     rookie_flag_meta: Dict[str, Any] = {}
     rookie_enrich_stats: Dict[str, Any] = {}
+    depth_holes: List[str] = []
+    demo_fill = "applied_last_resort"
     try:
         packaged_rows, pkg_depth_meta = load_packaged_depth_chart(season)
         rookie_flags, rookie_flag_meta = load_packaged_rookie_flags(season)
@@ -1859,9 +1887,8 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
             source=ROSTER_SOURCE_PACKAGED,
             baseline_eff=None,
         )
-        for team in NFL_TEAMS:
-            if not rosters.get(team):
-                rosters[team] = [_role_from_demo(team, r) for r in _generic_skill(team)]
+        depth_holes = _ensure_team_rosters(rosters, allow_demo_fill=False)
+        demo_fill = "blocked_pack_present"
         rosters = annotate_roster_book(rosters)
         rosters, _depth_structures = apply_depth_chart_roster_book(rosters)
         # v1.16: ladder league-default QB1 YPA off team offense before process priors.
@@ -1962,6 +1989,8 @@ def build_packaged_real_universe(season: int = 2026) -> EngineUniverse:
         "identity_scheme": str(pkg_depth_meta.get("identity_scheme") or ""),
         "ol_roles_count": len(pkg_depth_meta.get("ol_roles") or []),
         "ol_roles": list(pkg_depth_meta.get("ol_roles") or []),
+        "demo_depth_fill": demo_fill,
+        "depth_team_holes": depth_holes,
         "ol_efficiency_hooks": {
             **dict(pkg_depth_meta.get("ol_efficiency_hooks") or {}),
             "status": "ol_protection_v1_feature",

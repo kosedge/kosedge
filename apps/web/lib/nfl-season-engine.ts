@@ -249,11 +249,11 @@ export function isSeasonEngineReady(
   );
 }
 
-/** Informational — packaged fallback is healthy, not "degraded". */
+/** Informational — packaged SoT is the live depth book, not demo roles. */
 export function seasonEnginePackagedNotice(
   status: Pick<
     SeasonEngineStatus,
-    "schedule_source" | "depth_source" | "roster_source"
+    "schedule_source" | "depth_source" | "roster_source" | "depth_as_of" | "roster_as_of"
   >,
 ): string | null {
   const sources = [
@@ -261,8 +261,13 @@ export function seasonEnginePackagedNotice(
     status.depth_source,
     status.roster_source,
   ].filter((s): s is string => typeof s === "string" && s.length > 0);
+  if (sources.some((s) => s === "demo_depth_chart")) {
+    return "Demo depth in use — not the 2026 SoT pack. REG surfaces should not show this.";
+  }
   if (!sources.some((s) => s.startsWith("packaged"))) return null;
-  return "Not current 2026 depth/usage — packaged schedule/depth (synthetic roles until live feeds land)";
+  const asOf = status.depth_as_of || status.roster_as_of;
+  const asOfBit = asOf ? ` as_of ${asOf}` : "";
+  return `2026 depth/coaching SoT (packaged${asOfBit}). Named skill starters — not a live weekly injury feed.`;
 }
 
 export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {

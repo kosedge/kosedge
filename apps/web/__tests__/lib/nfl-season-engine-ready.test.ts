@@ -42,7 +42,7 @@ describe("seasonEnginePackagedNotice", () => {
         depth_source: "packaged_nflverse_depth_2026",
       }),
     ).toBe(
-      "Not current 2026 depth/usage — packaged schedule/depth (synthetic roles until live feeds land)",
+      "2026 depth/coaching SoT (packaged). Named skill starters — not a live weekly injury feed.",
     );
   });
 
@@ -53,5 +53,23 @@ describe("seasonEnginePackagedNotice", () => {
         depth_source: "db_depth",
       }),
     ).toBeNull();
+  });
+
+  it("flags demo depth loudly", () => {
+    expect(
+      seasonEnginePackagedNotice({
+        roster_source: "demo_depth_chart",
+        depth_source: "demo_depth_chart",
+      }),
+    ).toMatch(/Demo depth/);
+  });
+
+  it("includes pack as_of when present", () => {
+    expect(
+      seasonEnginePackagedNotice({
+        depth_source: "packaged_nflverse_depth_2026",
+        depth_as_of: "2026-08-13",
+      }),
+    ).toContain("as_of 2026-08-13");
   });
 });

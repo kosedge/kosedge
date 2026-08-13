@@ -39,8 +39,9 @@ SOT_QB_OVERRIDES: dict[str, list[tuple[str, str]]] = {
     # team -> [(depth_order, player_name), ...]
     "ARI": [(1, "Jacoby Brissett"), (2, "Gardner Minshew II"), (3, "Carson Beck")],
     "MIN": [(1, "Kyler Murray"), (2, "J.J. McCarthy"), (3, "Carson Wentz")],
-    "ATL": [(1, "Michael Penix Jr."), (2, "Malik Willis")],
-    "MIA": [(1, "Tua Tagovailoa")],
+    # Tua signed ATL; Penix still in the room (open_competition). Willis is MIA QB1.
+    "ATL": [(1, "Tua Tagovailoa"), (2, "Michael Penix Jr.")],
+    "MIA": [(1, "Malik Willis")],
 }
 
 # Non-QB skill SoT overlays (camp / FA landings). Applied after QB overrides.
