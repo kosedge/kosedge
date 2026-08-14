@@ -172,7 +172,10 @@ def compose_team_projection(
     defense_index = _clamp(defense_index, *P.STRENGTH_CLAMP)
     league_reg = 0.0
     eff_src = str(efficiency.source or "") if efficiency is not None else ""
-    if efficiency is not None and eff_src == "league_average_fill":
+    if efficiency is not None and eff_src in (
+        "league_average_fill",
+        "thin_sample_labeled",
+    ):
         league_reg = float(P.LEAGUE_REG_PLACEHOLDER)
         offense_index = 1.0 + (1.0 - league_reg) * (offense_index - 1.0)
         defense_index = 1.0 + (1.0 - league_reg) * (defense_index - 1.0)

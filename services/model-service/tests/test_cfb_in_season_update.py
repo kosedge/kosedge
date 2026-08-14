@@ -134,4 +134,4 @@ def test_project_game_picks_up_inseason_delta(clean_state):
 
 
 def test_engine_version_bump():
-    assert "v0.13-calibration-scale" in P.ENGINE_VERSION
+    assert "v0.14-efficiency-backbone" in P.ENGINE_VERSION

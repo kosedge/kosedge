@@ -38,9 +38,10 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.13-calibration-scale"
+ENGINE_VERSION = "cfb-season-engine-v0.14-efficiency-backbone"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.13-calibration-scale"
 CALIBRATION_AS_OF = "2026-08-14"
+BACKBONE_VERSION = "cfb-efficiency-backbone-v0.14-20260814"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -102,8 +103,9 @@ MATCHUP_RESPONSE = 1.40
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
 MATCHUP_RATIO_CLAMP = (0.52, 1.45)
 MATCHUP_RATIO_EXCESS_RETAIN = 0.42
-# v0.13: shrink O/D index toward 1.0 when SP+ is league-average fill.
-# Not a silent 0 — labeled in compose notes.
+# v0.13/v0.14: shrink O/D index toward 1.0 when efficiency is a labeled
+# thin-sample / leftover league-average fill. Official FBS with warehouse
+# or SP+ history does not hit this path.
 LEAGUE_REG_PLACEHOLDER = 0.28
 
 # Path evolution (mild; not backtested). Early weeks add extra noise.
@@ -380,6 +382,10 @@ def documentation() -> Dict[str, Any]:
             "v0.13: FBS-FBS margin = TAU*tanh(SCALE*raw/TAU) after the strength "
             "path (SCALE=0.80, TAU=26). Placeholder-SP+ teams regress 28% to "
             "league index. Totals stay on the separate pace path. σ not shrunk.",
+            "v0.14: warehouse opponent-adj EPA overlay replaces silent "
+            "league_average_fill for official FBS with ≥8 prior-season games. "
+            "Remaining missing codes are thin_sample_labeled (wider σ). "
+            "tanh constants unchanged. used_in_spread stays false.",
             "Season sim uses official ESPN 2026 slate when packaged; densified "
             "seed is never labeled official. Win tables stay research-only.",
             "FBS focus; FCS opponents treated as external when scheduled.",

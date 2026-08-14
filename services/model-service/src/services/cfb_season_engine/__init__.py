@@ -90,6 +90,7 @@ from src.services.cfb_season_engine.position_groups import (
     unit_grade_breakdown,
 )
 from src.services.cfb_season_engine.priors import (
+    BACKBONE_VERSION,
     ENGINE_VERSION,
     documentation as priors_documentation,
     early_season_narrowing_schedule,
@@ -215,6 +216,9 @@ def engine_status_payload(
             "n_games": 0,
             "slate_complete": False,
             "error": str(exc),
+            "backbone_version": BACKBONE_VERSION,
+            "n_filled": 0,
+            "n_thin": 0,
             "fbs_universe": fbs_doc(),
             "official_schedule": official_schedule_doc(),
             "preseason_prior": _preseason_prior_status(season, ["UGA", "OSU", "MICH", "FSU", "LSU"]),
@@ -355,6 +359,7 @@ def engine_status_payload(
             if state.coaching.returning_hc and state.coaching.returning_oc and state.coaching.returning_dc:
                 coaching_flags["all_returning"] += 1
 
+    eff_meta = efficiency_snapshot_meta()
     return {
         "ok": True,
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
@@ -370,7 +375,8 @@ def engine_status_payload(
             "v0.10 official-FBS preseason prior (research only) + "
             "v0.11 game/total sim distributions (research only) + "
             "v0.12 official 2026 ESPN slate + roster completeness (research only) + "
-            "v0.13 margin calibration / blowout-scale (research only)"
+            "v0.13 margin calibration / blowout-scale (research only) + "
+            "v0.14 warehouse efficiency backbone / SP+ fill reduction (research only)"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "calibration_id": __import__(
@@ -418,6 +424,18 @@ def engine_status_payload(
                 if universe.teams[c].efficiency
                 and universe.teams[c].efficiency.source == "league_average_fill"
             ),
+            "efficiency_warehouse_fill": sorted(
+                c
+                for c in official_in_universe
+                if universe.teams[c].efficiency
+                and "warehouse" in str(universe.teams[c].efficiency.source or "")
+            ),
+            "efficiency_thin": sorted(
+                c
+                for c in official_in_universe
+                if universe.teams[c].efficiency
+                and universe.teams[c].efficiency.source == "thin_sample_labeled"
+            ),
         },
         "roster_source": meta.get("roster_source") or snap_meta.get("roster_source"),
         "depth_source": meta.get("depth_source") or snap_meta.get("depth_source"),
@@ -449,7 +467,21 @@ def engine_status_payload(
                 fromlist=["documentation"],
             ).documentation(),
         ],
-        "efficiency": efficiency_snapshot_meta(),
+        "efficiency": eff_meta,
+        "backbone_version": eff_meta.get("backbone_version") or BACKBONE_VERSION,
+        "n_filled": int(eff_meta.get("n_filled") or 0),
+        "n_thin": int(eff_meta.get("n_thin") or 0),
+        "efficiency_backbone": {
+            "version": eff_meta.get("backbone_version"),
+            "n_sp_plus": eff_meta.get("n_sp_plus"),
+            "n_warehouse_fill": eff_meta.get("n_warehouse_fill"),
+            "n_filled": eff_meta.get("n_filled"),
+            "n_thin": eff_meta.get("n_thin"),
+            "thin": eff_meta.get("thin") or [],
+            "filled": eff_meta.get("filled") or [],
+            "method": eff_meta.get("method"),
+            "used_in_spread": False,
+        },
         "priors": priors_documentation(),
         "early_season_narrowing": early_season_narrowing_schedule(),
         "schedule": schedule.documentation(),
@@ -547,7 +579,8 @@ def engine_status_payload(
                 "athlete teamHistory/career splits; returning snap/start shares "
                 "are class-year proxies; portal-out incomplete; recruiting often "
                 "retained from curated priors; efficiency from final-2025 SP+ "
-                "carry (opponent-adjusted; success/explosiveness are proxies); "
+                "carry plus warehouse opponent-adj EPA overlay for official-FBS "
+                "fills (success/explosiveness are proxies); "
                 "HFA/coaching still curated; official ESPN 2026 slate when "
                 "packaged (densified seed never labeled official)"
             ),
@@ -628,6 +661,7 @@ def engine_status_payload(
             "package_official_schedule": "scripts/cfb/package_official_schedule_2026.py",
             "fill_roster_holes": "scripts/cfb/fill_roster_holes_2026.py",
             "package_efficiency": "scripts/cfb/package_efficiency_2025_carry.py",
+            "package_efficiency_backbone": "scripts/cfb/package_efficiency_backbone_2026.py",
             "historical_calibration": "scripts/cfb/run_historical_calibration.py",
             "ops": "data/ops/cfb-historical-calibration-20260805.md",
             "ops_performance": "data/ops/cfb-performance-tracking-20260805.md",
@@ -638,6 +672,7 @@ def engine_status_payload(
             "ops_p3_sim": "data/ops/cfb-p3-game-total-sim-20260813.md",
             "ops_slate_roster": "data/ops/cfb-2026-slate-roster-20260813.md",
             "ops_calibration_scale": "data/ops/cfb-calibration-scale-20260814.md",
+            "ops_efficiency_backbone_v014": "data/ops/cfb-efficiency-backbone-20260814.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
