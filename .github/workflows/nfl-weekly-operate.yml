@@ -1,0 +1,57 @@
+# NFL weekly operate — documented-only until Season Week ≥ 1.
+#
+# Enable the cron when REG Week 1 has kicked off. Until then this workflow
+# is workflow_dispatch / manual only. Do not also enable Railway + launchd.
+name: NFL Weekly Operate
+
+on:
+  workflow_dispatch:
+    inputs:
+      week:
+        description: "Finished REG week (0 = preseason skip ingest)"
+        required: true
+        default: "0"
+      dry_run:
+        description: "Dry-run (plan + read-only; never flips research pin)"
+        type: boolean
+        default: true
+  # Enable when Season Week ≥ 1 (Tuesday after MNF, 12:30 UTC):
+  # schedule:
+  #   - cron: "30 12 * * 2"
+
+jobs:
+  weekly-operate:
+    name: Weekly operate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run weekly operate
+        run: |
+          WEEK="${{ github.event.inputs.week }}"
+          WEEK="${WEEK:-0}"
+          DRY="${{ github.event.inputs.dry_run }}"
+          ARGS=(--week "$WEEK" --last-run data/ops/nfl-weekly-operate-last.json)
+          if [[ "${DRY}" != "false" ]]; then
+            ARGS+=(--dry-run)
+          fi
+          python scripts/nfl/run_weekly_operate.py "${ARGS[@]}"
+
+      - name: Confirm research pin untouched
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path("data/ops/nfl-web-launch-bundle.json").read_text())
+          tag = p.get("lock_tag")
+          assert tag == "nfl-season-engine-2026-preseason-lock", tag
+          assert p.get("locked_snapshot") is True
+          print("pin ok", tag)
+          PY
