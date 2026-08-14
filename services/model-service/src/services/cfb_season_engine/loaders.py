@@ -38,6 +38,13 @@ from src.services.cfb_season_engine.real_roster import (
     snapshot_meta,
 )
 from src.services.cfb_season_engine.roster_construction import build_roster_construction
+from src.services.cfb_season_engine.fbs_universe import official_fbs_codes
+from src.services.cfb_season_engine.official_schedule import (
+    attach_fcs_placeholders,
+    coverage_report,
+    games_from_blob,
+    load_official_schedule_blob,
+)
 from src.services.cfb_season_engine.schedule import densify_schedule
 from src.services.cfb_season_engine.team_projection import compose_team_projection
 from src.services.cfb_season_engine.types import (
@@ -203,34 +210,63 @@ def _build_universe_from_team_payloads(
         if player_hooks:
             hooks[team] = player_hooks
 
-    seed = load_packaged_schedule(season=season)
-    known = set(teams)
-    seed = [g for g in seed if g.home_team in known and g.away_team in known]
+    official_codes = official_fbs_codes()
+    teams = {k: v for k, v in teams.items() if k in official_codes}
+    official_blob = load_official_schedule_blob(season)
+    official_games = (
+        games_from_blob(official_blob, season=season) if official_blob.get("present") else []
+    )
     conferences = load_conference_map()
     conferences = {
         t: conferences.get(t, conferences.get(canonicalize_team_code(t), "Independent"))
-        for t in known
+        for t in set(teams) | set(official_codes)
     }
-    strength_by_team = {
-        code: float(state.roster.roster_strength) if state.roster else 50.0
-        for code, state in teams.items()
-    }
-    schedule, sched_meta = densify_schedule(
-        seed,
-        sorted(known),
-        season=season,
-        conference_by_team=conferences,
-        strength_by_team=strength_by_team,
-    )
+    if official_games:
+        teams, _fcs_added = attach_fcs_placeholders(teams, official_games)
+        schedule = official_games
+        cov = coverage_report(schedule, official=official_codes)
+        sched_meta = {
+            "schedule_source": str(official_blob.get("source") or "espn_team_schedule_public"),
+            "fidelity": "official_espn_slate",
+            "official_schedule": True,
+            "slate_complete": bool(
+                official_blob.get("slate_complete") or cov.get("slate_complete")
+            ),
+            "schedule_as_of": str(official_blob.get("as_of") or ""),
+            "total_games": len(schedule),
+            "densified_added": 0,
+            "seed_games_kept": 0,
+            "coverage": cov,
+            "note": "Official ESPN 2026 team schedules. Densified seed not used.",
+        }
+    else:
+        seed = load_packaged_schedule(season=season)
+        known = set(teams)
+        seed = [g for g in seed if g.home_team in known and g.away_team in known]
+        strength_by_team = {
+            code: float(state.roster.roster_strength) if state.roster else 50.0
+            for code, state in teams.items()
+        }
+        schedule, sched_meta = densify_schedule(
+            seed,
+            sorted(known),
+            season=season,
+            conference_by_team=conferences,
+            strength_by_team=strength_by_team,
+        )
+        sched_meta["official_schedule"] = False
+        sched_meta["slate_complete"] = False
 
     notes = {
         "mode": mode,
         "priors_as_of": str(blob_meta.get("as_of", "")),
         "priors_fidelity": str(blob_meta.get("fidelity", "approximate")),
-        "team_count": str(len(teams)),
+        "team_count": str(len([t for t in teams if t in official_codes])),
         "schedule_source": str(sched_meta.get("schedule_source", "packaged_sample_densified")),
         "schedule_fidelity": str(sched_meta.get("fidelity", "approximate")),
-        "official_schedule": "false",
+        "official_schedule": str(bool(sched_meta.get("official_schedule"))).lower(),
+        "slate_complete": str(bool(sched_meta.get("slate_complete"))).lower(),
+        "schedule_as_of": str(sched_meta.get("schedule_as_of") or ""),
         "schedule_games": str(sched_meta.get("total_games", len(schedule))),
         "schedule_seed_kept": str(sched_meta.get("seed_games_kept", 0)),
         "schedule_densified_added": str(sched_meta.get("densified_added", 0)),
@@ -241,7 +277,11 @@ def _build_universe_from_team_payloads(
         "returning_source": str(roster_meta.get("returning_source", "")),
         "recruiting_source": str(roster_meta.get("recruiting_source", "")),
         "roster_as_of": str(roster_meta.get("as_of", blob_meta.get("as_of", ""))),
-        "gap_official_schedule": "No official full 2026 FBS schedule in-repo; densified sample used",
+        "gap_official_schedule": (
+            ""
+            if sched_meta.get("official_schedule")
+            else "No official full 2026 FBS schedule in-repo; densified sample used"
+        ),
         "primary_drivers": (
             "off_eff/def_eff (2025 SP+ carry) + roster_strength + "
             "qb_situation_index + position_groups + variable_hfa + "
@@ -366,8 +406,12 @@ def resolve_season_universe(
         return {
             "mode": mode,
             "schedule_source": notes.get("schedule_source", "packaged"),
+            "schedule_as_of": notes.get("schedule_as_of", ""),
             "schedule_game_count": len(universe.schedule),
-            "team_count": len(universe.teams),
+            "n_games": len(universe.schedule),
+            "official_schedule": notes.get("official_schedule", "false") == "true",
+            "slate_complete": notes.get("slate_complete", "false") == "true",
+            "team_count": notes.get("team_count") or len(universe.teams),
             "as_of_week": as_of_week,
             "fidelity": notes.get("priors_fidelity", "approximate"),
             "roster_source": notes.get("roster_source", ROSTER_SOURCE_LEGACY_PRIORS),
@@ -404,7 +448,10 @@ def documentation() -> Dict[str, Any]:
         "packaged_schedule": str(PACKAGED_SCHEDULE),
         "packaged_real_roster": str(PACKAGED_REAL_ROSTER),
         "packaged_efficiency": str(PACKAGED_EFFICIENCY),
-        "schedule_policy": "seed sample + densify_schedule (not official FBS slate)",
+        "schedule_policy": (
+            "official ESPN 2026 team schedules when packaged; else densified "
+            "sample (never labeled official)"
+        ),
         "preference_order": "DB → packaged ESPN real-roster snapshot → legacy priors",
         "db_universe": "not_populated (packaged snapshot is the Railway-safe path)",
         "roster_source": meta.get("roster_source"),
@@ -418,6 +465,7 @@ def documentation() -> Dict[str, Any]:
             "identities / QB1 selection inputs are from ESPN 2026 rosters. "
             "Returning snap% and portal-out remain APPROXIMATE proxies. "
             "Efficiency is packaged final-2025 SP+ carry (APPROXIMATE; no PBP). "
-            "Densified schedule is APPROXIMATE. DB path is optional."
+            "Official ESPN 2026 slate is used when packaged; densified seed is "
+            "never labeled official. DB path is optional."
         ),
     }

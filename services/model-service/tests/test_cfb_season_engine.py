@@ -63,7 +63,7 @@ from src.services.cfb_season_engine.types import (
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.14-efficiency-backbone"
 
 
 def test_qb_situation_classification() -> None:
@@ -895,9 +895,14 @@ def test_matchup_ratio_clamp_limits_placeholder_blowouts() -> None:
 
 def test_densified_schedule_covers_many_teams() -> None:
     universe = build_packaged_universe(2026)
-    assert universe.notes.get("official_schedule") == "false"
-    assert "densified" in universe.notes.get("schedule_source", "")
     assert len(universe.schedule) >= 200
+    if universe.notes.get("official_schedule") == "true":
+        assert universe.notes.get("schedule_densified_added") == "0"
+        assert "espn" in universe.notes.get("schedule_source", "")
+        assert "densified" not in universe.notes.get("schedule_source", "")
+    else:
+        assert universe.notes.get("official_schedule") == "false"
+        assert "densified" in universe.notes.get("schedule_source", "")
     from collections import Counter
 
     counts = Counter()
@@ -984,8 +989,10 @@ def test_variable_hfa_moves_project_game() -> None:
     p_poor = project_game_preview(
         poor_u, home_team="TEX", away_team="OSU", week=5, neutral_site=False
     )
-    # ~2.7 pt HFA gap should show in expected home score and WP.
-    assert p_elite.expected_home_score - p_poor.expected_home_score >= 2.0
+    # HFA lives on the margin path; independent total splits the gap ~50/50
+    # onto home/away scores. ~2.7 pt HFA still moves spread and WP.
+    assert p_elite.expected_home_score - p_poor.expected_home_score >= 1.0
+    assert p_poor.spread_home - p_elite.spread_home >= 2.0
     assert p_elite.home_win_prob - p_poor.home_win_prob >= 0.04
     assert p_elite.drivers["matchup"]["hfa"]["bucket"] == "elite"
     assert p_poor.drivers["matchup"]["hfa"]["bucket"] == "poor"
@@ -1081,7 +1088,9 @@ def test_status_contract() -> None:
     assert "cfb-historical-calibration" in payload["entry_points"]["ops"]
     assert payload.get("historical_calibration", {}).get("ops")
     assert payload.get("calibration_tag")
-    assert "hist-cal" in str(payload.get("calibration_tag"))
+    assert "calibration-scale" in str(payload.get("calibration_tag")) or "hist-cal" in str(
+        payload.get("calibration_tag")
+    )
     assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert payload.get("roster_source")
     assert "espn" in str(payload.get("roster_source", "")).lower()
@@ -1231,10 +1240,19 @@ def test_calibration_win_distribution_width_bounds() -> None:
     """Season win means not absurdly tight; within-team std stays visible."""
     universe = build_packaged_universe(2026)
     result = simulate_full_season(universe, n_sims=40, seed=11)
-    means = [float(block["mean"]) for block in result.team_wins.values()]
-    stds = [float(block["std"]) for block in result.team_wins.values()]
+    from src.services.cfb_season_engine.fbs_universe import is_official_fbs
+
+    official_wins = {
+        team: block
+        for team, block in result.team_wins.items()
+        if is_official_fbs(team)
+    }
+    means = [float(block["mean"]) for block in official_wins.values()]
+    stds = [float(block["std"]) for block in official_wins.values()]
     assert max(means) - min(means) >= 3.0  # not collapsed to ~same win total
-    assert max(means) - min(means) <= 9.5  # densified SOS still compresses extremes
+    # Official slate has real SOS; densified seed used to compress this to ≤9.5.
+    upper = 14.0 if universe.notes.get("official_schedule") == "true" else 9.5
+    assert max(means) - min(means) <= upper
     mean_std = sum(stds) / len(stds)
     assert 1.4 <= mean_std <= 3.2
     # Early-season uncertainty still widens margin_sd vs midseason.
@@ -1380,8 +1398,14 @@ def test_efficiency_moves_projection_when_roster_fixed() -> None:
 
 def test_efficiency_top_sp_plus_teams_rank_high_in_power() -> None:
     universe = build_packaged_universe(2026)
+    from src.services.cfb_season_engine.fbs_universe import is_official_fbs
+
     ranked = sorted(
-        universe.teams.items(),
+        (
+            (code, state)
+            for code, state in universe.teams.items()
+            if is_official_fbs(code)
+        ),
         key=lambda kv: 0.5 * (kv[1].offense_index + kv[1].defense_index),
         reverse=True,
     )
@@ -1431,7 +1455,7 @@ def test_hist_cal_priors_bounds() -> None:
     """v0.8.1 hist-cal knobs stay inside documented calibration bounds."""
     from src.services.cfb_season_engine import priors as P
 
-    assert P.ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert P.ENGINE_VERSION == "cfb-season-engine-v0.14-efficiency-backbone"
     assert 24.5 <= P.LEAGUE_TEAM_PPG <= 27.0
     assert 1.4 <= P.HFA_BASELINE_POINTS <= 2.2
     assert 1.20 <= P.MATCHUP_RESPONSE <= 1.55
