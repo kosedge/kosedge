@@ -48,7 +48,13 @@ type ProjectPayload = {
   expected_away_score?: number;
   expected_total?: number;
   spread_home?: number;
+  fair_spread?: number;
+  fair_total?: number;
+  team_total_home?: number;
+  team_total_away?: number;
   margin_sd?: number;
+  n_sims?: number;
+  distributions?: Record<string, unknown>;
   fidelity?: string;
   uncertainty?: Record<string, unknown>;
   early_season_uncertainty?: Record<string, unknown>;
@@ -418,9 +424,9 @@ export default function CfbProjectGameClient({
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
-          Pick two FBS teams and project a research line — spread, total,
-          win probability with American moneyline — plus mean ± σ from the
-          preseason prior. Not a published handicap. Edge Board stays
+          Pick two FBS teams and project a research line — spread, a
+          separate total path (not spread×hack), win probability, team
+          totals, and sim σ. Not a published handicap. Edge Board stays
           markets-only. used_in_spread is false.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -593,8 +599,8 @@ export default function CfbProjectGameClient({
               />
               <MarketCell
                 label="Total"
-                primary={formatScore(result.expected_total)}
-                secondary={`${formatScore(result.expected_away_score)} + ${formatScore(result.expected_home_score)}`}
+                primary={formatScore(result.fair_total ?? result.expected_total)}
+                secondary={`separate total path · ${formatScore(result.team_total_away ?? result.expected_away_score)} + ${formatScore(result.team_total_home ?? result.expected_home_score)}`}
               />
               <MarketCell
                 label="Moneyline"
@@ -620,6 +626,21 @@ export default function CfbProjectGameClient({
                 <span className="font-semibold tabular-nums text-kos-text">
                   {formatIndex(marginSd, 1)}
                 </span>
+                {num(uncertainty.effective_total_sd) != null ? (
+                  <>
+                    {" "}
+                    · total σ{" "}
+                    <span className="font-semibold tabular-nums text-kos-text">
+                      {formatIndex(num(uncertainty.effective_total_sd), 1)}
+                    </span>
+                  </>
+                ) : null}
+                {result.n_sims ? (
+                  <span className="text-kos-text/55">
+                    {" "}
+                    · Sim N {result.n_sims}
+                  </span>
+                ) : null}
                 {earlyActive ? (
                   <span className="text-amber-100/75">
                     {" "}

@@ -200,7 +200,10 @@ def _normalize_row(row: Mapping[str, Any]) -> dict[str, Any]:
         "source": row.get("source") or "cfb_warehouse_research",
         "notes": dict(row.get("notes") or {}),
         "kei": False,
+        "used_in_spread": False,
     }
+    if "used_in_spread" not in out["notes"]:
+        out["notes"]["used_in_spread"] = False
     return out
 
 

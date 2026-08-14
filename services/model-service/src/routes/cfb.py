@@ -21,6 +21,8 @@ class ProjectGameBody(BaseModel):
     neutral_site: bool = False
     night_game: bool = False
     demo: bool = True
+    # Research smoke default; 15 is too thin for a distribution.
+    n_sims: int = Field(5000, ge=200, le=25000)
     # Explicit opt-in log for this request (also: CFB_AUTO_LOG_PROJECTIONS=1).
     log_projection: bool = False
 
@@ -28,7 +30,8 @@ class ProjectGameBody(BaseModel):
 class SimulateBody(BaseModel):
     season: int = Field(2026, ge=2010, le=2100)
     # Densified full-FBS paths are heavier than the old skeleton sample slate.
-    n_sims: int = Field(15, ge=1, le=200)
+    # Raised off the toy default of 15; still not an official-slate futures run.
+    n_sims: int = Field(200, ge=1, le=2000)
     seed: int = 2026
     demo: bool = True
     as_of_week: int = Field(1, ge=1, le=20)
@@ -145,6 +148,7 @@ def cfb_season_engine_project_game(
             season=body.season,
             neutral_site=body.neutral_site,
             night_game=body.night_game,
+            n_sims=body.n_sims,
         )
     except KeyError as exc:
         return {
@@ -177,8 +181,8 @@ def cfb_season_engine_project_game(
                 "week": body.week,
                 "home_team_id": body.home_team,
                 "away_team_id": body.away_team,
-                "fair_spread": payload.get("spread_home"),
-                "fair_total": payload.get("expected_total"),
+                "fair_spread": payload.get("fair_spread", payload.get("spread_home")),
+                "fair_total": payload.get("fair_total", payload.get("expected_total")),
                 "wp": payload.get("home_win_prob"),
                 "uncertainty": payload.get("uncertainty")
                 or payload.get("margin_sd"),
@@ -186,6 +190,7 @@ def cfb_season_engine_project_game(
                     "used_in_spread": False,
                     "kei": False,
                     "research_prior": True,
+                    "n_sims": payload.get("n_sims"),
                 },
             },
             prefer_hd=False,
@@ -384,7 +389,7 @@ def cfb_performance_summary(
 def cfb_season_engine_simulate(
     body: Optional[SimulateBody] = Body(None),
     season: int = Query(2026, ge=2010, le=2100),
-    n_sims: int = Query(15, ge=1, le=200),
+    n_sims: int = Query(200, ge=1, le=2000),
     seed: int = Query(2026),
     demo: bool = Query(True),
     as_of_week: int = Query(1, ge=1, le=20),

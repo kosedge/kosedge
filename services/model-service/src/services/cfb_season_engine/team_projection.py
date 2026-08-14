@@ -18,6 +18,12 @@ import random
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Tuple
 
 from src.services.cfb_season_engine import priors as P
+from src.services.cfb_season_engine.game_total_sim import (
+    GAME_SIM_N_DEFAULT,
+    USED_IN_SPREAD,
+    simulate_game_distributions,
+    total_path_mean,
+)
 from src.services.cfb_season_engine.coaching_continuity import (
     coaching_to_dict,
     coaching_week_adjustment,
@@ -413,11 +419,14 @@ def project_game_formula_doc() -> Dict[str, Any]:
             f"(baseline={P.HFA_BASELINE_POINTS})",
             "coaching_week_adj = week-decayed new HC/OC/DC penalties "
             "(strongest W1–W4)",
-            "optional thin ST nudge split evenly across both scores",
-            "margin = home_exp - away_exp",
-            "spread_home = away_exp - home_exp  (neg = home favorite)",
-            "total = home_exp + away_exp  (coherent with scores)",
-            "home_wp = Φ(margin / margin_sd)",
+            "optional thin ST nudge on the total path only",
+            "margin_mean = home_exp - away_exp  (HFA + coaching live here)",
+            "total_mean = league_total * pace * off_env^0.55 * expl  "
+            "(separate path; not f(spread) and not home_exp+away_exp)",
+            "sim: independent Gaussian margin + total; scores = (total±margin)/2",
+            "spread_home = away_sim - home_sim  (neg = home favorite)",
+            "fair_total = home_sim + away_sim",
+            "home_wp = Φ(margin_mean / margin_sd); sim WP also reported",
         ],
         "weights": P.documentation()["composition_weights"],
         "efficiency": (
@@ -435,7 +444,11 @@ def project_game_formula_doc() -> Dict[str, Any]:
             "spread_home": "away_score - home_score",
             "expected_total": "home_score + away_score",
             "win_probs": "home_wp + away_wp == 1",
+            "team_totals": "team_total_home + team_total_away == fair_total",
         },
+        "total_path": "separate_from_spread",
+        "n_sims_default": GAME_SIM_N_DEFAULT,
+        "used_in_spread": USED_IN_SPREAD,
     }
 
 
@@ -505,8 +518,10 @@ def project_game(
     night_game: bool = False,
     engine_version: str = P.ENGINE_VERSION,
     player_hook_summaries: Optional[List[Dict[str, Any]]] = None,
+    n_sims: Optional[int] = None,
+    seed: Optional[int] = None,
 ) -> GameProjection:
-    """Team-level projection for a matchup (strength → margin → lines/WP)."""
+    """Team-level projection: strength→margin + separate total sim."""
     home_team = home_team.upper()
     away_team = away_team.upper()
     if home_team not in universe.teams:
@@ -518,9 +533,7 @@ def project_game(
     away = universe.teams[away_team]
     early = P.early_season_uncertainty(week)
     margin_sd = P.win_prob_margin_sd_for_week(week)
-    # Team-specific early uncertainty widens margin SD further.
     team_u = 0.5 * (home.early_season_uncertainty + away.early_season_uncertainty)
-    margin_sd *= 1.0 + 0.25 * team_u
 
     home_exp, home_diag = expected_team_points(
         home,
@@ -541,14 +554,40 @@ def project_game(
         home_hfa_profile=home.home_field,
     )
 
-    # Thin special-teams nudge — split evenly so scores/total/spread stay coherent.
+    # Thin ST nudge belongs on the total path only (does not invent spread).
     st_home = home.groups.special_teams if home.groups else 50.0
     st_away = away.groups.special_teams if away.groups else 50.0
     st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
-    home_exp_adj = round(home_exp + 0.5 * st_nudge, 2)
-    away_exp_adj = round(away_exp + 0.5 * st_nudge, 2)
-    total = round(home_exp_adj + away_exp_adj, 2)
-    spread = round(away_exp_adj - home_exp_adj, 2)  # home spread (neg = favorite)
+    strength_home = round(home_exp, 2)
+    strength_away = round(away_exp, 2)
+    strength_total = round(strength_home + strength_away + st_nudge, 2)
+    strength_spread = round(strength_away - strength_home, 2)
+    margin_mean = strength_home - strength_away
+    total_mean, total_diag = total_path_mean(home, away, st_nudge=st_nudge)
+
+    sim_seed = seed
+    if sim_seed is None:
+        sim_seed = (
+            2026_0813
+            + int(week) * 1009
+            + sum(ord(c) for c in f"{home_team}{away_team}")
+        )
+    dist = simulate_game_distributions(
+        home,
+        away,
+        margin_mean=margin_mean,
+        total_mean=total_mean,
+        week=week,
+        base_margin_sd=margin_sd,
+        n_sims=n_sims,
+        seed=sim_seed,
+        st_nudge=st_nudge,
+    )
+    margin_sd = float(dist["sigma"]["margin_sd"])
+    home_exp_adj = float(dist["team_total_home"])
+    away_exp_adj = float(dist["team_total_away"])
+    total = float(dist["fair_total"])
+    spread = float(dist["fair_spread"])
     margin = home_exp_adj - away_exp_adj
     home_wp = win_prob_from_expected_scores(
         home_exp_adj, away_exp_adj, margin_sd=margin_sd
@@ -577,6 +616,18 @@ def project_game(
             "team_identity_uncertainty_blend": round(team_u, 4),
             "night_game": bool(night_game),
             "neutral_site": bool(neutral_site),
+            "strength_path_diagnostic": {
+                "home_exp": strength_home,
+                "away_exp": strength_away,
+                "total_if_summed": strength_total,
+                "spread_if_from_scores": strength_spread,
+                "note": (
+                    "Diagnostic only. Published total uses the separate "
+                    "total path, not home_exp+away_exp."
+                ),
+            },
+            "total_path": total_diag,
+            "n_sims": dist["n_sims"],
         },
         "primary_signals": {
             "home_off_eff": home_drivers.get("off_eff"),
@@ -622,25 +673,47 @@ def project_game(
             away.coaching.uncertainty_boost if away.coaching else 0.0
         ),
         "effective_margin_sd": round(margin_sd, 3),
+        "effective_total_sd": dist["total"]["std"],
+        "open_qb": {
+            "home": dist["sigma"]["home_open_qb"],
+            "away": dist["sigma"]["away_open_qb"],
+            "home_class": dist["sigma"]["home_qb_class"],
+            "away_class": dist["sigma"]["away_qb_class"],
+        },
+        "fcs": {
+            "home": dist["sigma"]["home_fcs"],
+            "away": dist["sigma"]["away_fcs"],
+            "home_label": dist["sigma"]["home_fcs_label"],
+            "away_label": dist["sigma"]["away_fcs_label"],
+        },
+        "n_sims": dist["n_sims"],
+        "weather": dist["weather"],
         "narrowing_schedule": P.early_season_narrowing_schedule(),
         "honesty": (
-            "Wide W1–W4 priors; week-indexed narrowing. Coaching change "
-            "penalties decay on the same early window. Not a claim of "
-            "known early-season identity."
+            "Wide W1–W4 priors; week-indexed narrowing. Open QB / FCS "
+            "widen margin and total σ. Coaching change penalties decay "
+            "on the same early window. Not a claim of known early-season "
+            "identity. Research only — used_in_spread=false."
         ),
     }
 
     game_id = f"{season or universe.season}_w{week}_{away_team}@{home_team}"
     notes = {
         "fidelity": "approximate",
-        "method": "strength→margin→spread/total/WP (unit-aware + HFA + coaching)",
+        "method": (
+            "strength→margin (HFA/coaching) + separate total sim "
+            "(pace/off_env/explosiveness); scores=(total±margin)/2"
+        ),
         "formula": (
-            "pts = league_ppg*(off/def)^resp*ol_skill_boost*opp_def_dampen*pace"
-            "+variable_HFA+coaching_adj; "
-            "spread_home=away-home; total=home+away; wp=Φ(margin/margin_sd)"
+            "margin=home_exp-away_exp; "
+            "total=league_ppg*2*pace*off_env^0.55*expl; "
+            "sim N Gaussian; spread_home=away-home; wp=Φ(margin/margin_sd)"
         ),
         "coherence": "spread=away-home; total=home+away; wp_home+wp_away=1",
         "does_not_touch": "edge_board_markets_only_cfb",
+        "used_in_spread": "false",
+        "n_sims": str(dist["n_sims"]),
+        "weather": dist["weather"],
         "margin": f"{margin:.2f}",
         "st_total_nudge": f"{st_nudge:.3f}",
         "hfa_bucket": home.home_field.bucket if home.home_field else "n/a",
@@ -668,6 +741,8 @@ def project_game(
         uncertainty=uncertainty,
         notes=notes,
         fidelity="approximate",
+        distributions=dist,
+        n_sims=int(dist["n_sims"]),
     )
 
 
@@ -699,6 +774,13 @@ def project_game_to_dict(proj: GameProjection) -> Dict[str, Any]:
         "players": proj.player_projections,
         "notes": proj.notes,
         "fidelity": proj.fidelity,
+        "fair_spread": proj.spread_home,
+        "fair_total": proj.expected_total,
+        "team_total_home": proj.expected_home_score,
+        "team_total_away": proj.expected_away_score,
+        "distributions": proj.distributions,
+        "n_sims": proj.n_sims,
+        "used_in_spread": USED_IN_SPREAD,
         "projection_formula": project_game_formula_doc(),
         # Research-only. Does not change spread / WP / KEI.
         "research_prior": research_prior_block(

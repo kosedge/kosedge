@@ -134,4 +134,4 @@ def test_project_game_picks_up_inseason_delta(clean_state):
 
 
 def test_engine_version_bump():
-    assert "v0.10-preseason-prior" in P.ENGINE_VERSION
+    assert "v0.11-game-total-sim" in P.ENGINE_VERSION
