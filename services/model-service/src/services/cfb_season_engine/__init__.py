@@ -170,7 +170,9 @@ def _preseason_prior_status(season: int, example_codes: Sequence[str]) -> Dict[s
         "leakage": pack.get("leakage") or "seasons < prior_year",
         "used_in_spread": False,
         "examples": {k: v for k, v in examples.items() if v},
-        "ops": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
+        "ops": "data/ops/cfb-p2-preseason-prior-20260813.md",
+        "prior_version": pack.get("prior_version"),
+        "universe": pack.get("universe"),
         "note": (
             "Neutral-field points vs average FBS + uncertainty σ. "
             "Research input on project-game; does not change spread/WP/KEI."
@@ -185,9 +187,22 @@ def engine_status_payload(
     demo: bool = True,
 ) -> Dict[str, Any]:
     """Honesty-first status contract for GET /cfb/season-engine/status."""
-    universe, meta = resolve_season_universe(
-        season=season, as_of_week=as_of_week, demo=demo, session=None
-    )
+    from src.services.cfb_season_engine.fbs_universe import documentation as fbs_doc
+
+    try:
+        universe, meta = resolve_season_universe(
+            season=season, as_of_week=as_of_week, demo=demo, session=None
+        )
+    except Exception as exc:
+        return {
+            "ok": False,
+            "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+            "used_in_spread": False,
+            "error": str(exc),
+            "fbs_universe": fbs_doc(),
+            "preseason_prior": _preseason_prior_status(season, ["UGA", "OSU", "MICH", "FSU", "LSU"]),
+            "note": "Universe load failed; version + research prior still returned. No KEI.",
+        }
     curated = sum(
         1
         for t in universe.teams.values()
@@ -313,14 +328,18 @@ def engine_status_payload(
                 coaching_flags["all_returning"] += 1
 
     return {
+        "ok": True,
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+        "used_in_spread": False,
         "sport": "cfb",
+        "fbs_universe": fbs_doc(),
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
             "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
             "v0.8 opponent-adjusted efficiency backbone + v0.8.1 historical "
             "closing-line calibration + v0.8.2 performance tracking / CLV + "
-            "v0.8.3 player coherence + v0.9 in-season updating foundation"
+            "v0.8.3 player coherence + v0.9 in-season updating foundation + "
+            "v0.10 official-FBS preseason prior (research only)"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "historical_calibration": {
@@ -506,6 +525,7 @@ def engine_status_payload(
             "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
             "ops_efficiency_prior": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
             "ops_qb_honesty": "data/ops/cfb-qb-honesty-prior-20260812.md",
+            "ops_p2_prior": "data/ops/cfb-p2-preseason-prior-20260813.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",

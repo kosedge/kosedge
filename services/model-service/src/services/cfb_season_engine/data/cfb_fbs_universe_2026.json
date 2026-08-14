@@ -1,0 +1,870 @@
+{
+  "as_of": "2026-08-13",
+  "season": 2026,
+  "source": "NCAA Division I FBS program list (Wikipedia / NCAA Directory, 2026-08-13) + engine ESPN name map",
+  "fidelity": "official_full_member_list; conference homes curated/approximate",
+  "n_fbs_full": 136,
+  "n_fbs_transition": 2,
+  "n_wikipedia_2026_programs": 138,
+  "independents": [
+    "CONN",
+    "ND"
+  ],
+  "notes": [
+    "Full-member 2026 FBS lock is 136 teams (bowl-subdivision members).",
+    "Wikipedia 2026 program count is 138 including NDSU and Sacramento State, which begin FBS transition in 2026 (full membership 2028). They are listed under transitioning \u2014 not deleted, not generic FCS -25.",
+    "Independents: Notre Dame, UConn. Army is AAC (joined 2024).",
+    "Conference homes for 2026 realignment (Pac-12 rebuild) are curated, not an NCAA membership feed.",
+    "Excluded from the prior universe: FCS contaminants and alias codes (ACU, CHAT, IDHO, FAY, SOUTH, FAU2, OLE, OREST, TA&M, TXAM, ULL).",
+    "This is the official team list, not the official 2026 game slate. Schedule remains densified until a later brief."
+  ],
+  "teams": {
+    "AFA": {
+      "display_name": "Air Force Falcons",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "AKR": {
+      "display_name": "Akron Zips",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ALA": {
+      "display_name": "Alabama Crimson Tide",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "APP": {
+      "display_name": "Appalachian State Mountaineers",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ARI": {
+      "display_name": "Arizona Wildcats",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ARK": {
+      "display_name": "Arkansas Razorbacks",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ARMY": {
+      "display_name": "Army Black Knights",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ARST": {
+      "display_name": "Arkansas State Red Wolves",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ASU": {
+      "display_name": "Arizona State Sun Devils",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "AUB": {
+      "display_name": "Auburn Tigers",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BALL": {
+      "display_name": "Ball State Cardinals",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BAY": {
+      "display_name": "Baylor Bears",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BC": {
+      "display_name": "Boston College Eagles",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BGSU": {
+      "display_name": "Bowling Green Falcons",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BOISE": {
+      "display_name": "Boise State Broncos",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BUFF": {
+      "display_name": "Buffalo Bulls",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "BYU": {
+      "display_name": "BYU Cougars",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CAL": {
+      "display_name": "California Golden Bears",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CCU": {
+      "display_name": "Coastal Carolina Chanticleers",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CHAR": {
+      "display_name": "Charlotte 49ers",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CIN": {
+      "display_name": "Cincinnati Bearcats",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CLEM": {
+      "display_name": "Clemson Tigers",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CMU": {
+      "display_name": "Central Michigan Chippewas",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "COLO": {
+      "display_name": "Colorado Buffaloes",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "CONN": {
+      "display_name": "UConn Huskies",
+      "conference": "Independent",
+      "membership": "fbs_full",
+      "independent": true
+    },
+    "CSU": {
+      "display_name": "Colorado State Rams",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "DEL": {
+      "display_name": "Delaware Fightin' Blue Hens",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "DUKE": {
+      "display_name": "Duke Blue Devils",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ECU": {
+      "display_name": "East Carolina Pirates",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "EMU": {
+      "display_name": "Eastern Michigan Eagles",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "FAU": {
+      "display_name": "Florida Atlantic Owls",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "FIU": {
+      "display_name": "Florida International Panthers",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "FRES": {
+      "display_name": "Fresno State Bulldogs",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "FSU": {
+      "display_name": "Florida State Seminoles",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "GASO": {
+      "display_name": "Georgia Southern Eagles",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "GAST": {
+      "display_name": "Georgia State Panthers",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "GT": {
+      "display_name": "Georgia Tech Yellow Jackets",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "HAW": {
+      "display_name": "Hawaii Rainbow Warriors",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "HOU": {
+      "display_name": "Houston Cougars",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ILL": {
+      "display_name": "Illinois Fighting Illini",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "IOWA": {
+      "display_name": "Iowa Hawkeyes",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ISU": {
+      "display_name": "Iowa State Cyclones",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "IU": {
+      "display_name": "Indiana Hoosiers",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "JMU": {
+      "display_name": "James Madison Dukes",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "JVST": {
+      "display_name": "Jacksonville State Gamecocks",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "KENNESAW": {
+      "display_name": "Kennesaw State Owls",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "KENT": {
+      "display_name": "Kent State Golden Flashes",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "KSU": {
+      "display_name": "Kansas State Wildcats",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "KU": {
+      "display_name": "Kansas Jayhawks",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "LIB": {
+      "display_name": "Liberty Flames",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "LOU": {
+      "display_name": "Louisville Cardinals",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "LSU": {
+      "display_name": "LSU Tigers",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "LT": {
+      "display_name": "Louisiana Tech Bulldogs",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "M-OH": {
+      "display_name": "Miami (OH) RedHawks",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MASS": {
+      "display_name": "Massachusetts Minutemen",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MD": {
+      "display_name": "Maryland Terrapins",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MEM": {
+      "display_name": "Memphis Tigers",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MIA": {
+      "display_name": "Miami Hurricanes",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MICH": {
+      "display_name": "Michigan Wolverines",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MINN": {
+      "display_name": "Minnesota Golden Gophers",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MISS": {
+      "display_name": "Ole Miss Rebels",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MIZZ": {
+      "display_name": "Missouri Tigers",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MOST": {
+      "display_name": "Missouri State Bears",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MRSH": {
+      "display_name": "Marshall Thundering Herd",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MSST": {
+      "display_name": "Mississippi State Bulldogs",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MSU": {
+      "display_name": "Michigan State Spartans",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "MTSU": {
+      "display_name": "Middle Tennessee Blue Raiders",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "NAVY": {
+      "display_name": "Navy Midshipmen",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "NCSU": {
+      "display_name": "NC State Wolfpack",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ND": {
+      "display_name": "Notre Dame Fighting Irish",
+      "conference": "Independent",
+      "membership": "fbs_full",
+      "independent": true
+    },
+    "NEB": {
+      "display_name": "Nebraska Cornhuskers",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "NEV": {
+      "display_name": "Nevada Wolf Pack",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "NIU": {
+      "display_name": "Northern Illinois Huskies",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "NMSU": {
+      "display_name": "New Mexico State Aggies",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "NW": {
+      "display_name": "Northwestern Wildcats",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ODU": {
+      "display_name": "Old Dominion Monarchs",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "OHIO": {
+      "display_name": "Ohio Bobcats",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "OKST": {
+      "display_name": "Oklahoma State Cowboys",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ORE": {
+      "display_name": "Oregon Ducks",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ORST": {
+      "display_name": "Oregon State Beavers",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "OSU": {
+      "display_name": "Ohio State Buckeyes",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "OU": {
+      "display_name": "Oklahoma Sooners",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "PITT": {
+      "display_name": "Pittsburgh Panthers",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "PSU": {
+      "display_name": "Penn State Nittany Lions",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "PUR": {
+      "display_name": "Purdue Boilermakers",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "RICE": {
+      "display_name": "Rice Owls",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "RUT": {
+      "display_name": "Rutgers Scarlet Knights",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "SCAR": {
+      "display_name": "South Carolina Gamecocks",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "SDSU": {
+      "display_name": "San Diego State Aztecs",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "SHSU": {
+      "display_name": "Sam Houston Bearkats",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "SJSU": {
+      "display_name": "San Jos\u00e9 State Spartans",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "SMU": {
+      "display_name": "SMU Mustangs",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "STAN": {
+      "display_name": "Stanford Cardinal",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "SYR": {
+      "display_name": "Syracuse Orange",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TAMU": {
+      "display_name": "Texas A&M Aggies",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TCU": {
+      "display_name": "TCU Horned Frogs",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TEM": {
+      "display_name": "Temple Owls",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TENN": {
+      "display_name": "Tennessee Volunteers",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TEX": {
+      "display_name": "Texas Longhorns",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TLSA": {
+      "display_name": "Tulsa Golden Hurricane",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TOL": {
+      "display_name": "Toledo Rockets",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TROY": {
+      "display_name": "Troy Trojans",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TTU": {
+      "display_name": "Texas Tech Red Raiders",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TULN": {
+      "display_name": "Tulane Green Wave",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "TXST": {
+      "display_name": "Texas State Bobcats",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UAB": {
+      "display_name": "UAB Blazers",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UCF": {
+      "display_name": "UCF Knights",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UCLA": {
+      "display_name": "UCLA Bruins",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UF": {
+      "display_name": "Florida Gators",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UGA": {
+      "display_name": "Georgia Bulldogs",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UK": {
+      "display_name": "Kentucky Wildcats",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UL": {
+      "display_name": "Louisiana Ragin' Cajuns",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "ULM": {
+      "display_name": "UL Monroe Warhawks",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UNC": {
+      "display_name": "North Carolina Tar Heels",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UNLV": {
+      "display_name": "UNLV Rebels",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UNM": {
+      "display_name": "New Mexico Lobos",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UNT": {
+      "display_name": "North Texas Mean Green",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "USA": {
+      "display_name": "South Alabama Jaguars",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "USC": {
+      "display_name": "USC Trojans",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "USF": {
+      "display_name": "South Florida Bulls",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "USM": {
+      "display_name": "Southern Miss Golden Eagles",
+      "conference": "Sun Belt",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UTAH": {
+      "display_name": "Utah Utes",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UTAHST": {
+      "display_name": "Utah State Aggies",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UTEP": {
+      "display_name": "UTEP Miners",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UTSA": {
+      "display_name": "UTSA Roadrunners",
+      "conference": "AAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "UVA": {
+      "display_name": "Virginia Cavaliers",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "VAN": {
+      "display_name": "Vanderbilt Commodores",
+      "conference": "SEC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "VT": {
+      "display_name": "Virginia Tech Hokies",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WAKE": {
+      "display_name": "Wake Forest Demon Deacons",
+      "conference": "ACC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WASH": {
+      "display_name": "Washington Huskies",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WIS": {
+      "display_name": "Wisconsin Badgers",
+      "conference": "Big Ten",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WKU": {
+      "display_name": "Western Kentucky Hilltoppers",
+      "conference": "CUSA",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WMU": {
+      "display_name": "Western Michigan Broncos",
+      "conference": "MAC",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WSU": {
+      "display_name": "Washington State Cougars",
+      "conference": "Pac-12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WVU": {
+      "display_name": "West Virginia Mountaineers",
+      "conference": "Big 12",
+      "membership": "fbs_full",
+      "independent": false
+    },
+    "WYO": {
+      "display_name": "Wyoming Cowboys",
+      "conference": "Mountain West",
+      "membership": "fbs_full",
+      "independent": false
+    }
+  },
+  "transitioning": {
+    "NDSU": {
+      "display_name": "North Dakota State Bison",
+      "conference": "Mountain West",
+      "membership": "fbs_transition",
+      "independent": false,
+      "full_membership_season": 2028,
+      "notes": "FBS transition begins 2026; not a full-member prior. Do not treat as generic FCS -25."
+    },
+    "SAC": {
+      "display_name": "Sacramento State Hornets",
+      "conference": "MAC",
+      "membership": "fbs_transition",
+      "independent": false,
+      "full_membership_season": 2028,
+      "notes": "FBS transition begins 2026; not a full-member prior. Do not treat as generic FCS -25."
+    }
+  },
+  "excluded_from_prior": {
+    "ACU": "FCS (Abilene Christian) \u2014 not 2026 FBS",
+    "CHAT": "FCS (Chattanooga) \u2014 not 2026 FBS",
+    "IDHO": "FCS (Idaho) \u2014 not 2026 FBS",
+    "FAY": "not 2026 FBS (unmatched roster code)",
+    "SOUTH": "not 2026 FBS (unmatched roster code)",
+    "FAU2": "alias of FAU",
+    "OLE": "alias of MISS",
+    "OREST": "alias of ORST",
+    "TA&M": "alias of TAMU",
+    "TXAM": "alias of TAMU",
+    "ULL": "alias of UL"
+  }
+}
