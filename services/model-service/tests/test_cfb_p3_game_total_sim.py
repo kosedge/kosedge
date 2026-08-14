@@ -26,7 +26,7 @@ from src.services.cfb_warehouse.predictions import write_prediction
 
 
 def test_version_and_status_document_sim() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.11-game-total-sim"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.12-slate-roster"
     assert GAME_SIM_N_DEFAULT >= 5000
     assert USED_IN_SPREAD is False
     status = engine_status_payload(season=2026, demo=True)
@@ -36,7 +36,12 @@ def test_version_and_status_document_sim() -> None:
     assert status["game_total_sim"]["used_in_spread"] is False
     assert status["game_total_sim"]["n_sims_default"] >= 5000
     assert status["game_total_sim"]["weather"] == "not applied"
-    assert status["slate"]["official_2026_fbs_schedule"] is False
+    assert "official_2026_fbs_schedule" in status["slate"]
+    if status["slate"]["official_2026_fbs_schedule"]:
+        assert status["slate"]["densified"] is False
+        assert "espn" in str(status["slate"]["source"]).lower()
+    else:
+        assert status["slate"]["densified"] is True
     assert status["season_futures"]["cfp_make"] is None
     assert status["season_futures"]["natty"] is None
     assert status["season_futures"]["status"] == "placeholder"
@@ -166,7 +171,7 @@ def test_status_and_project_game_http_200() -> None:
     status = client.get("/cfb/season-engine/status")
     assert status.status_code == 200
     body = status.json()
-    assert body["engine_version"] == "cfb-season-engine-v0.11-game-total-sim"
+    assert body["engine_version"] == "cfb-season-engine-v0.12-slate-roster"
     assert body["used_in_spread"] is False
     assert body["season_futures"]["natty"] is None
 

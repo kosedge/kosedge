@@ -318,8 +318,8 @@ def documentation() -> Dict[str, Any]:
             "natty": None,
             "status": "placeholder",
             "note": (
-                "Densified approximate slate cannot emit honest CFP/natty. "
-                "P4 stays stub until an official 2026 FBS schedule exists."
+                "CFP/natty stay stub. Official slate unblocks limited research "
+                "win totals only — not playoff percentages as product truth."
             ),
         },
     }

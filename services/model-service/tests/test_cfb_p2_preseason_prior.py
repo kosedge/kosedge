@@ -51,7 +51,7 @@ def test_official_fbs_lock() -> None:
 
 
 def test_engine_version_and_status_never_blank() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.11-game-total-sim"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.12-slate-roster"
     status = engine_status_payload(season=2026, demo=True)
     assert status["engine_version"] == DEFAULT_SEASON_ENGINE_VERSION
     assert status.get("used_in_spread") is False

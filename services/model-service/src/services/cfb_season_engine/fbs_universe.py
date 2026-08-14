@@ -1,7 +1,8 @@
 """Official 2026 FBS universe (full members + transitioning).
 
-This is the team-list lock for the preseason prior. It is not the official
-2026 game slate (schedule remains densified until a later brief).
+This is the team-list lock for the preseason prior. The official 2026
+game slate lives in ``official_schedule`` (ESPN team schedules), not the
+densified sample seed.
 """
 
 from __future__ import annotations

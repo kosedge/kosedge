@@ -201,6 +201,11 @@ class ScheduledGame:
     away_team: str
     neutral_site: bool = False
     night_game: bool = False
+    kickoff: str = ""
+    conference_game: bool = False
+    fcs_home: bool = False
+    fcs_away: bool = False
+    source_game_id: str = ""
 
 
 @dataclass(frozen=True)
