@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-12",
+  "as_of": "2026-08-13",
   "season": 2026,
   "fidelity": "approximate",
   "scope": "FBS priors with ESPN 2026 real-roster overlay",
@@ -12,6 +12,11 @@
     "v0.5: home_field (variable HFA buckets) and coaching (HC/OC/DC continuity) blocks added.",
     "HFA env_scores are curated venue / recent-home proxies or roster-derived \u2014 not live ATS splits.",
     "Coaching change flags are curated approximate for notable 2026 regimes; others default returning.",
+    "v0.6: roster/QB/position_groups overlaid from ESPN 2026 rosters + athlete teamHistory/career splits.",
+    "Returning snap/start shares remain approximate class-year proxies unless CFBD returning overlay applied.",
+    "Depth order is production/experience heuristic \u2014 official camp depth charts often unpublished preseason.",
+    "Portal-out is incomplete without a full departure feed; portal-in from teamHistory sample (+ optional CFBD).",
+    "home_field and coaching blocks retained from curated priors.",
     "v0.6: roster/QB/position_groups overlaid from ESPN 2026 rosters + athlete teamHistory/career splits.",
     "Returning snap/start shares remain approximate class-year proxies unless CFBD returning overlay applied.",
     "Depth order is production/experience heuristic \u2014 official camp depth charts often unpublished preseason.",
@@ -2744,346 +2749,6 @@
           "position": "WR",
           "usage_share": 0.22000000000000003,
           "talent": 69.8,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
-    "TA&M": {
-      "roster": {
-        "returning_snap_share": 0.6268,
-        "returning_start_share": 0.6568,
-        "returning_production": 62.68,
-        "portal_in_value": 62.38,
-        "portal_out_value": 48.12,
-        "portal_in_score": 62.38,
-        "portal_out_score": 48.12,
-        "recruiting_class_score": 90.0,
-        "recruiting_capital": 90.0,
-        "experience_index": 57.08,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "incumbent",
-        "starter_name": "Marcel Reed",
-        "starter_key": "4870971",
-        "qb_name": "Marcel Reed",
-        "experience_starts": 13,
-        "qb_talent": 80.94,
-        "ol_support": 67.0,
-        "weapons_support": 66.57,
-        "is_portal": false,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 377,
-        "pass_yards_2025": 3169,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
-      },
-      "position_groups": {
-        "ol": 67.0,
-        "skill": 66.57,
-        "front_seven": 69.23,
-        "secondary": 70.77,
-        "special_teams": 75.19,
-        "components": {
-          "ol": {
-            "talent": 76.67,
-            "experience": 49.28,
-            "portal_impact": 69.43
-          },
-          "skill": {
-            "talent": 76.58,
-            "experience": 48.12,
-            "portal_impact": 69.2
-          },
-          "front_seven": {
-            "talent": 77.88,
-            "experience": 54.04,
-            "portal_impact": 70.38
-          },
-          "secondary": {
-            "talent": 78.8,
-            "experience": 57.23,
-            "portal_impact": 71.02
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 74.0,
-        "bucket": "strong",
-        "hfa_points": 2.75,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Marcel Reed",
-          "player_id": "4870971",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 80.94,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Brady Hart",
-          "player_id": "5295969",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 80.94,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Rueben Owens II",
-          "player_id": "4870934",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jamarion Morrow",
-          "player_id": "5141561",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Micah Riley",
-          "player_id": "5081054",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Richie Anderson",
-          "player_id": "5078160",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Isaiah Horton",
-          "player_id": "4685383",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 75.2,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Chase Burton",
-          "player_id": "5160117",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
-    "OLE": {
-      "roster": {
-        "returning_snap_share": 0.6791,
-        "returning_start_share": 0.7091,
-        "returning_production": 67.91,
-        "portal_in_value": 75.0,
-        "portal_out_value": 45.61,
-        "portal_in_score": 75.0,
-        "portal_out_score": 45.61,
-        "recruiting_class_score": 86.0,
-        "recruiting_capital": 86.0,
-        "experience_index": 61.33,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "portal",
-        "starter_name": "Trinidad Chambliss",
-        "starter_key": "4911529",
-        "qb_name": "Trinidad Chambliss",
-        "experience_starts": 15,
-        "qb_talent": 86.15,
-        "ol_support": 70.52,
-        "weapons_support": 71.64,
-        "is_portal": true,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 445,
-        "pass_yards_2025": 3937,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
-      },
-      "position_groups": {
-        "ol": 70.52,
-        "skill": 71.64,
-        "front_seven": 70.31,
-        "secondary": 71.61,
-        "special_teams": 74.9,
-        "components": {
-          "ol": {
-            "talent": 76.73,
-            "experience": 57.01,
-            "portal_impact": 75.25
-          },
-          "skill": {
-            "talent": 77.71,
-            "experience": 58.88,
-            "portal_impact": 75.63
-          },
-          "front_seven": {
-            "talent": 76.75,
-            "experience": 56.37,
-            "portal_impact": 75.12
-          },
-          "secondary": {
-            "talent": 77.4,
-            "experience": 59.25,
-            "portal_impact": 75.7
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 68.3,
-        "bucket": "strong",
-        "hfa_points": 2.75,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Trinidad Chambliss",
-          "player_id": "4911529",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 86.15,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Walker Howard",
-          "player_id": "4685391",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 86.15,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Joshua Dye",
-          "player_id": "5125900",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 74.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Kewan Lacy",
-          "player_id": "5086388",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 74.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Luke Hasz",
-          "player_id": "4870797",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 74.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Caleb Odom",
-          "player_id": "5079647",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 74.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Anthony Aguirre",
-          "player_id": "5306604",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 74.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Darrell Gill Jr.",
-          "player_id": "5125819",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 74.9,
           "is_portal": false,
           "source": "packaged_espn_roster_2026"
         }
@@ -12439,176 +12104,6 @@
         }
       ]
     },
-    "ACU": {
-      "roster": {
-        "returning_snap_share": 0.6115,
-        "returning_start_share": 0.6415,
-        "returning_production": 61.15,
-        "portal_in_value": 68.38,
-        "portal_out_value": 47.64,
-        "portal_in_score": 68.38,
-        "portal_out_score": 47.64,
-        "recruiting_class_score": 55.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 57.88,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "portal",
-        "starter_name": "Stone Earle",
-        "starter_key": "4691272",
-        "qb_name": "Stone Earle",
-        "experience_starts": 15,
-        "qb_talent": 84.32,
-        "ol_support": 56.38,
-        "weapons_support": 60.07,
-        "is_portal": true,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 440,
-        "pass_yards_2025": 3270,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
-      },
-      "position_groups": {
-        "ol": 56.38,
-        "skill": 60.07,
-        "front_seven": 58.18,
-        "secondary": 60.03,
-        "special_teams": 56.3,
-        "components": {
-          "ol": {
-            "talent": 55.83,
-            "experience": 54.3,
-            "portal_impact": 60.88
-          },
-          "skill": {
-            "talent": 58.21,
-            "experience": 61.63,
-            "portal_impact": 62.35
-          },
-          "front_seven": {
-            "talent": 56.84,
-            "experience": 58.11,
-            "portal_impact": 61.64
-          },
-          "secondary": {
-            "talent": 57.82,
-            "experience": 62.11,
-            "portal_impact": 62.44
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Stone Earle",
-          "player_id": "4691272",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 84.32,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Quayde Hawkins",
-          "player_id": "4682787",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 84.32,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "B.K. Jackson",
-          "player_id": "4680029",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 56.3,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "E.J. Wilson",
-          "player_id": "4687515",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 56.3,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jed Castles",
-          "player_id": "4682792",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 56.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Bryan Henry",
-          "player_id": "5089179",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 56.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "J.J. Henry",
-          "player_id": "4683536",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 56.3,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "JB Mitchell III",
-          "player_id": "4710635",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 56.3,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
     "AFA": {
       "roster": {
         "returning_snap_share": 0.6928,
@@ -14139,176 +13634,6 @@
         }
       ]
     },
-    "CHAT": {
-      "roster": {
-        "returning_snap_share": 0.5636,
-        "returning_start_share": 0.5936,
-        "returning_production": 56.36,
-        "portal_in_value": 61.72,
-        "portal_out_value": 49.04,
-        "portal_in_score": 61.72,
-        "portal_out_score": 49.04,
-        "recruiting_class_score": 55.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 51.81,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "portal",
-        "starter_name": "Camden Orth",
-        "starter_key": "4577962",
-        "qb_name": "Camden Orth",
-        "experience_starts": 7,
-        "qb_talent": 69.01,
-        "ol_support": 54.17,
-        "weapons_support": 52.15,
-        "is_portal": true,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 218,
-        "pass_yards_2025": 1654,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
-      },
-      "position_groups": {
-        "ol": 54.17,
-        "skill": 52.15,
-        "front_seven": 53.85,
-        "secondary": 55.08,
-        "special_teams": 53.56,
-        "components": {
-          "ol": {
-            "talent": 54.46,
-            "experience": 51.56,
-            "portal_impact": 57.34
-          },
-          "skill": {
-            "talent": 53.61,
-            "experience": 46.88,
-            "portal_impact": 56.4
-          },
-          "front_seven": {
-            "talent": 54.54,
-            "experience": 50.52,
-            "portal_impact": 57.13
-          },
-          "secondary": {
-            "talent": 55.21,
-            "experience": 53.15,
-            "portal_impact": 57.65
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Camden Orth",
-          "player_id": "4577962",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 69.01,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Battle Alberson",
-          "player_id": "5223983",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 69.01,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Justus Durant",
-          "player_id": "5223979",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 53.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Ryan Ingram",
-          "player_id": "4429971",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 53.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Nathaniel Eberly-Rodriguez",
-          "player_id": "5224007",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 53.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "John McIntyre",
-          "player_id": "5224008",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 53.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jamarii Robinson",
-          "player_id": "5152767",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 53.6,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Markell Quick",
-          "player_id": "5159201",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 53.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
     "CMU": {
       "roster": {
         "returning_snap_share": 0.5522,
@@ -15834,176 +15159,6 @@
           "position": "WR",
           "usage_share": 0.22000000000000003,
           "talent": 55.4,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
-    "IDHO": {
-      "roster": {
-        "returning_snap_share": 0.5109,
-        "returning_start_share": 0.5409,
-        "returning_production": 51.09,
-        "portal_in_value": 52.63,
-        "portal_out_value": 51.64,
-        "portal_in_score": 52.63,
-        "portal_out_score": 51.64,
-        "recruiting_class_score": 55.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 48.01,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "true_freshman",
-        "starter_name": "Sawyer Teeney",
-        "starter_key": "5298293",
-        "qb_name": "Sawyer Teeney",
-        "experience_starts": 0,
-        "qb_talent": 46.88,
-        "ol_support": 48.68,
-        "weapons_support": 50.05,
-        "is_portal": false,
-        "is_true_freshman": true,
-        "open_competition": false,
-        "pass_attempts_2025": 16,
-        "pass_yards_2025": 53,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
-      },
-      "position_groups": {
-        "ol": 48.68,
-        "skill": 50.05,
-        "front_seven": 49.88,
-        "secondary": 51.55,
-        "special_teams": 51.86,
-        "components": {
-          "ol": {
-            "talent": 51.54,
-            "experience": 42.13,
-            "portal_impact": 51.36
-          },
-          "skill": {
-            "talent": 52.21,
-            "experience": 45.16,
-            "portal_impact": 51.97
-          },
-          "front_seven": {
-            "talent": 52.4,
-            "experience": 44.39,
-            "portal_impact": 51.81
-          },
-          "secondary": {
-            "talent": 52.95,
-            "experience": 48.51,
-            "portal_impact": 52.63
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Sawyer Teeney",
-          "player_id": "5298293",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 46.88,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Nick Josifek",
-          "player_id": "5165118",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 46.88,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Elisha Cummings",
-          "player_id": "4887438",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 51.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Carlos Matheney",
-          "player_id": "5165127",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 51.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Alex Moore",
-          "player_id": "4571768",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 51.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jake Cox",
-          "player_id": "4698298",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 51.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Michael Graves",
-          "player_id": "4887459",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 51.9,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Lonyatta Alexander Jr.",
-          "player_id": "4581420",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 51.9,
           "is_portal": false,
           "source": "packaged_espn_roster_2026"
         }
@@ -17879,176 +17034,6 @@
         }
       ]
     },
-    "OREST": {
-      "roster": {
-        "returning_snap_share": 0.6027,
-        "returning_start_share": 0.6327,
-        "returning_production": 60.27,
-        "portal_in_value": 50.61,
-        "portal_out_value": 50.54,
-        "portal_in_score": 50.61,
-        "portal_out_score": 50.54,
-        "recruiting_class_score": 55.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 56.37,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "incumbent",
-        "starter_name": "Braden Atkinson",
-        "starter_key": "5212654",
-        "qb_name": "Braden Atkinson",
-        "experience_starts": 14,
-        "qb_talent": 84.37,
-        "ol_support": 53.37,
-        "weapons_support": 54.42,
-        "is_portal": false,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 407,
-        "pass_yards_2025": 3611,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
-      },
-      "position_groups": {
-        "ol": 53.37,
-        "skill": 54.42,
-        "front_seven": 57.72,
-        "secondary": 56.18,
-        "special_teams": 55.62,
-        "components": {
-          "ol": {
-            "talent": 55.03,
-            "experience": 51.31,
-            "portal_impact": 52.28
-          },
-          "skill": {
-            "talent": 55.55,
-            "experience": 53.65,
-            "portal_impact": 52.75
-          },
-          "front_seven": {
-            "talent": 57.25,
-            "experience": 60.84,
-            "portal_impact": 54.19
-          },
-          "secondary": {
-            "talent": 56.41,
-            "experience": 57.56,
-            "portal_impact": 53.53
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Braden Atkinson",
-          "player_id": "5212654",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 84.37,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Maalik Murphy",
-          "player_id": "4685497",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 84.37,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "AJ Newberry",
-          "player_id": "4917981",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 55.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jake Reichle",
-          "player_id": "5085883",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 55.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "DeCorion Temple",
-          "player_id": "4869821",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 55.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Eric Olsen",
-          "player_id": "5088952",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 55.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Adonis McDaniel",
-          "player_id": "5300309",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 55.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jhae Drummer",
-          "player_id": "5103443",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 55.6,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
     "RICE": {
       "roster": {
         "returning_snap_share": 0.5282,
@@ -18559,253 +17544,6 @@
         }
       ]
     },
-    "FAU2": {
-      "roster": {
-        "returning_snap_share": 0.6414,
-        "returning_start_share": 0.6714,
-        "returning_production": 64.14,
-        "portal_in_value": 56.68,
-        "portal_out_value": 47.24,
-        "portal_in_score": 56.68,
-        "portal_out_score": 47.24,
-        "recruiting_class_score": 55.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 61.87,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "incumbent",
-        "starter_name": "Drew Devillier",
-        "starter_key": "5219898",
-        "qb_name": "Drew Devillier",
-        "experience_starts": 1,
-        "qb_talent": 49.96,
-        "ol_support": 58.1,
-        "weapons_support": 59.37,
-        "is_portal": false,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 21,
-        "pass_yards_2025": 123,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
-      },
-      "position_groups": {
-        "ol": 58.1,
-        "skill": 59.37,
-        "front_seven": 61.99,
-        "secondary": 61.74,
-        "special_teams": 58.09,
-        "components": {
-          "ol": {
-            "talent": 57.55,
-            "experience": 59.94,
-            "portal_impact": 56.74
-          },
-          "skill": {
-            "talent": 58.17,
-            "experience": 62.75,
-            "portal_impact": 57.31
-          },
-          "front_seven": {
-            "talent": 59.84,
-            "experience": 68.0,
-            "portal_impact": 58.36
-          },
-          "secondary": {
-            "talent": 59.55,
-            "experience": 67.7,
-            "portal_impact": 58.3
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Drew Devillier",
-          "player_id": "5219898",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 49.96,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jordan Magwood",
-          "player_id": "5215248",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 49.96,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Germanuel Tanelus",
-          "player_id": "5151490",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 58.1,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Joshua Harriott",
-          "player_id": "5151828",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 58.1,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "AJ Johnson",
-          "player_id": "4878788",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 58.1,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Brooks Johnson",
-          "player_id": "4917370",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 58.1,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Chase Hanning",
-          "player_id": "5295328",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 58.1,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Dominique Henry",
-          "player_id": "4917048",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 58.1,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
-    "FAY": {
-      "roster": {
-        "returning_production": 48,
-        "portal_in_score": 52.0,
-        "portal_out_score": 52.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 50,
-        "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior",
-        "returning_snap_share": 0.48,
-        "returning_start_share": 0.51,
-        "portal_in_value": 52.0,
-        "portal_out_value": 52.0,
-        "recruiting_class_score": 55.0,
-        "field_provenance": "placeholder_league_average"
-      },
-      "qb": {
-        "qb_class": "unknown",
-        "qb_talent": 50,
-        "ol_support": 50,
-        "weapons_support": 50,
-        "fidelity": "placeholder"
-      },
-      "position_groups": {
-        "ol": 50.7,
-        "skill": 51.3,
-        "front_seven": 51.9,
-        "secondary": 51.6,
-        "fidelity": "placeholder",
-        "components": {
-          "ol": {
-            "talent": 49.2,
-            "experience": 57.6,
-            "portal_impact": 49.6
-          },
-          "skill": {
-            "talent": 50.5,
-            "experience": 48.9,
-            "portal_impact": 53.4
-          },
-          "front_seven": {
-            "talent": 52.1,
-            "experience": 49.2,
-            "portal_impact": 53.5
-          },
-          "secondary": {
-            "talent": 53.2,
-            "experience": 49.0,
-            "portal_impact": 53.2
-          }
-        },
-        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      }
-    },
     "SHSU": {
       "roster": {
         "returning_snap_share": 0.6548,
@@ -18975,83 +17713,6 @@
           "source": "packaged_espn_roster_2026"
         }
       ]
-    },
-    "SOUTH": {
-      "roster": {
-        "returning_production": 48,
-        "portal_in_score": 52.0,
-        "portal_out_score": 52.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 50,
-        "fidelity": "placeholder",
-        "notes": "League-average placeholder FBS prior",
-        "returning_snap_share": 0.48,
-        "returning_start_share": 0.51,
-        "portal_in_value": 52.0,
-        "portal_out_value": 52.0,
-        "recruiting_class_score": 55.0,
-        "field_provenance": "placeholder_league_average"
-      },
-      "qb": {
-        "qb_class": "unknown",
-        "qb_talent": 50,
-        "ol_support": 50,
-        "weapons_support": 50,
-        "fidelity": "placeholder"
-      },
-      "position_groups": {
-        "ol": 50.7,
-        "skill": 51.3,
-        "front_seven": 51.9,
-        "secondary": 51.6,
-        "fidelity": "placeholder",
-        "components": {
-          "ol": {
-            "talent": 49.2,
-            "experience": 57.6,
-            "portal_impact": 49.6
-          },
-          "skill": {
-            "talent": 50.5,
-            "experience": 48.9,
-            "portal_impact": 53.4
-          },
-          "front_seven": {
-            "talent": 52.1,
-            "experience": 49.2,
-            "portal_impact": 53.5
-          },
-          "secondary": {
-            "talent": 53.2,
-            "experience": 49.0,
-            "portal_impact": 53.2
-          }
-        },
-        "notes": "placeholder flat rows replaced with roster-derived distinct unit grades"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      }
     },
     "TEM": {
       "roster": {
@@ -19734,176 +18395,6 @@
       ]
     },
     "UL": {
-      "roster": {
-        "returning_snap_share": 0.5208,
-        "returning_start_share": 0.5508,
-        "returning_production": 52.08,
-        "portal_in_value": 52.72,
-        "portal_out_value": 51.44,
-        "portal_in_score": 52.72,
-        "portal_out_score": 51.44,
-        "recruiting_class_score": 55.0,
-        "recruiting_capital": 55.0,
-        "experience_index": 48.95,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "field_provenance": "espn_2026_roster_derived",
-        "returning_source": "espn_class_year_plus_qb_stats",
-        "portal_source": "espn_athlete_team_history",
-        "depth_source": "espn_roster_production_depth",
-        "recruiting_source": "packaged_recruiting_prior_retained",
-        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
-      },
-      "qb": {
-        "qb_class": "incumbent",
-        "starter_name": "Daniel Beale",
-        "starter_key": "5146661",
-        "qb_name": "Daniel Beale",
-        "experience_starts": 3,
-        "qb_talent": 52.19,
-        "ol_support": 50.44,
-        "weapons_support": 50.31,
-        "is_portal": false,
-        "is_true_freshman": false,
-        "open_competition": false,
-        "pass_attempts_2025": 84,
-        "pass_yards_2025": 395,
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
-      },
-      "position_groups": {
-        "ol": 50.44,
-        "skill": 50.31,
-        "front_seven": 53.27,
-        "secondary": 49.57,
-        "special_teams": 52.28,
-        "components": {
-          "ol": {
-            "talent": 52.52,
-            "experience": 45.84,
-            "portal_impact": 52.14
-          },
-          "skill": {
-            "talent": 52.58,
-            "experience": 45.37,
-            "portal_impact": 52.05
-          },
-          "front_seven": {
-            "talent": 54.14,
-            "experience": 51.77,
-            "portal_impact": 53.33
-          },
-          "secondary": {
-            "talent": 52.09,
-            "experience": 43.92,
-            "portal_impact": 51.76
-          }
-        },
-        "fidelity": "approximate",
-        "source": "packaged_espn_roster_2026",
-        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
-      },
-      "home_field": {
-        "env_score": 52.75,
-        "bucket": "average",
-        "hfa_points": 2.0,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=average pts=2.00 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
-      "players": [
-        {
-          "player_name": "Daniel Beale",
-          "player_id": "5146661",
-          "position": "QB",
-          "usage_share": 0.95,
-          "talent": 52.19,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Sam Altmann",
-          "player_id": "5221102",
-          "position": "QB",
-          "usage_share": 0.22000000000000003,
-          "talent": 52.19,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Anthony Reagan Jr.",
-          "player_id": "5227209",
-          "position": "RB",
-          "usage_share": 0.28,
-          "talent": 52.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Steven Blanco",
-          "player_id": "5194804",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 52.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Brock Chappell",
-          "player_id": "5153377",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 52.3,
-          "is_portal": true,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Caden Jensen",
-          "player_id": "5156928",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 52.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jaydon Johnson",
-          "player_id": "4833238",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 52.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "KeDarius Wade",
-          "player_id": "5122096",
-          "position": "WR",
-          "usage_share": 0.22000000000000003,
-          "talent": 52.3,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        }
-      ]
-    },
-    "ULL": {
       "roster": {
         "returning_snap_share": 0.5208,
         "returning_start_share": 0.5508,
@@ -22793,18 +21284,459 @@
         }
       ]
     },
-    "TXAM": {
+    "ARST": {
       "roster": {
-        "returning_snap_share": 0.6268,
-        "returning_start_share": 0.6568,
-        "returning_production": 62.68,
-        "portal_in_value": 62.38,
-        "portal_out_value": 48.12,
-        "portal_in_score": 62.38,
-        "portal_out_score": 48.12,
-        "recruiting_class_score": 90.0,
-        "recruiting_capital": 90.0,
-        "experience_index": 57.08,
+        "returning_snap_share": 0.6227,
+        "returning_start_share": 0.6527,
+        "returning_production": 62.27,
+        "portal_in_value": 52.63,
+        "portal_out_value": 48.94,
+        "portal_in_score": 52.63,
+        "portal_out_score": 48.94,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 60.22,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "Drew Dickey",
+        "starter_key": "4713649",
+        "qb_name": "Drew Dickey",
+        "experience_starts": 0,
+        "qb_talent": 54.11,
+        "ol_support": 59.46,
+        "weapons_support": 58.47,
+        "is_portal": false,
+        "is_true_freshman": false,
+        "open_competition": true,
+        "pass_attempts_2025": 2,
+        "pass_yards_2025": 28,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+      },
+      "position_groups": {
+        "ol": 59.46,
+        "skill": 58.47,
+        "front_seven": 58.3,
+        "secondary": 59.84,
+        "special_teams": 57.35,
+        "components": {
+          "ol": {
+            "talent": 58.16,
+            "experience": 64.08,
+            "portal_impact": 55.75
+          },
+          "skill": {
+            "talent": 57.68,
+            "experience": 61.9,
+            "portal_impact": 55.31
+          },
+          "front_seven": {
+            "talent": 57.71,
+            "experience": 61.36,
+            "portal_impact": 55.21
+          },
+          "secondary": {
+            "talent": 58.53,
+            "experience": 64.67,
+            "portal_impact": 55.87
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Drew Dickey",
+          "player_id": "4713649",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 54.11,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ethan Crawford",
+          "player_id": "4920193",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.11,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Corey Reddick",
+          "player_id": "5089547",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 57.4,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ezell Jolly",
+          "player_id": "5121571",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.4,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jaden Hamm",
+          "player_id": "4870742",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 57.4,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Joshua Burrell",
+          "player_id": "4432669",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.4,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Chauncy Cobb",
+          "player_id": "5085496",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 57.4,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Hunter Summers",
+          "player_id": "5121601",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.4,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "CSU": {
+      "roster": {
+        "returning_snap_share": 0.569,
+        "returning_start_share": 0.599,
+        "returning_production": 56.9,
+        "portal_in_value": 66.13,
+        "portal_out_value": 48.34,
+        "portal_in_score": 66.13,
+        "portal_out_score": 48.34,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 52.82,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "true_freshman",
+        "starter_name": "Darius Curry",
+        "starter_key": "5122401",
+        "qb_name": "Darius Curry",
+        "experience_starts": 0,
+        "qb_talent": 57.3,
+        "ol_support": 54.16,
+        "weapons_support": 54.76,
+        "is_portal": false,
+        "is_true_freshman": true,
+        "open_competition": false,
+        "pass_attempts_2025": 107,
+        "pass_yards_2025": 740,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+      },
+      "position_groups": {
+        "ol": 54.16,
+        "skill": 54.76,
+        "front_seven": 55.9,
+        "secondary": 55.03,
+        "special_teams": 54.02,
+        "components": {
+          "ol": {
+            "talent": 54.33,
+            "experience": 50.58,
+            "portal_impact": 59.12
+          },
+          "skill": {
+            "talent": 54.62,
+            "experience": 51.91,
+            "portal_impact": 59.39
+          },
+          "front_seven": {
+            "talent": 55.69,
+            "experience": 53.7,
+            "portal_impact": 59.75
+          },
+          "secondary": {
+            "talent": 55.23,
+            "experience": 51.8,
+            "portal_impact": 59.37
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Darius Curry",
+          "player_id": "5122401",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 57.3,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Tahj Bullock",
+          "player_id": "4684003",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.3,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Keegan Holles",
+          "player_id": "5082253",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 54.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Konyae Hunter",
+          "player_id": "5295197",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Carlos Anaya",
+          "player_id": "5225641",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 54.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ryan McConnell",
+          "player_id": "5151385",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jordan McIntyre",
+          "player_id": "4876460",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 54.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Petey Tucker",
+          "player_id": "5220681",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "ECU": {
+      "roster": {
+        "returning_snap_share": 0.6286,
+        "returning_start_share": 0.6586,
+        "returning_production": 62.86,
+        "portal_in_value": 52.18,
+        "portal_out_value": 48.84,
+        "portal_in_score": 52.18,
+        "portal_out_score": 48.84,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 61.38,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "Mitch Griffis",
+        "starter_key": "4433829",
+        "qb_name": "Mitch Griffis",
+        "experience_starts": 1,
+        "qb_talent": 57.61,
+        "ol_support": 57.93,
+        "weapons_support": 60.5,
+        "is_portal": true,
+        "is_true_freshman": false,
+        "open_competition": true,
+        "pass_attempts_2025": 36,
+        "pass_yards_2025": 357,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+      },
+      "position_groups": {
+        "ol": 57.93,
+        "skill": 60.5,
+        "front_seven": 59.34,
+        "secondary": 59.93,
+        "special_teams": 57.87,
+        "components": {
+          "ol": {
+            "talent": 57.51,
+            "experience": 60.69,
+            "portal_impact": 54.87
+          },
+          "skill": {
+            "talent": 58.76,
+            "experience": 66.39,
+            "portal_impact": 56.01
+          },
+          "front_seven": {
+            "talent": 58.2,
+            "experience": 63.81,
+            "portal_impact": 55.49
+          },
+          "secondary": {
+            "talent": 58.62,
+            "experience": 64.93,
+            "portal_impact": 55.72
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Mitch Griffis",
+          "player_id": "4433829",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 57.61,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Cole Hodge",
+          "player_id": "5258470",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.61,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Michael Allen",
+          "player_id": "4685237",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 57.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ashton Gray",
+          "player_id": "5194306",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Gage Reale",
+          "player_id": "5081157",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 57.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Kanen Hamlett",
+          "player_id": "4911906",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ja'Keith Hamilton",
+          "player_id": "5153369",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 57.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jaquaize Pettaway",
+          "player_id": "4870951",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "JVST": {
+      "roster": {
+        "returning_snap_share": 0.5565,
+        "returning_start_share": 0.5865,
+        "returning_production": 55.65,
+        "portal_in_value": 56.77,
+        "portal_out_value": 49.74,
+        "portal_in_score": 56.77,
+        "portal_out_score": 49.74,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 50.1,
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "field_provenance": "espn_2026_roster_derived",
@@ -22816,148 +21748,1154 @@
       },
       "qb": {
         "qb_class": "incumbent",
-        "starter_name": "Marcel Reed",
-        "starter_key": "4870971",
-        "qb_name": "Marcel Reed",
-        "experience_starts": 13,
-        "qb_talent": 80.94,
-        "ol_support": 67.0,
-        "weapons_support": 66.57,
+        "starter_name": "Caden Creel",
+        "starter_key": "5122157",
+        "qb_name": "Caden Creel",
+        "experience_starts": 7,
+        "qb_talent": 64.77,
+        "ol_support": 50.56,
+        "weapons_support": 53.12,
         "is_portal": false,
         "is_true_freshman": false,
         "open_competition": false,
-        "pass_attempts_2025": 377,
-        "pass_yards_2025": 3169,
+        "pass_attempts_2025": 211,
+        "pass_yards_2025": 1514,
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
         "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
       },
       "position_groups": {
-        "ol": 67.0,
-        "skill": 66.57,
-        "front_seven": 69.23,
-        "secondary": 70.77,
-        "special_teams": 75.19,
+        "ol": 50.56,
+        "skill": 53.12,
+        "front_seven": 53.92,
+        "secondary": 51.38,
+        "special_teams": 52.8,
         "components": {
           "ol": {
-            "talent": 76.67,
-            "experience": 49.28,
-            "portal_impact": 69.43
+            "talent": 52.83,
+            "experience": 44.66,
+            "portal_impact": 53.73
           },
           "skill": {
-            "talent": 76.58,
-            "experience": 48.12,
-            "portal_impact": 69.2
+            "talent": 54.21,
+            "experience": 50.16,
+            "portal_impact": 54.83
           },
           "front_seven": {
-            "talent": 77.88,
-            "experience": 54.04,
-            "portal_impact": 70.38
+            "talent": 54.7,
+            "experience": 51.78,
+            "portal_impact": 55.15
           },
           "secondary": {
-            "talent": 78.8,
-            "experience": 57.23,
-            "portal_impact": 71.02
+            "talent": 53.53,
+            "experience": 46.05,
+            "portal_impact": 54.01
           }
         },
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
       },
-      "home_field": {
-        "env_score": 74.0,
-        "bucket": "strong",
-        "hfa_points": 2.75,
-        "major_environment": false,
-        "venue": "",
-        "source": "roster_proxy",
-        "fidelity": "approximate",
-        "notes": "derived from recruiting/experience proxy; bucket=strong pts=2.75 (baseline=2.00)"
-      },
-      "coaching": {
-        "new_hc": false,
-        "new_oc": false,
-        "new_dc": false,
-        "returning_hc": true,
-        "returning_oc": true,
-        "returning_dc": true,
-        "hc_name": "",
-        "continuity_score": 100.0,
-        "source": "default_returning",
-        "fidelity": "placeholder",
-        "notes": "default returning staff (no curated change flag)"
-      },
       "players": [
         {
-          "player_name": "Marcel Reed",
-          "player_id": "4870971",
+          "player_name": "Caden Creel",
+          "player_id": "5122157",
           "position": "QB",
           "usage_share": 0.95,
-          "talent": 80.94,
+          "talent": 64.77,
           "is_portal": false,
           "source": "packaged_espn_roster_2026"
         },
         {
-          "player_name": "Brady Hart",
-          "player_id": "5295969",
+          "player_name": "Donovan Moorhead",
+          "player_id": "5291762",
           "position": "QB",
           "usage_share": 0.22000000000000003,
-          "talent": 80.94,
+          "talent": 64.77,
           "is_portal": false,
           "source": "packaged_espn_roster_2026"
         },
         {
-          "player_name": "Rueben Owens II",
-          "player_id": "4870934",
+          "player_name": "Andrew Paul",
+          "player_id": "4911914",
           "position": "RB",
           "usage_share": 0.28,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Jamarion Morrow",
-          "player_id": "5141561",
-          "position": "RB",
-          "usage_share": 0.22000000000000003,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Micah Riley",
-          "player_id": "5081054",
-          "position": "TE",
-          "usage_share": 0.28,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Richie Anderson",
-          "player_id": "5078160",
-          "position": "TE",
-          "usage_share": 0.22000000000000003,
-          "talent": 75.2,
-          "is_portal": false,
-          "source": "packaged_espn_roster_2026"
-        },
-        {
-          "player_name": "Isaiah Horton",
-          "player_id": "4685383",
-          "position": "WR",
-          "usage_share": 0.28,
-          "talent": 75.2,
+          "talent": 52.8,
           "is_portal": true,
           "source": "packaged_espn_roster_2026"
         },
         {
-          "player_name": "Chase Burton",
-          "player_id": "5160117",
+          "player_name": "Jacob Cornejo",
+          "player_id": "5304196",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 52.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "David Alpers III",
+          "player_id": "5104052",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 52.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Kam Bell",
+          "player_id": "5230293",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 52.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ronnel Johnson",
+          "player_id": "5161162",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 52.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Colton Pitchford",
+          "player_id": "5150925",
           "position": "WR",
           "usage_share": 0.22000000000000003,
-          "talent": 75.2,
+          "talent": 52.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "MIZZ": {
+      "roster": {
+        "returning_snap_share": 0.5642,
+        "returning_start_share": 0.5942,
+        "returning_production": 56.42,
+        "portal_in_value": 53.17,
+        "portal_out_value": 50.34,
+        "portal_in_score": 53.17,
+        "portal_out_score": 50.34,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 53.4,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Austin Simmons",
+        "starter_key": "5141684",
+        "qb_name": "Austin Simmons",
+        "experience_starts": 2,
+        "qb_talent": 58.48,
+        "ol_support": 54.17,
+        "weapons_support": 53.97,
+        "is_portal": false,
+        "is_true_freshman": false,
+        "open_competition": false,
+        "pass_attempts_2025": 75,
+        "pass_yards_2025": 744,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+      },
+      "position_groups": {
+        "ol": 54.17,
+        "skill": 53.97,
+        "front_seven": 53.8,
+        "secondary": 52.9,
+        "special_teams": 54.28,
+        "components": {
+          "ol": {
+            "talent": 54.84,
+            "experience": 53.26,
+            "portal_impact": 53.83
+          },
+          "skill": {
+            "talent": 54.87,
+            "experience": 52.66,
+            "portal_impact": 53.71
+          },
+          "front_seven": {
+            "talent": 54.78,
+            "experience": 52.28,
+            "portal_impact": 53.63
+          },
+          "secondary": {
+            "talent": 54.23,
+            "experience": 50.45,
+            "portal_impact": 53.27
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Austin Simmons",
+          "player_id": "5141684",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 58.48,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Nick Evers",
+          "player_id": "4755664",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 58.48,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Anthony Favrow",
+          "player_id": "5081163",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 54.3,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ahmad Hardy",
+          "player_id": "5197065",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.3,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Brett Norfleet",
+          "player_id": "4870869",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 54.3,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jordon Harris",
+          "player_id": "5121468",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.3,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Caleb Goodie",
+          "player_id": "5120454",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 54.3,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Cayden Lee",
+          "player_id": "4870858",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.3,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "NEV": {
+      "roster": {
+        "returning_snap_share": 0.5642,
+        "returning_start_share": 0.5942,
+        "returning_production": 56.42,
+        "portal_in_value": 52.27,
+        "portal_out_value": 50.84,
+        "portal_in_score": 52.27,
+        "portal_out_score": 50.84,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 51.75,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Carter Jones",
+        "starter_key": "5205097",
+        "qb_name": "Carter Jones",
+        "experience_starts": 6,
+        "qb_talent": 60.15,
+        "ol_support": 53.15,
+        "weapons_support": 52.76,
+        "is_portal": false,
+        "is_true_freshman": false,
+        "open_competition": false,
+        "pass_attempts_2025": 171,
+        "pass_yards_2025": 1019,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+      },
+      "position_groups": {
+        "ol": 53.15,
+        "skill": 52.76,
+        "front_seven": 53.73,
+        "secondary": 52.39,
+        "special_teams": 53.54,
+        "components": {
+          "ol": {
+            "talent": 54.39,
+            "experience": 51.19,
+            "portal_impact": 53.01
+          },
+          "skill": {
+            "talent": 54.31,
+            "experience": 50.16,
+            "portal_impact": 52.8
+          },
+          "front_seven": {
+            "talent": 54.78,
+            "experience": 52.3,
+            "portal_impact": 53.23
+          },
+          "secondary": {
+            "talent": 54.01,
+            "experience": 49.49,
+            "portal_impact": 52.67
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Carter Jones",
+          "player_id": "5205097",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 60.15,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "AJ Bianco",
+          "player_id": "4819250",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 60.15,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Herschel Turner",
+          "player_id": "5220671",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 53.5,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Janerious Jackson",
+          "player_id": "5388800",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 53.5,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jayden O'Rourke",
+          "player_id": "5151791",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 53.5,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Kola Babalola",
+          "player_id": "5084959",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 53.5,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Damien Morgan",
+          "player_id": "5158756",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 53.5,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Gerick Robinson",
+          "player_id": "4683297",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 53.5,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "ODU": {
+      "roster": {
+        "returning_snap_share": 0.5675,
+        "returning_start_share": 0.5975,
+        "returning_production": 56.75,
+        "portal_in_value": 51.73,
+        "portal_out_value": 50.24,
+        "portal_in_score": 51.73,
+        "portal_out_score": 50.24,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 52.36,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "open_competition",
+        "starter_name": "Jaxon Potter",
+        "starter_key": "5091836",
+        "qb_name": "Jaxon Potter",
+        "experience_starts": 3,
+        "qb_talent": 55.67,
+        "ol_support": 54.1,
+        "weapons_support": 53.08,
+        "is_portal": false,
+        "is_true_freshman": false,
+        "open_competition": true,
+        "pass_attempts_2025": 95,
+        "pass_yards_2025": 604,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; split / unsettled QB room"
+      },
+      "position_groups": {
+        "ol": 54.1,
+        "skill": 53.08,
+        "front_seven": 53.16,
+        "secondary": 53.5,
+        "special_teams": 53.81,
+        "components": {
+          "ol": {
+            "talent": 54.92,
+            "experience": 53.35,
+            "portal_impact": 53.2
+          },
+          "skill": {
+            "talent": 54.42,
+            "experience": 51.07,
+            "portal_impact": 52.74
+          },
+          "front_seven": {
+            "talent": 54.56,
+            "experience": 51.09,
+            "portal_impact": 52.75
+          },
+          "secondary": {
+            "talent": 54.62,
+            "experience": 52.01,
+            "portal_impact": 52.93
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Jaxon Potter",
+          "player_id": "5091836",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 55.67,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Quinn Henicle",
+          "player_id": "5193346",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 55.67,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Trey Hall",
+          "player_id": "5294446",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 53.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Devin Roche",
+          "player_id": "4922993",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 53.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Leon Haughton Jr.",
+          "player_id": "4832875",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 53.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Karl Peterson",
+          "player_id": "5295940",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 53.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Sidney Mbanasor",
+          "player_id": "4912111",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 53.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "TJ Johnson",
+          "player_id": "5295923",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 53.8,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "TOL": {
+      "roster": {
+        "returning_snap_share": 0.6081,
+        "returning_start_share": 0.6381,
+        "returning_production": 60.81,
+        "portal_in_value": 49.8,
+        "portal_out_value": 49.64,
+        "portal_in_score": 49.8,
+        "portal_out_score": 49.64,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 57.52,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "John Alan Richter",
+        "starter_key": "5082330",
+        "qb_name": "John Alan Richter",
+        "experience_starts": 1,
+        "qb_talent": 51.17,
+        "ol_support": 56.13,
+        "weapons_support": 57.61,
+        "is_portal": false,
+        "is_true_freshman": false,
+        "open_competition": false,
+        "pass_attempts_2025": 25,
+        "pass_yards_2025": 153,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+      },
+      "position_groups": {
+        "ol": 56.13,
+        "skill": 57.61,
+        "front_seven": 56.6,
+        "secondary": 56.67,
+        "special_teams": 56.13,
+        "components": {
+          "ol": {
+            "talent": 56.48,
+            "experience": 57.51,
+            "portal_impact": 53.16
+          },
+          "skill": {
+            "talent": 57.33,
+            "experience": 60.63,
+            "portal_impact": 53.78
+          },
+          "front_seven": {
+            "talent": 56.71,
+            "experience": 58.57,
+            "portal_impact": 53.37
+          },
+          "secondary": {
+            "talent": 56.94,
+            "experience": 58.45,
+            "portal_impact": 53.35
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "John Alan Richter",
+          "player_id": "5082330",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 51.17,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jake DeHaan",
+          "player_id": "5151692",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 51.17,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Connor Walendzak",
+          "player_id": "5078063",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 56.1,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Autavius Ison",
+          "player_id": "5164730",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 56.1,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ethan Malafa",
+          "player_id": "5087060",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 56.1,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Jacob Newell",
+          "player_id": "4882061",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 56.1,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Anthony Simpson",
+          "player_id": "4712328",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 56.1,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Cooper Rusk",
+          "player_id": "5109511",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 56.1,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "UAB": {
+      "roster": {
+        "returning_snap_share": 0.585,
+        "returning_start_share": 0.615,
+        "returning_production": 58.5,
+        "portal_in_value": 55.38,
+        "portal_out_value": 49.14,
+        "portal_in_score": 55.38,
+        "portal_out_score": 49.14,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 54.67,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "incumbent",
+        "starter_name": "Ryder Burton",
+        "starter_key": "5057381",
+        "qb_name": "Ryder Burton",
+        "experience_starts": 3,
+        "qb_talent": 57.84,
+        "ol_support": 56.89,
+        "weapons_support": 53.98,
+        "is_portal": false,
+        "is_true_freshman": false,
+        "open_competition": false,
+        "pass_attempts_2025": 98,
+        "pass_yards_2025": 708,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+      },
+      "position_groups": {
+        "ol": 56.89,
+        "skill": 53.98,
+        "front_seven": 57.13,
+        "secondary": 53.49,
+        "special_teams": 54.85,
+        "components": {
+          "ol": {
+            "talent": 56.33,
+            "experience": 58.5,
+            "portal_impact": 55.87
+          },
+          "skill": {
+            "talent": 55.2,
+            "experience": 51.61,
+            "portal_impact": 54.49
+          },
+          "front_seven": {
+            "talent": 56.57,
+            "experience": 58.87,
+            "portal_impact": 55.94
+          },
+          "secondary": {
+            "talent": 54.67,
+            "experience": 50.94,
+            "portal_impact": 54.36
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Ryder Burton",
+          "player_id": "5057381",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 57.84,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Nate Rogers",
+          "player_id": "5197123",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 57.84,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Bam McReynolds",
+          "player_id": "4897730",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 54.9,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Ja'Vin Simpkins",
+          "player_id": "5157261",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Scott Isacks",
+          "player_id": "5081640",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 54.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Antonio Ferguson",
+          "player_id": "5078812",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "AJ Johnson",
+          "player_id": "5095096",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 54.9,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "CJ Smith",
+          "player_id": "4711421",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 54.9,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "UNM": {
+      "roster": {
+        "returning_snap_share": 0.619,
+        "returning_start_share": 0.649,
+        "returning_production": 61.9,
+        "portal_in_value": 60.14,
+        "portal_out_value": 47.64,
+        "portal_in_score": 60.14,
+        "portal_out_score": 47.64,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 57.14,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Jack Layne",
+        "starter_key": "5083171",
+        "qb_name": "Jack Layne",
+        "experience_starts": 11,
+        "qb_talent": 75.08,
+        "ol_support": 55.37,
+        "weapons_support": 56.3,
+        "is_portal": true,
+        "is_true_freshman": false,
+        "open_competition": false,
+        "pass_attempts_2025": 327,
+        "pass_yards_2025": 2486,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+      },
+      "position_groups": {
+        "ol": 55.37,
+        "skill": 56.3,
+        "front_seven": 58.45,
+        "secondary": 58.06,
+        "special_teams": 55.96,
+        "components": {
+          "ol": {
+            "talent": 55.79,
+            "experience": 53.57,
+            "portal_impact": 57.03
+          },
+          "skill": {
+            "talent": 56.37,
+            "experience": 55.45,
+            "portal_impact": 57.4
+          },
+          "front_seven": {
+            "talent": 57.66,
+            "experience": 59.87,
+            "portal_impact": 58.29
+          },
+          "secondary": {
+            "talent": 57.25,
+            "experience": 59.32,
+            "portal_impact": 58.18
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Jack Layne",
+          "player_id": "5083171",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 75.08,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "James Laubstein",
+          "player_id": "5228804",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 75.08,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Deshaun Buchanan",
+          "player_id": "5165109",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 56.0,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Scottre Humphrey",
+          "player_id": "5166161",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 56.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Simon Mapa",
+          "player_id": "5296599",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 56.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Cade Keith",
+          "player_id": "5219572",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 56.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Kader Diop",
+          "player_id": "5228799",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 56.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Shawn Miller",
+          "player_id": "4685458",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 56.0,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        }
+      ]
+    },
+    "UNT": {
+      "roster": {
+        "returning_snap_share": 0.6649,
+        "returning_start_share": 0.6949,
+        "returning_production": 66.49,
+        "portal_in_value": 64.2,
+        "portal_out_value": 46.54,
+        "portal_in_score": 64.2,
+        "portal_out_score": 46.54,
+        "recruiting_class_score": 55.0,
+        "recruiting_capital": 55.0,
+        "experience_index": 63.69,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "field_provenance": "espn_2026_roster_derived",
+        "returning_source": "espn_class_year_plus_qb_stats",
+        "portal_source": "espn_athlete_team_history",
+        "depth_source": "espn_roster_production_depth",
+        "recruiting_source": "packaged_recruiting_prior_retained",
+        "notes": "ESPN 2026 roster identities + QB/portal-in sample. Returning/portal levels blended with recruiting-informed baselines (not measured SNAP%). Portal-out approximate. Recruiting retained from curated prior until CFBD overlay."
+      },
+      "qb": {
+        "qb_class": "portal",
+        "starter_name": "Tayven Jackson",
+        "starter_key": "4801307",
+        "qb_name": "Tayven Jackson",
+        "experience_starts": 10,
+        "qb_talent": 72.51,
+        "ol_support": 60.42,
+        "weapons_support": 62.83,
+        "is_portal": true,
+        "is_true_freshman": false,
+        "open_competition": false,
+        "pass_attempts_2025": 315,
+        "pass_yards_2025": 2151,
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "identity_fidelity": "real",
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+      },
+      "position_groups": {
+        "ol": 60.42,
+        "skill": 62.83,
+        "front_seven": 63.25,
+        "secondary": 64.74,
+        "special_teams": 58.91,
+        "components": {
+          "ol": {
+            "talent": 58.63,
+            "experience": 63.17,
+            "portal_impact": 60.77
+          },
+          "skill": {
+            "talent": 59.93,
+            "experience": 68.34,
+            "portal_impact": 61.81
+          },
+          "front_seven": {
+            "talent": 60.33,
+            "experience": 69.0,
+            "portal_impact": 61.94
+          },
+          "secondary": {
+            "talent": 61.2,
+            "experience": 72.09,
+            "portal_impact": 62.56
+          }
+        },
+        "fidelity": "approximate",
+        "source": "packaged_espn_roster_2026",
+        "notes": "unit talent anchored on retained recruiting prior + ESPN roster experience/portal composition; not SP+/PFF"
+      },
+      "players": [
+        {
+          "player_name": "Tayven Jackson",
+          "player_id": "4801307",
+          "position": "QB",
+          "usage_share": 0.95,
+          "talent": 72.51,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Chaston Ditta",
+          "player_id": "5215310",
+          "position": "QB",
+          "usage_share": 0.22000000000000003,
+          "talent": 72.51,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Colin Page",
+          "player_id": "5081966",
+          "position": "RB",
+          "usage_share": 0.28,
+          "talent": 58.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Nick Osho",
+          "player_id": "5227742",
+          "position": "RB",
+          "usage_share": 0.22000000000000003,
+          "talent": 58.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Brec Long",
+          "player_id": "5295066",
+          "position": "TE",
+          "usage_share": 0.28,
+          "talent": 58.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Connor Vaughn",
+          "player_id": "4917338",
+          "position": "TE",
+          "usage_share": 0.22000000000000003,
+          "talent": 58.9,
+          "is_portal": false,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Andy Jean",
+          "player_id": "4870844",
+          "position": "WR",
+          "usage_share": 0.28,
+          "talent": 58.9,
+          "is_portal": true,
+          "source": "packaged_espn_roster_2026"
+        },
+        {
+          "player_name": "Corri Milliner",
+          "player_id": "5125905",
+          "position": "WR",
+          "usage_share": 0.22000000000000003,
+          "talent": 58.9,
           "is_portal": false,
           "source": "packaged_espn_roster_2026"
         }
@@ -22971,6 +22909,6 @@
     "depth_source": "espn_roster_production_depth",
     "portal_source": "espn_athlete_team_history",
     "snapshot": "cfb_real_roster_snapshot_2026.json",
-    "team_count": 134
+    "team_count": 11
   }
 }

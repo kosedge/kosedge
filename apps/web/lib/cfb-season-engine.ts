@@ -63,6 +63,8 @@ export type CfbProjectGameResponse = {
   away_layers?: Record<string, unknown>;
   notes?: Record<string, string>;
   fidelity?: string;
+  research_prior?: Record<string, unknown>;
+  used_in_spread?: boolean;
   error?: string;
   hint?: string;
 };
