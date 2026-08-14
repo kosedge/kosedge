@@ -63,7 +63,7 @@ from src.services.cfb_season_engine.types import (
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.10-preseason-prior"
 
 
 def test_qb_situation_classification() -> None:
@@ -1431,7 +1431,7 @@ def test_hist_cal_priors_bounds() -> None:
     """v0.8.1 hist-cal knobs stay inside documented calibration bounds."""
     from src.services.cfb_season_engine import priors as P
 
-    assert P.ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert P.ENGINE_VERSION == "cfb-season-engine-v0.10-preseason-prior"
     assert 24.5 <= P.LEAGUE_TEAM_PPG <= 27.0
     assert 1.4 <= P.HFA_BASELINE_POINTS <= 2.2
     assert 1.20 <= P.MATCHUP_RESPONSE <= 1.55

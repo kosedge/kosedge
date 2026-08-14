@@ -98,9 +98,25 @@ def cfb_season_engine_status(
     demo: bool = Query(True, description="Packaged universe probe (default)"),
 ) -> Dict[str, Any]:
     """Describe CFB hierarchical engine layers, data sources, solid vs approximate."""
-    from src.services.cfb_season_engine import engine_status_payload
+    from src.services.cfb_season_engine import (
+        DEFAULT_SEASON_ENGINE_VERSION,
+        engine_status_payload,
+    )
 
-    return engine_status_payload(season=season, as_of_week=as_of_week, demo=demo)
+    try:
+        return engine_status_payload(season=season, as_of_week=as_of_week, demo=demo)
+    except Exception as exc:  # pragma: no cover — never 500 a version probe
+        log.exception("cfb season-engine status failed")
+        return {
+            "ok": False,
+            "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+            "used_in_spread": False,
+            "error": str(exc),
+            "note": (
+                "Status degraded; version string is still authoritative. "
+                "Research prior only — no KEI."
+            ),
+        }
 
 
 @router.post("/season-engine/project-game")
@@ -140,6 +156,50 @@ def cfb_season_engine_project_game(
     payload = project_game_to_dict(proj)
     payload["ok"] = True
     payload["mode"] = meta.get("mode")
+    payload["used_in_spread"] = False
+    # Immutable research snapshot — never mutate; never fail the request.
+    try:
+        from datetime import datetime, timezone
+
+        from src.services.cfb_warehouse.predictions import write_prediction
+
+        as_of = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        game_id = str(
+            payload.get("game_id")
+            or f"{body.season}-W{body.week}-{body.away_team}-{body.home_team}"
+        )
+        snap = write_prediction(
+            {
+                "model_version": payload.get("engine_version"),
+                "as_of": as_of,
+                "game_id": game_id,
+                "season": body.season,
+                "week": body.week,
+                "home_team_id": body.home_team,
+                "away_team_id": body.away_team,
+                "fair_spread": payload.get("spread_home"),
+                "fair_total": payload.get("expected_total"),
+                "wp": payload.get("home_win_prob"),
+                "uncertainty": payload.get("uncertainty")
+                or payload.get("margin_sd"),
+                "notes": {
+                    "used_in_spread": False,
+                    "kei": False,
+                    "research_prior": True,
+                },
+            },
+            prefer_hd=False,
+            formats=("json",),
+        )
+        payload["research_snapshot"] = {
+            "written": True,
+            "as_of": snap.get("as_of"),
+            "game_id": snap.get("game_id"),
+            "used_in_spread": False,
+        }
+    except Exception as exc:  # pragma: no cover
+        log.debug("immutable research snapshot skipped: %s", exc)
+        payload["research_snapshot"] = {"written": False, "used_in_spread": False}
     # Best-effort tracking — never slows / fails the projection path.
     try:
         from src.services.cfb_season_engine.performance_tracking import (
