@@ -41,7 +41,7 @@ CAMP = ("UGA", "MICH", "FSU", "LSU", "ALA")
 
 
 def test_engine_version_v012() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.12-slate-roster"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.13-calibration-scale"
 
 
 def test_official_slate_loader_not_densified() -> None:

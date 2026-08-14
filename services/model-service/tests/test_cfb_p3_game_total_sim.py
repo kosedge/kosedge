@@ -26,7 +26,7 @@ from src.services.cfb_warehouse.predictions import write_prediction
 
 
 def test_version_and_status_document_sim() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.12-slate-roster"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.13-calibration-scale"
     assert GAME_SIM_N_DEFAULT >= 5000
     assert USED_IN_SPREAD is False
     status = engine_status_payload(season=2026, demo=True)
@@ -171,7 +171,7 @@ def test_status_and_project_game_http_200() -> None:
     status = client.get("/cfb/season-engine/status")
     assert status.status_code == 200
     body = status.json()
-    assert body["engine_version"] == "cfb-season-engine-v0.12-slate-roster"
+    assert body["engine_version"] == "cfb-season-engine-v0.13-calibration-scale"
     assert body["used_in_spread"] is False
     assert body["season_futures"]["natty"] is None
 

@@ -18,6 +18,11 @@ import random
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Tuple
 
 from src.services.cfb_season_engine import priors as P
+from src.services.cfb_season_engine.margin_calibration import (
+    apply_calibrated_scores,
+    calibrate_margin,
+    fcs_matchup_from_states,
+)
 from src.services.cfb_season_engine.game_total_sim import (
     GAME_SIM_N_DEFAULT,
     USED_IN_SPREAD,
@@ -165,6 +170,14 @@ def compose_team_projection(
     if coaching is not None:
         defense_index *= float(coaching.defense_index_mult)
     defense_index = _clamp(defense_index, *P.STRENGTH_CLAMP)
+    league_reg = 0.0
+    eff_src = str(efficiency.source or "") if efficiency is not None else ""
+    if efficiency is not None and eff_src == "league_average_fill":
+        league_reg = float(P.LEAGUE_REG_PLACEHOLDER)
+        offense_index = 1.0 + (1.0 - league_reg) * (offense_index - 1.0)
+        defense_index = 1.0 + (1.0 - league_reg) * (defense_index - 1.0)
+        offense_index = _clamp(offense_index, *P.STRENGTH_CLAMP)
+        defense_index = _clamp(defense_index, *P.STRENGTH_CLAMP)
 
     pace = _clamp(1.0 + (groups.skill - groups.front_seven) / 200.0, 0.85, 1.20)
     if efficiency is not None:
@@ -262,6 +275,10 @@ def compose_team_projection(
     if home_field is not None:
         notes["hfa_bucket"] = home_field.bucket
         notes["hfa_points"] = f"{home_field.hfa_points:.2f}"
+    if league_reg:
+        notes["league_regression"] = (
+            f"placeholder_sp_plus shrink {league_reg:.2f} toward index 1.0"
+        )
 
     return TeamProjectionState(
         team=str(team),
@@ -421,6 +438,8 @@ def project_game_formula_doc() -> Dict[str, Any]:
             "(strongest W1–W4)",
             "optional thin ST nudge on the total path only",
             "margin_mean = home_exp - away_exp  (HFA + coaching live here)",
+            "v0.13: cal_margin = TAU*tanh(SCALE*matchup/TAU) + HFA "
+            "(SCALE=0.80, TAU=26; HFA added after compress); total path unchanged",
             "total_mean = league_total * pace * off_env^0.55 * expl  "
             "(separate path; not f(spread) and not home_exp+away_exp)",
             "sim: independent Gaussian margin + total; scores = (total±margin)/2",
@@ -562,7 +581,13 @@ def project_game(
     strength_away = round(away_exp, 2)
     strength_total = round(strength_home + strength_away + st_nudge, 2)
     strength_spread = round(strength_away - strength_home, 2)
-    margin_mean = strength_home - strength_away
+    fcs_game = fcs_matchup_from_states(home, away)
+    hfa_pts = float((home_diag.get("hfa") or {}).get("hfa_points") or 0.0)
+    cal_block = calibrate_margin(
+        (strength_home - hfa_pts) - strength_away, fcs_matchup=fcs_game
+    )
+    cal_block["hfa_added_after"] = round(hfa_pts, 4)
+    margin_mean = float(cal_block["calibrated_margin"]) + hfa_pts
     total_mean, total_diag = total_path_mean(home, away, st_nudge=st_nudge)
 
     sim_seed = seed
@@ -627,6 +652,7 @@ def project_game(
                 ),
             },
             "total_path": total_diag,
+            "margin_calibration": cal_block,
             "n_sims": dist["n_sims"],
         },
         "primary_signals": {
@@ -712,6 +738,7 @@ def project_game(
         "coherence": "spread=away-home; total=home+away; wp_home+wp_away=1",
         "does_not_touch": "edge_board_markets_only_cfb",
         "used_in_spread": "false",
+        "calibration_id": cal_block["calibration_id"],
         "n_sims": str(dist["n_sims"]),
         "weather": dist["weather"],
         "margin": f"{margin:.2f}",
@@ -862,6 +889,23 @@ def realize_game_scores(
         night_game=False,
         home_hfa_profile=home.home_field,
     )
+    hfa_pts = float(
+        resolve_hfa_points(
+            home.home_field,
+            home=True,
+            neutral_site=game.neutral_site,
+            night_game=night,
+        ).get("hfa_points")
+        or 0.0
+    )
+    cal_scores = apply_calibrated_scores(
+        home_exp - hfa_pts,
+        away_exp,
+        fcs_matchup=fcs_matchup_from_states(home, away)
+        or bool(getattr(game, "fcs_home", False) or getattr(game, "fcs_away", False)),
+    )
+    home_exp = float(cal_scores["home_exp_cal"]) + hfa_pts
+    away_exp = float(cal_scores["away_exp_cal"])
     sd = P.score_noise_sd_for_week(game.week)
     home_score = max(0.0, rng.gauss(home_exp, sd))
     away_score = max(0.0, rng.gauss(away_exp, sd))

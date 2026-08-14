@@ -208,6 +208,8 @@ def engine_status_payload(
             "ok": False,
             "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
             "used_in_spread": False,
+            "calibration_id": "cfb-margin-scale-v0.13-20260814",
+            "calibration_as_of": "2026-08-14",
             "schedule_source": "missing",
             "schedule_as_of": "",
             "n_games": 0,
@@ -367,9 +369,16 @@ def engine_status_payload(
             "v0.8.3 player coherence + v0.9 in-season updating foundation + "
             "v0.10 official-FBS preseason prior (research only) + "
             "v0.11 game/total sim distributions (research only) + "
-            "v0.12 official 2026 ESPN slate + roster completeness (research only)"
+            "v0.12 official 2026 ESPN slate + roster completeness (research only) + "
+            "v0.13 margin calibration / blowout-scale (research only)"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
+        "calibration_id": __import__(
+            "src.services.cfb_season_engine.margin_calibration",
+            fromlist=["CALIBRATION_ID"],
+        ).CALIBRATION_ID,
+        "calibration_as_of": priors_documentation().get("calibration_as_of")
+        or "2026-08-14",
         "historical_calibration": {
             "ops": "data/ops/cfb-historical-calibration-20260805.md",
             "artifacts": "data/ops/cfb-historical-calibration-20260805/",
@@ -435,6 +444,10 @@ def engine_status_payload(
             season_sim.documentation(),
             player_hooks.documentation(),
             official_schedule_doc(),
+            __import__(
+                "src.services.cfb_season_engine.margin_calibration",
+                fromlist=["documentation"],
+            ).documentation(),
         ],
         "efficiency": efficiency_snapshot_meta(),
         "priors": priors_documentation(),
@@ -624,6 +637,7 @@ def engine_status_payload(
             "ops_p2_prior": "data/ops/cfb-p2-preseason-prior-20260813.md",
             "ops_p3_sim": "data/ops/cfb-p3-game-total-sim-20260813.md",
             "ops_slate_roster": "data/ops/cfb-2026-slate-roster-20260813.md",
+            "ops_calibration_scale": "data/ops/cfb-calibration-scale-20260814.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",

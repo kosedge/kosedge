@@ -63,7 +63,7 @@ from src.services.cfb_season_engine.types import (
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.12-slate-roster"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.13-calibration-scale"
 
 
 def test_qb_situation_classification() -> None:
@@ -1088,7 +1088,9 @@ def test_status_contract() -> None:
     assert "cfb-historical-calibration" in payload["entry_points"]["ops"]
     assert payload.get("historical_calibration", {}).get("ops")
     assert payload.get("calibration_tag")
-    assert "hist-cal" in str(payload.get("calibration_tag"))
+    assert "calibration-scale" in str(payload.get("calibration_tag")) or "hist-cal" in str(
+        payload.get("calibration_tag")
+    )
     assert payload["entry_points"]["web_hub"] == "/pro/cfb/model"
     assert payload.get("roster_source")
     assert "espn" in str(payload.get("roster_source", "")).lower()
@@ -1453,7 +1455,7 @@ def test_hist_cal_priors_bounds() -> None:
     """v0.8.1 hist-cal knobs stay inside documented calibration bounds."""
     from src.services.cfb_season_engine import priors as P
 
-    assert P.ENGINE_VERSION == "cfb-season-engine-v0.12-slate-roster"
+    assert P.ENGINE_VERSION == "cfb-season-engine-v0.13-calibration-scale"
     assert 24.5 <= P.LEAGUE_TEAM_PPG <= 27.0
     assert 1.4 <= P.HFA_BASELINE_POINTS <= 2.2
     assert 1.20 <= P.MATCHUP_RESPONSE <= 1.55
