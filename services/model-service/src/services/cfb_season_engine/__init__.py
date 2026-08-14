@@ -493,6 +493,10 @@ def engine_status_payload(
             "src.services.cfb_season_engine.game_total_sim",
             fromlist=["documentation"],
         ).documentation(),
+        "market_diagnostic": __import__(
+            "src.services.cfb_warehouse.market_diagnostic",
+            fromlist=["documentation"],
+        ).documentation(),
         "slate": {
             "official_2026_fbs_schedule": bool(meta.get("official_schedule")),
             "densified": not bool(meta.get("official_schedule")),
@@ -673,6 +677,8 @@ def engine_status_payload(
             "ops_slate_roster": "data/ops/cfb-2026-slate-roster-20260813.md",
             "ops_calibration_scale": "data/ops/cfb-calibration-scale-20260814.md",
             "ops_efficiency_backbone_v014": "data/ops/cfb-efficiency-backbone-20260814.md",
+            "ops_market_diagnostic": "data/ops/cfb-market-diagnostic-20260814.md",
+            "run_market_diagnostic": "scripts/cfb/run_market_diagnostic.py",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
