@@ -29,8 +29,10 @@ def clean_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     reset_state(season=2026)
 
 
-def test_week_weight_early_gt_late():
-    assert week_weight(1) > week_weight(5) > week_weight(13)
+def test_week_weight_prior_heavy_early():
+    # Games 0–2 prior-heavy; midseason ramp. No Week-1 cliff.
+    assert week_weight(0) < week_weight(1) < week_weight(3) < week_weight(6)
+    assert week_weight(1) < week_weight(5)
 
 
 def test_learning_rate_decays():
@@ -62,7 +64,7 @@ def test_single_result_moves_rating_modestly(clean_state):
     assert st["preseason_off_eff"] == pytest.approx(before.off_eff, abs=0.05)
 
 
-def test_early_season_moves_more_than_late(clean_state):
+def test_week1_moves_less_than_midseason(clean_state):
     early = ingest_result(
         home_team="OSU",
         away_team="MICH",
@@ -73,16 +75,16 @@ def test_early_season_moves_more_than_late(clean_state):
         game_id="early-test",
     )
     reset_state(season=2026)
-    late = ingest_result(
+    mid = ingest_result(
         home_team="OSU",
         away_team="MICH",
         home_score=45,
         away_score=10,
-        week=12,
+        week=6,
         model_spread_home=-3.0,
-        game_id="late-test",
+        game_id="mid-test",
     )
-    assert abs(early["home"]["delta_off_eff"]) > abs(late["home"]["delta_off_eff"])
+    assert abs(early["home"]["delta_off_eff"]) < abs(mid["home"]["delta_off_eff"])
 
 
 def test_idempotent_same_game_id(clean_state):
@@ -134,4 +136,4 @@ def test_project_game_picks_up_inseason_delta(clean_state):
 
 
 def test_engine_version_bump():
-    assert "v0.14-efficiency-backbone" in P.ENGINE_VERSION
+    assert "v0.15-power-sot" in P.ENGINE_VERSION

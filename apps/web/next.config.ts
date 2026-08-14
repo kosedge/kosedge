@@ -86,6 +86,17 @@ const nextConfig: NextConfig = {
     "/pro/model-transparency": ["../../data/ops/**/*"],
     "/pro/nfl/news": ["../../content/writers/news-breaks-2026/**/*"],
     "/pro/nfl/news/[slug]": ["../../content/writers/news-breaks-2026/**/*"],
+    "/pro/cfb/projections": [
+      "../../services/model-service/src/services/cfb_season_engine/data/cfb_season_projections_2026.json",
+      "../../services/model-service/src/services/cfb_season_engine/data/cfb_power_sot_2026.json",
+    ],
+    "/pro/cfb/teams": [
+      "../../services/model-service/src/services/cfb_season_engine/data/cfb_power_sot_2026.json",
+    ],
+    "/pro/cfb/model": [
+      "../../services/model-service/src/services/cfb_season_engine/data/cfb_season_projections_2026.json",
+      "../../services/model-service/src/services/cfb_season_engine/data/cfb_power_sot_2026.json",
+    ],
   },
 
   async redirects() {

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
-import type { CfbTeamDnaRow } from "@/lib/cfb-season-engine";
-import { fetchCfbSeasonEngineStatus } from "@/lib/cfb-season-engine";
+import {
+  loadCfbPowerSot,
+  type CfbPowerSotTeam,
+} from "@/lib/cfb-research-artifacts";
 import {
   formatIndex,
   formatQbClassLabel,
@@ -28,7 +30,7 @@ function firstValue(value: SearchValue): string | undefined {
   return value;
 }
 
-function sortRows(rows: CfbTeamDnaRow[], key: SortKey): CfbTeamDnaRow[] {
+function sortRows(rows: CfbPowerSotTeam[], key: SortKey): CfbPowerSotTeam[] {
   const copy = [...rows];
   copy.sort((a, b) => {
     if (key === "team") return a.team.localeCompare(b.team);
@@ -59,7 +61,7 @@ function sortRows(rows: CfbTeamDnaRow[], key: SortKey): CfbTeamDnaRow[] {
   return copy;
 }
 
-function projectNext(row: CfbTeamDnaRow): string | null {
+function projectNext(row: CfbPowerSotTeam): string | null {
   const next = row.next;
   if (!next?.opponent) return null;
   const home = next.home ? row.team : next.opponent;
@@ -92,9 +94,9 @@ export default async function CfbTeamDnaPage({
     : "power";
   const q = (firstValue(sp.q) ?? "").trim().toUpperCase();
 
-  const status = await fetchCfbSeasonEngineStatus();
-  const dna = status.desk?.team_dna;
-  const raw = dna?.teams ?? [];
+  const pack = loadCfbPowerSot();
+  const dna = pack;
+  const raw = pack?.teams ?? [];
   const filtered = q
     ? raw.filter(
         (r) =>
@@ -122,7 +124,7 @@ export default async function CfbTeamDnaPage({
       sportName="CFB"
       base="/pro/cfb"
       title="Team DNA"
-      summary="Official 136 FBS rows — power, OFF/DEF, early-season uncertainty, QB class, and efficiency source. Warehouse-fill teams are labeled, not silent 50/50. Research only."
+      summary="Official 136 FBS rows from the single Power SoT — power, OFF/DEF, early-season uncertainty, QB class, and efficiency source. Warehouse-fill teams are labeled, not silent 50/50. Research only."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
@@ -132,11 +134,9 @@ export default async function CfbTeamDnaPage({
       secondaryLabel="Win totals"
     >
       <p className="mt-3 text-xs text-kos-text/55">
-        {dna?.n ?? rows.length} / {dna?.official_fbs ?? 136} official FBS ·
-        warehouse fills {warehouse} · used_in_spread=false
-        {status.as_of || status.roster_as_of
-          ? ` · roster as_of ${status.as_of || status.roster_as_of}`
-          : ""}
+        {dna?.n_teams ?? rows.length} / 136 official FBS · warehouse fills{" "}
+        {warehouse} · used_in_spread=false · {pack?.power_version || "pack missing"}
+        {pack?.power_as_of ? ` · as_of ${pack.power_as_of}` : ""}
       </p>
 
       <form className="mt-3 flex flex-wrap items-end gap-2" method="get">
@@ -174,9 +174,13 @@ export default async function CfbTeamDnaPage({
         ))}
       </div>
 
-      {status.error ? (
+      {!pack ? (
         <p className="mt-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-kos-text/70">
-          Status probe failed ({status.error}). DNA table unavailable.
+          Power SoT pack not packaged. Run{" "}
+          <code className="text-kos-text/80">
+            scripts/cfb/package_power_sot_and_projections.py
+          </code>
+          .
         </p>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">

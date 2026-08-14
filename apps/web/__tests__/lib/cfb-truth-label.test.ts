@@ -50,6 +50,26 @@ describe("cfb truth-label wiring", () => {
     }
   });
 
+  it("projections page reads the packaged artifact, not a live 20-path sim", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/cfb/projections/page.tsx"),
+      "utf8",
+    );
+    expect(src).toContain("loadCfbSeasonProjections");
+    expect(src).not.toContain("fetchCfbSimulate");
+    expect(src).toContain("Research only");
+    expect(src).toContain("CFP");
+  });
+
+  it("teams page reads the Power SoT pack only", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/cfb/teams/page.tsx"),
+      "utf8",
+    );
+    expect(src).toContain("loadCfbPowerSot");
+    expect(src).not.toContain("fetchCfbSeasonEngineStatus");
+  });
+
   it("CFB Edge Board stays LIVE markets and refuses fake KEI", () => {
     const board = readFileSync(
       path.join(__dirname, "../../app/edge-board/[sport]/page.tsx"),

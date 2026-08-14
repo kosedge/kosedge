@@ -1,6 +1,10 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
 import {
+  loadCfbPowerSot,
+  loadCfbSeasonProjections,
+} from "@/lib/cfb-research-artifacts";
+import {
   fetchCfbPerformance,
   fetchCfbSeasonEngineStatus,
 } from "@/lib/cfb-season-engine";
@@ -40,6 +44,8 @@ export default async function CfbSeasonModelHubPage() {
     fetchCfbSeasonEngineStatus(),
     fetchCfbPerformance({ limit: 100 }),
   ]);
+  const powerPack = loadCfbPowerSot();
+  const projPack = loadCfbSeasonProjections();
   const ladder = status.power_style_ladder?.top ?? [];
   const solid = status.solid_vs_approximate?.solid?.slice(0, 6) ?? [];
   const approx = status.solid_vs_approximate?.approximate?.slice(0, 6) ?? [];
@@ -132,6 +138,13 @@ export default async function CfbSeasonModelHubPage() {
             <div className="mt-0.5 text-kos-text">omitted (stub)</div>
           </div>
         </div>
+        <p className="mt-3 text-xs text-kos-text/50">
+          Power {powerPack?.power_version || status.power_version || "—"} · as_of{" "}
+          {powerPack?.power_as_of || status.power_as_of || "—"} · n_teams{" "}
+          {powerPack?.n_teams ?? status.n_teams ?? 136} · projections{" "}
+          {projPack?.artifact_id || status.projection_artifact_id || "—"} · N=
+          {projPack?.n_sims ?? "—"}
+        </p>
         <div className="mt-3 grid gap-2 sm:grid-cols-4 text-xs">
           <div>
             <div className="text-kos-text/45 uppercase tracking-[0.1em]">

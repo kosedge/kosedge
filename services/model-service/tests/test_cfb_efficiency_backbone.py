@@ -39,7 +39,7 @@ CAMP_OPEN_QB = ("UGA", "MICH", "FSU", "LSU", "ALA")
 
 
 def test_version_and_status_expose_backbone() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.14-efficiency-backbone"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.15-power-sot"
     assert BACKBONE_VERSION == "cfb-efficiency-backbone-v0.14-20260814"
     status = engine_status_payload(season=2026, demo=True)
     assert status["ok"] is True

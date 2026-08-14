@@ -23,7 +23,7 @@ from src.services.cfb_warehouse.predictions import write_prediction
 
 
 def test_version_and_status_expose_calibration() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.14-efficiency-backbone"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.15-power-sot"
     status = engine_status_payload(season=2026, demo=True)
     assert status["ok"] is True
     assert status["engine_version"] == DEFAULT_SEASON_ENGINE_VERSION

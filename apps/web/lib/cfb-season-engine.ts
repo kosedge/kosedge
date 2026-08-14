@@ -76,6 +76,10 @@ export type CfbSeasonEngineStatus = {
   n_games?: number;
   slate_complete?: boolean;
   used_in_spread?: boolean;
+  power_version?: string;
+  power_as_of?: string;
+  n_teams?: number;
+  projection_artifact_id?: string;
   team_count?: number;
   roster_source?: string;
   depth_source?: string;
@@ -281,6 +285,20 @@ export async function fetchCfbSeasonEngineStatus(input?: {
         typeof payload.used_in_spread === "boolean"
           ? payload.used_in_spread
           : false,
+      power_version:
+        typeof payload.power_version === "string"
+          ? payload.power_version
+          : undefined,
+      power_as_of:
+        typeof payload.power_as_of === "string"
+          ? payload.power_as_of
+          : undefined,
+      n_teams:
+        typeof payload.n_teams === "number" ? payload.n_teams : undefined,
+      projection_artifact_id:
+        typeof payload.projection_artifact_id === "string"
+          ? payload.projection_artifact_id
+          : undefined,
       team_count:
         typeof payload.team_count === "number" ? payload.team_count : undefined,
       roster_source:

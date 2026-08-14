@@ -376,7 +376,8 @@ def engine_status_payload(
             "v0.11 game/total sim distributions (research only) + "
             "v0.12 official 2026 ESPN slate + roster completeness (research only) + "
             "v0.13 margin calibration / blowout-scale (research only) + "
-            "v0.14 warehouse efficiency backbone / SP+ fill reduction (research only)"
+            "v0.14 warehouse efficiency backbone / SP+ fill reduction (research only) + "
+            "v0.15 single Power SoT + frozen-SoT season projection artifact (research only)"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "calibration_id": __import__(
@@ -699,6 +700,23 @@ def engine_status_payload(
             "src.services.cfb_season_engine.product_desk",
             fromlist=["product_desk_payload"],
         ).product_desk_payload(universe, weeks=(0, 1)),
+        "power_sot": __import__(
+            "src.services.cfb_season_engine.power_sot",
+            fromlist=["documentation"],
+        ).documentation(),
+        "power_version": __import__(
+            "src.services.cfb_season_engine.power_sot",
+            fromlist=["POWER_VERSION"],
+        ).POWER_VERSION,
+        "power_as_of": __import__(
+            "src.services.cfb_season_engine.power_sot",
+            fromlist=["POWER_AS_OF"],
+        ).POWER_AS_OF,
+        "n_teams": 136,
+        "projection_artifact_id": __import__(
+            "src.services.cfb_season_engine.power_sot",
+            fromlist=["PROJECTION_ARTIFACT_ID"],
+        ).PROJECTION_ARTIFACT_ID,
     }
 
 

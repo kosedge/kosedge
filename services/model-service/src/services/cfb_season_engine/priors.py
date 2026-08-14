@@ -38,7 +38,7 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.14-efficiency-backbone"
+ENGINE_VERSION = "cfb-season-engine-v0.15-power-sot"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.13-calibration-scale"
 CALIBRATION_AS_OF = "2026-08-14"
 BACKBONE_VERSION = "cfb-efficiency-backbone-v0.14-20260814"
@@ -388,6 +388,9 @@ def documentation() -> Dict[str, Any]:
             "league_average_fill for official FBS with ≥8 prior-season games. "
             "Remaining missing codes are thin_sample_labeled (wider σ). "
             "tanh constants unchanged. used_in_spread stays false.",
+            "v0.15: one Power SoT pack feeds DNA, project-game indices, and "
+            "frozen-SoT season projections (N=10k artifact). No parallel "
+            "rating. CFP/natty stay stub. used_in_spread stays false.",
             "Season sim uses official ESPN 2026 slate when packaged; densified "
             "seed is never labeled official. Win tables stay research-only.",
             "FBS focus; FCS opponents treated as external when scheduled.",

@@ -7,12 +7,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
-from src.services.cfb_season_engine.conferences import conference_for
-from src.services.cfb_season_engine.fbs_universe import official_fbs_codes
 from src.services.cfb_season_engine.official_schedule import (
     games_from_blob,
     load_official_schedule_blob,
 )
+from src.services.cfb_season_engine.power_sot import build_power_sot
 from src.services.cfb_season_engine.types import EngineUniverse
 
 USED_IN_SPREAD = False
@@ -86,49 +85,16 @@ def team_dna_table(
     *,
     board: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
-    official = official_fbs_codes()
-    board = board if board is not None else official_week_board()
-    rows: List[Dict[str, Any]] = []
-    for code in official:
-        st = universe.teams.get(code)
-        qb = st.qb if st else None
-        eff = st.efficiency if st else None
-        src = str(eff.source or "") if eff else ""
-        fill = "warehouse" if "warehouse" in src else (
-            "thin" if src == "thin_sample_labeled" else (
-                "league_avg" if src == "league_average_fill" else "sp_plus_or_packaged"
-            )
-        )
-        rows.append(
-            {
-                "team": code,
-                "conference": universe.conferences.get(code) or conference_for(code),
-                "offense_index": round(st.offense_index, 3) if st else None,
-                "defense_index": round(st.defense_index, 3) if st else None,
-                "power_index": (
-                    round(0.5 * (st.offense_index + st.defense_index), 3)
-                    if st
-                    else None
-                ),
-                "early_season_uncertainty": (
-                    round(st.early_season_uncertainty, 3) if st else None
-                ),
-                "qb_class": qb.qb_class if qb else None,
-                "qb_name": qb.starter_name if qb else None,
-                "open_qb": bool(qb and qb.qb_class == "open_competition"),
-                "efficiency_source": src or None,
-                "efficiency_fill": fill,
-                "off_eff": round(eff.off_eff, 2) if eff else None,
-                "def_eff": round(eff.def_eff, 2) if eff else None,
-                "next": _next_opponent(code, board),
-            }
-        )
+    """DNA rows are the Power SoT pack — no parallel rating."""
+    sot = build_power_sot(universe)
     return {
-        "n": len(rows),
-        "official_fbs": len(official),
+        "n": sot["n_teams"],
+        "official_fbs": sot["official_fbs"],
         "used_in_spread": USED_IN_SPREAD,
         "kei": False,
-        "teams": rows,
+        "power_version": sot["power_version"],
+        "power_as_of": sot["power_as_of"],
+        "teams": sot["teams"],
     }
 
 

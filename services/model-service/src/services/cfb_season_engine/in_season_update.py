@@ -9,8 +9,12 @@ Safety
 ------
 - Per-game residual is clamped (weird blowouts cannot nuke a rating).
 - Updates shrink toward the preseason prior via decaying learning rate.
-- Early-season weeks (1–4) carry higher weight than late season.
+- Games 0–2 are prior-heavy (no Week-1 cliff). Games 3–8 ramp toward
+  observed efficiency. One noisy week must not replace the prior.
+- Injury / QB inactive: full-strength vs current path when a live feed
+  exists (stub until a feed is wired).
 - Preseason baseline is always preserved and inspectable.
+- Ops SoT: data/ops/cfb-phase1-projections-power-20260814.md
 """
 
 from __future__ import annotations
@@ -40,8 +44,9 @@ MAX_GAME_MOVE = 3.5
 # Hard clamp on residual margin (pts) before scaling.
 MAX_RESIDUAL = 28.0
 # Learning rate shrinks with games: alpha = ALPHA0 / (1 + n_games)^ALPHA_POW
-ALPHA0 = 0.55
-ALPHA_POW = 0.65
+# Prior-heavy: one game cannot replace the preseason prior (games/N style).
+ALPHA0 = 0.32
+ALPHA_POW = 0.70
 # Blend of residual onto offense of winner / defense of loser split.
 OFF_SHARE = 0.55  # of home residual goes to home offense; rest to away defense (signed)
 # Max absolute cumulative delta from preseason.
@@ -63,21 +68,28 @@ def _clamp(x: float, lo: float, hi: float) -> float:
 
 
 def week_weight(week: int) -> float:
-    """Early results move ratings more than late-season results."""
-    w = int(week or 1)
-    if w <= 1:
-        return 1.00
+    """Prior-heavy early; blend ramp midseason. No Week-1 cliff.
+
+    Games 0–2: small weight (continuity / QB prior still dominate).
+    Games 3–8: ramp toward observed efficiency.
+    Late season: still shrink — do not fully replace the prior.
+    """
+    w = int(week or 0)
+    if w <= 0:
+        return 0.16
+    if w == 1:
+        return 0.20
     if w == 2:
-        return 0.92
+        return 0.28
     if w == 3:
-        return 0.84
+        return 0.40
     if w == 4:
-        return 0.76
+        return 0.50
     if w <= 8:
         return 0.62
     if w <= 12:
-        return 0.48
-    return 0.38
+        return 0.58
+    return 0.50
 
 
 def learning_rate(n_games: int) -> float:
@@ -182,7 +194,7 @@ def documentation() -> Dict[str, Any]:
         "fidelity": "foundation_approximate",
         "rules": {
             "residual": "actual_margin_home - model_margin_home (home_score-away_score - model_spread_home*-1 convention: actual_home_minus_away - expected_home_minus_away)",
-            "week_weight": "W1=1.00 … W4=0.76 … late≈0.38",
+            "week_weight": "W0–1 prior-heavy (0.16–0.20); W3–8 ramp to 0.62; no Week-1 cliff",
             "learning_rate": f"alpha = {ALPHA0} / (1+n_games)^{ALPHA_POW}",
             "max_game_move": MAX_GAME_MOVE,
             "max_residual": MAX_RESIDUAL,

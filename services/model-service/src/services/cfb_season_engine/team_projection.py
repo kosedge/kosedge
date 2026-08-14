@@ -1,7 +1,8 @@
 """Layer 4 — Team projection + game-level matchup.
 
 Composes opponent-adjusted efficiency + roster + QB + position groups into
-offense/defense indices, then projects a single game:
+offense/defense indices (the single Power SoT — same table as Team DNA and
+frozen season projections), then projects a single game:
 
     strength indices → expected points (unit matchup) → margin
       → spread / total / win probability
