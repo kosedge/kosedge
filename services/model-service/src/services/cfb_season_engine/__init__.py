@@ -139,6 +139,8 @@ def project_game_preview(
     season: Optional[int] = None,
     neutral_site: bool = False,
     night_game: bool = False,
+    n_sims: int = 5000,
+    seed: Optional[int] = None,
 ) -> GameProjection:
     """Team-level game preview with player-hook identity + role-share projections."""
     hook_rows: List[Dict[str, Any]] = []
@@ -154,6 +156,8 @@ def project_game_preview(
         night_game=night_game,
         engine_version=DEFAULT_SEASON_ENGINE_VERSION,
         player_hook_summaries=hook_rows,
+        n_sims=n_sims,
+        seed=seed,
     )
     return attach_player_projections(universe, proj)
 
@@ -170,7 +174,9 @@ def _preseason_prior_status(season: int, example_codes: Sequence[str]) -> Dict[s
         "leakage": pack.get("leakage") or "seasons < prior_year",
         "used_in_spread": False,
         "examples": {k: v for k, v in examples.items() if v},
-        "ops": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
+        "ops": "data/ops/cfb-p2-preseason-prior-20260813.md",
+        "prior_version": pack.get("prior_version"),
+        "universe": pack.get("universe"),
         "note": (
             "Neutral-field points vs average FBS + uncertainty σ. "
             "Research input on project-game; does not change spread/WP/KEI."
@@ -185,9 +191,39 @@ def engine_status_payload(
     demo: bool = True,
 ) -> Dict[str, Any]:
     """Honesty-first status contract for GET /cfb/season-engine/status."""
-    universe, meta = resolve_season_universe(
-        season=season, as_of_week=as_of_week, demo=demo, session=None
+    from src.services.cfb_season_engine.fbs_universe import (
+        documentation as fbs_doc,
+        official_fbs_codes,
     )
+    from src.services.cfb_season_engine.official_schedule import (
+        documentation as official_schedule_doc,
+    )
+
+    try:
+        universe, meta = resolve_season_universe(
+            season=season, as_of_week=as_of_week, demo=demo, session=None
+        )
+    except Exception as exc:
+        return {
+            "ok": False,
+            "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+            "used_in_spread": False,
+            "schedule_source": "missing",
+            "schedule_as_of": "",
+            "n_games": 0,
+            "slate_complete": False,
+            "error": str(exc),
+            "fbs_universe": fbs_doc(),
+            "official_schedule": official_schedule_doc(),
+            "preseason_prior": _preseason_prior_status(season, ["UGA", "OSU", "MICH", "FSU", "LSU"]),
+            "season_futures": {
+                "research_only": True,
+                "cfp_make": None,
+                "natty": None,
+                "status": "placeholder",
+            },
+            "note": "Universe load failed; version + research prior still returned. No KEI.",
+        }
     curated = sum(
         1
         for t in universe.teams.values()
@@ -218,8 +254,11 @@ def engine_status_payload(
                 "teams_with_named_qb": real_identity,
             },
         }
+    official = official_fbs_codes()
+    official_in_universe = sorted(c for c in official if c in universe.teams)
+    missing_official = sorted(c for c in official if c not in universe.teams)
     # Example team diagnostics — power continuity vs new-HC / weak HFA.
-    example_codes = ["UGA", "TEX", "OSU", "LSU", "FSU", "PSU", "COLO", "BALL"]
+    example_codes = ["UGA", "TEX", "OSU", "LSU", "FSU", "PSU", "COLO", "BALL", "MIZZ"]
     examples: Dict[str, Any] = {}
     for code in example_codes:
         state = universe.teams.get(code)
@@ -248,6 +287,7 @@ def engine_status_payload(
         (
             (code, t.roster.roster_strength if t.roster else 0.0)
             for code, t in universe.teams.items()
+            if code in official
         ),
         key=lambda row: row[1],
         reverse=True,
@@ -270,6 +310,7 @@ def engine_status_payload(
                 t.early_season_uncertainty,
             )
             for code, t in universe.teams.items()
+            if code in official
         ),
         key=lambda row: row[1],
         reverse=True,
@@ -313,14 +354,20 @@ def engine_status_payload(
                 coaching_flags["all_returning"] += 1
 
     return {
+        "ok": True,
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+        "used_in_spread": False,
         "sport": "cfb",
+        "fbs_universe": fbs_doc(),
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
             "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
             "v0.8 opponent-adjusted efficiency backbone + v0.8.1 historical "
             "closing-line calibration + v0.8.2 performance tracking / CLV + "
-            "v0.8.3 player coherence + v0.9 in-season updating foundation"
+            "v0.8.3 player coherence + v0.9 in-season updating foundation + "
+            "v0.10 official-FBS preseason prior (research only) + "
+            "v0.11 game/total sim distributions (research only) + "
+            "v0.12 official 2026 ESPN slate + roster completeness (research only)"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "historical_calibration": {
@@ -341,8 +388,28 @@ def engine_status_payload(
         ).documentation(),
         "mode": meta.get("mode"),
         "schedule_source": meta.get("schedule_source"),
+        "schedule_as_of": meta.get("schedule_as_of") or universe.notes.get("schedule_as_of"),
+        "n_games": meta.get("n_games") or meta.get("schedule_game_count"),
+        "slate_complete": bool(meta.get("slate_complete")),
+        "official_schedule": official_schedule_doc(),
         "schedule_game_count": meta.get("schedule_game_count"),
         "team_count": meta.get("team_count"),
+        "roster_coverage_official": {
+            "official_fbs": len(official),
+            "in_universe": len(official_in_universe),
+            "missing": missing_official,
+            "independents": {
+                "ND": "ND" in universe.teams,
+                "CONN": "CONN" in universe.teams,
+            },
+            "as_of": meta.get("roster_as_of") or snap_meta.get("as_of"),
+            "efficiency_league_avg_fill": sorted(
+                c
+                for c in official_in_universe
+                if universe.teams[c].efficiency
+                and universe.teams[c].efficiency.source == "league_average_fill"
+            ),
+        },
         "roster_source": meta.get("roster_source") or snap_meta.get("roster_source"),
         "depth_source": meta.get("depth_source") or snap_meta.get("depth_source"),
         "portal_source": meta.get("portal_source") or snap_meta.get("portal_source"),
@@ -367,6 +434,7 @@ def engine_status_payload(
             coaching_continuity.documentation(),
             season_sim.documentation(),
             player_hooks.documentation(),
+            official_schedule_doc(),
         ],
         "efficiency": efficiency_snapshot_meta(),
         "priors": priors_documentation(),
@@ -376,6 +444,51 @@ def engine_status_payload(
         "project_game_formula": project_game_formula_doc(),
         "examples": examples,
         "preseason_prior": _preseason_prior_status(season, example_codes),
+        "game_total_sim": __import__(
+            "src.services.cfb_season_engine.game_total_sim",
+            fromlist=["documentation"],
+        ).documentation(),
+        "slate": {
+            "official_2026_fbs_schedule": bool(meta.get("official_schedule")),
+            "densified": not bool(meta.get("official_schedule")),
+            "source": meta.get("schedule_source") or "packaged_sample_densified",
+            "as_of": meta.get("schedule_as_of") or universe.notes.get("schedule_as_of"),
+            "game_count": meta.get("schedule_game_count"),
+            "n_games": meta.get("n_games") or meta.get("schedule_game_count"),
+            "slate_complete": bool(meta.get("slate_complete")),
+            "product_path": (
+                "official_slate_season_sim"
+                if meta.get("official_schedule")
+                else "on_demand_project_game"
+            ),
+            "note": (
+                "Official ESPN 2026 team schedules when packaged. Densified seed "
+                "is never treated as official. project-game remains on-demand "
+                "for arbitrary matchups. CFP/natty stay stub."
+                if meta.get("official_schedule")
+                else (
+                    "Densified seed slate is not the official 2026 FBS schedule. "
+                    "project-game(home, away, week, neutral?) is the research path."
+                )
+            ),
+        },
+        "season_futures": {
+            "research_only": True,
+            "cfp_make": None,
+            "natty": None,
+            "status": "placeholder",
+            "thin_sample": True,
+            "win_tables_final": False,
+            "win_tables_status": (
+                "research_limited"
+                if meta.get("slate_complete")
+                else "incomplete_slate_not_final"
+            ),
+            "note": (
+                "CFP make / natty stay stub. Official slate unblocks limited "
+                "research win totals only — not playoff percentages as product truth."
+            ),
+        },
         "qb_situation_overrides": __import__(
             "src.services.cfb_season_engine.qb_situation_overrides",
             fromlist=["documentation"],
@@ -422,8 +535,8 @@ def engine_status_payload(
                 "are class-year proxies; portal-out incomplete; recruiting often "
                 "retained from curated priors; efficiency from final-2025 SP+ "
                 "carry (opponent-adjusted; success/explosiveness are proxies); "
-                "HFA/coaching still curated; densified schedule is synthetic "
-                "approximate paths"
+                "HFA/coaching still curated; official ESPN 2026 slate when "
+                "packaged (densified seed never labeled official)"
             ),
             "efficiency": efficiency_snapshot_meta(),
         },
@@ -442,13 +555,14 @@ def engine_status_payload(
                 "Packaged final-2025 SP+ efficiency snapshot wiring",
                 "Variable HFA bucket structure (baseline ~2 pts, elite→poor)",
                 "Coaching continuity flags + week-decay schedule (HC/DC > OC)",
-                "project-game formula (strength → margin → spread/total/WP) + drivers block",
+                "project-game two-path sim (strength→margin + separate total) + drivers block",
                 "Early-season uncertainty posture (week-indexed narrowing, inspectable)",
                 "Season-sim path coherence (wins dist, week sample, ranking)",
                 "v0.6.1 calibration knobs (inspectable priors; measured, not market-grade)",
                 "v0.7 player role-share allocation (QB + skill; team totals unchanged)",
                 "v0.8.1 historical closing-line backtest framework + measured prior knobs",
                 "v0.8.2 performance tracking log → close → result → summary (+ CLV)",
+                "Official ESPN 2026 FBS slate packaging (not densified seed)",
                 "API / CLI / status honesty contract",
                 "Additive isolation from NFL engine + CFB markets-only Edge Board",
             ],
@@ -463,16 +577,15 @@ def engine_status_payload(
                 "Recruiting capital when retained from curated priors",
                 "HFA env_scores / venue labels (not live home ATS splits)",
                 "Coaching staff change flags for 2026 (curated proxies)",
-                "Densified schedule paths (not official FBS slate)",
+                "Densified schedule paths (fallback only; never labeled official)",
                 "Conference affiliations for standings",
                 "Game win probs / spreads / totals (hist-cal vs closes; not CLV/KEI)",
                 "Historical reconstruction (league-avg roster/QB; prior-year ratings proxy)",
                 "In-path strength evolution",
-                "Season win totals / ranking-ish standings (SOS-sensitive under densify)",
+                "Season win totals / ranking-ish standings (research; not final if slate incomplete)",
                 "Player yards/TDs/INTs (role shares of team pools; residual other OK)",
             ],
             "placeholder_or_deferred": [
-                "Full official 2026 FBS schedule feed",
                 "Live DB portal / returning production tables (optional; snapshot ships in-image)",
                 "Official preseason depth charts when ESPN publishes them",
                 "Live home scoring-margin / ATS feed",
@@ -482,7 +595,7 @@ def engine_status_payload(
                 "Full night-game / weather model",
                 "Special teams model (thin nudge only)",
                 "Full player box-score engine (completions, routes, air yards)",
-                "CFP bracket",
+                "CFP / natty season futures (P4 stub — not product truth)",
                 "Market-grade calibration / KEI fair lines",
                 "Walk-forward vs closing lines (Week 0–4)",
                 "Full portal player-value translation matrix",
@@ -499,6 +612,8 @@ def engine_status_payload(
             "performance": "GET /cfb/season-engine/performance",
             "cli": "scripts/cfb/run_hierarchical_season_sim.py",
             "package_roster": "scripts/cfb/package_real_roster_2026.py",
+            "package_official_schedule": "scripts/cfb/package_official_schedule_2026.py",
+            "fill_roster_holes": "scripts/cfb/fill_roster_holes_2026.py",
             "package_efficiency": "scripts/cfb/package_efficiency_2025_carry.py",
             "historical_calibration": "scripts/cfb/run_historical_calibration.py",
             "ops": "data/ops/cfb-historical-calibration-20260805.md",
@@ -506,6 +621,9 @@ def engine_status_payload(
             "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
             "ops_efficiency_prior": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
             "ops_qb_honesty": "data/ops/cfb-qb-honesty-prior-20260812.md",
+            "ops_p2_prior": "data/ops/cfb-p2-preseason-prior-20260813.md",
+            "ops_p3_sim": "data/ops/cfb-p3-game-total-sim-20260813.md",
+            "ops_slate_roster": "data/ops/cfb-2026-slate-roster-20260813.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",

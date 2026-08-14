@@ -38,7 +38,7 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.9-inseason"
+ENGINE_VERSION = "cfb-season-engine-v0.12-slate-roster"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
 
 # ---------------------------------------------------------------------------
@@ -372,7 +372,8 @@ def documentation() -> Dict[str, Any]:
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~1.7 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
-            "Season sim uses densified approximate schedule paths (not official FBS slate).",
+            "Season sim uses official ESPN 2026 slate when packaged; densified "
+            "seed is never labeled official. Win tables stay research-only.",
             "FBS focus; FCS opponents treated as external when scheduled.",
         ],
         "league_env": {
