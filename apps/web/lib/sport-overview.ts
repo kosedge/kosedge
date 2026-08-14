@@ -37,23 +37,23 @@ const GLANCE: Record<string, GlanceItem[]> = {
   cfb: [
     {
       href: "/pro/cfb/model",
-      title: "Season Model",
-      body: "Hierarchical engine hub — power-style ranks and fidelity honesty.",
+      title: "Model hub",
+      body: "Engine version, official slate coverage, and the research-only contract.",
     },
     {
       href: "/pro/cfb/project-game",
       title: "Project Game",
-      body: "Matchup projections with roster, QB, unit, HFA, and coaching drivers.",
+      body: "Research fair spread, total, WP, team totals, σ, and drivers.",
     },
     {
-      href: "/pro/cfb/tempo",
-      title: "Tempo & Havoc",
-      body: "Pace and disruption signals that move totals and spreads.",
+      href: "/pro/cfb/slate",
+      title: "Week 0 / Week 1 slate",
+      body: "Official ESPN 2026 board — open any row in Project Game.",
     },
     {
-      href: "/pro/cfb/teams",
-      title: "Conference Lens",
-      body: "Team research with conference and scheme context.",
+      href: "/pro/cfb/projections",
+      title: "Season projections",
+      body: "Research win totals on the official 889-game slate. CFP omitted.",
     },
   ],
   nba: [

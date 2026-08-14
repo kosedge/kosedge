@@ -1,0 +1,96 @@
+{
+  "as_of": "2026-08-13",
+  "used_in_spread": false,
+  "holes_before": [
+    "ARST",
+    "CSU",
+    "ECU",
+    "JVST",
+    "MIZZ",
+    "NEV",
+    "ODU",
+    "TOL",
+    "UAB",
+    "UNM",
+    "UNT"
+  ],
+  "filled": {
+    "ARST": {
+      "espn": "Arkansas State Red Wolves",
+      "athletes": 100,
+      "qb": "Drew Dickey",
+      "qb_class": "open_competition"
+    },
+    "CSU": {
+      "espn": "Colorado State Rams",
+      "athletes": 85,
+      "qb": "Darius Curry",
+      "qb_class": "true_freshman"
+    },
+    "ECU": {
+      "espn": "East Carolina Pirates",
+      "athletes": 100,
+      "qb": "Mitch Griffis",
+      "qb_class": "open_competition"
+    },
+    "JVST": {
+      "espn": "Jacksonville State Gamecocks",
+      "athletes": 100,
+      "qb": "Caden Creel",
+      "qb_class": "incumbent"
+    },
+    "MIZZ": {
+      "espn": "Missouri Tigers",
+      "athletes": 100,
+      "qb": "Austin Simmons",
+      "qb_class": "incumbent"
+    },
+    "NEV": {
+      "espn": "Nevada Wolf Pack",
+      "athletes": 100,
+      "qb": "Carter Jones",
+      "qb_class": "incumbent"
+    },
+    "ODU": {
+      "espn": "Old Dominion Monarchs",
+      "athletes": 100,
+      "qb": "Jaxon Potter",
+      "qb_class": "open_competition"
+    },
+    "TOL": {
+      "espn": "Toledo Rockets",
+      "athletes": 92,
+      "qb": "John Alan Richter",
+      "qb_class": "incumbent"
+    },
+    "UAB": {
+      "espn": "UAB Blazers",
+      "athletes": 100,
+      "qb": "Ryder Burton",
+      "qb_class": "incumbent"
+    },
+    "UNM": {
+      "espn": "New Mexico Lobos",
+      "athletes": 100,
+      "qb": "Jack Layne",
+      "qb_class": "portal"
+    },
+    "UNT": {
+      "espn": "North Texas Mean Green",
+      "athletes": 100,
+      "qb": "Tayven Jackson",
+      "qb_class": "portal"
+    }
+  },
+  "still_missing": [],
+  "prior_roster_pack_missing": [],
+  "official_in_universe": 136,
+  "camp_qb_classes": {
+    "UGA": "open_competition",
+    "MICH": "open_competition",
+    "FSU": "open_competition",
+    "LSU": "open_competition",
+    "ALA": "open_competition"
+  },
+  "mizz_in_universe": true
+}

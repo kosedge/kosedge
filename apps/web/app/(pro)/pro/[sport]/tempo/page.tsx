@@ -35,8 +35,8 @@ export default async function SportTempoPage({
       }
       primaryHref={`/edge-board/${sportKey}`}
       primaryLabel="Edge board →"
-      secondaryHref={`/pro/${sportKey}/fair-lines`}
-      secondaryLabel="KEI Lines →"
+      secondaryHref={isCfb ? "/pro/cfb/project-game" : `/pro/${sportKey}/fair-lines`}
+      secondaryLabel={isCfb ? "Project Game →" : "KEI Lines →"}
     >
       <section className="grid gap-3 sm:grid-cols-3">
         {[
@@ -54,7 +54,9 @@ export default async function SportTempoPage({
           },
           {
             title: "Market translation",
-            body: "Use these signals beside KEI Lines and Edge Board — never as standalone picks.",
+            body: isCfb
+              ? "Use these signals beside Project Game and the markets-only Edge Board — never as standalone picks."
+              : "Use these signals beside KEI Lines and Edge Board — never as standalone picks.",
           },
         ].map((card) => (
           <div

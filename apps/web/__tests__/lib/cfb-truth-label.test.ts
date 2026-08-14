@@ -31,18 +31,22 @@ describe("cfb-truth-label", () => {
 
 describe("cfb truth-label wiring", () => {
   it("Season Model and Project Game pages mount PRESEASON/MODEL badges", () => {
-    const model = readFileSync(
-      path.join(__dirname, "../../app/(pro)/pro/cfb/model/page.tsx"),
-      "utf8",
-    );
-    const project = readFileSync(
-      path.join(__dirname, "../../app/(pro)/pro/cfb/project-game/page.tsx"),
-      "utf8",
-    );
-    for (const src of [model, project]) {
+    const pages = [
+      "model/page.tsx",
+      "project-game/page.tsx",
+      "slate/page.tsx",
+      "projections/page.tsx",
+      "teams/page.tsx",
+    ];
+    for (const rel of pages) {
+      const src = readFileSync(
+        path.join(__dirname, `../../app/(pro)/pro/cfb/${rel}`),
+        "utf8",
+      );
       expect(src).toContain("cfbModelDeskTruthStates");
       expect(src).toContain("cfb-truth-state");
       expect(src).toContain("cfbModelDeskHonestyNote");
+      expect(src).not.toContain("Coming soon");
     }
   });
 

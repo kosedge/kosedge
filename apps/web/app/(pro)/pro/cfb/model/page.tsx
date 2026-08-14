@@ -16,7 +16,22 @@ const TOOLS = [
   {
     href: "/pro/cfb/project-game",
     title: "Project Game",
-    body: "Pick two FBS teams and read a clean market card — spread, total, WP→ML — with scannable Off/Def Eff + roster / QB / unit / HFA / coaching drivers.",
+    body: "Any FBS matchup or Week 0–2 slate row — research-fair spread, total, WP, team totals, σ, and drivers.",
+  },
+  {
+    href: "/pro/cfb/slate",
+    title: "Official slate",
+    body: "Week 0 / Week 1 boards from the official 2026 ESPN schedule. Open a row in Project Game.",
+  },
+  {
+    href: "/pro/cfb/projections",
+    title: "Season projections",
+    body: "Research expected wins on the official 889-game slate. CFP / natty omitted.",
+  },
+  {
+    href: "/pro/cfb/teams",
+    title: "Team DNA",
+    body: "136 official FBS rows — power, OFF/DEF, QB class, warehouse-fill labels.",
   },
 ] as const;
 
@@ -38,7 +53,7 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="Hierarchical CFB season engine with opponent-adjusted efficiency (2025 SP+ carry), ESPN 2026 real-roster overlay, historical closing-line calibration, and live projection/CLV tracking — team power-style ranks and project-game matchups. Edge Board stays markets-only; no fake KEI invent."
+      summary="Research desk only. Model → (future KEI when earned) → Edge. CFB is Model research today — used_in_spread stays false. Edge Board is live books only; no KEI, no Edge Tag, no PLAY/LEAN."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
@@ -63,12 +78,10 @@ export default async function CfbSeasonModelHubPage() {
         <div className="rounded-xl border border-white/10 bg-black/35 px-4 py-4">
           <h2 className="text-sm font-semibold text-kos-gold">Fidelity</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
-            Final-2025 SP+ efficiency carry drives Off/Def Eff alongside ESPN
-            2026 roster / QB / units; densified schedule stays approximate.
-            Named ESPN QBs: {fidelity?.espn_named_qb ?? "—"} · approximate
-            teams: {fidelity?.approximate_curated ?? "—"} · placeholder FBS:{" "}
-            {fidelity?.placeholder_fbs ?? "—"}. Returning snap% and portal-out
-            still proxies; coaching / HFA curated.
+            Official 2026 ESPN slate + 136/136 roster overlay. Named ESPN QBs:{" "}
+            {fidelity?.espn_named_qb ?? "—"} · warehouse fills labeled on Team
+            DNA (not silent 50/50). Returning snap% and portal-out still
+            proxies; coaching / HFA curated.
           </p>
         </div>
       </section>
@@ -86,6 +99,39 @@ export default async function CfbSeasonModelHubPage() {
             <span className="text-red-300"> — {status.error}</span>
           ) : null}
         </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 text-xs">
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              Slate
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              {status.slate_complete ? "complete" : "incomplete"} ·{" "}
+              {status.n_games ?? status.schedule_game_count ?? "—"} games
+            </div>
+          </div>
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              used_in_spread
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              {String(status.used_in_spread ?? false)}
+            </div>
+          </div>
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              Contract
+            </div>
+            <div className="mt-0.5 text-kos-text">
+              Research fair only · no KEI
+            </div>
+          </div>
+          <div>
+            <div className="text-kos-text/45 uppercase tracking-[0.1em]">
+              CFP / natty
+            </div>
+            <div className="mt-0.5 text-kos-text">omitted (stub)</div>
+          </div>
+        </div>
         <div className="mt-3 grid gap-2 sm:grid-cols-4 text-xs">
           <div>
             <div className="text-kos-text/45 uppercase tracking-[0.1em]">
@@ -263,8 +309,8 @@ export default async function CfbSeasonModelHubPage() {
             {(deferred.length > 0
               ? deferred
               : [
-                  "Official full FBS schedule feed",
-                  "Market-grade KEI fair lines",
+                  "2026 opens + held-out KEI (post–Week 3)",
+                  "CFP / natty product truth",
                   "Player box production path",
                 ]
             ).map((item) => (
