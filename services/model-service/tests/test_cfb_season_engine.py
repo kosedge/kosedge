@@ -63,7 +63,7 @@ from src.services.cfb_season_engine.types import (
 
 
 def test_engine_version_string() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.11-game-total-sim"
 
 
 def test_qb_situation_classification() -> None:
@@ -984,8 +984,10 @@ def test_variable_hfa_moves_project_game() -> None:
     p_poor = project_game_preview(
         poor_u, home_team="TEX", away_team="OSU", week=5, neutral_site=False
     )
-    # ~2.7 pt HFA gap should show in expected home score and WP.
-    assert p_elite.expected_home_score - p_poor.expected_home_score >= 2.0
+    # HFA lives on the margin path; independent total splits the gap ~50/50
+    # onto home/away scores. ~2.7 pt HFA still moves spread and WP.
+    assert p_elite.expected_home_score - p_poor.expected_home_score >= 1.0
+    assert p_poor.spread_home - p_elite.spread_home >= 2.0
     assert p_elite.home_win_prob - p_poor.home_win_prob >= 0.04
     assert p_elite.drivers["matchup"]["hfa"]["bucket"] == "elite"
     assert p_poor.drivers["matchup"]["hfa"]["bucket"] == "poor"
@@ -1431,7 +1433,7 @@ def test_hist_cal_priors_bounds() -> None:
     """v0.8.1 hist-cal knobs stay inside documented calibration bounds."""
     from src.services.cfb_season_engine import priors as P
 
-    assert P.ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert P.ENGINE_VERSION == "cfb-season-engine-v0.11-game-total-sim"
     assert 24.5 <= P.LEAGUE_TEAM_PPG <= 27.0
     assert 1.4 <= P.HFA_BASELINE_POINTS <= 2.2
     assert 1.20 <= P.MATCHUP_RESPONSE <= 1.55

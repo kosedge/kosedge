@@ -1,0 +1,194 @@
+{
+  "prior_version": "cfb-preseason-prior-v2-20260813",
+  "used_in_spread": false,
+  "n": 136,
+  "hd_finals": false,
+  "written": {
+    "n": 136,
+    "parquet": "/Users/ryankos/kosedge/.worktrees/cfb-p2-preseason-prior/data/cfb/warehouse/clean/priors/team_preseason_prior_2026.parquet",
+    "packaged": "/Users/ryankos/kosedge/.worktrees/cfb-p2-preseason-prior/services/model-service/src/services/cfb_season_engine/data/cfb_preseason_prior_2026.json",
+    "top5": [
+      {
+        "team": "OSU",
+        "mean": 20.459,
+        "sigma": 4.278
+      },
+      {
+        "team": "ND",
+        "mean": 17.198,
+        "sigma": 4.325
+      },
+      {
+        "team": "TEX",
+        "mean": 16.633,
+        "sigma": 4.26
+      },
+      {
+        "team": "TAMU",
+        "mean": 15.435,
+        "sigma": 4.3
+      },
+      {
+        "team": "UGA",
+        "mean": 15.066,
+        "sigma": 7.403
+      }
+    ],
+    "bottom5": [
+      {
+        "team": "KENT",
+        "mean": -1.246,
+        "sigma": 4.417
+      },
+      {
+        "team": "CHAR",
+        "mean": -1.283,
+        "sigma": 6.196
+      },
+      {
+        "team": "RICE",
+        "mean": -1.728,
+        "sigma": 8.089
+      },
+      {
+        "team": "MASS",
+        "mean": -1.832,
+        "sigma": 4.368
+      },
+      {
+        "team": "BALL",
+        "mean": -3.448,
+        "sigma": 7.692
+      }
+    ]
+  },
+  "smell": [
+    {
+      "team": "OSU",
+      "rank": 1,
+      "mean": 20.459,
+      "sigma": 4.278,
+      "qb_class": "incumbent",
+      "qb_sigma": 3.233,
+      "conference": "Big Ten",
+      "missing": []
+    },
+    {
+      "team": "TEX",
+      "rank": 3,
+      "mean": 16.633,
+      "sigma": 4.26,
+      "qb_class": "incumbent",
+      "qb_sigma": 3.215,
+      "conference": "SEC",
+      "missing": []
+    },
+    {
+      "team": "UGA",
+      "rank": 5,
+      "mean": 15.066,
+      "sigma": 7.403,
+      "qb_class": "open_competition",
+      "qb_sigma": 6.853,
+      "conference": "SEC",
+      "missing": []
+    },
+    {
+      "team": "ORE",
+      "rank": 6,
+      "mean": 15.046,
+      "sigma": 6.06,
+      "qb_class": "portal",
+      "qb_sigma": 5.37,
+      "conference": "Big Ten",
+      "missing": []
+    },
+    {
+      "team": "ALA",
+      "rank": 7,
+      "mean": 14.708,
+      "sigma": 7.305,
+      "qb_class": "open_competition",
+      "qb_sigma": 6.747,
+      "conference": "SEC",
+      "missing": []
+    },
+    {
+      "team": "PSU",
+      "rank": 8,
+      "mean": 14.187,
+      "sigma": 4.68,
+      "qb_class": "incumbent",
+      "qb_sigma": 3.253,
+      "conference": "Big Ten",
+      "missing": []
+    },
+    {
+      "team": "MICH",
+      "rank": 18,
+      "mean": 12.081,
+      "sigma": 7.455,
+      "qb_class": "open_competition",
+      "qb_sigma": 6.836,
+      "conference": "Big Ten",
+      "missing": []
+    },
+    {
+      "team": "LSU",
+      "rank": 22,
+      "mean": 11.553,
+      "sigma": 7.387,
+      "qb_class": "open_competition",
+      "qb_sigma": 6.839,
+      "conference": "SEC",
+      "missing": []
+    },
+    {
+      "team": "FSU",
+      "rank": 49,
+      "mean": 7.864,
+      "sigma": 7.589,
+      "qb_class": "open_competition",
+      "qb_sigma": 6.948,
+      "conference": "ACC",
+      "missing": []
+    },
+    {
+      "team": "MIZZ",
+      "rank": 50,
+      "mean": 7.809,
+      "sigma": 6.842,
+      "qb_class": "unknown",
+      "qb_sigma": 6.0,
+      "conference": "SEC",
+      "missing": [
+        "ol:neutral_missing",
+        "skill:neutral_missing",
+        "front_seven:neutral_missing",
+        "secondary:neutral_missing",
+        "st:neutral_missing",
+        "roster_pack_missing_neutral"
+      ]
+    },
+    {
+      "team": "MASS",
+      "rank": 135,
+      "mean": -1.832,
+      "sigma": 4.368,
+      "qb_class": "incumbent",
+      "qb_sigma": 3.339,
+      "conference": "MAC",
+      "missing": []
+    },
+    {
+      "team": "BALL",
+      "rank": 136,
+      "mean": -3.448,
+      "sigma": 7.692,
+      "qb_class": "open_competition",
+      "qb_sigma": 7.156,
+      "conference": "MAC",
+      "missing": []
+    }
+  ]
+}

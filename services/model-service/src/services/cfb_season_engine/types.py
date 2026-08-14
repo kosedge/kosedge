@@ -245,6 +245,9 @@ class GameProjection:
     uncertainty: Dict[str, Any] = field(default_factory=dict)
     notes: Dict[str, str] = field(default_factory=dict)
     fidelity: DataFidelity = "approximate"
+    # P3 two-path sim (margin + independent total). Empty on legacy callers.
+    distributions: Dict[str, Any] = field(default_factory=dict)
+    n_sims: int = 0
 
 
 @dataclass

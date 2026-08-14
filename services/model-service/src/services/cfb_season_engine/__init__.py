@@ -139,6 +139,8 @@ def project_game_preview(
     season: Optional[int] = None,
     neutral_site: bool = False,
     night_game: bool = False,
+    n_sims: int = 5000,
+    seed: Optional[int] = None,
 ) -> GameProjection:
     """Team-level game preview with player-hook identity + role-share projections."""
     hook_rows: List[Dict[str, Any]] = []
@@ -154,6 +156,8 @@ def project_game_preview(
         night_game=night_game,
         engine_version=DEFAULT_SEASON_ENGINE_VERSION,
         player_hook_summaries=hook_rows,
+        n_sims=n_sims,
+        seed=seed,
     )
     return attach_player_projections(universe, proj)
 
@@ -170,7 +174,9 @@ def _preseason_prior_status(season: int, example_codes: Sequence[str]) -> Dict[s
         "leakage": pack.get("leakage") or "seasons < prior_year",
         "used_in_spread": False,
         "examples": {k: v for k, v in examples.items() if v},
-        "ops": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
+        "ops": "data/ops/cfb-p2-preseason-prior-20260813.md",
+        "prior_version": pack.get("prior_version"),
+        "universe": pack.get("universe"),
         "note": (
             "Neutral-field points vs average FBS + uncertainty σ. "
             "Research input on project-game; does not change spread/WP/KEI."
@@ -185,9 +191,28 @@ def engine_status_payload(
     demo: bool = True,
 ) -> Dict[str, Any]:
     """Honesty-first status contract for GET /cfb/season-engine/status."""
-    universe, meta = resolve_season_universe(
-        season=season, as_of_week=as_of_week, demo=demo, session=None
-    )
+    from src.services.cfb_season_engine.fbs_universe import documentation as fbs_doc
+
+    try:
+        universe, meta = resolve_season_universe(
+            season=season, as_of_week=as_of_week, demo=demo, session=None
+        )
+    except Exception as exc:
+        return {
+            "ok": False,
+            "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+            "used_in_spread": False,
+            "error": str(exc),
+            "fbs_universe": fbs_doc(),
+            "preseason_prior": _preseason_prior_status(season, ["UGA", "OSU", "MICH", "FSU", "LSU"]),
+            "season_futures": {
+                "research_only": True,
+                "cfp_make": None,
+                "natty": None,
+                "status": "placeholder",
+            },
+            "note": "Universe load failed; version + research prior still returned. No KEI.",
+        }
     curated = sum(
         1
         for t in universe.teams.values()
@@ -313,14 +338,19 @@ def engine_status_payload(
                 coaching_flags["all_returning"] += 1
 
     return {
+        "ok": True,
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+        "used_in_spread": False,
         "sport": "cfb",
+        "fbs_universe": fbs_doc(),
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
             "variable HFA + coaching + v0.6.1 calibration + v0.7 player hooks + "
             "v0.8 opponent-adjusted efficiency backbone + v0.8.1 historical "
             "closing-line calibration + v0.8.2 performance tracking / CLV + "
-            "v0.8.3 player coherence + v0.9 in-season updating foundation"
+            "v0.8.3 player coherence + v0.9 in-season updating foundation + "
+            "v0.10 official-FBS preseason prior (research only) + "
+            "v0.11 game/total sim distributions (research only)"
         ),
         "calibration_tag": priors_documentation().get("calibration_tag"),
         "historical_calibration": {
@@ -376,6 +406,31 @@ def engine_status_payload(
         "project_game_formula": project_game_formula_doc(),
         "examples": examples,
         "preseason_prior": _preseason_prior_status(season, example_codes),
+        "game_total_sim": __import__(
+            "src.services.cfb_season_engine.game_total_sim",
+            fromlist=["documentation"],
+        ).documentation(),
+        "slate": {
+            "official_2026_fbs_schedule": False,
+            "source": meta.get("schedule_source") or "packaged_sample_densified",
+            "game_count": meta.get("schedule_game_count"),
+            "product_path": "on_demand_project_game",
+            "note": (
+                "Densified seed slate is not the official 2026 FBS schedule. "
+                "project-game(home, away, week, neutral?) is the research path."
+            ),
+        },
+        "season_futures": {
+            "research_only": True,
+            "cfp_make": None,
+            "natty": None,
+            "status": "placeholder",
+            "thin_sample": True,
+            "note": (
+                "CFP make / natty stay stub until an official slate + conserved "
+                "season-sim depth exist. Do not invent make rates."
+            ),
+        },
         "qb_situation_overrides": __import__(
             "src.services.cfb_season_engine.qb_situation_overrides",
             fromlist=["documentation"],
@@ -442,7 +497,7 @@ def engine_status_payload(
                 "Packaged final-2025 SP+ efficiency snapshot wiring",
                 "Variable HFA bucket structure (baseline ~2 pts, elite→poor)",
                 "Coaching continuity flags + week-decay schedule (HC/DC > OC)",
-                "project-game formula (strength → margin → spread/total/WP) + drivers block",
+                "project-game two-path sim (strength→margin + separate total) + drivers block",
                 "Early-season uncertainty posture (week-indexed narrowing, inspectable)",
                 "Season-sim path coherence (wins dist, week sample, ranking)",
                 "v0.6.1 calibration knobs (inspectable priors; measured, not market-grade)",
@@ -482,7 +537,7 @@ def engine_status_payload(
                 "Full night-game / weather model",
                 "Special teams model (thin nudge only)",
                 "Full player box-score engine (completions, routes, air yards)",
-                "CFP bracket",
+                "CFP / natty season futures (P4 stub — densified slate is not official)",
                 "Market-grade calibration / KEI fair lines",
                 "Walk-forward vs closing lines (Week 0–4)",
                 "Full portal player-value translation matrix",
@@ -506,6 +561,8 @@ def engine_status_payload(
             "ops_efficiency": "data/ops/cfb-efficiency-backbone-20260804.md",
             "ops_efficiency_prior": "data/ops/cfb-efficiency-preseason-prior-v1-20260812.md",
             "ops_qb_honesty": "data/ops/cfb-qb-honesty-prior-20260812.md",
+            "ops_p2_prior": "data/ops/cfb-p2-preseason-prior-20260813.md",
+            "ops_p3_sim": "data/ops/cfb-p3-game-total-sim-20260813.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",

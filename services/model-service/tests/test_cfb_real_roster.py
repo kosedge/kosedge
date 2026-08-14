@@ -29,7 +29,7 @@ SNAPSHOT = DATA_DIR / "cfb_real_roster_snapshot_2026.json"
 
 
 def test_engine_version_real_roster() -> None:
-    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.9-inseason"
+    assert DEFAULT_SEASON_ENGINE_VERSION == "cfb-season-engine-v0.11-game-total-sim"
 
 
 def test_loader_prefers_real_snapshot_when_present() -> None:
@@ -51,7 +51,7 @@ def test_loader_prefers_real_snapshot_when_present() -> None:
 
 def test_status_exposes_roster_depth_portal_sources() -> None:
     payload = engine_status_payload(season=2026, demo=True)
-    assert payload["engine_version"] == "cfb-season-engine-v0.9-inseason"
+    assert payload["engine_version"] == "cfb-season-engine-v0.11-game-total-sim"
     assert payload["roster_source"] == ROSTER_SOURCE_PACKAGED_ESPN
     assert payload["depth_source"]
     assert payload["portal_source"]
