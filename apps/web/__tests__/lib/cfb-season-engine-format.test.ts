@@ -36,6 +36,24 @@ describe("cfb-season-engine-format", () => {
     });
   });
 
+  it("accepts Week 0 project-game bodies", () => {
+    expect(
+      buildProjectGameBody({
+        homeTeam: "TCU",
+        awayTeam: "UNC",
+        week: 0,
+      }),
+    ).toEqual({
+      home_team: "TCU",
+      away_team: "UNC",
+      week: 0,
+      season: 2026,
+      neutral_site: false,
+      night_game: false,
+      demo: true,
+    });
+  });
+
   it("rejects same-team matchups", () => {
     expect(() =>
       buildProjectGameBody({ homeTeam: "UGA", awayTeam: "UGA" }),

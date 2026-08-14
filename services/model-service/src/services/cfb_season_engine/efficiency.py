@@ -1,16 +1,18 @@
-"""Opponent-adjusted efficiency backbone (SP+/EPA-style; 2025→2026 carry).
+"""Opponent-adjusted efficiency backbone (SP+ + warehouse EPA; 2025→2026 carry).
 
 College football preseason 2026 has no in-season PBP yet. This layer packages
-final-2025 SP+ offense/defense (opponent-adjusted efficiency) as a primary
-complementary driver beside roster / QB / unit identity — not a replacement.
+final-2025 SP+ offense/defense where mapped, and warehouse opponent-adj EPA
+for official FBS codes that lacked SP+. Complementary to roster / QB / units.
 
 Honesty
 -------
-- ``off_eff`` / ``def_eff`` are SP+-derived 0–100 scores (higher = better).
-- ``success_off`` / ``success_def`` / ``explosiveness`` are SP+-correlated
-  proxies, **not** true play-by-play success-rate / iso-explosiveness.
-- Full PBP EPA / CFBD advanced refresh is optional when a key is present;
-  the shipped snapshot is the default.
+- ``off_eff`` / ``def_eff`` are 0–100 (higher = better).
+- SP+ rows stay packaged SP+. Warehouse fills are EPA-z mapped to the same
+  0–100 space (``source=warehouse_pbp_epa_adj_2025``).
+- ``success_off`` / ``success_def`` / ``explosiveness`` are proxies, **not**
+  true play-by-play success-rate / iso-explosiveness.
+- Official FBS with playable history is never a silent ``league_average_fill``.
+  Missing history is ``thin_sample_labeled`` + wider σ.
 """
 
 from __future__ import annotations
@@ -52,10 +54,29 @@ def load_efficiency_snapshot() -> Dict[str, Any]:
 def snapshot_meta(snap: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
     snap = snap if snap is not None else load_efficiency_snapshot()
     teams = snap.get("teams") or {}
-    mapped = sum(
-        1
-        for row in teams.values()
-        if str(row.get("source", "")).startswith("packaged_sp_plus")
+    bb = snap.get("backbone") or {}
+    n_sp = int(
+        bb.get("n_sp_plus")
+        or sum(
+            1
+            for row in teams.values()
+            if str(row.get("source", "")).startswith("packaged_sp_plus")
+        )
+    )
+    n_wh = int(
+        bb.get("n_warehouse_fill")
+        or sum(
+            1
+            for row in teams.values()
+            if "warehouse" in str(row.get("source") or "")
+        )
+    )
+    n_thin = int(
+        bb.get("n_thin")
+        or sum(1 for row in teams.values() if row.get("source") == "thin_sample_labeled")
+    )
+    n_league = sum(
+        1 for row in teams.values() if row.get("source") == "league_average_fill"
     )
     return {
         "present": bool(teams),
@@ -66,7 +87,17 @@ def snapshot_meta(snap: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         "fidelity": str(snap.get("fidelity") or "approximate"),
         "metric_family": str(snap.get("metric_family") or ""),
         "team_count": len(teams),
-        "mapped_from_sp_plus": mapped,
+        "mapped_from_sp_plus": n_sp,
+        "backbone_version": str(bb.get("version") or P.BACKBONE_VERSION),
+        "n_sp_plus": n_sp,
+        "n_warehouse_fill": n_wh,
+        "n_filled": n_wh,
+        "n_thin": n_thin,
+        "n_league_average_fill": n_league,
+        "thin": list(bb.get("thin") or []),
+        "filled": sorted((bb.get("filled") or {}).keys()),
+        "method": bb.get("method"),
+        "used_in_spread": bool(snap.get("used_in_spread", False)),
         "source": snap.get("source") or {},
         "notes": list(snap.get("notes") or []),
     }
@@ -81,7 +112,8 @@ def build_efficiency_profile(
 ) -> EfficiencyProfile:
     """Build inspectable efficiency profile for one team.
 
-    Preference: explicit payload → packaged snapshot → league-average placeholder.
+    Preference: explicit payload → packaged snapshot → labeled thin-sample.
+    Official FBS with playable history is packaged (SP+ or warehouse EPA).
     When ``apply_inseason`` is True (default), cumulative in-season deltas from
     ``in_season_update`` are layered on top of the preseason baseline.
     """
@@ -104,11 +136,11 @@ def build_efficiency_profile(
             sp_plus=0.0,
             prior_year=2025,
             carry_to_season=2026,
-            source="league_average_fill",
+            source="thin_sample_labeled",
             fidelity="placeholder",
             notes=(
-                "No packaged SP+ row; league-average efficiency fill. "
-                "Not opponent-adjusted for this code."
+                "No packaged SP+ or warehouse EPA row. Thin-sample label — "
+                "not a silent league average. Wider σ at compose."
             ),
         )
     else:
@@ -220,10 +252,13 @@ def documentation() -> Dict[str, Any]:
         "name": "efficiency",
         "module": "src.services.cfb_season_engine.efficiency",
         "engine_version_introduced": "cfb-season-engine-v0.8-efficiency",
+        "engine_version_current": P.ENGINE_VERSION,
+        "backbone_version": P.BACKBONE_VERSION,
         "real_vs_approximate": (
             "Structure is REAL (inspectable off_eff/def_eff + blend weights). "
-            "Packaged values are APPROXIMATE final-2025 SP+ carry — not live "
-            "2026 PBP EPA. success/explosiveness are proxies."
+            "Packaged values are APPROXIMATE: final-2025 SP+ where mapped, "
+            "warehouse opponent-adj EPA overlay for official-FBS fills. "
+            "Not live 2026 PBP. success/explosiveness are proxies."
         ),
         "primary_role": (
             "Primary complementary driver of team O/D indices alongside "
@@ -255,9 +290,10 @@ def documentation() -> Dict[str, Any]:
             },
         },
         "limitations": [
-            "No full PBP store; not true EPA / success-rate / explosiveness from plays",
+            "success/explosiveness remain EPA-z / SP+ proxies, not play rates",
             "2026 preseason: prior-year carry + roster/QB update (labeled)",
-            "Some packaged codes lack SP+ rows (league-average placeholder)",
-            "Not a live weekly SP+ refresh pipeline",
+            "Warehouse overlay is season-final ≤2025; not a live weekly refresh",
+            "Official FBS with ≥8 prior games is never a silent league-average fill",
+            "Codes outside the official 136 snapshot are thin_sample_labeled",
         ],
     }

@@ -135,18 +135,27 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
   },
   cfb: {
     slateLabel: "Weekly Slate",
-    primary: corePrimary("cfb", {
-      slateLabel: "Weekly Slate",
-      deskExtras: [
-        { href: "/pro/cfb/tempo", label: "Tempo" },
-        { href: "/pro/cfb/model", label: "Season Model" },
-        { href: "/pro/cfb/project-game", label: "Project Game" },
-      ],
-    }),
+    primary: [
+      { href: "/pro/cfb/overview", label: "Overview", primary: true },
+      { href: "/pro/cfb/model", label: "Model", primary: true },
+      { href: "/pro/cfb/project-game", label: "Project Game", primary: true },
+      { href: "/pro/cfb/slate", label: "Slate", primary: true },
+      { href: "/pro/cfb/projections", label: "Projections", primary: true },
+      { href: "/pro/cfb/teams", label: "Teams", primary: true },
+      {
+        href: "/edge-board/cfb",
+        label: "Edge Board",
+        primary: true,
+        emphasis: "green",
+      },
+    ],
     tools: [
-      ...sharedTools("cfb"),
-      { href: "/pro/cfb/standings", label: "Standings" },
-      { href: "/pro/cfb/stats", label: "Havoc / Efficiency" },
+      { href: "/odds/cfb", label: "Compare Odds" },
+      { href: "/pro/cfb/tempo", label: "Tempo" },
+      { href: "/pro/kei-lines/cfb", label: "KEI (not shipped)" },
+      { href: "/pro/cfb/fair-lines", label: "Fair Lines" },
+      { href: "/pro/power-ratings/cfb", label: "Power Ratings" },
+      { href: "/pro/model-transparency", label: "Model Health" },
     ],
   },
   nba: {

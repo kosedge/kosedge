@@ -54,8 +54,8 @@ export function buildProjectGameBody(input: {
     throw new Error("homeTeam and awayTeam must differ");
   }
   const week = Number(input.week ?? 1);
-  if (!Number.isFinite(week) || week < 1 || week > 20) {
-    throw new Error("week must be between 1 and 20");
+  if (!Number.isFinite(week) || week < 0 || week > 20) {
+    throw new Error("week must be between 0 and 20");
   }
   const season = Number(input.season ?? 2026);
   return {
@@ -86,12 +86,16 @@ export function buildSimulateBody(input: {
   if (!Number.isFinite(nSims) || nSims < 1 || nSims > 50) {
     throw new Error("nSims must be between 1 and 50 for the web proxy");
   }
+  const asOfWeek = Number(input.asOfWeek ?? 0);
+  if (!Number.isFinite(asOfWeek) || asOfWeek < 0 || asOfWeek > 20) {
+    throw new Error("asOfWeek must be between 0 and 20");
+  }
   return {
     season: Math.round(Number(input.season ?? 2026)),
     n_sims: Math.round(nSims),
     seed: Math.round(Number(input.seed ?? 2026)),
     demo: input.demo !== false,
-    as_of_week: Math.round(Number(input.asOfWeek ?? 1)),
+    as_of_week: Math.round(asOfWeek),
   };
 }
 

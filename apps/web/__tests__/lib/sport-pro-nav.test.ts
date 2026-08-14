@@ -14,13 +14,29 @@ describe("sport-pro-nav", () => {
       const labels = primary.map((i) => i.label);
       expect(labels).toContain("Overview");
       expect(labels).toContain("Edge Board");
-      expect(labels).toContain("Edges");
       expect(labels).toContain("Teams");
-      expect(labels).toContain("Power Ratings");
       const edgeBoard = primary.find((i) => i.label === "Edge Board");
       expect(edgeBoard?.emphasis).toBe("green");
+      if (sport.key === "cfb") {
+        expect(labels).toEqual([
+          "Overview",
+          "Model",
+          "Project Game",
+          "Slate",
+          "Projections",
+          "Teams",
+          "Edge Board",
+        ]);
+        expect(labels).not.toContain("KEI Lines");
+        expect(labels).not.toContain("Fair Lines");
+        expect(labels).not.toContain("Edges");
+        expect(labels).not.toContain("Standings");
+        continue;
+      }
+      expect(labels).toContain("Edges");
+      expect(labels).toContain("Power Ratings");
       if (sport.key !== "nfl") {
-        if (sport.key === "cfb" || sport.key === "nhl") {
+        if (sport.key === "nhl") {
           expect(labels).toContain("Fair Lines");
           expect(labels).not.toContain("KEI Lines");
         } else {
@@ -96,16 +112,21 @@ describe("sport-pro-nav", () => {
       expect(primary).not.toContain("Season Model");
     }
 
-    // CFB season model desks are primary (not tools overflow).
+    // CFB research desks are primary (not tools overflow).
     const cfbTools = getSportToolNav("cfb").map((i) => i.label);
     const cfbPrimary = getSportPrimaryNav("cfb").map((i) => i.label);
-    expect(cfbTools).not.toContain("Season Model");
+    expect(cfbTools).not.toContain("Model");
     expect(cfbTools).not.toContain("Project Game");
-    expect(cfbPrimary).toContain("Season Model");
+    expect(cfbTools).not.toContain("Standings");
+    expect(cfbTools).not.toContain("Havoc / Efficiency");
+    expect(cfbPrimary).toContain("Model");
     expect(cfbPrimary).toContain("Project Game");
-    expect(cfbPrimary).toContain("Fair Lines");
+    expect(cfbPrimary).toContain("Slate");
+    expect(cfbPrimary).toContain("Projections");
+    expect(cfbPrimary).toContain("Teams");
     expect(cfbPrimary).not.toContain("KEI Lines");
     expect(cfbTools).toContain("KEI (not shipped)");
+    expect(cfbTools).toContain("Tempo");
     expect(cfbTools).not.toContain("KEI Projections");
     expect(cfbPrimary).not.toContain("Survivor");
     expect(cfbPrimary).not.toContain("Game Boxes");
@@ -114,10 +135,8 @@ describe("sport-pro-nav", () => {
 
   it("uses Tempo for college and Goalie Desk for NHL", () => {
     expect(getSportPrimaryNav("ncaam").map((i) => i.label)).toContain("Tempo");
-    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain("Tempo");
-    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain(
-      "Season Model",
-    );
+    expect(getSportToolNav("cfb").map((i) => i.label)).toContain("Tempo");
+    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain("Model");
     expect(getSportPrimaryNav("nhl").map((i) => i.label)).toContain(
       "Goalie Desk",
     );
