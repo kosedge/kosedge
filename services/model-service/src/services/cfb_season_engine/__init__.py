@@ -647,7 +647,7 @@ def engine_status_payload(
                 "Full player box-score engine (completions, routes, air yards)",
                 "CFP / natty season futures (P4 stub — not product truth)",
                 "Market-grade calibration / KEI fair lines",
-                "Walk-forward vs closing lines (Week 0–4)",
+                "2026 opens + held-out KEI design (post–Week 3; not shipped)",
                 "Full portal player-value translation matrix",
                 "Open camp QB battles (human review; not a single starter lock)",
             ],
@@ -682,6 +682,10 @@ def engine_status_payload(
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",
+            "web_slate": "/pro/cfb/slate",
+            "web_projections": "/pro/cfb/projections",
+            "web_teams": "/pro/cfb/teams",
+            "ops_product_closeout": "data/ops/cfb-full-product-closeout-20260814.md",
         },
         "additive": True,
         "does_not_modify": [
@@ -691,6 +695,10 @@ def engine_status_payload(
             "model_vs_kei_#70",
         ],
         "universe_notes": universe.notes,
+        "desk": __import__(
+            "src.services.cfb_season_engine.product_desk",
+            fromlist=["product_desk_payload"],
+        ).product_desk_payload(universe, weeks=(0, 1)),
     }
 
 

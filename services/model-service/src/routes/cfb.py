@@ -14,10 +14,10 @@ router = APIRouter(prefix="/cfb", tags=["cfb-model"])
 
 
 class ProjectGameBody(BaseModel):
-    home_team: str = Field(..., min_length=2, max_length=8)
-    away_team: str = Field(..., min_length=2, max_length=8)
+    home_team: str = Field(..., min_length=2, max_length=48)
+    away_team: str = Field(..., min_length=2, max_length=48)
     season: int = Field(2026, ge=2010, le=2100)
-    week: int = Field(1, ge=1, le=20)
+    week: int = Field(0, ge=0, le=20)
     neutral_site: bool = False
     night_game: bool = False
     demo: bool = True
@@ -34,16 +34,16 @@ class SimulateBody(BaseModel):
     n_sims: int = Field(200, ge=1, le=2000)
     seed: int = 2026
     demo: bool = True
-    as_of_week: int = Field(1, ge=1, le=20)
+    as_of_week: int = Field(0, ge=0, le=20)
 
 
 class LogProjectionBody(BaseModel):
     """Manual projection log (or pass-through of a project-game payload)."""
 
-    home_team: str = Field(..., min_length=2, max_length=8)
-    away_team: str = Field(..., min_length=2, max_length=8)
+    home_team: str = Field(..., min_length=2, max_length=48)
+    away_team: str = Field(..., min_length=2, max_length=48)
     season: int = Field(2026, ge=2010, le=2100)
-    week: int = Field(1, ge=1, le=20)
+    week: int = Field(0, ge=0, le=20)
     engine_version: Optional[str] = None
     spread_home: Optional[float] = None
     model_spread_home: Optional[float] = None

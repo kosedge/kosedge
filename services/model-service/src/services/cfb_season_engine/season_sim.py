@@ -86,7 +86,7 @@ def _simulate_one_path(
                     "winner": winner,
                     "loser": loser,
                     "neutral_site": game.neutral_site,
-                    "early_season": 1 <= game.week <= P.EARLY_SEASON_LAST_WEEK,
+                    "early_season": 0 <= game.week <= P.EARLY_SEASON_LAST_WEEK,
                 }
             )
 

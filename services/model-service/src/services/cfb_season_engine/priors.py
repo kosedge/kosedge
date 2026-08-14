@@ -263,6 +263,8 @@ def early_season_factor(
     default: float = 1.0,
 ) -> float:
     w = int(week or 0)
+    if w == 0:
+        w = 1  # Week 0 uses the Week 1 early-season posture
     if w < 1 or w > EARLY_SEASON_LAST_WEEK:
         return float(default)
     return float(table.get(w, default))
@@ -271,7 +273,7 @@ def early_season_factor(
 def early_season_uncertainty(week: int) -> Dict[str, Any]:
     """Inspectable early-season uncertainty posture (CFB-wider than NFL)."""
     w = int(week or 0)
-    active = 1 <= w <= EARLY_SEASON_LAST_WEEK
+    active = 0 <= w <= EARLY_SEASON_LAST_WEEK
     score_mult = early_season_factor(w, EARLY_SEASON_SCORE_NOISE_MULT)
     margin_mult = early_season_factor(w, EARLY_SEASON_MARGIN_SD_MULT)
     soften = early_season_factor(w, EARLY_SEASON_SEPARATION_SOFTEN)

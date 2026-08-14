@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
   americanOddsFromWinProb,
@@ -311,18 +311,22 @@ export default function CfbProjectGameClient({
   defaultHome = "OSU",
   defaultAway = "MICH",
   defaultWeek = 1,
+  defaultNeutral = false,
+  autoRun = false,
   engineVersion,
 }: {
   teams: CfbTeamOption[];
   defaultHome?: string;
   defaultAway?: string;
   defaultWeek?: number;
+  defaultNeutral?: boolean;
+  autoRun?: boolean;
   engineVersion?: string;
 }) {
   const [homeTeam, setHomeTeam] = useState(defaultHome);
   const [awayTeam, setAwayTeam] = useState(defaultAway);
   const [week, setWeek] = useState(defaultWeek);
-  const [neutralSite, setNeutralSite] = useState(false);
+  const [neutralSite, setNeutralSite] = useState(defaultNeutral);
   const [nightGame, setNightGame] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -359,6 +363,12 @@ export default function CfbProjectGameClient({
       }
     });
   }
+
+  useEffect(() => {
+    if (autoRun) run();
+    // Deep-link from slate / DNA — run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRun]);
 
   const uncertainty = result?.uncertainty ?? result?.early_season_uncertainty ?? {};
   const earlyActive = uncertainty.active === true;
@@ -474,7 +484,7 @@ export default function CfbProjectGameClient({
               value={week}
               onChange={(e) => setWeek(Number(e.target.value))}
             >
-              {Array.from({ length: 15 }, (_, i) => i + 1).map((w) => (
+              {Array.from({ length: 16 }, (_, i) => i).map((w) => (
                 <option key={w} value={w}>
                   Week {w}
                 </option>
@@ -564,9 +574,14 @@ export default function CfbProjectGameClient({
                   {result.mode ? ` · ${result.mode}` : ""}
                 </p>
               </div>
-              <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-text/55">
-                {result.fidelity ?? "approximate"}
-              </span>
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-md border border-kos-gold/30 bg-kos-gold/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-gold">
+                  Research fair
+                </span>
+                <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-text/55">
+                  {result.fidelity ?? "approximate"}
+                </span>
+              </div>
             </div>
 
             <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
